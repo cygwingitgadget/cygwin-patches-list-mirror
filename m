@@ -1,16 +1,16 @@
 Return-Path: <kbrown@cornell.edu>
 Received: from NAM11-DM6-obe.outbound.protection.outlook.com
  (mail-dm6nam11on2119.outbound.protection.outlook.com [40.107.223.119])
- by sourceware.org (Postfix) with ESMTPS id A8E013955422
- for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2021 17:14:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A8E013955422
+ by sourceware.org (Postfix) with ESMTPS id 1FEFC398881B
+ for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2021 17:14:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1FEFC398881B
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CZG6IH62NGLE61d5u9d1qL/kkKozRW1vwPRXzN4Vf93ZGkVaT+FFXh6q6h9wFRSaNXlb+ik2kt9fswBvjC91+NJxW8WLUuYruQEseHlULBziQtQAhl/Kr8NX2z9nJTbCqVL6P52XxSJyL21MWG5T6HE53MxhasRG9U+iTyX4FeehT1vXKbACLjawt+3EBvjGmo/oKtq2TYB38z+JId6YBFWV3n0c4Inxe7mPXfJWog65C6QCKdiAttddQJ2bPSXZoTMNAXOyFtFCJKGSf5d3lpSxEn1jIxKBle0PHXT8D554QMS8xVqK4Epr8Ndy64uf7I/fswF0kw0B2WjOaz++CQ==
+ b=jELCcp9nN+tIEiKljN0avd6H6XHlXMAuAeNNB+6oZtdbTdJZvDFy854bQa9f6lf1dMq/r9u9/2BfxxVV2I/HtXs+2ZSAZE0zJozAskGD6/wJJjL+LI2R7d/+c9D0nMKbpSLZfZo0invqaRkDix4VCF/EAd7fHJINUTnxj92eizLOB9cPdHYDFtoTIDZUm1qU9FIUl0o2hcG3fMVZ1nX2hf6ZOJmFKBSCCULnNi+OYm9vVW0pwOsyIfVycCB8/ayQ86pL/JEvQtwOE+HZiSqQvLiB6zbyOh7+Zp6plg6UN13HR7tl0l9Nm6x1xy3a03yIw4Q1CYwcVssxxnZfXG0J+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VhWBcKD8Bd4Wp49ArVnQLtSCD8bMPFsF9xGg+AbHw9s=;
- b=IfFN2R/MJ+Cdk/TXEY02PMOxL5vGfy+7IBDUlY4AJ1D6ZOTm1+iC1KJmv+FCUabQPcbctxImVCUR5VcWuqKoh/LqZFnICG/DTWcbPfUPgHFb7OmUR+wy3Qbd2qPm6Q0qSdSlXso+8s84amyAB3Qbd8swLF2Jotp46jKMTwGsZNqO7fLfnWr3JteDSfcotOb9dSpIJxla5jV+eD6QYp9DkFG4VZ9f9WfWKuFnuxkTlceA/9ZKSN67VmB1dnrKU+fjFHggunq4LMpRLlMkq7Sr8miPvZU06D31+fIip2J0mnZ0HsfDppplrB48+90FgxT8aoc2PqT918V4drAXVQuZsQ==
+ bh=B+UZ1UpIE1HmJuIw5B4g6w7OUm4/muBFBpUBiLurQDk=;
+ b=IQn17OHSZEgCzD/nbLoBGGFR5XJ6X92AGWc19wUnNPQ62qnsicNlxEh4sSV35dxlstYgYr0rejSkhuTcnegRBgIIg1GNQDO31ulHf2dg1KWonXfBocxrMrurdIXZfXPWMiCnmVbJp8CWepuv22WP/p8clV+lxyn+OgNp/EEqIyB3Hz1jwo+RspvyoEctOq3S82IgNKjsxzVw6ZOAbt9cQ4I0UdS56idygE88/SpQtZ4+DuIUiaypcJknc8a+F9K+LqLQN2ch5XA1mWIpOH0BUfbbhRngZ7tVkc8eskwx3C1/zIxBWb/8Tu4wMkeNOcnSivG7wJZo5kl7BrW0CFf4pg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
@@ -18,17 +18,17 @@ Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
  by BN6PR04MB0434.namprd04.prod.outlook.com (2603:10b6:404:95::11)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25; Thu, 18 Feb
- 2021 17:14:09 +0000
+ 2021 17:14:10 +0000
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::f071:e174:ef12:375c]) by BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::f071:e174:ef12:375c%6]) with mapi id 15.20.3846.038; Thu, 18 Feb 2021
- 17:14:09 +0000
+ 17:14:10 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/3] Cygwin: fstat_helper: always use handle in call to
- get_file_attribute
-Date: Thu, 18 Feb 2021 12:13:47 -0500
-Message-Id: <20210218171348.3847-3-kbrown@cornell.edu>
+Subject: [PATCH 3/3] Cygwin: FIFO: temporarily keep a conv_handle in
+ syscalls.cc:open
+Date: Thu, 18 Feb 2021 12:13:48 -0500
+Message-Id: <20210218171348.3847-4-kbrown@cornell.edu>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210218171348.3847-1-kbrown@cornell.edu>
 References: <20210218171348.3847-1-kbrown@cornell.edu>
@@ -44,57 +44,57 @@ Received: from localhost.localdomain (2603:7081:7e41:6a00:a842:7b47:be73:d167)
  by CH0PR03CA0065.namprd03.prod.outlook.com (2603:10b6:610:cc::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend
- Transport; Thu, 18 Feb 2021 17:14:08 +0000
+ Transport; Thu, 18 Feb 2021 17:14:09 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a8bbea44-7a9c-427d-825c-08d8d4309ab9
+X-MS-Office365-Filtering-Correlation-Id: 30310353-5d3e-41b2-0f95-08d8d4309b4c
 X-MS-TrafficTypeDiagnostic: BN6PR04MB0434:
-X-Microsoft-Antispam-PRVS: <BN6PR04MB0434F74CF5544E33A764B38FD8859@BN6PR04MB0434.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <BN6PR04MB0434DB3577ADAA3754E27A68D8859@BN6PR04MB0434.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZmvsKZkzYiQwGOsMxauIhJ2aYqs6ehChz+rWslVsV7V0nh9gtiDwDH/83sF80mBwxGboPi7gWHW5lpynVkGvpiiN4/lzDjWDPeYZRF6pJZaDT9MYdF4/ILMkkO0z0C9jfGLSWMrhIwlZO/FHaN8ZUqdmHV5d8PEoXWqHU6gsvzAWfE48K1Oj/6XRSHmAZudjMxFPuI+gBGobFlwXW8OefGKWzkHFt1M3OmERfZeSwCBZcZs/qAhev+yfrEVV6PcEw5XiGJKuW25ptPq+ZbPM5oorNAEP843GVkh8MQrW0lEYzSKXXmoxOVyO1S7xUDDXEo/csmyhX3DXDRjKlVmttF3N3/k18sZB/vln8Yo/FmD1oA0QO0nj1gSVtnTxt6AqzqIwohzui72F6+yidBQ6fG3FRDtNAxCb/YQuGblSdVKovz/oxso64bDjtdydvssnRPfBlSItrnmfXRKw5oUuiPe1hOHDmxl1AuOg1Dct4GpE7XI516jZUMtVsdLT7ZFztbphomY/jx3W9+x7kHHkbjzBkpXnB5Mo/SHKO+KFOQiXGkM5hXm9RjGlf/ugPhAJVoJjlce3QU1FpZDhiopc+A==
+X-Microsoft-Antispam-Message-Info: dLwnPwyWWyb4Lk28wtD+sWtJOnWBV9GSXSL9B01n5AerdISM0tWelnQZXii9K6E3Rsn6WWytrfE0iGRQQzFszRKaESVqqZMOapWghwyPl6LzYzKrgUVTLX1s+Nh2qDSVxa2acaRcL+TzKXdDuN7DF6rHv7b/8WTdQ35w13x+S5UfcCe8haNQRpfq9HAarnfqXPhuGnYJ4NCkgq/kwgc6fXmCosdgZPVkqlooOK81iaK+pE4ufNSgiYzDcAdVQfdXe1WMO2KlEZCc8CIur2VRjObjyp5sFfxal/YaIR2Dt3XErQRpenyxuVn24hNdX+CxAXMNapJikLoS2pQ1fYG63Aauhls1GGX52cunuEZJZRBcU5IL1oHlNp6RSCuJzXyDc5efrbWtkM0IX2mpx1s8u8Lyuzhkkrik+SoWPMs2t2AhvYxJt/VDyMsGT6DsIdagkMFrYV88hTaa8drB6dfzaUxuZDTcxNMFsWIf4TbEFXXn0R3sxp3PCE+/pKi/oh22tsaqtrNk+QSv+ufRG0SrDZJ5zribwrmAvIpSfPf/FmovAkHXpCgR/IrySoeFLmrrmUBsSlrf6um6eP7Pcq2t9A==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
  SFS:(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(6486002)(6506007)(16526019)(83380400001)(86362001)(5660300002)(66556008)(186003)(66946007)(786003)(6512007)(52116002)(2906002)(2616005)(478600001)(316002)(8676002)(1076003)(6666004)(6916009)(66476007)(8936002)(75432002)(36756003)(69590400012);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?RAtamfb6937zOHMVdosWlbNeE3cwlR3RVxijhoC2nY3TlEQzoPsmRHeQUAp2?=
- =?us-ascii?Q?jEzlTrxRb69I02gqbVG2SC0UoAN8u6JEiOpxIEGPdGmOqDxqDxOsaOS85DOk?=
- =?us-ascii?Q?gUKJXgdW803EoX9nmhTNoM1Zz1RTsbA4ilgbtSKwQ/QThiuuR3TR+mBe5yzv?=
- =?us-ascii?Q?/oo9J3Raw3MHjOO9j57rx/xS06zIg3FLtT8AZOAreD9q2w5aGPndTfhFrHl1?=
- =?us-ascii?Q?wGeWhvvN3AltZDu72R0DpLCeCAkQLlLvElhfFXdoq/aD3eNQ1J0v9WJTKx8M?=
- =?us-ascii?Q?CcZWmVQO7Kzl/i7U7XBsLnIeL2tTEbtKwDAlohxbpRru5xdn7h5/NgZt8tYa?=
- =?us-ascii?Q?EHwkAqVrjEdTt6h/Ytc+XBEUNj2DR5s6Vyg13K0GEtjkvt03V5DEQxyBc55e?=
- =?us-ascii?Q?PMxFQTKjWZmB4p0PwZt+J7huuWhZNM4z0Xn0vV5I/ctr4zKwydPIr6f50f3M?=
- =?us-ascii?Q?caMx5v6E9lgKYacmWIB9j1CG1wMAkjLCRCrQDACV8gLEQCfWtidNEvaf4pMX?=
- =?us-ascii?Q?awKI3ArvcxBDGTmP8Jnft66/pE2ZNnTtISEiRXdffpZywTY5JyMblgwJi2AP?=
- =?us-ascii?Q?n1w7pyWDhkQVSft7DhHghL3dSgjtDFV2dXE6nrIrGDKwRpg92GxlPGx+lefQ?=
- =?us-ascii?Q?OSz4Mq8eIyTV/ICSpYfBHAgJNdeh2R+hitPnaNCrJNv0D3pjE02s6gjjGC7g?=
- =?us-ascii?Q?eOHOxiw1MtcFFgIm8uxCNaxf1ciQ2XpxW+hSlJNK7cXKAW9HkeKXCtS++2X5?=
- =?us-ascii?Q?9mr+KBfbATBeNMk35IhurMQtRB3/KT1kwtRfagGdWtzkm6NFiBATYN1nWEiG?=
- =?us-ascii?Q?glw3n3eb89kx/yqn5VCurLLP8KP431tj+GYcwJygM0hj325o8xsVDMZEL73A?=
- =?us-ascii?Q?q25jwD8AoLi31KAjTVHz1NCgLp6GpdEr677myyVarDFG1+jXKOULcncVRH9Q?=
- =?us-ascii?Q?XyrA/gE4mj13oQX1hUzhnYJpj4bUqQV7AvsvRNtfHs/LooSjMy2OvH+OEUQJ?=
- =?us-ascii?Q?NfeqSXPMpvTa5i/qJQlpS59354twq3TiS03Bknil9fMygBTRMPEyyEAsyj1G?=
- =?us-ascii?Q?6CsZNuwD6VSIRsXC0Hu1tmIDMSDeVx0sXkCfu6ESZULfWhHiZftujkwRB1vw?=
- =?us-ascii?Q?4mf8lm+3o+c8+VvEROvBgs2VtcbGAZa2XFXZYpA29HdI2lfI/YVb1t6u+Zai?=
- =?us-ascii?Q?vBOBUE8gP030fpV6DNiZCFxjyqnOfex1bQy2qEPelHFNMQX2aCHLEdob3nVG?=
- =?us-ascii?Q?yiWSZdaIIXr3oYYGPflKSWYL951SM/dY0xGnVkQd2ZvPQZecaDW/M/1lkpyG?=
- =?us-ascii?Q?107xTuXYfMPPqqTixsipkJPy3bTDNedqKQJld46fnhswInByiSad8kQB+JBa?=
- =?us-ascii?Q?ZfJIaYyLdehvJHv4BrRwePQaeImR?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?SD6qAG4OCsVQMmv7VhGn1sw5r+ExjVRmjqVjhRNW2l8Frud3oiWjzlfaxGLu?=
+ =?us-ascii?Q?UIi6BOzUzL/vT0bDCF58Y2ShFe4kDSejBCheog5keso3dM+mT0qAc42dhUfA?=
+ =?us-ascii?Q?IAebud6wO38G9bYeUc82Zv2l391HvHjtpbmYDV0yCHrKoEK/Rp2T3WVTJjvc?=
+ =?us-ascii?Q?Ls605J8ZNWxbAebRbLdDPcj7aIKxXuA7ROn9f+y1G0Zu7+yaZbO5vXH+JCZ/?=
+ =?us-ascii?Q?i4rpQjvpDDgYaGdtaOyIAUMKWthjk8hnESyAM91MBZ6RkRtz+jHCHJ1ad67k?=
+ =?us-ascii?Q?IGzkTZz4DyXLup/iNSIW3vunrlB27FiDXWc2vq8ZmdkrkJxLeMrwZR3kJJ8k?=
+ =?us-ascii?Q?EQxc6sQi2qZ4037a/QoMDcDbMa2tydjsJ11SG+bJGZMDoY85IVRoQzTk8NMA?=
+ =?us-ascii?Q?177Yfd3O86/HHi/oDXnNeBwhjR2eLybK47H+lRxM99Yuifv3EyNUrTYOHqXH?=
+ =?us-ascii?Q?nmwyTc2H99GsfRWQgcKSr1p3zyQVoyT14CzoVlcKqijeYmfpf1j+Mi/a4Ekr?=
+ =?us-ascii?Q?EXkYS9URhSz/N0M13vl7M9WKOpzjLCMScpnHmqnGkndSXz2m7yQIhDZy+y4t?=
+ =?us-ascii?Q?xA1CgfjchEfT9yNHm/w+b5gMvjrzblbL8+g90rLGystMhfplOpCRdm9WwfzJ?=
+ =?us-ascii?Q?QvAmPYufX+GiGuf9W11Kg4POeewjdef9J9vwyB07UHYGejAnT1xBvyKwmBjC?=
+ =?us-ascii?Q?QmvhpB7Bm8HDIM3yFJGE2eEaeONPAfydSedkwczv4sGtdSG/mdu1e/HeAgUO?=
+ =?us-ascii?Q?ipiz8Bd1tXDpkcmYDqmgjYEOgwPNqazttrUD14eXV7yLwWVvt0I0hZiA3Y9X?=
+ =?us-ascii?Q?U8CAJSIRwws6FOQ2DvFB1F4snFOH5+cyHMPnGloNw6Me7hYEbeHYSK/8NfKP?=
+ =?us-ascii?Q?FtWNnv0LJ+MK2xFwZUiet1Jf1+AEwZsV6iPRcosBQqsrwFXERsv1nabNQXrS?=
+ =?us-ascii?Q?IrAmoISlHTnmAkNsNzfkJlJ1ok5BWMV9dBW9pJ1iH/mquNVsOKxVaRwgMC1B?=
+ =?us-ascii?Q?xE8MIfXXuAlIXVO/6dUP927mGXkNdoE+qTO5xo6HtJFMPv6c8b5fIk21kEsZ?=
+ =?us-ascii?Q?7/SiFeT9IRyLyNW4gUE6QDEiL6qnnbvkJqBukm8Mx3B7Vbu3NouV2KOIBHTS?=
+ =?us-ascii?Q?GGWrG0etyq4JTvVJIJ6JMrcx3aOVabAyZWynet0yb245BdcVWnKUCqJo7Ihp?=
+ =?us-ascii?Q?UdpnO0NSuIZgLoBIbMZhu8MNxA9cuTXm0P1knsWLnSa5gsTvR0qyJia3wIMB?=
+ =?us-ascii?Q?mEt2VxIpvZ0WusF+DbF9LsfPwECSiVOSFhqOMpF6Urvm2hZzTi9Tybda2zsz?=
+ =?us-ascii?Q?JLwt8bsSyttVKUJDu9U6rUoRJ8lbsjHEYRpG+QJ3+ozdPdLYMM4RLlOixmrp?=
+ =?us-ascii?Q?mfXJpLv1OQ5LmPqhe64zCYSRWVJy?=
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8bbea44-7a9c-427d-825c-08d8d4309ab9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30310353-5d3e-41b2-0f95-08d8d4309b4c
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 17:14:09.6660 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 17:14:10.5714 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cOpv0wrsIu+0IlqpQNeDNDnCFdATGgjdeobjmlJh2oU7l5oAc0k3Nv9o4kJBimztJWg86hFf8hersaoV1aoBug==
+X-MS-Exchange-CrossTenant-UserPrincipalName: wvuwPI3klca+ox9ma4jgA6btqm3Uy0B+eYeJNhJJZvofwnM1PrqLw5mwjbw3Yi8B0/whw7X9FnKeBrsJ/HiBYQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR04MB0434
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, JMQ_SPF_NEUTRAL,
+ MSGID_FROM_MTA_HEADER, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -109,35 +109,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 18 Feb 2021 17:14:15 -0000
+X-List-Received-Date: Thu, 18 Feb 2021 17:14:16 -0000
 
-Previously, the call to get_file_attribute for FIFOs set the first
-argument to NULL instead of the handle h returned by get_stat_handle,
-thereby forcing the file to be opened for fetching the security
-descriptor in get_file_sd().  This was done because h might have been
-a pipe handle rather than a file handle, and its permissions would not
-necessarily reflect those of the file.
+When a FIFO is opened, syscalls.cc:open always calls fstat on the
+newly-created fhandler_fifo.  This results from a call to
+device_access_denied.
 
-That situation can no longer occur with the new fhandler_fifo::fstat
-introduced in the previous commit.
+To speed-up this fstat call, and therefore the open(2) call, use
+PC_KEEP_HANDLE when the fhandler is created.  The resulting
+conv_handle is retained until after the fstat call if the fhandler is
+a FIFO; otherwise, it is closed immediately.
 ---
- winsup/cygwin/fhandler_disk_file.cc | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ winsup/cygwin/syscalls.cc | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
-index ef9171bbf..6170427b0 100644
---- a/winsup/cygwin/fhandler_disk_file.cc
-+++ b/winsup/cygwin/fhandler_disk_file.cc
-@@ -475,8 +475,7 @@ fhandler_base::fstat_helper (struct stat *buf)
-   else if (pc.issocket ())
-     buf->st_mode = S_IFSOCK;
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 32a155a1c..460fe6801 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -1487,8 +1487,15 @@ open (const char *unix_path, int flags, ...)
+ 	  opt |= PC_CTTY;
+ 	}
  
--  if (!get_file_attribute (is_fs_special () && !pc.issocket () ? NULL : h, pc,
--			   &buf->st_mode, &buf->st_uid, &buf->st_gid))
-+  if (!get_file_attribute (h, pc, &buf->st_mode, &buf->st_uid, &buf->st_gid))
-     {
-       /* If read-only attribute is set, modify ntsec return value */
-       if (::has_attribute (attributes, FILE_ATTRIBUTE_READONLY)
++      /* If we're opening a FIFO, we will call device_access_denied
++	 below.  This leads to a call to fstat, which can use the
++	 path_conv handle. */
++      opt |= PC_KEEP_HANDLE;
+       if (!(fh = build_fh_name (unix_path, opt, stat_suffixes)))
+ 	__leave;		/* errno already set */
++      opt &= ~PC_KEEP_HANDLE;
++      if (!fh->isfifo ())
++	fh->pc.close_conv_handle ();
+       if ((flags & O_NOFOLLOW) && fh->issymlink () && !(flags & O_PATH))
+ 	{
+ 	  set_errno (ELOOP);
+@@ -1555,9 +1562,18 @@ open (const char *unix_path, int flags, ...)
+ 	  delete fh;
+ 	  fh = fh_file;
+ 	}
+-      else if ((fh->is_fs_special () && fh->device_access_denied (flags))
+-	       || !fh->open_with_arch (flags, mode & 07777))
+-	__leave;		/* errno already set */
++      else
++	{
++	  if (fh->is_fs_special ())
++	    {
++	      if (fh->device_access_denied (flags))
++		__leave;	/* errno already set */
++	      else if (fh->isfifo ())
++		fh->pc.close_conv_handle ();
++	    }
++	  if (!fh->open_with_arch (flags, mode & 07777))
++	    __leave;		/* errno already set */
++	}
+       /* Move O_TMPFILEs to the bin to avoid blocking the parent dir. */
+       if ((flags & O_TMPFILE) && !fh->pc.isremote ())
+ 	try_to_bin (fh->pc, fh->get_handle (), DELETE,
 -- 
 2.30.0
 
