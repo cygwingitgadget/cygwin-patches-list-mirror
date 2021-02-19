@@ -1,41 +1,41 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id E313E398C81F
- for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 17:06:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E313E398C81F
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 9D06F3870914
+ for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 17:07:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9D06F3870914
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mcp3E-1llehQ2Rbm-00ZujJ for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021
- 18:06:06 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MeTwY-1ll75d1OTc-00aRkR for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021
+ 18:07:33 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 31155A80CF4; Fri, 19 Feb 2021 18:06:06 +0100 (CET)
-Date: Fri, 19 Feb 2021 18:06:06 +0100
+ id E4B4AA80CEC; Fri, 19 Feb 2021 18:07:32 +0100 (CET)
+Date: Fri, 19 Feb 2021 18:07:32 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Make tty setting NOFLSH work.
-Message-ID: <YC/v/qy/64WZFRA/@calimero.vinschen.de>
+Subject: Re: [PATCH 0/3] Fix fstat on FIFOs, part 2
+Message-ID: <YC/wVCqFCu9OmH9S@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210218090711.1612-1-takashi.yano@nifty.ne.jp>
+References: <20210218171348.3847-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210218090711.1612-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:OZciuNl0B3vb/ZKyI7lOGv92HsGUaU5wtne361WJi6jdmSY1gS/
- C+niV2j1TwgoP2TfAjPIs2Pi6wD8GrrVUuU6NMQT1NWpOiJVckPJ8nnx5mvj5a6mdjuroxs
- Gv1Jc40agGHjmJfzrfkDCQemlXpDg4pujGQCKkwlLVv2EUTEB73HGV7HYRTFy5Gzujk5Ghp
- j7kt+iRZRQl2Gh/hkAP4g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tmS9acBxHcQ=:RnmLHET5AiDAG9/3RMjCm3
- 7cuWwmk/q5BhUpOsQmCldAAEgW3qUhnZrZJs+rf3YiIFJZ5A2ri8vIj3MFqot0hyHxN51EJFk
- O/Sw5X0EZlViOmg2TEb+zkBoh/YnvK23TxQ0NwxAbKh0goLNPovdbITsCykIuzIfukQbk8sd9
- J5s6wpCQcQJb0Cor9G/L89pQi/FJVz2WiA6YEtXeaTh/G+O85Bo3GqcAbZc8S8NDBGWWnnigI
- h93du3BXQsyB2NmUiYG77qSdSB8JRGbviN9TfwvxyPZ0DmdzMydnxcPlEHERketo1BC0BHPvI
- SWO7zIagYj9MvzU2GT3Tdxuyllpe5lNEJEUC4oYSVjt25J4drBZFL4Tk9i0b7D+zL0DWGZ8te
- SJQP7Szdts4ewSblPpvAqc66aN22uqLsEGWz7/kT8sID2GY9P0wvqRdZGL7a6R8MNGCRVU9W5
- CyaC49zBog==
-X-Spam-Status: No, score=-107.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210218171348.3847-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:GaXfa8yXiMVRzmoSiKX21NiwJ9G4gz7i/5ob2qdLr1LyqxLO4CD
+ lI4vy7Tb2UVlVH2t2VVUTeBpHO1WYXWGpjTiBhciGoiyxkNkaZj+b2Cu3g+pLglPEnkaytS
+ B1/IS+cKN8cenSonEflmkdZ9YD6B2z47A3XhJp/f4PGWGSOLm5otz+WZEYIa/p2j2cLGI26
+ aU4SnenRtyoo+0kCdUX/Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tjxZmlGGPco=:m0Ux3o/En5W1UpwLBWa/f/
+ vKzTbyHbP2fbYyXfmePcpbb/uwpqkrLonxiWXQWYDMFQ/Py/2IsLyOcOunl5vpUiGWJUclqyk
+ JuY/dTiJNrfFrsjV3MLgYZfPVkP2yZGenE+5t/CSfnJeBLUWEy5wIx5dsCoFL2qHtHCWMsSkS
+ sdeHrIdHwRispI8/eLcpbFckDHkYKEBPkXHmTyfilb53YwjN82qg7Bwte9XLyZikKZYj5tDDk
+ R54zyNNNRSl1LCSNxNj2VcAqORJmpk7BbmUlhBz2tVHuAYrqV384+IgKWmiQmJt4CbTm3VhOP
+ ft/uz34Lit18TLBxE0JAkh1TlCnill0z7EIC5Tgk4oaURauckZhm7Bv+v8tB2ZeY+B6vET/sO
+ rb4UvIw4K59sQbOj6XW119jfxixduxV5REqQGLRxHophRjxJ4ZdF1BXNO8qHUtOYzNktexJ/v
+ cbV5uuv+0g==
+X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -51,32 +51,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 19 Feb 2021 17:06:09 -0000
+X-List-Received-Date: Fri, 19 Feb 2021 17:07:37 -0000
 
-On Feb 18 18:07, Takashi Yano via Cygwin-patches wrote:
-> - With this patch, "stty noflsh" gets working in pty.
-> ---
->  winsup/cygwin/fhandler_termios.cc | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On Feb 18 12:13, Ken Brown via Cygwin-patches wrote:
+> The first patch fixes a bug, in which fstat on FIFOs sometimes used
+> pipe handles instead of file handles.
 > 
-> diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-> index e8daf946b..ae35fe894 100644
-> --- a/winsup/cygwin/fhandler_termios.cc
-> +++ b/winsup/cygwin/fhandler_termios.cc
-> @@ -332,7 +332,8 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
->  	    goto not_a_sig;
->  
->  	  termios_printf ("got interrupt %d, sending signal %d", c, sig);
-> -	  eat_readahead (-1);
-> +	  if (!(ti.c_lflag & NOFLSH))
-> +	    eat_readahead (-1);
->  	  release_input_mutex_if_necessary ();
->  	  tc ()->kill_pgrp (sig);
->  	  acquire_input_mutex_if_necessary (INFINITE);
+> The second and third patches should improve the efficiency of fstat
+> and open on FIFOs.
+> 
+> Ken Brown (3):
+>   Cygwin: define fhandler_fifo::fstat
+>   Cygwin: fstat_helper: always use handle in call to get_file_attribute
+>   Cygwin: FIFO: temporarily keep a conv_handle in syscalls.cc:open
+> 
+>  winsup/cygwin/fhandler.h            |  1 +
+>  winsup/cygwin/fhandler_disk_file.cc |  3 +--
+>  winsup/cygwin/fhandler_fifo.cc      | 23 +++++++++++++++++++++++
+>  winsup/cygwin/syscalls.cc           | 22 +++++++++++++++++++---
+>  4 files changed, 44 insertions(+), 5 deletions(-)
+> 
 > -- 
 > 2.30.0
 
-Pushed.
+LGTM, please push.
+
 
 Thanks,
 Corinna
