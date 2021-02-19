@@ -1,39 +1,40 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 8B9F9398C039
- for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 16:58:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8B9F9398C039
+ by sourceware.org (Postfix) with ESMTPS id 949003870914
+ for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 16:59:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 949003870914
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N2VGj-1lqlSS1RR1-013uaP for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021
- 17:58:39 +0100
+ id 1MX0TX-1lNmDU1Y41-00XJME for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021
+ 17:59:17 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D5618A80CEC; Fri, 19 Feb 2021 17:58:38 +0100 (CET)
-Date: Fri, 19 Feb 2021 17:58:38 +0100
+ id 12EFDA80CEC; Fri, 19 Feb 2021 17:59:17 +0100 (CET)
+Date: Fri, 19 Feb 2021 17:59:17 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Console fixes for Win7.
-Message-ID: <YC/uPsB/KUGuJaZs@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Add console fix regarding Ctrl-Z etc. to release
+ notes.
+Message-ID: <YC/uZXo3KdG5QaU5@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210218090128.1459-1-takashi.yano@nifty.ne.jp>
+References: <20210218090242.1507-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210218090128.1459-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:c1Ly96qBK9q5Sfa2YaNjAV/qMBN74h6g46qfrBPAqPEfJEKvOhQ
- md/vGv9s9N7hQM9myKLlZplnt5FRmD/BxMUwD/tgw+SEfRFEVmkcjKj8Q5zT+kaalaH4WVn
- 0ISGI9VrJLIiiVHTL18omuenFa8QIVbhWq2U38vpHZdAikUPIVbeqFvaNQLIHu/YC1BHEg9
- J8LNYZAh/pv771mNSmTsg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iWi7h3/mR6k=:OQ7XqHzh/rlzm+sQ4RdH9r
- 75JpjmPmSagPnGzB5IO1gPcIlUMcETjh0ke0ima6qslVXE5Evr/Q1oE9j/doIWEixVL/wuQjK
- hS6iaU4nI8GVj50YKSKdtPrwVJHYxXsY659m0gxw3Ml5Ln/o4TYCjOVWD6x/5NzxKRGzIzDaC
- FBUNqmdqlG15k0bddMAuHvfkFrQbGx9iN5Rcj98A7z2jAXOpau/v5DDBm5Fk6lmvaFmXVTJFF
- +PSDdVXKiRhqP4G7ZwaiI5V6C7JudKcJDYpM46fXImm8OSgxJC5+c4FZEknIcjXPJCJb7Gl1s
- 6GadVAis2bPDfyiJGCYXAgOi5aMZ9KO1vadFVkvbD/+/vdFowEK4h/kZxN/vZcjbJxIcRCJjk
- TGXYD5UDoRyfwt8yzVgq5iStM8pjlSt1RdTVISiP2tCEAu5jikOxdJwurIC86B6yYa1dK/6JK
- +NgF+ZgOew==
-X-Spam-Status: No, score=-101.4 required=5.0 tests=BAYES_00,
+In-Reply-To: <20210218090242.1507-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:MQc6gSAq4d19EiS4Tc5UlELgmf/4CrFFB0X7jNrJgJ06FgKlxro
+ U0Mm6QtIq1KrAapzjCDaJY339Ku5VIjcTeHcs825JnZ/P0kH7NgEgokhI7E6/MJhYSdl3/j
+ EFkCn7Sej5S8khM/lOIhU3jYp9w1PZTLgifk8ktFworgPqcBkqCGSvAmmbppAPe6MRIzaCp
+ BzQmuEng8PcFA5RW9kM4g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UAZewj6jN1I=:SHEKSjtkgbqQsF/tWCOI7C
+ rMv1x5BtG2PAZ8tSoV0HYvpmY4ijdij4b8GTzlRaoMu9z3PgRXgWFsPfDuMXPCSb+vGV+PfK3
+ KdFGVCqjdpi+PvBfzjfy5Cwxfb8M2bvozMLUzYrdsoGd+cmDvsIG2vvWNMM6VSBWDS1me71QH
+ LQrGY5BcH8Bii18qK1k62yVXfwzk7DIQ8w7OIN+jjVOIgQtWIEESyinyJHEqFoZumlCy0TMML
+ 3RJPe1a/UblS94hxepw6HRliA0nZ5gOmGfOkncg7NYuvrPfYg0C3XKNLOKPX2ueGzVi98krEp
+ Z20qy6LdpgBBTZzmDA2wUQDEhP9Us4Grjud2mQYjbDVwPW3KOAMfmRIH+ZTkPGJs+fRTGacBY
+ lmsGDD8faU6rE9NPEnoIAZJRyh8EsaRn68t4GiRCys4y58CLH2a547GzpmBOSrFJARERXGkem
+ 2TBzJ3aRCA==
+X-Spam-Status: No, score=-107.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -51,24 +52,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 19 Feb 2021 16:58:45 -0000
+X-List-Received-Date: Fri, 19 Feb 2021 16:59:19 -0000
 
-On Feb 18 18:01, Takashi Yano via Cygwin-patches wrote:
-> Takashi Yano (2):
->   Cygwin: console: Fix SIGWINCH handling in Win7.
->   Cygwin: console: Fix handling of Ctrl-S in Win7.
+On Feb 18 18:02, Takashi Yano via Cygwin-patches wrote:
+> ---
+>  winsup/cygwin/release/3.2.0 | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
->  winsup/cygwin/fhandler.h          |   9 +-
->  winsup/cygwin/fhandler_console.cc | 306 ++++++++----------------------
->  winsup/cygwin/select.cc           |   4 +-
->  winsup/cygwin/spawn.cc            |  32 ++--
->  winsup/cygwin/tty.h               |   8 +-
->  5 files changed, 113 insertions(+), 246 deletions(-)
-> 
+> diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+> index d02d16863..d69ed446c 100644
+> --- a/winsup/cygwin/release/3.2.0
+> +++ b/winsup/cygwin/release/3.2.0
+> @@ -9,6 +9,11 @@ What's new:
+>    thrd_detach, thrd_equal, thrd_exit, thrd_join, thrd_sleep, thrd_yield,
+>    tss_create, tss_delete, tss_get, tss_set.
+>  
+> +- In cygwin console, new thread which handles special keys/signals such
+> +  as Ctrl-Z (VSUSP), Ctrl-\ (VQUIT), Ctrl-S (VSTOP), Ctrl-Q (VSTART) and
+> +  SIGWINCH has been intrudocued. There have been a long standing issue
+> +  that these keys/signals are handled only when app calls read() or
+> +  select(). Now, these work even if app does not call read() or select().
+>  
+>  What changed:
+>  -------------
 > -- 
 > 2.30.0
 
-Pushed.
+Pushed with a minor typo fix and I dup'ed this text to doc/new-features.xml
+
 
 Thanks,
 Corinna
