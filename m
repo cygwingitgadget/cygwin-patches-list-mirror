@@ -1,27 +1,42 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 4A07A393C845
- for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 08:45:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4A07A393C845
-Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
- [118.243.85.178]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 11J8iEEw005989;
- Fri, 19 Feb 2021 17:44:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 11J8iEEw005989
-X-Nifty-SrcIP: [118.243.85.178]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id 8B9F9398C039
+ for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021 16:58:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8B9F9398C039
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N2VGj-1lqlSS1RR1-013uaP for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2021
+ 17:58:39 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id D5618A80CEC; Fri, 19 Feb 2021 17:58:38 +0100 (CET)
+Date: Fri, 19 Feb 2021 17:58:38 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/2] Cygwin: pty: Make FLUSHO and Ctrl-O work.
-Date: Fri, 19 Feb 2021 17:44:01 +0900
-Message-Id: <20210219084402.1072-2-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210219084402.1072-1-takashi.yano@nifty.ne.jp>
-References: <20210219084402.1072-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 0/2] Console fixes for Win7.
+Message-ID: <YC/uPsB/KUGuJaZs@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210218090128.1459-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210218090128.1459-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:c1Ly96qBK9q5Sfa2YaNjAV/qMBN74h6g46qfrBPAqPEfJEKvOhQ
+ md/vGv9s9N7hQM9myKLlZplnt5FRmD/BxMUwD/tgw+SEfRFEVmkcjKj8Q5zT+kaalaH4WVn
+ 0ISGI9VrJLIiiVHTL18omuenFa8QIVbhWq2U38vpHZdAikUPIVbeqFvaNQLIHu/YC1BHEg9
+ J8LNYZAh/pv771mNSmTsg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iWi7h3/mR6k=:OQ7XqHzh/rlzm+sQ4RdH9r
+ 75JpjmPmSagPnGzB5IO1gPcIlUMcETjh0ke0ima6qslVXE5Evr/Q1oE9j/doIWEixVL/wuQjK
+ hS6iaU4nI8GVj50YKSKdtPrwVJHYxXsY659m0gxw3Ml5Ln/o4TYCjOVWD6x/5NzxKRGzIzDaC
+ FBUNqmdqlG15k0bddMAuHvfkFrQbGx9iN5Rcj98A7z2jAXOpau/v5DDBm5Fk6lmvaFmXVTJFF
+ +PSDdVXKiRhqP4G7ZwaiI5V6C7JudKcJDYpM46fXImm8OSgxJC5+c4FZEknIcjXPJCJb7Gl1s
+ 6GadVAis2bPDfyiJGCYXAgOi5aMZ9KO1vadFVkvbD/+/vdFowEK4h/kZxN/vZcjbJxIcRCJjk
+ TGXYD5UDoRyfwt8yzVgq5iStM8pjlSt1RdTVISiP2tCEAu5jikOxdJwurIC86B6yYa1dK/6JK
+ +NgF+ZgOew==
+X-Spam-Status: No, score=-101.4 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -36,133 +51,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 19 Feb 2021 08:45:03 -0000
+X-List-Received-Date: Fri, 19 Feb 2021 16:58:45 -0000
 
-- Previously, FLUSHO feature was implemented incompletely. With
-  this patch, FLUSHO and Ctrl-O (VDISCARD) get working.
----
- winsup/cygwin/fhandler.h      |  1 +
- winsup/cygwin/fhandler_tty.cc | 17 +++++++++++------
- winsup/cygwin/select.cc       |  5 +++++
- winsup/cygwin/tty.cc          |  1 +
- winsup/cygwin/tty.h           |  1 +
- 5 files changed, 19 insertions(+), 6 deletions(-)
+On Feb 18 18:01, Takashi Yano via Cygwin-patches wrote:
+> Takashi Yano (2):
+>   Cygwin: console: Fix SIGWINCH handling in Win7.
+>   Cygwin: console: Fix handling of Ctrl-S in Win7.
+> 
+>  winsup/cygwin/fhandler.h          |   9 +-
+>  winsup/cygwin/fhandler_console.cc | 306 ++++++++----------------------
+>  winsup/cygwin/select.cc           |   4 +-
+>  winsup/cygwin/spawn.cc            |  32 ++--
+>  winsup/cygwin/tty.h               |   8 +-
+>  5 files changed, 113 insertions(+), 246 deletions(-)
+> 
+> -- 
+> 2.30.0
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index faa910692..5d095d384 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2467,6 +2467,7 @@ public:
-   bool to_be_read_from_pcon (void);
-   void get_master_thread_param (master_thread_param_t *p);
-   void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
-+  void set_mask_flusho (bool m) { get_ttyp ()->mask_flusho = m; }
- };
- 
- class fhandler_dev_null: public fhandler_base
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index e4c35ea41..d30041af1 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -612,8 +612,8 @@ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on
- 	      rc = -1;
- 	      goto out;
- 	    }
--	  /* DISCARD (FLUSHO) and tcflush can finish here. */
--	  if ((get_ttyp ()->ti.c_lflag & FLUSHO || !buf))
-+	  /* tclush can finish here. */
-+	  if (!buf)
- 	    goto out;
- 
- 	  if (is_nonblocking ())
-@@ -671,8 +671,9 @@ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on
- 
-       termios_printf ("bytes read %u", n);
- 
--      if (get_ttyp ()->ti.c_lflag & FLUSHO || !buf)
--	continue;
-+      if (!buf || ((get_ttyp ()->ti.c_lflag & FLUSHO)
-+		   && !get_ttyp ()->mask_flusho))
-+	continue; /* Discard read data */
- 
-       memcpy (optr, outbuf, n);
-       optr += n;
-@@ -691,6 +692,8 @@ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on
-     }
- 
- out:
-+  if (buf)
-+    set_mask_flusho (false);
-   termios_printf ("returning %d", rc);
-   return rc;
- }
-@@ -2036,7 +2039,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- {
-   ssize_t ret;
-   char *p = (char *) ptr;
--  termios ti = tc ()->ti;
-+  termios &ti = tc ()->ti;
- 
-   bg_check_types bg = bg_check (SIGTTOU);
-   if (bg <= bg_eof)
-@@ -2193,7 +2196,7 @@ fhandler_pty_master::tcflush (int queue)
- 
-   if (queue == TCIFLUSH || queue == TCIOFLUSH)
-     ret = process_slave_output (NULL, OUT_BUFFER_SIZE, 0);
--  else if (queue == TCIFLUSH || queue == TCIOFLUSH)
-+  if (queue == TCOFLUSH || queue == TCIOFLUSH)
-     {
-       /* do nothing for now. */
-     }
-@@ -2929,6 +2932,8 @@ fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr,
- {
-   ssize_t towrite = len;
-   BOOL res = TRUE;
-+  if (ttyp->ti.c_lflag & FLUSHO)
-+    return res; /* Discard write data */
-   while (towrite)
-     {
-       if (!is_echo)
-diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-index 085de6deb..c8f288c27 100644
---- a/winsup/cygwin/select.cc
-+++ b/winsup/cygwin/select.cc
-@@ -710,6 +710,11 @@ peek_pipe (select_record *s, bool from_select)
-     }
- 
- out:
-+  if (fh->get_major () == DEV_PTYM_MAJOR)
-+    {
-+      fhandler_pty_master *fhm = (fhandler_pty_master *) fh;
-+      fhm->set_mask_flusho (s->read_ready);
-+    }
-   h = fh->get_output_handle_cyg ();
-   if (s->write_selected && dev != FH_PIPER)
-     {
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index 7627cd6c7..eaab573e0 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -252,6 +252,7 @@ tty::init ()
-   req_xfer_input = false;
-   pcon_input_state = to_cyg;
-   last_sig = 0;
-+  mask_flusho = false;
- }
- 
- HANDLE
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index 4ef1e04c9..b74120416 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -130,6 +130,7 @@ private:
-   bool master_is_running_as_service;
-   bool req_xfer_input;
-   xfer_dir pcon_input_state;
-+  bool mask_flusho;
- 
- public:
-   HANDLE from_master () const { return _from_master; }
--- 
-2.30.0
+Pushed.
 
+Thanks,
+Corinna
