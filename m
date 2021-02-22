@@ -1,42 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 2C297389682E
- for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2021 13:57:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2C297389682E
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id 586183939C0D
+ for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2021 13:58:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 586183939C0D
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MNccf-1lSo9d3X7z-00P6DY for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2021
- 14:57:42 +0100
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MQdtO-1lRzn842tS-00NiPH for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2021
+ 14:58:29 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4679CA80D43; Mon, 22 Feb 2021 14:57:42 +0100 (CET)
-Date: Mon, 22 Feb 2021 14:57:42 +0100
+ id 92F81A80D43; Mon, 22 Feb 2021 14:58:28 +0100 (CET)
+Date: Mon, 22 Feb 2021 14:58:28 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix segfault caused when tcflush() is called.
-Message-ID: <YDO4VrAr822OFerD@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: console: Prevent NULL pointer access in close().
+Message-ID: <YDO4hCq+91d7KfmB@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210220224516.1740-1-takashi.yano@nifty.ne.jp>
- <YDN+lx5V2I3W3bbw@calimero.vinschen.de>
- <20210222204100.698efc916f1eacacb89b9ab8@nifty.ne.jp>
- <20210222222816.90c09a753de37dbc12d993e5@nifty.ne.jp>
+References: <20210222133017.432-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210222222816.90c09a753de37dbc12d993e5@nifty.ne.jp>
-X-Provags-ID: V03:K1:T5Udh/m2iJSQSz3XRBWlzwSy6JMfqt1ejhymnlUsYmACwFIP14O
- hGrPkrVqxmGN7l0uuC2RKFpXrav+OXHIqylD+23ipZEt7si2Bhtz8HF1DzsCf1TQAkLA9vK
- 3lgj/6p00XFJP6Jr3K0eJOaPrpqsGr2JQfjeZLM5LbGj7ZBSZaV5bKhaEg4TCi3vWcVt/rg
- uKrmvjUWmPb3uVp5H535A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:E9duokhHfUs=:7V/71mriSBsEL54nBW4iqL
- mKFUZ67veIYeTBC3T2unWvmfUIuNrrPTA8Z0oWOAFM1y3jRGl7i6FB86gB8VSYvM4+62RaO3c
- hysd+pA19NdIaI3wpM7pF8AzKbAC965KUj1o4qKpuum5ltCw8QwkYHQ4vrzIcun6aF4+GcDe9
- NlRsfKCuVSdvVKBK1C8Jm77WFmoqFYnQox1TZW0JYNv3EfcFUkQP+nviKZkGl7I9u+F9cgf4U
- BMs+r2zcrPNPmOPTvqBVAzX1bX5UVj6UpkjRePr4qrL+wE7crEomCGJjoCrzOMGFIAOdgdwgS
- xg6OzC76WGxZ2YfOkeBrxqOq0G66OmMt541ChsIHcQMXqto/tJ/qJLcwOJt9I4gJLl4hw7ZYr
- 6r9wqBDsGRebiiOwwRDUHOuT6Z6UW/yc3hGd4k6A2yNZ0ixVETHFpRutKl10lKSs8fNehd80q
- afi5NWqyeQ==
-X-Spam-Status: No, score=-101.4 required=5.0 tests=BAYES_00,
+In-Reply-To: <20210222133017.432-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:NLUl5pSCLKs7DPqM5ZU6rT+Fqp8FqF8r2hsp6s5Dk57EXrquosX
+ 8rFSo/E0X9XcpA+LGal3wiYO39j16jJ7/rWN5XmMJbJrOeLniByFrmv8eU5U3UCu6qf+J5g
+ IzSnLBIKIAk6PZgUYe5l9WNcVJnv/xgBH9/qPV2eXdueVi0EdJJuJdKSDnJrBCEF2BVas0g
+ lCyKx4ZNKTaIrkXd3fCeg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DXUvTBJOxJw=:z2G5gEMyPDrGM/XqwNoqTG
+ VN5H/GWj3p3qH1gRaKleGIo1+i2JgSWsk+hd9lo8t+eX7BPqK+/VT0Plzq12zrY5VN575A6sa
+ Ry0eczoudDO7t7wstOLyKpzIzBkwsanBzg3zzrwXYpQVQZviiH42vWS6PILPqwzQ2XK4BGyMO
+ rfggwmiCvLJSMS97RyjLxT8B+AaVnrntIK72SJb4NxSAc2cz+HzqFP/ylu+RxiGkY5Svz0LD5
+ z2dQd7q3XJLWwUxgqUQXeVktocP0vqhspX/VVxYvYeyskJHHy3myR25rNZZjFRfEa7PxnmCMQ
+ uCKxP6GqMliKJffM7SEcCh6CTJXwjVmZEOqccb6t1vVvb/MIL/DqUbfAvF5VZwwaEWF4EVDQ4
+ 26FoQmtRRRnIxt1eBwgVspF2rEdGhxNEbIK+WOAefCNteCIca+VSWMG1atlFZ//028LlzvjX+
+ uPw7/ILukA==
+X-Spam-Status: No, score=-107.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -54,27 +51,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 22 Feb 2021 13:57:45 -0000
+X-List-Received-Date: Mon, 22 Feb 2021 13:58:31 -0000
 
-On Feb 22 22:28, Takashi Yano via Cygwin-patches wrote:
-> On Mon, 22 Feb 2021 20:41:00 +0900
-> Takashi Yano wrote:
-> > On Mon, 22 Feb 2021 10:51:19 +0100
-> > Corinna Vinschen wrote:
-> > > So, what do you think is the state of the console code, Takashi?
-> > > Shall we start a release cycle next week?
-> > 
-> > I think all the fixes and improvements that come to mind at this
-> > point have been completed. As for releasing, I believe I've done
-> > enough testing, but honestly I'm not without anxiety because total
-> > amount of changes for pty and console code is relatively large
-> > since the beginning of this year.
+On Feb 22 22:30, Takashi Yano via Cygwin-patches wrote:
+> - There seems to be a case that shared_console_info is not set yet
+>   when close() is called. This patch adds guard for such case.
+> ---
+>  winsup/cygwin/fhandler_console.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Sure enough, I found a problem in the console code...
+> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+> index 6ded9eabf..96a8729e8 100644
+> --- a/winsup/cygwin/fhandler_console.cc
+> +++ b/winsup/cygwin/fhandler_console.cc
+> @@ -1393,7 +1393,7 @@ fhandler_console::close ()
+>  
+>    release_output_mutex ();
+>  
+> -  if (con.owner == myself->pid)
+> +  if (shared_console_info && con.owner == myself->pid)
+>      {
+>        char name[MAX_PATH];
+>        shared_name (name, CONS_THREAD_SYNC, get_minor ());
+> -- 
+> 2.30.0
 
-:)
+Pushed.
 
-> I will submit a patch for that.
 
-No worries,
+Thanks,
 Corinna
