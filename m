@@ -1,19 +1,19 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 0FD82384803A
- for <cygwin-patches@cygwin.com>; Thu,  4 Mar 2021 08:56:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0FD82384803A
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 8E126384803A
+ for <cygwin-patches@cygwin.com>; Thu,  4 Mar 2021 08:58:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8E126384803A
 Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
  [118.243.85.178]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 1248uXLe007738;
- Thu, 4 Mar 2021 17:56:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 1248uXLe007738
+ by conuserg-11.nifty.com with ESMTP id 1248vUHk028640;
+ Thu, 4 Mar 2021 17:57:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1248vUHk028640
 X-Nifty-SrcIP: [118.243.85.178]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix a race issue in startup of pseudo console.
-Date: Thu,  4 Mar 2021 17:56:34 +0900
-Message-Id: <20210304085634.1659-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Fix restoring console mode failure.
+Date: Thu,  4 Mar 2021 17:57:34 +0900
+Message-Id: <20210304085734.1707-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -34,70 +34,77 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 04 Mar 2021 08:56:59 -0000
+X-List-Received-Date: Thu, 04 Mar 2021 08:58:14 -0000
 
-- If two non-cygwin apps are started simultaneously and this is the
-  first execution of non-cygwin apps in the pty, these occasionally
-  hang up. The cause is the race issue between term_has_pcon_cap(),
-  reset_switch_to_pcon() and setup_pseudoconsole(). This patch fixes
-  the issue.
+- Restoring console mode fails in the following scenario.
+   1) Start cygwin shell in command prompt.
+   2) Run 'exec chcp.com'.
+  This patch fixes the issue.
 ---
- winsup/cygwin/fhandler_tty.cc | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler.h |  1 +
+ winsup/cygwin/spawn.cc   | 14 ++++++++++----
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 3fcaa8277..930501d01 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1118,15 +1118,20 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index ad90cf33d..9b85d1ee9 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2251,6 +2251,7 @@ private:
+ 			       const handle_set_t *p);
+ 
+   static void cons_master_thread (handle_set_t *p, tty *ttyp);
++  pid_t get_owner (void) { return shared_console_info->con.owner; }
+ 
+   friend tty_min * tty_list::get_cttyp ();
+ };
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 323630fcb..490675859 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -608,6 +608,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       fhandler_pty_slave *ptys_primary = NULL;
+       fhandler_console *cons_native = NULL;
+       termios *cons_ti = NULL;
++      pid_t cons_owner = 0;
+       for (int i = 0; i < 3; i ++)
+ 	{
+ 	  const int chk_order[] = {1, 0, 2};
+@@ -628,6 +629,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 		    {
+ 		      cons_native = cons;
+ 		      cons_ti = &((tty *)cons->tc ())->ti;
++		      cons_owner = cons->get_owner ();
+ 		    }
+ 		  if (fd == 0)
+ 		    fhandler_console::set_input_mode (tty::native,
+@@ -1000,9 +1002,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
  	    }
- 	}
-     }
--  if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
--      && !!pinfo (get_ttyp ()->pcon_pid))
--    /* There is a process which is grabbing pseudo console. */
--    return;
-   if (isHybrid)
-     return;
-+  WaitForSingleObject (pcon_mutex, INFINITE);
-+  if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
-+      && !!pinfo (get_ttyp ()->pcon_pid))
-+    {
-+      /* There is a process which is grabbing pseudo console. */
-+      ReleaseMutex (pcon_mutex);
-+      return;
-+    }
-   get_ttyp ()->pcon_pid = 0;
-   get_ttyp ()->switch_to_pcon_in = false;
-   get_ttyp ()->pcon_activated = false;
-+  ReleaseMutex (pcon_mutex);
- }
- 
- ssize_t __stdcall
-@@ -3538,6 +3543,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
-     goto maybe_dumb;
- 
-   /* Check if terminal has CSI6n */
-+  WaitForSingleObject (pcon_mutex, INFINITE);
-   WaitForSingleObject (input_mutex, INFINITE);
-   /* Set pcon_activated and pcon_start so that the response
-      will sent to io_handle rather than io_handle_cyg. */
-@@ -3573,6 +3579,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
-   while (len);
-   get_ttyp ()->pcon_activated = false;
-   get_ttyp ()->pcon_pid = 0;
-+  ReleaseMutex (pcon_mutex);
-   if (len == 0)
-     goto not_has_csi6n;
- 
-@@ -3588,6 +3595,7 @@ not_has_csi6n:
-   get_ttyp ()->pcon_start = false;
-   get_ttyp ()->pcon_activated = false;
-   ReleaseMutex (input_mutex);
-+  ReleaseMutex (pcon_mutex);
- maybe_dumb:
-   get_ttyp ()->pcon_cap_checked = true;
-   return false;
+ 	  if (cons_native)
+ 	    {
+-	      fhandler_console::set_output_mode (tty::cygwin, cons_ti,
++	      tty::cons_mode mode =
++		cons_owner == myself->pid ? tty::restore : tty::cygwin;
++	      fhandler_console::set_output_mode (mode, cons_ti,
+ 						 &cons_handle_set);
+-	      fhandler_console::set_input_mode (tty::cygwin, cons_ti,
++	      fhandler_console::set_input_mode (mode, cons_ti,
+ 						&cons_handle_set);
+ 	      fhandler_console::close_handle_set (&cons_handle_set);
+ 	    }
+@@ -1035,9 +1039,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	    }
+ 	  if (cons_native)
+ 	    {
+-	      fhandler_console::set_output_mode (tty::cygwin, cons_ti,
++	      tty::cons_mode mode =
++		cons_owner == myself->pid ? tty::restore : tty::cygwin;
++	      fhandler_console::set_output_mode (mode, cons_ti,
+ 						 &cons_handle_set);
+-	      fhandler_console::set_input_mode (tty::cygwin, cons_ti,
++	      fhandler_console::set_input_mode (mode, cons_ti,
+ 						&cons_handle_set);
+ 	      fhandler_console::close_handle_set (&cons_handle_set);
+ 	    }
 -- 
 2.30.1
 
