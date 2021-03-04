@@ -1,38 +1,25 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.139])
- by sourceware.org (Postfix) with ESMTPS id 6982D3846077
- for <cygwin-patches@cygwin.com>; Thu,  4 Mar 2021 03:56:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6982D3846077
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from BWINGLISD.cg.shawcable.net. ([68.147.0.90])
- by shaw.ca with ESMTP
- id Hf5ileVhVHmS3Hf5jlKIPd; Wed, 03 Mar 2021 20:56:02 -0700
-X-Authority-Analysis: v=2.4 cv=MaypB7zf c=1 sm=1 tr=0 ts=60405a52
- a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
- a=nz-5sxVJmLUA:10 a=r77TgQKjGQsHNAKrUKIA:9 a=_166spCgmPjDGNcvoiYA:9
- a=QEXdDO2ut3YA:10 a=CCpqsmhAAAAA:8 a=W5r6je3X3E5lmGmlb3UA:9 a=2wkYanB4cVUA:10
- a=B2y7HmGcmWMA:10 a=ul9cdbp4aOFLsgKbc677:22 a=BPzZvq435JnGatEyYwdK:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 0FD82384803A
+ for <cygwin-patches@cygwin.com>; Thu,  4 Mar 2021 08:56:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0FD82384803A
+Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
+ [118.243.85.178]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 1248uXLe007738;
+ Thu, 4 Mar 2021 17:56:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 1248uXLe007738
+X-Nifty-SrcIP: [118.243.85.178]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] cygwin-htdocs/lists.html: add note about attachment size
- limits
-Date: Wed,  3 Mar 2021 20:55:56 -0700
-Message-Id: <20210304035556.10550-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.30.0
-Reply-To: patches
+Subject: [PATCH] Cygwin: pty: Fix a race issue in startup of pseudo console.
+Date: Thu,  4 Mar 2021 17:56:34 +0900
+Message-Id: <20210304085634.1659-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------2.30.0"
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfJi6Uib2vVUzQ6ofHyrBl1W4jy/4s5pGm95RV3Irb1D0bqEscT0QSBzlXR9cEhAD9or7BfAMWng+O9vULC9249YiE3QHrfb99RCp+rqOucj2z2sqfC3a
- lQynVI4ZXNLdTeIGhfOq19FF7cNsPOnDQTQ2BL3J37YimzqwLD99VJh+aevK+pEPUL3FkguK8vaUbOJADRqgXVViGuMsRhdu/XV/YsRURl2ZB68by2HjnsoM
- s3woj35iE4EA2sGCU82LighXm310RR5b/yIIV1bG3tg=
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NONE, TXREP, T_HTML_ATTACH autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,47 +34,70 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 04 Mar 2021 03:56:05 -0000
+X-List-Received-Date: Thu, 04 Mar 2021 08:56:59 -0000
 
-This is a multi-part message in MIME format.
---------------2.30.0
-Content-Type: text/plain; charset=UTF-8; format=fixed
-Content-Transfer-Encoding: 8bit
-
-committer please adjust based on actual size limits if different:
-(256KB - 8KB email text)/1.37 overhead ~ 180KB
-180KB * 1.37 overhead + 8KB email text ~ 256KB
+- If two non-cygwin apps are started simultaneously and this is the
+  first execution of non-cygwin apps in the pty, these occasionally
+  hang up. The cause is the race issue between term_has_pcon_cap(),
+  reset_switch_to_pcon() and setup_pseudoconsole(). This patch fixes
+  the issue.
 ---
- lists.html | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ winsup/cygwin/fhandler_tty.cc | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-
---------------2.30.0
-Content-Type: text/x-patch; name="0001-cygwin-htdocs-lists.html-add-note-about-attachment-size.patch"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: attachment; filename="0001-cygwin-htdocs-lists.html-add-note-about-attachment-size.patch"
-
-diff --git a/lists.html b/lists.html
-index fb784f8d2732..a3beda2d64e0 100755
---- a/lists.html
-+++ b/lists.html
-@@ -42,7 +42,14 @@ answer.</p>
- <div class="smaller">
- <ul class="spaced">
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 3fcaa8277..930501d01 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1118,15 +1118,20 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+ 	    }
+ 	}
+     }
+-  if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
+-      && !!pinfo (get_ttyp ()->pcon_pid))
+-    /* There is a process which is grabbing pseudo console. */
+-    return;
+   if (isHybrid)
+     return;
++  WaitForSingleObject (pcon_mutex, INFINITE);
++  if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
++      && !!pinfo (get_ttyp ()->pcon_pid))
++    {
++      /* There is a process which is grabbing pseudo console. */
++      ReleaseMutex (pcon_mutex);
++      return;
++    }
+   get_ttyp ()->pcon_pid = 0;
+   get_ttyp ()->switch_to_pcon_in = false;
+   get_ttyp ()->pcon_activated = false;
++  ReleaseMutex (pcon_mutex);
+ }
  
--<li><b>None of the below lists accept <a href="https://sourceware.org/lists.html#html-mail">html mail</a>.  Use plain text only.</b></li>
-+<li><b>None of the below lists accept
-+<a href="https://sourceware.org/lists.html#html-mail">html mail</a>.
-+Use plain text only.</b>
-+If you include attachments, please try to ensure they are in plain text,
-+and limit them to about <b>180KB</b>, as with encoding and email overhead,
-+any larger will exceed the size limits for emails to these lists.</li>
-+<!-- 180KB * 1.37 overhead + 8KB email text ~ 256KB -->
-+<!-- (256KB - 8KB email text)/1.37 overhead ~ 180KB -->
+ ssize_t __stdcall
+@@ -3538,6 +3543,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+     goto maybe_dumb;
  
- <li><b>Please do not feed the spammers by <a href="acronyms/#PCYMTNQREAIYR">including raw email addresses</a> in the body of your message.</b></li>
+   /* Check if terminal has CSI6n */
++  WaitForSingleObject (pcon_mutex, INFINITE);
+   WaitForSingleObject (input_mutex, INFINITE);
+   /* Set pcon_activated and pcon_start so that the response
+      will sent to io_handle rather than io_handle_cyg. */
+@@ -3573,6 +3579,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+   while (len);
+   get_ttyp ()->pcon_activated = false;
+   get_ttyp ()->pcon_pid = 0;
++  ReleaseMutex (pcon_mutex);
+   if (len == 0)
+     goto not_has_csi6n;
  
-
---------------2.30.0--
-
+@@ -3588,6 +3595,7 @@ not_has_csi6n:
+   get_ttyp ()->pcon_start = false;
+   get_ttyp ()->pcon_activated = false;
+   ReleaseMutex (input_mutex);
++  ReleaseMutex (pcon_mutex);
+ maybe_dumb:
+   get_ttyp ()->pcon_cap_checked = true;
+   return false;
+-- 
+2.30.1
 
