@@ -1,23 +1,23 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id ED84D3842411
- for <cygwin-patches@cygwin.com>; Thu,  4 Mar 2021 10:11:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org ED84D3842411
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+ by sourceware.org (Postfix) with ESMTPS id 35D5B3858001
+ for <cygwin-patches@cygwin.com>; Fri,  5 Mar 2021 09:02:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 35D5B3858001
 Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
  [118.243.85.178]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 124ABIj6023219;
- Thu, 4 Mar 2021 19:11:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 124ABIj6023219
+ by conuserg-09.nifty.com with ESMTP id 125920NR016823;
+ Fri, 5 Mar 2021 18:02:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 125920NR016823
 X-Nifty-SrcIP: [118.243.85.178]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: console: Fix restoring console mode failure.
-Date: Thu,  4 Mar 2021 19:11:08 +0900
-Message-Id: <20210304101108.1312-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Discard input already accepted on interrupt.
+Date: Fri,  5 Mar 2021 18:01:50 +0900
+Message-Id: <20210305090150.1593-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -34,77 +34,138 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 04 Mar 2021 10:11:55 -0000
+X-List-Received-Date: Fri, 05 Mar 2021 09:02:30 -0000
 
-- Restoring console mode fails in the following scenario.
-   1) Start cygwin shell in command prompt.
-   2) Run 'exec chcp.com'.
-  This patch fixes the issue.
+- Currently, input already accepted is not discarded on interrupt
+  by VINTR, VQUIT and VSUSP keys. This patch fixes the issue.
 ---
- winsup/cygwin/fhandler.h |  1 +
- winsup/cygwin/spawn.cc   | 14 ++++++++++----
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler.h          |  2 ++
+ winsup/cygwin/fhandler_termios.cc |  5 ++++-
+ winsup/cygwin/fhandler_tty.cc     | 23 +++++++++++++++++++++++
+ winsup/cygwin/tty.cc              |  1 +
+ winsup/cygwin/tty.h               |  1 +
+ 5 files changed, 31 insertions(+), 1 deletion(-)
 
 diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index ad90cf33d..9b85d1ee9 100644
+index 9b85d1ee9..4da35b7f5 100644
 --- a/winsup/cygwin/fhandler.h
 +++ b/winsup/cygwin/fhandler.h
-@@ -2251,6 +2251,7 @@ private:
- 			       const handle_set_t *p);
+@@ -1921,6 +1921,7 @@ class fhandler_termios: public fhandler_base
+   int eat_readahead (int n);
+   virtual void acquire_input_mutex_if_necessary (DWORD ms) {};
+   virtual void release_input_mutex_if_necessary (void) {};
++  virtual void discard_input () {};
  
-   static void cons_master_thread (handle_set_t *p, tty *ttyp);
-+  pid_t get_owner (void) { return shared_console_info->con.owner; }
+  public:
+   tty_min*& tc () {return _tc;}
+@@ -2451,6 +2452,7 @@ public:
+   void fixup_after_exec ();
+   int tcgetpgrp ();
+   void flush_to_slave ();
++  void discard_input ();
  
-   friend tty_min * tty_list::get_cttyp ();
- };
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 323630fcb..490675859 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -608,6 +608,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       fhandler_pty_slave *ptys_primary = NULL;
-       fhandler_console *cons_native = NULL;
-       termios *cons_ti = NULL;
-+      pid_t cons_owner = 0;
-       for (int i = 0; i < 3; i ++)
+   fhandler_pty_master (void *) {}
+ 
+diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
+index ae35fe894..b487acab3 100644
+--- a/winsup/cygwin/fhandler_termios.cc
++++ b/winsup/cygwin/fhandler_termios.cc
+@@ -333,7 +333,10 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
+ 
+ 	  termios_printf ("got interrupt %d, sending signal %d", c, sig);
+ 	  if (!(ti.c_lflag & NOFLSH))
+-	    eat_readahead (-1);
++	    {
++	      eat_readahead (-1);
++	      discard_input ();
++	    }
+ 	  release_input_mutex_if_necessary ();
+ 	  tc ()->kill_pgrp (sig);
+ 	  acquire_input_mutex_if_necessary (INFINITE);
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 930501d01..244147a80 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -391,6 +391,21 @@ fhandler_pty_master::flush_to_slave ()
+     accept_input ();
+ }
+ 
++void
++fhandler_pty_master::discard_input ()
++{
++  DWORD bytes_in_pipe;
++  char buf[1024];
++  DWORD n;
++
++  WaitForSingleObject (input_mutex, INFINITE);
++  while (::bytes_available (bytes_in_pipe, from_master_cyg) && bytes_in_pipe)
++    ReadFile (from_master_cyg, buf, sizeof(buf), &n, NULL);
++  ResetEvent (input_available_event);
++  get_ttyp ()->discard_input = true;
++  ReleaseMutex (input_mutex);
++}
++
+ DWORD
+ fhandler_pty_common::__acquire_output_mutex (const char *fn, int ln,
+ 					     DWORD ms)
+@@ -2150,6 +2165,9 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	}
+ 
+       WaitForSingleObject (input_mutex, INFINITE);
++      if ((ti.c_lflag & ISIG) && !(ti.c_iflag & IGNBRK)
++	  && !(ti.c_lflag & NOFLSH) && memchr (buf, '\003', nlen))
++	get_ttyp ()->discard_input = true;
+       DWORD n;
+       WriteFile (to_slave, buf, nlen, &n, NULL);
+       ReleaseMutex (input_mutex);
+@@ -3709,6 +3727,8 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+       while (PeekConsoleInputA (from, r, INREC_SIZE, &n) && n)
  	{
- 	  const int chk_order[] = {1, 0, 2};
-@@ -628,6 +629,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 		    {
- 		      cons_native = cons;
- 		      cons_ti = &((tty *)cons->tc ())->ti;
-+		      cons_owner = cons->get_owner ();
- 		    }
- 		  if (fd == 0)
- 		    fhandler_console::set_input_mode (tty::native,
-@@ -1000,9 +1002,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	    }
- 	  if (cons_native)
+ 	  ReadConsoleInputA (from, r, n, &n);
++	  if (ttyp->discard_input)
++	    continue;
+ 	  int len = 0;
+ 	  char *ptr = buf;
+ 	  for (DWORD i = 0; i < n; i++)
+@@ -3773,6 +3793,8 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+ 	{
+ 	  DWORD n = MIN (bytes_in_pipe, NT_MAX_PATH);
+ 	  ReadFile (from, buf, n, &n, NULL);
++	  if (ttyp->discard_input)
++	    continue;
+ 	  char *ptr = buf;
+ 	  if (dir == tty::to_nat)
  	    {
--	      fhandler_console::set_output_mode (tty::cygwin, cons_ti,
-+	      tty::cons_mode conmode =
-+		cons_owner == myself->pid ? tty::restore : tty::cygwin;
-+	      fhandler_console::set_output_mode (conmode, cons_ti,
- 						 &cons_handle_set);
--	      fhandler_console::set_input_mode (tty::cygwin, cons_ti,
-+	      fhandler_console::set_input_mode (conmode, cons_ti,
- 						&cons_handle_set);
- 	      fhandler_console::close_handle_set (&cons_handle_set);
- 	    }
-@@ -1035,9 +1039,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	    }
- 	  if (cons_native)
- 	    {
--	      fhandler_console::set_output_mode (tty::cygwin, cons_ti,
-+	      tty::cons_mode conmode =
-+		cons_owner == myself->pid ? tty::restore : tty::cygwin;
-+	      fhandler_console::set_output_mode (conmode, cons_ti,
- 						 &cons_handle_set);
--	      fhandler_console::set_input_mode (tty::cygwin, cons_ti,
-+	      fhandler_console::set_input_mode (conmode, cons_ti,
- 						&cons_handle_set);
- 	      fhandler_console::close_handle_set (&cons_handle_set);
- 	    }
+@@ -3803,4 +3825,5 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+   else if (transfered)
+     SetEvent (input_available_event);
+   ttyp->pcon_input_state = dir;
++  ttyp->discard_input = false;
+ }
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index eaab573e0..3c016315c 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -253,6 +253,7 @@ tty::init ()
+   pcon_input_state = to_cyg;
+   last_sig = 0;
+   mask_flusho = false;
++  discard_input = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index b74120416..f041250a3 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -131,6 +131,7 @@ private:
+   bool req_xfer_input;
+   xfer_dir pcon_input_state;
+   bool mask_flusho;
++  bool discard_input;
+ 
+ public:
+   HANDLE from_master () const { return _from_master; }
 -- 
 2.30.1
 
