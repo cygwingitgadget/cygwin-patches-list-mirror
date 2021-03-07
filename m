@@ -1,42 +1,25 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 9723C382D83E
- for <cygwin-patches@cygwin.com>; Fri,  5 Mar 2021 15:12:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9723C382D83E
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MLQl3-1l0FbJ0tpD-00IVUS for <cygwin-patches@cygwin.com>; Fri, 05 Mar 2021
- 16:12:22 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D7D23A8060B; Fri,  5 Mar 2021 16:12:21 +0100 (CET)
-Date: Fri, 5 Mar 2021 16:12:21 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+ by sourceware.org (Postfix) with ESMTPS id 87857386185F
+ for <cygwin-patches@cygwin.com>; Sun,  7 Mar 2021 01:41:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 87857386185F
+Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
+ [118.243.85.178]) (authenticated)
+ by conuserg-09.nifty.com with ESMTP id 1271fBlh004778;
+ Sun, 7 Mar 2021 10:41:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 1271fBlh004778
+X-Nifty-SrcIP: [118.243.85.178]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: console: Fix restoring console mode failure.
-Message-ID: <YEJKVYTOQ8wzX7vi@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210304101108.1312-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console, pty: Stop ignoring Ctrl-C by IGNBRK.
+Date: Sun,  7 Mar 2021 10:41:11 +0900
+Message-Id: <20210307014111.1065-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210304101108.1312-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:eul4a/B72F+aU0PeSccY8rxd2QdFeFIRti2O7LoahXB3N+dX8zY
- StS4SJ89vUJedZG39LlY6YvbaB5kjx4tTOj8wQGm0ksfslpKb5v9thh5QxcBoQFDbIYJqb/
- /luRdv4HRo/MYlYRX5SKMF59+Zz0QnOuVqBmwPv49daO7od3dpk9EmjMJWcg7WlepCr+dqX
- e4kX4vCqL1123SuRkVqyA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:59aMQo04EMo=:0/+8gYRt8Pn5PKBpNQCdX5
- m3xW9crshnYMy5UiupDUlmpENX837Lghzvi5tx9pJ7neKTp7CI+QlEMQvszOtEnX95ivabgBY
- wNYE4S+vwA3ZvHDG6WSy6LKDvNBmkzM+UL42Ci+RQEFj5AlzybKEykg2wKzkigzmuFtuhfZMC
- eJXOwV9uEabOukDukDEZrxtaheJ98qjrGhlUOxBmIvCq3YmYtIrSeIZuyqU0SFQ+6u+huxpQz
- NdiICCUF9hCA6Wu6jBx300BV8fh4Jw1iAtXxsuyL9gh2TATrWebwiHyd1UhvOXhBhyFoozaCm
- 3O8xY0yuii/P2MK1NrFhe/Ncmq2hp3EbSgd4nU6W03zkYPh6tR8X/y7W6OpAdQOpx09H3/uD3
- +ofkZHfVgsqQjk8Jh2qB54a4T+y9fnrYaXCcCCpZc7vdSdoqz8Z7q6LT2jtt9B0HUgcwCpahl
- Y5yz1Du6Fg==
-X-Spam-Status: No, score=-101.4 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -51,20 +34,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 05 Mar 2021 15:12:24 -0000
+X-List-Received-Date: Sun, 07 Mar 2021 01:41:48 -0000
 
-On Mar  4 19:11, Takashi Yano via Cygwin-patches wrote:
-> - Restoring console mode fails in the following scenario.
->    1) Start cygwin shell in command prompt.
->    2) Run 'exec chcp.com'.
->   This patch fixes the issue.
-> ---
->  winsup/cygwin/fhandler.h |  1 +
->  winsup/cygwin/spawn.cc   | 14 ++++++++++----
->  2 files changed, 11 insertions(+), 4 deletions(-)
+- Perhaps current code misunderstand meaning of the IGNBRK. As far
+  as I investigated, IGNBRK is concerned with break signal in serial
+  port but there is no evidence that it has effect to ignore Ctrl-C.
+  This patch stops ignoring Ctrl-C by IGNBRK for non-cygwin apps.
+---
+ winsup/cygwin/fhandler_console.cc | 2 +-
+ winsup/cygwin/fhandler_tty.cc     | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Pushed.
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 96a8729e8..0b33a1370 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -484,7 +484,7 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+ 	/* This is illegal, so turn off the echo here, and fake it
+ 	   when we read the characters */
+ 	flags &= ~ENABLE_ECHO_INPUT;
+-      if ((t->c_lflag & ISIG) && !(t->c_iflag & IGNBRK))
++      if (t->c_lflag & ISIG)
+ 	flags |= ENABLE_PROCESSED_INPUT;
+       break;
+     }
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 244147a80..4358bceec 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -2165,8 +2165,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	}
+ 
+       WaitForSingleObject (input_mutex, INFINITE);
+-      if ((ti.c_lflag & ISIG) && !(ti.c_iflag & IGNBRK)
+-	  && !(ti.c_lflag & NOFLSH) && memchr (buf, '\003', nlen))
++      if ((ti.c_lflag & ISIG) && !(ti.c_lflag & NOFLSH)
++	  && memchr (buf, '\003', nlen))
+ 	get_ttyp ()->discard_input = true;
+       DWORD n;
+       WriteFile (to_slave, buf, nlen, &n, NULL);
+@@ -3307,7 +3307,7 @@ skip_create:
+ 	/* This is illegal, so turn off the echo here, and fake it
+ 	   when we read the characters */
+ 	mode &= ~ENABLE_ECHO_INPUT;
+-      if ((t.c_lflag & ISIG) && !(t.c_iflag & IGNBRK))
++      if (t.c_lflag & ISIG)
+ 	mode |= ENABLE_PROCESSED_INPUT;
+       SetConsoleMode (hpConIn, mode);
+       /* Set output mode */
+-- 
+2.30.1
 
-
-Thanks,
-Corinna
