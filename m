@@ -1,48 +1,41 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-041.btinternet.com (mailomta2-re.btinternet.com
- [213.120.69.95])
- by sourceware.org (Postfix) with ESMTPS id E9BBE385DC37
- for <cygwin-patches@cygwin.com>; Sun,  7 Mar 2021 19:16:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E9BBE385DC37
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
+ by sourceware.org (Postfix) with ESMTPS id 76795385703F
+ for <cygwin-patches@cygwin.com>; Sun,  7 Mar 2021 20:26:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 76795385703F
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-041.btinternet.com with ESMTP id
- <20210307191613.RSOK26832.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Sun, 7 Mar 2021 19:16:13 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9C0CC299EF57A
-X-Originating-IP: [81.153.98.229]
-X-OWM-Source-IP: 81.153.98.229 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledruddutddgudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfedtgfefgfehvdegteekiedtfefgveevfeeujeektefgjedujeffffeiueelvddvnecuffhomhgrihhnpehmihhnghifrdhorhhgpdgthihgfihinhdrtghomhdpmhhinhhgfidqfieigedrohhrghenucfkphepkedurdduheefrdelkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkedurdduheefrdelkedrvddvledpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoeeurhhirghnrdfknhhglhhishesufihshhtvghmrghtihgtufifrdgrsgdrtggrqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (81.153.98.229) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C0CC299EF57A; Sun, 7 Mar 2021 19:16:13 +0000
-Subject: Re: [PATCH] winsup/doc/dll.xml: update MinGW/.org to MinGW-w64/.org
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([68.147.0.90]) by shaw.ca with ESMTP
+ id IzyulUD3ynRGtIzyvl9sYO; Sun, 07 Mar 2021 13:26:29 -0700
+X-Authority-Analysis: v=2.4 cv=cagXElPM c=1 sm=1 tr=0 ts=604536f5
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=IkcTkHD0fZMA:10 a=LF2dOfbMAAAA:8 a=w_pzkKWiAAAA:8 a=2qbvtFLIdV5TP_0_zVYA:9
+ a=QEXdDO2ut3YA:10 a=TX4KzpC5ujAA:10 a=TmiWL2DCWjWbbQwbIu5r:22
+ a=sRI3_1zDfAgwuvI8zelB:22 a=BPzZvq435JnGatEyYwdK:22
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
 To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20210307163155.63871-1-Brian.Inglis@SystematicSW.ab.ca>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
-Date: Sun, 7 Mar 2021 19:15:55 +0000
+ <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+Subject: Re: [PATCH] winsup/doc/dll.xml: update MinGW/.org to MinGW-w64/.org
+Message-ID: <38792da7-75f7-231d-0de2-d483b927820a@SystematicSw.ab.ca>
+Date: Sun, 7 Mar 2021 13:26:28 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210307163155.63871-1-Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3570.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfLrnOQg5Tge3/Vi/RN3wtJ2Zn4rMHRSj5qxpIe/lXMGMWc92w0plxU7DWeuCtpdNvmJLKiHIZSOWhOyRPFrBm2m6OROjCvfiOwPGSIMOx2y8UFrbtOBa
+ J3svP531hLnWcXNfQ3zWIAV43GVQXAYwNFEezESofSA3XCq98xGeg661CVS//NmLtUA4xfRXTZty5G0fyUq/f16FlXdlg7ZiJJg=
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -57,22 +50,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 07 Mar 2021 19:16:17 -0000
+X-List-Received-Date: Sun, 07 Mar 2021 20:26:32 -0000
 
-On 07/03/2021 16:31, Brian Inglis wrote:
-> ---
->   winsup/doc/dll.xml | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
+On 2021-03-07 12:15, Jon Turney wrote:
+> On 07/03/2021 16:31, Brian Inglis wrote:
+>> ---
+>>   winsup/doc/dll.xml | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
 
+> I don't think the link here actually has much value, and would be inclined to 
+> drop it, as far as I can tell it's just giving that as an example of a toolchain 
+> which produces 'lib'-prefixed DLLs.
+> 
+> Also, reading the whole page, the section "Linking against DLLs" needs updating 
+> since GNU ld has had the ability to link directly against DLLs (automatically 
+> generating the necessary import stubs) for a number of years.
+> 
+> Also, there are other mentions of MinGW.org on the cygwin website (e.g. 
+> https://cygwin.com/links.html) which also need updating, if that URL is no 
+> longer valid.
 
-I don't think the link here actually has much value, and would be 
-inclined to drop it, as far as I can tell it's just giving that as an 
-example of a toolchain which produces 'lib'-prefixed DLLs.
+I checked the tree and Corinna cleaned up some a few years ago.
 
-Also, reading the whole page, the section "Linking against DLLs" needs 
-updating since GNU ld has had the ability to link directly against DLLs 
-(automatically generating the necessary import stubs) for a number of years.
+I already checked winsup/doc/ and there were no other substantive uses of MinGW 
+unless you would prefer *ALL* mentions of MinGW be suffixed with -w64.
 
-Also, there are other mentions of MinGW.org on the cygwin website (e.g. 
-https://cygwin.com/links.html) which also need updating, if that URL is 
-no longer valid.
+I did not look closely at cygwin-htdocs, as git complained when I tried to 
+update, so I wiped that repo, but it looks like links.html and categories in 
+packaging-hint-files.html which includes Mingw, needed updated.
+
+Is there a definitive file with a list of all currently valid categories in 
+calm, cygport, setup, or shared somewhere?
+I may get to reclone, check, and patch htdocs later.
+
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
