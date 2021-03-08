@@ -1,43 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 4C1163939C04
- for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 14:03:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4C1163939C04
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MQeI4-1l4Um70Jrq-00Ng8j for <cygwin-patches@cygwin.com>; Mon, 08 Mar 2021
- 15:03:05 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 9B2F0A82675; Mon,  8 Mar 2021 15:03:04 +0100 (CET)
-Date: Mon, 8 Mar 2021 15:03:04 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id F1CDA3959CB8
+ for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 14:55:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org F1CDA3959CB8
+Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
+ [118.243.85.178]) (authenticated)
+ by conuserg-08.nifty.com with ESMTP id 128EtHH8020532;
+ Mon, 8 Mar 2021 23:55:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 128EtHH8020532
+X-Nifty-SrcIP: [118.243.85.178]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Attach to stub process when non-cygwin app
- inherits pcon.
-Message-ID: <YEYumE2YRiE6TnVh@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Transfer input for native app only if the stdin
+ is pcon.
+Date: Mon,  8 Mar 2021 23:55:10 +0900
+Message-Id: <20210308145510.1164-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:/fjf392vYF4vBAu0lGIaiORLFLTysaLHs+eub0cjVMfJzxm0egH
- Ep4MgOwZZ35iAmzHS5JHkCYAR2lpaNjpFZNgtFiv1Oj8UgadYkAI9VSks2/MZHgQdrZOkuD
- c26j6Dq8Kvlp7HEB+uj+qTBVdmAy1csvwb3ZU23MxgKNM8kGxDwTV8oRfxGE7HRz9fxBldF
- piSAX5ByfWhhxYGm++GlQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Dotw4VJdTDM=:ZV7+/Q45lETQhf7bjbB4Yl
- SwN1kueVt7F/WHQha5eL2SCOHlcXDJNB3lWcC8eZZ9+EFkCIlCieVL1617Jt7L1Jppee30KmY
- 46t98dXrxj9BpShZzzRhygkmrjH4h6eIlF8k3eQ/9UHFny2CeGm9LXYzyoiPtBSrziRbd91Mq
- QQlN88ExdZ1gGDU77SVL0SkTbEwOgH6mjkz/yfUVu0mmtRHHIjuzlVcKUv6w7MdhFAxbNgbZc
- Ls2CgAfSDT8V9BkD0wedFMhCMWVoIUNE/E0L/0qX8lQAk/skzh4GjOim9u1HR7zb1mKDPfubz
- gJDKH8lbfFGDTR1lcBM8GoCuP3m+6MDwIUEAhwItYR3u+Zpu1B7LVQLRRMDj6awhFWLBTI3HB
- o01TUul0VEqwBdRBzrj+EhZBFqhLpSmk0SUPByiaz2yQwEOQeEid0yVbl7nnJ4WyvEmr4sz3U
- Ww/AtVo3Fw==
-X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -52,36 +35,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 08 Mar 2021 14:03:07 -0000
+X-List-Received-Date: Mon, 08 Mar 2021 14:55:54 -0000
 
-On Mar  8 22:14, Takashi Yano via Cygwin-patches wrote:
-> - If two non-cygwin apps are started simultaneously, attaching to
->   pseudo console sometimes fails. This is because the second app
->   trys to attach to the process not started yet. This patch avoids
->   the issue by attaching to the stub process rather than the other
->   non-cygwin app.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index 4358bceec..3bfc8c0c8 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -3104,7 +3104,7 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
->  		       0, TRUE, DUPLICATE_SAME_ACCESS);
->        CloseHandle (pcon_owner);
->        FreeConsole ();
-> -      AttachConsole (p->dwProcessId);
-> +      AttachConsole (p->exec_dwProcessId);
->        goto skip_create;
->      }
->  
-> -- 
-> 2.30.1
+- Currently, transfer input is triggered even if the stdin of native
+  app is not a pseudo console. With this patch it is triggered only
+  if the stdin is a pseudo console.
+---
+ winsup/cygwin/fhandler_tty.cc | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Pushed.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 3bfc8c0c8..47d59e8c5 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -3084,14 +3084,16 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
+   if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
+       && !!pinfo (get_ttyp ()->pcon_pid) && get_ttyp ()->pcon_activated)
+     {
+-      /* Send CSI6n just for requesting transfer input. */
+-      DWORD n;
+-      WaitForSingleObject (input_mutex, INFINITE);
+-      get_ttyp ()->req_xfer_input = true;
+-      get_ttyp ()->pcon_start = true;
+-      get_ttyp ()->pcon_start_pid = myself->pid;
+-      WriteFile (get_output_handle_cyg (), "\033[6n", 4, &n, NULL);
+-      ReleaseMutex (input_mutex);
++      if (GetStdHandle (STD_INPUT_HANDLE) == get_handle ())
++	{ /* Send CSI6n just for requesting transfer input. */
++	  DWORD n;
++	  WaitForSingleObject (input_mutex, INFINITE);
++	  get_ttyp ()->req_xfer_input = true;
++	  get_ttyp ()->pcon_start = true;
++	  get_ttyp ()->pcon_start_pid = myself->pid;
++	  WriteFile (get_output_handle_cyg (), "\033[6n", 4, &n, NULL);
++	  ReleaseMutex (input_mutex);
++	}
+       /* Attach to the pseudo console which already exits. */
+       pinfo p (get_ttyp ()->pcon_pid);
+       HANDLE pcon_owner =
+-- 
+2.30.1
 
-
-Thanks,
-Corinna
