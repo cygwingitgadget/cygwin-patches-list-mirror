@@ -1,45 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id D697B394D809
- for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 10:14:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D697B394D809
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N6KMR-1lpfCe0lHV-016f1d for <cygwin-patches@cygwin.com>; Mon, 08 Mar 2021
- 11:14:45 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id BD189A8266C; Mon,  8 Mar 2021 11:14:44 +0100 (CET)
-Date: Mon, 8 Mar 2021 11:14:44 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id A016D394EC2D
+ for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 13:15:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A016D394EC2D
+Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
+ [118.243.85.178]) (authenticated)
+ by conuserg-07.nifty.com with ESMTP id 128DF600012724;
+ Mon, 8 Mar 2021 22:15:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 128DF600012724
+X-Nifty-SrcIP: [118.243.85.178]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] winsup/doc/dll.xml: update MinGW/.org to MinGW-w64/.org
-Message-ID: <YEX5FO0ISV06h9QY@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210307163155.63871-1-Brian.Inglis@SystematicSW.ab.ca>
- <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
- <38792da7-75f7-231d-0de2-d483b927820a@SystematicSw.ab.ca>
+Subject: [PATCH] Cygwin: pty: Attach to stub process when non-cygwin app
+ inherits pcon.
+Date: Mon,  8 Mar 2021 22:14:58 +0900
+Message-Id: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <38792da7-75f7-231d-0de2-d483b927820a@SystematicSw.ab.ca>
-X-Provags-ID: V03:K1:HY8QS2bxqcRRHHvTtTFLmj+dwUsTYfCHs/oOSYmp+gw0g5EAbtr
- 6Vlr8PEiz8JHFTYT2CW/iKpHYnVZ2T+TcYYDts9kq239U1irI3CV/TET0rXz3oqYSoNmEN4
- jYf/Un6Wjxu+4SlKf2DZAKlnbexofXYqk5b5Yfs+z3LojtjdGkQ/He0tahP7q9dY4oSnfuX
- MblEVvPMzdUJpICWXSphA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W/rP/6NAhvw=:+MfqA9B3KZ5DlOTOsT2u8/
- Xv7QR5pBI5mgQGGYRUJUCW/FHO3mLjd9Tzvs8xql4nOatrBg7U54/CkMapeWXXj2GJB9yQdpN
- vyZJ5OTyVI1KC8rxA2XI6XCnpBESLSRs566CqKyz1p8Or/Pvg/VcGe4h6I/GNEMLy0DkH+tAY
- klFykpy7rJcRB001AmW+7d2Axoo1WD6FV4KKvjW56IfDVqNDLUCrTq0X8jU3KQxOO0f84gpkf
- 3MmqU/JRoqLJ+RH9AQMd0779bh6Hy8FmxAYCvtf+1K/zoaNLjSU6DtB1J1ecmNOIkY7EOZ3oA
- IviAJGtjO/cOnMIvHcx3q84aHm/3CZMufWARttQRwmpVUnxihkFz3DXbsF9sL38778OPo1ukV
- GyGo/QBbjKQAAGwNicwDE/nnU1e/mCG1v41/acnGdxlNObSEULuR1nLPoioDzBQQ2amJPE2EM
- JFnsufkDkg==
-X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,38 +35,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 08 Mar 2021 10:14:48 -0000
+X-List-Received-Date: Mon, 08 Mar 2021 13:15:29 -0000
 
-On Mar  7 13:26, Brian Inglis wrote:
-> On 2021-03-07 12:15, Jon Turney wrote:
-> > On 07/03/2021 16:31, Brian Inglis wrote:
-> > > ---
-> > >   winsup/doc/dll.xml | 5 +++--
-> > >   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> > I don't think the link here actually has much value, and would be
-> > inclined to drop it, as far as I can tell it's just giving that as an
-> > example of a toolchain which produces 'lib'-prefixed DLLs.
-> > 
-> > Also, reading the whole page, the section "Linking against DLLs" needs
-> > updating since GNU ld has had the ability to link directly against DLLs
-> > (automatically generating the necessary import stubs) for a number of
-> > years.
-> > 
-> > Also, there are other mentions of MinGW.org on the cygwin website (e.g.
-> > https://cygwin.com/links.html) which also need updating, if that URL is
-> > no longer valid.
-> 
-> I checked the tree and Corinna cleaned up some a few years ago.
-> 
-> I already checked winsup/doc/ and there were no other substantive uses of
-> MinGW unless you would prefer *ALL* mentions of MinGW be suffixed with -w64.
-> 
-> I did not look closely at cygwin-htdocs, as git complained when I tried to
-> update, so I wiped that repo,
+- If two non-cygwin apps are started simultaneously, attaching to
+  pseudo console sometimes fails. This is because the second app
+  trys to attach to the process not started yet. This patch avoids
+  the issue by attaching to the stub process rather than the other
+  non-cygwin app.
+---
+ winsup/cygwin/fhandler_tty.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If git complained, your repo was just not in the latets state.
-Maybe just using `git reset --hard origin/master' would have fixed it.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 4358bceec..3bfc8c0c8 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -3104,7 +3104,7 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
+ 		       0, TRUE, DUPLICATE_SAME_ACCESS);
+       CloseHandle (pcon_owner);
+       FreeConsole ();
+-      AttachConsole (p->dwProcessId);
++      AttachConsole (p->exec_dwProcessId);
+       goto skip_create;
+     }
+ 
+-- 
+2.30.1
 
-
-Corinna
