@@ -1,41 +1,42 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id 76795385703F
- for <cygwin-patches@cygwin.com>; Sun,  7 Mar 2021 20:26:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 76795385703F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([68.147.0.90]) by shaw.ca with ESMTP
- id IzyulUD3ynRGtIzyvl9sYO; Sun, 07 Mar 2021 13:26:29 -0700
-X-Authority-Analysis: v=2.4 cv=cagXElPM c=1 sm=1 tr=0 ts=604536f5
- a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
- a=IkcTkHD0fZMA:10 a=LF2dOfbMAAAA:8 a=w_pzkKWiAAAA:8 a=2qbvtFLIdV5TP_0_zVYA:9
- a=QEXdDO2ut3YA:10 a=TX4KzpC5ujAA:10 a=TmiWL2DCWjWbbQwbIu5r:22
- a=sRI3_1zDfAgwuvI8zelB:22 a=BPzZvq435JnGatEyYwdK:22
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20210307163155.63871-1-Brian.Inglis@SystematicSW.ab.ca>
- <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-Subject: Re: [PATCH] winsup/doc/dll.xml: update MinGW/.org to MinGW-w64/.org
-Message-ID: <38792da7-75f7-231d-0de2-d483b927820a@SystematicSw.ab.ca>
-Date: Sun, 7 Mar 2021 13:26:28 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 08A013854801
+ for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 09:35:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 08A013854801
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1M890H-1lNszU0qPr-005Ez1 for <cygwin-patches@cygwin.com>; Mon, 08 Mar 2021
+ 10:35:03 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id BE475A82677; Mon,  8 Mar 2021 10:35:02 +0100 (CET)
+Date: Mon, 8 Mar 2021 10:35:02 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Discard input already accepted on interrupt.
+Message-ID: <YEXvxgaGivK1aOKJ@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210305090150.1593-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfLrnOQg5Tge3/Vi/RN3wtJ2Zn4rMHRSj5qxpIe/lXMGMWc92w0plxU7DWeuCtpdNvmJLKiHIZSOWhOyRPFrBm2m6OROjCvfiOwPGSIMOx2y8UFrbtOBa
- J3svP531hLnWcXNfQ3zWIAV43GVQXAYwNFEezESofSA3XCq98xGeg661CVS//NmLtUA4xfRXTZty5G0fyUq/f16FlXdlg7ZiJJg=
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210305090150.1593-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:KuDF32oey8qTZ/wtzV8FGRlTIiOxCQtaNVPvxhzzDffXEat4PeL
+ bqbCiBvwjjuUHxaNhciun81GbT2wwdVdPFRmA7rQn0/Ezo1q3Bp1Vp/TpMAIzdqhlv//m24
+ lL8UZ+9Yg3uAkqTdRpGl8QBYJZARi7ewBG2BTSZxlSd5yNi0xKYmjhoL6tfT11hFY/7bCBb
+ xXdQ12UdsIAWxrXKXnT7Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DkaM2zilmrA=:XYk1Ik8NYtFoU6BWmnOBrV
+ QXiN5gNU17wbfOHwlLWZy5AlsruGXjfWV2aQwwkjfVnPrYOGsFhnEiN0D4utUM2ZNAv+Z4TwH
+ aMH1ubEa4oZVcMC+5clg9AyRUjkwPvfNwkSIyvRmZW4LYx3eqOESXMAOSbrrSz19mY/i0oDAR
+ JfUduc4wCN4uRBDoVQpa1Gz6sVzByz+CAIueI6yFO6haCIUexX28eLLDaRX82azoztFcw2bEB
+ csQ1KEjGIUvcdGj96hrRjNWerct6za6beEFySsgG2c8O/BRHtdFq4fFfuMqA/jndRx3uhJQa2
+ 1iE3LJkVRi2km9ytBqnqjizoPb2xYB+ccsvghpmXUhVRE8Yt8ATjXP09NLy2dqgZDTnuKqN02
+ WabKvb6dVv5ARs8xNLHV9zOpiRICCn4gDq8tUF4bL+oR0fbxfCDFHVXhQeNPXkBfsnx79u32G
+ X/BMW1doRQ==
+X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -50,42 +51,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 07 Mar 2021 20:26:32 -0000
+X-List-Received-Date: Mon, 08 Mar 2021 09:35:12 -0000
 
-On 2021-03-07 12:15, Jon Turney wrote:
-> On 07/03/2021 16:31, Brian Inglis wrote:
->> ---
->>   winsup/doc/dll.xml | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
+On Mar  5 18:01, Takashi Yano via Cygwin-patches wrote:
+> - Currently, input already accepted is not discarded on interrupt
+>   by VINTR, VQUIT and VSUSP keys. This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler.h          |  2 ++
+>  winsup/cygwin/fhandler_termios.cc |  5 ++++-
+>  winsup/cygwin/fhandler_tty.cc     | 23 +++++++++++++++++++++++
+>  winsup/cygwin/tty.cc              |  1 +
+>  winsup/cygwin/tty.h               |  1 +
+>  5 files changed, 31 insertions(+), 1 deletion(-)
 
-> I don't think the link here actually has much value, and would be inclined to 
-> drop it, as far as I can tell it's just giving that as an example of a toolchain 
-> which produces 'lib'-prefixed DLLs.
-> 
-> Also, reading the whole page, the section "Linking against DLLs" needs updating 
-> since GNU ld has had the ability to link directly against DLLs (automatically 
-> generating the necessary import stubs) for a number of years.
-> 
-> Also, there are other mentions of MinGW.org on the cygwin website (e.g. 
-> https://cygwin.com/links.html) which also need updating, if that URL is no 
-> longer valid.
+Pushed.
 
-I checked the tree and Corinna cleaned up some a few years ago.
 
-I already checked winsup/doc/ and there were no other substantive uses of MinGW 
-unless you would prefer *ALL* mentions of MinGW be suffixed with -w64.
-
-I did not look closely at cygwin-htdocs, as git complained when I tried to 
-update, so I wiped that repo, but it looks like links.html and categories in 
-packaging-hint-files.html which includes Mingw, needed updated.
-
-Is there a definitive file with a list of all currently valid categories in 
-calm, cygport, setup, or shared somewhere?
-I may get to reclone, check, and patch htdocs later.
-
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
+Thanks,
+Corinna
