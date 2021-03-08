@@ -1,31 +1,36 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
- [210.131.2.82])
- by sourceware.org (Postfix) with ESMTPS id 7CF023850419
- for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 15:48:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7CF023850419
-Received: from Express5800-S70 (y085178.dynamic.ppp.asahi-net.or.jp
- [118.243.85.178]) (authenticated)
- by conssluserg-03.nifty.com with ESMTP id 128FmEoe021079
- for <cygwin-patches@cygwin.com>; Tue, 9 Mar 2021 00:48:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 128FmEoe021079
-X-Nifty-SrcIP: [118.243.85.178]
-Date: Tue, 9 Mar 2021 00:48:18 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.139])
+ by sourceware.org (Postfix) with ESMTPS id 5A3273947436
+ for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 16:17:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5A3273947436
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net. ([68.147.0.90])
+ by shaw.ca with ESMTP
+ id JIZIlHyUyHmS3JIZJla4dw; Mon, 08 Mar 2021 09:17:18 -0700
+X-Authority-Analysis: v=2.4 cv=MaypB7zf c=1 sm=1 tr=0 ts=60464e0e
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=nz-5sxVJmLUA:10 a=LF2dOfbMAAAA:8 a=N33GcLBcsBIFXr2wvvsA:9
+ a=TmiWL2DCWjWbbQwbIu5r:22
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Transfer input for native app only if the
- stdin is pcon.
-Message-Id: <20210309004818.0e6973cfde7a563ab293e1ac@nifty.ne.jp>
-In-Reply-To: <YEZDgPyUTu18fFD5@calimero.vinschen.de>
-References: <20210308145510.1164-1-takashi.yano@nifty.ne.jp>
- <YEZDgPyUTu18fFD5@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: [PATCH 0/2] cygwin-htdocs: update MinGW references
+Date: Mon,  8 Mar 2021 09:17:10 -0700
+Message-Id: <20210308161712.11280-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.30.1
+MIME-Version: 1.0
+Reply-To: patches
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfIWWkaYxVayM+BnQwCs1dyQVVcHOKtlemuOrjWsMSWFMZBP60Txfj9gRsGvTP75ZZBQBP68NrEX7PchcoxTm0QcNFLA23TdWtZsg75OgorXhtIYjNqjr
+ WPliAHFruZ2iBYfW1FMPHmE5ujZ0nzGVa/hP9hS1hKWiNS0yQ6b//K1dUqIAm8baaANoi40ZRn8m2srylNJ3sLyZwmKMLSWJtkBayHzZPW/4elHfMHMLRbR0
+ XjaW/KXQvNCCS7tid9Ml0gLuonq5XRLJi9rG+hyvjVE=
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, KAM_LINKBAIT, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -40,22 +45,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 08 Mar 2021 15:48:38 -0000
+X-List-Received-Date: Mon, 08 Mar 2021 16:17:20 -0000
 
-On Mon, 8 Mar 2021 16:32:16 +0100
-Corinna Vinschen wrote:
-> Hi Takashi,
-> 
-> On Mar  8 23:55, Takashi Yano via Cygwin-patches wrote:
-> > - Currently, transfer input is triggered even if the stdin of native
-> >   app is not a pseudo console. With this patch it is triggered only
-> >   if the stdin is a pseudo console.
-> 
-> do you have more patches in the loop?  I wonder if I should really start
-> the test release cycle for 3.2.0 or if I should wait a bit...?
+update MinGW.org references and update package categories to remove MinGW
 
-I'm sorry to submit patches one after another. However,
-I think this should be the last one. Please go ahead.
+Brian Inglis (2):
+  cygwin-htdocs/links.html: update MinGW.org reference
+  cygwin-htdocs/packaging-hint-files.html: update categories
+
+ links.html                | 4 ++--
+ packaging-hint-files.html | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.30.1
+
