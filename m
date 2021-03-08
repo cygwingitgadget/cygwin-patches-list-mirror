@@ -1,26 +1,43 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id A016D394EC2D
- for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 13:15:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A016D394EC2D
-Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
- [118.243.85.178]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 128DF600012724;
- Mon, 8 Mar 2021 22:15:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 128DF600012724
-X-Nifty-SrcIP: [118.243.85.178]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 4C1163939C04
+ for <cygwin-patches@cygwin.com>; Mon,  8 Mar 2021 14:03:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4C1163939C04
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MQeI4-1l4Um70Jrq-00Ng8j for <cygwin-patches@cygwin.com>; Mon, 08 Mar 2021
+ 15:03:05 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 9B2F0A82675; Mon,  8 Mar 2021 15:03:04 +0100 (CET)
+Date: Mon, 8 Mar 2021 15:03:04 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Attach to stub process when non-cygwin app
+Subject: Re: [PATCH] Cygwin: pty: Attach to stub process when non-cygwin app
  inherits pcon.
-Date: Mon,  8 Mar 2021 22:14:58 +0900
-Message-Id: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.1
+Message-ID: <YEYumE2YRiE6TnVh@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210308131458.1736-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:/fjf392vYF4vBAu0lGIaiORLFLTysaLHs+eub0cjVMfJzxm0egH
+ Ep4MgOwZZ35iAmzHS5JHkCYAR2lpaNjpFZNgtFiv1Oj8UgadYkAI9VSks2/MZHgQdrZOkuD
+ c26j6Dq8Kvlp7HEB+uj+qTBVdmAy1csvwb3ZU23MxgKNM8kGxDwTV8oRfxGE7HRz9fxBldF
+ piSAX5ByfWhhxYGm++GlQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dotw4VJdTDM=:ZV7+/Q45lETQhf7bjbB4Yl
+ SwN1kueVt7F/WHQha5eL2SCOHlcXDJNB3lWcC8eZZ9+EFkCIlCieVL1617Jt7L1Jppee30KmY
+ 46t98dXrxj9BpShZzzRhygkmrjH4h6eIlF8k3eQ/9UHFny2CeGm9LXYzyoiPtBSrziRbd91Mq
+ QQlN88ExdZ1gGDU77SVL0SkTbEwOgH6mjkz/yfUVu0mmtRHHIjuzlVcKUv6w7MdhFAxbNgbZc
+ Ls2CgAfSDT8V9BkD0wedFMhCMWVoIUNE/E0L/0qX8lQAk/skzh4GjOim9u1HR7zb1mKDPfubz
+ gJDKH8lbfFGDTR1lcBM8GoCuP3m+6MDwIUEAhwItYR3u+Zpu1B7LVQLRRMDj6awhFWLBTI3HB
+ o01TUul0VEqwBdRBzrj+EhZBFqhLpSmk0SUPByiaz2yQwEOQeEid0yVbl7nnJ4WyvEmr4sz3U
+ Ww/AtVo3Fw==
+X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -35,30 +52,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 08 Mar 2021 13:15:29 -0000
+X-List-Received-Date: Mon, 08 Mar 2021 14:03:07 -0000
 
-- If two non-cygwin apps are started simultaneously, attaching to
-  pseudo console sometimes fails. This is because the second app
-  trys to attach to the process not started yet. This patch avoids
-  the issue by attaching to the stub process rather than the other
-  non-cygwin app.
----
- winsup/cygwin/fhandler_tty.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mar  8 22:14, Takashi Yano via Cygwin-patches wrote:
+> - If two non-cygwin apps are started simultaneously, attaching to
+>   pseudo console sometimes fails. This is because the second app
+>   trys to attach to the process not started yet. This patch avoids
+>   the issue by attaching to the stub process rather than the other
+>   non-cygwin app.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index 4358bceec..3bfc8c0c8 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -3104,7 +3104,7 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
+>  		       0, TRUE, DUPLICATE_SAME_ACCESS);
+>        CloseHandle (pcon_owner);
+>        FreeConsole ();
+> -      AttachConsole (p->dwProcessId);
+> +      AttachConsole (p->exec_dwProcessId);
+>        goto skip_create;
+>      }
+>  
+> -- 
+> 2.30.1
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 4358bceec..3bfc8c0c8 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3104,7 +3104,7 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
- 		       0, TRUE, DUPLICATE_SAME_ACCESS);
-       CloseHandle (pcon_owner);
-       FreeConsole ();
--      AttachConsole (p->dwProcessId);
-+      AttachConsole (p->exec_dwProcessId);
-       goto skip_create;
-     }
- 
--- 
-2.30.1
+Pushed.
 
+
+Thanks,
+Corinna
