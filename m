@@ -1,25 +1,47 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 643AB3857832
- for <cygwin-patches@cygwin.com>; Tue,  9 Mar 2021 03:23:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 643AB3857832
-Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
- [118.243.85.178]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 1293NYSG003126;
- Tue, 9 Mar 2021 12:23:40 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 1293NYSG003126
-X-Nifty-SrcIP: [118.243.85.178]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.137])
+ by sourceware.org (Postfix) with ESMTPS id 8F90F386EC7D
+ for <cygwin-patches@cygwin.com>; Tue,  9 Mar 2021 06:08:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8F90F386EC7D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([68.147.0.90]) by shaw.ca with ESMTP
+ id JVXqlgLrenRGtJVXrlGHFL; Mon, 08 Mar 2021 23:08:39 -0700
+X-Authority-Analysis: v=2.4 cv=cagXElPM c=1 sm=1 tr=0 ts=604710e7
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=IkcTkHD0fZMA:10 a=uYT-Tk0qkVT609LjNaIA:9 a=QEXdDO2ut3YA:10
+Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Transfer input only if the stdin is a pty.
-Date: Tue,  9 Mar 2021 12:23:34 +0900
-Message-Id: <20210309032334.1197-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.1
+References: <20210307163155.63871-1-Brian.Inglis@SystematicSW.ab.ca>
+ <aada0b19-26ea-9db0-85f4-8f959441e05a@dronecode.org.uk>
+ <38792da7-75f7-231d-0de2-d483b927820a@SystematicSw.ab.ca>
+ <YEX5FO0ISV06h9QY@calimero.vinschen.de>
+ <b62c52a0-fee4-4cc4-bb57-e16169239d9a@SystematicSw.ab.ca>
+ <87pn098s1j.fsf@Rainer.invalid>
+ <70c973ec-f8c7-f5cc-1d38-f0306b8521c2@SystematicSw.ab.ca>
+ <87lfax8nu3.fsf@Rainer.invalid>
+ <b81497ce-72d0-f11e-a381-568aa407b98a@cornell.edu>
+ <YEaPTIQ2I1DgpPgt@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+Subject: Re: [PATCH] winsup/doc/dll.xml: update MinGW/.org to MinGW-w64/.org
+Message-ID: <a4f074eb-f708-0c6d-348c-2216e0af4b96@SystematicSw.ab.ca>
+Date: Mon, 8 Mar 2021 23:08:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
+In-Reply-To: <YEaPTIQ2I1DgpPgt@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-CMAE-Envelope: MS4xfJIQIRG2Qlz1AlKSgUl1Q8vIkC5DDEvXkHKvcTiPD4mUgdbh1o0cn6hnqg2Mzl1yGaer71mRSHWQGxiVLJD+IvNSJLz57J2iZwEQ/lYTwFJhhaClptso
+ IfTYuf+NPGD+focpyxacM3d1E/w+s0VgGfHqrRK5P+XWduJRNWxwQPp27St3kNZ8S82oioiXBYh37kUSAHReZG3MQM3kSrMHNcg=
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -34,112 +56,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 09 Mar 2021 03:23:57 -0000
+X-List-Received-Date: Tue, 09 Mar 2021 06:08:42 -0000
 
-- The commit 12325677f73a did not fix enough. With this patch, more
-  transfer_input() calls are skipped if stdin is redirected or piped.
----
- winsup/cygwin/fhandler_tty.cc | 10 ++++++++--
- winsup/cygwin/spawn.cc        |  9 +++++++--
- 2 files changed, 15 insertions(+), 4 deletions(-)
+On 2021-03-08 13:55, Corinna Vinschen via Cygwin-patches wrote:
+> On Mar  8 15:20, Ken Brown via Cygwin-patches wrote:
+>> On 3/8/2021 2:09 PM, Achim Gratz wrote:
+>>> Brian Inglis writes:
+>>>> It's normally a merge conflict which will not be satisfied by regular
+>>>> commands to restore the working files to upstream.
+>>>
+>>> So you're pulling on an unclean work tree?  That's a no-no, either keep
+>>> your changes on a separate branch (that you can rebase or merge later)
+>>> or stash them away for the pull.
+>>>
+>>> As Corinna said, if you're prepared to lose any local changes then
+>>>
+>>> git reset --hard
+>>>
+>>> will do that.  But you should be sure you really didn't want any of your
+>>> unfinished business around any more.
+>>
+>> If the unfinished business consists of local commits that haven't yet been
+>> applied upstream, then I typically do the following:
+>>
+>> git fetch  # Find out if upstream has changed since my last pull.  If so...
+>> git format-patch -n  # save n local commits
+>> git reset --hard origin/master
+>> git am 00*  # reapply my local commits
+> 
+> I'm doing this a bit differently:
+> 
+>    git fetch
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 47d59e8c5..643a357ad 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -131,7 +131,9 @@ set_switch_to_pcon (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
- 	{
- 	  fhandler_base *fh = cfd;
- 	  fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
--	  if (*in == ptys->get_handle ())
-+	  if (*in == ptys->get_handle ()
-+	      || *out == ptys->get_output_handle ()
-+	      || *err == ptys->get_output_handle ())
- 	    ptys_pcon = ptys;
- 	}
-     }
-@@ -284,6 +286,7 @@ exit_Hooked (int e)
- 	    HANDLE from = ptys->get_handle ();
- 	    HANDLE input_available_event = ptys->get_input_available_event ();
- 	    if (ttyp->getpgid () == myself->pgid
-+		&& GetStdHandle (STD_INPUT_HANDLE) == ptys->get_handle ()
- 		&& ttyp->pcon_input_state_eq (tty::to_nat))
- 	      {
- 		WaitForSingleObject (ptys->input_mutex, INFINITE);
-@@ -1035,6 +1038,7 @@ fhandler_pty_slave::set_switch_to_pcon (void)
-       bool pcon_enabled = setup_pseudoconsole (nopcon);
-       ReleaseMutex (pcon_mutex);
-       if (!pcon_enabled && get_ttyp ()->getpgid () == myself->pgid
-+	  && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
- 	  && get_ttyp ()->pcon_input_state_eq (tty::to_cyg))
- 	{
- 	  WaitForSingleObject (input_mutex, INFINITE);
-@@ -1062,6 +1066,7 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
- 	  if (isHybrid)
- 	    {
- 	      if (get_ttyp ()->getpgid () == myself->pgid
-+		  && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
- 		  && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
- 		{
- 		  WaitForSingleObject (input_mutex, INFINITE);
-@@ -1204,7 +1209,8 @@ fhandler_pty_slave::mask_switch_to_pcon_in (bool mask, bool xfer)
-   /* In GDB, transfer input based on setpgid() does not work because
-      GDB may not set terminal process group properly. Therefore,
-      transfer input here if isHybrid is set. */
--  if (isHybrid && !!masked != mask && xfer)
-+  if (isHybrid && !!masked != mask && xfer
-+      && GetStdHandle (STD_INPUT_HANDLE) == get_handle ())
-     {
-       if (mask && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
- 	{
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 9d70cb2b7..7a585392a 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -665,6 +665,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       HANDLE ptys_pcon_mutex = NULL;
-       HANDLE ptys_input_mutex = NULL;
-       tty *ptys_ttyp = NULL;
-+      bool stdin_is_ptys = false;
-       if (!iscygwin () && ptys_primary && is_console_app (runpath))
- 	{
- 	  bool nopcon = mode != _P_OVERLAY && mode != _P_WAIT;
-@@ -675,6 +676,9 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	  if (ptys_primary->setup_pseudoconsole (nopcon))
- 	    enable_pcon = true;
- 	  ReleaseMutex (ptys_primary->pcon_mutex);
-+	  HANDLE h_stdin = handle ((in__stdin < 0 ? 0 : in__stdin), false);
-+	  if (h_stdin == ptys_primary->get_handle ())
-+	    stdin_is_ptys = true;
- 	  ptys_from_master = ptys_primary->get_handle ();
- 	  DuplicateHandle (GetCurrentProcess (), ptys_from_master,
- 			   GetCurrentProcess (), &ptys_from_master,
-@@ -691,6 +695,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 			   GetCurrentProcess (), &ptys_input_mutex,
- 			   0, 0, DUPLICATE_SAME_ACCESS);
- 	  if (!enable_pcon && ptys_ttyp->getpgid () == myself->pgid
-+	      && stdin_is_ptys
- 	      && ptys_ttyp->pcon_input_state_eq (tty::to_cyg))
- 	    {
- 	      WaitForSingleObject (ptys_input_mutex, INFINITE);
-@@ -983,7 +988,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	  if (ptys_ttyp)
- 	    {
- 	      ptys_ttyp->wait_pcon_fwd ();
--	      if (ptys_ttyp->getpgid () == myself->pgid
-+	      if (ptys_ttyp->getpgid () == myself->pgid && stdin_is_ptys
- 		  && ptys_ttyp->pcon_input_state_eq (tty::to_nat))
- 		{
- 		  WaitForSingleObject (ptys_input_mutex, INFINITE);
-@@ -1020,7 +1025,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	  if (ptys_ttyp)
- 	    {
- 	      ptys_ttyp->wait_pcon_fwd ();
--	      if (ptys_ttyp->getpgid () == myself->pgid
-+	      if (ptys_ttyp->getpgid () == myself->pgid && stdin_is_ptys
- 		  && ptys_ttyp->pcon_input_state_eq (tty::to_nat))
- 		{
- 		  WaitForSingleObject (ptys_input_mutex, INFINITE);
+I changed to pull origin/master as I always want to get all updates;
+Achim suggests remote update
+
+>    git rebase -i origin/master
+
+I've figured out that enough to do your tweaks without hacking patches
+
+> I like git rebase, it's a very nifty tool, especially using the
+> interactive mode.
+
+Agreed - I trust myself more using interactive mode commands than gitk
+
+It's been months since I had to wipe and re-clone newlib-cygwin and that's 
+saying a lot.
+
+[Thanks for all the help to a git rookie who pled orgs/projects to use/*allow* 
+source/version control (often only MS SourceSafe/TeamSource? or cvs) sometimes 
+on my own with whatever was/could be installed (Windows Cygwin hg, RHEL/Solaris 
+cvs/rcs, Solaris/SunOS sccs/vi).]
+
 -- 
-2.30.1
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
