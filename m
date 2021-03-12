@@ -1,45 +1,31 @@
-Return-Path: <johannes.schindelin@gmx.de>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by sourceware.org (Postfix) with ESMTPS id 3E944399C003
- for <cygwin-patches@cygwin.com>; Fri, 12 Mar 2021 15:11:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3E944399C003
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [172.30.201.226] ([89.1.215.248]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6bfw-1lnrwS3uc2-017zcr for
- <cygwin-patches@cygwin.com>; Fri, 12 Mar 2021 16:11:55 +0100
-Date: Fri, 12 Mar 2021 16:11:53 +0100 (CET)
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
-X-X-Sender: virtualbox@gitforwindows.org
-To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] Allow executing Windows Store's "app execution
- aliases"
-Message-ID: <nycvar.QRO.7.76.6.2103121611520.50@tvgsbejvaqbjf.bet>
-User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
+Return-Path: <joe@pismotec.com>
+Received: from mail.pismotec.com (mail.pismotec.com [100.42.30.2])
+ by sourceware.org (Postfix) with ESMTPS id 8B8DB3857805
+ for <cygwin-patches@cygwin.com>; Fri, 12 Mar 2021 17:05:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8B8DB3857805
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=pismotec.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=joe@pismotec.com
+Received: from [10.7.1.101] (unknown [50.39.143.95])
+ by mail.pismotec.com (Postfix) with ESMTPSA id 8032E14BE0CB;
+ Fri, 12 Mar 2021 09:05:09 -0800 (PST)
+Subject: Re: [PATCH 1/2] Treat Windows Store's "app execution aliases" as
+ symbolic links
+To: Johannes Schindelin <johannes.schindelin@gmx.de>, cygwin-patches@cygwin.com
+References: <nycvar.QRO.7.76.6.2103121611440.50@tvgsbejvaqbjf.bet>
+From: Joe Lowe <joe@pismotec.com>
+Message-ID: <ff661784-ae78-4a98-8f6d-cddd57b0d216@pismotec.com>
+Date: Fri, 12 Mar 2021 09:03:57 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:Qgi+PHJWDO4yZ5wwIk3/PE4HAgizsIcAlTHzVrp/5sLBvHSwNH4
- WNaBtoT7uPQA5rzFSN4o1GEuJWDPPcVttf90Ym49jheToKsbKOzP2pIT2Wg23V+JcrqaIJN
- mo6YuvYAxZ1q9nsVaC+EXuNfzJ0Kay00vI7ivzgZr7PHNxZ/C3B0RhHgzKoYlDmthXt6+KT
- aIbJ6lcd8BXxucL+jNKdg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iv+K2+F1zxw=:RcDkKbrdiNw7jY54V4U4lY
- MzHRkFLtw+PRUjU2ZtF3NXoaRbwWGJ7mD59UWgWliouth2NnJkC1I4qAoIlZnhIUc+TLcOoF+
- geHfZ8JZbN9mnj43OmscamBWfpKkvKcQE/7vDXcvehoBpteZzARJqjqlXHDKyxcTEZHSULu0P
- t+TimhzSPZqdaZQk5aQ/fCdAv1sqzEUkkfGG81vJzgNFfoUhzVGa0hwQGTji4MkaKnWCNmXvR
- zRMVbwzDct0EctfqvHnPy5SN/cKc/nD6oGgdzruPCNiFyZr6VwXmrEFLxAX3M2g3sHiIMvMfR
- 4IywVb5MNGteEdlTUs86ToTl51LY40DiP+njp+VjioXhjpkCQG/uQ8DCqEodElJdRuhP72ULS
- tPD5ms6fEjMugIln302Zat47Bt23qCbIYzkhMN+3AiVr9O8Xdl4cY+JhcgwZjIjT+TPYh9VdL
- NX3wCBPI8uUVvJ/hBOvrR4wp4K+x7BFfc9O/GzP7RCLj8PXAKd+0xswA8iZwk6x6l35HXFDJ2
- PsFWcfagsCmKJ9c1qhJu5lbyFAlu11FRd+UMrrM/5qBA1PjBoKlCyERYH5X0nTNgfgGFq36A5
- /IzAyHl4bxo2550eLHUOcGsEgCk+X/VfjDV38Bf5Yi3ulWMHqrLwtKMTJtdWb9gUO28WTE/Zm
- BxVODpOvhQGIwGuo1vOo/UX2JMSvJKVEwtfNR2dWEMpnxphmHgd3oFwZHdndIWme58hNzVB9p
- mPNMgxmmB92axyF+lPHaIQHttm+2pYJY79oaFTmu0D/Hvlw0GShESTJ9UfQVFbd/DyBp6e6s7
- 5HVEUrRoPLnn9wgws7gs2zQjaG0IJFdrw93Mt2bZ5p9X7s4CwC7FojK2wcX4S85FyzrGlYEr+
- q1OXz9b3j/qYsztYSInSDUODc5vSZUIhx6ZdKL498=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <nycvar.QRO.7.76.6.2103121611440.50@tvgsbejvaqbjf.bet>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,50 +40,97 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 12 Mar 2021 15:11:57 -0000
+X-List-Received-Date: Fri, 12 Mar 2021 17:05:12 -0000
 
-The Windows Store version of Python (and apparently other Windows Store
-applications) install a special reparse point called "app execution
-alias" into the user's `PATH`.
 
-These applications can be executed without any problem, but they cannot
-be read as if they were files. This trips up Cygwin's beautiful logic that
-tries to determine whether we're about to execute a Cygwin executable or
-not: instead of executing the application, it will fail, saying
-"Permission denied".
+I am skeptical about this patch (part 1), interposing appexec reparse 
+point data as symlinks for cygwin applications.
 
-Let's detect this situation (`NtOpenFile()` helpfully says that this
-operation is not supported on this reparse point type), and simply skip
-the logic: Windows Store apps are not Cygwin executables (and even if
-they were, it is unlikely that they would come with a compatible
-`cygwin1.dll` or `msys-2.0.dll`).
+The appexec reparse point data is essentially an extended attribute 
+holding data that is used by CreateProcess(), more like a windows .lnk 
+file or an X11 .desktop file, not like a posix symlink. M$ just chose an 
+unnecessarily obtuse way to store the files data. This reminds me of old 
+Macintosh zero length font files.
 
-This fixes https://github.com/msys2/MSYS2-packages/issues/1943
+The useful function of the patch would seem to be as a way to display a 
+portion of the data in shell directory listings for the user. I suggest 
+this function is better provided by updated application code.
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-=2D--
- winsup/cygwin/spawn.cc | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index af177c0f13..ea08f3662e 100644
-=2D-- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -1166,6 +1166,13 @@ av::setup (const char *prog_arg, path_conv& real_pa=
-th, const char *ext,
- 			     FILE_SYNCHRONOUS_IO_NONALERT
- 			     | FILE_OPEN_FOR_BACKUP_INTENT
- 			     | FILE_NON_DIRECTORY_FILE);
-+	if (status =3D=3D STATUS_IO_REPARSE_TAG_NOT_HANDLED)
-+	  {
-+	    /* This is most likely an app execution alias (such as the
-+	       Windows Store version of Python, i.e. not a Cygwin program */
-+	    real_path.set_cygexec (false);
-+	    break;
-+	  }
- 	if (!NT_SUCCESS (status))
- 	  {
- 	    /* File is not readable?  Doesn't mean it's not executable.
-=2D-
-2.30.2
+The patch part 2 seems entirely appropriate.
 
+
+Joe L.
+
+
+On 2021-03-12 07:11, Johannes Schindelin via Cygwin-patches wrote:
+> When the Windows Store version of Python is installed, so-called "app
+> execution aliases" are put into the `PATH`. These are reparse points
+> under the hood, with an undocumented format.
+> 
+> We do know a bit about this format, though, as per the excellent analysis:
+> https://www.tiraniddo.dev/2019/09/overview-of-windows-execution-aliases.html
+> 
+> 	The first 4 bytes is the reparse tag, in this case it's
+> 	0x8000001B which is documented in the Windows SDK as
+> 	IO_REPARSE_TAG_APPEXECLINK. Unfortunately there doesn't seem to
+> 	be a corresponding structure, but with a bit of reverse
+> 	engineering we can work out the format is as follows:
+> 
+> 	Version: <4 byte integer>
+> 	Package ID: <NUL Terminated Unicode String>
+> 	Entry Point: <NUL Terminated Unicode String>
+> 	Executable: <NUL Terminated Unicode String>
+> 	Application Type: <NUL Terminated Unicode String>
+> 
+> Let's treat them as symbolic links. For example, in this developer's
+> setup, this will result in the following nice output:
+> 
+> 	$ cd $LOCALAPPDATA/Microsoft/WindowsApps/
+> 
+> 	$ ls -l python3.exe
+> 	lrwxrwxrwx 1 me 4096 105 Aug 23  2020 python3.exe -> '/c/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.7_3.7.2544.0_x64__qbz5n2kfra8p0/python.exe'
+> 
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> ---
+>   winsup/cygwin/path.cc | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+> 
+> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> index f3b9913bd0..63f377efb1 100644
+> --- a/winsup/cygwin/path.cc
+> +++ b/winsup/cygwin/path.cc
+> @@ -2538,6 +2538,30 @@ check_reparse_point_target (HANDLE h, bool remote, PREPARSE_DATA_BUFFER rp,
+>         if (check_reparse_point_string (psymbuf))
+>   	return PATH_SYMLINK | PATH_REP;
+>       }
+> +  else if (!remote && rp->ReparseTag == IO_REPARSE_TAG_APPEXECLINK)
+> +    {
+> +      /* App execution aliases are commonly used by Windows Store apps. */
+> +      WCHAR *buf = (WCHAR *)(rp->GenericReparseBuffer.DataBuffer + 4);
+> +      DWORD size = rp->ReparseDataLength / sizeof(WCHAR), n;
+> +
+> +      /*
+> +         It seems that app execution aliases have a payload of four
+> +	 NUL-separated wide string: package id, entry point, executable
+> +	 and application type. We're interested in the executable. */
+> +      for (int i = 0; i < 3 && size > 0; i++)
+> +        {
+> +	  n = wcsnlen (buf, size - 1);
+> +	  if (i == 2 && n > 0 && n < size)
+> +	    {
+> +	      RtlInitCountedUnicodeString (psymbuf, buf, n * sizeof(WCHAR));
+> +	      return PATH_SYMLINK | PATH_REP;
+> +	    }
+> +	  if (i == 2)
+> +	    break;
+> +	  buf += n + 1;
+> +	  size -= n + 1;
+> +	}
+> +    }
+>     else if (rp->ReparseTag == IO_REPARSE_TAG_LX_SYMLINK)
+>       {
+>         /* WSL symlink.  Problem: We have to convert the path to UTF-16 for
+> --
+> 2.30.2
+> 
