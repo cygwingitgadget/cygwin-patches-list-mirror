@@ -1,45 +1,43 @@
-Return-Path: <HBBroeker@t-online.de>
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by sourceware.org (Postfix) with ESMTPS id BD63A3858D29
- for <cygwin-patches@cygwin.com>; Mon, 15 Mar 2021 19:05:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BD63A3858D29
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=HBBroeker@t-online.de
-Received: from fwd20.aul.t-online.de (fwd20.aul.t-online.de [172.20.26.140])
- by mailout07.t-online.de (Postfix) with SMTP id C111434595
- for <cygwin-patches@cygwin.com>; Mon, 15 Mar 2021 20:04:27 +0100 (CET)
-Received: from [192.168.178.26]
- (ZG7Bn2ZQ8hsWMfgw0hRFpFk8CQQWyV7McBo1cnfHln92bAPcGBQeiAOp9Ayyz9qZPy@[87.154.41.231])
- by fwd20.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1lLsVv-2AbiL20; Mon, 15 Mar 2021 20:04:27 +0100
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 2EA083857012
+ for <cygwin-patches@cygwin.com>; Mon, 15 Mar 2021 19:52:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2EA083857012
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MZCX1-1lHESh34hF-00V67E for <cygwin-patches@cygwin.com>; Mon, 15 Mar 2021
+ 20:52:34 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 8FBFFA80D7C; Mon, 15 Mar 2021 20:52:33 +0100 (CET)
+Date: Mon, 15 Mar 2021 20:52:33 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 1/2] Treat Windows Store's "app execution aliases" as
  symbolic links
-To: cygwin-patches@cygwin.com
+Message-ID: <YE+7ATqy4vJdHAp7@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <nycvar.QRO.7.76.6.2103121611440.50@tvgsbejvaqbjf.bet>
- <ff661784-ae78-4a98-8f6d-cddd57b0d216@pismotec.com>
- <nycvar.QRO.7.76.6.2103140115180.50@tvgsbejvaqbjf.bet>
- <86c7c1b6-06f9-9e60-e9d7-072b6e8c806f@pismotec.com>
- <nycvar.QRO.7.76.6.2103150408230.50@tvgsbejvaqbjf.bet>
-From: =?UTF-8?Q?Hans-Bernhard_Br=c3=b6ker?= <HBBroeker@t-online.de>
-Message-ID: <69dc492e-cce9-1a1a-7d4b-92a58dbfe981@t-online.de>
-Date: Mon, 15 Mar 2021 20:04:23 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <nycvar.QRO.7.76.6.2103150408230.50@tvgsbejvaqbjf.bet>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ID: ZG7Bn2ZQ8hsWMfgw0hRFpFk8CQQWyV7McBo1cnfHln92bAPcGBQeiAOp9Ayyz9qZPy
-X-TOI-EXPURGATEID: 150726::1615835067-000053CC-7D645B38/0/0 CLEAN NORMAL
-X-TOI-MSGID: ee34687b-57de-4ca3-ad3f-621df7d46f2a
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00, FREEMAIL_FROM,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <nycvar.QRO.7.76.6.2103121611440.50@tvgsbejvaqbjf.bet>
+X-Provags-ID: V03:K1:BAKjsu/Lecq7E6B+O0iT8yxHtCCB1L9YkD6ooD9FHrfhvHgvv3i
+ 4R3T2Rt1zCdnaeys0xUHiLGIM5+uzO5QHEARunQu53gqKG0Fibv/Wi1XJP4TienwvTAGW7i
+ ApxGGi+O+DXWBEpL4yhCZ0PIHUdiarZvzpgv4LgXqTGtXITAq02CK/jt1uVCCn+sLaGTcN8
+ RKEv+iX2/L0Wrd5wYdFeQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZP/v2neG6fM=:mzSRMX83CvW0cHpinXsFcl
+ z/gY6bZYTBLiS6WpUHAb0JAPSLwW8o74l2JuugnwGDok7DWlfmSICT2Wz7ALiilXNxp5bNAj4
+ cUBBr2hcQ3cwaHtz79bm81rdHN4bp+ivIB+RYZ20C7ZA4Y0NdPspXLcw2bbvX7GWd7NaKjGyS
+ 5mnziC0g3HxVxW13FA3VQjMgQqtBvSAHKg9LCEt5Fd5zqm+BYci2orN18PjZEToZ4nH2B/yiN
+ cOxxKM4rz5wZScE5K0kKu90/reGhYDgYT9JEUea/3nhq3MN0vpgSduH7gaT/feAoMrF9vJxuo
+ teN+uSMeHG36Pw6/5AaNjmtSAbReIZp68Qj0CpEMeNP3PHsHrXiIlD2qZmpshod5+yQ6BzirB
+ xBpDrxuYyk8vaiZNDaKvpcdbO8f1IAHt9Di62ZcyP2eZnvkYYs1vr1qHHOOrqaAd4F7E/nzyv
+ oMDdrBFLuQ==
+X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,28 +52,76 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 15 Mar 2021 19:05:16 -0000
+X-List-Received-Date: Mon, 15 Mar 2021 19:52:38 -0000
 
-Am 15.03.2021 um 04:19 schrieb Johannes Schindelin via Cygwin-patches:
-> Hi Joe,
+Hi Johannes,
+
+I'm not opposed to treat these applinks as symlinks.  I have a
+suggestion and a style nit, though.
+
+On Mar 12 16:11, Johannes Schindelin via Cygwin-patches wrote:
+> When the Windows Store version of Python is installed, so-called "app
+> execution aliases" are put into the `PATH`. These are reparse points
+> under the hood, with an undocumented format.
 > 
-> On Sat, 13 Mar 2021, Joe Lowe wrote:
+> We do know a bit about this format, though, as per the excellent analysis:
+> https://www.tiraniddo.dev/2019/09/overview-of-windows-execution-aliases.html
 > 
->> I agree on the usefulness to the user of showing appexec target executable as
->> symlink target. But I am uncertain about the effect on code.
+> 	The first 4 bytes is the reparse tag, in this case it's
+> 	0x8000001B which is documented in the Windows SDK as
+> 	IO_REPARSE_TAG_APPEXECLINK. Unfortunately there doesn't seem to
+> 	be a corresponding structure, but with a bit of reverse
+> 	engineering we can work out the format is as follows:
 > 
-> Maybe. But I am concerned about the effect of not being able to do
-> anything useful with app execution aliases in the first place. 
+> 	Version: <4 byte integer>
+> 	Package ID: <NUL Terminated Unicode String>
+> 	Entry Point: <NUL Terminated Unicode String>
+> 	Executable: <NUL Terminated Unicode String>
+> 	Application Type: <NUL Terminated Unicode String>
 
-That argument might hold more sway if Windows itself didn't quite so 
-completely hide that information from users, too.
+Given we know this layout, what about introducing a matching struct,
+like I did for REPARSE_LX_SYMLINK_BUFFER, for instructional purposes?
 
-I found only one Windows native tool that will even show _any_ kind of 
-information about these reparse points: fsutil.  That is a) only 
-available as part of the highly optional WSL feature and b) only gives 
-you a hexdump of the actual data, without any meaningful interpretation.
+I. e.
 
-For something that Windows itself gives the "no user servicable parts 
-inside" treatment to the extent it does for these reparse points, I 
-rather doubt that Cygwin users really _need_ to see it.
+typedef struct _REPARSE_APPEXECLINK_BUFFER
+{
+  DWORD ReparseTag;
+  WORD  ReparseDataLength;
+  WORD  Reserved;
+  struct {
+    DWORD Version;       /* Take member name with a grain of salt. */
+    WCHAR Strings[1];	 /* Four serialized, NUL-terminated WCHAR strings:
+			    - Package ID
+			    - Entry Point
+			    - Executable Path
+			    - Application Type
+			    We're only interested in the Executable Path */
+  } AppExecLinkReparseBuffer;
+} REPARSE_APPEXECLINK_BUFFER,*PREPARSE_APPEXECLINK_BUFFER;
 
+
+> +  else if (!remote && rp->ReparseTag == IO_REPARSE_TAG_APPEXECLINK)
+> +    {
+> +      /* App execution aliases are commonly used by Windows Store apps. */
+> +      WCHAR *buf = (WCHAR *)(rp->GenericReparseBuffer.DataBuffer + 4);
+
+Analogue:
+
+     PREPARSE_APPEXECLINK_BUFFER rpl = (PREPARSE_APPEXECLINK_BUFFER) rp;
+     WCHAR *buf = rpl->AppExecLinkReparseBuffer.Strings;
+
+Maybe use 'str' or 'strp' here, instead of buf?
+
+> +      for (int i = 0; i < 3 && size > 0; i++)
+> +        {
+> +	  n = wcsnlen (buf, size - 1);
+> +	  if (i == 2 && n > 0 && n < size)
+> +	    {
+> +	      RtlInitCountedUnicodeString (psymbuf, buf, n * sizeof(WCHAR));
+                                                                  ^^^
+                                                                  space
+
+
+Thanks,
+Corinna
