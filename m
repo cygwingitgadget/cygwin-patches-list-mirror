@@ -1,27 +1,29 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 2E8EA3858024
- for <cygwin-patches@cygwin.com>; Sun, 21 Mar 2021 04:02:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2E8EA3858024
-Received: from localhost.localdomain (y084061.dynamic.ppp.asahi-net.or.jp
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id 2EA393858C27
+ for <cygwin-patches@cygwin.com>; Sun, 21 Mar 2021 08:44:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2EA393858C27
+Received: from Express5800-S70 (y084061.dynamic.ppp.asahi-net.or.jp
  [118.243.84.61]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 12L41QmZ028950;
- Sun, 21 Mar 2021 13:02:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 12L41QmZ028950
+ by conssluserg-04.nifty.com with ESMTP id 12L8iFbu018874
+ for <cygwin-patches@cygwin.com>; Sun, 21 Mar 2021 17:44:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 12L8iFbu018874
 X-Nifty-SrcIP: [118.243.84.61]
+Date: Sun, 21 Mar 2021 17:44:27 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] Cygwin: pty: Add hook for GetStdHandle() to return
- appropriate handle.
-Date: Sun, 21 Mar 2021 13:01:26 +0900
-Message-Id: <20210321040126.1720-3-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.1
+Subject: Re: [PATCH 0/2] Return appropriate handle by _get_osfhandle() and
+ GetStdHandle().
+Message-Id: <20210321174427.cf79e39deeea896583caa48c@nifty.ne.jp>
 In-Reply-To: <20210321040126.1720-1-takashi.yano@nifty.ne.jp>
 References: <20210321040126.1720-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -37,61 +39,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 21 Mar 2021 04:02:34 -0000
+X-List-Received-Date: Sun, 21 Mar 2021 08:44:47 -0000
 
-- Currently, GetStdHandle(STD_INPUT_HANDLE) returns input handle for
-  non-cygwin process. If cygwin process read from non-cygwin pipe,
-  this causes hang up because master writes input to cygwin pipe.
-  Also, setup_locale() is called to make charset conversion for output
-  handle work properly.
----
- winsup/cygwin/fhandler_tty.cc | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+On Sun, 21 Mar 2021 13:01:24 +0900
+Takashi Yano wrote:
+> Takashi Yano (2):
+>   Cygwin: syscalls.cc: Make _get_osfhandle() return appropriate handle.
+>   Cygwin: pty: Add hook for GetStdHandle() to return appropriate handle.
+> 
+>  winsup/cygwin/fhandler_tty.cc | 19 +++++++++++++++++++
+>  winsup/cygwin/syscalls.cc     | 13 ++++++++++++-
+>  2 files changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 02e94efcc..c1f11f399 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -157,6 +157,7 @@ set_switch_to_pcon (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
- DEF_HOOK (CreateProcessA);
- DEF_HOOK (CreateProcessW);
- DEF_HOOK (exit);
-+DEF_HOOK (GetStdHandle);
- 
- static BOOL WINAPI
- CreateProcessA_Hooked
-@@ -300,6 +301,23 @@ exit_Hooked (int e)
-   exit_Orig (e);
- }
- 
-+static HANDLE WINAPI
-+GetStdHandle_Hooked (DWORD h)
-+{
-+  HANDLE r = GetStdHandle_Orig (h);
-+  cygheap_fdenum cfd (false);
-+  while (cfd.next () >= 0)
-+    if (cfd->get_major () == DEV_PTYS_MAJOR)
-+      {
-+	fhandler_pty_slave *ptys =
-+	  (fhandler_pty_slave *) (fhandler_base *) cfd;
-+	ptys->setup_locale ();
-+	if (r == cfd->get_handle ())
-+	  return cfd->get_handle_cyg ();
-+      }
-+  return r;
-+}
-+
- static void
- convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
- 		UINT cp_from, const char *ptr_from, size_t len_from,
-@@ -2349,6 +2367,7 @@ fhandler_pty_slave::fixup_after_exec ()
-   DO_HOOK (NULL, CreateProcessW);
-   if (CreateProcessA_Orig || CreateProcessW_Orig)
-     DO_HOOK (NULL, exit);
-+  DO_HOOK (NULL, GetStdHandle);
- }
- 
- /* This thread function handles the master control pipe.  It waits for a
+I submitted these patches, however, I still wonder if we really
+need these patches. I cannot imagine the situation where handle
+itself is needed rather than file descriptor.
+
+However, following cygwin apps/dlls call _get_osfhandle():
+ccmake.exe
+cmake.exe
+cpack.exe
+ctest.exe
+ddrescue.exe
+
+And also, following cygwin apps/dlls call GetStdHandle():
+ccmake.exe
+cmake.exe
+cpack.exe
+ctest.exe
+run.exe
+cygusb0.dll
+tk86.dll
+
+in my installation.
+
+Therefore, some of these apps/dlls may need these patches...
+
 -- 
-2.30.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
