@@ -1,26 +1,26 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 045553858D29
- for <cygwin-patches@cygwin.com>; Sun, 21 Mar 2021 23:27:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 045553858D29
+ by sourceware.org (Postfix) with ESMTPS id BA1003858D29
+ for <cygwin-patches@cygwin.com>; Sun, 21 Mar 2021 23:28:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BA1003858D29
 Received: from localhost.localdomain (y084061.dynamic.ppp.asahi-net.or.jp
  [118.243.84.61]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 12LNQsMD020384;
- Mon, 22 Mar 2021 08:27:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 12LNQsMD020384
+ by conuserg-10.nifty.com with ESMTP id 12LNQsMF020384;
+ Mon, 22 Mar 2021 08:27:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 12LNQsMF020384
 X-Nifty-SrcIP: [118.243.84.61]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 2/3] Cygwin: pty: Add hook for GetStdHandle() to return
- appropriate handle.
-Date: Mon, 22 Mar 2021 08:26:46 +0900
-Message-Id: <20210321232647.56-3-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 3/3] Cygwin: pty: Clear input_available_event if pipe is
+ empty on close.
+Date: Mon, 22 Mar 2021 08:26:47 +0900
+Message-Id: <20210321232647.56-4-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210321232647.56-1-takashi.yano@nifty.ne.jp>
 References: <20210321232647.56-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -37,84 +37,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 21 Mar 2021 23:27:50 -0000
+X-List-Received-Date: Sun, 21 Mar 2021 23:28:07 -0000
 
-- Currently, GetStdHandle(STD_INPUT_HANDLE) returns input handle for
-  non-cygwin process. If cygwin process read from non-cygwin pipe,
-  this causes hang up because master writes input to cygwin pipe.
-  Also, setup_locale() is called to make charset conversion for output
-  handle work properly.
+- If apps read input from get_handle_cyg() directly by ReadFile(),
+  input_available_event may remains signalled. This patch clears
+  input_available_event if the pipe is empty on closing pty slave.
 ---
- winsup/cygwin/fhandler_tty.cc | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 02e94efcc..682264130 100644
+index 682264130..43e83b807 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -118,7 +118,7 @@ set_switch_to_pcon (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
-   fhandler_pty_slave *ptys_pcon = NULL;
-   while ((fd = cfd.next ()) >= 0)
-     {
--      if (*in == cfd->get_handle () ||
-+      if (*in == cfd->get_handle () || *in == cfd->get_handle_cyg () ||
- 	  (fd == 0 && *in == GetStdHandle (STD_INPUT_HANDLE)))
- 	replace_in = (fhandler_base *) cfd;
-       if (*out == cfd->get_output_handle () ||
-@@ -140,12 +140,7 @@ set_switch_to_pcon (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
-   if (!iscygwin && ptys_pcon)
-     ptys_pcon->set_switch_to_pcon ();
-   if (replace_in)
--    {
--      if (iscygwin && ptys_pcon->pcon_activated ())
--	*in = replace_in->get_handle_cyg ();
--      else
--	*in = replace_in->get_handle ();
--    }
-+    *in = replace_in->get_handle ();
-   if (replace_out)
-     *out = replace_out->get_output_handle ();
-   if (replace_err)
-@@ -157,6 +152,7 @@ set_switch_to_pcon (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
- DEF_HOOK (CreateProcessA);
- DEF_HOOK (CreateProcessW);
- DEF_HOOK (exit);
-+DEF_HOOK (GetStdHandle);
- 
- static BOOL WINAPI
- CreateProcessA_Hooked
-@@ -300,6 +296,23 @@ exit_Hooked (int e)
-   exit_Orig (e);
- }
- 
-+static HANDLE WINAPI
-+GetStdHandle_Hooked (DWORD h)
-+{
-+  HANDLE r = GetStdHandle_Orig (h);
-+  cygheap_fdenum cfd (false);
-+  while (cfd.next () >= 0)
-+    if (cfd->get_major () == DEV_PTYS_MAJOR)
-+      {
-+	fhandler_pty_slave *ptys =
-+	  (fhandler_pty_slave *) (fhandler_base *) cfd;
-+	ptys->setup_locale ();
-+	if (r == cfd->get_handle ())
-+	  return cfd->get_handle_cyg ();
-+      }
-+  return r;
-+}
-+
- static void
- convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
- 		UINT cp_from, const char *ptr_from, size_t len_from,
-@@ -2349,6 +2362,7 @@ fhandler_pty_slave::fixup_after_exec ()
-   DO_HOOK (NULL, CreateProcessW);
-   if (CreateProcessA_Orig || CreateProcessW_Orig)
-     DO_HOOK (NULL, exit);
-+  DO_HOOK (NULL, GetStdHandle);
- }
- 
- /* This thread function handles the master control pipe.  It waits for a
+@@ -982,6 +982,9 @@ fhandler_pty_slave::close ()
+   termios_printf ("closing last open %s handle", ttyname ());
+   if (inuse && !CloseHandle (inuse))
+     termios_printf ("CloseHandle (inuse), %E");
++  DWORD n;
++  if (bytes_available (n) && !n)
++    ResetEvent (input_available_event);
+   if (!ForceCloseHandle (input_available_event))
+     termios_printf ("CloseHandle (input_available_event<%p>), %E", input_available_event);
+   if (!ForceCloseHandle (get_output_handle_cyg ()))
 -- 
 2.30.2
 
