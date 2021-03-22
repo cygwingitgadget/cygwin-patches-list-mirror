@@ -1,61 +1,47 @@
-Return-Path: <Johannes.Schindelin@gmx.de>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by sourceware.org (Postfix) with ESMTPS id 5C4ED385482F
- for <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021 15:22:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5C4ED385482F
+Return-Path: <johannes.schindelin@gmx.de>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by sourceware.org (Postfix) with ESMTPS id 10EA3385801D
+ for <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021 15:51:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 10EA3385801D
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [172.27.144.62] ([213.196.212.127]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQv8n-1l4Kh21A99-00O31a; Mon, 22
- Mar 2021 16:22:35 +0100
-Date: Mon, 22 Mar 2021 16:22:37 +0100 (CET)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MHoRA-1lUMZN1Rqw-00Es2s for
+ <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021 16:51:27 +0100
+Date: Mon, 22 Mar 2021 16:51:29 +0100 (CET)
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 X-X-Sender: virtualbox@gitforwindows.org
-To: =?UTF-8?Q?Hans-Bernhard_Br=C3=B6ker?= <HBBroeker@t-online.de>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Treat Windows Store's "app execution aliases" as
- symbolic links
-In-Reply-To: <69dc492e-cce9-1a1a-7d4b-92a58dbfe981@t-online.de>
-Message-ID: <nycvar.QRO.7.76.6.2103221603030.50@tvgsbejvaqbjf.bet>
-References: <nycvar.QRO.7.76.6.2103121611440.50@tvgsbejvaqbjf.bet>
- <ff661784-ae78-4a98-8f6d-cddd57b0d216@pismotec.com>
- <nycvar.QRO.7.76.6.2103140115180.50@tvgsbejvaqbjf.bet>
- <86c7c1b6-06f9-9e60-e9d7-072b6e8c806f@pismotec.com>
- <nycvar.QRO.7.76.6.2103150408230.50@tvgsbejvaqbjf.bet>
- <69dc492e-cce9-1a1a-7d4b-92a58dbfe981@t-online.de>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH v2 0/2] Handle "app execution aliases"
+In-Reply-To: <nycvar.QRO.7.76.6.2103121606540.50@tvgsbejvaqbjf.bet>
+Message-ID: <cover.1616428114.git.johannes.schindelin@gmx.de>
+References: <nycvar.QRO.7.76.6.2103121606540.50@tvgsbejvaqbjf.bet>
 User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/w9EeQDBik40+3zCyvFd/zDgzUVuxd4W2+Yu+8vmR7HSzXQeInT
- EkjGBwuFTIvz8ogih0UG85Gi8FHkFeUpBNnB34j/7MgAUlnBmR50Og4FMi1Zm6xWMdJoQQ4
- hUR0nx7nvAJaQNAjl/NDDOF4rtanwAi4M1WpheXrLSN4O6rKVsPtsys3AMiPAUYSymsEKzN
- zgwn9V39sdS9JqEtbpcUg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZpAbMq/CClg=:1wG885XsETge0nR/q6T4vM
- ZKil5fvZL7EL/PpDHo+7lMTJ4qayEPXkX4541AYCQkBRpna4t07KxLNVJFcqetdrc1RvZDEpo
- Y0rt/pTzGBcG5L5MJjrd0MXU0gEV68wyXCNhkLdtsnrxTRmXrktoJ24Dliolq0N7ok+a8uZs6
- 66Nf3mWdqZEJ5INJ7l+cRbkLH6uyI6Mbp9Z5v+5xNU1g8iI/AmVzHn4a5zvO1TrfO+VJPkhkZ
- fzqFAAkiKFn43G57hybTha9KorgnFULHgjnE9syzmbdg8DcCmT473TK4jAg9eLrh6ezG/M9O0
- fB/3lAwKqim8/2JBxm7NQQeB5aG5YlpefIjSFlBXqKdTajT/sHPCG/D4ToyVJu+z5I4MUKR0y
- NrEnzbbRMnPO32SS16OaA46k/tOMv7GnbHw5ILxZkx/EfR74rNjso4VgLbDApGpp5bonEAFlz
- 2WNuSERxeIaj/BRP+StpRglNo/b68pgWGRjgeJnhyEd/U6YPDYLycCKpJZZgAVbxMzQ0SiQc+
- 31nYnRBEzD79aBmpCvLzzGFwABGg0crH3aA48yfdPyUQFSopbpwqVnfYKtlo5hDbeR7Lvagzk
- Xj9H82OZ8G3vEsuwZ0FJoyHNIREPRImP/rjzCgevsyidnMopcOY3ndAq4Q3PZVT8s68yHV6MQ
- IjjwjrQHnBcgzHoln0qPbah+zA28qy68gHbFy5XIHHmCIqhR9pRQMFJKGTH4U4OJn6FeggGln
- hgEOZU5iQHhdEhZLIm+PfDaIiUcoZPEcmWmltI8Hdpe2UC9UHNze9KbZ8pj3l00mZ+wciegNq
- 65SHiA77SoRc3BUHu5tBU1xMCEe9k44Kg6klFx9x+Vs29mx9iXlucx/i12wo3MqvR/zqSCQKE
- 6dz1ENmNj4Nae9H4joIDb8pg9NKsSPCEeoHEoht9gfjWF2mHzhf2D7YfZ3S3Kydt+0Ow41liA
- DnUcO7Zle+4/dEmgU1XC0PKup3j9O5SAGecZFFEFAtBJmZV9FUWH+uioDeaTQQuU3jVgrB9+r
- rwQgcDsTtLLtGJho4wd2PUyvocInypPjUwdWnG0YaLZTfSHg8PrDmnWe84gTOAt+5vPtur1lu
- bOgn4aeA2PiBT9v/7nZR5F5zI83oAzMeEIhE6nip19hhSU5/fuS029lFP9VjnETNCZdd/mAnL
- Stnz41t0t+DTKBR9OGjUrKgndja4bFT3SbzNtcOI00t/XyEPHthOdVBDQCIrEmpzOtaCMVhCV
- QpRwBGxv2GmA6YBsY
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, FREEMAIL_FROM, MALFORMED_FREEMAIL, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:A7oXVctvZdEREwI7C/CirnOrqJD7wmPFCMmbx/t54G/AbQExN9Y
+ ULNDi8uIljgcWXQlnPAdTY0fdcK/zeOjgbTIqR6MXg8oIyoYcSj9Aw2aRHTEXJxFrHe60aI
+ rLWbruOUhMd4qJxjEj8mL4tU+QFOu1gqQsaHHDl53/ZQiLnJb5FAKgDax8WLedKk37l9En7
+ 9BFL8ArOG3wXS1t6zHCCQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TQhVcvwVdCs=:/ZV6O++NU5m+6EQlshr9K4
+ m95o7hu6pcGPENV7TGhWCaxH11bFzCpta8t0emi0feYn97xOdwRNKw0VCVQG/bgnwnvtnCTOv
+ M+qIpGuZ/KM15phaVwkoHE7amhNRC04t5s84OubdmuwETgCHxFRip5ZxfoWxuHsqIo3Efzeba
+ azFsvmbY8UNo0Zj8sh9pc1rB2hHlSOzmRIFdivkBnUs3+BXxZqc/jMvqDBs0w0sLs2UEradNH
+ ctk1klYb8wx1hwUyy8Vzg51X15uZzgH57g3lmpG3qSp35os4hwqStN/0FdFdGQD+aWxsBcqyJ
+ cy4BXAq/Q69zhhBAu0fGBHJVw0bzuC0gCTUHvF1Hi8GkJayzD1PyKBM9Jkm6c79ZKdYIIzfXW
+ 9MJWQygdeAy5D1eWEhgPph7CFmYqeOf6oBCs0xYU7Ip5/6ZG/uLcY57czIpvEc06zO9hrkomk
+ 5lmmIDWrxMoWFvlBzeS7DLLk2nbD0Y/jNnvU4qrk4YUGlvVGbzNYkfuK/gNV2M0IPdbnkjZ07
+ oeXMZv8ZsnC7xxUXLagNWS6PhcXWXiKthQW9FKKgUMP9nMilJxqL8UtM9sH2LkFn2EyBuKD5Y
+ 5T6FxwAaRWuNzZdUbjcGvUmciA14QxOEnHz4Bd9gRquZV5gUrYu1auNbKFtSzM+pm6Hp9WuDE
+ wI/01WBfRQtPms/cTolPdHoEbeLqxtyQY1kCE6y/nBYDly0sED4RGXtEcdIP1+YdQUs03AXaC
+ ucTPErrWdnacZ1DjXOS7IwkLVbolyeco667cDzBgeXf6gXjPZOhuYh1zO3EVAsqHQSfJeoqGf
+ ui5Y55m5vL3JuMirw2TQ2ZmAfYzC3RuD4xH8m7Z/wiNzWlloLv079DsKmyP/YL2OTxHr66shO
+ B+wn9tyu8tSlPdMzTW/9Aww59WcFBbO6G55f+O4UE=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, FREEMAIL_FROM, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,64 +54,108 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 22 Mar 2021 15:22:39 -0000
+X-List-Received-Date: Mon, 22 Mar 2021 15:51:31 -0000
 
-Hi Hans-Bernhard,
+When installing e.g. Python via the Windows Store, it is common that the
+`python3.exe` entry in the `PATH` is not actually an executable at all,
+but an "app executaion alias" (i.e. a special class of reparse point).
 
-On Mon, 15 Mar 2021, Hans-Bernhard Br=C3=B6ker wrote:
+These filesystem entries are presented as 0-size files, but they are not
+readable, which is why Cygwin has problems to execute them, with the error
+message "Permission denied".
 
-> Am 15.03.2021 um 04:19 schrieb Johannes Schindelin via Cygwin-patches:
->
-> > On Sat, 13 Mar 2021, Joe Lowe wrote:
-> >
-> > > I agree on the usefulness to the user of showing appexec target
-> > > executable as symlink target. But I am uncertain about the effect on
-> > > code.
-> >
-> > Maybe. But I am concerned about the effect of not being able to do
-> > anything useful with app execution aliases in the first place.
->
-> That argument might hold more sway if Windows itself didn't quite so
-> completely hide that information from users, too.
+This issue has been reported a couple of times in the Git for Windows and
+in the MSYS2 project, and even in Cygwin
+(https://cygwin.com/pipermail/cygwin/2020-May/244969.html, the thread
+devolved into a discussion about Thunderbird vs Outlook before long,
+though).
 
-"So completely"? It at least executes them, and it does offer you to turn
-them aliases on and off (see
-https://www.tenforums.com/tutorials/102096-manage-app-execution-aliases-wi=
-ndows-10-a.html)
+The second patch fixes that, and for good measure, the first patch teaches
+Cygwin to treat these reparse points as symbolic links.
 
-Granted, the user interface has a lot of room for improvement, but if you
-are dead set on finding out what, say, that `idle.exe` app execution alias
-refers to, you can go to `Settings>Apps>Apps & features>App execution
-aliases` and find out that it is owned by the Python 3.7 package. That
-does not give you the path, but it does give you way more information than
-you claimed Windows would offer to you.
+Changes since v1:
 
-> I found only one Windows native tool that will even show _any_ kind of
-> information about these reparse points: fsutil.  That is a) only availab=
-le as
-> part of the highly optional WSL feature and b) only gives you a hexdump =
-of the
-> actual data, without any meaningful interpretation.
+- Introduce and use `struct _REPARSE_APPEXECLINK_BUFFER`.
 
-The `fsutil` program, contrary to your claim, is available without WSL:
-https://docs.microsoft.com/en-us/windows-server/administration/windows-com=
-mands/fsutil
+Johannes Schindelin (2):
+  Treat Windows Store's "app execution aliases" as symbolic links
+  Allow executing Windows Store's "app execution aliases"
 
-And yes, for under-documented reparse points, the tool gives you only a
-hexdump.
+ winsup/cygwin/path.cc  | 40 ++++++++++++++++++++++++++++++++++++++++
+ winsup/cygwin/spawn.cc |  7 +++++++
+ 2 files changed, 47 insertions(+)
 
-One of those under-documented reparse point types is the WSL symbolic
-link, which you will notice are supported in Cygwin, removing quite some
-sway from your argument...
+Range-diff against v1:
+1:  218dc58e36 ! 1:  529cb4ad54 Treat Windows Store's "app execution alias=
+es" as symbolic links
+    @@ Commit message
+         Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-> For something that Windows itself gives the "no user servicable parts in=
-side"
-> treatment to the extent it does for these reparse points, I rather doubt=
- that
-> Cygwin users really _need_ to see it.
+      ## winsup/cygwin/path.cc ##
+    +@@ winsup/cygwin/path.cc: symlink_info::check_sysfile (HANDLE h)
+    +   return res;
+    + }
+    +
+    ++typedef struct _REPARSE_APPEXECLINK_BUFFER
+    ++{
+    ++  DWORD ReparseTag;
+    ++  WORD  ReparseDataLength;
+    ++  WORD  Reserved;
+    ++  struct {
+    ++    DWORD Version;       /* Take member name with a grain of salt. *=
+/
+    ++    WCHAR Strings[1];    /* Four serialized, NUL-terminated WCHAR st=
+rings:
+    ++			   - Package ID
+    ++			   - Entry Point
+    ++			   - Executable Path
+    ++			   - Application Type
+    ++			   We're only interested in the Executable Path */
+    ++  } AppExecLinkReparseBuffer;
+    ++} REPARSE_APPEXECLINK_BUFFER,*PREPARSE_APPEXECLINK_BUFFER;
+    ++
+    + static bool
+    + check_reparse_point_string (PUNICODE_STRING subst)
+    + {
+     @@ winsup/cygwin/path.cc: check_reparse_point_target (HANDLE h, bool =
+remote, PREPARSE_DATA_BUFFER rp,
+            if (check_reparse_point_string (psymbuf))
+      	return PATH_SYMLINK | PATH_REP;
+    @@ winsup/cygwin/path.cc: check_reparse_point_target (HANDLE h, bool r=
+emote, PREPAR
+     +  else if (!remote && rp->ReparseTag =3D=3D IO_REPARSE_TAG_APPEXECLI=
+NK)
+     +    {
+     +      /* App execution aliases are commonly used by Windows Store ap=
+ps. */
+    -+      WCHAR *buf =3D (WCHAR *)(rp->GenericReparseBuffer.DataBuffer +=
+ 4);
+    -+      DWORD size =3D rp->ReparseDataLength / sizeof(WCHAR), n;
+    ++      PREPARSE_APPEXECLINK_BUFFER rpl =3D (PREPARSE_APPEXECLINK_BUFF=
+ER) rp;
+    ++      WCHAR *buf =3D rpl->Strings;
+    ++      DWORD size =3D rp->ReparseDataLength / sizeof (WCHAR), n;
+     +
+    -+      /*
+    -+         It seems that app execution aliases have a payload of four
+    ++      /* It seems that app execution aliases have a payload of four
+     +	 NUL-separated wide string: package id, entry point, executable
+     +	 and application type. We're interested in the executable. */
+     +      for (int i =3D 0; i < 3 && size > 0; i++)
+    -+        {
+    ++	{
+     +	  n =3D wcsnlen (buf, size - 1);
+     +	  if (i =3D=3D 2 && n > 0 && n < size)
+     +	    {
+    -+	      RtlInitCountedUnicodeString (psymbuf, buf, n * sizeof(WCHAR))=
+;
+    ++	      RtlInitCountedUnicodeString (psymbuf, buf, n * sizeof (WCHAR)=
+);
+     +	      return PATH_SYMLINK | PATH_REP;
+     +	    }
+     +	  if (i =3D=3D 2)
+2:  647dff4c7a =3D 2:  1c2659f902 Allow executing Windows Store's "app exe=
+cution aliases"
+=2D-
+2.31.0
 
-Well, that's funny: you are talking to one Cygwin user who needs to see
-it. So I feel a bit ignored by you there.
-
-Ciao,
-Johannes
