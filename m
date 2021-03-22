@@ -1,44 +1,41 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 3D185385801D
- for <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021 11:43:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3D185385801D
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id BFB653858004
+ for <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021 11:49:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BFB653858004
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MrQMz-1m3kBq1iCd-00oakH; Mon, 22 Mar 2021 12:43:37 +0100
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mysa4-1lc0Sh1qni-00vwO5 for <cygwin-patches@cygwin.com>; Mon, 22 Mar 2021
+ 12:49:21 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id BCCCCA80D44; Mon, 22 Mar 2021 12:43:36 +0100 (CET)
-Date: Mon, 22 Mar 2021 12:43:36 +0100
+ id C1E20A80D44; Mon, 22 Mar 2021 12:49:20 +0100 (CET)
+Date: Mon, 22 Mar 2021 12:49:20 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Return appropriate handle by _get_osfhandle() and
- GetStdHandle().
-Message-ID: <YFiC6FXrnGeW8v1M@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Rename input named pipes.
+Message-ID: <YFiEQJf6ZDivGbPH@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
- Marco Atzeri <marco.atzeri@gmail.com>
-References: <20210321040126.1720-1-takashi.yano@nifty.ne.jp>
- <20210321174427.cf79e39deeea896583caa48c@nifty.ne.jp>
- <20210322080738.6841d7f2a1e09290a929ad90@nifty.ne.jp>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210321035953.1671-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210322080738.6841d7f2a1e09290a929ad90@nifty.ne.jp>
-X-Provags-ID: V03:K1:SPNsI/wPEW/eQF5TiohvbSMWv1KWsPZU2AF11X84tR7SUCldCee
- tgmRa4+XgusIjm/SE1IAtjike3GS7KDiC8hNeW1nGaaLLS/UbJMyVZ45b+ohMpJ986p0yVb
- kW+icGYHKOreImAV0bF9hPomWZQNsNJQo1Wq7ABLyHmvc3Cx92XJHbnnOJ/d4x+OjkX9CKV
- YfoBGb+xFaApmhefjjRhg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9CmOH5RucOQ=:rQCADIpgoJAb6rDnxh8AkL
- iWbyc4LpkSoli3kOaLTeSoa0gqRo1YyHzaQ0tdpii6MhefYZyD6KAYgr7YLFLDtc3jBowuBLA
- bQQdBVwnYfN4mEOvRIbCkGK+dA1rDkhLV+zsAJQGgC00RWkn89DEkyv2EWYyFPnByYrfjGA15
- zvllrLoZTDn7eYcE+Kp1qr8PNihLMKraMfTHc3KqfFLQ9ChkRvzjKjQU6IX5WbEud8RPD3I6S
- nAQ8KShBz42Ffgb2Y5n/CYNM4RFvTy2ZHpH9wo+Si7Q0DweAZcRD4jf1AJ2s10C6xHAF2YbCC
- yEMhNW2DA2AFIO9k4NJ9AP1Pcs5yjSG8OrMZYCnlgb3Pb7hKzwkwwllCibaX6kToTiCHS96XK
- 0ky/GpzNzxa1EfsXsDk/13l/Yk07KWn7TFmr0MtWJ2kysHuDHlOwlm0h41Ylhc3PMeU0bNVnP
- cdwGpOIO0A==
+In-Reply-To: <20210321035953.1671-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:cBKiL4VqIwJtk4HdHKtX4KafJ5sMgxkREzfTiK4YOhgBQfrxw3f
+ kiQ1Bp4pz+aEX8WDQhV6qgmG7xYR74xscftlVXM4YPAFNyEWTARpU9e4xrqce7CJ5VsgfZV
+ J4wqbFj8/ywdlcalxZlOuj3Ha4S8Mek1O1mP6i4LOHqZ1jymN+vd+opRiwaZ/14DWMMEe5q
+ Py1y2BLQsCAW95Bk7d9ww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:15s1lUT5iyo=:QKIQDrIH3fapixfCMpU6b8
+ KEBbceLKffS+cRGGyfPaG1PuZofD9fkjxZ1BTXOO33HMS6aV+XUELYrFYij3jDfKbrYHrhIUv
+ 4BT0v6tVbYvn8zLoGboWg+WNcqNWirwqiVncVn6BqP/QoZqjZMJAUY7Q+vO2i3A0A/hZISoHQ
+ Xhhpwt6mGBsd+9Qrp1Ic2Jg1CFuqnEkCTES5608Fc80Y3s7X+M0rpHNDyMWs9v6Dh9X24ZKPo
+ +3DUSrk3JE51yllRigqKuz+2xKlWkdj9JazL9Z3i23Q0Cz711+3a6grVlKuICd/js/XZv6WtV
+ c6AANtrqZL1na5dZL386vz+uJC9ctxcJxLkZh7qpNsKVxkd4+JMB3a06tsUsHAGjHTtUo1N2g
+ BXaroCxjjBauDRrEz5C1LSh9qKcLYf5BA5VRBFgdLALTdy6mH5fuGpMHNBaJj2AFEsN3XdZtx
+ Zx+P4m9h2w==
 X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_NEUTRAL,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,77 +51,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 22 Mar 2021 11:43:40 -0000
+X-List-Received-Date: Mon, 22 Mar 2021 11:49:24 -0000
 
-[CC Marco]
+Hi Takashi,
 
-On Mar 22 08:07, Takashi Yano via Cygwin-patches wrote:
-> On Sun, 21 Mar 2021 17:44:27 +0900
-> Takashi Yano wrote:
-> > On Sun, 21 Mar 2021 13:01:24 +0900
-> > Takashi Yano wrote:
-> > > Takashi Yano (2):
-> > >   Cygwin: syscalls.cc: Make _get_osfhandle() return appropriate handle.
-> > >   Cygwin: pty: Add hook for GetStdHandle() to return appropriate handle.
-> > > 
-> > >  winsup/cygwin/fhandler_tty.cc | 19 +++++++++++++++++++
-> > >  winsup/cygwin/syscalls.cc     | 13 ++++++++++++-
-> > >  2 files changed, 31 insertions(+), 1 deletion(-)
-> > 
-> > I submitted these patches, however, I still wonder if we really
-> > need these patches. I cannot imagine the situation where handle
-> > itself is needed rather than file descriptor.
-> > 
-> > However, following cygwin apps/dlls call _get_osfhandle():
-> > ccmake.exe
-> > cmake.exe
-> > cpack.exe
-> > ctest.exe
-> > ddrescue.exe
-> > 
-> > And also, following cygwin apps/dlls call GetStdHandle():
-> > ccmake.exe
-> > cmake.exe
-> > cpack.exe
-> > ctest.exe
-> > run.exe
-> > cygusb0.dll
-> > tk86.dll
-> > 
-> > in my installation.
-> > 
-> > Therefore, some of these apps/dlls may need these patches...
-> 
-> I looked into cmake source and found the patch exactly for
-> this issue. Therefore, it seems better to fix this. 
-> 
-> /* Get the Windows handle for a FILE stream.  */
-> static HANDLE kwsysTerminalGetStreamHandle(FILE* stream)
-> {
->   /* Get the C-library file descriptor from the stream.  */
->   int fd = fileno(stream);
-> 
-> #  if defined(__CYGWIN__)
->   /* Cygwin seems to have an extra pipe level.  If the file descriptor
->      corresponds to stdout or stderr then obtain the matching windows
->      handle directly.  */
->   if (fd == fileno(stdout)) {
->     return GetStdHandle(STD_OUTPUT_HANDLE);
->   } else if (fd == fileno(stderr)) {
->     return GetStdHandle(STD_ERROR_HANDLE);
->   }
-> #  endif
-> 
->   /* Get the underlying Windows handle for the descriptor.  */
->   return (HANDLE)_get_osfhandle(fd);
-> }
+On Mar 21 12:59, Takashi Yano via Cygwin-patches wrote:
+> - Currently, the name of input pipe is "ptyNNNN-from-master" for
+>   cygwin process, and "ptyNNNN-to-slave" for non-cygwin process.
+>   These are not only inconsistent with output pipes but also very
+>   confusing.
+>   With this patch, these are renamed to "ptyNNNN-from-master-cyg"
+>   and "ptyNNNN-from-master" respectively.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 2 +-
+>  winsup/cygwin/tty.cc          | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Why on earth is cmake using Windows functions on Cygwin at all???
-It's not as if it actually requires Windows functionality on our
-platform.
+Actually... wouldn't it make more sense to call the Cygwin pipe
 
-Marco, any input?  Any chance to drop this Windows stuff from the Cygwin
-code path in cmake?
+  pty%d-from-master / pty%d-to-slave
+
+and the non-Cygwin one something like
+
+  pty%d-from-master-nat / pty%d-to-slave-nat
+
+?
+
+After all, Cygwin is the norm, and non-Cygwin is the exception.
+
+On second thought, this would also make sense for thr fhandler methods,
+i. e.
+
+  get_output_handle / get_output_handle_cyg
+
+vs.
+
+  get_output_handle_nat / get_output_handle
+
+Probably the fhandler stuff is too much renaming for this release,
+but we should do this for the next one, I think.
 
 
 Thanks,
