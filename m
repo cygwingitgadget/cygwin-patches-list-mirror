@@ -1,56 +1,63 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 52FB8385BF9E
- for <cygwin-patches@cygwin.com>; Tue, 23 Mar 2021 14:27:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 52FB8385BF9E
+Return-Path: <Stromeko@nexgo.de>
+Received: from smtpout2.vodafonemail.de (smtpout2.vodafonemail.de
+ [145.253.239.133])
+ by sourceware.org (Postfix) with ESMTPS id 8700C385701F
+ for <cygwin-patches@cygwin.com>; Tue, 23 Mar 2021 15:21:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8700C385701F
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
+ dmarc=none (p=none dis=none) header.from=nexgo.de
 Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N3bGP-1lp8io47j1-010Zvb for <cygwin-patches@cygwin.com>; Tue, 23 Mar 2021
- 15:27:30 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 0ABD6A80DC9; Tue, 23 Mar 2021 15:27:29 +0100 (CET)
-Date: Tue, 23 Mar 2021 15:27:29 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=pass smtp.mailfrom=Stromeko@nexgo.de
+Received: from smtp.vodafone.de (smtpa08.fra-mediabeam.com [10.2.0.39])
+ by smtpout2.vodafonemail.de (Postfix) with ESMTP id 3D49C1213AE
+ for <cygwin-patches@cygwin.com>; Tue, 23 Mar 2021 16:21:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nexgo.de;
+ s=vfde-smtpout-mb-15sep; t=1616512901;
+ bh=a1FYOm3nci/nr0/iZg14uxmqoHPyQSUXSS/DcJxlj+I=;
+ h=From:To:Subject:References:Date:In-Reply-To;
+ b=BfeOjT4SBYZqJArrkVBdKc7FBkqxDuPYgTYol5Mlkvb0YvIepbs/i4XM18icH5M7N
+ dI28SAah+3cndmdM2dKFS6A+ZagCw0NCr4TdfdSnek5uA9jihQ3uLM5hyaaSny8Ez0
+ 4BVaFhfuIMs7AmQbDhEG8Lg8cinitNmF0JCpboSM=
+Received: from Otto (p57b9d8ab.dip0.t-ipconnect.de [87.185.216.171])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.vodafone.de (Postfix) with ESMTPSA id 09850141427
+ for <cygwin-patches@cygwin.com>; Tue, 23 Mar 2021 15:21:39 +0000 (UTC)
+From: ASSI <Stromeko@nexgo.de>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 0/2] Return appropriate handle by _get_osfhandle() and
  GetStdHandle().
-Message-ID: <YFn60XBYI5qRfpo4@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <YFiC6FXrnGeW8v1M@calimero.vinschen.de>
+References: <20210321040126.1720-1-takashi.yano@nifty.ne.jp>
+ <20210321174427.cf79e39deeea896583caa48c@nifty.ne.jp>
+ <20210322080738.6841d7f2a1e09290a929ad90@nifty.ne.jp>
+ <YFiC6FXrnGeW8v1M@calimero.vinschen.de>
  <58c7be6c-42db-cc09-9f89-461ac7c87747@cornell.edu>
  <YFm+fEONY3wLq3Sp@calimero.vinschen.de>
  <20210323205717.bf5c3a41695871ec70bf1229@nifty.ne.jp>
  <YFncTItWHhMlNH5Y@calimero.vinschen.de>
  <20210323213212.d2c5a9e7db7a508260693998@nifty.ne.jp>
- <20210323214206.ebb5b1cb80a8b71ead4e8cda@nifty.ne.jp>
- <20210323215227.eda395caff35c4d5aa9b9007@nifty.ne.jp>
- <YFnt95aAHnuu7NCC@calimero.vinschen.de>
- <20210323225142.3ddc21334ca645ab838ddf49@nifty.ne.jp>
+ <YFnit7OtFJeflMQT@calimero.vinschen.de>
+ <ee1366d1-d7bb-0bb3-b9e1-7715eb476985@dronecode.org.uk>
+Date: Tue, 23 Mar 2021 16:21:34 +0100
+In-Reply-To: <ee1366d1-d7bb-0bb3-b9e1-7715eb476985@dronecode.org.uk> (Jon
+ Turney's message of "Tue, 23 Mar 2021 13:09:44 +0000")
+Message-ID: <87a6qtx5dt.fsf@Otto.invalid>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210323225142.3ddc21334ca645ab838ddf49@nifty.ne.jp>
-X-Provags-ID: V03:K1:rWX4sHLCkRu7y6j1F34yFTjnnet+0Az2VQFpt0RWsNoY6Tf3x8i
- EHL8Jhg3cCAdtBbSEg33u3WG5p/uzZxx0cMaVvHaXk8drVcOXJbP/HkeQWLDob88igSL0oo
- PiVK+4bGFXs41i5ZvY1JL4fo6pf/kve3BrpxRhHBGUE3bLindX09Nm6lGEhL93w2EM85z5R
- hgUk5mKSgm9QRKn5zBRpA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:a1/pcXIb1vg=:sxRQEVSi5b6H07fHCn2j0f
- 8a77PnqI/TM3mHFcBA2HIEd3sKQMNJlXXHu28FO9O+lCOhwVG0JkH6HqM3HGYqwfp9MExrc9m
- IlINNJHSdqDziJj6v4jdp2zXVBPjRj5wy6C6uicFiDU3ovsWdVjSOsrUkwh53GHzsMnkQ3IEv
- tavDYeCpRV5yZNA8nXoPYCj4XGIMSyoxyfDAvRnb4rGK42iwALnQiBNFXmMUrLUu93o01J09m
- NX/puwcQBJhh0udqkKhmQ4O0NeSiCdfd/mtTq3IKSni56cJM+CNw69wg4h4gRQ10z0/RXv8n0
- 3mn6HOETjELJANinCT1UdZZ1LjdF8RmWV99VQiK7glVbolw7OI2jHSW91h1YHGSglDLcBvANP
- kFrAuLdF3LsA37Hubwg76G+W0vOwNsiErI29bMkO8jA2rGdBzLCrf87ezKUWpm7ioSSN9pDgb
- Xjbo78XlEZoJy1ELDzFBR8exqDojpOLf5RXBCwNZjsQ/8euUuas5
-X-Spam-Status: No, score=-101.0 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: quoted-printable
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 750
+X-purgate-ID: 155817::1616512899-00005C41-D1DF08EA/0/0
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -65,49 +72,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 23 Mar 2021 14:27:33 -0000
+X-List-Received-Date: Tue, 23 Mar 2021 15:21:48 -0000
 
-On Mar 23 22:51, Takashi Yano wrote:
-> On Tue, 23 Mar 2021 14:32:39 +0100
-> Corinna Vinschen wrote:
-> > On Mar 23 21:52, Takashi Yano via Cygwin-patches wrote:
-> > > On Tue, 23 Mar 2021 21:42:06 +0900
-> > > Takashi Yano wrote:
-> > > > On Tue, 23 Mar 2021 21:32:12 +0900
-> > > > Takashi Yano wrote:
-> > > > > I try to check run.exe behaviour and noticed that
-> > > > > run cmd.exe
-> > > > > and
-> > > > > run cat.exe
-> > > > > does not work with cygwin 3.0.7 and 3.2.0 (TEST) while these
-> > > > > work in 3.1.7.
-> > > > 
-> > > > In obove cases, cmd.exe and cat.exe is running in *hidden* console,
-> > > > therefore nothing is shown. Right?
-> > > 
-> > > In what situation are
-> > >   psi->cb = sizeof (STARTUPINFO);
-> > >   psi->hStdInput  = GetStdHandle (STD_INPUT_HANDLE);
-> > >   psi->hStdOutput = GetStdHandle (STD_OUTPUT_HANDLE);
-> > >   psi->hStdError  = GetStdHandle (STD_ERROR_HANDLE);
-> > > these handles used?
-> > 
-> > Hmm, trying to make sense from the code, I'd say, these handles are used
-> > by default, unless run.exe is already attached to a console.  In  the
-> > latter case, it calls CreateFile( "CONIN$") etc. to attach the new
-> > process to that console.
-> 
-> "if (!bForceUsingPipes && bHaveConsole)"
-> then handles are replaced by CreateFile("CONIN$", ...) etc.
-> else replaced by pipe handle. If so, handles returned by
-> GetStdHandle() are never used.
-> 
-> Do I overlook something?
+Jon Turney writes:
+> 'run' is used by the start menu item which starts the X server.
+>
+> If that doesn't use it, a visible console window is created for the
+> bash process it starts (which is the parent of the X server process
+> and lives for it's lifetime).
+>
+> (As a separate issue, I'm not sure all the complex gymnastics run does
+> to creste the window invisibly are doing anything useful, since we
+> seem to briefly show the window and then hide it)
 
-AFAICS, bForceUsingPipes is always FALSE.  bHaveConsole is only TRUE if
-run.exe is started from a console.  If run.exe is started from the GUI
-(which was the primary idea, IIRC), bHaveConsole is FALSE.  So the
-GetStdHandle() handles are used when started from thre GUI, isn't it?
+It may be time to finally retire run and finish the work on run2=E2=80=A6
 
 
-Corinna
+Regards,
+Achim.
+--=20
++<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+
+SD adaptations for KORG EX-800 and Poly-800MkII V0.9:
+http://Synth.Stromeko.net/Downloads.html#KorgSDada
