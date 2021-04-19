@@ -1,48 +1,45 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 6223F385E013
- for <cygwin-patches@cygwin.com>; Mon, 19 Apr 2021 14:19:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6223F385E013
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
+ [210.131.2.82])
+ by sourceware.org (Postfix) with ESMTPS id D5ECE3951C9A
+ for <cygwin-patches@cygwin.com>; Mon, 19 Apr 2021 20:51:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D5ECE3951C9A
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N1PLB-1lfLR23hDn-012sbt for <cygwin-patches@cygwin.com>; Mon, 19 Apr 2021
- 16:19:48 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8A111A80EC7; Mon, 19 Apr 2021 16:19:47 +0200 (CEST)
-Date: Mon, 19 Apr 2021 16:19:47 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=fail smtp.mailfrom=takashi.yano@nifty.ne.jp
+Received: from Express5800-S70 (v050190.dynamic.ppp.asahi-net.or.jp
+ [124.155.50.190]) (authenticated)
+ by conssluserg-03.nifty.com with ESMTP id 13JKp8b6008744
+ for <cygwin-patches@cygwin.com>; Tue, 20 Apr 2021 05:51:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 13JKp8b6008744
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1618865469;
+ bh=IMsF+P+ASCG6k0zYNW4LGCpFjWWRL13XQ+TnCxBqfEI=;
+ h=Date:From:To:Subject:In-Reply-To:References:From;
+ b=ogpMVhSLP639tmrjpz0gjQnzOscWEqQdtOQiB04zNZGCnI6B82s7v4LmFmLnE9EPN
+ KDtpY/P9WKBZb4JaC0O/6CbrDrSYTFrAD67YTs7/6uDd+QxrROUW2UbtqNr19sz/ua
+ 1B9UvWZMLhz/aVHQvKnCrDJPB8X8HfsCPge1bc+vCzzZzdoqRcHabp5UdwDBxflH6p
+ tLl+Hbvla+Ex6AAKWG+3+2IDH3YavbM0FJpNFPco8C4eyuihExKbTOTgVcy4wN+OKx
+ DUvVvJlAOPo0eHzn4cdH/eIZC3OBLpmT4Q2AVGMr4JcDt39zfDiO9uqmSr9yFjTlA0
+ +aYmRqhuhyLfw==
+X-Nifty-SrcIP: [124.155.50.190]
+Date: Tue, 20 Apr 2021 05:51:13 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Fix a bug in the code to fix tab
- position.
-Message-ID: <YH2Rg7NdcSwK3ZtO@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210419103151.21887-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210419103151.21887-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:yeND7qBNmz86bpT9sihihTxdJ1kNGMb4MHXN8ru16AU0SoNawcZ
- 6+6Gaq8VwI/qtEQjxjkJKh4tORSYyxkJLkHgJ62SbPvHOPCrvxDlxLaPCiuxTyXBYgqXNH/
- qGLwwt0lAigwvpmStxdzzjYJyhPJAMsSVL6RHKRtDO8ImhGRk3WonLakp4C/pZuAiKY5y59
- U6HpUfH4D+0YJg+5q7r0w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t1E3bs50McU=:GfxH1cvyOqXjbjm4AQIVx9
- RLaZJSqa60CrR8TvR8Q2zFmdhVoeLyo2S5GLmjAFmhgCBf/qzpJww0xig8YLMc8UgGv+9Y6Yw
- Rn0VQDy+E+ozHSl4oNLL7Q+mZH1sjr67jY2bRvuSYgOlgTqdqD9x5x+U4pwsVfT06tOHHGVIG
- ZBb4nYTqMO0G9WyqMQQh6547X1hKsVzrqrvBLeV/X4z6mNxL8mDVFZwp9rsGadtEgEYWmeFeC
- W/5HtxX2pJ3D4rhOhcDCv9G3JDmgSMaFH+L+prWMyO5HRb4bqEgnJgbYAxva18Woo58I/6qC6
- kwJCbQvPI/J49ahN1zRaBsaP06q/uOxYbXiwzgoErrr/jmPRGdOf9Qq7drdaIpM/ow+vMd7qf
- UdSu4dQVfBiEBY6iuFc1G5qH0EGfZ3fHf3Jt2m2UaVisUNQAm2tevr60GC3avxRQRsscp8GNy
- Su/zUAkuBC6CIkrPiWc/nmKt2f94cp/UND3jLRN/xxmP6l+7twzuSatHMrRmn8AeuR/N8guA+
- 4Au+moby0dIP3nNtJ2yZ0g=
-X-Spam-Status: No, score=-106.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH] Cygwin: pty: Make rlwrap work with cmd.exe.
+Message-Id: <20210420055113.b03868929391b157c69dc807@nifty.ne.jp>
+In-Reply-To: <YH2RXQG9RT0V5WNG@calimero.vinschen.de>
+References: <20210419115153.1983-1-takashi.yano@nifty.ne.jp>
+ <YH2RXQG9RT0V5WNG@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -57,32 +54,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 19 Apr 2021 14:20:00 -0000
+X-List-Received-Date: Mon, 19 Apr 2021 20:51:40 -0000
 
-On Apr 19 19:31, Takashi Yano wrote:
-> - With this patch, a bug in the code to fix tab position after
->   resizing window is fixed.
-> ---
->  winsup/cygwin/fhandler_console.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 19 Apr 2021 16:19:09 +0200
+Corinna Vinschen wrote:
+> Hi Takashi,
 > 
-> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-> index 43e404ed6..0812e91f0 100644
-> --- a/winsup/cygwin/fhandler_console.cc
-> +++ b/winsup/cygwin/fhandler_console.cc
-> @@ -308,7 +308,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
->  		      /* Re-setting ENABLE_VIRTUAL_TERMINAL_PROCESSING
->  			 fixes the tab position. */
->  		      set_output_mode (tty::restore, &ti, p);
-> -		      set_input_mode (tty::cygwin, &ti, p);
-> +		      set_output_mode (tty::cygwin, &ti, p);
->  		    }
->  		  ttyp->kill_pgrp (SIGWINCH);
->  		}
-> -- 
-> 2.31.1
+> On Apr 19 20:51, Takashi Yano wrote:
+> > - After the commit 919dea66, "rlwrap cmd" fails to start pseudo
+> >   console. This patch fixes the issue.
+> > ---
+> >  winsup/cygwin/fhandler_tty.cc | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > index ba9f4117f..d44728795 100644
+> > --- a/winsup/cygwin/fhandler_tty.cc
+> > +++ b/winsup/cygwin/fhandler_tty.cc
+> > @@ -1170,6 +1170,8 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+> >      }
+> >    if (isHybrid)
+> >      return;
+> > +  if (get_ttyp ()->pcon_start)
+> > +    return;
+> >    WaitForSingleObject (pcon_mutex, INFINITE);
+> >    if (!pcon_pid_self (get_ttyp ()->pcon_pid)
+> >        && pcon_pid_alive (get_ttyp ()->pcon_pid))
+> > -- 
+> > 2.31.1
+> 
+> this patch doesn't apply.  Does it depend on the race issue fixes?
 
-Pushed.
+Yes. This depends on the race issue patches.
+Please apply this patch after the race issue patches.
 
-Thanks,
-Corinna
+Thanks.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
