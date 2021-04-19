@@ -1,37 +1,37 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id E0F5A395CCBB
- for <cygwin-patches@cygwin.com>; Mon, 19 Apr 2021 10:32:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E0F5A395CCBB
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 87EB8388A029
+ for <cygwin-patches@cygwin.com>; Mon, 19 Apr 2021 11:52:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 87EB8388A029
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=takashi.yano@nifty.ne.jp
 Received: from localhost.localdomain (v050190.dynamic.ppp.asahi-net.or.jp
  [124.155.50.190]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 13JAVqDM011657;
- Mon, 19 Apr 2021 19:31:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 13JAVqDM011657
+ by conuserg-07.nifty.com with ESMTP id 13JBpsai000515;
+ Mon, 19 Apr 2021 20:51:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 13JBpsai000515
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1618828317;
- bh=Av19bWVb3uPlWiNxVqKSS7kWbgzlq3EhdCrG9sNY5aA=;
+ s=dec2015msa; t=1618833118;
+ bh=wVUMwQEFjR0JauMbohUOFYQW34xdHl6PdRTSz36QZcg=;
  h=From:To:Cc:Subject:Date:From;
- b=je7KLeAmVtNFU4uHpj2cLPVhKyASo2qoc+UNipz7hGpVHFOWtvCouX+6MT/qQd7hh
- YUjaHm4dWfOIz7rkbSE6MQIekLO8TqedOX/PVuUHZksbuIctv4m+TdE2eQUZWI08HF
- nymPmQLSW46blaqc+ZpWPt13an6qmaZqKgywqFmstrQwC14OzAfiY0XnLvqlwsFJWz
- +YaamhfLkV7rcO+dWVpXlwOdfaUWDsvWTL0/9n52zmUrmq1RBxrpNakG2nqazik6dS
- ePyPWhqZx/l0dV5b3qAorqiu8gNh40qLyQGlTFp/S1mATsrr/EtLWyaFXrGeWVEned
- SbPPEXwjHhqYw==
+ b=E2RpEAKrjaK+ttzYpgMsw3TbuRqXixVJoYkKTd6ZFufwq//JiAn0oOCfiz0O3Nyv7
+ 6dcF5adq0ksR3IZWebh4Ny4C45BgJtstjHSKxixtBbd6imwtLsJAkuIsDHmEcbLPz2
+ 0UoH8o7l7X/KocMJVwjetzXW+88dr+RmnZN+xhBf0VSyfaI4rQLQcEOhv1GyD26UVU
+ 8Wz8Fb8yQO6zzk3kCeFGBLYkIOQFXT2aePtpgE0h6xLwk2XUsedd75SNC3ALtx7MWX
+ orguj+0ePKQKxkgJpdvoTJEKR0IVvscYz92hP7AMZZEEm5XmmKwNjX2S/r/Uj3nScW
+ Br1BBCBiVpJ2Q==
 X-Nifty-SrcIP: [124.155.50.190]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix a bug in the code to fix tab position.
-Date: Mon, 19 Apr 2021 19:31:51 +0900
-Message-Id: <20210419103151.21887-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Make rlwrap work with cmd.exe.
+Date: Mon, 19 Apr 2021 20:51:53 +0900
+Message-Id: <20210419115153.1983-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -48,27 +48,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 19 Apr 2021 10:32:19 -0000
+X-List-Received-Date: Mon, 19 Apr 2021 11:52:40 -0000
 
-- With this patch, a bug in the code to fix tab position after
-  resizing window is fixed.
+- After the commit 919dea66, "rlwrap cmd" fails to start pseudo
+  console. This patch fixes the issue.
 ---
- winsup/cygwin/fhandler_console.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/fhandler_tty.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 43e404ed6..0812e91f0 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -308,7 +308,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 		      /* Re-setting ENABLE_VIRTUAL_TERMINAL_PROCESSING
- 			 fixes the tab position. */
- 		      set_output_mode (tty::restore, &ti, p);
--		      set_input_mode (tty::cygwin, &ti, p);
-+		      set_output_mode (tty::cygwin, &ti, p);
- 		    }
- 		  ttyp->kill_pgrp (SIGWINCH);
- 		}
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index ba9f4117f..d44728795 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1170,6 +1170,8 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+     }
+   if (isHybrid)
+     return;
++  if (get_ttyp ()->pcon_start)
++    return;
+   WaitForSingleObject (pcon_mutex, INFINITE);
+   if (!pcon_pid_self (get_ttyp ()->pcon_pid)
+       && pcon_pid_alive (get_ttyp ()->pcon_pid))
 -- 
 2.31.1
 
