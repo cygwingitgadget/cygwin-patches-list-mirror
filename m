@@ -1,48 +1,48 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 0450439B6802
- for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 15:44:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0450439B6802
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 364D738460A2
+ for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 16:40:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 364D738460A2
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M7sQ6-1leD6c0QF8-004yeJ for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021
- 17:44:12 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1McHM2-1l3V2u0qNg-00cgWw for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021
+ 18:40:04 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 7BE43A80EDD; Wed, 21 Apr 2021 17:44:10 +0200 (CEST)
-Date: Wed, 21 Apr 2021 17:44:10 +0200
+ id 80678A80EDD; Wed, 21 Apr 2021 18:40:03 +0200 (CEST)
+Date: Wed, 21 Apr 2021 18:40:03 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Additional race issue fix regarding pseudo
- console.
-Message-ID: <YIBISlJOtJXk90RR@calimero.vinschen.de>
+Subject: Re: [PATCH] Use automake (v5)
+Message-ID: <YIBVYytjWjpdFDTo@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210421030600.3793-1-takashi.yano@nifty.ne.jp>
+References: <20210420201326.4876-1-jon.turney@dronecode.org.uk>
+ <5d7176f9-8d82-9b2c-4717-fdc5041d95ce@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210421030600.3793-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:aTapiExBcA6qJLu3oB9Xo/P/XsQ27QxhxYt8Vu6zee3gS2WkGBg
- vvtjEYIOBuaY6FfkpaIfuRcchq/7GjaYFP6zZ3NKNWPAMAPeNYGeEvAye1qdeDn8y8BTWjP
- QVuF65ev+CXq2XSl2QoCTFGF4NYwImqBpGOFEO/lPQWvZ2An2J/y3ZGlZeOKdBiM9UJwPA4
- 0xDWq/ADuQbUVqChejADQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9X244/am8RE=:DZSfeqSnSFouMybgpN8pVl
- feG/hd+v2WSXDLiRNPohPBgfRVKe2KiCF+7MzcdCCRXGiMRbMMyl0eOF1wWHleD9it1KjnPk1
- 8GQI+06B+mVLjK2ucwZmEz2hNVIVHZzLQlqCpNjm5pyOUfOpDiKMDUV2T2653P8UKJkNQCiXU
- Op0ptCqrnPRINTup2RixHMEwYc5Q5ej95+UqhhT1/Opv7Q9WfC41I9dtC6QpMbfum+wLR7Vub
- +f0EQEMZV+zMUBZj8vSNNPaqv5vR74ktpvBK+GFXIwMvP62gewb7wvLZ+3DGUiU2YMZRNk0TU
- rB+LTcCTyxGWyMw39gxbCErz62LtJX71fTCJLFCtXM47ySFnksFFZCXvLGGpW/QZutmJsfbXR
- O1KObfCPJOvs6FQTkhODCECNA17NMAeyG0g10NLRaUJgUUi2EwFtzgUXV3UAd/yEU0c2KKrhU
- BlyMOM3TCG8XtJh58oA3OqaqLyNGcEATEcsjlk90nsTBWas25VeXgZkaMyOFszYH8lYsRNbVu
- /pOPwrzOkdTzSOiS2IQiaw=
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <5d7176f9-8d82-9b2c-4717-fdc5041d95ce@dronecode.org.uk>
+X-Provags-ID: V03:K1:Wos6WGPGYyRXr7pb2FhNOarG12aO0Uv2t0lASnhu7o2KFdAV9xv
+ NlLbiq7ecbwvdXhjrSUSryjt54ImzoYdgfm9dz+ZxuYkZ/1iI8Hy2ATSNt+R9qLRGvBuDkY
+ a6b1NH+91QO6muFDWOsxX3ZC5L/nTlt6RgURotIGFwzgpJvVXYJIR5a03TyzAlP9gJynaXd
+ 61AkThhRt0erzd5OTLENA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/dwWkcEsnhI=:Iw23XruAzSCQMDrpd3ONTh
+ foNINYMN1ZJxIAKHp78Ek60v/LR3Jn5K35GCIWUrXTaidtr+WCUIkrBI0b3PFQM4UiZ2RQaRv
+ x28iKhAaE2vXlU0D4qQrERss3KcQyiMrpbXDnQwuHRpZloolTxaqWnyIE0GQBqX0KHDQYDuV7
+ 6fi4+vfBOyOFqdaugnBGiDAbpL5hX7zBK79TR+z7Gr8e/lsFTHjxMul5Gbsv6AGJdZ84yfnw9
+ SOCSAyGgWl6aKKO2onnd8CAx3fxR946Ea/I8HZRH6Spqf8y5hbqhEVqG+Cg6AbwPzWfkGWfRJ
+ AzdB76fyHg5Uvwbrq1YW1NBjzcADNNkJBLsohp2D0bTfjhAri9/E7T6GBUIusxMBNBi/EnRZs
+ LKgVLmwxRKhKJ+Ub97Hw0Gf796Cq6U2MAuKpPZ292jlj1qVDd6/DRPim7M1L/0hU6GP8dhNM6
+ m5Anf0inJmhnmhZiW2V+YQIGl1rHzCdNGBSSV5T7sdXuj3OlxsZHsvAcMgcIl2NRxOxhLk1CD
+ FT57FYqOJmhacKRnUkNcTg=
+X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -57,19 +57,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 21 Apr 2021 15:44:24 -0000
+X-List-Received-Date: Wed, 21 Apr 2021 16:40:09 -0000
 
-On Apr 21 12:06, Takashi Yano wrote:
-> - In commit bb93c6d7, the race issue was not completely fixed. In
->   the pseudo console inheritance, if the destination process to
->   which the ownership of pseudo console switches, is found but exits
->   before switching, the inheritance fails. Currently, this extremely
->   rarely happens. This patch fixes the issue.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 47 +++++++++++------------------------
->  1 file changed, 14 insertions(+), 33 deletions(-)
+On Apr 20 21:15, Jon Turney wrote:
+> On 20/04/2021 21:13, Jon Turney wrote:
+> > For ease of reviewing, this patch doesn't contain changes to generated
+> > files which would be made by running ./autogen.sh.
+> 
+> Sorry about getting distracted from this.  To summarize what I believe were
+> the outstanding issues with v3 [1]:
+> 
+> [1] https://cygwin.com/pipermail/cygwin-patches/2020q4/010827.html
+> 
+> * 'INCLUDES' is the old name for 'AM_CPPFLAGS' warning from autogen.sh
+> 
+> I plan to clean this up in a future patch
+> 
+> * 'ps$(EXEEXT)' previously defined' warning from autogen.sh
+> 
+> It seems to be a shortcoming of automake that there's no way to suppress
+> just that warning.
+> 
+> One possible solution is build ps.exe with a different name and rename it
+> while installing, but I think that is counter-productive (in the sense that
+> it trades this warning for making the build more complex to understand)
+> 
+> * some object files are in a unexpected places in the build file hierarchy
+> (compared to naive expectations and/or the non-automake build)
 
-This and the other two patches pushed.
+This is the only minor qualm I have with this patch.  It would be nice
+to have the mingw sources and .o files in the mingw subdir.  It would
+simply be a bit cleaner.  The files shared between cygwin and mingw
+(that's only path.cc, I think) could be handled by an include, i. e.
+
+  utils/
+
+    path.cc (full implementation)
+
+  utils/mingw/
+
+    path.cc:
+
+      #include "../path.cc"
+
+However, this isn't a showstopper, feel free to push what you're comfortable
+with.
+
+Still, wWhat do you think?  Any problem to move the mingw stuff to the
+mingw subdir entirely?
 
 
 Thanks,
