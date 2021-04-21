@@ -1,39 +1,48 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 408D33858031
- for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 03:08:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 408D33858031
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 0450439B6802
+ for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 15:44:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0450439B6802
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=takashi.yano@nifty.ne.jp
-Received: from localhost.localdomain (v050190.dynamic.ppp.asahi-net.or.jp
- [124.155.50.190]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 13L37ZQL003264;
- Wed, 21 Apr 2021 12:07:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 13L37ZQL003264
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1618974461;
- bh=TFvEyGY334MM3jpeLfbz4vQT37+BepxP0AN4pFPvSiA=;
- h=From:To:Cc:Subject:Date:From;
- b=Yz9FEirYdQw8+EYuWfhFZy54uFIG2OTFzAdcdR578qRImsvvt4DLfk0kJdyZdhH0f
- SIdFtecXrVgvq/XlY9NsQcL4kQoik6yCfcewx91HmDDPUqTlCqH82bWZZ9owRjFfPJ
- LvRPsCTWCeq2TcdyHFSlJki3MXy+9zh97OzLthKKvjZx9/D09dZ/PyIS1XTtpy+g2h
- pUE9O2ywRm1lwH38ixMPqai1ZlPifnYCmV+UGGG8XJh7GzWJrmgO64Voz8QZidOMzm
- Sf8vbVgps8O1PG9uvMN7g77UzhVJ022/zfXNa1CwDxAyZrOgmyWVdAvNlxwfM5yQY1
- 8/HgKDtrEwmhQ==
-X-Nifty-SrcIP: [124.155.50.190]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M7sQ6-1leD6c0QF8-004yeJ for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021
+ 17:44:12 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 7BE43A80EDD; Wed, 21 Apr 2021 17:44:10 +0200 (CEST)
+Date: Wed, 21 Apr 2021 17:44:10 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Add missing guard for close_pseudoconsole().
-Date: Wed, 21 Apr 2021 12:07:31 +0900
-Message-Id: <20210421030731.5928-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.31.1
+Subject: Re: [PATCH] Cygwin: pty: Additional race issue fix regarding pseudo
+ console.
+Message-ID: <YIBISlJOtJXk90RR@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210421030600.3793-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210421030600.3793-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:aTapiExBcA6qJLu3oB9Xo/P/XsQ27QxhxYt8Vu6zee3gS2WkGBg
+ vvtjEYIOBuaY6FfkpaIfuRcchq/7GjaYFP6zZ3NKNWPAMAPeNYGeEvAye1qdeDn8y8BTWjP
+ QVuF65ev+CXq2XSl2QoCTFGF4NYwImqBpGOFEO/lPQWvZ2An2J/y3ZGlZeOKdBiM9UJwPA4
+ 0xDWq/ADuQbUVqChejADQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9X244/am8RE=:DZSfeqSnSFouMybgpN8pVl
+ feG/hd+v2WSXDLiRNPohPBgfRVKe2KiCF+7MzcdCCRXGiMRbMMyl0eOF1wWHleD9it1KjnPk1
+ 8GQI+06B+mVLjK2ucwZmEz2hNVIVHZzLQlqCpNjm5pyOUfOpDiKMDUV2T2653P8UKJkNQCiXU
+ Op0ptCqrnPRINTup2RixHMEwYc5Q5ej95+UqhhT1/Opv7Q9WfC41I9dtC6QpMbfum+wLR7Vub
+ +f0EQEMZV+zMUBZj8vSNNPaqv5vR74ktpvBK+GFXIwMvP62gewb7wvLZ+3DGUiU2YMZRNk0TU
+ rB+LTcCTyxGWyMw39gxbCErz62LtJX71fTCJLFCtXM47ySFnksFFZCXvLGGpW/QZutmJsfbXR
+ O1KObfCPJOvs6FQTkhODCECNA17NMAeyG0g10NLRaUJgUUi2EwFtzgUXV3UAd/yEU0c2KKrhU
+ BlyMOM3TCG8XtJh58oA3OqaqLyNGcEATEcsjlk90nsTBWas25VeXgZkaMyOFszYH8lYsRNbVu
+ /pOPwrzOkdTzSOiS2IQiaw=
+X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -48,28 +57,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 21 Apr 2021 03:08:01 -0000
+X-List-Received-Date: Wed, 21 Apr 2021 15:44:24 -0000
 
-- This patch adds a missing mutex guard for close_pseudoconsole()
-  call when GDB exits.
----
- winsup/cygwin/fhandler_tty.cc | 2 ++
- 1 file changed, 2 insertions(+)
+On Apr 21 12:06, Takashi Yano wrote:
+> - In commit bb93c6d7, the race issue was not completely fixed. In
+>   the pseudo console inheritance, if the destination process to
+>   which the ownership of pseudo console switches, is found but exits
+>   before switching, the inheritance fails. Currently, this extremely
+>   rarely happens. This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 47 +++++++++++------------------------
+>  1 file changed, 14 insertions(+), 33 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 530321513..9c03e09a7 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -177,7 +177,9 @@ atexit_func (void)
- 						    input_available_event);
- 		ReleaseMutex (ptys->input_mutex);
- 	      }
-+	    WaitForSingleObject (ptys->pcon_mutex, INFINITE);
- 	    ptys->close_pseudoconsole (ttyp, force_switch_to);
-+	    ReleaseMutex (ptys->pcon_mutex);
- 	    break;
- 	  }
-       CloseHandle (h_gdb_process);
--- 
-2.31.1
+This and the other two patches pushed.
 
+
+Thanks,
+Corinna
