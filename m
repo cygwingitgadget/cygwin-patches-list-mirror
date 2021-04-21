@@ -1,33 +1,33 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id EFAF53858031
- for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 03:07:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EFAF53858031
+ by sourceware.org (Postfix) with ESMTPS id 408D33858031
+ for <cygwin-patches@cygwin.com>; Wed, 21 Apr 2021 03:08:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 408D33858031
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=takashi.yano@nifty.ne.jp
 Received: from localhost.localdomain (v050190.dynamic.ppp.asahi-net.or.jp
  [124.155.50.190]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 13L36l3m002502;
- Wed, 21 Apr 2021 12:06:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 13L36l3m002502
+ by conuserg-09.nifty.com with ESMTP id 13L37ZQL003264;
+ Wed, 21 Apr 2021 12:07:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 13L37ZQL003264
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1618974412;
- bh=TLUlKXnoQOWcRYdqzmsQWGGDFj6MIDhG4UHM5utulAM=;
+ s=dec2015msa; t=1618974461;
+ bh=TFvEyGY334MM3jpeLfbz4vQT37+BepxP0AN4pFPvSiA=;
  h=From:To:Cc:Subject:Date:From;
- b=oo/43T5sRKaVcXyQG4JycbV/rVbQ4jNpg9BY1gF/BUdkI8QFKMNIQtiRzgKAsouTh
- pC0/K4NK/J0EBrZuVqQ2kuSEdf6QHZ3Jez2aH/72RMQw/DED/ffTfszI16K65YXNzj
- D7qLx7cYcHBzJ0+I7WCluvl8Qpgx+jxrRovpbjDNUaVkNpIXke3dmn6gUqJqSp9O9H
- zQD9WZeWLH8tQZ7Y4uKfUZwxNa8a+tM8flxuyLnzp0JbsrIylXFUQpFUcGOmrXCwLW
- 3LPrSeWIL9d1Ab6IwoKPEZJ64Hf/SWO6NCAXwGnWLqAd7UUpAvnDxhsKApw6cJ54wc
- iJ4uYLI3ANX2Q==
+ b=Yz9FEirYdQw8+EYuWfhFZy54uFIG2OTFzAdcdR578qRImsvvt4DLfk0kJdyZdhH0f
+ SIdFtecXrVgvq/XlY9NsQcL4kQoik6yCfcewx91HmDDPUqTlCqH82bWZZ9owRjFfPJ
+ LvRPsCTWCeq2TcdyHFSlJki3MXy+9zh97OzLthKKvjZx9/D09dZ/PyIS1XTtpy+g2h
+ pUE9O2ywRm1lwH38ixMPqai1ZlPifnYCmV+UGGG8XJh7GzWJrmgO64Voz8QZidOMzm
+ Sf8vbVgps8O1PG9uvMN7g77UzhVJ022/zfXNa1CwDxAyZrOgmyWVdAvNlxwfM5yQY1
+ 8/HgKDtrEwmhQ==
 X-Nifty-SrcIP: [124.155.50.190]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix fallback processing in setup_pseudoconsole().
-Date: Wed, 21 Apr 2021 12:06:43 +0900
-Message-Id: <20210421030643.4790-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Add missing guard for close_pseudoconsole().
+Date: Wed, 21 Apr 2021 12:07:31 +0900
+Message-Id: <20210421030731.5928-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,61 +48,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 21 Apr 2021 03:07:33 -0000
+X-List-Received-Date: Wed, 21 Apr 2021 03:08:01 -0000
 
-- Currently, the fallback processing in setup_pseudoconsole()
-  when helper process error occurs does not work properly.
-  This patch fixes the issue.
+- This patch adds a missing mutex guard for close_pseudoconsole()
+  call when GDB exits.
 ---
- winsup/cygwin/fhandler_tty.cc | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index e4480771b..530321513 100644
+index 530321513..9c03e09a7 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3226,15 +3226,15 @@ fhandler_pty_slave::setup_pseudoconsole (bool nopcon)
- 	  if (wait_result == WAIT_OBJECT_0)
+@@ -177,7 +177,9 @@ atexit_func (void)
+ 						    input_available_event);
+ 		ReleaseMutex (ptys->input_mutex);
+ 	      }
++	    WaitForSingleObject (ptys->pcon_mutex, INFINITE);
+ 	    ptys->close_pseudoconsole (ttyp, force_switch_to);
++	    ReleaseMutex (ptys->pcon_mutex);
  	    break;
- 	  if (wait_result != WAIT_TIMEOUT)
--	    goto cleanup_helper_process;
-+	    goto cleanup_helper_with_hello;
- 	  DWORD exit_code;
- 	  if (!GetExitCodeProcess (pi.hProcess, &exit_code))
--	    goto cleanup_helper_process;
-+	    goto cleanup_helper_with_hello;
- 	  if (exit_code == STILL_ACTIVE)
- 	    continue;
- 	  if (exit_code != 0 ||
- 	      WaitForSingleObject (hello, 500) != WAIT_OBJECT_0)
--	    goto cleanup_helper_process;
-+	    goto cleanup_helper_with_hello;
- 	  break;
- 	}
-       CloseHandle (hello);
-@@ -3349,6 +3349,10 @@ skip_create:
- 
-   return true;
- 
-+cleanup_helper_with_hello:
-+  CloseHandle (hello);
-+  CloseHandle (pi.hThread);
-+  goto cleanup_helper_process;
- cleanup_pcon_in:
-   CloseHandle (hpConIn);
- cleanup_helper_process:
-@@ -3358,10 +3362,10 @@ cleanup_helper_process:
-   goto skip_close_hello;
- cleanup_event_and_pipes:
-   CloseHandle (hello);
-+skip_close_hello:
-   get_ttyp ()->pcon_start = false;
-   get_ttyp ()->pcon_start_pid = 0;
-   get_ttyp ()->pcon_activated = false;
--skip_close_hello:
-   CloseHandle (goodbye);
-   CloseHandle (hr);
-   CloseHandle (hw);
+ 	  }
+       CloseHandle (h_gdb_process);
 -- 
 2.31.1
 
