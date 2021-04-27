@@ -1,52 +1,35 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-043.btinternet.com (mailomta22-sa.btinternet.com
- [213.120.69.28])
- by sourceware.org (Postfix) with ESMTPS id 3F7C83896C2E
- for <cygwin-patches@cygwin.com>; Tue, 27 Apr 2021 18:33:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3F7C83896C2E
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.137])
+ by sourceware.org (Postfix) with ESMTPS id 6E6E33896C26
+ for <cygwin-patches@cygwin.com>; Tue, 27 Apr 2021 23:29:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6E6E33896C26
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-043.btinternet.com with ESMTP id
- <20210427183304.JFEF6062.sa-prd-fep-043.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Tue, 27 Apr 2021 19:33:04 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 603871830885FE2D
-X-Originating-IP: [81.153.98.246]
-X-OWM-Source-IP: 81.153.98.246 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvddvtddguddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepufhfhffvkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepleejjeeuhfdtkeehfedvjeffjeetkedtvddvveduffevkefhvdegjedtleeljeeunecukfhppeekuddrudehfedrleekrddvgeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeekuddrudehfedrleekrddvgeeipdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (81.153.98.246) by
- sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 603871830885FE2D for cygwin-patches@cygwin.com;
- Tue, 27 Apr 2021 19:33:04 +0100
-Subject: Re: [PATCH] Use automake (v5)
-References: <20210420201326.4876-1-jon.turney@dronecode.org.uk>
- <74ea8f75-8bbb-8a58-66d3-cf6ae68db2c3@dronecode.org.uk>
- <dd2be414-edd1-5502-050a-ecaaa5920db5@cornell.edu>
- <62ca4187-f798-38b3-f5dd-b3844b99fcf5@cornell.edu>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Message-ID: <a31e8cd1-2780-b1d8-8ca1-c529263f5f9b@dronecode.org.uk>
-Date: Tue, 27 Apr 2021 19:32:03 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net. ([68.147.0.90])
+ by shaw.ca with ESMTP
+ id bX8Yl9p7luKh3bX8Zl0RtP; Tue, 27 Apr 2021 17:29:04 -0600
+X-Authority-Analysis: v=2.4 cv=EaOr/NqC c=1 sm=1 tr=0 ts=60889e40
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=OqNVvETPx4XCAOYqvYUA:9 a=QEXdDO2ut3YA:10
+ a=F5wKHVgBXtolARwweDQA:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] format_proc_cpuinfo: add v_spec_ctrl, bus_lock_detect
+Date: Tue, 27 Apr 2021 17:28:52 -0600
+Message-Id: <20210427232852.51759-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <62ca4187-f798-38b3-f5dd-b3844b99fcf5@cornell.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
+Content-Type: multipart/mixed; boundary="------------2.31.1"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3571.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+X-CMAE-Envelope: MS4xfFNOYOFaP7cFnnKf/wYMis8z5xRx69LCVZvTPMs5m3BJ5kwAe0g9U8rhkTh00nJPS7xEi6XwGfrWotgpJKL5ngYB4iaFOfI5QBrI4PKziEJhai9PzCcF
+ /P/cg6DmkMGl8ooHC36ODm889ajeEhD2tjS6maZGJz6vMO0k0NsXwUfTcnVWSh1NTxa92r07TWSh7EkNr224iLvQSBtg+E3U/HIXrcwnag0RyZ3vHK15SKqt
+ ZqjSlRdy2bHSY1HCqnoXHAU4za8p9OF3DVxu6/t0T7k=
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,36 +44,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 27 Apr 2021 18:33:06 -0000
+X-List-Received-Date: Tue, 27 Apr 2021 23:29:07 -0000
 
-On 27/04/2021 18:00, Ken Brown wrote:
-> On 4/27/2021 12:52 PM, Ken Brown wrote:
->> On 4/27/2021 11:50 AM, Jon Turney wrote:
->>> On 20/04/2021 21:13, Jon Turney wrote:
->>>> For ease of reviewing, this patch doesn't contain changes to generated
->>>> files which would be made by running ./autogen.sh.
->>>   I pushed this patch.
->>>
->>> If you have an existing build directory, while you might get away 
->>> with invoking 'make' at the top-level, I would recommend blowing it 
->>> away and configuring again.
->>
->> I'm confused about how the generated files are going to get 
->> regenerated when necessary.  I see calls to autogen (which I guess is 
->> /usr/bin/autogen.exe from the autogen package) in the Makefiles, but I 
+This is a multi-part message in MIME format.
+--------------2.31.1
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-That's some cygnus top-level weirdness I don't understand.
 
->> don't see any calls to autogen.sh. Is the latter no longer needed?
+Linux 5.12 Frozen Wasteland added features and changes:
+add AMD 0x8000000a EDX:20 v_spec_ctrl virtual speculation control support
+add Intel 0x00000007 ECX:24 bus_lock_detect bus lock detect debug exception
+---
+ winsup/cygwin/fhandler_proc.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-There is (still) an autogen.sh in winsup/ ...
 
-> Oh, never mind.  The Makefiles just call autoconf, etc., as needed.
+--------------2.31.1
+Content-Type: text/x-patch; name="0001-format_proc_cpuinfo-add-v_spec_ctrl-bus_lock_detect.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-format_proc_cpuinfo-add-v_spec_ctrl-bus_lo.patch"
 
-... but you should now never need to explicitly use it, as 
-('maintainer-mode') rules now exist in the Makefile to do what's needed.
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index 501c157daae5..7cd0b3af02a2 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1519,6 +1519,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1, 13, "avic");             /* virt int control */
+ 	  ftcprint (features1, 15, "v_vmsave_vmload");  /* virt vmsave vmload */
+ 	  ftcprint (features1, 16, "vgif");             /* virt glb int flag */
++	  ftcprint (features1, 20, "v_spec_ctrl");	/* virt spec ctrl support */
+ /*	  ftcprint (features1, 28, "svme_addr_chk");  *//* secure vmexit addr check */
+         }
+ 
+@@ -1542,6 +1543,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1, 14, "avx512_vpopcntdq"); /* vec popcnt dw/qw */
+ 	  ftcprint (features1, 16, "la57");             /* 5 level paging */
+ 	  ftcprint (features1, 22, "rdpid");            /* rdpid instruction */
++	  ftcprint (features1, 24, "bus_lock_detect");	/* bus lock detect dbg excptn */
+ 	  ftcprint (features1, 25, "cldemote");         /* cldemote instr */
+ 	  ftcprint (features1, 27, "movdiri");          /* movdiri instr */
+ 	  ftcprint (features1, 28, "movdir64b");        /* movdir64b instr */
 
-If you do need to make changes in the autofoolery which are going to be 
-pushed, then specific versions of the autotools still need to be used 
-(to avoid these generated files thrashing between forms generated by 
-different versions)
+--------------2.31.1--
+
+
