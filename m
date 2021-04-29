@@ -1,46 +1,43 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 5AE52393A41A
- for <cygwin-patches@cygwin.com>; Wed, 28 Apr 2021 10:40:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5AE52393A41A
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-048.btinternet.com (mailomta7-sa.btinternet.com
+ [213.120.69.13])
+ by sourceware.org (Postfix) with ESMTPS id B2A983857036
+ for <cygwin-patches@cygwin.com>; Thu, 29 Apr 2021 18:54:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B2A983857036
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MoOIi-1lDa5A3eg4-00opqd for <cygwin-patches@cygwin.com>; Wed, 28 Apr 2021
- 12:40:00 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 5B8F2A80F11; Wed, 28 Apr 2021 12:40:00 +0200 (CEST)
-Date: Wed, 28 Apr 2021 12:40:00 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+ by sa-prd-fep-048.btinternet.com with ESMTP id
+ <20210429185440.CGLV24424.sa-prd-fep-048.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+ Thu, 29 Apr 2021 19:54:40 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6038717E08C42D90
+X-Originating-IP: [81.153.98.246]
+X-OWM-Source-IP: 81.153.98.246 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvddvgedgudefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdhqredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnheptddtvdefgeethefgfeettdeileefuddvieeivdeghedtgeegteekgfdvvdfhvddtnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.153.98.246) by
+ sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 6038717E08C42D90; Thu, 29 Apr 2021 19:54:40 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] format_proc_cpuinfo: add v_spec_ctrl, bus_lock_detect
-Message-ID: <YIk7gD+HPPtEZOdb@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210427232852.51759-1-Brian.Inglis@SystematicSW.ab.ca>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: CI configuration update
+Date: Thu, 29 Apr 2021 19:53:24 +0100
+Message-Id: <20210429185324.17357-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210427232852.51759-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:Pt1fg9MI3xEQ0hKIdz+MlIInpGmRko1qRDJr/zMX91moltRrvLN
- zzimZDkRWEPO//YcON/5A3qpHiLExx2wd34d/8NkKPQmH8XvEAZUX+YmAdDx7a+OgrIL1vv
- UPkid3RpIuRkYkWUJ8OAxUMaYaocjLVrzxrJQug2H+hOB+TubjLyPg1cIvD7iOn56iVbhN6
- kTSpGSRAe4pcP+r0CA4Yw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ep193WuaW8c=:C26E9V41sYlHbQ+tbnhnEF
- iAYCB7r4nkae9LX+AHT0XH7QzmJbeG9OJK2H8VX1aCndbZBQDZmoeBRVyuhVXzINqz9syyvzg
- TykznkceAgISoQZvig5TqBUjoKb/+gFJ+cnXIGuseMlLEbJNzID6K5uZT8YTFo6493W1avOqh
- Ea6En+IauSxMjLnzvCEB6151AuTqbOa1+K5D63U76IbIC8GybG4gopRL2opcfJBIj7a2bH9zL
- 8KJlE24aLI7u5DsLtOxSwYhrZXNm4g9WcoEGMJjn7sh7PS2b5GGTg2pu+FkAr3GREsNOwduFW
- UuUAiHfpC6vDiJl5Pzgn1TkRIcFqFXd5NV5Qhya07duN+5cP3uJW7ZJOarXeOQ9fKKFuUo2YN
- Ftq+BOf7cvHQbDd+WmspRz39D5VOCm//rq2CWQOMMj46ysdHWLZFav9SJQvhMvzSuLdDvGkqS
- TQgwT6ID3MnBJ/rmi5Vtt12J3061NYQ12D4F0GMnanwBWelnQwkHJRGvbOBYBN9GMUVAtmauj
- qDbRfqdDAl4ypLiRzl4JUc=
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1200.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -56,21 +53,133 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 28 Apr 2021 10:40:03 -0000
+X-List-Received-Date: Thu, 29 Apr 2021 18:54:44 -0000
 
-On Apr 27 17:28, Brian Inglis wrote:
-> 
-> Linux 5.12 Frozen Wasteland added features and changes:
-> add AMD 0x8000000a EDX:20 v_spec_ctrl virtual speculation control support
-> add Intel 0x00000007 ECX:24 bus_lock_detect bus lock detect debug exception
-> ---
->  winsup/cygwin/fhandler_proc.cc | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Install autoconf and automake, and run winsup/autogen.sh, and don't have
+it silently ignore failures.
 
-Pushed.
+On AppVeyor:
+- use latest VM image, to reduce time spent installing updates.
+- run the testsuite, but ignore the result, as some tests don't work
+correctly.
+- hardcode the python-lxml and python-ply packages to install, so we get
+ones for the right python.
+- install texlive collections now needed to build documentation.
 
+On github:
+- Use a copr for cocom, since RPMSphere's package updates don't track
+fedora:latest very efficently.
+---
+ .appveyor.yml                | 13 +++++++++++--
+ .github/workflows/cygwin.yml | 11 +++++++----
+ winsup/autogen.sh            |  1 +
+ 3 files changed, 19 insertions(+), 6 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/.appveyor.yml b/.appveyor.yml
+index 602c189cd..66ac35701 100644
+--- a/.appveyor.yml
++++ b/.appveyor.yml
+@@ -1,4 +1,5 @@
+ version: '{build}'=0D
++image: Visual Studio 2019=0D
+ =0D
+ branches:=0D
+   only:=0D
+@@ -30,6 +31,8 @@ install:
+ - "%CACHE%\\%SETUP% -qnNdO -R %CYGWIN_ROOT% -s %CYGWIN_MIRROR% -l %CACHE% =
+-g -P \=0D
+ gcc-core,\=0D
+ gcc-g++,\=0D
++autoconf,\=0D
++automake,\=0D
+ make,\=0D
+ perl,\=0D
+ patch,\=0D
+@@ -40,21 +43,27 @@ zlib-devel,\
+ %PKGARCH%-gcc-core,\=0D
+ %PKGARCH%-gcc-g++,\=0D
+ %PKGARCH%-zlib,\=0D
++dejagnu,\=0D
+ dblatex,\=0D
+ docbook2X,\=0D
+ docbook-xml45,\=0D
+ docbook-xsl,\=0D
++texlive-collection-latexrecommended,\=0D
++texlive-collection-fontsrecommended,\=0D
++texlive-collection-pictures,\=0D
+ xmlto,\=0D
+-python3-lxml,\=0D
+-python3-ply"=0D
++python38-lxml,\=0D
++python38-ply"=0D
+ =0D
+ build_script:=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir build inst=
+all"'=0D
++- '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER; cd winsup; ./aut=
+ogen.sh"'=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; ../configu=
+re --prefix=3D$(realpath $(pwd)/../install) -v"'=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; make"'=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; make insta=
+ll"'=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; cd */newli=
+b; make info man"'=0D
+ - '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; cd */newli=
+b; make install-info install-man"'=0D
++- '%CYGWIN_ROOT%/bin/bash -lc "cd $APPVEYOR_BUILD_FOLDER/build; cd */winsu=
+p; make check || true"'=0D
+ =0D
+ test: off=0D
+ deploy: off=0D
+diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
+index cdad8e67b..f9a9a7ae5 100644
+--- a/.github/workflows/cygwin.yml
++++ b/.github/workflows/cygwin.yml
+@@ -20,15 +20,17 @@ jobs:
+     - uses: actions/checkout@v2
+=20
+     # install build tools
+-    - run: dnf install -y make patch perl
++    - run: dnf install -y autoconf automake make patch perl
+     - run: dnf install -y mingw${{ matrix.pkgarch }}-gcc-c++ mingw${{ matr=
+ix.pkgarch }}-winpthreads-static mingw${{ matrix.pkgarch }}-zlib-static
+=20
+-    # cocom isn't packaged in Fedora, so we install from a 3rd party repo
+-    - run: dnf install -y https://github.com/rpmsphere/noarch/raw/master/r=
+/rpmsphere-release-$(rpm -E %fedora)-1.noarch.rpm
++    # enable 'dnf copr'
++    - run: dnf install -y dnf-plugins-core
++
++    # cocom isn't packaged in Fedora, so we install from a copr
++    - run: dnf copr enable -y jturney/cocom
+     - run: dnf install -y cocom
+=20
+     # install cross-cygwin toolchain and libs from copr
+-    - run: dnf install -y dnf-plugins-core
+     - run: dnf copr enable -y yselkowitz/cygwin
+     - run: dnf install -y cygwin${{ matrix.pkgarch }}-gcc-c++ cygwin${{ ma=
+trix.pkgarch }}-gettext cygwin${{ matrix.pkgarch }}-libbfd cygwin${{ matrix=
+.pkgarch }}-libiconv cygwin${{ matrix.pkgarch }}-zlib
+=20
+@@ -38,6 +40,7 @@ jobs:
+=20
+     # build
+     - run: mkdir build install
++    - run: cd winsup && ./autogen.sh
+     - run: cd build && ../configure --target=3D${{ matrix.target }} --pref=
+ix=3D$(realpath $(pwd)/../install)
+     - run: make -C build
+     - run: make -C build/*/newlib info man
+diff --git a/winsup/autogen.sh b/winsup/autogen.sh
+index 1db91add9..2dae1ae37 100755
+--- a/winsup/autogen.sh
++++ b/winsup/autogen.sh
+@@ -1,3 +1,4 @@
++set -e
+ /usr/bin/aclocal --force
+ /usr/bin/autoconf -f
+ /usr/bin/automake -ac
+--=20
+2.31.1
 
