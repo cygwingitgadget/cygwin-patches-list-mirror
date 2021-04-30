@@ -1,46 +1,32 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 567893857036
- for <cygwin-patches@cygwin.com>; Thu, 29 Apr 2021 19:09:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 567893857036
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.137])
+ by sourceware.org (Postfix) with ESMTPS id EC1AC3A47433
+ for <cygwin-patches@cygwin.com>; Fri, 30 Apr 2021 13:19:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EC1AC3A47433
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MVeDs-1m3n2920MW-00RcEq for <cygwin-patches@cygwin.com>; Thu, 29 Apr 2021
- 21:09:42 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 0E549A80F11; Thu, 29 Apr 2021 21:09:40 +0200 (CEST)
-Date: Thu, 29 Apr 2021 21:09:40 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net. ([68.147.0.90])
+ by shaw.ca with ESMTP
+ id cT3DlVAAPlrmAcT3El26Uy; Fri, 30 Apr 2021 07:19:24 -0600
+X-Authority-Analysis: v=2.4 cv=DK3sXwBb c=1 sm=1 tr=0 ts=608c03dc
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=CEE9eUwYcGiNUC0X2AQA:9
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: CI configuration update
-Message-ID: <YIsEdHJR1W0a+HYU@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210429185324.17357-1-jon.turney@dronecode.org.uk>
+Subject: [PATCH] format_proc_swaps: ensure space between fields for clarity
+Date: Fri, 30 Apr 2021 07:19:20 -0600
+Message-Id: <20210430131921.36002-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210429185324.17357-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:tfMHwZgEaGjTxnMiuBUq61+ibKLJ4VzkLQ70/ExVHF4JjVzje4H
- X3np2IV8GJM70rrthGlkwWZQVcsnqP4+Kz9X6WV2Tq0XhmfesY7mm0WVQQ5Mv+xtQ2RRPjh
- jqgBkrWnHhrI5pjcGQgxFHNCP7hJxTBeGToa2WnvgPUNbBpul3j8H3LrQRf4DGlk/zPsRxO
- 5iKCaXpJMd7TYnhGDmkkg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8Y3TabLhIgI=:1fnBgpKNUdK2qnr2uoISl6
- gkGaH1l12P+9lftMCFuWgQv5qBQNzDaXDR1WUfM4LUPqRTw/t7E88cbRVF8wAVd2QxUSIMjnt
- y/sQJqbO3FoCIE+G7VvfZe73K5fP82H3G82g1NWqcpRopz6ux34i673ivgWFiyEojM2A/27RY
- DB5511tUJ+4Lfjxm6ZJYYGUh8g3wHDHpck0f8q2uRRHu8G4Q0dEYIOK1HX+bcgc16lmEkxgbl
- yHg9cJO7qLoghXIk9USO1he8F+v0LA7oFCi7VE66/IjpQkivDAWo9agfIy1+s1DasqdPRcF8I
- Rdn3pevRU56tmcVOARXFAKY6ksxsFjlsT/Kl6HtUVISBco3oD9wGQY481I3Keb7KWkQN6fPDv
- gcQC63j/vTfS4fzZ08bvtLYyP0o5BQ0s2J9FKlTHe5wEPkBta2/otkMrt5JQ/x0RGGFJIL8kQ
- 47+W7juT+TH5QqtoeVC0+mFFb9H5CcCedHZQuUjAMGG/RK/HjthA/wDqenJ8aiD6G4wJBJqWy
- vun+Q8qSMeg8gKEuSbdaeM=
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfFdD11WcGpfz4yserXH9tkfWGQFXXVz9M9EdgztoZAjlh9+howHB1s8GA3FvHarA9NaDXvFha5CDrOeO/sLyeciZgclfnyxSOLm34fWNXeayFGcKZDXC
+ iE24VCcfxhyAdfLXpWDpnNKIUIhhIxErOiLRao5iBFn088cCrbCLxpIYt36pZoyqCyhtJabLw9uRmh886fj+KWljUDLqNEUGL40K0gig8dQHPBYSJQSfZDA/
+ ifymujSKQ3nY+g/rUNmSfySlaAIE9HjaoCN2N/wmVVk=
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -56,31 +42,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 29 Apr 2021 19:09:44 -0000
+X-List-Received-Date: Fri, 30 Apr 2021 13:19:27 -0000
 
-On Apr 29 19:53, Jon Turney wrote:
-> Install autoconf and automake, and run winsup/autogen.sh, and don't have
-> it silently ignore failures.
-> 
-> On AppVeyor:
-> - use latest VM image, to reduce time spent installing updates.
-> - run the testsuite, but ignore the result, as some tests don't work
-> correctly.
-> - hardcode the python-lxml and python-ply packages to install, so we get
-> ones for the right python.
-> - install texlive collections now needed to build documentation.
-> 
-> On github:
-> - Use a copr for cocom, since RPMSphere's package updates don't track
-> fedora:latest very efficently.
-> ---
->  .appveyor.yml                | 13 +++++++++++--
->  .github/workflows/cygwin.yml | 11 +++++++----
->  winsup/autogen.sh            |  1 +
->  3 files changed, 19 insertions(+), 6 deletions(-)
+page/swap space name >= 40 or size/used >= 8 leaves no space between fields;
+ensure a space after name and add extra tabs after size and used fields;
+output appears like Linux 5.8 after changes to mm/swapfile(swap_show);
 
-LGTM, please push.
+proc-swaps-space-before.log:
+==> /proc/swaps <==
+Filename				Type		Size	Used	Priority
+/mnt/c/pagefile.sys                     file            11567748292920  0
+/mnt/d/pagefile.sys                     file            12582912205960  0
 
+proc-swaps-space-after.log:
+==> /proc/swaps <==
+Filename				Type		Size		Used		Priority
+/mnt/c/pagefile.sys			file		11567748	241024		0
+/mnt/d/pagefile.sys			file		12582912	182928		0
+---
+ winsup/cygwin/fhandler_proc.cc | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index 7cd0b3af02..eb4efb07d4 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1920,7 +1920,7 @@ format_proc_swaps (void *, char *&destbuf)
+     }
+ 
+   bufptr += __small_sprintf (bufptr,
+-			     "Filename\t\t\t\tType\t\tSize\tUsed\tPriority\n");
++			"Filename\t\t\t\tType\t\tSize\t\tUsed\t\tPriority\n");
+ 
+   if (spi && NT_SUCCESS (status))
+     {
+@@ -1932,8 +1932,17 @@ format_proc_swaps (void *, char *&destbuf)
+ 	  used = (unsigned long long) spp->TotalUsed * wincap.page_size ();
+ 	  cygwin_conv_path (CCP_WIN_W_TO_POSIX, spp->FileName.Buffer,
+ 			    filename, NT_MAX_PATH);
+-	  bufptr += sprintf (bufptr, "%-40s%-16s%-8llu%-8llu%-8d\n",
+-			     filename, "file", total >> 10, used >> 10, 0);
++	  /* ensure space between fields for clarity */
++	  size_t tabo = strlen (filename) / 8;	/* offset tabs to space name */
++	  bufptr += sprintf (bufptr, "%s%s%s\t\t%llu%s\t%llu%s\t%d\n",
++				    filename,
++				    tabo < 5 ? "\t\t\t\t\t" + tabo : " ",
++					"file",
++					    total >> 10,
++					    total < 10000000000 ? "\t" : "",
++						used  >> 10,
++						used  < 10000000000 ? "\t" : "",
++								0);
+ 	}
+       while (spp->NextEntryOffset
+ 	     && (spp = (PSYSTEM_PAGEFILE_INFORMATION)
+-- 
+2.31.1
+
