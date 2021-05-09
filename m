@@ -1,50 +1,45 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 771443860C3B
- for <cygwin-patches@cygwin.com>; Thu,  6 May 2021 08:43:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 771443860C3B
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-046.btinternet.com (mailomta22-re.btinternet.com
+ [213.120.69.115])
+ by sourceware.org (Postfix) with ESMTPS id 94EF93857830
+ for <cygwin-patches@cygwin.com>; Sun,  9 May 2021 15:11:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 94EF93857830
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M1YlB-1lfwWF2GK3-0032ba for <cygwin-patches@cygwin.com>; Thu, 06 May 2021
- 10:43:32 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 9D6E9A80DBD; Thu,  6 May 2021 10:43:30 +0200 (CEST)
-Date: Thu, 6 May 2021 10:43:30 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from re-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.54.7])
+ by re-prd-fep-046.btinternet.com with ESMTP id
+ <20210509151104.MNEN13681.re-prd-fep-046.btinternet.com@re-prd-rgout-004.btmx-prd.synchronoss.net>;
+ Sun, 9 May 2021 16:11:04 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 5ED9C506323B80E3
+X-Originating-IP: [81.153.98.246]
+X-OWM-Source-IP: 81.153.98.246 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvdegiedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.153.98.246) by
+ re-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9C506323B80E3; Sun, 9 May 2021 16:11:04 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] Move source files used in utils/mingw/ into that
- subdirectory
-Message-ID: <YJOsMrJr+rC8EZHU@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 3/2] Get rid of relative include paths in strace.cc
+Date: Sun,  9 May 2021 16:09:39 +0100
+Message-Id: <20210509150939.64863-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210502152537.32312-1-jon.turney@dronecode.org.uk>
 References: <20210502152537.32312-1-jon.turney@dronecode.org.uk>
- <20210502152537.32312-3-jon.turney@dronecode.org.uk>
- <YI/VCcOj36ydUiEw@calimero.vinschen.de>
- <0d4d3343-45ec-2e25-0985-e99db9b46c01@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0d4d3343-45ec-2e25-0985-e99db9b46c01@dronecode.org.uk>
-X-Provags-ID: V03:K1:L0V7o+VfPH93UMZ5oPL00ORnj0dk7LkXqjk3mr8akFGJrmTVseO
- g1ff6ytEM/mGeKmcCLocBj3zehZDioS3l3zco8oEEbHT+kpjxctRISsZ4qCrhSOFY7ugXQ/
- nPala5KXzICgZeE2JZYORrNHYngoxNC1OS/dGUSiSYSlWOeuQNusXD0D6kT+r7hM24/ge17
- ruxa7n2U7V+/Sryjz+ZMg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:j+zttgts2ts=:uTncq8QcYDJ0VQTOhk7Rnj
- MX9a31AHzCFijvtpQvHavuNmJSU9NYvkApE1MEOZlFEkta9Bb9BNdShQDlik8/eCeRv4kKsTu
- j9kcDj1GquS+7wTNk4yGZI1jIy1ug/3sZUPDaOplyYzXfKFswdCWjvCi2PoeyPDgjffZYoO3r
- 4qWX5TWmtAjdzx3KUegzXUcoKLBvQKF+JmQrkPqdp4uYibwXiB7DhM7UrOVtI5OJHGJ5khX0v
- bMopYsqu22Zl2+qnPp76yGnJ0EiD66WtScdBOuK5/hVJT02HmX1Sct28tPdYdc0aoN4SSFVzF
- HAhaExs198NoMf8BohPeV4/3k8i36uGUKgS9AK++Uh/At9cbewLQpkL4M99cx+OzplaukkRNg
- 0AtI4kXlFD/Zhg3O9iO4AQbwhIhELoGRCfjSRARca6lZA5FsZrTGK7YIZNBQJjwka1rSZNamg
- lXi++mdnOYp/DYK6hvy0hRPojN3jK1Y61oJCHzl9DveqtkWFPL8ox49jc8+brXli+nJy303Vn
- znFPwqdeZuEqEtzgNNHwog=
-X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1200.0 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -60,61 +55,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 06 May 2021 08:43:36 -0000
+X-List-Received-Date: Sun, 09 May 2021 15:11:07 -0000
 
-On May  4 19:34, Jon Turney wrote:
-> On 03/05/2021 11:48, Corinna Vinschen wrote:
-> > On May  2 16:25, Jon Turney wrote:
-> > > Move all the source files used in utils/mingw/ into that subdirectory,
-> > > so the built objects are in the expected place.
-> > > 
-> > > (path.cc requires some more unpicking, and even then there is genuinely
-> > > some shared code, so use a trivial file which includes the real path.cc
-> > > so the object file is generated where expected)
-> > 
-> > This patchset LGTM, except one thing which isn't your fault:
-> > 
-> > > index b96ad40c1..a7797600c 100644
-> > > --- a/winsup/utils/strace.cc
-> > > +++ b/winsup/utils/mingw/strace.cc
-> > > @@ -21,11 +21,11 @@ details. */
-> > >   #include <time.h>
-> > >   #include <signal.h>
-> > >   #include <errno.h>
-> > > -#include "../cygwin/include/sys/strace.h"
-> > > -#include "../cygwin/include/sys/cygwin.h"
-> > > -#include "../cygwin/include/cygwin/version.h"
-> > > -#include "../cygwin/cygtls_padsize.h"
-> > > -#include "../cygwin/gcc_seh.h"
-> > > +#include "../../cygwin/include/sys/strace.h"
-> > > +#include "../../cygwin/include/sys/cygwin.h"
-> > > +#include "../../cygwin/include/cygwin/version.h"
-> > > +#include "../../cygwin/cygtls_padsize.h"
-> > > +#include "../../cygwin/gcc_seh.h"
-> > 
-> > What about adding -I../../cygwin -I../../cygwin/include to the build
-> > rules and get rid of the relative paths inside the sources?
-> 
-> That seems fraught as it allows cygwin system headers to be picked up in
-> preference to mingw ones?
-> 
-> Using '-idirafter' gets you a build, but it would be much more work to check
-> that you've actually built what you wanted to...
+---
+ winsup/utils/mingw/Makefile.am |  2 +-
+ winsup/utils/mingw/strace.cc   | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Well, ok.  It just looks *so* ugly...  What about at least
+diff --git a/winsup/utils/mingw/Makefile.am b/winsup/utils/mingw/Makefile.am
+index 73abc4264..874dce512 100644
+--- a/winsup/utils/mingw/Makefile.am
++++ b/winsup/utils/mingw/Makefile.am
+@@ -39,7 +39,7 @@ ldh_SOURCES = ldh.cc
+ strace_SOURCES = \
+ 	path.cc \
+ 	strace.cc
+-strace_CPPFLAGS=-I$(srcdir)/..
++strace_CPPFLAGS=-I$(srcdir)/.. -idirafter ${top_srcdir}/cygwin -idirafter ${top_srcdir}/cygwin/include
+ strace_LDADD = -lntdll
+ 
+ noinst_PROGRAMS = path-testsuite
+diff --git a/winsup/utils/mingw/strace.cc b/winsup/utils/mingw/strace.cc
+index a7797600c..d8a095fb6 100644
+--- a/winsup/utils/mingw/strace.cc
++++ b/winsup/utils/mingw/strace.cc
+@@ -21,11 +21,11 @@ details. */
+ #include <time.h>
+ #include <signal.h>
+ #include <errno.h>
+-#include "../../cygwin/include/sys/strace.h"
+-#include "../../cygwin/include/sys/cygwin.h"
+-#include "../../cygwin/include/cygwin/version.h"
+-#include "../../cygwin/cygtls_padsize.h"
+-#include "../../cygwin/gcc_seh.h"
++#include "sys/strace.h"
++#include "sys/cygwin.h"
++#include "cygwin/version.h"
++#include "cygtls_padsize.h"
++#include "gcc_seh.h"
+ #include "path.h"
+ #undef cygwin_internal
+ #include "loadlib.h"
+-- 
+2.31.1
 
-  --idirafter ../../cygwin
-
-and then
-
-      #include "include/sys/strace.h"
-      #include "include/sys/cygwin.h"
-      #include "include/cygwin/version.h"
-      #include "cygtls_padsize.h"
-      #include "gcc_seh.h"
-  
-That would disallow picking up system headers and still be a bit
-cleaner, no?
-
-
-Corinna
