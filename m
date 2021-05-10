@@ -1,50 +1,45 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id C978F3857821
- for <cygwin-patches@cygwin.com>; Mon, 10 May 2021 07:51:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C978F3857821
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id E172C3938C1E
+ for <cygwin-patches@cygwin.com>; Mon, 10 May 2021 08:09:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E172C3938C1E
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N1Ofr-1lVbUs15SN-012sFl for <cygwin-patches@cygwin.com>; Mon, 10 May 2021
- 09:51:41 +0200
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MPK73-1lsKnh1r6T-00PfKU for <cygwin-patches@cygwin.com>; Mon, 10 May 2021
+ 10:09:08 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id E47C0A80D95; Mon, 10 May 2021 09:51:40 +0200 (CEST)
-Date: Mon, 10 May 2021 09:51:40 +0200
+ id E1E73A80E05; Mon, 10 May 2021 10:09:07 +0200 (CEST)
+Date: Mon, 10 May 2021 10:09:07 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] Move source files used in utils/mingw/ into that
- subdirectory
-Message-ID: <YJjmDHgz2aAEon03@calimero.vinschen.de>
+Subject: Re: [PATCH 3/2] Get rid of relative include paths in strace.cc
+Message-ID: <YJjqIx1AylDxmEiF@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210502152537.32312-1-jon.turney@dronecode.org.uk>
- <20210502152537.32312-3-jon.turney@dronecode.org.uk>
- <YI/VCcOj36ydUiEw@calimero.vinschen.de>
- <0d4d3343-45ec-2e25-0985-e99db9b46c01@dronecode.org.uk>
- <YJOsMrJr+rC8EZHU@calimero.vinschen.de>
- <e95edb29-3a56-70d5-be45-ce68ffec9f0d@dronecode.org.uk>
+ <20210509150939.64863-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e95edb29-3a56-70d5-be45-ce68ffec9f0d@dronecode.org.uk>
-X-Provags-ID: V03:K1:bDeqRwYvCyQKdJDJSMfKXQiUjozGGML3KwG8LV2d3Tw6Cre2Wzx
- L4BhelOJGu3kd0AfBAPVkxChDOeMR53vdVE24mJ8sI+trdJgRzNt2UhnTYJ5U6Y28RWpjUR
- 0wMPKizNlrcFX7hnf9EFeYLV5eEmDPv0dl2/AJpfG6Vk+HbZ6T0fecv8ezhq1Ue2ROfwtNB
- GVMqtxAJ9dYocvAQXi1dg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6wux2VsWQVA=:5+9iE9LOBa2juWT8N8q4in
- mTgwayivnIQVpbW8TBOnt6g2f9lDxCm1OY15I+vTsdD+rjLLlgLw455OwijQldr4ZwFCt+dYN
- HWWVBXvUgmqhTd2Jp1fUD6xvPABmzzyFILaTp61uMHaUwDobbkQYRI5v+ctbqvao5knv92q41
- sAAOqOssXFCe2Faa08Gvf1HmEZLho8kBov+pjdmAROPcuR+oRQtR3WjQVSYDrrScl0PlF9Yxl
- J3906cZIvAEXbbFY157E/rQ8gPr22pTWv6GlFTh3bka+EmzhZvvkymen3NISyyZoJoTwqX79x
- IvF3CQNErP3haGlA00vjmvQI2SaOPsc7GCJZJ+dJflUmshXyxXpp3CLoILJP7RME4dvkm2Lvl
- 07JLrvP9WP6qHqhBfCDw3KQF+Jc8YogKaUxsDnnnf9l9QXDnbkvaoMQ+DrCMYe5iq0ab35PC6
- ny278BbhmLHN8n1Vbste8PnxWTwS8HeHBLHSM6uuLTPodS5wKb8zXTgNOuwMI8orOu+axgRjg
- tre6bdMwW2bswT/CBMXqyI=
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
+In-Reply-To: <20210509150939.64863-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:SsSfQP7E5JnEWNqn7U+XSi+mQ4DSJymKhd7r8jXXcgIXScZvj9p
+ j3A+ProvWL9kLIOkWGvpjCQ7jnwlyoQsvCa2BV0GPNuITRskDp9up060XFgTgw8wtT26iy0
+ ZEDGzvO50v/KiYGhr/XiW4+VZThYK/qXS0fTkT6o8cAkr+O1Tf0Ef1AIfyFKij8kAs1i3pO
+ ZyPMNuz2YVzY2jbt1vSRg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oht268LET7I=:dkj6cmjW1TVrgb9Xs/H0lN
+ Xae/vW6IlAUs7YfLsaBM+gusPlyBkDf/2YVcwgsmpHsQFWjE55mMF7YKmKEP3ZY6HkUPxQIEO
+ O4sqgLmWgswUNcL7wCtbOEtpszeYoIitSAcpCjaC7tHrN5eHNAmNYXb7n468imxTcT3a3Xov9
+ RBDPGxSrs/aKIqESuRs1o8XKi+nAGJshQAZhgumAqK055ZwA3eImKxYfjy8xpJy1Zxve2mB4P
+ uT+gXEsVTtlPYsgZfrHrb6erJk+NrWVKp1Ccn8islqwVB/wOmpKowf9QasxfVNoffod9rP4KB
+ pi3hjBzfTWGU3Xj1Yl1yQBYCqnkYxGYaPJ1t29kzFJgXNpujQsXlSvp3O647+VFWnzfXczNo0
+ v7rB6p3vlkHjjBRrlf/kIlkCJ7SbXyHhMmVWqbYoUN4tgNZfgf+tTF9p35jhSQ9q2cf9imFY5
+ f6tHzoHSmyDGSTHDdkzB5q0KbZjKFtimm+WJNZLqIKyBG+iOeKP5KHCgXZJUiRb3A5sUIzjjI
+ a/we9756heGDQKqUoGpSxw=
+X-Spam-Status: No, score=-106.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -62,49 +57,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 10 May 2021 07:51:44 -0000
+X-List-Received-Date: Mon, 10 May 2021 08:09:11 -0000
 
-On May  9 16:16, Jon Turney wrote:
-> On 06/05/2021 09:43, Corinna Vinschen wrote:
-> > On May  4 19:34, Jon Turney wrote:
-> > > On 03/05/2021 11:48, Corinna Vinschen wrote:
-> > > > What about adding -I../../cygwin -I../../cygwin/include to the build
-> > > > rules and get rid of the relative paths inside the sources?
-> > > 
-> > > That seems fraught as it allows cygwin system headers to be picked up in
-> > > preference to mingw ones?
-> > > 
-> > > Using '-idirafter' gets you a build, but it would be much more work to check
-> > > that you've actually built what you wanted to...
-> > 
-> > Well, ok.  It just looks *so* ugly...  What about at least
-> > 
-> >    --idirafter ../../cygwin
-> > 
-> > and then
-> > 
-> >        #include "include/sys/strace.h"
-> >        #include "include/sys/cygwin.h"
-> >        #include "include/cygwin/version.h"
-> >        #include "cygtls_padsize.h"
-> >        #include "gcc_seh.h"
-> > That would disallow picking up system headers and still be a bit
-> > cleaner, no?
+On May  9 16:09, Jon Turney wrote:
+> ---
+>  winsup/utils/mingw/Makefile.am |  2 +-
+>  winsup/utils/mingw/strace.cc   | 10 +++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> After thinking about this a bit more, I'm fairly certain that using
-> -idirafter with both paths gets us the same build as before, so I've posted
-> a patch with that change.
-> 
-> However, as written it's still a bit dangerous: any includes of system
-> headers by those files included from winsup/cygwin will be getting MinGW
-> system headers. I don't think that e.g. the value of ULONG_MAX is going be
-> used by any of those, but there is a theoretical risk of them not getting
-> what is expected...
-> 
-> Perhaps the only safe way to write this is to put the numeric constants
-> which strace uses into a separate header.
+> diff --git a/winsup/utils/mingw/Makefile.am b/winsup/utils/mingw/Makefile.am
+> index 73abc4264..874dce512 100644
+> --- a/winsup/utils/mingw/Makefile.am
+> +++ b/winsup/utils/mingw/Makefile.am
+> @@ -39,7 +39,7 @@ ldh_SOURCES = ldh.cc
+>  strace_SOURCES = \
+>  	path.cc \
+>  	strace.cc
+> -strace_CPPFLAGS=-I$(srcdir)/..
+> +strace_CPPFLAGS=-I$(srcdir)/.. -idirafter ${top_srcdir}/cygwin -idirafter ${top_srcdir}/cygwin/include
+>  strace_LDADD = -lntdll
+>  
+>  noinst_PROGRAMS = path-testsuite
+> diff --git a/winsup/utils/mingw/strace.cc b/winsup/utils/mingw/strace.cc
+> index a7797600c..d8a095fb6 100644
+> --- a/winsup/utils/mingw/strace.cc
+> +++ b/winsup/utils/mingw/strace.cc
+> @@ -21,11 +21,11 @@ details. */
+>  #include <time.h>
+>  #include <signal.h>
+>  #include <errno.h>
+> -#include "../../cygwin/include/sys/strace.h"
+> -#include "../../cygwin/include/sys/cygwin.h"
+> -#include "../../cygwin/include/cygwin/version.h"
+> -#include "../../cygwin/cygtls_padsize.h"
+> -#include "../../cygwin/gcc_seh.h"
+> +#include "sys/strace.h"
+> +#include "sys/cygwin.h"
+> +#include "cygwin/version.h"
+> +#include "cygtls_padsize.h"
+> +#include "gcc_seh.h"
+>  #include "path.h"
+>  #undef cygwin_internal
+>  #include "loadlib.h"
+> -- 
+> 2.31.1
 
-That sounds like a really good idea.
+Great, please push.
 
-
+Thanks,
 Corinna
