@@ -1,50 +1,32 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 816053835835
- for <cygwin-patches@cygwin.com>; Mon, 17 May 2021 11:03:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 816053835835
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M3lgL-1liK3S3zH9-000qsg; Mon, 17 May 2021 13:03:49 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 7B01CA80EF3; Mon, 17 May 2021 13:03:49 +0200 (CEST)
-Date: Mon, 17 May 2021 13:03:49 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Cc: Mingye Wang <arthur2e5@aosc.io>, cygwin-patches@cygwin.com
-Subject: Re: [PATCH v6] Cygwin: rewrite cmdline parser
-Message-ID: <YKJNlWSPUjihmoF1@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
- Mingye Wang <arthur2e5@aosc.io>, cygwin-patches@cygwin.com
-References: <20201107121221.6668-1-arthur2e5@aosc.io>
- <20210513131527.14904-1-arthur2e5@aosc.io>
- <nycvar.QRO.7.76.6.2105142124390.57@tvgsbejvaqbjf.bet>
+Return-Path: <cygwin@jdrake.com>
+Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
+ by sourceware.org (Postfix) with ESMTPS id BA3883853809
+ for <cygwin-patches@cygwin.com>; Mon, 17 May 2021 19:15:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BA3883853809
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+ by mail231.csoft.net (Postfix) with ESMTP id 6CF1FCB52
+ for <cygwin-patches@cygwin.com>; Mon, 17 May 2021 15:15:59 -0400 (EDT)
+Received: from mail231 (mail231 [96.47.74.235])
+ (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+ (No client certificate requested) (Authenticated sender: jeremyd)
+ by mail231.csoft.net (Postfix) with ESMTPSA id 5BB3DCB4B
+ for <cygwin-patches@cygwin.com>; Mon, 17 May 2021 15:15:59 -0400 (EDT)
+Date: Mon, 17 May 2021 12:15:59 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Add support for high-entropy-va flag to peflags.
+In-Reply-To: <YKJLZE/QFQotdkQw@calimero.vinschen.de>
+Message-ID: <alpine.BSO.2.21.2105171213390.14962@resin.csoft.net>
+References: <alpine.WNT.2.22.394.2105151214260.7536@persephone>
+ <YKJLZE/QFQotdkQw@calimero.vinschen.de>
+User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <nycvar.QRO.7.76.6.2105142124390.57@tvgsbejvaqbjf.bet>
-X-Provags-ID: V03:K1:UZWKQtBj84TMwSL7DUvP7nRWl7KHBgUjG8YFRzvJWdoimiGPNOR
- CqsV5/5UMbTMhP6orduFcYoqS6kGPepJPJz/ztmzObNnJDbLlNCmMbIW3J2ewt1qZhLCYj1
- zB4x6Bz6113N0Ja5/0cy9ABPq2KwjYQIh7n/iUFpPyxK4+GfG6y7V31mnY1JhTW9IwOksFu
- Kn1KJmSwCt0AEhi/2vn1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HoQBCiy2fCk=:xr1OAbjh6hs8ZtlGzdlKDM
- hVEBmnvEfqFk/zlpNzAUsef1Z2e2m1irhQtoeaIaCYC74RuLOQpcXER0MZ9Xouuk/Ma/u8WSm
- Lx5VYFJbtQpbpZ3AiLgns06j//MjfoOmCN9I68+kwgcBlEMRGiEpxQ16cdjLVFfTxf2fpDn+6
- ypKeEeHE5Uh1/BEL8B7ts0VL7ZzfDWh4dBHoCEI1M6+4+74IwZ5JLDs/2W2udMd/XFZkr2CUz
- bGdmR0hjlUPTpcTrjvWVGeHMO9fpLIi06Y+dZwjsUNWDDA3kZCQlJKj+7t2m/YHxC3euXq/bp
- TFB97GjXao4aovq+8RzmzVj30PGoyulWuHP6MX8nGSlRQo0LcVp9ZjL7whxvqHbZAfoaHHGSh
- 7JtLa8efeYqynIZLt8ctApEZPthGdj0McVZeym3islNebEfVlhk1+IfmREvaZ7/uGyY8pK1dc
- eU1t7B8AHP20y05rv2TqxujURYzGFT0B7TeysvfrUy1jQwy+2z1aROKcIk192wZeezyo2jvYK
- L6gFm+xA23UQb7BLRxOXtSr+wB3tWKwXyYx19Z3ArTJ
-X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: multipart/mixed;
+ boundary="9191230013440-97692182-1621278959=:14962"
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,70 +41,96 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 17 May 2021 11:04:04 -0000
+X-List-Received-Date: Mon, 17 May 2021 19:16:02 -0000
 
-On May 14 21:38, Johannes Schindelin wrote:
-> Hi,
-> 
-> first of all: thank you for working on this. I have run afoul of the
-> (de-)quoting differences between MSVCRT and Cygwin on more than one
-> occasion.
-> [...]
-> > * MSVCRT compatibility. Except for the single-quote handling (an
-> >   extension for compatibility with old Cygwin), the parser now
-> >   interprets option boundaries exactly like MSVCR since 2008. This fixes
-> >   the issue where our escaping does not work with our own parsing.
-> 
-> When I read this, I immediately think: This is probably going to break
-> backwards-compatibility, OMG this is making my life so much harder than it
-> already is.
-> [...]
-> I ask because as maintainer of Git for Windows (which bundles an MSYS2
-> runtime which is based on the Cygwin runtime), it is my responsibility to
-> take care of backwards-compatibility on behalf of the millions of users
-> out there.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Did you try it?  AFAIU, the patch actually fixes up a Cygwin weirdness,
-which already results in broken behaviour, rather than breaking backward
-compat.  IIRC we discussed this already a while back, you should find it
-in the archives.
+--9191230013440-97692182-1621278959=:14962
+Content-Type: text/plain; charset=US-ASCII
 
-> > * A memory leak in the @file expansion is removed by rewriting it to use
-> >   a stack of buffers. This also simplifies the code since we no longer
-> >   have to move stuff. The "downside" is that tokens can no longer cross
-> >   file boundaries.
-> 
-> This bullet point sounds as if it cries out loud to be put into a separate
-> patch, accompanied by the corresponding refactored part of the diff.
-> I would like to encourage you to disentangle these separate concerns:
-> 
-> - moving code (`git diff --color-moved` should tell the reader that
->   nothing was edited)
-> 
-> - clarifying documentation
-> 
-> - removing GLOB_NOCHECK
-> 
-> - introducing an MSVCRT-compatible mode (and make it opt-in!)
+On Mon, 17 May 2021, Corinna Vinschen wrote:
 
-What?  No.  There's no point in doing that.  We want a single way of
-handling the CLI when called natively.  
+> Hi Jeremy,
+>
+> Thanks for the patch, but I have two nits:
+>
+> - The patch doesn't apply cleanly with `git am'.  Please check again.
 
-> - whatever else I missed in the 304 deleted and 367 inserted lines (which
->   is a tough read, and I have to admit that my attention faded after about
->   a sixth of the patch)
-> 
-> In essence, pretend that you are a reviewer who wants to help by ensuring
-> that this patch (series) does not break anything, and that it does
-> everything as intended (i.e. no subtle bugs are lurking in there). Now,
-> how would you like the series to be presented (and I keep referring to it
-> as a _series_ because that's what it should be, for readability). Ideally
-> it would be a series of patches that tell an interesting story, in a
-> manner of speaking.
+Probably got mangled in the mail.  Attached this time.
 
-I concur that it would be rather nice to see this patch converted into a
-series with patches handling one problem at a time.
+>
+> - I would prefer a massively reduced patch size, by *not* changing
+>   indentation on otherwise unaffected lines.
+>
 
+Done
+--9191230013440-97692182-1621278959=:14962
+Content-Type: text/plain; charset=US-ASCII; name=0001-Add-support-for-high-entropy-va-flag-to-peflags.patch
+Content-Transfer-Encoding: BASE64
+Content-ID: <alpine.BSO.2.21.2105171215590.14962@resin.csoft.net>
+Content-Description: 
+Content-Disposition: attachment; filename=0001-Add-support-for-high-entropy-va-flag-to-peflags.patch
 
-Thanks,
-Corinna
+RnJvbSAyNmU3ZDcxNmI1ZWNjNDljYzJlOGQ1YWIwNWExNTg2YzA4OWM3NWZl
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogSmVyZW15IERyYWtl
+IDxjeWd3aW5AamRyYWtlLmNvbT4NCkRhdGU6IFNhdCwgMTUgTWF5IDIwMjEg
+MTI6MDc6MjYgLTA3MDANClN1YmplY3Q6IFtQQVRDSF0gQWRkIHN1cHBvcnQg
+Zm9yIGhpZ2gtZW50cm9weS12YSBmbGFnIHRvIHBlZmxhZ3MuDQoNClRoaXMg
+YWxsb3dzIGZvciBzZXR0aW5nLCBjbGVhcmluZywgYW5kIGRpc3BsYXlpbmcg
+dGhlIHZhbHVlIG9mIHRoZSAiaGlnaA0KZW50cm9weSB2YSIgZGxsIGNoYXJh
+Y3RlcmlzdGljcyBmbGFnLg0KDQpTaWduZWQtb2ZmLWJ5OiBKZXJlbXkgRHJh
+a2UgPGN5Z3dpbkBqZHJha2UuY29tPg0KLS0tDQogcGVmbGFncy5jIHwgMTMg
+KysrKysrKysrKystLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvcGVmbGFncy5j
+IGIvcGVmbGFncy5jDQppbmRleCA0ZDIyZTRhLi5iYjMzM2Q3IDEwMDY0NA0K
+LS0tIGEvcGVmbGFncy5jDQorKysgYi9wZWZsYWdzLmMNCkBAIC0xMTIsNyAr
+MTEyLDcgQEAgc3RhdGljIGNvbnN0IHN5bWJvbGljX2ZsYWdzX3QgcGVfc3lt
+Ym9saWNfZmxhZ3NbXSA9IHsNCiAvKkNGKDB4MDAwNCwgcmVzZXJ2ZWRfMHgw
+MDA0KSwqLw0KIC8qQ0YoMHgwMDA4LCByZXNlcnZlZF8weDAwMDgpLCovDQog
+LypDRigweDAwMTAsIHVuc3BlY18weDAwMTApLCovDQotLypDRigweDAwMjAs
+IHVuc3BlY18weDAwMjApLCovDQorICBDRigweDAwMjAsIGhpZ2gtZW50cm9w
+eS12YSksDQogICBDRigweDAwNDAsIGR5bmFtaWNiYXNlKSwNCiAgIENGKDB4
+MDA4MCwgZm9yY2VpbnRlZyksDQogICBDRigweDAxMDAsIG54Y29tcGF0KSwN
+CkBAIC0xODEsNiArMTgxLDcgQEAgc2l6ZW9mX3ZhbHVlc190IHNpemVvZl92
+YWxzWzVdID0gew0KIA0KIHN0YXRpYyBzdHJ1Y3Qgb3B0aW9uIGxvbmdfb3B0
+aW9uc1tdID0gew0KICAgeyJkeW5hbWljYmFzZSIsICBvcHRpb25hbF9hcmd1
+bWVudCwgTlVMTCwgJ2QnfSwNCisgIHsiaGlnaC1lbnRyb3B5LXZhIiwgb3B0
+aW9uYWxfYXJndW1lbnQsIE5VTEwsICdlJ30sDQogICB7ImZvcmNlaW50ZWci
+LCAgIG9wdGlvbmFsX2FyZ3VtZW50LCBOVUxMLCAnZid9LA0KICAgeyJueGNv
+bXBhdCIsICAgICBvcHRpb25hbF9hcmd1bWVudCwgTlVMTCwgJ24nfSwNCiAg
+IHsibm8taXNvbGF0aW9uIiwgb3B0aW9uYWxfYXJndW1lbnQsIE5VTEwsICdp
+J30sDQpAQCAtMjAzLDcgKzIwNCw3IEBAIHN0YXRpYyBzdHJ1Y3Qgb3B0aW9u
+IGxvbmdfb3B0aW9uc1tdID0gew0KICAge05VTEwsIG5vX2FyZ3VtZW50LCBO
+VUxMLCAwfQ0KIH07DQogc3RhdGljIGNvbnN0IGNoYXIgKnNob3J0X29wdGlv
+bnMNCi0JPSAiZDo6Zjo6bjo6aTo6czo6Yjo6Vzo6dDo6dzo6bDo6Uzo6eDo6
+WDo6eTo6WTo6ejo6VDp2aFYiOw0KKwk9ICJkOjplOjpmOjpuOjppOjpzOjpi
+OjpXOjp0Ojp3OjpsOjpTOjp4OjpYOjp5OjpZOjp6OjpUOnZoViI7DQogDQog
+c3RhdGljIHZvaWQgc2hvcnRfdXNhZ2UgKEZJTEUgKmYpOw0KIHN0YXRpYyB2
+b2lkIGhlbHAgKEZJTEUgKmYpOw0KQEAgLTY5OSw2ICs3MDAsMTEgQEAgcGFy
+c2VfYXJncyAoaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkNCiAJICAgICAgICAg
+ICAgICAgICAgICAgICAgIG9wdGFyZywNCiAJICAgICAgICAgICAgICAgICAg
+ICAgICAgIElNQUdFX0RMTENIQVJBQ1RFUklTVElDU19EWU5BTUlDX0JBU0Up
+Ow0KIAkgIGJyZWFrOw0KKwljYXNlICdlJzoNCisJICBoYW5kbGVfcGVfZmxh
+Z19vcHRpb24gKGxvbmdfb3B0aW9uc1tvcHRpb25faW5kZXhdLm5hbWUsDQor
+CSAgICAgICAgICAgICAgICAgICAgICAgICBvcHRhcmcsDQorCSAgICAgICAg
+ICAgICAgICAgICAgICAgICBJTUFHRV9ETExDSEFSQUNURVJJU1RJQ1NfSElH
+SF9FTlRST1BZX1ZBKTsNCisJICBicmVhazsNCiAJY2FzZSAnbic6DQogCSAg
+aGFuZGxlX3BlX2ZsYWdfb3B0aW9uIChsb25nX29wdGlvbnNbb3B0aW9uX2lu
+ZGV4XS5uYW1lLA0KIAkgICAgICAgICAgICAgICAgICAgICAgICAgb3B0YXJn
+LA0KQEAgLTEwNjksNiArMTA3NSw5IEBAIGhlbHAgKEZJTEUgKmYpDQogIlxu
+Ig0KICIgIC1kLCAtLWR5bmFtaWNiYXNlICBbQk9PTF0gICBJbWFnZSBiYXNl
+IGFkZHJlc3MgbWF5IGJlIHJlbG9jYXRlZCB1c2luZ1xuIg0KICIgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBhZGRyZXNzIHNwYWNlIGxheW91dCBy
+YW5kb21pemF0aW9uIChBU0xSKS5cbiINCisiICAtZSxcbiINCisiICAtLWhp
+Z2gtZW50cm9weS12YSAgW0JPT0xdICAgSW1hZ2UgaXMgY29tcGF0aWJsZSB3
+aXRoIDY0LWJpdCBhZGRyZXNzIHNwYWNlXG4iDQorIiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGxheW91dCByYW5kb21pemF0aW9uIChBU0xSKS5c
+biINCiAiICAtZiwgLS1mb3JjZWludGVnICAgW0JPT0xdICAgQ29kZSBpbnRl
+Z3JpdHkgY2hlY2tzIGFyZSBlbmZvcmNlZC5cbiINCiAiICAtbiwgLS1ueGNv
+bXBhdCAgICAgW0JPT0xdICAgSW1hZ2UgaXMgY29tcGF0aWJsZSB3aXRoIGRh
+dGEgZXhlY3V0aW9uXG4iDQogIiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHByZXZlbnRpb24gKERFUCkuXG4iDQotLSANCjIuMzEuMS53aW5kb3dz
+LjENCg0K
+
+--9191230013440-97692182-1621278959=:14962--
