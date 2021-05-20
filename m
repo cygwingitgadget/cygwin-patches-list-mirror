@@ -1,48 +1,38 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 35184385E44B
- for <cygwin-patches@cygwin.com>; Thu, 20 May 2021 07:17:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 35184385E44B
+Return-Path: <Christian.Franke@t-online.de>
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by sourceware.org (Postfix) with ESMTPS id 0F7743848407
+ for <cygwin-patches@cygwin.com>; Thu, 20 May 2021 10:02:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0F7743848407
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
+ dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MyKYE-1lXjt911G0-00ydHm for <cygwin-patches@cygwin.com>; Thu, 20 May 2021
- 09:17:31 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 96C6BA82BED; Thu, 20 May 2021 09:17:30 +0200 (CEST)
-Date: Thu, 20 May 2021 09:17:30 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=none smtp.mailfrom=Christian.Franke@t-online.de
+Received: from fwd36.aul.t-online.de (fwd36.aul.t-online.de [172.20.26.137])
+ by mailout07.t-online.de (Postfix) with SMTP id 9A69D53B78
+ for <cygwin-patches@cygwin.com>; Thu, 20 May 2021 12:01:34 +0200 (CEST)
+Received: from [192.168.2.105]
+ (V+eLLBZU8hvQRDrIvZLN+uYhRX50eFfnvSAYjpb81MQsY+MgP0U31YKkmS3E+ZdZvp@[79.230.169.184])
+ by fwd36.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1ljfUe-0LjPe40; Thu, 20 May 2021 12:01:28 +0200
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: Re: [PATCH] Cygwin: utils: chattr: Improve option parsing.
 To: cygwin-patches@cygwin.com
-Subject: Re: [RFC] FAST_CWD warnings on ARM64 insider preview
-Message-ID: <YKYNCkVLFY75At7L@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <alpine.BSO.2.21.2105181151200.14962@resin.csoft.net>
- <YKTfJ2kVCsV+yT3g@calimero.vinschen.de>
- <alpine.BSO.2.21.2105191040270.14962@resin.csoft.net>
+References: <d515bfba-ce77-40c0-0c3e-67895675f753@t-online.de>
+ <YKVPOaBrb0a9lV54@calimero.vinschen.de>
+Message-ID: <e78257d8-bd2a-3ea0-0cea-48114ec017a0@t-online.de>
+Date: Thu, 20 May 2021 12:01:27 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ SeaMonkey/2.53.6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.BSO.2.21.2105191040270.14962@resin.csoft.net>
-X-Provags-ID: V03:K1:UBmOTQsQIZPVpqGx1Y2HNjm9bjye4R9pcytKML9M3fjiACO1GCB
- hYFcrvX9NsNnpHbVxur6E6r3X8C8vxP5ZlBl0+spPFb+pqdT5m6EB3Sdcov5BHEbYxuBlZl
- e0qNBmP8UXMR2uoASLGc2KD2yb12ZOF7MFq+iiMuXRoZh0GEHe3ARbEskybETxq5zbe4qio
- G+Lw9HEwBQOnzPZQvcCSQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MX4pSKwS/J8=:HL6E8wclc9YVFwQ1aXcbz2
- i/YmUavJotjvL/pMkskFQpzPIs50nGGJdBBPlWgSLN2ISiLNH3jE7kG+ea8GdmzfmqECLjtql
- 1lh18ieDQtjZSEstLQuVjIjGSvS17AIL6VXrF3SIdWw2iJkV6l2/wDVpMMcS6cMt5ZSgRvdBk
- qEklgAhL1X6EAZmFh6tVDUl8wUWJOwsCYt7bXuiMT3/YGmaRBfmCfwjZzr+2uzn5w8FTSoS0Y
- 3YlpiM6FUDi/hp8wIzx87UE+vwS7LTrOi/fFQaoe+HCej4L7wi5+BSjugPA6vAf1VMoiJYhxm
- VpJmjqxsqiiO0FgEMBbB4UFZrh6AKKaUQ1nA3DaWIk+fTppkYl97Pepzorcmltc9P9W44tflW
- 7ykmRFEzHwGzTpRswWTSU29HdFu2UCnM8omdThc0LttIE0o6OMzxlhJSlFsgEaipaOAPcfEYq
- X/FmChIuYW1Anu8BuhNKMvjXtcO3M1G/ty9HHQJuGOvZ+EWWv5uNQ3oYJstheH70Cpc8mXdV6
- Wjn+daXrfDgagsqX8tflBY=
-X-Spam-Status: No, score=-100.4 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <YKVPOaBrb0a9lV54@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------44D411B130C01B4B380B8673"
+X-ID: V+eLLBZU8hvQRDrIvZLN+uYhRX50eFfnvSAYjpb81MQsY+MgP0U31YKkmS3E+ZdZvp
+X-TOI-EXPURGATEID: 150726::1621504888-000121E1-078DF690/0/0 CLEAN NORMAL
+X-TOI-MSGID: 3cb71040-61d9-4196-af07-c9a9948d6fe3
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00, BODY_8BITS,
+ FREEMAIL_FROM, GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -58,40 +48,145 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 20 May 2021 07:17:34 -0000
+X-List-Received-Date: Thu, 20 May 2021 10:02:41 -0000
 
-On May 19 11:02, Jeremy Drake via Cygwin-patches wrote:
-> On Wed, 19 May 2021, Corinna Vinschen wrote:
-> 
-> > > +#ifndef IMAGE_FILE_MACHINE_ARM64
-> > > +#define IMAGE_FILE_MACHINE_ARM64 0xAA64
-> > > +#endif
-> >
-> > IMAGE_FILE_MACHINE_ARM64 is already defined for some time in winnt.h
-> > so we won't need the ifdef.
-> 
-> OK.  Was just matching what was done with PROCESSOR_ARCHITECTURE_ARM64.
-> 
-> > > +      typedef BOOL (WINAPI * IsWow64Process2_t)(HANDLE hProcess, USHORT *pProcessMachine, USHORT *pNativeMachine);
-> > > +      IsWow64Process2_t pfnIsWow64Process2 = (IsWow64Process2_t)GetProcAddress(GetModuleHandle("kernel32.dll"), "IsWow64Process2");
-> > > +      if (pfnIsWow64Process2 && pfnIsWow64Process2(GetCurrentProcess(), &procmachine, &nativemachine) && nativemachine == IMAGE_FILE_MACHINE_ARM64)
-> >
-> > We're having the autoload mechanism for that, i. e., your patch can get
-> > rid of the GetModuleHandle/GetProcAddress preliminaries entirely.
-> >
-> > By using the LoadDLLfuncEx() expression, failure to load the function
-> > will result in a return value of FALSE with GetLastError ==
-> > ERROR_PROC_NOT_FOUND, so this is safe on older systems.
-> 
-> Nice.
-> 
-> > It's easier to understand with a full example, so I took the liberty to
-> > rewrite your patch accordingly.  Since the idea and the basic work is
-> > yours, I'd push this under your name, see below.
-> 
-> Looks good.  Thanks
+This is a multi-part message in MIME format.
+--------------44D411B130C01B4B380B8673
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Pushed.
+Corinna Vinschen wrote:
+> Hi Christian,
+>
+> On May 19 17:46, Christian Franke wrote:
+>> ...
+>> $ egrep 'ACL|--r' chattr.c
+>>            "Get POSIX ACL information\n"
+>>        "  -R, --recursive     recursively list attributes of directories and
+>> their \n"
+> Oops.  Please patch while you're at it...
+> ...
+>>  From 865a5a50501f3fd0cf5ed28500d3e6e45a6456de Mon Sep 17 00:00:00 2001
+>> From: Christian Franke<...>
+>> Date: Wed, 19 May 2021 16:24:47 +0200
+>> Subject: [PATCH] Cygwin: utils: chattr: Improve option parsing.
+>>
+>> Interpret '-h' as '--help' only if last argument.
+> Who was the idiot using -h for help *and* the hidden flag? *blush*
+>
+> I'd vote for --help to be changed to -H for the single character
+> option.  The help output is very unlikely to be used in scripts,
+> so that shouldn't be a backward compat problem.
 
-Thanks,
-Corinna
+New patch attached.
+
+Note that there is now the possibly unexpected (& hidden) behavior that 
+'chattr -h' without file argument clears the hidden attribute of cwd.
+
+Regards,
+Christian
+
+
+--------------44D411B130C01B4B380B8673
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-utils-chattr-Improve-option-parsing-fix-some-.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-utils-chattr-Improve-option-parsing-fix-some-.pa";
+ filename*1="tch"
+
+RnJvbSBiODM4MTI1Zjc5N2MxMjNkNGE2ZDJmMGVmMzBjY2NlZThmYWNlNTBjIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUaHUsIDIwIE1heSAyMDIxIDExOjA1OjI5ICswMjAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiB1dGlsczogY2hhdHRyOiBJbXByb3ZlIG9wdGlv
+biBwYXJzaW5nLCBmaXggc29tZQogbWVzc2FnZXMuCgpBbGxvdyBtdWx0aXBsZSBjaGFyYWN0
+ZXJzIGFsc28gaW4gZmlyc3QgJy1tb2RlJyBhcmd1bWVudC4KVXNlICctSCcgaW5zdGVhZCBv
+ZiAnLWgnIGZvciAnLS1oZWxwJyB0byBmaXggYW1iaWd1aXR5IHdpdGgKaGlkZGVuIGF0dHJp
+YnV0ZS4gIEZpeCBoZWxwIGFuZCB1c2FnZSB0ZXh0cyBhbmQgZG9jdW1lbnRhdGlvbi4KClNp
+Z25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFua2UgPGNocmlzdGlhbi5mcmFua2VAdC1vbmxp
+bmUuZGU+Ci0tLQogd2luc3VwL2RvYy91dGlscy54bWwgIHwgMTAgKysrKystLS0tLQogd2lu
+c3VwL3V0aWxzL2NoYXR0ci5jIHwgMzIgKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0t
+LS0KIDIgZmlsZXMgY2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKSwgMjMgZGVsZXRpb25zKC0p
+CgpkaWZmIC0tZ2l0IGEvd2luc3VwL2RvYy91dGlscy54bWwgYi93aW5zdXAvZG9jL3V0aWxz
+LnhtbAppbmRleCAyMmJkODY5MDQuLjY5NjExYjk1NCAxMDA2NDQKLS0tIGEvd2luc3VwL2Rv
+Yy91dGlscy54bWwKKysrIGIvd2luc3VwL2RvYy91dGlscy54bWwKQEAgLTI3LDE4ICsyNywx
+OCBAQAogCiAgICAgPHJlZnN5bm9wc2lzZGl2PgogICAgICAgPHNjcmVlbj4KLWNoYXR0ciBb
+LVJWZmh2XSBbKy09bW9kZV0uLi4gW2ZpbGVdLi4uCitjaGF0dHIgWy1SVmZIdl0gWystPW1v
+ZGVdLi4uIFtmaWxlXS4uLgogICAgICAgPC9zY3JlZW4+CiAgICAgPC9yZWZzeW5vcHNpc2Rp
+dj4KIAogICAgIDxyZWZzZWN0MSBpZD0iY2hhdHRyLW9wdGlvbnMiPgogICAgICAgPHRpdGxl
+Pk9wdGlvbnM8L3RpdGxlPgogICAgICAgPHNjcmVlbj4KLSAgLVIsIC0tcmVjdXJzaXZlICAg
+ICByZWN1cnNpdmVseSBsaXN0IGF0dHJpYnV0ZXMgb2YgZGlyZWN0b3JpZXMgYW5kIHRoZWly
+Ci0gICAgICAgICAgICAgICAgICAgICAgY29udGVudHMKKyAgLVIsIC0tcmVjdXJzaXZlICAg
+ICByZWN1cnNpdmVseSBhcHBseSB0aGUgY2hhbmdlcyB0byBkaXJlY3RvcmllcyBhbmQKKyAg
+ICAgICAgICAgICAgICAgICAgICB0aGVpciBjb250ZW50cwogICAtViwgLS12ZXJib3NlICAg
+ICAgIEJlIHZlcmJvc2UgZHVyaW5nIG9wZXJhdGlvbgogICAtZiwgLS1mb3JjZSAgICAgICAg
+IHN1cHByZXNzIGVycm9yIG1lc3NhZ2VzCi0gIC1oLCAtLWhlbHAgICAgICAgICAgdGhpcyBo
+ZWxwIHRleHQKKyAgLUgsIC0taGVscCAgICAgICAgICB0aGlzIGhlbHAgdGV4dAogICAtdiwg
+LS12ZXJzaW9uICAgICAgIGRpc3BsYXkgdGhlIHByb2dyYW0gdmVyc2lvbgogPC9zY3JlZW4+
+CiAgICAgPC9yZWZzZWN0MT4KQEAgLTYwLDcgKzYwLDcgQEAgY2hhdHRyIFstUlZmaHZdIFsr
+LT1tb2RlXS4uLiBbZmlsZV0uLi4KICAgICA8cGFyYT5TdXBwb3J0ZWQgYXR0cmlidXRlczo8
+L3BhcmE+CiAKICAgICA8c2NyZWVuPgotICAncicsICdSZWFkb25seSc6ICAgICBmaWxlIGlz
+IHJlYWQtb25seQorICAncicsICdSZWFkb25seSc6ICAgICAgZmlsZSBpcyByZWFkLW9ubHkK
+ICAgJ2gnLCAnSGlkZGVuJzogICAgICAgIGZpbGUgb3IgZGlyZWN0b3J5IGlzIGhpZGRlbgog
+ICAncycsICdTeXN0ZW0nOiAgICAgICAgZmlsZSBvciBkaXJlY3RvcnkgdGhhdCB0aGUgb3Bl
+cmF0aW5nIHN5c3RlbSB1c2VzCiAgICdhJywgJ0FyY2hpdmUnOiAgICAgICBmaWxlIG9yIGRp
+cmVjdG9yeSBoYXMgdGhlIGFyY2hpdmUgbWFya2VyIHNldApkaWZmIC0tZ2l0IGEvd2luc3Vw
+L3V0aWxzL2NoYXR0ci5jIGIvd2luc3VwL3V0aWxzL2NoYXR0ci5jCmluZGV4IDk4ZjY5M2Fh
+Yi4uYzdkYzY0OWMyIDEwMDY0NAotLS0gYS93aW5zdXAvdXRpbHMvY2hhdHRyLmMKKysrIGIv
+d2luc3VwL3V0aWxzL2NoYXR0ci5jCkBAIC0yOCwxMiArMjgsMTIgQEAgc3RydWN0IG9wdGlv
+biBsb25nb3B0c1tdID0gewogICB7ICJyZWN1cnNpdmUiLCBub19hcmd1bWVudCwgTlVMTCwg
+J1InIH0sCiAgIHsgInZlcmJvc2UiLCBub19hcmd1bWVudCwgTlVMTCwgJ1YnIH0sCiAgIHsg
+ImZvcmNlIiwgbm9fYXJndW1lbnQsIE5VTEwsICdmJyB9LAotICB7ICJoZWxwIiwgbm9fYXJn
+dW1lbnQsIE5VTEwsICdoJyB9LAorICB7ICJoZWxwIiwgbm9fYXJndW1lbnQsIE5VTEwsICdI
+JyB9LAogICB7ICJ2ZXJzaW9uIiwgbm9fYXJndW1lbnQsIE5VTEwsICd2JyB9LAogICB7IE5V
+TEwsIG5vX2FyZ3VtZW50LCBOVUxMLCAwfQogfTsKIAotY29uc3QgY2hhciAqb3B0cyA9ICIr
+UlZmaHYiOworY29uc3QgY2hhciAqb3B0cyA9ICIrUlZmSHYiOwogCiBzdHJ1Y3QKIHsKQEAg
+LTIxMSw3ICsyMTEsNyBAQCBzdGF0aWMgdm9pZAogcHJpbnRfdmVyc2lvbiAoKQogewogICBw
+cmludGYgKCIlcyAoY3lnd2luKSAlZC4lZC4lZFxuIgotCSAgIkdldCBQT1NJWCBBQ0wgaW5m
+b3JtYXRpb25cbiIKKwkgICJDaGFuZ2UgZmlsZSBhdHRyaWJ1dGVzXG4iCiAJICAiQ29weXJp
+Z2h0IChDKSAyMDE4IC0gJXMgQ3lnd2luIEF1dGhvcnNcbiIKIAkgICJUaGlzIGlzIGZyZWUg
+c29mdHdhcmU7IHNlZSB0aGUgc291cmNlIGZvciBjb3B5aW5nIGNvbmRpdGlvbnMuICAiCiAJ
+ICAiVGhlcmUgaXMgTk9cbiIKQEAgLTIyNyw3ICsyMjcsNyBAQCBwcmludF92ZXJzaW9uICgp
+CiBzdGF0aWMgdm9pZCBfX2F0dHJpYnV0ZV9fICgoX19ub3JldHVybl9fKSkKIHVzYWdlIChG
+SUxFICpzdHJlYW0pCiB7Ci0gIGZwcmludGYgKHN0cmVhbSwgIlVzYWdlOiAlcyBbLVJWZmh2
+XSBbKy09bW9kZV0uLi4gW2ZpbGVdLi4uXG4iLAorICBmcHJpbnRmIChzdHJlYW0sICJVc2Fn
+ZTogJXMgWy1SVmZIdl0gWystPW1vZGVdLi4uIFtmaWxlXS4uLlxuIiwKIAkgICBwcm9ncmFt
+X2ludm9jYXRpb25fc2hvcnRfbmFtZSk7CiAgIGlmIChzdHJlYW0gPT0gc3RkZXJyKQogICAg
+IGZwcmludGYgKHN0cmVhbSwgIlRyeSAnJXMgLS1oZWxwJyBmb3IgbW9yZSBpbmZvcm1hdGlv
+blxuIiwKQEAgLTIzNiwxMSArMjM2LDExIEBAIHVzYWdlIChGSUxFICpzdHJlYW0pCiAgICAg
+ZnByaW50ZiAoc3RyZWFtLCAiXG4iCiAgICAgICAiQ2hhbmdlIGZpbGUgYXR0cmlidXRlc1xu
+IgogICAgICAgIlxuIgotICAgICAgIiAgLVIsIC0tcmVjdXJzaXZlICAgICByZWN1cnNpdmVs
+eSBsaXN0IGF0dHJpYnV0ZXMgb2YgZGlyZWN0b3JpZXMgYW5kIHRoZWlyIFxuIgorICAgICAg
+IiAgLVIsIC0tcmVjdXJzaXZlICAgICByZWN1cnNpdmVseSBhcHBseSB0aGUgY2hhbmdlcyB0
+byBkaXJlY3RvcmllcyBhbmQgdGhlaXJcbiIKICAgICAgICIgICAgICAgICAgICAgICAgICAg
+ICAgY29udGVudHNcbiIKICAgICAgICIgIC1WLCAtLXZlcmJvc2UgICAgICAgQmUgdmVyYm9z
+ZSBkdXJpbmcgb3BlcmF0aW9uXG4iCiAgICAgICAiICAtZiwgLS1mb3JjZSAgICAgICAgIHN1
+cHByZXNzIGVycm9yIG1lc3NhZ2VzXG4iCi0gICAgICAiICAtaCwgLS1oZWxwICAgICAgICAg
+IHRoaXMgaGVscCB0ZXh0XG4iCisgICAgICAiICAtSCwgLS1oZWxwICAgICAgICAgIHRoaXMg
+aGVscCB0ZXh0XG4iCiAgICAgICAiICAtdiwgLS12ZXJzaW9uICAgICAgIGRpc3BsYXkgdGhl
+IHByb2dyYW0gdmVyc2lvblxuIgogICAgICAgIlxuIgogICAgICAgIlRoZSBmb3JtYXQgb2Yg
+J21vZGUnIGlzIHsrLT19W2FjQ2VobnJzU3RdXG4iCkBAIC0yNTEsNyArMjUxLDcgQEAgdXNh
+Z2UgKEZJTEUgKnN0cmVhbSkKICAgICAgICJcbiIKICAgICAgICJTdXBwb3J0ZWQgYXR0cmli
+dXRlczpcbiIKICAgICAgICJcbiIKLSAgICAgICIgICdyJywgJ1JlYWRvbmx5JzogICAgIGZp
+bGUgaXMgcmVhZC1vbmx5XG4iCisgICAgICAiICAncicsICdSZWFkb25seSc6ICAgICAgZmls
+ZSBpcyByZWFkLW9ubHlcbiIKICAgICAgICIgICdoJywgJ0hpZGRlbic6ICAgICAgICBmaWxl
+IG9yIGRpcmVjdG9yeSBpcyBoaWRkZW5cbiIKICAgICAgICIgICdzJywgJ1N5c3RlbSc6ICAg
+ICAgICBmaWxlIG9yIGRpcmVjdG9yeSB0aGF0IHRoZSBvcGVyYXRpbmcgc3lzdGVtIHVzZXNc
+biIKICAgICAgICIgICdhJywgJ0FyY2hpdmUnOiAgICAgICBmaWxlIG9yIGRpcmVjdG9yeSBo
+YXMgdGhlIGFyY2hpdmUgbWFya2VyIHNldFxuIgpAQCAtMjcxLDcgKzI3MSw3IEBAIGludAog
+bWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQogewogICBpbnQgYywgcmV0ID0gMDsKLSAg
+aW50IGxhc3RvcHRpbmQgPSAwOworICBpbnQgbGFzdG9wdGluZCA9IDE7CiAgIGNoYXIgKm9w
+dDsKIAogICBvcHRlcnIgPSAwOwpAQCAtMjgxLDE1ICsyODEsMTUgQEAgbWFpbiAoaW50IGFy
+Z2MsIGNoYXIgKiphcmd2KQogCXsKIAljYXNlICdSJzoKIAkgIFJvcHQgPSAxOwotCSAgbGFz
+dG9wdGluZCA9IG9wdGluZDsKIAkgIGJyZWFrOwogCWNhc2UgJ1YnOgogCSAgVm9wdCA9IDE7
+Ci0JICBsYXN0b3B0aW5kID0gb3B0aW5kOwogCSAgYnJlYWs7CiAJY2FzZSAnZic6CiAJICBm
+b3B0ID0gMTsKLQkgIGxhc3RvcHRpbmQgPSBvcHRpbmQ7CisJICBicmVhazsKKwljYXNlICdI
+JzoKKwkgIHVzYWdlIChzdGRvdXQpOwogCSAgYnJlYWs7CiAJY2FzZSAndic6CiAJICBwcmlu
+dF92ZXJzaW9uICgpOwpAQCAtMjk3LDE0ICsyOTcsMTAgQEAgbWFpbiAoaW50IGFyZ2MsIGNo
+YXIgKiphcmd2KQogCSAgYnJlYWs7CiAJZGVmYXVsdDoKIAkgIGlmIChvcHRpbmQgPiBsYXN0
+b3B0aW5kKQotCSAgICB7Ci0JICAgICAgLS1vcHRpbmQ7Ci0JICAgICAgZ290byBuZXh0Owot
+CSAgICB9Ci0JICAvKkZBTExUSFJVKi8KLQljYXNlICdoJzoKLQkgIHVzYWdlIChjID09ICdo
+JyA/IHN0ZG91dCA6IHN0ZGVycik7CisJICAgIC0tb3B0aW5kOworCSAgZ290byBuZXh0Owog
+CX0KKyAgICAgIGxhc3RvcHRpbmQgPSBvcHRpbmQ7CiAgICAgfQogbmV4dDoKICAgd2hpbGUg
+KG9wdGluZCA8IGFyZ2MpCi0tIAoyLjMxLjEKCg==
+--------------44D411B130C01B4B380B8673--
