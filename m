@@ -1,43 +1,49 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-046.btinternet.com (mailomta5-re.btinternet.com
- [213.120.69.98])
- by sourceware.org (Postfix) with ESMTPS id 4330F3858018
- for <cygwin-patches@cygwin.com>; Thu, 20 May 2021 17:46:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4330F3858018
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id B01463858018
+ for <cygwin-patches@cygwin.com>; Thu, 20 May 2021 17:57:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B01463858018
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-046.btinternet.com with ESMTP id
- <20210520174651.FGYU13681.re-prd-fep-046.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Thu, 20 May 2021 18:46:51 +0100
-Authentication-Results: btinternet.com;
- auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9C0CC33CB2B15
-X-Originating-IP: [86.140.130.48]
-X-OWM-Source-IP: 86.140.130.48 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvdejuddguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeekiedrudegtddrudeftddrgeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegtddrudeftddrgeekpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.140.130.48) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C0CC33CB2B15; Thu, 20 May 2021 18:46:51 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M72bv-1lp2Wz1COd-008cY7 for <cygwin-patches@cygwin.com>; Thu, 20 May 2021
+ 19:57:54 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id C7E6DA82BFD; Thu, 20 May 2021 19:57:53 +0200 (CEST)
+Date: Thu, 20 May 2021 19:57:53 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Ensure PSAPI_VERSION is 1 when building ldd
-Date: Thu, 20 May 2021 18:46:35 +0100
-Message-Id: <20210520174635.24163-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.31.1
+Subject: Re: [PATCH] Cygwin: utils: chattr: Improve option parsing.
+Message-ID: <YKajIZm3F4OpX5sx@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <d515bfba-ce77-40c0-0c3e-67895675f753@t-online.de>
+ <YKVPOaBrb0a9lV54@calimero.vinschen.de>
+ <e78257d8-bd2a-3ea0-0cea-48114ec017a0@t-online.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.6 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KHOP_HELO_FCRDNS,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+In-Reply-To: <e78257d8-bd2a-3ea0-0cea-48114ec017a0@t-online.de>
+X-Provags-ID: V03:K1:46oVoKOg0mMihEl2+AiAzZqiDO1Rn05sHJIhFVx2uwqis0DJ3rf
+ v7z0tfcRxPxO08QtjrpV2md0/Ow6rexT2kh0Vep5sX66MePD6aDjabScnI5yOfvcuRbAeLM
+ Qi5O3yPbuoOutcqBOCOdXusPxRMkmYyIZ9hw7/N8C2afdBfyIMJUw55mh2wbt7M6kRWmkst
+ XP+aztI4X9GMHq0G//gUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RKo2drhhY94=:/x7LA/krd1vlbtBSbhhEPZ
+ auURaufPPAwfLt1DKH/eKfkBlaiYxi9iZ/fmtdrBp2mU27Aw92physGHmB/J/uxh8HcPwm/CJ
+ 7Zy6HU+38IaqQJftA+Xm9KuMZRdiouMxhvmqHLgoYe6z7QlraqjbbMOr6OpYum5wBh762YVLz
+ WQTODfIwEvswB12EBAEO+LkNdLrbGtqWAbzbQG/DFM7v3IXi4OWy8qI7qet26ktJkeNJ5Zl/N
+ ocNCfdGSrowxeNQLnh7Tk2Ti8daU0FOg0hyHUGoC8iAKmRlJIJwwaVS9qnBvcbsvHXaLTjEya
+ qrozSUHoe0sJtC6hhulF4Zah4Gp6EWUZ9TTNpm1n9JKvDpIn84XkcPeVF+/cdFJvzMnEREAX/
+ phQwLmVmXZnrY+uuQvNlf8ilA/245TM3mSiE9+qom9wgutzR1BAeUb1wS+a7VEezHxHJmfu4m
+ XzW3xKwRsnufhP3qIvxYMeoN+InXrkc6jnaNN6UXHVQ+TK5+/3tzZWfvkXz1k1EjbCoiMGIn/
+ aSQj1Ce717HuodknetRNuI=
+X-Spam-Status: No, score=-98.6 required=5.0 tests=BAYES_00, BODY_8BITS,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -53,32 +59,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 20 May 2021 17:46:56 -0000
+X-List-Received-Date: Thu, 20 May 2021 17:57:57 -0000
 
-The default PSAPI_VERSION is controlled by WIN32_WINNT, which we set to
-0x0a00 when building ldd, which gets PSAPI_VERSION=2.
+Hi Christian,
 
-This causes K32GetModuleFileNameEx to be used for GetFileNameFromHandle,
-which isn't available on Windows Vista.
+On May 20 12:01, Christian Franke wrote:
+> Corinna Vinschen wrote:
+> > On May 19 17:46, Christian Franke wrote:
+> > > ...
+> > > $ egrep 'ACL|--r' chattr.c
+> > >            "Get POSIX ACL information\n"
+> > >        "  -R, --recursive     recursively list attributes of directories and
+> > > their \n"
+> > Oops.  Please patch while you're at it...
+> > ...
+> > >  From 865a5a50501f3fd0cf5ed28500d3e6e45a6456de Mon Sep 17 00:00:00 2001
+> > > From: Christian Franke<...>
+> > > Date: Wed, 19 May 2021 16:24:47 +0200
+> > > Subject: [PATCH] Cygwin: utils: chattr: Improve option parsing.
+> > > 
+> > > Interpret '-h' as '--help' only if last argument.
+> > Who was the idiot using -h for help *and* the hidden flag? *blush*
+> > 
+> > I'd vote for --help to be changed to -H for the single character
+> > option.  The help output is very unlikely to be used in scripts,
+> > so that shouldn't be a backward compat problem.
+> 
+> New patch attached.
+> 
+> Note that there is now the possibly unexpected (& hidden) behavior that
+> 'chattr -h' without file argument clears the hidden attribute of cwd.
 
-Define PSAPI_VERSION as 1 for the built executable to work on Windows
-Vista.
----
- winsup/utils/ldd.cc | 1 +
- 1 file changed, 1 insertion(+)
+Uhm... why?  Isn't that easily avoidable?
 
-diff --git a/winsup/utils/ldd.cc b/winsup/utils/ldd.cc
-index 1e1863c1c..d370db986 100644
---- a/winsup/utils/ldd.cc
-+++ b/winsup/utils/ldd.cc
-@@ -38,6 +38,7 @@
- #include <libgen.h>
- 
- #define _WIN32_WINNT 0x0a00
-+#define PSAPI_VERSION 1
- #include <windows.h>
- #include <winternl.h>
- #include <imagehlp.h>
--- 
-2.31.1
 
+Thanks,
+Corinna
