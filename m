@@ -1,52 +1,30 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-048.btinternet.com (mailomta18-re.btinternet.com
- [213.120.69.111])
- by sourceware.org (Postfix) with ESMTPS id 41F90385743C
- for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 21:37:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 41F90385743C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.54.7])
- by re-prd-fep-048.btinternet.com with ESMTP id
- <20210525213750.JYQF18350.re-prd-fep-048.btinternet.com@re-prd-rgout-004.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 22:37:50 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9C506349BA68A
-X-Originating-IP: [86.140.69.112]
-X-OWM-Source-IP: 86.140.69.112 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvdekuddgudeihecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffhvfhfkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnheptdelheeutdevffevudffhfeiudekffdvkeekgfeuleetudeluddtueetgffhtdfgnecukfhppeekiedrudegtddrieelrdduuddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeekiedrudegtddrieelrdduuddvpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.140.69.112) by
- re-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C506349BA68A for cygwin-patches@cygwin.com;
- Tue, 25 May 2021 22:37:50 +0100
-Subject: Re: [PATCH] Ensure PSAPI_VERSION is 1 when building ldd
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20210520174635.24163-1-jon.turney@dronecode.org.uk>
- <YKalBKpjhBx6mZBg@calimero.vinschen.de>
- <2c57cf3a-ed8f-f3e8-d3bc-a4c5dbe8edaf@dronecode.org.uk>
-Message-ID: <0d7d66f2-48f6-684d-946a-f05d07b329c3@dronecode.org.uk>
-Date: Tue, 25 May 2021 22:37:43 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+Return-Path: <cygwin@jdrake.com>
+Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
+ by sourceware.org (Postfix) with ESMTPS id A30B1385803D
+ for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 23:36:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A30B1385803D
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+ by mail231.csoft.net (Postfix) with ESMTP id 7F6D2CB58
+ for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 19:36:38 -0400 (EDT)
+Received: from mail231 (mail231 [96.47.74.235])
+ (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+ (No client certificate requested) (Authenticated sender: jeremyd)
+ by mail231.csoft.net (Postfix) with ESMTPSA id 6EB7FCB52
+ for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 19:36:38 -0400 (EDT)
+Date: Tue, 25 May 2021 16:36:38 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] cygdrop: fix return type of usageCore
+Message-ID: <alpine.BSO.2.21.2105251635120.14962@resin.csoft.net>
+User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <2c57cf3a-ed8f-f3e8-d3bc-a4c5dbe8edaf@dronecode.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3569.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: multipart/mixed;
+ boundary="9191230013440-1361337281-1621985576=:14962"
+Content-ID: <alpine.BSO.2.21.2105251635121.14962@resin.csoft.net>
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,16 +39,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 25 May 2021 21:37:53 -0000
+X-List-Received-Date: Tue, 25 May 2021 23:36:39 -0000
 
-On 22/05/2021 16:08, Jon Turney wrote:
-> On 20/05/2021 19:05, Corinna Vinschen wrote:
->> Hi Jon,
->>
->> On May 20 18:46, Jon Turney wrote:
->>> The default PSAPI_VERSION is controlled by WIN32_WINNT, which we set to
->>> 0x0a00 when building ldd, which gets PSAPI_VERSION=2.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-In the just released w32api 9.0.0, _WIN32_WINNT is now set to 0xa00 by 
-default, so this issue is probably going to surface in a few other 
-places as well.
+--9191230013440-1361337281-1621985576=:14962
+Content-Type: text/plain; charset=US-ASCII
+Content-ID: <alpine.BSO.2.21.2105251635122.14962@resin.csoft.net>
+
+Fixes a warning "no return statement in function returning non-void",
+and solves a crash running --help.
+--9191230013440-1361337281-1621985576=:14962
+Content-Type: text/plain; charset=US-ASCII; name=0001-cygdrop-fix-return-type-of-usageCore.patch
+Content-Transfer-Encoding: BASE64
+Content-ID: <alpine.BSO.2.21.2105251632561.14962@resin.csoft.net>
+Content-Description: 
+Content-Disposition: attachment; filename=0001-cygdrop-fix-return-type-of-usageCore.patch
+
+RnJvbSBmNDgyMWRiMjRkNGU0ZmVjYTE2ZTRhZWE1ODg0MzEyOGUyMzNlZjRl
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogSmVyZW15IERyYWtl
+IDxjeWd3aW5AamRyYWtlLmNvbT4NCkRhdGU6IFR1ZSwgMjUgTWF5IDIwMjEg
+MTY6MTM6MTcgLTA3MDANClN1YmplY3Q6IFtQQVRDSF0gY3lnZHJvcDogZml4
+IHJldHVybiB0eXBlIG9mIHVzYWdlQ29yZQ0KDQpGaXhlcyBhIHdhcm5pbmcg
+Im5vIHJldHVybiBzdGF0ZW1lbnQgaW4gZnVuY3Rpb24gcmV0dXJuaW5nIG5v
+bi12b2lkIiwNCmFuZCBzb2x2ZXMgYSBjcmFzaCBydW5uaW5nIC0taGVscC4N
+Ci0tLQ0KIHNyYy9jeWdkcm9wL2N5Z2Ryb3AuY2MgfCAyICstDQogMSBmaWxl
+IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRp
+ZmYgLS1naXQgYS9zcmMvY3lnZHJvcC9jeWdkcm9wLmNjIGIvc3JjL2N5Z2Ry
+b3AvY3lnZHJvcC5jYw0KaW5kZXggMzViY2MxOS4uZGM0MDNjOSAxMDA2NDQN
+Ci0tLSBhL3NyYy9jeWdkcm9wL2N5Z2Ryb3AuY2MNCisrKyBiL3NyYy9jeWdk
+cm9wL2N5Z2Ryb3AuY2MNCkBAIC0zOSw3ICszOSw3IEBAIHN0YXRpYyB2b2lk
+IGhlbHAgKEZJTEUgKiBmLCBjb25zdCBjaGFyICpuYW1lKTsNCiBzdGF0aWMg
+dm9pZCB2ZXJzaW9uIChGSUxFICogZiwgY29uc3QgY2hhciAqbmFtZSk7DQog
+c3RhdGljIHZvaWQgbGljZW5zZSAoRklMRSAqIGYsIGNvbnN0IGNoYXIgKm5h
+bWUpOw0KIA0KLXN0YXRpYyBpbnQNCitzdGF0aWMgdm9pZA0KIHVzYWdlQ29y
+ZSAoRklMRSAqIGYsIGNvbnN0IGNoYXIgKiBuYW1lKQ0KIHsNCiAgIGZwcmlu
+dGYgKGYsDQotLSANCjIuMzEuMQ0KDQo=
+
+--9191230013440-1361337281-1621985576=:14962--
