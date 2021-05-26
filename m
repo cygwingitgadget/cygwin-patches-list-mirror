@@ -1,47 +1,54 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 8A0193850415
- for <cygwin-patches@cygwin.com>; Wed, 26 May 2021 09:06:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8A0193850415
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-042.btinternet.com (mailomta2-sa.btinternet.com
+ [213.120.69.8])
+ by sourceware.org (Postfix) with ESMTPS id 4A3293858004
+ for <cygwin-patches@cygwin.com>; Wed, 26 May 2021 16:51:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4A3293858004
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MPooP-1m7dST1Sj5-00MscQ for <cygwin-patches@cygwin.com>; Wed, 26 May 2021
- 11:06:02 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 5B292A80D78; Wed, 26 May 2021 11:06:01 +0200 (CEST)
-Date: Wed, 26 May 2021 11:06:01 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygdrop: fix return type of usageCore
-Message-ID: <YK4PeWdpbeNssxCO@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <alpine.BSO.2.21.2105251635120.14962@resin.csoft.net>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+ by sa-prd-fep-042.btinternet.com with ESMTP id
+ <20210526165148.KNKZ15356.sa-prd-fep-042.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Wed, 26 May 2021 17:51:48 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6038717E0CA41809
+X-Originating-IP: [86.140.69.112]
+X-OWM-Source-IP: 86.140.69.112 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrvdekfedguddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeeuhfekvdefieeghfehtdejheeigedthefhhfehfffgheehgedtffeljeetueeunecukfhppeekiedrudegtddrieelrdduuddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeekiedrudegtddrieelrdduuddvpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (86.140.69.112) by
+ sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 6038717E0CA41809 for cygwin-patches@cygwin.com;
+ Wed, 26 May 2021 17:51:48 +0100
+Subject: Re: [PATCH] Ensure PSAPI_VERSION is 1 when building ldd
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20210520174635.24163-1-jon.turney@dronecode.org.uk>
+ <YKalBKpjhBx6mZBg@calimero.vinschen.de>
+ <2c57cf3a-ed8f-f3e8-d3bc-a4c5dbe8edaf@dronecode.org.uk>
+ <0d7d66f2-48f6-684d-946a-f05d07b329c3@dronecode.org.uk>
+ <YK4PIlepWXUOiCHb@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <104966fe-2e78-c28f-dcbe-53af7221f117@dronecode.org.uk>
+Date: Wed, 26 May 2021 17:51:41 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.BSO.2.21.2105251635120.14962@resin.csoft.net>
-X-Provags-ID: V03:K1:GF/wQMFnOw6ey6eoI6iUuJBBYMcq9H26OYIfZAmnWG6SEYppIT6
- q+nBuVYy3nAdKAdYOUzrt1JjNyMbfo/uuzTGfNbAJYSEPSMzr4ZetOZeXOHsfedxV+7Jtxs
- WKV/vb7L6KBntIgJL/sXJYr35uUBozS6Cjcf3AY1cfgr7hwNqol6o0KM/90dRlXPYubt0mo
- j2/Mzry8yvP6YMGMRoHQw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VYwEkdWWYmg=:2AiQ20HmQQiURQ+HWZ1Xk3
- +tVkU8tBkxQmsOz67tSee3UNmoGj9sH3J8CC7aW/iXa7XrWHbLZcuwouqKm/492B/fzzrcSac
- 49lVJRqFdjqpHgwZ7tt1TNezeH1al5Ti1g5/FbJ0EXPgxDPt00JydbNUjARpxSYfHD5HkCMop
- wZYkaSftVx1jymGHEKAcyqenHjSP+i0m8MXKve4DXNI+nSrnjCiXTYCjsAKdacUcgLEJnGklt
- lQ0eZfxcn2IfJA3VSuU4J+qejYwtIM7fOidieRLwbus0Tey0OKVpNz8XX5s2VpX5Tpu8iAcZS
- dqmg+hsAwXCVKtVYFX4iBxBbBEHB9QzZroxoIJ9hw8AGwwkqlQqWczvFHKR+M+ha0pzFy/c95
- gfzHQUQ/J85aFoW34YE/Lttbkhe5+aLW0b5hjLdPzQEt+8gEy0bOTjZo3Q6g8Wos71eBPpSH0
- K7LiG1nUGowoK7Y3VQhTD6VMEBsa3M/PTNoT1X07y8p8i4w0E7ISCIEGSH0k3Nb5U1y9WGyke
- 2fBl+XTyFadXRe96EyUPWk=
-X-Spam-Status: No, score=-100.4 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <YK4PIlepWXUOiCHb@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3569.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,15 +63,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 26 May 2021 09:06:04 -0000
+X-List-Received-Date: Wed, 26 May 2021 16:51:51 -0000
 
-On May 25 16:36, Jeremy Drake via Cygwin-patches wrote:
-> Fixes a warning "no return statement in function returning non-void",
-> and solves a crash running --help.
+On 26/05/2021 10:04, Corinna Vinschen wrote:
+> On May 25 22:37, Jon Turney wrote:
+>> On 22/05/2021 16:08, Jon Turney wrote:
+>>> On 20/05/2021 19:05, Corinna Vinschen wrote:
+>>>> Hi Jon,
+>>>>
+>>>> On May 20 18:46, Jon Turney wrote:
+>>>>> The default PSAPI_VERSION is controlled by WIN32_WINNT, which we set to
+>>>>> 0x0a00 when building ldd, which gets PSAPI_VERSION=2.
+>>
+>> In the just released w32api 9.0.0, _WIN32_WINNT is now set to 0xa00 by
+>> default, so this issue is probably going to surface in a few other places as
+>> well.
+> 
+> I added _WIN32_WINNT and NTDDI_VERSION settings to make sure we notice
+> any problems right away.
 
-Patches not affecting the Cygwin repo but other package's repos
-should really go to cygwin-apps, please.
+I'm not sure what the mechanism by which we're going to notice is?
 
+Adding WIN32_WINNT=0x0a00 everywhere changes the meaning of '#include 
+<psapi.h>' in a way that is incompatible with Vista.
 
-Thanks,
-Corinna
+So this has broken dumper, and possibly other utils, on Vista.
+
+I don't know if there are any other imports in other header which also 
+have this annoying behaviour...
