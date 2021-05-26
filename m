@@ -1,30 +1,50 @@
-Return-Path: <cygwin@jdrake.com>
-Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
- by sourceware.org (Postfix) with ESMTPS id A30B1385803D
- for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 23:36:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A30B1385803D
-Received: from mail231.csoft.net (localhost [127.0.0.1])
- by mail231.csoft.net (Postfix) with ESMTP id 7F6D2CB58
- for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 19:36:38 -0400 (EDT)
-Received: from mail231 (mail231 [96.47.74.235])
- (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
- (No client certificate requested) (Authenticated sender: jeremyd)
- by mail231.csoft.net (Postfix) with ESMTPSA id 6EB7FCB52
- for <cygwin-patches@cygwin.com>; Tue, 25 May 2021 19:36:38 -0400 (EDT)
-Date: Tue, 25 May 2021 16:36:38 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id CC6D73861843
+ for <cygwin-patches@cygwin.com>; Wed, 26 May 2021 09:04:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CC6D73861843
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MRTIx-1m75FP3mB3-00NSQQ for <cygwin-patches@cygwin.com>; Wed, 26 May 2021
+ 11:04:34 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 172FFA80D78; Wed, 26 May 2021 11:04:34 +0200 (CEST)
+Date: Wed, 26 May 2021 11:04:34 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] cygdrop: fix return type of usageCore
-Message-ID: <alpine.BSO.2.21.2105251635120.14962@resin.csoft.net>
-User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
+Subject: Re: [PATCH] Ensure PSAPI_VERSION is 1 when building ldd
+Message-ID: <YK4PIlepWXUOiCHb@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210520174635.24163-1-jon.turney@dronecode.org.uk>
+ <YKalBKpjhBx6mZBg@calimero.vinschen.de>
+ <2c57cf3a-ed8f-f3e8-d3bc-a4c5dbe8edaf@dronecode.org.uk>
+ <0d7d66f2-48f6-684d-946a-f05d07b329c3@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="9191230013440-1361337281-1621985576=:14962"
-Content-ID: <alpine.BSO.2.21.2105251635121.14962@resin.csoft.net>
-X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
- SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0d7d66f2-48f6-684d-946a-f05d07b329c3@dronecode.org.uk>
+X-Provags-ID: V03:K1:+XRT9kB7uPFAtJRAShtjCEMuqzl8x/iSQ8+aGlfRJxGUGPndgib
+ QlG5zFwt+z508JfPiUgRnlG4wZSsFXDT7Pp+JohnRarFC9qVNKBssb6W7w6l1B4ILID+QLR
+ NAZXitkSCYz9hYN67H7Cu737xCpSXwQqLwpSxHN6RMdNyUqtwnX8vQ7fOe7OwPRUEqZzS1p
+ E7hCxOisx2SPGs54oReXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yNg37xJ+U4g=:Di855yiNX5GETWpzTEwCUm
+ 3Oh8KAqQsOJ/+DogicZG0z43Xd8cpiVTP41EzPLUMiDitMUeo7tCmObVsrZyzu+mBwcMeLDHs
+ BfH1hmdMLGWJ5TfW8iJzozm1LRuIH7RtH5jv3ubx+XCk2htWDrJIM6j6HURuwMKpN1Sc9WT6E
+ aHZCebHKWcb7O09QgnAUn/uFUi8j1dpFVJzjVACMFe6oiP0eh0RW5mysd5d24tNWh8lXHeiOX
+ cK+p0FZ26LwTdWNoiCkqWx8jYS4ba5C8YJ3UcSOW4u0RLBuQ5uxALfysF17/dzAZtR/Zaa9GM
+ fYHvOPBqRjMPFcUzm7mg0dsZTwqRNyj83wnZviVqRPobImjpqFK0rBRjF4xRcrEdj+IqTylaD
+ EINHZsTAZz+VlPdnXrnOQu1K9kmEjhYtxqeS8YxqOpJ62c+ak0fWOFVOcz9FgoW7FOZc4iy8f
+ 3n+Z/ydVmYdL0Y567RHZXtzwD7XoxC9ZwaP5dhgItwBrRNl/mi736B5PMs2psVXq9tS5o4GfG
+ MTLK3UHuT6zaMz1XAnKJa0=
+X-Spam-Status: No, score=-100.4 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -39,42 +59,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 25 May 2021 23:36:39 -0000
+X-List-Received-Date: Wed, 26 May 2021 09:04:42 -0000
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On May 25 22:37, Jon Turney wrote:
+> On 22/05/2021 16:08, Jon Turney wrote:
+> > On 20/05/2021 19:05, Corinna Vinschen wrote:
+> > > Hi Jon,
+> > > 
+> > > On May 20 18:46, Jon Turney wrote:
+> > > > The default PSAPI_VERSION is controlled by WIN32_WINNT, which we set to
+> > > > 0x0a00 when building ldd, which gets PSAPI_VERSION=2.
+> 
+> In the just released w32api 9.0.0, _WIN32_WINNT is now set to 0xa00 by
+> default, so this issue is probably going to surface in a few other places as
+> well.
 
---9191230013440-1361337281-1621985576=:14962
-Content-Type: text/plain; charset=US-ASCII
-Content-ID: <alpine.BSO.2.21.2105251635122.14962@resin.csoft.net>
+I added _WIN32_WINNT and NTDDI_VERSION settings to make sure we notice
+any problems right away.
 
-Fixes a warning "no return statement in function returning non-void",
-and solves a crash running --help.
---9191230013440-1361337281-1621985576=:14962
-Content-Type: text/plain; charset=US-ASCII; name=0001-cygdrop-fix-return-type-of-usageCore.patch
-Content-Transfer-Encoding: BASE64
-Content-ID: <alpine.BSO.2.21.2105251632561.14962@resin.csoft.net>
-Content-Description: 
-Content-Disposition: attachment; filename=0001-cygdrop-fix-return-type-of-usageCore.patch
+In utils, I did this by tweaking CFLAGS_COMMON.  Maybe we should add a
+generic utils.h instead, which contains all common definitions...?
 
-RnJvbSBmNDgyMWRiMjRkNGU0ZmVjYTE2ZTRhZWE1ODg0MzEyOGUyMzNlZjRl
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogSmVyZW15IERyYWtl
-IDxjeWd3aW5AamRyYWtlLmNvbT4NCkRhdGU6IFR1ZSwgMjUgTWF5IDIwMjEg
-MTY6MTM6MTcgLTA3MDANClN1YmplY3Q6IFtQQVRDSF0gY3lnZHJvcDogZml4
-IHJldHVybiB0eXBlIG9mIHVzYWdlQ29yZQ0KDQpGaXhlcyBhIHdhcm5pbmcg
-Im5vIHJldHVybiBzdGF0ZW1lbnQgaW4gZnVuY3Rpb24gcmV0dXJuaW5nIG5v
-bi12b2lkIiwNCmFuZCBzb2x2ZXMgYSBjcmFzaCBydW5uaW5nIC0taGVscC4N
-Ci0tLQ0KIHNyYy9jeWdkcm9wL2N5Z2Ryb3AuY2MgfCAyICstDQogMSBmaWxl
-IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRp
-ZmYgLS1naXQgYS9zcmMvY3lnZHJvcC9jeWdkcm9wLmNjIGIvc3JjL2N5Z2Ry
-b3AvY3lnZHJvcC5jYw0KaW5kZXggMzViY2MxOS4uZGM0MDNjOSAxMDA2NDQN
-Ci0tLSBhL3NyYy9jeWdkcm9wL2N5Z2Ryb3AuY2MNCisrKyBiL3NyYy9jeWdk
-cm9wL2N5Z2Ryb3AuY2MNCkBAIC0zOSw3ICszOSw3IEBAIHN0YXRpYyB2b2lk
-IGhlbHAgKEZJTEUgKiBmLCBjb25zdCBjaGFyICpuYW1lKTsNCiBzdGF0aWMg
-dm9pZCB2ZXJzaW9uIChGSUxFICogZiwgY29uc3QgY2hhciAqbmFtZSk7DQog
-c3RhdGljIHZvaWQgbGljZW5zZSAoRklMRSAqIGYsIGNvbnN0IGNoYXIgKm5h
-bWUpOw0KIA0KLXN0YXRpYyBpbnQNCitzdGF0aWMgdm9pZA0KIHVzYWdlQ29y
-ZSAoRklMRSAqIGYsIGNvbnN0IGNoYXIgKiBuYW1lKQ0KIHsNCiAgIGZwcmlu
-dGYgKGYsDQotLSANCjIuMzEuMQ0KDQo=
 
---9191230013440-1361337281-1621985576=:14962--
+Corinna
