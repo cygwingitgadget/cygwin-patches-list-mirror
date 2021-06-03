@@ -1,34 +1,35 @@
 Return-Path: <cygwin@jdrake.com>
 Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
- by sourceware.org (Postfix) with ESMTPS id 92B95386FC35
- for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 20:29:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 92B95386FC35
+ by sourceware.org (Postfix) with ESMTPS id E6727385E447
+ for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 20:57:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E6727385E447
 Received: from mail231.csoft.net (localhost [127.0.0.1])
- by mail231.csoft.net (Postfix) with ESMTP id A72EFCB36
- for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 16:29:32 -0400 (EDT)
+ by mail231.csoft.net (Postfix) with ESMTP id A84BFCB51
+ for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 16:57:09 -0400 (EDT)
 Received: from mail231 (mail231 [96.47.74.235])
  (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
  (No client certificate requested) (Authenticated sender: jeremyd)
- by mail231.csoft.net (Postfix) with ESMTPSA id 97299CB2F
- for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 16:29:32 -0400 (EDT)
-Date: Thu, 3 Jun 2021 13:29:32 -0700 (PDT)
+ by mail231.csoft.net (Postfix) with ESMTPSA id 96DB4CB36
+ for <cygwin-patches@cygwin.com>; Thu,  3 Jun 2021 16:57:09 -0400 (EDT)
+Date: Thu, 3 Jun 2021 13:57:09 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v3] Cygwin: respect PC_SYM_FOLLOW and PC_SYM_NOFOLLOW_REP
+Subject: Re: [PATCH v3] Cygwin: respect PC_SYM_FOLLOW and PC_SYM_NOFOLLOW_REP
  with inner links
-In-Reply-To: <YLSYIC/yYFz2IdMS@calimero.vinschen.de>
-Message-ID: <alpine.BSO.2.21.2106031321380.30039@resin.csoft.net>
+In-Reply-To: <alpine.BSO.2.21.2106031321380.30039@resin.csoft.net>
+Message-ID: <alpine.BSO.2.21.2106031355540.30039@resin.csoft.net>
 References: <alpine.BSO.2.21.2105291322180.30039@resin.csoft.net>
  <alpine.BSO.2.21.2105291600460.30039@resin.csoft.net>
  <alpine.BSO.2.21.2105292259570.30039@resin.csoft.net>
  <alpine.BSO.2.21.2105301213380.30039@resin.csoft.net>
  <YLSYIC/yYFz2IdMS@calimero.vinschen.de>
+ <alpine.BSO.2.21.2106031321380.30039@resin.csoft.net>
 User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="28213640167424-1165171070-1622752172=:30039"
-X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ boundary="28213640167424-1930300939-1622753829=:30039"
+X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
  SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -45,27 +46,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Jun 2021 20:29:37 -0000
+X-List-Received-Date: Thu, 03 Jun 2021 20:57:11 -0000
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---28213640167424-1165171070-1622752172=:30039
+--28213640167424-1930300939-1622753829=:30039
 Content-Type: text/plain; charset=US-ASCII
 
-Just updated for formatting.
+On Thu, 3 Jun 2021, Jeremy Drake via Cygwin-patches wrote:
 
-> Formatting should try to stick to 80 chars max line length, if possible.
-> Kind of like this, just with TABs:
->
-> -	  for (unsigned pc_flags = opt & (PC_NO_ACCESS_CHECK | PC_KEEP_HANDLE);
-> +	  for (unsigned pc_flags = opt & (PC_NO_ACCESS_CHECK | PC_KEEP_HANDLE
-> 					  | PC_SYM_FOLLOW | PC_SYM_NOFOLLOW_REP);
->
---28213640167424-1165171070-1622752172=:30039
+> Just updated for formatting.
+
+Oops, forgot to edit the email address on patch 2.  Resending with that
+fixed.
+--28213640167424-1930300939-1622753829=:30039
 Content-Type: text/plain; charset=US-ASCII; name=0001-Revert-Cygwin-Handle-virtual-drives-as-non-symlinks.patch
 Content-Transfer-Encoding: BASE64
-Content-ID: <alpine.BSO.2.21.2106031329320.30039@resin.csoft.net>
+Content-ID: <alpine.BSO.2.21.2106031357090.30039@resin.csoft.net>
 Content-Description: 
 Content-Disposition: attachment; filename=0001-Revert-Cygwin-Handle-virtual-drives-as-non-symlinks.patch
 
@@ -98,16 +96,16 @@ DQogCQkgICB0byBza2lwIHJlYWxwYXRoIGhhbmRsaW5nIG9uIHRoZSBsYXN0
 IHBhdGggY29tcG9uZW50LiAqLw0KLS0gDQoyLjMxLjEud2luZG93cy4xDQoN
 Cg==
 
---28213640167424-1165171070-1622752172=:30039
+--28213640167424-1930300939-1622753829=:30039
 Content-Type: text/plain; charset=US-ASCII; name=0002-Cygwin-respect-PC_SYM_FOLLOW-and-PC_SYM_NOFOLLOW_REP.patch
 Content-Transfer-Encoding: BASE64
-Content-ID: <alpine.BSO.2.21.2106031329321.30039@resin.csoft.net>
+Content-ID: <alpine.BSO.2.21.2106031357091.30039@resin.csoft.net>
 Content-Description: 
 Content-Disposition: attachment; filename=0002-Cygwin-respect-PC_SYM_FOLLOW-and-PC_SYM_NOFOLLOW_REP.patch
 
 RnJvbSBlYTM2Y2NiMTNiMjA4MDY2MzUzNWQ4NjdlNmZlOGVkZjI0NmVmZTgz
 IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogSmVyZW15IERyYWtl
-IDxnaXRodWJAamRyYWtlLmNvbT4NCkRhdGU6IFNhdCwgMjkgTWF5IDIwMjEg
+IDxjeWd3aW5AamRyYWtlLmNvbT4NCkRhdGU6IFNhdCwgMjkgTWF5IDIwMjEg
 MTE6NDg6MTEgLTA3MDANClN1YmplY3Q6IFtQQVRDSCAyLzJdIEN5Z3dpbjog
 cmVzcGVjdCBQQ19TWU1fRk9MTE9XIGFuZCBQQ19TWU1fTk9GT0xMT1dfUkVQ
 DQogd2l0aCBpbm5lciBsaW5rcy4NCg0KVGhlIG5ldyBHZXRGaW5hbFBhdGhO
@@ -157,4 +155,4 @@ KwkJCSAgICAgIHwgUENfU1lNX05PRk9MTE9XX1JFUCk7DQogICAgICAgaWYg
 KHBhdGguZXJyb3IpDQogCXsNCiAJICBzZXRfZXJybm8gKHBhdGguZXJyb3Ip
 Ow0KLS0gDQoyLjMxLjEud2luZG93cy4xDQoNCg==
 
---28213640167424-1165171070-1622752172=:30039--
+--28213640167424-1930300939-1622753829=:30039--
