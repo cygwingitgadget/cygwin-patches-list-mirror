@@ -1,49 +1,38 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-042.btinternet.com (mailomta22-sa.btinternet.com
- [213.120.69.28])
- by sourceware.org (Postfix) with ESMTPS id 36985385C406
- for <cygwin-patches@cygwin.com>; Sat, 26 Jun 2021 14:29:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 36985385C406
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta002.cacentral1.a.cloudfilter.net
+ (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+ by sourceware.org (Postfix) with ESMTPS id 27DD73857C53
+ for <cygwin-patches@cygwin.com>; Tue, 29 Jun 2021 17:09:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 27DD73857C53
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-042.btinternet.com with ESMTP id
- <20210626142907.WPUI7927.sa-prd-fep-042.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Sat, 26 Jun 2021 15:29:07 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 60D1576E00D11A6E
-X-Originating-IP: [86.139.156.26]
-X-OWM-Source-IP: 86.139.156.26 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrfeehtddgjeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeguefhkedvfeeigefhhedtjeehieegtdehhffhheffgfehheegtdffleejteeuueenucfkphepkeeirddufeelrdduheeirddvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddufeelrdduheeirddviedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.139.156.26) by
- sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 60D1576E00D11A6E for cygwin-patches@cygwin.com;
- Sat, 26 Jun 2021 15:29:07 +0100
-Subject: Re: [PATCH] Cygwin: Zero out gmon header before use
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20210623085614.1697-1-mark@maxrnd.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <c2f3ddd1-d605-3dbc-6461-86026f9f0176@dronecode.org.uk>
-Date: Sat, 26 Jun 2021 15:28:36 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+ by cmsmtp with ESMTP
+ id yBsylEFj04bInyHEllFak1; Tue, 29 Jun 2021 17:09:27 +0000
+Received: from BWINGLISD.cg.shawcable.net. ([68.147.0.90]) by cmsmtp with ESMTP
+ id yHEkliG6QaZZOyHEll9clR; Tue, 29 Jun 2021 17:09:27 +0000
+X-Authority-Analysis: v=2.4 cv=e4PD9Yl/ c=1 sm=1 tr=0 ts=60db53c7
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=nz-5sxVJmLUA:10 a=r77TgQKjGQsHNAKrUKIA:9 a=U1ty1mkL6KNLAB6rl7sA:9
+ a=QEXdDO2ut3YA:10 a=izgBtNJKWR_rvYu6B2wA:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH] format_proc_cpuinfo: add Linux 5.13 AMD/Hygon rapl
+Date: Tue, 29 Jun 2021 11:09:24 -0600
+Message-Id: <20210629170924.30628-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.31.1
+Reply-To: patches
 MIME-Version: 1.0
-In-Reply-To: <20210623085614.1697-1-mark@maxrnd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3569.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
- RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: multipart/mixed; boundary="------------2.31.1"
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfKmbwHtnWt+Tr6CCCsUixS240ru6i+my5KRCrlKMDeR2GqErHmaUBI5ApMjiFLCw2k9N2+olHG8iAxa3KFsp7fF1O/KzGWDYbeXkWRbWo+B0nEvzfkRZ
+ gvJRT4X2PMKcoA2WIryNhZjiB19ivlHvXYIot/Xf+eVRe9YMoCcP9z7fICkb2zvRV1Jw5JoARgZbpfZsjSVMxbwudGHtyPkIuSnh18I92MLIi0U7hhkjna8R
+ HFl6yCnGNquW2KntX5LOmll8LY4niuWv/Ys9+yrPzL4=
+X-Spam-Status: No, score=-1179.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_BARRACUDACENTRAL,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,10 +47,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 26 Jun 2021 14:29:09 -0000
+X-List-Received-Date: Tue, 29 Jun 2021 17:09:29 -0000
 
-On 23/06/2021 09:56, Mark Geisert wrote:
-> Tools that process gmon.out files can be confused by gmon header fields
-> with garbage in them due to lack of initialization.  Repair that.
+This is a multi-part message in MIME format.
+--------------2.31.1
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-Applied. Thanks.
+
+Linux 5.13 Opossums on Parade added features and changes:
+add AMD 0x80000007 EDX:14 rapl runtime average power limit
+---
+ winsup/cygwin/fhandler_proc.cc | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+
+--------------2.31.1
+Content-Type: text/x-patch; name="0001-format_proc_cpuinfo-add-Linux-5.13-AMD-Hygon-rapl.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-format_proc_cpuinfo-add-Linux-5.13-AMD-Hygon-rapl.patch"
+
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index 7cd0b3af02a2..2a64e7428efa 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1165,6 +1165,14 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1,  0, "aperfmperf");   /* P state hw coord fb */
+ 	}
+ 
++      /* cpuid 0x80000007 edx Advanced power management */
++      if (maxe >= 0x80000007)
++	{
++	  cpuid (&unused, &unused, &unused, &features2, 0x80000007);
++
++	  ftcprint (features2, 14, "rapl"); /* runtime avg power limit */
++	}
++
+       /* Penwell, Cloverview, ... TSC doesn't sleep on S3 */
+       if (is_intel && family == 6)
+ 	switch (model)
+
+--------------2.31.1--
+
+
