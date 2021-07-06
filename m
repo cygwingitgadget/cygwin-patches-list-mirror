@@ -1,50 +1,50 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id AFABA385E83D
- for <cygwin-patches@cygwin.com>; Tue,  6 Jul 2021 14:00:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org AFABA385E83D
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 87168385E83D
+ for <cygwin-patches@cygwin.com>; Tue,  6 Jul 2021 14:00:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 87168385E83D
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MjSwu-1lLdIi0bbW-00l0o3 for <cygwin-patches@cygwin.com>; Tue, 06 Jul 2021
- 16:00:06 +0200
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MNc5b-1lqY6N0y9z-00P3Ar for <cygwin-patches@cygwin.com>; Tue, 06 Jul 2021
+ 16:00:56 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 01811A80D68; Tue,  6 Jul 2021 16:00:05 +0200 (CEST)
-Date: Tue, 6 Jul 2021 16:00:04 +0200
+ id B72AAA80D68; Tue,  6 Jul 2021 16:00:55 +0200 (CEST)
+Date: Tue, 6 Jul 2021 16:00:55 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Improve utils manpages
-Message-ID: <YORh5Gfuhw7G6OnP@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: console: Fix garbled input for non-ASCII chars.
+Message-ID: <YORiF1RqkM4WGxwm@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210616161918.41015-1-jon.turney@dronecode.org.uk>
+References: <20210623084216.777-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210616161918.41015-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:RwsJi4L24uf/0pu8y9Cp1LoKBVCdjFtGblk1Xyr/F6mRLZHf/+y
- sOTUm4KHqhIi0FUe/vIqWSc7JRDpFJ+Ij1tyevBhN2TzroZwK/125206fVczOEy/5APwWou
- AUmLiJ9iJcA1e0p7OpCuWL+CZ0mYzDkOSLmtEad4KsjudhawyYXcz1qa2A+kBnCjU9twdWi
- PhZ+lE8T3fpUjCl07hYig==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CPyDEmODUjc=:hmOKkignBS1QGZGQHA8yTj
- r3BQ0cZDJDHm299logplaxiduE3io+sbLMMjW9a4Fpr6Q3ByPW486epBqx3C99sBXK9GO+CVX
- k27ubkJkoHPi46Gcd8l0cqZ2FE2eZQr4CxIpj5/FtnlQqNFbUD6Y9yTsoXyBf961+oX/dU/yo
- U8Me5u8FlHc22bJpUrYBKXw+oL0HaH/fHwet08l6PT4CfySrnD728L1wy/KmRmvyTZhDfSIUL
- 0hrOh5jdlUDOQ3pkAz9AWMgtgsT0JGYq9kGyjWFYg/VmDIBAi9aqaEn4W1Zii2C1OBBFCCEyj
- e2wIuknVXAyyPmKcfFuIYZHvNsnaefK5ySv33Kmf1eO6jjYyj0M1MDn6QOo10R/iq9VkKHxlK
- bR/G7nyoSkS+FVlDBHeLekuzdl/bAgjELv5rhIFt0Segmwaon+SqgmpvUKs8qaLHeK5Zteh/M
- X3lqTfcWUqEoX0B95C7H1oBwYOFeAdVMoH/vKAMZ/K8FKOW4rgXXhhsqPL5XuXx1jmf8o7Ng2
- YpMRVDoY4rfpc+TDBsZy/t2oiHDB57EX9Ej+7lb0GDIU+d5R9ZCvod5LcyEzrS5CIrUDHsj9P
- mUAuD/5sH1AyJLRe/Oiu7liNdj3FgM/xXn0wVlSfqYdmgqe+8lz4e9RXs4IFKwcUsnW0tqTW8
- YctNWjcDUmx4/kYyJuaSxXIeBppYv6Px3yBJxY3zM4ucLtW/6jTBYeUb7gScc1F0rtApONTtj
- VDcijI/8Gur1Gd9Kwf7CoH6R88ZfWJGA+E1yzBg74TmN3+j5GeGf6xseyMDrqC//n7FWU5jWT
- eTdAGV+xfZFEmytk9gV+1eNejp3zQc1+bOdO/YyBYQDWA9vQRuIyX34un3GmlGzBteDFK88UM
- XnK8PjgS1DEdebcvJu7A==
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210623084216.777-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:DqhuJbyDtLjGrvK/tIpEv9qLtgLWVjAsUD5l4iG9wn9Sj9+8daP
+ +Re2FWD0xKWjeTPuDzCk+6UfOjTRoTEGfCPJShuBk6brGJ8+zya0sYUkSvxK/SS6z6t0ojx
+ 7SJtozhuYh76VyGmYXX/+19QzalZgBYD53yR5hWpUpnobvIxRpwdq70IljF3WUATESgDCDh
+ u6JAzqJCPCzOJ0uOUJtqw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O3DVa0n7ErQ=:QV4tdELfNvIPqpTtl8bxSG
+ VXS/rrDiIYjxVfv2qqbUm2SRkaxbRkS5c26JC6dR5RYrYFTpSOT3IFHARaJ6lYHpPJkYwHO22
+ lleE3Xxx9y0nHt8aFZhXRD38b568BF9x6x12MUWs8ekb0Lnn1jmrx8zCo5c3RP2o/1vXWpadk
+ ITjzUyYzpLho8HvZe6Xzf3F+NBw9HrK75FWO3GLuU/EVTXk56giOBGPmnYFLF6HRLAGfXf3XR
+ SK1DFRF1olSwexAYMocKipNfZXiWyk3SsY7LR9b1CxD4IlUyA64SheVbkv7z8cbsgv4uMJgHq
+ sbiLL59KdV8j9biHz2AY1iZRv0fpKX/WWooVfzSWNCVAwU7y4WS+j8f/nHmPm1UNFWtmlhiva
+ 4j5Jnyje8J+OOWpJCbmXD5wGkcKXUM8GzqjiFvRutDotKGbmrGNBw2EYrwI9Jvy23q6ZSxgjo
+ 15Ho9nXrASFdB4oUzuxja2l/5IfaxTlA1ulURQdWBtJXEZwttsx83PRCaQ3MzxTbQUib/jfAm
+ cjgHQygndqtaKl2rjbUbcxDX7EAg1OfvkeMEZsglG9GH+5LZGM2HGYpxducK3QxPRHseXe74g
+ tTAbMwd8Rk+x020scRJgYiHbZv9Srf2dMqLb0HUicFLsiOTW3rcq6WcYDvvIFQNCIwQKaVOkF
+ 3JIAvsz7fbaz61QMS86Jc6q1SGgGSwUPXpSV++3by2/yUne0zBWZ/fxHKnf2wwUn9idfkLHsv
+ 6XWnKfinbFiaDJtm3ilHG/RCvOfnyzUDjpd9ZwOLnfYmStaGRtvFitf3ChcfRdu0Y0SVS8BDS
+ 8H7XBdbmoq7Q2iqMwUGUfMRlkSUodoLkQB2f559Oa3E6A8sWH4tNQLGRKYGSZiahd0NQr/D1X
+ Ay0Rcj2cyl0qBME2qhzw==
+X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -60,20 +60,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 06 Jul 2021 14:00:09 -0000
+X-List-Received-Date: Tue, 06 Jul 2021 14:00:59 -0000
 
-On Jun 16 17:19, Jon Turney wrote:
-> Jon Turney (2):
->   Cygwin: Various minor fixes to utils documentation
->   Cygwin: Use cmdsynopsis element in utils documentation
+On Jun 23 17:42, Takashi Yano wrote:
+> - After the commit ff4440fc, non-ASCII input may sometimes be garbled.
+>   This patch fixes the issue.
 > 
->  winsup/doc/utils.xml | 709 ++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 594 insertions(+), 115 deletions(-)
-> 
-> -- 
-> 2.31.1
+>   Addresses: https://cygwin.com/pipermail/cygwin/2021-June/248775.html
+> ---
+>  winsup/cygwin/fhandler_console.cc | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Great stuff, please push.
+Pushed.
 
 
 Thanks,
