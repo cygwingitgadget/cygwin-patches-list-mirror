@@ -1,59 +1,47 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id C6E3D3857436
- for <cygwin-patches@cygwin.com>; Wed,  7 Jul 2021 08:47:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C6E3D3857436
+Return-Path: <towo@towo.net>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 219513857C44
+ for <cygwin-patches@cygwin.com>; Wed,  7 Jul 2021 09:43:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 219513857C44
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MCKO2-1lslTr2UmQ-009Rs0 for <cygwin-patches@cygwin.com>; Wed, 07 Jul 2021
- 10:47:49 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id ACA9BA80D3E; Wed,  7 Jul 2021 10:47:48 +0200 (CEST)
-Date: Wed, 7 Jul 2021 10:47:48 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=none (p=none dis=none) header.from=towo.net
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=towo.net
+Received: from [192.168.178.51] ([91.65.247.112]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MStKq-1lcDQU2KTe-00UGNm for <cygwin-patches@cygwin.com>; Wed, 07 Jul 2021
+ 11:43:44 +0200
+Subject: [PATCH] Re: propagate font zoom via SIGWINCH
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4] Cygwin: respect PC_SYM_FOLLOW and PC_SYM_NOFOLLOW_REP
- with inner links
-Message-ID: <YOVqNEsazee7/U5V@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <alpine.BSO.2.21.2105291322180.30039@resin.csoft.net>
- <alpine.BSO.2.21.2105291600460.30039@resin.csoft.net>
- <alpine.BSO.2.21.2105292259570.30039@resin.csoft.net>
- <alpine.BSO.2.21.2105301213380.30039@resin.csoft.net>
- <YLSYIC/yYFz2IdMS@calimero.vinschen.de>
- <alpine.BSO.2.21.2106031321380.30039@resin.csoft.net>
- <alpine.BSO.2.21.2106031355540.30039@resin.csoft.net>
- <YORvS4cn1fQX3O70@calimero.vinschen.de>
- <alpine.BSO.2.21.2107061038250.56404@resin.csoft.net>
+References: <9191991e-4c52-43f1-cd9e-6eaac9013f24@towo.net>
+ <YORkHm5mUk1jfMtm@calimero.vinschen.de>
+From: Thomas Wolff <towo@towo.net>
+Message-ID: <b0dba327-4e00-f681-fcbf-db0da3890b89@towo.net>
+Date: Wed, 7 Jul 2021 11:43:44 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.BSO.2.21.2107061038250.56404@resin.csoft.net>
-X-Provags-ID: V03:K1:rqRW2Yp6YeL3It3DsPhMArjUCbfNaZUgHx4xXDfR983VR5q321a
- CYgR1byOCIJBdaDonPq2iCC9uLIZmZrHkDCOlavHfvnpUCrfvyVNEhaGEIRc9MPPQhJehYN
- /tI88FFVyc9O2Ci0UWt9HAEXiMQNdPX4yu+r88EhG90SZp1+oeAwfD/GJun9KPQMyIO5haK
- 2GJ1XunVVOhau1st1OpdA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zDsYF0Y64IY=:fP2fXrNl16rbIos0YUZUvA
- rpV0iRFZUWF7/pOjKA2CX/smgJMlbizfvPwcxwDdgx9vZeKoicLIhddY1fuE2DTC/IKLSwGpR
- PgmkCfYmpd+NQP48PjGsYii1MQwJD1Ss6nSzqsBRqMifXSruMICcMp/EHqElZ6LLDds5WY8+W
- FD95QsQG7+sNadyLo31M6m67zYCI8RoqAP9dZYzV0/YsRTfB/1PK48/xXY0M85HVklVZE/6+t
- x/Ekx+JXrmKIzO1JAA5WPuE5AJb4TU4fLE0o1ZHt26tnx2Up5e+7mDJ9V76vEY0pmD3CtuC2n
- gFcqCeENNu9LqC+WJ81i/H+afJLpFKk+e6Od5HuOSV66Iz36F92t+EdCg8fBSFWiMnpSyK2I8
- 6zDvdRBhe2YgLTplmYHUNfUwiMnP27iugATrV8jwbO+Hn0P5YqivRhuF5E9fg/wzvxZTTZJZ5
- +ccn6TDWsdqe8z135sK6taIvZF1Fz8cU3IjHIN8fgcASXxrDe2lHFBaIXtq3qvtWnNbw7QldA
- 18sCbozrk8EQvqKTFp/Wh6KuSE591183/iwD5r6BBQxjFaQe5WvCO13X7+Tad60GGLe3CkZYL
- 93CFqkZv7XhlPi6KKBqkkZn9i/ETJBbpl3d0AgYBunmdzsFcucbEzlToYUxn7myjsMphImNNx
- X5L19tldktp08J1UMMRiDZBIkrg2FZnx4XheET6LLutHt4xrT0Zlcd2tAz0Zljxbm8eJGg1dO
- +ZIeNpZK7+v2yg96ogl4OgUjxDkeSTHvrpNuxHVJMU67CCASWZvx9O7VDgIXdj9WBpg0Vk5Tb
- R1a5SYkiNkU3wDZ5XzKCdIcaK3X9wk6HKMYjyTPoPZneZFd5yyMvi1xQiVG/ahXwtdH12KjnZ
- qK+2l2/RIYLVRkhpikBg==
-X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <YORkHm5mUk1jfMtm@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------DD4DA668A337340072F33162"
+X-Provags-ID: V03:K1:lFeGkgRxciHN/4qs/qg8SJOeXSUgBWZwZyF1LOTuq0p8zMJYI3t
+ 1qgh1mctxATjr9+D6EwAV2lZJyWA2UFlSOqswu7xHIPbITH+YxwYsR0tnMseqdvtRPafp6+
+ dmKLBnWyjJGDaRMuO2NGXq12RCSwe7sgEYguDfdp63NcT+nnmvXFLT/ST/LR9y/M7r/Va6v
+ sAcsXpopXLCiuFqF6Iuug==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FjgFuciCc0E=:2D8CvE/NlqeXM+nG/+mw+e
+ TlAG305QouBlWhi69NU0AGXOUfR2+T0kKHdDe4EWObiY2tmLkpk7usmefqLgQSFdLYT5/mpAp
+ 28GcAhcvPjhAfmzDoWsNC/VJmxao3YkWKa/4lfpCJ1ZRlXtVDSOCCLO8G7IfIV6xN5GOy+KEt
+ ILy/5lOKVfW1rVPN69d/zs/8Ww8Sw5vCwMJlpk/4p8N7SaQhlsPIrKJVg/YKxHWj64l36gIR1
+ w8hevmzP1boUhCD+ti8VM8gSesZQfAfu1IZSsUQiZC56jqk+2qhs8SPN1+UZ2GjCHtr/L2Dvw
+ vFBAhsD/uVvVdX2eIxA+HpQGJG9JyF1HOR8ukNaSfh+Ef0eKHRo6t/Vy+QgwxoXI91AC1yxSb
+ VjMWe7K0IUKtCyK1XDR85dmTHARbyA7CJzpuQ1OiveNugl2azKX2MgRuLzoe4mB6VqX5S1tdV
+ DxNSKMeF1/2xYNs1dpWhgm3sS3hIAc25HQTZ+OUJ6ycrRWGURoTd30OEGIop/WvQxQoP5k7E4
+ N6H7CwhsTSjq5Vjf/nODK+IgoXfEmIbpRug/zuAbePjdHTTUmRs3vHg6yuST9r5u+1QTsCatz
+ /tX5sjhAgdsOR+2O7S/xrANDzBb++ieEH3IWslHOUVqqBBUI8tkDVaQP0uGTKNFrwS9hByPK3
+ v4ZoVDHXexy5qc5n5yvNmx4Mh22hW271cZgLc3DlxfGj2kVIimrsG/ZBwUj+YZOmWx1M2ndwU
+ 89SBpi6Xxq6G8Dby80739Bd+BGKM+gCWteXpduwliv2tE26ekj+b1F9OmRXihiPwM33YGg0OV
+ 96tDt41JDXLFI8wvJ0Fn96fWu846VlM4I9q3bWTeo7+D7cwCG13Q7zEVT4j8gDGc0Rn0ct9
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_MSPIKE_BL,
+ RCVD_IN_MSPIKE_L3, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -69,18 +57,75 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 07 Jul 2021 08:47:55 -0000
+X-List-Received-Date: Wed, 07 Jul 2021 09:43:47 -0000
 
-On Jul  6 10:40, Jeremy Drake via Cygwin-patches wrote:
-> The new GetFinalPathNameW handling for native symlinks in inner path
-> components is disabled if caller doesn't want to follow symlinks, or
-> doesn't want to follow reparse points.
-> ---
->  winsup/cygwin/path.cc | 88 ++++++++++++++++++++++---------------------
->  1 file changed, 45 insertions(+), 43 deletions(-)
+This is a multi-part message in MIME format.
+--------------DD4DA668A337340072F33162
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Pushed.
+Update with more elaborate commit comment, hopefully formatted properly.
+
+Am 06.07.2021 um 16:09 schrieb Corinna Vinschen:
+> Hi Thomas,
+>
+> On Jul  3 18:19, Thomas Wolff wrote:
+>> xterm 368 and mintty 3.5.1 implement a new feature to support notification
+>> of terminal scaling via font zooming also if the terminal text dimensions
+>> (rows/columns) stay unchanged, using ioctl(TIOCSWINSZ), raising SIGWINCH.
+>> This does not work in cygwin currently. The attached patch fixes that.
+>> Thomas
+> Can you please put the describing text into the commit message?
+>
+>
+> Thanks,
+> Corinna
 
 
-Thanks,
-Corinna
+--------------DD4DA668A337340072F33162
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-tty-pty-support-TIOCSWINSZ-pixel-size-only-change-no.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-tty-pty-support-TIOCSWINSZ-pixel-size-only-change-no.pa";
+ filename*1="tch"
+
+RnJvbSBiOTc5NWVkNmVjMzk3OWY2ODE3M2U1NGQwMWU2ODEyNzFlZWE0YTlhIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBUaG9tYXMgV29sZmYgPG1pbmVkQHVzZXJzLm5vcmVw
+bHkuZ2l0aHViLmNvbT4KRGF0ZTogU2F0LCAzIEp1bCAyMDIxIDAwOjAwOjAwICswMjAwClN1
+YmplY3Q6IFtQQVRDSF0gdHR5L3B0eTogc3VwcG9ydCBUSU9DU1dJTlNaIHBpeGVsLXNpemUt
+b25seSBjaGFuZ2UKIG5vdGlmaWNhdGlvbgoKeHRlcm0gMzY4IGFuZCBtaW50dHkgMy41LjEg
+aW1wbGVtZW50IGEgbmV3IGZlYXR1cmUgdG8gc3VwcG9ydCAKbm90aWZpY2F0aW9uIG9mIHRl
+cm1pbmFsIHNjYWxpbmcgdmlhIGZvbnQgem9vbWluZyBhbHNvIGlmIHRoZSB0ZXJtaW5hbCAK
+dGV4dCBkaW1lbnNpb25zIChyb3dzL2NvbHVtbnMpIHN0YXkgdW5jaGFuZ2VkLCB1c2luZyAK
+aW9jdGwoVElPQ1NXSU5TWiksIHJhaXNpbmcgU0lHV0lOQ0g7CnRoaXMgcGF0Y2hlcyBjeWd3
+aW4gdG8gc3VwcG9ydCB0aGF0IHNjZW5hcmlvCgotLS0KIHdpbnN1cC9jeWd3aW4vZmhhbmRs
+ZXJfdHR5LmNjIHwgMTAgKysrKysrKystLQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9u
+cygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2ZoYW5k
+bGVyX3R0eS5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfdHR5LmNjCmluZGV4IDFlZDQx
+ZDNiMi4uZjJhYzI2ODkyIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3R0
+eS5jYworKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3R0eS5jYwpAQCAtMTY4Nyw3ICsx
+Njg3LDEwIEBAIGZoYW5kbGVyX3B0eV9zbGF2ZTo6aW9jdGwgKHVuc2lnbmVkIGludCBjbWQs
+IHZvaWQgKmFyZykKICAgICAgIGJyZWFrOwogICAgIGNhc2UgVElPQ1NXSU5TWjoKICAgICAg
+IGlmIChnZXRfdHR5cCAoKS0+d2luc2l6ZS53c19yb3cgIT0gKChzdHJ1Y3Qgd2luc2l6ZSAq
+KSBhcmcpLT53c19yb3cKLQkgIHx8IGdldF90dHlwICgpLT53aW5zaXplLndzX2NvbCAhPSAo
+KHN0cnVjdCB3aW5zaXplICopIGFyZyktPndzX2NvbCkKKwkgIHx8IGdldF90dHlwICgpLT53
+aW5zaXplLndzX2NvbCAhPSAoKHN0cnVjdCB3aW5zaXplICopIGFyZyktPndzX2NvbAorCSAg
+fHwgZ2V0X3R0eXAgKCktPndpbnNpemUud3NfeXBpeGVsICE9ICgoc3RydWN0IHdpbnNpemUg
+KikgYXJnKS0+d3NfeXBpeGVsCisJICB8fCBnZXRfdHR5cCAoKS0+d2luc2l6ZS53c194cGl4
+ZWwgIT0gKChzdHJ1Y3Qgd2luc2l6ZSAqKSBhcmcpLT53c194cGl4ZWwKKwkgKQogCXsKIAkg
+IGlmIChnZXRfdHR5cCAoKS0+cGNvbl9hY3RpdmF0ZWQgJiYgZ2V0X3R0eXAgKCktPnBjb25f
+cGlkKQogCSAgICByZXNpemVfcHNldWRvX2NvbnNvbGUgKChzdHJ1Y3Qgd2luc2l6ZSAqKSBh
+cmcpOwpAQCAtMjI3OSw3ICsyMjgyLDEwIEBAIGZoYW5kbGVyX3B0eV9tYXN0ZXI6OmlvY3Rs
+ICh1bnNpZ25lZCBpbnQgY21kLCB2b2lkICphcmcpCiAgICAgICBicmVhazsKICAgICBjYXNl
+IFRJT0NTV0lOU1o6CiAgICAgICBpZiAoZ2V0X3R0eXAgKCktPndpbnNpemUud3Nfcm93ICE9
+ICgoc3RydWN0IHdpbnNpemUgKikgYXJnKS0+d3Nfcm93Ci0JICB8fCBnZXRfdHR5cCAoKS0+
+d2luc2l6ZS53c19jb2wgIT0gKChzdHJ1Y3Qgd2luc2l6ZSAqKSBhcmcpLT53c19jb2wpCisJ
+ICB8fCBnZXRfdHR5cCAoKS0+d2luc2l6ZS53c19jb2wgIT0gKChzdHJ1Y3Qgd2luc2l6ZSAq
+KSBhcmcpLT53c19jb2wKKwkgIHx8IGdldF90dHlwICgpLT53aW5zaXplLndzX3lwaXhlbCAh
+PSAoKHN0cnVjdCB3aW5zaXplICopIGFyZyktPndzX3lwaXhlbAorCSAgfHwgZ2V0X3R0eXAg
+KCktPndpbnNpemUud3NfeHBpeGVsICE9ICgoc3RydWN0IHdpbnNpemUgKikgYXJnKS0+d3Nf
+eHBpeGVsCisJICkKIAl7CiAJICBpZiAoZ2V0X3R0eXAgKCktPnBjb25fYWN0aXZhdGVkICYm
+IGdldF90dHlwICgpLT5wY29uX3BpZCkKIAkgICAgcmVzaXplX3BzZXVkb19jb25zb2xlICgo
+c3RydWN0IHdpbnNpemUgKikgYXJnKTsKLS0gCjIuMzIuMAoK
+--------------DD4DA668A337340072F33162--
