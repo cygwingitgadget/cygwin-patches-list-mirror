@@ -1,22 +1,22 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 8F2C439AF4CE
+ by sourceware.org (Postfix) with ESMTPS id 9280439AF4CF
  for <cygwin-patches@cygwin.com>; Fri, 16 Jul 2021 04:50:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8F2C439AF4CE
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9280439AF4CF
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 16G4oMpf050428;
+ by m0.truegem.net (8.12.11/8.12.11) id 16G4oMKk050429;
  Thu, 15 Jul 2021 21:50:22 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdl9cegw; Thu Jul 15 21:50:13 2021
+ via SMTP by m0.truegem.net, id smtpduVHy2X; Thu Jul 15 21:50:15 2021
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/3] Cygwin: New tool: gmondump
-Date: Thu, 15 Jul 2021 21:49:56 -0700
-Message-Id: <20210716044957.5298-2-mark@maxrnd.com>
+Subject: [PATCH 3/3] Cygwin: updates to wire in profiler, gmondump
+Date: Thu, 15 Jul 2021 21:49:57 -0700
+Message-Id: <20210716044957.5298-3-mark@maxrnd.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210716044957.5298-1-mark@maxrnd.com>
 References: <20210716044957.5298-1-mark@maxrnd.com>
@@ -41,278 +41,223 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Fri, 16 Jul 2021 04:50:25 -0000
 
-This new tool was formerly part of 'profiler' but was spun out thanks to
-Jon T's reasonable review comment.  Gmondump is more of a debugging tool
-than something users might have need for.  Users would more likely use
-gprof to make use of symbolic info like function names and source line
-numbers.
+These are updates to wire into the build tree the new tools profiler and
+gmondump, and to supply documentation for the tools.
+
+The documentation for profiler and ssp now mention each other but do not
+discuss their similarities or differences.  That will be handled in a
+future update to the "Profiling Cygwin Programs" section of the Cygwin
+User's Guide, to be supplied.
 
 ---
- winsup/utils/gmondump.c | 255 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 255 insertions(+)
- create mode 100644 winsup/utils/gmondump.c
+ winsup/cygwin/release/3.2.1 |   7 ++
+ winsup/doc/utils.xml        | 123 ++++++++++++++++++++++++++++++++++++
+ winsup/utils/Makefile.am    |   5 ++
+ 3 files changed, 135 insertions(+)
 
-diff --git a/winsup/utils/gmondump.c b/winsup/utils/gmondump.c
-new file mode 100644
-index 000000000..e469f01f1
---- /dev/null
-+++ b/winsup/utils/gmondump.c
-@@ -0,0 +1,255 @@
-+/*
-+    gmondump.c
-+    Displays summary info about given profile data file(s).
+diff --git a/winsup/cygwin/release/3.2.1 b/winsup/cygwin/release/3.2.1
+index 99c65ce30..4f4db622a 100644
+--- a/winsup/cygwin/release/3.2.1
++++ b/winsup/cygwin/release/3.2.1
+@@ -1,6 +1,13 @@
+ What's new:
+ -----------
+ 
++- An IP-sampling profiler named 'profiler' has been added.  It can be used
++  to profile any Cygwin program along with any DLLs loaded.
 +
-+    Written by Mark Geisert <mark@maxrnd.com>.
++- A new tool 'gmondump' has been added.  It can dump the raw information
++  of any "gmon.out" file created by profiler, ssp, or use of the gcc/g++
++  option '-pg'.  (Continue using gprof to get symbolic profile displays.)
 +
-+    This file is part of Cygwin.
+ 
+ What changed:
+ -------------
+diff --git a/winsup/doc/utils.xml b/winsup/doc/utils.xml
+index 1d9b8488c..0b7b5d0ea 100644
+--- a/winsup/doc/utils.xml
++++ b/winsup/doc/utils.xml
+@@ -793,6 +793,56 @@ line separates the ACLs for each file.
+     </refsect1>
+   </refentry>
+ 
++  <refentry id="gmondump">
++    <refmeta>
++      <refentrytitle>gmondump</refentrytitle>
++      <manvolnum>1</manvolnum>
++      <refmiscinfo class="manual">Cygwin Utilities</refmiscinfo>
++    </refmeta>
 +
-+    This software is a copyrighted work licensed under the terms of the
-+    Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
-+*/
++    <refnamediv>
++      <refname>gmondump</refname>
++      <refpurpose>Display formatted contents of profile data files</refpurpose>
++    </refnamediv>
 +
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/stat.h>
-+#include "cygwin/version.h"
++    <refsynopsisdiv>
++    <screen>
++gmondump [OPTION]... FILENAME...
++    </screen>
++    </refsynopsisdiv>
 +
-+typedef unsigned short ushort;
-+typedef uint16_t u_int16_t; // Non-standard sized type needed by ancient gmon.h
-+#include "gmon.h"
++    <refsect1 id="gmondump-options">
++      <title>Options</title>
++      <screen>
++  -h, --help             Display usage information and exit
++  -v, --verbose          Display more file details (toggle: default false)
++  -V, --version          Display version information and exit
++</screen>
++    </refsect1>
 +
-+FILE       *ofile;
-+const char *pgm = "gmondump";
-+int         verbose = 0;
++    <refsect1 id="gmondump-desc">
++      <title>Description</title>
++    <para>The <command>gmondump</command> utility displays the contents of
++      one or more profile data files. Such files usually have names starting
++      with "gmon.out" and are created by a profiling program such as
++      <command>profiler</command> or <command>ssp</command>. Compiling your
++      gcc/g++ programs with option <literal>-pg</literal> also works.</para>
++    <para> By default, summary information is shown. You can use the
++      option <literal>-v</literal> to get more detailed displays.</para>
++    <para>Note that <command>gmondump</command> just displays the raw data;
++      one would usually use <command>gprof</command> to display the data in
++      a useful form incorporating symbolic info such as function names and
++      source line numbers.</para>
++    <para>Here is an example of <command>gmondump</command> operation:</para>
++<screen>
++$ gmondump gmon.out.21900.zstd.exe
++file gmon.out.21900.zstd.exe, gmon version 0x51879, sample rate 100
++  address range 0x0x100401000..0x0x1004cc668
++  numbuckets 208282, hitbuckets 1199, hitcount 12124, numrawarcs 0
++</screen>
++    </refsect1>
++  </refentry>
 +
-+void __attribute__ ((__noreturn__))
-+usage (FILE *where)
-+{
-+  fprintf (where, "\
-+Usage: %s [OPTIONS] FILENAME...\n\
-+\n\
-+Display formatted contents of profile data file(s).\n\
-+Such files usually have names starting with \"gmon.out\".\n\
-+OPTIONS are:\n\
-+\n\
-+  -h, --help             Display usage information and exit\n\
-+  -v, --verbose          Display more file details (toggle: default false)\n\
-+  -V, --version          Display version information and exit\n\
-+\n", pgm);
+   <refentry id="kill">
+     <refmeta>
+       <refentrytitle>kill</refentrytitle>
+@@ -2127,6 +2177,75 @@ specifying an empty password.
+     </refsect1>
+   </refentry>
+ 
++  <refentry id="profiler">
++    <refmeta>
++      <refentrytitle>profiler</refentrytitle>
++      <manvolnum>1</manvolnum>
++      <refmiscinfo class="manual">Cygwin Utilities</refmiscinfo>
++    </refmeta>
 +
-+  exit (where == stderr ? 1 : 0 );
-+}
++    <refnamediv>
++      <refname>profiler</refname>
++      <refpurpose>Sampling profiler of Cygwin programs with their DLLs</refpurpose>
++    </refnamediv>
 +
-+void
-+note (const char *fmt, ...)
-+{
-+  va_list args;
-+  char    buf[4096];
++    <refsynopsisdiv>
++    <screen>
++profiler [OPTION]... PROGRAM [ARG]...
++profiler [OPTION]... -p PID
++    </screen>
++    </refsynopsisdiv>
 +
-+  va_start (args, fmt);
-+  vsprintf (buf, fmt, args);
-+  va_end (args);
++    <refsect1 id="profiler-options">
++      <title>Options</title>
++      <screen>
++  -d, --debug            Display debugging messages (toggle: default false)
++  -e, --events           Display Windows DEBUG_EVENTS (toggle: default false)
++  -f, --fork-profile     Profiles child processes (toggle: default false)
++  -h, --help             Display usage information and exit
++  -o, --output=FILENAME  Write output to file FILENAME rather than stdout
++  -p, --pid=N            Attach to running program with Cygwin pid N
++                         ...                    or with Windows pid -N
++  -s, --sample-rate=N    Set IP sampling rate to N Hz (default 100)
++  -v, --verbose          Display more status messages (toggle: default false)
++  -V, --version          Display version information and exit
++  -w, --new-window       Launch given command in a new window
++</screen>
++    </refsect1>
 +
-+  fputs (buf, ofile);
-+  fflush (ofile);
-+}
++    <refsect1 id="profiler-desc">
++      <title>Description</title>
++    <para>The <command>profiler</command> utility executes a given program, and
++      optionally the children of that program, collecting the location of the
++      CPU instruction pointer (IP) many times per second. This gives a profile
++      of the program's execution, showing where the most time is being spent.
++      This profiling technique is called "IP sampling".</para>
 +
-+void
-+warn (int geterrno, const char *fmt, ...)
-+{
-+  va_list args;
-+  char    buf[4096];
++    <para>A novel feature of <command>profiler</command> is that time spent in
++      DLLs loaded with or by your program is profiled too. You use
++      <command>gprof</command> to process and display the resulting profile
++      information. In this fashion you can determine whether your own code,
++      the Cygwin DLL, or another DLL has "hot spots" that might benefit from
++      tuning.</para>
 +
-+  va_start (args, fmt);
-+  sprintf (buf, "%s: ", pgm);
-+  vsprintf (strchr (buf, '\0'), fmt, args);
-+  va_end (args);
-+  if (geterrno)
-+    perror (buf);
-+  else
-+    {
-+      fputs (buf, ofile);
-+      fputs ("\n", ofile);
-+      fflush (ofile);
-+    }
-+}
++    <para>(See also <command>ssp</command>, another profiler that
++      operates in a different fashion: stepping by instruction. This can
++      provide a different view on your program's operation.)</para>
 +
-+void __attribute__ ((noreturn))
-+error (int geterrno, const char *fmt, ...)
-+{
-+  va_list args;
++    <para>Here is an example of <command>profiler</command> operation:</para>
++<screen>
++$ profiler du -khs .
++22G     .
++97 samples across 83 buckets written to gmon.out.5908.cygwin1.dll
++4 samples across 4 buckets written to gmon.out.5908.KernelBase.dll
++1 sample across 1 bucket written to gmon.out.5908.kernel32.dll
++7318 samples across 42 buckets written to gmon.out.5908.ntdll.dll
++5 samples across 4 buckets written to gmon.out.5908.du.exe
++</screen>
++    </refsect1>
 +
-+  va_start (args, fmt);
-+  warn (geterrno, fmt, args);
-+  va_end (args);
++  </refentry>
 +
-+  exit (1);
-+}
+   <refentry id="ps">
+     <refmeta>
+       <refentrytitle>ps</refentrytitle>
+@@ -2775,6 +2894,10 @@ Example: ssp 0x401000 0x403000 hello.exe
+       <command>gprof</command> will claim the values are seconds, they really
+       are instruction counts. More on that later. </para>
+ 
++    <para>(See also <command>profiler</command>, another profiler that
++      operates in a different fashion: IP sampling. This can provide a
++      different view on your program's operation.)</para>
 +
-+void
-+gmondump1 (char *filename)
-+{
-+  ushort    *bucket = NULL;
-+  int        fd;
-+  struct gmonhdr hdr;
-+  int        hitbuckets;
-+  int        hitcount;
-+  int        numbuckets;
-+  int        numrawarcs;
-+  struct rawarc *rawarc = NULL;
-+  int        res;
-+  struct stat stat;
-+
-+  fd = open (filename, O_RDONLY | O_BINARY);
-+  if (fd < 0)
-+    {
-+      note ("file%s %s couldn't be opened; continuing\n",
-+            strchr (filename, '*') ? "s" : "", filename);
-+      return;
-+    }
-+
-+  /* Read and sanity-check what should be a gmon header. */
-+  res = fstat (fd, &stat);
-+  if (res < 0)
-+    goto notgmon;
-+  if (S_IFREG != (stat.st_mode & S_IFMT))
-+    goto notgmon;
-+  res = read (fd, &hdr, sizeof (hdr));
-+  if (res != sizeof (hdr))
-+    goto notgmon;
-+  if (hdr.lpc >= hdr.hpc)
-+    goto notgmon;
-+  numbuckets = (hdr.ncnt - sizeof (hdr)) / sizeof (short);
-+  if (numbuckets != (hdr.hpc - hdr.lpc) / 4)
-+    goto notgmon;
-+  numrawarcs = 0;
-+  if (stat.st_size != hdr.ncnt)
-+    {
-+      numrawarcs = stat.st_size - hdr.ncnt;
-+      if (numrawarcs !=
-+          (int) sizeof (rawarc) * (numrawarcs / (int) sizeof (rawarc)))
-+        goto notgmon;
-+      numrawarcs /= (int) sizeof (rawarc);
-+    }
-+
-+  /* Looks good, so read and display the profiling info. */
-+  bucket = (ushort *) calloc (numbuckets, sizeof (ushort));
-+  res = read (fd, bucket, hdr.ncnt - sizeof (hdr));
-+  if (res != hdr.ncnt - (int) sizeof (hdr))
-+    goto notgmon;
-+  hitcount = hitbuckets = 0;
-+  for (res = 0; res < numbuckets; ++bucket, ++res)
-+    if (*bucket)
-+      {
-+        ++hitbuckets;
-+        hitcount += *bucket;
-+      }
-+  bucket -= numbuckets;
-+
-+  note ("file %s, gmon version 0x%x, sample rate %d\n",
-+        filename, hdr.version, hdr.profrate);
-+  note ("  address range 0x%p..0x%p\n", hdr.lpc, hdr.hpc);
-+  note ("  numbuckets %d, hitbuckets %d, hitcount %d, numrawarcs %d\n",
-+        numbuckets, hitbuckets, hitcount, numrawarcs);
-+
-+  /* If verbose is set, display contents of buckets and rawarcs arrays. */
-+  if (verbose)
-+    {
-+      if (hitbuckets)
-+        note ("  bucket data follows...\n");
-+      char *addr = (char *) hdr.lpc;
-+      int   incr = (hdr.hpc - hdr.lpc) / numbuckets;
-+      for (res = 0; res < numbuckets; ++bucket, ++res, addr += incr)
-+        if (*bucket)
-+          note ("    address 0x%p, hitcount %d\n", addr, *bucket);
-+      bucket -= numbuckets;
-+
-+      if (numrawarcs)
-+        {
-+          rawarc = (struct rawarc *) calloc (numrawarcs, sizeof (rawarc));
-+          res = read (fd, rawarc, numrawarcs * (int) sizeof (rawarc));
-+          if (res != numrawarcs * (int) sizeof (rawarc))
-+            error (0, "unable to read rawarc data");
-+          note ("  rawarc data follows...\n");
-+          for (res = 0; res < numrawarcs; ++rawarc, ++res)
-+            note ("    from 0x%p, self 0x%p, count %d\n",
-+                  rawarc->raw_frompc, rawarc->raw_selfpc, rawarc->raw_count);
-+        }
-+    }
-+
-+  note ("\n");
-+  if (0)
-+    {
-+notgmon:
-+      note ("file %s isn't a profile data file; continuing\n", filename);
-+    }
-+  if (rawarc)
-+    free (rawarc);
-+  if (bucket)
-+    free (bucket);
-+  close (fd);
-+}
-+
-+struct option longopts[] = {
-+  {"help",    no_argument, NULL, 'h'},
-+  {"verbose", no_argument, NULL, 'v'},
-+  {"version", no_argument, NULL, 'V'},
-+  {NULL,      0,           NULL, 0  }
-+};
-+
-+const char *const opts = "+hvV";
-+
-+void __attribute__ ((__noreturn__))
-+print_version ()
-+{
-+  char *year_of_build = strrchr (__DATE__, ' ') + 1;
-+  printf ("gmondump (cygwin) %d.%d.%d\n"
-+          "Profiler data file viewer\n"
-+          "Copyright (C) %s%s Cygwin Authors\n"
-+          "This is free software; see the source for copying conditions.  "
-+          "There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS "
-+          "FOR A PARTICULAR PURPOSE.\n",
-+          CYGWIN_VERSION_DLL_MAJOR / 1000,
-+          CYGWIN_VERSION_DLL_MAJOR % 1000,
-+          CYGWIN_VERSION_DLL_MINOR,
-+          strncmp (year_of_build, "2021", 4) ? "2021 - " : "",
-+          year_of_build);
-+  exit (0);
-+}
-+
-+int
-+main(int argc, char **argv)
-+{
-+  ofile = stdout;
-+  int opt;
-+
-+  while ((opt = getopt_long (argc, argv, opts, longopts, NULL)) != EOF)
-+    switch (opt)
-+      {
-+      case 'h':
-+        /* Print help and exit. */
-+        usage (ofile);
-+
-+      case 'v':
-+        verbose ^= 1;
-+        break;
-+
-+      case 'V':
-+        /* Print version and exit. */
-+        print_version ();
-+
-+      default:
-+        ;
-+      }
-+
-+  for (int i = optind; i < argc; i++)
-+    gmondump1 (argv[i]);
-+
-+  return 0;
-+}
+     <para> Because the SSP was originally designed to profile the Cygwin DLL,
+       it does not automatically select a block of code to report statistics on.
+       You must specify the range of memory addresses to keep track of manually,
+diff --git a/winsup/utils/Makefile.am b/winsup/utils/Makefile.am
+index 9a846e39d..135e6143c 100644
+--- a/winsup/utils/Makefile.am
++++ b/winsup/utils/Makefile.am
+@@ -21,6 +21,7 @@ bin_PROGRAMS = \
+ 	gencat \
+ 	getconf \
+ 	getfacl \
++	gmondump \
+ 	kill \
+ 	ldd \
+ 	locale \
+@@ -31,6 +32,7 @@ bin_PROGRAMS = \
+ 	mount \
+ 	passwd \
+ 	pldd \
++	profiler \
+ 	regtool \
+ 	setfacl \
+ 	setmetamode \
+@@ -54,6 +56,7 @@ ldd_SOURCES = ldd.cc
+ locale_SOURCES = locale.cc
+ minidumper_SOURCES = minidumper.cc
+ mount_SOURCES = mount.cc path.cc
++profiler_SOURCES = profiler.cc path.cc
+ cygps_SOURCES = ps.cc
+ regtool_SOURCES = regtool.cc
+ umount_SOURCES = umount.cc
+@@ -79,6 +82,8 @@ ldd_LDADD = $(LDADD) -lpsapi -lntdll
+ mount_CXXFLAGS = -DFSTAB_ONLY $(AM_CXXFLAGS)
+ minidumper_LDADD = $(LDADD) -ldbghelp
+ pldd_LDADD = $(LDADD) -lpsapi
++profiler_CXXFLAGS = -I$(srcdir) -idirafter ${top_srcdir}/cygwin -idirafter ${top_srcdir}/cygwin/include $(AM_CXXFLAGS)
++profiler_LDADD = $(LDADD) -lntdll
+ cygps_LDADD = $(LDADD) -lpsapi -lntdll
+ 
+ if CROSS_BOOTSTRAP
 -- 
 2.31.1
 
