@@ -1,23 +1,25 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id DF9D4399E009
- for <cygwin-patches@cygwin.com>; Fri, 16 Jul 2021 04:50:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DF9D4399E009
+ by sourceware.org (Postfix) with ESMTPS id 8F2C439AF4CE
+ for <cygwin-patches@cygwin.com>; Fri, 16 Jul 2021 04:50:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8F2C439AF4CE
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 16G4oC6u049415;
- Thu, 15 Jul 2021 21:50:12 -0700 (PDT) (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 16G4oMpf050428;
+ Thu, 15 Jul 2021 21:50:22 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdMop8DN; Thu Jul 15 21:50:07 2021
+ via SMTP by m0.truegem.net, id smtpdl9cegw; Thu Jul 15 21:50:13 2021
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/3] Cygwin: New tool: profiler
-Date: Thu, 15 Jul 2021 21:49:55 -0700
-Message-Id: <20210716044957.5298-1-mark@maxrnd.com>
+Subject: [PATCH 2/3] Cygwin: New tool: gmondump
+Date: Thu, 15 Jul 2021 21:49:56 -0700
+Message-Id: <20210716044957.5298-2-mark@maxrnd.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210716044957.5298-1-mark@maxrnd.com>
+References: <20210716044957.5298-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
@@ -37,46 +39,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 16 Jul 2021 04:50:21 -0000
+X-List-Received-Date: Fri, 16 Jul 2021 04:50:25 -0000
 
-The new tool formerly known as cygmon is renamed to 'profiler'.  For the
-name I considered 'ipsampler' and could not think of any others.  I'm open
-to a different name if any is suggested.
-
-I decided that a discussion of the pros and cons of this profiler vs the
-existing ssp should probably be in the "Profiling Cygwin Programs" section
-of the Cygwin User's Guide rather than in the help for either.  That
-material will be supplied at some point.
-
-CONTEXT buffers are made child-specific and thus thread-specific since
-there is one profiler thread for each child program being profiled.
-
-The SetThreadPriority() warning comment has been expanded.
-
-chmod() works on Cygwin so the "//XXX ineffective" comment is gone.
-
-I decided to make the "sample all executable sections" and "sample
-dynamically generated code" suggestions simply expanded comments for now.
-
-The profiler program is now a Cygwin exe rather than a native exe.
+This new tool was formerly part of 'profiler' but was spun out thanks to
+Jon T's reasonable review comment.  Gmondump is more of a debugging tool
+than something users might have need for.  Users would more likely use
+gprof to make use of symbolic info like function names and source line
+numbers.
 
 ---
- winsup/utils/profiler.cc | 1109 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 1109 insertions(+)
- create mode 100644 winsup/utils/profiler.cc
+ winsup/utils/gmondump.c | 255 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 255 insertions(+)
+ create mode 100644 winsup/utils/gmondump.c
 
-diff --git a/winsup/utils/profiler.cc b/winsup/utils/profiler.cc
+diff --git a/winsup/utils/gmondump.c b/winsup/utils/gmondump.c
 new file mode 100644
-index 000000000..d1a01c3a2
+index 000000000..e469f01f1
 --- /dev/null
-+++ b/winsup/utils/profiler.cc
-@@ -0,0 +1,1109 @@
++++ b/winsup/utils/gmondump.c
+@@ -0,0 +1,255 @@
 +/*
-+    profiler.cc
-+    Periodically samples IP of a process and its DLLs; writes gprof data files.
++    gmondump.c
++    Displays summary info about given profile data file(s).
 +
-+    Written by Mark Geisert <mark@maxrnd.com>, who admits to
-+    copying pretty liberally from strace.cc.  h/t to cgf for strace!
++    Written by Mark Geisert <mark@maxrnd.com>.
 +
 +    This file is part of Cygwin.
 +
@@ -84,117 +70,41 @@ index 000000000..d1a01c3a2
 +    Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
 +*/
 +
-+#define WIN32_LEAN_AND_MEAN
-+#include <winternl.h>
-+
-+#define cygwin_internal cygwin_internal_dontuse
 +#include <errno.h>
 +#include <fcntl.h>
 +#include <getopt.h>
-+#include <io.h>
-+#include <stdarg.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
-+#include <time.h>
 +#include <unistd.h>
-+#include <sys/cygwin.h>
++#include <sys/stat.h>
 +#include "cygwin/version.h"
-+#include "cygtls_padsize.h"
-+#include "gcc_seh.h"
++
 +typedef unsigned short ushort;
 +typedef uint16_t u_int16_t; // Non-standard sized type needed by ancient gmon.h
-+#define NO_GLOBALS_H
 +#include "gmon.h"
-+#include "path.h"
-+#undef cygwin_internal
 +
-+/* Undo this #define from winsup.h. */
-+#ifdef ExitThread
-+#undef ExitThread
-+#endif
-+
-+#define SCALE_SHIFT 2 // == 4 bytes of address space per bucket
-+#define MS_VC_EXCEPTION 0x406D1388 // thread name notification from child
-+
-+DWORD       child_pid;
-+int         debugging = 0;
-+void       *drive_map;
-+int         events = 0;
-+int         forkprofile = 0;
-+int         new_window;
-+int         numprocesses;
-+FILE       *ofile = stdout;
-+const char *pgm;
-+char       *prefix = (char *) "gmon.out";
-+int         samplerate = 100; // in Hz; up to 1000 might work
++FILE       *ofile;
++const char *pgm = "gmondump";
 +int         verbose = 0;
 +
 +void __attribute__ ((__noreturn__))
-+usage (FILE *where = stderr)
++usage (FILE *where)
 +{
 +  fprintf (where, "\
-+Usage: %s [OPTIONS] <command-line>\n\
-+   or: %s [OPTIONS] -p <pid>\n\
++Usage: %s [OPTIONS] FILENAME...\n\
 +\n\
-+Profiles a command or process by sampling its IP (instruction pointer).\n\
++Display formatted contents of profile data file(s).\n\
++Such files usually have names starting with \"gmon.out\".\n\
 +OPTIONS are:\n\
 +\n\
-+  -d, --debug            Display debugging messages (toggle: default false)\n\
-+  -e, --events           Display Windows DEBUG_EVENTS (toggle: default false)\n\
-+  -f, --fork-profile     Profile child processes (toggle: default false)\n\
 +  -h, --help             Display usage information and exit\n\
-+  -o, --output=FILENAME  Write output to file FILENAME rather than stdout\n\
-+  -p, --pid=N            Attach to running program with Cygwin pid N\n\
-+                         ...                    or with Windows pid -N\n\
-+  -s, --sample-rate=N    Set IP sampling rate to N Hz (default 100)\n\
-+  -v, --verbose          Display more status messages (toggle: default false)\n\
++  -v, --verbose          Display more file details (toggle: default false)\n\
 +  -V, --version          Display version information and exit\n\
-+  -w, --new-window       Launch given command in a new window\n\
-+\n", pgm, pgm);
++\n", pgm);
 +
 +  exit (where == stderr ? 1 : 0 );
 +}
-+
-+/* A span is a memory address range covering an EXE's or DLL's .text segment. */
-+struct span_list
-+{
-+  WCHAR  *name;
-+  LPVOID  base;
-+  size_t  textlo;
-+  size_t  texthi;
-+  int     hitcount;
-+  int     hitbuckets;
-+  int     numbuckets;
-+  int    *buckets;
-+  struct span_list *next;
-+};
-+
-+/* A thread. */
-+struct thread_list
-+{
-+  DWORD   tid;
-+  HANDLE  hthread;
-+  WCHAR  *name;
-+  struct thread_list *next;
-+};
-+
-+/* A child is any process being sampled in this profiler run. */
-+struct child_list
-+{
-+  DWORD  pid;
-+  volatile int profiling;
-+  HANDLE hproc;
-+  HANDLE hquitevt;
-+  HANDLE hprofthr;
-+  CONTEXT            *context;
-+  struct thread_list *threads;
-+  struct span_list   *spans;
-+  struct child_list  *next;
-+};
-+
-+child_list children;
-+typedef struct child_list child;
 +
 +void
 +note (const char *fmt, ...)
@@ -242,824 +152,125 @@ index 000000000..d1a01c3a2
 +  exit (1);
 +}
 +
-+size_t
-+sample (CONTEXT *context, HANDLE h)
-+{
-+  size_t status;
-+
-+  if (-1U == SuspendThread (h))
-+    return 0ULL;
-+  status = GetThreadContext (h, context);
-+  if (-1U == ResumeThread (h))
-+    if (verbose)
-+      note ("*** unable to resume thread %d; continuing anyway\n", h);
-+
-+  if (0 == status)
-+    {
-+      if (verbose)
-+        note ("*** unable to get context for thread %d\n", h);
-+      return 0ULL;
-+    }
-+  else
-+//TODO this approach does not support 32-bit executables on 64-bit
-+#ifdef __x86_64__
-+    return context->Rip;
-+#else
-+    return context->Eip;
-+#endif
-+}
-+
 +void
-+bump_bucket (child *c, size_t pc)
++gmondump1 (char *filename)
 +{
-+  span_list *s = c->spans;
-+
-+//note ("%lu %p\n", c->pid, pc);
-+  if (pc == 0ULL)
-+    return;
-+  while (s)
-+    {
-+      if (pc >= s->textlo && pc < s->texthi)
-+        {
-+          if (0 == s->buckets[(pc - s->textlo) >> SCALE_SHIFT]++)
-+            ++s->hitbuckets;
-+          ++s->hitcount;
-+          return;
-+        }
-+      s = s->next;
-+    }
-+
-+  /*TODO If the child has dynamically created an executable memory region, we
-+   *     won't notice it until the profiler thread happens to sample an
-+   *     instruction in that region.  We could then add a new span to record
-+   *     hits on this new region. (QueryVirtualMemory to obtain limits?)
-+   *
-+   *     Note that if the app dynamically adds and deletes such regions, the
-+   *     profiling info on them will be confusing if their addresses overlap.
-+   */
-+  if (verbose)
-+    note ("*** pc %p out of range for pid %lu\n", pc, c->pid);
-+}
-+
-+/* profiler runs on its own thread; each child has a separate profiler. */
-+DWORD WINAPI
-+profiler (void *vp)
-+{
-+  child *c = (child *) vp;
-+
-+  while (c->profiling)
-+    {
-+      thread_list *t = c->threads;
-+
-+      while (t)
-+        {
-+          if (t->hthread)
-+            bump_bucket (c, sample (c->context, t->hthread));
-+          t = t->next;
-+        }
-+
-+      if (WaitForSingleObject (c->hquitevt, 1000 / samplerate) == WAIT_OBJECT_0)
-+        break;
-+    }
-+
-+  return 0;
-+}
-+
-+void
-+start_profiler (child *c)
-+{
-+  DWORD  tid;
-+
-+  if (verbose)
-+    note ("*** start profiler thread on pid %lu\n", c->pid);
-+  c->context = (CONTEXT *) calloc (1, sizeof (CONTEXT));
-+  if (!c->context)
-+    error (0, "unable to allocate CONTEXT buffer\n");
-+  c->context->ContextFlags = CONTEXT_CONTROL;
-+  c->hquitevt = CreateEvent (NULL, TRUE, FALSE, NULL);
-+  if (!c->hquitevt)
-+    error (0, "unable to create quit event\n");
-+  c->profiling = 1;
-+  c->hprofthr = CreateThread (NULL, 0, profiler, (void *) c, 0, &tid);
-+  if (!c->hprofthr)
-+    error (0, "unable to create profiling thread\n");
-+
-+  /* There is a temptation to raise the execution priority of the profiling
-+   * threads.  Don't do this, or at least don't do it this way.  Testing
-+   * showed that it was possible to starve system processes which makes the
-+   * system unresponsive.  Raising prio doesn't seem to be needed at all.
-+   *
-+  SetThreadPriority (c->hprofthr, THREAD_PRIORITY_TIME_CRITICAL);
-+   */
-+}
-+
-+void
-+stop_profiler (child *c)
-+{
-+  if (verbose)
-+    note ("*** stop profiler thread on pid %lu\n", c->pid);
-+  c->profiling = 0;
-+  SignalObjectAndWait (c->hquitevt, c->hprofthr, INFINITE, FALSE);
-+  CloseHandle (c->hquitevt);
-+  CloseHandle (c->hprofthr);
-+  c->hquitevt = c->hprofthr = 0;
-+}
-+
-+/* Create a gmon.out file for each EXE or DLL that has at least one sample. */
-+void
-+dump_profile_data (child *c)
-+{
++  ushort    *bucket = NULL;
 +  int        fd;
-+  char       filename[MAX_PATH + 1];
 +  struct gmonhdr hdr;
-+  span_list *s = c->spans;
++  int        hitbuckets;
++  int        hitcount;
++  int        numbuckets;
++  int        numrawarcs;
++  struct rawarc *rawarc = NULL;
++  int        res;
++  struct stat stat;
 +
-+  while (s)
++  fd = open (filename, O_RDONLY | O_BINARY);
++  if (fd < 0)
 +    {
-+      if (s->hitbuckets == 0)
-+        {
-+          s = s->next;
-+          continue;
-+        }
-+
-+      if (s->name)
-+        {
-+          WCHAR *name = 1 + wcsrchr (s->name, L'\\');
-+          sprintf (filename, "%s.%u.%ls", prefix, c->pid, name);
-+        }
-+      else
-+        sprintf (filename, "%s.%u", prefix, c->pid);
-+
-+      fd = open (filename, O_CREAT | O_TRUNC | O_WRONLY | O_BINARY);
-+      if (fd < 0)
-+        error (0, "dump_profile_data: unable to create %s\n", filename);
-+
-+      memset (&hdr, 0, sizeof (hdr));
-+      hdr.lpc = s->textlo;
-+      hdr.hpc = s->texthi;
-+      hdr.ncnt = s->numbuckets * sizeof (short) + sizeof (hdr);
-+      hdr.version = GMONVERSION;
-+      hdr.profrate = samplerate;
-+
-+      /* Our buckets hold more than gmon standard buckets, so truncate here. */
-+      ushort *gmonbuckets = (ushort *) calloc (s->numbuckets, sizeof (ushort));
-+      for (int i = 0; i < s->numbuckets; i++)
-+        {
-+          if (s->buckets[i])
-+            {
-+              if (s->buckets[i] > 65535)
-+                {
-+                  note ("  WARNING: bucket %d: value %d truncated to %d\n",
-+                        i, s->buckets[i], 65535);
-+                  gmonbuckets[i] = 65535;
-+                }
-+              else
-+                gmonbuckets[i] = s->buckets[i];
-+            }
-+        }
-+
-+      write (fd, &hdr, sizeof (hdr));
-+      write (fd, gmonbuckets, hdr.ncnt - sizeof (hdr));
-+      note ("%d %s across %d %s written to %s\n", s->hitcount,
-+            s->hitcount == 1 ? "sample" : "samples", s->hitbuckets,
-+            s->hitbuckets == 1 ? "bucket" : "buckets", filename);
-+      close (fd);
-+      chmod (filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+      free (gmonbuckets);
-+
-+      s = s->next;
++      note ("file%s %s couldn't be opened; continuing\n",
++            strchr (filename, '*') ? "s" : "", filename);
++      return;
 +    }
-+}
 +
-+HANDLE lasth;
-+DWORD  lastpid = 0;
-+
-+child *
-+get_child (DWORD pid)
-+{
-+  child *c;
-+
-+  for (c = &children; (c = c->next) != NULL;)
-+    if (c->pid == pid)
-+      return (child *) c;
-+
-+  return NULL;
-+}
-+
-+void add_span (DWORD, WCHAR *, LPVOID, HANDLE);
-+
-+void
-+add_child (DWORD pid, WCHAR *name, LPVOID base, HANDLE hproc)
-+{
-+  if (!get_child (pid))
++  /* Read and sanity-check what should be a gmon header. */
++  res = fstat (fd, &stat);
++  if (res < 0)
++    goto notgmon;
++  if (S_IFREG != (stat.st_mode & S_IFMT))
++    goto notgmon;
++  res = read (fd, &hdr, sizeof (hdr));
++  if (res != sizeof (hdr))
++    goto notgmon;
++  if (hdr.lpc >= hdr.hpc)
++    goto notgmon;
++  numbuckets = (hdr.ncnt - sizeof (hdr)) / sizeof (short);
++  if (numbuckets != (hdr.hpc - hdr.lpc) / 4)
++    goto notgmon;
++  numrawarcs = 0;
++  if (stat.st_size != hdr.ncnt)
 +    {
-+      child *c = children.next;
-+      children.next = (child *) calloc (1, sizeof (child));
-+      children.next->next = c;
-+      lastpid = children.next->pid = pid;
-+      lasth = children.next->hproc = hproc;
-+      add_span (pid, name, base, hproc);
-+      start_profiler (children.next);
-+      numprocesses++;
-+      if (verbose)
-+        note ("*** Windows process %lu attached\n", pid);
++      numrawarcs = stat.st_size - hdr.ncnt;
++      if (numrawarcs !=
++          (int) sizeof (rawarc) * (numrawarcs / (int) sizeof (rawarc)))
++        goto notgmon;
++      numrawarcs /= (int) sizeof (rawarc);
 +    }
-+}
 +
-+void
-+remove_child (DWORD pid)
-+{
-+  child *c;
-+
-+  if (pid == lastpid)
-+    lastpid = 0;
-+  for (c = &children; c->next != NULL; c = c->next)
-+    if (c->next->pid == pid)
++  /* Looks good, so read and display the profiling info. */
++  bucket = (ushort *) calloc (numbuckets, sizeof (ushort));
++  res = read (fd, bucket, hdr.ncnt - sizeof (hdr));
++  if (res != hdr.ncnt - (int) sizeof (hdr))
++    goto notgmon;
++  hitcount = hitbuckets = 0;
++  for (res = 0; res < numbuckets; ++bucket, ++res)
++    if (*bucket)
 +      {
-+        child *c1 = c->next;
-+        c->next = c1->next;
-+        stop_profiler (c1);
-+        dump_profile_data (c1);
-+        CloseHandle (c1->hproc);
-+        c1->hproc = 0;
-+        free (c1);
-+        if (verbose)
-+          note ("*** Windows process %lu detached\n", pid);
-+        numprocesses--;
-+        return;
++        ++hitbuckets;
++        hitcount += *bucket;
 +      }
++  bucket -= numbuckets;
 +
-+  error (0, "no process id %d found", pid);
-+}
++  note ("file %s, gmon version 0x%x, sample rate %d\n",
++        filename, hdr.version, hdr.profrate);
++  note ("  address range 0x%p..0x%p\n", hdr.lpc, hdr.hpc);
++  note ("  numbuckets %d, hitbuckets %d, hitcount %d, numrawarcs %d\n",
++        numbuckets, hitbuckets, hitcount, numrawarcs);
 +
-+void
-+add_thread (DWORD pid, DWORD tid, HANDLE h, WCHAR *name)
-+{
-+  child *c = get_child (pid);
-+
-+  if (!c)
-+    error (0, "add_thread: pid %lu not found\n", pid);
-+
-+  thread_list *t = (thread_list *) calloc (1, sizeof (thread_list));
-+  t->tid = tid;
-+  t->hthread = h;
-+  t->name = name;
-+
-+  t->next = c->threads;
-+  c->threads = t;
-+}
-+
-+void
-+remove_thread (DWORD pid, DWORD tid)
-+{
-+  child *c = get_child (pid);
-+
-+  if (!c)
-+    error (0, "remove_thread: pid %lu not found\n", pid);
-+
-+  thread_list *t = c->threads;
-+  while (t)
++  /* If verbose is set, display contents of buckets and rawarcs arrays. */
++  if (verbose)
 +    {
-+      if (t->tid == tid)
++      if (hitbuckets)
++        note ("  bucket data follows...\n");
++      char *addr = (char *) hdr.lpc;
++      int   incr = (hdr.hpc - hdr.lpc) / numbuckets;
++      for (res = 0; res < numbuckets; ++bucket, ++res, addr += incr)
++        if (*bucket)
++          note ("    address 0x%p, hitcount %d\n", addr, *bucket);
++      bucket -= numbuckets;
++
++      if (numrawarcs)
 +        {
-+          /*TODO We don't free(t), we just zero it out.  Maybe revisit this. */
-+          t->tid = 0;
-+          CloseHandle (t->hthread);
-+          t->hthread = 0;
-+          if (t->name)
-+            free (t->name);
-+          t->name = NULL;
-+          return;
-+        }
-+      t = t->next;
-+    }
-+
-+  error (0, "remove_thread: pid %lu tid %lu not found\n", pid, tid);
-+}
-+
-+void
-+read_child (void *buf, SIZE_T size, void *addr, HANDLE h)
-+{
-+  SIZE_T len;
-+
-+  if (debugging)
-+    note ("read %d bytes at %p from handle %d\n", size, addr, h);
-+  if (0 == ReadProcessMemory (h, addr, buf, size, &len))
-+    error (0, "read_child: failed\n");
-+  if (len != size)
-+    error (0, "read_child: asked for %d bytes but got %d\n", size, len);
-+}
-+
-+IMAGE_SECTION_HEADER *
-+find_text_section (LPVOID base, HANDLE h)
-+{
-+  static IMAGE_SECTION_HEADER asect;
-+  DWORD  lfanew;
-+  WORD   machine;
-+  WORD   nsects;
-+  DWORD  ntsig;
-+  char  *ptr = (char *) base;
-+
-+  IMAGE_DOS_HEADER *idh = (IMAGE_DOS_HEADER *) ptr;
-+  read_child ((void *) &lfanew, sizeof (lfanew), &idh->e_lfanew, h);
-+  ptr += lfanew;
-+
-+  /* Code handles 32- or 64-bit headers depending on compilation environment. */
-+  /*TODO It doesn't yet handle 32-bit headers on 64-bit Cygwin or v/v.        */
-+  IMAGE_NT_HEADERS *inth = (IMAGE_NT_HEADERS *) ptr;
-+  read_child ((void *) &ntsig, sizeof (ntsig), &inth->Signature, h);
-+  if (ntsig != IMAGE_NT_SIGNATURE)
-+    error (0, "find_text_section: NT signature not found\n");
-+
-+  read_child ((void *) &machine, sizeof (machine),
-+              &inth->FileHeader.Machine, h);
-+#ifdef __x86_64__
-+  if (machine != IMAGE_FILE_MACHINE_AMD64)
-+#else
-+  if (machine != IMAGE_FILE_MACHINE_I386)
-+#endif
-+    error (0, "target program was built for different machine architecture\n");
-+
-+  read_child ((void *) &nsects, sizeof (nsects),
-+              &inth->FileHeader.NumberOfSections, h);
-+  ptr += sizeof (*inth);
-+
-+  IMAGE_SECTION_HEADER *ish = (IMAGE_SECTION_HEADER *) ptr;
-+  for (int i = 0; i < nsects; i++)
-+    {
-+      read_child ((void *) &asect, sizeof (asect), ish, h);
-+      if (0 == memcmp (".text\0\0\0", &asect.Name, 8))
-+        return &asect;
-+      ish++;
-+    }
-+
-+  error (0, ".text section not found\n");
-+}
-+
-+//TODO Extend add_span to add all executable sections of this exe/dll
-+void
-+add_span (DWORD pid, WCHAR *name, LPVOID base, HANDLE h)
-+{
-+  child *c = get_child (pid);
-+
-+  if (!c)
-+    error (0, "add_span: pid %lu not found\n", pid);
-+
-+  IMAGE_SECTION_HEADER *sect = find_text_section (base, c->hproc);
-+  span_list *s = (span_list *) calloc (1, sizeof (span_list));
-+  s->name = name;
-+  s->base = base;
-+  s->textlo = sect->VirtualAddress + (size_t) base;
-+  s->texthi = s->textlo + sect->Misc.VirtualSize;
-+  s->numbuckets = (s->texthi - s->textlo) >> SCALE_SHIFT;
-+  s->buckets = (int *) calloc (s->numbuckets, sizeof (int));
-+  if (debugging)
-+    note ("    span %p - %p, size %X, numbuckets %d\n",
-+          s->textlo, s->texthi, s->texthi - s->textlo, s->numbuckets);
-+
-+  s->next = c->spans;
-+  c->spans = s;
-+}
-+
-+#define LINE_BUF_CHUNK 128
-+
-+class linebuf
-+{
-+  size_t  alloc;
-+public:
-+  size_t  ix;
-+  char   *buf;
-+  linebuf ()
-+  {
-+    ix = 0;
-+    alloc = 0;
-+    buf = NULL;
-+  }
-+ ~linebuf ()
-+  {
-+    if (buf)
-+      free (buf);
-+  }
-+  void add (const char *what, int len);
-+  void add (const char *what)
-+  {
-+    add (what, strlen (what));
-+  }
-+  void prepend (const char *what, int len);
-+};
-+
-+void
-+linebuf::add (const char *what, int len)
-+{
-+  size_t newix;
-+
-+  if ((newix = ix + len) >= alloc)
-+    {
-+      alloc += LINE_BUF_CHUNK + len;
-+      buf = (char *) realloc (buf, alloc + 1);
-+    }
-+  memcpy (buf + ix, what, len);
-+  ix = newix;
-+  buf[ix] = '\0';
-+}
-+
-+void
-+linebuf::prepend (const char *what, int len)
-+{
-+  int    buflen;
-+  size_t newix;
-+
-+  if ((newix = ix + len) >= alloc)
-+    {
-+      alloc += LINE_BUF_CHUNK + len;
-+      buf = (char *) realloc (buf, alloc + 1);
-+      buf[ix] = '\0';
-+    }
-+  if ((buflen = strlen (buf)))
-+    memmove (buf + len, buf, buflen + 1);
-+  else
-+    buf[newix] = '\0';
-+  memcpy (buf, what, len);
-+  ix = newix;
-+}
-+
-+void
-+make_command_line (linebuf & one_line, char **argv)
-+{
-+  for (; *argv; argv++)
-+    {
-+      char *p = NULL;
-+      const char *a = *argv;
-+
-+      int len = strlen (a);
-+      if (len != 0 && !(p = strpbrk (a, " \t\n\r\"")))
-+        one_line.add (a, len);
-+      else
-+        {
-+          one_line.add ("\"", 1);
-+          for (; p; a = p, p = strchr (p, '"'))
-+            {
-+              one_line.add (a, ++p - a);
-+              if (p[-1] == '"')
-+                one_line.add ("\"", 1);
-+            }
-+          if (*a)
-+            one_line.add (a);
-+          one_line.add ("\"", 1);
-+        }
-+      one_line.add (" ", 1);
-+    }
-+
-+  if (one_line.ix)
-+    one_line.buf[one_line.ix - 1] = '\0';
-+  else
-+    one_line.add ("", 1);
-+}
-+
-+BOOL WINAPI
-+ctrl_c (DWORD)
-+{
-+  static int tic = 1;
-+
-+  if ((tic ^= 1) && !GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0))
-+    error (0, "couldn't send CTRL-C to child, win32 error %d\n",
-+           GetLastError ());
-+  return TRUE;
-+}
-+
-+/* Set up interfaces to Cygwin internal funcs and path.cc helper funcs. */
-+extern "C" {
-+uintptr_t cygwin_internal (int, ...);
-+WCHAR cygwin_dll_path[32768];
-+}
-+
-+#define DEBUG_PROCESS_DETACH_ON_EXIT    0x00000001
-+#define DEBUG_PROCESS_ONLY_THIS_PROCESS 0x00000002
-+
-+void
-+attach_process (pid_t pid)
-+{
-+  child_pid = pid < 0 ? (DWORD) -pid :
-+        (DWORD) cygwin_internal (CW_CYGWIN_PID_TO_WINPID, pid);
-+
-+  if (!DebugActiveProcess (child_pid))
-+    error (0, "couldn't attach to pid %d for debugging", child_pid);
-+
-+  if (forkprofile)
-+    {
-+      HANDLE h = OpenProcess (PROCESS_ALL_ACCESS, FALSE, child_pid);
-+
-+      if (h)
-+        {
-+          /* Try to turn off DEBUG_ONLY_THIS_PROCESS so we can follow forks. */
-+          ULONG DebugFlags = DEBUG_PROCESS_DETACH_ON_EXIT;
-+          NTSTATUS status = NtSetInformationProcess (h, ProcessDebugFlags,
-+                                        &DebugFlags, sizeof (DebugFlags));
-+          if (!NT_SUCCESS (status))
-+            warn (0, "Could not clear DEBUG_ONLY_THIS_PROCESS (%x), "
-+                  "will not trace child processes", status);
-+
-+          CloseHandle (h);
++          rawarc = (struct rawarc *) calloc (numrawarcs, sizeof (rawarc));
++          res = read (fd, rawarc, numrawarcs * (int) sizeof (rawarc));
++          if (res != numrawarcs * (int) sizeof (rawarc))
++            error (0, "unable to read rawarc data");
++          note ("  rawarc data follows...\n");
++          for (res = 0; res < numrawarcs; ++rawarc, ++res)
++            note ("    from 0x%p, self 0x%p, count %d\n",
++                  rawarc->raw_frompc, rawarc->raw_selfpc, rawarc->raw_count);
 +        }
 +    }
 +
-+  return;
-+}
-+
-+void
-+create_child (char **argv)
-+{
-+  DWORD               flags;
-+  linebuf             one_line;
-+  PROCESS_INFORMATION pi;
-+  BOOL                ret;
-+  STARTUPINFO         si;
-+
-+  if (strchr (*argv, '/'))
-+      *argv = cygpath (*argv, NULL);
-+  memset (&si, 0, sizeof (si));
-+  si.cb = sizeof (si);
-+
-+  flags = CREATE_DEFAULT_ERROR_MODE
-+          | (forkprofile ? DEBUG_PROCESS : DEBUG_ONLY_THIS_PROCESS);
-+  if (new_window)
-+    flags |= CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP;
-+
-+  make_command_line (one_line, argv);
-+
-+  SetConsoleCtrlHandler (NULL, 0);
-+
-+  const char *cygwin_env = getenv ("CYGWIN");
-+  const char *space;
-+
-+  if (cygwin_env && strlen (cygwin_env) <= 256) /* sanity check */
-+    space = " ";
-+  else
-+    space = cygwin_env = "";
-+
-+  char *newenv = (char *) malloc (sizeof ("CYGWIN=noglob") +
-+                                  strlen (space) + strlen (cygwin_env));
-+  sprintf (newenv, "CYGWIN=noglob%s%s", space, cygwin_env);
-+  putenv (newenv);
-+  ret = CreateProcess (0, one_line.buf, /* command line */
-+                       NULL,    /* Security */
-+                       NULL,    /* thread */
-+                       TRUE,    /* inherit handles */
-+                       flags,   /* start flags */
-+                       NULL,    /* default environment */
-+                       NULL,    /* current directory */
-+                       &si, &pi);
-+  if (!ret)
-+    error (0, "error creating process %s, (error %d)", *argv,
-+           GetLastError ());
-+
-+  CloseHandle (pi.hThread);
-+  CloseHandle (pi.hProcess);
-+  child_pid = pi.dwProcessId;
-+  SetConsoleCtrlHandler (ctrl_c, 1);
-+}
-+
-+void
-+handle_output_debug_string (DWORD pid, OUTPUT_DEBUG_STRING_INFO *ev)
-+{
-+  char  *buf = (char *) alloca (ev->nDebugStringLength);
-+  child *c = get_child (pid);
-+
-+  if (!c)
-+    error (0, "handle_output_debug_string: pid %lu not found\n", pid);
-+
-+  read_child (buf, ev->nDebugStringLength, ev->lpDebugStringData, c->hproc);
-+  if (strncmp (buf, "cYg", 3))
-+    { // string is not from Cygwin, it's from the target app; just display it
-+      if (ev->fUnicode)
-+        note ("%ls", buf);
-+      else
-+        note ("%s", buf);
-+    }
-+  //else TODO Possibly decode and display Cygwin-internal debug string
-+}
-+
-+BOOL
-+GetFileNameFromHandle (HANDLE hFile, WCHAR pszFilename[MAX_PATH+1])
-+{
-+  BOOL     result = FALSE;
-+  ULONG    len = 0;
-+  OBJECT_NAME_INFORMATION *ntfn = (OBJECT_NAME_INFORMATION *) alloca (65536);
-+  NTSTATUS status = NtQueryObject (hFile, ObjectNameInformation,
-+                                   ntfn, 65536, &len);
-+  if (NT_SUCCESS (status))
++  note ("\n");
++  if (0)
 +    {
-+      PWCHAR win32path = ntfn->Name.Buffer;
-+      win32path[ntfn->Name.Length / sizeof (WCHAR)] = L'\0';
-+
-+      /* NtQueryObject returns a native NT path.  (Try to) convert to Win32. */
-+      if (drive_map)
-+        win32path = (PWCHAR) cygwin_internal (CW_MAP_DRIVE_MAP, drive_map,
-+                                              win32path);
-+      pszFilename[0] = L'\0';
-+      wcsncat (pszFilename, win32path, MAX_PATH);
-+      result = TRUE;
++notgmon:
++      note ("file %s isn't a profile data file; continuing\n", filename);
 +    }
-+
-+  return result;
-+}
-+
-+char *
-+cygwin_pid (DWORD winpid)
-+{
-+  static char  buf[48];
-+  DWORD        cygpid;
-+  static DWORD max_cygpid = 0;
-+
-+  if (!max_cygpid)
-+    max_cygpid = (DWORD) cygwin_internal (CW_MAX_CYGWIN_PID);
-+
-+  cygpid = (DWORD) cygwin_internal (CW_WINPID_TO_CYGWIN_PID, winpid);
-+
-+  if (cygpid >= max_cygpid)
-+    snprintf (buf, sizeof buf, "%u", winpid);
-+  else
-+    snprintf (buf, sizeof buf, "%u (pid: %u)", winpid, cygpid);
-+  return buf;
-+}
-+
-+DWORD
-+profile1 (FILE *ofile, pid_t pid)
-+{
-+  DEBUG_EVENT ev;
-+  DWORD       res = 0;
-+
-+  SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_HIGHEST);
-+  while (1)
-+    {
-+      BOOL debug_event = WaitForDebugEvent (&ev, INFINITE);
-+      DWORD status = DBG_CONTINUE;
-+
-+      if (!debug_event)
-+        continue;
-+
-+      /* Usually continue event here so child resumes while we process event. */
-+      if (ev.dwDebugEventCode != EXCEPTION_DEBUG_EVENT &&
-+          ev.dwDebugEventCode != OUTPUT_DEBUG_STRING_EVENT)
-+        debug_event = ContinueDebugEvent (ev.dwProcessId, ev.dwThreadId, status);
-+
-+      switch (ev.dwDebugEventCode)
-+        {
-+        case CREATE_PROCESS_DEBUG_EVENT:
-+          WCHAR exename[MAX_PATH+1];
-+
-+          if (!GetFileNameFromHandle (ev.u.CreateProcessInfo.hFile, exename))
-+            wcscpy (exename, L"(unknown)");
-+          if (events)
-+            {
-+              note ("--- Process %s created from %ls\n",
-+                    cygwin_pid (ev.dwProcessId), exename);
-+              note ("--- Process %s thread %lu created at %p\n",
-+                    cygwin_pid (ev.dwProcessId), ev.dwThreadId,
-+                    ev.u.CreateProcessInfo.lpStartAddress);
-+            }
-+          if (ev.u.CreateProcessInfo.hFile)
-+            CloseHandle (ev.u.CreateProcessInfo.hFile);
-+          add_child (ev.dwProcessId, wcsdup (exename),
-+                     ev.u.CreateProcessInfo.lpBaseOfImage,
-+                     ev.u.CreateProcessInfo.hProcess);
-+          add_thread (ev.dwProcessId, ev.dwThreadId,
-+                      ev.u.CreateProcessInfo.hThread, wcsdup (exename));
-+          break;
-+
-+        case CREATE_THREAD_DEBUG_EVENT:
-+          if (events)
-+            note ("--- Process %s thread %lu created at %p\n",
-+                  cygwin_pid (ev.dwProcessId), ev.dwThreadId,
-+                  ev.u.CreateThread.lpStartAddress);
-+          add_thread (ev.dwProcessId, ev.dwThreadId,
-+                      ev.u.CreateThread.hThread, NULL);
-+          break;
-+
-+        case LOAD_DLL_DEBUG_EVENT:
-+          WCHAR dllname[MAX_PATH+1];
-+
-+          /* lpImageName is not always populated, so find the filename for
-+             hFile instead. */
-+          if (!GetFileNameFromHandle (ev.u.LoadDll.hFile, dllname))
-+            wcscpy (dllname, L"(unknown)");
-+
-+          if (events)
-+              note ("--- Process %s loaded %ls at %p\n",
-+                    cygwin_pid (ev.dwProcessId), dllname,
-+                    ev.u.LoadDll.lpBaseOfDll);
-+          add_span (ev.dwProcessId, wcsdup (dllname),
-+                    ev.u.LoadDll.lpBaseOfDll, ev.u.LoadDll.hFile);
-+
-+          if (ev.u.LoadDll.hFile)
-+            CloseHandle (ev.u.LoadDll.hFile);
-+          break;
-+
-+        case UNLOAD_DLL_DEBUG_EVENT:
-+          if (events)
-+            note ("--- Process %s unloaded DLL at %p\n",
-+                  cygwin_pid (ev.dwProcessId), ev.u.UnloadDll.lpBaseOfDll);
-+          break;
-+
-+        case OUTPUT_DEBUG_STRING_EVENT:
-+          handle_output_debug_string (ev.dwProcessId, &ev.u.DebugString);
-+          status = DBG_EXCEPTION_HANDLED;
-+          debug_event = ContinueDebugEvent (ev.dwProcessId,
-+                                            ev.dwThreadId, status);
-+          break;
-+
-+        case EXIT_PROCESS_DEBUG_EVENT:
-+          if (events)
-+            note ("--- Process %s exited with status 0x%lx\n",
-+                  cygwin_pid (ev.dwProcessId), ev.u.ExitProcess.dwExitCode);
-+          res = ev.u.ExitProcess.dwExitCode;
-+          remove_child (ev.dwProcessId);
-+          break;
-+
-+        case EXIT_THREAD_DEBUG_EVENT:
-+          if (events)
-+            note ("--- Process %s thread %lu exited with status 0x%lx\n",
-+                  cygwin_pid (ev.dwProcessId), ev.dwThreadId,
-+                  ev.u.ExitThread.dwExitCode);
-+          remove_thread (ev.dwProcessId, ev.dwThreadId);
-+          break;
-+
-+        case EXCEPTION_DEBUG_EVENT:
-+          status = DBG_EXCEPTION_HANDLED;
-+          switch (ev.u.Exception.ExceptionRecord.ExceptionCode)
-+            {
-+            case MS_VC_EXCEPTION:
-+              //TODO Decode exception info to get thread name; set it internally
-+              // fall thru
-+
-+            case STATUS_BREAKPOINT:
-+              break;
-+
-+#ifdef __x86_64__
-+            case STATUS_GCC_THROW:
-+            case STATUS_GCC_UNWIND:
-+            case STATUS_GCC_FORCED:
-+              status = DBG_EXCEPTION_NOT_HANDLED;
-+              break;
-+#endif
-+
-+            default:
-+              status = DBG_EXCEPTION_NOT_HANDLED;
-+              if (ev.u.Exception.dwFirstChance)
-+                note ("--- Process %s thread %lu exception %08x at %p\n",
-+                      cygwin_pid (ev.dwProcessId), ev.dwThreadId,
-+                      ev.u.Exception.ExceptionRecord.ExceptionCode,
-+                      ev.u.Exception.ExceptionRecord.ExceptionAddress);
-+              break;
-+            }
-+          debug_event = ContinueDebugEvent (ev.dwProcessId,
-+                                            ev.dwThreadId, status);
-+          break;
-+        }
-+
-+      if (!debug_event)
-+        error (0, "couldn't continue debug event, windows error %d",
-+               GetLastError ());
-+      if (!numprocesses)
-+        break;
-+    }
-+
-+  return res;
-+}
-+
-+DWORD
-+doprofile (FILE *ofile, pid_t pid, char **argv)
-+{
-+  if (pid)
-+    attach_process (pid);
-+  else
-+    create_child (argv);
-+
-+  return profile1 (ofile, pid);
++  if (rawarc)
++    free (rawarc);
++  if (bucket)
++    free (bucket);
++  close (fd);
 +}
 +
 +struct option longopts[] = {
-+  {"debug",       no_argument,       NULL, 'd'},
-+  {"events",      no_argument,       NULL, 'e'},
-+  {"help",        no_argument,       NULL, 'h'},
-+  {"new-window",  no_argument,       NULL, 'w'},
-+  {"output",      required_argument, NULL, 'o'},
-+  {"pid",         required_argument, NULL, 'p'},
-+  {"fork-profile",no_argument,       NULL, 'f'},
-+  {"sample-rate", required_argument, NULL, 's'},
-+  {"verbose",     no_argument,       NULL, 'v'},
-+  {"version",     no_argument,       NULL, 'V'},
-+  {NULL,          0,                 NULL, 0  }
++  {"help",    no_argument, NULL, 'h'},
++  {"verbose", no_argument, NULL, 'v'},
++  {"version", no_argument, NULL, 'V'},
++  {NULL,      0,           NULL, 0  }
 +};
 +
-+const char *const opts = "+dehfo:p:s:vVw";
++const char *const opts = "+hvV";
 +
 +void __attribute__ ((__noreturn__))
 +print_version ()
 +{
 +  char *year_of_build = strrchr (__DATE__, ' ') + 1;
-+  printf ("profiler (cygwin) %d.%d.%d\n"
-+          "IP-Sampling Profiler\n"
++  printf ("gmondump (cygwin) %d.%d.%d\n"
++          "Profiler data file viewer\n"
 +          "Copyright (C) %s%s Cygwin Authors\n"
 +          "This is free software; see the source for copying conditions.  "
 +          "There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS "
@@ -1073,112 +284,34 @@ index 000000000..d1a01c3a2
 +}
 +
 +int
-+main2 (int argc, char **argv)
++main(int argc, char **argv)
 +{
-+  int    opt;
-+  pid_t  pid = 0;
-+  char  *ptr;
-+  DWORD  ret = 0;
-+
-+  _setmode (1, O_BINARY);
-+  _setmode (2, O_BINARY);
-+
-+  if (!(pgm = strrchr (*argv, '\\')) && !(pgm = strrchr (*argv, '/')))
-+    pgm = *argv;
-+  else
-+    pgm++;
++  ofile = stdout;
++  int opt;
 +
 +  while ((opt = getopt_long (argc, argv, opts, longopts, NULL)) != EOF)
 +    switch (opt)
 +      {
-+      case 'd':
-+        debugging ^= 1;
-+        if (debugging)
-+          verbose = events = 1; // debugging turns these on too
-+        break;
-+
-+      case 'e':
-+        events ^= 1;
-+        events |= debugging; // debugging turns on events too
-+        break;
-+
-+      case 'f':
-+        forkprofile ^= 1;
-+        break;
-+
 +      case 'h':
 +        /* Print help and exit. */
 +        usage (ofile);
 +
-+      case 'o':
-+        if ((ofile = fopen (cygpath (optarg, NULL), "wb")) == NULL)
-+          error (1, "can't open %s", optarg);
-+#ifdef F_SETFD
-+        (void) fcntl (fileno (ofile), F_SETFD, 0);
-+#endif
-+        break;
-+
-+      case 'p':
-+        pid = strtoul (optarg, NULL, 10);
-+        break;
-+
-+      case 's':
-+        samplerate = strtoul (optarg, NULL, 10);
-+        if (samplerate < 1 || samplerate > 1000)
-+          error (0, "sample rate must be between 1 and 1000 inclusive");
-+        break;
-+
 +      case 'v':
 +        verbose ^= 1;
-+        verbose |= debugging; // debugging turns on verbose too
 +        break;
 +
 +      case 'V':
-+        /* Print version info and exit. */
++        /* Print version and exit. */
 +        print_version ();
 +
-+      case 'w':
-+        new_window ^= 1;
-+        break;
-+
 +      default:
-+        note ("Try `%s --help' for more information.\n", pgm);
-+        exit (1);
++        ;
 +      }
 +
-+  if (pid && argv[optind])
-+    error (0, "cannot provide both a command line and a process id");
++  for (int i = optind; i < argc; i++)
++    gmondump1 (argv[i]);
 +
-+  if (!pid && !argv[optind])
-+    error (0, "must provide either a command line or a process id");
-+
-+  /* Honor user-supplied gmon file name prefix, if available. */
-+  ptr = getenv ("GMON_OUT_PREFIX");
-+  if (ptr && strlen (ptr) > 0)
-+    prefix = ptr;
-+
-+  drive_map = (void *) cygwin_internal (CW_ALLOC_DRIVE_MAP);
-+  ret = doprofile (ofile, pid, argv + optind);
-+  if (drive_map)
-+    cygwin_internal (CW_FREE_DRIVE_MAP, drive_map);
-+
-+  if (ofile && ofile != stdout)
-+    fclose (ofile);
-+  return (ret);
-+}
-+
-+int
-+main (int argc, char **argv)
-+{
-+  /* Make sure to have room for the _cygtls area *and* to initialize it.
-+   * This is required to make sure cygwin_internal calls into Cygwin work
-+   * reliably.  This problem has been noticed under AllocationPreference
-+   * registry setting to 0x100000 (TOP_DOWN).
-+   */
-+  char buf[CYGTLS_PADSIZE];
-+
-+  RtlSecureZeroMemory (buf, sizeof (buf));
-+  exit (main2 (argc, argv));
++  return 0;
 +}
 -- 
 2.31.1
