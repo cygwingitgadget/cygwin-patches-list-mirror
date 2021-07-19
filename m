@@ -1,29 +1,51 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 9280439AF4CF
- for <cygwin-patches@cygwin.com>; Fri, 16 Jul 2021 04:50:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9280439AF4CF
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id B4D7C3855011
+ for <cygwin-patches@cygwin.com>; Mon, 19 Jul 2021 10:05:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B4D7C3855011
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 16G4oMKk050429;
- Thu, 15 Jul 2021 21:50:22 -0700 (PDT) (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpduVHy2X; Thu Jul 15 21:50:15 2021
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH 3/3] Cygwin: updates to wire in profiler, gmondump
-Date: Thu, 15 Jul 2021 21:49:57 -0700
-Message-Id: <20210716044957.5298-3-mark@maxrnd.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210716044957.5298-1-mark@maxrnd.com>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mi2BV-1lRhjX2EE5-00e8uR; Mon, 19 Jul 2021 12:04:42 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 5C949A80EFD; Mon, 19 Jul 2021 12:04:39 +0200 (CEST)
+Date: Mon, 19 Jul 2021 12:04:39 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Mark Geisert <mark@maxrnd.com>
+Cc: cygwin-patches@cygwin.com, Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 1/3] Cygwin: New tool: profiler
+Message-ID: <YPVON/D5dvOYFwfU@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Mark Geisert <mark@maxrnd.com>, cygwin-patches@cygwin.com,
+ Jon TURNEY <jon.turney@dronecode.org.uk>
 References: <20210716044957.5298-1-mark@maxrnd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210716044957.5298-1-mark@maxrnd.com>
+X-Provags-ID: V03:K1:Bp6F5C52FIhDJO4W+Gf/5Yoz1MCALHmCd8Mwu71d6SCxatOalp+
+ nsphPZTd0ugun5McwCU0HpExko83NRjtQFVzSGWVxcLYl1XhYBnqJ2ZTn9wuPkWuc1GuHCK
+ O4aqREDu2scDhFxSod1LN49PCvbV6DRwuAAekZn5ODaV7CnoBFlS3T04evZHMN4Jz3ihcFO
+ RHSa96mtXjVe8DKOGXDMQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nkZ3ilQgCVI=:t0ccjCK/f6TSaFCYf/ESyb
+ io9dJvk+Kbe+gxlxhDyC94iFCT3/pooxHZW4c28VNZ7rbmXW/wDr0yHhf4WVKxvUs8gGgqBOS
+ 6246BdaAUx8aYbput0jNtIJe5TfCE83e/wA6FDVOAIJRSl2zkh9z0U4Y/MXI/7emNFLZaN88A
+ 0c8wO54vKT2F7SO7jyhfjR9M6ux8FI0k2Ur3V1rTHiwXOKX85ZvEw51xkEeIC1xOP33G1+Fsj
+ z15mMh2HHgEGip8j+i2Np43fa0EGkeQex4YQqwdYrkQweIR3e1yPlbhvG1Aeghsvf6xusTBnu
+ uPndNbNq1QoI4keLrCFcU32k9ME+Lelwwe0JyoZmChw0vuapOkssk+ZTBG8xuWzSnxE8DIDmS
+ mL8wUrnAqwBjwB7SBjs0Xy55hfNG/P4ozNR6p43vkOmzEEUJK/fnzadGaU+Y8FXUH6cuMfy3W
+ 8DNdF4NQ6UMcX5W+ztW5D4uIIuy+AUPoz/iSveESPQ8YMvtX8ZC6Ne44fitltttrVvYZTksyb
+ Bs5ReFays7Q2M5Tr2JRtQSacqHF8mANlrJKF2/PvM69KwJ0f64JaxUQrKjvlKzjz8GFSf8BYN
+ zg4IHfWCDghep2W4qMV9qfa82BWg84yOoGbDbYWoTIMldKCJu/dQHRdYLmssQH7Ql3xoecXfs
+ 2wQAOCRfuqn6glHh9D1rV2u6YGsnN9uq+Tvp57mGlQFBSoLuYMWML0veqDyjIZppTMfhc9ZDm
+ 2UisYz+VGjrtd8aMaDdjcKE3llSEDYulaCMrrm/+P2RZsbWapGUHXpJbDWVQHXK5XBDeJO1Gj
+ pAbORjj7Uqn8DpAo250zfFUuxywo12/dmXXLju32CMI/ACP1Fx+OMDCIkgl9jHjislH+tWcWb
+ mJLmXWL5oJoqa22taCmw==
+X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -39,225 +61,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 16 Jul 2021 04:50:25 -0000
+X-List-Received-Date: Mon, 19 Jul 2021 10:05:36 -0000
 
-These are updates to wire into the build tree the new tools profiler and
-gmondump, and to supply documentation for the tools.
+Hi Matt,
 
-The documentation for profiler and ssp now mention each other but do not
-discuss their similarities or differences.  That will be handled in a
-future update to the "Profiling Cygwin Programs" section of the Cygwin
-User's Guide, to be supplied.
+On Jul 15 21:49, Mark Geisert wrote:
+> The new tool formerly known as cygmon is renamed to 'profiler'.  For the
+> name I considered 'ipsampler' and could not think of any others.  I'm open
+> to a different name if any is suggested.
+> 
+> I decided that a discussion of the pros and cons of this profiler vs the
+> existing ssp should probably be in the "Profiling Cygwin Programs" section
+> of the Cygwin User's Guide rather than in the help for either.  That
+> material will be supplied at some point.
+> 
+> CONTEXT buffers are made child-specific and thus thread-specific since
+> there is one profiler thread for each child program being profiled.
+> 
+> The SetThreadPriority() warning comment has been expanded.
+> 
+> chmod() works on Cygwin so the "//XXX ineffective" comment is gone.
+> 
+> I decided to make the "sample all executable sections" and "sample
+> dynamically generated code" suggestions simply expanded comments for now.
+> 
+> The profiler program is now a Cygwin exe rather than a native exe.
 
----
- winsup/cygwin/release/3.2.1 |   7 ++
- winsup/doc/utils.xml        | 123 ++++++++++++++++++++++++++++++++++++
- winsup/utils/Makefile.am    |   5 ++
- 3 files changed, 135 insertions(+)
+The patchset LGTM, but for the details I'd like jturney to have a look
+and approve it eventually.
 
-diff --git a/winsup/cygwin/release/3.2.1 b/winsup/cygwin/release/3.2.1
-index 99c65ce30..4f4db622a 100644
---- a/winsup/cygwin/release/3.2.1
-+++ b/winsup/cygwin/release/3.2.1
-@@ -1,6 +1,13 @@
- What's new:
- -----------
- 
-+- An IP-sampling profiler named 'profiler' has been added.  It can be used
-+  to profile any Cygwin program along with any DLLs loaded.
-+
-+- A new tool 'gmondump' has been added.  It can dump the raw information
-+  of any "gmon.out" file created by profiler, ssp, or use of the gcc/g++
-+  option '-pg'.  (Continue using gprof to get symbolic profile displays.)
-+
- 
- What changed:
- -------------
-diff --git a/winsup/doc/utils.xml b/winsup/doc/utils.xml
-index 1d9b8488c..0b7b5d0ea 100644
---- a/winsup/doc/utils.xml
-+++ b/winsup/doc/utils.xml
-@@ -793,6 +793,56 @@ line separates the ACLs for each file.
-     </refsect1>
-   </refentry>
- 
-+  <refentry id="gmondump">
-+    <refmeta>
-+      <refentrytitle>gmondump</refentrytitle>
-+      <manvolnum>1</manvolnum>
-+      <refmiscinfo class="manual">Cygwin Utilities</refmiscinfo>
-+    </refmeta>
-+
-+    <refnamediv>
-+      <refname>gmondump</refname>
-+      <refpurpose>Display formatted contents of profile data files</refpurpose>
-+    </refnamediv>
-+
-+    <refsynopsisdiv>
-+    <screen>
-+gmondump [OPTION]... FILENAME...
-+    </screen>
-+    </refsynopsisdiv>
-+
-+    <refsect1 id="gmondump-options">
-+      <title>Options</title>
-+      <screen>
-+  -h, --help             Display usage information and exit
-+  -v, --verbose          Display more file details (toggle: default false)
-+  -V, --version          Display version information and exit
-+</screen>
-+    </refsect1>
-+
-+    <refsect1 id="gmondump-desc">
-+      <title>Description</title>
-+    <para>The <command>gmondump</command> utility displays the contents of
-+      one or more profile data files. Such files usually have names starting
-+      with "gmon.out" and are created by a profiling program such as
-+      <command>profiler</command> or <command>ssp</command>. Compiling your
-+      gcc/g++ programs with option <literal>-pg</literal> also works.</para>
-+    <para> By default, summary information is shown. You can use the
-+      option <literal>-v</literal> to get more detailed displays.</para>
-+    <para>Note that <command>gmondump</command> just displays the raw data;
-+      one would usually use <command>gprof</command> to display the data in
-+      a useful form incorporating symbolic info such as function names and
-+      source line numbers.</para>
-+    <para>Here is an example of <command>gmondump</command> operation:</para>
-+<screen>
-+$ gmondump gmon.out.21900.zstd.exe
-+file gmon.out.21900.zstd.exe, gmon version 0x51879, sample rate 100
-+  address range 0x0x100401000..0x0x1004cc668
-+  numbuckets 208282, hitbuckets 1199, hitcount 12124, numrawarcs 0
-+</screen>
-+    </refsect1>
-+  </refentry>
-+
-   <refentry id="kill">
-     <refmeta>
-       <refentrytitle>kill</refentrytitle>
-@@ -2127,6 +2177,75 @@ specifying an empty password.
-     </refsect1>
-   </refentry>
- 
-+  <refentry id="profiler">
-+    <refmeta>
-+      <refentrytitle>profiler</refentrytitle>
-+      <manvolnum>1</manvolnum>
-+      <refmiscinfo class="manual">Cygwin Utilities</refmiscinfo>
-+    </refmeta>
-+
-+    <refnamediv>
-+      <refname>profiler</refname>
-+      <refpurpose>Sampling profiler of Cygwin programs with their DLLs</refpurpose>
-+    </refnamediv>
-+
-+    <refsynopsisdiv>
-+    <screen>
-+profiler [OPTION]... PROGRAM [ARG]...
-+profiler [OPTION]... -p PID
-+    </screen>
-+    </refsynopsisdiv>
-+
-+    <refsect1 id="profiler-options">
-+      <title>Options</title>
-+      <screen>
-+  -d, --debug            Display debugging messages (toggle: default false)
-+  -e, --events           Display Windows DEBUG_EVENTS (toggle: default false)
-+  -f, --fork-profile     Profiles child processes (toggle: default false)
-+  -h, --help             Display usage information and exit
-+  -o, --output=FILENAME  Write output to file FILENAME rather than stdout
-+  -p, --pid=N            Attach to running program with Cygwin pid N
-+                         ...                    or with Windows pid -N
-+  -s, --sample-rate=N    Set IP sampling rate to N Hz (default 100)
-+  -v, --verbose          Display more status messages (toggle: default false)
-+  -V, --version          Display version information and exit
-+  -w, --new-window       Launch given command in a new window
-+</screen>
-+    </refsect1>
-+
-+    <refsect1 id="profiler-desc">
-+      <title>Description</title>
-+    <para>The <command>profiler</command> utility executes a given program, and
-+      optionally the children of that program, collecting the location of the
-+      CPU instruction pointer (IP) many times per second. This gives a profile
-+      of the program's execution, showing where the most time is being spent.
-+      This profiling technique is called "IP sampling".</para>
-+
-+    <para>A novel feature of <command>profiler</command> is that time spent in
-+      DLLs loaded with or by your program is profiled too. You use
-+      <command>gprof</command> to process and display the resulting profile
-+      information. In this fashion you can determine whether your own code,
-+      the Cygwin DLL, or another DLL has "hot spots" that might benefit from
-+      tuning.</para>
-+
-+    <para>(See also <command>ssp</command>, another profiler that
-+      operates in a different fashion: stepping by instruction. This can
-+      provide a different view on your program's operation.)</para>
-+
-+    <para>Here is an example of <command>profiler</command> operation:</para>
-+<screen>
-+$ profiler du -khs .
-+22G     .
-+97 samples across 83 buckets written to gmon.out.5908.cygwin1.dll
-+4 samples across 4 buckets written to gmon.out.5908.KernelBase.dll
-+1 sample across 1 bucket written to gmon.out.5908.kernel32.dll
-+7318 samples across 42 buckets written to gmon.out.5908.ntdll.dll
-+5 samples across 4 buckets written to gmon.out.5908.du.exe
-+</screen>
-+    </refsect1>
-+
-+  </refentry>
-+
-   <refentry id="ps">
-     <refmeta>
-       <refentrytitle>ps</refentrytitle>
-@@ -2775,6 +2894,10 @@ Example: ssp 0x401000 0x403000 hello.exe
-       <command>gprof</command> will claim the values are seconds, they really
-       are instruction counts. More on that later. </para>
- 
-+    <para>(See also <command>profiler</command>, another profiler that
-+      operates in a different fashion: IP sampling. This can provide a
-+      different view on your program's operation.)</para>
-+
-     <para> Because the SSP was originally designed to profile the Cygwin DLL,
-       it does not automatically select a block of code to report statistics on.
-       You must specify the range of memory addresses to keep track of manually,
-diff --git a/winsup/utils/Makefile.am b/winsup/utils/Makefile.am
-index 9a846e39d..135e6143c 100644
---- a/winsup/utils/Makefile.am
-+++ b/winsup/utils/Makefile.am
-@@ -21,6 +21,7 @@ bin_PROGRAMS = \
- 	gencat \
- 	getconf \
- 	getfacl \
-+	gmondump \
- 	kill \
- 	ldd \
- 	locale \
-@@ -31,6 +32,7 @@ bin_PROGRAMS = \
- 	mount \
- 	passwd \
- 	pldd \
-+	profiler \
- 	regtool \
- 	setfacl \
- 	setmetamode \
-@@ -54,6 +56,7 @@ ldd_SOURCES = ldd.cc
- locale_SOURCES = locale.cc
- minidumper_SOURCES = minidumper.cc
- mount_SOURCES = mount.cc path.cc
-+profiler_SOURCES = profiler.cc path.cc
- cygps_SOURCES = ps.cc
- regtool_SOURCES = regtool.cc
- umount_SOURCES = umount.cc
-@@ -79,6 +82,8 @@ ldd_LDADD = $(LDADD) -lpsapi -lntdll
- mount_CXXFLAGS = -DFSTAB_ONLY $(AM_CXXFLAGS)
- minidumper_LDADD = $(LDADD) -ldbghelp
- pldd_LDADD = $(LDADD) -lpsapi
-+profiler_CXXFLAGS = -I$(srcdir) -idirafter ${top_srcdir}/cygwin -idirafter ${top_srcdir}/cygwin/include $(AM_CXXFLAGS)
-+profiler_LDADD = $(LDADD) -lntdll
- cygps_LDADD = $(LDADD) -lpsapi -lntdll
- 
- if CROSS_BOOTSTRAP
--- 
-2.31.1
 
+Thanks,
+Corinna
