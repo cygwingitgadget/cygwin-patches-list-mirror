@@ -1,44 +1,46 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-041.btinternet.com (mailomta21-sa.btinternet.com
- [213.120.69.27])
- by sourceware.org (Postfix) with ESMTPS id 84944395BC09
- for <cygwin-patches@cygwin.com>; Mon, 19 Jul 2021 16:32:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 84944395BC09
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-041.btinternet.com with ESMTP id
- <20210719163245.TCRE18744.sa-prd-fep-041.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
- Mon, 19 Jul 2021 17:32:45 +0100
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 60D644B90441269B
-X-Originating-IP: [86.139.167.43]
-X-OWM-Source-IP: 86.139.167.43 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvtddrfedtgddutddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkeeirddufeelrdduieejrdegfeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddufeelrdduieejrdegfedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.167.43) by
- sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 60D644B90441269B; Mon, 19 Jul 2021 17:32:45 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 3/3] Add winsymlinks:wslstrict
-Date: Mon, 19 Jul 2021 17:31:34 +0100
-Message-Id: <20210719163134.9230-4-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
-References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
+Return-Path: <dra27@hermes.cam.ac.uk>
+Received: from ppsw-31.csi.cam.ac.uk (ppsw-31.csi.cam.ac.uk [131.111.8.131])
+ by sourceware.org (Postfix) with ESMTPS id A30E2385800E
+ for <cygwin-patches@cygwin.com>; Tue, 20 Jul 2021 15:15:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A30E2385800E
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cl.cam.ac.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hermes.cam.ac.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cam.ac.uk; 
+ s=20180806.ppsw;
+ h=Sender:Content-Type:MIME-Version:Message-ID:Date:Subject:
+ To:From:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=5zI2hSpLR7TPUtocvSCW0hIHZ+duNyzfSFYVzrKfX3o=; b=NitdE4PP2FjiX6dkLqCv4fqYXb
+ i9ujdJ5HzkpOwH9z1mn4eG13Z6mzOaBuJGt9DHLg3gIU89R3xdHs1v8wRarmfxrUUhDZ9U0QBjv+V
+ 8O6m7rfQjQDWLdPSGivwjbN5tyR2x6V2CKhkxBgJKK0hjwiKJ5rrlVIkCGUMrRHR9ccw=;
+X-Cam-AntiVirus: no malware found
+X-Cam-ScannerInfo: https://help.uis.cam.ac.uk/email-scanner-virus
+Received: from [62.31.23.242] (port=57877 helo=Libera)
+ by ppsw-31.csi.cam.ac.uk (smtp.hermes.cam.ac.uk [131.111.8.157]:25)
+ with esmtpsa (LOGIN:dra27) (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+ id 1m5rTF-000qzY-Kx (Exim 4.94.2) for cygwin-patches@cygwin.com
+ (return-path <dra27@hermes.cam.ac.uk>); Tue, 20 Jul 2021 16:15:45 +0100
+Reply-To: <David.Allsopp@cl.cam.ac.uk>
+From: "David Allsopp" <David.Allsopp@cl.cam.ac.uk>
+To: <cygwin-patches@cygwin.com>
+Subject: Fix nanosleep returning negative rem
+Date: Tue, 20 Jul 2021 16:16:16 +0100
+Organization: University of Cambridge
+Message-ID: <000201d77d7a$2faae510$8f00af30$@cl.cam.ac.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.6 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: multipart/mixed;
+ boundary="----=_NextPart_000_0003_01D77D82.916F9B30"
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: Add9eS/VixoQahcVTP2uK87XyOsdjg==
+Content-Language: en-gb
+Sender: David Allsopp <dra27@hermes.cam.ac.uk>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50, DKIMWL_WL_MED,
+ DKIM_SIGNED, DKIM_VALID, DKIM_VALID_EF, JMQ_SPF_NEUTRAL, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -53,100 +55,97 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 19 Jul 2021 16:32:48 -0000
+X-List-Received-Date: Tue, 20 Jul 2021 15:15:48 -0000
 
-Add winsymlinks:wslstrict, so we have a spanning set of values for
-winsymlinks.
----
- winsup/cygwin/environ.cc |  3 +++
- winsup/cygwin/globals.cc |  1 +
- winsup/cygwin/path.cc    |  7 +++++++
- winsup/doc/cygwinenv.xml | 15 ++++++++++++++-
- 4 files changed, 25 insertions(+), 1 deletion(-)
+This is a multipart message in MIME format.
 
-diff --git a/winsup/cygwin/environ.cc b/winsup/cygwin/environ.cc
-index a7a52feeb..b53b018fd 100644
---- a/winsup/cygwin/environ.cc
-+++ b/winsup/cygwin/environ.cc
-@@ -88,6 +88,9 @@ set_winsymlinks (const char *buf)
-   else if (ascii_strncasematch (buf, "native", 6))
-     allow_winsymlinks = ascii_strcasematch (buf + 6, "strict")
- 			? WSYM_nativestrict : WSYM_native;
-+  else if (ascii_strncasematch (buf, "wsl", 3))
-+    allow_winsymlinks = ascii_strcasematch (buf + 3, "strict")
-+			? WSYM_wslstrict : WSYM_default;
- }
- 
- /* The structure below is used to set up an array which is used to
-diff --git a/winsup/cygwin/globals.cc b/winsup/cygwin/globals.cc
-index b15980bb3..9459d8bcb 100644
---- a/winsup/cygwin/globals.cc
-+++ b/winsup/cygwin/globals.cc
-@@ -59,6 +59,7 @@ enum winsym_t
-   WSYM_nativestrict,
-   WSYM_nfs,
-   WSYM_magic,
-+  WSYM_wslstrict,
- };
- 
- exit_states NO_COPY exit_state;
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index edb3b27ee..57ec8be72 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -2062,12 +2062,19 @@ symlink_worker (const char *oldpath, path_conv &win32_newpath, bool isdevice)
- 	  wsym_type = WSYM_default;
- 	  fallthrough;
- 	case WSYM_default:
-+	case WSYM_wslstrict:
- 	  if (win32_newpath.fs_flags () & FILE_SUPPORTS_REPARSE_POINTS)
- 	    {
- 	      res = symlink_wsl (oldpath, win32_newpath);
- 	      if (!res)
- 		__leave;
- 	    }
-+	  /* Strictly wsl? */
-+	  if (wsym_type == WSYM_wslstrict)
-+	    {
-+	      __seterrno ();
-+	      __leave;
-+	    }
- 	  /* On FSes not supporting reparse points, or in case of an error
- 	     creating the WSL symlink, fall back to creating the plain old
- 	     SYSTEM file symlink. */
-diff --git a/winsup/doc/cygwinenv.xml b/winsup/doc/cygwinenv.xml
-index 496088292..b98e27243 100644
---- a/winsup/doc/cygwinenv.xml
-+++ b/winsup/doc/cygwinenv.xml
-@@ -76,7 +76,7 @@ in addition to the normal UNIX argv list.  Defaults to not set.</para>
- </listitem>
- 
- <listitem>
--<para><envar>winsymlinks:{lnk,magic,native,nativestrict}</envar></para>
-+<para><envar>winsymlinks:{lnk,magic,native,nativestrict,wsl,wslstrict}</envar></para>
- 
- <itemizedlist mark="square">
- <listitem>
-@@ -105,6 +105,19 @@ with <literal>winsymlinks:native</literal>, while with
- <literal>winsymlinks:nativestrict</literal> the <literal>symlink(2)</literal>
- system call will immediately fail.</para>
- </listitem>
-+
-+<listitem>
-+<para>If set to <literal>winsymlinks:wsl</literal> or
-+<literal>winsymlinks:wslstrict</literal>, Cygwin creates symlinks as special
-+reparse points, defined by WSL.</para>
-+
-+<para>With <literal>winsymlinks:wsl</literal>, if Cygwin fails to create a WSL
-+symlink for some reason, it will fall back to creating a Cygwin magic cookie
-+symlink, while with <literal>winsymlinks:wslstrict</literal> the
-+<literal>symlink(2)</literal> system call will immediately fail.</para>
-+
-+<para><literal>winsymlinks:wsl</literal> is the default behaviour.</para>
-+</listitem>
- </itemizedlist>
- 
- <para>For more information on symbolic links, see
--- 
-2.32.0
+------=_NextPart_000_0003_01D77D82.916F9B30
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+I've pushed a repro case for this to
+https://github.com/dra27/cygwin-nanosleep-bug.git
+
+Originally noticed as the main CI system for OCaml has been failing
+sporadically for the signal.ml test mentioned in that repo. This morning I
+tried hammering that test on my dev machine and discovered that it fails
+very frequently. No idea if that's drivers, Windows 10 updates, number of
+cores or what, but it was definitely happening, and easily.
+
+Drilling further, it appears that NtQueryTimer is able to return a negative
+value in the TimeRemaining field even when SignalState is false. The values
+I've seen have always been < 15ms - i.e. less than the timer resolution, so
+I wonder if there is a point at which the timer has elapsed but has not been
+signalled, but WaitForMultipleObjects returns because of the EINTR signal.
+Mildly surprising that it seems to be so reproducible.
+
+Anyway, a patch is attached which simply guards a negative return value. The
+test on tbi.SignalState is in theory unnecessary.
+
+All best,
+
+
+David
+
+------=_NextPart_000_0003_01D77D82.916F9B30
+Content-Type: application/octet-stream;
+	name="0001-Ensure-nanosleep-2-never-returns-negative-rem.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="0001-Ensure-nanosleep-2-never-returns-negative-rem.patch"
+
+From 24f5adc3ac8246d93582ac6e4b2779b369f8b3f1 Mon Sep 17 00:00:00 2001=0A=
+From: David Allsopp <david.allsopp@metastack.com>=0A=
+Date: Tue, 20 Jul 2021 16:07:00 +0100=0A=
+Subject: [PATCH] Ensure nanosleep(2) never returns negative rem=0A=
+=0A=
+It appears to be the case that NtQueryTimer can return a negative time=0A=
+remaining for an unsignalled timer. The value appears to be less than=0A=
+the timer resolution.=0A=
+=0A=
+Signed-off-by: David Allsopp <david.allsopp@metastack.com>=0A=
+---=0A=
+ winsup/cygwin/cygwait.cc    | 6 ++++--=0A=
+ winsup/cygwin/release/3.2.1 | 4 ++++=0A=
+ 2 files changed, 8 insertions(+), 2 deletions(-)=0A=
+=0A=
+diff --git a/winsup/cygwin/cygwait.cc b/winsup/cygwin/cygwait.cc=0A=
+index 1d6c7c9cc..dbbe1db6e 100644=0A=
+--- a/winsup/cygwin/cygwait.cc=0A=
++++ b/winsup/cygwin/cygwait.cc=0A=
+@@ -104,8 +104,10 @@ cygwait (HANDLE object, PLARGE_INTEGER timeout, =
+unsigned mask)=0A=
+ 		    sizeof tbi, NULL);=0A=
+       /* if timer expired, TimeRemaining is negative and represents the=0A=
+ 	  system uptime when signalled */=0A=
+-      if (timeout->QuadPart < 0LL)=0A=
+-	timeout->QuadPart =3D tbi.SignalState ? 0LL : =
+tbi.TimeRemaining.QuadPart;=0A=
++      if (timeout->QuadPart < 0LL) {=0A=
++	timeout->QuadPart =3D tbi.SignalState || tbi.TimeRemaining.QuadPart < =
+0LL=0A=
++                            ? 0LL : tbi.TimeRemaining.QuadPart;=0A=
++      }=0A=
+       NtCancelTimer (_my_tls.locals.cw_timer, NULL);=0A=
+     }=0A=
+ =0A=
+diff --git a/winsup/cygwin/release/3.2.1 b/winsup/cygwin/release/3.2.1=0A=
+index 4f4db622a..2a339718c 100644=0A=
+--- a/winsup/cygwin/release/3.2.1=0A=
++++ b/winsup/cygwin/release/3.2.1=0A=
+@@ -44,3 +44,7 @@ Bug Fixes=0A=
+   AF_UNSPEC.  As specified by POSIX and Linux, this is allowed on=0A=
+   datagram sockets, and its effect is to reset the socket's peer=0A=
+   address.=0A=
++=0A=
++- Fix nanosleep(2) returning negative rem. NtQueryTimer appears to be =
+able to=0A=
++  return a negative remaining time (less than the timer resolution) for=0A=
++  unsignalled timers.=0A=
+-- =0A=
+2.29.2.windows.2=0A=
+=0A=
+
+------=_NextPart_000_0003_01D77D82.916F9B30--
 
