@@ -1,51 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id BE22C3857C67
- for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021 08:19:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BE22C3857C67
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id DD55B383603E
+ for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021 08:39:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DD55B383603E
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mmhs6-1lMNJC1Lt8-00jrtY for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021
- 10:19:16 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MqsGv-1lJKd327NJ-00mwWE for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021
+ 10:39:40 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C8325A831C3; Wed, 21 Jul 2021 10:19:15 +0200 (CEST)
-Date: Wed, 21 Jul 2021 10:19:15 +0200
+ id 02CDBA831C7; Wed, 21 Jul 2021 10:39:39 +0200 (CEST)
+Date: Wed, 21 Jul 2021 10:39:39 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] Add more winsymlinks values
-Message-ID: <YPfYgz0EHe7Yw5ko@calimero.vinschen.de>
+Subject: Re: Fix nanosleep returning negative rem
+Message-ID: <YPfdSyPTCdSWhRv/@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
+References: <000201d77d7a$2faae510$8f00af30$@cl.cam.ac.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:MbxDG0OenstzmWYmCTcchiupMACcR7aCgwe2qavbf0cjhekgKrN
- 6uIjtP7CxGd18RZVi7JAdWAKcUIsXORN2fasxHU0yLVkgeciXukecqTQfKVpwdq3B7ey/CS
- 7neHCWko9sDzx7aJgiwBC3kg17/8MOQPzhj+PS5yv7C07xvxWN56MLy5fD3UiBlOZk5jpRW
- 5VBfQY9JEGA/1Jj7eR/dg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DWmN9WIm+tg=:oSV6W1VFmmz3N/uw7kgFd2
- k/ikln7zwuQMMOwcyRWoUW+C7eMA7F5m45eyEb+kpBun4uhKCnFa5h6leuOxiOYWROLftg8eH
- 3IHX72c0YQslG+PhpEWDZ0+Ev4ufYgZVzVwmzWhjjpr3LdPKEak1P04FbEVgEaMgG7OaooW/B
- 1aRWmfOT03DwJg6k4ogSlcHqNpjNkF5sa0mjuz8crv907XIklfrbUkSmNJXWULp6YdBusb18g
- UvrAY2ol1ESshd8ygDLCGGoAho8n/RkjpoLRqJQmiYdXE87sUdyQd1bwVg8A3h01B6AwdpKfj
- iEQDeHtkPNCIL66hQSSsjl1cPZ4+CrLgXP7GpMtEq+UdVjDG45RtcJsEYUucYn6n6wP8IZm2y
- L9q3uXvmudHCRcWt0kTmYNzrwr4WBSbUNFh7Aw2CoY/tVVF9BesccWcBNnJi3D012J8ZWYGuf
- dq4vk+FSHZPnYY2y/N3eOApebIU8Ymn6dpzN34xDFksm6TKvFcBOxx1/i1e6JCkS3tl7t6VNF
- 3JVzHk6OU5/UvmhwVeYgKLY+cSMv2uP39QhOomHXw4VKJjf3bhlPHDBFHT2lJYKwHHysFu+yn
- tFDaqquMedAYKYjeRr+hG73mvWuVTkHtGm4MP1DoYGeX+UVCBj4K+wL9qXl+PRBXDXZN8oCuo
- M4QdJPwOOfIoTtWqfb3mRD7Ntcgeop80rUkYAe83BvJTBUiNhOeihtLk/iGYLALdsk/mF6+L+
- pn27wIiMNXUYWvmGweuuxhxgA2GquwQyqhqEDccF/KyIgEf6/tRNKHhk7nfjYrNxPe6YQRXX0
- gVu2b/hJEwMSXj/ZwerveXIQL2v5UW66F9/fkGXnngX1ER6odDoovPGEZKPf/oeZqTsA8CpBz
- v1wCfgdQzjkvIcl4hWkg==
-X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.4
+In-Reply-To: <000201d77d7a$2faae510$8f00af30$@cl.cam.ac.uk>
+X-Provags-ID: V03:K1:ut1PNptIP+9j5hBs+toAnwSOB+WmhaD41RONlSxVT8wBpyLJCVQ
+ 01tpaSxMv7zli1tDdjg7slyVipYWzxKCZQLRS6BYD29Y40i1e69roVoBrm/WLPuENkRYbrB
+ FsUJ65bAjV797Wh6380sXlR1yNGiLzj+uI1jEtkaW/uE93rD+kJmimJYKzCOSgX0fsR0uGJ
+ n5lWUloU/CEtAXz+fLkJg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SYV1wnlAWUk=:2nKZ18Up9gDdXSSzOMh4oC
+ 0TSA1lUkUP3dpz7KS/GSJF4i4scg0BMK+RW80rmvwlHiWwlorAZvNN0FY2Y96cKzSrxBABCgp
+ F3+smbeEqiOByQ4jMTW9m7lSy7xFNcehUyykCQw02ghBBLUinV3UT6/xcwDZvpU++Ha2zHhxh
+ 48rL2CJ7yHzRipqWrffJ04ITHeCm66OH9mi8am/zVatgsgR+wBWBtz3iC/rFEOxTam6Wiw3x/
+ 2lEp4rtQ6SRee+eSBOlv79/DV7sg+j7pHYTn4QtyAhTdnIY+85ys5AwQJY1vkCy2IXW5IJofh
+ mbxO0u33aV8TPdSeCZN/6HpssrhKmfWFZBGTYdIbzlLdqoDvMDjwhqMt9+3naxXFo8SN61nYf
+ aDaTWTVrHqMCAcWut3Nj2BL1AjHY6kyQUt8SNwKlTcnvefFAc7OymXFzfzcJlaLDI0Y+3odlN
+ Beyp6CYiWQlfGkH9sTb2gE+6eo6ctDQuhvpORiRwxBkBfBC0Hq+KBCSqmzcqLBPeZEvzOOgTq
+ 6NcyuvH9L/RkFSTMLJs9bNWYFl2sEeSUzmvsSFTOgVElQmM8cKxoltb0JWebjC9/KOveFF2C7
+ 9wvAOKwQu215UNfm4MWm4JYK1Wlk+mKOucVP+TR/PMVyjGgF+wwwR5YNH4DzDtnBfLLGYFAkI
+ cPoDJVRz3YAY+FxdqSmqg2ovAmNL859IzYb1jk/t3aTfvIJkyHFFOo6ZzeIDoJmhMYs/VG77B
+ 366naRm4hREfGycXUZRB4VaSQJDETDTlQC6mr1z0pKY2Mbnug8Qrb3qEUpxeqVBbLDhFlu2/G
+ 4BTb5VNIZ3nnpYQu501++uvRgsrgKcvCTP4LcKvtwRZ1i5vaFRybFeJWEM0aFvswl+CsVgvJT
+ SMip3onv/gzPgxivO0iQ==
+X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,24 +60,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 21 Jul 2021 08:19:19 -0000
+X-List-Received-Date: Wed, 21 Jul 2021 08:39:43 -0000
 
-On Jul 19 17:31, Jon Turney wrote:
-> I'm not sure this is the best idea, since it adds more configurations that
-> aren't going to get tested often, but the idea is that this would enable
-> proper and consistent control of the symlink type used from setup, as
-> discussed in [1].
+Hi David,
+
+On Jul 20 16:16, David Allsopp wrote:
+> I've pushed a repro case for this to
+> https://github.com/dra27/cygwin-nanosleep-bug.git
 > 
-> [1] https://cygwin.com/pipermail/cygwin-apps/2021-May/041327.html
+> Originally noticed as the main CI system for OCaml has been failing
+> sporadically for the signal.ml test mentioned in that repo. This morning I
+> tried hammering that test on my dev machine and discovered that it fails
+> very frequently. No idea if that's drivers, Windows 10 updates, number of
+> cores or what, but it was definitely happening, and easily.
+> 
+> Drilling further, it appears that NtQueryTimer is able to return a negative
+> value in the TimeRemaining field even when SignalState is false. The values
+> I've seen have always been < 15ms - i.e. less than the timer resolution, so
+> I wonder if there is a point at which the timer has elapsed but has not been
+> signalled, but WaitForMultipleObjects returns because of the EINTR signal.
+> Mildly surprising that it seems to be so reproducible.
+> 
+> Anyway, a patch is attached which simply guards a negative return value. The
+> test on tbi.SignalState is in theory unnecessary.
 
-Why isn't it sufficient to use 'winsymlinks:native' from setup?
-
-The way we express symlinks shouldn't be a user choice, really.  The
-winsymlinks thingy was only ever introduced in a desperate attempt to
-improve access to symlinks from native tools, and I still don't see a
-way around that.  But either way, what's the advantage in allowing the
-user complete control over the type, even if the type is only useful in
-Cygwin?
+Thanks for the patch, I think your patch is fine.  However, I'd like
+to dig a bit into this to see what exactly happens.  Do you have a
+very simple testcase in plain C, by any chance?
 
 
+Thanks,
 Corinna
