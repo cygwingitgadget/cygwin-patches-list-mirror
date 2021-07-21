@@ -1,48 +1,47 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id B168C3857400
- for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021 08:09:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B168C3857400
+ by sourceware.org (Postfix) with ESMTPS id BE22C3857C67
+ for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021 08:19:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BE22C3857C67
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MF3Y8-1lv8vC1fho-00FWh5 for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021
- 10:09:30 +0200
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mmhs6-1lMNJC1Lt8-00jrtY for <cygwin-patches@cygwin.com>; Wed, 21 Jul 2021
+ 10:19:16 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D6B70A831C8; Wed, 21 Jul 2021 10:09:29 +0200 (CEST)
-Date: Wed, 21 Jul 2021 10:09:29 +0200
+ id C8325A831C3; Wed, 21 Jul 2021 10:19:15 +0200 (CEST)
+Date: Wed, 21 Jul 2021 10:19:15 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fix format warnings in profiler.cc
-Message-ID: <YPfWOWeu6b0c7Kfs@calimero.vinschen.de>
+Subject: Re: [PATCH 0/3] Add more winsymlinks values
+Message-ID: <YPfYgz0EHe7Yw5ko@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <5acddcda-7fa9-e854-911c-27af2f13a22c@dronecode.org.uk>
- <20210721080040.55316-1-mark@maxrnd.com>
+References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210721080040.55316-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:Usd71CD2VPHLx+f0cdscj3hDH0WzbFttstHOvGNx9cG3kGXswlY
- ro/InuZxQnBJn/Dx3mmmA0YRBMAxP3nBEjHHxK9uMrsYZ8vHyCbTEXpAMTMB95BFQSBsLUl
- Cjelp9TAzriTRJIU3lxYUqsaUHwCfuX49V3RWG4jC0CScEZ1qJhV6n6kZFCQvYv91SIk2Cp
- PWDFUJbjJKc0ZjVqTHz9Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Td8w07ecuk=:cRvgkt20Cl03CempL0UlWo
- qeeZAhAwPjzJFjErKK9fcHi0kcHz4dDfNisLUMpaknQUDUogMvdKk8TdmjGY9cs7MBwgFk6P/
- 9lCDWOfKCxSKeaW9iolXmTClJCoStc5gd55B7WiBu2fsFB/jloYQW3rRfwrBK5VTDWMU5voH8
- MDbxuXrkbniCsEelnbSmubE4U8xgpaoGjABdbb694TGpcEqwQJF6S0MT8lZXqiQacxLRZ1/Fy
- ScEnOmktz4Hod1AhASfOwmdeYAvnel/n4pxsVEQjzCKeiVzQwP/NbNQXZb2AC6KQUUWQKxFms
- r/1JeKx4MEBvMj72pWfO7Wsn6AdG7MQcQCsRGdo2PLREcy73pKq0130oP9U3aezJij40htByL
- wiR/5arc2cbZIwltnu18lWAOX+dyLLo5M7teeU6911MridkUIO7e1oiv/PUpoUWfMIZawZqwI
- vlitWnsHvr8pgkpduru7GLhWfPhrr+/lS80MBKQ72zXzKE+oh8g9d3Vmk2XwxCeF1ckXMXPrn
- MJokgsDO9k7sqHyOqi8Mmm0tRyG4Yfa7qsCH39MkqDvdAa2wF3PVLy0G3MPTxtL8noCRy3Cig
- TNJPHOgajLFaoj2gSlXcdfVOtVEHjCAToa3NdSkMwhSl9p/ZcFzE8aMljuIQ5hDaoPxkGMjlq
- X1DDE78TDR6bfLuZns+RqwEGk+8wPSKr4oVlbL6tGoM1OLsG8/7qVdNCTHpFv1iZL2R2CYytT
- UYN2+KvukmF2gPqUXIcPd3ct42zXe0cHVNry/PTizeI0eyShseI1fPdT95mpzGw+mJ9ByKOc6
- VHXdnhhPkWEbAMLmaT7oG/XzAUxwsGMXgmzeI3dww+lmN6MOFKWZK8ofq/5M7wNjmpnY5e9wS
- O17sv7pnSjG7dzCphJNA==
+In-Reply-To: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:MbxDG0OenstzmWYmCTcchiupMACcR7aCgwe2qavbf0cjhekgKrN
+ 6uIjtP7CxGd18RZVi7JAdWAKcUIsXORN2fasxHU0yLVkgeciXukecqTQfKVpwdq3B7ey/CS
+ 7neHCWko9sDzx7aJgiwBC3kg17/8MOQPzhj+PS5yv7C07xvxWN56MLy5fD3UiBlOZk5jpRW
+ 5VBfQY9JEGA/1Jj7eR/dg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DWmN9WIm+tg=:oSV6W1VFmmz3N/uw7kgFd2
+ k/ikln7zwuQMMOwcyRWoUW+C7eMA7F5m45eyEb+kpBun4uhKCnFa5h6leuOxiOYWROLftg8eH
+ 3IHX72c0YQslG+PhpEWDZ0+Ev4ufYgZVzVwmzWhjjpr3LdPKEak1P04FbEVgEaMgG7OaooW/B
+ 1aRWmfOT03DwJg6k4ogSlcHqNpjNkF5sa0mjuz8crv907XIklfrbUkSmNJXWULp6YdBusb18g
+ UvrAY2ol1ESshd8ygDLCGGoAho8n/RkjpoLRqJQmiYdXE87sUdyQd1bwVg8A3h01B6AwdpKfj
+ iEQDeHtkPNCIL66hQSSsjl1cPZ4+CrLgXP7GpMtEq+UdVjDG45RtcJsEYUucYn6n6wP8IZm2y
+ L9q3uXvmudHCRcWt0kTmYNzrwr4WBSbUNFh7Aw2CoY/tVVF9BesccWcBNnJi3D012J8ZWYGuf
+ dq4vk+FSHZPnYY2y/N3eOApebIU8Ymn6dpzN34xDFksm6TKvFcBOxx1/i1e6JCkS3tl7t6VNF
+ 3JVzHk6OU5/UvmhwVeYgKLY+cSMv2uP39QhOomHXw4VKJjf3bhlPHDBFHT2lJYKwHHysFu+yn
+ tFDaqquMedAYKYjeRr+hG73mvWuVTkHtGm4MP1DoYGeX+UVCBj4K+wL9qXl+PRBXDXZN8oCuo
+ M4QdJPwOOfIoTtWqfb3mRD7Ntcgeop80rUkYAe83BvJTBUiNhOeihtLk/iGYLALdsk/mF6+L+
+ pn27wIiMNXUYWvmGweuuxhxgA2GquwQyqhqEDccF/KyIgEf6/tRNKHhk7nfjYrNxPe6YQRXX0
+ gVu2b/hJEwMSXj/ZwerveXIQL2v5UW66F9/fkGXnngX1ER6odDoovPGEZKPf/oeZqTsA8CpBz
+ v1wCfgdQzjkvIcl4hWkg==
 X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
@@ -61,14 +60,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 21 Jul 2021 08:09:33 -0000
+X-List-Received-Date: Wed, 21 Jul 2021 08:19:19 -0000
 
-On Jul 21 01:00, Mark Geisert wrote:
-> Use new typedef to normalize pids for printing on both 32- and 64-bit Cygwin.
+On Jul 19 17:31, Jon Turney wrote:
+> I'm not sure this is the best idea, since it adds more configurations that
+> aren't going to get tested often, but the idea is that this would enable
+> proper and consistent control of the symlink type used from setup, as
+> discussed in [1].
+> 
+> [1] https://cygwin.com/pipermail/cygwin-apps/2021-May/041327.html
 
-I pushed my patch before I saw yours.  If you want to use ulong, please
-send a followup patch which introduces the typedef.
+Why isn't it sufficient to use 'winsymlinks:native' from setup?
+
+The way we express symlinks shouldn't be a user choice, really.  The
+winsymlinks thingy was only ever introduced in a desperate attempt to
+improve access to symlinks from native tools, and I still don't see a
+way around that.  But either way, what's the advantage in allowing the
+user complete control over the type, even if the type is only useful in
+Cygwin?
 
 
-Thanks,
 Corinna
