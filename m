@@ -1,56 +1,54 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 236023858002
- for <cygwin-patches@cygwin.com>; Thu, 22 Jul 2021 08:01:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 236023858002
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id EEA9E3858002
+ for <cygwin-patches@cygwin.com>; Thu, 22 Jul 2021 08:03:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org EEA9E3858002
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MXH7g-1lbBev3Vjq-00YhZF for <cygwin-patches@cygwin.com>; Thu, 22 Jul 2021
- 10:01:07 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MEF87-1lySvO2Oqz-00AJFu for <cygwin-patches@cygwin.com>; Thu, 22 Jul 2021
+ 10:03:47 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4341CA80D50; Thu, 22 Jul 2021 10:01:07 +0200 (CEST)
-Date: Thu, 22 Jul 2021 10:01:07 +0200
+ id E3867A80BC1; Thu, 22 Jul 2021 10:03:46 +0200 (CEST)
+Date: Thu, 22 Jul 2021 10:03:46 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Fix nanosleep returning negative rem
-Message-ID: <YPklw5blHYSEN7O5@calimero.vinschen.de>
+Subject: Re: [PATCH 0/3] Add more winsymlinks values
+Message-ID: <YPkmYgHpDLmsyJjI@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <000201d77d7a$2faae510$8f00af30$@cl.cam.ac.uk>
- <YPfdSyPTCdSWhRv/@calimero.vinschen.de>
- <0189b5495b2149c5a690de0431b7695c@metastack.com>
- <YPfpSgbZbr+bnOWE@calimero.vinschen.de>
- <YPfp0WgZUVo0nap7@calimero.vinschen.de>
- <2271051beb734ce984ed71eab4180746@metastack.com>
+References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
+ <YPfYgz0EHe7Yw5ko@calimero.vinschen.de>
+ <616f5f9b-83e2-689c-bda3-dddc50dff5f0@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2271051beb734ce984ed71eab4180746@metastack.com>
-X-Provags-ID: V03:K1:RHb5vFiRKDUJTLbeYd6PbTI7UYWIvP8ulgI/b4J7Sv/HVSw4EDS
- Q6nU3I+T+lQujMX5sQqg9NZsqg4PeSgO1byXso4KNrSss7vG93ly/gJjOImCGPwacCu4fpV
- P5jWNMFz1TouX6V9IJtrg8558nfLMHE2uS73SMYQQvAHIwJbhHXiWHy6J2388CjVjLLdJQw
- IyBwSWb4XfZI49PhIP+hA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Jpo6ByeSe3Q=:nfQPjVO+KP8+wSfrGFmPqA
- UxMKnxWAKym1w6FZWv8Jv/cKnzXnc1P4NO5Zaf9becTld+B6WB/GPok39He+Oz/p905xXf5Zf
- 99QTQloubC+Wr2+ebHbLVBWrq91DFZ8u2BUU+Ag8lMYDYyROjpDAR4VMIn0LKb9TOnuMqqWwl
- Tn9B0GlokkNPn4dJ0xMUg5c5a1ut2qpw5XWKacPSjt0KZs1EhcG1Gcy+b5jr3MH5Um29oplfJ
- aCH18wsn+JtcoeToZIUslbYSx7uPKxaqxOmKzhy/Rmk4H4wBSIE101kxYl+JaxU6FFiZQyRwu
- qyLdpOtET1J4Dm5UYelrqZ99C4Y54ZcaeF8ElKq3uXCFgU+mx6FWfpM8wGlF16ebRMX8RbYBH
- NaxYYhtd3dsFhFSOPHeMjdmgeEWNzY4ch4cLO/rb/gwN85slzZls5SFYvetopBag50sazf2AD
- YnhO32qtbNYeRqZgU4Vk1t+DPBp9Xa8pDdzrD/oxw+RJelkIx3C9nSLxAErodzovw8bNU+Ef7
- JI/GGzshMlj/GLwFR4yU/9kkAix0R/IWuOMcOYv+0JAAv66a1t5llfNq9Z2q/AjY0x7I5efSO
- B8xdKzdwgpncQT6rRh2x91pSQ4Rw6+mV4LyDj3Ti4oDIZQkDdxRi28DkbKosCF08XozUf3Xdh
- XH87FkVzMFB51EvKpLZxzXiwcs+rAimYokrZoFoyMlMuedDZs1BhR1mt3Hn3XNImt3lSfdQrG
- MtWopj1rkP2nJTo8ZGOUlIRxguVLtttGFk5StOQ6JjeO0ctm2R//zqvO1kchKKvn2wMrN2VIL
- Zs2OugxC9TVuAuLYjQVd6FpKyJbO5SeYvt7WRaLinXYwwbyO+LRYvUeuTe2ZhFiJrgWJdht0J
- 4pvFhjB1LTN/1O3NyOmg==
+In-Reply-To: <616f5f9b-83e2-689c-bda3-dddc50dff5f0@t-online.de>
+X-Provags-ID: V03:K1:qRkj0nEuirnRnW4fxa4fyFae9aKqR0JacAr8P5eKOLu4tvdEUN6
+ QLark5spW6FtAPDXTAByNJa9kAs9y2/b4myLuW1SeD172qu33RdOJuNJeiNy/tBTUef45Sq
+ MInmKKCKaBMQFn7QZ4aUTfdIFSVRdfrl0PxSUJxzjlzJHkdkwkR2uvSmjtNYRcqO3ewuRTw
+ FBXLbAM5SNHcQIG+2tbTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:suse87TYWFA=:T9deQDkp6mgTGwZnSblG3D
+ 9xSozblLgumxGE10/ytXD9K+Yqt69ziws/DtmdVixasPIbSfZoJkS328RNdkyxs9zsjPPz128
+ 6+fERvVLpgWgQevd26ZjHYuPKzJxfDbzApDF4ErEo2Z7g5pHKckn9MoplSqEzlo/GhvLB5pOy
+ 95LyqrwT2M06yZgcgf4zgUgov2rYteOrmnmOlhb3WeF5WrVVAiN9/qGdndO40LLKTcTh2/nDU
+ qA947JkGJnX6AWkj3nn5KW5TxvjUFXVv6j4q1wwa2Q+kiwkS6O7xzYPxyCMg/JOJLlYbijtyj
+ MPbED9oFBco01HiHPyn7QRYK+TF5W4goXCM77kzVGFetbKlQOe6Kw4ZqZRe7eOuobCh9+0GST
+ etgGg6YpH28qyQifI36Ytrkxc+htrElYgg4ob5UfQsNVBwUpQ1hmpFnZTpKZQA6jwFQ1CVuoh
+ y9jjwk5pPNJv2EkRsbwMVfEVz6sWZsc+FblzXNhAi3TvG6FSn77++Z84YchV6mCbJUww3+EdV
+ Xtkzp2Ot0ZB/ElTSfQYCCCr4sTAhPEwcuVZLVgFM3Jleas5i1SEuGBGVWuVTuZYf5aRnpP0hu
+ nLAcF/j9i54moJjjCVaidFaoUru2/tHkKOEjhKEkpkBsgDoSULa3Vg+OUiVYJ/5VKa0KTKHoz
+ M99hfE31KT1CHLELGbnfbzfbhu7YVJ7QWVgEToHLta4/peMmtELdRTnbuCeXySgt+gb1blkYj
+ wQUk8lHg6h9pOIyhqicTEfrV3CY6fC4YocM7R+JL3C8zQtPsSszOHSdaUvn4Nt6+9RiD+2bfp
+ shRbjL+E8Ao+ISO8WQ4ayzUfb9FTLVCUQPQI0eSTbfnhOQU+LsUKNyJtR59iFOPybWySS0y7q
+ UCwtTE6gaftz/duHyaPA==
 X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.4
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL,
+ SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -65,55 +63,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 22 Jul 2021 08:01:10 -0000
+X-List-Received-Date: Thu, 22 Jul 2021 08:03:56 -0000
 
-On Jul 21 16:02, David Allsopp wrote:
+On Jul 21 12:24, Christian Franke wrote:
 > Corinna Vinschen wrote:
-> > Sent: 21 July 2021 10:33
-> > To: cygwin-patches@cygwin.com
-> > Subject: Re: Fix nanosleep returning negative rem
+> > On Jul 19 17:31, Jon Turney wrote:
+> > > I'm not sure this is the best idea, since it adds more configurations that
+> > > aren't going to get tested often, but the idea is that this would enable
+> > > proper and consistent control of the symlink type used from setup, as
+> > > discussed in [1].
+> > > 
+> > > [1] https://cygwin.com/pipermail/cygwin-apps/2021-May/041327.html
+> > Why isn't it sufficient to use 'winsymlinks:native' from setup?
 > > 
-> > On Jul 21 11:30, Corinna Vinschen wrote:
-> > > I wrote a quick STC using the NT API calls and I can't reproduce the
-> > > problem with this code either.  The output is either
-> > >
-> > >   SignalState: 1 TimeRemaining: -5354077459183
-> > >
-> > > or
-> > >
-> > >   SignalState: 0 TimeRemaining: 653
-> > >
-> > > I never get a small negative value in the latter case.  Can you
-> > > reproduce your problem with this testcase or tweak it to reproduce it?
+> > The way we express symlinks shouldn't be a user choice, really.  The
+> > winsymlinks thingy was only ever introduced in a desperate attempt to
+> > improve access to symlinks from native tools, and I still don't see a
+> > way around that.  But either way, what's the advantage in allowing the
+> > user complete control over the type, even if the type is only useful in
+> > Cygwin?
 > > 
-> > Now I actually attached the code :}
 > 
-> :) Yes, I can reproduce - I didn't even need a loop! Third time:
-> 
->   dra@Thor /cygdrive/c/Scratch/nanosleep
->   $ ./timer
->   SignalState: 0 TimeRemaining: -1151
-> 
-> That said, I can get it easily get this on my desktop (AMD Ryzen
-> Threadripper 3990X) but not at all on my laptop (Intel Core i7-8650U).
-> On the laptop, ignoring the couple of signalled cases, 747 runs of
-> timer.c give values between 131597-149947 with a very narrow SD
-> (~4000) whereas on the AMD chip, 738 runs gives a range of -2722 to
-> 149896 with a relatively wider SD of ~23000.
-> 
-> The CI system where this was first seen is an virtualised Intel system
-> so it doesn't appear to be as simple as CPU manufacturer or even core
-> count.
+> WSL compatible symlinks introduce several issues with non-Cygwin
+> Copy/Archive/Backup tools (robocopy behaves strange, 7-Zip stores these as
+> empty files, ...).
 
-Weird.  I pushed your patch.
-
-> That said, I'm not at all familiar with the details of how this
-> works, but I expect the timer for these things is part of the chipset,
-> not the CPU?!
-
-As timers go, the timer behind the NtCreateTimer scenes is a simple
-interrupt based timer with a default resolution of 15 ms.
+Native backup tools are supposed to store unknown reparse points
+verbatim,  If they don't, it's a bug in these tools which not only
+affects Cygwin, but every unknown reparse point.
 
 
-Thanks,
 Corinna
