@@ -1,22 +1,22 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 624983858038
- for <cygwin-patches@cygwin.com>; Thu, 29 Jul 2021 10:23:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 624983858038
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id C24D53858038
+ for <cygwin-patches@cygwin.com>; Thu, 29 Jul 2021 10:40:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C24D53858038
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MuUvU-1mzELL3aLq-00rWAo for <cygwin-patches@cygwin.com>; Thu, 29 Jul 2021
- 12:23:21 +0200
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mt6wz-1n2GTc0n4D-00tR1j for <cygwin-patches@cygwin.com>; Thu, 29 Jul 2021
+ 12:40:05 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 561A4A80DDF; Thu, 29 Jul 2021 12:23:21 +0200 (CEST)
-Date: Thu, 29 Jul 2021 12:23:21 +0200
+ id AC746A80DDF; Thu, 29 Jul 2021 12:40:04 +0200 (CEST)
+Date: Thu, 29 Jul 2021 12:40:04 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 0/3] Add more winsymlinks values
-Message-ID: <YQKBmcZgFygx7cDK@calimero.vinschen.de>
+Message-ID: <YQKFhJE6jhPy5xCD@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
@@ -24,31 +24,32 @@ References: <20210719163134.9230-1-jon.turney@dronecode.org.uk>
  <0b2f3506-b5f8-5e73-b92f-62583dbd4fdb@dronecode.org.uk>
  <YPl+7gROlATG/ggs@calimero.vinschen.de>
  <8c228092-1699-35aa-7558-106f49fde87f@dronecode.org.uk>
+ <YQKBmcZgFygx7cDK@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8c228092-1699-35aa-7558-106f49fde87f@dronecode.org.uk>
-X-Provags-ID: V03:K1:eyiwhDoXvuApkAATDX8Mhut/bC6Ab2cjVXE1WSn8KR8FztG14du
- re5D4TE3qGy3q7ltw2Uer7+vQcMd1hWDCR4X7AIpXbpg1g03O8nFfecWJhkuCzWMZei+YyJ
- qcJ1gcbCSJnY1dBqfSLCEbrvEI325KLv8qfpuPw+6NsoBJOdOvIIKbkrVtBHszlC6Nfovx3
- 8k1i/N5tGEHaEP8ZunzmA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RhNPCXi+nZw=:AFPZ3K3LOQgXban+wFecZl
- QUkpPKoGA9wKBVcHB0RD9Mwr2y+LuniuadOzhvApgX3V9GfeEC4EXR9nvU4qg0pkau+YjO5ml
- 891isCaTVayLSBUAKIok4l4fUWkbLVYMzjFLfvrNUFkI63aN6eKqSNr89H2mR5aQr3o4xJ5k/
- E2ijKqs+YnrsvHKPzfYSOqL30GXZfYmKQocaBmVmYd3D+QjSFgMXCe5Bh5MazH/01NHU555r/
- 9cYXMYo7ruW3eip998uNiFEG40rPbmGiwaXt4pL/ngmCMXa3HhwA4uaGyISWuJd1Mq9UKldqZ
- YQLW2edzwAYhIBKIjj33xafiZ6d0gJyExAmyH6rD7nc23GKOVBMpOx2oGnlMG4apHZozeXazg
- Ey/K5SlNVi3rShqHR3g/nnqU5rrqFhcAWe1McZMT5+1rKa98BXRBgm8U6N/9iLxUehnMS29Sb
- 7a7h1abY/SRZmAi1aUBvcvyzEhwzvJK6P9HOfd9UNxrRnZtN2qZknNYNkGzNfzU0vQ1hv3pyP
- b/YU1BvrG1vVVkVQbMqbp+HAj+J6mPhHFZbZk2V5PqHaYzldRzl/PwXS4fgcy5l8ifWA2F1cz
- 5ZHaN1XxPPBTzx+WQeIrLHOTGCrVqsyGrAxs5crg/ynNE1YN+9xMVt7CTeuNJPhWhDh9O/Wgu
- lyl1iFJ6JTmq7rrJihTBYbgITvyd4E2RKIJ9V2awf0+2VODTtEAqGi7jFv8A7Uzv21keS4yA+
- GtkmqsWM1jJKiBeI0wH1aZgkqPLG6SsF2W5KCrxmB3GGw2+TdgAGK0KdBcrZ2dH+GI7m0Xz+T
- H2/R64kMXWja0v8oYKTTwS9PkGREXAat3oqaF+X6PmqhEo3WegT4/KDITGsGZuqwMs/D3kmac
- 3xJATjO1U/Fkbpb4zEPw==
+In-Reply-To: <YQKBmcZgFygx7cDK@calimero.vinschen.de>
+X-Provags-ID: V03:K1:j+M6OrwVfJJBt9bB7zBqLJllIiStdw/u0OXTG0Qt8FCZoFHaHap
+ 3+euE8A8or1ys8eHQy8vLLxnU5CXYjRJdgAmqMJ5mSQS+JO8ZByFweTZ9PfUpED0X7Qp2PQ
+ CpYMEVrCkPL17zRg33KNkUjBNZaHAnw6zidjhAd/bJb7Rwbu5DAXXnzpg1F5M3zRKfZS7eg
+ 02zyI49bU+YtPbyeOXyOg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:u7pbXd/U1/8=:MHZEQg0tB63+6gmt/9XAv6
+ v3l9RLZFP5AEhF+OllBnHjiQ7pd+gykw4GGQQsZX9MatucNJClwWN29Jlu6N/rwQcaT1V4Bw+
+ YUN8hfxHPf4VH62bhF9mzVInXZtf61ke//GlLu1A3Mo73LsPb2kIquXQuVB21VlNiHuvVNVcu
+ E/4QkgaEiQzxjVWaQfKCLhJ6gfuU2V0vZfc3birrjVJUbJkC5SSbDQaS8T0wucdbEAJxbGtMg
+ SuhLbao1JW8wEroaVWl+9g9HPEQ3209KpMQ/QNCuCE+WohPqUwa2vbr8pOkxzCev6wqYXqFfx
+ Yt4j89y0z5G/K1slgXE6MZkhQ/k/WjTw90vSLts56hmHwiWSQEBlcgjBibk3Pz/XiYSkSkCbq
+ cq2Q0xiiKgnZeZoAk++m0etN9h+KQlA65fOLSOhSPQ8w8f9FpUN32oB5EkPMho8PHME2CoV4d
+ 6wJb3O+eJt4Vxps5JmXXFGS1yZ0ASCA6BKOCWfLKi1o6K8GzR4HWXLccDc45J216Sp3D5gzi5
+ s0UJ55O1T6KQUQVM4t4vZwu949+8okGNqUPGE0PjiEilfNu/BNSu9sKnwZDa46wyGMS6MIPR8
+ mipIF8Pqz7vj+N42TjkQXVgsq5hED3DoBqMKoVQiDd7vsXGHcVYnLyjZNvctqOC2ObyQBcFfE
+ ZYFBTQJ9HYwuBRjed6QMZENGfAuS3xfgRDw6NR+Ys2g9MSOl0hYVZONAdnfMBV7/DN3Hzvpse
+ CTR8gGwt64+QnFH8P+kXswt7OE+sgiIWY6OTResIIp7R1+adKTL6zTlPoMT5X680siC0OESsZ
+ tHjAcSWcQF1PFs5yo0O90RRe6EXK8MxRDfnJdFzs5pQ1djNVvGVSRHLXjNWX9yWK+Yj5+lBUu
+ tPQKXgjlnt4AjNdWjcqg==
 X-Spam-Status: No, score=-100.2 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -64,63 +65,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 29 Jul 2021 10:23:25 -0000
+X-List-Received-Date: Thu, 29 Jul 2021 10:40:08 -0000
 
-On Jul 28 20:55, Jon Turney wrote:
-> On 22/07/2021 15:21, Corinna Vinschen wrote:
-> > On Jul 22 14:53, Jon Turney wrote:
-> > > [1] https://cygwin.com/pipermail/cygwin/2020-August/245994.html
-> > 
-> > Did nobody ask the Docker guys why they fail to support perfectly
-> > valid reparse points?
-> 
-> It seems so e.g. [1]. The answer isn't much beyond "yes, that doesn't work",
-> though.
-> 
-> [1] https://github.com/moby/moby/issues/41058#issuecomment-692968944
-
-D'oh!
-
-> > > I haven't yet looked at adding 'native' symlink support to setup itself, but
-> > > it's probably going to be a bit of a pain.
-> > 
-> > That may be not a bad idea after all.  Setup typically runs as elevated
-> > process, so it has the required permissions to create native symlinks.
-> > Scripts could then run with CYGWIN=winsymlinks:native by default.
-> > 
-> > As long as nobody has the hare-brained idea to move a Cygwin distro
-> > manually, native symlinks should be just as well as Cygwin symlinks.
-> 
-> I'm pretty reluctant to add this to setup in any form which isn't initially
-> "keep doing what we currently do, unless you explicitly ask for symlinks to
-> be made a different way".  (especially since when we changed what we were
-> doing in Cygwin 3.1.5, it opened this whole can of worms)
-> 
-> So I don't think that gets us any further forward if setup doesn't have
-> useful control over the kinds of symlinks made by post-install scripts.
-
-Ok, then, by all means, lets' add a few options to the CYGWIN=winsymlinks
-setting.  Just s/WSYM_magic/WSYM_sysfile/.
-
-> >>
-> > > If we can come up with a fixed policy that works everywhere, there is no
-> > > advantage.  But that seems unlikely :)
+On Jul 29 12:23, Corinna Vinschen wrote:
+> On Jul 28 20:55, Jon Turney wrote:
+> > On 22/07/2021 15:21, Corinna Vinschen wrote:
+> > > On Jul 22 14:53, Jon Turney wrote:
+> > > > [1] https://cygwin.com/pipermail/cygwin/2020-August/245994.html
 > > > 
-> > > I could buy an argument that 'native' should be the default (although maybe
-> > > all that does is slow things down in the majority of installs?).
+> > > Did nobody ask the Docker guys why they fail to support perfectly
+> > > valid reparse points?
 > > 
-> > It may slow down installations a tiny little bit because the target
-> > paths have to be converted to POSIX, but I doubt this is more than just
-> > a marginal slowdown.
+> > It seems so e.g. [1]. The answer isn't much beyond "yes, that doesn't work",
+> > though.
+> > 
+> > [1] https://github.com/moby/moby/issues/41058#issuecomment-692968944
 > 
-> My assumption was that "the majority of installs" are running where native
-> symlink creation isn't permitted, so the slowdown I meant was that adds "try
-> to create a native symlink, fail and fallback" for every symlink creation.
+> D'oh!
+> 
+> > > > I haven't yet looked at adding 'native' symlink support to setup itself, but
+> > > > it's probably going to be a bit of a pain.
+> > > 
+> > > That may be not a bad idea after all.  Setup typically runs as elevated
+> > > process, so it has the required permissions to create native symlinks.
+> > > Scripts could then run with CYGWIN=winsymlinks:native by default.
+> > > 
+> > > As long as nobody has the hare-brained idea to move a Cygwin distro
+> > > manually, native symlinks should be just as well as Cygwin symlinks.
+> > 
+> > I'm pretty reluctant to add this to setup in any form which isn't initially
+> > "keep doing what we currently do, unless you explicitly ask for symlinks to
+> > be made a different way".  (especially since when we changed what we were
+> > doing in Cygwin 3.1.5, it opened this whole can of worms)
+> > 
+> > So I don't think that gets us any further forward if setup doesn't have
+> > useful control over the kinds of symlinks made by post-install scripts.
+> 
+> Ok, then, by all means, lets' add a few options to the CYGWIN=winsymlinks
+> setting.  Just s/WSYM_magic/WSYM_sysfile/.
 
-Uh, ok.  That's avoidable, though.  The Cygwin code is lacking a check
-for SeCreateSymbolicLinkPrivilege being present and enabled in the
-current user token.  This could be done once and then stored in a static
-var for later consumption.
+Also winsymlinks:sys or winsymlinks:sysfile
 
-
+Thanks,
 Corinna
