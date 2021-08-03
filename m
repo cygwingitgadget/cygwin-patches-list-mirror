@@ -1,47 +1,47 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 4F9433895031
- for <cygwin-patches@cygwin.com>; Tue,  3 Aug 2021 08:04:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 4F9433895031
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id B21A6385AC30
+ for <cygwin-patches@cygwin.com>; Tue,  3 Aug 2021 08:07:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B21A6385AC30
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N7AEs-1nDShc0LqG-017T0k for <cygwin-patches@cygwin.com>; Tue, 03 Aug 2021
- 10:04:04 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MpD39-1mwl7B0gCl-00qmVD for <cygwin-patches@cygwin.com>; Tue, 03 Aug 2021
+ 10:07:18 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 315F8A80DA9; Tue,  3 Aug 2021 10:04:03 +0200 (CEST)
-Date: Tue, 3 Aug 2021 10:04:03 +0200
+ id C2429A80D90; Tue,  3 Aug 2021 10:07:17 +0200 (CEST)
+Date: Tue, 3 Aug 2021 10:07:17 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Make gmondump conform to its doc + adjust doc
-Message-ID: <YQj4c77qeWPE80Wg@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: More profiler format + small issue fixes
+Message-ID: <YQj5Na4vtJ8xVNcR@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210802092553.1268-1-mark@maxrnd.com>
+References: <20210802065231.1011-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210802092553.1268-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:POSbsQrY/QdS1XorMzH7jL9dNxQVSI8SaZbtXq17yypTxFan1Qk
- 0xk9yac/5JacEyvDHpHgDiuJsVPzo9qZ6BedsgGEJh2c6Oix934UinPDjmlYxCCS53aMaBO
- mprRA6cTWnZHY4sannVnavSZa0sWLj3ULpuuqDzU4tZnQRTB0tPjrfW0cTY5uaA/h67v6yR
- Vc7hnyfqgVVDkhhas436g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6JEUZMRAbYY=:eUL+dS1uO18dYjurIYN8mh
- 5g61fsWE61/bUi9noDJAGp93mWOzWL+oLC5h36M3vTZMGFDe+jwiO0nU/aMKCQnoiCSoKwDwU
- b+w5RwUYHQDjiLmEFQl1y7dDBfNqfB1a2knY5y2c7JMAltDI+wD1nxfcxr33e0xhEGGTX/O4t
- 6yT2K1z09N6fgElmQXpXFeOzC8B6+8aY16EfDtKFWtVNidsuD/4DcWjLtnWknZ4dEFdhJ/EDh
- LKSSbh+ZDEJqj3wV5f8qtDLVV95hlGF/Gx2KGvXl3pKeJZUk+PXP6ZB2EcqlVL1Gh19mvgb+6
- 8S6VYg8lUbltju+7AJQN0qRJ1b+LBd19ugkYT0hV1vOZ6U8iNnd1TBpgpyPCbf+DCQjWQKTEa
- vbpJrdRmOL93X9A22Hjy92JWCfCoOK2a2ehwvaQNFU/C2//H4DjvOod8A7zS9sC+0L14/usxd
- gVqGJj4tvAE+3HurzuE2rDjai4yUL001KpEbqYIAyFO+Nc8eQD5DZPYQMux8EIKIZe0rEsPrD
- rCJCmQH3I94iCkSjha4IKpW66J/a9DZCy+8YeLTdPFbreOGKSLZQksimzWhfqCE9NcCARvk/U
- ju7PGct9lPxfzBHHhAX9K/VjMM/yfSe5EUf626KMmjEPwkeUqY/+i4aqDKF7qkgKNptaHOcqy
- lPV41zRo25ao8b7P4rjt2UPWvGXQNS/cVN60zQmg2aNm8xRhjHFyFzvQXJoM22FI40esmZaeU
- mxGMwuNqBabuW18MIS5iWAOlDaV45HdxKHg+40xOTkARv1Idq9pEdTKsn23pRdSB5BE2aQw9r
- HZrA4/2AtLILjbRR1wlPpt1df2/qZDHxSk8vV6Bgp5h4xo7kOmX81yTXPCpms4l3nBulytXYl
- ducKGp8EbsO0dw+w5ZSQ==
+In-Reply-To: <20210802065231.1011-1-mark@maxrnd.com>
+X-Provags-ID: V03:K1:xOJiW6CWfg5/kUO0VFg+N50uiOwxtiYzMYMCghRvCPQH36FizlW
+ Pu6hjpUf8pfQgUgUsn20T87jQEnAbUgILCp0nE24FtvTYgoCtHJlozxE4tw8TNduBYZtH+s
+ PJUF0msZqNHcW54A0ffAtec6pgVcE5h53AdhpvwhGtTxkQXE3dELsY9+41Dav02Pa88pO8j
+ 7Gs+L245siCSdm8VLtFpw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X+BZL9fwJlU=:mmIF+etQu9VQEPUmaP/lq2
+ zmREXhP2wVzM1v4yN7jdO2JpZp0nUufn9RkyGS/+Aqk1zwF49dFoE0uedcZeHqtpX+juMf4KQ
+ TadLgE/jZHWvZrenkreBTeqL5YUrentujQRy6GdZ4jXuWU44nCu5ZFzvWk2EeC86e25ihzxSr
+ kqI5j7GLevqP6tV8njZuHXVlSFvQQUmUd3QV6F0pSfEMbToW+tWmMTwcosXTDMwDlarrFSlxd
+ 7amG99I2pwfxZSZTgDHB4ZxrNgkEQQJ9YX9Drk3lZZxKR6zNHMRKSl3pkBUeJcRFvQlnGOnNF
+ 4bUk6kyg61O3W+VLkJbF37igsIX9VfxIcNgBahJyfKnCfjsptGYeKH3IceSUhwS9IVzIPYJdA
+ o7c50AV6garFzK9QUB7frtYhq2KOXKTT9IbOGd/aemyw41FREs1SbhpSGr4rS4BksScWV3YmQ
+ tQbPa8nwUARGdI63sUPx0mmTzrjSuV911t5LpqMaMkZS4AFZxTU+NgyKL+FuxFrk3ghlQlQjq
+ iLw9w25lcdSj63hQvzy9LQn9X4nJt7PnTeAHshl8pVrp+5qpScMYrqO/m9WCHk8Em6fmwNqg0
+ 4UbLrqnzRcmjcL2gjJPlaaXLgjx2vWcc7cTO4ASeMbkL2E+IEINh+uscXg3CXXQTOigd4cnFH
+ Sl9SvGeTJhQCRyPemzjzFq/RWvWofMVeP1DCW4V6xvoyyEb7gjyE4ybBd3ABVZD6Ujn9RCWMR
+ 9tLam7jgo7ZvPHOOBMc5yzGEcQ1JEbtmGXuRorRd2lvTU4+afngLWA6TUHZlbRXG7JHshXT8+
+ 0zSdH4OsT6tb5FR0KN2zFVABMJOa00OFhOWbSuDQ8qysAwAsHc+ZoKRZsUS3TQx5zTg4G9pwi
+ TOX+FB1wtfhImT4eTBAg==
 X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -60,20 +60,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 03 Aug 2021 08:04:06 -0000
+X-List-Received-Date: Tue, 03 Aug 2021 08:07:23 -0000
 
-On Aug  2 02:25, Mark Geisert wrote:
-> The doc for gmondump says 1 or more FILENAME are expected, but 0 is
-> handled. That's an oversight. Make invocation with 0 FILENAMEs print a
-> one-line help message.
+On Aug  1 23:52, Mark Geisert wrote:
+> Make sure to cast to ulong all DWORD values displayed with format "%lu".
+> More instances are fixed here than in either my earlier unused patch or
+> Corinna's patch. I decided to use typedef..ulong for more compact code.
 > 
-> Reword the beginning of profiler's description doc to clarify target's
-> child processes are run but only optionally profiled.
+> Address jturney's reported small issues:
+> - Remove explicit external ref for cygwin_internal() as it is already
+>   provided by <sys/cygwin.h>.
+> - Leave intact ref for cygwin_dll_path[] as it is required by function(s)
+>   in path.cc that profiler uses. Added comment to that effect.
+> - Delete existing main() wrapper. Rename main2() to main(). This because
+>   profiler is now a Cygwin program and doesn't need to dynamically load
+>   cygwin1.dll.
+> - Documentation issues will be addressed in a separate xml patch.
+> 
+> (I would have linked message-ids of Corinna's and Jon's messages for
+> proper theading but I no longer have their original emails and the mail
+> archives don't show msgids any more.)
 > 
 > ---
->  winsup/doc/utils.xml    |  7 ++++---
->  winsup/utils/gmondump.c | 12 ++++++++++++
->  2 files changed, 16 insertions(+), 3 deletions(-)
+>  winsup/utils/profiler.cc | 60 ++++++++++++++--------------------------
+>  1 file changed, 20 insertions(+), 40 deletions(-)
 
 Pushed.
 
