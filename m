@@ -1,59 +1,57 @@
-Return-Path: <schn27@gmail.com>
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com
- [IPv6:2607:f8b0:4864:20::535])
- by sourceware.org (Postfix) with ESMTPS id 74B99385842C
- for <cygwin-patches@cygwin.com>; Mon, 23 Aug 2021 15:48:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 74B99385842C
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 4E11F385703C
+ for <cygwin-patches@cygwin.com>; Mon, 23 Aug 2021 18:09:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 4E11F385703C
 Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-x535.google.com with SMTP id s11so17037556pgr.11
- for <cygwin-patches@cygwin.com>; Mon, 23 Aug 2021 08:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
- bh=XdbEKqOIklCGPEf7k40BXAnWsnyC+OtC5Zm0tSuWKbs=;
- b=MVWXLnlUsay6SC6EQw1q5Oj6YDRsi1EvDLdr1ZLOVY3+fYV1KluvbeNVYR/XBjPdhv
- y49oTjhuI5R7PJ05HZ8JhS7hYQ6IprB3SbUxgN8ZZKLKkDTLZYrzeLRk4PFI+EL2wvJj
- 4RysuJ09fuL+qcnFqF4deWJro9ka1lT2QmH9QAylrqgUPtQr7vXgEOuqjbfoi3Y4sk/a
- +2vdsSvqkDPP9XdJucO0WJzAwMNm0BSYmOc4PFn7PmPxHbS+6SBj6JB6fVmuW1xFkdSb
- CAPY3F5kHohq8dhKs24wKtQ08To8hZuwStd0JkQUygEawDjjW+rlAq406ijHuS3VQpDZ
- RmuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=XdbEKqOIklCGPEf7k40BXAnWsnyC+OtC5Zm0tSuWKbs=;
- b=O3Te1a9yh6oupR9eS17rLTPqS5RDTXJj5sjJ7rR2igOhoccigpVe5jlbiuBo+IO67S
- nxztARPFvOVUkc7nlL9VwI8EXt28kXKcw4HPrlwu2FY7iWJiaRbzGaSAwZuIRIKkE0j9
- 1Esp04rt4SSNBYFGhOx/VJCs0Y9nAHf3ZbcyK7Ddf8pHEOcz74SsoFCjQVN+6zIlSFf2
- 70MGB1f9pBIZWEsZdYb8Q+hNDW9Fj44Ua+RWKhzfjicWAJ4HzjZLfxpNEqipCYCQt5C0
- 1hf8/yhK/6iceBjHU8neS2NQjh/1orS7iky7Ae2LGRI7SOmV5P4hUi4W/yQ2CdWJAIZ6
- Gfpw==
-X-Gm-Message-State: AOAM532BYtxNTKCCToQAq3NnpjIP5UznPCMHLs/FuGVgeYv2F9DGvJrf
- hU/JMdsPqVlBydmCC1YXqvjryvePAQp8ZIUKmOXC2hLM/VcqYQ==
-X-Google-Smtp-Source: ABdhPJxr1dGUzDeXE/EG9AC94ZX67xGa13V56OotgF7mX1QWtDxGiVOBGvIoBfLH9DImow4Iiih116YbwGk3CZObA2o=
-X-Received: by 2002:a62:78c1:0:b0:3e2:bdc:6952 with SMTP id
- t184-20020a6278c1000000b003e20bdc6952mr33839517pfc.45.1629733712255; Mon, 23
- Aug 2021 08:48:32 -0700 (PDT)
-MIME-Version: 1.0
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MwwqB-1nEcqo3uTD-00yNlB; Mon, 23 Aug 2021 20:08:57 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 789A4A80D9E; Mon, 23 Aug 2021 20:08:57 +0200 (CEST)
+Date: Mon, 23 Aug 2021 20:08:57 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: =?utf-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCc0LDQu9C40LrQvtCy?= <schn27@gmail.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] fix race condition in List_insert
+Message-ID: <YSPkOY8WbIppas+R@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: =?utf-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCc0LDQu9C40LrQvtCy?=
+ <schn27@gmail.com>, cygwin-patches@cygwin.com
 References: <20210823142748.1012-1-schn27@gmail.com>
  <YSO4hmZcdL/5w44q@calimero.vinschen.de>
-In-Reply-To: <YSO4hmZcdL/5w44q@calimero.vinschen.de>
-From: =?UTF-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCc0LDQu9C40LrQvtCy?=
- <schn27@gmail.com>
-Date: Mon, 23 Aug 2021 18:48:21 +0300
-Message-ID: <CAGdYWrY=tydw+Bu_dYVef_enUh-_ndBC4kQGUgfL=D6AZuqb+Q@mail.gmail.com>
-Subject: Re: [PATCH] fix race condition in List_insert
-To: cygwin-patches@cygwin.com, Aleksandr Malikov <schn27@gmail.com>
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
- FREEMAIL_FROM, HTML_MESSAGE, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ <CAGdYWrY=tydw+Bu_dYVef_enUh-_ndBC4kQGUgfL=D6AZuqb+Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGdYWrY=tydw+Bu_dYVef_enUh-_ndBC4kQGUgfL=D6AZuqb+Q@mail.gmail.com>
+X-Provags-ID: V03:K1:u1Jo1q8aSjZa7rAnWG6dKDrgk4vS8uiSF+KVktI5jpfj+RkXiH5
+ eUTwEPfQbN63km629VcEHJ4YC7A78fB0lEAuu7AG6kOMj1muFg+phvjXMnSTtbUiVr1b/fH
+ TycQuuDagvct5/UIbZLkoCIekbQxhAOwE0rn2aia0CX9dIaKuo1fcthwYRPlk4NAzOrfT3d
+ EPf+whUPT1SCtEvsfp9aw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Lgxwsoz0lQw=:b2KyQaqJUes7rhAlUEulEj
+ AHWmUGBkDq91qF9q/jpWU7a+kC6wUTk+XN4t0bW0v/BNrRGsZSNs+4lpV6ArREsHwBjUcCtn6
+ W4JmBy04zTo0aYzpQg001C9AKv6g+oZxj+GVg54/7jyUP6n+PoinnpSxmfEvCCth3+KxI+Gjy
+ bSb5HGrg8OKtF5lQJzePCQ5D4aDx4CvTIidsEhmbdFjJP47IyZ9Eu1kFKwl9rE3dSP2jb1Xpy
+ 8YcTTGyp4WOb8Kf4tNaehxISdQryONk7jYUEiiubRLd1f5mr4QRLRQYR9Z8kuKoH/6CcqnBp/
+ R4l6Hni19l9Dqg4shMji3QK8QpsilZm7z5StVgiAkQIVJU/J6qzM1IYJj8GEcssI2MA5KV/cR
+ g43qwaVcldwfQPap6J5weshwwGLmwEQNKwrmK1JsXcg9JNXUeacmrxLboYOmfjPhgPbtkzF1k
+ 6BvZSlRPhZcAC/W7OIzkLUt2vkPQCAWij+CSb/xt0aZkIZtRRjpqt7xUMQ2BvJDbhCNfXqkVf
+ hUltAK3ea7DdS8Pwcy1ClLTjSlq3LPn+4HdunWxm3F+qvZRPI/opk0Kzj7SjW/sylC35GD0Or
+ AUuV/jjqgaOv5Kzplwc05iduXtTV2kNH8/UpJ1KfPmTMnebCtkimKNNaE7CFk6LBm04fGRJY1
+ ZMv3+upo0KDGiEeB7ghlc5ut6yG2Q/jHmIoNiVs51BjDaftZrsx3CgOAbbvl5L1KNf+TdWxEn
+ Ee0I7Y9EBJQy2EgG09doqzK+wxvnkDu7mnTzrdN5pT4qbuSyvFbc2H5KxAIQQ6xzetsQwzw6T
+ gGdLsbA3N34edu8sb4LvSOaXdU8nvEYtucEpPrNMPWZcZK/BXUbRbXzrwSdtVoTcQ9qxKqp/K
+ I0BwQzqh0c9xwlGQ/Zug==
+X-Spam-Status: No, score=-98.7 required=5.0 tests=BAYES_00, BODY_8BITS,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,46 +64,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 23 Aug 2021 15:48:44 -0000
+X-List-Received-Date: Mon, 23 Aug 2021 18:09:10 -0000
 
-https://gist.github.com/schn27/23b47563b429aaaad5ac315d05a43a11
+Hi Александр,
 
-The test is failed if "Thread #X timeout" is printed and -1 returned. This
-happens on my laptop in about several minutes.
-The test is passed if it runs infinitely.
+On Aug 23 18:48, Александр Маликов wrote:
+> https://gist.github.com/schn27/23b47563b429aaaad5ac315d05a43a11
+> 
+> The test is failed if "Thread #X timeout" is printed and -1 returned. This
+> happens on my laptop in about several minutes.
+> The test is passed if it runs infinitely.
+
+Yup, that shows the problem nicely.
+
+> > LGTM.  Can you please provide a copyright waiver per
+> > https://cygwin.com/contrib.html.  See the winsup/CONTRIBUTORS file.
+
+Just provide your BSD-2 waiver and I'll push your patch.
 
 
-=D0=BF=D0=BD, 23 =D0=B0=D0=B2=D0=B3. 2021 =D0=B3. =D0=B2 18:02, Corinna Vin=
-schen <corinna-cygwin@cygwin.com>:
-
-> Hi Aleksandr,
->
->
-> thanks for the patch.
->
-> On Aug 23 17:27, Aleksandr Malikov wrote:
-> > From: Aleksand Malikov <schn27@gmail.com>
-> >
-> > Revert mx parameter and mutex lock while operating the list.
-> > Mutex was removed with 94d24160 informing that:
-> > 'Use InterlockedCompareExchangePointer to ensure race safeness
-> > without using a mutex.'
-> >
-> > But it does not.
-> >
-> > Calling pthread_mutex_init and pthread_mutex_destroy from two or
-> > more threads occasionally leads to hang in pthread_mutex_destroy.
->
-> Do you have a simple testcase in plain C, by any chance?
->
-> > To not change the behaviour of other cases where List_insert was called=
-,
-> > List_insert_nolock is added.
->
-> LGTM.  Can you please provide a copyright waiver per
-> https://cygwin.com/contrib.html.  See the winsup/CONTRIBUTORS file.
->
->
-> Thanks,
-> Corinna
->
+Thanks,
+Corinna
