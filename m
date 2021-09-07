@@ -1,73 +1,38 @@
-Return-Path: <j_mcnickle@hotmail.com>
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com
- (mail-oln040092066015.outbound.protection.outlook.com [40.92.66.15])
- by sourceware.org (Postfix) with ESMTPS id A993D3858411
- for <cygwin-patches@cygwin.com>; Wed,  1 Sep 2021 14:08:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A993D3858411
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 7A5763858415
+ for <cygwin-patches@cygwin.com>; Tue,  7 Sep 2021 10:28:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7A5763858415
 Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hotmail.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PRrubFClQp00dszjFD3tIRdM+qFXnpuEBQGm0F2aRZCL4nRymnqVSBS0q09zF8UZ3lXroYgObwWAcsdOWPZFck3rMBJ6IQUdFRUELnUF3YjLhYU9iY+oYNYtwhjYQhM2a3Cvfg9O4k0niRCVTsm/XY8OQe0kpBFnE1kDjw5tILVPO+1Cr0VX35W6uXxflpyxGyN+wBrn6qXCnbwjxUjIgTPszrlPlmbPlQj8QQElifYSdPRAlLZcBY9xZ8rX3G75Via4rbAKYSuk9xeIqJkjLchtS80y/Fabz11f/oVl0Cq2FK6FeUoJN4y4lP+dbRiEMNY1cDvBFw4RlDf0eYre9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version; 
- bh=qpXY+FgZpZO9tODNs9j3FarGTrT8jP0ZUr5clBRwu9I=;
- b=CJ9SkuQql042ZNVOj2SdAwN/RK0KEKoqu1wZs4d89p2oJB9SKjRAurid+sdRfgyEK+AbcjtAbipGcETNKGHVfdzg7xAAU1OrUGBPj+6tts8S4BjADSr7E36fQ9DjbNyLa9ekb8WAdyBZ8DbyzNAatP8fP+0Q6dYvxAtRYs4YDVR1eZuo0a+AUIPkzhdiN6GvCDOMurJBubo85/MdJAxnbivWhviCPi3h6073owWDkZPAYfpy71Nma8tNQw5aGMW08TJeFOWswR7HGN27/YR5PJyJNDh1ZEbS5INjwj/5xBNPkrF94jVe7F9T/IccTh1QMYPM71U6WLDBf6yNyF51AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qpXY+FgZpZO9tODNs9j3FarGTrT8jP0ZUr5clBRwu9I=;
- b=AbhAGN4JPjJlZibVRK5RTYXaX/w6NNAoizXCVzOFiAO++nNKopNNqzzPmajT2guHCHGKgVIdt6lzz8qpL3YH5UzWHjgINFRvAcSHqrtD6YcTNe0qy6xSBjj08CJAR9pz46+6p4/3xcsUPmsPGYLCE+jSgxkXHruLdn500B1sVp4HtQGQWJu1iK7Lesb1Z2/Mjq02C4OfO8kVCnL6wimG/MCIWowrjLHCxEYOX5QwYJ+F+tlV3x3BvsmORb5NtYryn8IZoI6xcl4uqKhYifb+s5913CQl9Fyn8bqEInTai6kiQayLv0P0/4iHTI5F5RiRvZqHzAPPAdWKmEgVcP4nhA==
-Received: from VI1PR06MB5918.eurprd06.prod.outlook.com (2603:10a6:803:d3::10)
- by VI1PR06MB6704.eurprd06.prod.outlook.com (2603:10a6:800:183::13)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.17; Wed, 1 Sep
- 2021 14:08:37 +0000
-Received: from VI1PR06MB5918.eurprd06.prod.outlook.com
- ([fe80::e173:d95a:67de:691c]) by VI1PR06MB5918.eurprd06.prod.outlook.com
- ([fe80::e173:d95a:67de:691c%7]) with mapi id 15.20.4457.024; Wed, 1 Sep 2021
- 14:08:37 +0000
-From: Jonathan McNickle <j_mcnickle@hotmail.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: OpenSSL Patching
-Thread-Topic: OpenSSL Patching
-Thread-Index: AQHXnzp1Algfn3nLcUG2uayfnS/WHw==
-Date: Wed, 1 Sep 2021 14:08:37 +0000
-Message-ID: <VI1PR06MB5918473FFC0A05EAD0002798F2CD9@VI1PR06MB5918.eurprd06.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 918918f0-9a8d-6328-662f-e89c9522f3bc
-x-tmn: [K+E4U6i3JNrGqrD+MedLbEUkcSluzChz]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a07d9d65-80b2-4d06-1e5b-08d96d51fe23
-x-ms-traffictypediagnostic: VI1PR06MB6704:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iNfLJ2jtOzzdp+kQhkUhmeIvJBBhZtkn34gPS+bbJZ903K0vtbAr/03T2h2Q53F4odMsLVpsvxkJeDWv8B2r5QFFVv0yZsJt+h5B7jUoRuITCP0ZE8+TCaA8AwjDyeLlnH/lIczmSU5uXH1wXLao5kcJbuOp47Ggx32Hs5xV5wKZETbDy0nuVJIGAKVX5nJ/pvwez1y4B/alpXzXy+eyY5FvKaSnUU87hkxlFivmAglT1LTi2b1nPMhDXPY/EPyn5mtpiP3S3WaM9+wUo7RTyRrR168d9sedFy5jN2h0iSbRv9TF0i9NjlCT1NZd9RNRnokHYsqIjg0M2QgkFR2Tgj5uxiXo4xJ4HeUyO0uBY6IHyMmF3YyXR8JN3Bu2X+jBKCoKSALI3v/atoT9dThcUN6rkFV9QOaFj0XchPy2GnsskDriaeRtX22IZIXJBfd/httAeksCNzxkmtJF4HbvPGniACIfgVkwla8iJzjdnco=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: y2nt0aeigmYtzrT7SuXVd7hJ41ropge2P6ReDd5p9OV8LRHbOcSZ5OcUtA70EJEBA2zWCTPoUoSq998YeKK4raAcgWaWhLUW9xb2PZtQFgtRKMtfivONmP43nlU9akgrXu9uBhmVkmDwEFWtlI7SGw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-08.nifty.com with ESMTP id 187ARsf3013879;
+ Tue, 7 Sep 2021 19:27:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 187ARsf3013879
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1631010479;
+ bh=M8pN+6J3eP2mpV5U7PbCxw/iq0TqQIp3c4As2p9NghE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=BYg4K9/NjkFoSeREeUtB6FXp69VlzTDDDrc5qGTOVOG/UheyWcSBI16tgfdxDiJ1R
+ FHILbjdPq+ygu2ZPyufYa9mi626ze701xRvLwgTiaouTuHYTuaqAW7co5BF9OUGlRE
+ M19uSIkzosEo6cuZ3B83eK7KeX0Q3oJrm+B7KhqJFHPkZZbhtxSs1IaK5/HMtnfVw3
+ SXQoTJhlXcZBRZglYiQrqbQ6YuMGQNHHWS+pC95geHSiKEm/ciMYf2FvF6oySRlckH
+ SiFtEF4fUHSckYfcllYGz2Pnyxj9qhyLH6uXWU2yto86PVjm/LdXu7Jk4Zs3DD3tfm
+ IJc0n6+LMk16Q==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: pty: Fix error handling of master write().
+Date: Tue,  7 Sep 2021 19:27:45 +0900
+Message-Id: <20210907102745.1149-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-eb2c2.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR06MB5918.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: a07d9d65-80b2-4d06-1e5b-08d96d51fe23
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2021 14:08:37.2069 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR06MB6704
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_FROM, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -82,14 +47,104 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 01 Sep 2021 14:08:49 -0000
+X-List-Received-Date: Tue, 07 Sep 2021 10:28:27 -0000
 
-Hi=0A=
-I was wondering if plans were in place to update OpenSSL to=A0version 1.1.1=
-l to fix the latest high sev security issue?=0A=
-=0A=
-https://www.openssl.org/news/secadv/20210824.txt=0A=
-=0A=
-Thanks =0A=
-=0A=
-Jonny=0A=
+- Currently, error handling of write() in pty master side is broken.
+  This patch fixes that.
+---
+ winsup/cygwin/fhandler_termios.cc | 24 +++++++++++-------------
+ winsup/cygwin/fhandler_tty.cc     | 11 +++++++----
+ 2 files changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
+index b487acab3..012ecb356 100644
+--- a/winsup/cygwin/fhandler_termios.cc
++++ b/winsup/cygwin/fhandler_termios.cc
+@@ -308,12 +308,12 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
+   int input_done = 0;
+   bool sawsig = false;
+   int iscanon = ti.c_lflag & ICANON;
++  size_t read_cnt = 0;
+ 
+-  if (bytes_read)
+-    *bytes_read = nread;
+-  while (nread-- > 0)
++  while (read_cnt < nread)
+     {
+       c = *rptr++;
++      read_cnt++;
+ 
+       paranoid_printf ("char %0o", c);
+ 
+@@ -453,7 +453,6 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
+ 	  if (status != 1)
+ 	    {
+ 	      ret = status ? line_edit_error : line_edit_pipe_full;
+-	      nread += ralen ();
+ 	      break;
+ 	    }
+ 	  ret = line_edit_input_done;
+@@ -462,22 +461,21 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
+     }
+ 
+   /* If we didn't write all bytes in non-canonical mode, write them now. */
+-  if (!iscanon && ralen () > 0
+-      && (ret == line_edit_ok || ret == line_edit_input_done))
++  if ((input_done || !iscanon) && ralen () > 0 && ret != line_edit_error)
+     {
+-      int status = accept_input ();
++      int status;
++      int retry_count = 3;
++      while ((status = accept_input ()) != 1 &&
++	     ralen () > 0 && --retry_count > 0)
++	cygwait ((DWORD) 10);
+       if (status != 1)
+-	{
+-	  ret = status ? line_edit_error : line_edit_pipe_full;
+-	  nread += ralen ();
+-	}
++	ret = status ? line_edit_error : line_edit_pipe_full;
+       else
+ 	ret = line_edit_input_done;
+     }
+ 
+-  /* Adding one compensates for the postdecrement in the above loop. */
+   if (bytes_read)
+-    *bytes_read -= (nread + 1);
++    *bytes_read = read_cnt;
+ 
+   if (sawsig)
+     ret = line_edit_signalled;
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index f2ac26892..1ea9a47ac 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -561,18 +561,21 @@ fhandler_pty_master::accept_input ()
+ 	{
+ 	  n = p1 - p0 + 1;
+ 	  rc = WriteFile (write_to, p0, n, &n, NULL);
+-	  written += n;
++	  if (rc)
++	    written += n;
+ 	  p0 = p1 + 1;
+ 	}
+-      if ((n = bytes_left - (p0 - p)))
++      if (rc && (n = bytes_left - (p0 - p)))
+ 	{
+ 	  rc = WriteFile (write_to, p0, n, &n, NULL);
+-	  written += n;
++	  if (rc)
++	    written += n;
+ 	}
+-      if (!rc)
++      if (!rc && written == 0)
+ 	{
+ 	  debug_printf ("error writing to pipe %p %E", write_to);
+ 	  get_ttyp ()->read_retval = -1;
++	  puts_readahead (p, bytes_left);
+ 	  ret = -1;
+ 	}
+       else
+-- 
+2.33.0
+
