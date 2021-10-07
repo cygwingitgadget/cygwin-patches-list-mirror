@@ -1,48 +1,27 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id 323813858039
- for <cygwin-patches@cygwin.com>; Tue,  7 Sep 2021 18:22:20 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 323813858039
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id DF02A3858C39
+ for <cygwin-patches@cygwin.com>; Thu,  7 Oct 2021 05:22:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DF02A3858C39
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N2Dks-1n66YW3tLK-013fQr for <cygwin-patches@cygwin.com>; Tue, 07 Sep 2021
- 20:22:18 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 5F10BA80D89; Tue,  7 Sep 2021 20:22:18 +0200 (CEST)
-Date: Tue, 7 Sep 2021 20:22:18 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 1975MtVo076206;
+ Wed, 6 Oct 2021 22:22:55 -0700 (PDT) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdOewASi; Wed Oct  6 22:22:48 2021
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix error handling of master write().
-Message-ID: <YTet2suQC5341byD@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210907102745.1149-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: Make native clipboard layout same for 32- and 64-bit
+Date: Wed,  6 Oct 2021 22:22:37 -0700
+Message-Id: <20211007052237.7139-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210907102745.1149-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:rOg1eL3d3QY8/vpQaig07NKorWUp50t3rmhg/KjYWVANDzoy6Km
- E7S7LQEB4bMz4ydAmB1iZwLb54I/XKHrbv0MQkcPXZSLm+6eVHI6lhWQx9CNugJRTBQ1VfQ
- 7FR1IH5hM45Hz5pfS3bblrhUuu0KF1mggkqfbAMDer8PXEDDdz7LOUbaQzcicCXt6PPXvac
- L0IeqOqYhga/xzVx7VOjQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DatKZpW9BkE=:CVWizX6s2B9vTsA0xhSSyD
- eEBEKerrZDp5LJG/mbYep6MotORS6cRMiEwvMpX0RCTqJztpqf/L6UXGGJT8FocPXcodhuwdq
- k6ePVKa3nEs7gQJx2x5fcZRLS6sMxRb4OKx+rj0MHHLcFl3qZM8fWpEHg5MyIEBKePkqR4MWG
- 8AwnZNwd1YCi9TAxJe8A1tArZubzggB70DSTqohZSkJ1UVtTtQrBFAMk4i/8dcDPcStSNWkZ+
- 4aAsVi0okey/zLfkjK5gc3NGJ/KsLQ61778lA/uJRIjJfUDnhDheSCf165yDrJ9RGY9nMa2r5
- 2Vnnbg8gwA9DizR+Mbwp2NV7/+pJlCqxXPQaVHx2xEq8csgoQYhNDcVwDiLWSOCQxy8lR+ZU7
- LoIJL4xJBM+6ixT5mdfRumezVgC8g0e+YSTaJOXuzuwP4aeVoq7+XFRGfxErSTBltUvm4Ecu1
- QIv38Hv7bTpHBwQSxF8FU9yQboCp1gHyophahqnolxHcmtXrkipVHz0W0Um0HNMRtC/yw9YH0
- OluC1eIwGnfJsL0ra/iOAwKV6MQ1xdtSoFujPdBYQmzar/SI2K6FDBckz8yI3/pwrlG2R4pz/
- S4CX3GSTHWb636e841vYLoXrmATcYsFrdAr8A5zLCmBa/vnGoN35itwDT33E1v2wrwy7GMXL0
- bjdXxyU269wUDVxUvNp5AoHTs/B/iuUTdE7tVmRGdxF9f7Ssiiqxt0tid4j/s2SJ+Bh+h2cag
- LYDlTB1SUwP8cI+oYlISxxd8MK0PYC2DxrKj9rSBcYqxCz2Phoqn4KfapH0=
-X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -58,18 +37,94 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 07 Sep 2021 18:22:21 -0000
+X-List-Received-Date: Thu, 07 Oct 2021 05:22:59 -0000
 
-On Sep  7 19:27, Takashi Yano wrote:
-> - Currently, error handling of write() in pty master side is broken.
->   This patch fixes that.
-> ---
->  winsup/cygwin/fhandler_termios.cc | 24 +++++++++++-------------
->  winsup/cygwin/fhandler_tty.cc     | 11 +++++++----
->  2 files changed, 18 insertions(+), 17 deletions(-)
+This allows correct copy and pasting between the two Cygwin flavors.
 
-Pushed.
+What's done is to overlay the differing timespec formats via a union
+within the control structure cygcb_t.  Then conversion between the two
+formats is done on the 32-bit side only.
 
+The cygutils package has two programs, putclip and getclip, that also
+depend on the layout of the cygcb_t.  At present they have duplicate
+defs of struct cygcb_t defined here as no Cygwin header provides it.
 
-Thanks,
-Corinna
+---
+ winsup/cygwin/fhandler_clipboard.cc | 39 +++++++++++++++++++++--------
+ 1 file changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
+index ccdb295f3..649e57072 100644
+--- a/winsup/cygwin/fhandler_clipboard.cc
++++ b/winsup/cygwin/fhandler_clipboard.cc
+@@ -28,9 +28,16 @@ static const WCHAR *CYGWIN_NATIVE = L"CYGWIN_NATIVE_CLIPBOARD";
+ 
+ typedef struct
+ {
+-  timestruc_t	timestamp;
+-  size_t	len;
+-  char		data[1];
++  union
++  {
++    struct timespec ts; // 8 bytes on 32-bit Cygwin, 16 bytes on 64-bit Cygwin
++    struct
++    {
++      uint64_t	cb_sec;
++      uint64_t	cb_nsec;
++    };
++  };
++  uint64_t	cb_size;
+ } cygcb_t;
+ 
+ fhandler_dev_clipboard::fhandler_dev_clipboard ()
+@@ -74,9 +81,14 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+ 	}
+       clipbuf = (cygcb_t *) GlobalLock (hmem);
+ 
+-      clock_gettime (CLOCK_REALTIME, &clipbuf->timestamp);
+-      clipbuf->len = len;
+-      memcpy (clipbuf->data, buf, len);
++      clock_gettime (CLOCK_REALTIME, &clipbuf->ts);
++#ifndef __x86_64__
++      // expand 32-bit timespec layout to 64-bit layout
++      clipbuf->cb_nsec = clipbuf->ts.tv_nsec;
++      clipbuf->cb_sec = clipbuf->ts.tv_sec;
++#endif
++      clipbuf->cb_size = len;
++      memcpy (&clipbuf[1], buf, len); // append data
+ 
+       GlobalUnlock (hmem);
+       EmptyClipboard ();
+@@ -179,8 +191,13 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
+ 	  && (hglb = GetClipboardData (format))
+ 	  && (clipbuf = (cygcb_t *) GlobalLock (hglb)))
+ 	{
+-	  buf->st_atim = buf->st_mtim = clipbuf->timestamp;
+-	  buf->st_size = clipbuf->len;
++#ifndef __x86_64__
++	  // compress 64-bit timespec layout to 32-bit layout
++	  clipbuf->ts.tv_sec = clipbuf->cb_sec;
++	  clipbuf->ts.tv_nsec = clipbuf->cb_nsec;
++#endif
++	  buf->st_atim = buf->st_mtim = clipbuf->ts;
++	  buf->st_size = clipbuf->cb_size;
+ 	  GlobalUnlock (hglb);
+ 	}
+       CloseClipboard ();
+@@ -218,10 +235,10 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
+     {
+       cygcb_t *clipbuf = (cygcb_t *) cb_data;
+ 
+-      if (pos < (off_t) clipbuf->len)
++      if (pos < (off_t) clipbuf->cb_size)
+ 	{
+-	  ret = ((len > (clipbuf->len - pos)) ? (clipbuf->len - pos) : len);
+-	  memcpy (ptr, clipbuf->data + pos , ret);
++	  ret = (len > (clipbuf->cb_size - pos)) ? clipbuf->cb_size - pos : len;
++	  memcpy (ptr, &clipbuf[1] + pos , ret);
+ 	  pos += ret;
+ 	}
+     }
+-- 
+2.33.0
+
