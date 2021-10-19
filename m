@@ -1,39 +1,50 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id 7E5483858D39
- for <cygwin-patches@cygwin.com>; Tue, 19 Oct 2021 08:40:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7E5483858D39
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id A45BF3858D39
+ for <cygwin-patches@cygwin.com>; Tue, 19 Oct 2021 11:07:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A45BF3858D39
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
- [110.4.221.123]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 19J8eTvH005998;
- Tue, 19 Oct 2021 17:40:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 19J8eTvH005998
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1634632835;
- bh=36xVRXfzQzxJkRTbFFByB1O0X0Hrv3nQvC54q5c/960=;
- h=From:To:Cc:Subject:Date:From;
- b=fLIYEp5hVyQap8UCPqJM7aKgjth18DxOw/rsvtEaj4DM7/mErv4yDBxkiz/ra0fCj
- tknaMdpvmELuH+ugzjS/S6BKzcAgQ+CEjY1u//JHqwLBSOkGkc/ek66UsEvbdPJbJe
- fu/P/IfXd+I6fzAfRGYgv9eoEbOzdJbEr450jUpcykuI3CYovRdojSLXPg3FbMlNa4
- Wtvwb+MoZBR9jfPneXOm1B1h8yfcjjCC+4WkbLiTat09eBPo1Pe8+gm6tPzlXJss8z
- KT/i3/NwVh0aY2pNzYW6cyC9FG3SbWtK9LFRVKar+WjzHQ24XA2MepYoaOAEi5x6ZH
- Y0aMYzHojsGhg==
-X-Nifty-SrcIP: [110.4.221.123]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MS3rB-1m9xOw2k7H-00TTfl for <cygwin-patches@cygwin.com>; Tue, 19 Oct 2021
+ 13:07:17 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 89630A80D72; Tue, 19 Oct 2021 13:07:16 +0200 (CEST)
+Date: Tue, 19 Oct 2021 13:07:16 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pipe: Use NtQuerySystemInformation() instead of
+Subject: Re: [PATCH] Cygwin: pipe: Use NtQuerySystemInformation() instead of
  EnumProcesses().
-Date: Tue, 19 Oct 2021 17:40:19 +0900
-Message-Id: <20211019084019.1660-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.33.0
+Message-ID: <YW6m5AgCpkTy7fyi@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20211019084019.1660-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211019084019.1660-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:M8AdvvLS46bfLJ7IZzct4zVBR/XmPmfNrIuIWHsCGtwhO6kXMVr
+ ThumCGvkxX0f5jdqkTIXNmwK12hDHxKve1I++3h01VmmbSwHcWnZ+p8VqR8ltIpLEutXzlh
+ 0tAxwhrDcT9b1FHatT0JyyrBm9u1DE9kulBwHJo8aiWTg1hvgsOoyljvYoWv+SMMgSTGRv3
+ ANKMbq2wNOyhuMOy80Hig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1qkZ4CiBROc=:ho0KpJaEiUXw2SiCMObiC0
+ x0XhRPDOvylL5WSyjqhFkKSOtxt4uTl+y+cQeclNO5jtM5UXFWMuzPCfjH4KaEOqLau6P6AGp
+ ctBtMGx05Cj2FVNYiWkXWUpnAUNfP24Dez+VYnpp0GZQNFvcw5DwEIfAgoTX8zQtLx/bf6chK
+ QhIX5ndgEiKwDOHpp6KNqXT4yzz+5EFrpq1Fv/Jh7TCjCa5CdVX9EhGgbUZbFHsLhWGNXY3Fs
+ OVYSVqTBiuVU+6wuwfAaLrtwrTd++IRgZe8rnnUxq1IQTM9CpHVpZtwowo01YQEQ8+k2WrFSp
+ QTwmE1F/eIgqRIOWAm3+S1d/GXrqwmjnA+nzBSFrB3iVbF5Ir3GsArxjzYNZYmP9XavjRCeLp
+ IwEIHc92kRsutPW01mPyHWT1ZUj6EFgrVMK/SuG2iZqH9+TuXyeBFmjqCHOcWvX54w9xJAyuv
+ c+ys0sys7QiSgtiXqBfbAjovdAA4sGnai1T4q5+QQBlmdGfwKupr+8EOz7xqpoL2bPPccSaX0
+ MtrhLhyxYX77LGV6Dxc1BfrLdutC1ftgJyja0mVqnDvTuqWFwVoSYK16B7NwXOo3c9k0nuHUM
+ 2Yjmf0mKjlHZAkDSBgLbX4eWMoUs6V+M7t9KDhw2DoCv3ing+dLyenEwcTAxZbmPCUqqy66bv
+ V6Q4w6Hv89r5Gexen33Vytcgfe8wynU3lr9yqnC7vf+e+qRfGNESf9/gZcVm936tPOqGZ2SK5
+ RY828+L5rqfKmFCC
+X-Spam-Status: No, score=-99.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -48,108 +59,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 Oct 2021 08:40:56 -0000
+X-List-Received-Date: Tue, 19 Oct 2021 11:07:21 -0000
 
-- Using EnumProcess() breaks Windows Vista compatibility. This patch
-  replaces EnumProcesses() with NtQuerySystemInformation().
+On Oct 19 17:40, Takashi Yano wrote:
+> - Using EnumProcess() breaks Windows Vista compatibility. This patch
+>   replaces EnumProcesses() with NtQuerySystemInformation().
+> 
+> Addresses:
+> https://cygwin.com/pipermail/cygwin-developers/2021-October/012422.html
+> ---
+>  winsup/cygwin/fhandler_pipe.cc | 50 +++++++++++++++++++++++-----------
+>  1 file changed, 34 insertions(+), 16 deletions(-)
 
-Addresses:
-https://cygwin.com/pipermail/cygwin-developers/2021-October/012422.html
----
- winsup/cygwin/fhandler_pipe.cc | 50 +++++++++++++++++++++++-----------
- 1 file changed, 34 insertions(+), 16 deletions(-)
+Pushed.
 
-diff --git a/winsup/cygwin/fhandler_pipe.cc b/winsup/cygwin/fhandler_pipe.cc
-index dd8b4f317..63e432160 100644
---- a/winsup/cygwin/fhandler_pipe.cc
-+++ b/winsup/cygwin/fhandler_pipe.cc
-@@ -20,7 +20,6 @@ details. */
- #include "pinfo.h"
- #include "shared_info.h"
- #include "tls_pbuf.h"
--#include <psapi.h>
- 
- /* This is only to be used for writing.  When reading,
- STATUS_PIPE_EMPTY simply means there's no data to be read. */
-@@ -1190,27 +1189,47 @@ HANDLE
- fhandler_pipe::get_query_hdl_per_process (WCHAR *name,
- 					  OBJECT_NAME_INFORMATION *ntfn)
- {
-+  NTSTATUS status;
-   ULONG len;
--  BOOL res;
-   DWORD n_process = 256;
--  DWORD *proc_pids;
-+  PSYSTEM_PROCESS_INFORMATION spi;
-   do
-     { /* Enumerate processes */
--      DWORD nbytes = n_process * sizeof (DWORD);
--      proc_pids = (DWORD *) HeapAlloc (GetProcessHeap (), 0, nbytes);
--      if (!proc_pids)
-+      DWORD nbytes = n_process * sizeof (SYSTEM_PROCESS_INFORMATION);
-+      spi = (PSYSTEM_PROCESS_INFORMATION) HeapAlloc (GetProcessHeap (),
-+						     0, nbytes);
-+      if (!spi)
- 	return NULL;
--      res = EnumProcesses (proc_pids, nbytes, &len);
--      if (res && len < nbytes)
-+      status = NtQuerySystemInformation (SystemProcessInformation,
-+					 spi, nbytes, &len);
-+      if (NT_SUCCESS (status))
- 	break;
--      res = FALSE;
--      HeapFree (GetProcessHeap (), 0, proc_pids);
-+      HeapFree (GetProcessHeap (), 0, spi);
-       n_process *= 2;
-     }
--  while (n_process < (1L<<20));
--  if (!res)
-+  while (n_process < (1L<<20) && status == STATUS_INFO_LENGTH_MISMATCH);
-+  if (!NT_SUCCESS (status))
-     return NULL;
--  n_process = len / sizeof (DWORD);
-+
-+  /* In most cases, it is faster to check the processes in reverse order.
-+     To do this, store PIDs into an array. */
-+  DWORD *proc_pids = (DWORD *) HeapAlloc (GetProcessHeap (), 0,
-+					  n_process * sizeof (DWORD));
-+  if (!proc_pids)
-+    {
-+      HeapFree (GetProcessHeap (), 0, spi);
-+      return NULL;
-+    }
-+  PSYSTEM_PROCESS_INFORMATION p = spi;
-+  n_process = 0;
-+  while (true)
-+    {
-+      proc_pids[n_process++] = (DWORD)(intptr_t) p->UniqueProcessId;
-+      if (!p->NextEntryOffset)
-+	break;
-+      p = (PSYSTEM_PROCESS_INFORMATION) ((char *) p + p->NextEntryOffset);
-+    }
-+  HeapFree (GetProcessHeap (), 0, spi);
- 
-   for (LONG i = (LONG) n_process - 1; i >= 0; i--)
-     {
-@@ -1221,7 +1240,6 @@ fhandler_pipe::get_query_hdl_per_process (WCHAR *name,
- 	continue;
- 
-       /* Retrieve process handles */
--      NTSTATUS status;
-       DWORD n_handle = 256;
-       PPROCESS_HANDLE_SNAPSHOT_INFORMATION phi;
-       do
-@@ -1255,8 +1273,8 @@ fhandler_pipe::get_query_hdl_per_process (WCHAR *name,
- 
- 	  /* Retrieve handle */
- 	  HANDLE h = (HANDLE)(intptr_t) phi->Handles[j].HandleValue;
--	  res = DuplicateHandle (proc, h, GetCurrentProcess (), &h,
--				 FILE_READ_DATA, 0, 0);
-+	  BOOL res = DuplicateHandle (proc, h, GetCurrentProcess (), &h,
-+				      FILE_READ_DATA, 0, 0);
- 	  if (!res)
- 	    continue;
- 
--- 
-2.33.0
 
+Thanks,
+Corinna
