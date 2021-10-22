@@ -1,49 +1,56 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id A45BF3858D39
- for <cygwin-patches@cygwin.com>; Tue, 19 Oct 2021 11:07:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A45BF3858D39
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 1DDFE3858416
+ for <cygwin-patches@cygwin.com>; Fri, 22 Oct 2021 15:11:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1DDFE3858416
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MS3rB-1m9xOw2k7H-00TTfl for <cygwin-patches@cygwin.com>; Tue, 19 Oct 2021
- 13:07:17 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M1HuU-1mfbA01UVO-002lxe for <cygwin-patches@cygwin.com>; Fri, 22 Oct 2021
+ 17:11:14 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 89630A80D72; Tue, 19 Oct 2021 13:07:16 +0200 (CEST)
-Date: Tue, 19 Oct 2021 13:07:16 +0200
+ id B10DBA81066; Fri, 22 Oct 2021 17:11:13 +0200 (CEST)
+Date: Fri, 22 Oct 2021 17:11:13 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pipe: Use NtQuerySystemInformation() instead of
- EnumProcesses().
-Message-ID: <YW6m5AgCpkTy7fyi@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Make native clipboard layout same for 32- and
+ 64-bit
+Message-ID: <YXLUkU6Nc3qAXLyp@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20211019084019.1660-1-takashi.yano@nifty.ne.jp>
+References: <20211007052237.7139-1-mark@maxrnd.com>
+ <20211008185210.cac713f28dea727a1467cf94@nifty.ne.jp>
+ <29514de9-0d19-0d22-b8e1-3bfbce11589b@cornell.edu>
+ <7dd31f61-43a1-4e4d-2e1a-dc79606263d5@dronecode.org.uk>
+ <037a8027-8969-df1e-ccb5-6a736578cec5@cornell.edu>
+ <6de24f8c-bd21-cd4f-18ff-ece3fef85b89@maxrnd.com>
+ <ee8b46bd-f8f4-85da-be25-233c3cb60c71@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211019084019.1660-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:M8AdvvLS46bfLJ7IZzct4zVBR/XmPmfNrIuIWHsCGtwhO6kXMVr
- ThumCGvkxX0f5jdqkTIXNmwK12hDHxKve1I++3h01VmmbSwHcWnZ+p8VqR8ltIpLEutXzlh
- 0tAxwhrDcT9b1FHatT0JyyrBm9u1DE9kulBwHJo8aiWTg1hvgsOoyljvYoWv+SMMgSTGRv3
- ANKMbq2wNOyhuMOy80Hig==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1qkZ4CiBROc=:ho0KpJaEiUXw2SiCMObiC0
- x0XhRPDOvylL5WSyjqhFkKSOtxt4uTl+y+cQeclNO5jtM5UXFWMuzPCfjH4KaEOqLau6P6AGp
- ctBtMGx05Cj2FVNYiWkXWUpnAUNfP24Dez+VYnpp0GZQNFvcw5DwEIfAgoTX8zQtLx/bf6chK
- QhIX5ndgEiKwDOHpp6KNqXT4yzz+5EFrpq1Fv/Jh7TCjCa5CdVX9EhGgbUZbFHsLhWGNXY3Fs
- OVYSVqTBiuVU+6wuwfAaLrtwrTd++IRgZe8rnnUxq1IQTM9CpHVpZtwowo01YQEQ8+k2WrFSp
- QTwmE1F/eIgqRIOWAm3+S1d/GXrqwmjnA+nzBSFrB3iVbF5Ir3GsArxjzYNZYmP9XavjRCeLp
- IwEIHc92kRsutPW01mPyHWT1ZUj6EFgrVMK/SuG2iZqH9+TuXyeBFmjqCHOcWvX54w9xJAyuv
- c+ys0sys7QiSgtiXqBfbAjovdAA4sGnai1T4q5+QQBlmdGfwKupr+8EOz7xqpoL2bPPccSaX0
- MtrhLhyxYX77LGV6Dxc1BfrLdutC1ftgJyja0mVqnDvTuqWFwVoSYK16B7NwXOo3c9k0nuHUM
- 2Yjmf0mKjlHZAkDSBgLbX4eWMoUs6V+M7t9KDhw2DoCv3ing+dLyenEwcTAxZbmPCUqqy66bv
- V6Q4w6Hv89r5Gexen33Vytcgfe8wynU3lr9yqnC7vf+e+qRfGNESf9/gZcVm936tPOqGZ2SK5
- RY828+L5rqfKmFCC
-X-Spam-Status: No, score=-99.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee8b46bd-f8f4-85da-be25-233c3cb60c71@cornell.edu>
+X-Provags-ID: V03:K1:PJFHNq6JttFmXh1N3FNfyL7yQhI/A+qf89lHR0eLS+DxncSUpfy
+ tV+ufWj1sh1yExbt3KErd/A/WdO6zMIlCwwuRkCUWI4Y1focI+ZEN+JTlBFx9eP6VuaYuIS
+ V/Sr/N8KvJ6y08nP53/XvxfqqUCf45wTjivbzUUdqrdV5iF+BNV06WZPfRMT2npyRduL40A
+ UBGYbUWCM7/0bak9/4r1Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KF08Pdr7wxA=:8fQQkkosSf+v9JXX+bSuo7
+ KxZmQJY9nnH7oofnyrTZw3yNV6vo07L9yZPATh5lZEDv3p7Ozb+LhQAa8X0Eykth72dSq7lhD
+ 1sW0i3piL30WIhheMaPQXq8K0rIAc9CVdnscQ2Oy6L3sgcaLDcMRd6/mOtG1Ol5iCTVnWudSQ
+ dUEnYct4HzbbMHojbLyId5GeAKIxwVgyVNZ1prpLOvmW0yDx26/kZcAqJeKV81vVizxNTbLqJ
+ ZDl9EX42ltZNE+i6LpWKPr13DGfTuf2T0NnfF8e4PICtnuHDfLQALN5SuHQzGASzBOx3PfebW
+ ueRpLM13Ntw283CU9+rtm/T8DfH45tkXftSENCxth3tFsddy6QGNZvcQkLeXYqXxGA5XnTEMj
+ sOQ7iFGe2RfhannxCxRjaA6k/8r7iHMK+vMHV2AVmUE4etOGVWYST8nxLx1DfoZYfYnLkh4H8
+ utH95ylaZRQZu1EslfLTtmmzkuznb8enWA0R154emWCW0T4DqfXDneuO5LJgK4uf6ttm3J9H8
+ jtX+Xxk/6itS90oAM7zIlh2iAYCFMxiqRtiRG7Tz1DOu59umcMWc7mFlE4w5kLI7kCvR5xEmn
+ vmNUgRfvjOXt0eG1ru9PNI0mh6W0/WIOEP7b3MsOQQyfbb7Yi9tGMaBYeRRI49DQgWQDJjlR2
+ EOZtNETHRxbSg/yB11ozFId5TVoVUWHVWuq0P2JMQr1752gL18m6ept+88sLcxA9MxZeVE3Ie
+ i2zpkrMfx4SoEhX6
+X-Spam-Status: No, score=-99.7 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -59,20 +66,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 Oct 2021 11:07:21 -0000
+X-List-Received-Date: Fri, 22 Oct 2021 15:11:17 -0000
 
-On Oct 19 17:40, Takashi Yano wrote:
-> - Using EnumProcess() breaks Windows Vista compatibility. This patch
->   replaces EnumProcesses() with NtQuerySystemInformation().
+On Oct 11 08:11, Ken Brown wrote:
+> On 10/11/2021 2:13 AM, Mark Geisert wrote:
+> > It's just that after submitting the patch I realized that, if we really
+> > are going to support both Cygwin archs (x86_64 and i686), there is still
+> > the issue of different cygcb_t layouts between Cygwin versions being
+> > ignored.
+> > 
+> > Specifically, the fhandler_clipboard::fstat routine can't tell which
+> > Cygwin environment has set the clipboard contents.  My original patch
+> > takes care of 32-bit and 64-bit, providing both are running Cygwin >=
+> > 3.3.0 (presumably).  What if it was a different version (pre 3.3.0) that
+> > set the contents?
 > 
-> Addresses:
-> https://cygwin.com/pipermail/cygwin-developers/2021-October/012422.html
-> ---
->  winsup/cygwin/fhandler_pipe.cc | 50 +++++++++++++++++++++++-----------
->  1 file changed, 34 insertions(+), 16 deletions(-)
+> I wonder if this is worth the trouble.  Right now we have a problem in which
+> data written to /dev/clipboard in one arch can't be read in the other arch.
+> The fix will appear in Cygwin 3.3.0.  Do we really have to try to make the
+> fix apply retroactively in case the user updates one arch but not the other?
 
-Pushed.
+Just to close this up prior to the 3.3.0 release...
+
+Given we never actually strived for 32<->64 bit interoperability, it's
+hard to argue why this should be different for the clipboard stuff.
+
+Running 32 and 64 bit Cygwin versions in parallel doesn't actually make
+much sense for most people anyway, unless they explicitely develop for
+32 and 64 bit systems under Cygwin.  From a productivity point of view
+there's no good reason to run more than one arch.
+
+So I agree with Ken here.  It's probably not worth the trouble.
 
 
-Thanks,
 Corinna
