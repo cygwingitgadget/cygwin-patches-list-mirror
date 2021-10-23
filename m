@@ -1,21 +1,35 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 68D543858D28
- for <cygwin-patches@cygwin.com>; Sat, 23 Oct 2021 21:53:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 68D543858D28
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
+ [210.131.2.91])
+ by sourceware.org (Postfix) with ESMTPS id 3F3603858D28
+ for <cygwin-patches@cygwin.com>; Sat, 23 Oct 2021 23:58:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3F3603858D28
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 19NLri7I008416
- for <cygwin-patches@cygwin.com>; Sat, 23 Oct 2021 14:53:44 -0700 (PDT)
- (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "[192.168.1.100]"
- via SMTP by m0.truegem.net, id smtpdzcZAju; Sat Oct 23 14:53:35 2021
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from Express5800-S70 (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conssluserg-06.nifty.com with ESMTP id 19NNwEMW007654
+ for <cygwin-patches@cygwin.com>; Sun, 24 Oct 2021 08:58:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 19NNwEMW007654
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1635033495;
+ bh=Yk06SlkyjuHppK+a8nkAXM2vwiCZic6LMgEH3CGJAwU=;
+ h=Date:From:To:Subject:In-Reply-To:References:From;
+ b=UaF0o/rXehPqAuHDawe4DZErpFZ5D3OZsh2FsGIvIt9knsreWeP3GnsW0kOndmWb2
+ Cac/Bbkksh26L1hpKsGFLw+QZDKRwNkSawbkz2JQ8NzWbhCCq8o1W0i9i6v+dlqfrJ
+ t+05USuMVNa3pkgPIdBFlEgLHNf+blFljoe2BlOw6yznPDEQSz9tFZ/60wdR1Jaw/E
+ JK6comQoJebWO3mJNF0ps6kCP/ROu6aVnaFQO72acBhQDNXSqI4ozvmQd9tQGcDNon
+ d3Z+VJC74Jsk0Pcfn/DITX6vetcnzEfy4nJ/1hMMqTb2PbFJEyIb++RzGdpUIUwv71
+ As7FEfHXwaE0g==
+X-Nifty-SrcIP: [110.4.221.123]
+Date: Sun, 24 Oct 2021 08:58:23 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: Make native clipboard layout same for 32- and
  64-bit
-To: cygwin-patches@cygwin.com
+Message-Id: <20211024085823.909b894a0ae6c604f0216582@nifty.ne.jp>
+In-Reply-To: <YXLUkU6Nc3qAXLyp@calimero.vinschen.de>
 References: <20211007052237.7139-1-mark@maxrnd.com>
  <20211008185210.cac713f28dea727a1467cf94@nifty.ne.jp>
  <29514de9-0d19-0d22-b8e1-3bfbce11589b@cornell.edu>
@@ -24,20 +38,13 @@ References: <20211007052237.7139-1-mark@maxrnd.com>
  <6de24f8c-bd21-cd4f-18ff-ece3fef85b89@maxrnd.com>
  <ee8b46bd-f8f4-85da-be25-233c3cb60c71@cornell.edu>
  <YXLUkU6Nc3qAXLyp@calimero.vinschen.de>
- <12fea3e3-92ae-2a33-81ea-808bdcc20f2a@maxrnd.com>
- <0cdc8601-fd90-226a-d486-7204bbe604c6@cornell.edu>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <13f8b939-8d01-4e98-6756-9ae83a681b4b@maxrnd.com>
-Date: Sat, 23 Oct 2021 14:53:35 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
-MIME-Version: 1.0
-In-Reply-To: <0cdc8601-fd90-226a-d486-7204bbe604c6@cornell.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -52,36 +59,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 23 Oct 2021 21:53:47 -0000
+X-List-Received-Date: Sat, 23 Oct 2021 23:58:38 -0000
 
-Ken Brown wrote:
-> On 10/23/2021 1:35 AM, Mark Geisert wrote:
->> Corinna Vinschen wrote:
->>> Just to close this up prior to the 3.3.0 release...
->>>
->>> Given we never actually strived for 32<->64 bit interoperability, it's
->>> hard to argue why this should be different for the clipboard stuff.
->>>
->>> Running 32 and 64 bit Cygwin versions in parallel doesn't actually make
->>> much sense for most people anyway, unless they explicitely develop for
->>> 32 and 64 bit systems under Cygwin.  From a productivity point of view
->>> there's no good reason to run more than one arch.
->>>
->>> So I agree with Ken here.  It's probably not worth the trouble.
->>
->> Sorry, I've been sidetracked for a bit.  I can agree with Ken too.  The only 
->> circumstance I could think of where multiple internal format support might be 
->> useful (to non-developers) was some user hanging on to an older Cygwin because 
->> it was needed to support something else (s/w or h/w) old and non-upgradeable. 
->> Doesn't seem very likely at this point.
->>
->> I'll try to get the v2 patch out over this weekend.  Same end-result for same 
->> environments as the v1 patch, but incorporating all the comments I received.
+Hi Corinna,
+
+On Fri, 22 Oct 2021 17:11:13 +0200
+Corinna Vinschen wrote:
+> Just to close this up prior to the 3.3.0 release...
 > 
-> I think Corinna was saying that the whole idea of making the 32-bit and 64-bit 
-> clipboards interoperable is not worth the trouble.
+> Given we never actually strived for 32<->64 bit interoperability, it's
+> hard to argue why this should be different for the clipboard stuff.
+> 
+> Running 32 and 64 bit Cygwin versions in parallel doesn't actually make
+> much sense for most people anyway, unless they explicitely develop for
+> 32 and 64 bit systems under Cygwin.  From a productivity point of view
+> there's no good reason to run more than one arch.
+> 
+> So I agree with Ken here.  It's probably not worth the trouble.
 
-Oh, I didn't read it that way.  But that works for me too.  Color it dropped :-).
-Thanks,
+Current code below in fhandler_clipboard.cc causes access violation
+if clipboard is accessed between 32 and 64 bit cygwin.
 
-..mark
+      cygcb_t *clipbuf = (cygcb_t *) cb_data;
+
+      if (pos < (off_t) clipbuf->len)
+        {
+          ret = ((len > (clipbuf->len - pos)) ? (clipbuf->len - pos) : len);
+          memcpy (ptr, clipbuf->data + pos , ret);
+          pos += ret;
+        }
+
+Don't you think this should be fixed?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
