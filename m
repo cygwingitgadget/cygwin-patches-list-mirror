@@ -1,28 +1,49 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 452ED3858423
- for <cygwin-patches@cygwin.com>; Mon, 25 Oct 2021 09:25:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 452ED3858423
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 8495E3858410
+ for <cygwin-patches@cygwin.com>; Tue, 26 Oct 2021 10:43:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8495E3858410
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 19P9PrGs038174;
- Mon, 25 Oct 2021 02:25:53 -0700 (PDT) (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpd2Mxe7Z; Mon Oct 25 02:25:51 2021
-From: Mark Geisert <mark@maxrnd.com>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MumVX-1mvsrw0bbv-00rmeg for <cygwin-patches@cygwin.com>; Tue, 26 Oct 2021
+ 12:43:15 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id A27C4A80DAB; Tue, 26 Oct 2021 12:43:14 +0200 (CEST)
+Date: Tue, 26 Oct 2021 12:43:14 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: Make native clipboard layout same for 32- and
+Subject: Re: [PATCH v2] Cygwin: Make native clipboard layout same for 32- and
  64-bit
-Date: Mon, 25 Oct 2021 02:25:40 -0700
-Message-Id: <20211025092540.4819-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.33.0
+Message-ID: <YXfbwhOHlXBYgCFA@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20211025092540.4819-1-mark@maxrnd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211025092540.4819-1-mark@maxrnd.com>
+X-Provags-ID: V03:K1:45GB4VPjcUXVTPHJVfEmafpPYD6TgCkM4xyBP7g7vMEG8+rlhg1
+ up55uzMASQMf0X5ssojHonsgwQ1TFeNWTZJfGUzfQtGg+ZtlKoCq0H8+QClmCjapcbXr/ea
+ 9Hg+XW2yh0Hvk8KDQqMoB4b9Ge23cnOocZ0AyTS3agj8nRJX8LaD+G7ZCX0Ax8aGzaNrLAc
+ ysIiRVusbgd372vIw1aBA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e97hDlFklsU=:kvhL12gQWV79ntVPqHkaOx
+ 0xZlBNukWHJs2gmLbiqe0m7/RwgCXEfuxFvzlnKMR4h+k50OVmeCbT2LcpKY1qC7bNjYWuAjA
+ NBG+XlqG2ipIwwQgyFlwWgpraV6CyoeqnaORlLONFM4r6kU06vfdFTBxOEzS51yepJhAY6zHs
+ WN9GtJQKwzjMvSEUyJDdfWG8RMD9852aKGJ4M1hJsBmUFK8MJJaA21rcCbhSO4d3Bvb/xP4l9
+ 0Ib4KrgZQtWNc5poGsXEfVXNaWFJBJEVCtbA8FThn7+l/LUBrLHVo9lsJXjk0WiXKnviZnFS9
+ P8nkxW0K/AaEe3JAoW6fvL2Glmx8UKRQOgAj1jJgBUqvxrR+N7dtQXnAempClokXjZrP31Fos
+ Uo/P4PZ8VOa1B/KtU8G2k/DCUKAxONOjXxq0EeMJt+RrniRAKzer7MECZua5d4uxdRD2T3S87
+ H98saW3wxsiWVAZ46OcE4YWI4kf+VYUnXQWgjGgOL0yQJkBWsj361oOfLbQ+cLj/4hiVfh5yc
+ 6yJo4hjL73RXT2KC4pfwgTERq+71D50CAywR31SFtYzB6/VMhz0HSvqO5un9I1tkWFz8JS+aZ
+ bFx7UoFClian0Fn8tzTGZ4x5NFLIjn/FkFXc841Ta3i81dJOCI1vCB1vOHqlzbmldF8Fqb19k
+ ikany1bncKVxsWSrtJjCSAGxS9/juTd/gXTDtJDBUa0W1ottXreImiKFEwzcrIFTHP5yCTG9Z
+ iDsjl0FwTjTNoj6d
+X-Spam-Status: No, score=-105.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -38,176 +59,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 25 Oct 2021 09:25:58 -0000
+X-List-Received-Date: Tue, 26 Oct 2021 10:43:18 -0000
 
-This patch unifies the layout of the clipboard descriptor cygcb_t for
-32- and 64-bit Cygwin.  It allows correct copy/paste between the two
-environments without corruption of user's copied data and without access
-violations due to interpreting that data as a size field.
+On Oct 25 02:25, Mark Geisert wrote:
+> This patch unifies the layout of the clipboard descriptor cygcb_t for
+> 32- and 64-bit Cygwin.  It allows correct copy/paste between the two
+> environments without corruption of user's copied data and without access
+> violations due to interpreting that data as a size field.
+> 
+> The definitions of CYGWIN_NATIVE and cygcb_t are moved to a new include
+> file, sys/clipboard.h.  The include file is used by fhandler_clipboard.cc
+> as well as getclip.c and putclip.c in the Cygwin cygutils package.
+> 
+> When copy/pasting between 32- and 64-bit Cygwin environments, both must
+> be running version 3.3.0 or later for successful operation.
+> 
+> ---
+>  winsup/cygwin/fhandler_clipboard.cc   | 42 +++++++++++++----------
+>  winsup/cygwin/include/sys/clipboard.h | 49 +++++++++++++++++++++++++++
+>  winsup/cygwin/release/3.3.0           |  4 +++
+>  3 files changed, 78 insertions(+), 17 deletions(-)
+>  create mode 100644 winsup/cygwin/include/sys/clipboard.h
+> 
+> diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
+> index ccdb295f3..7adb50991 100644
+> --- a/winsup/cygwin/fhandler_clipboard.cc
+> +++ b/winsup/cygwin/fhandler_clipboard.cc
+> @@ -17,6 +17,7 @@ details. */
+>  #include "dtable.h"
+>  #include "cygheap.h"
+>  #include "child_info.h"
+> +#include "sys/clipboard.h"
 
-The definitions of CYGWIN_NATIVE and cygcb_t are moved to a new include
-file, sys/clipboard.h.  The include file is used by fhandler_clipboard.cc
-as well as getclip.c and putclip.c in the Cygwin cygutils package.
+Pushed with a minor change:
 
-When copy/pasting between 32- and 64-bit Cygwin environments, both must
-be running version 3.3.0 or later for successful operation.
+   #include <sys/clipboard.h>
 
----
- winsup/cygwin/fhandler_clipboard.cc   | 42 +++++++++++++----------
- winsup/cygwin/include/sys/clipboard.h | 49 +++++++++++++++++++++++++++
- winsup/cygwin/release/3.3.0           |  4 +++
- 3 files changed, 78 insertions(+), 17 deletions(-)
- create mode 100644 winsup/cygwin/include/sys/clipboard.h
+given this is a system header.
 
-diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
-index ccdb295f3..7adb50991 100644
---- a/winsup/cygwin/fhandler_clipboard.cc
-+++ b/winsup/cygwin/fhandler_clipboard.cc
-@@ -17,6 +17,7 @@ details. */
- #include "dtable.h"
- #include "cygheap.h"
- #include "child_info.h"
-+#include "sys/clipboard.h"
- 
- /*
-  * Robert Collins:
-@@ -24,15 +25,6 @@ details. */
-  * changed? How does /dev/clipboard operate under (say) linux?
-  */
- 
--static const WCHAR *CYGWIN_NATIVE = L"CYGWIN_NATIVE_CLIPBOARD";
--
--typedef struct
--{
--  timestruc_t	timestamp;
--  size_t	len;
--  char		data[1];
--} cygcb_t;
--
- fhandler_dev_clipboard::fhandler_dev_clipboard ()
-   : fhandler_base (), pos (0), membuffer (NULL), msize (0)
- {
-@@ -74,9 +66,17 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
- 	}
-       clipbuf = (cygcb_t *) GlobalLock (hmem);
- 
--      clock_gettime (CLOCK_REALTIME, &clipbuf->timestamp);
--      clipbuf->len = len;
--      memcpy (clipbuf->data, buf, len);
-+      clock_gettime (CLOCK_REALTIME, &clipbuf->ts);
-+#ifdef __x86_64__
-+      /* ts overlays cb_sec and cb_nsec such that no conversion is needed */
-+#elif __i386__
-+      /* Expand 32-bit timespec layout to 64-bit layout.
-+         NOTE: Steps must be done in this order to avoid data loss. */
-+      clipbuf->cb_nsec = clipbuf->ts.tv_nsec;
-+      clipbuf->cb_sec  = clipbuf->ts.tv_sec;
-+#endif
-+      clipbuf->cb_size = len;
-+      memcpy (&clipbuf[1], buf, len); // append user-supplied data
- 
-       GlobalUnlock (hmem);
-       EmptyClipboard ();
-@@ -179,8 +179,16 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
- 	  && (hglb = GetClipboardData (format))
- 	  && (clipbuf = (cygcb_t *) GlobalLock (hglb)))
- 	{
--	  buf->st_atim = buf->st_mtim = clipbuf->timestamp;
--	  buf->st_size = clipbuf->len;
-+#ifdef __x86_64__
-+	  /* ts overlays cb_sec and cb_nsec such that no conversion is needed */
-+#elif __i386__
-+	  /* Compress 64-bit timespec layout to 32-bit layout.
-+	     NOTE: Steps must be done in this order to avoid data loss. */
-+	  clipbuf->ts.tv_sec  = clipbuf->cb_sec;
-+	  clipbuf->ts.tv_nsec = clipbuf->cb_nsec;
-+#endif
-+	  buf->st_atim = buf->st_mtim = clipbuf->ts;
-+	  buf->st_size = clipbuf->cb_size;
- 	  GlobalUnlock (hglb);
- 	}
-       CloseClipboard ();
-@@ -218,10 +226,10 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
-     {
-       cygcb_t *clipbuf = (cygcb_t *) cb_data;
- 
--      if (pos < (off_t) clipbuf->len)
-+      if (pos < (off_t) clipbuf->cb_size)
- 	{
--	  ret = ((len > (clipbuf->len - pos)) ? (clipbuf->len - pos) : len);
--	  memcpy (ptr, clipbuf->data + pos , ret);
-+	  ret = (len > (clipbuf->cb_size - pos)) ? clipbuf->cb_size - pos : len;
-+	  memcpy (ptr, &clipbuf[1] + pos , ret);
- 	  pos += ret;
- 	}
-     }
-diff --git a/winsup/cygwin/include/sys/clipboard.h b/winsup/cygwin/include/sys/clipboard.h
-new file mode 100644
-index 000000000..4c00c8ea1
---- /dev/null
-+++ b/winsup/cygwin/include/sys/clipboard.h
-@@ -0,0 +1,49 @@
-+/* sys/clipboard.h
-+
-+This file is part of Cygwin.
-+
-+This software is a copyrighted work licensed under the terms of the
-+Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-+details. */
-+
-+#ifndef _SYS_CLIPBOARD_H_
-+#define _SYS_CLIPBOARD_H_
-+
-+/*
-+ * These definitions are used in fhandler_clipboard.cc
-+ * as well as in the Cygwin cygutils package, specifically
-+ * getclip.c and putclip.c.
-+ */
-+
-+static const WCHAR *CYGWIN_NATIVE = L"CYGWIN_NATIVE_CLIPBOARD";
-+
-+/*
-+ * The following layout of cygcb_t is new with Cygwin 3.3.0.  It aids in the
-+ * transfer of clipboard contents between 32- and 64-bit Cygwin environments.
-+ */
-+typedef struct
-+{
-+  union
-+  {
-+    /*
-+     * Note that ts below overlays the struct following it.  On 32-bit Cygwin
-+     * timespec values have to be converted to|from cygcb_t layout.  On 64-bit
-+     * Cygwin timespec values perfectly conform to the struct following, so
-+     * no conversion is needed.
-+     *
-+     * We avoid directly using 'struct timespec' or 'size_t' here because they
-+     * are different sizes on different architectures.  When copy/pasting
-+     * between 32- and 64-bit Cygwin, the pasted data could appear corrupted,
-+     * or partially interpreted as a size which can cause an access violation.
-+     */
-+    struct timespec ts;  // 8 bytes on 32-bit Cygwin, 16 bytes on 64-bit Cygwin
-+    struct
-+    {
-+      uint64_t  cb_sec;  // 8 bytes everywhere
-+      uint64_t  cb_nsec; // 8 bytes everywhere
-+    };
-+  };
-+  uint64_t      cb_size; // 8 bytes everywhere
-+} cygcb_t;
-+
-+#endif
-diff --git a/winsup/cygwin/release/3.3.0 b/winsup/cygwin/release/3.3.0
-index 2df81a4ae..895c27397 100644
---- a/winsup/cygwin/release/3.3.0
-+++ b/winsup/cygwin/release/3.3.0
-@@ -74,3 +74,7 @@ Bug Fixes
- 
- - Fix pty master closing error regarding attach_mutex.
-   Addresses: https://cygwin.com/pipermail/cygwin-developers/2021-October/012418.html
-+
-+- Fix access violation that can sometimes occur when copy/pasting between
-+  32-bit and 64-bit Cygwin environments.  Align clipboard descriptor layouts.
-+  Addresses: https://cygwin.com/pipermail/cygwin-patches/2021q4/011517.html
--- 
-2.33.0
 
+Thanks,
+Corinna
