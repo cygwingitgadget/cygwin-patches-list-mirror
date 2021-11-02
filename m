@@ -1,38 +1,49 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 3BC22385840D
- for <cygwin-patches@cygwin.com>; Tue,  2 Nov 2021 08:09:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3BC22385840D
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 648323858C60
+ for <cygwin-patches@cygwin.com>; Tue,  2 Nov 2021 14:48:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 648323858C60
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
- [110.4.221.123]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 1A289bdg027089;
- Tue, 2 Nov 2021 17:09:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1A289bdg027089
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1635840582;
- bh=xnKLixwgy0mV2ZC7whewoxmelJyMr61Fk6sLjMTzjvY=;
- h=From:To:Cc:Subject:Date:From;
- b=1mKdmCUZUuPxqzq4u+6wT3xqnxDoJz0H6UGZeY+t00gmpLopVPiOUKBUUTMaO2vuQ
- 6Nv/dU7SzjJ6e0gEG68fJmHxG46ZuScViauKMhjAU5IiTDiegv/1xn0Gl3jViD3TuI
- jSLr5xayQjuE8C5pFa9/s7ouORfvPo5umVAYhSNnGtj1vhRkmCzBjrpDx4yuhv+/iJ
- X/1XcHM3UelWuIpmZsuVrdGfYIQoI7MmBhFDvbaztpafUsWm4ZA0QTS4cyYwqf7xBF
- M4ruR9zGmXtgs4Qa6PSKAf6bZUnIbaOuZWYT6ZYjSi+JH3TaT//AOci6k528Y+icpc
- Zxtt1i4pj9xqQ==
-X-Nifty-SrcIP: [110.4.221.123]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MfqGN-1mFBu718Mj-00gFlD for <cygwin-patches@cygwin.com>; Tue, 02 Nov 2021
+ 15:48:18 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 89727A80BC1; Tue,  2 Nov 2021 15:48:17 +0100 (CET)
+Date: Tue, 2 Nov 2021 15:48:17 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix yet another bug on input when signalled.
-Date: Tue,  2 Nov 2021 17:09:40 +0900
-Message-Id: <20211102080940.1694-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.33.0
+Subject: Re: [PATCH] Cygwin: console: Fix a bug on input when signalled.
+Message-ID: <YYFPsd2fzo8mjHIV@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20211102034010.1500-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211102034010.1500-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:ieLsBV0fN+0ZH7xno/NUnkFBaHVuLfNDi/xR9KiBl0Iq1DzRsQ5
+ sMZ3ZCmIyvgJCiLSU9Ohz+Km13IVjYTacugzKccQOERPl8YZ6Ln18CBvH2CzAe6wRd6VDh2
+ wKK5gx7Mem3efnFpR3Hr23R5k216Je4kFCiP5h0Z+E6Wrpm1FlmChewQykwi4kf3odSXkVU
+ 5xEb5IU/GdNq3rTyoxGWA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GF2Ksn3Yilg=:1LX7L33CB0IM0LMIVuqhme
+ ZazQAlYcKqoe9+ieFckoqkBIUJAffm3WtKtJcVnMxwf5S5shqJ4z1964D8PlwgbVKvNA+Ru9Y
+ sFfCisDIKvk+w2CQahStAukUcAgTXXctj2r4yVelMKBhxe9cd1m+wQeh98pQYST3UaK08wt6u
+ evWzdJnZcWXpXpFhuxg+Vnw8Z/ipLha9wOQ5OTiHpGAssJ1oZX0L6XEFx493lfPC75kDwdKzF
+ a4bYGv8rWC8tO70cYd1rYk1MF+5xvj7WPFc10VBIM7F6WuVvSf3J3Iutqho7AkBaiUD61+mWv
+ 1l8WQbTgFLHggjud2OF1N3/iUFqMdtu0wYeCOAIVUwDycpAu9+JEJNkFSUSIpJI4H+uSBVXzc
+ 9syFBG+9/Gz/TDqrIqAcgmqAs6yKW/pVGVp941ivbyhn9ByA4+3bPNw2Bk7EyRmcnozhOUeCS
+ LDF5wkR0AlgyRhvlssretmnlx3t752TKWzr6As5pF4OBtD4oxpZHaFsAFg6AQxZhker95vg8+
+ uAwG3da1eOiOM2mvPoRhNrePfyuUPoCwnpHbRWq7/H9Rjgbcrq67sIMmxWVgRrxh1+RjMqC53
+ SPAJYRn9B58AMlK13ZuUjU0iL1zONcwHlnAwApmXXuU5hPSY9QhnXei3rpfQhIqcEGI8vfuNx
+ R66aHOWpvf2X5Z40da48ciZsOSKpf61+T1JnFV7c4qGM0bLaAQN1wCMwRO8DFfq4y9PkD5kEf
+ jGHFiQNO3Slf+u5O
+X-Spam-Status: No, score=-105.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,29 +58,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 02 Nov 2021 08:09:58 -0000
+X-List-Received-Date: Tue, 02 Nov 2021 14:48:21 -0000
 
-- Currently, read() returns EINTR due to a bug if signal handler
-  is SIG_DFL and the process is suspended by Ctrl-Z and restarted.
-  This patch fixes the issue.
----
- winsup/cygwin/fhandler_termios.cc | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Nov  2 12:40, Takashi Yano wrote:
+> - This patch fixes the bug that Ctrl-C sometimes does not work as
+>   expected in Windows Terminal.
+> 
+> Addresses:
+>   https://cygwin.com/pipermail/cygwin/2021-November/249749.html
+> ---
+>  winsup/cygwin/fhandler_console.cc | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+> index 940c66a6e..0501b36fa 100644
+> --- a/winsup/cygwin/fhandler_console.cc
+> +++ b/winsup/cygwin/fhandler_console.cc
+> @@ -1178,6 +1178,10 @@ out:
+>    /* Discard processed recored. */
+>    DWORD dummy;
+>    DWORD discard_len = min (total_read, i + 1);
+> +  /* If input is signalled, do not discard input here because
+> +     tcflush() is already called from line_edit(). */
+> +  if (stat == input_signalled && !(ti->c_lflag & NOFLSH))
+> +    discard_len = 0;
+>    if (discard_len)
+>      ReadConsoleInputW (get_handle (), input_rec, discard_len, &dummy);
+>    return stat;
+> -- 
+> 2.33.0
 
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 012ecb356..b72f01f22 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -133,7 +133,8 @@ tty_min::kill_pgrp (int sig)
-   siginfo_t si = {0};
-   si.si_signo = sig;
-   si.si_code = SI_KERNEL;
--  last_sig = sig;
-+  if (sig > 0 && sig < _NSIG)
-+    last_sig = sig;
- 
-   for (unsigned i = 0; i < pids.npids; i++)
-     {
--- 
-2.33.0
+This and the next patch pushed to master and cygwin-3_3-branch.
 
+
+Thanks,
+Corinna
