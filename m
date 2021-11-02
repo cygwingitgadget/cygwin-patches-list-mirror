@@ -1,50 +1,38 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 8495E3858410
- for <cygwin-patches@cygwin.com>; Tue, 26 Oct 2021 10:43:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8495E3858410
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+ by sourceware.org (Postfix) with ESMTPS id E488B3858415
+ for <cygwin-patches@cygwin.com>; Tue,  2 Nov 2021 03:40:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E488B3858415
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MumVX-1mvsrw0bbv-00rmeg for <cygwin-patches@cygwin.com>; Tue, 26 Oct 2021
- 12:43:15 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id A27C4A80DAB; Tue, 26 Oct 2021 12:43:14 +0200 (CEST)
-Date: Tue, 26 Oct 2021 12:43:14 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-09.nifty.com with ESMTP id 1A23e9pu020690;
+ Tue, 2 Nov 2021 12:40:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 1A23e9pu020690
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1635824414;
+ bh=vwaWl0CPVFF9hSh3IBzI5GpIu+KMtnaedA87ad/ELCo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=0k7lDn6d813U687nT8Rtj9ceAYh900NN+eYuFfRS4E3uemsL0YCa1Ffigcdk1NCcy
+ wtbjLsCTVuXR6wQxd/EuAEYS8T5Ze4mYTdLfpCXStkLpS+QONPzZxCD1Jd9RatB6jz
+ Wmh6SCAh3df5auIsmqvewRCyJ1CGOb+CEj7SmMM3mmaqHJwGCKTnFpO00HXoAxaNHA
+ lHf9EKP+d/Olg8AvWd+HK95IV3ip5MMcYVDBpvTwFgpt2YccbK/H5pENm/sx+vKNnM
+ EASaUkftLgfj2BwG21L1k2HrCh+6pYlRSTqoGO37W68SSn1pbbC+wzmFhOBFuilv42
+ B9vTEdC/H2E3w==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: Make native clipboard layout same for 32- and
- 64-bit
-Message-ID: <YXfbwhOHlXBYgCFA@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20211025092540.4819-1-mark@maxrnd.com>
+Subject: [PATCH] Cygwin: console: Fix a bug on input when signalled.
+Date: Tue,  2 Nov 2021 12:40:10 +0900
+Message-Id: <20211102034010.1500-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211025092540.4819-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:45GB4VPjcUXVTPHJVfEmafpPYD6TgCkM4xyBP7g7vMEG8+rlhg1
- up55uzMASQMf0X5ssojHonsgwQ1TFeNWTZJfGUzfQtGg+ZtlKoCq0H8+QClmCjapcbXr/ea
- 9Hg+XW2yh0Hvk8KDQqMoB4b9Ge23cnOocZ0AyTS3agj8nRJX8LaD+G7ZCX0Ax8aGzaNrLAc
- ysIiRVusbgd372vIw1aBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:e97hDlFklsU=:kvhL12gQWV79ntVPqHkaOx
- 0xZlBNukWHJs2gmLbiqe0m7/RwgCXEfuxFvzlnKMR4h+k50OVmeCbT2LcpKY1qC7bNjYWuAjA
- NBG+XlqG2ipIwwQgyFlwWgpraV6CyoeqnaORlLONFM4r6kU06vfdFTBxOEzS51yepJhAY6zHs
- WN9GtJQKwzjMvSEUyJDdfWG8RMD9852aKGJ4M1hJsBmUFK8MJJaA21rcCbhSO4d3Bvb/xP4l9
- 0Ib4KrgZQtWNc5poGsXEfVXNaWFJBJEVCtbA8FThn7+l/LUBrLHVo9lsJXjk0WiXKnviZnFS9
- P8nkxW0K/AaEe3JAoW6fvL2Glmx8UKRQOgAj1jJgBUqvxrR+N7dtQXnAempClokXjZrP31Fos
- Uo/P4PZ8VOa1B/KtU8G2k/DCUKAxONOjXxq0EeMJt+RrniRAKzer7MECZua5d4uxdRD2T3S87
- H98saW3wxsiWVAZ46OcE4YWI4kf+VYUnXQWgjGgOL0yQJkBWsj361oOfLbQ+cLj/4hiVfh5yc
- 6yJo4hjL73RXT2KC4pfwgTERq+71D50CAywR31SFtYzB6/VMhz0HSvqO5un9I1tkWFz8JS+aZ
- bFx7UoFClian0Fn8tzTGZ4x5NFLIjn/FkFXc841Ta3i81dJOCI1vCB1vOHqlzbmldF8Fqb19k
- ikany1bncKVxsWSrtJjCSAGxS9/juTd/gXTDtJDBUa0W1ottXreImiKFEwzcrIFTHP5yCTG9Z
- iDsjl0FwTjTNoj6d
-X-Spam-Status: No, score=-105.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,44 +47,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 26 Oct 2021 10:43:18 -0000
+X-List-Received-Date: Tue, 02 Nov 2021 03:40:47 -0000
 
-On Oct 25 02:25, Mark Geisert wrote:
-> This patch unifies the layout of the clipboard descriptor cygcb_t for
-> 32- and 64-bit Cygwin.  It allows correct copy/paste between the two
-> environments without corruption of user's copied data and without access
-> violations due to interpreting that data as a size field.
-> 
-> The definitions of CYGWIN_NATIVE and cygcb_t are moved to a new include
-> file, sys/clipboard.h.  The include file is used by fhandler_clipboard.cc
-> as well as getclip.c and putclip.c in the Cygwin cygutils package.
-> 
-> When copy/pasting between 32- and 64-bit Cygwin environments, both must
-> be running version 3.3.0 or later for successful operation.
-> 
-> ---
->  winsup/cygwin/fhandler_clipboard.cc   | 42 +++++++++++++----------
->  winsup/cygwin/include/sys/clipboard.h | 49 +++++++++++++++++++++++++++
->  winsup/cygwin/release/3.3.0           |  4 +++
->  3 files changed, 78 insertions(+), 17 deletions(-)
->  create mode 100644 winsup/cygwin/include/sys/clipboard.h
-> 
-> diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
-> index ccdb295f3..7adb50991 100644
-> --- a/winsup/cygwin/fhandler_clipboard.cc
-> +++ b/winsup/cygwin/fhandler_clipboard.cc
-> @@ -17,6 +17,7 @@ details. */
->  #include "dtable.h"
->  #include "cygheap.h"
->  #include "child_info.h"
-> +#include "sys/clipboard.h"
+- This patch fixes the bug that Ctrl-C sometimes does not work as
+  expected in Windows Terminal.
 
-Pushed with a minor change:
+Addresses:
+  https://cygwin.com/pipermail/cygwin/2021-November/249749.html
+---
+ winsup/cygwin/fhandler_console.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-   #include <sys/clipboard.h>
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 940c66a6e..0501b36fa 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -1178,6 +1178,10 @@ out:
+   /* Discard processed recored. */
+   DWORD dummy;
+   DWORD discard_len = min (total_read, i + 1);
++  /* If input is signalled, do not discard input here because
++     tcflush() is already called from line_edit(). */
++  if (stat == input_signalled && !(ti->c_lflag & NOFLSH))
++    discard_len = 0;
+   if (discard_len)
+     ReadConsoleInputW (get_handle (), input_rec, discard_len, &dummy);
+   return stat;
+-- 
+2.33.0
 
-given this is a system header.
-
-
-Thanks,
-Corinna
