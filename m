@@ -1,50 +1,39 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 6ACEA3858D28
- for <cygwin-patches@cygwin.com>; Wed,  3 Nov 2021 14:15:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6ACEA3858D28
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 649E63858406
+ for <cygwin-patches@cygwin.com>; Sun,  7 Nov 2021 03:47:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 649E63858406
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MjPYI-1mJPpS08V8-00kzU9 for <cygwin-patches@cygwin.com>; Wed, 03 Nov 2021
- 15:15:36 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 30202A810A5; Wed,  3 Nov 2021 15:15:35 +0100 (CET)
-Date: Wed, 3 Nov 2021 15:15:35 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-11.nifty.com with ESMTP id 1A73lHDT023086;
+ Sun, 7 Nov 2021 12:47:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1A73lHDT023086
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1636256843;
+ bh=447rV6RSXEzSD+OrFvf2zjknfNtQw6QECQOYjPNL51E=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hx7VsDg5FfxCimuB+gPDB/H/pUEPhy+4hsmXTimRF7Tvp6aqSGmlIN5PRTiRx5S97
+ AKnwoLQitdMLxrhAfNKJRku30N/eAeQkPCRddPko7NdbjbBNQaL/kxDeOoXwgja1fk
+ /BufxuL0wJFJGyi7F+P3jsXEBi6MV1NI1jv2HLy9UbunzrB4SlxoglQ53eRWa117JP
+ jngyToMAcmMHm5ZRIzjqS7ZJsMPEinUaaNzHMUfEfYmMPKxc0G5ZaJGjisRwLQaB4w
+ xRqSVGaw6vQX8haTwYlSXPYPQZ+lFRLwhpgkag9A8cKz73qvFcLDyVkr4ZHFjLK8dy
+ QMxnqy/oBtkZw==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Prevent the exec'ed bash from exiting
- by Ctrl-C.
-Message-ID: <YYKZhxejpTLsdn67@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20211103061442.774-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pipe: Avoid false EOF while reading output of C#
+ programs.
+Date: Sun,  7 Nov 2021 12:47:18 +0900
+Message-Id: <20211107034718.1048-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211103061442.774-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:VOOjTqNawX5cTvDMmJOXhrEI2bZgAHPgCmLEx4q1HfUl0HwmrE9
- 41d5xkRrIHUsrejW2q244IjE0WI/KccczsNFPoK4wt/CQQw+5TE8dRTuw1ZydEzdqDIaiD+
- DxYIlxgOlBLmh1IGGi/22ACsK/0+vkAeqzk9TnCzZ2ay9OUIqM/EzIWwLNpCl983auxUE2v
- MTI4WKSyq0RUJKsj7k/WQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CGiP9tyEBSo=:nFasUdns9obBQNzN1RrwhY
- n4F1EcGDgmXZT/+WdTdvMpf742UTmPp4zdrZyiD1SxdsjnCh4iy3bgO4B/6LHBZYStO9JMMjj
- hvkYlPCjKhsoUTfwFPTjZvnQ7sfMN0o5erZnOdRFHcXWvdlLQ0PtqaJ6TDOGaH780PsTTySCh
- w9cXPQiB8viEZOV9UNFr+BWA62afYV7Sg8VYNbB6CHZWfynXKPnm0anWbEiQ2PGM7b3OXFkds
- CVLsko3YkxwdEMWr6dYiA77G7ccHDoSbp/acW9Sy8Yawp0KSz2PDtobZ822BweKSG44gUymbI
- iQ2JRPLp07HHa0XSfon3Qv0WUvKviD29KJhbFPwkxiL7dtqaDpMsjSv2+B9x7PpAvoOzoV9IJ
- kHX02JGPWr9qK4UlXsdELqrDi31d105FeEIjkdcFeVxGMaKICi0nf0vj6pkOc6vW8jqfq3KMM
- atgQVSi4Io6NXsrWEPsmwQ+J/NQXx1SmS/T68UIZ6gNs+rt09Hkb5GSRsdXklCybsOujEpCTl
- BQpoCTUrTKf89Ut5IUxkJHsNLrRkrFFrjVr2XJZl72uRL/ouoLU9RaZ7wQOGxb9wU43sZUmkt
- as4UUlBz67gmA8mPyD+SVjziuF0DSphwVAm4xdhqomcObmxTAeWb0PVJXSsh3TMuLapLAy+0t
- OQtoAkr7YWNn/gJikpBniBmkdcLjp6lvPCZ8x6P/2Vs9eTqCFikPraX1XwCWxdYKgsRgAMaYG
- ZPG0EyAKWXxXRD2y
-X-Spam-Status: No, score=-105.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,43 +48,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 03 Nov 2021 14:15:39 -0000
+X-List-Received-Date: Sun, 07 Nov 2021 03:47:54 -0000
 
-On Nov  3 15:14, Takashi Yano wrote:
-> - Currently, bash occasionally exits by Ctrl-C with the following
->   scenario.
->     1) Start bash in the command prompt.
->     2) Run 'exec bash'.
->     3) Press Ctrl-C several times.
->   This patch fixes the issue.
-> ---
->  winsup/cygwin/sigproc.cc | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-> index 8e70a9329..97211edcf 100644
-> --- a/winsup/cygwin/sigproc.cc
-> +++ b/winsup/cygwin/sigproc.cc
-> @@ -594,6 +594,14 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
->        p = myself;
->      }
->  
-> +  /* If myself is the stub process, send signal to the child process
-> +     rather than myself. The fact that myself->dwProcessId is not equal
-> +     to the current process id indicates myself is the stub process. */
-> +  if (its_me && myself->dwProcessId != GetCurrentProcessId ())
-> +    {
-> +      wait_for_completion = false;
-> +      its_me = false;
-> +    }
->  
->    if (its_me)
->      sendsig = my_sendsig;
-> -- 
-> 2.33.0
+- If output of C# program is redirected to pipe, pipe reader falsely
+  detects EOF. This happens after overhaul of pipe implementation.
+  This patch fixes the issue.
 
-Pushed.
+Addresses:
+  https://cygwin.com/pipermail/cygwin/2021-November/249777.html
+---
+ winsup/cygwin/fhandler_pipe.cc | 3 ++-
+ winsup/cygwin/release/3.3.2    | 4 ++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/winsup/cygwin/fhandler_pipe.cc b/winsup/cygwin/fhandler_pipe.cc
+index 43771e8f7..bc06d157c 100644
+--- a/winsup/cygwin/fhandler_pipe.cc
++++ b/winsup/cygwin/fhandler_pipe.cc
+@@ -393,7 +393,8 @@ fhandler_pipe::raw_read (void *ptr, size_t& len)
+ 	    }
+ 	}
+ 
+-      if (nbytes_now == 0 || status == STATUS_BUFFER_OVERFLOW)
++      if ((nbytes_now == 0 && !NT_SUCCESS (status))
++	  || status == STATUS_BUFFER_OVERFLOW)
+ 	break;
+     }
+   ReleaseMutex (read_mtx);
+diff --git a/winsup/cygwin/release/3.3.2 b/winsup/cygwin/release/3.3.2
+index 263c3efe6..2e48e39be 100644
+--- a/winsup/cygwin/release/3.3.2
++++ b/winsup/cygwin/release/3.3.2
+@@ -8,3 +8,7 @@ Bug Fixes
+   Addresses: https://sourceware.org/pipermail/newlib/2021/018626.html
+ 
+ - Fix a permission problem when writing ACLs on Samba.
++
++- Fix the issue that pipe reader falsely detects EOF if the output of
++  the C# program is redirected to the pipe.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249777.html
+-- 
+2.33.0
 
-Thanks,
-Corinna
