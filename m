@@ -1,47 +1,44 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 01CDA3858D35
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id 0293A3858400
  for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021 20:32:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 01CDA3858D35
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0293A3858400
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MFKbB-1mw9jr2qlN-00Fk1G for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MNKqC-1n5Kns2Qri-00Oq9C for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021
  21:32:54 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id E75D0A80966; Wed, 10 Nov 2021 21:32:53 +0100 (CET)
+ id E478FA80A5B; Wed, 10 Nov 2021 21:32:53 +0100 (CET)
 From: corinna-cygwin@cygwin.com
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/2] Cygwin: drop unused isabspath_u and iswabspath macros
-Date: Wed, 10 Nov 2021 21:32:52 +0100
-Message-Id: <20211110203253.2933679-2-corinna-cygwin@cygwin.com>
+Subject: [PATCH 0/2] Fix a bad case of absolute path handling
+Date: Wed, 10 Nov 2021 21:32:51 +0100
+Message-Id: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
-References: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lltGPCFX9QEk38Dlgc/Czfsn6DFLRsHCkuTewG0xMNfZjNEWTW3
- wPjuHWGTxK74IZjI1dgacLoZbfH3bS+AYA7xQHs367QsAX/ZTX1pQybtveg4AFq+NoXjBqn
- SaWloJLHznUZoEpJfWLR3uqd5g37zTvgSMK3dBg7pBuI/ID9QT1ihBBPL/UINDKDOerriAA
- QLVHqPAqUxpmGtVwOpWYw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UhgCeD/pTSg=:VRnyGWUkUSJvP9h8tJEJUQ
- 8v2dS6l5eo6lWqQ6eyyVgzlYoIMKYy80h24dcqyeKxA5LiNEpRAZXftwQ/ETPiCCGeW3Rd3Zt
- uwxzEjd/gsQq3Uv2tvwTO/+/GBNP9JoPsokmu31HawYh9R5PgQeqiQRdxIwbFNJ0ZNQ/MYkZt
- RKnLE4VkXwIciZIFVeWdy1x+4Udv/My5JVV/mY3VNt8MLwp03jvxRwsQnIWlko9neQ1C4en+2
- N+9VJ6OiOge4IAGcd/EyS3COyMn3qHJ6FJRVXhT1KxtbbCUKfeiFsbfZGm71riOxZtKi8nUnc
- PPemNing8h9tWpw5s8z+hmb4tE8k2tM9yytiL34oYVfDGHdfwXzDTGb/7KvYwDKDcL03iIMH4
- 2seKyOVt8kutrL2WYIUhl/SJFSbfwiFX6/3nEyw76HktVYTP8PlUywglR6tfYkgvMIbzWlB2G
- bGSFkinCkZDjgkdJQ3La1pjmLCWUb8FemH/998mu+8MHj8yD5HT0cZYD35zn9fpxnliJeA+wE
- NhOHEf4Mhf8jRfsGv8Nzh0sIzB3JpA6fRFwij0mp33aoaHZVnDyHj5rmtpG3smfhW4iGfEe9b
- ElnaWxkvsYH40BN5a8HZ74k4MiRiEsN8MOBXdjy2UgyaRtpBT2eEe/zyiQIAVdxvhf1fN6ohx
- E4Oom+W8/QHELjQZ5xxWEabEZQVJ3Hec8uICcEKb22TBSyao2aH86Uc5JQsdvKE0Z6eCJkFvS
- wVc31DxKgQ8tBAWE
-X-Spam-Status: No, score=-55.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2,
- SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Provags-ID: V03:K1:GC2/wZMGxJ4EGGxjHj0CcGyzUQ9lu052cU6D8xesGU43FVjRsVj
+ 0l/H0G23p463AVPFT2QjpOD38Ab5u3HqArbpoMTjXVGHVzGJwsR6/ZRNCifU6ahiK8MEheX
+ A462IUrypIEnKwxP7WaIO8CwrSleLyHVRu1H9TfgAYtSA9jEjT5Vro/3bl0ukdxdoZshRji
+ vuKxq2oBBOsqPtqUEyOOA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9zYeWg2KQ/o=:0/v1HmiNCmjrWDlTonK914
+ CFau9ezDkOjJfo0cQKpKgSyQ2PWFIxoVN5KXtUw0TOOW2EbApRO2klz5t0BV9YAvRJZcE3zhd
+ SFYVy9URZ4/wAQf9dv6TAL6uE2O66EAgGm7YHU3X2fuC7Wj7YCTP7tiNspwDyK1L6IkIpVI3q
+ CMQF2vXzUBMqZ3H9cvHzxWDHRQjxZ9tZgXvjJPSopQKs1soNygLCY5dxxe/XDzjKejFPAAl40
+ DR1Jahhh4QJ3CeWuWQMzzNVHAeK/T/gWReiQCQgyJcZ6tKXMoaV79PBJVb56bzeEcnCf5AQnl
+ gCxYjBrtIiVyBq7Sez+i1Nm35mQgjXCpNV3JcfuncwylaK3j7lWkRW0wC4UhqhKIGRWbcurf1
+ 2OtZPZJq0q1Gdi4xPOoLrHpIuplzLpf9n/OvlgU4Fk3HjdHyFqGPD3lorM0J0ONgIa2aFCxaw
+ KgIc5t8bhbi4SSBnoShKMJhWbU+WPEMWjXvn1XX0kDwQ79QQF2LIxh/oCKQT+PtVUyqAKFrIS
+ 4/KhoMiYZftVaOxjdkncJr5uNxnkg1q9RLeekfsVC7dDAstQ628Oczit7ePXxCDM69erm9jf6
+ H83hXug/usDB8cmBu26UquHoVIsN3HaW0KmpVwvfqWGJW2MtygLFC6wzpRFYR5CPZw6jEKyxi
+ JEtyCGMwAYdltzpTPA2cEne2oL4ATwNll1W+/8SdDlGNtX00plN4KXKcY93QErELClz0mpDnd
+ w49iEDylY0LVACFT
+X-Spam-Status: No, score=-49.2 required=5.0 tests=BAYES_00, JMQ_SPF_NEUTRAL,
+ KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_NEUTRAL, TXREP autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,34 +57,51 @@ X-List-Received-Date: Wed, 10 Nov 2021 20:32:57 -0000
 
 From: Corinna Vinschen <corinna@vinschen.de>
 
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/winsup.h | 12 ------------
- 1 file changed, 12 deletions(-)
+As I told Takashi in PM, I will try to more often send patches to the
+cygwin-patches ML before pushing them, so there's a chance to chime in.
 
-diff --git a/winsup/cygwin/winsup.h b/winsup/cygwin/winsup.h
-index abdef35261ca..f6fea6313d56 100644
---- a/winsup/cygwin/winsup.h
-+++ b/winsup/cygwin/winsup.h
-@@ -139,18 +139,6 @@ extern int cygserver_running;
- #undef issep
- #define issep(ch) (strchr (" \t\n\r", (ch)) != NULL)
- 
--/* Every path beginning with / or \, as well as every path being X:
--   or starting with X:/ or X:\ */
--#define isabspath_u(p) \
--  ((p)->Length && \
--   (iswdirsep ((p)->Buffer[0]) || \
--    ((p)->Length > sizeof (WCHAR) && iswalpha ((p)->Buffer[0]) \
--    && (p)->Buffer[1] == L':' && \
--    ((p)->Length == 2 * sizeof (WCHAR) || iswdirsep ((p)->Buffer[2])))))
--
--#define iswabspath(p) \
--  (iswdirsep (*(p)) || (iswalpha (*(p)) && (p)[1] == L':' && (!(p)[2] || iswdirsep ((p)[2]))))
--
- #define isabspath(p) \
-   (isdirsep (*(p)) || (isalpha (*(p)) && (p)[1] == ':' && (!(p)[2] || isdirsep ((p)[2]))))
- 
+This patch series is supposed to address the `rm -rf' problem reported
+in https://cygwin.com/pipermail/cygwin/2021-November/249837.html
+
+It was always frustrating, having to allow DOS drive letter paths for
+backward compatibility.  This here is another case of ambiguity,
+triggered by the `isabspath' macro handling "X:" as absolute path, even
+without the trailing slash or backslash.
+
+Check out the 2nd patch for a more detailed description.
+
+While at it, I wonder if we might have a chance to fix these ambiguities
+in a better way.  For instance, consider this:
+
+  $ mkdir -p test/c:
+  $ cd test
+
+As non-admin:
+
+  $ touch c:/foo
+  touch: cannot touch 'c:/foo': Permission denied
+
+As admin, even worse:
+
+  $ touch c:/foo
+  $ ls /cygdrive/c/foo
+  foo
+
+As long as we support DOS paths as input, I have a hard time to see how
+to fix this, but maybe we can at least minimize the ambiguity somehow.
+
+
+Corinna
+
+
+Corinna Vinschen (2):
+  Cygwin: drop unused isabspath_u and iswabspath macros
+  Cygwin: introduce isabspath_strict macro
+
+ winsup/cygwin/syscalls.cc |  2 +-
+ winsup/cygwin/winsup.h    | 20 ++++++++------------
+ 2 files changed, 9 insertions(+), 13 deletions(-)
+
 -- 
 2.31.1
 
