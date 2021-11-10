@@ -1,47 +1,125 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 5F3E03858407
- for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021 20:32:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5F3E03858407
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20719.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eab::719])
+ by sourceware.org (Postfix) with ESMTPS id C69F13858D35
+ for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021 22:22:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C69F13858D35
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MCKJw-1muDvo2O7W-009OO0 for <cygwin-patches@cygwin.com>; Wed, 10 Nov 2021
- 21:32:54 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id EAF1EA80D3D; Wed, 10 Nov 2021 21:32:53 +0100 (CET)
-From: corinna-cygwin@cygwin.com
+ dmarc=pass (p=none dis=none) header.from=cornell.edu
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eTUc0TbSlnLG5bt8yOH2w8mCPLUhUz/pyK1tk9tqhoGy0jMTJaafRbzsi5drdZ+6OCw5CLxfkL8Q2bnplsdAvIqI4jrpRgksSTZHIx14WF3rO6ELKqaQIJuR4/4KnkhoEfU+adOWWYaxYMrXjFFpYQes1lnlcDLub2OoPVI//SCv3p9fkrPrNg1JQhRG1V5TdxHIASjBgeio0otosxvLnWewq70Rq0xgQ4O9ahTDtZZjjKmI/yHgBtZ/LU6XnOk2ANOK+wqEsInVoHXXbJSs8is23ZTUluUliJ6P/TAUinlVWXEyt3OELhHOBjeXg67aFirpNxoIaS/v0Y4YnL7A2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DRTwsDRKeLPg/KjUZKo2ucUnfQx3HncEFIh8U+AfjvM=;
+ b=PeFOBK27Urbp6p0uxrL0ieXbjLdJZRjCl3nPvpVi2vqir8oW7JW9L01GNnrhKTs+a5eg3VuM0lk07pW5kqOY7aB9gJ8GT0lnyTVdFBVLHfhzm//K0ktVn/jfK4JjxGl8L5G1HBkyyEbx/HFCb6L5flL/qJirZtiK8j3AVCuqPSqWxghvuauiq16aTysoKymVnq92S7VGlt3PhJWL5KneVcsgJ1/YNNXTVUwI5GNgrW+/GGvPfB1mNyj6v0yhP9mZM3kZhnpW48aWUpThAIwZFyKg/O9m1Oq2YT+dcW0hz17fZY1G4eEMx1EsCGZ2D0drLFNsmnB0uaZ1tmiWBsmBKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DRTwsDRKeLPg/KjUZKo2ucUnfQx3HncEFIh8U+AfjvM=;
+ b=SJQjJ/UFADYKDHgWSPFcY3a04NB9MLkYS3RsarKYw/dYrJDGLDQnqp7OwPzzErgLxo7WdODhPEXCDlbLv5i3Hx5SKKyi60goOzP3k81tyzkc/Npzoygf+qZKcjeWMmvq4wBBer38J2Wel+buA1wbEbTnroUbjOt3eOepMOq9Byw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornell.edu;
+Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
+ by BN8PR04MB6385.namprd04.prod.outlook.com (2603:10b6:408:d6::18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.17; Wed, 10 Nov
+ 2021 22:22:08 +0000
+Received: from BN7PR04MB4388.namprd04.prod.outlook.com
+ ([fe80::88c4:79c5:1eb1:b969]) by BN7PR04MB4388.namprd04.prod.outlook.com
+ ([fe80::88c4:79c5:1eb1:b969%7]) with mapi id 15.20.4669.016; Wed, 10 Nov 2021
+ 22:22:08 +0000
+Message-ID: <f6a4f67f-1db4-4e53-7907-c7a7dcfbde79@cornell.edu>
+Date: Wed, 10 Nov 2021 17:22:05 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 0/2] Fix a bad case of absolute path handling
+Content-Language: en-US
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] Cygwin: introduce isabspath_strict macro
-Date: Wed, 10 Nov 2021 21:32:53 +0100
-Message-Id: <20211110203253.2933679-3-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
 References: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
+From: Ken Brown <kbrown@cornell.edu>
+In-Reply-To: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR01CA0035.prod.exchangelabs.com (2603:10b6:208:10c::48)
+ To BN7PR04MB4388.namprd04.prod.outlook.com
+ (2603:10b6:406:f8::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:dziy9bWkTrw5Ek+/tcXMteQeSS0tDZli21Gq8B/LW501QGCrh5B
- 8c4RVPL5Z5n0a4F4S8AoduzRBnYHAZ9b90tMcz+dAVlxFkpwzX6u54e6OaFnvx12/k3hYkS
- v6zWNFEIUfRkzrie98jOX7G/z2JyPeSF9Af0bl+RQV6VcpjkXNXGsUwK3vnbUIBonFacDJm
- q22tXU+e0EZB3qPFPKKXw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CvHTcwHCrLg=:HFfGqoLHdx1v9KVH5j8FQy
- FAmaNgPFdpow9LEYSG/9AiK5ZEWytqtR+GroJU9SeazXXjNNu7DnGBQDyQB53Ci64n0rfKyFo
- 0Ykm9vFKoU8AJ0TxKVsREKlv2dB167dzv5ovfZ2LDWWev7Az4zjXLqbcLHNuOezc0cj4uUG+n
- 39NxNtLYp48J3jVH9se7vgyP9WnB6yS0LD7bkz1wpBTbWIVDWpal2E5gFf1s6IbkqvNL6BkoW
- wSkSCmh8nXhQSzpKP6imqhVXFLIWcoT2LD1MdwNh6LpRd9jaZnBgxJtzRUk3PGyBmhRKY2e5R
- z7ZdMwQUeIOt8lFcb0mX//tPjwtAViBnLK3RUuro9DvfcCUYuuHqJxCDAM1hAC4iBGLx7guLe
- L8HJO3+FP++4R49ApZNllofnIaN/SdGzBnwC5Rgydz9pZpdFYTM1JH3349EK8Umb+NyDiqOx0
- YTRrZSt25r8awNtYJMzois+q/gajixv3SeadwIcAaYqpudmfIuuZgukwAYxBAKKs80cRdgCQw
- woFdDTNmxwS/x9zbPVGfX12I++26JdABRNGnhH28gcElINprIns8MfW0HfzVR5LKCAh4VJ8un
- aocQzosMxPUz+s+U1RWEjAVdsPPB61EHEQYIunQZHhIFPGyu6Y55UReBxasM2ZEQnS/Kuqc/Y
- px8s85BkvVf5xjWOBLCDJPBSfF1hRXGsSxRYOstTcQGTSO1DKLYeV+9/hDBnfTxlMIFDE2GQY
- IImvDwU31PiWmO1Q
-X-Spam-Status: No, score=-55.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2,
- SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Received: from [IPV6:2603:7081:7e3f:3419:7428:1d03:8434:f8fd]
+ (2603:7081:7e3f:3419:7428:1d03:8434:f8fd) by
+ MN2PR01CA0035.prod.exchangelabs.com (2603:10b6:208:10c::48) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4690.16 via Frontend Transport; Wed, 10 Nov 2021 22:22:07 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 54e2904f-ccc9-48a1-ebd1-08d9a4988849
+X-MS-TrafficTypeDiagnostic: BN8PR04MB6385:
+X-Microsoft-Antispam-PRVS: <BN8PR04MB6385D34060A057AF45454445D8939@BN8PR04MB6385.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W1R+VIyd8wyDudPkNYVLDE2haVvJFcooaLBPfmKEmOyAUEWXdWxSUQGSWUS7Z99Im35Py626cT0EpQk0kmKgn3zDLzHOfhfVvg9ahssmX8bZVSUCcWrPpqssAXu1s9gsnOy5aVdJywKFZKKU5zeTEz7Hyv8Ax0L2KMk/UlnctiS5bnQPae+zbIaby40mhcK3d7/Nodq4wkVL+xJNaCFg4sdhSBMSoAq+gmiQBpsH5BS3ThOzBdinLLcBtAYDljfptLpGAcsmGzipgFiw5wzCs1m3wVOkmjxtmyF8fhhWAYop/nkRLifO95Q0uut/l7MlBIkKtX8RS6haIHdnXPuK74WTpVy4o+HKGBGjQFndZ6cJmXCz3wvRa5OTZRxYvmRiCx8zpI4urLtmkt9+LbmNc5+dqVcQjYxNJtEzP1zU+uzArDOxQ7Bg+BubGnHkelaVkWDglcS4VZAf6wSJLLX+1DRtXAEl8KrvngNk43GAjFx9/PQI+5wOn+KgYguP3Dp4309f3zL3coXLO+YzqNOwVwLQoTBoYeAFlHGiEH8pEcyxex/xyAahghUnz1K0EuLUU8ZrerJhnW7QpFJY5Z90S0nJGdThdqjxBFFYeOghW2zlpgkCB3wz250oJhkvfHSim/gWfuw/krjzN8/xB1PMzuqTyfbs8u4MzqwhKcQVYdbMso/EAPLo1p3ueM0aYTzZzJm2K6D4ERIHTniPsDAQUuM5tPbQRk2Vd817YXP2jTjy9h8Z63zb8E+N9Eb718mruQxElSt9f4jvqAGbZVNCEw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(366004)(8676002)(75432002)(36756003)(6486002)(2906002)(508600001)(83380400001)(186003)(786003)(316002)(31696002)(86362001)(6916009)(8936002)(5660300002)(66556008)(38100700002)(66476007)(2616005)(53546011)(66946007)(31686004)(966005)(43740500002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TzExVSt1TFJ6LzRhVWd6UmFnZHpvVStPTlNWb2dPZ251ZXgrcFNXV3lQY3Zj?=
+ =?utf-8?B?MjhJY01pMzRhZ211QnlwZmsyRXRZUmNWZko5WVR4ZlEydDk0bHFvankzdVZ6?=
+ =?utf-8?B?M0FhazU5UkVCQkFvZGdjaE0yeXRWSUJyVmN3ZUtEcWNHR2NLWitqOVZpeThq?=
+ =?utf-8?B?eWtGRHl1QjhZZC9mMG9pamdYQ3R4YmcxU1gyb2F0b0I0K1o2alMrVFFDWHZm?=
+ =?utf-8?B?VXlwVlU4REJuYWZTaGZMc01EZmRIb1FCM3g0QVZnaVY2QTJ4Mlg4Q3o2cXFl?=
+ =?utf-8?B?QWxHU0RJYWU2SDlHbHEwbUtCVUdFeC8zVmdhMGZ5SjZIaFhiZUFFQUpzb01i?=
+ =?utf-8?B?YWdQZnNEbCs0VG90QURaMkRzaFA1TTZlak9yQVlaMEN1cEdtbWF2T2dwbWxL?=
+ =?utf-8?B?Yi9FQWdraG9Ddi96ZzFyaXprc2tzZFBpVnFTeU1DZlZBWUdBc3FpSVBqeG10?=
+ =?utf-8?B?d0tBdjgxUnNpdkJ3WVJ4SXBGWm1IU0VPemh1NG5ZbDlBeGpZb2JrZFpGVE80?=
+ =?utf-8?B?TXNWTy9OcUc1OFZEWFRXNDlTck5sVlBkSS93S1NKZFcrc1RqbDlTRTZnOGJk?=
+ =?utf-8?B?ZVB4K0dYQlJFU2JBTmw2cXl3ZW91aUwza21LcXBReEU3aXNSd1QrY1NwNGlB?=
+ =?utf-8?B?SHdsbDRnNnV2dDhGYStxZmlCcW90WWJHS2g0MGVCNGlITGFTazBhYjgvaGpt?=
+ =?utf-8?B?ZkcrbkV0UWpLQ0JvRVFjR1p0cXJrTERJSU5UZWxrbUtFbXNSNkgxeHVBcXMw?=
+ =?utf-8?B?MGZsOGNPL0V1SGlaaXRwMVdjcU5CTHpRL2xudXFISlRxN3FlSnFTMk4rNTlz?=
+ =?utf-8?B?aFB0S21qdDVTY2xQNGFhWE00TjBTQm92Mnl1Wm5tbk54aGROWUhPZmQzWUtC?=
+ =?utf-8?B?anhibHlNYWpyWTFZOXpUdTVXd0NEc3V4R1ZwKzZkdWpqZjhxL1VNVUphM0Fp?=
+ =?utf-8?B?Q1FXbUU1MVZZQ3Z3bEJvNEtwVmFFaTN4T3JyOUhtb1R3VG82M0Z0bWFFd1Qw?=
+ =?utf-8?B?UVprend1UlhzbGs5ZlVLakcrM3dCTWNqbmQ4bHlidWVRNDBFNno2NUp5M21z?=
+ =?utf-8?B?d3JER1JEVytJUGVhQWxTOGM3a0l6NFhaV3dNY3ZRR2hCTzFNbzFONEtXK2dL?=
+ =?utf-8?B?L2FwbmN5Znl3bS82Y1BjVlZFenJHSE03cFlqdkNOOVZPSGxlVGhtWEhoTWNQ?=
+ =?utf-8?B?Z3NxRUdkWFcyUUtrd0FCL0tZZWJva3Judzh5Y083bGZiM0RuR3M2MFZQTFJO?=
+ =?utf-8?B?c1VEWXY4WW4wVDdNL2JjU1huenRNWTRkQWJkUGhZL0hJaStnWmF4YVZZZzZO?=
+ =?utf-8?B?QjVaWmdlWFZhQmlyNkh2R2VZN3lQc0xiYjhrdG5VZHByaDR0akZvWHZHckJa?=
+ =?utf-8?B?bitZS1cyejZhRk85TUZYWWNBanpYT2p6YnlXWWxEekhGQzlWZXc4OW9RamZQ?=
+ =?utf-8?B?NllLbVJPZ2hrZGRYa0Z6UGFoeXpCTGFoYmFSdnZQRzhoSWFrc3VCM1NZWFRj?=
+ =?utf-8?B?aWcwSnFWNFZueEZOQTd4eTVhazR3SEVoOStPUDQxRmV4S01DZWowYXJjL1NX?=
+ =?utf-8?B?TnhiL01CNk5EbnZLL2U1S0FxazFOSDlJY2p1bjhrSFRKUXphZFdvMjk4c1hr?=
+ =?utf-8?B?aDBrbW1nelJkVk1vNC9pRkxxcVVOZndxdEU1V21sVW4xN2lDV254VC82eHRU?=
+ =?utf-8?B?N25lMmJEa3RUQkN2U0NJU2d5YUcxVXd1dzZMTkZ4VTNRWEo4ZG5WcEYrVDJK?=
+ =?utf-8?B?TDUzYjdLVHZyaHJJU3lJQjRPNFREMysyQ1haZ1AwbHR3SXBuS1BKQ0tza0Qv?=
+ =?utf-8?B?cTlYMmhxRjVkcW5QZGpGVlNncDBZTC9EYnVYTXdzS3FvNUcwVjR2UndjMTBM?=
+ =?utf-8?B?ZWtqdDlkQzZsQWZPanpFVW9kdVI4aFFseDVVbitoYTFwM0kwUE0xUFdRS0NY?=
+ =?utf-8?B?RFdWSElZblFVdGVzdGpqMDJEdlVQYmg5Y2xUbi8wdnI5YzZJK05VV3NHNU05?=
+ =?utf-8?B?aW95TTZpbmZwTEN6OE5pVFY0KzRnTHYyZGdjTDZ5dk5RSTF6SFBQS3Z3ajJs?=
+ =?utf-8?B?VVRhV0JJVDR4aGlPK1dpb3o3aGJXanBLTUNHb3RhMDc0WWxGTVZnMTNXamRI?=
+ =?utf-8?B?N2lGMXJBQXAzZ2txUGRGR0tKYyttK0xkYTArelB2d1pHY0xmYVRzUzZzSmxY?=
+ =?utf-8?B?eHBDKzFHVzQvZXNOWHQ0RnpXTkd3UTRrTTMxZmg4cHhBWlU1ZEh6ZTduWWNh?=
+ =?utf-8?Q?1y74aCby76xbNjywxM4fvuETCQSbgsV7roAR+5YFRU=3D?=
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54e2904f-ccc9-48a1-ebd1-08d9a4988849
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2021 22:22:07.9415 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1fQnoOQHSClbhUtcbj4BGppdEjWxIoAa129Of0fUkEopuab8A5Sn/2EjRLPXLoLVZWXNNqhG7RDgN4vTq9STPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR04MB6385
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER, NICE_REPLY_A,
+ SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,69 +134,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 10 Nov 2021 20:32:58 -0000
+X-List-Received-Date: Wed, 10 Nov 2021 22:22:13 -0000
 
-From: Corinna Vinschen <corinna@vinschen.de>
+On 11/10/2021 3:32 PM, corinna-cygwin@cygwin.com wrote:
+> From: Corinna Vinschen <corinna@vinschen.de>
+> 
+> As I told Takashi in PM, I will try to more often send patches to the
+> cygwin-patches ML before pushing them, so there's a chance to chime in.
 
-isabspath handles a path "X:", without trailing slas or backslash,
-as absolute path.  This breaks some scenarios with relative paths
-starting with "X:".  For instance, fstatat will mishandle a call
-with valid dirfd and "c:" as path.
+LGTM.
 
-The reason is that gen_full_path_at() will check for isabspath("C:")
-which returns true.  So the path will be used verbatim in fstatat,
-rather than being converted to a path "<dirfd-path>/c:".
+> This patch series is supposed to address the `rm -rf' problem reported
+> in https://cygwin.com/pipermail/cygwin/2021-November/249837.html
+> 
+> It was always frustrating, having to allow DOS drive letter paths for
+> backward compatibility.  This here is another case of ambiguity,
+> triggered by the `isabspath' macro handling "X:" as absolute path, even
+> without the trailing slash or backslash.
+> 
+> Check out the 2nd patch for a more detailed description.
+> 
+> While at it, I wonder if we might have a chance to fix these ambiguities
+> in a better way.  For instance, consider this:
+> 
+>    $ mkdir -p test/c:
+>    $ cd test
+> 
+> As non-admin:
+> 
+>    $ touch c:/foo
+>    touch: cannot touch 'c:/foo': Permission denied
+> 
+> As admin, even worse:
+> 
+>    $ touch c:/foo
+>    $ ls /cygdrive/c/foo
+>    foo
+> 
+> As long as we support DOS paths as input, I have a hard time to see how
+> to fix this, but maybe we can at least minimize the ambiguity somehow.
 
-So, introduce isabspath_strict, which returns true for paths starting
-with "X:" only if the next char is actually a slash or backslash.
-Use it from gen_full_path_at().
+I can't immediately think of anything.  But is it really impossible to phase out 
+DOS path support over a period of time?  We could start with a HEADS-UP, asking 
+for comments, then a deprecation announcement, then something like the old 
+dosfilewarning option, then a more forceful warning that can't be turned off, 
+and finally removal of support.  This could be done over a period of several 
+years (not sure how many).
 
-This still fixes only half the problem.  The right thing would have been
-to disallow using DOS paths in the first place.  Unfortunately it's much
-too late for that.
+We could also put lines like
 
-Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249837.html
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/syscalls.cc | 2 +-
- winsup/cygwin/winsup.h    | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+   # C:/ on /c type ntfs (binary,posix=0)
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 7a48e422e8f4..661c143479e4 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -4714,7 +4714,7 @@ gen_full_path_at (char *path_ret, int dirfd, const char *pathname,
- 	  return -1;
- 	}
-     }
--  if (pathname && isabspath (pathname))
-+  if (pathname && isabspath_strict (pathname))
-     stpcpy (path_ret, pathname);
-   else
-     {
-diff --git a/winsup/cygwin/winsup.h b/winsup/cygwin/winsup.h
-index f6fea6313d56..1f265ec28934 100644
---- a/winsup/cygwin/winsup.h
-+++ b/winsup/cygwin/winsup.h
-@@ -139,9 +139,17 @@ extern int cygserver_running;
- #undef issep
- #define issep(ch) (strchr (" \t\n\r", (ch)) != NULL)
- 
-+/* Treats "X:" as absolute path.
-+   FIXME: We should drop the notion that "X:" is a valid absolute path.
-+   Only "X:/" and "X:\\" should be (see isabspath_strict below).  The
-+   problem is to find out if we have code depending on this behaviour. */
- #define isabspath(p) \
-   (isdirsep (*(p)) || (isalpha (*(p)) && (p)[1] == ':' && (!(p)[2] || isdirsep ((p)[2]))))
- 
-+/* Treats "X:/" and "X:\\" as absolute paths, but not "X:" */
-+#define isabspath_strict(p) \
-+  (isdirsep (*(p)) || (isalpha (*(p)) && (p)[1] == ':' && isdirsep ((p)[2])))
-+
- /******************** Initialization/Termination **********************/
- 
- class per_process;
--- 
-2.31.1
+into the default /etc/fstab.
 
+Ken
