@@ -1,44 +1,38 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta002.cacentral1.a.cloudfilter.net
- (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
- by sourceware.org (Postfix) with ESMTPS id 65C083858402
- for <cygwin-patches@cygwin.com>; Fri, 12 Nov 2021 16:30:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 65C083858402
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 74246385781A
+ for <cygwin-patches@cygwin.com>; Tue, 16 Nov 2021 03:19:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 74246385781A
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
- by cmsmtp with ESMTP
- id lVPBm9Wjqps7PlZRbmkfy3; Fri, 12 Nov 2021 16:30:27 +0000
-Received: from [192.168.1.105] ([68.147.0.90]) by cmsmtp with ESMTP
- id lZRbm9CKm49dplZRbmf1Cw; Fri, 12 Nov 2021 16:30:27 +0000
-X-Authority-Analysis: v=2.4 cv=RqTWkQqK c=1 sm=1 tr=0 ts=618e96a3
- a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
- a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=uYT-Tk0qkVT609LjNaIA:9 a=QEXdDO2ut3YA:10
- a=tiDzgGXBa_QA:10 a=sRI3_1zDfAgwuvI8zelB:22
-Message-ID: <221514b7-28c9-2a33-92e2-61537b1407b4@SystematicSw.ab.ca>
-Date: Fri, 12 Nov 2021 09:30:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Subject: Re: [PATCH 0/2] Fix a bad case of absolute path handling
-Reply-To: cygwin-patches@cygwin.com
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 1AG3Ir60008345;
+ Tue, 16 Nov 2021 12:18:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 1AG3Ir60008345
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1637032739;
+ bh=EOUQC0bHvljI2TL3dPEcMTQfXWW3rKYgviXeDgbPXKo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=zHes3qsHdeBj/m2NRaxrqQ3JxNWQYxrd7QvVuQlJy1U6nEcSk+BgFr8JsiMiPXgH4
+ cgamSTyCotBu8wtW1kRRJV4l+6a7tsyGjDZ2NZrc4Wrdl4E6+scjZJJTex/p4p01td
+ cvXutEUYCmTSigwtXreC4FUyq3NO2fGZuoOwnckVT5Rt8yvMVouFW4OttnIi4lNHzI
+ /3km5qPtXu5LphLMINv0liICCWRK6sapaOXymkypDkIWn9UEsYt/LrUkbDd9+1diFO
+ eV37YFSvdIYKTacyskpOqIFxL8INO0IpuGV2P27HvTqJgzgO7Jm8Ytsjt5hwR+yuI9
+ tqOokT1TGAJ3w==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20211110203253.2933679-1-corinna-cygwin@cygwin.com>
- <f6a4f67f-1db4-4e53-7907-c7a7dcfbde79@cornell.edu>
-Content-Language: en-CA
-Organization: Systematic Software
-In-Reply-To: <f6a4f67f-1db4-4e53-7907-c7a7dcfbde79@cornell.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH] Cygwin: pipe: Handle STATUS_PENDING even for nonblocking mode.
+Date: Tue, 16 Nov 2021 12:18:47 +0900
+Message-Id: <20211116031848.247-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfB/Lc00apcJEdRdkioLD1QvswMQaXcI0ROqBAoxGdXQ/xMH3ZCX9O63cwstIYS64fBtRPAJVaLyvZXnBVzZ4JFEZiC3fxd04meRnyyCm5yPExvqtij96
- +hWgyeOXeViOw4EtnE5zjkNEHTlTQ8MQLPLy8Lnxc2jDMmdzUHYdCBZk03OhEfpTPE3vWq6IEPJhBSFSmCyOBxqPrnqaQodq/jY=
-X-Spam-Status: No, score=-1166.0 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -53,68 +47,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 12 Nov 2021 16:30:30 -0000
+X-List-Received-Date: Tue, 16 Nov 2021 03:19:44 -0000
 
-On 2021-11-10 15:22, Ken Brown wrote:
-> On 11/10/2021 3:32 PM, corinna-cygwin@cygwin.com wrote:
->> From: Corinna Vinschen <corinna@vinschen.de>
->>
->> As I told Takashi in PM, I will try to more often send patches to the
->> cygwin-patches ML before pushing them, so there's a chance to chime in.
-> 
-> LGTM.
-> 
->> This patch series is supposed to address the `rm -rf' problem reported
->> in https://cygwin.com/pipermail/cygwin/2021-November/249837.html
->>
->> It was always frustrating, having to allow DOS drive letter paths for
->> backward compatibility.  This here is another case of ambiguity,
->> triggered by the `isabspath' macro handling "X:" as absolute path, even
->> without the trailing slash or backslash.
->>
->> Check out the 2nd patch for a more detailed description.
->>
->> While at it, I wonder if we might have a chance to fix these ambiguities
->> in a better way.  For instance, consider this:
->>
->>    $ mkdir -p test/c:
->>    $ cd test
->>
->> As non-admin:
->>
->>    $ touch c:/foo
->>    touch: cannot touch 'c:/foo': Permission denied
->>
->> As admin, even worse:
->>
->>    $ touch c:/foo
->>    $ ls /cygdrive/c/foo
->>    foo
->>
->> As long as we support DOS paths as input, I have a hard time to see how
->> to fix this, but maybe we can at least minimize the ambiguity somehow.
-> 
-> I can't immediately think of anything.  But is it really impossible to 
-> phase out DOS path support over a period of time?  We could start with a 
-> HEADS-UP, asking for comments, then a deprecation announcement, then 
-> something like the old dosfilewarning option, then a more forceful 
-> warning that can't be turned off, and finally removal of support.  This 
-> could be done over a period of several years (not sure how many).
-> 
-> We could also put lines like
-> 
->    # C:/ on /c type ntfs (binary,posix=0)
-> 
-> into the default /etc/fstab.
+- NtReadFile() and NtWriteFile() seems to return STATUS_PENDING
+  occasionally even in nonblocking mode. This patch adds handling
+  for STATUS_PENDING in nonblocking mode.
 
-NO! BTDT GTS.
-Try getting help from any DOS/cmd type command or subcommand.
-Shell expands /? to list of all mapped drives /c /d ... /s /v /y which 
-gives you a bunch of potentially destructive switches.
+Addresses:
+  https://cygwin.com/pipermail/cygwin/2021-November/249910.html
+---
+ winsup/cygwin/fhandler_pipe.cc | 10 ++++++----
+ winsup/cygwin/release/3.3.3    |  5 +++++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
+diff --git a/winsup/cygwin/fhandler_pipe.cc b/winsup/cygwin/fhandler_pipe.cc
+index 1ebf4de10..f70ff56fe 100644
+--- a/winsup/cygwin/fhandler_pipe.cc
++++ b/winsup/cygwin/fhandler_pipe.cc
+@@ -336,9 +336,10 @@ fhandler_pipe::raw_read (void *ptr, size_t& len)
+ 	break;
+       status = NtReadFile (get_handle (), evt, NULL, NULL, &io, ptr,
+ 			   len1, NULL, NULL);
+-      if (evt && status == STATUS_PENDING)
++      if (status == STATUS_PENDING)
+ 	{
+-	  waitret = cygwait (evt, INFINITE, cw_cancel | cw_sig);
++	  HANDLE w = evt ?: get_handle ();
++	  waitret = cygwait (w, INFINITE, cw_cancel | cw_sig);
+ 	  /* If io.Status is STATUS_CANCELLED after CancelIo, IO has actually
+ 	     been cancelled and io.Information contains the number of bytes
+ 	     processed so far.
+@@ -507,10 +508,11 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+ 	    break;
+ 	  len1 >>= 1;
+ 	}
+-      if (evt && status == STATUS_PENDING)
++      if (status == STATUS_PENDING)
+ 	{
++	  HANDLE w = evt ?: get_handle ();
+ 	  while (WAIT_TIMEOUT ==
+-		 (waitret = cygwait (evt, (DWORD) 0, cw_cancel | cw_sig)))
++		 (waitret = cygwait (w, (DWORD) 0, cw_cancel | cw_sig)))
+ 	    {
+ 	      if (reader_closed ())
+ 		{
+diff --git a/winsup/cygwin/release/3.3.3 b/winsup/cygwin/release/3.3.3
+index 1eb25e2fc..49c1bcdc3 100644
+--- a/winsup/cygwin/release/3.3.3
++++ b/winsup/cygwin/release/3.3.3
+@@ -16,3 +16,8 @@ Bug Fixes
+ - Fix long-standing problem that new files don't get created with the
+   FILE_ATTRIBUTE_ARCHIVE DOS attribute set.
+   Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249909.html
++
++- Fix issue that pipe read()/write() occationally returns a garnage
++  length when NtReadFile/NtWriteFile returns STATUS_PENDING in non-
++  blocking mode.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249910.html
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.33.0
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
