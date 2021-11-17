@@ -1,33 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id CA19C3858C27
- for <cygwin-patches@cygwin.com>; Wed, 17 Nov 2021 08:08:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CA19C3858C27
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 627643858C27
+ for <cygwin-patches@cygwin.com>; Wed, 17 Nov 2021 08:09:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 627643858C27
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 1AH88PHH024689;
- Wed, 17 Nov 2021 17:08:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1AH88PHH024689
+ by conuserg-08.nifty.com with ESMTP id 1AH896YO024830;
+ Wed, 17 Nov 2021 17:09:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1AH896YO024830
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1637136510;
- bh=0dNug70I8Fcy7gxBZqI1vfprQuVb4G8wMTGb5aYFxAQ=;
+ s=dec2015msa; t=1637136553;
+ bh=d1IRSe9vYFEFwGF/rvdQOKnz5NI7KRzqL7Ec4YwM4SM=;
  h=From:To:Cc:Subject:Date:From;
- b=2HruPjxql09LhLPsh8Hhn5bkdr2pAzwBOCFeQtmIHvJaBsyRB4SB1scnjxjnctDUZ
- yofGScP3baEOYAEJnq9ruGBIfg48de2Z/xeU5poNnnC45hNdy723uL+Hgmykm8QyEY
- VfUARVTEG9aliRRw2tNkWisBm/GD9/bmmEC02e2pTb2dHmgd8GcHjBaanRjtyPk6s+
- 9v6UZ8/ACcczedVNv43hEBDvhV33unlHGLhIzkAIBkIuoztZBFIH0FoShqFcs2Dz4E
- Och8I6mKPfQy5msTW2ZszJdNiEvaHfkRtX5I9XafZm/NoBNG2/qBSHsuc+JVPNMceA
- OEzXecaPG+Q0w==
+ b=vE7+vnWPg1uqRuEbynIfOamOhq6rSS2pIin7Dk7EMsEtBUU6VYhRPxkG2qRxfLjX4
+ YUD/h0cZwdqZ+frQ82M4kmhWd41nl09QlrGUtDDKnLIhGRNhEJz9tA/0+TSvIy5k11
+ 6QlO4hMXQ8YesZ9JBUEh7gOUihykdC7/9QdxBHPWrLGAAsOkkIEglBKHbdWedK2Hjs
+ Htr2NYdA2OJOcC+biaB3A50ZAl2uFGv6dvJs4zUhVK0Vy0P2C/qbORrZpkPYrQuHXG
+ 4bIQPY+3WdmMx2lOHmm+IMmQub5nHke6JExQShimHt92EGZoLwQNDwbBEk0o4s+gkk
+ n+p2VOYC/5BHQ==
 X-Nifty-SrcIP: [110.4.221.123]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pipe: Suppress unnecessary set_pipe_non_blocking()
- call.
-Date: Wed, 17 Nov 2021 17:08:27 +0900
-Message-Id: <20211117080827.1800-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: Correct the release notes 3.3.3.
+Date: Wed, 17 Nov 2021 17:09:08 +0900
+Message-Id: <20211117080908.1811-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,47 +47,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 17 Nov 2021 08:08:48 -0000
+X-List-Received-Date: Wed, 17 Nov 2021 08:09:29 -0000
 
-- Call set_pipe_non_blocking(false) only if the pipe will be really
-  inherited to non-cygwin process.
+- Fix incorrect description of the bug fixes part.
 ---
- winsup/cygwin/spawn.cc | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ winsup/cygwin/release/3.3.3 | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 6b2026776..e160fa3bb 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -648,8 +648,9 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+diff --git a/winsup/cygwin/release/3.3.3 b/winsup/cygwin/release/3.3.3
+index 7248302a3..c947816db 100644
+--- a/winsup/cygwin/release/3.3.3
++++ b/winsup/cygwin/release/3.3.3
+@@ -3,6 +3,10 @@ Bug Fixes
  
-       if (!iscygwin ())
- 	{
-+	  int fd;
- 	  cfd.rewind ();
--	  while (cfd.next () >= 0)
-+	  while ((fd = cfd.next ()) >= 0)
- 	    if (cfd->get_major () == DEV_PTYS_MAJOR)
- 	      {
- 		fhandler_pty_slave *ptys =
-@@ -657,13 +658,15 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 		ptys->create_invisible_console ();
- 		ptys->setup_locale ();
- 	      }
--	    else if (cfd->get_dev () == FH_PIPEW)
-+	    else if (cfd->get_dev () == FH_PIPEW
-+		     && (fd == (in__stdout < 0 ? 1 : in__stdout) || fd == 2))
- 	      {
- 		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
- 		pipe->close_query_handle ();
- 		pipe->set_pipe_non_blocking (false);
- 	      }
--	    else if (cfd->get_dev () == FH_PIPER)
-+	    else if (cfd->get_dev () == FH_PIPER
-+		     && fd == (in__stdin < 0 ? 0 : in__stdin))
- 	      {
- 		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
- 		pipe->set_pipe_non_blocking (false);
+ - Fix issue that new pipe code doesn't handle reading zero byte reads
+   emitted by some non-Cygwin apps.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249777.html
++
++- Fix issue that new pipe code doesn't handle size zero pipe which
++  may be created by non-cygwin apps.
+   Addresses: https://cygwin.com/pipermail/cygwin/2021-November/249844.html
+ 
+ - Make sure that "X:" paths are not handled as absolute DOS paths in
 -- 
 2.33.0
 
