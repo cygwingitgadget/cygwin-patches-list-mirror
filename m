@@ -1,51 +1,39 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id 1B1CE3858402
- for <cygwin-patches@cygwin.com>; Wed, 17 Nov 2021 18:22:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1B1CE3858402
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 32B953858402
+ for <cygwin-patches@cygwin.com>; Thu, 18 Nov 2021 08:32:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 32B953858402
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MWRi7-1nBrVa1LD9-00XsiV for <cygwin-patches@cygwin.com>; Wed, 17 Nov 2021
- 19:22:33 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 66529A80D57; Wed, 17 Nov 2021 19:22:32 +0100 (CET)
-Date: Wed, 17 Nov 2021 19:22:32 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-07.nifty.com with ESMTP id 1AI8VuB7007443;
+ Thu, 18 Nov 2021 17:32:02 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 1AI8VuB7007443
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1637224322;
+ bh=4lDZs8HoM9dy+40mziJk2BPPG1lwFTBeH237MHGEE7M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=MGPVzSNuAkuLhTGPsvXG91TMqV90diCGgas8WzCHcYBnO/xAPTi6ATNo2iz9vOpwD
+ mDxoWWXrF7SMf9349GPd4lPFvn+DhKOaKOAkkIThRjNiLhC0rZuyfpeUZaRc8UKvNC
+ /jHGlMzKLnzfK/N9K4hpmzALy8+76gx6xe9KNlZPTBTU2Abx0ZfOFBlzUyXu4+FGwn
+ f//cVp1xFxTAddWaVQiw4u0XWuqdu4iEQI2plFZOSAgKoSf7Cqcj29kIoUBVCc++ng
+ Yzx76ArPCwEh7dtS16K8aVBQkzR0LSeuUfjrraALO47CCHpF9pxKsJMTyc5MVDRa5e
+ x/P82JwokAzgA==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pipe: Suppress unnecessary
- set_pipe_non_blocking() call.
-Message-ID: <YZVIaMwayVXfzVMT@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20211117080827.1800-1-takashi.yano@nifty.ne.jp>
- <ce2d178a-4a01-6041-3ca7-44a9df090222@cornell.edu>
+Subject: [PATCH] Cygwin: console: Fix interference issue regarding master
+ thread.
+Date: Thu, 18 Nov 2021 17:31:58 +0900
+Message-Id: <20211118083158.1144-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ce2d178a-4a01-6041-3ca7-44a9df090222@cornell.edu>
-X-Provags-ID: V03:K1:ksPLt1F2PbexdUCrqQ8Jx9JW3NFS8njiD6lBmRyAxr2YcJQSvd3
- SEVyW2mIuDu2fJqUMcj2ooJnaV3/Xr/LfDKfhq43eVGrPc8jq8cEes+0QcKlESE8tIYQFPf
- l9p7I52a2j9zdoQ0j/KZFXxiBlqh2Yu7v7AVwarsBIRsGtF41przcZSaV92QwlDRfGq6QXZ
- gDaVZ5gxtT66b3umjG3tA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BkwzUYvyJZ4=:GQjGe5Ipgkc2vK6tzVJ2Ve
- /mkXiyIJTWbL6CiJZ+0XbViWdd64nJfW3KQwL3p+mZ+LBYu+KkF3bOAXiTT9uI9ig898WqWcN
- 7S2LKf16xPSV1TckDz6t7F2+dSmtB4NvYRKtll+MBjga+jshUh+qPWDLWduPCL9MfJHfNry51
- CJdgmqummFtaqohZ1IxVbiDAtzgFRn4QNIM2kV83xLW0kAzHpS850saMolyyw2x4iAMsOLt7d
- M4sYqggQHXrsyvhYoP2KdKHmlJPg9z00JZvqMSfyHZ29qRWUfxUFF5tnYeNW3VexLFnbfcBK/
- avUcAd5BD4DYDZ24U9G67ibO2/HvMdQDebh0mf939lXSfM8XOZPf2bkq3fejYjuu2cqi1j+8a
- PK5p8Z7cpWsQPfR8My6z3D8Cct1kNAl5e45qqBsNCsqasqFlr2Efng9teILH23qZzIf/9adJV
- 1Pny2wmCtk+qD8m3dPHWNzAfQ4Hr4zRjH7AgCGDcMd/vpEqzLrfRW/7FNfl6OFRTAQpKJmOGN
- mXs0pb5fUeoXAcJs4rpAU7N6qTqyTGT5GYvUS/QPxQUg9nkFTJovRDAxBs5kQT4ygW852W/iZ
- xHG5HVi//CGBI+EWYd1rUqYjQTub+/0TxvFhKiit9OPz59Q+2x1BKRwGbs4QhN7YDhyANNnSr
- BdgDlSpXeTNjD2nGmfJsiFcjUKeLvANy7wFkLwZGCYuCV6JfhC5B7jdur9wnwkZci8jfMBWT8
- Hu4arze+s5RzWq9D
-X-Spam-Status: No, score=-99.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,17 +48,70 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 17 Nov 2021 18:22:37 -0000
+X-List-Received-Date: Thu, 18 Nov 2021 08:32:27 -0000
 
-On Nov 17 10:09, Ken Brown wrote:
-> On 11/17/2021 3:08 AM, Takashi Yano wrote:
-> > - Call set_pipe_non_blocking(false) only if the pipe will be really
-> >    inherited to non-cygwin process.
-> 
-> LGTM, but Corinna should probably take a quick look too, since I'm not very
-> familiar with this part of the code.
+- This patch fixes the issue that ReadConsoleInputW() call in the
+  master thread interferes with the input process of non-cygwin apps.
+---
+ winsup/cygwin/fhandler.h          |  1 +
+ winsup/cygwin/fhandler_console.cc | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-Looks right to me.
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index ea8d6e9e1..c838d15a2 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2042,6 +2042,7 @@ class dev_console
+   char cons_rabuf[40];  // cannot get longer than char buf[40] in char_command
+   char *cons_rapoi;
+   bool cursor_key_app_mode;
++  bool disable_master_thread;
+ 
+   inline UINT get_console_cp ();
+   DWORD con_to_str (char *d, int dlen, WCHAR w);
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index f4241ee82..d9ed71af8 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -208,6 +208,12 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+       DWORD total_read, n, i;
+       INPUT_RECORD input_rec[INREC_SIZE];
+ 
++      if (con.disable_master_thread)
++	{
++	  cygwait (40);
++	  continue;
++	}
++
+       WaitForSingleObject (p->input_mutex, INFINITE);
+       total_read = 0;
+       switch (cygwait (p->input_handle, (DWORD) 0))
+@@ -427,6 +433,7 @@ fhandler_console::setup ()
+       con.cons_rapoi = NULL;
+       shared_console_info->tty_min_state.is_console = true;
+       con.cursor_key_app_mode = false;
++      con.disable_master_thread = false;
+     }
+ }
+ 
+@@ -480,6 +487,8 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+ 	flags |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+       else
+ 	flags |= ENABLE_MOUSE_INPUT;
++      if (shared_console_info)
++	con.disable_master_thread = false;
+       break;
+     case tty::native:
+       if (t->c_lflag & ECHO)
+@@ -492,6 +501,8 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+ 	flags &= ~ENABLE_ECHO_INPUT;
+       if (t->c_lflag & ISIG)
+ 	flags |= ENABLE_PROCESSED_INPUT;
++      if (shared_console_info)
++	con.disable_master_thread = true;
+       break;
+     }
+   SetConsoleMode (p->input_handle, flags);
+-- 
+2.33.0
 
-
-Corinna
