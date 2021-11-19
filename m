@@ -1,33 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 32B953858402
- for <cygwin-patches@cygwin.com>; Thu, 18 Nov 2021 08:32:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 32B953858402
+ by sourceware.org (Postfix) with ESMTPS id AF3723857C43
+ for <cygwin-patches@cygwin.com>; Fri, 19 Nov 2021 11:51:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org AF3723857C43
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 1AI8VuB7007443;
- Thu, 18 Nov 2021 17:32:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 1AI8VuB7007443
+ by conuserg-07.nifty.com with ESMTP id 1AJBop3k025767;
+ Fri, 19 Nov 2021 20:50:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 1AJBop3k025767
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1637224322;
- bh=4lDZs8HoM9dy+40mziJk2BPPG1lwFTBeH237MHGEE7M=;
+ s=dec2015msa; t=1637322656;
+ bh=H4NTiJylQWUMBmUvE2jDoOi4rIEOL9qV0DEJ/Od3Vwc=;
  h=From:To:Cc:Subject:Date:From;
- b=MGPVzSNuAkuLhTGPsvXG91TMqV90diCGgas8WzCHcYBnO/xAPTi6ATNo2iz9vOpwD
- mDxoWWXrF7SMf9349GPd4lPFvn+DhKOaKOAkkIThRjNiLhC0rZuyfpeUZaRc8UKvNC
- /jHGlMzKLnzfK/N9K4hpmzALy8+76gx6xe9KNlZPTBTU2Abx0ZfOFBlzUyXu4+FGwn
- f//cVp1xFxTAddWaVQiw4u0XWuqdu4iEQI2plFZOSAgKoSf7Cqcj29kIoUBVCc++ng
- Yzx76ArPCwEh7dtS16K8aVBQkzR0LSeuUfjrraALO47CCHpF9pxKsJMTyc5MVDRa5e
- x/P82JwokAzgA==
+ b=iFa4LNc58PvNbthM5ILxES9ZPqMG/1iJM5AoiHqCXxvVtupZRCrGtLy07VJDS8ykt
+ L7VzhnkR8OXdfLnJ6L+U7Q57BoAGOkucjAumEC8ipYVAO7EqYqhDU6p+x05NwhEyN2
+ srEW++aN61JTg//Acap47EvofzNkp/ZeCisHU1qvnUzmzzwrI6pLgAvC4RzyTygpE/
+ 9YiiI8ouefIl+QAquYw8NyTIj9Pi6WkbMjAiZ4Y0paj0t2E3hgg8Nz9QMPKulYjDWb
+ HZ0+Dc5YkyGZzesSBtbS3V31TUw6dEstmVRht0PoK0vy7yiEW9fSLiqe9OIqQPzfg8
+ Y9dQ5umLM+JLw==
 X-Nifty-SrcIP: [110.4.221.123]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix interference issue regarding master
- thread.
-Date: Thu, 18 Nov 2021 17:31:58 +0900
-Message-Id: <20211118083158.1144-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: sigproc: Do not send signal to myself if exiting.
+Date: Fri, 19 Nov 2021 20:50:43 +0900
+Message-Id: <20211119115043.356-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,70 +47,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 18 Nov 2021 08:32:27 -0000
+X-List-Received-Date: Fri, 19 Nov 2021 11:51:18 -0000
 
-- This patch fixes the issue that ReadConsoleInputW() call in the
-  master thread interferes with the input process of non-cygwin apps.
+- This patch fixes the issue that process sometimes hangs for 60
+  seconds with the following scenario.
+    1) Open command prompt.
+    2) Run "c:\cygwin64\bin\bash -l"
+    3) Compipe the following source with mingw compiler.
+       /*--- Begin ---*/
+       #include <stdio.h>
+       int main() {return getchar();}
+       /*---- End ----*/
+    3) Run "tcsh -c ./a.exe"
+    4) Hit Ctrl-C.
 ---
- winsup/cygwin/fhandler.h          |  1 +
- winsup/cygwin/fhandler_console.cc | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ winsup/cygwin/sigproc.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index ea8d6e9e1..c838d15a2 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2042,6 +2042,7 @@ class dev_console
-   char cons_rabuf[40];  // cannot get longer than char buf[40] in char_command
-   char *cons_rapoi;
-   bool cursor_key_app_mode;
-+  bool disable_master_thread;
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index 97211edcf..9160dd160 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -603,6 +603,10 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+       its_me = false;
+     }
  
-   inline UINT get_console_cp ();
-   DWORD con_to_str (char *d, int dlen, WCHAR w);
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index f4241ee82..d9ed71af8 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -208,6 +208,12 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-       DWORD total_read, n, i;
-       INPUT_RECORD input_rec[INREC_SIZE];
- 
-+      if (con.disable_master_thread)
-+	{
-+	  cygwait (40);
-+	  continue;
-+	}
++  /* Do not send signal to myself if exiting. */
++  if (its_me && exit_state > ES_EXIT_STARTING && si.si_signo > 0)
++    goto out;
 +
-       WaitForSingleObject (p->input_mutex, INFINITE);
-       total_read = 0;
-       switch (cygwait (p->input_handle, (DWORD) 0))
-@@ -427,6 +433,7 @@ fhandler_console::setup ()
-       con.cons_rapoi = NULL;
-       shared_console_info->tty_min_state.is_console = true;
-       con.cursor_key_app_mode = false;
-+      con.disable_master_thread = false;
-     }
- }
- 
-@@ -480,6 +487,8 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
- 	flags |= ENABLE_VIRTUAL_TERMINAL_INPUT;
-       else
- 	flags |= ENABLE_MOUSE_INPUT;
-+      if (shared_console_info)
-+	con.disable_master_thread = false;
-       break;
-     case tty::native:
-       if (t->c_lflag & ECHO)
-@@ -492,6 +501,8 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
- 	flags &= ~ENABLE_ECHO_INPUT;
-       if (t->c_lflag & ISIG)
- 	flags |= ENABLE_PROCESSED_INPUT;
-+      if (shared_console_info)
-+	con.disable_master_thread = true;
-       break;
-     }
-   SetConsoleMode (p->input_handle, flags);
+   if (its_me)
+     sendsig = my_sendsig;
+   else
 -- 
 2.33.0
 
