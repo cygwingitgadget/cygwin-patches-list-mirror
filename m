@@ -1,41 +1,37 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
- [210.131.2.81])
- by sourceware.org (Postfix) with ESMTPS id 15436385841D
- for <cygwin-patches@cygwin.com>; Wed, 24 Nov 2021 03:41:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 15436385841D
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 54FEB3858D28
+ for <cygwin-patches@cygwin.com>; Thu,  2 Dec 2021 08:44:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 54FEB3858D28
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (z221123.dynamic.ppp.asahi-net.or.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conssluserg-02.nifty.com with ESMTP id 1AO3fDfd016947
- for <cygwin-patches@cygwin.com>; Wed, 24 Nov 2021 12:41:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1AO3fDfd016947
+ by conuserg-11.nifty.com with ESMTP id 1B28hxdS025001;
+ Thu, 2 Dec 2021 17:44:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1B28hxdS025001
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1637725274;
- bh=O3iUNodHQKjDmH13lQlA8WVku8tgziPQUlUA2cr4xQs=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=QMnWJ4bdTO1Cfbut7ZNQnwgQmmjiJfG4wlAUdJp5LixM8Wbnc6/VKfugMFt3ZFyAA
- hnkOsf1ksm4zKNKjZdB2KfqzHOVrukaahhghGKKeVYkboTkJiApWTKc+GwsdueN6b6
- W4Z9Ub8OnKfx/YbdjxgzZda/3eEqMprHwxZ8YTkjIYOTdGxeQTX9bgLuPLIogDUm5n
- Yrrl1LRT+sWTJmnfdC4nxyx5+w8X7dxlvkCb2wADfL4czrMKy9pGqF0/FSDHgAWZnU
- P6bNJFwo/BVWU+9fsngEvj5n1t0S5vNofrfVhs25OxgMqfddf2RTqC1v1mxmLYW2Ln
- ZdM8jBfvxM7ng==
+ s=dec2015msa; t=1638434648;
+ bh=bsWO6LJ3NU+VJgZyVe/2Mb/9dABLhfJjr5mzvDLaI3E=;
+ h=From:To:Cc:Subject:Date:From;
+ b=yAAyX8eyyQJI700U0hezmRZTTtcwjjmvIapBMvXrr5mUekOIKC9NpPwcr9bfOfvlj
+ LXHf+cwyF82rpYJws0gj2m7U9Jnp+pourtlOY9FQyFb0sXW0NX5I4vyrAbxeuur7YC
+ zIirWTcJjQagaNpXXIe718G/ECScA0aXwQk4n+N9cmnNFMYDosr7685qkiZ0UmDWGO
+ eMVjxgwAzr9AZ67tvNTHMScxZANQ72To4buuas1bhJK5im0bEPru5VXbYsg2cemuL+
+ 9ImG+9k6bzmGOrYEKiBfX9tCgPqnbarDd8W3MWoFsGp8ZjMy0oRE2LJh3PhhF+zlvX
+ N6OGrEWpwWD3g==
 X-Nifty-SrcIP: [110.4.221.123]
-Date: Wed, 24 Nov 2021 12:41:24 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fhandler_fifo::raw_read: handle STATUS_PENDING
-Message-Id: <20211124124124.e8ff32bc50dbbf21e94d6dc0@nifty.ne.jp>
-In-Reply-To: <9bb59713-39a9-99c4-04b6-b4d5a0f74ea2@cornell.edu>
-References: <9bb59713-39a9-99c4-04b6-b4d5a0f74ea2@cornell.edu>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+Subject: [PATCH] Cygwin: console: Fix OSC sequence handling.
+Date: Thu,  2 Dec 2021 17:43:49 +0900
+Message-Id: <20211202084349.336-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -51,15 +47,56 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 24 Nov 2021 03:41:42 -0000
+X-List-Received-Date: Thu, 02 Dec 2021 08:44:41 -0000
 
-On Tue, 23 Nov 2021 15:59:05 -0500
-Ken Brown wrote:
-> Patch attached.  Takashi, since you wrote the analogous patch for pipes, could 
-> you take a look?
+- Currently, some OSC escape sequences, such as 'OSC 110 BEL', are
+  not handled correctly. This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_console.cc | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
-This one also LGTM.
-
-
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index d9ed71af8..4c98b5355 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -3308,13 +3308,30 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	case gotrsquare:
+ 	  if (isdigit (*src))
+ 	    con.rarg = con.rarg * 10 + (*src - '0');
+-	  else if (*src == ';' && (con.rarg == 2 || con.rarg == 0))
+-	    con.state = gettitle;
+-	  else if (*src == ';' && (con.rarg == 4 || con.rarg == 104
+-				   || (con.rarg >= 10 && con.rarg <= 19)))
+-	    con.state = eatpalette;
+-	  else
+-	    con.state = eattitle;
++	  else if (*src == ';')
++	    {
++	      if (con.rarg == 0 || con.rarg == 2)
++		con.state = gettitle;
++	      else if ((con.rarg >= 4 && con.rarg <= 6)
++		       || (con.rarg >=10 && con.rarg <= 19)
++		       || (con.rarg >=104 && con.rarg <= 106)
++		       || (con.rarg >=110 && con.rarg <= 119))
++		con.state = eatpalette;
++	      else
++		con.state = eattitle;
++	    }
++	  else if (*src == '\033')
++	    con.state = endpalette;
++	  else if (*src == '\007')
++	    {
++	      wpbuf.put (*src);
++	      if (wincap.has_con_24bit_colors () && !con_is_legacy)
++		wpbuf.send (get_output_handle ());
++	      wpbuf.empty ();
++	      con.state = normal;
++	      src++;
++	      break;
++	    }
+ 	  wpbuf.put (*src);
+ 	  src++;
+ 	  break;
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.33.0
+
