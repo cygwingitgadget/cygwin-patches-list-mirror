@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id BA3A93858000
- for <cygwin-patches@cygwin.com>; Tue,  7 Dec 2021 13:33:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BA3A93858000
+ by sourceware.org (Postfix) with ESMTPS id ADDC23858D3C
+ for <cygwin-patches@cygwin.com>; Tue,  7 Dec 2021 14:00:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org ADDC23858D3C
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 1B7DX06N002198;
- Tue, 7 Dec 2021 22:33:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B7DX06N002198
+ by conuserg-12.nifty.com with ESMTP id 1B7E0DQE023563;
+ Tue, 7 Dec 2021 23:00:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B7E0DQE023563
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1638883987;
- bh=lHsNFL1RT+9nC4vRc5PWj1TOlYHBPw3BbYdbY7DMXRI=;
+ s=dec2015msa; t=1638885619;
+ bh=fy/O152wG1C0A1J9P8+m5koiEvjTiIoIfcP/0FI8es8=;
  h=From:To:Cc:Subject:Date:From;
- b=bigey3tVDJhY1KlvfLKRFIA7NF8EwF5C655xfBFunXW25+p/GlI/bC05xKfPNSA+A
- u/6dqxTXwlFu7krE4VKhf5TUeRwjL3N7ZDlK6m7CUEnz8Ao454G2qy5m1e7453x7WJ
- CZh6n2sZEL9aiyv3jOj/MJocskocMt96o/6FjNAckJEIdcPOkL8iXdUtS0S+OQU4dH
- Ud234CHcRYAk0HEBOaDIiSBG0ZcVBkZvYrc/w28bns2adASlIsD1QzY3YU4kptkicG
- eE+Ts2dMr+gOHAJz1dSTxJwr9oOFt2kMUjcIej2lfPSSnLVaHtO/Hd30u60YinnpTM
- vfHMTbfTqHJXA==
+ b=hX/VoEIzYjeUFORPZjYHtjmhp1g12X0f9K4ZeSTHskHU3F9vyrk45fhw7c0fzk+wf
+ uzv1rBYt+bz1LP1kSj/Qea/7dFVl6Uj9UDmM2KzAw4dfDY8KhubnDPL0eL5o34PspS
+ Vecw9Vo/BSJaqkyAAOG2GnsY8+UzUsK0+4An7G/VBlc+WZyK79+6tuLzF9ygGpyIA1
+ xD6aetypMeLU+NhlvbX7DmDylBV/QyGw89V5hPcH5uQGJADHBSvQndRfFWWLCZ21vB
+ yeTaoiTbYYyxPu0P1H9ZPCFlrv68BkhKEkhNI740sNUP43wHes2LZJKI6omyjc9Lp0
+ pBKSO3ntzPcjQ==
 X-Nifty-SrcIP: [110.4.221.123]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: clipboard: Fix a bug in read().
-Date: Tue,  7 Dec 2021 22:32:52 +0900
-Message-Id: <20211207133252.751-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: clipboard: Fix a bug in read().
+Date: Tue,  7 Dec 2021 23:00:06 +0900
+Message-Id: <20211207140006.912-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,16 +47,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 07 Dec 2021 13:33:23 -0000
+X-List-Received-Date: Tue, 07 Dec 2021 14:00:54 -0000
 
-- Fix a bug in fhandler_clipboard::read() that the second read fails
-  with 'Bad address'.
+- Fix a bug in fhandler_dev_clipboard::read() that the second read
+  fails with 'Bad address'.
 
 Addresses:
   https://cygwin.com/pipermail/cygwin/2021-December/250141.html
 ---
  winsup/cygwin/fhandler_clipboard.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/release/3.3.4         | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+ create mode 100644 winsup/cygwin/release/3.3.4
 
 diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
 index 0b87dd352..ae10228a7 100644
@@ -71,6 +73,18 @@ index 0b87dd352..ae10228a7 100644
  	  pos += ret;
  	}
      }
+diff --git a/winsup/cygwin/release/3.3.4 b/winsup/cygwin/release/3.3.4
+new file mode 100644
+index 000000000..f1c32a1a5
+--- /dev/null
++++ b/winsup/cygwin/release/3.3.4
+@@ -0,0 +1,6 @@
++Bug Fixes
++---------
++
++- Fix a bug in fhandler_dev_clipboard::read() that the second read
++  fails with 'Bad address'.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-December/250141.html
 -- 
 2.34.1
 
