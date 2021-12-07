@@ -1,38 +1,49 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id ADDC23858D3C
- for <cygwin-patches@cygwin.com>; Tue,  7 Dec 2021 14:00:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org ADDC23858D3C
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id 66FA2385842D
+ for <cygwin-patches@cygwin.com>; Tue,  7 Dec 2021 14:16:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 66FA2385842D
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
- [110.4.221.123]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 1B7E0DQE023563;
- Tue, 7 Dec 2021 23:00:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B7E0DQE023563
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1638885619;
- bh=fy/O152wG1C0A1J9P8+m5koiEvjTiIoIfcP/0FI8es8=;
- h=From:To:Cc:Subject:Date:From;
- b=hX/VoEIzYjeUFORPZjYHtjmhp1g12X0f9K4ZeSTHskHU3F9vyrk45fhw7c0fzk+wf
- uzv1rBYt+bz1LP1kSj/Qea/7dFVl6Uj9UDmM2KzAw4dfDY8KhubnDPL0eL5o34PspS
- Vecw9Vo/BSJaqkyAAOG2GnsY8+UzUsK0+4An7G/VBlc+WZyK79+6tuLzF9ygGpyIA1
- xD6aetypMeLU+NhlvbX7DmDylBV/QyGw89V5hPcH5uQGJADHBSvQndRfFWWLCZ21vB
- yeTaoiTbYYyxPu0P1H9ZPCFlrv68BkhKEkhNI740sNUP43wHes2LZJKI6omyjc9Lp0
- pBKSO3ntzPcjQ==
-X-Nifty-SrcIP: [110.4.221.123]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M7auL-1mvQkX3OaT-007yTZ for <cygwin-patches@cygwin.com>; Tue, 07 Dec 2021
+ 15:16:56 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 42DB5A80A6B; Tue,  7 Dec 2021 15:16:56 +0100 (CET)
+Date: Tue, 7 Dec 2021 15:16:56 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: clipboard: Fix a bug in read().
-Date: Tue,  7 Dec 2021 23:00:06 +0900
-Message-Id: <20211207140006.912-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] Cygwin: Update configure.ac to use AC_CONFIG_HEADERS
+Message-ID: <Ya9s2HC0cQnw8Xy4@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20211207132933.6796-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211207132933.6796-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:tJpGsprByUpIrKpbMmtRqjAuZPzWHwRNYaFkstua70WYHrU8oYb
+ gTri4ql6mY+XqWwIrhuYt14A76kLTKRkIuQonBfh32NB9ooxxN82iTHXtfmsR1zZf/PTqWq
+ J+oJVweS+BJ+crW6w12u2l3JFw6xo4lOlNq6qcxzdc5lglUGinCzZ+ZgGRYd5fzREIvsPSj
+ 1mHIkGN53wS8acXG94RBg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xVnCQQFzLf0=:mawRf96Op49yKzM3/EOYx2
+ edqWqwfmuDy88ZvkTpCoIVzNifhGbZ3nO2erW544Vl2JDvIHwmwo4O69JiCJoyV+jCBclsShA
+ lmXGGCyKVF5vtn5kKtG17ppROVsxg0M5UOC8J6Wmz1F53ndkhFT2nBLCV2w4Iz70R535FsYK+
+ PAYuwb9hpjVwlcdoMZMo2icZkqmsC9DJ9aaKqa8Y0lRj/8xF6a4nPQtnVp+H1Shfbx0LynKMi
+ JHJuJ2u9afuss3SYR4lNAOcL4w7Q/7n/0Vlb7HUjwZCA679QuDIlW2ptb+TuwfD/ZGsc1BLzs
+ JK5nmrSEOh/KMHQoSkDXYTpqPArb999cCw+lYOvEuVkNRY7Z7rELc97o7uL1Iq90skx8y/Czy
+ TiIj/7Ki1jqTTDRYe8I2vovGjL7IhEbYB6zrWwK1WB4A7W+EMpvfb7AcU2KkDf9C3GoF7NKAA
+ 728wu7LF6NCcncM/XBF6KhMPW+HbrBlCLdOSHMVuesGZwvFbWs92v3S7yIL+91KnQ7MlIWnEr
+ NKeiVxuTmF8s7MK8qhX5xs6U3tZLOufJUHD2806ELg7eXT4mi42LlrKwPUaDX+l1dFS328ihp
+ M28j6IV52L/mIPlsu24QOFgLE1CStswa5O1MysZAppMLoJmNU+6pMPQmW5iIwWJUIA6JAUI5k
+ AbiXC9FTDvZlrL52Xhu1X6xgVIeGXIwrybx+3AFS7IMZjuTcoVDWyHAl+iibt2xnV9NmiiSSh
+ 08IkDysC4hmOgGYq
+X-Spam-Status: No, score=-105.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,44 +58,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 07 Dec 2021 14:00:54 -0000
+X-List-Received-Date: Tue, 07 Dec 2021 14:17:01 -0000
 
-- Fix a bug in fhandler_dev_clipboard::read() that the second read
-  fails with 'Bad address'.
+On Dec  7 13:29, Jon Turney wrote:
+> This avoids warning with autoconf >= 2.70:
+> 
+>   configure.ac:47: warning: The macro `AC_CONFIG_HEADER' is obsolete.
+> 
+> AC_CONFIG_HEADERS has been supported since before autconf 2.59, the
+> minimum version we can be using, controlled by AC_PREREQ.
+> ---
+>  winsup/configure.ac | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/winsup/configure.ac b/winsup/configure.ac
+> index 9a11411ab..79e78a5fc 100644
+> --- a/winsup/configure.ac
+> +++ b/winsup/configure.ac
+> @@ -44,7 +44,7 @@ AC_ARG_WITH([cross-bootstrap],[AS_HELP_STRING([--with-cross-bootstrap],[do not b
+>  
+>  AC_CYGWIN_INCLUDES
+>  
+> -AC_CONFIG_HEADER(cygwin/config.h)
+> +AC_CONFIG_HEADERS([cygwin/config.h])
+>  
+>  AC_CHECK_TOOL(AR, ar, ar)
+>  AC_CHECK_TOOL(AS, as, as)
+> -- 
+> 2.34.1
 
-Addresses:
-  https://cygwin.com/pipermail/cygwin/2021-December/250141.html
----
- winsup/cygwin/fhandler_clipboard.cc | 2 +-
- winsup/cygwin/release/3.3.4         | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
- create mode 100644 winsup/cygwin/release/3.3.4
+Sure thing.
 
-diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
-index 0b87dd352..ae10228a7 100644
---- a/winsup/cygwin/fhandler_clipboard.cc
-+++ b/winsup/cygwin/fhandler_clipboard.cc
-@@ -229,7 +229,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
-       if (pos < (off_t) clipbuf->cb_size)
- 	{
- 	  ret = (len > (clipbuf->cb_size - pos)) ? clipbuf->cb_size - pos : len;
--	  memcpy (ptr, &clipbuf[1] + pos , ret);
-+	  memcpy (ptr, (char *) &clipbuf[1] + pos, ret);
- 	  pos += ret;
- 	}
-     }
-diff --git a/winsup/cygwin/release/3.3.4 b/winsup/cygwin/release/3.3.4
-new file mode 100644
-index 000000000..f1c32a1a5
---- /dev/null
-+++ b/winsup/cygwin/release/3.3.4
-@@ -0,0 +1,6 @@
-+Bug Fixes
-+---------
-+
-+- Fix a bug in fhandler_dev_clipboard::read() that the second read
-+  fails with 'Bad address'.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2021-December/250141.html
--- 
-2.34.1
 
+Thanks,
+Corinna
