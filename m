@@ -1,38 +1,44 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 3D15B3857810
- for <cygwin-patches@cygwin.com>; Fri,  3 Dec 2021 03:18:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3D15B3857810
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
- [110.4.221.123]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 1B33IHQ2004583;
- Fri, 3 Dec 2021 12:18:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 1B33IHQ2004583
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1638501502;
- bh=7fiXG1dbacnAZrw55e/KDzVQp+cGzgsekWv8R8P1cFE=;
- h=From:To:Cc:Subject:Date:From;
- b=xaNBBNDOl/pao3S+yS8jjRhuCquoaO1z+HscMAHfhDWvcs9sJvj7vDETbdL1bL3ma
- lh43nL+6HsGQvm/hZbJMbFJbV3caECll8HDFMH/tc1nuHreGfzRUm2wpULQYEaR9tY
- Ml7VknpgCfkvikcQjpRO1EY4gsB6IrWd61tZZ3gYaaDGlM/Bm0bjpsJh/EM9UxxVNk
- 1VP4LWQxYdxgFCkuJkv6g3eGtEG9ah8OZoMnaV6vF9G5uSIES8WP344wVkPNw3XxTD
- E8R/b0487w1ukBXc9lVnIEIqdh5g5yYUM176YawvlgWCnbyVb6CJPdzfWTM8+weeNn
- gw6N+Kn+zZjTw==
-X-Nifty-SrcIP: [110.4.221.123]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-041.btinternet.com (mailomta26-re.btinternet.com
+ [213.120.69.119])
+ by sourceware.org (Postfix) with ESMTPS id EE8043858D3C
+ for <cygwin-patches@cygwin.com>; Tue,  7 Dec 2021 13:30:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org EE8043858D3C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
+ by re-prd-fep-041.btinternet.com with ESMTP id
+ <20211207133026.PTBS24157.re-prd-fep-041.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Tue, 7 Dec 2021 13:30:26 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 61A69BAC00C96B9E
+X-Originating-IP: [81.129.146.209]
+X-OWM-Source-IP: 81.129.146.209 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvuddrjeehgdehgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeekuddruddvledrudegiedrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduvdelrddugeeirddvtdelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.129.146.209) by
+ re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 61A69BAC00C96B9E; Tue, 7 Dec 2021 13:30:25 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: Fix typo in new-features.xml
-Date: Fri,  3 Dec 2021 12:18:17 +0900
-Message-Id: <20211203031817.11640-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.33.0
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Update configure.ac to use AC_CONFIG_HEADERS
+Date: Tue,  7 Dec 2021 13:29:33 +0000
+Message-Id: <20211207132933.6796-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-1197.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,25 +53,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 03 Dec 2021 03:19:02 -0000
+X-List-Received-Date: Tue, 07 Dec 2021 13:30:31 -0000
 
+This avoids warning with autoconf >= 2.70:
+
+  configure.ac:47: warning: The macro `AC_CONFIG_HEADER' is obsolete.
+
+AC_CONFIG_HEADERS has been supported since before autconf 2.59, the
+minimum version we can be using, controlled by AC_PREREQ.
 ---
- winsup/doc/new-features.xml | 2 +-
+ winsup/configure.ac | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
-index e05ffe38e..4fdfafc24 100644
---- a/winsup/doc/new-features.xml
-+++ b/winsup/doc/new-features.xml
-@@ -4,7 +4,7 @@
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index 9a11411ab..79e78a5fc 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -44,7 +44,7 @@ AC_ARG_WITH([cross-bootstrap],[AS_HELP_STRING([--with-cross-bootstrap],[do not b
  
- <sect1 id="ov-new"><title>What's new and what changed in Cygwin</title>
+ AC_CYGWIN_INCLUDES
  
--<sect2 id="ov-new3.4"><title>What's new and what changed in 3.3</title>
-+<sect2 id="ov-new3.4"><title>What's new and what changed in 3.4</title>
+-AC_CONFIG_HEADER(cygwin/config.h)
++AC_CONFIG_HEADERS([cygwin/config.h])
  
- <itemizedlist mark="bullet">
- 
+ AC_CHECK_TOOL(AR, ar, ar)
+ AC_CHECK_TOOL(AS, as, as)
 -- 
-2.33.0
+2.34.1
 
