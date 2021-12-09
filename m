@@ -1,37 +1,44 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id AF2AF385801A
- for <cygwin-patches@cygwin.com>; Thu,  9 Dec 2021 11:16:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org AF2AF385801A
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+ by sourceware.org (Postfix) with ESMTPS id 8FF813858C39
+ for <cygwin-patches@cygwin.com>; Thu,  9 Dec 2021 11:20:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8FF813858C39
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-06.nifty.com
+ with ESMTP id 1B9BFNNp019710
+ for <cygwin-patches@cygwin.com>; Thu, 9 Dec 2021 20:15:23 +0900
+Received: from Express5800-S70 (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 1B9BFaHf019660;
- Thu, 9 Dec 2021 20:15:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B9BFaHf019660
+ by conssluserg-02.nifty.com with ESMTP id 1B9BEuGH012015
+ for <cygwin-patches@cygwin.com>; Thu, 9 Dec 2021 20:14:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1B9BEuGH012015
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1639048542;
- bh=5RkoWk/fM9+jxNlgDXoyWrF1y0rSam4iK2OF9iSQqHw=;
- h=From:To:Cc:Subject:Date:From;
- b=fdzP7S49uSxRYxRMxcsrlSQSrqes6wJ572slXL3BlWOv8kTHRaRnZgYzyh4uv5kAa
- zpA+OAZdqKBKfSDSCeL+StfvMlty8uzV1MiqT7IRrpKzVGxO4+TwS+GTOYYm8wXu9c
- aaLn2cBHY5TMOkDMmwFLr2aW294g/L4PSXIGD1876/sUid+TEhqQlHBretQwK/bFb1
- QzUhyFEIc/EQYV4VbeRnA7FPF+n2wZBMiAyvJh6KEYqKh0O81D7q9UhE3vITqgYUBs
- fiQHs/WqKPLIu6v3/uuwQ864RVIjuQwsA3c8hrSN8wicdtCXgWNsr3FU/FjsIKFTtR
- FHfhudAwIvO/A==
+ s=dec2015msa; t=1639048496;
+ bh=EvVJVOn5pGFIX4wRbOEt9BqcEG5Dkq53SQoZMNqY6mc=;
+ h=Date:From:To:Subject:In-Reply-To:References:From;
+ b=qFbmFosftY6Uwx3zHzSNFttzQPDsilpSryDZ5w5nEx5LFL6HvRGYblm5FH7eLk8VM
+ 8/1IvKYTd+TZrGTVWqw8yDodvtsG2LV1d+CF+i4guCawtyvHzG4/b4IyHg9YhnmbND
+ 3FmRq+QvNNg0Uv5TF3PT8ZAc71Ns81FFBfbbE26EUvnTTiVNZza2U937miA/1C9200
+ H5Xk5HxwMGlcaQlQhe2LYcrLrMXO+w0GdLekoYVOvBlTZivGk8Z59GcZYPIV2WuYlw
+ dyHLH5FAMtmPP2ylOn/VUhjRTHYxkdxqruh8n+ccA7oXmvPG0fexrT2kXaekqZBzdg
+ iMOP7nff3XsPw==
 X-Nifty-SrcIP: [110.4.221.123]
+Date: Thu, 9 Dec 2021 20:14:57 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: path: Fix path conversion of virtual drive.
-Date: Thu,  9 Dec 2021 20:15:27 +0900
-Message-Id: <20211209111527.15917-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] Cygwin: path: Fix path conversion of virtual drive.
+Message-Id: <20211209201457.97d11b5796075ec8eea87bf9@nifty.ne.jp>
+In-Reply-To: <YbHVrmn+hm7sH23S@calimero.vinschen.de>
+References: <20211209081750.4970-1-takashi.yano@nifty.ne.jp>
+ <YbHVrmn+hm7sH23S@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -47,85 +54,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 09 Dec 2021 11:16:11 -0000
+X-List-Received-Date: Thu, 09 Dec 2021 11:20:03 -0000
 
-- The last change in path.cc introduced a bug that causes an error
-  when accessing a virtual drive which mounts UNC path such as
-  "\\server\share\dir" rather than "\\server\share". This patch
-  fixes the issue.
----
- winsup/cygwin/path.cc | 56 +++++++++++++++++++++++++++----------------
- 1 file changed, 35 insertions(+), 21 deletions(-)
+On Thu, 9 Dec 2021 11:08:46 +0100
+Corinna Vinschen wrote:
+> On Dec  9 17:17, Takashi Yano wrote:
+> > +		      if (!QueryDosDeviceW (drive, remote, MAX_PATH))
+> > +			goto file_not_symlink; /* fallback */
+> > +
+> > +		      int remlen = wcslen (remote);
+> 
+> QueryDosDeviceW returns the string followed by two \0 chars, and that's
+> reflected by its return value.  You could skip the wcslen call:
+> 
+>                       int remlen;
+> 		      remlen = QueryDosDeviceW (drive, remote, MAX_PATH);
+> 		      if (!remlen)
+> 		      	goto file_not_symlink;
+> 		      remlen -= 2;
+> 
+> 
+> > +		      if (remote[remlen - 1] == L'\\')
+> > +			remlen--;
+> > +		      WCHAR *p;
+> > +		      if (wcsstr (remote, L"\\??\\UNC\\") == remote)
+> 
+> That should be wcsncmp.  The subst'ed UNC path always begins with that
+> string.  Alternatively:
+> 
+> 		      UNICODE_STRING rpath;
+> 		      RtlInitCountedUnicodeString (&rpath, remote,
+> 						   remlen * sizeof (WCHAR));
+> 		      if (RtlEqualUnicodePathPrefix (&rpath, &ro_u_uncp, TRUE))
+> 
+> 
+> > +			remlen -= 6;
+> > +		      else if ((p = wcschr (remote, L';') + 1)
+> 
+> This expression is always true, even if wcschr returns a NULL pointer.
+> 
+> > +			       && wcsstr (p, drive) == p
+> 
+>                                && wcsncmp (p, drive, 2) == 2?
+> 
+> Alternatively just skip the additional drive letter check and move
+> the pointer immediately forward to the next backslash:
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index eb1255849..4f82dbebb 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -3507,29 +3507,43 @@ restart:
- 		  if (RtlEqualUnicodePathPrefix (&fpath, &ro_u_uncp, TRUE)
- 		      && !RtlEqualUnicodePathPrefix (&upath, &ro_u_uncp, TRUE))
- 		    {
--		      /* ...get the remote path from the volume path name,
--			 replace remote path with drive letter, check again. */
-+		      /* ...get the remote path, replace remote path
-+			 with drive letter, check again. */
-+		      WCHAR drive[3] =
-+			{(WCHAR) towupper (upath.Buffer[4]), L':', L'\0'};
- 		      WCHAR remote[MAX_PATH];
- 
--		      fpbuf[1] = L'\\';
--		      BOOL r = GetVolumePathNameW (fpbuf, remote, MAX_PATH);
--		      fpbuf[1] = L'?';
--		      if (r)
--			{
--			  int remlen = wcslen (remote);
--			  if (remote[remlen - 1] == L'\\')
--			    remlen--;
--			  /* Hackfest */
--			  fpath.Buffer[4] = upath.Buffer[4]; /* Drive letter */
--			  fpath.Buffer[5] = L':';
--			  WCHAR *to = fpath.Buffer + 6;
--			  WCHAR *from = to + remlen - 6;
--			  memmove (to, from,
--				   (wcslen (from) + 1) * sizeof (WCHAR));
--			  fpath.Length -= (from - to) * sizeof (WCHAR);
--			  if (RtlEqualUnicodeString (&upath, &fpath, !!ci_flag))
--			    goto file_not_symlink;
--			}
-+
-+		      int remlen = QueryDosDeviceW (drive, remote, MAX_PATH);
-+		      if (!remlen)
-+			goto file_not_symlink; /* fallback */
-+		      remlen -= 2;
-+
-+		      if (remote[remlen - 1] == L'\\')
-+			remlen--;
-+		      WCHAR *p;
-+		      UNICODE_STRING rpath;
-+		      RtlInitCountedUnicodeString (&rpath, remote,
-+						   remlen * sizeof (WCHAR));
-+		      if (RtlEqualUnicodePathPrefix (&rpath, &ro_u_uncp, TRUE))
-+			remlen -= 6;
-+		      else if ((p = wcschr (remote, L';'))
-+			       && p + 3 < remote + remlen
-+			       && wcsncmp (p + 1, drive, 2) == 0
-+			       && (p = wcschr (p + 3, L'\\')))
-+			remlen -= p - remote - 1;
-+		      else
-+			goto file_not_symlink; /* fallback */
-+		      /* Hackfest */
-+		      fpath.Buffer[4] = drive[0]; /* Drive letter */
-+		      fpath.Buffer[5] = L':';
-+		      WCHAR *to = fpath.Buffer + 6;
-+		      WCHAR *from = to + remlen;
-+		      memmove (to, from,
-+			       (wcslen (from) + 1) * sizeof (WCHAR));
-+		      fpath.Length -= (from - to) * sizeof (WCHAR);
-+		      if (RtlEqualUnicodeString (&upath, &fpath, !!ci_flag))
-+			goto file_not_symlink;
- 		    }
- 		  issymlink = true;
- 		  /* upath.Buffer is big enough and unused from this point on.
+Thanks for checking and advice. I'll submit v2 patch shortly.
+
 -- 
-2.34.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
