@@ -1,53 +1,38 @@
-Return-Path: <towo@towo.net>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 1767E3858005
- for <cygwin-patches@cygwin.com>; Wed,  8 Dec 2021 18:46:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1767E3858005
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+ by sourceware.org (Postfix) with ESMTPS id 2F5AB385803D
+ for <cygwin-patches@cygwin.com>; Thu,  9 Dec 2021 08:18:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 2F5AB385803D
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=towo.net
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=towo.net
-Received: from [192.168.178.72] ([91.65.221.56]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M1qfu-1mxDoF0ufw-002IMY for <cygwin-patches@cygwin.com>; Wed, 08 Dec 2021
- 19:46:07 +0100
-Message-ID: <76e4a449-9c49-8a23-92bb-c194cacd6fa1@towo.net>
-Date: Wed, 8 Dec 2021 19:46:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] Cygwin: clipboard: Fix a bug in read().
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
+ [110.4.221.123]) (authenticated)
+ by conuserg-12.nifty.com with ESMTP id 1B98Hlp0023800;
+ Thu, 9 Dec 2021 17:17:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B98Hlp0023800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1639037873;
+ bh=97urM7xY+aG03YPvBUAFevLqJoAbxuYBGUDRRUsOTzE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=TBn+zgJVmsMor6KmVqt0A1+UUzBxxMTHa7t4zBgdgmA/oyHzCBX7QnuZLLtmJI6gG
+ +mD1t1rdTEXxoYZXpkJ7xwuu9P9VA+coqatZVl4ObHlCQ2h+MCEBGa/5s2LqcmWJ+1
+ JMkvlOjah5VUvC8LPW3RIfjfQURciYNQpvzeqm+Sibp4dQ+kGbZPXtJ5pVsJ7sVTwH
+ tfvRY+hmb3VGw2r/O9upzzl1XQWL2/kdAtLeQ8eJGJt4sALwN9PYftZG9ElVhodYKy
+ xzSCUK06PD+S59YNQfVz3aH/ZbWbS2UjJJbooU5VIaXtlRI4lBAVhH9pCoApew+qWA
+ Q63+5Tr99DMeA==
+X-Nifty-SrcIP: [110.4.221.123]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20211207140006.912-1-takashi.yano@nifty.ne.jp>
- <Ya9uU1JP8stQOB/l@calimero.vinschen.de>
- <c69ec6dd-fbbb-829c-9856-7f34cf0a792e@towo.net>
- <bc0170d9-1fcc-1659-beab-d11b01c37e5f@SystematicSw.ab.ca>
- <549e1dea-5545-50c5-fc1f-79c2c4982e8c@maxrnd.com>
- <20211208171929.68490866d4a07aac4b1ca0d7@nifty.ne.jp>
- <3e5ea337-8748-7c1c-813d-29196b6ef68a@maxrnd.com>
- <YbCGmbAsZ4pJuttS@calimero.vinschen.de>
-From: Thomas Wolff <towo@towo.net>
-In-Reply-To: <YbCGmbAsZ4pJuttS@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:VNgybirh9JneC8X47tXZVrs1ABp0Sf+4lgDsyQ6Yv27lJcXFWZL
- HUQ2AFVPbYnSh+T+/Cm9vax7gYSYkBfus66SFwNu8Ley0zCEGLcHjfNA6JZjcYswAPIfZbX
- qL3hokHC7FTF3/nyFgo5dhrN79c0fYiYXEQYOaKtAc3t06B5LpYh3Xsn1hz4RwsLurOWHmB
- nwBX6JmJgJdcLwLgHYXTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:75o4USDc5cc=:3OWBCd0CD1SQIVaJtNGTsm
- QLGu9ioCzd1B/e6o1oei06AC7lCdqORcgc9e2hRgbSogGWXULWPFjD4wSJRSV/T2vfzc0oGrr
- dgPXcSyAX3e4EAYmkMwkujxloXdSM+sIkvPn4x4zekn9HkJ1BJObZn0YuMkDDnEm+gch75QzF
- KWLXOWKV3E6e+E561OjawqyKhalfsWvkL4WlFlmCogOhrrO5vn6fkhXLptU4vCo3jvTOWgYcA
- h9ESPj+23+226SoZU3fPLD456tgpiCdR6vu81pFpqEyejmtHcsV6ncc8T4g0356Jw2xgMNkEe
- s3ogehBzRkhXapGKqJNHmYTOIL9VUPKPz95aeKhnqJBJnF7MMdmvPoEPmjIZfB552SD4VIjfy
- kK7EJqOtWWR03EnSzpCRzL5EPeOOJizSWeZSCssgIDWa0aAarLYmTS+mYiMrBelX1q7MqKDwX
- fBoAG0I73FcIuqZdiwMKLI18ZoLhxmLN2xIk7QR8WjicP0IfNnZwBiRD4LilGekYihqlH9TZ0
- OHAJMUdxywOXl2CigNjShs8mq8qQpkUqfCnxV4u/qAS39Yehgatk4Pg1Rrr+F6EY+B6+uPLNK
- xYPRU802ElYIpfl+hBs+ZEvtxTkAbzF4j4OnuwRxraZJD8yTvEhbYBk91NcCTNqlApmpn5qMr
- tRGwTxzs/l6Y8JXvjCQxXxU4Zz8LzUd3qtkH8EiJt7esBrlLSQP275ezxro/X4wsxfeE=
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Subject: [PATCH] Cygwin: path: Fix path conversion of virtual drive.
+Date: Thu,  9 Dec 2021 17:17:50 +0900
+Message-Id: <20211209081750.4970-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,74 +47,79 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 08 Dec 2021 18:46:10 -0000
+X-List-Received-Date: Thu, 09 Dec 2021 08:18:25 -0000
 
+- The last change in path.cc introduced a bug that causes an error
+  when accessing a virtual drive which mounts UNC path such as
+  "\\server\share\dir" rather than "\\server\share". This patch
+  fixes the issue.
+---
+ winsup/cygwin/path.cc | 50 +++++++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 21 deletions(-)
 
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index eb1255849..6682d2a58 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -3507,29 +3507,37 @@ restart:
+ 		  if (RtlEqualUnicodePathPrefix (&fpath, &ro_u_uncp, TRUE)
+ 		      && !RtlEqualUnicodePathPrefix (&upath, &ro_u_uncp, TRUE))
+ 		    {
+-		      /* ...get the remote path from the volume path name,
+-			 replace remote path with drive letter, check again. */
++		      /* ...get the remote path, replace remote path
++			 with drive letter, check again. */
++		      WCHAR drive[3] =
++			{(WCHAR) towupper (upath.Buffer[4]), L':', L'\0'};
+ 		      WCHAR remote[MAX_PATH];
+ 
+-		      fpbuf[1] = L'\\';
+-		      BOOL r = GetVolumePathNameW (fpbuf, remote, MAX_PATH);
+-		      fpbuf[1] = L'?';
+-		      if (r)
+-			{
+-			  int remlen = wcslen (remote);
+-			  if (remote[remlen - 1] == L'\\')
+-			    remlen--;
+-			  /* Hackfest */
+-			  fpath.Buffer[4] = upath.Buffer[4]; /* Drive letter */
+-			  fpath.Buffer[5] = L':';
+-			  WCHAR *to = fpath.Buffer + 6;
+-			  WCHAR *from = to + remlen - 6;
+-			  memmove (to, from,
+-				   (wcslen (from) + 1) * sizeof (WCHAR));
+-			  fpath.Length -= (from - to) * sizeof (WCHAR);
+-			  if (RtlEqualUnicodeString (&upath, &fpath, !!ci_flag))
+-			    goto file_not_symlink;
+-			}
++		      if (!QueryDosDeviceW (drive, remote, MAX_PATH))
++			goto file_not_symlink; /* fallback */
++
++		      int remlen = wcslen (remote);
++		      if (remote[remlen - 1] == L'\\')
++			remlen--;
++		      WCHAR *p;
++		      if (wcsstr (remote, L"\\??\\UNC\\") == remote)
++			remlen -= 6;
++		      else if ((p = wcschr (remote, L';') + 1)
++			       && wcsstr (p, drive) == p
++			       && (p = wcschr (p + 2, L'\\')))
++			remlen -= p - remote - 1;
++		      else
++			goto file_not_symlink; /* fallback */
++		      /* Hackfest */
++		      fpath.Buffer[4] = drive[0]; /* Drive letter */
++		      fpath.Buffer[5] = L':';
++		      WCHAR *to = fpath.Buffer + 6;
++		      WCHAR *from = to + remlen;
++		      memmove (to, from,
++			       (wcslen (from) + 1) * sizeof (WCHAR));
++		      fpath.Length -= (from - to) * sizeof (WCHAR);
++		      if (RtlEqualUnicodeString (&upath, &fpath, !!ci_flag))
++			goto file_not_symlink;
+ 		    }
+ 		  issymlink = true;
+ 		  /* upath.Buffer is big enough and unused from this point on.
+-- 
+2.34.1
 
-Am 08.12.2021 um 11:19 schrieb Corinna Vinschen:
-> On Dec  8 01:43, Mark Geisert wrote:
->> Takashi Yano wrote:
->> [...]
->>> I think the following patch makes the intent clearer.
->>> What do you think?
->>>
->>>
->>>   From d0aee9af225384a24ac6301f987ce2e94f262500 Mon Sep 17 00:00:00 2001
->>> From: Takashi Yano <takashi.yano@nifty.ne.jp>
->>> Date: Wed, 8 Dec 2021 17:06:03 +0900
->>> Subject: [PATCH] Cygwin: clipboard: Make intent of the code clearer.
->>>
->>> ---
->>>    winsup/cygwin/fhandler_clipboard.cc   | 4 ++--
->>>    winsup/cygwin/include/sys/clipboard.h | 1 +
->>>    2 files changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
->>> index 05f54ffb3..65a3cad97 100644
->>> --- a/winsup/cygwin/fhandler_clipboard.cc
->>> +++ b/winsup/cygwin/fhandler_clipboard.cc
->>> @@ -76,7 +76,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
->>>          clipbuf->cb_sec  = clipbuf->ts.tv_sec;
->>>    #endif
->>>          clipbuf->cb_size = len;
->>> -      memcpy (&clipbuf[1], buf, len); // append user-supplied data
->>> +      memcpy (clipbuf->data, buf, len); // append user-supplied data
->>>          GlobalUnlock (hmem);
->>>          EmptyClipboard ();
->>> @@ -229,7 +229,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
->>>          if (pos < (off_t) clipbuf->cb_size)
->>>    	{
->>>    	  ret = (len > (clipbuf->cb_size - pos)) ? clipbuf->cb_size - pos : len;
->>> -	  memcpy (ptr, (char *) (clipbuf + 1) + pos, ret);
->>> +	  memcpy (ptr, clipbuf->data + pos, ret);
->>>    	  pos += ret;
->>>    	}
->>>        }
->>> diff --git a/winsup/cygwin/include/sys/clipboard.h b/winsup/cygwin/include/sys/clipboard.h
->>> index 4c00c8ea1..b2544be85 100644
->>> --- a/winsup/cygwin/include/sys/clipboard.h
->>> +++ b/winsup/cygwin/include/sys/clipboard.h
->>> @@ -44,6 +44,7 @@ typedef struct
->>>        };
->>>      };
->>>      uint64_t      cb_size; // 8 bytes everywhere
->>> +  char          data[];
->>>    } cygcb_t;
->>>    #endif
->> Sigh.  I guess it's not possible to keep rid of a data item like I'd hoped.
->> At least "data[]" is cleaner than the historical "data[1]" here.  If you
->> call the item cb_data I can live with it.
->> Thanks all for the discussion.
->    sometype *ptr;
->
->    ptr = (sometype *) somebuffer;
->    do_something (ptr + 1);
->
-> is a perfectly valid and perfectly readable thing, and used a lot if
-> "sometype" is either a header in a buffer followed by arbitrary data, or
-> if the buffer consists of multiple packed blocks of type "sometype".
->
-> Takashi's suggestion adds the information that "sometype" is a header
-> followed by arbitrary data, so that's a good thing..
-Yes, thanks for this variant.
-Thomas
