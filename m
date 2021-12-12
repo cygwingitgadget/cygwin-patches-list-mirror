@@ -1,41 +1,38 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id B82A9385841C
+ by sourceware.org (Postfix) with ESMTPS id C0424385800F
  for <cygwin-patches@cygwin.com>; Sun, 12 Dec 2021 13:05:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B82A9385841C
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C0424385800F
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 1BCD59Ug022149;
- Sun, 12 Dec 2021 22:05:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1BCD59Ug022149
+ by conuserg-11.nifty.com with ESMTP id 1BCD59Uc022149;
+ Sun, 12 Dec 2021 22:05:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1BCD59Uc022149
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1639314319;
- bh=0g6jIUWe2ABVpHgeS1LaKSfMtjoPAz93olAKae0ksFg=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=amGWrOvhs00KplK3PppWA99taJDBE43hH6u7qhSAzK5tfOVH/9g4zPPrejVmRLV+I
- PBTQC8fNZQoC1bf68xZu1cmjF9sTqDSNE+YSnYkwC8NBaStAJTkgfAn5/cf1jg6m51
- neihE1UyZeYLB4CgMQp7eVy49VfEOMzSElGBRrbhmT9YliJvyiI9lmjrHOaZ6Y9laJ
- cOFI+2fyT7Gq/DHXBJgNeQzSeRa0z5RmTIOfj69+TzxgciSroCR/Il7piFa3/Oclve
- wsNU3QYQkSiIjcGAop/DHVOZ6EiER5v+GxVVWicKUFA1GR6OeHxXgQE6Yz9lYWXDNI
- KzCLTHe8XHLBA==
+ s=dec2015msa; t=1639314314;
+ bh=ubQ9ill03A5iVFpWXL20+BJUTMj7mArSGIrytOIANXk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Fzp0/5WpUiyvbYZhtVKVfIM/oueo/nmCRjfQwpsO0JzYdDCjhAYRno7ybi1OkZC3/
+ Rk9ZXOr2kjJKJwqjsvgkxjV7NI2F1d6BTN0zMpugJ5M/Xj1y1EiVL4C7+bXq5RS1iB
+ yeaf7HEBUVxvE1hVVTKJtQDZKGiY1Zaa5T3MBfXy58qnQ6AA1DQs42C5jkTQrljuov
+ IBl/gw07ask3vY7gTRfDLpdzIOBwxeRoOt4gJHpehO/dhVcASwSE8+LLp31HzeHWyv
+ cW+5U2fSaqryVhDGoPvADkNhbllcwQAWJpOM3SKGIVYybXHRc1l+JF4GJtB9EafNr6
+ g1KeUQftQrdHQ==
 X-Nifty-SrcIP: [110.4.221.123]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/3] Cygwin: pty: Fix console mode of non-cygwin apps in
- background.
-Date: Sun, 12 Dec 2021 22:05:00 +0900
-Message-Id: <20211212130501.10091-3-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/3] Fix behaviour of non-cygwin apps in background.
+Date: Sun, 12 Dec 2021 22:04:58 +0900
+Message-Id: <20211212130501.10091-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211212130501.10091-1-takashi.yano@nifty.ne.jp>
-References: <20211212130501.10091-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -52,34 +49,15 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Sun, 12 Dec 2021 13:05:40 -0000
 
-- If the non-cygwin app is started in the background in pseudo
-  console, the console mode is broken for the app. This patch fixes
-  the issue.
----
- winsup/cygwin/fhandler_tty.cc | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Takashi Yano (3):
+  Cygwin: pty: Fix Ctrl-C handling for non-cygwin apps in background.
+  Cygwin: pty: Fix console mode of non-cygwin apps in background.
+  Cygwin: console: Fix console mode of non-cygwin apps in background.
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 904398179..cd0de9bc0 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3384,7 +3384,7 @@ skip_create:
-   if (get_ttyp ()->previous_output_code_page)
-     SetConsoleOutputCP (get_ttyp ()->previous_output_code_page);
- 
--  do
-+  if (get_ttyp ()->getpgid () == myself->pgid)
-     {
-       termios &t = get_ttyp ()->ti;
-       DWORD mode;
-@@ -3409,7 +3409,6 @@ skip_create:
- 	mode |= DISABLE_NEWLINE_AUTO_RETURN;
-       SetConsoleMode (hpConOut, mode);
-     }
--  while (false);
- 
-   return true;
- 
+ winsup/cygwin/fhandler_tty.cc | 12 +++++++-----
+ winsup/cygwin/spawn.cc        |  7 +++++--
+ 2 files changed, 12 insertions(+), 7 deletions(-)
+
 -- 
 2.34.1
 
