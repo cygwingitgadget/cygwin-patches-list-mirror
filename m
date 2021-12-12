@@ -1,47 +1,39 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
- [210.131.2.82])
- by sourceware.org (Postfix) with ESMTPS id 418BD3858405
- for <cygwin-patches@cygwin.com>; Sat, 11 Dec 2021 13:40:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 418BD3858405
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 8BD783858419
+ for <cygwin-patches@cygwin.com>; Sun, 12 Dec 2021 13:04:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8BD783858419
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (z221123.dynamic.ppp.asahi-net.or.jp
+Received: from localhost.localdomain (z221123.dynamic.ppp.asahi-net.or.jp
  [110.4.221.123]) (authenticated)
- by conssluserg-03.nifty.com with ESMTP id 1BBDeSri021973;
- Sat, 11 Dec 2021 22:40:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 1BBDeSri021973
+ by conuserg-08.nifty.com with ESMTP id 1BCD3tqW021654;
+ Sun, 12 Dec 2021 22:04:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BCD3tqW021654
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1639230028;
- bh=wwEPGYjeUrBSu0wkbiQ63QkikT8TsaHApuM3tgFfPOk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iBRuNaIS+8U2ug315U6pESboeRjiPRKlHb/sIQjefkFD8uC/H8PMirv/pofbWxWew
- MOsVCNz5G95NW3vhxkVxkImbsXzRhabpXh7MFwzl0SlpogqT9bEUyLGpIvD0R5CUEg
- Zl/+L3k7agfoANmJLSiOp8wJseCNpqPSM1ANMFbeCEYcVAk5hySLAzNzGHIGO5sDrT
- 99r52xNt21GehEHPcfNjF/pjuUF4fpmNq7sq9EzispMpHh1MWV8G7n8n6SweDto6vQ
- EnQC5TwHkNfqAVoAoumHkycnhAd8VjYJh6nFDEyi+ClA6wF/XaZ6ZDPZraGdJUi9vQ
- Vbv+MXBcI2azg==
+ s=dec2015msa; t=1639314241;
+ bh=ACgcLWpmS/Ifdj/sItHCeY3Z6Voda5MRdHcK8xjOCaA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=igP3cdQO27HR3q3iUdacw+yJIBouGJm2F3zO7DkkFeyApIaEH9dAaz7O89NmJqebp
+ 62257R0ClQlLCRlQkgAxRd47+MR/N0ce0+3bfKJUpmL5J/aJXXowkitEHiyqqkrGEB
+ St66BVeyc24TXz7ssnT8HbaWGFWoX2ZVYGTGBANjkfzvZq99x1qIjyG7nvsgjD6OQN
+ M99SVXnNSloOwtGG3R4+1TT6UxRCmqrYcoA9FX5Caah4is5wYKz7ISWxkZFqcUzeKm
+ 0s3PH5v0sN76cy9m5niza+e/zJW+9WLdw93VQTwcM2OitLk1zkQs9sP5AfhtOWUj0I
+ uv8/RTAGTyYOQ==
 X-Nifty-SrcIP: [110.4.221.123]
-Date: Sat, 11 Dec 2021 22:40:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Reduce unecessary input transfer.
-Message-Id: <20211211224030.bf6dc202f01bdd2f4eff32d9@nifty.ne.jp>
-In-Reply-To: <nycvar.QRO.7.76.6.2112101152320.90@tvgsbejvaqbjf.bet>
-References: <20210211090942.3955-1-takashi.yano@nifty.ne.jp>
- <nycvar.QRO.7.76.6.2112092345060.90@tvgsbejvaqbjf.bet>
- <20211210192040.71f88b263b8c20f2f61db310@nifty.ne.jp>
- <nycvar.QRO.7.76.6.2112101152320.90@tvgsbejvaqbjf.bet>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: pty: Add missing input transfer when
+ switch_to_pcon_in state.
+Date: Sun, 12 Dec 2021 22:03:47 +0900
+Message-Id: <20211212130347.10080-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,97 +48,196 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 11 Dec 2021 13:40:53 -0000
+X-List-Received-Date: Sun, 12 Dec 2021 13:04:22 -0000
 
-On Fri, 10 Dec 2021 12:12:44 +0100 (CET)
-Johannes Schindelin wrote:
-> On Fri, 10 Dec 2021, Takashi Yano wrote:
-> > Could you please test if the following patch solves the issue?
-> 
-> It does!
+- This patch fixes the bug that input is wrongly sent to io_handle_nat
+  rather than io_handle when neither read() nor select() is called
+  after the cygwin app is started from non-cygwin app. This happens
+  only if psuedo console is disabled.
 
-It seems that you already apply this patch to msys2, however,
-this is just an experimental patch to identify the cause of
-the problem.
+Addresses:
+  https://cygwin.com/pipermail/cygwin-patches/2021q4/011587.html
+---
+ winsup/cygwin/fhandler_tty.cc | 87 ++++++++++++++++++++++++++++-------
+ winsup/cygwin/release/3.3.4   |  5 ++
+ 2 files changed, 75 insertions(+), 17 deletions(-)
 
-Please wait a while for actual patch.
-
-> However, I am a bit frustrated because there is still a lot light-shedding
-> to be done. In the current shape of the code, I do not even understand
-> what it does, let alone why it works around the problem.
-> 
-> For example, why is there such a long `pcon` stuff going on? I am in the
-> _disabled_ pseudo console mode, for starters. Like, why is there a
-> `pcon_input_state`? And why has the `disable_pcon` code path changed at
-> all (there was no need to touch it, was there)?
-> 
-> Also, `needs_xfer` clearly means `needs transfer`. What transfer? What's
-> `masked`? And how does it differ from `mask`?
-> 
-> I fear that the pseudo console/non-pseudo console code currently has a
-> lottery factor of 1. I spent a good part of three entire working days
-> pouring over it, and I still do not understand it. Usually, a combination
-> of reading the commit messages, reading the code, parsing
-> function/variable names with a sprinkling of intuition gets me very far in
-> understanding any kind of legacy code, but not here. And I do _a lot_ of
-> legacy code hacking, as part of maintaining Git for Windows. The pseudo
-> console code in Cygwin really is a class of its own in this regard.
-> 
-> And I have the very strong sense that it does not have to be that way.
-> 
-> I would really like it if the code in `fhandler_*` could see some tender,
-> loving care, bringing clarity about, for example clearly distinguishing
-> between the code paths that use pseudo console support vs not, and code
-> paths regarding Cygwin processes vs not.
-> 
-> I mean, even if your diff below is short, I cannot review it. Not the
-> context, not my study of three days of the surrounding code and the commit
-> messages, none of that equips me with enough knowledge to even spot an
-> obvious bug, because such a bug would still not be obvious to me.
-> 
-> I really hope that this can be fixed. Please let me know if there is
-> anything I can do to help bring this about.
-
-The current pty code is too complicated indeed. :(
-It is very difficult to explain how it works.
-
-Basically, pty has two pairs of pipes, one is for cygwin apps
-(io_handle/output_handle), the other is for non-cygwin app (
-io_handle_nat/output_handle_nat). This is because these pipe-
-pairs are processed differently even without ConPTY.
-
-Outputs to output_handle_nat is forwarded to output_handle by
-pty_master_fwd_thread after appropriate processing.
-
-Input from keyboard is switched between two input pipes, i.e.
-io_handle and io_handle_nat. When the cygwin-app is activated,
-input from keyboard is sent to io_handle, and when the non-
-cygwin app is activated, input from keyboard is sent to
-io_handle_nat. This switching is done based on switch_to_pcon_in
-and pcon_input_state. The name of this variable and related
-function is *pcon*, however, these are also used for non-cygwin
-apps even without ConPTY by historical reason.
-
-While non-cygwin app is activated, switch_to_pcon_in is true
-and pcon_input_state == to_nat. However, if the cygwin-app is
-started from non-cygwin app, input from keyboard should be sent
-to io_handle. This is done using mask_switch_to_pcon_in(). By
-this function, input is temporary sent to io_handle even if
-switch_to_pcon_in is true.
-
-The function transfer_input() is used to transfer type ahead
-inupt between two input pipes, i.e. io_handle and io_handle_nat.
-Masking switch_to_pcon_in state by mask_switch_to_pcon_in() is
-done in read() and select(), so input while read() or select()
-is NOT called is sent to io_handle_nat rather than io_handle
-if switch_to_pcon_in is true. The bug to be fixed now is just
-the case.
-
-So, transferring input from io_handle_nat to io_handle solves
-the issue in this case. The patch I have sent yesterday is to
-add this missing action.
-
-In addition, this problem does not occur if ConPTY is enabled.
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index f523dafed..dae00efd7 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1077,11 +1077,15 @@ pcon_pid_alive (DWORD pid)
+ {
+   if (pid == 0)
+     return false;
+-  HANDLE h = OpenProcess (SYNCHRONIZE, FALSE, pid);
++  HANDLE h = OpenProcess (PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+   if (h == NULL)
+     return false;
++  DWORD exit_code;
++  BOOL r = GetExitCodeProcess (h, &exit_code);
+   CloseHandle (h);
+-  return true;
++  if (r && exit_code == STILL_ACTIVE)
++    return true;
++  return false;
+ }
+ 
+ inline static bool
+@@ -1172,11 +1176,53 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+     return;
+   if (get_ttyp ()->pcon_start)
+     return;
++  /* This input transfer is needed if non-cygwin app is terminated
++     by Ctrl-C or killed. */
++  WaitForSingleObject (input_mutex, INFINITE);
++  if (!get_ttyp ()->pcon_fg (get_ttyp ()->getpgid ())
++      && get_ttyp ()->switch_to_pcon_in && !get_ttyp ()->pcon_activated
++      && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
++    transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
++		    input_available_event);
++  ReleaseMutex (input_mutex);
+   WaitForSingleObject (pcon_mutex, INFINITE);
+   if (!pcon_pid_self (get_ttyp ()->pcon_pid)
+       && pcon_pid_alive (get_ttyp ()->pcon_pid))
+     {
+       /* There is a process which is grabbing pseudo console. */
++      if (get_ttyp ()->pcon_activated
++	  && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
++	{
++	  HANDLE pcon_owner =
++	    OpenProcess (PROCESS_DUP_HANDLE, FALSE, get_ttyp ()->pcon_pid);
++	  if (pcon_owner)
++	    {
++	      pinfo pinfo_resume = pinfo (myself->ppid);
++	      DWORD resume_pid;
++	      if (pinfo_resume)
++		resume_pid = pinfo_resume->dwProcessId;
++	      else
++		resume_pid =
++		  get_console_process_id (myself->dwProcessId, false);
++	      if (resume_pid)
++		{
++		  HANDLE h_pcon_in;
++		  DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
++				   GetCurrentProcess (), &h_pcon_in,
++				   0, TRUE, DUPLICATE_SAME_ACCESS);
++		  FreeConsole ();
++		  AttachConsole (get_ttyp ()->pcon_pid);
++		  WaitForSingleObject (input_mutex, INFINITE);
++		  transfer_input (tty::to_cyg, h_pcon_in, get_ttyp (),
++				  input_available_event);
++		  ReleaseMutex (input_mutex);
++		  FreeConsole ();
++		  AttachConsole (resume_pid);
++		  CloseHandle (h_pcon_in);
++		}
++	      CloseHandle (pcon_owner);
++	    }
++	}
+       ReleaseMutex (pcon_mutex);
+       return;
+     }
+@@ -1231,6 +1277,7 @@ fhandler_pty_slave::mask_switch_to_pcon_in (bool mask, bool xfer)
+   HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
+   CloseHandle (masked);
+ 
++  WaitForSingleObject (input_mutex, INFINITE);
+   if (mask)
+     {
+       if (InterlockedIncrement (&num_reader) == 1)
+@@ -1239,27 +1286,25 @@ fhandler_pty_slave::mask_switch_to_pcon_in (bool mask, bool xfer)
+   else if (InterlockedDecrement (&num_reader) == 0)
+     CloseHandle (slave_reading);
+ 
++  /* This is needed when cygwin-app is started from non-cygwin app if
++     pseudo console is disabled. */
++  bool need_xfer = get_ttyp ()->pcon_fg (get_ttyp ()->getpgid ()) && mask
++    && get_ttyp ()->switch_to_pcon_in && !get_ttyp ()->pcon_activated;
++
+   /* In GDB, transfer input based on setpgid() does not work because
+      GDB may not set terminal process group properly. Therefore,
+      transfer input here if isHybrid is set. */
+-  if (isHybrid && !!masked != mask && xfer
++  if ((isHybrid || need_xfer) && !!masked != mask && xfer
+       && GetStdHandle (STD_INPUT_HANDLE) == get_handle ())
+     {
+       if (mask && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
+-	{
+-	  WaitForSingleObject (input_mutex, INFINITE);
+-	  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
+-			  input_available_event);
+-	  ReleaseMutex (input_mutex);
+-	}
++	transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
++			input_available_event);
+       else if (!mask && get_ttyp ()->pcon_input_state_eq (tty::to_cyg))
+-	{
+-	  WaitForSingleObject (input_mutex, INFINITE);
+-	  transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+-			  input_available_event);
+-	  ReleaseMutex (input_mutex);
+-	}
++	transfer_input (tty::to_nat, get_handle (), get_ttyp (),
++			input_available_event);
+     }
++  ReleaseMutex (input_mutex);
+ }
+ 
+ bool
+@@ -1536,7 +1581,7 @@ out:
+   if (ptr0)
+     { /* Not tcflush() */
+       bool saw_eol = totalread > 0 && strchr ("\r\n", ptr0[totalread -1]);
+-      mask_switch_to_pcon_in (false, saw_eol);
++      mask_switch_to_pcon_in (false, saw_eol || len == 0);
+     }
+ }
+ 
+@@ -2187,6 +2232,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
+   /* Write terminal input to to_slave_nat pipe instead of output_handle
+      if current application is native console application. */
++  WaitForSingleObject (input_mutex, INFINITE);
+   if (to_be_read_from_pcon () && get_ttyp ()->pcon_activated
+       && get_ttyp ()->pcon_input_state == tty::to_nat)
+     {
+@@ -2203,7 +2249,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 			  &mbp);
+ 	}
+ 
+-      WaitForSingleObject (input_mutex, INFINITE);
+       if ((ti.c_lflag & ISIG) && !(ti.c_lflag & NOFLSH)
+ 	  && memchr (buf, '\003', nlen))
+ 	get_ttyp ()->discard_input = true;
+@@ -2214,6 +2259,14 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+       return len;
+     }
+ 
++  /* This input transfer is needed when cygwin-app which is started from
++     non-cygwin app is terminated if pseudo console is disabled. */
++  if (to_be_read_from_pcon () && !get_ttyp ()->pcon_activated
++      && get_ttyp ()->pcon_input_state == tty::to_cyg)
++    fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
++					get_ttyp (), input_available_event);
++  ReleaseMutex (input_mutex);
++
+   line_edit_status status = line_edit (p, len, ti, &ret);
+   if (status > line_edit_signalled && status != line_edit_pipe_full)
+     ret = -1;
+diff --git a/winsup/cygwin/release/3.3.4 b/winsup/cygwin/release/3.3.4
+index 4cbfba8eb..a15684fdb 100644
+--- a/winsup/cygwin/release/3.3.4
++++ b/winsup/cygwin/release/3.3.4
+@@ -9,3 +9,8 @@ Bug Fixes
+   This solves the following issues:
+   Addresses: https://cygwin.com/pipermail/cygwin/2021-November/250087.html
+              https://cygwin.com/pipermail/cygwin/2021-December/250103.html
++
++- Fix a bug in pty code that input is wrongly sent to io_handle_nat
++  rather than io_handle while neither read() nor select() is called
++  after the cygwin app is started from non-cygwin app.
++  Addresses: https://cygwin.com/pipermail/cygwin-patches/2021q4/011587.html
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.34.1
+
