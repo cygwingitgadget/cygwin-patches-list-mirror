@@ -1,38 +1,44 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id DEAB53858D28
- for <cygwin-patches@cygwin.com>; Wed, 15 Dec 2021 03:30:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DEAB53858D28
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (v050141.dynamic.ppp.asahi-net.or.jp
- [124.155.50.141]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 1BF3TnYA008831;
- Wed, 15 Dec 2021 12:29:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BF3TnYA008831
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1639538995;
- bh=IbLf+0kL9OiT3jnirfOp4Cdwp+tvRg2HSfxTTvO+djs=;
- h=From:To:Cc:Subject:Date:From;
- b=0sz6FE4gfoBE2meAeJhkhqk7nmAIaza3KBZnkpuOSD9CNv+ghbm66vCGRUJ1g5jMH
- zoSdc5UYhazA3JNRfLsCwrjpAgfhz0WAymTE/WYBRJwZiGdKZLtBPKbZ13fatVdOJ8
- VyJoTMez0jeabST29KXGt3pq8nVYr4jckcEK4PVxYEhLZLeAfiFNGVpbDyEdUAitve
- y5psVxj49iTGahXLck+2tDQ1PRHtZE4Q0nj8Z6MryJtpZeWy/s1lhKDVoR4me0Uoge
- ipAd7l6bY7vbtwjiVsD4XhOEsntgIoCSzEKtZdIN6zUBeuNg+UhpZ0C17Zc1Wp3Ae1
- 89+DGwZvbwswQ==
-X-Nifty-SrcIP: [124.155.50.141]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-044.btinternet.com (mailomta28-re.btinternet.com
+ [213.120.69.121])
+ by sourceware.org (Postfix) with ESMTPS id B1BD6385B83D
+ for <cygwin-patches@cygwin.com>; Sat, 18 Dec 2021 17:48:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B1BD6385B83D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
+ by re-prd-fep-044.btinternet.com with ESMTP id
+ <20211218174814.DRFD13120.re-prd-fep-044.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Sat, 18 Dec 2021 17:48:14 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 61A69BAC020F4390
+X-Originating-IP: [81.129.146.209]
+X-OWM-Source-IP: 81.129.146.209 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvuddrleekgddutdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeuieejgeduvdeutdffieeileefffdufeekhefgjefffeehtdekjeegkeeftdfffeenucfkphepkedurdduvdelrddugeeirddvtdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrvddtledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.129.146.209) by
+ re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 61A69BAC020F4390; Sat, 18 Dec 2021 17:48:14 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix input switching failure.
-Date: Wed, 15 Dec 2021 12:29:48 +0900
-Message-Id: <20211215032948.527-1-takashi.yano@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Conditionally build documentation
+Date: Sat, 18 Dec 2021 17:47:21 +0000
+Message-Id: <20211218174721.12448-1-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-1198.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,59 +53,121 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 15 Dec 2021 03:30:11 -0000
+X-List-Received-Date: Sat, 18 Dec 2021 17:48:20 -0000
 
-- This patch fixes the failure of input switching between io_handle
-  and io_handle_nat. This very rarely happens, however, input is
-  wrongly switched to io_handle_nat even though the non-cygwin app
-  is in the background.
+Add a configure option '--disable-doc' to disable building of the
+documentation by the 'all' target.
+
+Check for the required tools at configure time, and require them if
+building documentation is enabled.
+
+Even if building the documentation was diabled with '--disable-doc',
+'make -C doc' at the top-level can still make the documentation, if the
+documentation tools were found. If the tools were not found, 'missing'
+is used to issue a warning about that.
+
+Update instructions for building Cygwin appropriately.
+
+(Building documentation remains the default to increase the chances of
+noticing when building the documentation is broken.)
 ---
- winsup/cygwin/fhandler_tty.cc | 3 +++
- winsup/cygwin/tty.cc          | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ winsup/Makefile.am             |  6 +++++-
+ winsup/configure.ac            | 25 ++++++++++++++++++++++++-
+ winsup/doc/Makefile.am         |  2 +-
+ winsup/doc/faq-programming.xml | 14 +++++++++-----
+ 4 files changed, 39 insertions(+), 8 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index ee687d9ad..c8ad53cb7 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1056,6 +1056,7 @@ fhandler_pty_slave::set_switch_to_pcon (void)
-       isHybrid = true;
-       setup_locale ();
-       myself->exec_dwProcessId = myself->dwProcessId;
-+      myself->process_state |= PID_NEW_PG; /* Marker for pcon_fg */
-       bool nopcon = (disable_pcon || !term_has_pcon_cap (NULL));
-       WaitForSingleObject (pcon_mutex, INFINITE);
-       bool pcon_enabled = setup_pseudoconsole (nopcon);
-@@ -1168,6 +1169,7 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
- 		    }
- 		}
- 	      myself->exec_dwProcessId = 0;
-+	      myself->process_state &= ~PID_NEW_PG;
- 	      isHybrid = false;
- 	    }
- 	}
-@@ -2272,6 +2274,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	      _pinfo *p = pids[i];
- 	      if (p->ctty == get_ttyp ()->ntty
- 		  && p->pgid == get_ttyp ()->getpgid ()
-+		  && (p->process_state & PID_NOTCYGWIN)
- 		  && (p->process_state & PID_NEW_PG))
- 		{
- 		  wpid = p->dwProcessId;
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index 2566f4c45..11ad3ec51 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -392,7 +392,8 @@ tty::pcon_fg (pid_t pgid)
-   for (unsigned i = 0; i < pids.npids; i++)
-     {
-       _pinfo *p = pids[i];
--      if (p->ctty == ntty && p->pgid == pgid && p->exec_dwProcessId)
-+      if (p->ctty == ntty && p->pgid == pgid
-+	  && (p->process_state & (PID_NOTCYGWIN | PID_NEW_PG)))
- 	return true;
-     }
-   if (pgid > MAX_PID)
+diff --git a/winsup/Makefile.am b/winsup/Makefile.am
+index 067f74688..9efdd4cb1 100644
+--- a/winsup/Makefile.am
++++ b/winsup/Makefile.am
+@@ -14,6 +14,10 @@ cygdoc_DATA = \
+ 	CYGWIN_LICENSE \
+ 	COPYING
+ 
+-SUBDIRS = cygwin cygserver doc utils testsuite
++SUBDIRS = cygwin cygserver utils testsuite
++
++if BUILD_DOC
++SUBDIRS += doc
++endif
+ 
+ cygserver utils testsuite: cygwin
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index cf1128b37..4ae20509a 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -88,7 +88,30 @@ AC_SUBST(TLSOFFSETS_H)
+ 
+ AM_CONDITIONAL(TARGET_X86_64, [test $target_cpu = "x86_64"])
+ 
+-AC_CHECK_PROGS([DOCBOOK2XTEXI], [docbook2x-texi db2x_docbook2texi], [true])
++AC_ARG_ENABLE(doc,
++	      [AS_HELP_STRING([--enable-doc], [Build documentation])],,
++	      enable_doc=yes)
++AM_CONDITIONAL(BUILD_DOC, [test $enable_doc != "no"])
++
++AC_CHECK_PROGS([DOCBOOK2XTEXI], [docbook2x-texi db2x_docbook2texi])
++if test -z "$DOCBOOK2XTEXI" ; then
++    if test "x$enable_doc" != "xno"; then
++        AC_MSG_ERROR([docbook2texi is required to build documentation])
++    else
++        unset DOCBOOK2XTEXI
++        AM_MISSING_PROG([DOCBOOK2XTEXI], [docbook2texi])
++    fi
++fi
++
++AC_CHECK_PROGS([XMLTO], [xmlto])
++if test -z "$XMLTO"; then
++    if test "x$enable_doc" != "xno"; then
++        AC_MSG_ERROR([xmlto is required to build documentation])
++    else
++        unset XMLTO
++        AM_MISSING_PROG([XMLTO], [xmlto])
++    fi
++fi
+ 
+ if test "x$with_cross_bootstrap" != "xyes"; then
+     AC_CHECK_PROGS(MINGW_CXX, ${target_cpu}-w64-mingw32-g++)
+diff --git a/winsup/doc/Makefile.am b/winsup/doc/Makefile.am
+index 534d67480..5164c6e0a 100644
+--- a/winsup/doc/Makefile.am
++++ b/winsup/doc/Makefile.am
+@@ -16,7 +16,7 @@ doc_DATA = \
+ 
+ htmldir = $(datarootdir)/doc
+ 
+-XMLTO=xmlto --skip-validation --with-dblatex
++XMLTO=@XMLTO@ --skip-validation --with-dblatex
+ DOCBOOK2XTEXI=@DOCBOOK2XTEXI@ --xinclude --info --utf8trans-map=charmap
+ 
+ -include Makefile.dep
+diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+index 26fcfe921..46dd23ab8 100644
+--- a/winsup/doc/faq-programming.xml
++++ b/winsup/doc/faq-programming.xml
+@@ -689,12 +689,16 @@ Building for 32-bit Cygwin also requires
+ Building for 64-bit Cygwin also requires
+ <literal>mingw64-x86_64-gcc-g++</literal> and
+ <literal>mingw64-x86_64-zlib</literal>.
++</para>
++
+ <!-- If you want to run the tests, <literal>dejagnu</literal> is also required. -->
+-Normally, building ignores any errors in building the documentation,
+-which requires the <literal>dblatex</literal>, <literal>docbook2X</literal>,
+-<literal>docbook-xml45</literal>, <literal>docbook-xsl</literal>, and
+-<literal>xmlto</literal> packages.  For more information on building the
+-documentation, see the README included in the <literal>cygwin-doc</literal> package.
++
++<para>
++Building the documentation also requires the <literal>dblatex</literal>,
++<literal>docbook2X</literal>, <literal>docbook-xml45</literal>,
++<literal>docbook-xsl</literal>, and <literal>xmlto</literal> packages.  Building
++the documentation can be disabled with the <literal>--disable-doc</literal>
++option to <literal>configure</literal>.
+ </para>
+ 
+ <para>Next, check out the Cygwin sources from the
 -- 
 2.34.1
 
