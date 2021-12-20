@@ -1,44 +1,48 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-048.btinternet.com (mailomta26-re.btinternet.com
- [213.120.69.119])
- by sourceware.org (Postfix) with ESMTPS id 1972C3858405
- for <cygwin-patches@cygwin.com>; Sat, 18 Dec 2021 17:48:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1972C3858405
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-048.btinternet.com with ESMTP id
- <20211218174842.TEQA1873.re-prd-fep-048.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Sat, 18 Dec 2021 17:48:42 +0000
-Authentication-Results: btinternet.com;
- auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 613A8DE80DAEE510
-X-Originating-IP: [81.129.146.209]
-X-OWM-Source-IP: 81.129.146.209 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvuddrleekgddutdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeetteeijeeuuddtiefhhffhlefhffeuveekhedvhfefudeghedtheegveefhfeifeenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekuddruddvledrudegiedrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduvdelrddugeeirddvtdelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.129.146.209) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 613A8DE80DAEE510; Sat, 18 Dec 2021 17:48:42 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id 032853858406
+ for <cygwin-patches@cygwin.com>; Mon, 20 Dec 2021 09:55:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 032853858406
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MWRe1-1mxpIg1e3f-00Xx7E for <cygwin-patches@cygwin.com>; Mon, 20 Dec 2021
+ 10:55:45 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 5742BA808FF; Mon, 20 Dec 2021 10:55:44 +0100 (CET)
+Date: Mon, 20 Dec 2021 10:55:44 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] cygwin: Add cocom and patch to build prerequisites in FAQ
-Date: Sat, 18 Dec 2021 17:47:48 +0000
-Message-Id: <20211218174748.12478-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] Cygwin: Conditionally build documentation
+Message-ID: <YcBTIABhBeOeIHWv@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20211218174721.12448-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1198.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211218174721.12448-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:Th7raIwmNolJXOaKzRN8463KnDZX4xwEPdXk0/UUQ/qbo+NK1Zd
+ p9NSE5eJvj18pphCixsKeal3rIUfwbKxQr0EUDeR4A9PdOpYVPU6fZvtQIqLjOE5vUEjQqB
+ tviLRtKeQIVtKWaC1fBmyGTSoSpcPZRzGNnFoHlLP4yVKmnGcprpu83QeF/qfiycIdWlrKJ
+ 0YadyzjBKumDp1ipf2n8w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PKLFdDtlzJU=:aP1XX336hMBUu2ilKBHZB3
+ Xg4IGabQaB1Qt8MGteABQAr0za496Ga0HWv0Xq/q1BcfQg9Ue3SYEyoJtJLMoB5C8FcgnA57o
+ pLoTkaBwyZdRV11YvEBio0nWJREpnpvXn7cxjG2cdmDlUdNs3nBY6iwpW7JytwDLr9ZpKgFeX
+ bI3VUPqdzy712aA/l8g6PF2qBUv+VX2sd604SYO28v30nl321u6sSJfWXq5QPh+4BgTCajujT
+ PX96nAFsbWk6Iowmrm/SzOOABLXUIWzREnwZyEa1wVrj38UCYq+TUDGGhxUSEpT4p5cKBW5fl
+ AwA2d41LE6B08ykqrl3mBUZfePGsvUwWnHxWohIn2NcHxE5Lg+OYQb2Di8wDb1kAVYiYjClDq
+ JKv4fPw2vlHT8OrNbfun+Cdzd03bTXshOb2Ylns8NmVykbEvleKxpIVCIsc+uzZVn2r8SULKX
+ yxhvNjKlcusWH4vjixQtU013PxIrTv1c6kRKBI69RbtNHpHJvVfu5b4LAQrLbNvI+Z7DRh4Xi
+ JIOtl/mDxH3siV+Z3NLjyI+1WVEqtVuJ3lc4q4wgsV6By7c1PJhQQeCt+lnpff6/E6mSoqttJ
+ stceR2/lhyJCi8ULKeGDl0YBihkUX3ci9OU31VgWPiN+mZy81GOzXhFDtEsklieudmLZVRnsJ
+ OILjVLETh6wjPvytEo9igFQddEhoLa3bHb0zqVcjZAzVRDPq/H2TLmP5QgcCQDyd2Hr2gY+eE
+ mx3cDWPtNxNh3arm
+X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H2,
+ SPF_FAIL, SPF_HELO_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -53,44 +57,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 18 Dec 2021 17:48:45 -0000
+X-List-Received-Date: Mon, 20 Dec 2021 09:55:51 -0000
 
-Add patch, and make cocom unconditional in list of build prerequisites.
+On Dec 18 17:47, Jon Turney wrote:
+> Add a configure option '--disable-doc' to disable building of the
+> documentation by the 'all' target.
+> 
+> Check for the required tools at configure time, and require them if
+> building documentation is enabled.
+> 
+> Even if building the documentation was diabled with '--disable-doc',
+> 'make -C doc' at the top-level can still make the documentation, if the
+> documentation tools were found. If the tools were not found, 'missing'
+> is used to issue a warning about that.
+> 
+> Update instructions for building Cygwin appropriately.
+> 
+> (Building documentation remains the default to increase the chances of
+> noticing when building the documentation is broken.)
+> ---
+>  winsup/Makefile.am             |  6 +++++-
+>  winsup/configure.ac            | 25 ++++++++++++++++++++++++-
+>  winsup/doc/Makefile.am         |  2 +-
+>  winsup/doc/faq-programming.xml | 14 +++++++++-----
+>  4 files changed, 39 insertions(+), 8 deletions(-)
 
-Even though the products of these tools are checked in, these are tools
-are required when building in a fresh git checkout, presumably due to
-the order in which git creates the files resulting in timestamps which
-indicate that the output of rules using these tools is more recent than
-the input.
+Please push.  Both patches.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2021-December/250124.html
 
-Also drop a duplicate sentence about 'fetch sources from git'.
----
- winsup/doc/faq-programming.xml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
-index 46dd23ab8..3c6bf7b46 100644
---- a/winsup/doc/faq-programming.xml
-+++ b/winsup/doc/faq-programming.xml
-@@ -679,11 +679,11 @@ rewriting the runtime library in question from specs...
- installed; you at least need <literal>gcc-g++</literal>,
- <literal>make</literal>, <literal>automake</literal>,
- <literal>autoconf</literal>, <literal>git</literal>, <literal>perl</literal>,
--<literal>gettext-devel</literal>, <literal>libiconv-devel</literal> and
--<literal>zlib-devel</literal>.  Fetch the sources from the
--<ulink url="https://cygwin.com/git/newlib-cygwin.git">Cygwin GIT source repository</ulink>.
--If you change a certain core part of Cygwin, namely the layout
--of the Cygwin TLS area, you also have to install <literal>cocom</literal>.
-+<literal>gettext-devel</literal>, <literal>libiconv-devel</literal>
-+<literal>zlib-devel</literal>, <literal>cocom</literal> and <literal>patch</literal>.
-+</para>
-+
-+<para>
- Building for 32-bit Cygwin also requires
- <literal>mingw64-i686-gcc-g++</literal> and <literal>mingw64-i686-zlib</literal>.
- Building for 64-bit Cygwin also requires
--- 
-2.34.1
-
+Thanks,
+Corinna
