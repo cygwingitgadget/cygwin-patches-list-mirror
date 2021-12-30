@@ -1,47 +1,52 @@
-Return-Path: <cygwin@jdrake.com>
-Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
- by sourceware.org (Postfix) with ESMTPS id 1E0FF3858027
- for <cygwin-patches@cygwin.com>; Wed, 29 Dec 2021 23:29:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1E0FF3858027
-Received: from mail231.csoft.net (localhost [127.0.0.1])
- by mail231.csoft.net (Postfix) with ESMTP id 68A4CCBA4;
- Wed, 29 Dec 2021 18:29:48 -0500 (EST)
-Received: from mail231 (mail231 [96.47.74.235])
- (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
- (No client certificate requested) (Authenticated sender: jeremyd)
- by mail231.csoft.net (Postfix) with ESMTPSA id 63645CB59;
- Wed, 29 Dec 2021 18:29:48 -0500 (EST)
-Date: Wed, 29 Dec 2021 15:29:48 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Ken Brown <kbrown@cornell.edu>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_pipe: add sanity limit to handle loops
-In-Reply-To: <104c6a5c-a480-5087-89c5-d3737d8b7a2d@cornell.edu>
-Message-ID: <alpine.BSO.2.21.2112291527470.11760@resin.csoft.net>
-References: <alpine.BSO.2.21.2112231503400.11760@resin.csoft.net>
- <20211225121902.54b82f1bb0d4f958d34a8bb7@nifty.ne.jp>
- <alpine.BSO.2.21.2112241945060.11760@resin.csoft.net>
- <20211225131242.adef568db53d561a6b134612@nifty.ne.jp>
- <alpine.BSO.2.21.2112242101520.11760@resin.csoft.net>
- <20211226021010.a2b2ad28f12df9ffb25b6584@nifty.ne.jp>
- <alpine.BSO.2.21.2112251111580.11760@resin.csoft.net>
- <alpine.BSO.2.21.2112251457480.11760@resin.csoft.net>
- <8172019c-e048-4fe2-79c9-0b3262057d3e@cornell.edu>
- <alpine.BSO.2.21.2112252054310.11760@resin.csoft.net>
- <c7664703-0ec2-388f-64e3-8c46d4590b3e@cornell.edu>
- <d2af0b22-666a-b820-acb0-afc835836372@cornell.edu>
- <317dc73a-fb9d-3937-7354-c79492c1c64c@cornell.edu>
- <alpine.BSO.2.21.2112261331090.11760@resin.csoft.net>
- <b278775d-03d9-6683-ec43-62729bb0054c@cornell.edu>
- <alpine.BSO.2.21.2112261432360.11760@resin.csoft.net>
- <7781155f-d4a1-2e9d-a5c7-2ecc2250a5cf@cornell.edu>
- <104c6a5c-a480-5087-89c5-d3737d8b7a2d@cornell.edu>
-User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-045.btinternet.com (mailomta21-sa.btinternet.com
+ [213.120.69.27])
+ by sourceware.org (Postfix) with ESMTPS id 518B53858D28
+ for <cygwin-patches@cygwin.com>; Thu, 30 Dec 2021 15:44:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 518B53858D28
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
+ by sa-prd-fep-045.btinternet.com with ESMTP id
+ <20211230154405.XJYI20692.sa-prd-fep-045.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Thu, 30 Dec 2021 15:44:05 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613943C60F937027
+X-Originating-IP: [81.129.146.209]
+X-OWM-Source-IP: 81.129.146.209 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeihfeghfdviedvjeevkeektdejuddvhedtveetgeevkefgtdeigeejvdeutefhvdenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeekuddruddvledrudegiedrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtfegnpdhinhgvthepkedurdduvdelrddugeeirddvtdelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.103] (81.129.146.209) by
+ sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613943C60F937027 for cygwin-patches@cygwin.com;
+ Thu, 30 Dec 2021 15:44:05 +0000
+Message-ID: <9796eaa8-07f1-0f14-3105-9ce482005b17@dronecode.org.uk>
+Date: Thu, 30 Dec 2021 15:44:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, SPF_HELO_PASS, SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] fhandler_pipe: add sanity limit to handle loops
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <alpine.BSO.2.21.2112231503400.11760@resin.csoft.net>
+ <f97bba17-16ab-d7be-01f6-1c057fb5f1a5@cornell.edu>
+ <alpine.BSO.2.21.2112231623490.11760@resin.csoft.net>
+ <90dd8b13-8e7f-97b8-b480-299a9d64836e@dronecode.org.uk>
+ <alpine.BSO.2.21.2112282143180.11760@resin.csoft.net>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <alpine.BSO.2.21.2112282143180.11760@resin.csoft.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1193.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -57,13 +62,25 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 29 Dec 2021 23:29:52 -0000
+X-List-Received-Date: Thu, 30 Dec 2021 15:44:07 -0000
 
-On Wed, 29 Dec 2021, Ken Brown wrote:
+On 29/12/2021 05:45, Jeremy Drake wrote:
+> On Mon, 27 Dec 2021, Jon Turney wrote:
+> 
+>> On 24/12/2021 00:29, Jeremy Drake via Cygwin-patches wrote:
+>>> again, so I can't confirm this.  I took a core with 'dumper' but gdb
+>>> doesn't want to load it (it says Core file format not supported, maybe
+>>> something with msys2's gdb?).
+>>
+>> I think you need gdb 11 (for this patch set [1], which is also in cygwin's
+>> gdb 10 package) to read x86_64 cygwin core dumps.
+>>
+>> [1] https://sourceware.org/pipermail/gdb-patches/2020-August/171232.html
+> 
+> Thanks, this was the problem.  But the core dump wasn't much help anyway,
+> the stuff I was interested in was pre-exception, and the backtrace
+> seemed to stop at the exception handling (unlike when 'live' debugging
+> when the stack trace continued).
 
-> Takashi must be unavailable also, but it's a simple enough fix that I decided
-> to go ahead and push it.
-
-Thanks.  Regarding the other hang I'm seeing on ARM64, I tried gdb windbg
-and lldb, and none of them seem able to read the 'context' of the main
-thread when in this state so I can't get a stack trace.
+Hmm..  That's probably a bug of some sort, since I think the two methods 
+should produce the same results...
