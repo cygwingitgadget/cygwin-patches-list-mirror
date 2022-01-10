@@ -1,53 +1,53 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-045.btinternet.com (mailomta21-sa.btinternet.com
- [213.120.69.27])
- by sourceware.org (Postfix) with ESMTPS id 518B53858D28
- for <cygwin-patches@cygwin.com>; Thu, 30 Dec 2021 15:44:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 518B53858D28
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-045.btinternet.com with ESMTP id
- <20211230154405.XJYI20692.sa-prd-fep-045.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Thu, 30 Dec 2021 15:44:05 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 613943C60F937027
-X-Originating-IP: [81.129.146.209]
-X-OWM-Source-IP: 81.129.146.209 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeihfeghfdviedvjeevkeektdejuddvhedtveetgeevkefgtdeigeejvdeutefhvdenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeekuddruddvledrudegiedrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtfegnpdhinhgvthepkedurdduvdelrddugeeirddvtdelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.103] (81.129.146.209) by
- sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 613943C60F937027 for cygwin-patches@cygwin.com;
- Thu, 30 Dec 2021 15:44:05 +0000
-Message-ID: <9796eaa8-07f1-0f14-3105-9ce482005b17@dronecode.org.uk>
-Date: Thu, 30 Dec 2021 15:44:00 +0000
+Return-Path: <yselkowi@redhat.com>
+Received: from us-smtp-delivery-124.mimecast.com
+ (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+ by sourceware.org (Postfix) with ESMTPS id 03BC63857C4B
+ for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 03BC63857C4B
+Authentication-Results: sourceware.org;
+ dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+ s=mimecast20190719; t=1641785704;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=n09WJ2HevYPndf3kOJK6piy7VfJNdrWgsNdtIzf41Ps=;
+ b=VCGEuHM5AUx7bPOHIlXaT6gD7rzXyLj33DIBJzRxAvkdNBgZv5dIUk91nrTc0aMYp6y3I3
+ qGo8KVTlWWxRRwtVmkfRhAbgu7jr9N6Sf3THn6m7Rho3MGqfIlQCSIio+O+5eSx8PsaoAL
+ vIBm/pBpQTGMtE1JE5K5QjpKoPaHt2Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-119-gGc0X5xSPXqTO0n6i2zhlQ-1; Sun, 09 Jan 2022 22:35:03 -0500
+X-MC-Unique: gGc0X5xSPXqTO0n6i2zhlQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com
+ [10.5.11.14])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B1CA835BC3
+ for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:02 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.22.8.45])
+ by smtp.corp.redhat.com (Postfix) with ESMTPS id B11DE519D0
+ for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:01 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: do not build MinGW testsuite/cygrun
+ --with-cross-bootstrap
+Date: Sun,  9 Jan 2022 22:34:49 -0500
+Message-Id: <20220110033449.216876-1-yselkowi@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] fhandler_pipe: add sanity limit to handle loops
-Content-Language: en-GB
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <alpine.BSO.2.21.2112231503400.11760@resin.csoft.net>
- <f97bba17-16ab-d7be-01f6-1c057fb5f1a5@cornell.edu>
- <alpine.BSO.2.21.2112231623490.11760@resin.csoft.net>
- <90dd8b13-8e7f-97b8-b480-299a9d64836e@dronecode.org.uk>
- <alpine.BSO.2.21.2112282143180.11760@resin.csoft.net>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <alpine.BSO.2.21.2112282143180.11760@resin.csoft.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1193.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Authentication-Results: relay.mimecast.com;
+ auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=yselkowi@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
+ DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,25 +62,23 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 30 Dec 2021 15:44:07 -0000
+X-List-Received-Date: Mon, 10 Jan 2022 03:35:06 -0000
 
-On 29/12/2021 05:45, Jeremy Drake wrote:
-> On Mon, 27 Dec 2021, Jon Turney wrote:
-> 
->> On 24/12/2021 00:29, Jeremy Drake via Cygwin-patches wrote:
->>> again, so I can't confirm this.  I took a core with 'dumper' but gdb
->>> doesn't want to load it (it says Core file format not supported, maybe
->>> something with msys2's gdb?).
->>
->> I think you need gdb 11 (for this patch set [1], which is also in cygwin's
->> gdb 10 package) to read x86_64 cygwin core dumps.
->>
->> [1] https://sourceware.org/pipermail/gdb-patches/2020-August/171232.html
-> 
-> Thanks, this was the problem.  But the core dump wasn't much help anyway,
-> the stuff I was interested in was pre-exception, and the backtrace
-> seemed to stop at the exception handling (unlike when 'live' debugging
-> when the stack trace continued).
+---
+ winsup/testsuite/Makefile.am | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hmm..  That's probably a bug of some sort, since I think the two methods 
-should produce the same results...
+diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+index 4b8c7dbb7..ac68934d0 100644
+--- a/winsup/testsuite/Makefile.am
++++ b/winsup/testsuite/Makefile.am
+@@ -61,4 +61,6 @@ EXTRA_DEJAGNU_SITE_CONFIG = site-extra.exp
+ clean-local:
+ 	rm -f *.log *.exe *.exp *.bak *.stackdump winsup.sum
+ 
++if CROSS_BOOTSTRAP
+ SUBDIRS = cygrun
++endif
+-- 
+2.34.1
+
