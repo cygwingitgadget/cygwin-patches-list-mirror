@@ -1,53 +1,49 @@
-Return-Path: <yselkowi@redhat.com>
-Received: from us-smtp-delivery-124.mimecast.com
- (us-smtp-delivery-124.mimecast.com [170.10.129.124])
- by sourceware.org (Postfix) with ESMTPS id 03BC63857C4B
- for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 03BC63857C4B
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id 556543858402
+ for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 08:48:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 556543858402
 Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
- s=mimecast20190719; t=1641785704;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=n09WJ2HevYPndf3kOJK6piy7VfJNdrWgsNdtIzf41Ps=;
- b=VCGEuHM5AUx7bPOHIlXaT6gD7rzXyLj33DIBJzRxAvkdNBgZv5dIUk91nrTc0aMYp6y3I3
- qGo8KVTlWWxRRwtVmkfRhAbgu7jr9N6Sf3THn6m7Rho3MGqfIlQCSIio+O+5eSx8PsaoAL
- vIBm/pBpQTGMtE1JE5K5QjpKoPaHt2Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-gGc0X5xSPXqTO0n6i2zhlQ-1; Sun, 09 Jan 2022 22:35:03 -0500
-X-MC-Unique: gGc0X5xSPXqTO0n6i2zhlQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com
- [10.5.11.14])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B1CA835BC3
- for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:02 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.22.8.45])
- by smtp.corp.redhat.com (Postfix) with ESMTPS id B11DE519D0
- for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022 03:35:01 +0000 (UTC)
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MUooJ-1mxfOA3uhl-00QmHp for <cygwin-patches@cygwin.com>; Mon, 10 Jan 2022
+ 09:48:39 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 3A0B9A80D60; Mon, 10 Jan 2022 09:48:39 +0100 (CET)
+Date: Mon, 10 Jan 2022 09:48:39 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: do not build MinGW testsuite/cygrun
+Subject: Re: [PATCH] Cygwin: do not build MinGW testsuite/cygrun
  --with-cross-bootstrap
-Date: Sun,  9 Jan 2022 22:34:49 -0500
-Message-Id: <20220110033449.216876-1-yselkowi@redhat.com>
+Message-ID: <Ydvy57lXWPeceJ1+@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220110033449.216876-1-yselkowi@redhat.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Authentication-Results: relay.mimecast.com;
- auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=yselkowi@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220110033449.216876-1-yselkowi@redhat.com>
+X-Provags-ID: V03:K1:TdhHex1lBN+xiJ/r5YFjLFYljGWBz3M9crlXhSN9FaaZXHfFNmc
+ aFtwXpgeMAbxGGpEkpBSgpE/B+US5n7RU5mpCHjE9tWz8So4vZdSsc2Dpme/AnImCXw6U8L
+ Z7RZp7AgLYDfFEpU4V5hB6mqQiCYRYrvsYa/Zn4at4395DfC/k8XSNwBWQkCqIyWIOsZaKV
+ pNRKJsymtkuLfA1UKXVdg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AN+7leHoRQU=:XEjxjDb4nKr7SWzWJRaf79
+ LS9hBUIoZSLBH87sNhCAxEoPhv/H5erpHBpWQ+p2eC75JVSyluPtiDjmpsFWRK8sBPfOwji52
+ EDLxELNla6GtUOFy03Y5mzVrPQdSBoaSWNM4QAsXb41pqFn6AtD3TIzIiqMIhk06AvBlx4d9h
+ 4W7267lds0cy8kwYQ7QKi7q2NElhdpPBpwNf76+wzB6H+Z0yZQIstfY1SRuDp4KPTiVr9v0yY
+ VNIl2LKjbao+mtzr0kJglTNVB3ZfAIvAyAhst/CYd42HH5Zx5NhyIhz4mpMcUCt00mOZnyrbY
+ djv7eIvs/rQ5zNBVdm+/b041f9Qlm3Jr8l5vmPuejnOWLvAW6gONug33TXx7GlT/FGcSrPMmi
+ eGJe4ErJLwSyOGeY5YzWrniCy0nhWPdXo7EFWUd5nnmaTG/4K6cZHTRYz55vBnGNibNd7sdIs
+ hbXGJdxwMgBNYMZzPdNaE+TT49MCaQr6B+JuHBlYMxnY4c8gurbxODMG0OqfCnPUfYUS4I4hz
+ 0PzDNL4QI/s3lbLd9WSLFsDeC+VisXZ7VculNLIaDPwmcyEs755uGIGF6+uLFtplnZdc9zsyN
+ U3UUNc9twjV8u6O8UxF6nmq2FwnaiFE8H7geY1LaZEnua6eaIy1M7BakZLzmVmgFWySCh5MkJ
+ oOCzNa0+WFrPCjQx7p25FDnFzNlLtftEwFok9oRxbelDNxtNmH8ThFjwNPrjG49YIkMF5ck6d
+ nHKFe/jGp1e+B4YV
+X-Spam-Status: No, score=-93.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ SPF_FAIL, SPF_HELO_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,23 +58,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 10 Jan 2022 03:35:06 -0000
+X-List-Received-Date: Mon, 10 Jan 2022 08:48:43 -0000
 
----
- winsup/testsuite/Makefile.am | 2 ++
- 1 file changed, 2 insertions(+)
+On Jan  9 22:34, Yaakov Selkowitz wrote:
+> ---
+>  winsup/testsuite/Makefile.am | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+> index 4b8c7dbb7..ac68934d0 100644
+> --- a/winsup/testsuite/Makefile.am
+> +++ b/winsup/testsuite/Makefile.am
+> @@ -61,4 +61,6 @@ EXTRA_DEJAGNU_SITE_CONFIG = site-extra.exp
+>  clean-local:
+>  	rm -f *.log *.exe *.exp *.bak *.stackdump winsup.sum
+>  
+> +if CROSS_BOOTSTRAP
+>  SUBDIRS = cygrun
+> +endif
+> -- 
+> 2.34.1
 
-diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
-index 4b8c7dbb7..ac68934d0 100644
---- a/winsup/testsuite/Makefile.am
-+++ b/winsup/testsuite/Makefile.am
-@@ -61,4 +61,6 @@ EXTRA_DEJAGNU_SITE_CONFIG = site-extra.exp
- clean-local:
- 	rm -f *.log *.exe *.exp *.bak *.stackdump winsup.sum
- 
-+if CROSS_BOOTSTRAP
- SUBDIRS = cygrun
-+endif
--- 
-2.34.1
+ACK.
 
+
+Thanks,
+Corinna
