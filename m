@@ -1,46 +1,52 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta001.cacentral1.a.cloudfilter.net
- (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
- by sourceware.org (Postfix) with ESMTPS id 06A183857C5C
- for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022 16:32:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 06A183857C5C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 53A913858406
+ for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022 18:45:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 53A913858406
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
- by cmsmtp with ESMTP
- id 7MMVnVK3S5Rf17gXan9C55; Wed, 12 Jan 2022 16:32:02 +0000
-Received: from [192.168.1.105] ([68.147.0.90]) by cmsmtp with ESMTP
- id 7gXZnLRCFUcbn7gXZnBMgd; Wed, 12 Jan 2022 16:32:02 +0000
-X-Authority-Analysis: v=2.4 cv=OO00YAWB c=1 sm=1 tr=0 ts=61df0282
- a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
- a=IkcTkHD0fZMA:10 a=VwQbUJbxAAAA:8 a=8VpDeP3kAAAA:8 a=IhITR0H2Is7bWmWTaesA:9
- a=QEXdDO2ut3YA:10 a=uar3UI-X7uIA:10 a=-E0vlWde17EA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=x58pXJj3Pl9T3GLWE5Uy:22
-Message-ID: <23658f98-9edb-6119-a0d8-81cf58fe9d70@SystematicSw.ab.ca>
-Date: Wed, 12 Jan 2022 09:32:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Reply-To: cygwin-patches@cygwin.com
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MadGG-1mVv1N0D5W-00cBNY for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022
+ 19:44:59 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 3BDA1A80B83; Wed, 12 Jan 2022 19:44:58 +0100 (CET)
+Date: Wed, 12 Jan 2022 19:44:58 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.16
  Gobble Gobble flags
-Content-Language: en-CA
-To: cygwin-patches@cygwin.com
+Message-ID: <Yd8hqq0a6boX2Bn9@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20220112060431.7956-1-Brian.Inglis@SystematicSW.ab.ca>
  <Yd6q2CARZ3qNyo8H@calimero.vinschen.de>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <Yd6q2CARZ3qNyo8H@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfAgWmBNLpu3F8x9XZxESF5Kni7olmnRWHozckuRcBARi0fzqhBlRoaZ1ZKXZcUBL2xed4ylWmMEGiFxu4PUtJEPLgLy/UdlNvcNsZDhAT2gVNOMDVonG
- CXWiCvBSu928LhJDozWWM94DGatPXDyHxCNlCmiAud52FtvgJ8ROL7cZY2de77hjFw0jfbZZ0LnFzWCFRytHf6qVvtlpjR5YkLE=
-X-Spam-Status: No, score=-1160.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.4
+ <23658f98-9edb-6119-a0d8-81cf58fe9d70@SystematicSw.ab.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <23658f98-9edb-6119-a0d8-81cf58fe9d70@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:HPrZMxUQRHGYkaLPceUXsGU8beKERP7GrD2st9iHyu5hmUVz6+o
+ epGnyI820BuCR/bugtyddbPbGNYE9zeU4sMXtHFh2uNstb7X6c+x9a1bTB1v2fUt1FKQZ8k
+ Lgd/cBR5nUwBLk53YgGYeCybtHEYWRuY+t2We4J9/DSoX8o3mj+k4DuvMuRPUvPp/06pBXn
+ RAPzSOiduBtJyFk4BDjrg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sQQPFHIcWF0=:rsuRqIN4fmN13K63gwhdCo
+ ajOBuhfA830fbgiDpgAO6zvc8in6CiYnUggAqC7kJ251k0L3Kfeg9HkStNuo2shl9xhyZ7O1h
+ /9pr8uLA4PJ3eUYof6K65MxArs6OurZD6ImEJ8FmCq2tJHWXOzleiBDdFrfF4PgkFaxLSX3Ka
+ Zh06EXqheYENR6iPolePUlmdvJfFrw6k7EfhVdAfs23QofrzT68nNjlOkj5ihgisszZ44L+8/
+ TPZ732CxyLEUCJ0j7G2btBp/MsFZk39IYvEDPAF8Xs+sMEOztluIeXJq1yTujEc13Z3kJy0Dc
+ p7e/rLG7u96W4CUrMpydX1AsCBmGxTrVSyrWqJk2Qx1m4lspJI0mU3L+qQg+e+6/5FsmyjQlM
+ 8C4bLvqn3Y2y8ctknLW7IVjUD3PUJ+J8dUFdEV/mf8Io0/L6BetQyFrFFBXoCMT+qtYvU0yuH
+ u4Ap6DhB/y348y1Lmv1N24Svdisj7Fp1Fe13CWBz+b9Ub+/6Hfh4ispcK5EsqLODcZBNy/T4c
+ hwnyC4rDbjyvcWkyf2zyGoNJwqbc1B2ac7lCTSZeexaOQiL1pGsnCAvYSzTlNeuMqke+AaMuR
+ 0iBMHFIvyMDHHLjOOoXPY9VPqzrV8HJQxBQHBrJvtH4HEfcfhO+TokNfzXWxKfEdeeF2btr/4
+ Hgz6fkKmsK74WO98dxiATJuhLN372bKsuWzN5xqqaY2JD0iqdVOLtNtdSNB+vl6VOz4xWzPI2
+ svkjIp/LGRy8QbVD
+X-Spam-Status: No, score=-94.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -55,44 +61,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 12 Jan 2022 16:32:04 -0000
+X-List-Received-Date: Wed, 12 Jan 2022 18:45:02 -0000
 
-On 2022-01-12 03:18, Corinna Vinschen wrote:
-> On Jan 11 23:04, Brian Inglis wrote:
->> Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.16 Gobble Gobble flags
+On Jan 12 09:32, Brian Inglis wrote:
+> On 2022-01-12 03:18, Corinna Vinschen wrote:
+> > On Jan 11 23:04, Brian Inglis wrote:
+> > > Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.16 Gobble Gobble flags
+> > 
+> > Gobble Gobble?
+> > 
+> > Did I miss something or is that a preliminary subject line? :)
 > 
-> Gobble Gobble?
+> Linux 5.16 codename from rc3 which came out about US Thanksgiving; see
+> bottom of thread:
 > 
-> Did I miss something or is that a preliminary subject line? :)
+> https://lkml.kernel.org/lkml/163789349650.12632.8523698126811716771.pr-tracker-bot@kernel.org/t/#u
+> 
+> noticed:
+> 
+> https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.16-rc3
+> 
+> from scripts monitoring cpuid usage and cpuinfo changes across releases:
+> 
+> diff -pu linux-prev/Makefile linux-next/Makefile
+> --- linux-prev/Makefile	2021-10-31 14:53:10.000000000 -0600
+> +++ linux-next/Makefile	2022-01-11 07:45:05.000000000 -0700
+> @@ -1,9 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  VERSION = 5
+> -PATCHLEVEL = 15
+> +PATCHLEVEL = 16
+>  SUBLEVEL = 0
+>  EXTRAVERSION =
+> -NAME = Trick or Treat
+> +NAME = Gobble Gobble
 
-Linux 5.16 codename from rc3 which came out about US Thanksgiving; see 
-bottom of thread:
+Heh, ok.  Thanks and pushed.
 
-https://lkml.kernel.org/lkml/163789349650.12632.8523698126811716771.pr-tracker-bot@kernel.org/t/#u
 
-noticed:
-
-https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.16-rc3
-
-from scripts monitoring cpuid usage and cpuinfo changes across releases:
-
-diff -pu linux-prev/Makefile linux-next/Makefile
---- linux-prev/Makefile	2021-10-31 14:53:10.000000000 -0600
-+++ linux-next/Makefile	2022-01-11 07:45:05.000000000 -0700
-@@ -1,9 +1,9 @@
-  # SPDX-License-Identifier: GPL-2.0
-  VERSION = 5
--PATCHLEVEL = 15
-+PATCHLEVEL = 16
-  SUBLEVEL = 0
-  EXTRAVERSION =
--NAME = Trick or Treat
-+NAME = Gobble Gobble
-...
-
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
+Corinna
