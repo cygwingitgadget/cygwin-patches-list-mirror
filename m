@@ -1,51 +1,48 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 53A913858406
- for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022 18:45:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 53A913858406
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 28AF53858406
+ for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022 18:51:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 28AF53858406
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MadGG-1mVv1N0D5W-00cBNY for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022
- 19:44:59 +0100
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MCsLo-1nGUAN3hy4-008sna for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022
+ 19:51:55 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 3BDA1A80B83; Wed, 12 Jan 2022 19:44:58 +0100 (CET)
-Date: Wed, 12 Jan 2022 19:44:58 +0100
+ id 6531FA80B83; Wed, 12 Jan 2022 19:51:55 +0100 (CET)
+Date: Wed, 12 Jan 2022 19:51:55 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.16
- Gobble Gobble flags
-Message-ID: <Yd8hqq0a6boX2Bn9@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: doc: drop mention of 32-bit installer
+Message-ID: <Yd8jSyIZCPmkKd1E@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220112060431.7956-1-Brian.Inglis@SystematicSW.ab.ca>
- <Yd6q2CARZ3qNyo8H@calimero.vinschen.de>
- <23658f98-9edb-6119-a0d8-81cf58fe9d70@SystematicSw.ab.ca>
+References: <20220112155241.1635-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <23658f98-9edb-6119-a0d8-81cf58fe9d70@SystematicSw.ab.ca>
-X-Provags-ID: V03:K1:HPrZMxUQRHGYkaLPceUXsGU8beKERP7GrD2st9iHyu5hmUVz6+o
- epGnyI820BuCR/bugtyddbPbGNYE9zeU4sMXtHFh2uNstb7X6c+x9a1bTB1v2fUt1FKQZ8k
- Lgd/cBR5nUwBLk53YgGYeCybtHEYWRuY+t2We4J9/DSoX8o3mj+k4DuvMuRPUvPp/06pBXn
- RAPzSOiduBtJyFk4BDjrg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sQQPFHIcWF0=:rsuRqIN4fmN13K63gwhdCo
- ajOBuhfA830fbgiDpgAO6zvc8in6CiYnUggAqC7kJ251k0L3Kfeg9HkStNuo2shl9xhyZ7O1h
- /9pr8uLA4PJ3eUYof6K65MxArs6OurZD6ImEJ8FmCq2tJHWXOzleiBDdFrfF4PgkFaxLSX3Ka
- Zh06EXqheYENR6iPolePUlmdvJfFrw6k7EfhVdAfs23QofrzT68nNjlOkj5ihgisszZ44L+8/
- TPZ732CxyLEUCJ0j7G2btBp/MsFZk39IYvEDPAF8Xs+sMEOztluIeXJq1yTujEc13Z3kJy0Dc
- p7e/rLG7u96W4CUrMpydX1AsCBmGxTrVSyrWqJk2Qx1m4lspJI0mU3L+qQg+e+6/5FsmyjQlM
- 8C4bLvqn3Y2y8ctknLW7IVjUD3PUJ+J8dUFdEV/mf8Io0/L6BetQyFrFFBXoCMT+qtYvU0yuH
- u4Ap6DhB/y348y1Lmv1N24Svdisj7Fp1Fe13CWBz+b9Ub+/6Hfh4ispcK5EsqLODcZBNy/T4c
- hwnyC4rDbjyvcWkyf2zyGoNJwqbc1B2ac7lCTSZeexaOQiL1pGsnCAvYSzTlNeuMqke+AaMuR
- 0iBMHFIvyMDHHLjOOoXPY9VPqzrV8HJQxBQHBrJvtH4HEfcfhO+TokNfzXWxKfEdeeF2btr/4
- Hgz6fkKmsK74WO98dxiATJuhLN372bKsuWzN5xqqaY2JD0iqdVOLtNtdSNB+vl6VOz4xWzPI2
- svkjIp/LGRy8QbVD
-X-Spam-Status: No, score=-94.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H4,
- RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
+In-Reply-To: <20220112155241.1635-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:MrKtBJa9OINM4EgxyoZV6dO4NM+96/P0rVWuZdvaUMquFxNje+w
+ s9p+vcI1rgJnCdWJ4dk7Z0VQLYd1i2puo0xrErlPU6LjXQJt0jDSJS7Syms0Ix9GknmS8W0
+ wYpvU+8lVOHLpZjs7bAiqc1ZfDHI5AliT4DZXIA2lRt6dgziDsUzdGj2F4h/7Q9efYj2eLj
+ BxztXD2zeF+PTU7Ab4lGA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:N1OJBJFPSgc=:FMkY1pO7k+LU3hcjxHKckn
+ cOhJnvzSHrwoAObIS2YhWcc60lGG+JnrGdxw08DfVgSqEdrw/BJyQc27uUpnxse8nxzOXR+Ky
+ StSTWj4iVtwvph3QwIVMSYUKY1H+VMO+FNmHOQweZlJrw0IVGQbMkFjM9dW81vnAenH8aZE3N
+ xHkgUQsKfM3lTwXHHq40SX05Bxlmmvg8TTVtTFXFVgO8+pekl8c1dxZ/FDvwrrrKknkD5QIh4
+ 9iKlpn1WUvszXwbepHntUcXKpFoFzHTX8Y6gSVFz3Ha07+x4NqvKVpNmhXooZTw1q9xqd6ktt
+ GOOw/c39oHqBD7LjMN7/cobJgvboudMiEL8DkBGzbkUfR/UE17YLU9uVQQW7YPxGWn0lCsPmo
+ ZzbPrvguUNwuHI/K0xST5pytfdAxOP04hinJYnoDZ9eGiLgbEXvwphnfw/pcxekYHwFI8JHUl
+ NnlEuhCC9dNWRBCR5zYhaF+KyfZYEECGgDDN6Ldr4PXlBwGu9O+T4HXqjB1IQlys8+NZqC9YM
+ XLNrY3hjWx7d2EALYxDrr7ga4tiZN5Qg9WWpvJp/484eapILEH3il3qwlpHhMhPgcjd/SNyOQ
+ cMr0rrv/MChVgHJfDiAiJ9JjhMhd442Xf8NbBTGzst1qBazWZaBhOZ/EvElVicFIn2njIKVQu
+ Bu4linJbxQQ1KEiAmD4mSzOE6BA2v59T1Hk58mM0NDus5Stjy75Zu6clY/Vgaf4qlhIOxKRCW
+ c72Mjg7veczsFqD1
+X-Spam-Status: No, score=-94.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -61,42 +58,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 12 Jan 2022 18:45:02 -0000
+X-List-Received-Date: Wed, 12 Jan 2022 18:51:58 -0000
 
-On Jan 12 09:32, Brian Inglis wrote:
-> On 2022-01-12 03:18, Corinna Vinschen wrote:
-> > On Jan 11 23:04, Brian Inglis wrote:
-> > > Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.16 Gobble Gobble flags
-> > 
-> > Gobble Gobble?
-> > 
-> > Did I miss something or is that a preliminary subject line? :)
+On Jan 12 15:52, Jon Turney wrote:
+> Drop mention of 32-bit installer, since it's offically discouraged, and
+> planned to be dropped soon.
 > 
-> Linux 5.16 codename from rc3 which came out about US Thanksgiving; see
-> bottom of thread:
-> 
-> https://lkml.kernel.org/lkml/163789349650.12632.8523698126811716771.pr-tracker-bot@kernel.org/t/#u
-> 
-> noticed:
-> 
-> https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.16-rc3
-> 
-> from scripts monitoring cpuid usage and cpuinfo changes across releases:
-> 
-> diff -pu linux-prev/Makefile linux-next/Makefile
-> --- linux-prev/Makefile	2021-10-31 14:53:10.000000000 -0600
-> +++ linux-next/Makefile	2022-01-11 07:45:05.000000000 -0700
-> @@ -1,9 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  VERSION = 5
-> -PATCHLEVEL = 15
-> +PATCHLEVEL = 16
->  SUBLEVEL = 0
->  EXTRAVERSION =
-> -NAME = Trick or Treat
-> +NAME = Gobble Gobble
+> Adjust various references to be something more generic, like 'the Cygwin
+> Setup program' to accomodate this.
+> ---
+>  winsup/doc/faq-setup.xml | 12 +++----
+>  winsup/doc/setup-net.xml | 74 ++++++++++++++++------------------------
+>  2 files changed, 34 insertions(+), 52 deletions(-)
+> [...]
+>  <para>
+> -On Windows Vista and later, <command>setup.exe</command> will check by
+> +On Windows Vista and later, <command>setup</command> will check by
+              ^^^^^
+This will have to be changed for the master branch to mention W7
+instead.  Vista is a dead stinkin' fish at that time.  That reminds me,
+we have to do this throughout.  Do you want to or shall I?
 
-Heh, ok.  Thanks and pushed.
+Other than that, :+1: and push at your discretion.
 
 
 Corinna
