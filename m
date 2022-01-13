@@ -1,51 +1,40 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id B6E783858406
- for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022 19:25:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B6E783858406
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+ by sourceware.org (Postfix) with ESMTPS id 7C5FF394881E
+ for <cygwin-patches@cygwin.com>; Thu, 13 Jan 2022 12:29:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7C5FF394881E
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N1Ofr-1mMrrU12ap-012lKF for <cygwin-patches@cygwin.com>; Wed, 12 Jan 2022
- 20:25:07 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C8F2DA80B83; Wed, 12 Jan 2022 20:25:06 +0100 (CET)
-Date: Wed, 12 Jan 2022 20:25:06 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ae233132.dynamic.ppp.asahi-net.or.jp
+ [14.3.233.132]) (authenticated)
+ by conuserg-09.nifty.com with ESMTP id 20DCSLD6010973;
+ Thu, 13 Jan 2022 21:28:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 20DCSLD6010973
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1642076926;
+ bh=5KjYWcTifE0ucwm34IbODcOr6qzyi3TJWTyjR4eMtyE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=vS4K+FW3TbYsnJPXpbALvwmnaFAaXX/sM++bVDYfd6laTn28naIrey3KI/vGNri9c
+ 7ZUqlVTuS4qJ3gxjZjBDL2x6NJM66OvHOftunScsGsjayoqihHR520yw3VOC38uybx
+ /3nNODvikn5bb94kdMj9XPar5gy+RzVbTICNIzXHEvGh4ACaDcSzfdUFpaHcab/pAU
+ R8QlMZIr/eRDXPGh8NHDNOY+PR4Z6tqOx1VdCr/cp8K2CnSv5/betMl3BIUuaGq6D7
+ TKGZIA3+HEJOoDyCXWzdKK2HmmN5lDyk7UX/dIluoPRdu04bxdpsXFUqq1d5sgY+Fz
+ nI6vVLhD5U8FQ==
+X-Nifty-SrcIP: [14.3.233.132]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: doc: drop mention of 32-bit installer
-Message-ID: <Yd8rEsDBRyCL/2VE@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220112155241.1635-1-jon.turney@dronecode.org.uk>
- <Yd8jSyIZCPmkKd1E@calimero.vinschen.de>
- <31607842-7ac3-44ee-8099-ae53de5d1ed0@dronecode.org.uk>
+Subject: [PATCH 2/4] Cygwin: pty: Fix memory leak in master_fwd_thread.
+Date: Thu, 13 Jan 2022 21:28:09 +0900
+Message-Id: <20220113122811.241-3-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220113122811.241-1-takashi.yano@nifty.ne.jp>
+References: <20220113122811.241-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <31607842-7ac3-44ee-8099-ae53de5d1ed0@dronecode.org.uk>
-X-Provags-ID: V03:K1:IO8hnC5NBfOf+qwql+FfkX6pUo5JwT8tAnGYQjs1L74aT4cZH2Q
- MWyg7Zn2MJebQbKfMMTJEs4Gq2F+KOnN47UxgYlL87OCvIQl6iPP+uF7OPfgPQd6bZlWfRN
- Wo/CgErmgMhYPPSC/WuzsjtRaVUoFmjtCs99cSazGJ5lToEgSqercGDV16z3B+9Tjrgla4L
- y6qi2jtGb1xM7uafywDvQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0NG0EKJbIqw=:MtxmGnpOMrN8Q1gRNwMHTl
- tVwSZLbXTvBts7b44PSBstg2lI6AvTQd35+rzEvf3pVg3R/5l57tpL6V/wXkQPyjZQMCJpIVO
- VnCkORpabJsrSWPprmlIfMerjvYAh+qhFW1oE8AiwP+feJstse03D9cArjT0lqNTA/GCp4L0G
- ECUovdiQUnKcYX9kEyyDxH/4nHOD1BLpe9TcOZHrg2jSAFFN9FegoXE8R2MsAa46D+e/Zl9iJ
- SRqV4RTi2Vv5pgxgysQ4QALb4GVyL/1aJvg8Hkb5S/QaNuEObnzEU+XyzKB6WoWCEc1pgp/K9
- T70lKBazOSxnEvnYD18KgMgEXX+HTX7lUBWo7MfuvhuArfZYOoBxmBZSphCN63ztOK19oTd4C
- TwdFPD/+DSMzjMrNoj3oKHLryrel5/B7mcZy61K2xWudah8fbEPmTsWmz6ATr+hE/5MBM6gz5
- egzBUVPgtY4F9guL7DJYpgM/CCn2cctmVCLuQKTxB2KeFOyYw5Y57W1A50raB5x5CIluwoAm+
- YvPDEcLasqBoyfH5HAylEZgbJijvcNDlQpCqLAxJkNRpHmZKZbTokxjqQRuLpVMkmo9JGCkER
- WUckavDQrQy1yXGPv3UoAmXfXHsy5gqtnooaQYe4dcN2WBtZY5zmdHzFhhAodT0oDJgUf2/to
- JX2cJkiqKhi4uKWtlAE+ESxiam2lGl4kGOfvE4aAHeeSmIzas5Ebt6xZ46mQzP9prYUAKDgN4
- hGRPeOHvO3/uQXOy
-X-Spam-Status: No, score=-94.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,36 +49,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 12 Jan 2022 19:25:10 -0000
+X-List-Received-Date: Thu, 13 Jan 2022 12:29:07 -0000
 
-On Jan 12 19:17, Jon Turney wrote:
-> On 12/01/2022 18:51, Corinna Vinschen wrote:
-> > On Jan 12 15:52, Jon Turney wrote:
-> > > Drop mention of 32-bit installer, since it's offically discouraged, and
-> > > planned to be dropped soon.
-> > > 
-> > > Adjust various references to be something more generic, like 'the Cygwin
-> > > Setup program' to accomodate this.
-> > > ---
-> > >   winsup/doc/faq-setup.xml | 12 +++----
-> > >   winsup/doc/setup-net.xml | 74 ++++++++++++++++------------------------
-> > >   2 files changed, 34 insertions(+), 52 deletions(-)
-> > > [...]
-> > >   <para>
-> > > -On Windows Vista and later, <command>setup.exe</command> will check by
-> > > +On Windows Vista and later, <command>setup</command> will check by
-> >                ^^^^^
-> > This will have to be changed for the master branch to mention W7
-> > instead.  Vista is a dead stinkin' fish at that time.  That reminds me,
-> > we have to do this throughout.  Do you want to or shall I?
-> 
-> Please go ahead.
-> 
-> In this particular case, the leading clause can simply be dropped, since
-> "setup will check by default if it runs with administrative privileges ..."
-> describes the behaviour on all supported Windows versions.
+- If master_fwd_thread is terminated by cygthread::terminate_thread(),
+  the opportunity to release tmp_pathbuf is missed, resulting in a
+  memory leak. This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc | 6 +++++-
+ winsup/cygwin/tty.cc          | 1 +
+ winsup/cygwin/tty.h           | 1 +
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-Yeah, makes sense.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 16dbc5c0a..f68e80df9 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -2106,7 +2106,9 @@ fhandler_pty_master::close ()
+ 	      master_ctl = NULL;
+ 	    }
+ 	  release_output_mutex ();
+-	  master_fwd_thread->terminate_thread ();
++	  get_ttyp ()->stop_fwd_thread = true;
++	  WriteFile (to_master_nat, "", 0, NULL, NULL);
++	  master_fwd_thread->detach ();
+ 	}
+     }
+   if (InterlockedDecrement (&master_cnt) == 0)
+@@ -2695,6 +2697,8 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+ 	  termios_printf ("ReadFile for forwarding failed, %E");
+ 	  break;
+ 	}
++      if (p->ttyp->stop_fwd_thread)
++	break;
+       ssize_t wlen = rlen;
+       char *ptr = outbuf;
+       if (p->ttyp->pcon_activated)
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index e29d73dcb..789528856 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -254,6 +254,7 @@ tty::init ()
+   last_sig = 0;
+   mask_flusho = false;
+   discard_input = false;
++  stop_fwd_thread = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index 25d351a4a..519d7c0d5 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -132,6 +132,7 @@ private:
+   xfer_dir pcon_input_state;
+   bool mask_flusho;
+   bool discard_input;
++  bool stop_fwd_thread;
+ 
+ public:
+   HANDLE from_master_nat () const { return _from_master_nat; }
+-- 
+2.34.1
 
-
-Corinna
