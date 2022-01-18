@@ -1,52 +1,33 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-046.btinternet.com (mailomta22-sa.btinternet.com
- [213.120.69.28])
- by sourceware.org (Postfix) with ESMTPS id E3A343857C6A
- for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 20:01:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E3A343857C6A
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
- by sa-prd-fep-046.btinternet.com with ESMTP id
- <20220118200152.OVFP19171.sa-prd-fep-046.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 20:01:52 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 6139452E11B9946A
-X-Originating-IP: [81.129.146.209]
-X-OWM-Source-IP: 81.129.146.209 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgddufedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeffkeeigfdujeehteduiefgjeeltdelgeelteekudetfedtffefhfeufefgueettdenucfkphepkedurdduvdelrddugeeirddvtdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdefngdpihhnvghtpeekuddruddvledrudegiedrvddtledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.103] (81.129.146.209) by
- sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 6139452E11B9946A for cygwin-patches@cygwin.com;
- Tue, 18 Jan 2022 20:01:52 +0000
-Message-ID: <3f9f53a4-2fa3-34a0-93d4-fe67d59ac4bc@dronecode.org.uk>
-Date: Tue, 18 Jan 2022 20:01:36 +0000
+Return-Path: <lavr@ncbi.nlm.nih.gov>
+Received: from nihsmtpxwayst05.hub.nih.gov (nihsmtpxwayst05.hub.nih.gov
+ [165.112.13.52])
+ by sourceware.org (Postfix) with ESMTPS id 6311B3858D39
+ for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 21:34:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6311B3858D39
+X-SBRS-Extended: Low
+X-IronPortListener: non-ces-out
+X-IronPortListener: non-ces-out
+X-IronPort-AV: E=Sophos;i="5.88,298,1635220800"; d="scan'208";a="90473571"
+Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail2.ncbi.nlm.nih.gov)
+ ([128.231.90.73])
+ by nihsmtpxwayst05.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 18 Jan 2022 16:34:45 -0500
+Received: from mail2.ncbi.nlm.nih.gov (vhod23.be-md.ncbi.nlm.nih.gov
+ [130.14.26.86])
+ by mail2.ncbi.nlm.nih.gov (Postfix) with ESMTP id DF0811A0002;
+ Tue, 18 Jan 2022 16:34:44 -0500 (EST)
+From: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: resolver: A few fixes for cygwin_query()
+Date: Tue, 18 Jan 2022 16:34:34 -0500
+Message-Id: <20220118213434.35894-1-lavr@ncbi.nlm.nih.gov>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: Conditionally build documentation
-Content-Language: en-GB
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <DM8PR09MB70950BB104F774E1F959F7BEA5549@DM8PR09MB7095.namprd09.prod.outlook.com>
- <06431ef7-3239-b2e7-06c1-b9b4e4090df1@dronecode.org.uk>
- <DM8PR09MB70955355574135F9CB346D82A5559@DM8PR09MB7095.namprd09.prod.outlook.com>
- <6eeba4f9-6951-d018-cbee-7dc6e40c924b@SystematicSw.ab.ca>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <6eeba4f9-6951-d018-cbee-7dc6e40c924b@SystematicSw.ab.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3571.0 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
+ DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FROM_GOV_DKIM_AU,
+ GIT_PATCH_0, SPF_PASS, TXREP,
+ T_SPF_HELO_PERMERROR autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,22 +42,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 18 Jan 2022 20:01:55 -0000
+X-List-Received-Date: Tue, 18 Jan 2022 21:34:46 -0000
 
-On 15/01/2022 23:00, Brian Inglis wrote:
-> On 2022-01-15 12:06, Lavrentiev, Anton (NIH/NLM/NCBI) [C] via 
-> Cygwin-patches wrote:
->>> It is reported by 'configure --help', at the appropriate level (although
->>> since enable is the default, I probably should have written
->>> '--disable-doc' here).
->>
-[...]
-> 
-> It looks like it's not propagated to newlib-cygwin/configure, and 
-> newlib-cygwin/configure --help=recursive seems to loop recursing on 
-> newlib 4.2.0, so it's only shown by winsup/configure:
+- Make sure the answer buffer is properly cleared so there is no trailing
+garbage when the response does not fit entirely in;
+- Make sure an internal decomp failure gets reported correctly (w/return code -1);
+- Make sure that the buffer is not overrun when filling out the header.
+---
+ winsup/cygwin/libc/minires-os-if.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-In my testing, it seems that a top-level './configure --help=recursive' 
-terminates eventually, it's just that there are also configures in 
-subdirectories of newlib (for no good reason I know of), which makes it 
-spend a long time repeating mostly useless output...
+diff --git a/winsup/cygwin/libc/minires-os-if.c b/winsup/cygwin/libc/minires-os-if.c
+index bb6786f6c..c4183db9c 100644
+--- a/winsup/cygwin/libc/minires-os-if.c
++++ b/winsup/cygwin/libc/minires-os-if.c
+@@ -193,6 +193,8 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
+   dnptrs[0] = AnsPtr;
+   dnptrs[1] = NULL;
+ 
++  memset(AnsPtr, 0, AnsLength);
++
+   if (Class != ns_c_in) {
+     errno = ENOSYS;
+     statp->res_h_errno = NETDB_INTERNAL;
+@@ -214,7 +216,7 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
+     switch (res) {
+     case ERROR_INVALID_NAME:
+       errno = EINVAL;
+-      statp->res_h_errno = NETDB_INTERNAL;;
++      statp->res_h_errno = NETDB_INTERNAL;
+       break;
+     case ERROR_TIMEOUT:
+       statp->res_h_errno = TRY_AGAIN;
+@@ -259,8 +261,9 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
+       /* No question. Adopt the first name as the name in the question */
+       if ((len = dn_comp(rr->pName, ptr, AnsLength - 4,
+ 			 dnptrs, &dnptrs[DIM(dnptrs) - 1])) < 0) {
+-	ptr = NULL;
+-	break;
++	statp->res_h_errno = NETDB_INTERNAL;  /* dn_comp sets errno */
++	len = -1;
++	goto done;
+       }
+       ptr += len;
+       PUTSHORT(Type, ptr);
+@@ -289,11 +292,13 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
+ 
+   len = ptr - AnsPtr;
+ done:
+-  ptr = AnsPtr;
+-  PUTSHORT(0, ptr); /* Id */
+-  PUTSHORT((QR << 8) + RA + RD, ptr);
+-  for (section = 0; section < DIM(counts); section++) {
+-    PUTSHORT(counts[section], ptr);
++  if (HFIXEDSZ <= AnsLength) {
++    ptr = AnsPtr;
++    PUTSHORT(0, ptr); /* Id */
++    PUTSHORT((QR << 8) + RA + RD, ptr);
++    for (section = 0; section < DIM(counts); section++) {
++      PUTSHORT(counts[section], ptr);
++    }
+   }
+   return len;
+ }
+-- 
+2.33.0
+
