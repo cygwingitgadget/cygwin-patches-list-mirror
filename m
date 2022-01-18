@@ -1,48 +1,47 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id C567D385801F
- for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 10:32:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C567D385801F
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id CCA183858D39
+ for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 10:50:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CCA183858D39
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N0WPK-1mMBPS02ia-00wYeZ for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022
- 11:32:50 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N3sZy-1mA8zK1eoi-00zpwY for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022
+ 11:50:18 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 40107A8096F; Tue, 18 Jan 2022 11:32:49 +0100 (CET)
-Date: Tue, 18 Jan 2022 11:32:49 +0100
+ id DC016A8096F; Tue, 18 Jan 2022 11:50:17 +0100 (CET)
+Date: Tue, 18 Jan 2022 11:50:17 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] Cygwin: resolver: Process options forward (not
- backwards)
-Message-ID: <YeaXUdGyYg3uirHv@calimero.vinschen.de>
+Subject: Re: resolver //Was: [PATCH 3/7] Debug output to show both IP and
+ port # in native b.o., a few little cosmetic improvements for consistency
+Message-ID: <YeabaaciPOzsMUBp@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220117180314.29064-1-lavr@ncbi.nlm.nih.gov>
- <20220117180314.29064-3-lavr@ncbi.nlm.nih.gov>
+References: <DM8PR09MB70952595CA9E93D575F033F9A5579@DM8PR09MB7095.namprd09.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220117180314.29064-3-lavr@ncbi.nlm.nih.gov>
-X-Provags-ID: V03:K1:NkSammYISyVdtQSUSaYPrpR7NoS03HXf8Rvt9njfgkG81JdoeeN
- 6WyS6O7bww+exjSzHZkLd3XOWwNDLgbbTNjRLBRtzSr+P+4RU0FMNEzwY+5AtyoIEU/2hkJ
- E9mbxilITGdKMVltok2qazb7xClrePLe6+nT8h0+QFVTw58y0jOWCBD0y+fJ1gmzJYHFokU
- SEgeTvMk/6TeHX+kf/mxQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fY08pv9KyjI=:hEIQzYYA5N38Zw8Fqwc1ba
- UqDxjAfinsxGeFVWNPz7K7VyxyFHmV4Y6t2yu2SEPOQyfTk9K2xi8u1U1E4lbcRheYC2dEOxf
- gxGHn2eJ8WzgYQPEXvskTGA6A1N6/4QT4Ut0yGbuTJ3qnyjPhfWRnyQM0aXZ/C3EBOX2UAwaj
- S+f8n3GxT1PBbZwRWt4nfDQt49RaAaG7dp1r5j3xgBn613tplHppy7vanEqVftPb0QcLAIf6h
- tSqju8OvyXjv/NIzicCmxmQWye+Cv++48XLGhAZCTevDWeziSQPCuhw7xhnIBXgbrYA5HQR9c
- /xrMVIP5VciDpeq05GKYYkUQFMaokU01eRlnHPfxv6ZO/BXcooQEkSvJerXcnGsKghvj7LicV
- 6jY1V5oSvoSY/at7RMS/e9QKKq4IVv3TT0sFnpKE38DDJcAk0n9iCSqqt0b10XyiWUvPwGOsm
- M0R+ORqHaqWQ2LwZXP4VO00juvZdQ/++XZkEOELtjem1595Cbp8oBgYszOrKII2sZF9iOzkpC
- 4DIploUWdNepY6ZDwARmvvwPC44oRpsFcsPy+O40rwIsHO423kVLW/F0uv0wODrwXc5r24QwZ
- 0GO6fe/kRv0EOujs2PzCG9KLeDRVT/5IIVZo/3jfwk1EA6jRy52xj02mtYkiKxMsUZH3ghcOe
- e7UGQkrnH2uIqq1VwEepXADxyOkTjb2AdLfX5ytwnAGUbqXSPRvcTNoAfgxcOsyKnErZeFmuf
- pUnvnhYBPGIsHsaj
-X-Spam-Status: No, score=-102.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <DM8PR09MB70952595CA9E93D575F033F9A5579@DM8PR09MB7095.namprd09.prod.outlook.com>
+X-Provags-ID: V03:K1:m9m/e8wiy8CPxX2LiXEkVTNaegV0kOTMksM9DTOEZVglf+7hZKq
+ LFEQH63rzd9RkfnL6Q0sxH7SJF+65LzCbZw5K5zZQBFWp+lvfSYu0fdTuaeXbDwYp9bBXEw
+ iYAegRNHJPSDoLXpyOM9q2I6p4wi57+4KN7/vRmnk5Zh9JfBoT46aUCOcivlCTvjVh+4Lpl
+ 3JzvcjXUyPituMDx+RPGA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gdOw93SpNVQ=:jTyPyS1B6ere7jGXMIlZtv
+ 5KzTLDYHXfQ+JJW6fP5tTHfsCCFLRP2g1rtcQffQpUiXH+cUIZpnTXQ7C7ubyI1C7MtKg6sK9
+ Y5StrEQJRWX1deq5a1p/CDXR2QypT4sZEs3Cs4IxluacXz2xoU4vLzPlURMFmg5RL2rDFZ9LW
+ kPdNpRkAmzSFmb4G3G/HFHUwepAYdTfUqezSFSfFFcafVWm1fYAXJUz+SecESJwVsCgqtvG0y
+ COguycopt+sm2EzCT2qi6Nk/3yN21+AfBzU6SyqM87wLDEsAg3OfuWaj/ru+VEJt692FhR/J9
+ fd52qn553y8ZdQVLQUAoC2I2KRd70UPQTY58fZjV+26daGbiEGhSFO0oAUsDDV7FHQxxvYe+N
+ Qo8g8rpIdk26cXwr4DN3cQTnnXWc55XQLj2aaIEm3HOE6+6dwht0u72+tesrqjStokQM5AIoU
+ 7M0S/FR4hl2w8jvJ+41ODXYIQym3fAAI4JirYFJlX7JAmmAYFU6IpyJoftlFLSuG9pXPbJn8d
+ uyifPQEd491KEcH6OYBF7T4yBBi5iTJQraBDv5MfmRj5GT0XmAsJLNhxYYkqOsMMsropdcmhB
+ cjXaIdcfKlH5D3b8hkN8UXzZB7lQ5pJk5GMTdqKmGdV/jkimzxxa+gBlpm/aUvvb5H0d4tsuS
+ h57cCjDb3p/dpHbh7sce0Nb+oHByNGiLsL1DtQQ6FatopquwtgjnCzWzjH80JszLLGn4MLoE3
+ 1+WyQKpGyxIxc72W
+X-Spam-Status: No, score=-96.5 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
@@ -60,57 +59,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 18 Jan 2022 10:32:53 -0000
+X-List-Received-Date: Tue, 18 Jan 2022 10:50:21 -0000
 
 Hi Anton,
 
-I pushed patches 1 and 3 to 5.  I fixed the consitency typo
-throughout.
-
-As for this path 2:
-
-On Jan 17 13:03, Anton Lavrentiev via Cygwin-patches wrote:
-> ---
->  winsup/cygwin/libc/minires.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+On Jan 17 18:29, Lavrentiev, Anton (NIH/NLM/NCBI) [C] via Cygwin-patches wrote:
+> Hi Corinna,
 > 
-> diff --git a/winsup/cygwin/libc/minires.c b/winsup/cygwin/libc/minires.c
-> index 0cf9efd9b..fdc6087f5 100644
-> --- a/winsup/cygwin/libc/minires.c
-> +++ b/winsup/cygwin/libc/minires.c
-> @@ -86,12 +86,12 @@ Read options
->  
->  
->  ***********************************************************************/
-> -static void get_options(res_state statp, int i, char **words)
-> +static void get_options(res_state statp, int n, char **words)
->  {
->    char *ptr;
-> -  int value;
-> +  int i, value;
->  
-> -  while (i-- > 0) {
-> +  for (i = 0;  i < n;  ++i) {
->      if (!strcasecmp("debug", words[i])) {
->        statp->options |= RES_DEBUG;
->        DPRINTF(statp->options & RES_DEBUG, "%s: 1\n", words[i]);
-> @@ -208,8 +208,10 @@ static void get_resolv(res_state statp)
->  	}
->        }
->        /* Options line */
-> -      else if (!strncasecmp("options", words[0], sizes[0]))
-> +      else if (!strncasecmp("options", words[0], sizes[0])) {
->  	get_options(statp, i - 1, &words[1]);
-> +	debug = statp->options & RES_DEBUG;
+> > Other than that, the remaining patches look good, except, adding a short
+> > description what patch 7 does to the commit message would be great for
+> > later readers of the git log.
+> 
+> I resubmitted the patches with a little improvement and a better description
+> to the #7 (now #5) as requested.
 
-This addition setting the debug flag needs a bit of explaining in the
-log message, me thinks.  Why was it necessary or why is it better to do
-it here?
+Thanks!
 
-Right now, the debug flag gets set in several places throughout the
-code.  Given you set the debug flag above, doesn't that mean several
-code snippets setting the debug flag later in the code can go away?
+> While doing the code review afresh in there, I noticed a few more problems:
+> 
+> 1.
+> minires-os-if.c on line 262 does this:
+>     262         ptr = NULL;
+>     263         break;
+> 
+> and then a bit later this:
+>     290   len = ptr - AnsPtr;
+> 
+> which makes the return value "len" to be a total nonsense (I think it
+> should return -1 in this case, but it's debatable).
 
+I don't think it's actually debatable.  The statp->os_query call should
+return the same kind of reply as the calling res_nsend/res_nquery.  The
+return values of this function calls are used unfiltered.  Therefore
+the above snippet needs fixing and, along the same lines, it should
+set statp->res_h_errno to a useful value.
 
-Thanks,
+> 2.
+> Also, "ptr" in the cygwin_query() function is not checked for buffer
+> overrun in the "done:" section of the code (after line 291), which is
+> not good IMO.
+
+ACK
+
+> 3.
+> Lastly, at other places where "ptr" is checked for overrun (notably,
+> in write_record()), it can leave garbage in the unfilled portion of
+> the answer buffer (because it still advances "ptr" properly, to
+> calculate the final "would-be" size of the response): so if the return
+> value is greater than the passed "AnsLength", the user cannot assume
+> that at least all AnsLength bytes were filled correctly.  They cannot
+> actually assume any "boundary" where the "Ans" buffer was actually
+> stopped being updated.
+> 
+> Maybe "Ans" should be cleared upon entry?... But that would mean
+> double-write of the buffer in most of the use-cases (where no overflow
+> actually occurs because of an adequate size of the buffer).
+
+Either that or fill the reminder of the buffer with 0-bytes.  Clearing
+upon entry is a simpe and good choice, IMHO.  Yeah, it might take
+a tiny little bit longer, but it's a safe choice.
+
+Thanks for looking into this!
 Corinna
