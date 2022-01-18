@@ -1,49 +1,49 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 9A62A3858D39
- for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 11:05:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9A62A3858D39
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id A90BB3857C46
+ for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022 11:05:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A90BB3857C46
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MyK9U-1mONhS3Ttk-00ygRt for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022
- 12:05:02 +0100
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MIbzB-1n4ZE71MOL-00EeRC for <cygwin-patches@cygwin.com>; Tue, 18 Jan 2022
+ 12:05:22 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id CBF92A80BAE; Tue, 18 Jan 2022 12:05:01 +0100 (CET)
-Date: Tue, 18 Jan 2022 12:05:01 +0100
+ id 596A3A8096F; Tue, 18 Jan 2022 12:05:21 +0100 (CET)
+Date: Tue, 18 Jan 2022 12:05:21 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] path_conv: do not get confused by a directory with
- `.lnk` suffix
-Message-ID: <Yeae3ZsFhRZgo/gS@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: fhandler_base: Fix double free caused when
+ open() fails.
+Message-ID: <Yeae8aAALPev8KvG@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <e4230b2bc45903850a4007c6f556bffe1507cc9e.1642450788.git.johannes.schindelin@gmx.de>
+References: <20220117230507.387-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e4230b2bc45903850a4007c6f556bffe1507cc9e.1642450788.git.johannes.schindelin@gmx.de>
-X-Provags-ID: V03:K1:zEZckAlSP4zAYhEnhxVROwC2bgJUGqw7IT2X2rl940pN+yWAvA/
- QNrHd1d8aizJjCMFO1jT+9yV4cQROo9QuCFTDVOjej5t1V9j9QCc7WrTRvKNkxQbk5a90N6
- BPfeEELDQiUwuMBe7x5dpMhc/pQn2cO/J6zQUaayYbCdWSSE/t5izBDQdS9U7srQIhT1hKH
- 2gX+FJJiJ3QLtYgxSA+aw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PhoHH3jyXmY=:vUhOwkRQIACcv3we3q3vr4
- dZo3mGUiex0J7IPGyYyFxfJCeY1dnOlrD9/N33RIP8BnjWwJ8VJbSoQJu9NnCIhA7vfIPp781
- lZNg+sjacaWqDxToEh900I3MuMrFctYOPaoIKIwBS/la+KWFa3mZbcWq8smt2ANXwcWarbpXs
- 1DacPcFlJQc5g/kO7HRCf7eA+ZLsJq7Mw7yLsaEW4d5q4y82T6aCc1TRMlL0bkGxqAiWkrhCL
- kmieMYRC4mjbt1v3P64HtotQf/EdDizY3ZhRX890i056MhX4gfaat/uNCXzzyQ3jmwN22jOpb
- o9oa8T3hOPpVVL502YoAp8R9QQaLjavV6FwGOu8OcR8vRnH9YL12m4QjLXLzpAjHJlnqbtkj5
- 50Ut+vzQZyly9bLYN2/Xr4tVEDYk+VMMPHsSrEyQu5C7XYU6gdsLmq89owGK0ki2hzuXpbug/
- W8L6hRKimRHAmcHcX3KeVAT5zB9LRBRyVGQ8hdqZo6GPowy+kf1td4G/U5+B0dFqnMSJmvDVY
- 50QevVWtO0Qe3W4FSrY0nd+TycTC08TdNqrSCQaPd70nFTQJl10InPi4kvnvbSa0EOJSfX3r5
- pRxsTD0odQWGnlaNDo8Jju7KTEW7cHAkq/SqYz9cp/h9Rk+g6e/d09tVmvNh4pAt9VUygdOI7
- 8MO0G+lQOv4oHNaB0U2pXNg5+MfJh0TKX5IdR+MBi1A6hEsV4y5+FJOuBwCgwh6SRKcOaRbTw
- LvbEhODoO/GrpabL
-X-Spam-Status: No, score=-96.6 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220117230507.387-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:o3+4d5uy67I5ThwMViukSVefrb1l10tNFZwkBuho5XWzZnPvJMc
+ TEsYmYHFZ5YV8r20wzPu97BthwpxmI/0w4+G3eX1I4tQHWfoEVJGgxO0pF4GFAEeHm0mnMf
+ xthV28K0MXNFPtpnroRzCP5Hxm0qzuVmvI6Ka5B2keebuW6b8m4//t+4oo3S01/wUy0PqbX
+ /X5VJgA3Llo4eKrBvE5IA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eFx58rWYpb0=:MvxiUqlsQo4C9H9S6UEm+E
+ O8byYmvdtvT0gpLFsTaDJlAFeOpGcCMzvmOFujC5G4Ty7vKs8yuasOgUwAt8TXILUTBzFhi5R
+ yLxt+Xhp30SRgTiC10+Z+EKmwtUhcbLbTjVN5CKjdptemHXwFoCpNtp4h8U6W1PqeQMyTI8NS
+ EwVLgpjODr09xbK+Dv8hwYZnNAHLS7RXlOM+jHqmsNL76H/h2X7kKwWfEdqQ+L/BwTbkZnR+L
+ HPwctjpEkSJZJcO6hatp77lQ+r+xApM/sgU55ylRBluTbPKTz5Jd7BzUdp16D3I+l+xHnoXaj
+ 9brnCfd/+xD8CbA9+UYsM61CW2V3zHZvl0RP9GUqtEI/kHMyVEJHl+z8QbAdylgrwkzI1ih8F
+ 8kxnGMdNBzCk/sPj2prJLAoKqRFsY0Src3mnweBevS52UsFG073HiUiToE2A5j2Pv0kdTv9t5
+ loa3y6l+5Hb10xX0NGyqAFM3R6UthEbHcVhN6tMgI2Xhxs9YcHSBi9heLWoHrEP6Uw1B5DwPy
+ OU0m9bBIx5SJzf70UKKefuIlf7fRAR5fdEtce9436gx0JpLM/H1feSKzIIrNGhg/3Wp45AtfW
+ Qel4tNaKDSgiktnSU2l75e5Mp8bJxc7f2jYLyAlrUBNhaGun7rYDYXGOYhJlLBk71H9LJkHCo
+ j4ZAxcBLqFd+23fuNP29DQfnRsPhMcNgcqd180WqkaEb7bCS9STiGqbimsRuqaZYDEGGOvyRX
+ SbfytFXV616nU41f
+X-Spam-Status: No, score=-96.7 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -59,32 +59,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 18 Jan 2022 11:05:08 -0000
+X-List-Received-Date: Tue, 18 Jan 2022 11:05:27 -0000
 
-On Jan 17 21:20, Johannes Schindelin wrote:
-> When trying to create a directory called `xyz` in the presence of a
-> directory `xyz.lnk`, the Cygwin runtime errors out with an `ENOENT`.
+On Jan 18 08:05, Takashi Yano wrote:
+> - When open fails, archetype stored in archetypes[] is not cleared.
+>   This causes double free when next open fail. This patch fixes the
+>   issue.
 > 
-> The root cause is actually a bit deeper: the `symlink_info::check()`
-> method tries to figure out whether the given path refers to a symbolic
-> link as emulated via `.lnk` files, but since it is a directory, that is
-> not the case, and that hypothesis is rejected.
-> 
-> However, the `fileattr` field is not cleared, so that a later
-> `.exists()` call on the instance mistakenly thinks that the symlink
-> actually exists. Let's clear that field.
-> 
-> This fixes https://github.com/msys2/msys2-runtime/issues/81
-> 
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> Addresses:
+>   https://cygwin.com/pipermail/cygwin/2022-January/250518.html
 > ---
-> Published-As: https://github.com/dscho/msys2-runtime/releases/tag/dont-confuse-a-xyz.lnk-directory-for-a-lnk-file-cygwin-v1
-> Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime dont-confuse-a-xyz.lnk-directory-for-a-lnk-file-cygwin-v1
-> 
->  winsup/cygwin/path.cc | 1 +
->  1 file changed, 1 insertion(+)
+>  winsup/cygwin/fhandler.cc   | 4 ++--
+>  winsup/cygwin/release/3.3.4 | 3 +++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
-Pushed with adeded "Cygwin:" tag in commit summary.
+Yup, please push.
+
 
 Thanks,
-Corinna
+corinna
