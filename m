@@ -1,33 +1,49 @@
-Return-Path: <lavr@ncbi.nlm.nih.gov>
-Received: from nihsmtpxwayst05.hub.nih.gov (nihsmtpxwayst05.hub.nih.gov
- [165.112.13.52])
- by sourceware.org (Postfix) with ESMTPS id 7A77A3858409
- for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 00:08:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7A77A3858409
-X-SBRS-Extended: Low
-X-IronPortListener: non-ces-out
-X-IronPortListener: non-ces-out
-X-IronPort-AV: E=Sophos;i="5.88,298,1635220800"; d="scan'208";a="90495286"
-Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail2.ncbi.nlm.nih.gov)
- ([128.231.90.73])
- by nihsmtpxwayst05.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Jan 2022 19:08:11 -0500
-Received: from mail2.ncbi.nlm.nih.gov (vhod23.be-md.ncbi.nlm.nih.gov
- [130.14.26.86])
- by mail2.ncbi.nlm.nih.gov (Postfix) with ESMTP id 0DE9C1A0002;
- Tue, 18 Jan 2022 19:08:11 -0500 (EST)
-From: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id 8A07D385780E
+ for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 07:55:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8A07D385780E
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M8QNs-1nEVez1EG0-004XFv for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022
+ 08:55:37 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 7B241A80D5F; Wed, 19 Jan 2022 08:55:36 +0100 (CET)
+Date: Wed, 19 Jan 2022 08:55:36 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: resolver: A few fixes for cygwin_query(), part 2
-Date: Tue, 18 Jan 2022 19:07:55 -0500
-Message-Id: <20220119000755.1324-1-lavr@ncbi.nlm.nih.gov>
-X-Mailer: git-send-email 2.33.0
+Subject: Re: [PATCH] Cygwin: resolver: A few fixes for cygwin_query(), part 2
+Message-ID: <YefD+DEki2DpBx2+@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220119000755.1324-1-lavr@ncbi.nlm.nih.gov>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FROM_GOV_DKIM_AU,
- GIT_PATCH_0, KAM_NUMSUBJECT, SPF_PASS, TXREP,
- T_SPF_HELO_PERMERROR autolearn=ham autolearn_force=no version=3.4.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119000755.1324-1-lavr@ncbi.nlm.nih.gov>
+X-Provags-ID: V03:K1:6dtKnaacBJDc+rQiwG/OqXj/b1j7Wrgu/XmLpvB5sDS777b/e0j
+ r9bW9nDCvr6Dd944toUoCtCYGSUezA1Mdwe9OFUd/3S7LX5BueO3RG4RyJHaEnbNq38GRYg
+ OXe1T6qawxXQ/s596idBd3HLQ6Utg2Fy3dOH7fLHZp/0V0OvzNBNX0JIzoRj0Jb7s8yKw1o
+ LjnsEfRnlYaDAVwbrqoXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CQUjrdHkI5o=:LQZFppdLZVfuR2PwIAxgPf
+ K3Dym6FeUzVFQCMx5qGJ+He76hDzbA258NDLgPqxKFytxavEK46vVS9opRbyB+9WxH0jmB3DV
+ OpYzGUr6g1l4xxh6rCgBu1z1S10e76xuR+hYsh5R4Yzv0ZYeTZnBLp6PHmT/1OSPT0M5d37yH
+ Gjl6M5WHf69f2L3hKkicwqG9tuCqB+Fg118AIYZyYw23nRvVaXNnI01+qwcVNnxCZENdUAqWD
+ rFEuPtr6bzzd9qfjC5ZOP5ucNBTfAtO3Eaquk7QFyd7oAhdzf8zDn53vvnlJjmcT1bH4LDYCx
+ 0auJMhgsMHa73dRL/aUxD3C2KPsKDC9zx0wVHX25A1Ob5zhzCQ2B/Abt9pWAlXEhSp5VS16iL
+ vPU2Pd5Jb3TDQVdtr9U8KnETp7BKIPrqUE9xWbPbsb2Nl/NakeqaYm+7tkggGcsXctGd2F9A0
+ 7iEfaHBONXuy8b6d3zv4JzwFeaeRttKY/EYw7T33v8ooc00/cP35Qg8MbYe0XeZZzOK5R/QdF
+ xVj2y2wa+boEHm5Q+710i711aCDHWfiz5CYvQJycG53AW4+gl47YkIez09hhDvDQD7m67YSTu
+ GN4vET9U7Lv4gblK6qSTFHDOECMd8f94UoMOsHUrHsTH7zkjkxPR/yhTisjWrfq0DKQmFtncJ
+ V1S2PVdvRkhR6BPddwTqwe2kaPUuuOrgh8R1k0UaYMu6m+3S9QafQ45VDhQ6QF6nxnXs64Ygs
+ ijMjU2E0IDywp4ux
+X-Spam-Status: No, score=-96.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL,
+ SPF_HELO_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -42,42 +58,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 19 Jan 2022 00:08:13 -0000
+X-List-Received-Date: Wed, 19 Jan 2022 07:55:40 -0000
 
-Make sure Windows ResultSet is free'd when dn_comp failed internally
----
- winsup/cygwin/libc/minires-os-if.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Jan 18 19:07, Anton Lavrentiev via Cygwin-patches wrote:
+> Make sure Windows ResultSet is free'd when dn_comp failed internally
+> ---
+>  winsup/cygwin/libc/minires-os-if.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/cygwin/libc/minires-os-if.c b/winsup/cygwin/libc/minires-os-if.c
-index 5da1c0c55..c6fde776a 100644
---- a/winsup/cygwin/libc/minires-os-if.c
-+++ b/winsup/cygwin/libc/minires-os-if.c
-@@ -246,8 +246,7 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
-       statp->res_h_errno = NO_RECOVERY;
-       break;
-     }
--    len = -1;
--    goto done;
-+    return -1;
-   }
- 
-   ptr = AnsPtr + HFIXEDSZ; /* Skip header */
-@@ -293,10 +292,12 @@ static int cygwin_query(res_state statp, const char * DomName, int Class, int Ty
-     rr = rr->pNext;
-   }
- 
--  DnsFree(pQueryResultsSet, DnsFreeRecordList);
--
-   len = ptr - AnsPtr;
-+
- done:
-+
-+  DnsFree(pQueryResultsSet, DnsFreeRecordList);
-+
-   if (HFIXEDSZ <= AnsLength) {
-     ptr = AnsPtr;
-     PUTSHORT(Id, ptr);
--- 
-2.33.0
+Great, thanks!  I pushed all your resolver patches.
 
+
+Corinna
