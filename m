@@ -1,49 +1,42 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 04CD73858401
- for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 14:39:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 04CD73858401
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta002.cacentral1.a.cloudfilter.net
+ (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+ by sourceware.org (Postfix) with ESMTPS id 107CC3858421
+ for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 19:12:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 107CC3858421
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MqatK-1mWiUz0KxM-00maW0 for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022
- 15:39:29 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id A9296A80D67; Wed, 19 Jan 2022 15:39:28 +0100 (CET)
-Date: Wed, 19 Jan 2022 15:39:28 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Silence more build rules
-Message-ID: <YegioLvRwD4+T3PF@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220119131521.51616-1-jon.turney@dronecode.org.uk>
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+ by cmsmtp with ESMTP
+ id A7ScntqG5yr5HAGNOns7XQ; Wed, 19 Jan 2022 19:12:10 +0000
+Received: from [192.168.1.105] ([68.147.0.90]) by cmsmtp with ESMTP
+ id AGNNnHYTpUcbnAGNOnbYiP; Wed, 19 Jan 2022 19:12:10 +0000
+X-Authority-Analysis: v=2.4 cv=OO00YAWB c=1 sm=1 tr=0 ts=61e8628a
+ a=T+ovY1NZ+FAi/xYICV7Bgg==:117 a=T+ovY1NZ+FAi/xYICV7Bgg==:17
+ a=IkcTkHD0fZMA:10 a=94nOnFI1EgyDtX4ev68A:9 a=QEXdDO2ut3YA:10
+Message-ID: <41c0e46f-bbd3-6e7a-e433-66fa94f95187@SystematicSw.ab.ca>
+Date: Wed, 19 Jan 2022 12:12:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220119131521.51616-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:0hIiPs1OZMWbKP1nJBlxDcFvUIo1RMjvWsDuj6oJximsit45+ts
- m6eluoT1JUkomP/ihS3GkabVKMn+s7FQVl20PnD84TwWv122AyOucqWZBWJ6S+HW0ddni1o
- UqXCk/MvZtQwqdx1XVju5qX/HbopRfStnIoQVcQbOfugBUiUopYeXTjwl6ihJDQeTSSDYd/
- TEuJPC24WzB8r3Miv82gA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SHEjtYhZzHg=:F57K8B08Fxx/QzwMpI2zwO
- w7c5E7lnoPYjONWN5HFNB/XMe6fwXTOyUU4NU2W8NFDSqSgCUzMAQkz8ybwbg+GZKaxv4YoCU
- Hxf9Gbx5OdNhKDFyajdtl7D0Z/gW9IbqSVA5T88+h4mXfOCzP1sjzayqOC93HQsunKGs8qiTM
- 5RtJKkVVKJPXJICJJqtm5IzOimZvvHzFO+Nq+FM/gTz57Crumk2Dy/4/dgAPTfwdFZQh3MKnI
- +ntSFSfUuULB1UP4OfInU8MzSf36zip1A87VaKSWTumYUtltl2UX870SNXPOFFyX524mLklrA
- 1ex7QXTZUt12Q03dWbUV7ZkuZP6tEvbWTI8Zco36U+Jlw1z4jCUOq3MpU4409Pp+t9Q8MUQav
- U64r8WulwxmBswga98rB85lfgJPdxXJi7y3uk+nfTYrgtrTKRRVMnL+BTAib7de/7mxPmRivS
- pCXo2pgRyeMQUiJZRrNXiRXdgq35e+gCALj9m6EnBOUQXKfUCCTsB5E9avJZT0e5txflEnJm2
- BsK3lKxiXGHNGj2jXdPKT8T8rq1xGN+CjHeFCZ/sDpLbJfpN0pvW7CBYIHoCbJO5TWax06zWg
- /rtBOdN517/niCHmGnoY+QPQj+0u+nJgtH3rDqQxlqfEmCXlzkbyspAO4zyHzXM28yczUvAXh
- 6T6+sviZnA/o06MlR7aaBuUD7x7r4s50OVv98nD7sVaN1brzd/xQMF/RPfg5EvTDhMQt4ERMO
- vLWu3W7DCnXqCUEm
-X-Spam-Status: No, score=-97.2 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H4,
- RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 0/4] Silence more build rules
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <20220119131521.51616-1-jon.turney@dronecode.org.uk>
+ <YegioLvRwD4+T3PF@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+In-Reply-To: <YegioLvRwD4+T3PF@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKhHBJLS71zJsUaVqIIr8pjmf1LgSbyKR9zp+XDzxakw34hVzzmrokY8Rxa9rMCGxVGo6nD2R/EmUkqY2o7FUq9+dlJS8VRaa+9WQdgX7VFiM7svnrjo
+ N1JIBN4wJMX2JZ76WFh0TMseQhx8jYXNYpPDeje8xNo5P22/h/4FXYw4AKe84zTeTsUS7UJz6VhJY/PGrUQ3CKIFGXyGjkVZNck=
+X-Spam-Status: No, score=-1160.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,21 +51,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 19 Jan 2022 14:39:32 -0000
+X-List-Received-Date: Wed, 19 Jan 2022 19:12:12 -0000
 
-On Jan 19 13:15, Jon Turney wrote:
-> Jon Turney (4):
->   Cygwin: silence most custom build rules
->   Cygwin: silence dblatex when building PDFs
->   Cygwin: silence xsltproc when writing chunked html
->   Cygwin: silence xsltproc when writing manpages
-> 
->  winsup/cygwin/Makefile.am | 38 ++++++++++++++++-----------------
->  winsup/doc/Makefile.am    | 45 ++++++++++++++++++++++-----------------
->  2 files changed, 45 insertions(+), 38 deletions(-)
+On 2022-01-19 07:39, Corinna Vinschen wrote:
+> On Jan 19 13:15, Jon Turney wrote:
+>> Jon Turney (4):
+>>    Cygwin: silence most custom build rules
+>>    Cygwin: silence dblatex when building PDFs
+>>    Cygwin: silence xsltproc when writing chunked html
+>>    Cygwin: silence xsltproc when writing manpages
+>>
+>>   winsup/cygwin/Makefile.am | 38 ++++++++++++++++-----------------
+>>   winsup/doc/Makefile.am    | 45 ++++++++++++++++++++++-----------------
+>>   2 files changed, 45 insertions(+), 38 deletions(-)
 
-Yesss!
+Hopefully these are now changed to be the helpful type of build rules 
+that output only "CC foo" when commands work and show the complete 
+command line and diagnostics when commands err?
 
+Or do we have to now have to rerun with V=1 to see error diagnostics?
 
-Thanks,
-Corinna
+Some tests can be particularly obscure when hunting down the command 
+responsible and output resulting from failures: others DTRT!
+
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
