@@ -1,43 +1,49 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-047.btinternet.com (mailomta18-sa.btinternet.com
- [213.120.69.24])
- by sourceware.org (Postfix) with ESMTPS id 6F23F3857829
- for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 13:16:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6F23F3857829
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
- by sa-prd-fep-047.btinternet.com with ESMTP id
- <20220119131606.UHAI16049.sa-prd-fep-047.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
- Wed, 19 Jan 2022 13:16:06 +0000
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 613006A912DF46DD
-X-Originating-IP: [81.129.146.209]
-X-OWM-Source-IP: 81.129.146.209 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudehgdegkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekuddruddvledrudegiedrvddtleenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduvdelrddugeeirddvtdelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.129.146.209) by
- sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 613006A912DF46DD; Wed, 19 Jan 2022 13:16:06 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 6BBD93858401
+ for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022 14:32:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6BBD93858401
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M4K6z-1nAT7Z3scD-000MMi for <cygwin-patches@cygwin.com>; Wed, 19 Jan 2022
+ 15:32:08 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 316A1A80D67; Wed, 19 Jan 2022 15:32:08 +0100 (CET)
+Date: Wed, 19 Jan 2022 15:32:08 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 4/4] Cygwin: silence xsltproc when writing manpages
-Date: Wed, 19 Jan 2022 13:15:21 +0000
-Message-Id: <20220119131521.51616-5-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220119131521.51616-1-jon.turney@dronecode.org.uk>
-References: <20220119131521.51616-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH] Cygwin: resolver: cygwin_query() skip response header on
+ internal error
+Message-ID: <Yegg6MxTbArol2ol@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220119131255.27821-1-lavr@ncbi.nlm.nih.gov>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1198.3 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119131255.27821-1-lavr@ncbi.nlm.nih.gov>
+X-Provags-ID: V03:K1:mBpWb9njY2DvcFwrTXQCi/o8jzXS2SxzQKAIAmyYzPQUbUgBWj/
+ n9E/ATz9wPFhjKcYf5bMpStyAYY7miWcpEv9WmgjDB4BcPFy7sLftL4N+LBXp9Oy0cv+L4l
+ GYRxaSYMOI8XX+eeuBT0jRBBC+OORcISct4EtNszP2Hk+XH4vOVWjVVNLXwV6k04YR1PZUz
+ 5fdotAkNodR/6SXtHfZ3A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l/i5KrvNUK4=:OVhJavteTJt5sZw+COuqy4
+ fLhfvRm8tqU9OCWaUGNqPaMoCxoXmuXGrOmZ7O9UOSLnXhqxjdOWqYX9VQB7INr/oMVSkn6MI
+ Oi9IvySWoH/NURv//EtGjqBiBmh5gOJiWhBMHtDum0fraFLlBQS4AcVyw/q0Lo28FDYEw9pwr
+ q8xTH8xEXwVZY8+mQ4TlH17ywoO5f+jELs4g9x2zIHbLqxfm7SlZPgBpoTp+91dViKUC/EvAy
+ gzZwcvq2MEaeaYJJ/SJbemlO4vVnMP4bqq8ubNymgYzGJPdrd7vzePjtu0tKGbhUb0tdPlR8W
+ qaUFHnBJx205nlor3yR6UVG/Zh4s45J3s8pDzGF2GJ4kKxP92F3KtA5XyZ77oexqM0vO9jo8e
+ NPfI0wHdIclptjvBc10qpXIQgf4t9YT7+YV6hj08hC3bRNqgZPJmcZdbZFJ9vddyRcZxsz0Br
+ 20uJozQq72duSOQBRO5wccP9ytxWFYYzLVUkGHarVluuuq09HeTaJvg4F8p2n0/WwokzMM4+A
+ Io4sKVKD48VihDovm2+lJT4wesDD+ezVojAeq2zed4YEc22ItwBGtfa4D4GP8D3PY7Nh77arC
+ 71lHJ5qhsNAunDR0FlpBzeN5jq3zEMIXuZxuY1vaRzWZTF7WASAE4OYWXJ+uO5gXXrKsT41DL
+ 5HRTRpAL8a8cze6imKwrMJg1BtYrThGA3OPYl6tKgReuFfU/YAMCQUB4QZBDdhS6MNchP8WHW
+ po340A/4xf9fwiGc
+X-Spam-Status: No, score=-97.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -53,55 +59,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 19 Jan 2022 13:16:10 -0000
+X-List-Received-Date: Wed, 19 Jan 2022 14:32:11 -0000
 
-Unless make is invoked with V=1, have xmlto pass the parameter
-'man.output.quietly=1' to xsltproc to suppress "Note: Writing foo.N"
-output from the manpages stylesheet.
----
- winsup/doc/Makefile.am | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+On Jan 19 08:12, Anton Lavrentiev via Cygwin-patches wrote:
+> - When dn_comp() failed internally there is no longer any need to
+> fill the response header since it's now all cleared upon entry
+> ---
+>  winsup/cygwin/libc/minires-os-if.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/doc/Makefile.am b/winsup/doc/Makefile.am
-index fb3ab711c..650e0c924 100644
---- a/winsup/doc/Makefile.am
-+++ b/winsup/doc/Makefile.am
-@@ -21,6 +21,8 @@ XMLTO_DBLATEX_QUIET_=-p '-q'
- XMLTO_DBLATEX_QUIET=$(XMLTO_DBLATEX_QUIET_$(V))
- XMLTO_HTML_CHUNK_QUIET_=--stringparam chunk.quietly=1
- XMLTO_HTML_CHUNK_QUIET=$(XMLTO_HTML_CHUNK_QUIET_$(V))
-+XMLTO_MAN_QUIET_=--stringparam man.output.quietly=1
-+XMLTO_MAN_QUIET=$(XMLTO_MAN_QUIET_$(V))
- 
- DOCBOOK2XTEXI=@DOCBOOK2XTEXI@ --xinclude --info --utf8trans-map=charmap
- 
-@@ -125,7 +127,7 @@ cygwin-ug-net/cygwin-ug-net.pdf: $(cygwin-ug-net_SOURCES) fo.xsl
- 	$(AM_V_GEN)$(XMLTO) pdf -o cygwin-ug-net/ -m $(srcdir)/fo.xsl $(XMLTO_DBLATEX_QUIET) $<
- 
- utils2man.stamp: $(cygwin-ug-net_SOURCES) man.xsl
--	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $<
-+	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $(XMLTO_MAN_QUIET) $<
- 	@touch $@
- 
- cygwin-ug-net.info: $(cygwin-ug-net_SOURCES) charmap
-@@ -138,7 +140,7 @@ cygwin-api/cygwin-api.pdf: $(cygwin-api_SOURCES) fo.xsl
- 	$(AM_V_GEN)$(XMLTO) pdf -o cygwin-api/ -m $(srcdir)/fo.xsl $(XMLTO_DBLATEX_QUIET) $<
- 
- api2man.stamp: $(cygwin-api_SOURCES) man.xsl
--	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $<
-+	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $(XMLTO_MAN_QUIET) $<
- 	@touch $@
- 
- cygwin-api.info: $(cygwin-api_SOURCES) charmap
-@@ -150,7 +152,7 @@ charmap:
- 	$(AM_V_at)echo "ae (R)" >>charmap
- 
- intro2man.stamp: intro.xml man.xsl
--	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $<
-+	$(AM_V_GEN)$(XMLTO) man -m $(srcdir)/man.xsl $(XMLTO_MAN_QUIET) $<
- 	@echo ".so intro.1" >cygwin.1
- 	@touch $@
- 
--- 
-2.34.1
+Pushed.
 
+Thanks,
+Corinna
