@@ -1,39 +1,49 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 14D873857018
- for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 08:40:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 14D873857018
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id D7BBB3858C39
+ for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 08:58:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D7BBB3858C39
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (v036249.dynamic.ppp.asahi-net.or.jp
- [124.155.36.249]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 2138ecDp011977;
- Thu, 3 Feb 2022 17:40:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2138ecDp011977
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1643877645;
- bh=o0DxStoT5reP19KJ1xxE6Kw4u3BQpa4+5wLbKKrgSE0=;
- h=From:To:Cc:Subject:Date:From;
- b=I2j8EA9plFnkJpEF9mL9xlO88zk5cMtXQGSZAdRqTwxUwe6AF7youpSUcMfx0QHwx
- yLC8k3LExhpqmB8KH4kROT2YkzAaNcdsyMHgyet97JxzXan46Sgqdk+6MR5ig5KFEI
- 3gf6opJWfilGgd499IzG5pKL0LiYoq+sK3uRkMH1BySUKsyHJZW0GN9FknWcD84HRz
- DTTaL3qaAx6GLuMGmcOVUDelPIRztovlnHXzfgSVWPmT9YvpvERrwVTfDmbYXK6hnS
- sevd4JKk2Jp5ju+28boYGp9iBl0NeMpXs/8fjk500GDqhpQibbRtmj/iFaaLM5ICCI
- XxVtShe9OGdTw==
-X-Nifty-SrcIP: [124.155.36.249]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MpCz1-1mR6MW2TYV-00qjFX for <cygwin-patches@cygwin.com>; Thu, 03 Feb 2022
+ 09:58:19 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 247ACA808FF; Thu,  3 Feb 2022 09:58:19 +0100 (CET)
+Date: Thu, 3 Feb 2022 09:58:19 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: path: Fix UNC path handling for SMB3 mounted to a
- drive.
-Date: Thu,  3 Feb 2022 17:40:26 +0900
-Message-Id: <20220203084026.1934-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] Cygwin: path: Fix UNC path handling for SMB3 mounted to
+ a drive.
+Message-ID: <YfuZK5lTopYPSwwZ@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220203084026.1934-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220203084026.1934-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:6+gT3lJ8yRwdhIjZoU3FPHWW0jNgQ8XnKvpf/KIqqR9HiYqPiwo
+ CRy2HRYKLktf69ICfoCdy3Zn2ZIeX+Rl1WZPIpZvqROjebnD+dln87wEUwM5ftom5Yjw2aJ
+ eX8duCPkVS9eurNpmbRzea+rtRsVGdxrYSgaIkGxf74Kfj8WjAcyAfVf+4k2DrdamGCUTB2
+ BiCysbmcEsVqWdOsLKRrg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wbv/pRwK6vI=:ZRMehZDFupoCsUMH5YSzfT
+ zULDlO1gOOAhKlVXnCQMfL3ltxcfMRZkLuN0o5f/kmA18qqOGM7yz9XEtKOk3ipPLPDD4Uoe5
+ pSY7RZ9ValTr8O+4lTiEwDk0veFBpRbAhcb4+lQnf6JAFE28q/AsppKyxBktcOIOiUp7toSpP
+ 19CVzSkC6dOee2CCMuGlDOxtbzAekMxiJMpwOolRNeyjSQabFZ4mYoruK/pqXFMQNIdHmXy14
+ efzxV8OSRXU1i0DgRLSIwIp4u9/GDUHJy9a2gMvT9gjlMZEscBv7AjOjgQ6pAOVZ3uQCrWt47
+ Lx+teVseNQ6sWg18UJRqW6cVihtDpAmQ6fCG4sE/sueJf1c/EAWJ2mnjXJFzglnOBbG+FgflC
+ TI+GfsLoAUlRh5AQZkVd3fWfm+gSSzGOatvpTNu8gC/QBRKa4SUhGa6+TjLfXoOVz0RACbmGr
+ pUbOVBozcSqF0Fi5oZn8oP2qxItq+b3Kr8rdolTtJA7aFw3IUvpRNtYwTzf3LAKcrj9MNbcz3
+ BSYh/6mKMFOFB5gbIu1G4Zh7ehmqRZBDTyTKM+W0zbP5H/ZaLc16MnSMHVvPmB+du/Bg94ntq
+ 4Odcze18HEf6InO5wZVXU+p+TYImGCJBYnY7C3R1uZo2cuOZ5Ye7KaH5n+0u4oRoWGY0rKHmS
+ MPwB9etpcJyV1A42DPV+SqkYbF68ryzYkTHC6ZK11oGOtb78WO6CcU72y4T4cnonbkGVDDsAf
+ DqGRoFZg72n15Xv5
+X-Spam-Status: No, score=-97.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -49,41 +59,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Feb 2022 08:41:04 -0000
+X-List-Received-Date: Thu, 03 Feb 2022 08:58:22 -0000
 
-- If an UNC path is mounted to a drive using SMB3.11, accessing to
-  the drive fails with error "Too many levels of symbolic links."
-  This patch fixes the issue.
----
- winsup/cygwin/path.cc | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+On Feb  3 17:40, Takashi Yano wrote:
+> - If an UNC path is mounted to a drive using SMB3.11, accessing to
+>   the drive fails with error "Too many levels of symbolic links."
+>   This patch fixes the issue.
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 87ac2404a..4ad4e0821 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -3495,10 +3495,19 @@ restart:
- 
- 	      /* If incoming path has no trailing backslash, but final path
- 		 has one, drop trailing backslash from final path so the
--		 below string comparison has a chance to succeed. */
-+		 below string comparison has a chance to succeed.
-+		 On the contrary, if incoming path has trailing backslash,
-+		 but final path does not have one, add trailing backslash
-+		 to the final path. */
- 	      if (upath.Buffer[(upath.Length - 1) / sizeof (WCHAR)] != L'\\'
--                  && fpbuf[ret - 1] == L'\\')
-+		  && fpbuf[ret - 1] == L'\\')
-                 fpbuf[--ret] = L'\0';
-+	      if (upath.Buffer[(upath.Length - 1) / sizeof (WCHAR)] == L'\\'
-+		  && fpbuf[ret - 1] != L'\\' && ret < NT_MAX_PATH - 1)
-+		{
-+		  fpbuf[ret++] = L'\\';
-+		  fpbuf[ret] = L'\0';
-+		}
- 	      fpbuf[1] = L'?';	/* \\?\ --> \??\ */
- 	      RtlInitCountedUnicodeString (&fpath, fpbuf, ret * sizeof (WCHAR));
- 	      if (!RtlEqualUnicodeString (&upath, &fpath, !!ci_flag))
--- 
-2.34.1
+LGTM, please push.
 
+I'm curious.  I'm using Samba as well and never saw this problem.
+Can you describe how to reproduce?
+
+
+Thanks,
+Corinna
