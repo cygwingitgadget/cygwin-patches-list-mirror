@@ -1,37 +1,38 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com
- [210.131.2.90])
- by sourceware.org (Postfix) with ESMTPS id 39A1F3858424
- for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 09:28:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 39A1F3858424
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id E24EE3858D37
+ for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 11:00:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E24EE3858D37
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from Express5800-S70 (v036249.dynamic.ppp.asahi-net.or.jp
  [124.155.36.249]) (authenticated)
- by conssluserg-05.nifty.com with ESMTP id 2139SW85012729
- for <cygwin-patches@cygwin.com>; Thu, 3 Feb 2022 18:28:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2139SW85012729
+ by conssluserg-04.nifty.com with ESMTP id 213Axleb002588
+ for <cygwin-patches@cygwin.com>; Thu, 3 Feb 2022 19:59:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 213Axleb002588
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1643880512;
- bh=mYMc+9jDsIxVlSW/ej1ZdDmEUEgGYQk6qkfwUvgZVYU=;
+ s=dec2015msa; t=1643885988;
+ bh=mWuKuftS+x0BtZs5xBToTG0ibcAkCxRqb9drLEPA8XQ=;
  h=Date:From:To:Subject:In-Reply-To:References:From;
- b=btpVEcBXZUNE905drg6a2yP29tXkjSl81P1rUhmdTlzvDBAgIvdpvv7kmQ28jKSJ/
- P6fUMfQgVvHAla2wqSLi3UBgOTNgtakYzcV2CAq1UV786HedBZcz5q16hMWBzuBcPn
- YFicbs93g3hc61LRXE4+fqlP5kLL3oHMzWqhGCXJtiqpsLEhV0uIEqvdlXveSXXxvr
- X/0psiepcIc5yQj5ac3U3Nnd25AOJwTwh2BcuGBtsI6ZGUidOxfaIFdpbbw5pwvAJb
- ihn1mNTj8klpsGKTfQdLyk9amBPPZMOWYhjVbCzytlRkHLL84dlbElFFfLxNz/pKga
- 3KJ77Xo7K7AKg==
+ b=YvAdtRwTkelcWXedUXa00vHb6s7JCoFDBxIXcA67/feqCnrfSX02m5+DP9Nb9wIUi
+ B0PaGJolMEQniQ1ja659JokEtwEVGGl8bmM+56TG3bsjZQiHnNhNJeOuyE90quW2lb
+ zHEKAHVZwITGAU/N2fHodm2KaERBEkIy7Mm/qfBc58PNJdi/WIHfcPjyW7DITFZVXh
+ r50RCG8p5ke4VpLqps4mIAAQd5aSevERpvGf6iVVJ0CBRnM88XQlX0ZBJ3nrhhvMZI
+ 3YrTOewdXESj3Al/QyojarYtT0SXc4oyAkW2wwUVCWvS879i6SZD4ZAVZnwVUCg1Pj
+ jAoNSRrBjlpyQ==
 X-Nifty-SrcIP: [124.155.36.249]
-Date: Thu, 3 Feb 2022 18:28:32 +0900
+Date: Thu, 3 Feb 2022 19:59:49 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: path: Fix UNC path handling for SMB3 mounted to
  a drive.
-Message-Id: <20220203182832.3f0613375ce8eadd2cd27b05@nifty.ne.jp>
-In-Reply-To: <YfuZK5lTopYPSwwZ@calimero.vinschen.de>
+Message-Id: <20220203195949.5842fb4ab2ab901fe4a6f789@nifty.ne.jp>
+In-Reply-To: <20220203182832.3f0613375ce8eadd2cd27b05@nifty.ne.jp>
 References: <20220203084026.1934-1-takashi.yano@nifty.ne.jp>
  <YfuZK5lTopYPSwwZ@calimero.vinschen.de>
+ <20220203182832.3f0613375ce8eadd2cd27b05@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -54,47 +55,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Feb 2022 09:28:52 -0000
+X-List-Received-Date: Thu, 03 Feb 2022 11:00:08 -0000
 
-On Thu, 3 Feb 2022 09:58:19 +0100
-Corinna Vinschen wrote:
-> On Feb  3 17:40, Takashi Yano wrote:
-> > - If an UNC path is mounted to a drive using SMB3.11, accessing to
-> >   the drive fails with error "Too many levels of symbolic links."
-> >   This patch fixes the issue.
+On Thu, 3 Feb 2022 18:28:32 +0900
+Takashi Yano wrote:
+> On Thu, 3 Feb 2022 09:58:19 +0100
+> Corinna Vinschen wrote:
+> > On Feb  3 17:40, Takashi Yano wrote:
+> > > - If an UNC path is mounted to a drive using SMB3.11, accessing to
+> > >   the drive fails with error "Too many levels of symbolic links."
+> > >   This patch fixes the issue.
+> > I'm curious.  I'm using Samba as well and never saw this problem.
+> > Can you describe how to reproduce?
 > 
-> LGTM, please push.
+> I used samba under debian stretch last December, and
+> confirmed current code worked without the problem.
+> 
+> Recently, I have upgraded the server OS from stretch
+> to bullseye, and noticed this problem.
+> 
+> Perhaps, samba version and its protocol version may be
+> related.
+> 
+> My samba version is: Version 4.13.13-Debian
 
-Thanks for reviewing.
+I have just reconfirmed that this problem does not occur
+if samba under debian stretch is used even with SMB3.11.
 
-> I'm curious.  I'm using Samba as well and never saw this problem.
-> Can you describe how to reproduce?
-
-I used samba under debian stretch last December, and
-confirmed current code worked without the problem.
-
-Recently, I have upgraded the server OS from stretch
-to bullseye, and noticed this problem.
-
-Perhaps, samba version and its protocol version may be
-related.
-
-My samba version is: Version 4.13.13-Debian
-
-This also happens with shared folder under Windows 10
-in my environment.
-
-Win10 version is:
-Microsoft Windows [Version 10.0.19044.1466]
-
-The reproducible steps are as follows.
-
-$ net use z: '\\server\sharedname'
-The command completed successfully.
-
-$ cd /cygdrive/z
-/cygdrive/z: Too many levels of symbolic links.
-$
+Samba version of stretch is: Version 4.5.16-Debian.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
