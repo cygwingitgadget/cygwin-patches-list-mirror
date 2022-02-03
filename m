@@ -1,45 +1,52 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
- [210.131.2.83])
- by sourceware.org (Postfix) with ESMTPS id E24EE3858D37
- for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 11:00:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E24EE3858D37
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 5553C3858C2C
+ for <cygwin-patches@cygwin.com>; Thu,  3 Feb 2022 11:36:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5553C3858C2C
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (v036249.dynamic.ppp.asahi-net.or.jp
- [124.155.36.249]) (authenticated)
- by conssluserg-04.nifty.com with ESMTP id 213Axleb002588
- for <cygwin-patches@cygwin.com>; Thu, 3 Feb 2022 19:59:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 213Axleb002588
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1643885988;
- bh=mWuKuftS+x0BtZs5xBToTG0ibcAkCxRqb9drLEPA8XQ=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=YvAdtRwTkelcWXedUXa00vHb6s7JCoFDBxIXcA67/feqCnrfSX02m5+DP9Nb9wIUi
- B0PaGJolMEQniQ1ja659JokEtwEVGGl8bmM+56TG3bsjZQiHnNhNJeOuyE90quW2lb
- zHEKAHVZwITGAU/N2fHodm2KaERBEkIy7Mm/qfBc58PNJdi/WIHfcPjyW7DITFZVXh
- r50RCG8p5ke4VpLqps4mIAAQd5aSevERpvGf6iVVJ0CBRnM88XQlX0ZBJ3nrhhvMZI
- 3YrTOewdXESj3Al/QyojarYtT0SXc4oyAkW2wwUVCWvS879i6SZD4ZAVZnwVUCg1Pj
- jAoNSRrBjlpyQ==
-X-Nifty-SrcIP: [124.155.36.249]
-Date: Thu, 3 Feb 2022 19:59:49 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N5G1T-1mGi2S1rfh-011DcV for <cygwin-patches@cygwin.com>; Thu, 03 Feb 2022
+ 12:36:45 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id E1AB7A808FF; Thu,  3 Feb 2022 12:36:44 +0100 (CET)
+Date: Thu, 3 Feb 2022 12:36:44 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: path: Fix UNC path handling for SMB3 mounted to
  a drive.
-Message-Id: <20220203195949.5842fb4ab2ab901fe4a6f789@nifty.ne.jp>
-In-Reply-To: <20220203182832.3f0613375ce8eadd2cd27b05@nifty.ne.jp>
+Message-ID: <Yfu+TPEQgeC7OJdR@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20220203084026.1934-1-takashi.yano@nifty.ne.jp>
  <YfuZK5lTopYPSwwZ@calimero.vinschen.de>
  <20220203182832.3f0613375ce8eadd2cd27b05@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+ <20220203195949.5842fb4ab2ab901fe4a6f789@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220203195949.5842fb4ab2ab901fe4a6f789@nifty.ne.jp>
+X-Provags-ID: V03:K1:HSSyr7zV332h3fbGL+GXsBCRjQI/PnrwhTIzjYsFCZKGY+gad95
+ icXHgDyKhMK7dCua6aFyIO7BqGi082ZaA5Lvau3Cogf0jDOLvz39VWXK3V/wR6jYbYGXLbM
+ gBl9QeDN6/WVfZwj4XYoAuLle5XqvQzhJRj0Sl0dv414edHcq20sZUK1Wq0pjX9xEXVdffr
+ 3LCJBwnyAEmxiUrpWFXyw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zNYBIbW4vEI=:EIqPlEpqZNLO9Up5KniL/J
+ bsBWRv4XSrmFGJcRUGlCS1brKNQyHr9ctHx6o2WaDsI8BnyRR4gBAoP8KArvLohV6AcxE/Pbm
+ W3cKUpBm7vr9ChnUVY/cIjhclzQqS93vktpXF5sMjUJb9egl7Rt56vzI+OwJCXzfhFSWP6Zja
+ 1D6ZWG9juKTdayK6ItHPcfMKlwcT23iEg1PtNN4Av2m+8HNoZhjIGb6d/GHSVsOgLse0Jgkmz
+ 1VGis3e2dlFWSjO/rttk+FGHhFNU9IKuvZhPUE2Qfy1WBYoPNkJawjn0YmDJZrI+wnXMxat1M
+ Mu6u/f7maMeUZ+qAdmgdk+09hd0ifrp4i192L09p3kLj+Vt/q+ZoTehg6nm/WEPE3boPxnmCC
+ NsRkU+Ziz7TB6uJEBxPOlPkBAbVft6SbCZoVuyGOnMgmL9RAARhkR3p9bHaiecDgq75P+KWrW
+ tIoyFzTwizsP8eXoDQ6bM05C9vHmCxgdlv1p12mcmEB4CPfPbfLaVsLwTqCgDZq+3NtxCyGCb
+ mvpyS0uThe5vUlMCyEl3qxM4+YtP/5o3emUmVe7ErsTzdeUXDLfIX+EczlPGZyGZSbtgB3ehm
+ 6BbDO4e2QvdzHcGZAoe/WEJCqxgdHtCavWx0iAuUBaAKvnQJwDZSWtokN6BvK3FsknXAMW3kf
+ 1/YlmM1/Id5iR5zAMm45O34LDySUtcEZJpZIX6mT+JnzaJXszBzBJkW5fGt5qbvpXvTlvT/zF
+ TtfDaent3dLfYYZF
+X-Spam-Status: No, score=-97.7 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H5,
+ RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -55,34 +62,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Feb 2022 11:00:08 -0000
+X-List-Received-Date: Thu, 03 Feb 2022 11:36:52 -0000
 
-On Thu, 3 Feb 2022 18:28:32 +0900
-Takashi Yano wrote:
-> On Thu, 3 Feb 2022 09:58:19 +0100
-> Corinna Vinschen wrote:
-> > On Feb  3 17:40, Takashi Yano wrote:
-> > > - If an UNC path is mounted to a drive using SMB3.11, accessing to
-> > >   the drive fails with error "Too many levels of symbolic links."
-> > >   This patch fixes the issue.
-> > I'm curious.  I'm using Samba as well and never saw this problem.
-> > Can you describe how to reproduce?
+On Feb  3 19:59, Takashi Yano wrote:
+> On Thu, 3 Feb 2022 18:28:32 +0900
+> Takashi Yano wrote:
+> > On Thu, 3 Feb 2022 09:58:19 +0100
+> > Corinna Vinschen wrote:
+> > > On Feb  3 17:40, Takashi Yano wrote:
+> > > > - If an UNC path is mounted to a drive using SMB3.11, accessing to
+> > > >   the drive fails with error "Too many levels of symbolic links."
+> > > >   This patch fixes the issue.
+> > > I'm curious.  I'm using Samba as well and never saw this problem.
+> > > Can you describe how to reproduce?
+> > 
+> > I used samba under debian stretch last December, and
+> > confirmed current code worked without the problem.
+> > 
+> > Recently, I have upgraded the server OS from stretch
+> > to bullseye, and noticed this problem.
+> > 
+> > Perhaps, samba version and its protocol version may be
+> > related.
+> > 
+> > My samba version is: Version 4.13.13-Debian
 > 
-> I used samba under debian stretch last December, and
-> confirmed current code worked without the problem.
+> I have just reconfirmed that this problem does not occur
+> if samba under debian stretch is used even with SMB3.11.
 > 
-> Recently, I have upgraded the server OS from stretch
-> to bullseye, and noticed this problem.
-> 
-> Perhaps, samba version and its protocol version may be
-> related.
-> 
-> My samba version is: Version 4.13.13-Debian
+> Samba version of stretch is: Version 4.5.16-Debian.
 
-I have just reconfirmed that this problem does not occur
-if samba under debian stretch is used even with SMB3.11.
+Indeed, I can reproduce it.  I'm using Fedora 35 with Samba 4.15.3,
+so there's probably a behavioural change.  The reason I didn't
+notice it is that I never use drive letters but always UNC paths.
 
-Samba version of stretch is: Version 4.5.16-Debian.
+Thanks!
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Corinna
