@@ -1,47 +1,53 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
- [210.131.2.83])
- by sourceware.org (Postfix) with ESMTPS id 904D63858433
- for <cygwin-patches@cygwin.com>; Sat,  5 Feb 2022 10:26:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 904D63858433
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conssluserg-04.nifty.com with ESMTP id 215AQUlR010031
- for <cygwin-patches@cygwin.com>; Sat, 5 Feb 2022 19:26:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 215AQUlR010031
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1644056790;
- bh=qK0pdN5/qCySvm5nP5GpqTOofnFCE2g1+nQMVlTPZj4=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=wTCmqj+A1wXaJ2jdqF9XlV+T+eQlv25Yqf6VGBe0+LWLvFJ8ci7oC0Y5pxE9dusSr
- kYjc0FX+j/oYwrI0ZaOxlDeppUDTVnvRLrKSLsXXTs2s2kR6hdCS3cwQl7cBb3vjBX
- wP/B72hJKchbhyiVdq7/LdYbXrg/caKPCQUinjqxt5dZou7g73AIMATM3phK7+51Rf
- wL4TXrJdj/UNl0w2lZlpH54SqTp+TPFIFWNZG5CIePSb5AyEIRsNkhmrj9pAZwYX+J
- PlrIZz1m2b6IWz6+PslJR6l4kB2iCSnF3Z1uCCn2PFQjSvbrPoVhPbe3guOXxSUmgZ
- yT2/luU2tLQPQ==
-X-Nifty-SrcIP: [119.150.36.16]
-Date: Sat, 5 Feb 2022 19:26:32 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: wincap: Add capabilities for Windows 10 2004
- and newer.
-Message-Id: <20220205192632.5746151728be1c5cf7aab249@nifty.ne.jp>
-In-Reply-To: <Yf5P80AMY1rRQpuK@calimero.vinschen.de>
-References: <20220205080719.928-1-takashi.yano@nifty.ne.jp>
- <Yf5H+DgpvRIGa9ys@calimero.vinschen.de>
- <20220205185519.ee6239a14697d360a902e666@nifty.ne.jp>
- <Yf5P80AMY1rRQpuK@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-044.btinternet.com (mailomta2-sa.btinternet.com
+ [213.120.69.8])
+ by sourceware.org (Postfix) with ESMTPS id BE3EB3857C53
+ for <cygwin-patches@cygwin.com>; Sat,  5 Feb 2022 14:27:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BE3EB3857C53
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
+ by sa-prd-fep-044.btinternet.com with ESMTP id
+ <20220205142701.MJKQ24689.sa-prd-fep-044.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Sat, 5 Feb 2022 14:27:01 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 6139417C14351483
+X-Originating-IP: [213.120.30.10]
+X-OWM-Source-IP: 213.120.30.10 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrhedugdeigecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffekiefgudejheetudeigfejledtleegleetkeduteeftdfffefhueefgfeutedtnecukfhppedvudefrdduvddtrdeftddruddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdefngdpihhnvghtpedvudefrdduvddtrdeftddruddtpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.103] (213.120.30.10) by
+ sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 6139417C14351483 for cygwin-patches@cygwin.com;
+ Sat, 5 Feb 2022 14:27:01 +0000
+Message-ID: <dc63c4eb-489d-be97-8f54-3aedc7645ebf@dronecode.org.uk>
+Date: Sat, 5 Feb 2022 14:26:32 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] update site goldstar award types images from jpg/png to
+ webp
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20220202065958.6840-1-Brian.Inglis@SystematicSW.ab.ca>
+ <YfpSaFiy7EH6BwAy@calimero.vinschen.de>
+ <5d10614e-adbc-38e4-2b69-f5794d1e24c9@SystematicSw.ab.ca>
+ <Yfrskl5AsCMMepFc@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <Yfrskl5AsCMMepFc@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-3569.0 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_PASS, SPF_NONE, TXREP, T_SCC_BODY_TEXT_LINE,
+ WINNER_SUBJECT autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,29 +62,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 05 Feb 2022 10:26:56 -0000
+X-List-Received-Date: Sat, 05 Feb 2022 14:27:04 -0000
 
-On Sat, 5 Feb 2022 11:22:43 +0100
-Corinna Vinschen <corinna-cygwin@cygwin.com> wrote:
+On 02/02/2022 20:41, Corinna Vinschen wrote:
+> On Feb  2 11:49, Brian Inglis wrote:
+>> On 2022-02-02 02:44, Corinna Vinschen wrote:
+>>> On Feb  1 23:59, Brian Inglis wrote:
+[...]
+>>
+>> Would you be interested in a similar patch series for the whole site?
 
-> On Feb  5 18:55, Takashi Yano wrote:
-> > On Sat, 5 Feb 2022 10:48:40 +0100
-> > Corinna Vinschen wrote:
-> > > On Feb  5 17:07, Takashi Yano wrote:
-> > > > - The capability changes since Windows 10 2004 have been reflected
-> > > >   in wincap.cc. (has_con_broken_il_dl has been changed to false.)
-> > > > ---
-> > > >  winsup/cygwin/wincap.cc | 35 ++++++++++++++++++++++++++++++++++-
-> > > >  1 file changed, 34 insertions(+), 1 deletion(-)
-> > > 
-> > > Sure thing, please push.
-> > 
-> > Is this should be for both master and cygwin-3_3-branch?
-> > Or only for master?
-> 
-> Not sure... master-only, I think.
+Do you have any information on how widespread browser support for webp is?
 
-I see.
+> It's not *my* interest as such, rather it's a great idea... as would be
+> any and all patches to make the entire site mobile-aware.  Always feel
+> free to send patches for stuff like that!
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+If you're going to make the site more mobile friendly, I think the first 
+thing which needs to be done is some responsive CSS to stop the navbar 
+taking up the majority of the screen.
