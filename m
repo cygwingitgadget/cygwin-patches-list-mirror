@@ -1,49 +1,44 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id A32A23858D28
- for <cygwin-patches@cygwin.com>; Sat,  5 Feb 2022 09:48:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A32A23858D28
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id 203563858D28
+ for <cygwin-patches@cygwin.com>; Sat,  5 Feb 2022 09:55:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 203563858D28
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MspyA-1mNMe12HRA-00tBzy for <cygwin-patches@cygwin.com>; Sat, 05 Feb 2022
- 10:48:41 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8A9DAA8076B; Sat,  5 Feb 2022 10:48:40 +0100 (CET)
-Date: Sat, 5 Feb 2022 10:48:40 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from Express5800-S70 (ak036016.dynamic.ppp.asahi-net.or.jp
+ [119.150.36.16]) (authenticated)
+ by conssluserg-04.nifty.com with ESMTP id 2159tIpF022389
+ for <cygwin-patches@cygwin.com>; Sat, 5 Feb 2022 18:55:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2159tIpF022389
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1644054918;
+ bh=Wd9BG1T6IXJQzFf5KUtDpZNxQvnbQ68dpt1oLVYFky4=;
+ h=Date:From:To:Subject:In-Reply-To:References:From;
+ b=Akp4ORv8mo8dJYNhpqlJ0a8Fm/S5Cyb15I2Ku9WitH9cSPkblGCmbEiZbni+sEH1u
+ O+jp5/2oyQvOe8r72ya98hgMA7Ni6U5zZbfDZ6PUYq0gKutr1syLUqTu/cd+7a18C2
+ +/jXxcyGn7LxBH2avFI98yF3RHDeKY2GAI1zYp7kSrKL7TMe+PXJ2oBp7GIygnsUA2
+ nWmpvyApIq2rhEdJogE8OcitGE9BxYQZH1Dy1YKOTfF4AJE0Ed7sxVfMDvpZEo4VsU
+ djinE9TCl6JwviTuP3Yk2AhM3EteQHZEe3DII1Ij3Gw0qOyfTce3FmwN3ZEkMI9kh+
+ qI48MnDzRlodA==
+X-Nifty-SrcIP: [119.150.36.16]
+Date: Sat, 5 Feb 2022 18:55:19 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: wincap: Add capabilities for Windows 10 2004 and
- newer.
-Message-ID: <Yf5H+DgpvRIGa9ys@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: wincap: Add capabilities for Windows 10 2004
+ and newer.
+Message-Id: <20220205185519.ee6239a14697d360a902e666@nifty.ne.jp>
+In-Reply-To: <Yf5H+DgpvRIGa9ys@calimero.vinschen.de>
 References: <20220205080719.928-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220205080719.928-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:0f5fwclq8pzGu4ncvLUnkh6AHHOAWmrCDidmzO3y76XZrfocuLe
- HD9FlnRSqfwvvcR5Xow/ETdSwAAGn+wuGNnU2FZyBKXjZGhzrnnJ7BmlkQOzBUHjFQegItq
- eq4ra4hBPQy3LzoIR0FrwH4GVlKXL0vdNhY8uLNXvhE6gU/cWwUaT3xU515FAf1Fr0Kx8kK
- 14UIbGuAICI5T+u7O+SiA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ogdjI0TP0aw=:zMx7+unNd4qM4R973NEhs0
- E4MoONltuSD/7cvlXG8+2QhG7fOp2Hfe30Egsb2d5mSmGWphC5OcO7PTlab8LVDRy36wf06Cy
- zZdEoDGBJGbXoG1TqRfsyWHmdFvBG4iPOhTCXoUQp8+L/0ojZLbX1K6A5bw3xSNWT6sHOz3m/
- bo44rFeHonMDTfp7Xhiu2LdzswZAMYn0/0JFD5R3jG300FWMV+XqqyvvF0BpZcq8uVIg00Ro9
- 9dYc4LY2l6meRRYZ5qaOock6eMgY5M0cofhS5kNGj9t7ORti/cEodXSkedYL+6iY6BKHzPYHE
- Mpr0UCSXTpiXFZvv0ruXF2frtMvF1NN6RJfo13Jh9boVXZgZMBnZP2aAuBXTQwkKb5vEMsYTh
- zpsBO2EmcaJP8ukrVyiqA5bltx55PDr0lT7lVxQQS12gAxaMNQNaWZpQs5XdhJ44Xrscarupy
- wCas4W2bk/4zbAq07xEtM2PrkIhBTX0V3XVS7K1LVu3JjgJDBC8WJlzyCtl2jg5cakPN0JKZp
- oe9i0wZjAT9mp0zXQc7Y8IOpFpuT+I31nY/NmkD936Caq6ozLC55fzj6p8KOdKtl22y+7GLVj
- bAPc/Yt1Dd42WwUAr9WmrHD7EbE+qGoaRgEtiOju+wPTy5RVhi6kdDuXTsKWk/Jq9U97HWAaz
- OQSF+LH9bPTsAk+GGK3wmQJT+PRVk6lPUg2kHe8tT1JsUKe9dYFzStv6a5NsBajGNluq82xWu
- o+oe2E5ynDEzq+y7
-X-Spam-Status: No, score=-97.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
+ <Yf5H+DgpvRIGa9ys@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -59,17 +54,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 05 Feb 2022 09:48:45 -0000
+X-List-Received-Date: Sat, 05 Feb 2022 09:55:37 -0000
 
-On Feb  5 17:07, Takashi Yano wrote:
-> - The capability changes since Windows 10 2004 have been reflected
->   in wincap.cc. (has_con_broken_il_dl has been changed to false.)
-> ---
->  winsup/cygwin/wincap.cc | 35 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
+On Sat, 5 Feb 2022 10:48:40 +0100
+Corinna Vinschen wrote:
+> On Feb  5 17:07, Takashi Yano wrote:
+> > - The capability changes since Windows 10 2004 have been reflected
+> >   in wincap.cc. (has_con_broken_il_dl has been changed to false.)
+> > ---
+> >  winsup/cygwin/wincap.cc | 35 ++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
+> Sure thing, please push.
 
-Sure thing, please push.
+Is this should be for both master and cygwin-3_3-branch?
+Or only for master?
 
-
-Thanks,
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
