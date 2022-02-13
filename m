@@ -1,38 +1,39 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id E1A603858407
+ by sourceware.org (Postfix) with ESMTPS id EA9E1385840F
  for <cygwin-patches@cygwin.com>; Sun, 13 Feb 2022 14:40:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E1A603858407
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org EA9E1385840F
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 21DEdOvJ000575;
- Sun, 13 Feb 2022 23:39:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvJ000575
+ by conuserg-11.nifty.com with ESMTP id 21DEdOvL000575;
+ Sun, 13 Feb 2022 23:39:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvL000575
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1644763191;
- bh=Y0EsVzfvQ0VnTTgFN7VH4ntew6QQPVbZ+GZO4VkHO5w=;
+ s=dec2015msa; t=1644763194;
+ bh=CwriTp+6kEvBnR+CKWca0Vzp7nnIzRqspKDPliWWlco=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=oyLpg/7h/rSuacYySsfP5lN50PYH88/Z57gwA5WVaBBDVmvBrZJHN3ZtM9QHk4xCq
- SvFOYj3IIMWXiYTeQjKZeXWnkFXY1gYKVV3OWrZ1ABQdVF8rFEco4OHw/1e3QDcD9e
- PkPMy8I3HKMdIuMznd/1snT7C9u126s2k+C7lKoZpl8kmwEdher1beMXbMsncIwDku
- Zu83yGzM2Fgeq0r2Y45QxNl43Acze68sOcMjGtrZzsGfRd4YWT+JZ+tR0ivAQupiwZ
- rW0X/L7JfMWZIW/jCRkRefzMZOOUlu/x6wr3prAc949fVJ9O+RnK+4PMi9Pbu3uwz4
- /ulXEsfMy0whw==
+ b=m3rlNIdKVsmyBvUuN0VGd5HQFf4c2F1d826Fp7cWW2BCj9CxadMiWXoMmZh3iTmNr
+ +wYj9G1b4WKC0B0cocTU6XNXqJ1N6fjZpUJKKi//RgZLJMKE4skcjYNkDkdV2q4oT0
+ vAsElNq0JJY7C9vHkJtOIxV6eBhFShUt0gFm+hfliKAhnYYPODFvN4wiJbuXYOqXzI
+ 83bPIqivh084n4axs2J6wqXup2BrNGM+FZvrPWlHqRfFlafyqIUO2tX92Z2y1OsGYz
+ Sch32UUCkZnQnsj4hcxdFoj5g3ri3XdyVcBFaPeAIBX7w15sPR70zJFufNDMcm4Em4
+ w81vzZlCc2rHA==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 3/8] Cygwin: pty: Prevent deadlock on echo output.
-Date: Sun, 13 Feb 2022 23:39:05 +0900
-Message-Id: <20220213143910.1947-4-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 4/8] Cygwin: pty: Revise the code to wait for completion of
+ forwarding.
+Date: Sun, 13 Feb 2022 23:39:06 +0900
+Message-Id: <20220213143910.1947-5-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
 References: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
@@ -52,32 +53,96 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Sun, 13 Feb 2022 14:40:15 -0000
 
-- If the slave process writes a lot of text output, doecho() can
-  cause deadlock. This is because output_mutex is held in slave::
-  write() and if WriteFile() is blocked due to pipe full, doecho()
-  tries to acquire output_mutex and gets into deadlock. With this
-  patch, the deadlock is prevented on the sacrifice of atomicity
-  of doecho().
+- With this patch, the code to wait for completion of forwarding of
+  output from non-cygwin app is revised so that it can more reliably
+  detect the completion.
 ---
- winsup/cygwin/fhandler_tty.cc | 2 --
- 1 file changed, 2 deletions(-)
+ winsup/cygwin/fhandler_tty.cc |  5 ++++-
+ winsup/cygwin/tty.cc          | 11 ++++++-----
+ winsup/cygwin/tty.h           |  3 ++-
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 7bef6958c..7e065c46a 100644
+index 7e065c46a..7e733e49a 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -496,11 +496,9 @@ void
- fhandler_pty_master::doecho (const void *str, DWORD len)
- {
-   ssize_t towrite = len;
--  acquire_output_mutex (mutex_timeout);
-   if (!process_opost_output (echo_w, str, towrite, true,
- 			     get_ttyp (), is_nonblocking ()))
-     termios_printf ("Write to echo pipe failed, %E");
--  release_output_mutex ();
+@@ -1118,7 +1118,7 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+       if (WaitForSingleObject (h_gdb_process, 0) == WAIT_TIMEOUT)
+ 	{
+ 	  if (isHybrid)
+-	    get_ttyp ()->wait_pcon_fwd (false);
++	    get_ttyp ()->wait_pcon_fwd ();
+ 	}
+       else
+ 	{
+@@ -2705,6 +2705,9 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+   for (;;)
+     {
+       p->ttyp->pcon_last_time = GetTickCount ();
++      DWORD n;
++      p->ttyp->pcon_fwd_not_empty =
++	::bytes_available (n, p->from_slave_nat) && n;
+       if (!ReadFile (p->from_slave_nat, outbuf, NT_MAX_PATH, &rlen, NULL))
+ 	{
+ 	  termios_printf ("ReadFile for forwarding failed, %E");
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 789528856..da75b8dd2 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -240,6 +240,7 @@ tty::init ()
+   pcon_pid = 0;
+   term_code_page = 0;
+   pcon_last_time = 0;
++  pcon_fwd_not_empty = false;
+   pcon_start = false;
+   pcon_start_pid = 0;
+   pcon_cap_checked = false;
+@@ -367,7 +368,7 @@ tty_min::setpgid (int pid)
  }
  
- int
+ void
+-tty::wait_pcon_fwd (bool init)
++tty::wait_pcon_fwd ()
+ {
+   /* The forwarding in pseudo console sometimes stops for
+      16-32 msec even if it already has data to transfer.
+@@ -377,11 +378,11 @@ tty::wait_pcon_fwd (bool init)
+      thread when the last data is transfered. */
+   const int sleep_in_pcon = 16;
+   const int time_to_wait = sleep_in_pcon * 2 + 1/* margine */;
+-  if (init)
+-    pcon_last_time = GetTickCount ();
+-  while (GetTickCount () - pcon_last_time < time_to_wait)
++  int elapsed;
++  while (pcon_fwd_not_empty
++	 || (elapsed = GetTickCount () - pcon_last_time) < time_to_wait)
+     {
+-      int tw = time_to_wait - (GetTickCount () - pcon_last_time);
++      int tw = pcon_fwd_not_empty ? 10 : (time_to_wait - elapsed);
+       cygwait (tw);
+     }
+ }
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index 519d7c0d5..2cd12a665 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -116,6 +116,7 @@ private:
+   DWORD pcon_pid;
+   UINT term_code_page;
+   DWORD pcon_last_time;
++  bool pcon_fwd_not_empty;
+   HANDLE h_pcon_write_pipe;
+   HANDLE h_pcon_condrv_reference;
+   HANDLE h_pcon_conhost_process;
+@@ -166,7 +167,7 @@ public:
+   void set_master_ctl_closed () {master_pid = -1;}
+   static void __stdcall create_master (int);
+   static void __stdcall init_session ();
+-  void wait_pcon_fwd (bool init = true);
++  void wait_pcon_fwd ();
+   bool pcon_input_state_eq (xfer_dir x) { return pcon_input_state == x; }
+   bool pcon_fg (pid_t pgid);
+   friend class fhandler_pty_common;
 -- 
 2.35.1
 
