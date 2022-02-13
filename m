@@ -1,33 +1,33 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id 01CEF3858418
- for <cygwin-patches@cygwin.com>; Sun, 13 Feb 2022 14:40:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 01CEF3858418
+ by sourceware.org (Postfix) with ESMTPS id D2DD83857C4E
+ for <cygwin-patches@cygwin.com>; Sun, 13 Feb 2022 14:40:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D2DD83857C4E
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 21DEdOvN000575;
- Sun, 13 Feb 2022 23:39:56 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvN000575
+ by conuserg-11.nifty.com with ESMTP id 21DEdOvT000575;
+ Sun, 13 Feb 2022 23:40:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvT000575
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1644763196;
- bh=iUbtjOMkXQyjThkB5KhjKMtmniJIcu2KiLQOcokkQWA=;
+ s=dec2015msa; t=1644763203;
+ bh=Ra0QlISZkTGqXLOwxcjKKYtMglUEQymeBEdd0wkylHE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Pr7KXrzZNzBf/mSX85OFdCtNeYXc59wS7+xBMS/CczmChSBt4C9dq8iCcPuAAfte/
- LdZKuH1hzDcZvaCve36uIjlUdfExD5O7cfLCgJvsF5tRS3KgMH8453bEJYAfbUmxti
- FHyiCKUvVA/zrjYXHwl2XNIV2ZBcTSNy8V+CZuGvWM19jAiAayoUmoYmQ5kB17vwAC
- /U+dF4/+I5JuaY1ko0Ply43I2P1F0GAYfIINYRN3ltnQuIatDZMrCtvMwpngHFhTlz
- wX1jPvSTMKDzUBwbApuG16TRJf9eGQgpj5pnpx344JYfmz/GDg+X823M+T4Lw0w+TJ
- IL7IgBAs0i+dg==
+ b=ZeQvz5jpRMGEG/wEDG1Naa824upu8MZmTrpWafAQ+PcrwzQjMdwWQDaaO42ITtZLc
+ Q365MEnyZ0vebKivLciPQJLAWQavP56olLv6W86Cz+15o9+cyl5wgye8lrg3E9+6rD
+ MvzGq0PSwbv3HIg1Ch25zFi93RQfM5UKYbWCUaNH7vLHuvTA51WJDSvu7askwanYrZ
+ tCqNx689oM20VvC/mtnb8uN7LZoUvBKXR8B/2cxRDrB5I1t84oO+LrmkJ+fwWQg3mq
+ QXb0jlqDxrgz5m71spMmnXc6qa74PcWRqMT8bb7PKBdFam8pXst0zGGrCCbGi5Rr29
+ h63Tc9YqKYSYA==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 5/8] Cygwin: pty: Discard input in from_master_nat pipe on
- signal as well.
-Date: Sun, 13 Feb 2022 23:39:07 +0900
-Message-Id: <20220213143910.1947-6-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 8/8] Cygwin: console: Set console mode even if stdin/stdout is
+ redirected.
+Date: Sun, 13 Feb 2022 23:39:10 +0900
+Message-Id: <20220213143910.1947-9-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
 References: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
@@ -51,30 +51,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 13 Feb 2022 14:40:16 -0000
+X-List-Received-Date: Sun, 13 Feb 2022 14:40:21 -0000
 
-- Currently, pty discards input only in from_master pipe on signal.
-  Due to this, if pty is started without pseudo console support and
-  start a non-cygwin process from cmd.exe, type adhead input is not
-  discarded on signals such as Ctrl-C. This patch fixes the issue.
+- When non-cygwin app is started in console, console mode is set to
+  tty::native. However, if stdin is redirected, current code does not
+  set the input mode of the console. In this case, if the app opens
+  "CONIN$", the console mode will not be appropriate for non-cygwin
+  app. This patch fixes the issue.
+
+Addresses:
+https://github.com/GitCredentialManager/git-credential-manager/issues/576
 ---
- winsup/cygwin/fhandler_tty.cc | 3 +++
- 1 file changed, 3 insertions(+)
+ winsup/cygwin/spawn.cc | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 7e733e49a..8c9a10c23 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -438,6 +438,9 @@ fhandler_pty_master::discard_input ()
-   while (::bytes_available (bytes_in_pipe, from_master) && bytes_in_pipe)
-     ReadFile (from_master, buf, sizeof(buf), &n, NULL);
-   ResetEvent (input_available_event);
-+  if (!get_ttyp ()->pcon_activated)
-+    while (::bytes_available (bytes_in_pipe, from_master_nat) && bytes_in_pipe)
-+      ReadFile (from_master_nat, buf, sizeof(buf), &n, NULL);
-   get_ttyp ()->discard_input = true;
-   ReleaseMutex (input_mutex);
- }
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 81dba5a94..a7e25cc20 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -627,23 +627,18 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	    }
+ 	  else if (fh && fh->get_major () == DEV_CONS_MAJOR)
+ 	    {
+-	      fhandler_console *cons = (fhandler_console *) fh;
+-	      if (!iscygwin ())
++	      if (!iscygwin () && cons_native == NULL)
+ 		{
+-		  if (cons_native == NULL)
+-		    {
+-		      cons_native = cons;
+-		      cons_ti = &((tty *)cons->tc ())->ti;
+-		      cons_owner = cons->get_owner ();
+-		    }
++		  fhandler_console *cons = (fhandler_console *) fh;
++		  cons_native = cons;
++		  cons_ti = &((tty *)cons->tc ())->ti;
++		  cons_owner = cons->get_owner ();
+ 		  tty::cons_mode conmode =
+ 		    (ctty_pgid && ctty_pgid == myself->pgid) ?
+ 		    tty::native : tty::restore;
+-		  if (fd == 0)
+-		    fhandler_console::set_input_mode (conmode,
++		  fhandler_console::set_input_mode (conmode,
+ 					   cons_ti, cons->get_handle_set ());
+-		  else if (fd == 1 || fd == 2)
+-		    fhandler_console::set_output_mode (conmode,
++		  fhandler_console::set_output_mode (conmode,
+ 					   cons_ti, cons->get_handle_set ());
+ 		}
+ 	    }
 -- 
 2.35.1
 
