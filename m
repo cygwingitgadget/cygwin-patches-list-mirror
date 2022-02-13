@@ -1,33 +1,33 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id 167B4385841C
+ by sourceware.org (Postfix) with ESMTPS id 01CEF3858418
  for <cygwin-patches@cygwin.com>; Sun, 13 Feb 2022 14:40:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 167B4385841C
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 01CEF3858418
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 21DEdOvH000575;
- Sun, 13 Feb 2022 23:39:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvH000575
+ by conuserg-11.nifty.com with ESMTP id 21DEdOvN000575;
+ Sun, 13 Feb 2022 23:39:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvN000575
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1644763187;
- bh=Iyk6mnGyvDSR8OfmoQrTIF7AippjeJXxXYC5dKhtelo=;
+ s=dec2015msa; t=1644763196;
+ bh=iUbtjOMkXQyjThkB5KhjKMtmniJIcu2KiLQOcokkQWA=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=M06/B3CbzubPJLBzUvLz4RiYjii2M1M8XqtvIZ1XW8AXc56VJD04HzSYYpDDs0kxP
- r4IdAa4ZfDc4xXeXIgLr/vVIvIVbwoCkDpGp+RInnhOK02XAheWPR71UibZS7XA2Ku
- LL7WCaaifxfFZyoCMBNWX+VDSU1K7mcEaahWswLC1wP4ZKar8o3elN9wzs6D89WA9j
- SDNvwIQyg4A0e4Bb4BEEqN6Ln2h1SjVopEc/hpFEvJmNnBgE25UE+pQQhoYCN+riZz
- TkpCEgGvC/LmpxomJH4mNCVmOamrWZUKQ8rlpJIZNNKhaGkNyEmM3Wg2uSNKHT8kF1
- 7baiAwWvnRRvw==
+ b=Pr7KXrzZNzBf/mSX85OFdCtNeYXc59wS7+xBMS/CczmChSBt4C9dq8iCcPuAAfte/
+ LdZKuH1hzDcZvaCve36uIjlUdfExD5O7cfLCgJvsF5tRS3KgMH8453bEJYAfbUmxti
+ FHyiCKUvVA/zrjYXHwl2XNIV2ZBcTSNy8V+CZuGvWM19jAiAayoUmoYmQ5kB17vwAC
+ /U+dF4/+I5JuaY1ko0Ply43I2P1F0GAYfIINYRN3ltnQuIatDZMrCtvMwpngHFhTlz
+ wX1jPvSTMKDzUBwbApuG16TRJf9eGQgpj5pnpx344JYfmz/GDg+X823M+T4Lw0w+TJ
+ IL7IgBAs0i+dg==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/8] Cygwin: pty: Pass Ctrl-Z (EOF) to non-cygwin apps with
- disable_pcon.
-Date: Sun, 13 Feb 2022 23:39:04 +0900
-Message-Id: <20220213143910.1947-3-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 5/8] Cygwin: pty: Discard input in from_master_nat pipe on
+ signal as well.
+Date: Sun, 13 Feb 2022 23:39:07 +0900
+Message-Id: <20220213143910.1947-6-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
 References: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
@@ -53,64 +53,28 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Sun, 13 Feb 2022 14:40:16 -0000
 
-- Previously, non-cygwin app running in pty started without pseudo
-  console support was suspended by Ctrl-Z rather than sending EOF.
-  Even worse, suspended app could not be resumed by fg command. With
-  this patch, Ctrl-Z (EOF for non-cygwin apps) is passed to non-cygwin
-  app instead of suspending that app. This patch also handles Ctrl-\
-  (QUIT) and Ctrl-D (EOF) as well.
+- Currently, pty discards input only in from_master pipe on signal.
+  Due to this, if pty is started without pseudo console support and
+  start a non-cygwin process from cmd.exe, type adhead input is not
+  discarded on signals such as Ctrl-C. This patch fixes the issue.
 ---
- winsup/cygwin/fhandler_termios.cc | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index fe1021520..b935a70bc 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -329,6 +329,7 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
-       if (ti.c_iflag & ISTRIP)
- 	c &= 0x7f;
-       winpids pids ((DWORD) 0);
-+      bool need_check_sigs = get_ttyp ()->pcon_input_state_eq (tty::to_cyg);
-       if (get_ttyp ()->pcon_input_state_eq (tty::to_nat))
- 	{
- 	  bool need_discard_input = false;
-@@ -349,11 +350,15 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 		    GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
- 		  need_discard_input = true;
- 		}
-+	      if (p->ctty == get_ttyp ()->ntty
-+		  && p->pgid == get_ttyp ()->getpgid () && !p->cygstarted)
-+		need_check_sigs = true;
- 	    }
--	  if (need_discard_input
--	      && !CCEQ (ti.c_cc[VINTR], c)
-+	  if (!CCEQ (ti.c_cc[VINTR], c)
- 	      && !CCEQ (ti.c_cc[VQUIT], c)
- 	      && !CCEQ (ti.c_cc[VSUSP], c))
-+	    need_check_sigs = false;
-+	  if (need_discard_input && !need_check_sigs)
- 	    {
- 	      if (!(ti.c_lflag & NOFLSH))
- 		{
-@@ -364,7 +369,7 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 	      continue;
- 	    }
- 	}
--      if (ti.c_lflag & ISIG)
-+      if ((ti.c_lflag & ISIG) && need_check_sigs)
- 	{
- 	  int sig;
- 	  if (CCEQ (ti.c_cc[VINTR], c))
-@@ -469,7 +474,7 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 	    }
- 	  continue;
- 	}
--      else if (CCEQ (ti.c_cc[VEOF], c))
-+      else if (CCEQ (ti.c_cc[VEOF], c) && need_check_sigs)
- 	{
- 	  termios_printf ("EOF");
- 	  accept_input ();
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 7e733e49a..8c9a10c23 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -438,6 +438,9 @@ fhandler_pty_master::discard_input ()
+   while (::bytes_available (bytes_in_pipe, from_master) && bytes_in_pipe)
+     ReadFile (from_master, buf, sizeof(buf), &n, NULL);
+   ResetEvent (input_available_event);
++  if (!get_ttyp ()->pcon_activated)
++    while (::bytes_available (bytes_in_pipe, from_master_nat) && bytes_in_pipe)
++      ReadFile (from_master_nat, buf, sizeof(buf), &n, NULL);
+   get_ttyp ()->discard_input = true;
+   ReleaseMutex (input_mutex);
+ }
 -- 
 2.35.1
 
