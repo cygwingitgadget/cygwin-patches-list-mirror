@@ -1,41 +1,38 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id D2DD83857C4E
- for <cygwin-patches@cygwin.com>; Sun, 13 Feb 2022 14:40:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D2DD83857C4E
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta001.cacentral1.a.cloudfilter.net
+ (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
+ by sourceware.org (Postfix) with ESMTPS id 5AB653858C1F
+ for <cygwin-patches@cygwin.com>; Tue, 15 Feb 2022 21:54:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5AB653858C1F
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 21DEdOvT000575;
- Sun, 13 Feb 2022 23:40:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21DEdOvT000575
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1644763203;
- bh=Ra0QlISZkTGqXLOwxcjKKYtMglUEQymeBEdd0wkylHE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=ZeQvz5jpRMGEG/wEDG1Naa824upu8MZmTrpWafAQ+PcrwzQjMdwWQDaaO42ITtZLc
- Q365MEnyZ0vebKivLciPQJLAWQavP56olLv6W86Cz+15o9+cyl5wgye8lrg3E9+6rD
- MvzGq0PSwbv3HIg1Ch25zFi93RQfM5UKYbWCUaNH7vLHuvTA51WJDSvu7askwanYrZ
- tCqNx689oM20VvC/mtnb8uN7LZoUvBKXR8B/2cxRDrB5I1t84oO+LrmkJ+fwWQg3mq
- QXb0jlqDxrgz5m71spMmnXc6qa74PcWRqMT8bb7PKBdFam8pXst0zGGrCCbGi5Rr29
- h63Tc9YqKYSYA==
-X-Nifty-SrcIP: [119.150.36.16]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+ by cmsmtp with ESMTP
+ id K28qn4NTz5Rf1K5mCn7K1F; Tue, 15 Feb 2022 21:54:24 +0000
+Received: from BWINGLISD.shawcable.net. ([184.64.124.72]) by cmsmtp with ESMTP
+ id K5mCnP69z2SCrK5mCn9mDD; Tue, 15 Feb 2022 21:54:24 +0000
+X-Authority-Analysis: v=2.4 cv=JLwoDuGb c=1 sm=1 tr=0 ts=620c2110
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=hNZfkREwxPR_96-FR58A:9 a=QEXdDO2ut3YA:10
+ a=1cF8Z3q_FTqyLXo45agA:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 8/8] Cygwin: console: Set console mode even if stdin/stdout is
- redirected.
-Date: Sun, 13 Feb 2022 23:39:10 +0900
-Message-Id: <20220213143910.1947-9-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): fix bad bits in last
+ change
+Date: Tue, 15 Feb 2022 14:54:20 -0700
+Message-Id: <20220215215420.40254-1-Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
-References: <20220213143910.1947-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.35.1"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+X-CMAE-Envelope: MS4xfKEwx6HaW/BgneIn+CcxFCjlTyu4ivdFW5XJbH+iUDDYxBXV/4i5YWMkhRQUv0E+ZYeSodXpOCrPPNZQspzN9wsWNS8BUKOa/R4OLDjFNCxdT7JTQkem
+ qLjokxHK71eg9owC99X5nSTjCBF55C7AYkAyhpbVDcqykHw6ilbJF6ba+hXR7Qd8hO8oM/9qTizgld8V2r61/IYJtwgb4utoSXDvPrC5QaYbOlE3xHhf+cEF
+ N3ZSNCwhiS+jAW8gNLZ55UukNQq3hwzhnlZS8GGnBT4=
+X-Spam-Status: No, score=-1169.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -51,55 +48,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 13 Feb 2022 14:40:21 -0000
+X-List-Received-Date: Tue, 15 Feb 2022 21:54:26 -0000
 
-- When non-cygwin app is started in console, console mode is set to
-  tty::native. However, if stdin is redirected, current code does not
-  set the input mode of the console. In this case, if the app opens
-  "CONIN$", the console mode will not be appropriate for non-cygwin
-  app. This patch fixes the issue.
+This is a multi-part message in MIME format.
+--------------2.35.1
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-Addresses:
-https://github.com/GitCredentialManager/git-credential-manager/issues/576
+
+move Linux 5.16 Gobble Gobble flags to 5.17 Superb Owl correct positions:
+0x00000007:1 Intel Advanced Matrix eXtensions:
+		 EAX:22 amx_bf16 Brain Float 16 dot product
+		 EAX:24 amx_tile Tile matrix multiply
+		 EAX:25 amx_int8 Int 8 byte dot product
+0x00000007:0 Intel Advanced Matrix eXtensions:
+		 EDX:22 amx_bf16 Brain Float 16 dot product
+		 EDX:24 amx_tile Tile matrix multiply
+		 EDX:25 amx_int8 Int 8 byte dot product
 ---
- winsup/cygwin/spawn.cc | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ winsup/cygwin/fhandler_proc.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 81dba5a94..a7e25cc20 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -627,23 +627,18 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	    }
- 	  else if (fh && fh->get_major () == DEV_CONS_MAJOR)
- 	    {
--	      fhandler_console *cons = (fhandler_console *) fh;
--	      if (!iscygwin ())
-+	      if (!iscygwin () && cons_native == NULL)
- 		{
--		  if (cons_native == NULL)
--		    {
--		      cons_native = cons;
--		      cons_ti = &((tty *)cons->tc ())->ti;
--		      cons_owner = cons->get_owner ();
--		    }
-+		  fhandler_console *cons = (fhandler_console *) fh;
-+		  cons_native = cons;
-+		  cons_ti = &((tty *)cons->tc ())->ti;
-+		  cons_owner = cons->get_owner ();
- 		  tty::cons_mode conmode =
- 		    (ctty_pgid && ctty_pgid == myself->pgid) ?
- 		    tty::native : tty::restore;
--		  if (fd == 0)
--		    fhandler_console::set_input_mode (conmode,
-+		  fhandler_console::set_input_mode (conmode,
- 					   cons_ti, cons->get_handle_set ());
--		  else if (fd == 1 || fd == 2)
--		    fhandler_console::set_output_mode (conmode,
-+		  fhandler_console::set_output_mode (conmode,
- 					   cons_ti, cons->get_handle_set ());
- 		}
- 	    }
--- 
-2.35.1
+
+--------------2.35.1
+Content-Type: text/x-patch; name="0001-fhandler_proc.cc-format_proc_cpuinfo-fix-bad-bits-in-last-change.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-fhandler_proc.cc-format_proc_cpuinfo-fix-bad-bits-in-last-change.patch"
+
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index d51f171a3a41..0b01e68f8e50 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1456,9 +1456,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 
+ 	  ftcprint (features1,  4, "avx_vnni");	    /* vex enc NN vec */
+ 	  ftcprint (features1,  5, "avx512_bf16");  /* vec bfloat16 short */
+-	  ftcprint (features1, 22, "amx_bf16");	    /* Advanced Matrix eXtensions Brain Float 16 dot product */
+-	  ftcprint (features1, 24, "amx_tile");	    /* Advanced Matrix eXtensions Tile matrix multiply */
+-	  ftcprint (features1, 25, "amx_int8");	    /* Advanced Matrix eXtensions Int 8 byte dot product */
+ 	}
+ 
+       /* AMD cpuid 0x80000008 ebx */
+@@ -1576,7 +1573,10 @@ format_proc_cpuinfo (void *, char *&destbuf)
+           ftcprint (features1, 16, "tsxldtrk");		   /* TSX Susp Ld Addr Track */
+           ftcprint (features1, 18, "pconfig");		   /* platform config */
+           ftcprint (features1, 19, "arch_lbr");		   /* last branch records */
++	  ftcprint (features1, 22, "amx_bf16");	    /* Advanced Matrix eXtensions Brain Float 16 dot product */
+           ftcprint (features1, 23, "avx512_fp16");	   /* avx512 fp16 */
++	  ftcprint (features1, 24, "amx_tile");	    /* Advanced Matrix eXtensions Tile matrix multiply */
++	  ftcprint (features1, 25, "amx_int8");	    /* Advanced Matrix eXtensions Int 8 byte dot product */
+           ftcprint (features1, 28, "flush_l1d");	   /* flush l1d cache */
+           ftcprint (features1, 29, "arch_capabilities");   /* arch cap MSR */
+         }
+
+--------------2.35.1--
+
 
