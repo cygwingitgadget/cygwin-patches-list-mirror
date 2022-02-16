@@ -1,42 +1,48 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
- [210.131.2.91])
- by sourceware.org (Postfix) with ESMTPS id 144363858D37
- for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 09:43:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 144363858D37
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id BDD603858D3C
+ for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 10:43:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BDD603858D3C
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conssluserg-06.nifty.com with ESMTP id 21G9gxeQ030116
- for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 18:43:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21G9gxeQ030116
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645004580;
- bh=LctgFblFHyHuJd44xvciE4o/b/sxhIpUm6TBr0qx6rw=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=f73nkvJnBjTIHGbXib4ADWSFOlQtZDft7G7bh0LjpRHuGK1C5rJttxUb90OXnd0VV
- WF3oV9eFBIBFfSl/OTDUaB0yDlZJtW3oHatHU2nVp9nW/Gh6qKB8goxjCOBJdagwNl
- v268TQR35NwC0XUpZ5u/cN9OSJyw4DhDZqPeYo3Q5BHQMc0dsaad7JunjqWoCXHqNG
- /L9zVwmNRX5LFEdc+SyQUkQ88B00eZfTV3T3jeK/FYSR+BeDzyzyTIi7Pp9cYmaZdy
- wBSeBFRtogL76Jebnd8WVSfCiM2mGvmdJ2agJlFGMr4FrGOq7XHnRSCSVm2nNbEmBj
- 1h2DXFfOKwjaQ==
-X-Nifty-SrcIP: [119.150.36.16]
-Date: Wed, 16 Feb 2022 18:43:00 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MNL2Y-1neYjL1o2U-00OqIV for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022
+ 11:43:53 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 0BDC0A807A1; Wed, 16 Feb 2022 11:43:53 +0100 (CET)
+Date: Wed, 16 Feb 2022 11:43:53 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: wincap: Add capabilities for Windows 11.
-Message-Id: <20220216184300.f043bb387c5c590ea13fa9f9@nifty.ne.jp>
-In-Reply-To: <20220216093311.2055-1-takashi.yano@nifty.ne.jp>
-References: <20220216093311.2055-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+Subject: Re: [PATCH v2] Cygwin: wincap: Add capabilities for Windows 11.
+Message-ID: <YgzVaeCEKItAei3n@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220216094008.2087-1-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220216094008.2087-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:6AUfLMLUw17RyulqNzUoQdAuh8GnBTmogsiuQ1ALGAgM16Nr/TG
+ Ue+gh/cYVUt226sBmMuGHe8LWrYlnuqGjDsy7CpD40rBhq228HrToGO2WCC3jj6mZovZeyI
+ 7C866+aEez9hdmMfEzukz4Y0GqVlOAjJOdsb4ar6EYVZXY+q302dNsWFdMwVopxb+S5ZPiV
+ 4+BWY9yP/fHhDbapN8BXA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/NeC89jusgc=:nnTr7oepvCeS2nLLIbEbwM
+ Ph5nk3BptjdK7I3DZZvFHU8ivR2Yr8jmoBMpuA/Bm1UEQHVu2+ujDCFWFXZes0zqXE5ZJKvZg
+ 3B4xZIC9Itnsjh6DUJnrRp6BlPkzETLWzFq44Z0e82FXjxbpiJhyTeo+mHdzk7gMtpwrddkek
+ A+fXNahNUByX3l4c73iOGG1o8PTyEWJb+8KWbyZBd1Mb/OnPIeEcJQA0MaG76ri9TeZ4xqZ0T
+ sjB71xBG7Q5RtheOG+KVDjTEyEbAdGK2y9IHJ+NwAnRNRSAEOUbbfYdNeQz2uKbDoNf+2Cf3y
+ NQzXJb7udy0i2wZkAnmnuuqKn2JZOg2uV57JikAFC7eaQCqR7U7e35xZKOX/ksfVpKIEgzwzi
+ TsqQi7bPWBrrBrgHxG0yrRoLZ9GL0L47LhjUtjPJb6C2shv4py1osm/b87N4DMWXxjNux2s/x
+ QXgtCs91wY9G8KlI5Rtq88cJc5rUsN13otw/wUasEZAAZWYRrQZNT5zM13Bn0voguQgARHtXf
+ a9CQCubQQoHEAeql3AhDTUrWt8a4frmFms+awGRAhOT5H4C2OkGBESxPgKw321Ii508YFTVyF
+ 3hqbY+Df6/dhaJw2m+KOXsh5nNAG47MwuPwXbrmXFDk6rd3wmfVqbsFDDixLYjZhh6CLhL8v8
+ 0L+wr4sG+eqZGNEVVORUawnOGWRuHQJu6HQzaZrYtIwtMNVP3tj63BQh+c8z4pr97TBRpqnMV
+ Hp5sim4z35Pu/B3s
+X-Spam-Status: No, score=-96.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -52,16 +58,19 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 16 Feb 2022 09:43:31 -0000
+X-List-Received-Date: Wed, 16 Feb 2022 10:43:56 -0000
 
-On Wed, 16 Feb 2022 18:33:11 +0900
-Takashi Yano <takashi.yano@nifty.ne.jp> wrote:
-> -	if (likely (version.dwBuildNumber >= 19041))
-> +	if (likely (version.dwBuildNumber >= 22000))
-> +	  caps = &wincap_11;
-> +	if (version.dwBuildNumber >= 19041)
+On Feb 16 18:40, Takashi Yano wrote:
+> - The capability changes since Windows 11 have been reflected in
+>   wincap.cc. The capability has_con_broken_tabs is added, which is
+>   false since Windows 11.
+> ---
+>  winsup/cygwin/wincap.cc | 47 ++++++++++++++++++++++++++++++++++++++++-
+>  winsup/cygwin/wincap.h  |  2 ++
+>  2 files changed, 48 insertions(+), 1 deletion(-)
 
-Sorry, here is a bug. I have sent v2 patch.
+Looks good!
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Thx,
+Corinna
