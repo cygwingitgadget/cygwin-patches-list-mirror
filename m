@@ -1,38 +1,38 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 269473858D37
- for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 09:33:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 269473858D37
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id D4DAF3858D37
+ for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 09:40:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D4DAF3858D37
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 21G9XLef013902;
- Wed, 16 Feb 2022 18:33:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 21G9XLef013902
+ by conuserg-10.nifty.com with ESMTP id 21G9eI3Q012931;
+ Wed, 16 Feb 2022 18:40:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 21G9eI3Q012931
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645004006;
- bh=Q8ii6H9UYSdNMg/bqxDE04XWigSfoZ/DZ1/IRboHrSU=;
+ s=dec2015msa; t=1645004422;
+ bh=oaP9Fp+awyd/zKNB6GPAIEpBXgf16vs5m5vuuhRima0=;
  h=From:To:Cc:Subject:Date:From;
- b=ct55hDQsmKGXU8B7wkFR3WKR+p3uwkyp0QDIIkibxuni41LTKqzSU21cyFgEqc/Jd
- LhqsKjpmJWxtcLbLEBy9ErPZNuwXbfSBSaHQEdG04Jc+SVMWDGetsumg/l4zDO4hmT
- 6HNGBCwRW2CYEmUSwXg8q42Il7OQpaJjKDUOwFiifsDsH0DU4cxQiXOqn6XlAxZTaj
- uQ0ogqkx3ADbCMZMohhAlcu+9Q0gMgzQuj21Y7skJdZo3b0AhkLUK5kRaz4K1jtx09
- 6xtMdqpQ0hoY0Y0XT/vnQofX6RuuSWNmp2D5LN4WuOzA2fyRWZKuWya+tm+nERJTVa
- Yf490pyfzFbVg==
+ b=CV7eMncXAnoAY6l9rEP5VyPtDYvCTTNSMK1n3e2uHNGCEWHnOUBCY5MkPZpLfR4Xx
+ VK4ZSNJuDd8U9X1TV6qhelG6fwnRI+gMans48GIulNIUedLdUsDuhX9K/vIOa4+L5A
+ h22JAPg/+JGwW8YJS+XDgVzfmToH5QX6Z2FyT3PevKKHxNwZArkKJ3wlItnslvjRHM
+ LHMTBWHHBVNTSjx97nq24vmEXPyb2j6JvybcfxMJOs9EQwEr0PgJt3qFsxUwEYUplo
+ pd1V40AGgLPriASUlC3xWPlwldVGMou7wv/d0o7BM1wmAREFAWI8yG7RLMqkS9avVn
+ nNRxoB8+cqqOw==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: wincap: Add capabilities for Windows 11.
-Date: Wed, 16 Feb 2022 18:33:11 +0900
-Message-Id: <20220216093311.2055-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: wincap: Add capabilities for Windows 11.
+Date: Wed, 16 Feb 2022 18:40:08 +0900
+Message-Id: <20220216094008.2087-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,7 +48,7 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 16 Feb 2022 09:33:57 -0000
+X-List-Received-Date: Wed, 16 Feb 2022 09:40:57 -0000
 
 - The capability changes since Windows 11 have been reflected in
   wincap.cc. The capability has_con_broken_tabs is added, which is
@@ -59,7 +59,7 @@ X-List-Received-Date: Wed, 16 Feb 2022 09:33:57 -0000
  2 files changed, 48 insertions(+), 1 deletion(-)
 
 diff --git a/winsup/cygwin/wincap.cc b/winsup/cygwin/wincap.cc
-index b8376b8ed..244ebc8e5 100644
+index b8376b8ed..ffc32140b 100644
 --- a/winsup/cygwin/wincap.cc
 +++ b/winsup/cygwin/wincap.cc
 @@ -46,6 +46,7 @@ wincaps wincap_7 __attribute__((section (".cygwin_dll_common"), shared)) = {
@@ -189,7 +189,7 @@ index b8376b8ed..244ebc8e5 100644
 -	if (likely (version.dwBuildNumber >= 19041))
 +	if (likely (version.dwBuildNumber >= 22000))
 +	  caps = &wincap_11;
-+	if (version.dwBuildNumber >= 19041)
++	else if (version.dwBuildNumber >= 19041)
  	  caps = &wincap_10_2004;
  	else if (version.dwBuildNumber >= 18362)
  	  caps = &wincap_10_1903;
