@@ -1,49 +1,38 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id CE8993858D3C
- for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 08:32:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CE8993858D3C
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 269473858D37
+ for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 09:33:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 269473858D37
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MQuwR-1ng1Th1nyJ-00Nwyr for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022
- 09:32:02 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C52ADA807A1; Wed, 16 Feb 2022 09:32:01 +0100 (CET)
-Date: Wed, 16 Feb 2022 09:32:01 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
+ [119.150.36.16]) (authenticated)
+ by conuserg-08.nifty.com with ESMTP id 21G9XLef013902;
+ Wed, 16 Feb 2022 18:33:26 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 21G9XLef013902
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1645004006;
+ bh=Q8ii6H9UYSdNMg/bqxDE04XWigSfoZ/DZ1/IRboHrSU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ct55hDQsmKGXU8B7wkFR3WKR+p3uwkyp0QDIIkibxuni41LTKqzSU21cyFgEqc/Jd
+ LhqsKjpmJWxtcLbLEBy9ErPZNuwXbfSBSaHQEdG04Jc+SVMWDGetsumg/l4zDO4hmT
+ 6HNGBCwRW2CYEmUSwXg8q42Il7OQpaJjKDUOwFiifsDsH0DU4cxQiXOqn6XlAxZTaj
+ uQ0ogqkx3ADbCMZMohhAlcu+9Q0gMgzQuj21Y7skJdZo3b0AhkLUK5kRaz4K1jtx09
+ 6xtMdqpQ0hoY0Y0XT/vnQofX6RuuSWNmp2D5LN4WuOzA2fyRWZKuWya+tm+nERJTVa
+ Yf490pyfzFbVg==
+X-Nifty-SrcIP: [119.150.36.16]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): fix bad bits in
- last change
-Message-ID: <Ygy2gQVkfD1VXKfm@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220215215420.40254-1-Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH] Cygwin: wincap: Add capabilities for Windows 11.
+Date: Wed, 16 Feb 2022 18:33:11 +0900
+Message-Id: <20220216093311.2055-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220215215420.40254-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:PZNmyeYEM7fMa5KO1daFvx1kmX6xb+lNkytScxeftuQe9j4TQkr
- Nk6xQ8uRTsnwIMFLHktHzvS1+l/EjfpTD9lhIlOTi5BPLUEGfbK4h+66gpujkjci6oA3rR/
- 8RIpJgSZgP5gzBf/Hp1m0HvfWv1E0elYwBDY3lf2a1x+CutySdOBq50F2Pr/CXKx0zB0D2J
- ujXmrDQJQwSN5wDuCzrcg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VfP2wQ7FjPM=:eKrAoj07dvE60tJDknTN8L
- 21STjdDkYrdWr2r9VgxvY/6a0FFiLwHYZcdxZzGyQ65Uir6HxAYHaSTsFelaFp2xlXm8fT9U0
- WHMEMNHQ4qvEff4c/S1FaA/VrKPCPXTHb2A/VBcR3J4I1BWgGw/v4lXOee8N3VQPNNvApyGvB
- KZm/Gh3rgWH1/RovDD/acfFy8ieQooeO4lcyiEBHgE6WUQEJG0jVZqu3+NkIDt/um6aUtXgDJ
- lyKtPfsJ33q1LcguKvet8vR2HcZq6Q69x5Be5USJN4bN1XD5Afv0NWGmViR7g0QVIn8j1Ayml
- HwhqzUUoUnXwzAHrvn7srIHkJ8gy6/s87TuNS8pHhQYVijFD63HuDoZMln6N5TzFv9F7QCGFl
- DKzhuOEI+93TBkTwHpS+Kuy/2PWPDdppGdRge215fTIEFhX1t7snEoExFzgGpwS5bvz7ie90F
- 1RqX7+W38W8h3rhAgzTPsILgWI/b0p2M24/aKO1hneWXUpRwtqfqNpXYCJPV8A2wwUyDwjC7s
- mCOn5siZ0iH6FwGz50jH+20P8ks7PuCCXZ4yvPLij/hpeUNvv9Cz+Xcra5I/myAHwxbY7F8Ok
- v0eyeNHheBriB89jWjLZjFXcS/WNyvi/B0FBtdpUPEGfQx4Bf7INMebiumymCmUgeuK92n6qM
- WTw5HneB5DY+BdLFy9azjIQfjE4bcyN2db2IxCNGZkXOMMJ+smwBN6OO/0f4biFwbwInyi+lc
- ecg0oGgLfGF86Il1
-X-Spam-Status: No, score=-96.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -59,27 +48,171 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 16 Feb 2022 08:32:06 -0000
+X-List-Received-Date: Wed, 16 Feb 2022 09:33:57 -0000
 
-On Feb 15 14:54, Brian Inglis wrote:
-> 
-> move Linux 5.16 Gobble Gobble flags to 5.17 Superb Owl correct positions:
-> 0x00000007:1 Intel Advanced Matrix eXtensions:
-> 		 EAX:22 amx_bf16 Brain Float 16 dot product
-> 		 EAX:24 amx_tile Tile matrix multiply
-> 		 EAX:25 amx_int8 Int 8 byte dot product
-> 0x00000007:0 Intel Advanced Matrix eXtensions:
-> 		 EDX:22 amx_bf16 Brain Float 16 dot product
-> 		 EDX:24 amx_tile Tile matrix multiply
-> 		 EDX:25 amx_int8 Int 8 byte dot product
-> ---
->  winsup/cygwin/fhandler_proc.cc | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
+- The capability changes since Windows 11 have been reflected in
+  wincap.cc. The capability has_con_broken_tabs is added, which is
+  false since Windows 11.
+---
+ winsup/cygwin/wincap.cc | 47 ++++++++++++++++++++++++++++++++++++++++-
+ winsup/cygwin/wincap.h  |  2 ++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
 
-Pushed.
-
-
-Thanks,
-Corinna
+diff --git a/winsup/cygwin/wincap.cc b/winsup/cygwin/wincap.cc
+index b8376b8ed..244ebc8e5 100644
+--- a/winsup/cygwin/wincap.cc
++++ b/winsup/cygwin/wincap.cc
+@@ -46,6 +46,7 @@ wincaps wincap_7 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:false,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -77,6 +78,7 @@ wincaps wincap_8 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -108,6 +110,7 @@ wincaps wincap_8_1 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -139,6 +142,7 @@ wincaps  wincap_10_1507 __attribute__((section (".cygwin_dll_common"), shared))
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -170,6 +174,7 @@ wincaps  wincap_10_1607 __attribute__((section (".cygwin_dll_common"), shared))
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -201,6 +206,7 @@ wincaps wincap_10_1703 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:false,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
+   },
+ };
+ 
+@@ -232,6 +238,7 @@ wincaps wincap_10_1709 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:true,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
+   },
+ };
+ 
+@@ -263,6 +270,7 @@ wincaps wincap_10_1803 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:true,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
+   },
+ };
+ 
+@@ -294,6 +302,7 @@ wincaps wincap_10_1809 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:true,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
+   },
+ };
+ 
+@@ -325,6 +334,7 @@ wincaps wincap_10_1903 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:true,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
+   },
+ };
+ 
+@@ -356,6 +366,39 @@ wincaps wincap_10_2004 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_linux_tcp_keepalive_sockopts:true,
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
++    has_con_broken_tabs:true,
++  },
++};
++
++wincaps wincap_11 __attribute__((section (".cygwin_dll_common"), shared)) = {
++  def_guard_pages:2,
++  mmap_storage_high:0x700000000000LL,
++  {
++    is_server:false,
++    needs_query_information:false,
++    has_gaa_largeaddress_bug:false,
++    has_precise_system_time:true,
++    has_microsoft_accounts:true,
++    has_broken_prefetchvm:false,
++    has_new_pebteb_region:true,
++    has_broken_whoami:false,
++    has_unprivileged_createsymlink:true,
++    has_precise_interrupt_time:true,
++    has_posix_unlink_semantics:true,
++    has_posix_unlink_semantics_with_ignore_readonly:true,
++    has_case_sensitive_dirs:true,
++    has_posix_rename_semantics:true,
++    no_msv1_0_s4u_logon_in_wow64:false,
++    has_con_24bit_colors:true,
++    has_con_broken_csi3j:false,
++    has_con_broken_il_dl:false,
++    has_con_esc_rep:true,
++    has_extended_mem_api:true,
++    has_tcp_fastopen:true,
++    has_linux_tcp_keepalive_sockopts:true,
++    has_tcp_maxrtms:true,
++    has_query_process_handle_info:true,
++    has_con_broken_tabs:false,
+   },
+ };
+ 
+@@ -396,7 +439,9 @@ wincapc::init ()
+ 	break;
+       case 10:
+       default:
+-	if (likely (version.dwBuildNumber >= 19041))
++	if (likely (version.dwBuildNumber >= 22000))
++	  caps = &wincap_11;
++	if (version.dwBuildNumber >= 19041)
+ 	  caps = &wincap_10_2004;
+ 	else if (version.dwBuildNumber >= 18362)
+ 	  caps = &wincap_10_1903;
+diff --git a/winsup/cygwin/wincap.h b/winsup/cygwin/wincap.h
+index ba9a3b59d..1602ed6e1 100644
+--- a/winsup/cygwin/wincap.h
++++ b/winsup/cygwin/wincap.h
+@@ -40,6 +40,7 @@ struct wincaps
+     unsigned has_linux_tcp_keepalive_sockopts			: 1;
+     unsigned has_tcp_maxrtms					: 1;
+     unsigned has_query_process_handle_info			: 1;
++    unsigned has_con_broken_tabs				: 1;
+   };
+ };
+ 
+@@ -103,6 +104,7 @@ public:
+   bool	IMPLEMENT (has_linux_tcp_keepalive_sockopts)
+   bool	IMPLEMENT (has_tcp_maxrtms)
+   bool	IMPLEMENT (has_query_process_handle_info)
++  bool	IMPLEMENT (has_con_broken_tabs)
+ 
+   void disable_case_sensitive_dirs ()
+   {
+-- 
+2.35.1
 
