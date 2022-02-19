@@ -1,48 +1,43 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id BDD603858D3C
- for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022 10:43:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BDD603858D3C
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MNL2Y-1neYjL1o2U-00OqIV for <cygwin-patches@cygwin.com>; Wed, 16 Feb 2022
- 11:43:53 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 0BDC0A807A1; Wed, 16 Feb 2022 11:43:53 +0100 (CET)
-Date: Wed, 16 Feb 2022 11:43:53 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-041.btinternet.com (mailomta17-re.btinternet.com
+ [213.120.69.110])
+ by sourceware.org (Postfix) with ESMTPS id 8F2893858D1E
+ for <cygwin-patches@cygwin.com>; Sat, 19 Feb 2022 18:19:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8F2893858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
+ by re-prd-fep-041.btinternet.com with ESMTP id
+ <20220219181947.BTN24157.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Sat, 19 Feb 2022 18:19:47 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613A8DE81545EEE7
+X-Originating-IP: [86.139.167.74]
+X-OWM-Source-IP: 86.139.167.74 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrkedvgdduudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeuieejgeduvdeutdffieeileefffdufeekhefgjefffeehtdekjeegkeeftdfffeenucfkphepkeeirddufeelrdduieejrdejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddufeelrdduieejrdejgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.139.167.74) by
+ re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613A8DE81545EEE7; Sat, 19 Feb 2022 18:19:47 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: wincap: Add capabilities for Windows 11.
-Message-ID: <YgzVaeCEKItAei3n@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220216094008.2087-1-takashi.yano@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Adjust path to newlib libm.a in builddir
+Date: Sat, 19 Feb 2022 18:18:51 +0000
+Message-Id: <20220219181851.57211-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220216094008.2087-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:6AUfLMLUw17RyulqNzUoQdAuh8GnBTmogsiuQ1ALGAgM16Nr/TG
- Ue+gh/cYVUt226sBmMuGHe8LWrYlnuqGjDsy7CpD40rBhq228HrToGO2WCC3jj6mZovZeyI
- 7C866+aEez9hdmMfEzukz4Y0GqVlOAjJOdsb4ar6EYVZXY+q302dNsWFdMwVopxb+S5ZPiV
- 4+BWY9yP/fHhDbapN8BXA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/NeC89jusgc=:nnTr7oepvCeS2nLLIbEbwM
- Ph5nk3BptjdK7I3DZZvFHU8ivR2Yr8jmoBMpuA/Bm1UEQHVu2+ujDCFWFXZes0zqXE5ZJKvZg
- 3B4xZIC9Itnsjh6DUJnrRp6BlPkzETLWzFq44Z0e82FXjxbpiJhyTeo+mHdzk7gMtpwrddkek
- A+fXNahNUByX3l4c73iOGG1o8PTyEWJb+8KWbyZBd1Mb/OnPIeEcJQA0MaG76ri9TeZ4xqZ0T
- sjB71xBG7Q5RtheOG+KVDjTEyEbAdGK2y9IHJ+NwAnRNRSAEOUbbfYdNeQz2uKbDoNf+2Cf3y
- NQzXJb7udy0i2wZkAnmnuuqKn2JZOg2uV57JikAFC7eaQCqR7U7e35xZKOX/ksfVpKIEgzwzi
- TsqQi7bPWBrrBrgHxG0yrRoLZ9GL0L47LhjUtjPJb6C2shv4py1osm/b87N4DMWXxjNux2s/x
- QXgtCs91wY9G8KlI5Rtq88cJc5rUsN13otw/wUasEZAAZWYRrQZNT5zM13Bn0voguQgARHtXf
- a9CQCubQQoHEAeql3AhDTUrWt8a4frmFms+awGRAhOT5H4C2OkGBESxPgKw321Ii508YFTVyF
- 3hqbY+Df6/dhaJw2m+KOXsh5nNAG47MwuPwXbrmXFDk6rd3wmfVqbsFDDixLYjZhh6CLhL8v8
- 0L+wr4sG+eqZGNEVVORUawnOGWRuHQJu6HQzaZrYtIwtMNVP3tj63BQh+c8z4pr97TBRpqnMV
- Hp5sim4z35Pu/B3s
-X-Spam-Status: No, score=-96.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1200.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_PASS, SPF_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -58,19 +53,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 16 Feb 2022 10:43:56 -0000
+X-List-Received-Date: Sat, 19 Feb 2022 18:19:50 -0000
 
-On Feb 16 18:40, Takashi Yano wrote:
-> - The capability changes since Windows 11 have been reflected in
->   wincap.cc. The capability has_con_broken_tabs is added, which is
->   false since Windows 11.
-> ---
->  winsup/cygwin/wincap.cc | 47 ++++++++++++++++++++++++++++++++++++++++-
->  winsup/cygwin/wincap.h  |  2 ++
->  2 files changed, 48 insertions(+), 1 deletion(-)
+Adjust path to newlib libm.a in builddir, changed by ac9f8c46
+---
+ winsup/cygwin/Makefile.am | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Looks good!
+diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
+index ad38fb220..1c4f00c24 100644
+--- a/winsup/cygwin/Makefile.am
++++ b/winsup/cygwin/Makefile.am
+@@ -626,7 +626,7 @@ $(LDSCRIPT): $(LDSCRIPT).in
+ 
+ # cygwin dll
+ $(PRE_DLL_NAME): $(LDSCRIPT) libdll.a $(VERSION_OFILES) $(LIBSERVER)\
+-		  $(newlib_build)/libm/libm.a $(newlib_build)/libc/libc.a
++		  $(newlib_build)/libm.a $(newlib_build)/libc/libc.a
+ 	$(AM_V_CXXLD)$(CXX) $(CXXFLAGS) \
+ 	-mno-use-libstdc-wrappers \
+ 	-Wl,--gc-sections -nostdlib -Wl,-T$(LDSCRIPT) -static \
+@@ -635,7 +635,7 @@ $(PRE_DLL_NAME): $(LDSCRIPT) libdll.a $(VERSION_OFILES) $(LIBSERVER)\
+ 	-Wl,-whole-archive libdll.a -Wl,-no-whole-archive \
+ 	$(VERSION_OFILES) \
+ 	$(LIBSERVER) \
+-	$(newlib_build)/libm/libm.a \
++	$(newlib_build)/libm.a \
+ 	$(newlib_build)/libc/libc.a \
+ 	-lgcc -lkernel32 -lntdll -Wl,-Map,cygwin.map
+ 
+@@ -696,7 +696,7 @@ speclib=\
+ libc.a: $(LIB_NAME) libm.a libpthread.a libutil.a
+ 	$(AM_V_GEN)$(speclib) $^ -v $(@F)
+ 
+-libm.a: $(LIB_NAME) $(newlib_build)/libm/libm.a $(addsuffix .o,$(basename $(MATH_FILES)))
++libm.a: $(LIB_NAME) $(newlib_build)/libm.a $(addsuffix .o,$(basename $(MATH_FILES)))
+ 	$(AM_V_GEN)$(speclib) $^ $(@F)
+ 
+ libpthread.a: $(LIB_NAME) pthread.o thread.o libc/call_once.o libc/cnd.o \
+-- 
+2.35.1
 
-
-Thx,
-Corinna
