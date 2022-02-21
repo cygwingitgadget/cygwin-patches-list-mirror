@@ -1,39 +1,57 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id A55BF3858D35
- for <cygwin-patches@cygwin.com>; Sun, 20 Feb 2022 11:17:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A55BF3858D35
+Return-Path: <johannes.schindelin@gmx.de>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by sourceware.org (Postfix) with ESMTPS id 9E5043858D37
+ for <cygwin-patches@cygwin.com>; Mon, 21 Feb 2022 13:36:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9E5043858D37
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 21KBGko6020379;
- Sun, 20 Feb 2022 20:16:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 21KBGko6020379
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645355811;
- bh=4bhgljP6egsgMWobuZ62OG9OUbdfEulxjJmqG28DtCg=;
- h=From:To:Cc:Subject:Date:From;
- b=ecInfI4yBPSHZQmdrducimyB/C227vglxdBVoJfhacf6VMhFdTeXqWqAq5UYZZk9C
- 6hXoIpLPiTFt/EkS+PWYl4dUlQZpCcwVtMqHMj/hE2K5IzcSsWHBVWr6NvOsrikTem
- okPN19SiIeWXoJ47d1qiX9XoeNXrLxBdG0WKRW0XMLIFS+2new13NicVTmzV9eS+6E
- xs9zmDv5Mos//DzBVkInx9s5QiXIqF20gVvTDXdeHK/mrqDQwcWG+BvW1QNyeQg5G1
- KaNGCFSRribhkggu5Nu42r5mmQo0QAEjnf661CRW1caBpaqP0JdhTo2/6BUnTl0bIi
- Fa4E9apANeSlQ==
-X-Nifty-SrcIP: [119.150.36.16]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=pass (p=none dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1645450579;
+ bh=fEbbDd7CvGcWTiymGzaWkqrxnjOfuSugCTJmlUGrQ7o=;
+ h=X-UI-Sender-Class:Date:From:To:Subject;
+ b=ZfAJ6LkFvXmORBL1wz2LGTkxEMCdct8N7EXeF32Rh9+AbEM+Mo8aQ2f1wjj+wulFS
+ ncw+9E0nip6WoWmIC1g6kLCc3VXBBdm99I5mvj9xrfT71a5ZT8sEYpZEbz2kGlV0il
+ CKh7tggQtdJAAfFTfk3QTULhu2KPvWhhR1SdayKU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [172.28.129.168] ([89.1.212.236]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIMbO-1nRedy46DM-00EPeC for
+ <cygwin-patches@cygwin.com>; Mon, 21 Feb 2022 14:36:19 +0100
+Date: Mon, 21 Feb 2022 14:36:16 +0100 (CET)
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
+X-X-Sender: virtualbox@gitforwindows.org
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Call fix_tab_position() only if having
- broken tabs.
-Date: Sun, 20 Feb 2022 20:16:36 +0900
-Message-Id: <20220220111636.1000-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+Subject: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin,stdout,stderr}
+ symlinks
+Message-ID: <cover.1645450518.git.johannes.schindelin@gmx.de>
+User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:iZb7WqAjZzVphXbLYLLiOtKFlWNEMkGZhEFBcOlonVDUzTVubF3
+ G+ujiCyAMZ0QZJ3vxebxivrEAR8vwcXH5Lu6o5d/q34bgQfd5ubjKIaMsXv8S8gkm+cyDoQ
+ VYcO7wOWEy9p5TBSDPOFTDlp9oWQc4mPSS+Z+S7AEBOuQrE1LdNqRJUWE/6ZNEM0xICmJTu
+ Z1W6LJ89ObzsBjUyXY8+A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HVPtNzwmpcw=:L4AKetPjyZbO1qGOE0HTQT
+ cmrrjiguXpZKqtueelbxM0ZpL2JClDGieKW6EpGRi8nepxlBUoavL3b7zaa8Pr2Tqb58hQSzO
+ 2bhrutU/p+oYBh28DSXz+E3DuijPsflHYx/EcLRAb1z2r1AyO7T2eigGor7R1W/rsYWV9efkI
+ p9RGeaSFv3qqQYwrzcVpHbVLLgHneZH9Zig3jXfs+2IejBsaMJNAU3QMFYC9UcZ/ND6GgPoJ3
+ +8MXl88pANeHdjVuq87WPHMCwxIm4pSaVqmLLklTcSnlQO7hO3oBso/Ygxr/s1CtUkyVlI0oZ
+ JywhI7iKsgUK+0FtoHFbdPC9ioAhaHxK3i90MIFsK1lw6mk8K+Vpo2a4iOZ3jd1jxNXA+V5So
+ syyFdcnW+lrVlO6RxypJ0rBnyjnz6NQX/7kFcyF1lR3+bbTTEI/UtfC9woVNfRJ0NQ9t5IFpm
+ YA9e7b64Na4r6JhB4caWdHxBfpv2ra/Z2bpLg0CxlrooGtBZvk2zpdQtKLunIZmRtnb69Cw8l
+ F5hsHrvO4mrqcxXrMzrDVyezgytRArACFCLq3lJnu4iqWAuzEdwGQeGH/nKF0mn2xe2rIj9AE
+ 2e6TqsGVOdNO9IXO6hFvXGNDUmayxVWqYjCm8Wu+kf/2oEVEDyqG3emFbhSmIVG3jKeFRGikQ
+ /Av/PKs5wJYRxngF6FcRbNJbcEO7Wkg6wc93iIfQW2JXfaCOKgQzubnTqLyHuuuIZ6hGc99z6
+ Pnw/EGXMc5cxUhirBv/ZCGPI3Z+kIGJloqDUI2g6j/S7TzouZTEszIwJrRo59Jo1xxG9EpTZm
+ gpMkw1Tj2ZjCz/IrZcyGP5dhNwf7zHyftinFP9/WLe0nfFJbl7EaQncvNZUU2VUuHfCZtYf4Q
+ DDeeweVu20re4DcKKgycOn8mHioF1jOHA2wHJ5aTptIhBp8kAer3KmFFxHGsL21ZftjXbzJC2
+ +jglDXkLrx7KBMk9yDWk/Qs2i97dKZUZE+fn+VnmFdy3CB4d6Zm0XvYULNcGMvqsQZkk+cauF
+ 7YDLGUi+A4IZ/SQ8B9NVq4oDuKO9Ptp4jaxOYKoyoOwdTU7kFwpJ6Q2YjBvd1mP5//jkN5vK/
+ lGugWWK65TZeRw=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, FREEMAIL_FROM, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE,
+ SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -49,51 +67,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 20 Feb 2022 11:17:21 -0000
+X-List-Received-Date: Mon, 21 Feb 2022 13:36:23 -0000
 
-- Calling fix_tab_position() is necessary in Windows 10 with xterm
-  compatible mode enabled, because it has a problem that the tab
-  positions will be broken when the window size is changed. Fortunately,
-  this problem has been fixed in Windows 11. Therefore, with this patch,
-  necessity of fix_tab_position() call is determined by referring to
-  wincap.has_con_broken_tabs(), which is recently introduced.
----
- winsup/cygwin/fhandler_console.cc | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+These symbolic links are crucial e.g. to support process substitution (Bas=
+h's
+very nice `<(SOME-COMMAND)` feature).
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 1dfe8e0c7..03ec88804 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -286,7 +286,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 		{
- 		  con.scroll_region.Top = 0;
- 		  con.scroll_region.Bottom = -1;
--		  if (wincap.has_con_24bit_colors () && !con_is_legacy)
-+		  if (wincap.has_con_24bit_colors () && !con_is_legacy
-+		      && wincap.has_con_broken_tabs ())
- 		    fix_tab_position (p->output_handle);
- 		  ttyp->kill_pgrp (SIGWINCH);
- 		}
-@@ -664,7 +665,8 @@ fhandler_console::send_winch_maybe ()
-     {
-       con.scroll_region.Top = 0;
-       con.scroll_region.Bottom = -1;
--      if (wincap.has_con_24bit_colors () && !con_is_legacy)
-+      if (wincap.has_con_24bit_colors () && !con_is_legacy
-+	  && wincap.has_con_broken_tabs ())
- 	fix_tab_position (get_output_handle ());
-       get_ttyp ()->kill_pgrp (SIGWINCH);
-       return true;
-@@ -2321,7 +2323,7 @@ fhandler_console::char_command (char c)
- 		  if (con.args[i] == 1049)
- 		    {
- 		      con.screen_alternated = (c == 'h');
--		      need_fix_tab_position = true;
-+		      need_fix_tab_position = wincap.has_con_broken_tabs ();
- 		    }
- 		  if (con.args[i] == 1) /* DECCKM */
- 		    con.cursor_key_app_mode = (c == 'h');
--- 
+For various reasons, it is a bit cumbersome (or impossible) to generate th=
+ese
+symbolic links in all circumstances where Git for Windows wants to use its
+close fork of the Cygwin runtime.
+
+Therefore, let's just handle these symbolic links as implicit, virtual one=
+s.
+
+If there is appetite for it, I wonder whether we should do something simil=
+ar
+for `/dev/shm` and `/dev/mqueue`? Are these even still used in Cygwin?
+
+Johannes Schindelin (2):
+  Implicitly support the /dev/fd symlink and friends
+  Regenerate devices.cc
+
+ winsup/cygwin/Makefile.am        |    1 +
+ winsup/cygwin/devices.cc         | 1494 ++++++++++++++++--------------
+ winsup/cygwin/devices.h          |    3 +-
+ winsup/cygwin/devices.in         |    4 +
+ winsup/cygwin/dtable.cc          |    3 +
+ winsup/cygwin/fhandler.h         |   28 +
+ winsup/cygwin/fhandler_dev_fd.cc |   53 ++
+ 7 files changed, 879 insertions(+), 707 deletions(-)
+ create mode 100644 winsup/cygwin/fhandler_dev_fd.cc
+
+
+base-commit: ba7b912feba3178e530a484afea4cb127e7f2ae7
+Published-As: https://github.com/dscho/msys2-runtime/releases/tag/virtual-=
+dev-fd-cygwin-v1
+Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime virtual-dev=
+-fd-cygwin-v1
+
+=2D-
 2.35.1
 
