@@ -1,43 +1,39 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
- [210.131.2.91])
- by sourceware.org (Postfix) with ESMTPS id BFA43385801E
- for <cygwin-patches@cygwin.com>; Thu, 24 Feb 2022 14:24:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BFA43385801E
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 95B9D385841F
+ for <cygwin-patches@cygwin.com>; Thu, 24 Feb 2022 14:25:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 95B9D385841F
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (ak036016.dynamic.ppp.asahi-net.or.jp
+Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conssluserg-06.nifty.com with ESMTP id 21OEO1Dw000719
- for <cygwin-patches@cygwin.com>; Thu, 24 Feb 2022 23:24:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21OEO1Dw000719
+ by conuserg-07.nifty.com with ESMTP id 21OEOb6K022170;
+ Thu, 24 Feb 2022 23:24:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 21OEOb6K022170
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645712641;
- bh=eWd+wXm6hJ4wCAVc+YOH8ZklsGJPu9/sSZZ2Tsl7UQY=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=v2UOU9CzrX71aFIBrfAM/9EscVh8QTWpQ68ZK0K2rZFSfHPeia36y37WCxQXzv3bc
- LJPSWm7Gd34isngjN49a6zv2f3mCBd76U1DF15KRvo4KtFazOEYZo2Q8Ws4Syf7FbN
- fmgSSgVONURdFRd9/dLv9tQCUT4elxu7xYLoRzzvXI++5vy0K6iDn+f75fLLniGfCd
- kcMqrOdoUjwB+LabRZ7LRK/StlmG4HnP9DZ9NjNRrcAPHuopSXTI9sF2OX8E79tcmk
- vMb0gQOmraBoBHo6ObiQZ/b7zQCwXR13bIpC8V33Zx7rQLPRjUyrNmdPW9kPxoh+/3
- 9jP/RKM50dypw==
+ s=dec2015msa; t=1645712681;
+ bh=vkgnjJu059od3ch5RQvjAQFpWcT8ruNgZw+BTHDjg/c=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GYYARf6qvM4IXEQN2s4VY6vWUTWp5rOqwbsR7bFWlx359miipigHBOJa+reVsLIh0
+ Rp0Idw6F7ssXlr8xFYJNnzLDkwlxVIpQJGNxcbIFqBIai++Teo/NyBrBJIfAaT4ylH
+ iatJeMhkPARze+xWas4MZywnWYj00SiKvPJ5Zs4+2LtLUv0tADhfdz46uCl021CcO9
+ nEbQh7FcFWuOO7pphgxTz1QykhJZaTokOgQkDIIfVhXpmjeJCVMgzTiTbw4FMyxe4b
+ 71pSFUn7PWzxxsSL256Ymt7Hn7SAOaIFhJ52UWYTaSA4/H1qAYraE5Qoo8x7MQXza5
+ DqJals/3Bt72Q==
 X-Nifty-SrcIP: [119.150.36.16]
-Date: Thu, 24 Feb 2022 23:24:04 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pinfo: Fix exit code when non-cygwin app exits
- by Ctrl-C.
-Message-Id: <20220224232404.475a9505b3ba7fccc862848e@nifty.ne.jp>
-In-Reply-To: <20220224134335.603-1-takashi.yano@nifty.ne.jp>
-References: <20220224134335.603-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v2] Cygwin: pinfo: Fix exit code when non-cygwin app exits by
+ Ctrl-C.
+Date: Thu, 24 Feb 2022 23:24:29 +0900
+Message-Id: <20220224142429.888-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS, TXREP,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -53,35 +49,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 24 Feb 2022 14:24:22 -0000
+X-List-Received-Date: Thu, 24 Feb 2022 14:25:05 -0000
 
-On Thu, 24 Feb 2022 22:43:35 +0900
-Takashi Yano wrote:
-> - Previously, if non-cygwin app exits by Ctrl-C, exit code was
->   0x00007f00. With this patch, the exit code will be 0x00000002,
->   which means process exited by SIGINT.
-> ---
->  winsup/cygwin/pinfo.cc | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-> index bce743bfc..bb7c16547 100644
-> --- a/winsup/cygwin/pinfo.cc
-> +++ b/winsup/cygwin/pinfo.cc
-> @@ -156,6 +156,9 @@ pinfo::status_exit (DWORD x)
->  	 a lengthy small_printf instead. */
->        x = SIGBUS;
->        break;
-> +    case STATUS_CONTROL_C_EXIT:
-> +      x = SIGINT;
-> +      break;
->      default:
->        debug_printf ("*** STATUS_%y\n", x);
->        x = 127 << 8;
-> -- 
-> 2.35.1
+- Previously, if non-cygwin app exits by Ctrl-C, exit code was
+  0x00007f00. With this patch, the exit code will be 0x00000002,
+  which means process exited by SIGINT.
+---
+ winsup/cygwin/exceptions.cc | 6 +++++-
+ winsup/cygwin/pinfo.cc      | 3 +++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-This was not enough. I will submit v2 patch.
-
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 73bf68939..f6a755b3c 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1139,7 +1139,11 @@ ctrl_c_handler (DWORD type)
+     }
+ 
+   if (ch_spawn.set_saw_ctrl_c ())
+-    return TRUE;
++    {
++      if (myself->process_state & PID_NOTCYGWIN)
++	sigExeced = SIGINT;
++      return TRUE;
++    }
+ 
+   /* We're only the process group leader when we have a valid pinfo structure.
+      If we don't have one, then the parent "stub" will handle the signal. */
+diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
+index bce743bfc..bb7c16547 100644
+--- a/winsup/cygwin/pinfo.cc
++++ b/winsup/cygwin/pinfo.cc
+@@ -156,6 +156,9 @@ pinfo::status_exit (DWORD x)
+ 	 a lengthy small_printf instead. */
+       x = SIGBUS;
+       break;
++    case STATUS_CONTROL_C_EXIT:
++      x = SIGINT;
++      break;
+     default:
+       debug_printf ("*** STATUS_%y\n", x);
+       x = 127 << 8;
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.35.1
+
