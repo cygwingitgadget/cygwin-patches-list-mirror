@@ -1,38 +1,39 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id E51ED385841F
- for <cygwin-patches@cygwin.com>; Thu, 24 Feb 2022 08:42:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E51ED385841F
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 089203858402
+ for <cygwin-patches@cygwin.com>; Thu, 24 Feb 2022 13:44:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 089203858402
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 21O8gM36015162;
- Thu, 24 Feb 2022 17:42:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21O8gM36015162
+ by conuserg-07.nifty.com with ESMTP id 21ODhgVk006593;
+ Thu, 24 Feb 2022 22:43:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 21ODhgVk006593
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645692148;
- bh=wr4L06/gKz6aOOSVZadzRZ6tlmcnjUuAGtJCZ1KgXaE=;
+ s=dec2015msa; t=1645710227;
+ bh=t4a0p5WUiOpzloTOP5wrGGsBRhwu+AhfA1RwFIjOLiA=;
  h=From:To:Cc:Subject:Date:From;
- b=W0Zb/aky/H7NWKY2H+E76YrIFto+4I5oVwJORP9ajiAa9GRjh+jyGz1z8QhUKXH/3
- hqgOMSycuZclyAExoKeblZ1s715epkRnWIbNRW5Vw5aef453401nSXUzAJBUZYh3WY
- QL2HpHUjTYMdm8IWVSJprqlbycRT1saeMXO3T/EIYafZZwbUzQkWnUq4/MlxPkFkEt
- 0rbciL97j60deumt+cJb/4stIb2cfoDnfiNbUc+4F2kUXwrHXgMnw1p6YaULG/sXmb
- KHbld3FHHE2deAunMAtucWxYIAnQR2SKPeRR6OMvhMLcHmAr39/YADK+o8zZ4rtt+X
- rwMKp18Q/gbyQ==
+ b=A7ktBztmrr+BOuCGASIHqvMqCwL/IB0GR29aVASRFIIadRIZGjJVK8Xmxu4nhc16S
+ TSEi2hQuTywkIUU60uCWgDPOBFulYAZL2Q3+vqXucPv+LpnU+6xuXayOegkxYiC7K9
+ tvoVJrN9HcuwEMWz7Uilm57A2+TZDg8zkP6/4rSsfSv4Q+jUhqKIW69w2061UI5jRU
+ zw9vbMCbBtfyLUh3RIFJxRObT6b0x7pcdY7s8HI3KVDiC2741wBNP2b4UNHvS029Zt
+ rFNakHagmRM1m4iY/BOI5h5GGsTSBJLX9VWpIdGPF0jsSJOAUvpRRs9q21tAJFa0+V
+ mHl6Gzwg6l9Bw==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Restore CTRL_BREAK_EVENT handling.
-Date: Thu, 24 Feb 2022 17:42:12 +0900
-Message-Id: <20220224084212.6238-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pinfo: Fix exit code when non-cygwin app exits by
+ Ctrl-C.
+Date: Thu, 24 Feb 2022 22:43:35 +0900
+Message-Id: <20220224134335.603-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,99 +49,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 24 Feb 2022 08:43:03 -0000
+X-List-Received-Date: Thu, 24 Feb 2022 13:44:15 -0000
 
-- The recent change by the commit "Cygwin: console: Redesign handling
-  of special keys." breaks the handling of CTRL_BREAK_EVENT. The login
-  shell in console exits on Ctrl-Break key. This patch fixes the issue.
+- Previously, if non-cygwin app exits by Ctrl-C, exit code was
+  0x00007f00. With this patch, the exit code will be 0x00000002,
+  which means process exited by SIGINT.
 ---
- winsup/cygwin/exceptions.cc       | 13 ++++++-------
- winsup/cygwin/fhandler_console.cc | 11 +++--------
- winsup/cygwin/sigproc.cc          |  3 +--
- 3 files changed, 10 insertions(+), 17 deletions(-)
+ winsup/cygwin/pinfo.cc | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index 356d69d6a..73bf68939 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -1146,6 +1146,11 @@ ctrl_c_handler (DWORD type)
-   if (!pinfo (cygwin_pid (GetCurrentProcessId ())))
-     return TRUE;
- 
-+  if (type == CTRL_C_EVENT && ::cygheap->ctty
-+      && !cygheap->ctty->need_console_handler ())
-+    /* Ctrl-C is handled in fhandler_console::cons_master_thread(). */
-+    return TRUE;
-+
-   tty_min *t = cygwin_shared->tty.get_cttyp ();
- 
-   /* If process group leader is non-cygwin process or not exist,
-@@ -1169,14 +1174,8 @@ ctrl_c_handler (DWORD type)
-        (to indicate that we have handled the signal).  At this point, type
-        should be a CTRL_C_EVENT or CTRL_BREAK_EVENT. */
-     {
--      int sig = SIGINT;
--      /* If intr and quit are both mapped to ^C, send SIGQUIT on ^BREAK */
--      if (type == CTRL_BREAK_EVENT
--	  && t->ti.c_cc[VINTR] == 3 && t->ti.c_cc[VQUIT] == 3)
--	sig = SIGQUIT;
-       t->last_ctrl_c = GetTickCount64 ();
--      t->kill_pgrp (sig);
--      t->output_stopped = false;
-+      fhandler_termios::process_sigs ('\003', (tty *) t, ::cygheap->ctty);
-       t->last_ctrl_c = GetTickCount64 ();
-       return TRUE;
-     }
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index b290cde08..843a96f9a 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -699,11 +699,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
-   if (sig == SIGTTIN)
-     {
-       set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
--      if (con.disable_master_thread)
--	{
--	  con.disable_master_thread = false;
--	  init_console_handler (false);
--	}
-+      con.disable_master_thread = false;
-     }
-   if (sig == SIGTTOU)
-     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
-@@ -1406,7 +1402,8 @@ bool
- fhandler_console::open_setup (int flags)
- {
-   set_flags ((flags & ~O_TEXT) | O_BINARY);
--  myself->set_ctty (this, flags);
-+  if (myself->set_ctty (this, flags) && !myself->cygstarted)
-+    init_console_handler (true);
-   return fhandler_base::open_setup (flags);
- }
- 
-@@ -1422,8 +1419,6 @@ fhandler_console::post_open_setup (int fd)
-   else if (fd == 1 || fd == 2)
-     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
- 
--  init_console_handler (need_console_handler ());
--
-   fhandler_base::post_open_setup (fd);
- }
- 
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 16ea5031b..4d7d273ae 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -1392,8 +1392,7 @@ wait_sig (VOID *)
- 	  sig_held = true;
- 	  break;
- 	case __SIGSETPGRP:
--	  if (::cygheap->ctty)
--	    init_console_handler (::cygheap->ctty->need_console_handler ());
-+	  init_console_handler (true);
- 	  break;
- 	case __SIGTHREADEXIT:
- 	  {
+diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
+index bce743bfc..bb7c16547 100644
+--- a/winsup/cygwin/pinfo.cc
++++ b/winsup/cygwin/pinfo.cc
+@@ -156,6 +156,9 @@ pinfo::status_exit (DWORD x)
+ 	 a lengthy small_printf instead. */
+       x = SIGBUS;
+       break;
++    case STATUS_CONTROL_C_EXIT:
++      x = SIGINT;
++      break;
+     default:
+       debug_printf ("*** STATUS_%y\n", x);
+       x = 127 << 8;
 -- 
 2.35.1
 
