@@ -1,35 +1,35 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-049.btinternet.com (mailomta27-sa.btinternet.com
- [213.120.69.33])
- by sourceware.org (Postfix) with ESMTPS id 0A93D3858D1E
- for <cygwin-patches@cygwin.com>; Sat, 26 Feb 2022 16:42:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0A93D3858D1E
+Received: from sa-prd-fep-047.btinternet.com (mailomta1-sa.btinternet.com
+ [213.120.69.7])
+ by sourceware.org (Postfix) with ESMTPS id 771DC385801D
+ for <cygwin-patches@cygwin.com>; Sat, 26 Feb 2022 16:42:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 771DC385801D
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
 Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-049.btinternet.com with ESMTP id
- <20220226164203.PDNN30507.sa-prd-fep-049.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
- Sat, 26 Feb 2022 16:42:03 +0000
+ by sa-prd-fep-047.btinternet.com with ESMTP id
+ <20220226164208.LLDZ16049.sa-prd-fep-047.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Sat, 26 Feb 2022 16:42:08 +0000
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 6139417C17222EE3
+X-SNCR-Rigid: 6139417C17222FA0
 X-Originating-IP: [86.139.167.74]
 X-OWM-Source-IP: 86.139.167.74 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrleeigdeklecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudeijedrjeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrjeegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrleeigdeklecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudeijedrjeegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrjeegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.167.74) by
  sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
  jonturney@btinternet.com)
- id 6139417C17222EE3; Sat, 26 Feb 2022 16:42:02 +0000
+ id 6139417C17222FA0; Sat, 26 Feb 2022 16:42:08 +0000
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 1/2] Cygwin: Drop pointless loadlib.h includes in utilities
-Date: Sat, 26 Feb 2022 16:40:53 +0000
-Message-Id: <20220226164054.26698-2-jon.turney@dronecode.org.uk>
+Subject: [PATCH 2/2] Cygwin: Drop use of loadlib.h in regtool
+Date: Sat, 26 Feb 2022 16:40:54 +0000
+Message-Id: <20220226164054.26698-3-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220226164054.26698-1-jon.turney@dronecode.org.uk>
 References: <20220226164054.26698-1-jon.turney@dronecode.org.uk>
@@ -53,65 +53,56 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 26 Feb 2022 16:42:05 -0000
+X-List-Received-Date: Sat, 26 Feb 2022 16:42:10 -0000
 
-These utilities used to LoadLibrary()/GetProcAddress(), but don't
-anymore.
+Link directly with RegDeleteKeyExW(), available since Vista.
+
+(It's unclear the LoadLibrary wrapper was ever doing anything useful
+here, as (i) DLL lookup in PATH was avoided as advapi32 is already
+loaded into the process, and (ii) advapi32 is a 'known DLL' which is
+only ever loaded from system directory)
 ---
- winsup/utils/cygpath.cc     | 1 -
- winsup/utils/module_info.cc | 1 -
- winsup/utils/path.cc        | 1 -
- winsup/utils/ps.cc          | 1 -
- 4 files changed, 4 deletions(-)
+ winsup/utils/regtool.cc | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/winsup/utils/cygpath.cc b/winsup/utils/cygpath.cc
-index 701c34998..9873e7b16 100644
---- a/winsup/utils/cygpath.cc
-+++ b/winsup/utils/cygpath.cc
-@@ -29,7 +29,6 @@ details. */
- #include <ntdll.h>
- 
- #include "wide_path.h"
--#include "loadlib.h"
- 
- static char *prog_name;
- static char *file_arg, *output_arg;
-diff --git a/winsup/utils/module_info.cc b/winsup/utils/module_info.cc
-index e0bd4b71a..3e2fc28e2 100644
---- a/winsup/utils/module_info.cc
-+++ b/winsup/utils/module_info.cc
-@@ -12,7 +12,6 @@ details. */
+diff --git a/winsup/utils/regtool.cc b/winsup/utils/regtool.cc
+index fd2dd0590..e919185ae 100644
+--- a/winsup/utils/regtool.cc
++++ b/winsup/utils/regtool.cc
+@@ -16,7 +16,6 @@ details. */
  #include <windows.h>
- #define PSAPI_VERSION 1
- #include <psapi.h>
--#include "loadlib.h"
- 
- /* Returns full name of Dll, which is loaded by hProcess at BaseAddress.
-    Uses psapi.dll. */
-diff --git a/winsup/utils/path.cc b/winsup/utils/path.cc
-index df0037c15..fe55a646d 100644
---- a/winsup/utils/path.cc
-+++ b/winsup/utils/path.cc
-@@ -28,7 +28,6 @@ details. */
- #ifdef FSTAB_ONLY
  #include <sys/cygwin.h>
- #endif
--#include "loadlib.h"
- 
- #ifndef FSTAB_ONLY
- /* Used when treating / and \ as equivalent. */
-diff --git a/winsup/utils/ps.cc b/winsup/utils/ps.cc
-index b51657535..dbcacbab4 100644
---- a/winsup/utils/ps.cc
-+++ b/winsup/utils/ps.cc
-@@ -21,7 +21,6 @@ details. */
  #include <cygwin/version.h>
- #include <ntdef.h>
- #include <ntdll.h>
 -#include "loadlib.h"
  
- /* Maximum possible path length under NT.  There's no official define
-    for that value.  Note that PATH_MAX is only 4K. */
+ #define DEFAULT_KEY_SEPARATOR '\\'
+ 
+@@ -589,10 +588,6 @@ cmd_add ()
+   return 0;
+ }
+ 
+-extern "C" {
+-  LONG WINAPI (*regDeleteKeyEx)(HKEY, LPCWSTR, REGSAM, DWORD);
+-}
+-
+ int
+ cmd_remove ()
+ {
+@@ -600,13 +595,7 @@ cmd_remove ()
+ 
+   find_key (2, KEY_ALL_ACCESS);
+   if (wow64)
+-    {
+-      HMODULE mod = LoadLibrary ("advapi32.dll");
+-      if (mod)
+-	regDeleteKeyEx = (LONG WINAPI (*)(HKEY, LPCWSTR, REGSAM, DWORD)) GetProcAddress (mod, "RegDeleteKeyExW");
+-    }
+-  if (regDeleteKeyEx)
+-    rv = (*regDeleteKeyEx) (key, value, wow64, 0);
++    rv = RegDeleteKeyExW (key, value, wow64, 0);
+   else
+     rv = RegDeleteKeyW (key, value);
+   if (rv != ERROR_SUCCESS)
 -- 
 2.35.1
 
