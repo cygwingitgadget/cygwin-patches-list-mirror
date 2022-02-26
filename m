@@ -1,38 +1,39 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id 0032F3858D1E
- for <cygwin-patches@cygwin.com>; Sat, 26 Feb 2022 10:36:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0032F3858D1E
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 610A43858D1E
+ for <cygwin-patches@cygwin.com>; Sat, 26 Feb 2022 10:36:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 610A43858D1E
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 21QAZlQ7006316;
- Sat, 26 Feb 2022 19:35:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21QAZlQ7006316
+ by conuserg-07.nifty.com with ESMTP id 21QAaPOL007841;
+ Sat, 26 Feb 2022 19:36:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 21QAaPOL007841
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645871751;
- bh=VfjGbJS3BTpYCpcCT1o8cLuvdJNJKt1N25xwbDLoLHY=;
+ s=dec2015msa; t=1645871793;
+ bh=/O42hLkuUzvCmlnMiDuxx0hRBid5nuPVT7LBWM+QQiI=;
  h=From:To:Cc:Subject:Date:From;
- b=CpUslE+hlh02J7t/2hpAyqiaoP/qU+kc/juvg0+EBx7fju/DQjHG78eqIwjums6ZR
- 4nKy1paUFaBNCszGVYNplXZl4C1pMcrYY6NUB8GMz7EGgG6jN9hPcGVA+fmBctmH5P
- 4IcEzM0n7Tzry+1nYyStMHUM3vegxUroX/QmWHTeNSCLAHIvI+WVg8ZVIEKQQ6GTaR
- yIAlxwbthRF25Vqr+Xn0nMZhbqipzU7aB49WWznGGQrBQdLnW/kYelVfjLlSvL5mZt
- Ds+E58Dlnbhyaj9Y24MRUk4jzk7TboW0MlGOx36WwwlornGW/FSlAnaKHU6rEyLfHU
- PMAFzu3PG4CsA==
+ b=KME9ehEIICKOLLtFWvu3VFUOgiL1XwLjfBiaiRNQxC437O67IoUMLzSqiSAKlWgK3
+ dVrUQ0TXlJdQczVCPggty/AOvl+5/pJtvgDIpHHDdK225GvmPKXjSst50wqCyig7M4
+ i1kqlZGyz/YiqEcHHXApFo+TVgXCtGWheWXLeFuDJQROC5kAWiqZxrZjIMTu9cVPIW
+ JTiwQvVbOwEjHS0YCun9FXdVRtbivrBaAjCTxp+al7oXUGrphF3frMIeFPuV7H9K61
+ SiJ3/vgudYTemYNPxlHtFszyRdSoOuv1fTukG98z+cSIOr2LHU9k0r1jFNe9xTBYd1
+ ehoImR/+Sll0A==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Stop to send CTRL_C_EVENT if pcon activated.
-Date: Sat, 26 Feb 2022 19:35:38 +0900
-Message-Id: <20220226103538.1506-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Prevent the order of typeahead input from
+ swapped.
+Date: Sat, 26 Feb 2022 19:36:16 +0900
+Message-Id: <20220226103616.1517-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,91 +49,88 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 26 Feb 2022 10:36:08 -0000
+X-List-Received-Date: Sat, 26 Feb 2022 10:36:52 -0000
 
-- The commit "Cygwin: console: Redesign handling of special keys."
-  removes special treatment for pty in with pseudo console activated,
-  however, it is necessary on second thought. This is because sending
-  CTRL_C_EVENT to non-cygwin apps will be done in pseudo console,
-  therefore, sending it in fhandler_pty_master::write() duplicates
-  that event for non-cygwin apps.
+- If a lot of keys are typed very quickly in the app which does
+  not read console, the order of input keys in console input buffer
+  occasionally swapped. Although this extremely rarely happens,
+  is obviously a bug of cons_master_thread. This patch fixes the
+  issue.
 ---
- winsup/cygwin/fhandler.h          |  2 ++
- winsup/cygwin/fhandler_termios.cc | 11 ++++-------
- winsup/cygwin/fhandler_tty.cc     | 11 +++++++++++
- 3 files changed, 17 insertions(+), 7 deletions(-)
+ winsup/cygwin/fhandler_console.cc | 53 +++++++++++++++++++++++++++++--
+ 1 file changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 0652075b0..fda5a4ec9 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -1958,6 +1958,7 @@ class fhandler_termios: public fhandler_base
-   virtual void cleanup_before_exit () {}
-   virtual void setpgid_aux (pid_t pid) {}
-   virtual bool need_console_handler () { return false; }
-+  virtual bool need_send_ctrl_c_event () { return true; }
- };
- 
- enum ansi_intensity
-@@ -2492,6 +2493,7 @@ public:
-   void get_master_thread_param (master_thread_param_t *p);
-   void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
-   void set_mask_flusho (bool m) { get_ttyp ()->mask_flusho = m; }
-+  bool need_send_ctrl_c_event ();
- };
- 
- class fhandler_dev_null: public fhandler_base
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index b236c1b62..568523390 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -359,16 +359,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	     instead. */
- 	  if ((p->process_state & PID_NEW_PG)
- 	      && (p->process_state & PID_NOTCYGWIN))
--	    {
--	      GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT,
--					p->dwProcessId);
--	      need_discard_input = true;
--	    }
--	  else if (!ctrl_c_event_sent)
-+	    GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT, p->dwProcessId);
-+	  else if ((!fh || fh->need_send_ctrl_c_event () || cyg_leader)
-+			  && !ctrl_c_event_sent)
- 	    {
- 	      GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
- 	      ctrl_c_event_sent = true;
--	      need_discard_input = true;
- 	    }
- 	  if (resume_pid && fh && !fh->is_console ())
- 	    {
-@@ -377,6 +373,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	      if (::cygheap->ctty && ::cygheap->ctty->is_console ())
- 		init_console_handler (true);
- 	    }
-+	  need_discard_input = true;
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index aa0f26450..88c0f894b 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -208,6 +208,20 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	case WAIT_OBJECT_0:
+ 	  ReadConsoleInputW (p->input_handle,
+ 			     input_rec, INREC_SIZE, &total_read);
++	  if (total_read == INREC_SIZE /* Working space full */
++	      && cygwait (p->input_handle, (DWORD) 0) == WAIT_OBJECT_0)
++	    {
++	      const int incr = 1;
++	      size_t bytes = sizeof (INPUT_RECORD) * (total_read - incr);
++	      /* Discard oldest incr events. */
++	      memmove (input_rec, input_rec + incr, bytes);
++	      total_read -= incr;
++	      processed_up_to =
++		(processed_up_to + 1 >= incr) ? processed_up_to - incr : -1;
++	      ReadConsoleInputW (p->input_handle,
++				 input_rec + total_read, incr, &n);
++	      total_read += n;
++	    }
+ 	  break;
+ 	case WAIT_TIMEOUT:
+ 	  processed_up_to = -1;
+@@ -291,8 +305,43 @@ remove_record:
  	}
-       if (p && p->ctty == ttyp->ntty && p->pgid == pgid)
- 	{
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 2440318b8..9855f54eb 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -4105,3 +4105,14 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
-     }
-   ReleaseMutex (pcon_mutex);
- }
-+
-+bool
-+fhandler_pty_master::need_send_ctrl_c_event ()
-+{
-+  /* If pseudo console is activated, sending CTRL_C_EVENT to non-cygwin
-+     apps will be done in pseudo console, therefore, sending it in
-+     fhandler_pty_master::write() duplicates that event for non-cygwin
-+     apps. So return false if pseudo console is activated. */
-+  return !(to_be_read_from_pcon () && get_ttyp ()->pcon_activated
-+    && get_ttyp ()->pcon_input_state == tty::to_nat);
-+}
+       processed_up_to = total_read - 1;
+       if (total_read)
+-	/* Writeback input records other than interrupt. */
+-	WriteConsoleInputW (p->input_handle, input_rec, total_read, &n);
++	{
++	  /* Writeback input records other than interrupt. */
++	  WriteConsoleInputW (p->input_handle, input_rec, total_read, &n);
++	  size_t bytes = sizeof (INPUT_RECORD) * total_read;
++	  do
++	    {
++	      const int additional_size = 128; /* Possible max number of
++						  incoming events during
++						  above process. */
++	      const int new_size = INREC_SIZE + additional_size;
++	      INPUT_RECORD tmp[new_size];
++	      /* Check if writeback was successfull. */
++	      PeekConsoleInputW (p->input_handle, tmp, new_size, &n);
++	      if (memcmp (input_rec, tmp, bytes) == 0)
++		break; /* OK */
++	      /* Try to fix */
++	      DWORD incr = n - total_read;
++	      DWORD ofst;
++	      for (ofst = 1; ofst <= incr; ofst++)
++		if (memcmp (input_rec, tmp + ofst, bytes) == 0)
++		  {
++		    ReadConsoleInputW (p->input_handle, tmp, new_size, &n);
++		    DWORD m;
++		    WriteConsoleInputW (p->input_handle, tmp + ofst,
++					total_read, &m);
++		    WriteConsoleInputW (p->input_handle, tmp, ofst, &m);
++		    if ( n > ofst + total_read)
++		      WriteConsoleInputW (p->input_handle,
++					  tmp + ofst + total_read,
++					  n - (ofst + total_read), &m);
++		    break;
++		  }
++	      if (ofst > incr) /* Hard to fix */
++		break; /* Giving up */
++	    }
++	  while (true);
++	}
+ skip_writeback:
+       ReleaseMutex (p->input_mutex);
+       cygwait (40);
 -- 
 2.35.1
 
