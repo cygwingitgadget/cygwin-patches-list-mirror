@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 9AD9A3858D35
- for <cygwin-patches@cygwin.com>; Sun, 27 Feb 2022 03:48:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9AD9A3858D35
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id C0D613858D37
+ for <cygwin-patches@cygwin.com>; Sun, 27 Feb 2022 11:50:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C0D613858D37
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 21R3lwD6025908;
- Sun, 27 Feb 2022 12:48:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 21R3lwD6025908
+ by conuserg-11.nifty.com with ESMTP id 21RBo5IB004686;
+ Sun, 27 Feb 2022 20:50:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21RBo5IB004686
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645933690;
- bh=aqPcyP9z3gm39CjQh3rYU8YDcUQAZ+EivDhqvQrQB7I=;
+ s=dec2015msa; t=1645962610;
+ bh=/4wvgwrjErRGtCWhIVU9DVUQ2mECY+ds8YldQxmHIPY=;
  h=From:To:Cc:Subject:Date:From;
- b=utH1QN1+eQ5/JzEAybQ0jx24vBB6EMgl9TzirO3ExfZrs3CvxmjD/ux2Gj7aeUiS3
- USO9iDoEPr/uakBBIc/cHBj4qEKfUWg0ksYSJziFLbPjDz5L13EC+mmZ6XSPDeno/6
- W/Fv80gv4iyoRiG15rZQPJKOsVH2R/ef64F4XwkgXqWO77qwG2zsmqpuaBrPcLEmf2
- ulvdUO20U7Z1IAdx+FsDYLVY5kqNQ7LCGZTfo/3pH2X4UQt3VTjllExeQ5mSG3uZHi
- pMHJXMwLSod/n4f8wx9tuCdclfgicwmGUxhaCfYN1B1gHvcEV9Dw2FaQR8FIgVsBin
- veDljVSbI+azQ==
+ b=HbOuw7eXqbjevbG/UBSsMCsoa8Ec98gzdd+F31By74T/R4aPFzBMCUiFxYrXo9a5P
+ Lib8AS57yJXrheTmB6EI0yU0CdShlbzySjxU0cBENNJfVQcmwskA842W1N6ryQog/8
+ blVZH1LbW3C9UrE2aGWJdKVEKXEZKAwQsRhLZ4NzG0hlZF88fUjB7gWVypOLvTAVkv
+ 5xVGASLXz1dnd4WWGL4TIxJyrPSR9mYFPWNHYLhtFRW8RQW2NmZmletGXRHB/GjIs9
+ Jy/PN+VC3Byy4hIqtZ+OSpcAA72VABjNeoszFgwbMN2j/sfa60PJGlkI7TM3fae3HM
+ RY3GMVgiW8X0w==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Correct the past fix for apps which open pty.
-Date: Sun, 27 Feb 2022 12:47:58 +0900
-Message-Id: <20220227034758.1266-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: termios: Add comments to the code refactored recently.
+Date: Sun, 27 Feb 2022 20:49:53 +0900
+Message-Id: <20220227114953.1443-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,34 +48,168 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 27 Feb 2022 03:48:34 -0000
+X-List-Received-Date: Sun, 27 Feb 2022 11:50:49 -0000
 
-- The commit "Cygwin: console: Fix issues of apps which open pty."
-  did not fix the second problem correctly. That commit looked to
-  fix the issue, but the actual problem was that ctrl_c_handler()
-  should be reregistered *AFTER* FreeConsole()/AttachConsole().
-  This patch correct that.
+- This patch adds some comments to the source code whose intent may
+  not be clear enough from the code which is refactored recently.
 ---
- winsup/cygwin/fhandler_termios.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler.h          | 13 ++++---
+ winsup/cygwin/fhandler_termios.cc | 60 ++++++++++++++++++++++---------
+ 2 files changed, 52 insertions(+), 21 deletions(-)
 
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 71321532d..c82f065e3 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -1902,12 +1902,15 @@ class fhandler_termios: public fhandler_base
+   virtual void release_input_mutex_if_necessary (void) {};
+   virtual void discard_input () {};
+ 
++  /* Result status of processing keys in process_sigs(). */
+   enum process_sig_state {
+-    signalled,
+-    not_signalled,
+-    not_signalled_but_done,
+-    not_signalled_with_nat_reader,
+-    done_with_debugger
++    signalled, /* Signalled normally */
++    not_signalled, /* Not signalled at all */
++    not_signalled_but_done, /* Not signalled, but CTRL_C_EVENT was sent. */
++    not_signalled_with_nat_reader, /* Not signalled, but detected non-cygwin
++				      process may be reading the tty. */
++    done_with_debugger /* The key was processed (CTRL_C_EVENT was sent)
++			  for inferior of GDB. */
+   };
+ 
+  public:
 diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 568523390..767b28302 100644
+index 767b28302..f82ac76dc 100644
 --- a/winsup/cygwin/fhandler_termios.cc
 +++ b/winsup/cygwin/fhandler_termios.cc
-@@ -344,10 +344,10 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	      (myself->dwProcessId, false);
- 	  if (resume_pid && fh && !fh->is_console ())
+@@ -149,7 +149,8 @@ tty_min::kill_pgrp (int sig, pid_t target_pgid)
+       if (!p || !p->exists () || p->ctty != ntty || p->pgid != target_pgid)
+ 	continue;
+       if (p->process_state & PID_NOTCYGWIN)
+-	continue;
++	continue; /* Do not send signal to non-cygwin process to prevent
++		     cmd.exe from crash. */
+       if (p == myself)
+ 	killself = sig != __SIGSETPGRP && !exit_state;
+       else
+@@ -309,32 +310,52 @@ fhandler_termios::echo_erase (int force)
+     doecho ("\b \b", 3);
+ }
+ 
++/* The basic policy is as follows:
++   - The signal generated by key press will be sent only to cygwin process.
++   - For non-cygwin process, CTRL_C_EVENT will be sent on Ctrl-C. */
++/* The inferior of GDB is an exception. GDB does not support to hook signal
++   even if the inferior is a cygwin app. As a result, inferior cannot be
++   continued after interruption by Ctrl-C if SIGINT was sent. Therefore,
++   CTRL_C_EVENT rather than SIGINT is sent to the inferior of GDB. */
+ fhandler_termios::process_sig_state
+ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ {
+   termios &ti = ttyp->ti;
+   pid_t pgid = ttyp->pgid;
+ 
++  /* The name *_nat stands for 'native' which means non-cygwin apps. */
+   pinfo leader (pgid);
+-  bool cyg_leader = leader && !(leader->process_state & PID_NOTCYGWIN);
++  bool cyg_leader = /* The process leader is a cygwin process. */
++    leader && !(leader->process_state & PID_NOTCYGWIN);
+   bool ctrl_c_event_sent = false;
+   bool need_discard_input = false;
+-  bool pg_with_nat = false;
+-  bool need_send_sig = false;
+-  bool nat_shell = false;
+-  bool cyg_reader = false;
+-  bool with_debugger = false;
+-  bool with_debugger_nat = false;
++  bool pg_with_nat = false; /* The process group has non-cygwin processes. */
++  bool need_send_sig = false; /* There is process which need the signal. */
++  bool nat_shell = false; /* The shell seems to be a non-cygwin process. */
++  bool cyg_reader = false; /* Cygwin process is reading the tty. */
++  bool with_debugger = false; /* GDB is debugging cygwin app. */
++  bool with_debugger_nat = false; /* GDB is debugging non-cygwin app. */
+ 
+   winpids pids ((DWORD) 0);
+   for (unsigned i = 0; i < pids.npids; i++)
+     {
+       _pinfo *p = pids[i];
++      /* PID_NOTCYGWIN: check this for non-cygwin process.
++	 PID_NEW_PG: check this ofr GDB with non-cygwin inferior in pty
++		     without pcon enabled. In this case, the inferior is not
++		     cygwin process list. PID_NEW_PG is set as a marker for
++		     GDB with non-cygwin inferior in pty code.
++	 !PID_CYGPARENT: check this for GDB with cygwin inferior. */
+       if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
+ 	  && ((p->process_state & PID_NOTCYGWIN)
+ 	      || (p->process_state & PID_NEW_PG)
+ 	      || !(p->process_state & PID_CYGPARENT)))
+ 	{
++	  /* Ctrl-C event will be sent only to the processes attaching
++	     to the same console. Therefore, attach to the console to
++	     which the target process is attaching before sending the
++	     CTRL_C_EVENT. After sending the event, reattach to the
++	     console to which the process was previously attached.  */
+ 	  pinfo pinfo_resume = pinfo (myself->ppid);
+ 	  DWORD resume_pid = 0;
+ 	  if (pinfo_resume)
+@@ -361,7 +382,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	      && (p->process_state & PID_NOTCYGWIN))
+ 	    GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT, p->dwProcessId);
+ 	  else if ((!fh || fh->need_send_ctrl_c_event () || cyg_leader)
+-			  && !ctrl_c_event_sent)
++		   && !ctrl_c_event_sent) /* cyg_leader is needed by GDB
++					     with non-cygwin inferior */
  	    {
--	      if (::cygheap->ctty && ::cygheap->ctty->is_console ())
--		init_console_handler (false);
- 	      FreeConsole ();
- 	      AttachConsole (p->dwProcessId);
-+	      if (::cygheap->ctty && ::cygheap->ctty->is_console ())
-+		init_console_handler (true);
- 	    }
- 	  if (fh && p == myself && being_debugged ())
- 	    { /* Avoid deadlock in gdb on console. */
+ 	      GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
+ 	      ctrl_c_event_sent = true;
+@@ -378,13 +400,13 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+       if (p && p->ctty == ttyp->ntty && p->pgid == pgid)
+ 	{
+ 	  if (p->process_state & PID_NOTCYGWIN)
+-	    pg_with_nat = true;
++	    pg_with_nat = true; /* The process group has non-cygwin process */
+ 	  if (!(p->process_state & PID_NOTCYGWIN))
+-	    need_send_sig = true;
++	    need_send_sig = true; /* Process which needs signal exists */
+ 	  if (!p->cygstarted)
+-	    nat_shell = true;
++	    nat_shell = true; /* The shell seems to a non-cygwin shell */
+ 	  if (p->process_state & PID_TTYIN)
+-	    cyg_reader = true;
++	    cyg_reader = true; /* Theh process is reading the tty */
+ 	  if (!p->cygstarted && !(p->process_state & PID_NOTCYGWIN)
+ 	      && (p != myself || being_debugged ())
+ 	      && cyg_leader) /* inferior is cygwin app */
+@@ -406,8 +428,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+       return done_with_debugger;
+     }
+   if (with_debugger_nat)
+-    return not_signalled;
+-  /* Send SIGQUIT to non-cygwin process. */
++    return not_signalled; /* Do not process slgnal keys further.
++			     The non-cygwin inferior of GDB cannot receive
++			     the signals. */
++  /* Send SIGQUIT to non-cygwin process. Non-cygwin app will not be alerted
++     by kill_pgrp(), however, QUIT key should quit the non-cygwin app
++     if it is started along with cygwin process from cygwin shell. */
+   if ((ti.c_lflag & ISIG) && CCEQ (ti.c_cc[VQUIT], c)
+       && pg_with_nat && need_send_sig && !nat_shell)
+     {
+@@ -426,7 +452,9 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	sig = SIGINT;
+       else if (CCEQ (ti.c_cc[VQUIT], c))
+ 	sig = SIGQUIT;
+-      else if (pg_with_nat)
++      else if (pg_with_nat) /* If the process group has a non-cygwin process,
++			       it cannot be suspended correctly. Therefore,
++			       do not send SIGTSTP. */
+ 	goto not_a_sig;
+       else if (CCEQ (ti.c_cc[VSUSP], c))
+ 	sig = SIGTSTP;
 -- 
 2.35.1
 
