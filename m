@@ -1,32 +1,33 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id C0D613858D37
- for <cygwin-patches@cygwin.com>; Sun, 27 Feb 2022 11:50:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C0D613858D37
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 3E1083858D35
+ for <cygwin-patches@cygwin.com>; Sun, 27 Feb 2022 23:15:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3E1083858D35
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 21RBo5IB004686;
- Sun, 27 Feb 2022 20:50:10 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 21RBo5IB004686
+ by conuserg-10.nifty.com with ESMTP id 21RNEX1u020040;
+ Mon, 28 Feb 2022 08:14:40 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 21RNEX1u020040
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1645962610;
- bh=/4wvgwrjErRGtCWhIVU9DVUQ2mECY+ds8YldQxmHIPY=;
+ s=dec2015msa; t=1646003680;
+ bh=yxL3ygsw6OcggHTJmEGjJGeCfBEw5VmWdHHlkrZCRhM=;
  h=From:To:Cc:Subject:Date:From;
- b=HbOuw7eXqbjevbG/UBSsMCsoa8Ec98gzdd+F31By74T/R4aPFzBMCUiFxYrXo9a5P
- Lib8AS57yJXrheTmB6EI0yU0CdShlbzySjxU0cBENNJfVQcmwskA842W1N6ryQog/8
- blVZH1LbW3C9UrE2aGWJdKVEKXEZKAwQsRhLZ4NzG0hlZF88fUjB7gWVypOLvTAVkv
- 5xVGASLXz1dnd4WWGL4TIxJyrPSR9mYFPWNHYLhtFRW8RQW2NmZmletGXRHB/GjIs9
- Jy/PN+VC3Byy4hIqtZ+OSpcAA72VABjNeoszFgwbMN2j/sfa60PJGlkI7TM3fae3HM
- RY3GMVgiW8X0w==
+ b=vPs1qjwV41OEQjz87tDW2wKbUoSjo2jaSzBdVyhUWu7bxVTNMhLP1PP7Mftckn4Ca
+ iaXE6ureWmo6kx7QkfcRZxD3jzjzp04L8xWbTeDixQM3OTPrRnEqFG3gpn6PRJ6wBE
+ xy8mkdn/Xb/uc8wWf0XTyfC05eoH9nLeE2j5H60qCwCs9GTZXM5BkbmOs8xViW6BiZ
+ TKz25BhdT8ucooQ0VslOgWyGCEGCGE7DeVIa437oPOsfyDSO+utfj06CFhWvwSeQz2
+ I2J/I1n9le3MeAsBptf8cWJL+JSCL0I/kxU9YbqLoDNbM4wD1LjLujeIwMj48qXFM3
+ BhSYyEszg1bgQ==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: termios: Add comments to the code refactored recently.
-Date: Sun, 27 Feb 2022 20:49:53 +0900
-Message-Id: <20220227114953.1443-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: termios: Ensure detection of GDB inferior in
+ process_sigs().
+Date: Mon, 28 Feb 2022 08:14:30 +0900
+Message-Id: <20220227231430.10199-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,168 +49,73 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 27 Feb 2022 11:50:49 -0000
+X-List-Received-Date: Sun, 27 Feb 2022 23:15:24 -0000
 
-- This patch adds some comments to the source code whose intent may
-  not be clear enough from the code which is refactored recently.
+- In some situations, some cygwin processes might wrongly identified
+  as GDB inferior. This patch ensures the detection of GDB inferior.
 ---
- winsup/cygwin/fhandler.h          | 13 ++++---
- winsup/cygwin/fhandler_termios.cc | 60 ++++++++++++++++++++++---------
- 2 files changed, 52 insertions(+), 21 deletions(-)
+ winsup/cygwin/fhandler_termios.cc  | 12 ++++++------
+ winsup/cygwin/include/sys/cygwin.h |  1 +
+ winsup/cygwin/pinfo.cc             |  2 ++
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 71321532d..c82f065e3 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -1902,12 +1902,15 @@ class fhandler_termios: public fhandler_base
-   virtual void release_input_mutex_if_necessary (void) {};
-   virtual void discard_input () {};
- 
-+  /* Result status of processing keys in process_sigs(). */
-   enum process_sig_state {
--    signalled,
--    not_signalled,
--    not_signalled_but_done,
--    not_signalled_with_nat_reader,
--    done_with_debugger
-+    signalled, /* Signalled normally */
-+    not_signalled, /* Not signalled at all */
-+    not_signalled_but_done, /* Not signalled, but CTRL_C_EVENT was sent. */
-+    not_signalled_with_nat_reader, /* Not signalled, but detected non-cygwin
-+				      process may be reading the tty. */
-+    done_with_debugger /* The key was processed (CTRL_C_EVENT was sent)
-+			  for inferior of GDB. */
-   };
- 
-  public:
 diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 767b28302..f82ac76dc 100644
+index f82ac76dc..028210d98 100644
 --- a/winsup/cygwin/fhandler_termios.cc
 +++ b/winsup/cygwin/fhandler_termios.cc
-@@ -149,7 +149,8 @@ tty_min::kill_pgrp (int sig, pid_t target_pgid)
-       if (!p || !p->exists () || p->ctty != ntty || p->pgid != target_pgid)
- 	continue;
-       if (p->process_state & PID_NOTCYGWIN)
--	continue;
-+	continue; /* Do not send signal to non-cygwin process to prevent
-+		     cmd.exe from crash. */
-       if (p == myself)
- 	killself = sig != __SIGSETPGRP && !exit_state;
-       else
-@@ -309,32 +310,52 @@ fhandler_termios::echo_erase (int force)
-     doecho ("\b \b", 3);
- }
- 
-+/* The basic policy is as follows:
-+   - The signal generated by key press will be sent only to cygwin process.
-+   - For non-cygwin process, CTRL_C_EVENT will be sent on Ctrl-C. */
-+/* The inferior of GDB is an exception. GDB does not support to hook signal
-+   even if the inferior is a cygwin app. As a result, inferior cannot be
-+   continued after interruption by Ctrl-C if SIGINT was sent. Therefore,
-+   CTRL_C_EVENT rather than SIGINT is sent to the inferior of GDB. */
- fhandler_termios::process_sig_state
- fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- {
-   termios &ti = ttyp->ti;
-   pid_t pgid = ttyp->pgid;
- 
-+  /* The name *_nat stands for 'native' which means non-cygwin apps. */
-   pinfo leader (pgid);
--  bool cyg_leader = leader && !(leader->process_state & PID_NOTCYGWIN);
-+  bool cyg_leader = /* The process leader is a cygwin process. */
-+    leader && !(leader->process_state & PID_NOTCYGWIN);
-   bool ctrl_c_event_sent = false;
-   bool need_discard_input = false;
--  bool pg_with_nat = false;
--  bool need_send_sig = false;
--  bool nat_shell = false;
--  bool cyg_reader = false;
--  bool with_debugger = false;
--  bool with_debugger_nat = false;
-+  bool pg_with_nat = false; /* The process group has non-cygwin processes. */
-+  bool need_send_sig = false; /* There is process which need the signal. */
-+  bool nat_shell = false; /* The shell seems to be a non-cygwin process. */
-+  bool cyg_reader = false; /* Cygwin process is reading the tty. */
-+  bool with_debugger = false; /* GDB is debugging cygwin app. */
-+  bool with_debugger_nat = false; /* GDB is debugging non-cygwin app. */
- 
-   winpids pids ((DWORD) 0);
-   for (unsigned i = 0; i < pids.npids; i++)
-     {
-       _pinfo *p = pids[i];
-+      /* PID_NOTCYGWIN: check this for non-cygwin process.
-+	 PID_NEW_PG: check this ofr GDB with non-cygwin inferior in pty
-+		     without pcon enabled. In this case, the inferior is not
-+		     cygwin process list. PID_NEW_PG is set as a marker for
-+		     GDB with non-cygwin inferior in pty code.
-+	 !PID_CYGPARENT: check this for GDB with cygwin inferior. */
+@@ -345,7 +345,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 		     without pcon enabled. In this case, the inferior is not
+ 		     cygwin process list. PID_NEW_PG is set as a marker for
+ 		     GDB with non-cygwin inferior in pty code.
+-	 !PID_CYGPARENT: check this for GDB with cygwin inferior. */
++	 !PID_CYGPARENT: check this for GDB with cygwin inferior or
++			 cygwin apps started from non-cygwin shell. */
        if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
  	  && ((p->process_state & PID_NOTCYGWIN)
  	      || (p->process_state & PID_NEW_PG)
- 	      || !(p->process_state & PID_CYGPARENT)))
- 	{
-+	  /* Ctrl-C event will be sent only to the processes attaching
-+	     to the same console. Therefore, attach to the console to
-+	     which the target process is attaching before sending the
-+	     CTRL_C_EVENT. After sending the event, reattach to the
-+	     console to which the process was previously attached.  */
- 	  pinfo pinfo_resume = pinfo (myself->ppid);
- 	  DWORD resume_pid = 0;
- 	  if (pinfo_resume)
-@@ -361,7 +382,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	      && (p->process_state & PID_NOTCYGWIN))
- 	    GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT, p->dwProcessId);
- 	  else if ((!fh || fh->need_send_ctrl_c_event () || cyg_leader)
--			  && !ctrl_c_event_sent)
-+		   && !ctrl_c_event_sent) /* cyg_leader is needed by GDB
-+					     with non-cygwin inferior */
- 	    {
- 	      GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
- 	      ctrl_c_event_sent = true;
-@@ -378,13 +400,13 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
-       if (p && p->ctty == ttyp->ntty && p->pgid == pgid)
- 	{
- 	  if (p->process_state & PID_NOTCYGWIN)
--	    pg_with_nat = true;
-+	    pg_with_nat = true; /* The process group has non-cygwin process */
- 	  if (!(p->process_state & PID_NOTCYGWIN))
--	    need_send_sig = true;
-+	    need_send_sig = true; /* Process which needs signal exists */
- 	  if (!p->cygstarted)
--	    nat_shell = true;
-+	    nat_shell = true; /* The shell seems to a non-cygwin shell */
+@@ -408,13 +409,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
  	  if (p->process_state & PID_TTYIN)
--	    cyg_reader = true;
-+	    cyg_reader = true; /* Theh process is reading the tty */
+ 	    cyg_reader = true; /* Theh process is reading the tty */
  	  if (!p->cygstarted && !(p->process_state & PID_NOTCYGWIN)
- 	      && (p != myself || being_debugged ())
- 	      && cyg_leader) /* inferior is cygwin app */
-@@ -406,8 +428,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
-       return done_with_debugger;
+-	      && (p != myself || being_debugged ())
+-	      && cyg_leader) /* inferior is cygwin app */
+-	    with_debugger = true;
++	      && (p->process_state & PID_DEBUGGED))
++	    with_debugger = true; /* inferior is cygwin app */
+ 	  if (!(p->process_state & PID_NOTCYGWIN)
+ 	      && (p->process_state & PID_NEW_PG) /* Check marker */
+-	      && p->pid == pgid) /* inferior is non-cygwin app */
+-	    with_debugger_nat = true;
++	      && p->pid == pgid)
++	    with_debugger_nat = true; /* inferior is non-cygwin app */
+ 	}
      }
-   if (with_debugger_nat)
--    return not_signalled;
--  /* Send SIGQUIT to non-cygwin process. */
-+    return not_signalled; /* Do not process slgnal keys further.
-+			     The non-cygwin inferior of GDB cannot receive
-+			     the signals. */
-+  /* Send SIGQUIT to non-cygwin process. Non-cygwin app will not be alerted
-+     by kill_pgrp(), however, QUIT key should quit the non-cygwin app
-+     if it is started along with cygwin process from cygwin shell. */
-   if ((ti.c_lflag & ISIG) && CCEQ (ti.c_cc[VQUIT], c)
-       && pg_with_nat && need_send_sig && !nat_shell)
-     {
-@@ -426,7 +452,9 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	sig = SIGINT;
-       else if (CCEQ (ti.c_cc[VQUIT], c))
- 	sig = SIGQUIT;
--      else if (pg_with_nat)
-+      else if (pg_with_nat) /* If the process group has a non-cygwin process,
-+			       it cannot be suspended correctly. Therefore,
-+			       do not send SIGTSTP. */
- 	goto not_a_sig;
-       else if (CCEQ (ti.c_cc[VSUSP], c))
- 	sig = SIGTSTP;
+   if ((with_debugger || with_debugger_nat) && need_discard_input)
+diff --git a/winsup/cygwin/include/sys/cygwin.h b/winsup/cygwin/include/sys/cygwin.h
+index ac55ab09c..c9d4599a3 100644
+--- a/winsup/cygwin/include/sys/cygwin.h
++++ b/winsup/cygwin/include/sys/cygwin.h
+@@ -276,6 +276,7 @@ enum
+   PID_PROCINFO	       = 0x08000, /* caller just asks for process info */
+   PID_NEW_PG	       = 0x10000, /* Process created with
+ 				     CREATE_NEW_PROCESS_GROUOP flag */
++  PID_DEBUGGED	       = 0x20000, /* Process being debugged */
+   PID_EXITED	       = 0x40000000, /* Free entry. */
+   PID_REAPED	       = 0x80000000  /* Reaped */
+ };
+diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
+index bb7c16547..5e04ea3da 100644
+--- a/winsup/cygwin/pinfo.cc
++++ b/winsup/cygwin/pinfo.cc
+@@ -106,6 +106,8 @@ pinfo_init (char **envp, int envc)
+ 
+   myself->process_state |= PID_ACTIVE;
+   myself->process_state &= ~(PID_INITIALIZING | PID_EXITED | PID_REAPED);
++  if (being_debugged ())
++    myself->process_state |= PID_DEBUGGED;
+   myself.preserve ();
+   debug_printf ("pid %d, pgid %d, process_state %y",
+ 		myself->pid, myself->pgid, myself->process_state);
 -- 
 2.35.1
 
