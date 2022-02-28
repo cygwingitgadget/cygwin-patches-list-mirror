@@ -1,52 +1,39 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id BAFE83858C20
- for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022 09:57:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BAFE83858C20
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+ by sourceware.org (Postfix) with ESMTPS id 28E513858C60
+ for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022 11:16:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 28E513858C60
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N2m7O-1oKsE21MVQ-0139Qr for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022
- 10:57:06 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C1FDDA80CE4; Mon, 28 Feb 2022 10:57:05 +0100 (CET)
-Date: Mon, 28 Feb 2022 10:57:05 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
+ [119.150.36.16]) (authenticated)
+ by conuserg-09.nifty.com with ESMTP id 21SBGLDo014777;
+ Mon, 28 Feb 2022 20:16:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 21SBGLDo014777
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1646046988;
+ bh=aQvSMXPWQTqGJXmgGyzLIIDe9oAVS56EkNRA206m+80=;
+ h=From:To:Cc:Subject:Date:From;
+ b=sdtUIrvkLDik+/4jBKhqUjrHhXsHUc0t1y3B/yA1nfQuoWdk6Sg11zbAPcw1I4BgU
+ Re0yQoOEzYMSk2UdljTXsZnADr6DyEHU8NVi1mbm8P6m1I79lwXxjlXqZJ45dHqMuj
+ LZcGe+PXAYLx+hpiEWNqtCP33aglKSyWwwFdxGGA4vg03bBImd9ijq04FqH8INvrNx
+ TipO2Pm5lEH5SwKv0nCyWyjmQv/y+eed11YbZDbIJM3O5FtuzA0FK072vLZ291Ps5N
+ DhJe5jxJ57tHtl2kBSfEBNfuY0P2KO+bHukGr6i50OwCHEAvQAkzs6P0feXWeQOoAr
+ LfPcG0xOPYAmQ==
+X-Nifty-SrcIP: [119.150.36.16]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin, stdout,
- stderr} symlinks
-Message-ID: <YhyccZ1dGKVeRNdp@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <cover.1645450518.git.johannes.schindelin@gmx.de>
- <YhTYazKXC+2X2TbU@calimero.vinschen.de>
- <nycvar.QRO.7.76.6.2202251645090.11118@tvgsbejvaqbjf.bet>
- <YhyUwucjllyFpkRy@calimero.vinschen.de>
+Subject: [PATCH] Cygwin: console: Improve the code to avoid typeahead key
+ swapping.
+Date: Mon, 28 Feb 2022 20:16:11 +0900
+Message-Id: <20220228111611.1169-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YhyUwucjllyFpkRy@calimero.vinschen.de>
-X-Provags-ID: V03:K1:Cr6h3sjeuzoJTMpFbhkj5PLZu5tC982Z+WsWvWAxTlgbbaOa/SD
- uRb3dUnt2GofWG8wtKjQckI/eTNwLFDz3AfwBcGqWFmCryMW45FebYfkhBqNeP5uIk3ShL4
- aR6xeBevSeqIrUfeawzuq16avyTFLyl1POb5FKzLs4nVkM5WU+NZqRZq8qoJbrkS8LxYZxY
- okgk6u5hywZ4/40I9+ZUw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kw9lZE9iQ4w=:2HjJojvkrfBoRI9JuBLOjY
- YLwgbo/hhGLABna/b5TvMsSBOPQvuCitS06CohSvnamv1S5EG5jcgiye3UUdB6REpRMsGWPVt
- rAdWsr0viiuhJkPWO3DBR9gdDWS1qYGPkAV/XERqsUZV69XDm0RdsmPLMbmnnsTXcPyTRoPW1
- w8HP2FnxsdiaYA2Ac2XucmUv7d8kpT+aTe+4CkUOo67DQMp7W+jYQeX3kBdCB96E4YOO04Lb1
- k1UK9vfeaNbc4v9sTKLIcbb7y2tCJwWgWPM0E3buL77krzAljaCTMGV36xO/G7UFHSj4ipUvA
- Q85j266AyWFBBbcEfyx/o8TSj/uQUepfi1L+AZRPgd3b3xf0/XS1pLY9SSiMgCsA0VmfxZuke
- knriRpRBAfX391KdhL3vgrru9+pIxWw3AamkokFECKfkr7pqWkqeIxLIINSIxjb03L+Zqk+nk
- h6LbgpPONgpWjmRQBC22yoE3Q0iS7ioU2QL+wpzD3xkIJnX8zFB8cEeAd8s+YdJBPZSX/P/V6
- G2rhc3K/CMIyrlq3JW9MGP8/6Cpqn/1Dq7Ys9iWedmA+xlTglLCQJZyvLBHhihfsSMIZDCUFw
- xAzXIb1ol59d5qWGwSiKXiZofDY95yiH8nsZqe0IZ61JjOZv87FDtV1cB62QUtxKycO8lXke1
- 9Dw3DZQol1AM3uFF1kkIuibveVHegd/wJasRpYYTY/SK8098HrdQv5P2TgIxinCGhX06+czAc
- GMKkE3SMloSnSndY
-X-Spam-Status: No, score=-96.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H2,
- SPF_FAIL, SPF_HELO_NONE, TXREP,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -62,45 +49,153 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 28 Feb 2022 09:57:09 -0000
+X-List-Received-Date: Mon, 28 Feb 2022 11:16:47 -0000
 
-On Feb 28 10:24, Corinna Vinschen wrote:
-> On Feb 25 16:46, Johannes Schindelin wrote:
-> > On Tue, 22 Feb 2022, Corinna Vinschen wrote:
-> > > On Feb 21 14:36, Johannes Schindelin wrote:
-> > > > If there is appetite for it, I wonder whether we should do something similar
-> > > > for `/dev/shm` and `/dev/mqueue`? Are these even still used in Cygwin?
-> > >
-> > > "still used"?  These are the dirs to store POSIX semaphors, message
-> > > queues and shared mem objects.
-> > 
-> > Okay. I guess we do not really use them in Git for Windows ;-)
-> 
-> Probably not.  I'm not aware that git uses POSIX IPC objects.
-> 
-> > > These have to be real on-disk dirs.
-> > 
-> > Could I ask you to help me understand why? Do they have to be writable? Or
-> > do the things that are written into them have to be persisted between
-> > Cygwin sessions?
-> 
-> Cygwin uses ordinary on-disk files to emulate the objects, and
-> they have to persist over process exits.  Unfortunately I don't
-> see any other way to create persistent objects from user space.
+- The commit "Cygwin: console: Prevent the order of typeahead input
+  from swapped." did not fully resolve the issue. If keys are typed
+  during input buffer fix, the order of key event may be swapped.
+  This patch fixes the issue again.
+---
+ winsup/cygwin/fhandler_console.cc | 75 +++++++++++++++++--------------
+ 1 file changed, 42 insertions(+), 33 deletions(-)
 
-Btw., you don't have to create those dirs.  Only if you actually use
-POSIX IPC calls, the directories are required.
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 88c0f894b..920dd4be0 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -188,12 +188,23 @@ cons_master_thread (VOID *arg)
+ void
+ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ {
++  const int additional_space = 128; /* Possible max number of incoming events
++				       during the process. Additional space
++				       should be left for writeback fix. */
++  const int inrec_size = INREC_SIZE + additional_space;
++  struct
++  {
++    inline static size_t bytes (size_t n)
++      {
++	return sizeof (INPUT_RECORD) * n;
++      }
++  } m;
+   termios &ti = ttyp->ti;
+   int processed_up_to = -1;
+   while (con.owner == myself->pid)
+     {
+       DWORD total_read, n, i;
+-      INPUT_RECORD input_rec[INREC_SIZE];
++      INPUT_RECORD input_rec[inrec_size];
+ 
+       if (con.disable_master_thread)
+ 	{
+@@ -203,6 +214,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 
+       WaitForSingleObject (p->input_mutex, mutex_timeout);
+       total_read = 0;
++      bool nowait = false;
+       switch (cygwait (p->input_handle, (DWORD) 0))
+ 	{
+ 	case WAIT_OBJECT_0:
+@@ -211,16 +223,13 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	  if (total_read == INREC_SIZE /* Working space full */
+ 	      && cygwait (p->input_handle, (DWORD) 0) == WAIT_OBJECT_0)
+ 	    {
+-	      const int incr = 1;
+-	      size_t bytes = sizeof (INPUT_RECORD) * (total_read - incr);
+-	      /* Discard oldest incr events. */
+-	      memmove (input_rec, input_rec + incr, bytes);
+-	      total_read -= incr;
+-	      processed_up_to =
+-		(processed_up_to + 1 >= incr) ? processed_up_to - incr : -1;
++	      const int incr = min (processed_up_to + 1, additional_space);
+ 	      ReadConsoleInputW (p->input_handle,
+ 				 input_rec + total_read, incr, &n);
+-	      total_read += n;
++	      /* Discard oldest n events. */
++	      memmove (input_rec, input_rec + n, m.bytes (total_read));
++	      processed_up_to -= n;
++	      nowait = true;
+ 	    }
+ 	  break;
+ 	case WAIT_TIMEOUT:
+@@ -298,7 +307,7 @@ remove_record:
+ 	    { /* Remove corresponding record. */
+ 	      if (total_read > i + 1)
+ 		memmove (input_rec + i, input_rec + i + 1,
+-			 sizeof (INPUT_RECORD) * (total_read - i - 1));
++			 m.bytes (total_read - i - 1));
+ 	      total_read--;
+ 	      i--;
+ 	    }
+@@ -306,45 +315,45 @@ remove_record:
+       processed_up_to = total_read - 1;
+       if (total_read)
+ 	{
+-	  /* Writeback input records other than interrupt. */
+-	  WriteConsoleInputW (p->input_handle, input_rec, total_read, &n);
+-	  size_t bytes = sizeof (INPUT_RECORD) * total_read;
+ 	  do
+ 	    {
+-	      const int additional_size = 128; /* Possible max number of
+-						  incoming events during
+-						  above process. */
+-	      const int new_size = INREC_SIZE + additional_size;
+-	      INPUT_RECORD tmp[new_size];
++	      INPUT_RECORD tmp[inrec_size];
++	      /* Writeback input records other than interrupt. */
++	      WriteConsoleInputW (p->input_handle, input_rec, total_read, &n);
+ 	      /* Check if writeback was successfull. */
+-	      PeekConsoleInputW (p->input_handle, tmp, new_size, &n);
+-	      if (memcmp (input_rec, tmp, bytes) == 0)
++	      PeekConsoleInputW (p->input_handle, tmp, inrec_size, &n);
++	      if (n < total_read)
++		break; /* Someone has read input without acquiring
++			  input_mutex. ConEmu cygwin-connector? */
++	      if (memcmp (input_rec, tmp, m.bytes (total_read)) == 0)
+ 		break; /* OK */
+ 	      /* Try to fix */
+ 	      DWORD incr = n - total_read;
+ 	      DWORD ofst;
+ 	      for (ofst = 1; ofst <= incr; ofst++)
+-		if (memcmp (input_rec, tmp + ofst, bytes) == 0)
++		if (memcmp (input_rec, tmp + ofst, m.bytes (total_read)) == 0)
+ 		  {
+-		    ReadConsoleInputW (p->input_handle, tmp, new_size, &n);
+-		    DWORD m;
+-		    WriteConsoleInputW (p->input_handle, tmp + ofst,
+-					total_read, &m);
+-		    WriteConsoleInputW (p->input_handle, tmp, ofst, &m);
+-		    if ( n > ofst + total_read)
+-		      WriteConsoleInputW (p->input_handle,
+-					  tmp + ofst + total_read,
+-					  n - (ofst + total_read), &m);
++		    ReadConsoleInputW (p->input_handle, tmp, inrec_size, &n);
++		    memcpy (input_rec, tmp + ofst, m.bytes (total_read));
++		    memcpy (input_rec + total_read, tmp, m.bytes (ofst));
++		    if (n > ofst + total_read)
++		      memcpy (input_rec + total_read + ofst,
++			      tmp + ofst + total_read,
++			      m.bytes (n - (ofst + total_read)));
++		    total_read = n;
+ 		    break;
+ 		  }
+-	      if (ofst > incr) /* Hard to fix */
+-		break; /* Giving up */
++	      if (ofst > incr)
++		break; /* Writeback was not atomic. Or someone has read
++			  input without acquiring input_mutex.
++			  Giving up because hard to fix. */
+ 	    }
+ 	  while (true);
+ 	}
+ skip_writeback:
+       ReleaseMutex (p->input_mutex);
+-      cygwait (40);
++      if (!nowait)
++	cygwait (40);
+     }
+ }
+ 
+-- 
+2.35.1
 
-In fact, the IPC objects are just mmaps (message queues, shared mem
-objects), or the file is just used to store the values after closing
-the object (semaphores).
-
-With "persistent" I mean, "DLL lifetime persistent".  It's not required
-that the objects are persistent until system shutdown, as it is now with
-file-based objects.
-It would be sufficient if the objects persist until the last Cygwin
-process of a Cygwin process tree exits.  I'm open to ideas, but they
-shouldn't further slow down the startup of a Cygwin process tree.
-
-
-Corinna
