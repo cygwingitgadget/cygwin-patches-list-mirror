@@ -1,51 +1,52 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id 2651F3858C20
- for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022 09:44:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 2651F3858C20
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id BAFE83858C20
+ for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022 09:57:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BAFE83858C20
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N0nzR-1oA6ti3hwr-00wk4H for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022
- 10:44:51 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N2m7O-1oKsE21MVQ-0139Qr for <cygwin-patches@cygwin.com>; Mon, 28 Feb 2022
+ 10:57:06 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8AB85A80CE4; Mon, 28 Feb 2022 10:44:51 +0100 (CET)
-Date: Mon, 28 Feb 2022 10:44:51 +0100
+ id C1FDDA80CE4; Mon, 28 Feb 2022 10:57:05 +0100 (CET)
+Date: Mon, 28 Feb 2022 10:57:05 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pinfo: Fix exit code for non-cygwin apps
- which reads console.
-Message-ID: <YhyZk1JonIErhPal@calimero.vinschen.de>
+Subject: Re: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin, stdout,
+ stderr} symlinks
+Message-ID: <YhyccZ1dGKVeRNdp@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220227004607.2051-1-takashi.yano@nifty.ne.jp>
- <YhyUHPKAQkHi3uQT@calimero.vinschen.de>
- <20220228183202.9236c4f2bbeacb65a816be64@nifty.ne.jp>
+References: <cover.1645450518.git.johannes.schindelin@gmx.de>
+ <YhTYazKXC+2X2TbU@calimero.vinschen.de>
+ <nycvar.QRO.7.76.6.2202251645090.11118@tvgsbejvaqbjf.bet>
+ <YhyUwucjllyFpkRy@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220228183202.9236c4f2bbeacb65a816be64@nifty.ne.jp>
-X-Provags-ID: V03:K1:l6tcyP4idHbyePzAzYmLpKzqCldEmmrXfERkXsPbs8EYfwOkUxE
- KYOChPSQncBPrl+FtF9aSGkt5mchmmK43vuefK/R71Oxn0rsSI4Q+LvFY6mNbGX2j1434cg
- LrR4M2KO8VH8ayLx9lckr5xIaFL6ffnscH7xhGAWY6IP7azcPDnuaVc2fHQpKb47Jz5NW7J
- w/Z6266d8EmaUuVSosxnQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9CqXz4Mp3Ds=:ev+TV+LYCf2AZg7+j8WzMP
- dKNS5jEk9c2zSN4QVhjW0JGiou/Jz5LyMmN9dLDyevmOIP9rpsBoe/ou0kQcuLkvtK6kfMnk5
- OKKgYIKorQ6Ss8e2koFPX3an6eGEw/lN+JaY/ZWDvLhLZIdmSyvkTbznj+9ddXRojKC7bp+Ep
- uFlOSvmq7p4z9ZrGGw9WW5c6Rx43xyExMF+U94mSGm72/XvL6brKcTgQhV6ac5VILc2uGb0VJ
- eFHQhvP19FWNH0VyuQNBl/Ag+GL72ZQeEF6bau2IAPss+E0JKrqkm2CGNL1Tef7myK8w4Tc4o
- HsTyyaw/9mRQ6bpdD7Cf+xESnsZcb7Swg5r6iExUbp570V1zQPNrBLn/M3sAHSWtrBXOF8Wi/
- WFB0yopchjqgPuMnvilS8ENfIIeGNmnqYU8XLW54+7D1Qb1iMwFhJRg65qJ+MzgHj2oH7pf+l
- 1n6klXW94lZUH1auGI9x3/Pw2kGUyXjlWQFSlRGl5FAflWwAresD1aLbF9Ar0cgNTc3itv5ji
- 4l4wSNCVcDci6IC68AK12zS93g9JnUtK3WGMRiFS/WGV63lh8UqlOXZhHDf/1F61/Zzb2zrOD
- eUDZoXCEIRG4n+8RzWh4wueMqnG4Gp57dBwaD+P/yxFBZk2el5r/BRHNVXaSJViXVI/jvl8E8
- WCwYlgo/tlGk7fEHTKlbofxEIpUzgvn4+aCNiIJpILaxxTYzvUtbV+3X7C0BT2QjkUlEwi+3I
- UZMWAwxdx/m3m6Sv
+In-Reply-To: <YhyUwucjllyFpkRy@calimero.vinschen.de>
+X-Provags-ID: V03:K1:Cr6h3sjeuzoJTMpFbhkj5PLZu5tC982Z+WsWvWAxTlgbbaOa/SD
+ uRb3dUnt2GofWG8wtKjQckI/eTNwLFDz3AfwBcGqWFmCryMW45FebYfkhBqNeP5uIk3ShL4
+ aR6xeBevSeqIrUfeawzuq16avyTFLyl1POb5FKzLs4nVkM5WU+NZqRZq8qoJbrkS8LxYZxY
+ okgk6u5hywZ4/40I9+ZUw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kw9lZE9iQ4w=:2HjJojvkrfBoRI9JuBLOjY
+ YLwgbo/hhGLABna/b5TvMsSBOPQvuCitS06CohSvnamv1S5EG5jcgiye3UUdB6REpRMsGWPVt
+ rAdWsr0viiuhJkPWO3DBR9gdDWS1qYGPkAV/XERqsUZV69XDm0RdsmPLMbmnnsTXcPyTRoPW1
+ w8HP2FnxsdiaYA2Ac2XucmUv7d8kpT+aTe+4CkUOo67DQMp7W+jYQeX3kBdCB96E4YOO04Lb1
+ k1UK9vfeaNbc4v9sTKLIcbb7y2tCJwWgWPM0E3buL77krzAljaCTMGV36xO/G7UFHSj4ipUvA
+ Q85j266AyWFBBbcEfyx/o8TSj/uQUepfi1L+AZRPgd3b3xf0/XS1pLY9SSiMgCsA0VmfxZuke
+ knriRpRBAfX391KdhL3vgrru9+pIxWw3AamkokFECKfkr7pqWkqeIxLIINSIxjb03L+Zqk+nk
+ h6LbgpPONgpWjmRQBC22yoE3Q0iS7ioU2QL+wpzD3xkIJnX8zFB8cEeAd8s+YdJBPZSX/P/V6
+ G2rhc3K/CMIyrlq3JW9MGP8/6Cpqn/1Dq7Ys9iWedmA+xlTglLCQJZyvLBHhihfsSMIZDCUFw
+ xAzXIb1ol59d5qWGwSiKXiZofDY95yiH8nsZqe0IZ61JjOZv87FDtV1cB62QUtxKycO8lXke1
+ 9Dw3DZQol1AM3uFF1kkIuibveVHegd/wJasRpYYTY/SK8098HrdQv5P2TgIxinCGhX06+czAc
+ GMKkE3SMloSnSndY
 X-Spam-Status: No, score=-96.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H2,
+ SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -61,62 +62,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 28 Feb 2022 09:44:54 -0000
+X-List-Received-Date: Mon, 28 Feb 2022 09:57:09 -0000
 
-On Feb 28 18:32, Takashi Yano wrote:
-> On Mon, 28 Feb 2022 10:21:32 +0100
-> Corinna Vinschen wrote:
-> > Hi Takashi,
+On Feb 28 10:24, Corinna Vinschen wrote:
+> On Feb 25 16:46, Johannes Schindelin wrote:
+> > On Tue, 22 Feb 2022, Corinna Vinschen wrote:
+> > > On Feb 21 14:36, Johannes Schindelin wrote:
+> > > > If there is appetite for it, I wonder whether we should do something similar
+> > > > for `/dev/shm` and `/dev/mqueue`? Are these even still used in Cygwin?
+> > >
+> > > "still used"?  These are the dirs to store POSIX semaphors, message
+> > > queues and shared mem objects.
 > > 
-> > On Feb 27 09:46, Takashi Yano wrote:
-> > > - The recent commit "Cygwin: pinfo: Fix exit code when non-cygwin app
-> > >   exits by Ctrl-C." did not fix enough the issue. If a non-cygwin app
-> > >   is reading the console, it will not return STATUS_CONTROL_C_EXIT
-> > >   even if it is terminated by Ctrl-C. As a result, the previous patch
-> > >   does not take effect.
-> > >   This patch solves this issue by setting sigExeced to SIGINT in
-> > >   ctrl_c_handler(). In addition, sigExeced will be cleared if the app
-> > >   does not terminated within predetermined time period. The reason is
-> > >   that the app does not seem to be terminated by the signal sigExeced.
-> > > [...]
-> > > --- a/winsup/cygwin/spawn.cc
-> > > +++ b/winsup/cygwin/spawn.cc
-> > > @@ -953,7 +953,15 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-> > >  	  if (sem)
-> > >  	    __posix_spawn_sem_release (sem, 0);
-> > >  	  if (ptys_need_cleanup || cons_need_cleanup)
-> > > -	    WaitForSingleObject (pi.hProcess, INFINITE);
-> > > +	    {
-> > > +	      LONG prev_sigExeced = sigExeced;
-> > > +	      while (WaitForSingleObject (pi.hProcess, 100) == WAIT_TIMEOUT)
-> > > +		/* If child process does not exit in predetermined time
-> > > +		   period, the process does not seem to be terminated by
-> > > +		   the signal sigExeced. Therefore, clear sigExeced here. */
-> > > +		prev_sigExeced =
-> > > +		  InterlockedCompareExchange (&sigExeced, 0, prev_sigExeced);
-> > > +	    }
-> > >  	  if (ptys_need_cleanup)
-> > >  	    {
-> > >  	      fhandler_pty_slave::cleanup_for_non_cygwin_app (&ptys_handle_set,
-> > 
-> > Is it really necessary to run the InterlockedCompareExchange in a loop?
-> > What about
-> > 
-> >   if (WFMO(..., 100) == WAIT_TIMEOUT)
-> >     {
-> >       InterlockedCompareExchange (&sigExeced, 0, prev_sigExeced);
-> >       WFMO(..., INFINITE);
-> >     }
-> > 
-> > ?
+> > Okay. I guess we do not really use them in Git for Windows ;-)
 > 
-> If non-cygwin app ignores Ctrl-C (like cmd.exe), and if
-> you hit Ctrl-C twice or more, sigExeced should be cleared
-> everytime on Ctrl-C. Your code clears sigExeced only once,
-> doesn't it?
+> Probably not.  I'm not aware that git uses POSIX IPC objects.
+> 
+> > > These have to be real on-disk dirs.
+> > 
+> > Could I ask you to help me understand why? Do they have to be writable? Or
+> > do the things that are written into them have to be persisted between
+> > Cygwin sessions?
+> 
+> Cygwin uses ordinary on-disk files to emulate the objects, and
+> they have to persist over process exits.  Unfortunately I don't
+> see any other way to create persistent objects from user space.
 
-Oh, ok.  Then, please go ahead.
+Btw., you don't have to create those dirs.  Only if you actually use
+POSIX IPC calls, the directories are required.
+
+In fact, the IPC objects are just mmaps (message queues, shared mem
+objects), or the file is just used to store the values after closing
+the object (semaphores).
+
+With "persistent" I mean, "DLL lifetime persistent".  It's not required
+that the objects are persistent until system shutdown, as it is now with
+file-based objects.
+It would be sufficient if the objects persist until the last Cygwin
+process of a Cygwin process tree exits.  I'm open to ideas, but they
+shouldn't further slow down the startup of a Cygwin process tree.
 
 
-Thanks,
 Corinna
