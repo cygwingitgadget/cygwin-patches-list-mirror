@@ -1,49 +1,45 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-049.btinternet.com (mailomta26-re.btinternet.com
- [213.120.69.119])
- by sourceware.org (Postfix) with ESMTPS id B1B203858415
- for <cygwin-patches@cygwin.com>; Tue,  1 Mar 2022 14:26:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B1B203858415
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta002.cacentral1.a.cloudfilter.net
+ (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+ by sourceware.org (Postfix) with ESMTPS id 016DA3858C78
+ for <cygwin-patches@cygwin.com>; Tue,  1 Mar 2022 20:20:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 016DA3858C78
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
- by re-prd-fep-049.btinternet.com with ESMTP id
- <20220301142618.OKFJ31284.re-prd-fep-049.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
- Tue, 1 Mar 2022 14:26:18 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 613A8CC316BF0F26
-X-Originating-IP: [86.139.156.65]
-X-OWM-Source-IP: 86.139.156.65 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeehudeuveeujeeujeegueefhedttdekvedtudeileefteetfeefjeejudekfefggfenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudefledrudehiedrieehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdefngdpihhnvghtpeekiedrudefledrudehiedrieehpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepvhgrphhivghrsehgvghnthhoohdrohhrgh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.103] (86.139.156.65) by
- re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 613A8CC316BF0F26; Tue, 1 Mar 2022 14:26:18 +0000
-Message-ID: <9a4b4c3c-f35f-920f-5937-bf119f63983e@dronecode.org.uk>
-Date: Tue, 1 Mar 2022 14:26:17 +0000
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4003a.ext.cloudfilter.net ([10.228.9.183])
+ by cmsmtp with ESMTP
+ id P7BGnfT2zgTZYP8zGn9sn6; Tue, 01 Mar 2022 20:20:46 +0000
+Received: from [10.0.0.5] ([184.64.124.72]) by cmsmtp with ESMTP
+ id P8zFn4RpTQV6mP8zGnAa4l; Tue, 01 Mar 2022 20:20:46 +0000
+X-Authority-Analysis: v=2.4 cv=PbTsOwtd c=1 sm=1 tr=0 ts=621e801e
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=IkcTkHD0fZMA:10 a=iMpC6L0jGsNNbTZxuiUA:9 a=QEXdDO2ut3YA:10
+Message-ID: <2a8615a6-1214-ed7a-71f1-d191bcf2f3fe@SystematicSw.ab.ca>
+Date: Tue, 1 Mar 2022 13:20:45 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: Re: [PATCH] winsup: enable maintainer mode support
-Content-Language: en-GB
-To: Mike Frysinger <vapier@gentoo.org>,
- Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20220301005439.23139-1-vapier@gentoo.org>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <20220301005439.23139-1-vapier@gentoo.org>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Subject: Cygwin sysconf.cc
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20220225163959.48753-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20220225163959.48753-3-Brian.Inglis@SystematicSW.ab.ca>
+ <Yhy6OKd/2o8VqIUH@calimero.vinschen.de>
+ <d71a5b05-531f-8028-7b06-6ee466053f5f@SystematicSw.ab.ca>
+Content-Language: en-CA
+Organization: Systematic Software
+In-Reply-To: <d71a5b05-531f-8028-7b06-6ee466053f5f@SystematicSw.ab.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1199.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+X-CMAE-Envelope: MS4xfENOCSOI1wf9PKLfwc6Tsr5SngzKo3jsEBk7OtF0g5Kyu59rcCd8oEBt31cPnnoP5dJYDnoN+iTUks8i9yMIrUc8jCYhVa5nzSUyok/p5OXj6nW2y3GJ
+ eFRSG8+IrSFncXrfTBSpPJihUMX05/fRqG72udtHlUC7fPrpnaRqJef1mMGLYmL6iz4mRaI9WaDf/5ZcODxPnu5p7RLlgCNw7VU=
+X-Spam-Status: No, score=-1160.9 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, KAM_LINKBAIT, RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL,
+ SPF_HELO_NONE, SPF_NONE, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,33 +54,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 01 Mar 2022 14:26:24 -0000
+X-List-Received-Date: Tue, 01 Mar 2022 20:20:48 -0000
 
-On 01/03/2022 00:54, Mike Frysinger wrote:
-> We do this in newlib & libgloss, so enable in winsup too for consistency.
-> ---
->   winsup/configure.ac | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/winsup/configure.ac b/winsup/configure.ac
-> index b8d2100dbe90..6c6e1cb0893a 100644
-> --- a/winsup/configure.ac
-> +++ b/winsup/configure.ac
-> @@ -13,6 +13,7 @@ AC_INIT([Cygwin],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
->   AC_CONFIG_AUX_DIR(..)
->   AC_CANONICAL_TARGET
->   AM_INIT_AUTOMAKE([dejagnu foreign no-define no-dist subdir-objects -Wall -Wno-portability -Wno-extra-portability])
-> +AM_MAINTAINER_MODE
+Interested in a patch for sysconf.cc to return:
 
-I'm not sure having maintainer-mode disabled by default for cygwin makes 
-a lot of sense.
+      _SC_TZNAME_MAX => TZNAME_MAX and
+_SC_MONOTONIC_CLOCK => _POSIX_MONOTONIC_CLOCK?
 
-We don't check in the autotools generated files, so for the handful of 
-people in the world who build cygwin from source from the git repo, they 
-should have autotools already installed and this just requires them to 
-know and remember to use '--enable-maintainer-mode'.
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-(There are no meaningful source archive releases of cygwin.)
-
-I take the point about consistency, but I'm not sure what the arguments 
-are against using 'AM_MAINTAINER_MODE([enabled])' everywhere.
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
