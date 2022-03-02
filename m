@@ -1,40 +1,47 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 94C853858D39
- for <cygwin-patches@cygwin.com>; Wed,  2 Mar 2022 12:59:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 94C853858D39
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta001.cacentral1.a.cloudfilter.net
+ (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
+ by sourceware.org (Postfix) with ESMTPS id 3711A3858D39
+ for <cygwin-patches@cygwin.com>; Wed,  2 Mar 2022 19:45:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3711A3858D39
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 222CxYLh007744;
- Wed, 2 Mar 2022 21:59:40 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 222CxYLh007744
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1646225980;
- bh=sUaEPTL46dml0/UHvCmUN+bHHwtTTUC7Y3wsCR4fo44=;
- h=From:To:Cc:Subject:Date:From;
- b=AFjfxE7P/G0roL7QUlugfrvjwvpPMu5rD/QwK1H9MFeZIu66GYjKM/3xJhpZn5xyo
- cFbq1fl8zATdrbgAWuOB5BNTw6dNCdTZx07zFebW2YP2I4oXS/3rjs6OJab5omtBAr
- VH3WyTBK+Cw16I4lA53aerHzve60bUCe/3U/3JvWb3beEaz/5bbE7kO+3cHT51TWlJ
- DrlK/hQ8G65VSdKTb2++zYGTfD5ZS36J2AfFJ4OZTx/jgilQPsuTFGsTUd8xArfMxs
- fDayNcK88GNBqYRUTLrHQTQUxehYtp5hjroneGlEuqd7Y8tcvwc89/UnhU4DjNK8il
- Py1f74PFlH8VQ==
-X-Nifty-SrcIP: [119.150.36.16]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Communalize the code for temporary attach to
- console.
-Date: Wed,  2 Mar 2022 21:59:26 +0900
-Message-Id: <20220302125926.1524-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
+ by cmsmtp with ESMTP
+ id PLstn5Zl843SgPUuPnZpO2; Wed, 02 Mar 2022 19:45:13 +0000
+Received: from [10.0.0.5] ([184.64.124.72]) by cmsmtp with ESMTP
+ id PUuPnmyPfd7RfPUuPnC1vl; Wed, 02 Mar 2022 19:45:13 +0000
+X-Authority-Analysis: v=2.4 cv=XrLphHJ9 c=1 sm=1 tr=0 ts=621fc949
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=IkcTkHD0fZMA:10 a=94nOnFI1EgyDtX4ev68A:9 a=QEXdDO2ut3YA:10
+Message-ID: <b7a385c3-5480-9881-9feb-7fb49350c755@SystematicSw.ab.ca>
+Date: Wed, 2 Mar 2022 12:45:12 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: Cygwin sysconf.cc
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <20220225163959.48753-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20220225163959.48753-3-Brian.Inglis@SystematicSW.ab.ca>
+ <Yhy6OKd/2o8VqIUH@calimero.vinschen.de>
+ <d71a5b05-531f-8028-7b06-6ee466053f5f@SystematicSw.ab.ca>
+ <2a8615a6-1214-ed7a-71f1-d191bcf2f3fe@SystematicSw.ab.ca>
+ <Yh8p80lFZNuUYWTw@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+In-Reply-To: <Yh8p80lFZNuUYWTw@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfDO404T9m5Gj46ZZayuq1/CxIRblB9Ahvt5tCSDKUDePq7vC+xZU+8wn/b48Zyw3jz/fchsvN2gZesVDvmyLgy+IoRACJvelcifBnnRQHCOXMvBhIQO1
+ NKYjDknVv6yEF8xvAe7ITdxmP7L3jyBcHnxafhvxASLnS9hz0ygqvi2tl0yYbAf8GThQOMRqD0ZSe3lWPkPjxLBtN1G+cTXMcFw=
+X-Spam-Status: No, score=-1163.9 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
+ SPF_HELO_NONE, SPF_NONE, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -49,269 +56,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Mar 2022 13:00:08 -0000
+X-List-Received-Date: Wed, 02 Mar 2022 19:45:15 -0000
 
-- This patch communalizes the code for attaching another console
-  temporarily and resuming to the original attach state, because
-  there were a plurality of similar codes throughout.
----
- winsup/cygwin/fhandler.h          |   2 +
- winsup/cygwin/fhandler_termios.cc |  27 ++-----
- winsup/cygwin/fhandler_tty.cc     | 128 ++++++++++++++----------------
- 3 files changed, 66 insertions(+), 91 deletions(-)
+On 2022-03-02 01:25, Corinna Vinschen wrote:
+> Hi Brian,
+> 
+> On Mar  1 13:20, Brian Inglis wrote:
+>> Interested in a patch for sysconf.cc to return:
+>>
+>>       _SC_TZNAME_MAX => TZNAME_MAX and
+>> _SC_MONOTONIC_CLOCK => _POSIX_MONOTONIC_CLOCK?
+> 
+> not sure I understand the question.  Both are already implemented.
+> 
+>    $ getconf -a | egrep '(TZNAME_MAX|MONOTONIC_CLOCK)'
+>    _POSIX_TZNAME_MAX                   6
+>    TZNAME_MAX                          undefined
+>    _POSIX_MONOTONIC_CLOCK              200809
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index fbe7135b1..c32dc7b57 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2321,6 +2321,8 @@ class fhandler_pty_common: public fhandler_termios
- 				       bool cygwin = false,
- 				       bool stub_only = false);
-   bool to_be_read_from_nat_pipe (void);
-+  static DWORD attach_console_temporarily (DWORD target_pid);
-+  static void resume_from_temporarily_attach (DWORD resume_pid);
- 
-  protected:
-   static BOOL process_opost_output (HANDLE h, const void *ptr, ssize_t& len,
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 3767c6405..3740ba011 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -357,22 +357,10 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	     which the target process is attaching before sending the
- 	     CTRL_C_EVENT. After sending the event, reattach to the
- 	     console to which the process was previously attached.  */
--	  bool console_exists = fhandler_console::exists ();
--	  pinfo pinfo_resume = pinfo (myself->ppid);
- 	  DWORD resume_pid = 0;
--	  if (pinfo_resume)
--	    resume_pid = pinfo_resume->dwProcessId;
--	  else
--	    resume_pid = fhandler_pty_common::get_console_process_id
--	      (myself->dwProcessId, false);
--	  acquire_attach_mutex (mutex_timeout);
--	  if ((!console_exists || resume_pid) && fh && !fh->is_console ())
--	    {
--	      FreeConsole ();
--	      AttachConsole (p->dwProcessId);
--	      init_console_handler (::cygheap->ctty
--				    && ::cygheap->ctty->is_console ());
--	    }
-+	  if (fh && !fh->is_console ())
-+	    resume_pid =
-+	      fhandler_pty_common::attach_console_temporarily (p->dwProcessId);
- 	  if (fh && p == myself && being_debugged ())
- 	    { /* Avoid deadlock in gdb on console. */
- 	      fh->tcflush(TCIFLUSH);
-@@ -391,7 +379,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	      GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
- 	      ctrl_c_event_sent = true;
- 	    }
--	  if ((!console_exists || resume_pid) && fh && !fh->is_console ())
-+	  if (fh && !fh->is_console ())
- 	    {
- 	      /* If a process on pseudo console is killed by Ctrl-C,
- 		 this process may take over the ownership of the
-@@ -399,13 +387,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 		 before sending CTRL_C_EVENT. In this case, closing
- 		 pseudo console is necessary. */
- 	      fhandler_pty_slave::release_ownership_of_nat_pipe (ttyp, fh);
--	      FreeConsole ();
--	      if (resume_pid && console_exists)
--		AttachConsole (resume_pid);
--	      init_console_handler (::cygheap->ctty
--				    && ::cygheap->ctty->is_console ());
-+	      fhandler_pty_common::resume_from_temporarily_attach (resume_pid);
- 	    }
--	  release_attach_mutex ();
- 	  need_discard_input = true;
- 	}
-       if (p && p->ctty == ttyp->ntty && p->pgid == pgid)
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index a2a9eab99..433861bb4 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -530,26 +530,13 @@ fhandler_pty_master::accept_input ()
-       DWORD target_pid = 0;
-       if (pinfo_target)
- 	target_pid = pinfo_target->dwProcessId;
--      pinfo pinfo_resume = pinfo (myself->ppid);
--      DWORD resume_pid;
--      if (pinfo_resume)
--	resume_pid = pinfo_resume->dwProcessId;
--      else
--	resume_pid = get_console_process_id (myself->dwProcessId, false);
--      bool console_exists = fhandler_console::exists ();
--      if (target_pid && (resume_pid || !console_exists))
-+      if (target_pid)
- 	{
- 	  /* Slave attaches to a different console than master.
- 	     Therefore reattach here. */
--	  acquire_attach_mutex (mutex_timeout);
--	  FreeConsole ();
--	  AttachConsole (target_pid);
-+	  DWORD resume_pid = attach_console_temporarily (target_pid);
- 	  cp_to = GetConsoleCP ();
--	  FreeConsole ();
--	  if (resume_pid && console_exists)
--	    AttachConsole (resume_pid);
--	  init_console_handler (false);
--	  release_attach_mutex ();
-+	  resume_from_temporarily_attach (resume_pid);
- 	}
-       else
- 	cp_to = GetConsoleCP ();
-@@ -1231,33 +1218,18 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
- 					   get_ttyp ()->nat_pipe_owner_pid);
- 	      if (pcon_owner)
- 		{
--		  pinfo pinfo_resume = pinfo (myself->ppid);
--		  DWORD resume_pid;
--		  if (pinfo_resume)
--		    resume_pid = pinfo_resume->dwProcessId;
--		  else
--		    resume_pid =
--		      get_console_process_id (myself->dwProcessId, false);
--		  if (resume_pid)
--		    {
--		      HANDLE h_pcon_in;
--		      DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
--				       GetCurrentProcess (), &h_pcon_in,
--				       0, TRUE, DUPLICATE_SAME_ACCESS);
--		      acquire_attach_mutex (mutex_timeout);
--		      FreeConsole ();
--		      AttachConsole (get_ttyp ()->nat_pipe_owner_pid);
--		      init_console_handler (false);
--		      WaitForSingleObject (input_mutex, mutex_timeout);
--		      transfer_input (tty::to_cyg, h_pcon_in, get_ttyp (),
--				      input_available_event);
--		      ReleaseMutex (input_mutex);
--		      FreeConsole ();
--		      AttachConsole (resume_pid);
--		      init_console_handler (false);
--		      release_attach_mutex ();
--		      CloseHandle (h_pcon_in);
--		    }
-+		  HANDLE h_pcon_in;
-+		  DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
-+				   GetCurrentProcess (), &h_pcon_in,
-+				   0, TRUE, DUPLICATE_SAME_ACCESS);
-+		  DWORD target_pid = get_ttyp ()->nat_pipe_owner_pid;
-+		  DWORD resume_pid = attach_console_temporarily (target_pid);
-+		  WaitForSingleObject (input_mutex, mutex_timeout);
-+		  transfer_input (tty::to_cyg, h_pcon_in, get_ttyp (),
-+				  input_available_event);
-+		  ReleaseMutex (input_mutex);
-+		  resume_from_temporarily_attach (resume_pid);
-+		  CloseHandle (h_pcon_in);
- 		  CloseHandle (pcon_owner);
- 		}
- 	    }
-@@ -2853,26 +2825,13 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
-       DWORD target_pid = 0;
-       if (pinfo_target)
- 	target_pid = pinfo_target->dwProcessId;
--      pinfo pinfo_resume = pinfo (myself->ppid);
--      DWORD resume_pid;
--      if (pinfo_resume)
--	resume_pid = pinfo_resume->dwProcessId;
--      else
--	resume_pid = get_console_process_id (myself->dwProcessId, false);
--      bool console_exists = fhandler_console::exists ();
--      if (target_pid && (resume_pid || !console_exists))
-+      if (target_pid)
- 	{
- 	  /* Slave attaches to a different console than master.
- 	     Therefore reattach here. */
--	  acquire_attach_mutex (mutex_timeout);
--	  FreeConsole ();
--	  AttachConsole (target_pid);
-+	  DWORD resume_pid = attach_console_temporarily (target_pid);
- 	  cp_from = GetConsoleOutputCP ();
--	  FreeConsole ();
--	  if (resume_pid && console_exists)
--	    AttachConsole (resume_pid);
--	  init_console_handler (false);
--	  release_attach_mutex ();
-+	  resume_from_temporarily_attach (resume_pid);
- 	}
-       else
- 	cp_from = GetConsoleOutputCP ();
-@@ -4130,6 +4089,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
-     {
-       bool attach_restore = false;
-       HANDLE from = get_handle_nat ();
-+      DWORD resume_pid = 0;
-       if (get_ttyp ()->pcon_activated && get_ttyp ()->nat_pipe_owner_pid
- 	  && !get_console_process_id (get_ttyp ()->nat_pipe_owner_pid, true))
- 	{
-@@ -4139,22 +4099,15 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
- 			   GetCurrentProcess (), &from,
- 			   0, TRUE, DUPLICATE_SAME_ACCESS);
- 	  CloseHandle (pcon_owner);
--	  FreeConsole ();
--	  AttachConsole (get_ttyp ()->nat_pipe_owner_pid);
--	  init_console_handler (false);
-+	  DWORD target_pid = get_ttyp ()->nat_pipe_owner_pid;
-+	  resume_pid = attach_console_temporarily (target_pid);
- 	  attach_restore = true;
- 	}
-       WaitForSingleObject (input_mutex, mutex_timeout);
-       transfer_input (tty::to_cyg, from, get_ttyp (), input_available_event);
-       ReleaseMutex (input_mutex);
-       if (attach_restore)
--	{
--	  FreeConsole ();
--	  pinfo p (myself->ppid);
--	  if (!p || !AttachConsole (p->dwProcessId))
--	    AttachConsole (ATTACH_PARENT_PROCESS);
--	  init_console_handler (false);
--	}
-+	resume_from_temporarily_attach (resume_pid);
-     }
-   ReleaseMutex (pipe_sw_mutex);
- }
-@@ -4187,3 +4140,40 @@ fhandler_pty_slave::release_ownership_of_nat_pipe (tty *ttyp,
-       ReleaseMutex (ptym->pipe_sw_mutex);
-     }
- }
-+
-+DWORD
-+fhandler_pty_common::attach_console_temporarily (DWORD target_pid)
-+{
-+  DWORD resume_pid = 0;
-+  pinfo pinfo_resume (myself->ppid);
-+  if (pinfo_resume)
-+    resume_pid = pinfo_resume->dwProcessId;
-+  if (!resume_pid)
-+    resume_pid = get_console_process_id (myself->dwProcessId, false);
-+  bool console_exists = fhandler_console::exists ();
-+  acquire_attach_mutex (mutex_timeout);
-+  if (!console_exists || resume_pid)
-+    {
-+      FreeConsole ();
-+      AttachConsole (target_pid);
-+      init_console_handler (::cygheap->ctty
-+			    && ::cygheap->ctty->is_console ());
-+    }
-+  return console_exists ? resume_pid : (DWORD) -1;
-+}
-+
-+void
-+fhandler_pty_common::resume_from_temporarily_attach (DWORD resume_pid)
-+{
-+  bool console_exists = (resume_pid != (DWORD) -1);
-+  if (!console_exists || resume_pid)
-+    {
-+      FreeConsole ();
-+      if (console_exists)
-+	if (!resume_pid || !AttachConsole (resume_pid))
-+	  AttachConsole (ATTACH_PARENT_PROCESS);
-+      init_console_handler (::cygheap->ctty
-+			    && ::cygheap->ctty->is_console ());
-+    }
-+  release_attach_mutex ();
-+}
+Sorry, must have been looking at very *OLD* version online, as 
+_SC_CLOCK_SELECTION and _SC_MONOTONIC_CLOCK were not defined.
+
+Why did you not define _SC_TZNAME_MAX => _POSIX_TZNAME_MAX when you 
+tweaked it?
+
+My rereading of the man and POSIX pages leads me to believe that for all 
+known values of _SC_... the entries now showing {nsup, {c:0}} should be 
+{cons, {c:-1L}} supported but undefined, and only out of range values 
+for the parameter should be treated as {nsup, {c:-1L}}?
+
 -- 
-2.35.1
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
