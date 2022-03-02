@@ -1,39 +1,52 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 449383858D39
- for <cygwin-patches@cygwin.com>; Wed,  2 Mar 2022 02:15:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 449383858D39
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 84A383858D39
+ for <cygwin-patches@cygwin.com>; Wed,  2 Mar 2022 08:25:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 84A383858D39
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 2222EmUS022558;
- Wed, 2 Mar 2022 11:14:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2222EmUS022558
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1646187293;
- bh=HlVSuUlydFmRcXh5KVhbTxHDg/dha0ZhJ89J/IJOZ/0=;
- h=From:To:Cc:Subject:Date:From;
- b=L/iIS0HZKo7Zk4PfTz2PpLlVZdvLdqOmHVR8zL0tPyEecV50/+Xxgt6d/f7tucbOa
- YS3r2wVjOiibJhap+H5QY7UE42KgcUpuMmbIQ2gWNf71ey7k5J4xnHliOx+5SV+A/x
- Iawk9HU5Qfguq33LX7WBNBgDmyttcqdpJGF9W2D9ESQ/wgjpCBpFAwRa2Kd6zH7w8f
- YuIlq/7P9crUKeFhrStOcMicalv7eaGLyVnbDOAGIArWlBFXG4d+b0x+iMy8Z4hmiG
- fv6C4DnNAH206UKlfBy4WCRrwnsx1WFcm649uSXJcOFczYC7gX+xOd18wfQ5VVsXvD
- XNz9GGhrzRGYQ==
-X-Nifty-SrcIP: [119.150.36.16]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MeCYx-1nwk2V41J9-00bGKv for <cygwin-patches@cygwin.com>; Wed, 02 Mar 2022
+ 09:25:24 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 6E807A80762; Wed,  2 Mar 2022 09:25:23 +0100 (CET)
+Date: Wed, 2 Mar 2022 09:25:23 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix a bug from comparison between int and
- DWORD.
-Date: Wed,  2 Mar 2022 11:14:47 +0900
-Message-Id: <20220302021447.1988-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: Cygwin sysconf.cc
+Message-ID: <Yh8p80lFZNuUYWTw@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220225163959.48753-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20220225163959.48753-3-Brian.Inglis@SystematicSW.ab.ca>
+ <Yhy6OKd/2o8VqIUH@calimero.vinschen.de>
+ <d71a5b05-531f-8028-7b06-6ee466053f5f@SystematicSw.ab.ca>
+ <2a8615a6-1214-ed7a-71f1-d191bcf2f3fe@SystematicSw.ab.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2a8615a6-1214-ed7a-71f1-d191bcf2f3fe@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:t38CypuH5LwCFBFPUmpZcqUEwWStvMzJL19GSdCgxmPh5tLK4QC
+ WnAzzsdp6NYMZ2oYb1yBKwd1PX1hTNV1IRzbzKeEl2Go/LcJjNRkGmNxrVm69kjHRYUh23g
+ 2lR4OvtZfiSStR+RNWu52o1fYrG8+pC2GcmMl0uxREedXta4pwcSDS767L8dy6amd9PJt5Z
+ 1XqUyyHpMkfrtGB66F4OQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4c+Ggs8yvGs=:8is8eqH0axThiSHXU2vqgc
+ PVyGnlmsI5R4dYT6xKjfEQgoaAxl0Q0yi3LKvOXThiBI4KeKuFMtM/ZSMCH2FhiAHGGjh6etR
+ MXk8aqE8yvdXLuUNlNfSZbSnbwwmfO6EAkn6rA0mqr6K1rBOkkbg0fjHh9DX+URqT0ASjmB5T
+ H9FE3uDiOphPY11FapIZkcSXSwtAF/Mpf8Yr2RpHo6Tn4yH9RU4Qe68GLEde9KD1nY1grxBHK
+ 8yRCRdJmze0HbavGpTkmx6wDIfP14zQgBBKHfAI/tS8hfsslnvyKiOjt2c98SOYXkI0R4ONTF
+ KvhBXwfpaV3gpAFQUGRaW+fFXtAEC6Vi7SwRTCnpdN9XnVNeSoRohU17uNbCwDMvx5hNX5wti
+ nu3+ONeV6s4d87zJgHip8MBX/+ywTX44m/WGWurr85Asnzzu5H1ESwbQnFPze0mgXeXAI1DKn
+ SfRCFG2Bbg4jBrmwURxSS18MawcXKfWNe4zsgQgdZZSEPtbAxz3hHyrIXwazZmhIRCvx2q2AU
+ hpCQXMhXM37HwAvkZxWcuUWGv9qlSLqA3aIAJCU37xy4IEIdvXRd0yX9yc0pCj+X6u+eDU/1G
+ VfFMOrQe7uXyZN1rFiqD1DIVVg+yKCT3w5QxtOszSJvG2V0fNbuqYGqkhlc23cqkzPk2zE3lw
+ 0+032eHp74q5gdu2R6bX3ZfWjtSj+DLhfHXHeQqaOsnZIuvhrjXeS3HQjOHmfmglgHtaBHGSw
+ SL6FXIjISKB+9rYQ
+X-Spam-Status: No, score=-96.5 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H5, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -49,25 +62,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Mar 2022 02:15:26 -0000
+X-List-Received-Date: Wed, 02 Mar 2022 08:25:28 -0000
 
----
- winsup/cygwin/fhandler_console.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Brian,
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 7e51ea19e..7693ab8e4 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -1274,7 +1274,7 @@ out:
-     {
-       DWORD discarded;
-       ReadConsoleInputW (get_handle (), input_rec, discard_len, &discarded);
--      con.num_processed = max (con.num_processed - discarded, 0);
-+      con.num_processed -= min (con.num_processed, discarded);
-     }
-   return stat;
- }
--- 
-2.35.1
+On Mar  1 13:20, Brian Inglis wrote:
+> Interested in a patch for sysconf.cc to return:
+> 
+>      _SC_TZNAME_MAX => TZNAME_MAX and
+> _SC_MONOTONIC_CLOCK => _POSIX_MONOTONIC_CLOCK?
 
+not sure I understand the question.  Both are already implemented.
+
+  $ getconf -a | egrep '(TZNAME_MAX|MONOTONIC_CLOCK)'
+  _POSIX_TZNAME_MAX                   6
+  TZNAME_MAX                          undefined
+  _POSIX_MONOTONIC_CLOCK              200809
+
+
+Corinna
