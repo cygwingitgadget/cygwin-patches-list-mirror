@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 9AC803858D20
- for <cygwin-patches@cygwin.com>; Thu,  3 Mar 2022 18:14:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9AC803858D20
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id C24CA3858D20
+ for <cygwin-patches@cygwin.com>; Thu,  3 Mar 2022 18:15:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C24CA3858D20
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 223IE7Em029816;
- Fri, 4 Mar 2022 03:14:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 223IE7Em029816
+ by conuserg-07.nifty.com with ESMTP id 223IEmxi018846;
+ Fri, 4 Mar 2022 03:14:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 223IEmxi018846
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1646331252;
- bh=tPJdX/+M2FQa+Ayp2dQf2J3AhTWLccN9Gqb9HcdfBME=;
+ s=dec2015msa; t=1646331293;
+ bh=/R8UjXWHykUi+rw2q2rqwwl4o2hfWO7Uji+f2v9hd6w=;
  h=From:To:Cc:Subject:Date:From;
- b=aQgGUwJECY86bQyxAUMfvHsyvGgFpa5UbhPIwixkRxLLGvKU53cA3R1YZz9q3VV9/
- kfPR9qR05U2M99L/QgBtMOorcB34JhCDIddy0aJHO4cULwphUN5a6xoITjvbOlKfpp
- IB5ahDK2lJatNaoTP9gnWQC/O0NrN9Sl7ZE6+zlqK8ORfu889gnclFZ3brVe3yzDGO
- yhodRONs35y8TPIsqi5TsiZtbSeTU9YQ+8uo/QKhFa5WfqIaUw4EHClTF2iQnCv6CR
- sLXMIdcx+Fr16ako5M5FXpu98H7vLX0UqN06wzuy5FHmSKzKXpkOoG/m0RqXmjz+3z
- d3cn37KZDAvWw==
+ b=kKAk0hZZioj9hblV3MAHcosXoNl1DalUVSBDnhQ+Xa3cm3DlAeffcysPyI9DkkZYq
+ e3I9K355X31don854/XQ+VzCOisDX7oSkiE0Wo/FIBHL2hLdx9NMe2Cfn9YlzoEs0U
+ t2fvbRc3zP3Wij39g0BKdOzWsGQS/9UEg7wYz1TEV1c0Vc9mUacZrUXnxQeHoxoXfK
+ LWeqdLSr+aOWqTn7uiRkbUuQq4WVBifnSvB+l1lz6cuzJM6ieuY1aCYmFrVD3upfbv
+ zc2iU5OnF1U3v+N7semPsD/wlnEgeJML7+scV2v7MfPOOx/ZpQ0b5VreFegVrC0VS2
+ uLK3+C5z8as5w==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Rename nat_pipe_owner_alive() to process_alive().
-Date: Fri,  4 Mar 2022 03:14:01 +0900
-Message-Id: <20220303181401.5101-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Simplify the setup code for GDB a bit.
+Date: Fri,  4 Mar 2022 03:14:42 +0900
+Message-Id: <20220303181442.5112-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,76 +48,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Mar 2022 18:14:38 -0000
+X-List-Received-Date: Thu, 03 Mar 2022 18:15:07 -0000
 
-- The function nat_pipe_owner_alive() is used even for the process
-  which is not a nat pipe owner, so, it is renamed to process_alive().
+- This patch omits the unnecessary code path for setup for GDB.
 ---
- winsup/cygwin/fhandler_tty.cc | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 43668975f..be3e6fcba 100644
+index be3e6fcba..c7588a073 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -74,7 +74,7 @@ void release_attach_mutex (void)
-   ReleaseMutex (attach_mutex);
- }
+@@ -121,12 +121,12 @@ static bool isHybrid; /* Set true if the active pipe is set to nat pipe even
+ static HANDLE h_gdb_inferior; /* Handle of GDB inferior process. */
  
--inline static bool nat_pipe_owner_alive (DWORD pid);
-+inline static bool process_alive (DWORD pid);
- 
- DWORD
- fhandler_pty_common::get_console_process_id (DWORD pid, bool match,
-@@ -107,7 +107,7 @@ fhandler_pty_common::get_console_process_id (DWORD pid, bool match,
- 		res_pri = stub_only ? p->exec_dwProcessId : list[i];
- 		break;
- 	      }
--	    if (!p && !res && nat_pipe_owner_alive (list[i]) && stub_only)
-+	    if (!p && !res && process_alive (list[i]) && stub_only)
- 	      res = list[i];
- 	    if (!!p && !res && !stub_only)
- 	      res = list[i];
-@@ -1086,8 +1086,11 @@ fhandler_pty_slave::set_switch_to_nat_pipe (void)
- }
- 
- inline static bool
--nat_pipe_owner_alive (DWORD pid)
-+process_alive (DWORD pid)
+ static void
+-set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
++set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err)
  {
-+  /* This function is very similar to _pinfo::alive(), however, this
-+     can be used for non-cygwin process which is started from non-cygwin
-+     shell. In addition, this checks exit code as well. */
-   if (pid == 0)
-     return false;
-   HANDLE h = OpenProcess (PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
-@@ -1208,7 +1211,7 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
-   if (wait_ret == WAIT_TIMEOUT)
-     return;
-   if (!nat_pipe_owner_self (get_ttyp ()->nat_pipe_owner_pid)
--      && nat_pipe_owner_alive (get_ttyp ()->nat_pipe_owner_pid))
-+      && process_alive (get_ttyp ()->nat_pipe_owner_pid))
+   cygheap_fdenum cfd (false);
+   int fd;
+   fhandler_base *replace_in = NULL, *replace_out = NULL, *replace_err = NULL;
+-  fhandler_pty_slave *ptys_nat = NULL;
++  fhandler_pty_slave *ptys = NULL;
+   while ((fd = cfd.next ()) >= 0)
      {
-       /* There is a process which owns nat pipe. */
-       if (!to_be_read_from_nat_pipe ()
-@@ -3421,7 +3424,7 @@ skip_create:
+       if (*in == cfd->get_handle () ||
+@@ -141,15 +141,14 @@ set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
+       if (cfd->get_device () == (dev_t) myself->ctty)
+ 	{
+ 	  fhandler_base *fh = cfd;
+-	  fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
+-	  if (*in == ptys->get_handle ()
+-	      || *out == ptys->get_output_handle ()
+-	      || *err == ptys->get_output_handle ())
+-	    ptys_nat = ptys;
++	  if (*in == fh->get_handle ()
++	      || *out == fh->get_output_handle ()
++	      || *err == fh->get_output_handle ())
++	    ptys = (fhandler_pty_slave *) fh;
+ 	}
      }
-   while (false);
- 
--  if (!nat_pipe_owner_alive (get_ttyp ()->nat_pipe_owner_pid))
-+  if (!process_alive (get_ttyp ()->nat_pipe_owner_pid))
-     get_ttyp ()->nat_pipe_owner_pid = myself->exec_dwProcessId;
- 
-   if (hpcon && nat_pipe_owner_self (get_ttyp ()->nat_pipe_owner_pid))
-@@ -4044,7 +4047,7 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon, PWCHAR envblock,
-     {
-       fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
-       ptys->get_ttyp ()->switch_to_nat_pipe = true;
--      if (!nat_pipe_owner_alive (ptys->get_ttyp ()->nat_pipe_owner_pid))
-+      if (!process_alive (ptys->get_ttyp ()->nat_pipe_owner_pid))
- 	ptys->get_ttyp ()->nat_pipe_owner_pid = myself->exec_dwProcessId;
+-  if (!iscygwin && ptys_nat)
+-    ptys_nat->set_switch_to_nat_pipe ();
++  if (ptys)
++    ptys->set_switch_to_nat_pipe ();
+   if (replace_in)
+     *in = replace_in->get_handle_nat ();
+   if (replace_out)
+@@ -280,8 +279,9 @@ CreateProcessA_Hooked
+       siov->hStdError = GetStdHandle (STD_ERROR_HANDLE);
      }
-   bool pcon_enabled = false;
+   bool path_iscygexec = fhandler_termios::path_iscygexec_a (n, c);
+-  set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
+-			  &siov->hStdError, path_iscygexec);
++  if (!path_iscygexec)
++    set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
++			    &siov->hStdError);
+   BOOL ret = CreateProcessA_Orig (n, c, pa, ta, inh, f, e, d, siov, pi);
+   h_gdb_inferior = pi->hProcess;
+   DuplicateHandle (GetCurrentProcess (), h_gdb_inferior,
+@@ -318,8 +318,9 @@ CreateProcessW_Hooked
+       siov->hStdError = GetStdHandle (STD_ERROR_HANDLE);
+     }
+   bool path_iscygexec = fhandler_termios::path_iscygexec_w (n, c);
+-  set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
+-			  &siov->hStdError, path_iscygexec);
++  if (!path_iscygexec)
++    set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
++			    &siov->hStdError);
+   BOOL ret = CreateProcessW_Orig (n, c, pa, ta, inh, f, e, d, siov, pi);
+   h_gdb_inferior = pi->hProcess;
+   DuplicateHandle (GetCurrentProcess (), h_gdb_inferior,
 -- 
 2.35.1
 
