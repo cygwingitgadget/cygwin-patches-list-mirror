@@ -1,38 +1,38 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id C24CA3858D20
- for <cygwin-patches@cygwin.com>; Thu,  3 Mar 2022 18:15:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C24CA3858D20
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+ by sourceware.org (Postfix) with ESMTPS id ABA8D3858D20
+ for <cygwin-patches@cygwin.com>; Thu,  3 Mar 2022 18:15:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org ABA8D3858D20
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
  [119.150.36.16]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 223IEmxi018846;
- Fri, 4 Mar 2022 03:14:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 223IEmxi018846
+ by conuserg-12.nifty.com with ESMTP id 223IFUm3020146;
+ Fri, 4 Mar 2022 03:15:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 223IFUm3020146
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1646331293;
- bh=/R8UjXWHykUi+rw2q2rqwwl4o2hfWO7Uji+f2v9hd6w=;
+ s=dec2015msa; t=1646331336;
+ bh=4OlXoRRAL6WVwatnUtbK+OM2oI1abYPtVd1fSgVfFNo=;
  h=From:To:Cc:Subject:Date:From;
- b=kKAk0hZZioj9hblV3MAHcosXoNl1DalUVSBDnhQ+Xa3cm3DlAeffcysPyI9DkkZYq
- e3I9K355X31don854/XQ+VzCOisDX7oSkiE0Wo/FIBHL2hLdx9NMe2Cfn9YlzoEs0U
- t2fvbRc3zP3Wij39g0BKdOzWsGQS/9UEg7wYz1TEV1c0Vc9mUacZrUXnxQeHoxoXfK
- LWeqdLSr+aOWqTn7uiRkbUuQq4WVBifnSvB+l1lz6cuzJM6ieuY1aCYmFrVD3upfbv
- zc2iU5OnF1U3v+N7semPsD/wlnEgeJML7+scV2v7MfPOOx/ZpQ0b5VreFegVrC0VS2
- uLK3+C5z8as5w==
+ b=aRK/ObWvYn+F8WmQ2CZWWv3jYOk04GYt+ypDMBtCeeeMCkokNM+Z+oxRIf/Rf81Qb
+ fBJXnUREdRfvIn/vDXEx8HZqS6CFodGpcXIX0SfYXlR1M+BN8uUWNBTUhB2ar7reim
+ u01Fw7kL0GpGhiKSt6EeJolVBN2UZnVOUR6ZZAALXLKe8eayketP/ipUURyIuVfhe3
+ 3mTMY/DO530hG+O5h8TO2PmMMymODopiTKt16ku21QmA3HUxaLZkFz70IveAMLvv62
+ jY52UjgvijBB3Sc5F67xpax8NcG/ncYDb/WQ/YXPUstk4/sXgrwygDirZDPC44zfOw
+ eL8CC0LWUyPfA==
 X-Nifty-SrcIP: [119.150.36.16]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Simplify the setup code for GDB a bit.
-Date: Fri,  4 Mar 2022 03:14:42 +0900
-Message-Id: <20220303181442.5112-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Stop to use PID_NEW_PG flag as a marker for GDB.
+Date: Fri,  4 Mar 2022 03:15:24 +0900
+Message-Id: <20220303181524.5123-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,78 +48,113 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Mar 2022 18:15:07 -0000
+X-List-Received-Date: Thu, 03 Mar 2022 18:16:05 -0000
 
-- This patch omits the unnecessary code path for setup for GDB.
+- Previously, the PID_NEW_PG flag was also used as a marker for GDB
+  with non-cygwin inferior, unlike its original meaning. With this
+  patch, the condition exec_dwProcessId == dwProcessId is used as a
+  marker for that instead.
 ---
- winsup/cygwin/fhandler_tty.cc | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ winsup/cygwin/fhandler_termios.cc | 14 +++++++-------
+ winsup/cygwin/fhandler_tty.cc     | 11 ++++++-----
+ winsup/cygwin/tty.cc              |  4 +++-
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
+diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
+index 3740ba011..5cd44d7bf 100644
+--- a/winsup/cygwin/fhandler_termios.cc
++++ b/winsup/cygwin/fhandler_termios.cc
+@@ -341,15 +341,16 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+     {
+       _pinfo *p = pids[i];
+       /* PID_NOTCYGWIN: check this for non-cygwin process.
+-	 PID_NEW_PG: check this ofr GDB with non-cygwin inferior in pty
++	 exec_dwProcessId == dwProcessId:
++		     check this for GDB with non-cygwin inferior in pty
+ 		     without pcon enabled. In this case, the inferior is not
+-		     cygwin process list. PID_NEW_PG is set as a marker for
+-		     GDB with non-cygwin inferior in pty code.
++		     cygwin process list. This condition is set true as
++		     a marker for GDB with non-cygwin inferior in pty code.
+ 	 !PID_CYGPARENT: check this for GDB with cygwin inferior or
+ 			 cygwin apps started from non-cygwin shell. */
+       if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
+ 	  && ((p->process_state & PID_NOTCYGWIN)
+-	      || (p->process_state & PID_NEW_PG)
++	      || (p->exec_dwProcessId == p->dwProcessId)
+ 	      || !(p->process_state & PID_CYGPARENT)))
+ 	{
+ 	  /* Ctrl-C event will be sent only to the processes attaching
+@@ -369,8 +370,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	  /* CTRL_C_EVENT does not work for the process started with
+ 	     CREATE_NEW_PROCESS_GROUP flag, so send CTRL_BREAK_EVENT
+ 	     instead. */
+-	  if ((p->process_state & PID_NEW_PG)
+-	      && (p->process_state & PID_NOTCYGWIN))
++	  if (p->process_state & PID_NEW_PG)
+ 	    GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT, p->dwProcessId);
+ 	  else if ((!fh || fh->need_send_ctrl_c_event () || cyg_leader)
+ 		   && !ctrl_c_event_sent) /* cyg_leader is needed by GDB
+@@ -405,7 +405,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	      && (p->process_state & PID_DEBUGGED))
+ 	    with_debugger = true; /* inferior is cygwin app */
+ 	  if (!(p->process_state & PID_NOTCYGWIN)
+-	      && (p->process_state & PID_NEW_PG) /* Check marker */
++	      && (p->exec_dwProcessId == p->dwProcessId) /* Check marker */
+ 	      && p->pid == pgid)
+ 	    with_debugger_nat = true; /* inferior is non-cygwin app */
+ 	}
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index be3e6fcba..c7588a073 100644
+index c7588a073..52f0b8622 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -121,12 +121,12 @@ static bool isHybrid; /* Set true if the active pipe is set to nat pipe even
+@@ -116,8 +116,9 @@ fhandler_pty_common::get_console_process_id (DWORD pid, bool match,
+   return res_pri ?: res;
+ }
+ 
+-static bool isHybrid; /* Set true if the active pipe is set to nat pipe even
+-			 though the current process is a cygwin process. */
++static bool isHybrid; /* Set true if the active pipe is set to nat pipe 
++			 owned by myself even though the current process
++			 is a cygwin process. */
  static HANDLE h_gdb_inferior; /* Handle of GDB inferior process. */
  
  static void
--set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
-+set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err)
- {
-   cygheap_fdenum cfd (false);
-   int fd;
-   fhandler_base *replace_in = NULL, *replace_out = NULL, *replace_err = NULL;
--  fhandler_pty_slave *ptys_nat = NULL;
-+  fhandler_pty_slave *ptys = NULL;
-   while ((fd = cfd.next ()) >= 0)
+@@ -1079,8 +1080,9 @@ fhandler_pty_slave::set_switch_to_nat_pipe (void)
      {
-       if (*in == cfd->get_handle () ||
-@@ -141,15 +141,14 @@ set_switch_to_nat_pipe (HANDLE *in, HANDLE *out, HANDLE *err, bool iscygwin)
-       if (cfd->get_device () == (dev_t) myself->ctty)
- 	{
- 	  fhandler_base *fh = cfd;
--	  fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
--	  if (*in == ptys->get_handle ()
--	      || *out == ptys->get_output_handle ()
--	      || *err == ptys->get_output_handle ())
--	    ptys_nat = ptys;
-+	  if (*in == fh->get_handle ()
-+	      || *out == fh->get_output_handle ()
-+	      || *err == fh->get_output_handle ())
-+	    ptys = (fhandler_pty_slave *) fh;
+       isHybrid = true;
+       setup_locale ();
+-      myself->exec_dwProcessId = myself->dwProcessId;
+-      myself->process_state |= PID_NEW_PG; /* Marker for nat_fg */
++      myself->exec_dwProcessId = myself->dwProcessId; /* Set this as a marker
++							 for tty::nat_fg()
++							 and process_sigs() */
+       bool stdin_is_ptys = GetStdHandle (STD_INPUT_HANDLE) == get_handle ();
+       setup_for_non_cygwin_app (false, NULL, stdin_is_ptys);
+     }
+@@ -1199,7 +1201,6 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
+ 		    }
+ 		}
+ 	      myself->exec_dwProcessId = 0;
+-	      myself->process_state &= ~PID_NEW_PG;
+ 	      isHybrid = false;
+ 	    }
  	}
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index b2218fef7..60f4a602a 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -342,7 +342,9 @@ tty::nat_fg (pid_t pgid)
+     {
+       _pinfo *p = pids[i];
+       if (p->ctty == ntty && p->pgid == pgid
+-	  && (p->process_state & (PID_NOTCYGWIN | PID_NEW_PG)))
++	  && ((p->process_state & PID_NOTCYGWIN)
++	      /* Below is true for GDB with non-cygwin inferior */
++	      || p->exec_dwProcessId == p->dwProcessId))
+ 	return true;
      }
--  if (!iscygwin && ptys_nat)
--    ptys_nat->set_switch_to_nat_pipe ();
-+  if (ptys)
-+    ptys->set_switch_to_nat_pipe ();
-   if (replace_in)
-     *in = replace_in->get_handle_nat ();
-   if (replace_out)
-@@ -280,8 +279,9 @@ CreateProcessA_Hooked
-       siov->hStdError = GetStdHandle (STD_ERROR_HANDLE);
-     }
-   bool path_iscygexec = fhandler_termios::path_iscygexec_a (n, c);
--  set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
--			  &siov->hStdError, path_iscygexec);
-+  if (!path_iscygexec)
-+    set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
-+			    &siov->hStdError);
-   BOOL ret = CreateProcessA_Orig (n, c, pa, ta, inh, f, e, d, siov, pi);
-   h_gdb_inferior = pi->hProcess;
-   DuplicateHandle (GetCurrentProcess (), h_gdb_inferior,
-@@ -318,8 +318,9 @@ CreateProcessW_Hooked
-       siov->hStdError = GetStdHandle (STD_ERROR_HANDLE);
-     }
-   bool path_iscygexec = fhandler_termios::path_iscygexec_w (n, c);
--  set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
--			  &siov->hStdError, path_iscygexec);
-+  if (!path_iscygexec)
-+    set_switch_to_nat_pipe (&siov->hStdInput, &siov->hStdOutput,
-+			    &siov->hStdError);
-   BOOL ret = CreateProcessW_Orig (n, c, pa, ta, inh, f, e, d, siov, pi);
-   h_gdb_inferior = pi->hProcess;
-   DuplicateHandle (GetCurrentProcess (), h_gdb_inferior,
+   if (pgid > MAX_PID)
 -- 
 2.35.1
 
