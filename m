@@ -1,38 +1,48 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id 6E25B385141D
- for <cygwin-patches@cygwin.com>; Fri, 11 Mar 2022 21:37:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6E25B385141D
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 80CC6385842A
+ for <cygwin-patches@cygwin.com>; Mon, 14 Mar 2022 09:50:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 80CC6385842A
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak036016.dynamic.ppp.asahi-net.or.jp
- [119.150.36.16]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 22BLb9Ra019128;
- Sat, 12 Mar 2022 06:37:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 22BLb9Ra019128
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1647034634;
- bh=qcM5kpTrJ3em3ZDDjvuh4GaVKDMA6y1t5pmps4FOEiE=;
- h=From:To:Cc:Subject:Date:From;
- b=oAwoHEM9toK2TB7sTP1LaM17vt56eMHxOKvc+ZGr8xUr6vusgcDVclhCNtm4pmpLQ
- WGZxdLrGRrLHYkDqUUsS6L7MxZ0mj5MYiLzdQi2bTTqD8uWibxhd+BUvWL1rZr8efI
- oAnziVVzGdpfs4PMoRfVjlgGsxs+Tt+o6j9xBiS5NXbOqyDmkazQ2zObvzOFuvXUmp
- R3RDmziZAEqFumSrmCUtOLL5RjYgm/nq2cTA/MGKuu0lrtS/Xb/QedxoKIiGD4v2mf
- fLvAdrTWKqE2Lhbik4kpp4SqEWkDOH3l0YQrYJeowGIZThsF1j9WxNVLR9bhykfeZg
- HQ5T6Lmi5afeA==
-X-Nifty-SrcIP: [119.150.36.16]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MNL2Y-1nn1Q03GLS-00Oqh8 for <cygwin-patches@cygwin.com>; Mon, 14 Mar 2022
+ 10:50:26 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 73F4DA8075A; Mon, 14 Mar 2022 10:50:26 +0100 (CET)
+Date: Mon, 14 Mar 2022 10:50:26 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: fsync: Return EINVAL for special files.
-Date: Sat, 12 Mar 2022 06:37:06 +0900
-Message-Id: <20220311213707.1463-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH] Cygwin: fsync: Return EINVAL for special files.
+Message-ID: <Yi8P4sOhvgEuJ1oE@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220311213707.1463-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220311213707.1463-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:cRghsnjYa0bUXDDlg7Ii1tMs5caiiDPxNnp+PG92cc8C7Gnx/DH
+ pg1tpztsFgwtjwnzyhW06UyqbiV/ohZ9MvY5mfLz/S+jQeEY+Wwxlad0DAuYHEEdyRO4GuJ
+ j1IGXeUMfTpVha0inZDJnohbcH/KwVuEvZGKvnfKrf7v53zBwU+fEl/RQHAc0wInRoy8Jwc
+ emZO1Ola4mYMElhwAzgOA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9RQYx12gN+c=:4OXxY74m4rmhSIVPvRlV5q
+ tFZ9xUDw9+08tH5/K84p9XeFyRzimcQ1nW2WUNGJ5G0SkZ17WUIWNv5YYWSoVdRptpZtL/pE4
+ F20su4TqGlD/ZBxXatAp7Fnpn+Z+wlHOH20XUcE+VjJqg1e0V3fNmweLgE/KWOKjg0x5sCeX/
+ J8KIPXMFk2zeOiMElbWrMDUF9vgHCWBcZStIlP6naLcf/K36eyn1v+2i71Qu7ZpzZEyiamvU3
+ C+/XHUueFlYneljA6D+/OaMNfqfo+pi9ErAQm8c8ZOrsdaJiAs3Wbwxe1795UXFZ4w8psUO95
+ sA1sc/Zoqfr3q9hu2DWXFKAdtaZZau5vV1sbCPz+RZ0Oe2hsvAQaQdpnN++H9zt05c8WYzWTn
+ +WIsel/8zlNzQwertPwU/onfreRkRLCsuaHpklHUsiFaAn/A93NfGpZLQVRBjqLX2Vp48AkFF
+ +ti2cyyCIovc3McqCQUZ+hAcm2BlKZR18y3sOOLYyljcMoQlwJMOHlDzZOrSzZxD5gW7t1g9y
+ XWvIUVdS5vlOvmQKneL+9cja9+3hg0j5xhTXswP9ocXv3xScVPpfLw0NWKQ69QXzWUmI68yL+
+ U1K0AZhoc4kmxODTn4M6q3uv5uZvt3uXJVWQIQzy6jUjCGHUKOwqzNAj++W73blUBOHEGoub4
+ tWQesGnxtOjX3VoLB5ZipuSszjoPsl29p3s9A3hLO5tlJXEj8a0a295h55JjJlXtkRMD/EGPC
+ ZKnJO/px0vbFtCgV
+X-Spam-Status: No, score=-102.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,29 +58,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Mar 2022 21:37:31 -0000
+X-List-Received-Date: Mon, 14 Mar 2022 09:50:30 -0000
 
-- Unlike linux, fsync() calls FlushFileBuffers() even for special
-  files. This cause the problem reported in:
-    https://cygwin.com/pipermail/cygwin/2022-March/251022.html
-  This patch fixes the issue.
----
- winsup/cygwin/fhandler.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mar 12 06:37, Takashi Yano wrote:
+> - Unlike linux, fsync() calls FlushFileBuffers() even for special
+>   files. This cause the problem reported in:
+>     https://cygwin.com/pipermail/cygwin/2022-March/251022.html
+>   This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
+> index 98d7a3b2d..fc7bf0a0e 100644
+> --- a/winsup/cygwin/fhandler.cc
+> +++ b/winsup/cygwin/fhandler.cc
+> @@ -1750,7 +1750,7 @@ fhandler_base::utimens (const struct timespec *tvp)
+>  int
+>  fhandler_base::fsync ()
+>  {
+> -  if (!get_handle () || nohandle ())
+> +  if (!get_handle () || nohandle () || pc.isspecial ())
+>      {
+>        set_errno (EINVAL);
+>        return -1;
+> -- 
+> 2.35.1
 
-diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
-index 98d7a3b2d..fc7bf0a0e 100644
---- a/winsup/cygwin/fhandler.cc
-+++ b/winsup/cygwin/fhandler.cc
-@@ -1750,7 +1750,7 @@ fhandler_base::utimens (const struct timespec *tvp)
- int
- fhandler_base::fsync ()
- {
--  if (!get_handle () || nohandle ())
-+  if (!get_handle () || nohandle () || pc.isspecial ())
-     {
-       set_errno (EINVAL);
-       return -1;
--- 
-2.35.1
+Ouch, yeah, that's obvious.
 
+
+Thanks,
+Corinna
