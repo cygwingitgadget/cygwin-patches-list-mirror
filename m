@@ -1,24 +1,48 @@
-Return-Path: <vapier@gentoo.org>
-Received: from smtp.gentoo.org (woodpecker.gentoo.org
- [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
- by sourceware.org (Postfix) with ESMTPS id 660A83858C78
- for <cygwin-patches@cygwin.com>; Tue, 15 Mar 2022 03:27:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 660A83858C78
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 70FEA3844079
+ for <cygwin-patches@cygwin.com>; Wed, 16 Mar 2022 07:43:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 70FEA3844079
 Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gentoo.org
-Received: by smtp.gentoo.org (Postfix, from userid 559)
- id 19DBA342AA4; Tue, 15 Mar 2022 03:20:47 +0000 (UTC)
-From: Mike Frysinger <vapier@gentoo.org>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N1feo-1oEYyo483k-012380 for <cygwin-patches@cygwin.com>; Wed, 16 Mar 2022
+ 08:43:55 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 239E8A8071E; Wed, 16 Mar 2022 08:43:54 +0100 (CET)
+Date: Wed, 16 Mar 2022 08:43:54 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] winsup: disable fortify source
-Date: Mon, 14 Mar 2022 23:20:53 -0400
-Message-Id: <20220315032053.10985-1-vapier@gentoo.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] Cygwin: Fix gmondump formatting goofs
+Message-ID: <YjGVOi2/U1W6N2xu@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220315004730.15783-1-mark@maxrnd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, SPF_HELO_PASS, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220315004730.15783-1-mark@maxrnd.com>
+X-Provags-ID: V03:K1:h2iRPdYY4+sU+XPxiBFBOgKzH00XfeRPSo2vT01LK7aAVZ+wq0a
+ Jx82lpZhB4OaQ/UBmvX8qtb/lbZi3nf3pr+2U0+9mLEMyI1X449UukMY8PcZDUjLeevynCR
+ UA/8PlRuobEEB7w+Z4WxiXUpdBcuY8OgJAcZd+35fzGb2MJEe+knsnZbV5jpB57aXXpyDHj
+ lzq7CJCfBHiQGpG6014Gg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v9e/sjb66Bc=:vPhT3xbd3e0QpbnsBJUxC9
+ uOYlaHCpXgaCdoK3qg4Op7d3d3NsH8IfcnXUrGBzrlke/qbCBsnlpF8lcxPASGE0Y2ERuARGW
+ cik8mS2WW5ZQlLO/uhYS+k8Iscqxq0R+HS4pwfJiCCfESAfn7lRMIs7IldMYlpnZi75yNIpvg
+ IhSUfBj1jMmOOTccq3UeQW7apYO1wSGo1oH1efZRxU7Jl8kBK5Zl7KGjq7HILeAY158QDrT4B
+ ah+9NCQuf3U2/TmMMCmXHWvj4U4mTcsdpVUliHlZ0IQNtphOM2T+VJzC2ZQ6a138T78yqAOe1
+ okOywJGUHkiqrFbdU7MP6Qk37GJ54FIvfI54h8JN85HciI5z/d1qAlUoyuK1za5QSA9kOa59A
+ Qz71HIsIbnlO2YMdpqrydVsM+GPYQ+esb32BDxJPVp0IRpPEebght6g+NIn37sPqs9UJuNwlq
+ mAqCvPjqj4e4PkCK8B7LFsRjcXKEeIzfoBq4gsDE20tlcBBrrdRslpC1Eme4Ael2+1/K7hceJ
+ Gu/tZgRxvEpgR/d2WWe3T4m16x3+9FqC7+9nxIgt3F+eeEmiLzUM6HZyATvW52aiTJ3V+CQ1P
+ rHfFNMNyGWFR0KBWKXIberMb7Q6tynEYzGayyS7CM+FPfhK58iwTUV7wc05OW8aMNCVk4kPaH
+ 4pzsX9gXpML+FKanHXuBvy1KwAV6HIi8RtbEeayoth8vosvtDTn7V6Ph/GSJrxDrbeZ8P7IcH
+ N7BniwdZAguwsY9I
+X-Spam-Status: No, score=-96.9 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -34,96 +58,14 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 15 Mar 2022 03:27:06 -0000
+X-List-Received-Date: Wed, 16 Mar 2022 07:43:57 -0000
 
-When using a compiler that automatically enables -D_FORTIFY_SOURCE,
-building winsup fails with errors like below.  Since winsup is not
-setup to compile itself with _FORTIFY_SOURCE, disable it for now.
+On Mar 14 17:47, Mark Geisert wrote:
+> The rewrite of %X to %p was malhandled.  Fix that/them.
 
-make[4]: Entering directory '.../x86_64-pc-cygwin/winsup/cygwin'
-  CC       libc/minires-os-if.o
-In file included from .../newlib/newlib/libc/include/ssp/strings.h:34,
-                 from .../newlib/newlib/libc/include/strings.h:77,
-                 from .../newlib/newlib/libc/include/string.h:24,
-                 from ../../../../../winsup/cygwin/string.h:12,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/guiddef.h:154,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/winnt.h:635,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/minwindef.h:163,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/windef.h:9,
-                 from /usr/x86_64-pc-cygwin/usr/include/windows.h:69,
-                 from ../../../../../winsup/cygwin/winlean.h:56,
-                 from ../../../../../winsup/cygwin/winsup.h:84,
-                 from ../../../../../winsup/cygwin/libc/minires-os-if.c:13:
-.../newlib/winsup/cygwin/include/ssp/socket.h:9:1: error: conflicting types for 'recv';
-  have 'ssize_t(int,  void *, size_t,  int)' {aka 'long int(int,  void *, long unsigned int,  int)'}
-    9 | __ssp_redirect0(ssize_t, recv, \
-      | ^~~~~~~~~~~~~~~
-In file included from /usr/x86_64-pc-cygwin/usr/include/w32api/ws2tcpip.h:17,
-                 from ../../../../../winsup/cygwin/libc/minires-os-if.c:14:
-/usr/x86_64-pc-cygwin/usr/include/w32api/winsock2.h:1022:34: note: previous declaration of 'recv' with
-  type 'int(SOCKET,  char *, int,  int)' {aka 'int(long long unsigned int,  char *, int,  int)'}
- 1022 |   WINSOCK_API_LINKAGE int WSAAPI recv(SOCKET s,char *buf,int len,int flags);
-      |                                  ^~~~
-In file included from .../newlib/newlib/libc/include/ssp/strings.h:34,
-                 from .../newlib/newlib/libc/include/strings.h:77,
-                 from .../newlib/newlib/libc/include/string.h:24,
-                 from ../../../../../winsup/cygwin/string.h:12,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/guiddef.h:154,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/winnt.h:635,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/minwindef.h:163,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/windef.h:9,
-                 from /usr/x86_64-pc-cygwin/usr/include/windows.h:69,
-                 from ../../../../../winsup/cygwin/winlean.h:56,
-                 from ../../../../../winsup/cygwin/winsup.h:84,
-                 from ../../../../../winsup/cygwin/libc/minires-os-if.c:13:
-.../newlib/winsup/cygwin/include/ssp/socket.h:13:1: error: conflicting types for 'recvfrom';
-  have 'ssize_t(int,  void *, size_t,  int,  struct sockaddr *, socklen_t *)' {aka 'long int(int,  void *, long unsigned int,  int,  struct sockaddr *, int *)'}
-   13 | __ssp_redirect0(ssize_t, recvfrom, \
-      | ^~~~~~~~~~~~~~~
-In file included from /usr/x86_64-pc-cygwin/usr/include/w32api/ws2tcpip.h:17,
-                 from ../../../../../winsup/cygwin/libc/minires-os-if.c:14:
-/usr/x86_64-pc-cygwin/usr/include/w32api/winsock2.h:1023:34: note: previous declaration of 'recvfrom' with
-  type 'int(SOCKET,  char *, int,  int,  struct sockaddr *, int *)' {aka 'int(long long unsigned int,  char *, int,  int,  struct sockaddr *, int *)'}
- 1023 |   WINSOCK_API_LINKAGE int WSAAPI recvfrom(SOCKET s,char *buf,int len,int flags,struct sockaddr *from,int *fromlen);
-      |                                  ^~~~~~~~
-make[4]: *** [Makefile:1930: libc/minires-os-if.o] Error 1
-  CC       gmon.o
-../../../../../winsup/cygwin/gmon.c:60: error: "bzero" redefined [-Werror]
-   60 | #define bzero(ptr,size) memset (ptr, 0, size);
-      |
-In file included from .../newlib/newlib/libc/include/strings.h:77,
-                 from .../newlib/newlib/libc/include/string.h:24,
-                 from ../../../../../winsup/cygwin/string.h:12,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/guiddef.h:154,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/winnt.h:635,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/minwindef.h:163,
-                 from /usr/x86_64-pc-cygwin/usr/include/w32api/windef.h:9,
-                 from /usr/x86_64-pc-cygwin/usr/include/windows.h:69,
-                 from ../../../../../winsup/cygwin/winlean.h:56,
-                 from ../../../../../winsup/cygwin/winsup.h:84,
-                 from ../../../../../winsup/cygwin/gmon.h:69,
-                 from ../../../../../winsup/cygwin/gmon.c:47:
-.../newlib/newlib/libc/include/ssp/strings.h:43: note: this is the location of the previous definition
-   43 | #define bzero(dst, len) \
-      |
-cc1: all warnings being treated as errors
----
- winsup/acinclude.m4 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This should probably go into 3.3 as well.  Care to write a
+matching entry for the release/3.3.5 file?
 
-diff --git a/winsup/acinclude.m4 b/winsup/acinclude.m4
-index 7c900d70719a..ffd15aaaa86b 100644
---- a/winsup/acinclude.m4
-+++ b/winsup/acinclude.m4
-@@ -16,7 +16,7 @@ if test -z "$newlib_headers"; then
- fi
- newlib_headers="$target_builddir/newlib/targ-include $newlib_headers"
- 
--AM_CPPFLAGS="-I${winsup_srcdir}/cygwin -I${target_builddir}/winsup/cygwin"
-+AM_CPPFLAGS="-U_FORTIFY_SOURCE -I${winsup_srcdir}/cygwin -I${target_builddir}/winsup/cygwin"
- AM_CPPFLAGS="${AM_CPPFLAGS} -isystem ${cygwin_headers}"
- for h in ${newlib_headers}; do
-     AM_CPPFLAGS="${AM_CPPFLAGS} -isystem $h"
--- 
-2.34.1
 
+Thanks,
+Corinna
