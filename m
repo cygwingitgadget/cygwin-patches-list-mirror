@@ -1,30 +1,34 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 73247385782D
- for <cygwin-patches@cygwin.com>; Thu, 17 Mar 2022 03:02:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 73247385782D
+ by sourceware.org (Postfix) with ESMTPS id D4704385DC31
+ for <cygwin-patches@cygwin.com>; Thu, 17 Mar 2022 03:06:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D4704385DC31
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 22H32MK8080365;
- Wed, 16 Mar 2022 20:02:22 -0700 (PDT) (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 22H36X8A094964
+ for <cygwin-patches@cygwin.com>; Wed, 16 Mar 2022 20:06:33 -0700 (PDT)
+ (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdnAuGPV; Wed Mar 16 19:02:18 2022
-From: Mark Geisert <mark@maxrnd.com>
+ claiming to be "[192.168.1.100]"
+ via SMTP by m0.truegem.net, id smtpdYhGexz; Wed Mar 16 19:06:26 2022
+Subject: Re: [PATCH] Cygwin: Fix gmondump formatting goofs
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: document recent gmondump formatting fix
-Date: Wed, 16 Mar 2022 20:02:07 -0700
-Message-Id: <20220317030207.16529-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2022q1/011849.html>
-References: <https://cygwin.com/pipermail/cygwin-patches/2022q1/011849.html>
+References: <20220315004730.15783-1-mark@maxrnd.com>
+ <YjGVOi2/U1W6N2xu@calimero.vinschen.de>
+From: Mark Geisert <mark@maxrnd.com>
+Message-ID: <82807ebd-fb9f-7b22-8a5c-481be755402d@maxrnd.com>
+Date: Wed, 16 Mar 2022 20:06:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Firefox/52.0 SeaMonkey/2.49.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+In-Reply-To: <YjGVOi2/U1W6N2xu@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, KAM_LINKBAIT, NICE_REPLY_A, SPF_HELO_NONE, SPF_NONE,
+ TXREP, T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -39,23 +43,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 17 Mar 2022 03:02:29 -0000
+X-List-Received-Date: Thu, 17 Mar 2022 03:06:36 -0000
 
----
- winsup/cygwin/release/3.3.5 | 3 +++
- 1 file changed, 3 insertions(+)
+Corinna Vinschen wrote:
+> On Mar 14 17:47, Mark Geisert wrote:
+>> The rewrite of %X to %p was malhandled.  Fix that/them.
+> 
+> This should probably go into 3.3 as well.  Care to write a
+> matching entry for the release/3.3.5 file?
+Done, under separate patch
+https://cygwin.com/pipermail/cygwin-patches/2022q1/011851.html
+Cheers,
 
-diff --git a/winsup/cygwin/release/3.3.5 b/winsup/cygwin/release/3.3.5
-index 752d65703..d2a7f772a 100644
---- a/winsup/cygwin/release/3.3.5
-+++ b/winsup/cygwin/release/3.3.5
-@@ -40,3 +40,6 @@ Bug Fixes
- - Fix a problem that fsync() flushes the console input buffer unlike
-   linux. fsync() should return EINVAL for special files such as tty.
-   Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251022.html
-+
-+- Fix a formatting problem in gmondump where all displayed addresses are
-+  mistakenly prefixed with "0x0x".
--- 
-2.35.1
-
+..mark
