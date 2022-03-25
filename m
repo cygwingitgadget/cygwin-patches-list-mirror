@@ -1,40 +1,38 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta002.cacentral1.a.cloudfilter.net
- (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
- by sourceware.org (Postfix) with ESMTPS id E6E893858C2C
- for <cygwin-patches@cygwin.com>; Thu, 24 Mar 2022 04:58:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E6E893858C2C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 50E4F385EC4E
+ for <cygwin-patches@cygwin.com>; Fri, 25 Mar 2022 11:33:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 50E4F385EC4E
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4003a.ext.cloudfilter.net ([10.228.9.183])
- by cmsmtp with ESMTP
- id X0YAn12KegTZYXFY6nRS7d; Thu, 24 Mar 2022 04:58:14 +0000
-Received: from BWINGLISD.cg.shawcable.net. ([184.64.124.72])
- by cmsmtp with ESMTP
- id XFY5n3wCeQV6mXFY5nGyGz; Thu, 24 Mar 2022 04:58:14 +0000
-X-Authority-Analysis: v=2.4 cv=PbTsOwtd c=1 sm=1 tr=0 ts=623bfa66
- a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17 a=7vT8eNxyAAAA:8
- a=r77TgQKjGQsHNAKrUKIA:9 a=Fubkae2diaQA:10 a=TjClg5NT7KohLBBQbJgA:9
- a=QEXdDO2ut3YA:10 a=Q9-mM32qkEwUNn8quOYA:9 a=B2y7HmGcmWMA:10
- a=Mzmg39azMnTNyelF985k:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: "Cygwin Patches" <cygwin-patches@Cygwin.com>
-Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux Superb Owl
- cpuinfo flags
-Date: Wed, 23 Mar 2022 22:57:58 -0600
-Message-Id: <20220324045759.57242-1-Brian.Inglis@SystematicSW.ab.ca>
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-11.nifty.com with ESMTP id 22PBWaon006685;
+ Fri, 25 Mar 2022 20:32:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 22PBWaon006685
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1648207961;
+ bh=ZNIAZbu2IzJDPCXWUrEFnJQXH0wSsLGqQOXkod9AnPM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=cyo4RarKeiyzmwNwLZzdsBBvlZ2lf9Lwy+YjBDDwsiXKyj47o169iQBo+t3Hb1ZIs
+ Y+NkaPNcVbNBi+5lhSpDeBV7K75/L7cEyhxsgVIhy7FrRk5BplxHzY4gwCEM/KW6y6
+ loJoPaJaRtsuH1IG4ycKl1dKjPmvrQdwqfvg3kcu8PQ5a27/cCW3Cjg3SvP/AJeRnT
+ 9eMHvZ0AyC1UsKzQ43NIobATHV5+uO92FJK9zS0OmplJGjoaSKQQeohmF57adiXKyp
+ tphIJ2Gm+0+MzXOGJtzb4ok3tmyMsxF/Uil4CxUvbIwW4WFnzKtntUNjlqBAkkkdfW
+ SUKlhvv9w4R6Q==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH v3] Cygwin: pipe: Avoid deadlock for non-cygwin writer.
+Date: Fri, 25 Mar 2022 20:32:27 +0900
+Message-Id: <20220325113227.1195-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------2.35.1"
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfBk+Sgu7FcQ7M0jYUrm96ZBx69iZNeHJ4L1d6LVZ6tcfjnLGvbMH9s83aT1z3JrXpUw2NsjiLp9gFtW3/hSw1QypcIeI/rplde1Yol3VTaxTEM+p7hMZ
- Cw36xVYPgcDvDoME09ngHOZpq/rcpOootjM6yU+B4rAkQbwvsmCUmGjaVJdKTnbjGPiSluHqG6X4vbqt56/ASgbgB3zxErt9AMWeBDqhO+6jiW2gMCJFIEGZ
- pTVxFiDKgeyWRir6bYnLE93LMVKxjFuOOyJAjhxl/Eg=
-X-Spam-Status: No, score=-1170.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP,
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -50,73 +48,90 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 24 Mar 2022 04:58:16 -0000
+X-List-Received-Date: Fri, 25 Mar 2022 11:33:12 -0000
 
-From: "Brian Inglis" <Brian.Inglis@SystematicSW.ab.ca>
+- As mentioned in commit message of the commit b531d6b0, if multiple
+  writers including non-cygwin app exist, the non-cygwin app cannot
+  detect pipe closure on the read side when the pipe is created by
+  system account or the the pipe creator is running as service.
+  This is because query_hdl which is held in write side also is a
+  read end of the pipe, so the pipe still alive for the non-cygwin
+  app even after the reader is closed.
 
-This is a multi-part message in MIME format.
---------------2.35.1
-Content-Type: text/plain; charset=UTF-8; format=fixed
-Content-Transfer-Encoding: 8bit
+  To avoid this problem, this patch lets all processes in the same
+  process group close query_hdl using newly introduced internal signal
+  __SIGNONCYGCHLD when non-cygwin app is started to avoid the problem.
 
-
-0x00000007:1 EBX:0  intel_ppin	Intel Protected Processor Inventory Number
-0x00000006:0 EAX:19 hfi		Hardware Feedback Interface
-0x00000007:0 EDX:20 ibt		Intel Indirect Branch Tracking
+  Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251097.html
 ---
- winsup/cygwin/fhandler_proc.cc | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ winsup/cygwin/sigproc.cc |  9 +++++++++
+ winsup/cygwin/sigproc.h  |  1 +
+ winsup/cygwin/spawn.cc   | 12 +++++++++++-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
-
---------------2.35.1
-Content-Type: text/x-patch; name="0001-fhandler_proc.cc-format_proc_cpuinfo-add-Linux-Superb-Owl-cpuinfo-flags.patch"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: attachment; filename="0001-fhandler_proc.cc-format_proc_cpuinfo-add-Linux-Superb-Owl-cpuinfo-flags.patch"
-
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index 0b01e68f8e50..9ba241981a5e 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -1303,6 +1303,13 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- 	  ftcprint (features1,  3, "epb");	/* energy perf bias */
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index d3f2b0c6a..9a2f75861 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -1477,6 +1477,15 @@ wait_sig (VOID *)
+ 		clearwait = true;
+ 	    }
+ 	  break;
++	case __SIGNONCYGCHLD:
++	  cygheap_fdenum cfd (false);
++	  while (cfd.next () >= 0)
++	    if (cfd->get_dev () == FH_PIPEW)
++	      {
++		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
++		pipe->close_query_handle ();
++	      }
++	  break;
  	}
-+      /* cpuid 0x00000007:1 ebx */
-+      if (maxf >= 0x00000007)
-+	{
-+	  cpuid (&unused, &features1, &unused, &unused, 0x00000007, 1);
+       if (clearwait && !have_execed)
+ 	proc_subproc (PROC_CLEARWAIT, 0);
+diff --git a/winsup/cygwin/sigproc.h b/winsup/cygwin/sigproc.h
+index 23287c85b..d037eaec3 100644
+--- a/winsup/cygwin/sigproc.h
++++ b/winsup/cygwin/sigproc.h
+@@ -24,6 +24,7 @@ enum
+   __SIGSETPGRP	    = -(_NSIG + 9),
+   __SIGTHREADEXIT   = -(_NSIG + 10),
+   __SIGPENDINGALL   = -(_NSIG + 11),
++  __SIGNONCYGCHLD   = -(_NSIG + 12),
+ };
+ #endif
+ 
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index fb3d09d84..3b65d32c8 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -28,6 +28,7 @@ details. */
+ #include "tls_pbuf.h"
+ #include "winf.h"
+ #include "ntdll.h"
++#include "shared_info.h"
+ 
+ static const suffix_info exe_suffixes[] =
+ {
+@@ -645,8 +646,17 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 		     && (fd == fileno_stdout || fd == fileno_stderr))
+ 	      {
+ 		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
+-		pipe->close_query_handle ();
+ 		pipe->set_pipe_non_blocking (false);
 +
-+	  ftcprint (features1,  0, "intel_ppin"); /* Prot Proc Id No */
-+	}
-       /* cpuid 0x00000010 ebx */
-       if (maxf >= 0x00000010)
- 	{
-@@ -1330,8 +1337,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- /*	  ftcprint (features1, 11, "pti");*//* Page Table Isolation reqd with Meltdown */
- 
--/*	  ftcprint (features1, 14, "intel_ppin");*//* MSR_PPIN_CTL Prot Proc Id No */
--
-       /* cpuid 0x00000010:2 ecx */
-       if (maxf >= 0x00000010)
- 	{
-@@ -1497,6 +1502,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	  ftcprint (features1,  9, "hwp_act_window"); /* HWP activity window */
- 	  ftcprint (features1, 10, "hwp_epp");  /* HWP energy perf pref */
- 	  ftcprint (features1, 11, "hwp_pkg_req"); /* HWP package level req */
-+	  ftcprint (features1, 19, "hfi");	/* Hardware Feedback Interface */
- 	}
- 
-       /* AMD SVM cpuid 0x8000000a edx */
-@@ -1573,6 +1579,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
-           ftcprint (features1, 16, "tsxldtrk");		   /* TSX Susp Ld Addr Track */
-           ftcprint (features1, 18, "pconfig");		   /* platform config */
-           ftcprint (features1, 19, "arch_lbr");		   /* last branch records */
-+	  ftcprint (features1, 20, "ibt");		   /* Indirect Branch Tracking */
- 	  ftcprint (features1, 22, "amx_bf16");	    /* Advanced Matrix eXtensions Brain Float 16 dot product */
-           ftcprint (features1, 23, "avx512_fp16");	   /* avx512 fp16 */
- 	  ftcprint (features1, 24, "amx_tile");	    /* Advanced Matrix eXtensions Tile matrix multiply */
-
---------------2.35.1--
-
++		tty_min dummy_tty;
++		dummy_tty.ntty = (fh_devices) myself->ctty;
++		dummy_tty.pgid = myself->pgid;
++		tty_min *t = cygwin_shared->tty.get_cttyp ();
++		if (!t) /* If tty is not allocated, use dummy_tty instead. */
++		  t = &dummy_tty;
++		/* Emit __SIGNONCYGCHLD to let all processes in the
++		   process group close query_hdl. */
++		t->kill_pgrp (__SIGNONCYGCHLD);
+ 	      }
+ 	    else if (cfd->get_dev () == FH_PIPER && fd == fileno_stdin)
+ 	      {
+-- 
+2.35.1
 
