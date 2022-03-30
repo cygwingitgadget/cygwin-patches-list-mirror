@@ -1,31 +1,44 @@
-Return-Path: <cygwin@jdrake.com>
-Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
- by sourceware.org (Postfix) with ESMTPS id A53023857C4A
- for <cygwin-patches@cygwin.com>; Tue, 29 Mar 2022 15:40:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A53023857C4A
-Received: from mail231.csoft.net (localhost [127.0.0.1])
- by mail231.csoft.net (Postfix) with ESMTP id 70499CC21;
- Tue, 29 Mar 2022 11:40:19 -0400 (EDT)
-Received: from mail231 (mail231 [96.47.74.235])
- (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
- (No client certificate requested) (Authenticated sender: jeremyd)
- by mail231.csoft.net (Postfix) with ESMTPSA id 6D470CC1C;
- Tue, 29 Mar 2022 11:40:19 -0400 (EDT)
-Date: Tue, 29 Mar 2022 08:40:19 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-cc: cygwin-patches@cygwin.com
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
+ [210.131.2.81])
+ by sourceware.org (Postfix) with ESMTPS id 9DCAE3858C50
+ for <cygwin-patches@cygwin.com>; Wed, 30 Mar 2022 00:17:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9DCAE3858C50
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from Express5800-S70 (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conssluserg-02.nifty.com with ESMTP id 22U0H9sG014680;
+ Wed, 30 Mar 2022 09:17:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 22U0H9sG014680
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1648599430;
+ bh=qN1HH19pA1u1+rJk9zGRDLx3SF+xb/Ciqwm32LOekWU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Vrtfy3PTUsoPvqUWl8OPoqdhlLNtfwT/toYMhcY6+BECL2FyJv3/LUhUSUwvFTeRj
+ xvV0OWZ7HUSTA8w0hrAufdT9Zze6AmHx0vUchkW4DDB2TGfpEoQhDCnKF53UHec5mI
+ 0VRtSYr9uFIat4MYxipQPOzWfS/vbqxFwQ44suuYu+YeIR8Q/yfSR+oWdSdkGpRn66
+ QXhPUlwCf4qIaTQU8F4GJ9VWZCxdn2nbUL8NAwCyCzX0koQdXIp7rYmbyfBuf1fLyr
+ igGSSmMJzFRsUid682t1T3FsflKlrcGASHG0EP0WNtHahuObVTd84Vz33dXvSCME3X
+ MMmyQ5Y7WOylA==
+X-Nifty-SrcIP: [119.150.44.95]
+Date: Wed, 30 Mar 2022 09:17:16 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v4] Cygwin: pipe: Avoid deadlock for non-cygwin writer.
-In-Reply-To: <20220329090753.47207-1-takashi.yano@nifty.ne.jp>
-Message-ID: <alpine.BSO.2.21.2203290837290.56460@resin.csoft.net>
+Message-Id: <20220330091716.f4541fdff98f2b0aa0c1ec2f@nifty.ne.jp>
+In-Reply-To: <alpine.BSO.2.21.2203290816270.56460@resin.csoft.net>
 References: <20220329090753.47207-1-takashi.yano@nifty.ne.jp>
-User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
-MIME-Version: 1.0
+ <alpine.BSO.2.21.2203290816270.56460@resin.csoft.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, SPF_HELO_PASS, SPF_PASS,
- TXREP, T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -40,39 +53,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 29 Mar 2022 15:40:22 -0000
+X-List-Received-Date: Wed, 30 Mar 2022 00:17:37 -0000
 
-On Tue, 29 Mar 2022, Takashi Yano wrote:
+On Tue, 29 Mar 2022 08:21:11 -0700 (PDT)
+Jeremy Drake wrote:
 
-> diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-> index b87160edb..006c7b4bf 100644
-> --- a/winsup/cygwin/fhandler.h
-> +++ b/winsup/cygwin/fhandler.h
-> @@ -1194,6 +1194,7 @@ private:
->    HANDLE hdl_cnt_mtx;
->    HANDLE query_hdl_proc;
->    HANDLE query_hdl_value;
-> +  HANDLE query_hdl_close_req_evt;
->    uint64_t pipename_key;
->    DWORD pipename_pid;
->    LONG pipename_id;
-> @@ -1258,6 +1259,16 @@ public:
->    }
->    bool reader_closed ();
->    HANDLE temporary_query_hdl ();
-> +  bool need_close_query_hdl ()
-> +    {
-> +      return query_hdl_close_req_evt ?
-> +	IsEventSignalled (query_hdl_close_req_evt) : false;
-> +    }
-> +  void request_close_query_hdl ()
-> +    {
-> +      if (query_hdl_close_req_evt)
-> +	SetEvent (query_hdl_close_req_evt);
-> +    }
->  };
->
->  #define CYGWIN_FIFO_PIPE_NAME_LEN     47
+> On Tue, 29 Mar 2022, Takashi Yano wrote:
+> 
+> > diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+> > index fb3d09d84..cd2d3a7ef 100644
+> > --- a/winsup/cygwin/spawn.cc
+> > +++ b/winsup/cygwin/spawn.cc
+> > @@ -645,8 +646,18 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+> >  		     && (fd == fileno_stdout || fd == fileno_stderr))
+> >  	      {
+> >  		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
+> > -		pipe->close_query_handle ();
+> >  		pipe->set_pipe_non_blocking (false);
+> > +		pipe->request_close_query_hdl ();
+> > +
+> > +		tty_min dummy_tty;
+> > +		dummy_tty.ntty = (fh_devices) myself->ctty;
+> > +		dummy_tty.pgid = myself->pgid;
+> > +		tty_min *t = cygwin_shared->tty.get_cttyp ();
+> > +		if (!t) /* If tty is not allocated, use dummy_tty instead. */
+> > +		  t = &dummy_tty;
+> > +		/* Emit __SIGNONCYGCHLD to let all processes in the
+> > +		   process group close query_hdl. */
+> > +		t->kill_pgrp (__SIGNONCYGCHLD);
+> >  	      }
+> >  	    else if (cfd->get_dev () == FH_PIPER && fd == fileno_stdin)
+> >  	      {
+> >
+> 
+> This block seems to be inside a loop over handles.  Would it make sense to
+> move the `tty_min dummy_tty` through `t->kill_pgrp` lines outside the
+> loop, and set a flag in the loop instead, so the pgrp only needs to be
+> signaled (killed) once rather than for each handle that needs closing?
 
-Oh, a minor optimization: should close_query_handle also close (and NULL)
-the query_hdl_close_req_evt?
+Thanks for the advice. I will submit v5 patch reflecting your advice.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
