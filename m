@@ -1,38 +1,49 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 087B93858D28
- for <cygwin-patches@cygwin.com>; Fri,  1 Apr 2022 08:45:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 087B93858D28
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 5E0873947403
+ for <cygwin-patches@cygwin.com>; Fri,  1 Apr 2022 12:55:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5E0873947403
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 2318j3w0013221;
- Fri, 1 Apr 2022 17:45:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 2318j3w0013221
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1648802708;
- bh=g/Cb8Qtd8gMBxa2fzsUBRUhPGlVecarRLonE4ehPDDI=;
- h=From:To:Cc:Subject:Date:From;
- b=bToBcVWHza9bTtXBF13pVS4YhFSxRS3cOkmAxVOgbQQVhdAzbOCyrNujgPWMWClM8
- Xa2p28Zw6+6OEF3ljFlJlPWmdeCgcPG2F0XMqVtvfRegjUxsPEJdEB1cJbsdXBUqUz
- nCKRe6Cigz2NItCeaxEqXVfC3NsUItcX8l6zLKafQ0/IyaNaO+iyREqQ4i88dGrNF9
- 2X7rVzx1reIF4Kv7BDWCH8bLjgvAOd0u2X5sSv7KRkfNkTbdcD6z6MRFc5j6HqU81u
- RdeJAAEodPxdjzsEbKSyWBUtSGCybeAfpsA7E53o/6kNEs/pq6PHI7SGW+MuVhs3aO
- 389xNl1uDzRug==
-X-Nifty-SrcIP: [119.150.44.95]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mj8eD-1oCswe28dJ-00fD68 for <cygwin-patches@cygwin.com>; Fri, 01 Apr 2022
+ 14:55:21 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 21DB6A80D52; Fri,  1 Apr 2022 14:55:21 +0200 (CEST)
+Date: Fri, 1 Apr 2022 14:55:21 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v6] Cygwin: pipe: Avoid deadlock for non-cygwin writer.
-Date: Fri,  1 Apr 2022 17:45:05 +0900
-Message-Id: <20220401084505.2469-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux Superb
+ Owl cpuinfo flags
+Message-ID: <Ykb2OSLYLxAKkcv7@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220324045759.57242-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220324045759.57242-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:SKh9Zb/pFu4nJmwopXOxON6CLkK34kEYXpsyCF6JN0quO+kGtJe
+ 2PylnlcoSkxtY0xhH03esR+NUNIVrulKJD7Rddc2d03d3N70AB2sPon+y3ifQ3qxKlshry5
+ CSEa2agPM/r+UtTTtUQSyKnbM8PkpMAzllyYW1bHiXlDUURNj24pVTH/bakHDRBAjsRWtwQ
+ kJAhdPTU8iVadK0gF8hjw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HXgG9KXhT9I=:GR3jong1Alfw8UIfKDw1HQ
+ AE/+h07NzlDdD/RvwNGAvVj4YiumGte/vSQ+S1i+PvgW+1/4Za2Y3JeuO+BHFpgxAzveNsTmt
+ /hZT6sjr7GGIRChi/hHkzqSX2hN8639WsC22MzMXDev3r87dvLG0wm/soembUCC0P6w9M4J3G
+ f5IYT1zMwRQgEj2LpflYguXgBWUA/ko0Bx7+6ZrFO/YuDcFOcQCVDjuUvB0/xFt8GQg6uKecF
+ dEsmG3pu5TuBCVrfeH4LZ5apRRvv0QI3IFa/5X9VpjHI2LrgREh9kER0QhPsXgWEoeZcTMShH
+ kn4kEvSuoJ6eyj61T5jX0MVckMLPGJfdhWNOhDY7c4BI9vdZkLXFhHBecYlp0PqJqwJqwURg/
+ 8sZIGXMwvfJpqXIdAn+q0nO1oBFgw5HvScbpLC9tq75+htivKBgnbQP6M00ezWfV6tqaeIuSF
+ h++zJ/wGGW+x1btu5NblA4xJyEYpRnswwVuTFvK5D5t2wVS2KHp6ntbT7N0prAQg4PLrdUAms
+ S8iAXAa6y+npNcGjZU/2n0DOKI7ITkXJVeO8LcOw7I8qMW6YEp1yvjfZj0rdbO5rR1G9+/+Pv
+ m+V1liOujk0dZlY6wEU1zXAlpuxr4Yy6e3UC5PtaH/msWDvGxaOK2ls123gwgJHNEHSwAve+S
+ YzFKkzM8ES4m73bhjIUlCoLPcDhiZP5e+gqXrRFeKBb6Tj/XqUNV80Om2VaOmlbdGVryEC1FM
+ Mp41/fxzHp0XVkz9
+X-Spam-Status: No, score=-95.9 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
@@ -48,211 +59,19 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 01 Apr 2022 08:45:33 -0000
+X-List-Received-Date: Fri, 01 Apr 2022 12:55:25 -0000
 
-- As mentioned in commit message of the commit b531d6b0, if multiple
-  writers including non-cygwin app exist, the non-cygwin app cannot
-  detect pipe closure on the read side when the pipe is created by
-  system account or the the pipe creator is running as service.
-  This is because query_hdl which is held in write side also is a
-  read end of the pipe, so the pipe is still alive for the non-cygwin
-  app even after the reader is closed.
+On Mar 23 22:57, Brian Inglis wrote:
+> 
+> 0x00000007:1 EBX:0  intel_ppin	Intel Protected Processor Inventory Number
+> 0x00000006:0 EAX:19 hfi		Hardware Feedback Interface
+> 0x00000007:0 EDX:20 ibt		Intel Indirect Branch Tracking
+> ---
+>  winsup/cygwin/fhandler_proc.cc | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
 
-  To avoid this problem, this patch lets all processes in the same
-  process group close query_hdl using newly introduced internal signal
-  __SIGNONCYGCHLD when non-cygwin app is started.
+Pushed.
 
-  Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251097.html
----
- winsup/cygwin/fhandler.h       | 20 ++++++++++++++++++++
- winsup/cygwin/fhandler_pipe.cc | 23 +++++++++++++++++++++++
- winsup/cygwin/sigproc.cc       | 10 ++++++++++
- winsup/cygwin/sigproc.h        |  1 +
- winsup/cygwin/spawn.cc         | 18 +++++++++++++++++-
- 5 files changed, 71 insertions(+), 1 deletion(-)
-
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index b87160edb..80dd94508 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -1194,6 +1194,7 @@ private:
-   HANDLE hdl_cnt_mtx;
-   HANDLE query_hdl_proc;
-   HANDLE query_hdl_value;
-+  HANDLE query_hdl_close_req_evt;
-   uint64_t pipename_key;
-   DWORD pipename_pid;
-   LONG pipename_id;
-@@ -1255,9 +1256,28 @@ public:
- 	CloseHandle (query_hdl);
- 	query_hdl = NULL;
-       }
-+    if (query_hdl_close_req_evt)
-+      {
-+	CloseHandle (query_hdl_close_req_evt);
-+	query_hdl_close_req_evt = NULL;
-+      }
-   }
-   bool reader_closed ();
-   HANDLE temporary_query_hdl ();
-+  bool need_close_query_hdl ()
-+    {
-+      return query_hdl_close_req_evt ?
-+	IsEventSignalled (query_hdl_close_req_evt) : false;
-+    }
-+  bool request_close_query_hdl ()
-+    {
-+      if (query_hdl_close_req_evt)
-+	{
-+	  SetEvent (query_hdl_close_req_evt);
-+	  return true;
-+	}
-+      return false;
-+    }
- };
- 
- #define CYGWIN_FIFO_PIPE_NAME_LEN     47
-diff --git a/winsup/cygwin/fhandler_pipe.cc b/winsup/cygwin/fhandler_pipe.cc
-index aef0bf6be..270ba34a0 100644
---- a/winsup/cygwin/fhandler_pipe.cc
-+++ b/winsup/cygwin/fhandler_pipe.cc
-@@ -566,6 +566,8 @@ fhandler_pipe::fixup_after_fork (HANDLE parent)
-     fork_fixup (parent, select_sem, "select_sem");
-   if (query_hdl)
-     fork_fixup (parent, query_hdl, "query_hdl");
-+  if (query_hdl_close_req_evt)
-+    fork_fixup (parent, query_hdl_close_req_evt, "query_hdl_close_req_evt");
- 
-   fhandler_base::fixup_after_fork (parent);
-   ReleaseMutex (hdl_cnt_mtx);
-@@ -616,6 +618,16 @@ fhandler_pipe::dup (fhandler_base *child, int flags)
-       ftp->close ();
-       res = -1;
-     }
-+  else if (query_hdl_close_req_evt &&
-+	   !DuplicateHandle (GetCurrentProcess (), query_hdl_close_req_evt,
-+			     GetCurrentProcess (),
-+			     &ftp->query_hdl_close_req_evt,
-+			     0, !(flags & O_CLOEXEC), DUPLICATE_SAME_ACCESS))
-+    {
-+      __seterrno ();
-+      ftp->close ();
-+      res = -1;
-+    }
-   ReleaseMutex (hdl_cnt_mtx);
- 
-   debug_printf ("res %d", res);
-@@ -635,6 +647,8 @@ fhandler_pipe::close ()
-   WaitForSingleObject (hdl_cnt_mtx, INFINITE);
-   if (query_hdl)
-     CloseHandle (query_hdl);
-+  if (query_hdl_close_req_evt)
-+    CloseHandle (query_hdl_close_req_evt);
-   int ret = fhandler_base::close ();
-   ReleaseMutex (hdl_cnt_mtx);
-   CloseHandle (hdl_cnt_mtx);
-@@ -868,9 +882,18 @@ fhandler_pipe::create (fhandler_pipe *fhs[2], unsigned psize, int mode)
- 			0, sa->bInheritHandle, DUPLICATE_SAME_ACCESS))
-     goto err_close_hdl_cnt_mtx0;
- 
-+  if (fhs[1]->query_hdl)
-+    {
-+      fhs[1]->query_hdl_close_req_evt = CreateEvent (sa, TRUE, FALSE, NULL);
-+      if (!fhs[1]->query_hdl_close_req_evt)
-+	goto err_close_hdl_cnt_mtx1;
-+    }
-+
-   res = 0;
-   goto out;
- 
-+err_close_hdl_cnt_mtx1:
-+  CloseHandle (fhs[1]->hdl_cnt_mtx);
- err_close_hdl_cnt_mtx0:
-   CloseHandle (fhs[0]->hdl_cnt_mtx);
- err_close_query_hdl:
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index d3f2b0c6a..62df96652 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -1477,6 +1477,16 @@ wait_sig (VOID *)
- 		clearwait = true;
- 	    }
- 	  break;
-+	case __SIGNONCYGCHLD:
-+	  cygheap_fdenum cfd (false);
-+	  while (cfd.next () >= 0)
-+	    if (cfd->get_dev () == FH_PIPEW)
-+	      {
-+		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
-+		if (pipe->need_close_query_hdl ())
-+		  pipe->close_query_handle ();
-+	      }
-+	  break;
- 	}
-       if (clearwait && !have_execed)
- 	proc_subproc (PROC_CLEARWAIT, 0);
-diff --git a/winsup/cygwin/sigproc.h b/winsup/cygwin/sigproc.h
-index 23287c85b..d037eaec3 100644
---- a/winsup/cygwin/sigproc.h
-+++ b/winsup/cygwin/sigproc.h
-@@ -24,6 +24,7 @@ enum
-   __SIGSETPGRP	    = -(_NSIG + 9),
-   __SIGTHREADEXIT   = -(_NSIG + 10),
-   __SIGPENDINGALL   = -(_NSIG + 11),
-+  __SIGNONCYGCHLD   = -(_NSIG + 12),
- };
- #endif
- 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index fb3d09d84..400457117 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -28,6 +28,7 @@ details. */
- #include "tls_pbuf.h"
- #include "winf.h"
- #include "ntdll.h"
-+#include "shared_info.h"
- 
- static const suffix_info exe_suffixes[] =
- {
-@@ -631,6 +632,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 
-       if (!iscygwin ())
- 	{
-+	  bool need_send_sig = false;
- 	  int fd;
- 	  cygheap_fdenum cfd (false);
- 	  while ((fd = cfd.next ()) >= 0)
-@@ -645,14 +647,28 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 		     && (fd == fileno_stdout || fd == fileno_stderr))
- 	      {
- 		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
--		pipe->close_query_handle ();
- 		pipe->set_pipe_non_blocking (false);
-+		if (pipe->request_close_query_hdl ())
-+		  need_send_sig = true;
- 	      }
- 	    else if (cfd->get_dev () == FH_PIPER && fd == fileno_stdin)
- 	      {
- 		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
- 		pipe->set_pipe_non_blocking (false);
- 	      }
-+
-+	  if (need_send_sig)
-+	    {
-+	      tty_min dummy_tty;
-+	      dummy_tty.ntty = (fh_devices) myself->ctty;
-+	      dummy_tty.pgid = myself->pgid;
-+	      tty_min *t = cygwin_shared->tty.get_cttyp ();
-+	      if (!t) /* If tty is not allocated, use dummy_tty instead. */
-+		t = &dummy_tty;
-+	      /* Emit __SIGNONCYGCHLD to let all processes in the
-+		 process group close query_hdl. */
-+	      t->kill_pgrp (__SIGNONCYGCHLD);
-+	    }
- 	}
- 
-       bool stdin_is_ptys = false;
--- 
-2.35.1
-
+Thanks,
+Corinna
