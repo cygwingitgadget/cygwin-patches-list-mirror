@@ -1,46 +1,45 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 5E0873947403
- for <cygwin-patches@cygwin.com>; Fri,  1 Apr 2022 12:55:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5E0873947403
+ by sourceware.org (Postfix) with ESMTPS id E1723394740B
+ for <cygwin-patches@cygwin.com>; Fri,  1 Apr 2022 12:55:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E1723394740B
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mj8eD-1oCswe28dJ-00fD68 for <cygwin-patches@cygwin.com>; Fri, 01 Apr 2022
- 14:55:21 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1N1Oo7-1o2MQb2YpP-012nWp for <cygwin-patches@cygwin.com>; Fri, 01 Apr 2022
+ 14:55:46 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 21DB6A80D52; Fri,  1 Apr 2022 14:55:21 +0200 (CEST)
-Date: Fri, 1 Apr 2022 14:55:21 +0200
+ id 40B1FA80D52; Fri,  1 Apr 2022 14:55:46 +0200 (CEST)
+Date: Fri, 1 Apr 2022 14:55:46 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux Superb
- Owl cpuinfo flags
-Message-ID: <Ykb2OSLYLxAKkcv7@calimero.vinschen.de>
+Subject: Re: [PATCH v6] Cygwin: pipe: Avoid deadlock for non-cygwin writer.
+Message-ID: <Ykb2UihKWV65bGEs@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220324045759.57242-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <20220401084505.2469-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220324045759.57242-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:SKh9Zb/pFu4nJmwopXOxON6CLkK34kEYXpsyCF6JN0quO+kGtJe
- 2PylnlcoSkxtY0xhH03esR+NUNIVrulKJD7Rddc2d03d3N70AB2sPon+y3ifQ3qxKlshry5
- CSEa2agPM/r+UtTTtUQSyKnbM8PkpMAzllyYW1bHiXlDUURNj24pVTH/bakHDRBAjsRWtwQ
- kJAhdPTU8iVadK0gF8hjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HXgG9KXhT9I=:GR3jong1Alfw8UIfKDw1HQ
- AE/+h07NzlDdD/RvwNGAvVj4YiumGte/vSQ+S1i+PvgW+1/4Za2Y3JeuO+BHFpgxAzveNsTmt
- /hZT6sjr7GGIRChi/hHkzqSX2hN8639WsC22MzMXDev3r87dvLG0wm/soembUCC0P6w9M4J3G
- f5IYT1zMwRQgEj2LpflYguXgBWUA/ko0Bx7+6ZrFO/YuDcFOcQCVDjuUvB0/xFt8GQg6uKecF
- dEsmG3pu5TuBCVrfeH4LZ5apRRvv0QI3IFa/5X9VpjHI2LrgREh9kER0QhPsXgWEoeZcTMShH
- kn4kEvSuoJ6eyj61T5jX0MVckMLPGJfdhWNOhDY7c4BI9vdZkLXFhHBecYlp0PqJqwJqwURg/
- 8sZIGXMwvfJpqXIdAn+q0nO1oBFgw5HvScbpLC9tq75+htivKBgnbQP6M00ezWfV6tqaeIuSF
- h++zJ/wGGW+x1btu5NblA4xJyEYpRnswwVuTFvK5D5t2wVS2KHp6ntbT7N0prAQg4PLrdUAms
- S8iAXAa6y+npNcGjZU/2n0DOKI7ITkXJVeO8LcOw7I8qMW6YEp1yvjfZj0rdbO5rR1G9+/+Pv
- m+V1liOujk0dZlY6wEU1zXAlpuxr4Yy6e3UC5PtaH/msWDvGxaOK2ls123gwgJHNEHSwAve+S
- YzFKkzM8ES4m73bhjIUlCoLPcDhiZP5e+gqXrRFeKBb6Tj/XqUNV80Om2VaOmlbdGVryEC1FM
- Mp41/fxzHp0XVkz9
+In-Reply-To: <20220401084505.2469-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:F7p8gjpjDpIee6gY0S5E2yqkrV5EtNMTbQfT4OMaIN4WnjAsD7m
+ 8ilp4pWfrsCDwO9wl1aAYUIfVbsyldGpc1y/ysXqxAxS3N3LSSwdbf0roWlCUNdJvwCRNaM
+ vpFk9Q08Y7lj/2yudb73fSRSYQLEHxGJCiplu3CM9llVKusPoRfY7Xnw6oCLJ62nOMTbjzG
+ bESZhcvxBcgBVwIPrtkCw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:irNr/5pugHo=:r7BALESiUGF0N7DOkFi9l6
+ say7FHWeK/n1JyrQFtp1LJT3bUeB5WUeTRwoihT0IFpjmUwy/A8AHGlEdf14Em9K6i64cTvCJ
+ PpfUEPrpuPclpimOEWnN7rFdUxwP1sBRst+SOEAMNe5u2WuFEOUZysXGpagD0IqJWNlrQRWbQ
+ ivaCSZPsup36iOFk8hQOaLsnyoTWUsDzZZhZYe53LYwtRyYUVpZ+5nD8bDLSwjkjjTcs2mH9X
+ lvryxku8WOfoV6TWNEcyOMwNExJBWkJBUVvq5H1xpRRQMl+ROB1+7/Ev4+RoAMtthXidAj6sI
+ vSB9LBuMulELZezfT5EidWd/VZVnGZNA69X3vGzMGgy23NHf7PjwKRuk05B65aSDyo1G2epPT
+ 8PFdvJ9ppbn/W1NwHQjCSw7Ab0W8qWBnbkQz4+bWB217qZfB6YWpuaiYB3OQjIy4WEoiEbNFl
+ dwDOIjFuf5bHDTDmMPq2ia4qPINUYHZFHF9njHNn7W3k/fljuu44sk606EtiIX/IoJvn17pKo
+ pAwEYhNfgayTtxifrD2P95HVHEwVeJA6Hy2L7TefJrKTs0yj2v9xRCto62ztzQ5LjPkarYUWz
+ gRaAL8R1jJyC+uf99LAtzHVcNe8idwGoco+yVqCHSdrQke9rA03DzPGhRE0iGX4G73asV6G7F
+ eYzMTxGMTZMTJtK9nAyl5TPyXBMvCgFnuOpB9o+9vIiu2hmK0TQZ376UvsMIeRPkVB2TFdVjl
+ QOIzQP+JbAaollpI
 X-Spam-Status: No, score=-95.9 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
@@ -59,19 +58,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 01 Apr 2022 12:55:25 -0000
+X-List-Received-Date: Fri, 01 Apr 2022 12:55:49 -0000
 
-On Mar 23 22:57, Brian Inglis wrote:
+On Apr  1 17:45, Takashi Yano wrote:
+> - As mentioned in commit message of the commit b531d6b0, if multiple
+>   writers including non-cygwin app exist, the non-cygwin app cannot
+>   detect pipe closure on the read side when the pipe is created by
+>   system account or the the pipe creator is running as service.
+>   This is because query_hdl which is held in write side also is a
+>   read end of the pipe, so the pipe is still alive for the non-cygwin
+>   app even after the reader is closed.
 > 
-> 0x00000007:1 EBX:0  intel_ppin	Intel Protected Processor Inventory Number
-> 0x00000006:0 EAX:19 hfi		Hardware Feedback Interface
-> 0x00000007:0 EDX:20 ibt		Intel Indirect Branch Tracking
+>   To avoid this problem, this patch lets all processes in the same
+>   process group close query_hdl using newly introduced internal signal
+>   __SIGNONCYGCHLD when non-cygwin app is started.
+> 
+>   Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251097.html
 > ---
->  winsup/cygwin/fhandler_proc.cc | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
+>  winsup/cygwin/fhandler.h       | 20 ++++++++++++++++++++
+>  winsup/cygwin/fhandler_pipe.cc | 23 +++++++++++++++++++++++
+>  winsup/cygwin/sigproc.cc       | 10 ++++++++++
+>  winsup/cygwin/sigproc.h        |  1 +
+>  winsup/cygwin/spawn.cc         | 18 +++++++++++++++++-
+>  5 files changed, 71 insertions(+), 1 deletion(-)
 
-Pushed.
+When you're happy with your patch, feel free to push.
+
 
 Thanks,
 Corinna
