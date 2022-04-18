@@ -1,40 +1,39 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-047.btinternet.com (mailomta2-sa.btinternet.com
- [213.120.69.8])
- by sourceware.org (Postfix) with ESMTPS id CC1D6385780C
- for <cygwin-patches@cygwin.com>; Tue, 12 Apr 2022 17:32:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CC1D6385780C
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-047.btinternet.com with ESMTP id
- <20220412173259.VRF16049.sa-prd-fep-047.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
- Tue, 12 Apr 2022 18:32:59 +0100
-X-SNCR-Rigid: 6139417C1ED77F6E
-X-Originating-IP: [86.139.167.41]
-X-OWM-Source-IP: 86.139.167.41 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudekkedgudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.167.41) by
- sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 6139417C1ED77F6E; Tue, 12 Apr 2022 18:32:59 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+ by sourceware.org (Postfix) with ESMTPS id BCB943858D28
+ for <cygwin-patches@cygwin.com>; Mon, 18 Apr 2022 11:49:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BCB943858D28
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-12.nifty.com with ESMTP id 23IBn29r020469;
+ Mon, 18 Apr 2022 20:49:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 23IBn29r020469
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1650282549;
+ bh=n231ttCPnMSUvRisx/xInA67R39i4bEwODiOdteeGX8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=QxpMqoNAaLDxfPW//zBN4UPE/B8VVJOLAicPYs/QLC8KOx3YOesxzPAX2a552RXb+
+ vYMpoLB7HU36IbyPhQtp28yY2tUKqAqKjAefWP4MiReA5XndJ6uI/Ld+IVyTpv0sys
+ WVbHUB6kVaYSDGs+WJVndtp1F+2CG8dvTkY47TN2k1pjnr4wlzKzXOlSSG3Va518VV
+ B6jn9hrCyXOROnsD/FzxJpMyh1CTKR0W0TFzJ7U74fd6NhYV+3AZTd6g/RBLawstWC
+ ShzuZ3CfrdJkSW11RCirZABnaZSoDt/lkDN8afrK5Rq3cXzlVbib3H8XSLdbdzEPIG
+ VpOppuZ3S2X8g==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 2/2] Cygwin: Fix typo KERB_S4U_LOGON_FLAG_IDENTITY -> IDENTIFY
-Date: Tue, 12 Apr 2022 18:32:10 +0100
-Message-Id: <20220412173210.50882-3-jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: pty: Do not set internal handles in HPCON inheritable.
+Date: Mon, 18 Apr 2022 20:48:53 +0900
+Message-Id: <20220418114853.27705-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412173210.50882-1-jon.turney@dronecode.org.uk>
-References: <20220412173210.50882-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1199.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H5,
- RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, TXREP, T_SCC_BODY_TEXT_LINE,
- T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -49,34 +48,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 12 Apr 2022 17:33:01 -0000
+X-List-Received-Date: Mon, 18 Apr 2022 11:49:28 -0000
 
+- The internal handles in HPCON should not be inheritable, however,
+  the current code duplicates them as inheritable when handing over
+  ownership of the pseudo console. This patch fixes the issue.
+
+Addresses: https://cygwin.com/pipermail/cygwin/2022-April/251222.html
 ---
- winsup/cygwin/sec_auth.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/cygwin/sec_auth.cc b/winsup/cygwin/sec_auth.cc
-index 0e5aaeb0b..2b1ce2203 100644
---- a/winsup/cygwin/sec_auth.cc
-+++ b/winsup/cygwin/sec_auth.cc
-@@ -1247,7 +1247,7 @@ typedef struct _MSV1_0_S4U_LOGON
- } MSV1_0_S4U_LOGON, *PMSV1_0_S4U_LOGON;
- 
- /* Missing in Mingw-w64 */
--#define KERB_S4U_LOGON_FLAG_IDENTITY 0x08
-+#define KERB_S4U_LOGON_FLAG_IDENTIFY 0x08
- 
- #endif
- 
-@@ -1368,7 +1368,7 @@ s4uauth (bool logon, PCWSTR domain, PCWSTR user, NTSTATUS &ret_status)
-       RtlSecureZeroMemory (authinf, authinf_size);
-       s4u_logon = (KERB_S4U_LOGON *) authinf;
-       s4u_logon->MessageType = KerbS4ULogon;
--      s4u_logon->Flags = logon ? 0 : KERB_S4U_LOGON_FLAG_IDENTITY;
-+      s4u_logon->Flags = logon ? 0 : KERB_S4U_LOGON_FLAG_IDENTIFY;
-       /* Append user to login info */
-       RtlInitEmptyUnicodeString (&s4u_logon->ClientUpn,
- 				 (PWCHAR) (s4u_logon + 1),
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index c02dfb8ed..b03087ba5 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -2056,7 +2056,7 @@ fhandler_pty_common::resize_pseudo_console (struct winsize *ws)
+     OpenProcess (PROCESS_DUP_HANDLE, FALSE, get_ttyp ()->nat_pipe_owner_pid);
+   DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_write_pipe,
+ 		   GetCurrentProcess (), &hpcon_local.hWritePipe,
+-		   0, TRUE, DUPLICATE_SAME_ACCESS);
++		   0, FALSE, DUPLICATE_SAME_ACCESS);
+   acquire_attach_mutex (mutex_timeout);
+   ResizePseudoConsole ((HPCON) &hpcon_local, size);
+   release_attach_mutex ();
+@@ -3551,15 +3551,15 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
+ 	  DuplicateHandle (GetCurrentProcess (),
+ 			   ttyp->h_pcon_write_pipe,
+ 			   new_owner, &new_write_pipe,
+-			   0, TRUE, DUPLICATE_SAME_ACCESS);
++			   0, FALSE, DUPLICATE_SAME_ACCESS);
+ 	  DuplicateHandle (GetCurrentProcess (),
+ 			   ttyp->h_pcon_condrv_reference,
+ 			   new_owner, &new_condrv_reference,
+-			   0, TRUE, DUPLICATE_SAME_ACCESS);
++			   0, FALSE, DUPLICATE_SAME_ACCESS);
+ 	  DuplicateHandle (GetCurrentProcess (),
+ 			   ttyp->h_pcon_conhost_process,
+ 			   new_owner, &new_conhost_process,
+-			   0, TRUE, DUPLICATE_SAME_ACCESS);
++			   0, FALSE, DUPLICATE_SAME_ACCESS);
+ 	  DuplicateHandle (GetCurrentProcess (), ttyp->h_pcon_in,
+ 			   new_owner, &new_pcon_in,
+ 			   0, TRUE, DUPLICATE_SAME_ACCESS);
 -- 
 2.35.1
 
