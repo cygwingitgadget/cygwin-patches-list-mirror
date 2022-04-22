@@ -1,39 +1,28 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 739053858C50
- for <cygwin-patches@cygwin.com>; Mon, 18 Apr 2022 11:51:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 739053858C50
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id AD2223858D37
+ for <cygwin-patches@cygwin.com>; Fri, 22 Apr 2022 05:36:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org AD2223858D37
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 23IBp9rT013485;
- Mon, 18 Apr 2022 20:51:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 23IBp9rT013485
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1650282674;
- bh=JCsHPvjCxBa1vFzC+jiK4388s1pcyPeJQ4ya3Lpo3i8=;
- h=From:To:Cc:Subject:Date:From;
- b=RFZebCa3UV6XdVXFV7cyKPG/ipp00SaBOZ0Wm4mCPmVI9Iq8vj/F6EBwUFaF1cSTt
- fVDvfossL1MABWO0K9ktuCc53RYaP5Jw5DuviVfo9VA6ZNdrfCqbxZVQYm0Kb7DONd
- fXMBkKDEdr0Y8o+A5NBIb2WOVSrmX6qWYD+RB97F+SVqGqFUYf67p/3AH9KaPygMCZ
- p1CtX0KaHLuCmUfO11ALPA7c3N7NJYg6MZvx61MPvw3+Zzx7pzn3/4wPOR7U+081KU
- kNKgq5RkNYEdxTqJUymwtEcsgfhg3q9kBckx+99aAAC9axzpKkkAdVQFK9xyR64aM1
- zNtWXk7ffnWMA==
-X-Nifty-SrcIP: [119.150.44.95]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 23M5aqD7085190;
+ Thu, 21 Apr 2022 22:36:52 -0700 (PDT) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdaewNc9; Thu Apr 21 22:36:44 2022
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix Ctrl-C behaviour in latest GDB.
-Date: Mon, 18 Apr 2022 20:51:00 +0900
-Message-Id: <20220418115101.29199-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.35.1
+Subject: [PATCH] Cygwin: Fix "0x0x" in gmondump and ssp man pages
+Date: Thu, 21 Apr 2022 22:36:33 -0700
+Message-Id: <20220422053633.6128-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -48,37 +37,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Apr 2022 11:51:39 -0000
+X-List-Received-Date: Fri, 22 Apr 2022 05:36:56 -0000
 
-- In the latest GDB (11.2-1), Ctrl-C behaviour is broken a bit for
-  non-cygwin inferior. For example, Ctrl-C on GDB prompt is not sent
-  to GDB but to the inferior. This patch fixes the issue.
+A recent patch fixed gmondump to stop printing "0x0x" as an address
+prefix.  It turns out the Cygwin User's Guide and the gmondump and
+ssp man pages (all from utils.xml) have examples of the same error.
+
 ---
- winsup/cygwin/fhandler_termios.cc | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ winsup/cygwin/release/3.3.5 | 2 +-
+ winsup/doc/utils.xml        | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 5cd44d7bf..4eff5eab3 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -350,7 +350,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 			 cygwin apps started from non-cygwin shell. */
-       if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
- 	  && ((p->process_state & PID_NOTCYGWIN)
--	      || (p->exec_dwProcessId == p->dwProcessId)
-+	      || ((p->exec_dwProcessId == p->dwProcessId)
-+		  && ttyp->pty_input_state_eq (tty::to_nat))
- 	      || !(p->process_state & PID_CYGPARENT)))
- 	{
- 	  /* Ctrl-C event will be sent only to the processes attaching
-@@ -406,6 +407,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
- 	    with_debugger = true; /* inferior is cygwin app */
- 	  if (!(p->process_state & PID_NOTCYGWIN)
- 	      && (p->exec_dwProcessId == p->dwProcessId) /* Check marker */
-+	      && ttyp->pty_input_state_eq (tty::to_nat)
- 	      && p->pid == pgid)
- 	    with_debugger_nat = true; /* inferior is non-cygwin app */
- 	}
+diff --git a/winsup/cygwin/release/3.3.5 b/winsup/cygwin/release/3.3.5
+index f0a834039..049d19b8c 100644
+--- a/winsup/cygwin/release/3.3.5
++++ b/winsup/cygwin/release/3.3.5
+@@ -42,7 +42,7 @@ Bug Fixes
+   Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251022.html
+ 
+ - Fix a formatting problem in gmondump where all displayed addresses are
+-  mistakenly prefixed with "0x0x".
++  mistakenly prefixed with "0x0x". Fix man pages for gmondump and ssp.
+ 
+ - Fix crash on pty master close in Windows 7.
+   Addresses: https://cygwin.com/pipermail/cygwin/2022-March/251162.html
+diff --git a/winsup/doc/utils.xml b/winsup/doc/utils.xml
+index 0b9e38549..895988037 100644
+--- a/winsup/doc/utils.xml
++++ b/winsup/doc/utils.xml
+@@ -846,7 +846,7 @@ line separates the ACLs for each file.
+ <screen>
+ $ gmondump gmon.out.21900.zstd.exe
+ file gmon.out.21900.zstd.exe, gmon version 0x51879, sample rate 100
+-  address range 0x0x100401000..0x0x1004cc668
++  address range 0x100401000..0x1004cc668
+   numbuckets 208282, hitbuckets 1199, hitcount 12124, numrawarcs 0
+ </screen>
+     </refsect1>
+@@ -2951,7 +2951,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
+       section and the VMA of the section after it (sections are usually
+       contiguous; you can also add the Size to the VMA to get the end address).
+       In this case, the VMA is 0x61001000 and the ending address is either
+-      0x61080000 (start of .data method) or 0x0x6107fa00 (VMA+Size method). </para>
++      0x61080000 (start of .data method) or 0x6107fa00 (VMA+Size method). </para>
+ 
+     <para> There are two basic ways to use SSP - either profiling a whole
+       program, or selectively profiling parts of the program. </para>
 -- 
-2.35.1
+2.36.0
 
