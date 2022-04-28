@@ -1,44 +1,51 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id B3190385840C
- for <cygwin-patches@cygwin.com>; Thu, 28 Apr 2022 00:29:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B3190385840C
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from Express5800-S70 (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 23S0Sreb017802
- for <cygwin-patches@cygwin.com>; Thu, 28 Apr 2022 09:28:54 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 23S0Sreb017802
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1651105734;
- bh=PRK8tXONi0r6Km36jaEI95pesd//WbTLM1ShMoEbuF8=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=LOYh81aNbo3yqBM0ieWOctUjoLkcR1Jnv6pQOF7pMJwGpv+p3XIn/ZV+yS0D+CD0i
- mUB7UQpYtqJxbAealjZ0Ck/DyD60pxQ1FnxWabKYQPDxiT23GeRbZJ68Uzjd9Zl+hP
- A0czAkhru4YV7dDMZ8hXEuVaFaU7BrQhIDKskj5NeRhBKWYotRlW+ratmYd3A6OkJ1
- +tiQgTWW2UvfNsk4wKz1cg28Y7DrbEihCk2gYEtk4mXA8a4Ru8KPYIzJ4ArMsfwroz
- 8Z3pjajBnz2FHkaGjt7TeisTogkWXBYry57q1Z9SAIH8XFTCUFSBth1Ff+kPjPCFtD
- 8K5LggsFAGtnA==
-X-Nifty-SrcIP: [119.150.44.95]
-Date: Thu, 28 Apr 2022 09:29:02 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-045.btinternet.com (mailomta26-re.btinternet.com
+ [213.120.69.119])
+ by sourceware.org (Postfix) with ESMTPS id 6F5E83857346
+ for <cygwin-patches@cygwin.com>; Thu, 28 Apr 2022 13:23:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6F5E83857346
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.54.7])
+ by re-prd-fep-045.btinternet.com with ESMTP id
+ <20220428132307.XYGO3219.re-prd-fep-045.btinternet.com@re-prd-rgout-004.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Thu, 28 Apr 2022 14:23:07 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613A901C206DFC2D
+X-Originating-IP: [86.139.167.41]
+X-OWM-Source-IP: 86.139.167.41 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudejgdeigecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffekiefgudejheetudeigfejledtleegleetkeduteeftdfffefhueefgfeutedtnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdehngdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.105] (86.139.167.41) by
+ re-prd-rgout-004.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613A901C206DFC2D for cygwin-patches@cygwin.com;
+ Thu, 28 Apr 2022 14:23:07 +0100
+Message-ID: <1d636cfc-6d0b-3ef0-38b3-9af31f423ce5@dronecode.org.uk>
+Date: Thu, 28 Apr 2022 14:23:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
 Subject: Re: [PATCH 0/2] Fix build with w32api 10.0.0
-Message-Id: <20220428092902.d7cb9331078f1e97f9fee144@nifty.ne.jp>
-In-Reply-To: <YmkNRCnQq7pR00Ee@calimero.vinschen.de>
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20220412173210.50882-1-jon.turney@dronecode.org.uk>
  <YmkNRCnQq7pR00Ee@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20220428092902.d7cb9331078f1e97f9fee144@nifty.ne.jp>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <20220428092902.d7cb9331078f1e97f9fee144@nifty.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, KAM_NUMSUBJECT, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-3570.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -53,21 +60,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Apr 2022 00:29:20 -0000
+X-List-Received-Date: Thu, 28 Apr 2022 13:23:10 -0000
 
-On Wed, 27 Apr 2022 11:30:44 +0200
-Corinna Vinschen wrote:
-> On Apr 12 18:32, Jon Turney via Cygwin-patches wrote:
-> > Jon Turney (2):
-> >   Cygwin: Fix build with w32api 10.0.0
-> >   Cygwin: Fix typo KERB_S4U_LOGON_FLAG_IDENTITY -> IDENTIFY
->                                          ^^^^^^^^^^^^^^^^^^^^
->                                          Ooooops
+On 28/04/2022 01:29, Takashi Yano wrote:
+> On Wed, 27 Apr 2022 11:30:44 +0200
+> Corinna Vinschen wrote:
+>> On Apr 12 18:32, Jon Turney via Cygwin-patches wrote:
+>>> Jon Turney (2):
+>>>    Cygwin: Fix build with w32api 10.0.0
+>>>    Cygwin: Fix typo KERB_S4U_LOGON_FLAG_IDENTITY -> IDENTIFY
+>>                                           ^^^^^^^^^^^^^^^^^^^^
+>>                                           Ooooops
+>>
+>> LGTM, thanks,
+>> Corinna
 > 
-> LGTM, thanks,
-> Corinna
+> Shouldn't these patches be applied also to cygwin-3_3-branch?
+> 
 
-Shouldn't these patches be applied also to cygwin-3_3-branch?
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Yes, I guess so.  My mistake that they weren't.
