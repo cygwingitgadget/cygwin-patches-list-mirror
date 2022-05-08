@@ -1,40 +1,49 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 206023858C2D
- for <cygwin-patches@cygwin.com>; Fri,  6 May 2022 18:46:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 206023858C2D
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 246IkWt2002049;
- Sat, 7 May 2022 03:46:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 246IkWt2002049
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1651862799;
- bh=Tiurq20CJ4e9iMM0bC1bSmLoHP7YcPA53NgEX1LoAZ8=;
- h=From:To:Cc:Subject:Date:From;
- b=luThe7N+Yn7gA0DMGB3X99zZSxUO4Exl0ber9Ch5y7nIb7LhlD+lcz5zz1XgnFcW5
- nkq1WuCc3fOdbtPfElehxLMI582xjXZvVYcoeMTaJhY+hgcr+ZezzWnSPn0LXveh9k
- wOM26BDAkYUgR7OnxYNfLtOwkn70UGvw4+9D4iI7glLzqKt2NMRjyThR4Hl1fAUYl1
- 9cLymepavaJ3K9dYeHkXaRYyDo2eDwqsPxNhKoLpztqN8gT04LDpXTpJAYAy+C4+B6
- 1JCpn0HybnY4gwIVI24o+SVanjr4PYwVJS2CH/ffdFR1TCzAwxOTZlh9LJg4sWY1wC
- c1ibT8vkNSdLQ==
-X-Nifty-SrcIP: [119.150.44.95]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: sigproc: Avoid segfault caused by signal just after
- fork().
-Date: Sat,  7 May 2022 03:46:27 +0900
-Message-Id: <20220506184627.1650-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.36.0
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-042.btinternet.com (mailomta17-re.btinternet.com
+ [213.120.69.110])
+ by sourceware.org (Postfix) with ESMTPS id 7F9A53858C54
+ for <cygwin-patches@cygwin.com>; Sun,  8 May 2022 10:27:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7F9A53858C54
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
+ by re-prd-fep-042.btinternet.com with ESMTP id
+ <20220508102729.FYQM3291.re-prd-fep-042.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Sun, 8 May 2022 11:27:29 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613A8DE8223D5D2E
+X-Originating-IP: [86.139.167.41]
+X-OWM-Source-IP: 86.139.167.41 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeevgffghfdtvdetvddvfeduhedukeettdekveeflefgkeekieefgfehhfffudetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepkeeirddufeelrdduieejrdegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddthegnpdhinhgvthepkeeirddufeelrdduieejrdeguddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehmrghrkhesmhgrgihrnhgurdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.105] (86.139.167.41) by
+ re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613A8DE8223D5D2E; Sun, 8 May 2022 11:27:29 +0100
+Message-ID: <223aa826-7bf9-281a-aed8-e16349de5b96@dronecode.org.uk>
+Date: Sun, 8 May 2022 11:27:27 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: load average calculation failing
+Content-Language: en-GB
+To: Mark Geisert <mark@maxrnd.com>, Cygwin Patches <cygwin-patches@cygwin.com>
+References: <Pine.BSF.4.63.2205051618470.42373@m0.truegem.net>
+ <3a3edd10-2617-0919-4eb0-7ca965b48963@maxrnd.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <3a3edd10-2617-0919-4eb0-7ca965b48963@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+X-Spam-Status: No, score=-1194.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_PASS, SPF_NONE, TXREP, T_SCC_BODY_TEXT_LINE,
+ WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -49,31 +58,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 06 May 2022 18:46:58 -0000
+X-List-Received-Date: Sun, 08 May 2022 10:27:32 -0000
 
-- The commit "Cygwin: always add sigmask to child info" also tries
-  to fix this issue, however, did not fix enough. This patch fixes
-  that.
----
- winsup/cygwin/sigproc.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 08/05/2022 08:01, Mark Geisert wrote:
+> Mark Geisert wrote (on the main Cygwin mailing list):
+>> I've recently noticed that the 'xload' I routinely run shows zero load 
+>> even with compute-bound processes running.  This is on both Cygwin 
+>> pre-3.4.0 as well as 3.3.4.  A test program, shown below, indicates 
+>> that getloadavg() is returning with 0 status, i.e. not an error but no 
+>> elems
+>> of the passed-in array updated.
+>>
+>> Stepping with gdb through the test program seems weird within the 
+>> loadavginfo::load_init method.  Single-stepping at line loadavg.cc:68 
+>> goes to strace.h:52 and then to _sigbe ?!
+>>
+>> I had recently updated both Cygwin and Windows 10 to latest at the 
+>> same time so I cannot say when the failure started.  Last day or two 
+>> at most.
+>>
+[...]
+> 
+> I've debugged a bit further..  Within Cygwin's loadavg.cc:load_init(), 
+> the PdhOpenQueryW() call returns successfully.  The subsequent 
+> PdhAddEnglishCounterW() call is unsuccessful.  It returns status 
+> 0x800007D0 == PDH_CSTATUS_NO_MACHINE. The code (at line 68 mentioned 
+> above) calls debug_printf() to conditionally display the error, which is 
+> what leads to the strace.h and _sigbe; that's fine.
+> 
+> The weird PDH_CSTATUS_NO_MACHINE is the problem.  I'll try running the 
+> example from an elevated shell.  Or rebooting the machine.  After that 
+> it's consulting some oracle TBD. :-(
+> 
 
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 987dfea37..a70c3b6f6 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -1356,9 +1356,9 @@ wait_sig (VOID *)
- 	     when _main_tls points to the system-allocated stack, not to
- 	     the parent thread. In that case find_tls fails, and we fetch
- 	     the sigmask from the child_info passed from the parent. */
--	  tl_entry = cygheap->find_tls (_main_tls);
--	  if (tl_entry)
-+	  if (cygwin_finished_initializing)
- 	    {
-+	      tl_entry = cygheap->find_tls (_main_tls);
- 	      dummy_mask = _main_tls->sigmask;
- 	      cygheap->unlock_tls (tl_entry);
- 	    }
--- 
-2.36.0
+Thanks for looking into this.
+You can find the user space version of this code I initially wrote at 
+https://github.com/jon-turney/windows-loadavg, which might save you some 
+time.
+
+I can't reproduce this on W10 21H1, so I think this must be due to some 
+change in later Windows...
 
