@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id B58503858C54
- for <cygwin-patches@cygwin.com>; Sun,  8 May 2022 11:03:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B58503858C54
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 4C9663858C54
+ for <cygwin-patches@cygwin.com>; Sun,  8 May 2022 11:04:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 4C9663858C54
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
  [119.150.44.95]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 248B3OFd002848;
- Sun, 8 May 2022 20:03:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 248B3OFd002848
+ by conuserg-10.nifty.com with ESMTP id 248B4FBJ029436;
+ Sun, 8 May 2022 20:04:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 248B4FBJ029436
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1652007811;
- bh=uLt4tUvPTWZt17uK93Be3Zo8+eYhLPB3yo0XzDcI424=;
+ s=dec2015msa; t=1652007861;
+ bh=NGwwz4L7NirH536Sd9sBGCBBxf/qMcvr/oEJ3zcDBt8=;
  h=From:To:Cc:Subject:Date:From;
- b=Gaog+/5qKr9PYW7CowBGEASxaMd5zS8dPfJX0XMielcwWaUsPC7x0zpneCS76kWvT
- Mj1NPgzi824IGlxKfcW1zbXSldxDNyJmzsYYOtyKStcR63nUAWSp5eofGkcAcXm77C
- idaVKdGCzmKonORAwM8h1ejGnl2bi7zv1D5rnb8T36Qs21d0xd3hSpf8zAqBFRmZwV
- tr9rJJ964MZNiOvuly8lX326Loi8xFV5/fJqn9P1M8YsD3mDKL96zACammQpWOBZdJ
- Gqj63vYIQR86PNMev/SfuM0Jg27c3fhyt8TY/CqtFib8731I7Tx8Aes64nlzNaE8qG
- /PJYaSPrke7Zg==
+ b=tdFi0WVIHgSN17pWlBwBrosz2Vl7qwXXuBhIi9LqSftRl0E4gD++S8+eUL/eMqwyM
+ ZaiYeqw+xFNlPq18T4G6Ab88+ckLZnTIL40EYJvfe3UQkieh/8m0MsssI8N8NeoRZV
+ W0MpXq6GyuiyhySB2uVEWSP+O4j/377gHBGruhvhDSpuBpUMfoDWsRU82gGIE1kIe/
+ Dp26xlmqrbooO7Ss+F+b4RDY6mba5cO/hYj7dTXC+HdN8z5N1DN/a9GcNmbeSe2TA1
+ V/+lpdIkIuRd3IduSBC2Tx7CbIcCMg4SrJFE+OyzbciforM0+aCJOdFoB/HBT6gyo9
+ eQDqvvSsLuxKg==
 X-Nifty-SrcIP: [119.150.44.95]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix acquiring attach_mutex timing.
-Date: Sun,  8 May 2022 20:03:15 +0900
-Message-Id: <20220508110315.20953-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix timing of creating invisible console.
+Date: Sun,  8 May 2022 20:04:06 +0900
+Message-Id: <20220508110406.20963-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,35 +48,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 08 May 2022 11:03:56 -0000
+X-List-Received-Date: Sun, 08 May 2022 11:04:57 -0000
 
-- When temporarily attaching a console, the timing of acquiring
-  attach_mutex was not appropriate. This sometimes caused master
-  forwarding thread to crash on Ctrl-C in Windows 7. This patch
-  fixes the issue.
+- Previously, invisible console was created in fixup_after_exec().
+  However, actually this should be done in fixup_after_fork(). this
+  patch fixes the issue.
 ---
- winsup/cygwin/fhandler_tty.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/fhandler_tty.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 484bf55dc..bdde1dce6 100644
+index bdde1dce6..9ab681d6c 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -4171,13 +4171,13 @@ DWORD
- fhandler_pty_common::attach_console_temporarily (DWORD target_pid)
+@@ -2467,6 +2467,8 @@ fhandler_pty_slave::bg_check (int sig, bool dontsignal)
+ void
+ fhandler_pty_slave::fixup_after_fork (HANDLE parent)
  {
-   DWORD resume_pid = 0;
-+  acquire_attach_mutex (mutex_timeout);
-   pinfo pinfo_resume (myself->ppid);
-   if (pinfo_resume)
-     resume_pid = pinfo_resume->dwProcessId;
-   if (!resume_pid)
-     resume_pid = get_console_process_id (myself->dwProcessId, false);
-   bool console_exists = fhandler_console::exists ();
--  acquire_attach_mutex (mutex_timeout);
-   if (!console_exists || resume_pid)
-     {
-       FreeConsole ();
++  create_invisible_console ();
++
+   // fork_fixup (parent, inuse, "inuse");
+   // fhandler_pty_common::fixup_after_fork (parent);
+   report_tty_counts (this, "inherited", "");
+@@ -2475,8 +2477,6 @@ fhandler_pty_slave::fixup_after_fork (HANDLE parent)
+ void
+ fhandler_pty_slave::fixup_after_exec ()
+ {
+-  create_invisible_console ();
+-
+   if (!close_on_exec ())
+     fixup_after_fork (NULL);	/* No parent handle required. */
+ 
 -- 
 2.36.0
 
