@@ -1,53 +1,58 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 24E633857402
- for <cygwin-patches@cygwin.com>; Wed, 11 May 2022 08:03:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 24E633857402
+Return-Path: <nejamuljumu1203@gmail.com>
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com
+ [IPv6:2607:f8b0:4864:20::e30])
+ by sourceware.org (Postfix) with ESMTPS id 924883856DE7
+ for <cygwin-patches@cygwin.com>; Wed, 11 May 2022 14:56:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 924883856DE7
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N8GIa-1nt9GD0fke-014CKo for <cygwin-patches@cygwin.com>; Wed, 11 May 2022
- 10:03:05 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 33CB8A8076B; Wed, 11 May 2022 10:03:04 +0200 (CEST)
-Date: Wed, 11 May 2022 10:03:04 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] fhandler_process.cc(format_process_stat): fix
- /proc/pid/stat issues
-Message-ID: <YnttuBkTc0HN3KQh@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220510144443.5555-1-Brian.Inglis@SystematicSW.ab.ca>
- <20220510144443.5555-2-Brian.Inglis@SystematicSW.ab.ca>
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-xe30.google.com with SMTP id t85so2269517vst.4
+ for <cygwin-patches@cygwin.com>; Wed, 11 May 2022 07:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=GCvsDvw2I77be3/0RPDwXIpMeqrlhuvK1CtZ7esLlwI=;
+ b=aaUYRTU82RjQBTIzPOtjfWyscW1eAT4I8cvol/GeL1IadboMKZjLQoUbTP6QCCInFE
+ SyPsHsPf6ChXFdOFkgKwDz9kamQWe+LHkVOxrNC/S4UodbRp+UyeK3lP0qnC56yJFuf5
+ I9U0loRKR9l0h2eogqe7ZBHpI/7TxQ/xd4+gzc9jTFgXK9tg0jin3cJsygJk9LzcHY7+
+ mt4aXXVuXNf3fAkDKIzpm98jpsk4KuLP0NbT+xSlFn9vZrux3BI/g6GR63wjAbnBvkrf
+ FYzT76LF6bUGTPJIuTLetn3hRBhoxg1on0h70JZP/bHsGnP8l3+JOC8h/f/4AhiJ9BbP
+ OvCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=GCvsDvw2I77be3/0RPDwXIpMeqrlhuvK1CtZ7esLlwI=;
+ b=p2kEUcbSthfpa2JqoPWLYszX9SGHIxzwNqnLYulDpi2+4PcE+2iJXqO7Wj0Wisch6q
+ rh0sn+haozgnHi6Y7BXFX//4wJgPeErvaeHSgQlNUhUleEyCYzfFYZhFJOX9n8yJs/QR
+ h5skLGWklFHehGpakNE5YZ7NpyXfoXzRB0NyX/g9CCDAjSy++pKYUDbQdctwo1bYWu5A
+ ruWvwwONvwpFXJyBaddZ+/ZfziLOP5+e9hPFwhv+vwDPbqgUNpWtieJoUW3Iv5N6IYDu
+ XjKbCOKqFz6oNYyu9zc9/pHApMF8zpLyJaDnollNi+TcLGv/Ue4OdbLd+0uYoAZUb6Ov
+ gKYg==
+X-Gm-Message-State: AOAM533qD6I8a1BqC7narvJU54INVAAIF4J8PeAtCJa9EWRPvZKjpibv
+ z5tRdQRfxLuDPl7EAIFNMZZBCxLwxFH4H134OmL6kf5J93TnkQ==
+X-Google-Smtp-Source: ABdhPJy9RTauD7KzD7kHBJmpkZ7YOG+HBhKJXxB6Qg6krTJgTjHV2yg3+bylTUrjkvDw9r5XOsVDASzCIpAuGU+e4Uc=
+X-Received: by 2002:a67:2d17:0:b0:32c:e934:770e with SMTP id
+ t23-20020a672d17000000b0032ce934770emr13447606vst.85.1652280967848; Wed, 11
+ May 2022 07:56:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220510144443.5555-2-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:Ca+gcoBrqBzUJMOLMHscQh4rRAce5qMx8VkeScBodpwTZ3xL5xX
- 2/B68d6A9hjTgKmr8fwc2vStET6oOMybzHGaR8CKWQi1vw0h82jzHIQaNziZ2G0mlcp+va1
- OwLHaubra0eBWD1B12DeI1rGfMmL5124yz7pIMeTgLBAZKJMYLzi9RW2gjX8EXMajL2wJNS
- lP5870LbnP3BvVTj4BTfg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xWEcJSPaGN8=:PCgHb3zb/DYruTREc2UHM7
- mkAYrJYav9UqKtD/lS7sGyEinJpktDTp77atoEiyXdpMOzm4SfiRyRdI7Q+yv/U+Vn6YhKsV3
- LnFuiRYvbnNP/PXJIg7o3vb0gOnbkY6xKPURNT4ogPqwA4uhElyoPDrhi/BiRUXIOJEUTsd33
- NidMQEJEsq7Krh+Thl9KXu59q3iGuedHvyaQvvBp1xtFs8wisSkvyR99Ow2nAWmKyK77ZaG0S
- RLKdZ+hVgI3cqw4CTSpf7SYjwO8ufRysP4ayorwZcOfUeqN1YhwIms0rXZ5szuPbXLbbJVmB1
- peFgWFLUAKTXvKVAqGWnWUtPNUS1f02vfNTuk8bQXSYEUmsxqkzeEPp3mUtIbGuBjTk54oMvo
- WqWaoklEJk0lhBuYNRmMxinJj1+R5dwTaAHLna0bzt2snTUPQ/FXdhwPu5h+CjzqQQiby3QLI
- bJMG8tHKVHcuN4sv8QjLZBul6SdaYdl/Qk5gExIbQD947S/G3YBqEabtTbHPojgq+jb2lQQRO
- gEWCThUOBOFoM1QIv+JbIDciFSDUn2dR4Mz4ImO+rcCdeHT5NRhO/o1rd56AdFgSTYZtw87J5
- E9UQ+mbSj/beeyNJkva8/hdGAVVdw9Ec8YsXh6/81TPF+sOczHTTABHhwscOI0dxQLJxgtyDn
- 6jmk3XARvPKHRXlFycQMCZlc0bPqbpk21TC8zsDpbODvUC5pI0S+ZQ7nDDEIDKPv90OeWV9Bp
- N+67MTzE+p68xTHw5LO1GITAsekxNHiKPXH2RDTmwUCWx1zat8xD5RQf1Sw=
-X-Spam-Status: No, score=-95.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_BL, RCVD_IN_MSPIKE_ZBI, SPF_FAIL, SPF_HELO_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
+References: <20220510144443.5555-1-Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <20220510144443.5555-1-Brian.Inglis@SystematicSW.ab.ca>
+From: Mohammad HOQUE <nejamuljumu1203@gmail.com>
+Date: Wed, 11 May 2022 20:55:58 +0600
+Message-ID: <CAFgkkcsxPgp98_eC3Vdkj+g3Dte3xm1gUC5F3T0NeGOD9bcRgA@mail.gmail.com>
+Subject: Re: [PATCH 0/1] fhandler_process.cc(format_process_stat): fix
+ /proc/pid/stat issues
+To: Brian Inglis <Brian.Inglis@systematicsw.ab.ca>
+Cc: Cygwin Patches <cygwin-patches@cygwin.com>
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
+ FREEMAIL_FROM, HTML_MESSAGE, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP, T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
  server2.sourceware.org
+Content-Type: text/plain; charset="UTF-8"
+X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,22 +65,97 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 11 May 2022 08:03:17 -0000
+X-List-Received-Date: Wed, 11 May 2022 14:56:10 -0000
 
-On May 10 08:44, Brian Inglis wrote:
-> 
-> fix tty_nr maj/min bits, vmmaxrss units, and x86 format mismatch:
-> ctty maj is 31:16, min is 15:0; tty_nr s/b maj 15:8, min 31:20, 7:0;
-> vmmaxrss s/b bytes not pages;
-> times all 64 bit - change formats of first two instances from %lu to %U;
-> realign sprintf formats and variables/values in more logical groups
-> ---
+On Tue, May 10, 2022, 8:45 PM Brian Inglis <Brian.Inglis@systematicsw.ab.ca>
+wrote:
+
+> Noticed some issues with x86 32 bit procps and checked /proc/pid/stat which
+> looked misaligned compared to x86_64 64 bit, due to int64_t format
+> mismatches.
+> There were also issues with the tty_nr encoding (uses ctty which has major
+> in
+> top 16 bits and minor in bottom 16 bits, where tty_nr is specified to have
+> major in bits 15:8 and minor across 31:20 and 7:0) and rsslim units in
+> bytes
+> not pages.
+> This patch fixes those issues.
+> Below are the old and new /proc/pid/stat values and decoded listings for 32
+> bit; only tty_nr and rsslim values changed in 64 bit; tty_nr listing
+> decoding
+> was also changed after.
+>
+> ==> proc-pid-stat-old-32.log <==
+> 1025 (bash) S 1024 1025 1025 8912896 -1 0 147513 147513 0 0 49546 0 45000
+> 49546 45000 0 20 0 0 4115675647 0 7397376
+>
+> ==> proc-pid-stat-new-32.log <==
+> 27991 (bash) S 1 27991 1025 34816 -1 0 9662 9662 0 0 312 562 312 562 20 0
+> 0 0 5113740411 7241728 2901 1413120
+>
+> ==> proc-pid-stat-list-old-32.log <==
+> CLK_TCK 1000 PAGE_SIZE 65536 boot time 5110786.43
+>  1 pid                1025 process
+>  2 comm             (bash) executable
+>  3 state                 S ?
+>  4 ppid               1024 parent
+>  5 pgrp               1025 group
+>  6 session            1025 id
+>  7 tty_nr         136    0 15:8,31:20,7:0
+>  8 tpgid                -1 group
+>  9 flags                 0 sys
+> 10 minflt           147425 minor
+> 11 cminflt          147425 minorchild
+> 12 majflt                0 major
+> 13 cmajflt               0 majorchild
+> 14 utime            49.546 user
+> 15 stime             0.000 sys
+> 16 cutime           44.984 userchild
+> 17 cstime           49.546 syschild
+> 18 priority          44984 0..39->-20..19
+> 19 nice                  0 -20..19
+> 20 num_threads          20 threads
+> 21 itrealvalue           0 timer
+> 22 starttime   59 3:39:46.430 start
+> 23 vsize        4115675647 memory
+> 24 rss                   0 pages
+> 25 rsslim          7397376 limit
+>
+> ==> proc-pid-stat-list-new-32.log <==
+> CLK_TCK 1000 PAGE_SIZE 65536 boot time 5114365.42
+>  1 pid               27991 process
+>  2 comm             (bash) executable
+>  3 state                 S ?
+>  4 ppid                  1 parent
+>  5 pgrp              27991 group
+>  6 session            1025 id
+>  7 tty_nr         136    0 15:8,31:20,7:0
+>  8 tpgid                -1 group
+>  9 flags                 0 sys
+> 10 minflt             9662 minor
+> 11 cminflt            9662 minorchild
+> 12 majflt                0 major
+> 13 cmajflt               0 majorchild
+> 14 utime             0.312 user
+> 15 stime             0.562 sys
+> 16 cutime            0.312 userchild
+> 17 cstime            0.562 syschild
+> 18 priority             20 0..39->-20..19
+> 19 nice                  0 -20..19
+> 20 num_threads           0 threads
+> 21 itrealvalue           0 timer
+> 22 starttime     10:25.009 start
+> 23 vsize           7241728 memory
+> 24 rss                2901 pages
+> 25 rsslim          1413120 limit
+>
+> Brian Inglis (1):
+>   fhandler_process.cc(format_process_stat): fix /proc/pid/stat issues
+>
 >  winsup/cygwin/fhandler_process.cc | 33 +++++++++++++++++++------------
 >  1 file changed, 20 insertions(+), 13 deletions(-)
-> 
-
-Pushed.
-
-
-Thanks,
-Corinna
+>
+> --
+> 2.36.0
+>
+>
