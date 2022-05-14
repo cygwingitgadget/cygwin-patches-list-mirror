@@ -1,58 +1,41 @@
-Return-Path: <nejamuljumu1203@gmail.com>
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com
- [IPv6:2607:f8b0:4864:20::e30])
- by sourceware.org (Postfix) with ESMTPS id 924883856DE7
- for <cygwin-patches@cygwin.com>; Wed, 11 May 2022 14:56:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 924883856DE7
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 2FB893858D28
+ for <cygwin-patches@cygwin.com>; Sat, 14 May 2022 22:28:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 2FB893858D28
 Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-xe30.google.com with SMTP id t85so2269517vst.4
- for <cygwin-patches@cygwin.com>; Wed, 11 May 2022 07:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=GCvsDvw2I77be3/0RPDwXIpMeqrlhuvK1CtZ7esLlwI=;
- b=aaUYRTU82RjQBTIzPOtjfWyscW1eAT4I8cvol/GeL1IadboMKZjLQoUbTP6QCCInFE
- SyPsHsPf6ChXFdOFkgKwDz9kamQWe+LHkVOxrNC/S4UodbRp+UyeK3lP0qnC56yJFuf5
- I9U0loRKR9l0h2eogqe7ZBHpI/7TxQ/xd4+gzc9jTFgXK9tg0jin3cJsygJk9LzcHY7+
- mt4aXXVuXNf3fAkDKIzpm98jpsk4KuLP0NbT+xSlFn9vZrux3BI/g6GR63wjAbnBvkrf
- FYzT76LF6bUGTPJIuTLetn3hRBhoxg1on0h70JZP/bHsGnP8l3+JOC8h/f/4AhiJ9BbP
- OvCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=GCvsDvw2I77be3/0RPDwXIpMeqrlhuvK1CtZ7esLlwI=;
- b=p2kEUcbSthfpa2JqoPWLYszX9SGHIxzwNqnLYulDpi2+4PcE+2iJXqO7Wj0Wisch6q
- rh0sn+haozgnHi6Y7BXFX//4wJgPeErvaeHSgQlNUhUleEyCYzfFYZhFJOX9n8yJs/QR
- h5skLGWklFHehGpakNE5YZ7NpyXfoXzRB0NyX/g9CCDAjSy++pKYUDbQdctwo1bYWu5A
- ruWvwwONvwpFXJyBaddZ+/ZfziLOP5+e9hPFwhv+vwDPbqgUNpWtieJoUW3Iv5N6IYDu
- XjKbCOKqFz6oNYyu9zc9/pHApMF8zpLyJaDnollNi+TcLGv/Ue4OdbLd+0uYoAZUb6Ov
- gKYg==
-X-Gm-Message-State: AOAM533qD6I8a1BqC7narvJU54INVAAIF4J8PeAtCJa9EWRPvZKjpibv
- z5tRdQRfxLuDPl7EAIFNMZZBCxLwxFH4H134OmL6kf5J93TnkQ==
-X-Google-Smtp-Source: ABdhPJy9RTauD7KzD7kHBJmpkZ7YOG+HBhKJXxB6Qg6krTJgTjHV2yg3+bylTUrjkvDw9r5XOsVDASzCIpAuGU+e4Uc=
-X-Received: by 2002:a67:2d17:0:b0:32c:e934:770e with SMTP id
- t23-20020a672d17000000b0032ce934770emr13447606vst.85.1652280967848; Wed, 11
- May 2022 07:56:07 -0700 (PDT)
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 24EMSV1f031118;
+ Sun, 15 May 2022 07:28:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24EMSV1f031118
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1652567316;
+ bh=lKWOyQE75FV4I5x3xVFAFtMBfyjUMluf6ro7IQpeuaM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bziK5jB/G3QL171QgwXfJPtBsSfS1fHLiO7Rvr78dd1MEs1rHbax2cK/MCLGhpFnj
+ Tc40hjAzSMXknw04KhKFdGXwB2l59h8pAlpUcHT12irWgMJZ5byZgzbCb08aF7JitC
+ 5VS5cdgSVQiFicm9GgJ1EDRupwovVSfInqc75QoHZkqFieOhYXb3+f1LTM+6OdZwbk
+ AjcRKEy9C7GWVGsQ/tGeHk1TjHmBrqx67GxrqjAIxrsIYNBkBgWJZhjtC3ey7NJFnZ
+ DbSnlEbwFqor/WxGp6HE/KKvrJejmwWdxoJSSGJ+bxbBGr9e9ea2lKjeJKpO5VsCf+
+ HzwNK07TDY2kQ==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: pty: Fix script command crash on console in Win7.
+Date: Sun, 15 May 2022 07:28:23 +0900
+Message-Id: <20220514222823.36326-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220510144443.5555-1-Brian.Inglis@SystematicSW.ab.ca>
-In-Reply-To: <20220510144443.5555-1-Brian.Inglis@SystematicSW.ab.ca>
-From: Mohammad HOQUE <nejamuljumu1203@gmail.com>
-Date: Wed, 11 May 2022 20:55:58 +0600
-Message-ID: <CAFgkkcsxPgp98_eC3Vdkj+g3Dte3xm1gUC5F3T0NeGOD9bcRgA@mail.gmail.com>
-Subject: Re: [PATCH 0/1] fhandler_process.cc(format_process_stat): fix
- /proc/pid/stat issues
-To: Brian Inglis <Brian.Inglis@systematicsw.ab.ca>
-Cc: Cygwin Patches <cygwin-patches@cygwin.com>
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
- FREEMAIL_FROM, HTML_MESSAGE, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
- TXREP, T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
-Content-Type: text/plain; charset="UTF-8"
-X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,97 +48,362 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 11 May 2022 14:56:10 -0000
+X-List-Received-Date: Sat, 14 May 2022 22:29:01 -0000
 
-On Tue, May 10, 2022, 8:45 PM Brian Inglis <Brian.Inglis@systematicsw.ab.ca>
-wrote:
+- Previously, the command "cmd /c script -c cmd" in console of Win7
+  crashes. This seems to be due to a bug (?) of AttachConsole().
+  This patch adds workaround for this issue.
 
-> Noticed some issues with x86 32 bit procps and checked /proc/pid/stat which
-> looked misaligned compared to x86_64 64 bit, due to int64_t format
-> mismatches.
-> There were also issues with the tty_nr encoding (uses ctty which has major
-> in
-> top 16 bits and minor in bottom 16 bits, where tty_nr is specified to have
-> major in bits 15:8 and minor across 31:20 and 7:0) and rsslim units in
-> bytes
-> not pages.
-> This patch fixes those issues.
-> Below are the old and new /proc/pid/stat values and decoded listings for 32
-> bit; only tty_nr and rsslim values changed in 64 bit; tty_nr listing
-> decoding
-> was also changed after.
->
-> ==> proc-pid-stat-old-32.log <==
-> 1025 (bash) S 1024 1025 1025 8912896 -1 0 147513 147513 0 0 49546 0 45000
-> 49546 45000 0 20 0 0 4115675647 0 7397376
->
-> ==> proc-pid-stat-new-32.log <==
-> 27991 (bash) S 1 27991 1025 34816 -1 0 9662 9662 0 0 312 562 312 562 20 0
-> 0 0 5113740411 7241728 2901 1413120
->
-> ==> proc-pid-stat-list-old-32.log <==
-> CLK_TCK 1000 PAGE_SIZE 65536 boot time 5110786.43
->  1 pid                1025 process
->  2 comm             (bash) executable
->  3 state                 S ?
->  4 ppid               1024 parent
->  5 pgrp               1025 group
->  6 session            1025 id
->  7 tty_nr         136    0 15:8,31:20,7:0
->  8 tpgid                -1 group
->  9 flags                 0 sys
-> 10 minflt           147425 minor
-> 11 cminflt          147425 minorchild
-> 12 majflt                0 major
-> 13 cmajflt               0 majorchild
-> 14 utime            49.546 user
-> 15 stime             0.000 sys
-> 16 cutime           44.984 userchild
-> 17 cstime           49.546 syschild
-> 18 priority          44984 0..39->-20..19
-> 19 nice                  0 -20..19
-> 20 num_threads          20 threads
-> 21 itrealvalue           0 timer
-> 22 starttime   59 3:39:46.430 start
-> 23 vsize        4115675647 memory
-> 24 rss                   0 pages
-> 25 rsslim          7397376 limit
->
-> ==> proc-pid-stat-list-new-32.log <==
-> CLK_TCK 1000 PAGE_SIZE 65536 boot time 5114365.42
->  1 pid               27991 process
->  2 comm             (bash) executable
->  3 state                 S ?
->  4 ppid                  1 parent
->  5 pgrp              27991 group
->  6 session            1025 id
->  7 tty_nr         136    0 15:8,31:20,7:0
->  8 tpgid                -1 group
->  9 flags                 0 sys
-> 10 minflt             9662 minor
-> 11 cminflt            9662 minorchild
-> 12 majflt                0 major
-> 13 cmajflt               0 majorchild
-> 14 utime             0.312 user
-> 15 stime             0.562 sys
-> 16 cutime            0.312 userchild
-> 17 cstime            0.562 syschild
-> 18 priority             20 0..39->-20..19
-> 19 nice                  0 -20..19
-> 20 num_threads           0 threads
-> 21 itrealvalue           0 timer
-> 22 starttime     10:25.009 start
-> 23 vsize           7241728 memory
-> 24 rss                2901 pages
-> 25 rsslim          1413120 limit
->
-> Brian Inglis (1):
->   fhandler_process.cc(format_process_stat): fix /proc/pid/stat issues
->
->  winsup/cygwin/fhandler_process.cc | 33 +++++++++++++++++++------------
->  1 file changed, 20 insertions(+), 13 deletions(-)
->
-> --
-> 2.36.0
->
->
+  Currently, pty reattaches to the console of the process which is
+  predetermined by ConsoleProcessList() after temporarily attaching
+  to another console. After that, the console output handle opened
+  with the name "CONOUT$" may not be accessible in Win7.
+  This seems to happen when the attached process does not have the
+  same handle even if the console attached is the same. With this
+  patch, cygwin-console-helper which is started when pty master is
+  opened in console, is utilized to be a target process to which
+  pty reattaches if the OS is Win7.
+---
+ winsup/cygwin/fhandler.h                    |  8 ++-
+ winsup/cygwin/fhandler_termios.cc           |  3 +-
+ winsup/cygwin/fhandler_tty.cc               | 77 +++++++++++++++++++--
+ winsup/cygwin/wincap.cc                     | 12 ++++
+ winsup/cygwin/wincap.h                      |  2 +
+ winsup/utils/mingw/cygwin-console-helper.cc |  2 +-
+ 6 files changed, 96 insertions(+), 8 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 80dd94508..36f64818d 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -1984,6 +1984,7 @@ class fhandler_termios: public fhandler_base
+   virtual void setpgid_aux (pid_t pid) {}
+   virtual bool need_console_handler () { return false; }
+   virtual bool need_send_ctrl_c_event () { return true; }
++  virtual DWORD get_helper_pid () { return 0; }
+ };
+ 
+ enum ansi_intensity
+@@ -2343,7 +2344,7 @@ class fhandler_pty_common: public fhandler_termios
+ 				       bool cygwin = false,
+ 				       bool stub_only = false);
+   bool to_be_read_from_nat_pipe (void);
+-  static DWORD attach_console_temporarily (DWORD target_pid);
++  static DWORD attach_console_temporarily (DWORD target_pid, DWORD helper_pid);
+   static void resume_from_temporarily_attach (DWORD resume_pid);
+ 
+  protected:
+@@ -2472,6 +2473,7 @@ public:
+     HANDLE from_slave_nat;
+     HANDLE output_mutex;
+     tty *ttyp;
++    DWORD helper_pid;
+   };
+ private:
+   int pktmode;			// non-zero if pty in a packet mode.
+@@ -2483,6 +2485,9 @@ private:
+   HANDLE to_master, from_master;
+   cygthread *master_fwd_thread;	// Master forwarding thread
+   HANDLE thread_param_copied_event;
++  HANDLE helper_goodbye;
++  HANDLE helper_h_process;
++  DWORD helper_pid;
+ 
+ public:
+   HANDLE get_echo_handle () const { return echo_r; }
+@@ -2537,6 +2542,7 @@ public:
+   void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
+   void set_mask_flusho (bool m) { get_ttyp ()->mask_flusho = m; }
+   bool need_send_ctrl_c_event ();
++  DWORD get_helper_pid () { return helper_pid; }
+ };
+ 
+ class fhandler_dev_null: public fhandler_base
+diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
+index 735423bf2..328c73fcd 100644
+--- a/winsup/cygwin/fhandler_termios.cc
++++ b/winsup/cygwin/fhandler_termios.cc
+@@ -359,7 +359,8 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	  DWORD resume_pid = 0;
+ 	  if (fh && !fh->is_console ())
+ 	    resume_pid =
+-	      fhandler_pty_common::attach_console_temporarily (p->dwProcessId);
++	      fhandler_pty_common::attach_console_temporarily
++				    (p->dwProcessId, fh->get_helper_pid ());
+ 	  if (fh && p == myself && being_debugged ())
+ 	    { /* Avoid deadlock in gdb on console. */
+ 	      fh->tcflush(TCIFLUSH);
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 9dfc3c495..825d80666 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -547,7 +547,8 @@ fhandler_pty_master::accept_input ()
+ 	{
+ 	  /* Slave attaches to a different console than master.
+ 	     Therefore reattach here. */
+-	  DWORD resume_pid = attach_console_temporarily (target_pid);
++	  DWORD resume_pid =
++	    attach_console_temporarily (target_pid, helper_pid);
+ 	  cp_to = GetConsoleCP ();
+ 	  resume_from_temporarily_attach (resume_pid);
+ 	}
+@@ -2104,6 +2105,16 @@ fhandler_pty_master::close ()
+ 	  get_ttyp ()->stop_fwd_thread = true;
+ 	  WriteFile (to_master_nat, "", 0, &len, NULL);
+ 	  master_fwd_thread->detach ();
++	  if (helper_goodbye)
++	    {
++	      SetEvent (helper_goodbye);
++	      WaitForSingleObject (helper_h_process, INFINITE);
++	      CloseHandle (helper_h_process);
++	      CloseHandle (helper_goodbye);
++	      helper_pid = 0;
++	      helper_h_process = 0;
++	      helper_goodbye = NULL;
++	    }
+ 	}
+     }
+ 
+@@ -2826,7 +2837,8 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+ 	{
+ 	  /* Slave attaches to a different console than master.
+ 	     Therefore reattach here. */
+-	  DWORD resume_pid = attach_console_temporarily (target_pid);
++	  DWORD resume_pid =
++	    attach_console_temporarily (target_pid, p->helper_pid);
+ 	  cp_from = GetConsoleOutputCP ();
+ 	  resume_from_temporarily_attach (resume_pid);
+ 	}
+@@ -3009,6 +3021,57 @@ fhandler_pty_master::setup ()
+       goto err;
+     }
+   WaitForSingleObject (thread_param_copied_event, INFINITE);
++
++  if (wincap.has_broken_attach_console ()
++      && _major (myself->ctty) == DEV_CONS_MAJOR
++      && !(!pinfo (myself->ppid) && getenv ("ConEmuPID")))
++    {
++      HANDLE hello = CreateEvent (&sec_none, true, false, NULL);
++      HANDLE goodbye = CreateEvent (&sec_none, true, false, NULL);
++      WCHAR cmd[MAX_PATH];
++      path_conv helper ("/bin/cygwin-console-helper.exe");
++      size_t len = helper.get_wide_win32_path_len ();
++      helper.get_wide_win32_path (cmd);
++      __small_swprintf (cmd + len, L" %p %p", hello, goodbye);
++
++      STARTUPINFOEXW si;
++      PROCESS_INFORMATION pi;
++      ZeroMemory (&si, sizeof (si));
++      si.StartupInfo.cb = sizeof (STARTUPINFOEXW);
++
++      SIZE_T bytesRequired;
++      InitializeProcThreadAttributeList (NULL, 1, 0, &bytesRequired);
++      si.lpAttributeList = (PPROC_THREAD_ATTRIBUTE_LIST)
++	HeapAlloc (GetProcessHeap (), 0, bytesRequired);
++      InitializeProcThreadAttributeList (si.lpAttributeList,
++					 1, 0, &bytesRequired);
++      HANDLE handles_to_inherit[] = {hello, goodbye};
++      UpdateProcThreadAttribute (si.lpAttributeList,
++				 0,
++				 PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
++				 handles_to_inherit,
++				 sizeof (handles_to_inherit),
++				 NULL, NULL);
++      if (CreateProcessW (NULL, cmd, &sec_none, &sec_none,
++			  TRUE, EXTENDED_STARTUPINFO_PRESENT,
++			  NULL, NULL, &si.StartupInfo, &pi))
++	{
++	  WaitForSingleObject (hello, INFINITE);
++	  CloseHandle (hello);
++	  CloseHandle (pi.hThread);
++	  helper_goodbye = goodbye;
++	  helper_pid = pi.dwProcessId;
++	  helper_h_process = pi.hProcess;
++	}
++      else
++	{
++	  CloseHandle (hello);
++	  CloseHandle (goodbye);
++	}
++      DeleteProcThreadAttributeList (si.lpAttributeList);
++      HeapFree (GetProcessHeap (), 0, si.lpAttributeList);
++    }
++
+   master_fwd_thread = new cygthread (::pty_master_fwd_thread, this, "ptymf");
+   if (!master_fwd_thread)
+     {
+@@ -3814,6 +3877,7 @@ fhandler_pty_master::get_master_fwd_thread_param (master_fwd_thread_param_t *p)
+   p->from_slave_nat = from_slave_nat;
+   p->output_mutex = output_mutex;
+   p->ttyp = get_ttyp ();
++  p->helper_pid = helper_pid;
+   SetEvent (thread_param_copied_event);
+ }
+ 
+@@ -4124,7 +4188,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 			   0, TRUE, DUPLICATE_SAME_ACCESS);
+ 	  CloseHandle (pcon_owner);
+ 	  DWORD target_pid = get_ttyp ()->nat_pipe_owner_pid;
+-	  resume_pid = attach_console_temporarily (target_pid);
++	  resume_pid = attach_console_temporarily (target_pid, 0);
+ 	  attach_restore = true;
+ 	}
+       else
+@@ -4170,12 +4234,15 @@ fhandler_pty_slave::release_ownership_of_nat_pipe (tty *ttyp,
+ }
+ 
+ DWORD
+-fhandler_pty_common::attach_console_temporarily (DWORD target_pid)
++fhandler_pty_common::attach_console_temporarily (DWORD target_pid,
++						 DWORD helper_pid)
+ {
+   DWORD resume_pid = 0;
+   acquire_attach_mutex (mutex_timeout);
+   pinfo pinfo_resume (myself->ppid);
+-  if (pinfo_resume)
++  if (helper_pid)
++    resume_pid = helper_pid;
++  else if (pinfo_resume)
+     resume_pid = pinfo_resume->dwProcessId;
+   if (!resume_pid)
+     resume_pid = get_console_process_id (myself->dwProcessId, false);
+diff --git a/winsup/cygwin/wincap.cc b/winsup/cygwin/wincap.cc
+index 835497cfe..0f0b77de8 100644
+--- a/winsup/cygwin/wincap.cc
++++ b/winsup/cygwin/wincap.cc
+@@ -44,6 +44,7 @@ wincaps wincap_7 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:false,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:true,
+   },
+ };
+ 
+@@ -73,6 +74,7 @@ wincaps wincap_8 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -102,6 +104,7 @@ wincaps wincap_8_1 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -131,6 +134,7 @@ wincaps  wincap_10_1507 __attribute__((section (".cygwin_dll_common"), shared))
+     has_tcp_maxrtms:false,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -160,6 +164,7 @@ wincaps  wincap_10_1607 __attribute__((section (".cygwin_dll_common"), shared))
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -189,6 +194,7 @@ wincaps wincap_10_1703 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -218,6 +224,7 @@ wincaps wincap_10_1709 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -247,6 +254,7 @@ wincaps wincap_10_1803 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -276,6 +284,7 @@ wincaps wincap_10_1809 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -305,6 +314,7 @@ wincaps wincap_10_1903 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -334,6 +344,7 @@ wincaps wincap_10_2004 __attribute__((section (".cygwin_dll_common"), shared)) =
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:true,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+@@ -363,6 +374,7 @@ wincaps wincap_11 __attribute__((section (".cygwin_dll_common"), shared)) = {
+     has_tcp_maxrtms:true,
+     has_query_process_handle_info:true,
+     has_con_broken_tabs:false,
++    has_broken_attach_console:false,
+   },
+ };
+ 
+diff --git a/winsup/cygwin/wincap.h b/winsup/cygwin/wincap.h
+index 8184e7151..818359f94 100644
+--- a/winsup/cygwin/wincap.h
++++ b/winsup/cygwin/wincap.h
+@@ -38,6 +38,7 @@ struct wincaps
+     unsigned has_tcp_maxrtms					: 1;
+     unsigned has_query_process_handle_info			: 1;
+     unsigned has_con_broken_tabs				: 1;
++    unsigned has_broken_attach_console				: 1;
+   };
+ };
+ 
+@@ -97,6 +98,7 @@ public:
+   bool	IMPLEMENT (has_tcp_maxrtms)
+   bool	IMPLEMENT (has_query_process_handle_info)
+   bool	IMPLEMENT (has_con_broken_tabs)
++  bool	IMPLEMENT (has_broken_attach_console)
+ 
+   void disable_case_sensitive_dirs ()
+   {
+diff --git a/winsup/utils/mingw/cygwin-console-helper.cc b/winsup/utils/mingw/cygwin-console-helper.cc
+index 66004bd15..80d15e3f3 100644
+--- a/winsup/utils/mingw/cygwin-console-helper.cc
++++ b/winsup/utils/mingw/cygwin-console-helper.cc
+@@ -6,11 +6,11 @@ main (int argc, char **argv)
+   char *end;
+   if (argc < 3)
+     exit (1);
++  SetConsoleCtrlHandler (NULL, TRUE);
+   HANDLE h = (HANDLE) strtoull (argv[1], &end, 0);
+   SetEvent (h);
+   if (argc == 4) /* Pseudo console helper mode for PTY */
+     {
+-      SetConsoleCtrlHandler (NULL, TRUE);
+       HANDLE hPipe = (HANDLE) strtoull (argv[3], &end, 0);
+       char buf[64];
+       sprintf (buf, "StdHandles=%p,%p\n",
+-- 
+2.36.0
+
