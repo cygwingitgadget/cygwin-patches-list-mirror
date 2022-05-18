@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id EBFC738515CD
- for <cygwin-patches@cygwin.com>; Wed, 18 May 2022 18:23:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org EBFC738515CD
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 8B359385043C
+ for <cygwin-patches@cygwin.com>; Wed, 18 May 2022 18:49:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8B359385043C
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
  [119.150.44.95]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 24IIMf81024473;
- Thu, 19 May 2022 03:22:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 24IIMf81024473
+ by conuserg-10.nifty.com with ESMTP id 24IImmS5005653;
+ Thu, 19 May 2022 03:48:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24IImmS5005653
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1652898168;
- bh=+zdYvzk3X70NMezyYSy98ssAl2GPnUK9vufnBxmggEg=;
+ s=dec2015msa; t=1652899735;
+ bh=Tt/FLu/MU8WFK2CUg4PN3YK69pUW/x84A/nij0NsoaE=;
  h=From:To:Cc:Subject:Date:From;
- b=VZPQtYlcQfsbaO71Owo/1G9JFy3TM/1YimcX9AgGi1McwwbXVKIzuSx0E1ouX3pZh
- 0iJZR2B6jv5jLasrR4KWKHRuBumTsAqKxMTcP04FaWb0M+KJ2lg28cXeDtmX5uUCl0
- 0PUVVmLlRyXzGhy3zMKN7iVjvZuCwYUl234GHrYlqjzaSCl8BTT8z+vDg7zuTPHVkS
- 88X4Rf97OGhrqVAGlgoKCKFMf1CEzR45H1Ku96dSF+zc9S9Es5ZmaJcakVyaDUkFMR
- Bh4YQZTljzPv6ktQBTXUt9NW1IgIah0Pevva3Jgd6BIJ+fC+FtmmC8Y8rIffFV1D9Y
- KS12O6tMz593Q==
+ b=L4pjRmYElAkB0O3IfFX3dTiGgc0MNuLc2hAzChGzAgFO0xAf+jWkLldpPT7+phcdD
+ Qp4pFCasoP93VDwVJ0T3dqxekIlbFSar5WqNA7ipT3luu0CJpZqhmFmYX0dtexx/9U
+ m4//Wn6Wr2sqrrO8L4xrvv9ZZdMyW+er3xkSJEVBINNCfFQY/nYv6gvvmMODVlHuKK
+ ymtIqyuwd9FIE3ctRHNi4Jh4lRB7fKK13wgqBF0tV6vau3JfwlwCnkw1qWw/Z/Pc57
+ kMGyuerik1zZUrRl3mDhiBHMCVkT4FSJ3nTBFfCjfK9AFkb6mKIXRoSgVRzEoErQsh
+ 106z4cNyQdqiA==
 X-Nifty-SrcIP: [119.150.44.95]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: Use two pass parse for tlsoffsets generation.
-Date: Thu, 19 May 2022 03:22:35 +0900
-Message-Id: <20220518182235.9203-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: Use two pass parse for tlsoffsets generation.
+Date: Thu, 19 May 2022 03:48:44 +0900
+Message-Id: <20220518184844.9219-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,7 +48,7 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 18 May 2022 18:23:17 -0000
+X-List-Received-Date: Wed, 18 May 2022 18:49:18 -0000
 
 - The commit "Cygwin: fix new sigfe.o generation in optimized case"
   fixed the wrong tlsoffsets generation by adding -O0 to compile
@@ -59,26 +59,36 @@ X-List-Received-Date: Wed, 18 May 2022 18:23:17 -0000
   order of the entry, however, there is no guarantee will retain
   the order of the entries in the future.
 
-  This patch make gentls_offsets parse the assembler code in the
+  This patch makes gentls_offsets parse the assembler code in the
   two pass to omit -O0 option dependency.
 ---
  winsup/cygwin/gentls_offsets | 27 ++++++++++++++++++++++-----
  1 file changed, 22 insertions(+), 5 deletions(-)
 
 diff --git a/winsup/cygwin/gentls_offsets b/winsup/cygwin/gentls_offsets
-index d76562c05..111e6aa78 100755
+index d76562c05..0adb702a3 100755
 --- a/winsup/cygwin/gentls_offsets
 +++ b/winsup/cygwin/gentls_offsets
-@@ -43,7 +43,7 @@ gawk '
+@@ -2,6 +2,9 @@
+ #set -x
+ input_file=$1
+ output_file=$2
++tmp_file=/tmp/${output_file}.$$
++
++trap "rm -f ${tmp_file}" 0 1 2 15
+ 
+ # Preprocess cygtls.h and filter out only the member lines from
+ # class _cygtls to generate an input file for the cross compiler
+@@ -43,7 +46,7 @@ gawk '
    }
  ' | \
  # Now run the compiler to generate an assembler file.
 -${CXXCOMPILE} -x c++ -g0 -O0 -S - -o - | \
-+${CXXCOMPILE} -x c++ -g0 -S - -o ${output_file}.s && \
++${CXXCOMPILE} -x c++ -g0 -S - -o ${tmp_file} && \
  # The assembler file consists of lines like these:
  #
  #   __CYGTLS__foo
-@@ -52,10 +52,25 @@ ${CXXCOMPILE} -x c++ -g0 -O0 -S - -o - | \
+@@ -52,10 +55,25 @@ ${CXXCOMPILE} -x c++ -g0 -O0 -S - -o - | \
  #       .align 4
  #
  # From this info, generate the tlsoffsets file.
@@ -98,7 +108,7 @@ index d76562c05..111e6aa78 100755
 +      varname = "";
 +    }
 +  }
-+' ${output_file}.s) && \
++' ${tmp_file}) && \
 +gawk -v start_offset="$start_offset" '\
    BEGIN {
      varname=""
@@ -106,7 +116,7 @@ index d76562c05..111e6aa78 100755
    }
    /^__CYGTLS__/ {
      varname = gensub (/__CYGTLS__(\w+):/, "\\1", "g");
-@@ -70,7 +85,6 @@ gawk '\
+@@ -70,7 +88,6 @@ gawk '\
    /\s*\.long\s+/ {
      if (length (varname) > 0) {
        if (varname == "start_offset") {
@@ -114,15 +124,12 @@ index d76562c05..111e6aa78 100755
  	printf (".equ _cygtls.%s, -%u\n", varname, start_offset);
        } else {
        	value = $2;
-@@ -80,4 +94,7 @@ gawk '\
+@@ -80,4 +97,4 @@ gawk '\
        varname = "";
      }
    }
 -' > "${output_file}"
-+' ${output_file}.s > "${output_file}"
-+ret=$?
-+rm -f ${output_file}.s
-+exit $ret
++' ${tmp_file} > "${output_file}"
 -- 
 2.36.1
 
