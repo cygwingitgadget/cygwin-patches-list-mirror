@@ -1,123 +1,120 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam08on20709.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8d::709])
- by sourceware.org (Postfix) with ESMTPS id 897D8382F98F
- for <cygwin-patches@cygwin.com>; Wed, 25 May 2022 17:32:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 897D8382F98F
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on2071e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e89::71e])
+ by sourceware.org (Postfix) with ESMTPS id 364D33838208
+ for <cygwin-patches@cygwin.com>; Thu, 26 May 2022 19:16:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 364D33838208
 Authentication-Results: sourceware.org;
  dmarc=pass (p=none dis=none) header.from=cornell.edu
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aVoGe1jWCQidSqacShQ2GVLM04QSJ48+sy92TiDEcReFOk3SH/CdA1yP4wxuTI1t1meIz5613D0NpYYvmyip7UCg3xxrCAEPFQsDdiuJH0MyVhOfABEFqfdAPNEmBRnBrW437pzgOVdMvhRJZl1vz+reCvOHHr4D5DjGBF0pYTox0DRSkZTmzYRE8+lXntxR0SijFoaX2gIlvy4jrDKS0h9972/g49SCXRet+2T6tYBcJPsMRG+2p4UxuClRRVJMR/9P6we1DQR7dfiRVtkPMMSbIIBIxsWHmZoC3U7E7q4sSf4g0EzlFavS21ifWL7L9SQIz7JbR7Q9+5uQXUjtkg==
+ b=mNHQWdyqX46zpf98svjrrlZ6RYUpfQjsL0jqkpV3e/UCsy/tkzDm5pLKbqffjZiDRdCZtx1k8Fv/i7WcqEcqB9JaYWnxQHgtWTk3Jg7gXWkGYlOQeM5VM8nS/RCwxi4r/HyvNbuuWpcQCHW/dUsVL4bRSbv4eKL+1b4kFKaTKhGKtHHLonhKYR7c0+h+AVU0UF/MWRX6heCFAJ+5EwztqoNzKNyUUZX/cLEFmqcZIDjdxJDmxDizuklNemLqbPplFXs1SvWBqZ1PLu9mUJm4Al4W1QAABy6kVb2UpiEJJhzWzkSwbG24+QtS4BGM1LyMJtg+FyTk2+a7EjoaFJ90Dg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Kk66+J4Hmy5XqJ2mNORVtKpn5tWcjTmtlmeecD4Iro=;
- b=aybtqqd0eB5k3Tdasb+DSlWncE5RjVAjXCgWdufAEjIctFGvg+jh8K4Tp8S7wscR+AnIAtpt1cwfHQcScqP9EkPQL8J7wzoRByVAdGhAqEp8Y0kigo7nqqm9MB0xLMNdGSwXRoJHK1KJrLj5ctlk/Y58RjE4qNtVqwfrOM658EJP1pF4bG96uaNvt/MOlFvJD4LX/s7PPWWGJPhmu3NLtRt4QFVW88FvOIhxha8Fr2o1uH0tKyPQJCP/AmpDaSyoSZWkTgYc/n/C5I9Rm3oVQBp+VbDJW6uWhsy5XFBttT1gdY0TJgK/MYsjwmT8UBL16W679aW6aDiWlylhbnfrfg==
+ bh=+jpGbtEYVElPmtkNE98wE7IfFXZVyXYyvWk53YqSarg=;
+ b=U1iqnHcGS4h70mRhIh1UiPdr5fNuqW+yVY8PUjSdNlccSzIiDg65cfUSDxvc47lMT9LeDJOByYaI75yHMdDYMR8Vom++RL4GxGgiaY0nAfEO7SxTAr9bmPW0upVy40yIdMEn1qIk7FgLbOi4nZ3/S/8abZSEPKlwa8ey+oF3FvCM1qD1RffvLg6m66+L+CCwhusPwGbRWvPZ9iZKfBNbiAc0/K/S33zgFJmjZNDXDPkCp/oqdhy/gB86JnAzHT+fQGeFpG9yL2URoIGIhFq6et6WeA/KmMKnEJ6pz4PgXmiiDFRvNG0KWxKJnRkDOsvWNjBlkGM2KOr2FMkdm2ulHw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Kk66+J4Hmy5XqJ2mNORVtKpn5tWcjTmtlmeecD4Iro=;
- b=FqHb+ptTJ8U1zOfdgYr2uVfYVyiJqAe1zcsw5+vWIywYdcg+ow1uK9WYaFwCXKulSQ+QgLZO0vux7MyO6c+H9/BVsJryiJsuxGioJXHHtcACB1fQQSJZtofTekmCJYMnphcWOzQJfaB9eAGlRaMs9czWwJksMUN1eayjTWAXdhg=
+ bh=+jpGbtEYVElPmtkNE98wE7IfFXZVyXYyvWk53YqSarg=;
+ b=VnjgxHclM6/71pNqcYDW8OmdeoxCb/MUKt6malbx2WG30kYu24je9tGjxINlmhS6VVyLVg6jFF4CssWcaKkgV17haFVEL23cJK0XsiMr2wTXnc7i6y3Ip9LOM5UwFvGyjA5Kp+btl2C0pdbg5MVgZ7ff2Z/udj1oq7AmrHTkRsQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=cornell.edu;
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
- by SN6PR04MB4733.namprd04.prod.outlook.com (2603:10b6:805:a5::13)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Wed, 25 May
- 2022 17:32:11 +0000
+ by DM5PR04MB0443.namprd04.prod.outlook.com (2603:10b6:3:a6::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
+ 2022 19:16:54 +0000
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::ed45:6a5d:b109:673e]) by BN7PR04MB4388.namprd04.prod.outlook.com
- ([fe80::ed45:6a5d:b109:673e%6]) with mapi id 15.20.5273.023; Wed, 25 May 2022
- 17:32:11 +0000
-Message-ID: <3c6a7890-1735-f256-e4c1-493790c74ded@cornell.edu>
-Date: Wed, 25 May 2022 13:32:09 -0400
+ ([fe80::ed45:6a5d:b109:673e%6]) with mapi id 15.20.5273.023; Thu, 26 May 2022
+ 19:16:54 +0000
+Message-ID: <20be5f5f-d371-a2d8-4579-c6e8b762e357@cornell.edu>
+Date: Thu, 26 May 2022 15:16:52 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add Linux 5.18
- cpuinfo flags
 Content-Language: en-US
-To: cygwin-patches@cygwin.com
-References: <20220525123045.8880-1-Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches <cygwin-patches@cygwin.com>
 From: Ken Brown <kbrown@cornell.edu>
-In-Reply-To: <20220525123045.8880-1-Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH 0/7] Remove 32-bit code
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0105.namprd02.prod.outlook.com
- (2603:10b6:208:51::46) To BN7PR04MB4388.namprd04.prod.outlook.com
+X-ClientProxiedBy: MN2PR16CA0047.namprd16.prod.outlook.com
+ (2603:10b6:208:234::16) To BN7PR04MB4388.namprd04.prod.outlook.com
  (2603:10b6:406:f8::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84dc4292-5883-44ee-5b16-08da3e747fd6
-X-MS-TrafficTypeDiagnostic: SN6PR04MB4733:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR04MB47334C1367F1E97A7128DAF6D8D69@SN6PR04MB4733.namprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: ca4f817c-5ae7-4375-dfb3-08da3f4c4b24
+X-MS-TrafficTypeDiagnostic: DM5PR04MB0443:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR04MB0443C440B80CD23E3C50EE99D8D99@DM5PR04MB0443.namprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mkXFFJ2WCoxAgRxOhWdLJFesgrW/nqqpaikPZpeI1NZ/JXA8aYA5Wn51xAeHagEUJxGI0/e728PvZc1i3gJwjmwMFjuftuEtFVoc0PtJ8pmOE30KZGpxOQCCdrJlpmdG5XrCNuu2FPdLurxl8SzH7DCY/X87hNubZE5ZvCjjhQQgK0JsKZ3nWizSjYV3NAS0A6K43YpU3gty0MtXF1B6QQCPaQHxrgkYUhCXm8Y0kiTTwwC0DQwmyzgpdAI//fxLf/J+w+vYh7yJWSfw+CGcd7KDkbglZK5O6+wZ9Td/NBIrfIhXXLU8iDo3+u9l97yEKxaj2/gmwPaKU9iXbpO5w/LYlS+t2D6Y3RHHDDy4AFVWgYH+MYHqr60MzTzlLEkDpDBMZehA8ZF/swz7Cu5ZW+AaSAGLYhMMhIRYp/jEnE+Af13JwwucetImDhTjWqox7vuyENvGbkqtzeSEifYOWlKJnXccpZQh9uMJZSkSIiL7C0UQRDyhOZ3ywlmMJ8jRpci/mSbus5kCDCIfLJybLLppo5o/IoKdP/zHnteT1ux4N02/4Xg3DBXsVYkapqPJANoz8rQdZ5Fauef2bbKPl/WqaEfIkw+98y3zETbhr6ZtPHgTluAR+rQ5FaOYgfATV1ai7M8PDns+sRLTXdIWmTk4yMF2sogVkwPLEYGPZ/IyFN9Byfs7VsLMpoqX5z1aOqT1gNYdjgqHy9L5tVaAVhut+JZeZZgkB3UXY2Vewt38RLxC2B+3IVJ3yD8ncHqDgepMF7PI4Fpup9DSmLF/OQ==
+X-Microsoft-Antispam-Message-Info: jJ6Fn1zVc/hO8bi0l2pGFtfOwKTF9LWvdj4kkeObY46xptMvBf5od/vfNPTclRdyMHvrwzQBKCdpd4eOpZaObsPAuZ0DrFusIFxyaHmQgrTQF+KGchkn8t36W9d0bV2pAuzMd+BE5rnMSdd0dadco8yMP9vN53EBX58ddzTqlKRBiiLqk2x8PPWivILp25E8BijDasgO79h6VIRGI64znaFw0zNtc750YynQtgIr/oXLdERASKKEC7P45Jt2wxGaPDQ4Dcvi2PhgfXDSQhV5Z1XoBUQNelEBh0gSMWZeaEIu9itJRiydSaZMGTczhEIQYBHm9sYnNise8yIvAcwYzUmUAPlt9amvaIF/S7+y4h3yJ2gazyMwJrEP1wZWoa24J+nUkEtOlYP4HQ3sLL9zderQIUgacNYHoySZnuaBRruy8EON6CHuPfNPnh3HWgZdsGCzc7yfveA8FYc9cY2+R607uvajtIObc11mVdjtb9kZvYwYJZl3ewiF7Kj8XlOLd7AG1JCF4V+i+bNm6iOQ7bzFU+oTBJiVIwb7959QmM5SOIzAZKnYCbwahLmjm7Y6p71PBRYrg12WJ0XemuZOxZyu7tNXdguAbwYX3D4BpfyJVpdJjl0QhMxvhSVLf6AVu/6EMDoWtt0OZFvNUysKLkf+JELbTZl2u4ZKDi6e//OA8PSZBh5kPQoxKaLbrmw/46aSU3OpzSJm0SnQMQeZz2TDc8SK6avb3NMLH3N4+5A=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(53546011)(6512007)(6506007)(36756003)(38100700002)(6916009)(4744005)(75432002)(8676002)(5660300002)(31696002)(786003)(316002)(508600001)(86362001)(186003)(66946007)(2616005)(66476007)(31686004)(2906002)(6486002)(83380400001)(8936002)(66556008)(43740500002)(45980500001);
+ SFS:(13230001)(4636009)(366004)(66946007)(66476007)(66556008)(86362001)(38100700002)(31696002)(36756003)(8676002)(508600001)(316002)(786003)(6916009)(2906002)(2616005)(75432002)(5660300002)(6512007)(6506007)(83380400001)(8936002)(6486002)(31686004)(186003)(45980500001)(43740500002);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SnE2bThkSitRNi9NSWFVU2V3V1pESmduTjBzN2FJTXdaSUFPYldjKytwY09h?=
- =?utf-8?B?TTN4MTZLeHB0S2hmR2s1OEFwTWQzcTdrbXpCYlB4S2VoUTJ0eDZWNC8wbFNw?=
- =?utf-8?B?VjhrYWxsQ25jeFoyK2lvcUJQMWIveW5PbTNZa2JyNVJHMUJrYS80NkhzeHMr?=
- =?utf-8?B?NzRINk5QVFpJKzF1YlhIMjNnYkx4MUMydEpWTVV4Nm9xM1E3SDFTTjdaMXdF?=
- =?utf-8?B?UjlRcndsbWVtZVBITHdqMFJzMzl6Y0pEVFFMQVovUFo4dmpFamdubVZBem85?=
- =?utf-8?B?VlRCZzVsbEdlNFloWGxIMnVGa0JzNXJLc1IzdlBDWEZHV2Q2eWpHTmgxZHE3?=
- =?utf-8?B?S2tCMUpvSDlGWDJZeURYZU95Q2tUM1dhYUw1aXZCekdQcUlVK0Z1a0dlN09s?=
- =?utf-8?B?T2ZoUW1rSXg3Ri8rK2J5cDJDSElwc3h3Rkd4N290VFh6a3ZTbmJFeitLUS9T?=
- =?utf-8?B?ZDBRR1pnN3drRC8za1luTjl3SzBGTTRxbC9HcFBvOEZRWUI4emx4bDJBaGZI?=
- =?utf-8?B?cDlYOC9FZU1QSDJBd2NjVERoTk9DMUpyVGdJY05ZWlM3VjV6cUpuK0hBYjUv?=
- =?utf-8?B?WmlSSUwxcDVObkl0dytxcm5kaGhZNGkvUDI0U2pzV0ZnZ1VRVkxHdHRkTlJv?=
- =?utf-8?B?aHVMWTdReXVLYjk1bFZhV01QOWxnc1QvTHpjbGFjTVBKMFJpa2lLL0tEcUM4?=
- =?utf-8?B?V1VSRXRBMmR2WDNiTm5xSGJISVMvSFVHU1FNMU9Id3FYQ0Rwd3YyeksyNmcy?=
- =?utf-8?B?MllTamFYSjhZUE5YajJzYnlNdnR1SVU2ejk3TnJVN0pxcHFZWlp3NVdYdldj?=
- =?utf-8?B?c0FwYnBpL1RjYlBvdEZkT2JwVXlsR0NXais4WTdqMGh6NXFZTWhqVkFlSWh4?=
- =?utf-8?B?ZWRNeFFIWUh0bmVsa3ErU29FYjM4VlRqR2hlRjVpb091MjU3amV1S0R2QWpC?=
- =?utf-8?B?c09ZOEpnbWRxbGpnam1Db08zZFRxeERCdDI5NUxZRTZtdGRVa1I4QWF3VjlP?=
- =?utf-8?B?OGJvTWFvRk1ia2VmZlNrVm9RM3pjVW5vcWdzVW5OeHQvK2ozWVBzUzhRVHNw?=
- =?utf-8?B?TkxzVmk4eFlFVCt2cnJkZGZpb0dIa0wxVmk1aHZkYzVyTjdXN3I0cTBualQ0?=
- =?utf-8?B?MzVFdTFPaVkyUjcxaUszZk5vdWZpT3R5QjdIMFl3a1Z6am4wTForKzJrSnFk?=
- =?utf-8?B?QW9uR1ExSkZvVDV0YU5yN28zQ3dhN0laYkdVV3ZwSTJqck5abmduemNCbUVm?=
- =?utf-8?B?RkVuSThIR1dsWHMwUHA4eVNIeUJhcGU0aGJTclJPTUZ4T0g4bmo5Y3hacFUv?=
- =?utf-8?B?aHRPM0VRVFZQUE5NZjJyYXhkLytXaFRHK1hMSTdpbUt3RUN5YklWNUc3THRO?=
- =?utf-8?B?clNQSDE0dmc3ZTFDdjN5czBQek9HM0dkdlZOeHE5UTNvanRkcU91SmJqblY0?=
- =?utf-8?B?djRlRVdldFY3eWQ1d0UyenFVZjZGZ1FKMGYrcGFGQkdmMTR0emNHM2IvclBx?=
- =?utf-8?B?aGo0ZG02aVlObG5GQ2MwV3hOTU9GNk94WElXVTlzSGIrc3kxMkNMNWNGOTRy?=
- =?utf-8?B?eDZpZGFqNEEvOE1wMUR0OURnNDFmWUxUR0JvRUt1NjJ4QnZyK0hMblR5VEtj?=
- =?utf-8?B?TTR5aGxuM3Y0S3B6Q01qekIrV0NmMCswNDEvaDQ5SmZWWlpNaFZLVkFrbXJ4?=
- =?utf-8?B?d1ZHSHNzUDI2V0dJdTJjRUJRenBRZnNBK0t1TmtwNEIvd1JGZGpycUVaYTY0?=
- =?utf-8?B?T2tYdnlpWmkzTGJUclJvanc1K3I4MVdsOGJ1TVNiTm9uaU1nTWdoeGpRNFFX?=
- =?utf-8?B?T2VYeWZaVWJub21HRVR3YVM4elFpdGlUdnREdkxmRkJVUXBoTldpeGg0Y29M?=
- =?utf-8?B?Sml1Q1dBUVQrTG93bDVaOTVTUjhOZUJZWS93OE9aejliOXkzSERzNmo3WTJw?=
- =?utf-8?B?OXdNZ2FtcVZVRmxoTmU2QWZzclJCSkZrNmVtdGliVkwwdjBjS2hsL0lqTEF5?=
- =?utf-8?B?SER0TFJ2d2hJTUhqb3EzVUlrSmpsYUdKMWg2UVF2STlpVExHOWdOa2dNdGY4?=
- =?utf-8?B?T2dRME14TjF6MldGOXdLY2RxeS9pQ2pPd3J5bTN1WnhnZG9FZ1gyYm1uNzVI?=
- =?utf-8?B?SDRGaE5tZTY4YjQweEQ5NGhsTmFMR2NZZDJLa0dzQkp6SnkwcVlUclk2TDRj?=
- =?utf-8?B?Rm5uTUpsTjVvMGpWUWYyZ3daeXM0Zk5IZlI5end1RWpiVDVQTDc0Um1yUXZZ?=
- =?utf-8?B?YjVYUlFCV0FLY2h3UXo1N1pjR3Q4RTRha000Tm5pOVFDNk1ZWDhYUGEvUFVY?=
- =?utf-8?B?WjVsN2RnbEd4c0tIdlZDdGdoZDJkTXZwZkJQR01MMTFGZE1jZU5SS1NPVG1l?=
- =?utf-8?Q?t87u75bT1kHZK/oV827aRqQ56i7s37hcNH5GC5NeEr01c?=
-X-MS-Exchange-AntiSpam-MessageData-1: xlv+xNzPczlpbA==
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1RneVdxWTF5anYzUUVNNHhsaVJoUXJsQkFJR0FsdFNoM3pBdkZ3U2NsUUdY?=
+ =?utf-8?B?Q2FFVmwvTGRFeG1oSkgvN2hjb1k2WWpKUWhWbHgzMUJPcVJQb0pMZFBLMDBx?=
+ =?utf-8?B?ZjA0Q09jYWc1YmM5NlZHQitJRjBBWGlkMkRiNnNOdEFpL1FmNlgrQWUzL09q?=
+ =?utf-8?B?eWtTT1MzSEo5bGprU2FBNnhST3o2TzVwc2U0V3dYYW1VWUk5TUh2Q0JMWU9K?=
+ =?utf-8?B?NXVWS3dGc1ZtWlVaUTQ0c3RYWExWWU90U2FxQVJCTXJLZUVNTzdUT2FuWWNW?=
+ =?utf-8?B?WEFUWVVIazZwdWpDK1l4em1aMnZJbm5SR1J5dGxzb3FoQ05pVzU3d0hydm1K?=
+ =?utf-8?B?ajJNblpaZC9TNTF5OElvMGt0VXJEMVg5cjcwTVpjUm1IY2lpeUVWN3lRYkVl?=
+ =?utf-8?B?aFJ3bVd1ZEpWQk9vMFJzOTZwWDZHaDI1aXFVMWZYekw0U2FHNHBycCsvT2hN?=
+ =?utf-8?B?d0lESHlwejUxdjVhakhSYWZ1NUViRHlDTzdjek1vWDZBNjhkd0M4azdlbEpo?=
+ =?utf-8?B?RFhEeGlYWkJnR1YyNFRLbDBqaUNvTjMyWU9KTGIzdkw2RFdKbStVd2ZmeTZR?=
+ =?utf-8?B?aEFha285a1doUERjTC8xWGwxUUdHM1d4WVN6amRxcTMxL2pKZHNTTi9vdzhG?=
+ =?utf-8?B?UjducW54anovOUNxNEJHQmVvOFVoODhOSUNpbVFxaVlIV3NOS1NJSFA1d2Zi?=
+ =?utf-8?B?SHNvTmM4QndUOXQ4cnhGSExiRXk1blFBTk9CMmtqdkhlclUzZ01VTWJpT2xI?=
+ =?utf-8?B?aWg1ZmhKRWFjYy9MbytvZG5ESkxRUHVjdk5BbGQ5VEhuZTlEQklDbFZwTWda?=
+ =?utf-8?B?NHoyK0FSQUJLLytBamRzMEtrMWtuK1BlQVRESjJDZmczcXpITHMvSTFUVTh5?=
+ =?utf-8?B?QjE4L0ltQXRRS2YvczR1U1Vxb2lZU1BrcXhwWWRTRmV2ZXZDc2NxZEVkdjJR?=
+ =?utf-8?B?UkMrb3JNcisremlZLy9ZbmU4THh2S2JsOE41Uys4Zy9Wc1ZzZDZtNDUvSDRT?=
+ =?utf-8?B?L1hkSXhlTTdISWd5WFU1TWRCbERvMWdNaWlCVGVHQlJjYkxldmsrNERTK0sw?=
+ =?utf-8?B?aTBmUE9IRHZnRk9qRUtKOGVRSXBkSHllMFZsWkhidXd3ZmUrZk8rNW9Jd3Iw?=
+ =?utf-8?B?aTBZQWlxdUg3TlBueWxWMmVlQzRFakl1ai9qZVBFZFFTSFJ6bmRaUzJSM0Jj?=
+ =?utf-8?B?Z3FWNE05MkUwTSsvMVdhQUpuWHpzdmJ4aDEveHdpREdFS1JVQStWRjBFUGF5?=
+ =?utf-8?B?RGFJSHp0b25nQ3JEMlI4VFhkTkRLS1JxeE9nVHBtajZGbHpuN2pZbllNbjZI?=
+ =?utf-8?B?Y2tSN3hsWXhSeDNSQnlKMUxNWG1lMUEwMVpoT3NhanZCWE9peU56L09DOE8r?=
+ =?utf-8?B?YjhoMG1venhyZ0M4dDVwSEsvUEhSTmhvYU1FUVpCcTE4Vk5ONGF5cnQ2Q0ox?=
+ =?utf-8?B?TlhQRmJKTVB6OXBObWxVTVI5dm9nMEwzdkpFcVdTRTdJNldIWUFCU05zWFdW?=
+ =?utf-8?B?bXJXYS8rZWNUaGtRZHh3enI2VDBBVGdvOW9TOURZaHpIRVRrLzZmVGFwNUx5?=
+ =?utf-8?B?Y0NBRm5RdTErNStPWEduNE1WU1EvaklWTDBxSzNITHFoenVJVlh2SWk1SkFq?=
+ =?utf-8?B?WmxBWGN6dGlObEUvSWhqLzgvaTNVTEhjMzRtUmxxTVNXRk44WkZMcEhWYVE3?=
+ =?utf-8?B?c2cyMWxaYVE2N0Iwc01wa3REUExTdVBGcFB0d3hmUHByZWczRXV2bTE1OFV1?=
+ =?utf-8?B?THcwQTF5UmFIKytoejZ6UGYxODNyVjVuRVo0RzFzYVdITHRKNnlpNEdLZkdO?=
+ =?utf-8?B?Z3lhY0lRTmlhVHh3cGtvNHZ0bzlXVXR5cmswenhRNGJwVGlJMHVhcEVpM0Ey?=
+ =?utf-8?B?dUFxcW5NajZHZzkzaUg2WWtwbHh1TEwvVStBbkVJUDF2UEVMUC9nSzZ1WWFR?=
+ =?utf-8?B?RFBVYW9Hb01UbE1rWGoycjZYWXd5T3FMeFF0Rlc5b0JzYk8zOXVsVlJwY251?=
+ =?utf-8?B?YUN6Vlh3QTUwTE1XbXFQdkFuZnhSQ1plVjdweWM5WXFha0FsMUNLMzY0MFZy?=
+ =?utf-8?B?cTlhZXZEQ3ZOdlBjMVhWMGtKSXRFdUdiZnNSdUtFaDJYaDd0aDMxVFRLQXEz?=
+ =?utf-8?B?dVdqckd0Z3ZoVE5NNEdBMzduNGRiRzJNeXNGK2tBRXozRy9raS81TCtxbDRn?=
+ =?utf-8?B?ZmdOQzV5OVk1YkRMT1B4akhOUHRYYnlTRU44ZnpKTFF3K2lDVXlDK09uUW5U?=
+ =?utf-8?B?RWYrNEMxZWlBaVh4UWhlT3ZHaVh5cy9iWTRlRnBXYk9nYkgrRUFyMWlKS0Nq?=
+ =?utf-8?B?dzlENEtSQ252VFdsTVVNeHhqRWZvcE5kMkJSTEF3ZlR5N3JycG5uQytMa0p2?=
+ =?utf-8?Q?lmhVrRgcCeNQ93ubjZ6iaRwcVIoK966hr60dH4YLP92N0?=
+X-MS-Exchange-AntiSpam-MessageData-1: lJNNTM8lIWWgAg==
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84dc4292-5883-44ee-5b16-08da3e747fd6
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca4f817c-5ae7-4375-dfb3-08da3f4c4b24
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 17:32:11.0104 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 19:16:53.9462 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +9FRlzRJ2crp9DVWWKM6R4L8wXvXfAHwxl/TyAImIhGXLz+qTuFL0Xk2OCP6WFAfj2T6J3N2x7AVLL/gOTjyOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4733
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL, NICE_REPLY_A,
- SPF_HELO_PASS, SPF_PASS, TXREP,
+X-MS-Exchange-CrossTenant-UserPrincipalName: vaVUHaGXf0893OoBOt2qHubhrHdvhsvhcd3TA1ZxFe27eIstMzsNu4tAF0cglgmcmljO+8uxcsCt0f9AIIV56g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0443
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL, SPF_HELO_PASS,
+ SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -133,17 +130,164 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 25 May 2022 17:32:17 -0000
+X-List-Received-Date: Thu, 26 May 2022 19:17:07 -0000
 
-On 5/25/2022 8:30 AM, Brian Inglis wrote:
-> 
-> 0x80000008:0 EBX:31 brs		AMD Branch Sampling available
-> 0x80000022:0 EAX:0  perfmon_v2	AMD ExtPerfMonAndDbg Performance Monitoring Version 2
-> 0x00000021:0 EBX|EDX|ECX=="IntelTDX    " tdx_guest Intel Trust Domain Extensions- Guest Support
-> ---
->   winsup/cygwin/fhandler_proc.cc | 22 ++++++++++++++++++++--
->   1 file changed, 20 insertions(+), 2 deletions(-)
+The patches in this series other than the second remove code that was used only 
+in the 32-bit build.  The second patch does some code simpification that is 
+possible as a result of the removal.  For example, we rename stat64 to stat. 
+This eliminates the need to export stat as an alias for stat64, and it also 
+eliminates the need to define a prototype of stat64 for use in the build of Cygwin.
 
-Pushed.  Thanks.
+Ken Brown (7):
+   Cygwin: remove some 32-bit-only function definitions
+   Cygwin: simplify some function names
+   Cygwin: remove regparm.h
+   Cygwin: remove some 32-bit only path conversion functions
+   Cygwin: remove some 32-bit only environment code
+   Cygwin: remove 32-bit only clipboard code
+   Cygwin: remove miscellaneous 32-bit code
 
-Ken
+  newlib/libc/include/pwd.h                |   2 +-
+  newlib/libc/include/sys/stat.h           |   2 +-
+  newlib/libc/include/sys/unistd.h         |  16 +-
+  newlib/libc/posix/posix_spawn.c          |  11 -
+  winsup/cygwin/autoload.cc                | 136 ----------
+  winsup/cygwin/child_info.h               |  14 +-
+  winsup/cygwin/cpuid.h                    |  23 --
+  winsup/cygwin/cygerrno.h                 |  11 +-
+  winsup/cygwin/cygheap.cc                 |  42 ++-
+  winsup/cygwin/cygheap.h                  |  18 +-
+  winsup/cygwin/cygheap_malloc.h           |  24 +-
+  winsup/cygwin/cygmalloc.h                |  25 +-
+  winsup/cygwin/cygserver_ipc.h            |   4 +-
+  winsup/cygwin/cygthread.h                |   4 +-
+  winsup/cygwin/cygtls.cc                  |   2 -
+  winsup/cygwin/cygtls.h                   |  26 +-
+  winsup/cygwin/cygwait.h                  |   2 +-
+  winsup/cygwin/dcrt0.cc                   |  41 +--
+  winsup/cygwin/debug.cc                   |   6 +-
+  winsup/cygwin/debug.h                    |  10 +-
+  winsup/cygwin/dlfcn.cc                   |  23 --
+  winsup/cygwin/dll_init.cc                |  36 ---
+  winsup/cygwin/dll_init.h                 |   6 -
+  winsup/cygwin/dtable.h                   |   4 +-
+  winsup/cygwin/environ.cc                 |  31 +--
+  winsup/cygwin/environ.h                  |  19 +-
+  winsup/cygwin/errno.cc                   |   8 +-
+  winsup/cygwin/exceptions.cc              |   4 +-
+  winsup/cygwin/external.cc                |   7 -
+  winsup/cygwin/fcntl.cc                   |  46 +---
+  winsup/cygwin/fhandler.cc                |  18 +-
+  winsup/cygwin/fhandler.h                 | 324 +++++++++++------------
+  winsup/cygwin/fhandler_clipboard.cc      |  25 +-
+  winsup/cygwin/fhandler_console.cc        |  14 +-
+  winsup/cygwin/fhandler_cygdrive.cc       |   2 +-
+  winsup/cygwin/fhandler_dev.cc            |   4 +-
+  winsup/cygwin/fhandler_dev_fd.cc         |   2 +-
+  winsup/cygwin/fhandler_disk_file.cc      |  30 +--
+  winsup/cygwin/fhandler_dsp.cc            |   8 +-
+  winsup/cygwin/fhandler_fifo.cc           |   6 +-
+  winsup/cygwin/fhandler_floppy.cc         |   4 +-
+  winsup/cygwin/fhandler_mqueue.cc         |   4 +-
+  winsup/cygwin/fhandler_netdrive.cc       |   2 +-
+  winsup/cygwin/fhandler_pipe.cc           |   8 +-
+  winsup/cygwin/fhandler_proc.cc           |   4 +-
+  winsup/cygwin/fhandler_process.cc        |   4 +-
+  winsup/cygwin/fhandler_process_fd.cc     |   2 +-
+  winsup/cygwin/fhandler_procnet.cc        |   4 +-
+  winsup/cygwin/fhandler_procsys.cc        |   4 +-
+  winsup/cygwin/fhandler_procsysvipc.cc    |   2 +-
+  winsup/cygwin/fhandler_random.cc         |   2 +-
+  winsup/cygwin/fhandler_raw.cc            |   6 +-
+  winsup/cygwin/fhandler_registry.cc       |   2 +-
+  winsup/cygwin/fhandler_serial.cc         |   4 +-
+  winsup/cygwin/fhandler_signalfd.cc       |   4 +-
+  winsup/cygwin/fhandler_socket.cc         |   4 +-
+  winsup/cygwin/fhandler_socket_inet.cc    |  51 +---
+  winsup/cygwin/fhandler_socket_local.cc   |  22 +-
+  winsup/cygwin/fhandler_socket_unix.cc    |  10 +-
+  winsup/cygwin/fhandler_tape.cc           |   6 +-
+  winsup/cygwin/fhandler_timerfd.cc        |   4 +-
+  winsup/cygwin/fhandler_tty.cc            |  14 +-
+  winsup/cygwin/fhandler_virtual.cc        |   4 +-
+  winsup/cygwin/fhandler_windows.cc        |   2 +-
+  winsup/cygwin/fhandler_zero.cc           |   2 +-
+  winsup/cygwin/fork.cc                    |   4 -
+  winsup/cygwin/gcc_seh.h                  |   2 -
+  winsup/cygwin/glob.cc                    |  38 +--
+  winsup/cygwin/globals.cc                 |   6 -
+  winsup/cygwin/grp.cc                     | 126 +--------
+  winsup/cygwin/heap.cc                    |  52 +---
+  winsup/cygwin/hookapi.cc                 |  25 +-
+  winsup/cygwin/include/a.out.h            |   7 -
+  winsup/cygwin/include/asm/bitsperlong.h  |   4 -
+  winsup/cygwin/include/bits/wordsize.h    |   6 +-
+  winsup/cygwin/include/cygwin/acl.h       |   2 -
+  winsup/cygwin/include/cygwin/config.h    |  11 +-
+  winsup/cygwin/include/cygwin/grp.h       |  17 --
+  winsup/cygwin/include/cygwin/signal.h    |  59 -----
+  winsup/cygwin/include/cygwin/stat.h      |  29 --
+  winsup/cygwin/include/machine/_types.h   |   8 -
+  winsup/cygwin/include/machine/types.h    |  11 -
+  winsup/cygwin/include/sys/clipboard.h    |  23 +-
+  winsup/cygwin/include/sys/cygwin.h       |  32 ---
+  winsup/cygwin/include/sys/dirent.h       |  16 --
+  winsup/cygwin/include/sys/mman.h         |   2 -
+  winsup/cygwin/include/sys/strace.h       |  12 +-
+  winsup/cygwin/init.cc                    |   3 -
+  winsup/cygwin/ipc.cc                     |   2 +-
+  winsup/cygwin/lib/_cygwin_crt0_common.cc |  11 -
+  winsup/cygwin/libc/fts.c                 |   9 -
+  winsup/cygwin/libc/minires.c             |   4 +-
+  winsup/cygwin/libc/rcmd.cc               |  13 +-
+  winsup/cygwin/libc/rexec.cc              |   4 +-
+  winsup/cygwin/libstdcxx_wrapper.cc       |   7 -
+  winsup/cygwin/miscfuncs.cc               | 100 +------
+  winsup/cygwin/miscfuncs.h                |  16 +-
+  winsup/cygwin/mktemp.cc                  |   4 +-
+  winsup/cygwin/mmap.cc                    |  52 +---
+  winsup/cygwin/mmap_alloc.cc              |   4 -
+  winsup/cygwin/mmap_alloc.h               |   4 -
+  winsup/cygwin/mount.h                    |   2 +-
+  winsup/cygwin/net.cc                     |   8 -
+  winsup/cygwin/ntdll.h                    |   2 -
+  winsup/cygwin/ntea.cc                    |   4 +-
+  winsup/cygwin/passwd.cc                  |  32 +--
+  winsup/cygwin/path.cc                    | 182 +------------
+  winsup/cygwin/path.h                     |  20 +-
+  winsup/cygwin/perprocess.h               |   4 -
+  winsup/cygwin/pinfo.cc                   |   2 +-
+  winsup/cygwin/pinfo.h                    |  16 +-
+  winsup/cygwin/posix_ipc.cc               |  10 +-
+  winsup/cygwin/regparm.h                  |  19 --
+  winsup/cygwin/sec_acl.cc                 | 139 ++--------
+  winsup/cygwin/sec_helper.cc              |   2 +-
+  winsup/cygwin/sec_posixacl.cc            |   8 +-
+  winsup/cygwin/security.cc                |   4 +-
+  winsup/cygwin/security.h                 |  43 ++-
+  winsup/cygwin/shm.cc                     |   4 -
+  winsup/cygwin/signal.cc                  |   8 +-
+  winsup/cygwin/sigproc.cc                 |  23 +-
+  winsup/cygwin/sigproc.h                  |  26 +-
+  winsup/cygwin/smallprint.cc              |  32 ---
+  winsup/cygwin/spawn.cc                   |   2 +-
+  winsup/cygwin/strsig.cc                  |  14 +-
+  winsup/cygwin/sync.h                     |  10 +-
+  winsup/cygwin/syscalls.cc                | 316 ++++------------------
+  winsup/cygwin/sysconf.cc                 |  16 --
+  winsup/cygwin/thread.cc                  |   4 -
+  winsup/cygwin/tty.cc                     |   2 +-
+  winsup/cygwin/tty.h                      |   6 +-
+  winsup/cygwin/uinfo.cc                   |  40 ---
+  winsup/cygwin/wincap.h                   |   2 -
+  winsup/cygwin/window.cc                  |   4 +-
+  winsup/cygwin/winf.h                     |  10 +-
+  winsup/cygwin/wininfo.h                  |   4 +-
+  winsup/cygwin/winsup.h                   |  36 +--
+  winsup/testsuite/winsup.api/cygload.cc   |   2 -
+  138 files changed, 607 insertions(+), 2387 deletions(-)
+  delete mode 100644 winsup/cygwin/regparm.h
+
+-- 
+2.36.1
+
