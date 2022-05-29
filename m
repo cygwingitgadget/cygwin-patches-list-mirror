@@ -1,49 +1,44 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-047.btinternet.com (mailomta18-re.btinternet.com
- [213.120.69.111])
- by sourceware.org (Postfix) with ESMTPS id 951CE3856241
- for <cygwin-patches@cygwin.com>; Sun, 29 May 2022 13:39:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 951CE3856241
+Received: from sa-prd-fep-042.btinternet.com (mailomta31-sa.btinternet.com
+ [213.120.69.37])
+ by sourceware.org (Postfix) with ESMTPS id 66D1B3851C13
+ for <cygwin-patches@cygwin.com>; Sun, 29 May 2022 14:03:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 66D1B3851C13
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-047.btinternet.com with ESMTP id
- <20220529133932.ODCQ3222.re-prd-fep-047.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Sun, 29 May 2022 14:39:32 +0100
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+ by sa-prd-fep-042.btinternet.com with ESMTP id
+ <20220529140332.GYLT3231.sa-prd-fep-042.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>;
+ Sun, 29 May 2022 15:03:32 +0100
 Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
  bimi=skipped
-X-SNCR-Rigid: 613A8DE825CB501E
+X-SNCR-Rigid: 6139452E268FCC52
 X-Originating-IP: [86.139.167.41]
 X-OWM-Source-IP: 86.139.167.41 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeggdeihecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffekiefgudejheetudeigfejledtleegleetkeduteeftdfffefhueefgfeutedtnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdehngdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeggdeikecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeejkedtgeekleetueegfeetgeeuveffteffheevgfdtgfdvledtgeegiedtieekffenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.105] (86.139.167.41) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+Received: from localhost.localdomain (86.139.167.41) by
+ sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
  jonturney@btinternet.com)
- id 613A8DE825CB501E for cygwin-patches@cygwin.com;
- Sun, 29 May 2022 14:39:32 +0100
-Message-ID: <ce7de251-14d1-e54d-e2ef-5b67ad256a64@dronecode.org.uk>
-Date: Sun, 29 May 2022 14:39:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 7/7] Cygwin: remove miscellaneous 32-bit code
-Content-Language: en-GB
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <2de3539b-efc2-b6f1-b9e3-8429ecb24c0b@cornell.edu>
+ id 6139452E268FCC52; Sun, 29 May 2022 15:03:32 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <2de3539b-efc2-b6f1-b9e3-8429ecb24c0b@cornell.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1192.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_LINKBAIT, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Set threadnames with SetThreadDescription()
+Date: Sun, 29 May 2022 15:03:15 +0100
+Message-Id: <20220529140315.18306-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1199.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_PASS, SPF_NONE, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,12 +53,98 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 29 May 2022 13:39:35 -0000
+X-List-Received-Date: Sun, 29 May 2022 14:03:35 -0000
 
-On 26/05/2022 20:17, Ken Brown wrote:
->   winsup/cygwin/autoload.cc                | 136 -----------------------
+gdb master recently learnt how to use GetThreadDescription() [1], so set
+threadnames using SetThreadDescription() [available since Windows
+101607] as well.
 
-Looks good.
+This is superior to using a special exception to indicate the thread
+name to the debugger, because the thread name isn't missed if you don't
+have a debugger attached at the time it's set.
 
-I think that perhaps the stdcall decoration number n is unused on 
-x86_64, so can be removed also in a followup?
+It's not clear what the encoding of a thread name string is, we assume
+UTF8 for the moment.
+
+For the moment, continue to use the old method as well, for the benefit
+of older gdb versions etc.
+
+[1] https://sourceware.org/pipermail/gdb-patches/2022-April/187833.html
+---
+ winsup/cygwin/autoload.cc  |  1 +
+ winsup/cygwin/miscfuncs.cc | 33 +++++++++++++++++++++++++++++++--
+ 2 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
+index 1f52411d8..cb564d173 100644
+--- a/winsup/cygwin/autoload.cc
++++ b/winsup/cygwin/autoload.cc
+@@ -592,6 +592,7 @@ LoadDLLfuncEx (PrefetchVirtualMemory, 16, kernel32, 1)
+ LoadDLLfunc (QueryInterruptTime, 4, KernelBase)
+ LoadDLLfunc (QueryInterruptTimePrecise, 4, KernelBase)
+ LoadDLLfunc (QueryUnbiasedInterruptTimePrecise, 4, KernelBase)
++LoadDLLfuncEx (SetThreadDescription, 8, KernelBase, 1)
+ LoadDLLfunc (VirtualAlloc2, 28, KernelBase)
+ 
+ LoadDLLfunc (NtMapViewOfSectionEx, 36, ntdll)
+diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+index 739d9de3b..546df929a 100644
+--- a/winsup/cygwin/miscfuncs.cc
++++ b/winsup/cygwin/miscfuncs.cc
+@@ -18,6 +18,9 @@ details. */
+ #include "tls_pbuf.h"
+ #include "mmap_alloc.h"
+ 
++/* not yet prototyped in w32api */
++extern "C" HRESULT WINAPI SetThreadDescription(HANDLE hThread, PCWSTR lpThreadDescription);
++
+ /* Get handle count of an object. */
+ ULONG
+ get_obj_handle_count (HANDLE h)
+@@ -993,8 +996,8 @@ wmempcpy:								\n\
+ 
+ #define MS_VC_EXCEPTION 0x406D1388
+ 
+-void
+-SetThreadName(DWORD dwThreadID, const char* threadName)
++static void
++SetThreadNameExc(DWORD dwThreadID, const char* threadName)
+ {
+   if (!IsDebuggerPresent ())
+     return;
+@@ -1025,6 +1028,32 @@ SetThreadName(DWORD dwThreadID, const char* threadName)
+   __endtry
+ }
+ 
++void
++SetThreadName(DWORD dwThreadID, const char* threadName)
++{
++  HANDLE hThread = OpenThread (THREAD_SET_LIMITED_INFORMATION, FALSE, dwThreadID);
++  if (hThread)
++    {
++      /* SetThreadDescription only exists in a wide-char version, so we must
++	 convert threadname to wide-char.  The encoding of threadName is
++	 unclear, so use UTF8 until we know better. */
++      int bufsize = MultiByteToWideChar (CP_UTF8, 0, threadName, -1, NULL, 0);
++      WCHAR buf[bufsize];
++      bufsize = MultiByteToWideChar (CP_UTF8, 0, threadName, -1, buf, bufsize);
++      HRESULT hr = SetThreadDescription (hThread, buf);
++      if (hr != S_OK)
++	{
++	  debug_printf ("SetThreadDescription() failed. %08x %08x\n",
++			GetLastError (), hr);
++	}
++      CloseHandle (hThread);
++    }
++
++  /* also use the older, exception-based method of setting threadname for the
++     benefit of things which don't known about GetThreadDescription. */
++  SetThreadNameExc(dwThreadID, threadName);
++}
++
+ #define add_size(p,s) ((p) = ((__typeof__(p))((PBYTE)(p)+(s))))
+ 
+ static WORD num_cpu_per_group = 0;
+-- 
+2.36.1
+
