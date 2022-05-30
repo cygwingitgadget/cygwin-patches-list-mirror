@@ -1,123 +1,122 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on20700.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eab::700])
- by sourceware.org (Postfix) with ESMTPS id CF4C93857BA3
- for <cygwin-patches@cygwin.com>; Sun, 29 May 2022 21:26:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CF4C93857BA3
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20702.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eaa::702])
+ by sourceware.org (Postfix) with ESMTPS id 1090B384F024
+ for <cygwin-patches@cygwin.com>; Mon, 30 May 2022 15:37:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1090B384F024
 Authentication-Results: sourceware.org;
  dmarc=pass (p=none dis=none) header.from=cornell.edu
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HJcQAuLEvffolwCs31PvpDsmllOasaEox6bWM6lj3qXpShU6ILsXmWRh5miYXEHvI9X3ZkCzMadenkieeJK7XNRN0VOW5g1pyWva5claoEg8FEsNZJg9Ds7l0wBH469Jg1e3MN+RUHckY7T9X7lCVGYRiuZgyu85Gi+c3mCKUYP3lyx3W2v6NNTgHMbrFxe+3vIR2MhjXehFP51VT3zDFVAc3vSuV66wEN/QEDPTWxCWhNTUsTVEpUL0QnmEN1UD6xpkOsrQ7FKR5Pg5F/WCIFpux+3ehy0dr/41gYRBgZmXBlBDomifCiypW3r+YRxP7vOypF3eoelT9h5fa6TuhQ==
+ b=FhSyhaYq7vhB7LXD1Uhv/P95xWLBZooO46WVZaTCTIIderW1+52w6zWGJQY0veFTolcVTodP6t8UMOf47xRLr/8qvDXLTq18gtULuX1vutevivMf/khyl8Qu7kcwGlYxCsqjfFfh0hv3FGDULWb+ICmVYUUU0QXGcZr3RGnse5s0SEb4AVT04NJ3i3pRQw6hOkPh/g+LJeR/fH1fti4lT4HR2XXvNwnU/doir2qvf3ZS6oSN8Jyd4xN/pqy3GEJcgPxYhrJ1ur3EXxNBAiOJK0XOB2jd05ondm4bizNeEoOz7bUgLHwH1MtS0Ex2c6G2b5M03oQBH3LOqgFTAXNm3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zQqZfdgL8upuXRncBoQD31ji+7jV43RdSjUht3wMiNo=;
- b=c/BDFyMb2ccThIAxzsUNNqAI5WInsZO8zFwGGCzXKbZJETwsjNEoYv8UEBKKpCkfAXWj7RmCMOQaj+zD4cePNWEAo3qJzfm/xFJhghdchsTMwgtcM9bq0o1Q3wwJh8ySuV1m6gvDammiyc5+ByOYsEbCf5/Qvpk4ef3JHEFx9StpXkWNjeA5Dvv8lNeXhuP4ct+qXONd3LbjJmfCFSAaPoe/kqqzcu95k5gNq7HqDJLMAGPtsECKvOU7Xja63PCYjks8Ehq1+4sQY72fz0DkPjg5rr+MPICVFp+1p7ZGPziFmOvgLzVwsjzsuwT10kD6sG5GaDnWIaRvgISFkTdZ4g==
+ bh=NSU3J54r7dgAdI/2PQHvUM1mPddvIXRwT7fnScAQq7g=;
+ b=Tqrrtub/gghkYJu/99hPcUc57EnbGGVVv1o9Utt8L6HEeXQpC/cM4b+wLKfVLdKUtRtzPRBjuEgXhtKzC8u6ZCKrhuMUl8+7+ot8y4twCNSqGjseNP1rWmOrPuDvg+baeaVfgRYsCBaLZ372Ky8iJQeK0/dyzxzTyYq3TajrLtCfallZSdY7XP9xyQL9Sko0ZqHP8TfVRx4npsaiYdumOlNMlxyQmnmojMtYEtAfQNO/4eGDOs9heUqTKXXJm3mR+kg2oFx7zvxaD6QAtnkySmd3sJAG6vmDPR5JuxDm7SfYrh9qw+NBVX6EeZ+F1HIyMPOSN4yFnbeUqvl6jOCDMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zQqZfdgL8upuXRncBoQD31ji+7jV43RdSjUht3wMiNo=;
- b=MDM2HJq3D4oZca4YCelWDqlvaszm921DI6SobeOLYbP2HHmwvrG3Wc5Vo98Q7saA3CqwCjNDWTy8s17AKCLRyoIg2Q47kCUTPXHHnllv4ITWIpTKGCyvOORa4yrx3ItEYkEV2tweUT1RhCqEW94bSrcxZiu8LIOxHBOm/9Hho0g=
+ bh=NSU3J54r7dgAdI/2PQHvUM1mPddvIXRwT7fnScAQq7g=;
+ b=bDO1MQPU0q0W9FCBFaXNk3ED4WqkUe5Z2896/RDGsw59J1e7avha0YbGTQGVcAWvDoXNG6yuZby5V3VKBW+14K4LI+nEVU+NdJMCe0ygInLxcXMy3FVRhx6g8Jkx1VT66XrFnSbBNLdP6SOEiZfNEY1BVg79tL3IjlM7cPhyUlo=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=cornell.edu;
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
- by DM6PR04MB5001.namprd04.prod.outlook.com (2603:10b6:5:fe::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Sun, 29 May
- 2022 21:26:22 +0000
+ by BYAPR04MB5383.namprd04.prod.outlook.com (2603:10b6:a03:cc::24)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 15:37:46 +0000
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::e48c:b440:3098:a050]) by BN7PR04MB4388.namprd04.prod.outlook.com
- ([fe80::e48c:b440:3098:a050%6]) with mapi id 15.20.5293.018; Sun, 29 May 2022
- 21:26:22 +0000
-Message-ID: <c5bec956-6e71-083e-f3bf-f6b52726b218@cornell.edu>
-Date: Sun, 29 May 2022 17:26:19 -0400
+ ([fe80::e48c:b440:3098:a050%6]) with mapi id 15.20.5293.019; Mon, 30 May 2022
+ 15:37:46 +0000
+Message-ID: <b0d41109-f306-f896-03bc-468e87982450@cornell.edu>
+Date: Mon, 30 May 2022 11:37:44 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 7/7] Cygwin: remove miscellaneous 32-bit code
+Subject: Re: [PATCH] Cygwin: Set threadnames with SetThreadDescription()
 Content-Language: en-US
 To: cygwin-patches@cygwin.com
-References: <2de3539b-efc2-b6f1-b9e3-8429ecb24c0b@cornell.edu>
- <ce7de251-14d1-e54d-e2ef-5b67ad256a64@dronecode.org.uk>
+References: <20220529140315.18306-1-jon.turney@dronecode.org.uk>
 From: Ken Brown <kbrown@cornell.edu>
-In-Reply-To: <ce7de251-14d1-e54d-e2ef-5b67ad256a64@dronecode.org.uk>
+In-Reply-To: <20220529140315.18306-1-jon.turney@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN2PR20CA0062.namprd20.prod.outlook.com
- (2603:10b6:208:235::31) To BN7PR04MB4388.namprd04.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR13CA0032.namprd13.prod.outlook.com
+ (2603:10b6:208:160::45) To BN7PR04MB4388.namprd04.prod.outlook.com
  (2603:10b6:406:f8::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c5eeb389-6e70-4359-cfab-08da41b9e04f
-X-MS-TrafficTypeDiagnostic: DM6PR04MB5001:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR04MB50019BF6649674C1D18AAA00D8DA9@DM6PR04MB5001.namprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: a65bea6d-5425-4a8e-095d-08da42525880
+X-MS-TrafficTypeDiagnostic: BYAPR04MB5383:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR04MB5383AD6A05CFB69962C73957D8DD9@BYAPR04MB5383.namprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vurAGzUWjTuS14Vpv2Ep6EcSwxXV+0UsP1qiUcWfDJPtSyyVEY3a2yGNJDKu2LIOVQsYyeGwmIjqmYE/7PI7agGWf3qc1Hz9izMVXbcy6uUmzpxQXYBO4H2vd53/WQRNR+WCfLwwN3n1V71Ki8HPSwRd4qjr1dzLIUXReaQDyReWqQymD0UysSZUeYQ9+qCzUSIesRE1DgVfGwKB8jL7Jpv9tcAwGiRJRPE3y8PalC06+qTqa7bmUxcMYssIMrf6kADss4Lthi3vYJyuay6aDYbn2VxA+DyDFQ/D2n98S+qlFiBm1jhnU5YQhNc2GYfaTwfAzfoGOo0he0g/+V0td4OzeERW2+CUT3vOnbACZOzNaIdn0zA8wVTCFIRXQjFIm2u/9BHx92si31sUQ5QoqbA/rZ7mSZzDWuDnXUQX0beohOkqQu//k+rx3IqKjZKGU+uNaM7vz1x+FpvX9zNXDfRIPcUMiXaczKCh+rVywIWvdFs8iohsAQynTs3lrKS0qOVGJZwnkUojjbCHxwP1xGz6P8zwFdf5aoNB71aNDTLXeE6LxHVtBSzot5skixQN2i1yiGBJC7ZkJD+K3Dityjko1M7RZpSAPRyoy1FJRJUf/Xl6VMozHbfgmbkzMk4d1kizSQBhJvXynPFyvtkrCh/zfzOOYnST17dXeSipeDZNOIbVHMLwVNLxA2A17gMuD/GEwZeOvA+UmuZhA0pyG6tO0Iwr1MJYClkV6BN7D5I=
+X-Microsoft-Antispam-Message-Info: FwlSYL+bKIhl0CmRir0garrJKRj0YWrdp8U5/fMLmm66Eyr97OVxRTmPW6MmmemFQvbW3EVEm5LZcB1gC0lg/JeGqhuLm43thpUnloZb66dQpdiGtoqPT8VvSXafSKX+lzQEXKFMwLySlivZ657Wtmb3sed760kP7BK6/nq5P6ApI8Lc/Fo6kSPmi+7FcetJw3YDmBvDDdV+d3KJQL26ZMGAIH/ol2eDPnVoQHnDPNIJuTp4fHmnpSsBhTQDve1Lq/eaxqkWs0uw0nbE+ATGvZ/2wUMNjhVb2A8ZlzJ6ktmNClhLrKaD614K1j2PTBg0cYkj5gv+nezvzYWpWipp+dlH9uhCaI7k7S+qN3olj4Xzscctu6+dgudCI8zHwRCggTcnaiqb4hkGHSXvPQtc4GllTlylSJ6E9knB2/GPkgpphyL8ybNazJ9Qylc/Gnu9rR9wUCYMdFYDvhSo1ZXgzspnOwjpNUptIx+lkT/U18RQ5uJRPF8WWbq9nAfP2AiA2B7Id8kTUq4M4DkSr7s1VcKq33Zb/qFzZp2+0rwpMglotfO6vIx82GVoCq5Ya3Ykzob1cbnLT1jzobsR/d8EufH5ys9+Utg+syp5qdu3VADj1CmkVolaVJNafRJYBbEL5cUdLWjcywmja99XhH9I6JYg4yK+PGtOKxWA/fF354fJyqt6G1eH3amscGqhcqZIS2AJSM3v5ODO3Ky1Zl+3HMFCJiVVYMGdIdAJJ4VRMZ0=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(2616005)(8936002)(66476007)(66556008)(6916009)(2906002)(66946007)(8676002)(31696002)(316002)(786003)(4744005)(6506007)(86362001)(6512007)(36756003)(31686004)(75432002)(53546011)(5660300002)(6486002)(508600001)(6666004)(186003)(38100700002)(43740500002)(45980500001);
+ SFS:(13230001)(4636009)(366004)(6506007)(6512007)(6486002)(53546011)(2906002)(83380400001)(186003)(2616005)(66556008)(66946007)(8936002)(75432002)(66476007)(8676002)(5660300002)(316002)(38100700002)(36756003)(31686004)(786003)(6916009)(508600001)(86362001)(31696002)(45980500001)(43740500002);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U3ZUMUlDZWZTYUlJUFNUWXVzYW1CM2htMTNyKzEwUzdBRnQwRjhXZWRDaU9w?=
- =?utf-8?B?T0x0Nm14UE96aWJ5cGRBMEF6UmRtRkFncFB0SnlOSkhHTy9xS1JxeEJkdkM2?=
- =?utf-8?B?eEVXcFJvWTZJRnBld1diay9odVk1ZW5kS1JnK0VMaGVxYXpHY0ZWcklDUWV2?=
- =?utf-8?B?bjNpZzFjN0xpSU9yeXl5S2MxV1RqeTdOS2g3NXhFQlJ1S0F3Q0NIdmdNOGdj?=
- =?utf-8?B?b3pTcnRNVTZhZVp1VnY1NWszcWJkbFBXNTIzR1V5QWFRSHlPYVBPNExxcDhD?=
- =?utf-8?B?d0xSM3VOYk1Ga3Q0N2xicG9mSlFhM2Jod3dxNFNtbmY2a0cwODZMcTRmMzhB?=
- =?utf-8?B?bVM2VE9oQXpsZkw1aVhYUFVySTJvQjRXNmNNa2RiYmxnOHBKR25PcEVENEpy?=
- =?utf-8?B?alZLNzkrYTFRQmVjR3RWMm5jZ2I0ejg1Q0c0Mit4cy9CRFhCMjBNVjVPWklW?=
- =?utf-8?B?MlJQSXNPc1RLeEt1cVhkZFpGRUdDQTdDaThBamJmejAxZEVsQUk4dU9KdVEr?=
- =?utf-8?B?Zm5KdldnSURHT2x0Qkl1Skl2bXkyU3ErMEJsb1BNMFBHekw2RUlrdnhuRzly?=
- =?utf-8?B?MlV6WDYrM0pRYk43dVlRUElvMEpQR1lMUENrcVFuNHBwejMwVUl2elhUaS9O?=
- =?utf-8?B?aHlreG1OLzNFSElMbnI5QXlOdnBqS0NqR1FsSlhFSDBzeHpXZ09ZZFY1c0pS?=
- =?utf-8?B?SUo0V0xybnhlcm1SY2dUY2Nab3F4blFuTFdrWUJkWWxBWENEaTF2WkJNYnpT?=
- =?utf-8?B?ekdFNVY3VVpaVFVISTduMGJYOTZSczdVdDVCblU3NjZpTUVsaUlHOStiaHIw?=
- =?utf-8?B?ZzJJWllmQjIra0FZMENUTDZIVmt2YnkrN2dkV3FIQnhiMjlVblRWL0NYc3FB?=
- =?utf-8?B?bStjSDd5R3drOEp5eW1VOW1QN3dJWXFUZEt4cDBpT0tJUmJyWnJpYUZpQ2dH?=
- =?utf-8?B?S0kxZHRQNjlMZ0hQdTY3bWpJazJJS0ozSDVPTk40enVKZ1lYUm9CVFQrTG5S?=
- =?utf-8?B?UDJqTmFJRDFOcDlmMU9SQmZ4SU5EWE93L3B5RHN0NzdQd1NvcVlxd1FOUjZ0?=
- =?utf-8?B?RHV4OVFwdXJ3bktuSysvTWdqWUVEcnN1RXlpdjF1UGh6WnJTS05STnRjOU5i?=
- =?utf-8?B?ZWxRRVVpMkRUbGloWTZnd1I3c2Z4RC96L0MyMVdoemNOa1JnUUtJaVpKSXkw?=
- =?utf-8?B?Nnp1dG5xckhVTjltcS9Hd2MvNFBXOXVlMWJkellPV1B6SDUrRFJ0anh1a29t?=
- =?utf-8?B?cEJXcGJsWWJEa2s0K1JqNzdhM1VWRjFBemZVb2R3VmxWblh6ZkJsbTNOYjlS?=
- =?utf-8?B?eUM1VmNHN21HMjdVVXJmWThMTXd4bVVhUC92bkMzR0U3WG9qaEgzZHV2SUxr?=
- =?utf-8?B?eWU0SEFicXE1TmM4UkE3ckpaTGNJL3RBZGFZTGZyYi9yVmo5eGJOQjZ0VXhs?=
- =?utf-8?B?d0J4M1EyY09aZ3dVSnhLUnRUT3BzMmlFcnkvMnlsS0pER0tROHZMOU9CUXNh?=
- =?utf-8?B?Q2xrem80eHpaRG8wMjJoTFp2eFFCNG1kbUpHSDFMdUE2TUtDQ3loTnNpSS8w?=
- =?utf-8?B?ZHYyNlhJYjNnWXpzTUJLVHpHT3FDTzhidERkVmR6ZHhsank5UUpnZlo2RElR?=
- =?utf-8?B?ekRDVFIwdnh2NVlNNFl4U0RHd0I4WEFCbDAyRk5QK0pXM2k3STBYV1I5RnBH?=
- =?utf-8?B?REJ3UXh4QWJ5MFpMRXB5THliMjFaSHc2dWlxSkdUcmNlakNiUEFVa2t6eXg4?=
- =?utf-8?B?d1hha29lakVWd2l3N3pQNlY2WkN2U3dFQzdJcGV6Qk9qUi9zQ09UZENtNmJh?=
- =?utf-8?B?VjBCSkpjTW90bGpWK1JMZ0QzeFpVMWdHWFdGd0FpV1RFSFpOblRLd3kxMzBJ?=
- =?utf-8?B?elpwNlpCTE03YjR5aUtwb2NManB2YVduVUI2MlA2bUxSNGpYc0hLYnIwOWxV?=
- =?utf-8?B?N0NRNVFvTFYrNWczTUNRZy9zeDdPVDZNaG4rTEVmSTZrNklwUVlrbjArUTlv?=
- =?utf-8?B?S3lXVUdzcEt5UVZtbEFVcDkwRnhsZFBtdVVnU1JKSVU0ZzlZMDZVUnBWeEQ1?=
- =?utf-8?B?aXVrdXZJV2JwUnZ5S1hmWkttcVpPQllmYUVtUS9CNmZRM0Y2OEF3WGR3SVpM?=
- =?utf-8?B?SkdxUHB2Y2ZhTERFVCtkV2YyWmMrZkg2c3VUVDRVc0FHNE1qelc1SXBraTJz?=
- =?utf-8?B?UjZoQ0RpZVRNMGJhQVc5VzcxM01VQVNkMjVRWllzRWpGaHMwQjd2SWxuS3ZH?=
- =?utf-8?B?bUkvdTBnUmxibjJSQnVRTHEyQXpVWHIzQVdBenBCY3RpQXVnMEVKaWxPb0Jr?=
- =?utf-8?B?aVp2VmUrRUl6TmxkL2gydXFOTHVQQzFHQllyT3ZvR0RqZFplM2t2Q0xNOWxt?=
- =?utf-8?Q?/YeonZF7U20UEMtJwfHz7TfOsguwo1oXiWYflKtyr+Gel?=
-X-MS-Exchange-AntiSpam-MessageData-1: S8NXJa4psBSpxQ==
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eHhqeUJIQ0o2RFcwZlJtUy9NVDdUTnJjNmptNDZPRkVDRVpLOGtrbkJBOFIy?=
+ =?utf-8?B?T0xhbithUHZzNVBadEg1bmF1ZTNXS2Ztb2FYNnJXQkorOU5xeE85MGFDd1Y1?=
+ =?utf-8?B?Y0l0UUpSc3h5MUJhdE9tSVIveUdGeEdhWjVWQWRUZExXUEltcld6WVRYdTFR?=
+ =?utf-8?B?SkthYWxCVUlPQ1h3TG4yVjVueTVFWlFEYmtqRXppdklSQWRyd2J3Q3E4MTcx?=
+ =?utf-8?B?S1kzZlZ5QnhCdXBZRVdPb3NPOXh6WDFQbFhVZ2h4SGQwKzk4RHNDOWhUdHhv?=
+ =?utf-8?B?eXZwemJLOUZBcGZrMVlXOTNGdnNNdFhtRVFQb1BMU1JVN2ZXV1ZjdHdNeVMx?=
+ =?utf-8?B?b0ExSDhCTzJoeHZpVlg4bHFTQ0ZyT0JVTEZnNUgzcERzZjQwOUIwdDFVM3Mv?=
+ =?utf-8?B?RGUrekFhOTVzdCtVTWhtUFhpS3g3dkxPUzJUNTczREdVY1E4ZkJZbEorUGl4?=
+ =?utf-8?B?QkZIN0VKeEFvbWM0Y0RBbWZmeFNiTk1velcwMjF5Mld6bytuQnN5TlRlK2g1?=
+ =?utf-8?B?d0NjN2FZNk9OemZxWWpsMVIyYWh1TzhkNDBQMHlhQkcvZmlsTHpyUTR1b0w3?=
+ =?utf-8?B?TE5NTEtINTh4Z1hnSHVkSkZ2Q3FwR1lvWndpdVVKVkZQUWxxRy8xRVpUV0o5?=
+ =?utf-8?B?VWZLL0M4aCszVnNPRHRvRW5IWGJENGVhR0s1YW9ZZitta2RZNW1PTkVpZHNj?=
+ =?utf-8?B?akNBKzY4eHlIdXBnSC9hZUtmWk1HRFM5aERjMG12VDJQSEFWZis4VnE1aTJV?=
+ =?utf-8?B?dzdjQ0VGQlNEQTA5SnRkVzVDRHVFcFJ1OFNqVW1lVFREZ2JTSmMrcmVVUE5U?=
+ =?utf-8?B?Q01Wa0Q4aHUvOGZIUHZCMEJja1FWNE9NQzhjbCt0ZFBxaW5IeE1iaW55anBi?=
+ =?utf-8?B?Q2o2b2JDdjlDNUdvRFlwWmViZHRaOG9vMm1ndXZiUE4zdFFYNS9XNktwQUpI?=
+ =?utf-8?B?R1Rxc01WL29UNkhBSm90RzVrOEVtOHd2R0J3Y1hkK3ZnZDdBUFdUSnB3NFhH?=
+ =?utf-8?B?L2VUNURPMUtOSSt0aHFaYnlVeVZXTkVIdDczUlNiQnJ4eFpNbmFZOExsSDBK?=
+ =?utf-8?B?WkM5dlNzTFY5Ulh6bFByNjM4eUxkdEZaVmdZeWs2NW42ZnZONmxReGkwQWg4?=
+ =?utf-8?B?OVlCVm12dmlweWkrMDJkTVJsb25jNENjOUpMUlgzT1NSVmhoZU93NjhtZ1dp?=
+ =?utf-8?B?RHFWc3MwMEtEWjVFUEV4QVpDTlpQYUcxdzJEeEw4NzdMYzJQMm92b2pCMkx5?=
+ =?utf-8?B?NjJiMlZXZHN0dTdXRExJVUpNaFQ3UHQ4NXp2NytISU9Ma1kwWm03NWFtSGFT?=
+ =?utf-8?B?UmI4a0IyUlU0SjliWE82VEUyMVFTUUdBRUFuVk5IK1NNcTVrcWlzQmJONVhq?=
+ =?utf-8?B?Q3oyRFVSYzd5MVRHOHRQR1lkaG5DU2U4a1I1YzRPcDZZSW5KM1BEaHNRcGNJ?=
+ =?utf-8?B?VVZFRXNBcWFBeEJqTlM1MEhSN1R2NTlGNVNGdVFNYmhHNm85VVI5Zlg1alla?=
+ =?utf-8?B?T1FBcWp4M2ZSTUlSY3hHNzRqaCs2bndteGlkOThwdFVLZmRQbmY5MlB1QjJs?=
+ =?utf-8?B?RmFFUk9wcS9PRVRmYnB0TFAzRkgxR0dFcGZpUE01aVhJWkt5YnljczZjd1Js?=
+ =?utf-8?B?bUJzdmRwNjdacExDTWgvSUxjUXFKd0hIM25XeTErR2dEc29hSmJVbVVJQUlq?=
+ =?utf-8?B?M3RXVFNnRDZwdGdIUnhxRnI0UkdoUDlpOWVCelB3bjhsTGVmYlJxOVgya201?=
+ =?utf-8?B?aFJZZ0J6Um9oMENUcnN4bWlqZVI3TFBjbW9zeThENXFVeEh6MmdPY1N2a0hF?=
+ =?utf-8?B?M0J3Q01sRDJ3RDM1K3NYTVAxZzVqVjZOY2ppRENVc2k3VVBNRHFMNmh4aFVL?=
+ =?utf-8?B?YURONDhRTlJibSt0NUxlWjRFRjFZMHFyMWR1Y0ZCSWpDMlRldFRyekVXNW0r?=
+ =?utf-8?B?dThNUWRjR3FPTVdjNkRVbDAxOEVnS2FrUURWdTNIdCtDYWFmNWVacGZubEk2?=
+ =?utf-8?B?YlN1QkVhUmpOYldsTVMyajdabDloZlFNZjlJQUdtUUNmVGQvdDZhaDVGaHF4?=
+ =?utf-8?B?SnFYcXZXL3ZrSnNNMDRwWTcwQkswOEhPMUY0ZjZNYmxpL1BpQmEzRkpnTk1p?=
+ =?utf-8?B?NENuVGFvZjVQclU2b25jbldUMXVGNEJGS0pFWmE0MFhiUTJnZ0xMa2g5bjhX?=
+ =?utf-8?B?TDM0Z1UvenUvZktHeWNnYjlFdjdKZUYrdjcwdmFrWTFkTDVhZGxrbHlXZXdv?=
+ =?utf-8?B?UHR1Y1F4ZkVnNE5aRE9OcFZGcGZmQUpzSkZYWGV5ZlZXenowMHVjd0o3VE1p?=
+ =?utf-8?B?akM0WXp3cTZYckNpSjFWY2tFc013MVZxNU95YUJkSXNNQXdTWnQ5RTJBRjFK?=
+ =?utf-8?Q?yHk381ls+gbWhrM/Mh2ws+XkhziwjkzRnP+K64URFjDgj?=
+X-MS-Exchange-AntiSpam-MessageData-1: Aa1yI9J85k70Lw==
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5eeb389-6e70-4359-cfab-08da41b9e04f
+X-MS-Exchange-CrossTenant-Network-Message-Id: a65bea6d-5425-4a8e-095d-08da42525880
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2022 21:26:21.6615 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 15:37:46.8071 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vivRT05o1YQywdKysD9FBzZCnqVldnNxOwmhfEoWfMknX1WtIpnE9vlQiheQzsnvTIccMPmagyaoGTw8mpzULA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5001
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00, BODY_8BITS,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL,
- NICE_REPLY_A, SPF_HELO_PASS, SPF_PASS, TXREP,
+X-MS-Exchange-CrossTenant-UserPrincipalName: m8Xh/nD3FArl8xqMho7jUpUS6jkL8LvOnBtWOKq8ahH0ud/ww71VUvILPygj4XKr1RnxgTY/hslT5umYYxXSBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5383
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL, NICE_REPLY_A,
+ SPF_HELO_PASS, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -133,20 +132,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 29 May 2022 21:26:28 -0000
+X-List-Received-Date: Mon, 30 May 2022 15:37:51 -0000
 
-On 5/29/2022 9:39 AM, Jon Turney wrote:
-> On 26/05/2022 20:17, Ken Brown wrote:
->>   winsup/cygwin/autoload.cc                | 136 -----------------------
+On 5/29/2022 10:03 AM, Jon Turney wrote:
+> gdb master recently learnt how to use GetThreadDescription() [1], so set
+> threadnames using SetThreadDescription() [available since Windows
+> 101607] as well.
 > 
-> Looks good.
+> This is superior to using a special exception to indicate the thread
+> name to the debugger, because the thread name isn't missed if you don't
+> have a debugger attached at the time it's set.
 > 
-> I think that perhaps the stdcall decoration number n is unused on x86_64, so can 
-> be removed also in a followup?
+> It's not clear what the encoding of a thread name string is, we assume
+> UTF8 for the moment.
+> 
+> For the moment, continue to use the old method as well, for the benefit
+> of older gdb versions etc.
 
-Thanks, I missed that.
+LGTM, except for a few missing spaces (see below), although maybe you did that 
+deliberately since the existing code was already like that.
 
-Also, I guess most or all of the uses of __stdcall and __cdecl can be removed 
-from the code.
+> --- a/winsup/cygwin/miscfuncs.cc
+> +++ b/winsup/cygwin/miscfuncs.cc
+> @@ -18,6 +18,9 @@ details. */
+>   #include "tls_pbuf.h"
+>   #include "mmap_alloc.h"
+>   
+> +/* not yet prototyped in w32api */
+> +extern "C" HRESULT WINAPI SetThreadDescription(HANDLE hThread, PCWSTR lpThreadDescription);
+                                                  ^
+> @@ -993,8 +996,8 @@ wmempcpy:								\n\
+>   
+>   #define MS_VC_EXCEPTION 0x406D1388
+>   
+> -void
+> -SetThreadName(DWORD dwThreadID, const char* threadName)
+                ^
+> +static void
+> +SetThreadNameExc(DWORD dwThreadID, const char* threadName)
+                   ^
+> @@ -1025,6 +1028,32 @@ SetThreadName(DWORD dwThreadID, const char* threadName)
+>     __endtry
+>   }
+>   
+> +void
+> +SetThreadName(DWORD dwThreadID, const char* threadName)
+                ^
+[...]
+> +  SetThreadNameExc(dwThreadID, threadName);
+                     ^
 
 Ken
