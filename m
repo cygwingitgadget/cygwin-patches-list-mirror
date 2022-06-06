@@ -1,44 +1,48 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
- [210.131.2.91])
- by sourceware.org (Postfix) with ESMTPS id 4882E385828F
- for <cygwin-patches@cygwin.com>; Mon,  6 Jun 2022 00:02:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 4882E385828F
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from HP-Z230 (ak044095.dynamic.ppp.asahi-net.or.jp [119.150.44.95])
- (authenticated)
- by conssluserg-06.nifty.com with ESMTP id 256028F8007451
- for <cygwin-patches@cygwin.com>; Mon, 6 Jun 2022 09:02:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 256028F8007451
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1654473728;
- bh=7GgrrpNABiTUGNQH9fw34r5KzbPoIDQfsMo+SORoTmM=;
- h=Date:From:To:Subject:In-Reply-To:References:From;
- b=1epcvjBwYg/9GsCqwauKmdvqg5r5D2QM/S+qnD1YkMSNa+0Os12aWaYamnCNq8q0r
- cFW/P1iwjE8fLfpuVDPQarEgy3vTJeuf3XplWHwRELX6gQURQmIOclrVU0oZLyaL14
- Z3ZH3OwJsSPf4miSJn8FWJ3nLbprAWetM0hQXb0OAcLz39oWPj8nLy/1LA+fFFPfZL
- +HzYrSz1K23/zEPjRFYZFuspGDXhGBVIXhXgOrwtk99enF9YjxK1A1CRwdrOBYSooo
- 8yp+C0L4LPoAuDhOYSKUMHtbu0vXuxvkTX736Cww0UkFReM2MkenuTpY/ZroHVEKrP
- hr8j1vqa8y9/Q==
-X-Nifty-SrcIP: [119.150.44.95]
-Date: Mon, 6 Jun 2022 09:02:08 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-043.btinternet.com (mailomta4-sa.btinternet.com
+ [213.120.69.10])
+ by sourceware.org (Postfix) with ESMTPS id 3E3D63858C54
+ for <cygwin-patches@cygwin.com>; Mon,  6 Jun 2022 10:41:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3E3D63858C54
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+ by sa-prd-fep-043.btinternet.com with ESMTP id
+ <20220606104140.LGWH3164.sa-prd-fep-043.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+ Mon, 6 Jun 2022 11:41:40 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613006A928F6C90E
+X-Originating-IP: [86.139.167.41]
+X-OWM-Source-IP: 86.139.167.41 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrtddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeehudeuveeujeeujeegueefhedttdekvedtudeileefteetfeefjeejudekfefggfenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdehngdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepkhgsrhhofihnsegtohhrnhgvlhhlrdgvughu
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.105] (86.139.167.41) by
+ sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613006A928F6C90E; Mon, 6 Jun 2022 11:41:39 +0100
+Message-ID: <618fb9d8-52bd-a14d-4419-46408d4d3bd6@dronecode.org.uk>
+Date: Mon, 6 Jun 2022 11:41:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Subject: Re: [PATCH] Cygwin: remove most occurrences of __stdcall, WINAPI,
  and, __cdecl
-Message-Id: <20220606090208.04c671c35d529bef308c9425@nifty.ne.jp>
-In-Reply-To: <c9c7e7fe-adc6-c845-2720-06bc40591255@dronecode.org.uk>
+Content-Language: en-GB
+To: Ken Brown <kbrown@cornell.edu>, Cygwin Patches <cygwin-patches@cygwin.com>
 References: <2d54f846-365f-848f-4fdb-1c22d4c1bfa0@cornell.edu>
- <c9c7e7fe-adc6-c845-2720-06bc40591255@dronecode.org.uk>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <2d54f846-365f-848f-4fdb-1c22d4c1bfa0@cornell.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+X-Spam-Status: No, score=-1194.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_PASS, SPF_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -54,22 +58,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 06 Jun 2022 00:02:46 -0000
+X-List-Received-Date: Mon, 06 Jun 2022 10:41:43 -0000
 
-On Sun, 5 Jun 2022 21:24:15 +0100
-Jon Turney wrote:
-> On 03/06/2022 15:00, Ken Brown wrote:
-> > remove most occurrences of __stdcall, WINAPI, and __cdecl
-> > 
-> > These have no effect on x86_64.  Retain only a few occurrences of
-> > __cdecl in files imported from other sources.
-> 
-> While you are correct that it has no effect on x86_64, I'd incline 
-> towards retaining WINAPI on Windows API functions, because it's part of 
-> the function signature.  But other people might have other opinions on 
-> that...
+On 03/06/2022 15:00, Ken Brown wrote:
+> --- a/winsup/utils/regtool.cc
+> +++ b/winsup/utils/regtool.cc
+> @@ -590,7 +590,7 @@ cmd_add ()
+>   }
+>   
+>   extern "C" {
+> -  LONG WINAPI (*regDeleteKeyEx)(HKEY, LPCWSTR, REGSAM, DWORD);
+> +  LONG (*regDeleteKeyEx)(HKEY, LPCWSTR, REGSAM, DWORD);
+>   }
+>   
+>   int
+> @@ -603,7 +603,7 @@ cmd_remove ()
+>       {
+>         HMODULE mod = LoadLibrary ("advapi32.dll");
+>         if (mod)
+> -	regDeleteKeyEx = (LONG WINAPI (*)(HKEY, LPCWSTR, REGSAM, DWORD)) GetProcAddress (mod, "RegDeleteKeyExW");
+> +	regDeleteKeyEx = (LONG (*)(HKEY, LPCWSTR, REGSAM, DWORD)) GetProcAddress (mod, "RegDeleteKeyExW");
+>       }
+>     if (regDeleteKeyEx)
+>       rv = (*regDeleteKeyEx) (key, value, wow64, 0);
 
-I rather incline to Jon's opinion.
+MSDN says RegDeleteKeyExW() is since Windows 2000, so I think this can 
+all be dropped and just link with it directly instead?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+There may be other instances of that simplification which can happen in 
+utils/ ?
+
+Later: This all seems strangely familiar...  Oh, it appears I wrote this 
+patch, and then forgot to apply it :(
+
+https://cygwin.com/pipermail/cygwin-patches/2022q1/011794.html
