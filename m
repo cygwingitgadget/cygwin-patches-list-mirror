@@ -1,34 +1,34 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
- [210.131.2.81])
- by sourceware.org (Postfix) with ESMTPS id 09A6B38387D5
- for <cygwin-patches@cygwin.com>; Mon,  6 Jun 2022 23:22:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 09A6B38387D5
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
+ [210.131.2.82])
+ by sourceware.org (Postfix) with ESMTPS id 03AB23814FCD
+ for <cygwin-patches@cygwin.com>; Tue,  7 Jun 2022 16:49:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 03AB23814FCD
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from HP-Z230 (ak044095.dynamic.ppp.asahi-net.or.jp [119.150.44.95])
  (authenticated)
- by conssluserg-02.nifty.com with ESMTP id 256NLeLH018369
- for <cygwin-patches@cygwin.com>; Tue, 7 Jun 2022 08:21:40 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 256NLeLH018369
+ by conssluserg-03.nifty.com with ESMTP id 257GnGX8008983
+ for <cygwin-patches@cygwin.com>; Wed, 8 Jun 2022 01:49:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 257GnGX8008983
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1654557700;
- bh=AdNOm+2B7Cl2vYMbu8tlAoMAYtNCe+oWP2sw8k3DiKw=;
+ s=dec2015msa; t=1654620556;
+ bh=kjLCCNstT25ytV8bUf7ebTkesiqMqaeXbl58G26HOyI=;
  h=Date:From:To:Subject:In-Reply-To:References:From;
- b=gN9zFjQucp5g7DK+TIm9i0MRbC0xQbD9oUrnwxPfCTy38T7SsJzVMzK7ykDC0nWlH
- GrgS94iGbzmWUhBWZOaPAVGmNJGlE803qqyQKnNaP8zt4odlxViEXPuCc7Rsy0Phnf
- uunOy656WUOdShI0ooqDjb5ZVNIX/c7n+GGLy9AaJwqU1MuwWlnCMZ9Q8d7i0TD8n4
- 3msRaADEZS3/aFFa+jg6qv4r3AIlMaNSh/kuA6tMPkjuuTkzveNCEPebWea87+6Dsh
- PxumwbWJ3CWXfiyO9WxekdBB/LNjb3k5xAsY8QfYIeREqXmC/vJP17hIv4I5xf08hE
- 5zw39luwrNtng==
+ b=fzDfczs+otB8UulUrO0ncmrY+mBe8G5wLjCt4pOTAMGBaAfR/ReNrmGHKU2rYm4Yx
+ LiHEK+Lbw3Zu2R5Ov35yzeQ3l21Si64gMUFq804OocUFliVifOBwssYHMH6+dwmvGQ
+ Oq2fCh7v8n6QjUgTGuteZRxsnTjgwCNhPhx/tnrP+SCoYmDJC5CMXM17Q8iirEk0zM
+ eJ8SSPt671T+A5fp92Pe4OQmYPzkB0pTOkpk6BiSjm5f6R//2AH92pgDbd6UoIE1bX
+ JmPffNhTeFnNqVDbQ1rt7WRSxj2+32rDggNlF1z1pnC+kndU58Vz9LDb8NeMZ3vvZk
+ PrhmXwF3XdTeQ==
 X-Nifty-SrcIP: [119.150.44.95]
-Date: Tue, 7 Jun 2022 08:21:40 +0900
+Date: Wed, 8 Jun 2022 01:49:16 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: remove most occurrences of __stdcall, WINAPI,
  and, __cdecl
-Message-Id: <20220607082140.65c6d89ead72e9806ea24ff8@nifty.ne.jp>
+Message-Id: <20220608014916.df0275787115d55138757a3c@nifty.ne.jp>
 In-Reply-To: <b5f56fb5-48eb-8596-5855-35a35dcb8a55@cornell.edu>
 References: <2d54f846-365f-848f-4fdb-1c22d4c1bfa0@cornell.edu>
  <c9c7e7fe-adc6-c845-2720-06bc40591255@dronecode.org.uk>
@@ -37,9 +37,9 @@ X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -55,7 +55,7 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 06 Jun 2022 23:22:06 -0000
+X-List-Received-Date: Tue, 07 Jun 2022 16:49:53 -0000
 
 On Mon, 6 Jun 2022 12:24:15 -0400
 Ken Brown wrote:
@@ -74,7 +74,42 @@ Ken Brown wrote:
 > in Windows API functions are mostly used for thread functions passed to 
 > CreateThread, and the latter expects a WINAPI function.
 
-That sounds good to me.
+_dll_crt0() is declared as
+extern void __stdcall _dll_crt0 ()
+  __declspec (dllimport) __attribute__ ((noreturn));
+in winsup/cygwin/lib/cygwin_crt0.c, however, this patch
+removes __stdcall from winsup.h and dcrt0.cc as follows.
+
+diff --git b/winsup/cygwin/dcrt0.cc a/winsup/cygwin/dcrt0.cc
+index 0d6c1c3b9..71215ace6 100644
+--- b/winsup/cygwin/dcrt0.cc
++++ a/winsup/cygwin/dcrt0.cc
+@@ -1013,7 +1013,7 @@ __cygwin_exit_return:			\n\
+ ");
+ }
+ 
+-extern "C" void __stdcall
++extern "C" void
+ _dll_crt0 ()
+ {
+ #ifdef __x86_64__
+diff --git b/winsup/cygwin/winsup.h a/winsup/cygwin/winsup.h
+index 9d204434b..8774f3bec 100644
+--- b/winsup/cygwin/winsup.h
++++ a/winsup/cygwin/winsup.h
+@@ -147,7 +147,7 @@ extern int cygserver_running;
+ class per_process;
+ /* cygwin .dll initialization */
+ void dll_crt0 (per_process *) __asm__ (_SYMSTR (dll_crt0__FP11per_process));
+-extern "C" void __stdcall _dll_crt0 ();
++extern "C" void _dll_crt0 ();
+ void dll_crt0_1 (void *);
+ void dll_dllcrt0_1 (void *);
+ 
+To be consistent these, shouldn't _dll_crt0() retain __stdcall?
+
+Changing cygwin_crt0.c is a bit weird because it looks as if
+it might affect binary compatibility, even if it really doesn't.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
