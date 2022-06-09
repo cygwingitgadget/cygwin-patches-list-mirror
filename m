@@ -1,27 +1,51 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 9B5E0385AE44
- for <cygwin-patches@cygwin.com>; Thu,  9 Jun 2022 04:47:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9B5E0385AE44
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 7A55C385AE78
+ for <cygwin-patches@cygwin.com>; Thu,  9 Jun 2022 15:23:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7A55C385AE78
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 2594lnNQ011458;
- Wed, 8 Jun 2022 21:47:49 -0700 (PDT) (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpd5sewcd; Wed Jun  8 21:47:42 2022
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: Have gmondump support ssp-generated gmon.out
-Date: Wed,  8 Jun 2022 21:47:31 -0700
-Message-Id: <20220609044731.30872-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.36.1
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mg6i8-1nXPQf3BR0-00hcgf; Thu, 09 Jun 2022 17:23:11 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 13731A807E3; Thu,  9 Jun 2022 17:23:11 +0200 (CEST)
+Date: Thu, 9 Jun 2022 17:23:11 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Ken Brown <kbrown@cornell.edu>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 7/7] Cygwin: remove miscellaneous 32-bit code
+Message-ID: <YqIQX4HJ8lXveQdx@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Ken Brown <kbrown@cornell.edu>, cygwin-patches@cygwin.com
+References: <2de3539b-efc2-b6f1-b9e3-8429ecb24c0b@cornell.edu>
+ <ce7de251-14d1-e54d-e2ef-5b67ad256a64@dronecode.org.uk>
+ <c5bec956-6e71-083e-f3bf-f6b52726b218@cornell.edu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE, TXREP,
+In-Reply-To: <c5bec956-6e71-083e-f3bf-f6b52726b218@cornell.edu>
+X-Provags-ID: V03:K1:S+J0AtHkzSvTK9Z3+EP7pqjWx9fJBu2b84snztRYx/GAnODTNw8
+ QAXm7bE8ry+wBlx06eCdcsZ9qq4IorCAX+zCf+D65m2US6grdKXUaK2JAxkPSi08Hp/Lw8W
+ L5ZZ+7BjiCnj7upJxm+Evgdm1vx793Xas/nwTzSzxSND9/xKqEleymvWJveAXxgfEYkhLLl
+ mTKTEQpjJRKu6Db4ZCetA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZbXcpnjFhAc=:KWGPAIZV4oTrOpczNrUnS4
+ bYQgehOSGKL5tRrfHPRIzbZ2W+5uOT866NokfkkvjGavo20edjvMA5+sLN05cYUtCdYUvac8P
+ ckUT5dodd8S5fzR2geMsGhZqLM4yX9XYojtR5zGtoabH+1s2qF3t+ge8E1I3/kJliBotsW0QX
+ aBATO18iDg/zR7yicleZ/ELbMKaNeeXWK4QyrPvC6BZgGvtRPXQ2nWg8ryY+CqZHjUgGJu6p8
+ 70tqDMv1mxuqNLhDHtznM9ml7zA5TypajCqqbbtS3v/5AVJH5TArC8bAnq1iQHr8mY921t7ay
+ eJcvaKuxsB5cv9uWxQOj3+lgQ6P1WbrulXISIr9+5ZbcWQgWkdXZ0hMQUS7iMKSvODUG7eiJT
+ hKjz+9ohQA14Aw5yrn1SCay9YEN0YN0GEA/hxpFVvjEDI2534bVZhuzE18er4YK4apzb3RrO9
+ Ednc+uUd5yXVCi3+vXxe6mt8lPH7Cr6G+kSmMbK8VOL+QHaMqoSGYxpcHHmuBLUk13iFCT194
+ IyRJshBYnDbq51wgiuZenIuxkcGpBT7DMYbqcusgyinB1JhJg1ROvGgt+0wW+GKZ0GUw0TYJQ
+ t53XH0xKTajg97PLWPtZ1wFn8qJ7h3AVcGY7HcrO48BYk6KaXyz3ZQswFvMb3xw2KjrRXBHbZ
+ GPTuqxDPIC8q/IlU003d1FnLJAkVEDnW/K+2wJAxLK99Y4PzXVX4ggNQh3onXVSHftHlRT7pU
+ Ahr6TPhq8frnAemhAQKTknPTauHZnJNKLj791E9fnvu2rHkW1WuhH6lxVa0=
+X-Spam-Status: No, score=-93.6 required=5.0 tests=BAYES_00, BODY_8BITS,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -37,119 +61,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 09 Jun 2022 04:47:55 -0000
+X-List-Received-Date: Thu, 09 Jun 2022 15:23:18 -0000
 
-Cygwin tool ssp generates gmon.out files with different address
-resolution than other tools do. Two address bytes per bucket rather than
-the usual four address bytes. Gprof can deal with the difference but
-gmondump can't because the latter's gmon.out header validation fails.
+On May 29 17:26, Ken Brown wrote:
+> On 5/29/2022 9:39 AM, Jon Turney wrote:
+> > On 26/05/2022 20:17, Ken Brown wrote:
+> > >   winsup/cygwin/autoload.cc                | 136 -----------------------
+> > 
+> > Looks good.
+> > 
+> > I think that perhaps the stdcall decoration number n is unused on
+> > x86_64, so can be removed also in a followup?
+> 
+> Thanks, I missed that.
+> 
+> Also, I guess most or all of the uses of __stdcall and __cdecl can be
+> removed from the code.
 
-- Remove the offending portion of the header validation code.
-- Make sure all code can handle differing address resolutions.
-- Display address resolution in verbose data dumps.
-- Change "rawarc" to "struct rawarc" in certain sizeof expressions to
-  avoid buffer overrun faults.
-- When "-v" (verbose) is specified, note when there is missing bucket
-  data or rawarc data.
+Yes, that's right, given there's only one calling convention on 64 bit.
 
----
- winsup/utils/gmondump.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+I have a minor objection in terms of this patch.
 
-diff --git a/winsup/utils/gmondump.c b/winsup/utils/gmondump.c
-index 2d29e826d..16b99594a 100644
---- a/winsup/utils/gmondump.c
-+++ b/winsup/utils/gmondump.c
-@@ -103,6 +103,7 @@ error (int geterrno, const char *fmt, ...)
- void
- gmondump1 (char *filename)
- {
-+  int        addrincr;
-   ushort    *bucket = NULL;
-   int        fd;
-   struct gmonhdr hdr;
-@@ -134,16 +135,15 @@ gmondump1 (char *filename)
-   if (hdr.lpc >= hdr.hpc)
-     goto notgmon;
-   numbuckets = (hdr.ncnt - sizeof (hdr)) / sizeof (short);
--  if (numbuckets != (hdr.hpc - hdr.lpc) / 4)
--    goto notgmon;
-+  addrincr = (hdr.hpc - hdr.lpc) / numbuckets;
-   numrawarcs = 0;
-   if (stat.st_size != hdr.ncnt)
-     {
-       numrawarcs = stat.st_size - hdr.ncnt;
--      if (numrawarcs !=
--          (int) sizeof (rawarc) * (numrawarcs / (int) sizeof (rawarc)))
-+      if (numrawarcs != (int) sizeof (struct rawarc) *
-+                        (numrawarcs / (int) sizeof (struct rawarc)))
-         goto notgmon;
--      numrawarcs /= (int) sizeof (rawarc);
-+      numrawarcs /= (int) sizeof (struct rawarc);
-     }
- 
-   /* Looks good, so read and display the profiling info. */
-@@ -162,7 +162,8 @@ gmondump1 (char *filename)
- 
-   note ("file %s, gmon version 0x%x, sample rate %d\n",
-         filename, hdr.version, hdr.profrate);
--  note ("  address range %p..%p\n", hdr.lpc, hdr.hpc);
-+  note ("  address range %p..%p, address increment %d/bucket\n",
-+        hdr.lpc, hdr.hpc, addrincr);
-   note ("  numbuckets %d, hitbuckets %d, hitcount %d, numrawarcs %d\n",
-         numbuckets, hitbuckets, hitcount, numrawarcs);
- 
-@@ -171,27 +172,31 @@ gmondump1 (char *filename)
-     {
-       if (hitbuckets)
-         note ("  bucket data follows...\n");
-+      else
-+        note ("  no bucket data present\n");
-       char *addr = (char *) hdr.lpc;
--      int   incr = (hdr.hpc - hdr.lpc) / numbuckets;
--      for (res = 0; res < numbuckets; ++bucket, ++res, addr += incr)
-+      for (res = 0; res < numbuckets; ++bucket, ++res, addr += addrincr)
-         if (*bucket)
-           note ("    address %p, hitcount %d\n", addr, *bucket);
-       bucket -= numbuckets;
- 
-       if (numrawarcs)
-         {
--          rawarc = (struct rawarc *) calloc (numrawarcs, sizeof (rawarc));
--          res = read (fd, rawarc, numrawarcs * (int) sizeof (rawarc));
--          if (res != numrawarcs * (int) sizeof (rawarc))
-+          rawarc = (struct rawarc *) calloc (numrawarcs,
-+                                             sizeof (struct rawarc));
-+          res = read (fd, rawarc, numrawarcs * (int) sizeof (struct rawarc));
-+          if (res != numrawarcs * (int) sizeof (struct rawarc))
-             error (0, "unable to read rawarc data");
-           note ("  rawarc data follows...\n");
-           for (res = 0; res < numrawarcs; ++rawarc, ++res)
-             note ("    from %p, self %p, count %d\n",
-                   rawarc->raw_frompc, rawarc->raw_selfpc, rawarc->raw_count);
-+          rawarc -= numrawarcs;
-         }
-+      else
-+        note ("  no rawarc data present\n");
-     }
- 
--  note ("\n");
-   if (0)
-     {
- notgmon:
-@@ -261,7 +266,11 @@ main(int argc, char **argv)
-     usage1 (ofile);
- 
-   for (int i = optind; i < argc; i++)
--    gmondump1 (argv[i]);
-+    {
-+      gmondump1 (argv[i]);
-+      if ((i + 1) < argc)
-+        note ("\n");
-+    }
- 
-   return 0;
- }
--- 
-2.36.1
+When implementing support for AMD64, there were basically 2 problems to
+solve. One of them was to support 64 bit systems, the other one was to
+support AMD64.  At that time, only IA-64 and AMD64 64 bit systems
+existed, and since we never considered IA-64 to run Cygwin on, we
+subsumed all 64 bit code paths under the __x86_64__ macro.
 
+But should we *ever* support ARM64, as unlikely as it is, we have to
+make sure to find all the places where the code is specificially AMD64.
+That goes, for instance, for all places calling assembler code, or
+for exception handling accessing CPU registers, etc.
+
+I'm open to discussion, but I think the code being CPU-specific
+should still be enclosed into #ifdef __x86_64__ brackets, with an
+#else #error alternative.
+
+Right?  Wrong?  Useless complication?
+
+
+Thanks,
+Corinna
