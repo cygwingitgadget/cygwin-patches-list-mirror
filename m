@@ -1,45 +1,46 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta002.cacentral1.a.cloudfilter.net
- (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
- by sourceware.org (Postfix) with ESMTPS id 609A8385C306
- for <cygwin-patches@cygwin.com>; Thu, 30 Jun 2022 19:03:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 609A8385C306
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
+ [210.131.2.81])
+ by sourceware.org (Postfix) with ESMTPS id 3047C3858010
+ for <cygwin-patches@cygwin.com>; Thu, 30 Jun 2022 19:05:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3047C3858010
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
- by cmsmtp with ESMTP
- id 6yNto0DlzSp396zS4oTPoD; Thu, 30 Jun 2022 19:03:44 +0000
-Received: from [10.0.0.5] ([184.64.124.72]) by cmsmtp with ESMTP
- id 6zS3oP5AjC3uh6zS4oznRW; Thu, 30 Jun 2022 19:03:44 +0000
-X-Authority-Analysis: v=2.4 cv=a6MjSGeF c=1 sm=1 tr=0 ts=62bdf390
- a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
- a=IkcTkHD0fZMA:10 a=94nOnFI1EgyDtX4ev68A:9 a=QEXdDO2ut3YA:10
-Message-ID: <f766aa3a-6bca-5d6b-50c9-316e87816ea1@SystematicSw.ab.ca>
-Date: Thu, 30 Jun 2022 13:03:43 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Reply-To: cygwin-patches@cygwin.com
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 (ak044095.dynamic.ppp.asahi-net.or.jp [119.150.44.95])
+ (authenticated)
+ by conssluserg-02.nifty.com with ESMTP id 25UJ4aji027400;
+ Fri, 1 Jul 2022 04:04:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25UJ4aji027400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1656615877;
+ bh=5usJsjXtw0Q4BUZ/nUr6Bwf2gFhLdidUq2rLMATwdvI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VNQbh7aw9TdnSkVxlNReuCLt6VXg/6CLp09ybn0ZQw4KySwtheQUXY9Fod8aja2+Y
+ 5/wNd/t1erT0s+/LYqj5ESz9YqtV9yqUs68b+A6iZkCeD/NfbFzMgi/xmKaoSGpxnv
+ b4dMWvepOup0Dq+2kWE+QrJe2CXVKDVHbpY4WDaTUY53z7/ljfAEG7sMbnAlGm1mt+
+ XS8IarFe6d4uzUpZ0eZEkPJeHfYEAkqKZ4LupbvfJ/J9E0L9bSPyjxENFmrwaUQdLA
+ y/tz2gE8BIrB84vRWsMzHnf0nXwGLoo0vYrA8oI5k9Gg5zHKk6Hc3pufMTzCA35u9s
+ b4Izu0euVP72g==
+X-Nifty-SrcIP: [119.150.44.95]
+Date: Fri, 1 Jul 2022 04:04:36 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
 Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: spawn: Treat empty path as the
  current directory.
-Content-Language: en-CA
-To: cygwin-patches@cygwin.com
+Message-Id: <20220701040436.d1e0f8151fffe03a0823b99d@nifty.ne.jp>
+In-Reply-To: <DM8PR09MB7095DDCF46700AB235A53717A5BA9@DM8PR09MB7095.namprd09.prod.outlook.com>
 References: <20220627124427.184-1-takashi.yano@nifty.ne.jp>
  <c4a8d150-4d16-2af5-a7ac-26e42f9befb8@cornell.edu>
  <DM8PR09MB7095DDCF46700AB235A53717A5BA9@DM8PR09MB7095.namprd09.prod.outlook.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <DM8PR09MB7095DDCF46700AB235A53717A5BA9@DM8PR09MB7095.namprd09.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfMJ6glI8T6/t1ne4yXFMfrBG4T4rX3SaMEqCo52wBa2nDQFyB6H29m2xSFYLZCAyOl0sX5hLdyUQN8vrjkgGFJJp81cN0oOUs/RBoIBpCDqs8NcvHUEe
- tm9u/SscYl8pp0ibOKkJqCp6gX/JnTqlNuzpFdReM5z5IKbknRLlDqScZwIAsElqjR3U8QFs3mj9xn6bUZV+lf6G1R7FysjZ15E=
-X-Spam-Status: No, score=-1164.2 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
+ T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,42 +55,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 30 Jun 2022 19:03:48 -0000
+X-List-Received-Date: Thu, 30 Jun 2022 19:05:24 -0000
 
-
-On 2022-06-30 12:35, Lavrentiev, Anton (NIH/NLM/NCBI) [C] via 
-Cygwin-patches wrote:
->> However, use of this feature is deprecated, and POSIX notes that a
->> conforming application shall use an explicit pathname (e.g., .)  to
->> specify the current working directory.
-
+On Thu, 30 Jun 2022 18:35:04 +0000
+"Lavrentiev, Anton \(NIH/NLM/NCBI\) \[C\] wrote:
+> >                However, use of this feature is deprecated, and POSIX
+> >                notes that a conforming application shall use an explicit
+> >                pathname (e.g., .)  to specify the current working
+> >                directory.
+> 
 > Since "SHALL" does not mean "MUST", I think this patch is correct.
 
-It appears you may be confusing POSIX's (1.5 Terminology)
-*shall* (mandatory) and *should* (recommended):
+In the POSIX standard, "SHALL" is used almost interchangeably
+with "MUST" as other standard documents do.
 
-"*SHALL*
-
-For an implementation that conforms to POSIX.1-2017, describes a feature 
-or behavior that is mandatory. An application can rely on the existence 
-of the feature or behavior.
-
-For an application or user, describes a behavior that is mandatory.
-
-*SHOULD*
-
-For an implementation that conforms to POSIX.1-2017, describes a feature 
-or behavior that is recommended but not mandatory. An application should 
-not rely on the existence of the feature or behavior. An application 
-that relies on such a feature or behavior cannot be assured to be 
-portable across conforming implementations.
-
-For an application, describes a feature or behavior that is recommended 
-programming practice for optimum portability."
+https://pubs.opengroup.org/onlinepubs/9699919799/xrat/V4_xbd_chap01.html#tag_21_01_09
 
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
+Takashi Yano <takashi.yano@nifty.ne.jp>
