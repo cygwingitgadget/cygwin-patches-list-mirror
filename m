@@ -1,118 +1,112 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on2127.outbound.protection.outlook.com [40.107.220.127])
- by sourceware.org (Postfix) with ESMTPS id 8149B386F0D2
- for <cygwin-patches@cygwin.com>; Thu, 30 Jun 2022 16:04:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8149B386F0D2
-Authentication-Results: sourceware.org;
- dmarc=pass (p=none dis=none) header.from=cornell.edu
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
+Return-Path: <lavr@ncbi.nlm.nih.gov>
+Received: from nihcesxwayst06.hub.nih.gov (nihcesxwayst06.hub.nih.gov
+ [165.112.13.54])
+ by sourceware.org (Postfix) with ESMTPS id BC786385042A
+ for <cygwin-patches@cygwin.com>; Thu, 30 Jun 2022 18:35:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BC786385042A
+X-SBRS-Extended: Low
+X-IronPortListener: ces-out
+X-IronPort-AV: E=Sophos;i="5.92,235,1650945600"; d="scan'208";a="250634907"
+Received: from unknown (HELO mail.nih.gov) ([156.40.79.162])
+ by nihcesxwayst06.hub.nih.gov with ESMTP/TLS/AES256-GCM-SHA384;
+ 30 Jun 2022 14:35:06 -0400
+Received: from nihexb2.nih.gov (156.40.79.162) by nihexb2.nih.gov
+ (156.40.79.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Thu, 30 Jun
+ 2022 14:35:06 -0400
+Received: from GCC02-DM3-obe.outbound.protection.outlook.com (156.40.79.133)
+ by nihexb2.nih.gov (156.40.79.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9
+ via Frontend Transport; Thu, 30 Jun 2022 14:35:06 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a7T/zzWQzJmTL+AZH32pu8t9phrcogO2uCDrPno4Ient8TVEGtib5WcfE3wshEFnk3RmcaF9VESTm18LvhDmlkU/6LaBq7km4a/+G8//ourgS8ePEplprADy3cV1NMWTLEjXh+jIvOWFnwFvFpVTae3jBRFkYAOTLxXYacQfksT3vOA/rgFkDLrt408xIcHQ1MAF05t4Xp8chEJzBbxlGH5LMuDV4JMrhCdfFCXT7qGhdHGsrYQzqR3KhgRjkmC5buQimeMXKlKTWVS2dChfwMezu2TgMbkAVYLUIX9UWRHc0c0ng31k3IWU/tN5vu1tQwBm2wRTRLf/Ldqe9gdUYQ==
+ b=isX/yTdzfTQI2F6kVQ69ehsu4/cIKdoEBi2O27AGZeJ1w/0M66Xbo3dFVrxx7KsCIuHPjDd2hwsiC8v4XhflC70Q80a6gvjtIEv6Y/EUunvfFD6MNkiDnUPUgLdYOIbEslyA0ybbVKg/P/Qjy5wHbSKz+fP3HkHKo1cED98C7ZBBiy1wUywpsvBtLce2pbQnbHnZWNInzySsEbMtatvN5aRjYewr1XSDmA05aDJ3ql3KUcxDCZPedysMXjAiJmwCj2fvQUn9OwnUbPLQ7FAv/8jyzdBJoHiJrDPDJuoMx24D13VR7KwiSAVm123gRYQHHceu4WfBz7xguQpeXNX7OA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RwpFVoL/GwzTOXOGtk6L5hvvERQwkfEcFZIkI3/82wg=;
- b=I2n9z51dsKGlPuAbE9h2TSi5rN32r8rvRROf6x/O4Cgn8Ukd6RqxbgV89hevt8500FkpjZmGUU8pXlQlM2uvf/0znKYhSiBVFzcoiKHujdiHHW9rY6GYTbJpS0UppLlYqcVCmbLss6MQJDN3zZ6WKz+tELu8iq+UE1eymo+w25qcHMTFpXL0J8Sjo6sIelim1FdZvo2OrzOvezfF1n/dsSG3HzrKqEjMQxzGfiaYCj2H9UAg+S3rJQkQOhV9ZZ6eYue7LGqVcnVMMLhtfhGZ4M2yCrEHsPFv2TCRdFaF5VhFVRepOquBITtlQNGGv4MxYeF5QTpIxX8WS259UuY0xg==
+ bh=J5NJCkNa4YnJU713B7Gl1F0uuOcHWz2f0oX9GiQ2yQY=;
+ b=UIRalMruiYMGEINr1m0+RhIMupCTFvaGjr/EMZcxh0605ssC/Lk45b5fcPpq2TRP1xacheW/dnsOzWnOgRGsvTQQLq+yy1LUtjCXZsnWfv2nGf9pcipj+dbdEHI0hHH9wAO4llZ0NoMjgn/9yuJPqPaKfHLOJJeYpTc0jy7tnUkC+NNo+Q3GERTuqAV1rtf8TUYzcTeHsVfvnE7Lk0MqpWL51MaMUm2XfSd7RVWi5kQ9bBcuQ5FJvZSwl2cDQepX53wLBQatT2QIe4xp8M1VqpLYS2vwz3hE/NePr/EwNiAx1sHjdMiLeXq9DYlVZ81aCefMwiEQCgR50MC9ARbrLQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RwpFVoL/GwzTOXOGtk6L5hvvERQwkfEcFZIkI3/82wg=;
- b=bhXS45B4AyZe/On+GTNTqFTDmBMRuyTDORwyf3oLUAxFgutlZ8NV4N0swYFL/yomb47fsopFf7wXEwT84fzAMkDKVMTzpPSTY6g25nJm5qaObdDHRG7E2Z/hMWCNLOHvPtZmNc5OS6QxWCX0XhBfsgg4QkG+l5G1dbbdGvSZbh4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornell.edu;
-Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
- by DM6PR04MB5978.namprd04.prod.outlook.com (2603:10b6:5:125::23) with
+ smtp.mailfrom=ncbi.nlm.nih.gov; dmarc=pass action=none
+ header.from=ncbi.nlm.nih.gov; dkim=pass header.d=ncbi.nlm.nih.gov; arc=none
+Received: from DM8PR09MB7095.namprd09.prod.outlook.com (2603:10b6:5:2e3::14)
+ by SJ0PR09MB7342.namprd09.prod.outlook.com (2603:10b6:a03:267::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Thu, 30 Jun
- 2022 16:04:19 +0000
-Received: from BN7PR04MB4388.namprd04.prod.outlook.com
- ([fe80::901f:a758:30f5:309d]) by BN7PR04MB4388.namprd04.prod.outlook.com
- ([fe80::901f:a758:30f5:309d%2]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
- 16:04:19 +0000
-Message-ID: <b42b2a3b-d2b5-56ff-eb96-81cc7ff06881@cornell.edu>
-Date: Thu, 30 Jun 2022 12:04:16 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] Cygwin: poll: Fix a bug on inquiring same fd with
- different events.
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 30 Jun
+ 2022 18:35:04 +0000
+Received: from DM8PR09MB7095.namprd09.prod.outlook.com
+ ([fe80::282a:38f8:c3b5:8f5b]) by DM8PR09MB7095.namprd09.prod.outlook.com
+ ([fe80::282a:38f8:c3b5:8f5b%7]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
+ 18:35:04 +0000
+From: "Lavrentiev, Anton (NIH/NLM/NCBI) [C]" <lavr@ncbi.nlm.nih.gov>
+To: Ken Brown <kbrown@cornell.edu>, "cygwin-patches@cygwin.com"
+ <cygwin-patches@cygwin.com>
+Subject: RE: [EXTERNAL] Re: [PATCH] Cygwin: spawn: Treat empty path as the
+ current directory.
+Thread-Topic: [EXTERNAL] Re: [PATCH] Cygwin: spawn: Treat empty path as the
+ current directory.
+Thread-Index: AQHYjJiLtjjVkMJcoUSGbHwt63TYgK1oRrWg
+Date: Thu, 30 Jun 2022 18:35:04 +0000
+Message-ID: <DM8PR09MB7095DDCF46700AB235A53717A5BA9@DM8PR09MB7095.namprd09.prod.outlook.com>
+References: <20220627124427.184-1-takashi.yano@nifty.ne.jp>
+ <c4a8d150-4d16-2af5-a7ac-26e42f9befb8@cornell.edu>
+In-Reply-To: <c4a8d150-4d16-2af5-a7ac-26e42f9befb8@cornell.edu>
+Accept-Language: en-US
 Content-Language: en-US
-To: cygwin-patches@cygwin.com
-References: <20220627015032.278-1-takashi.yano@nifty.ne.jp>
-From: Ken Brown <kbrown@cornell.edu>
-In-Reply-To: <20220627015032.278-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR14CA0013.namprd14.prod.outlook.com
- (2603:10b6:208:23e::18) To BN7PR04MB4388.namprd04.prod.outlook.com
- (2603:10b6:406:f8::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 95abebde-e63e-45b5-e848-08da5ab2305b
-X-MS-TrafficTypeDiagnostic: DM6PR04MB5978:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TAKMsIK9tIxAMN5E4zUBowUfINk6DUxc8z5F4Vey37Gicn2OWbfvNhKtroLeQeXd8TPJBOrEFHRgwkcdYzCbKsGDB9dqj5RpjYLwiM0V4LPycR5nXXmj1hIIdeZnSew8G5ypnyS/tjN8+zjl4wrBp9F8zv1fhEV09gtExx4T9CjDE19i+xWLsP5Dt/E4l6YGqOUPLm/AgCKroY3wRkbJeJc5rp5yfg9pKPEH/2pb2oKxx2Qplq74FXiWisZQmK/Qj+9BmlJDxQ8FPdEI8KMIQFmLzgvZsj9CvRqZUtrQVJdFc10e5i+c5ZKVLig7K1uuTOzS7rKGV8p4JYLbRppsMYKvFvp/3DIJn4wdwkjJPnvdEkXf+NU6mbGDAmVCKFcu9IcE4qH2yAIlrTUpg2JN2fpztpFvjX4h25JTBcBiClkcemmKD5QWqqH/k12wfhDsF8FNfBc5ABTj9G+3I7tsu1mQItx/bS39prgIGLPyOJ4FIrVWAKBXEdX3KLRBr4SbsTKArTo4TO11W05fPO0FBcLDE8G7VCBrbxX/O7Ai4BioWzWxJB8NoQRs32oa9G78PfYYKFQvN0qTIHMpu4SS+7GnwAbpxafD7/2eVPSPh4dIwJLyrOTX+fWkQP55atS/IQh+8qO4SBV6GRtTkXdH97eyF6WHj7NU5TNpV2t9ZSCFgttHPhoPnBsZuCVDsPhPbBpRjLro6hO00f7kH8ev59Dn7mYHXMzsSNOo9BzC53lLD4EdPxJ1V/4hEsKdfapER/CVvdC8TLzVz+8SzvGoHMzHgOqdSa4x9ghDtfjLauNkafN7FYPDoI22bbWa1ilkRssOgv9LbE0Ip6xeHTzwQfElU8HVezPCqrRDYppKvzSGxhDACaMGvVfgnqeH1VqD
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(8676002)(75432002)(6486002)(8936002)(38100700002)(478600001)(31696002)(4744005)(186003)(2906002)(53546011)(966005)(786003)(31686004)(316002)(41320700001)(86362001)(6512007)(5660300002)(66476007)(2616005)(6916009)(36756003)(66556008)(6506007)(41300700001)(6666004)(66946007)(45980500001)(43740500002);
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a89212ee-ef30-4788-001b-08da5ac73fdb
+x-ms-traffictypediagnostic: SJ0PR09MB7342:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3gCWk0zNw9oyUvkuQxb7g1fq0yIq56gtM9ktnFz4c3Rlk1YFUuaa27dIKBjFtRAss1CKk6C+W+KQ7Sc9h5ywvK/krtnSPGSa0EwjrjuFBaEVcir8UKgeCXqx/vqXKMQLivRzCo28dNFiB4rM9BLd1OymtJCrUySjAagoClK6jVAg+o4mW+huqJiXJqNwT//U/hhmW7Q0PrfN/jiAdQiAQbix069iuLCpKNmm29elNHoVFtr5IJJcQf7e24A56kvU11kNHpdWxK5hSIeCP+M1h+q0402KDmsNH0OeIRREgZVEX99BBjFpLG4uol3GQT4csmqL6KJJsjCPKt4vt8mr3NptXlK/MsX0mF1tSTcKkaakSda/deWzb3TyT6hBtCscgJp5tq+yeE/s1rQmfvRrQ8+x7cqOf3gjeQHseaGNPcAPnWMOCoom7UaUsAWy0fDSuqbRKXdyIl6XFtG2tbEZhe5+55qGpyhujxRDOLFxszG94CY75y7YYmx2BFLAGD0NyBazbZYbxLILupM8VmB0KLakmP4ZG6kdfeKxkDRa4ZLPripqgHR1+u3+n8tzTwRaLQhEXY+lipxIclzQnXxTnNr9dvJMzZB+aLmdeCbFLETHGS2Q5pC3ANQPGuLJi0qKL0gQW7WiK0S0aXKyNJTKcOvec5H/a/FBewC/ygx7nrgPnRxaUg73qXkr+b++SuYH0K1qVKXbaNaMyRCAKchdOU3QW7xqOIYgLPspqy0xERNMZ/PR3RW1mT83q0Ofj3/458rCzV2yIaQ2pgzyNzYBm8D3DTU3fT2aTGRhOMKhqXkAELOqHCs0jkf7HZgahkU/
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DM8PR09MB7095.namprd09.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230016)(4636009)(366004)(66446008)(38070700005)(66476007)(558084003)(8676002)(66556008)(498600001)(64756008)(76116006)(66946007)(2906002)(8936002)(5660300002)(33656002)(52536014)(71200400001)(296002)(7696005)(110136005)(122000001)(55016003)(6506007)(38100700002)(86362001)(186003)(9686003)(26005);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVYrQlJrRlcxUm11b29XQlFlekE0eUFyajA5QWhzVEZwY25ZQWdTeHBwRXlU?=
- =?utf-8?B?S0phK1p0RHU3OFFLR01OVE04N29lSWF1RzZkMzZLSUxPdk03dTNFaEJCS3Ju?=
- =?utf-8?B?WVl6Q1B6a0lTK0FPQkpXZTU0cE5oL2hlMVNqNk82d3MyVGUvbUEzdFg4UFlq?=
- =?utf-8?B?eUNEZkpVQ0dJM0YwQUtvb1NlWitWQVpETGh1SDR4QTNjeHBQNm5JeWhwMUJF?=
- =?utf-8?B?S3BNaU5aMHdqQldtYjdFb0E4SWkzYkVtNStieDZoTExTWkNGd0lBL0FGbHls?=
- =?utf-8?B?cEVYZ0JEOUdzTjBlTklMNUk3YllkanU0d3VtbWVWOERHbFNwZzBJZC9WVGdw?=
- =?utf-8?B?amowV0pWT0lXbUJvaGZnQmw4TnFjcFM0c1lQSmxycmpvVkhnRlZyd21YS3JK?=
- =?utf-8?B?Mi93c1F2RmxSSHJOUWcxYmVGbzZsVTVaWDZOSDdjQmFxaUErT3dyazYzN09Z?=
- =?utf-8?B?dTZyVFR5TFN2RFlRNTFzRThQbnhueHJlV2REQ0ZQeGM0RTJ0bG93MEEzaG9E?=
- =?utf-8?B?N0Q0RTB6b3NPTVd2bzBLWUJBbE54Q2ovSlRQMHFPTmE4Rk1IMnNqMm8wdWlD?=
- =?utf-8?B?ZWZSdXJxZ2Z1YlpFVkUzZjB0MFBQdXlPak5xeTZRUW42ZUV4b2lMdE9lNTB4?=
- =?utf-8?B?bDdDKzdFTGxra0d5U0lILzJXZVEyKzNuK3hQczcrMnlpRFZ4cDRXL0J2aWVu?=
- =?utf-8?B?R0lvL00yQlJkTGNzREZBMDNreUg4VzZ0VHdLT3dFajVjS01hRVMvRWNMV2ZF?=
- =?utf-8?B?Wk1jZnlnbC9QSmU2UUFOWERHQXNSY0szYS9QbU9kYTBsUUE3RU9pU0lWbnpj?=
- =?utf-8?B?SUQ5ZlNiUmlzYnQyY04vZXN5azZpRGhuRlFlRVpGUHIzYTlkOUx3cm9nbysy?=
- =?utf-8?B?YklIVlpsTzVrTE9Vb0tVbCt2eFREVG9Ta3dPTGc5QjBLd2lwaVFhZFJtMDdB?=
- =?utf-8?B?YW5iODlBT29VZllUTXhQN003M3NXUWR0OWdrcVNFVm1vVEZxOVZOOEk2QTg4?=
- =?utf-8?B?TUFuZ25KNE9ucFV3TDZhdzZHaWtJSDF0akw0MVNvYUcxYTVDcjAvVFY1ejd0?=
- =?utf-8?B?dWFXMWtEU0cwcTBoVW9rV1dORXBUMzFYRWR6cXQ0SFg3dnc5amRLOVg1Q2tn?=
- =?utf-8?B?U0pLMVluRmFubG1jUU1iY0V4OE9OTFl6aWw5WmxuY3FTM1NyeG9raHU2dkxS?=
- =?utf-8?B?NTF0M1BENmRXeDRYSSs2V3RwR3hzZ2g4ditMaWd6aTBOYm0wbzRXbmIvR3gy?=
- =?utf-8?B?QmIvUi80cFJZR0dPOHVMRUZDN1piUGdpbzRKejQ4YmZrRjUrOEc1aG4wQllt?=
- =?utf-8?B?OERnTFBia3FDL2EvMit2K3RzYkEvSVIwcGpDYURDS3UrUFBPTVVQTmNrMERD?=
- =?utf-8?B?TTYvZmRNWFdKRi9PU3ZkL0IzN285b1pKVEdQbFRRL2RzeXk1bHovemJDTW9T?=
- =?utf-8?B?NWFCYW5DU1NPZjQxYnZtTkZsYlBLcm1oeEZnYi9ZQkpja25wbzlZNTlaRzdH?=
- =?utf-8?B?RFp4ZGRPVlh1cEwzNUVzTWlMb0ZjSGVYVWF2QmhVMitSMGM0aUNGb0JacGp0?=
- =?utf-8?B?aXpDWDZubkQ5WC9hVTJ4L2hRZyt3L1hQWVZlY0tmWEJRL0w5eWQ3NDN2Q1Jz?=
- =?utf-8?B?TkpzN3hTdjQ4OEpHRXgrUG9uQWVBbDExbUt0eHRaOVVWdHlndFM1ZUdCRVp2?=
- =?utf-8?B?Nld4NnJhMW8ycGJIcHpQRGduSlhJMmIzR2RVWEduMmUzOStlUXl1QWVVRUpv?=
- =?utf-8?B?MHpINVFpMEZNb0E1dEVXLzV3VTRvQS9FUFNPZzEzQjZiM0crSWdVT2hmYzVt?=
- =?utf-8?B?ZmMvUzg4N2ZiTkttWVFnd1kxMTJjYlVjRExGZTFhcEZBSmNLNVNVZElPMFY0?=
- =?utf-8?B?OFgzZXlpdlZTdmZ5Y2RwL2N2bFR3Q1JuaHlpUzd4NzYvMmMvZHJqTGRBQnRH?=
- =?utf-8?B?ZUFFSGlDVXdmQTRYZGZFbXkvMTBFSWlqQmd6aU5rdEloSjBia0RuYkIzREFv?=
- =?utf-8?B?aHBNSERmYm1CVXl5cm9CVzNnQWRCdGRNSm5wNzl1VXZFTi9MUnJ5YXdXa25E?=
- =?utf-8?B?eGhwWWR4czJ1OFZ3OWlINlNySmo1bGNsOUQ0N0ZwaUZhdkJ4MkZrUFQwODkx?=
- =?utf-8?B?NnEyY1NXT3NmOVNTb1JxdmM0R0hUTUlOMElDNS9KSVM0b1Vuajd6aGhndFRx?=
- =?utf-8?Q?FSIewTNriF8bHcqmWnzPAK4T/i/TxCRPYHWcoH8jI+BT?=
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95abebde-e63e-45b5-e848-08da5ab2305b
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nivDLM5TWsMg8IE1uW6hiPojXh1/eHRfuKHRSe7glyb9dtgwRFRQPQsIzbHO?=
+ =?us-ascii?Q?aatqVjwNbaGK7RJQ7pZGAsWgz4ERlXxVdW8X4B+QB8R4e9Q58IXS2DjNchjL?=
+ =?us-ascii?Q?S9HkQl7FgKjZ6n1qJ39pb9OSqAKkpG8d1/WcgVf9DdSo5TY8dIMom8xsaxcv?=
+ =?us-ascii?Q?ytI/H+rc3rhQN1Pq2HiTZ40aFr6EIoayly0mD/9rPPlZ0tgB2j2M1NOfBFIi?=
+ =?us-ascii?Q?ahPtWIOEkJPkUTTdxE8gGP04yRqBljSk2fl2PUPzrBOmTbqdnrGwjMDgp/rt?=
+ =?us-ascii?Q?ZO/+fOfj6CVif0XjqWVl8fFomwqnTLpNVrN75QgbQoga6GL7tYYPbFzdBRq4?=
+ =?us-ascii?Q?QOwX3aR1wT3sS0851ME1QWgTZd75jFOeu698Y6/CyszblX43q/9AS4/fj+Le?=
+ =?us-ascii?Q?uVKro4u0Vpvc0hG45PDuXsacbTXGVrN7BcKWZuOPCIhIyCpsFqdXSGiCqSnF?=
+ =?us-ascii?Q?L9C33hkBH/s99b9VGh/6kbYhkLFYJJmwavl2dm6N7Ww/ufNER0o4ZhxwhOng?=
+ =?us-ascii?Q?4UkQJEsBoaV8EbEkeWLYaNoPbgQa8KiAwuy5+eOP8Bdg/4o+OBZb+kGYm/Nu?=
+ =?us-ascii?Q?AXvUwDl2yzIFV25MCmarB3rq2USjCbPr7yfW5kZhUJgMb+xc+PxUa+zTdENP?=
+ =?us-ascii?Q?fJu5If4MkoZghqIrgU+pLC74/eoMYGlOTfyKjZhyBH8AKWi24LhsZuOekIwh?=
+ =?us-ascii?Q?3g/AmzpUmgZjUGLwekGSEWOxCcRyXa9yzPM0ZEjBiJFmQtjUqnLYyM8DA4Q3?=
+ =?us-ascii?Q?n1Supton2Y44B/oUWH96wbsDzLs/hGvGFVx2SOtp51E8fsNhxKFceoDCIMG6?=
+ =?us-ascii?Q?i3H+mg/90g3rA/1eSnTgq2/uY9skFLgPbOUJjP1kyZQGmo5e+LxcZhCbYnQD?=
+ =?us-ascii?Q?EPplc2mJju75ElgEw3QiZC7byQLrL0RU5RzY56udjKF9w8ipy+Bc+MTmkWLS?=
+ =?us-ascii?Q?DwS+9FOn0Bvr/hPtkakLEoXF6B09Mz+nLcWtbaAmAPcMpapxtSpndN7vCR8w?=
+ =?us-ascii?Q?R5poun0GuIMHVK75FnsetODURlMXX+sPwh33U/2DaCoyfUugD2upJFZ/ZvNm?=
+ =?us-ascii?Q?dDfqubaSWwieQAAN2uU5r87aFVlmOtmuLwkp/dMhUc0YEr0u4F8v9YiufR/U?=
+ =?us-ascii?Q?ev9jdJDGVJoIQ57BOQ8gxIGtFBKzZERIBsDbpzI3tO2iFgN6lJAXdHHzqNQq?=
+ =?us-ascii?Q?VExRDY99bC9ofT7P1Sa3NTR3FCbgJSVAuDsw0oseD90PC0S7RjGcbFC5/9KK?=
+ =?us-ascii?Q?O1p/NAuYXe3bvHxXk/tzGO4eldSeopr9p4Hm1gIt8pzgtCy7DBBV5cF33MPk?=
+ =?us-ascii?Q?HsJ35vOobAyvazDRa3MtIBm8Icaish336mu6EjB4ZaemH5DXryeQ8eBrgt0v?=
+ =?us-ascii?Q?DAgPmoB3Vz6WzJSCpgIpTn5USgitoaEKFHF8IR87J2MWprwoOpnDFdZQ3LbR?=
+ =?us-ascii?Q?5DnCtNAlP6S2ng5IvWwnP0KjEiosW8iE3dRIUCsybLbZTYblIB5vW8N1rhYO?=
+ =?us-ascii?Q?tfzdvxk2iPCZs9LqcDY6dHeGeJ3DNhTkIVSI8aFFEunVpF2JBOTBfApIU2Yt?=
+ =?us-ascii?Q?rgeiyv3InUw1Wo7z0SE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 16:04:19.0698 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1LQxKvsi+GmDHe/SLfgP/lc+L2g/vy8eKIz0aNkqWWiqYyxTTKvzToSGwHEKd7ulKOhE11PORpdDB5OQpOprvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5978
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR09MB7095.namprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a89212ee-ef30-4788-001b-08da5ac73fdb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 18:35:04.2342 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 14b77578-9773-42d5-8507-251ca2dc2b06
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR09MB7342
+X-OriginatorOrg: ncbi.nlm.nih.gov
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_EF, SPF_PASS, TXREP, T_SCC_BODY_TEXT_LINE,
+ T_SPF_HELO_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -127,14 +121,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 30 Jun 2022 16:04:25 -0000
+X-List-Received-Date: Thu, 30 Jun 2022 18:35:26 -0000
 
-On 6/26/2022 9:50 PM, Takashi Yano wrote:
-> - poll() has a bug that it returns event which is not inquired if
->    events are inquired in multiple pollfd entries on the same fd at
->    the same time. This patch fixes the issue.
-> Addresses: https://cygwin.com/pipermail/cygwin/2022-June/251732.html
+>                However, use of this feature is deprecated, and POSIX
+>                notes that a conforming application shall use an explicit
+>                pathname (e.g., .)  to specify the current working
+>                directory.
 
-LGTM (but I haven't tested it).
+Since "SHALL" does not mean "MUST", I think this patch is correct.
 
-Ken
+Anton Lavrentiev
+Contractor NIH/NLM/NCBI
+
