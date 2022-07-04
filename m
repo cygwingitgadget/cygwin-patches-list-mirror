@@ -1,53 +1,48 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 43F563858C52
- for <cygwin-patches@cygwin.com>; Mon,  4 Jul 2022 08:37:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 43F563858C52
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id CD96C3858C52
+ for <cygwin-patches@cygwin.com>; Mon,  4 Jul 2022 08:39:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org CD96C3858C52
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MRTIx-1nwXbR2QSr-00NS9U for <cygwin-patches@cygwin.com>; Mon, 04 Jul 2022
- 10:37:52 +0200
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MTR6K-1o2p251KCy-00TpG9 for <cygwin-patches@cygwin.com>; Mon, 04 Jul 2022
+ 10:39:45 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 25785A80B74; Mon,  4 Jul 2022 10:37:52 +0200 (CEST)
-Date: Mon, 4 Jul 2022 10:37:52 +0200
+ id EC7EFA80BE3; Mon,  4 Jul 2022 10:39:44 +0200 (CEST)
+Date: Mon, 4 Jul 2022 10:39:44 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: spawn: Treat empty path as the current directory.
-Message-ID: <YsKm4GDa5Zi3VHjK@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: implement getfacl(1) for socket files
+Message-ID: <YsKnUOvT/jnv/8QD@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220627124427.184-1-takashi.yano@nifty.ne.jp>
- <c4a8d150-4d16-2af5-a7ac-26e42f9befb8@cornell.edu>
- <376762b9-6ef2-4415-b3e6-fbc9be48f183@cornell.edu>
- <20220702083107.8aa64b1046484ab41911d8dc@nifty.ne.jp>
- <ab1226ff-1236-67a0-a140-0f6826fd1778@cornell.edu>
+References: <c16697ba-b02f-ffd1-7422-fa22443e7895@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab1226ff-1236-67a0-a140-0f6826fd1778@cornell.edu>
-X-Provags-ID: V03:K1:z6Vhqf8EKLH3CALeO8KXrNs3A4UzzQvLk7eSey1Opd+51G5ULAm
- wOBLVJYd9faNFVNmlm6r/smL2G3cEmhp2NIfuqBKIDYmLtnLHwizHTOfJhzHZlRcatHEXQH
- DKliwNj1CHpse1lei9rjsbtM0unyS7aFAZO4EP9RB0xnp8MyfdFk6OnztH+tc2t2zHxD522
- fzzgBhyoYQSZKnp2Hz27g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FbQEfg5pTLU=:Q90MZyoEmSutkFw8V25FVJ
- 27ROSYvlHXaUNGrkKbY23zwI2XEJLgdU7wsBTYmRo8DSigtvr+LzilTcaMgEcaDLPGx60v5cN
- h9/Lw2jnM+Hdcgclb+JRTzH0ptQhkcoRBq2pFRa7y9k6d0VHERmYGcGZms141L9jsIdiZ0VV4
- VbOEDV1/gl9itxCCZz5fZ3VlflL5uQtU/LQOM5KL7bsSC2uO9zPDttv3ISy9pV/Hxh7ux4PjT
- xJnuWbQYkM3u+tRDN+KOQZwIULAsH9A+7nTsfxFGzd0bOe3T20aejtdOlgf0KlhfSOwiXxmeP
- fWMJeXRO2rpTPnO49fnLis2Y/XGi9Yns6bmgz3eL97x4hc/kDiuZiT/3IO3mUJex7DywfPTp3
- A8Nl+5lFuC5+umjA+WYFaS7139609AGLRkJnhp0yrGYanMJINbhEZPVUoEVWjwrdQd3VJEuFl
- W1gYIu/M33z+I5T3lwd/XH3/oz77EaJGOKNmay6MAe7g1myN7tQKtpBqWWEYs4O+nlaaHfTuZ
- 0uXViUJG1XUXRKad1cU8IVcg622cfQ0Zl9yKTtuobEmo3Rde1OYON4KLGmcymA1jkrGekyVM6
- SdbnAi8pP0oWOfZ3BTtk9mVFJnIT6Dk5nGjfsOhPunvt9BI0c0U3lqNyOizZpdrDweua2ZMNl
- HuwmJj/eugOHTT3FcpdvI/AEbrzywU+3nC1Hsw4zUsKYD2JKdRrCwTMoewA/HB8B9JNQX0vwJ
- QIFDUXs5UbIE6BxeEzzV63uZpeZMPH6Q3XtO5OOmqVjgDNCb1K6NY4QGhXM=
-X-Spam-Status: No, score=-93.4 required=5.0 tests=BAYES_00, BODY_8BITS,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, KAM_SHORT,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
+In-Reply-To: <c16697ba-b02f-ffd1-7422-fa22443e7895@cornell.edu>
+X-Provags-ID: V03:K1:IVComn8tnmYjwNpba+MN9Ne7H7hjs05vS3wx3XeP2TSGJYweZK6
+ pXEHFFvvUy5ltbGpY8fi6/4Zl79BVrWX5rL11vz718Rumm70+/zsMGxUcYS2EzA53dlnkMD
+ CC3N60RAbHpufpcnsSXe4KtkoKpYBQo11X8tBkGEImSR741nZLH5Eyo4sB+J1NMXn2XloQU
+ o5PAL7bXJZM4PMupdZqng==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9ySWCyQt5Ck=:2i0+P7EEsL6If+wEN+K8YN
+ JOXPn3mcbkQJO/1Dv9huGyz63vtCc4Hek904bBc431dAx1AwRIjwlzT6ppnyiTD4tfefuE838
+ 41v7viWgYKk+O66aXjMEvN4uhwwXBWa9F2xkuOCWW4MsXkGH9V840ilK9CzMvEegYRlu3dzhC
+ 5Tfr9o5EC8e5ogZm4wEM2Que5RjuDFBC5GwB7bej5YMiKwrh/wMAH15RjWJveBCp9vsCpTBRX
+ aB2tx1469wCpz7Z9nWGr4+r/OAib6PG+uwU9fML95HSYEncMVkUR5ZBfTSeK6+oGzrmNgUSdp
+ baRJo5Mzc/gaWt6zGUwXFkDIcf3PHdr4/UAYUgX0OXs8P9u3GeZkr2kpG3li+QaXdzaLL8tAY
+ zuLh2bV4Qa/cP2TmM3JcjTxQ6iqyARSXUh4ZFYvBMaTpNjwHPPN/Rf5+CsvSvZS6JwgNg/pNA
+ vttcWLYTaqpKh+NgOuJt02j2D020E53XQ0dSY2RMGFt1mjIMSnjWVRXeDzoqMHq9ZE1FalPRi
+ lt1S1C9+u9CndcS0bVy/aXYP1mhN0PCMlGH/7Vc5RC5VJezyyJH+oOpqMV8Bc+ovUvpn1ELZt
+ wXKI6zf9vbH768eWnP2wXzlHvzp5u+0egVW86OVZ3qovdZBfPe6V1Syhc787+7RtJczT4puun
+ jq3T57x0ClChflSynyjfIcKIaUd5PO2XbItyHqpxTgNX0mLk6y986XUb0a13PyUxju3fV+yY0
+ 924DIj9qUkHP3X0OiFwbDV0Eq1/FJVg6okLR2CzjgHHpi/Ab3P5Yh+QEaWU=
+X-Spam-Status: No, score=-100.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -63,52 +58,162 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 04 Jul 2022 08:38:00 -0000
+X-List-Received-Date: Mon, 04 Jul 2022 08:39:48 -0000
 
-On Jul  1 21:32, Ken Brown wrote:
-> On 7/1/2022 7:31 PM, Takashi Yano wrote:
-> > On Thu, 30 Jun 2022 21:16:35 -0400
-> > Ken Brown wrote:
-> > > On 6/30/2022 11:45 AM, Ken Brown wrote:
-> > > > On 6/27/2022 8:44 AM, Takashi Yano wrote:
-> > > > > - With this patch, the empty path (empty element in PATH or PATH is
-> > > > >     absent) is treated as the current directory as Linux does.
-> > > > > Addresses: https://cygwin.com/pipermail/cygwin/2022-June/251730.html
-> > > > 
-> > > > It might be a good idea to include a comment in the code and the commit message
-> > > > that this feature is being added for Linux compatibility but that it is
-> > > > deprecated.  According to https://man7.org/linux/man-pages/man7/environ.7.html,
-> > > > 
-> > > >                 As a legacy feature, a zero-length prefix (specified as
-> > > >                 two adjacent colons, or an initial or terminating colon)
-> > > >                 is interpreted to mean the current working directory.
-> > > >                 However, use of this feature is deprecated, and POSIX
-> > > >                 notes that a conforming application shall use an explicit
-> > > >                 pathname (e.g., .)  to specify the current working
-> > > >                 directory.
-> > > > 
-> > > > Alternatively, maybe this is a case where we should prefer POSIX compliance to
-> > > > Linux compatibility.  Corinna, WDYT?
-> > > 
-> > > I withdraw my suggestion.  There's already a comment in the code saying, "An
-> > > empty path or '.' means the current directory", so it's clear that the intention
-> > > was to support that feature, and the code was simply buggy.
-> > > 
-> > > I've now read through the patch, and it looks good to me.  This was pretty
-> > > tricky to get right.
-> > 
-> > We still need to discuss whether it is better to align Linux
-> > behavior or just keeping POSIX compliance, don't we?
-> 
-> I interpreted the existing comment as meaning that a decision was already
-> made at some point to align with Linux.  But it can't hurt to wait for
-> Corinna to weigh in.
+On Jul  3 14:37, Ken Brown wrote:
+> Patch attached.
 
-Personally I don't like this old crufty feature and I would rather keep
-this POSIX compatible, but in fact it was meant to work as on Linux, so,
-please go ahead, Takashi.
-
-However, maybe this should go into the master branch only? WDYT?
+LGTM, but make this master (i .e., 3.4) only.
 
 
+Thanks,
 Corinna
+
+
+> From 28cd29d99fe6d1a54c8dad04854bda10743737d3 Mon Sep 17 00:00:00 2001
+> From: Ken Brown <kbrown@cornell.edu>
+> Date: Sat, 2 Jul 2022 15:12:40 -0400
+> Subject: [PATCH] Cygwin: implement getfacl(1) for socket files
+> 
+> Do this by defining the acl_get method for the fhandler_socket_local
+> and fhandler_socket_unix classes.  Also define acl_set for these
+> classes.
+> 
+> Partially addresses: https://cygwin.com/pipermail/cygwin/2022-July/251768.html
+> ---
+>  winsup/cygwin/fhandler.h      |  4 ++
+>  winsup/cygwin/release/3.3.6   |  3 ++
+>  winsup/cygwin/sec_posixacl.cc | 76 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 83 insertions(+)
+> 
+> diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+> index d5ec56a6d..cb5e08fa3 100644
+> --- a/winsup/cygwin/fhandler.h
+> +++ b/winsup/cygwin/fhandler.h
+> @@ -861,6 +861,8 @@ class fhandler_socket_local: public fhandler_socket_wsock
+>    int fchmod (mode_t newmode);
+>    int fchown (uid_t newuid, gid_t newgid);
+>    int facl (int, int, struct acl *);
+> +  struct __acl_t *acl_get (uint32_t);
+> +  int acl_set (struct __acl_t *, uint32_t);
+>    int link (const char *);
+>  
+>    /* from here on: CLONING */
+> @@ -1143,6 +1145,8 @@ class fhandler_socket_unix : public fhandler_socket
+>    int fchmod (mode_t newmode);
+>    int fchown (uid_t newuid, gid_t newgid);
+>    int facl (int, int, struct acl *);
+> +  struct __acl_t *acl_get (uint32_t);
+> +  int acl_set (struct __acl_t *, uint32_t);
+>    int link (const char *);
+>  
+>    /* select.cc */
+> diff --git a/winsup/cygwin/release/3.3.6 b/winsup/cygwin/release/3.3.6
+> index 44a7bcf9d..b18691428 100644
+> --- a/winsup/cygwin/release/3.3.6
+> +++ b/winsup/cygwin/release/3.3.6
+> @@ -26,3 +26,6 @@ Bug Fixes
+>  - Fix a console problem that the text longer than 1024 bytes cannot
+>    be pasted correctly.
+>    Addresses: https://cygwin.com/pipermail/cygwin/2022-June/251764.html
+> +
+> +- Don't error out if getfacl(1) is called on a socket file.
+> +  Partially addresses: https://cygwin.com/pipermail/cygwin/2022-July/251768.html
+> diff --git a/winsup/cygwin/sec_posixacl.cc b/winsup/cygwin/sec_posixacl.cc
+> index e7e5a9c3e..c2daa3309 100644
+> --- a/winsup/cygwin/sec_posixacl.cc
+> +++ b/winsup/cygwin/sec_posixacl.cc
+> @@ -633,6 +633,44 @@ fhandler_disk_file::acl_get (acl_type_t type)
+>    return acl;
+>  }
+>  
+> +acl_t
+> +fhandler_socket_local::acl_get (acl_type_t type)
+> +{
+> +  if (!dev ().isfs ())
+> +    /* acl_get_fd on a socket. */
+> +    return fhandler_base::acl_get (type);
+> +
+> +  /* acl_get_fd on a socket opened with O_PATH or acl_get_file on a
+> +     socket file. */
+> +  if (get_flags () & O_PATH)
+> +    {
+> +      set_errno (EBADF);
+> +      return NULL;
+> +    }
+> +  fhandler_disk_file fh (pc);
+> +  return fh.acl_get (type);
+> +}
+> +
+> +#ifdef __WITH_AF_UNIX
+> +acl_t
+> +fhandler_socket_unix::acl_get (acl_type_t type)
+> +{
+> +  if (!dev ().isfs ())
+> +    /* acl_get_fd on a socket. */
+> +    return fhandler_base::acl_get (type);
+> +
+> +  /* acl_get_fd on a socket opened with O_PATH or acl_get_file on a
+> +     socket file. */
+> +  if (get_flags () & O_PATH)
+> +    {
+> +      set_errno (EBADF);
+> +      return NULL;
+> +    }
+> +  fhandler_disk_file fh (pc);
+> +  return fh.acl_get (type);
+> +}
+> +#endif
+> +
+>  extern "C" acl_t
+>  acl_get_fd (int fd)
+>  {
+> @@ -765,6 +803,44 @@ fhandler_disk_file::acl_set (acl_t acl, acl_type_t type)
+>    return ret;
+>  }
+>  
+> +int
+> +fhandler_socket_local::acl_set (acl_t acl, acl_type_t type)
+> +{
+> +  if (!dev ().isfs ())
+> +    /* acl_set_fd on a socket. */
+> +    return fhandler_base::acl_set (acl, type);
+> +
+> +  /* acl_set_fd on a socket opened with O_PATH or acl_set_file on a
+> +     socket file. */
+> +  if (get_flags () & O_PATH)
+> +    {
+> +      set_errno (EBADF);
+> +      return -1;
+> +    }
+> +  fhandler_disk_file fh (pc);
+> +  return fh.acl_set (acl, type);
+> +}
+> +
+> +#ifdef __WITH_AF_UNIX
+> +int
+> +fhandler_socket_unix::acl_set (acl_t acl, acl_type_t type)
+> +{
+> +  if (!dev ().isfs ())
+> +    /* acl_set_fd on a socket. */
+> +    return fhandler_base::acl_set (acl, type);
+> +
+> +  /* acl_set_fd on a socket opened with O_PATH or acl_set_file on a
+> +     socket file. */
+> +  if (get_flags () & O_PATH)
+> +    {
+> +      set_errno (EBADF);
+> +      return -1;
+> +    }
+> +  fhandler_disk_file fh (pc);
+> +  return fh.acl_set (acl, type);
+> +}
+> +#endif
+> +
+>  extern "C" int
+>  acl_set_fd (int fd, acl_t acl)
+>  {
+> -- 
+> 2.36.1
+> 
+
