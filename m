@@ -1,38 +1,47 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id 9703F385828E
- for <cygwin-patches@cygwin.com>; Tue,  5 Jul 2022 03:11:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9703F385828E
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
+ [210.131.2.91])
+ by sourceware.org (Postfix) with ESMTPS id 2C82B385828E
+ for <cygwin-patches@cygwin.com>; Tue,  5 Jul 2022 04:55:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 2C82B385828E
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 2653ArWL013028;
- Tue, 5 Jul 2022 12:10:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2653ArWL013028
+Received: from HP-Z230 (ak044095.dynamic.ppp.asahi-net.or.jp [119.150.44.95])
+ (authenticated)
+ by conssluserg-06.nifty.com with ESMTP id 2654sZMC031997
+ for <cygwin-patches@cygwin.com>; Tue, 5 Jul 2022 13:54:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2654sZMC031997
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1656990658;
- bh=ngkRpKsdm/fjIhzAzpLzmlRC9FeEDOTmOSQSUn/uqKw=;
- h=From:To:Cc:Subject:Date:From;
- b=NpP5uaCQvfZEc3cZvvmPfEFozSAMozt2CxUosGtUPDQO09eMV+qJYeHlUFHYaXOje
- qAoeGzKXlfH2wPutSStNezb+GD0O3957uS6oxA+VTX5Be4WEcHJc+dsyA6CUN95TxW
- Nbl9L3pF1mDTs1IX65++txQHNaO6hh2SF4A5JA2/k1pc7L0dgIupKvfokNBM8Qmjtm
- BtT8L0d7Kt+oyiSyOKqLbj0jbRDW7udtqQHO5OvAeDF9C1lcYlzq6MJzlk3KpLocg6
- SSrvxEYCgBBjkgjG84T4Z1vzm3/KduVC5bJOp6PwWVSDUwzi3cECQ1Ak1En2scrfs4
- Omt/0iFTj4Fjw==
+ s=dec2015msa; t=1656996876;
+ bh=bI9A3a6NmXPpsgxECaD0EDLdI7ZPhUpHDsOJBqHHHGw=;
+ h=Date:From:To:Subject:In-Reply-To:References:From;
+ b=wve9wm1+MwOGD1oNimvxTA2pWFUB97aAYBKRpyld6xhweoMg1zGpMV0/CXdLQa0xB
+ ruUyWz3WP13PT3ZlJRC+5x/p9w4zsFLfL3UhbY6eKEgfIQLmZFAJCXP19MErneNCU8
+ V+7xxl21bb9ZScLYCUsyCT+dp1J1Ycy17LsKZN6SxjNDb9stCETvGf6XV3d00t4yNE
+ fp7CZjRwfGpSX1+KtS8kMEY0QPTutSKArnTTCipt1jmowpyRU4jxV9V9xJM+g8I+RB
+ Tkh+HU6WugUB8qynInGpFo9cOrlQOhV+FXpw+J32OZ2SQJsiK6YosB418ZO9Mdrrs4
+ hfJE0aBUc34NQ==
 X-Nifty-SrcIP: [119.150.44.95]
+Date: Tue, 5 Jul 2022 13:54:36 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix issue of pasting very long text input
- again.
-Date: Tue,  5 Jul 2022 12:10:44 +0900
-Message-Id: <20220705031044.1374-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] Cygwin: spawn: Treat empty path as the current directory.
+Message-Id: <20220705135436.1d91baa3426e31114938f51d@nifty.ne.jp>
+In-Reply-To: <4ba56b80-8faa-de1b-f3c4-f64106797106@cornell.edu>
+References: <20220627124427.184-1-takashi.yano@nifty.ne.jp>
+ <c4a8d150-4d16-2af5-a7ac-26e42f9befb8@cornell.edu>
+ <376762b9-6ef2-4415-b3e6-fbc9be48f183@cornell.edu>
+ <20220702083107.8aa64b1046484ab41911d8dc@nifty.ne.jp>
+ <ab1226ff-1236-67a0-a140-0f6826fd1778@cornell.edu>
+ <YsKm4GDa5Zi3VHjK@calimero.vinschen.de>
+ <4ba56b80-8faa-de1b-f3c4-f64106797106@cornell.edu>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,138 +58,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 05 Jul 2022 03:11:21 -0000
+X-List-Received-Date: Tue, 05 Jul 2022 04:55:14 -0000
 
-- The recent commit "Cygwin: console: Allow pasting very long text
-  input." did not fix the issue enough. This patch adds fixes for
-  that.
----
- winsup/cygwin/fhandler_console.cc | 87 +++++++++++++++++++++++--------
- 1 file changed, 65 insertions(+), 22 deletions(-)
+On Mon, 4 Jul 2022 19:05:19 -0400
+Ken Brown wrote:
+> On 7/4/2022 4:37 AM, Corinna Vinschen wrote:
+> > On Jul  1 21:32, Ken Brown wrote:
+> >> I interpreted the existing comment as meaning that a decision was already
+> >> made at some point to align with Linux.  But it can't hurt to wait for
+> >> Corinna to weigh in.
+> > 
+> > Personally I don't like this old crufty feature and I would rather keep
+> > this POSIX compatible, but in fact it was meant to work as on Linux, so,
+> > please go ahead, Takashi.
+> > 
+> > However, maybe this should go into the master branch only? WDYT?
+> 
+> I think so.  The bug has been around for a long time, and the code is tricky. 
+> So we probably shouldn't take a chance on de-stabilizing the 3.3 branch.
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 52031fe31..47d30bc88 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -342,9 +342,9 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 	{
- 	  DWORD new_inrec_size = total_read + additional_space;
- 	  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
--	    realloc (input_rec, new_inrec_size * sizeof (INPUT_RECORD));
-+	    realloc (input_rec, m::bytes (new_inrec_size));
- 	  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
--	    realloc (input_tmp, new_inrec_size * sizeof (INPUT_RECORD));
-+	    realloc (input_tmp, m::bytes (new_inrec_size));
- 	  if (new_input_rec && new_input_tmp)
- 	    {
- 	      inrec_size = new_inrec_size;
-@@ -360,6 +360,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-       switch (cygwait (p->input_handle, (DWORD) 0))
- 	{
- 	case WAIT_OBJECT_0:
-+	  acquire_attach_mutex (mutex_timeout);
- 	  total_read = 0;
- 	  while (cygwait (p->input_handle, (DWORD) 0) == WAIT_OBJECT_0
- 		 && total_read < inrec_size)
-@@ -467,7 +468,30 @@ remove_record:
- 				      min (total_read - n, inrec_size1), &len);
- 		  n += len;
- 		}
-+	      release_attach_mutex ();
-+
-+	      acquire_attach_mutex (mutex_timeout);
-+	      GetNumberOfConsoleInputEvents (p->input_handle, &n);
-+	      release_attach_mutex ();
-+	      if (n + additional_space > inrec_size)
-+		{
-+		  DWORD new_inrec_size = n + additional_space;
-+		  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
-+		    realloc (input_rec, m::bytes (new_inrec_size));
-+		  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
-+		    realloc (input_tmp, m::bytes (new_inrec_size));
-+		  if (new_input_rec && new_input_tmp)
-+		    {
-+		      inrec_size = new_inrec_size;
-+		      input_rec = new_input_rec;
-+		      input_tmp = new_input_tmp;
-+		      if (!wincap.cons_need_small_input_record_buf ())
-+			inrec_size1 = inrec_size;
-+		    }
-+		}
-+
- 	      /* Check if writeback was successfull. */
-+	      acquire_attach_mutex (mutex_timeout);
- 	      PeekConsoleInputW (p->input_handle, input_tmp, inrec_size1, &n);
- 	      release_attach_mutex ();
- 	      if (n < min (total_read, inrec_size1))
-@@ -488,28 +512,47 @@ remove_record:
- 		  n += len;
- 		}
- 	      release_attach_mutex ();
--	      for (DWORD i = 0, j = 0; j < n; j++)
--		if (i == total_read
--		    || !inrec_eq (input_rec + i, input_tmp + j, 1))
--		  {
--		    if (total_read + j - i >= n)
--		      { /* Something is wrong. Giving up. */
--			acquire_attach_mutex (mutex_timeout);
--			DWORD l = 0;
--			while (l < n)
--			  {
--			    DWORD len;
--			    WriteConsoleInputW (p->input_handle, input_tmp + l,
--					      min (n - l, inrec_size1), &len);
--			    l += len;
-+	      bool fixed = false;
-+	      for (DWORD ofs = n - total_read; ofs > 0; ofs--)
-+		{
-+		  if (inrec_eq (input_rec, input_tmp + ofs, total_read))
-+		    {
-+		      memcpy (input_rec + total_read, input_tmp,
-+			      m::bytes (ofs));
-+		      memcpy (input_rec + total_read + ofs,
-+			      input_tmp + total_read + ofs,
-+			      m::bytes (n - ofs - total_read));
-+		      fixed = true;
-+		      break;
-+		    }
-+		}
-+	      if (!fixed)
-+		{
-+		  for (DWORD i = 0, j = 0; j < n; j++)
-+		    if (i == total_read
-+			|| !inrec_eq (input_rec + i, input_tmp + j, 1))
-+		      {
-+			if (total_read + j - i >= n)
-+			  { /* Something is wrong. Giving up. */
-+			    acquire_attach_mutex (mutex_timeout);
-+			    DWORD l = 0;
-+			    while (l < n)
-+			      {
-+				DWORD len;
-+				WriteConsoleInputW (p->input_handle,
-+						    input_tmp + l,
-+						    min (n - l, inrec_size1),
-+						    &len);
-+				l += len;
-+			      }
-+			    release_attach_mutex ();
-+			    goto skip_writeback;
- 			  }
--			release_attach_mutex ();
--			goto skip_writeback;
-+			input_rec[total_read + j - i] = input_tmp[j];
- 		      }
--		    input_rec[total_read + j - i] = input_tmp[j];
--		  }
--		else
--		  i++;
-+		    else
-+		      i++;
-+		}
- 	      total_read = n;
- 	    }
- 	  while (true);
+Thanks! I have pushed the patch to master branch.
+
 -- 
-2.36.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
