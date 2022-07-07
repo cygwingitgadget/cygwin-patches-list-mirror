@@ -1,31 +1,48 @@
-Return-Path: <Christian.Franke@t-online.de>
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by sourceware.org (Postfix) with ESMTPS id 494F23858D32
- for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 10:08:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 494F23858D32
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id B52183858D32
+ for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 10:20:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B52183858D32
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=t-online.de
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout11.t-online.de (Postfix) with SMTP id B472E8B43
- for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 12:08:40 +0200 (CEST)
-Received: from [192.168.2.102] ([87.187.34.65]) by fwd72.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1o9OR5-28EK7k0; Thu, 7 Jul 2022 12:08:39 +0200
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MPGBR-1nxdQn0Zqv-00PZqd for <cygwin-patches@cygwin.com>; Thu, 07 Jul 2022
+ 12:20:28 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 54CB0A807DB; Thu,  7 Jul 2022 12:20:27 +0200 (CEST)
+Date: Thu, 7 Jul 2022 12:20:27 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH htdocs] Align setup help text in FAQ with setup 2.919
-Message-ID: <0d7b7998-60c3-a21a-71d5-2860bb198997@t-online.de>
-Date: Thu, 7 Jul 2022 12:08:39 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- SeaMonkey/2.53.12
+Subject: Re: [PATCH htdocs] Align setup help text in FAQ with setup 2.919
+Message-ID: <YsazayJMXQfKlt5v@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <0d7b7998-60c3-a21a-71d5-2860bb198997@t-online.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------F5ABE5D05914F15B580DE00E"
-X-TOI-EXPURGATEID: 150726::1657188519-01439E5E-6A1D172C/0/0 CLEAN NORMAL
-X-TOI-MSGID: dc5235d9-728e-421b-9aa9-09fbb42de4c0
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00, FREEMAIL_FROM,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0d7b7998-60c3-a21a-71d5-2860bb198997@t-online.de>
+X-Provags-ID: V03:K1:phUTuqgZTzhayIwpcj12mga6Sya8wDkxqgxhQLXUwLwXEbiLg7T
+ Xrge1OEOoKAWoYvDAw0JZT4K+KayRN9n57cvwBHOV8WCm+YoDb0Jv7y6UMPhl/YjnB62Bdv
+ /7pmrgHnYdMcQMHzVIvwLHgLPZUDKWPFu1u83FwO/GuIcDb1HHtnWa4dQ1jLvv9o7LnxODf
+ UYpqYB7BezxOPYxibsqcw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ThAIXGPvlds=:ONlvWw0XoA9xv4agieJqxq
+ GFQGnu84oh57NXWVzXqlhKs/xcDvLr8t2o+aTIJKpY+4miaHxOBc16rOV3shnDedDF1UJWXB6
+ +BwuWAq4xZC78vBwAIazLJsNv9hVI79ophh79Q/2Nr/04D5/um5zgWNcDIgKAwWLhHr2w11+0
+ N9V3hprahk46iCsFmZ0pS+zZmvqz4NgWcRjmAMoW1WD8P90penc3dtDy5GX9tU6jojn9VJxd1
+ 5QXaJoosSCtg8P/KouUvCg5qcdBSC6v8BZvXkCHco0BqQQkNY2mciVQ0IDTeHo2wMZNHRWEWX
+ dBTKJ1wNy7LpZQFypwGl7i6wGVme8flqpijLmvoFew330FVAk87xfpfbu4os+E1zo4W9NqXAz
+ ODYUKqX7a7bBod/jZqCL9aVd2k+BdlO/U2Fkb9i/cF79JJ+WydNYHsu9P+B4PFV0B6DAOlHnK
+ S8T58u2Vtj5Q/cTkCrpfu/q26AMW4dxqEBbLBKzG5RFMElfdrUmfDBGhNFgPNjynW0+0zlWcq
+ eP3Ijdcl0pz7JhjsgaTkIDnoLTeb26GXxK0C3UZXBqSTFUCiGrNcBjD8vwYvodhpScWMGZeWw
+ SAA8eYS6tuzd7PebEF09aWB+UktNzBv7amUss9xyvpMyB5WIAGIV1v+DzWWZad23QSWas0GnF
+ RZS4ZLlh610woYUJffO50h38KKGQbEhV174AQ0lwPSv+CRC4Qgib5iKzIK4L/P6NoKWkhIvjR
+ LN2ZcNdxr+fRPbaPSjK1Kni8rRqd06dZLOTjVKhDUL/upzlhZBmSCAi30Go=
+X-Spam-Status: No, score=-94.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -41,104 +58,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 07 Jul 2022 10:08:44 -0000
+X-List-Received-Date: Thu, 07 Jul 2022 10:20:31 -0000
 
-This is a multi-part message in MIME format.
---------------F5ABE5D05914F15B580DE00E
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Jul  7 12:08, Christian Franke wrote:
+> Not sure whether cygwin-patches is the correct list for this patch,
+> cygwin-htdocs is not mentioned in lists.html.
 
-Not sure whether cygwin-patches is the correct list for this patch, 
-cygwin-htdocs is not mentioned in lists.html.
-
--- 
-Regards,
-Christian
+The FAQ is part of the Cygwin source, just clone the repo and create the
+patch against winsup/doc/faq*.xml.
 
 
---------------F5ABE5D05914F15B580DE00E
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Align-setup-help-text-in-FAQ-with-setup-2.919.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Align-setup-help-text-in-FAQ-with-setup-2.919.patch"
-
-RnJvbSAyZTUyNjU1NzdhYTQ5MjZmMzY3MmM2ZjZjZTI0OGQwOTQ0MWJkZDkyIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUaHUsIDcgSnVsIDIwMjIgMTE6NTc6MzQgKzAyMDAK
-U3ViamVjdDogW1BBVENIXSBBbGlnbiBzZXR1cCBoZWxwIHRleHQgaW4gRkFRIHdpdGggc2V0
-dXAgMi45MTkKCi0tLQogZmFxL2ZhcS5odG1sIHwgMTggKysrKysrKysrKystLS0tLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYg
-LS1naXQgYS9mYXEvZmFxLmh0bWwgYi9mYXEvZmFxLmh0bWwKaW5kZXggZWEzZDBiNTguLjlm
-NmJkZGNmIDEwMDY0NAotLS0gYS9mYXEvZmFxLmh0bWwKKysrIGIvZmFxL2ZhcS5odG1sCkBA
-IC0xMzksMTEgKzEzOSwxMyBAQCBGb3Igb3RoZXIgb3B0aW9ucywgc2VhcmNoIHRoZSBtYWls
-aW5nIGxpc3RzIHdpdGggdGVybXMgc3VjaCBhcwogPC9wPjxwcmUgY2xhc3M9InNjcmVlbiI+
-CiAgICAgLS1hbGxvdy11bnN1cHBvcnRlZC13aW5kb3dzICAgIEFsbG93IG9sZCwgdW5zdXBw
-b3J0ZWQgV2luZG93cyB2ZXJzaW9ucwogIC1hIC0tYXJjaCAgICAgICAgICAgICAgICAgICAg
-ICAgICBBcmNoaXRlY3R1cmUgdG8gaW5zdGFsbCAoeDg2XzY0IG9yIHg4NikKLSAtQyAtLWNh
-dGVnb3JpZXMgICAgICAgICAgICAgICAgICAgU3BlY2lmeSBlbnRpcmUgY2F0ZWdvcmllcyB0
-byBpbnN0YWxsCisgLUMgLS1jYXRlZ29yaWVzICAgICAgICAgICAgICAgICAgIFNwZWNpZnkg
-Y2F0ZWdvcmllcyB0byBpbnN0YWxsCisgICAgLS1jb21wYWN0LW9zICAgICAgICAgICAgICAg
-ICAgIENvbXByZXNzIGluc3RhbGxlZCBmaWxlcyB3aXRoIENvbXBhY3QgT1MKKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgKHhwcmVzczRrLCB4cHJlc3M4aywgeHByZXNz
-MTZrLCBsengpCiAgLW8gLS1kZWxldGUtb3JwaGFucyAgICAgICAgICAgICAgIFJlbW92ZSBv
-cnBoYW5lZCBwYWNrYWdlcwogIC1BIC0tZGlzYWJsZS1idWdneS1hbnRpdmlydXMgICAgICBE
-aXNhYmxlIGtub3duIG9yIHN1c3BlY3RlZCBidWdneSBhbnRpIHZpcnVzCi0gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHNvZnR3YXJlIHBhY2thZ2VzIGR1cmluZyBleGVj
-dXRpb24uCi0gLUQgLS1kb3dubG9hZCAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHBh
-Y2thZ2VzIGZyb20gaW50ZXJuZXQgb25seQorICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBzb2Z0d2FyZSBwYWNrYWdlcyBkdXJpbmcgZXhlY3V0aW9uCisgLUQgLS1kb3du
-bG9hZCAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHBhY2thZ2VzIGZyb20gaW50ZXJu
-ZXQKICAtZiAtLWZvcmNlLWN1cnJlbnQgICAgICAgICAgICAgICAgU2VsZWN0IHRoZSBjdXJy
-ZW50IHZlcnNpb24gZm9yIGFsbCBwYWNrYWdlcwogIC1oIC0taGVscCAgICAgICAgICAgICAg
-ICAgICAgICAgICBQcmludCBoZWxwCiAgLUkgLS1pbmNsdWRlLXNvdXJjZSAgICAgICAgICAg
-ICAgIEF1dG9tYXRpY2FsbHkgaW5zdGFsbCBzb3VyY2UgZm9yIGV2ZXJ5CkBAIC0xNTEsNyAr
-MTUzLDggQEAgRm9yIG90aGVyIG9wdGlvbnMsIHNlYXJjaCB0aGUgbWFpbGluZyBsaXN0cyB3
-aXRoIHRlcm1zIHN1Y2ggYXMKICAtaSAtLWluaS1iYXNlbmFtZSAgICAgICAgICAgICAgICAg
-VXNlIGEgZGlmZmVyZW50IGJhc2VuYW1lLCBlLmcuICJmb28iLAogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBpbnN0ZWFkIG9mICJzZXR1cCIKICAtVSAtLWtlZXAtdW50
-cnVzdGVkLWtleXMgICAgICAgICAgVXNlIHVudHJ1c3RlZCBrZXlzIGFuZCByZXRhaW4gYWxs
-Ci0gLUwgLS1sb2NhbC1pbnN0YWxsICAgICAgICAgICAgICAgIEluc3RhbGwgcGFja2FnZXMg
-ZnJvbSBsb2NhbCBkaXJlY3Rvcnkgb25seQorICAgIC0tbGFuZyAgICAgICAgICAgICAgICAg
-ICAgICAgICBTcGVjaWZ5IEdVSSBsYW5ndWFnZSBsYW5naWQKKyAtTCAtLWxvY2FsLWluc3Rh
-bGwgICAgICAgICAgICAgICAgSW5zdGFsbCBwYWNrYWdlcyBmcm9tIGxvY2FsIGRpcmVjdG9y
-eQogIC1sIC0tbG9jYWwtcGFja2FnZS1kaXIgICAgICAgICAgICBMb2NhbCBwYWNrYWdlIGRp
-cmVjdG9yeQogIC1tIC0tbWlycm9yLW1vZGUgICAgICAgICAgICAgICAgICBTa2lwIHBhY2th
-Z2UgYXZhaWxhYmlsaXR5IGNoZWNrIHdoZW4KICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgaW5zdGFsbGluZyBmcm9tIGxvY2FsIGRpcmVjdG9yeSAocmVxdWlyZXMKQEAg
-LTE1OSwxNSArMTYyLDE1IEBAIEZvciBvdGhlciBvcHRpb25zLCBzZWFyY2ggdGhlIG1haWxp
-bmcgbGlzdHMgd2l0aCB0ZXJtcyBzdWNoIGFzCiAgLUIgLS1uby1hZG1pbiAgICAgICAgICAg
-ICAgICAgICAgIERvIG5vdCBjaGVjayBmb3IgYW5kIGVuZm9yY2UgcnVubmluZyBhcwogICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBBZG1pbmlzdHJhdG9yCiAgLWQgLS1u
-by1kZXNrdG9wICAgICAgICAgICAgICAgICAgIERpc2FibGUgY3JlYXRpb24gb2YgZGVza3Rv
-cCBzaG9ydGN1dAotIC1yIC0tbm8tcmVwbGFjZW9ucmVib290ICAgICAgICAgICBEaXNhYmxl
-IHJlcGxhY2luZyBpbi11c2UgZmlsZXMgb24gbmV4dAotICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICByZWJvb3QuCisgLXIgLS1uby1yZXBsYWNlb25yZWJvb3QgICAgICAg
-ICAgIERpc2FibGUgcmVwbGFjaW5nIGluLXVzZSBmaWxlcyBvbiBuZXh0IHJlYm9vdAogIC1u
-IC0tbm8tc2hvcnRjdXRzICAgICAgICAgICAgICAgICBEaXNhYmxlIGNyZWF0aW9uIG9mIGRl
-c2t0b3AgYW5kIHN0YXJ0IG1lbnUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgc2hvcnRjdXRzCiAgLU4gLS1uby1zdGFydG1lbnUgICAgICAgICAgICAgICAgIERpc2Fi
-bGUgY3JlYXRpb24gb2Ygc3RhcnQgbWVudSBzaG9ydGN1dAogIC1YIC0tbm8tdmVyaWZ5ICAg
-ICAgICAgICAgICAgICAgICBEb24ndCB2ZXJpZnkgc2V0dXAuaW5pIHNpZ25hdHVyZXMKICAg
-ICAtLW5vLXZlcnNpb24tY2hlY2sgICAgICAgICAgICAgU3VwcHJlc3MgY2hlY2tpbmcgaWYg
-YSBuZXdlciB2ZXJzaW9uIG9mCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHNldHVwIGlzIGF2YWlsYWJsZQotICAgIC0tb2xkLWtleXMgICAgICAgICAgICAgICAgICAg
-ICBFbmFibGUgb2xkIGN5Z3dpbi5jb20ga2V5cworIC13IC0tbm8td2Fybi1kZXByZWNhdGVk
-LXdpbmRvd3MgICBEb24ndCB3YXJuIGFib3V0IGRlcHJlY2F0ZWQgV2luZG93cyB2ZXJzaW9u
-cworICAgIC0tZW5hYmxlLW9sZC1rZXlzICAgICAgICAgICAgICBFbmFibGUgb2xkIGN5Z3dp
-bi5jb20ga2V5cwogIC1PIC0tb25seS1zaXRlICAgICAgICAgICAgICAgICAgICBEbyBub3Qg
-ZG93bmxvYWQgbWlycm9yIGxpc3QuICBPbmx5IHVzZSBzaXRlcwogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBzcGVjaWZpZWQgd2l0aCAtcy4KICAtTSAtLXBhY2thZ2Ut
-bWFuYWdlciAgICAgICAgICAgICAgU2VtaS1hdHRlbmRlZCBjaG9vc2VyLW9ubHkgbW9kZQpA
-QCAtMTgzLDYgKzE4Niw3IEBAIEZvciBvdGhlciBvcHRpb25zLCBzZWFyY2ggdGhlIG1haWxp
-bmcgbGlzdHMgd2l0aCB0ZXJtcyBzdWNoIGFzCiAgLVIgLS1yb290ICAgICAgICAgICAgICAg
-ICAgICAgICAgIFJvb3QgaW5zdGFsbGF0aW9uIGRpcmVjdG9yeQogIC1TIC0tc2V4cHItcHVi
-a2V5ICAgICAgICAgICAgICAgICBFeHRyYSBEU0EgcHVibGljIGtleSBpbiBzLWV4cHIgZm9y
-bWF0CiAgLXMgLS1zaXRlICAgICAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHNpdGUg
-VVJMCisgICAgLS1zeW1saW5rLXR5cGUgICAgICAgICAgICAgICAgIFN5bWxpbmsgdHlwZSAo
-bG5rLCBuYXRpdmUsIHN5cywgd3NsKQogIC11IC0tdW50cnVzdGVkLWtleXMgICAgICAgICAg
-ICAgICBVc2UgdW50cnVzdGVkIHNhdmVkIGV4dHJhIGtleXMKICAtZyAtLXVwZ3JhZGUtYWxz
-byAgICAgICAgICAgICAgICAgQWxzbyB1cGdyYWRlIGluc3RhbGxlZCBwYWNrYWdlcwogICAg
-IC0tdXNlci1hZ2VudCAgICAgICAgICAgICAgICAgICBVc2VyIGFnZW50IHN0cmluZyBmb3Ig
-SFRUUCByZXF1ZXN0cwotLSAKMi4zNi4xCgo=
---------------F5ABE5D05914F15B580DE00E--
+Thanks,
+Corinna
