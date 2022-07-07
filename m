@@ -1,43 +1,43 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-049.btinternet.com (mailomta12-sa.btinternet.com
- [213.120.69.18])
- by sourceware.org (Postfix) with ESMTPS id D2A243857805
- for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 11:44:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D2A243857805
+Received: from sa-prd-fep-043.btinternet.com (mailomta11-sa.btinternet.com
+ [213.120.69.17])
+ by sourceware.org (Postfix) with ESMTPS id 384A43858D32
+ for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 11:44:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 384A43858D32
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-049.btinternet.com with ESMTP id
- <20220707114400.TVYH3227.sa-prd-fep-049.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
- Thu, 7 Jul 2022 12:44:00 +0100
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+ by sa-prd-fep-043.btinternet.com with ESMTP id
+ <20220707114443.YEIL3164.sa-prd-fep-043.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>;
+ Thu, 7 Jul 2022 12:44:43 +0100
 Authentication-Results: btinternet.com;
  auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
  bimi=skipped
-X-SNCR-Rigid: 6139417C2EA9D5EC
+X-SNCR-Rigid: 6139452E2EAABFDE
 X-Originating-IP: [86.139.167.41]
 X-OWM-Source-IP: 86.139.167.41 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfejgeejvdektddvfefffeeiteehvedtieehhedtteeiudetfeelueejkefgleffnecuffhomhgrihhnpehsrghmsggrrdhorhhgpdhgnhhurdhorhhgpdhsohhurhgtvgifrghrvgdrohhrghdptgihghifihhnrdgtohhmnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.167.41) by
- sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
  jonturney@btinternet.com)
- id 6139417C2EA9D5EC; Thu, 7 Jul 2022 12:44:00 +0100
+ id 6139452E2EAABFDE; Thu, 7 Jul 2022 12:44:43 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Update FAQs for removal of 32-bit Cygwin
-Date: Thu,  7 Jul 2022 12:43:43 +0100
-Message-Id: <20220707114343.65340-1-jon.turney@dronecode.org.uk>
+Subject: [PATCH] Update FAQs which are out of date on the details of setup UI
+Date: Thu,  7 Jul 2022 12:44:28 +0100
+Message-Id: <20220707114428.65374-1-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1198.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- SPF_HELO_PASS, SPF_NONE, TXREP,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -53,75 +53,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 07 Jul 2022 11:44:03 -0000
+X-List-Received-Date: Thu, 07 Jul 2022 11:44:45 -0000
 
-Update FAQs for removal of 32-bit Cygwin
-Also update FAQs for dropping support for Windows Vista/Server 20008
 ---
- winsup/doc/faq-programming.xml |  4 +---
- winsup/doc/faq-setup.xml       |  3 ---
- winsup/doc/faq-what.xml        | 12 +++++-------
- 3 files changed, 6 insertions(+), 13 deletions(-)
+ winsup/doc/faq-setup.xml | 11 ++++++-----
+ winsup/doc/faq-using.xml | 14 +++++++-------
+ 2 files changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
-index 3c6bf7b46..c2c4004c1 100644
---- a/winsup/doc/faq-programming.xml
-+++ b/winsup/doc/faq-programming.xml
-@@ -346,7 +346,7 @@ would be difficult.
- <question><para>Where is Objective C?</para></question>
- <answer>
- 
--<para>Support for compiling Objective C is available in the <literal>gcc{4}-objc</literal>
-+<para>Support for compiling Objective C is available in the <literal>gcc-objc</literal>
- package; resulting binaries will depend on the <literal>libobjc2</literal>
- package at runtime.
- </para>
-@@ -684,8 +684,6 @@ installed; you at least need <literal>gcc-g++</literal>,
- </para>
- 
- <para>
--Building for 32-bit Cygwin also requires
--<literal>mingw64-i686-gcc-g++</literal> and <literal>mingw64-i686-zlib</literal>.
- Building for 64-bit Cygwin also requires
- <literal>mingw64-x86_64-gcc-g++</literal> and
- <literal>mingw64-x86_64-zlib</literal>.
 diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
-index cfa771098..ce1069616 100644
+index ce1069616..da9fce534 100644
 --- a/winsup/doc/faq-setup.xml
 +++ b/winsup/doc/faq-setup.xml
-@@ -383,9 +383,6 @@ are strongly advised not to attempt to
- at once, unless you have a lot of free disk space, a very high speed network
- connection, and the system will not be required for any other purpose for
- many hours (or days) until installation completes.
--For a 32-bit Cygwin installation, you can not install everything, as the
--installation will fail because the 4GB memory available is insufficient to allow
--all the DLLs required to run along with the programs using them.
+@@ -518,10 +518,11 @@ getpwnam(3), disregarding <literal>HOME</literal>.
+ <question><para>How do I uninstall individual packages?</para></question>
+ <answer>
+ 
+-<para>Run the Cygwin Setup program as you would to install packages.  In the list of
+-packages to install, browse the relevant category or click on the
+-``View'' button to get a full listing.  Click on the cycle glyph until
+-the action reads ``Uninstall''.  Proceed by clicking ``Next''.
++<para>Run the Cygwin Setup program as you would to install packages.  In the
++``Select packages to install'' dialog, choose ``Up To Date'' in the
++<literal>View</literal> drop-down menu, and locate the package.  Choose the
++``Uninstall'' action from the drop-down menu in the ``New'' column. Proceed by
++clicking ``Next''.
  </para>
  </answer></qandaentry>
  
-diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
-index 77ba1c5fd..4bdbf4eff 100644
---- a/winsup/doc/faq-what.xml
-+++ b/winsup/doc/faq-what.xml
-@@ -30,13 +30,11 @@ They can be used from one of the provided Unix shells like bash, tcsh or zsh.
- <question><para>What versions of Windows are supported?</para></question>
- <answer>
+@@ -688,7 +689,7 @@ files, reinstall the "<literal>cygwin</literal>" package using the Cygwin Setup
+ this purpose.  See <ulink url="http://rsync.samba.org/"/>,
+ <ulink url="http://www.gnu.org/software/wget/"/> for utilities that can do this for you.
+ For more information on setting up a custom Cygwin package server, see
+-the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin Setup program page</ulink>.
++the <ulink url="https://cygwin.com/package-server.html.html">Cygwin Package Server page</ulink>.
  
--<para>Cygwin can be expected to run on all modern, released versions of Windows,
--from Windows Vista, 7, 8, 8.1, 10, Windows Server 2008 and all
--later versions of Windows, except Windows S mode due to its limitations.
--The 32 bit version of Cygwin also runs in the WOW64 32 bit environment on
--released 64 bit versions of Windows including ARM PCs,
--the 64 bit version of course only on 64 bit AMD/Intel compatible PCs.
--</para>
-+<para>Cygwin can be expected to run on all modern, released versions of Windows.
-+This includes Windows 7, Windows Server 2008 R2 and all later versions of
-+Windows, except Windows S mode due to its limitations, on 64 bit AMD/Intel
-+compatible PCs, and under x64 emulation on ARM PCs running Windows 11.</para>
-+
- <para>Keep in mind that Cygwin can only do as much as the underlying OS
- supports.  Because of this, Cygwin will behave differently, and
- exhibit different limitations, on the various versions of Windows.
+ </para>
+ </answer></qandaentry>
+diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
+index 7b9bbe1c1..ea5f5a797 100644
+--- a/winsup/doc/faq-using.xml
++++ b/winsup/doc/faq-using.xml
+@@ -15,13 +15,13 @@
+ <para>To repair the damage, you must run the Cygwin Setup program again, and re-install the
+ package which provides the missing DLL package.
+ </para>
+-<para>If you already installed the package at one point, the Cygwin Setup program won't
+-show the option to install the package by default.  In the
+-``Select packages to install'' dialog, click on the <literal>Full/Part</literal>
+-button.  This lists all packages, even those that are already
+-installed.  Scroll down to locate the missing package, for instance
+-<literal>libncurses8</literal>.  Click on the ``cycle'' glyph until it says
+-``Reinstall''.  Continue with the installation.
++<para>If you already installed the package at one point, the Cygwin Setup
++program won't show the option to install the package by default.  In the
++``Select packages to install'' dialog, choose ``Full'' in the
++<literal>View</literal> drop-down menu.  This lists all packages, even those
++that are already installed.  Scroll down to locate the missing package, for
++instance <literal>libncurses8</literal>.  Choose the ``Reinstall'' action from
++the drop-down menu in the ``New'' column.  Continue with the installation.
+ </para>
+ <para>For a detailed explanation of the general problem, and how to extend
+ it to other missing DLLs and identify their containing packages, see
 -- 
 2.36.1
 
