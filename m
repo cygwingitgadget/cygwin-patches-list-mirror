@@ -1,50 +1,31 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 5DA1E385842B
- for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 08:44:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5DA1E385842B
+Return-Path: <Christian.Franke@t-online.de>
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by sourceware.org (Postfix) with ESMTPS id 494F23858D32
+ for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 10:08:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 494F23858D32
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MiIlc-1nclb90g3q-00fSuD for <cygwin-patches@cygwin.com>; Thu, 07 Jul 2022
- 10:44:29 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 621F1A807DB; Thu,  7 Jul 2022 10:44:28 +0200 (CEST)
-Date: Thu, 7 Jul 2022 10:44:28 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=t-online.de
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout11.t-online.de (Postfix) with SMTP id B472E8B43
+ for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 12:08:40 +0200 (CEST)
+Received: from [192.168.2.102] ([87.187.34.65]) by fwd72.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1o9OR5-28EK7k0; Thu, 7 Jul 2022 12:08:39 +0200
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: redefine some macros for Linux compatibility
-Message-ID: <Ysac7M2R4NKpDMHK@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <efb21775-c0c5-768f-e1fd-d38145fb2f0b@cornell.edu>
- <b3d8d4c2-59f6-e3c4-4394-1a77a6ad9c9d@cornell.edu>
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH htdocs] Align setup help text in FAQ with setup 2.919
+Message-ID: <0d7b7998-60c3-a21a-71d5-2860bb198997@t-online.de>
+Date: Thu, 7 Jul 2022 12:08:39 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ SeaMonkey/2.53.12
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b3d8d4c2-59f6-e3c4-4394-1a77a6ad9c9d@cornell.edu>
-X-Provags-ID: V03:K1:SB/ktjRrG2gk9uJn/RWkkHdwzzQ/ZnQ7XMXuarSqiT+HuoUPO2U
- 8L4g0qPqIIqvgOzy5dDr9bcROrqpT5J3FxAlqKLafLk+dibyFikO3NaFrqM1Ozhb5EmER7p
- CPAsnTiZMKU8zwqJnGDfwO95v2huc7PuOSad3lHPfn8EkjQgFJ6s8kO0n6EpU1GHMEh2eij
- OESqdSyA8BvmM/70vB3YQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EoBTas6zaKs=:rioHuT9PB/kEsFpGQdaU6Q
- N3QThVhmIM5dIGfng9sFMxD8ew3mBHgniWpEUjwkZVEhxg7kZKQPokhdW+qWkKPOtQlgnCPps
- 8M8YgntTzvD0x/KZRERelZek+TBQohilv35Oh/N7Mfxndep75rQpBg54zn2uGtq8SV9GQPmgS
- LwOzpLD8cvRYMU7xAq6ovqdiEuVDnLC/zFLKfRmliYhp5tPU++iOBYUXgdZY00gz6LGEvKXBn
- sMr1BjKYwsWPNU5L/aIf2nKflNqTJ7XTYjhGo7x+FUei4brw9SA3zg6UPLq4ROHM4Uo/0w6gB
- 4Fz75XueKM5N+s/5bW+trjdWB1aaL3tzCztZP18pxdV2ugp8nBj7+eBqOyOT2vbBgTakxQY7G
- ADDPCjtoaDXP04/Ns29Fy66X4inKvCipClrs5h5O2Ox4T43pCdJI3MbJ0zI+fN+k3CR1iCU+w
- P1lFHyRKTGCd5kEKQCzZdtlZwzfX4ppxOPTGzPCu+vmugok4I/vn1XwKrXeTl4wekQA83tlW7
- wFjhrcM24NBtYt6CIMRXdPTtH0xTu5v1GOiRnBgBzYzpS3lLT7uY2YTJF/ve+wLsK6xh3CQlb
- 7ZwpOFwJo+9msKEQ/SX2/Cddaa2X3D1y9klW/q1JBwnQlphvR7yn8MiUm8YxRzynm6aui9D8E
- +t2RwEzBqV8SuNBsIyxzhobKZjhN/iAVVIZ3qyD6KRZp4dNnwx0C3VURL4QR1iivZDddYVcJF
- tAM4hxGMbZ9w1F0sdkwImnu68LCmssCaMHM/Q3EmASm+oSRUPwzPXnpIsMI=
-X-Spam-Status: No, score=-95.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- SPF_FAIL, SPF_HELO_NONE, TXREP,
+Content-Type: multipart/mixed; boundary="------------F5ABE5D05914F15B580DE00E"
+X-TOI-EXPURGATEID: 150726::1657188519-01439E5E-6A1D172C/0/0 CLEAN NORMAL
+X-TOI-MSGID: dc5235d9-728e-421b-9aa9-09fbb42de4c0
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00, FREEMAIL_FROM,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -60,38 +41,104 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 07 Jul 2022 08:44:33 -0000
+X-List-Received-Date: Thu, 07 Jul 2022 10:08:44 -0000
 
-On Jul  6 16:51, Ken Brown wrote:
-> On 7/6/2022 4:25 PM, Ken Brown wrote:
-> > Patch attached.
-> > 
-> > I wasn't sure whether the API bump was warranted for such a trivial
-> > change.  But the fact is that some programs compiled prior to the patch
-> > will behave differently if they are recompiled after the patch.  For
-> > example, emacs limits the number of open subprocesses to FD_SETSIZE, so
-> > this number will change when emacs is recompiled for Cygwin 3.4.0.  Is
-> > that a good enough reason to bump the API?
-> 
-> Oh, wait a minute there's already been an API bump from 341 to 342, so I
-> guess there's no need for another.  I could just add the FD_SETSIZE and
-> NOFILE changes to the explanation for that bump.
+This is a multi-part message in MIME format.
+--------------F5ABE5D05914F15B580DE00E
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Just bump.  It doesn't hurt.
+Not sure whether cygwin-patches is the correct list for this patch, 
+cygwin-htdocs is not mentioned in lists.html.
 
-The patch is fine.  I was going to say we should drop OPEN_MAX, too,
-just as on Linux, but that would be wrong because we really use OPEN_MAX
-as a limit.
+-- 
+Regards,
+Christian
 
 
-Thanks,
-Corinna
+--------------F5ABE5D05914F15B580DE00E
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Align-setup-help-text-in-FAQ-with-setup-2.919.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Align-setup-help-text-in-FAQ-with-setup-2.919.patch"
 
-
-Idle musing:
-
-We could think about dropping OPEN_MAX, too.  getdtablesize() and
-sysconf(_SC_OPEN_MAX) could be implemented as requesting the rlimit_cur
-value of getrlimit(RLIMIT_NOFILE), as in glibc.  Per the current Linux
-source, the start values for RLIMIT_NOFILE are 1024 as soft, and 4096 as
-hard limit...
+RnJvbSAyZTUyNjU1NzdhYTQ5MjZmMzY3MmM2ZjZjZTI0OGQwOTQ0MWJkZDkyIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUaHUsIDcgSnVsIDIwMjIgMTE6NTc6MzQgKzAyMDAK
+U3ViamVjdDogW1BBVENIXSBBbGlnbiBzZXR1cCBoZWxwIHRleHQgaW4gRkFRIHdpdGggc2V0
+dXAgMi45MTkKCi0tLQogZmFxL2ZhcS5odG1sIHwgMTggKysrKysrKysrKystLS0tLS0tCiAx
+IGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYg
+LS1naXQgYS9mYXEvZmFxLmh0bWwgYi9mYXEvZmFxLmh0bWwKaW5kZXggZWEzZDBiNTguLjlm
+NmJkZGNmIDEwMDY0NAotLS0gYS9mYXEvZmFxLmh0bWwKKysrIGIvZmFxL2ZhcS5odG1sCkBA
+IC0xMzksMTEgKzEzOSwxMyBAQCBGb3Igb3RoZXIgb3B0aW9ucywgc2VhcmNoIHRoZSBtYWls
+aW5nIGxpc3RzIHdpdGggdGVybXMgc3VjaCBhcwogPC9wPjxwcmUgY2xhc3M9InNjcmVlbiI+
+CiAgICAgLS1hbGxvdy11bnN1cHBvcnRlZC13aW5kb3dzICAgIEFsbG93IG9sZCwgdW5zdXBw
+b3J0ZWQgV2luZG93cyB2ZXJzaW9ucwogIC1hIC0tYXJjaCAgICAgICAgICAgICAgICAgICAg
+ICAgICBBcmNoaXRlY3R1cmUgdG8gaW5zdGFsbCAoeDg2XzY0IG9yIHg4NikKLSAtQyAtLWNh
+dGVnb3JpZXMgICAgICAgICAgICAgICAgICAgU3BlY2lmeSBlbnRpcmUgY2F0ZWdvcmllcyB0
+byBpbnN0YWxsCisgLUMgLS1jYXRlZ29yaWVzICAgICAgICAgICAgICAgICAgIFNwZWNpZnkg
+Y2F0ZWdvcmllcyB0byBpbnN0YWxsCisgICAgLS1jb21wYWN0LW9zICAgICAgICAgICAgICAg
+ICAgIENvbXByZXNzIGluc3RhbGxlZCBmaWxlcyB3aXRoIENvbXBhY3QgT1MKKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgKHhwcmVzczRrLCB4cHJlc3M4aywgeHByZXNz
+MTZrLCBsengpCiAgLW8gLS1kZWxldGUtb3JwaGFucyAgICAgICAgICAgICAgIFJlbW92ZSBv
+cnBoYW5lZCBwYWNrYWdlcwogIC1BIC0tZGlzYWJsZS1idWdneS1hbnRpdmlydXMgICAgICBE
+aXNhYmxlIGtub3duIG9yIHN1c3BlY3RlZCBidWdneSBhbnRpIHZpcnVzCi0gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHNvZnR3YXJlIHBhY2thZ2VzIGR1cmluZyBleGVj
+dXRpb24uCi0gLUQgLS1kb3dubG9hZCAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHBh
+Y2thZ2VzIGZyb20gaW50ZXJuZXQgb25seQorICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBzb2Z0d2FyZSBwYWNrYWdlcyBkdXJpbmcgZXhlY3V0aW9uCisgLUQgLS1kb3du
+bG9hZCAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHBhY2thZ2VzIGZyb20gaW50ZXJu
+ZXQKICAtZiAtLWZvcmNlLWN1cnJlbnQgICAgICAgICAgICAgICAgU2VsZWN0IHRoZSBjdXJy
+ZW50IHZlcnNpb24gZm9yIGFsbCBwYWNrYWdlcwogIC1oIC0taGVscCAgICAgICAgICAgICAg
+ICAgICAgICAgICBQcmludCBoZWxwCiAgLUkgLS1pbmNsdWRlLXNvdXJjZSAgICAgICAgICAg
+ICAgIEF1dG9tYXRpY2FsbHkgaW5zdGFsbCBzb3VyY2UgZm9yIGV2ZXJ5CkBAIC0xNTEsNyAr
+MTUzLDggQEAgRm9yIG90aGVyIG9wdGlvbnMsIHNlYXJjaCB0aGUgbWFpbGluZyBsaXN0cyB3
+aXRoIHRlcm1zIHN1Y2ggYXMKICAtaSAtLWluaS1iYXNlbmFtZSAgICAgICAgICAgICAgICAg
+VXNlIGEgZGlmZmVyZW50IGJhc2VuYW1lLCBlLmcuICJmb28iLAogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBpbnN0ZWFkIG9mICJzZXR1cCIKICAtVSAtLWtlZXAtdW50
+cnVzdGVkLWtleXMgICAgICAgICAgVXNlIHVudHJ1c3RlZCBrZXlzIGFuZCByZXRhaW4gYWxs
+Ci0gLUwgLS1sb2NhbC1pbnN0YWxsICAgICAgICAgICAgICAgIEluc3RhbGwgcGFja2FnZXMg
+ZnJvbSBsb2NhbCBkaXJlY3Rvcnkgb25seQorICAgIC0tbGFuZyAgICAgICAgICAgICAgICAg
+ICAgICAgICBTcGVjaWZ5IEdVSSBsYW5ndWFnZSBsYW5naWQKKyAtTCAtLWxvY2FsLWluc3Rh
+bGwgICAgICAgICAgICAgICAgSW5zdGFsbCBwYWNrYWdlcyBmcm9tIGxvY2FsIGRpcmVjdG9y
+eQogIC1sIC0tbG9jYWwtcGFja2FnZS1kaXIgICAgICAgICAgICBMb2NhbCBwYWNrYWdlIGRp
+cmVjdG9yeQogIC1tIC0tbWlycm9yLW1vZGUgICAgICAgICAgICAgICAgICBTa2lwIHBhY2th
+Z2UgYXZhaWxhYmlsaXR5IGNoZWNrIHdoZW4KICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgaW5zdGFsbGluZyBmcm9tIGxvY2FsIGRpcmVjdG9yeSAocmVxdWlyZXMKQEAg
+LTE1OSwxNSArMTYyLDE1IEBAIEZvciBvdGhlciBvcHRpb25zLCBzZWFyY2ggdGhlIG1haWxp
+bmcgbGlzdHMgd2l0aCB0ZXJtcyBzdWNoIGFzCiAgLUIgLS1uby1hZG1pbiAgICAgICAgICAg
+ICAgICAgICAgIERvIG5vdCBjaGVjayBmb3IgYW5kIGVuZm9yY2UgcnVubmluZyBhcwogICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBBZG1pbmlzdHJhdG9yCiAgLWQgLS1u
+by1kZXNrdG9wICAgICAgICAgICAgICAgICAgIERpc2FibGUgY3JlYXRpb24gb2YgZGVza3Rv
+cCBzaG9ydGN1dAotIC1yIC0tbm8tcmVwbGFjZW9ucmVib290ICAgICAgICAgICBEaXNhYmxl
+IHJlcGxhY2luZyBpbi11c2UgZmlsZXMgb24gbmV4dAotICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICByZWJvb3QuCisgLXIgLS1uby1yZXBsYWNlb25yZWJvb3QgICAgICAg
+ICAgIERpc2FibGUgcmVwbGFjaW5nIGluLXVzZSBmaWxlcyBvbiBuZXh0IHJlYm9vdAogIC1u
+IC0tbm8tc2hvcnRjdXRzICAgICAgICAgICAgICAgICBEaXNhYmxlIGNyZWF0aW9uIG9mIGRl
+c2t0b3AgYW5kIHN0YXJ0IG1lbnUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgc2hvcnRjdXRzCiAgLU4gLS1uby1zdGFydG1lbnUgICAgICAgICAgICAgICAgIERpc2Fi
+bGUgY3JlYXRpb24gb2Ygc3RhcnQgbWVudSBzaG9ydGN1dAogIC1YIC0tbm8tdmVyaWZ5ICAg
+ICAgICAgICAgICAgICAgICBEb24ndCB2ZXJpZnkgc2V0dXAuaW5pIHNpZ25hdHVyZXMKICAg
+ICAtLW5vLXZlcnNpb24tY2hlY2sgICAgICAgICAgICAgU3VwcHJlc3MgY2hlY2tpbmcgaWYg
+YSBuZXdlciB2ZXJzaW9uIG9mCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHNldHVwIGlzIGF2YWlsYWJsZQotICAgIC0tb2xkLWtleXMgICAgICAgICAgICAgICAgICAg
+ICBFbmFibGUgb2xkIGN5Z3dpbi5jb20ga2V5cworIC13IC0tbm8td2Fybi1kZXByZWNhdGVk
+LXdpbmRvd3MgICBEb24ndCB3YXJuIGFib3V0IGRlcHJlY2F0ZWQgV2luZG93cyB2ZXJzaW9u
+cworICAgIC0tZW5hYmxlLW9sZC1rZXlzICAgICAgICAgICAgICBFbmFibGUgb2xkIGN5Z3dp
+bi5jb20ga2V5cwogIC1PIC0tb25seS1zaXRlICAgICAgICAgICAgICAgICAgICBEbyBub3Qg
+ZG93bmxvYWQgbWlycm9yIGxpc3QuICBPbmx5IHVzZSBzaXRlcwogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBzcGVjaWZpZWQgd2l0aCAtcy4KICAtTSAtLXBhY2thZ2Ut
+bWFuYWdlciAgICAgICAgICAgICAgU2VtaS1hdHRlbmRlZCBjaG9vc2VyLW9ubHkgbW9kZQpA
+QCAtMTgzLDYgKzE4Niw3IEBAIEZvciBvdGhlciBvcHRpb25zLCBzZWFyY2ggdGhlIG1haWxp
+bmcgbGlzdHMgd2l0aCB0ZXJtcyBzdWNoIGFzCiAgLVIgLS1yb290ICAgICAgICAgICAgICAg
+ICAgICAgICAgIFJvb3QgaW5zdGFsbGF0aW9uIGRpcmVjdG9yeQogIC1TIC0tc2V4cHItcHVi
+a2V5ICAgICAgICAgICAgICAgICBFeHRyYSBEU0EgcHVibGljIGtleSBpbiBzLWV4cHIgZm9y
+bWF0CiAgLXMgLS1zaXRlICAgICAgICAgICAgICAgICAgICAgICAgIERvd25sb2FkIHNpdGUg
+VVJMCisgICAgLS1zeW1saW5rLXR5cGUgICAgICAgICAgICAgICAgIFN5bWxpbmsgdHlwZSAo
+bG5rLCBuYXRpdmUsIHN5cywgd3NsKQogIC11IC0tdW50cnVzdGVkLWtleXMgICAgICAgICAg
+ICAgICBVc2UgdW50cnVzdGVkIHNhdmVkIGV4dHJhIGtleXMKICAtZyAtLXVwZ3JhZGUtYWxz
+byAgICAgICAgICAgICAgICAgQWxzbyB1cGdyYWRlIGluc3RhbGxlZCBwYWNrYWdlcwogICAg
+IC0tdXNlci1hZ2VudCAgICAgICAgICAgICAgICAgICBVc2VyIGFnZW50IHN0cmluZyBmb3Ig
+SFRUUCByZXF1ZXN0cwotLSAKMi4zNi4xCgo=
+--------------F5ABE5D05914F15B580DE00E--
