@@ -1,43 +1,39 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-043.btinternet.com (mailomta11-sa.btinternet.com
- [213.120.69.17])
- by sourceware.org (Postfix) with ESMTPS id 384A43858D32
- for <cygwin-patches@cygwin.com>; Thu,  7 Jul 2022 11:44:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 384A43858D32
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
- by sa-prd-fep-043.btinternet.com with ESMTP id
- <20220707114443.YEIL3164.sa-prd-fep-043.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>;
- Thu, 7 Jul 2022 12:44:43 +0100
-Authentication-Results: btinternet.com;
- auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 6139452E2EAABFDE
-X-Originating-IP: [86.139.167.41]
-X-OWM-Source-IP: 86.139.167.41 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfejgeejvdektddvfefffeeiteehvedtieehhedtteeiudetfeelueejkefgleffnecuffhomhgrihhnpehsrghmsggrrdhorhhgpdhgnhhurdhorhhgpdhsohhurhgtvgifrghrvgdrohhrghdptgihghifihhnrdgtohhmnecukfhppeekiedrudefledrudeijedrgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrgedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.167.41) by
- sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 6139452E2EAABFDE; Thu, 7 Jul 2022 12:44:43 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+ by sourceware.org (Postfix) with ESMTPS id 26669385843E
+ for <cygwin-patches@cygwin.com>; Fri,  8 Jul 2022 03:42:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 26669385843E
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-12.nifty.com with ESMTP id 2683g0sD008161;
+ Fri, 8 Jul 2022 12:42:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2683g0sD008161
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1657251726;
+ bh=l2HZsdSO63LI/b2mWjmNqsnygho85sp0ivQU2CC+V64=;
+ h=From:To:Cc:Subject:Date:From;
+ b=crz0bL0+Gz5LE+b1giD5aRXYDlnLs7e1Hq70bfHAZfPFQXRgyuIZlmVxoR7UtTaxW
+ HeXrpxfixFHRkdNUgG1t4wf4XycikW3gak5gafDkXusAdBum2KJ0KR5YoE5Ok3Ipb7
+ vSOd9ztYBuUdYtVfeJW2w3VHqk3ui7QPHn2OFnU80Zm8P0zfCVf3b2LrJnL9G1z3aT
+ dU3aLzBFjQMvH8O1cNDKmk+J1Fg/3kJUM29VDpgZbREQI3Jlka65ZhAVUFMz0CQI+p
+ Dhe7B7nqXixavR2xFX+jxdbe7URqHU5LRiN9oSwLvoSpJbxXCkWcSEvKBMPbBZEebK
+ IOnqDk8wdPdeg==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Update FAQs which are out of date on the details of setup UI
-Date: Thu,  7 Jul 2022 12:44:28 +0100
-Message-Id: <20220707114428.65374-1-jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: clipboard: Add workaround for setting clipboard
+ failure.
+Date: Fri,  8 Jul 2022 12:41:51 +0900
+Message-Id: <20220708034151.1780-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1198.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT,
- RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE, TXREP,
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -53,67 +49,157 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 07 Jul 2022 11:44:45 -0000
+X-List-Received-Date: Fri, 08 Jul 2022 03:42:24 -0000
 
+- OpenClipboard() just after CloseClipboard() sometimes fails. Due
+  to this, /dev/clipboard sometimes fails to set CF_UNICODETEXT
+  data. This patch add a workaround for this issue.
 ---
- winsup/doc/faq-setup.xml | 11 ++++++-----
- winsup/doc/faq-using.xml | 14 +++++++-------
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ winsup/cygwin/fhandler_clipboard.cc | 47 +++++++++++++++++++++--------
+ 1 file changed, 34 insertions(+), 13 deletions(-)
 
-diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
-index ce1069616..da9fce534 100644
---- a/winsup/doc/faq-setup.xml
-+++ b/winsup/doc/faq-setup.xml
-@@ -518,10 +518,11 @@ getpwnam(3), disregarding <literal>HOME</literal>.
- <question><para>How do I uninstall individual packages?</para></question>
- <answer>
+diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
+index 4886968b2..fe3545bf5 100644
+--- a/winsup/cygwin/fhandler_clipboard.cc
++++ b/winsup/cygwin/fhandler_clipboard.cc
+@@ -20,6 +20,27 @@ details. */
+ #include <sys/clipboard.h>
+ #include <unistd.h>
  
--<para>Run the Cygwin Setup program as you would to install packages.  In the list of
--packages to install, browse the relevant category or click on the
--``View'' button to get a full listing.  Click on the cycle glyph until
--the action reads ``Uninstall''.  Proceed by clicking ``Next''.
-+<para>Run the Cygwin Setup program as you would to install packages.  In the
-+``Select packages to install'' dialog, choose ``Up To Date'' in the
-+<literal>View</literal> drop-down menu, and locate the package.  Choose the
-+``Uninstall'' action from the drop-down menu in the ``New'' column. Proceed by
-+clicking ``Next''.
- </para>
- </answer></qandaentry>
++/* Opening clipboard immediately after CloseClipboard()
++   sometimes fails. Therefore use retry-loop. */
++static inline bool
++open_clipboard ()
++{
++  const int max_retry = 10;
++  for (int i = 0; i < max_retry; i++)
++    {
++      if (OpenClipboard (NULL))
++	return true;
++      Sleep (1);
++    }
++  return false;
++}
++
++static inline bool
++close_clipboard ()
++{
++  return CloseClipboard ();
++}
++
+ /*
+  * Robert Collins:
+  * FIXME: should we use GetClipboardSequenceNumber to tell if the clipboard has
+@@ -30,9 +51,9 @@ fhandler_dev_clipboard::fhandler_dev_clipboard ()
+   : fhandler_base (), pos (0), membuffer (NULL), msize (0)
+ {
+   /* FIXME: check for errors and loop until we can open the clipboard */
+-  OpenClipboard (NULL);
++  open_clipboard ();
+   cygnativeformat = RegisterClipboardFormatW (CYGWIN_NATIVE);
+-  CloseClipboard ();
++  close_clipboard ();
+ }
  
-@@ -688,7 +689,7 @@ files, reinstall the "<literal>cygwin</literal>" package using the Cygwin Setup
- this purpose.  See <ulink url="http://rsync.samba.org/"/>,
- <ulink url="http://www.gnu.org/software/wget/"/> for utilities that can do this for you.
- For more information on setting up a custom Cygwin package server, see
--the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin Setup program page</ulink>.
-+the <ulink url="https://cygwin.com/package-server.html.html">Cygwin Package Server page</ulink>.
+ /*
+@@ -54,7 +75,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+ {
+   HGLOBAL hmem;
+   /* Native CYGWIN format */
+-  if (OpenClipboard (NULL))
++  if (open_clipboard ())
+     {
+       cygcb_t *clipbuf;
  
- </para>
- </answer></qandaentry>
-diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
-index 7b9bbe1c1..ea5f5a797 100644
---- a/winsup/doc/faq-using.xml
-+++ b/winsup/doc/faq-using.xml
-@@ -15,13 +15,13 @@
- <para>To repair the damage, you must run the Cygwin Setup program again, and re-install the
- package which provides the missing DLL package.
- </para>
--<para>If you already installed the package at one point, the Cygwin Setup program won't
--show the option to install the package by default.  In the
--``Select packages to install'' dialog, click on the <literal>Full/Part</literal>
--button.  This lists all packages, even those that are already
--installed.  Scroll down to locate the missing package, for instance
--<literal>libncurses8</literal>.  Click on the ``cycle'' glyph until it says
--``Reinstall''.  Continue with the installation.
-+<para>If you already installed the package at one point, the Cygwin Setup
-+program won't show the option to install the package by default.  In the
-+``Select packages to install'' dialog, choose ``Full'' in the
-+<literal>View</literal> drop-down menu.  This lists all packages, even those
-+that are already installed.  Scroll down to locate the missing package, for
-+instance <literal>libncurses8</literal>.  Choose the ``Reinstall'' action from
-+the drop-down menu in the ``New'' column.  Continue with the installation.
- </para>
- <para>For a detailed explanation of the general problem, and how to extend
- it to other missing DLLs and identify their containing packages, see
+@@ -62,7 +83,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+       if (!hmem)
+ 	{
+ 	  __seterrno ();
+-	  CloseClipboard ();
++	  close_clipboard ();
+ 	  return -1;
+ 	}
+       clipbuf = (cygcb_t *) GlobalLock (hmem);
+@@ -74,7 +95,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+       GlobalUnlock (hmem);
+       EmptyClipboard ();
+       HANDLE ret = SetClipboardData (cygnativeformat, hmem);
+-      CloseClipboard ();
++      close_clipboard ();
+       /* According to MSDN, hmem must not be free'd after transferring the
+ 	 data to the clipboard via SetClipboardData. */
+       /* GlobalFree (hmem); */
+@@ -92,7 +113,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+       set_errno (EILSEQ);
+       return -1;
+     }
+-  if (OpenClipboard (NULL))
++  if (open_clipboard ())
+     {
+       PWCHAR clipbuf;
+ 
+@@ -100,14 +121,14 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
+       if (!hmem)
+ 	{
+ 	  __seterrno ();
+-	  CloseClipboard ();
++	  close_clipboard ();
+ 	  return -1;
+ 	}
+       clipbuf = (PWCHAR) GlobalLock (hmem);
+       sys_mbstowcs (clipbuf, len + 1, (const char *) buf);
+       GlobalUnlock (hmem);
+       HANDLE ret = SetClipboardData (CF_UNICODETEXT, hmem);
+-      CloseClipboard ();
++      close_clipboard ();
+       /* According to MSDN, hmem must not be free'd after transferring the
+ 	 data to the clipboard via SetClipboardData. */
+       /* GlobalFree (hmem); */
+@@ -161,7 +182,7 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
+   buf->st_ctim.tv_nsec = 0L;
+   buf->st_birthtim = buf->st_atim = buf->st_mtim = buf->st_ctim;
+ 
+-  if (OpenClipboard (NULL))
++  if (open_clipboard ())
+     {
+       UINT formatlist[1] = { cygnativeformat };
+       int format;
+@@ -176,7 +197,7 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
+ 	  buf->st_size = clipbuf->cb_size;
+ 	  GlobalUnlock (hglb);
+ 	}
+-      CloseClipboard ();
++      close_clipboard ();
+     }
+ 
+   return 0;
+@@ -192,7 +213,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
+   LPVOID cb_data;
+   int rach;
+ 
+-  if (!OpenClipboard (NULL))
++  if (!open_clipboard ())
+     {
+       len = 0;
+       return;
+@@ -203,7 +224,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
+       || !(hglb = GetClipboardData (format))
+       || !(cb_data = GlobalLock (hglb)))
+     {
+-      CloseClipboard ();
++      close_clipboard ();
+       len = 0;
+       return;
+     }
+@@ -290,7 +311,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
+ 	}
+     }
+   GlobalUnlock (hglb);
+-  CloseClipboard ();
++  close_clipboard ();
+   len = ret;
+ }
+ 
 -- 
 2.36.1
 
