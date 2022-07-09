@@ -1,34 +1,34 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id 26669385843E
- for <cygwin-patches@cygwin.com>; Fri,  8 Jul 2022 03:42:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 26669385843E
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 238C93858430
+ for <cygwin-patches@cygwin.com>; Sat,  9 Jul 2022 05:55:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 238C93858430
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
  [119.150.44.95]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 2683g0sD008161;
- Fri, 8 Jul 2022 12:42:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2683g0sD008161
+ by conuserg-11.nifty.com with ESMTP id 2695tLLI022058;
+ Sat, 9 Jul 2022 14:55:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2695tLLI022058
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1657251726;
- bh=l2HZsdSO63LI/b2mWjmNqsnygho85sp0ivQU2CC+V64=;
+ s=dec2015msa; t=1657346127;
+ bh=aH8vsrP7XpVO0oJFqnfVK/jgL+i8as4PAmOgM87ppcE=;
  h=From:To:Cc:Subject:Date:From;
- b=crz0bL0+Gz5LE+b1giD5aRXYDlnLs7e1Hq70bfHAZfPFQXRgyuIZlmVxoR7UtTaxW
- HeXrpxfixFHRkdNUgG1t4wf4XycikW3gak5gafDkXusAdBum2KJ0KR5YoE5Ok3Ipb7
- vSOd9ztYBuUdYtVfeJW2w3VHqk3ui7QPHn2OFnU80Zm8P0zfCVf3b2LrJnL9G1z3aT
- dU3aLzBFjQMvH8O1cNDKmk+J1Fg/3kJUM29VDpgZbREQI3Jlka65ZhAVUFMz0CQI+p
- Dhe7B7nqXixavR2xFX+jxdbe7URqHU5LRiN9oSwLvoSpJbxXCkWcSEvKBMPbBZEebK
- IOnqDk8wdPdeg==
+ b=K+MfzBdsVDiFUKnS2cnUvZg5rueQ81Er3dURiQHmr0ryi9P8aHi1DHz0jBZInE6qw
+ eZq+mKQkHDDurxPubq/WRHEAfb/foJByGvprEvpbLYT6dNSI6uq5wz38ZJhOwNGTP7
+ sa+VXZWkLmu+UA0lgSJm2EyqKn1BWdtNg7Mv7mh7+GhXkaV/QEd/tnWxzIDela4vAU
+ 5sAn+XAWvabHInrpSWyp8Q50seDUP90Km20XEO2njopQj7l7ZOTD2LDTFTDFEOWYWn
+ EUv5HvsX3TWSkCQ69jWn/yl7cWxGnu/i7Uf1Av6IzlrVB5imUGCe6iTIiC/PR6TGw/
+ 5Xx46bX7O1eiA==
 X-Nifty-SrcIP: [119.150.44.95]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: clipboard: Add workaround for setting clipboard
- failure.
-Date: Fri,  8 Jul 2022 12:41:51 +0900
-Message-Id: <20220708034151.1780-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.36.1
+Subject: [PATCH] Cygwin: console: Fix an issue which causes when realloc()
+ fails.
+Date: Sat,  9 Jul 2022 14:55:12 +0900
+Message-Id: <20220709055512.1072-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
@@ -49,157 +49,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 08 Jul 2022 03:42:24 -0000
+X-List-Received-Date: Sat, 09 Jul 2022 05:55:53 -0000
 
-- OpenClipboard() just after CloseClipboard() sometimes fails. Due
-  to this, /dev/clipboard sometimes fails to set CF_UNICODETEXT
-  data. This patch add a workaround for this issue.
 ---
- winsup/cygwin/fhandler_clipboard.cc | 47 +++++++++++++++++++++--------
- 1 file changed, 34 insertions(+), 13 deletions(-)
+ winsup/cygwin/fhandler_console.cc | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_clipboard.cc b/winsup/cygwin/fhandler_clipboard.cc
-index 4886968b2..fe3545bf5 100644
---- a/winsup/cygwin/fhandler_clipboard.cc
-+++ b/winsup/cygwin/fhandler_clipboard.cc
-@@ -20,6 +20,27 @@ details. */
- #include <sys/clipboard.h>
- #include <unistd.h>
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 47d30bc88..c542fa46e 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -296,7 +296,11 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+     (INPUT_RECORD *) malloc (inrec_size * sizeof (INPUT_RECORD));
  
-+/* Opening clipboard immediately after CloseClipboard()
-+   sometimes fails. Therefore use retry-loop. */
-+static inline bool
-+open_clipboard ()
-+{
-+  const int max_retry = 10;
-+  for (int i = 0; i < max_retry; i++)
-+    {
-+      if (OpenClipboard (NULL))
-+	return true;
-+      Sleep (1);
+   if (!input_rec || !input_tmp)
+-    return; /* Cannot continue */
++    { /* Cannot continue */
++      free (input_rec);
++      free (input_tmp);
++      return;
 +    }
-+  return false;
-+}
-+
-+static inline bool
-+close_clipboard ()
-+{
-+  return CloseClipboard ();
-+}
-+
- /*
-  * Robert Collins:
-  * FIXME: should we use GetClipboardSequenceNumber to tell if the clipboard has
-@@ -30,9 +51,9 @@ fhandler_dev_clipboard::fhandler_dev_clipboard ()
-   : fhandler_base (), pos (0), membuffer (NULL), msize (0)
- {
-   /* FIXME: check for errors and loop until we can open the clipboard */
--  OpenClipboard (NULL);
-+  open_clipboard ();
-   cygnativeformat = RegisterClipboardFormatW (CYGWIN_NATIVE);
--  CloseClipboard ();
-+  close_clipboard ();
- }
  
- /*
-@@ -54,7 +75,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
- {
-   HGLOBAL hmem;
-   /* Native CYGWIN format */
--  if (OpenClipboard (NULL))
-+  if (open_clipboard ())
-     {
-       cygcb_t *clipbuf;
- 
-@@ -62,7 +83,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
-       if (!hmem)
- 	{
- 	  __seterrno ();
--	  CloseClipboard ();
-+	  close_clipboard ();
- 	  return -1;
- 	}
-       clipbuf = (cygcb_t *) GlobalLock (hmem);
-@@ -74,7 +95,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
-       GlobalUnlock (hmem);
-       EmptyClipboard ();
-       HANDLE ret = SetClipboardData (cygnativeformat, hmem);
--      CloseClipboard ();
-+      close_clipboard ();
-       /* According to MSDN, hmem must not be free'd after transferring the
- 	 data to the clipboard via SetClipboardData. */
-       /* GlobalFree (hmem); */
-@@ -92,7 +113,7 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
-       set_errno (EILSEQ);
-       return -1;
-     }
--  if (OpenClipboard (NULL))
-+  if (open_clipboard ())
-     {
-       PWCHAR clipbuf;
- 
-@@ -100,14 +121,14 @@ fhandler_dev_clipboard::set_clipboard (const void *buf, size_t len)
-       if (!hmem)
- 	{
- 	  __seterrno ();
--	  CloseClipboard ();
-+	  close_clipboard ();
- 	  return -1;
- 	}
-       clipbuf = (PWCHAR) GlobalLock (hmem);
-       sys_mbstowcs (clipbuf, len + 1, (const char *) buf);
-       GlobalUnlock (hmem);
-       HANDLE ret = SetClipboardData (CF_UNICODETEXT, hmem);
--      CloseClipboard ();
-+      close_clipboard ();
-       /* According to MSDN, hmem must not be free'd after transferring the
- 	 data to the clipboard via SetClipboardData. */
-       /* GlobalFree (hmem); */
-@@ -161,7 +182,7 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
-   buf->st_ctim.tv_nsec = 0L;
-   buf->st_birthtim = buf->st_atim = buf->st_mtim = buf->st_ctim;
- 
--  if (OpenClipboard (NULL))
-+  if (open_clipboard ())
-     {
-       UINT formatlist[1] = { cygnativeformat };
-       int format;
-@@ -176,7 +197,7 @@ fhandler_dev_clipboard::fstat (struct stat *buf)
- 	  buf->st_size = clipbuf->cb_size;
- 	  GlobalUnlock (hglb);
- 	}
--      CloseClipboard ();
-+      close_clipboard ();
-     }
- 
-   return 0;
-@@ -192,7 +213,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
-   LPVOID cb_data;
-   int rach;
- 
--  if (!OpenClipboard (NULL))
-+  if (!open_clipboard ())
-     {
-       len = 0;
-       return;
-@@ -203,7 +224,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
-       || !(hglb = GetClipboardData (format))
-       || !(cb_data = GlobalLock (hglb)))
-     {
--      CloseClipboard ();
-+      close_clipboard ();
-       len = 0;
-       return;
-     }
-@@ -290,7 +311,7 @@ fhandler_dev_clipboard::read (void *ptr, size_t& len)
- 	}
-     }
-   GlobalUnlock (hglb);
--  CloseClipboard ();
-+  close_clipboard ();
-   len = ret;
- }
- 
+   DWORD inrec_size1 =
+     wincap.cons_need_small_input_record_buf () ? INREC_SIZE : inrec_size;
+@@ -343,13 +347,15 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	  DWORD new_inrec_size = total_read + additional_space;
+ 	  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
+ 	    realloc (input_rec, m::bytes (new_inrec_size));
++	  if (new_input_rec)
++	    input_rec = new_input_rec;
+ 	  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
+ 	    realloc (input_tmp, m::bytes (new_inrec_size));
++	  if (new_input_tmp)
++	    input_tmp = new_input_tmp;
+ 	  if (new_input_rec && new_input_tmp)
+ 	    {
+ 	      inrec_size = new_inrec_size;
+-	      input_rec = new_input_rec;
+-	      input_tmp = new_input_tmp;
+ 	      if (!wincap.cons_need_small_input_record_buf ())
+ 		inrec_size1 = inrec_size;
+ 	    }
+@@ -478,13 +484,15 @@ remove_record:
+ 		  DWORD new_inrec_size = n + additional_space;
+ 		  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
+ 		    realloc (input_rec, m::bytes (new_inrec_size));
++		  if (new_input_rec)
++		    input_rec = new_input_rec;
+ 		  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
+ 		    realloc (input_tmp, m::bytes (new_inrec_size));
++		  if (new_input_tmp)
++		    input_tmp = new_input_tmp;
+ 		  if (new_input_rec && new_input_tmp)
+ 		    {
+ 		      inrec_size = new_inrec_size;
+-		      input_rec = new_input_rec;
+-		      input_tmp = new_input_tmp;
+ 		      if (!wincap.cons_need_small_input_record_buf ())
+ 			inrec_size1 = inrec_size;
+ 		    }
 -- 
-2.36.1
+2.37.0
 
