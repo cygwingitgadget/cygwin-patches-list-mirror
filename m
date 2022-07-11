@@ -1,39 +1,48 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id 238C93858430
- for <cygwin-patches@cygwin.com>; Sat,  9 Jul 2022 05:55:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 238C93858430
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 3E2F33858292
+ for <cygwin-patches@cygwin.com>; Mon, 11 Jul 2022 07:45:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3E2F33858292
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 2695tLLI022058;
- Sat, 9 Jul 2022 14:55:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2695tLLI022058
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1657346127;
- bh=aH8vsrP7XpVO0oJFqnfVK/jgL+i8as4PAmOgM87ppcE=;
- h=From:To:Cc:Subject:Date:From;
- b=K+MfzBdsVDiFUKnS2cnUvZg5rueQ81Er3dURiQHmr0ryi9P8aHi1DHz0jBZInE6qw
- eZq+mKQkHDDurxPubq/WRHEAfb/foJByGvprEvpbLYT6dNSI6uq5wz38ZJhOwNGTP7
- sa+VXZWkLmu+UA0lgSJm2EyqKn1BWdtNg7Mv7mh7+GhXkaV/QEd/tnWxzIDela4vAU
- 5sAn+XAWvabHInrpSWyp8Q50seDUP90Km20XEO2njopQj7l7ZOTD2LDTFTDFEOWYWn
- EUv5HvsX3TWSkCQ69jWn/yl7cWxGnu/i7Uf1Av6IzlrVB5imUGCe6iTIiC/PR6TGw/
- 5Xx46bX7O1eiA==
-X-Nifty-SrcIP: [119.150.44.95]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+ dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MRBWU-1nycKj1ttk-00NDEb for <cygwin-patches@cygwin.com>; Mon, 11 Jul 2022
+ 09:44:57 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 9407DA80751; Mon, 11 Jul 2022 09:44:56 +0200 (CEST)
+Date: Mon, 11 Jul 2022 09:44:56 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Fix an issue which causes when realloc()
- fails.
-Date: Sat,  9 Jul 2022 14:55:12 +0900
-Message-Id: <20220709055512.1072-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.37.0
+Subject: Re: [PATCH] Update FAQs for removal of 32-bit Cygwin
+Message-ID: <YsvU+P+djrd0OawP@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20220707114343.65340-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220707114343.65340-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:p78aL63z6EvcUx6PsnhH5RFDVm9ZYVOY1njGQwolkZrenVfPc9r
+ jdHJC2BhlWSp8QJ8YUXSjKLrFQTuqQ1qDFjdXl+gXIP8fPKH/4HuFitb6gIexIKR9Eexd71
+ 9lMcUVzMZyHEH5XLoNk9tiB0ycAYQujnVbEVu+YyFOiDnwBWL1CbP4MKAZzsXWaWabMdDR/
+ KnzC+EX76pIIBCKweO5nQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b8xfUYEL7cc=:d9wWfVktebephDBTosD7ic
+ /Kp7zrDw7HP5cmyFLCa58KpzcqIs3TM70YZhJjAFNj7QfrUTCjgheUXc6w8JxOLfCLQC+4u5p
+ nh28mqhIlk8uYHDMtM0J1BpVfNJvVcXQEDkq9RPFolg4M9kItzr0alcYguzB5omnZ1Rz3PYk3
+ iODqJEYGS10/5qPk06sPv0h4qVpWQixrSUKkH77T1ccpFuXhtM/45GCPc9DNaSit4P7Nkf21m
+ QdzrMk4V5hQnN153UJofSDBkdHBu0aCyqqaY9tx/6iMZY23N94Qif1k0fcugnX3WzZZJFeJYn
+ KL2CgHuXwf84TmGOJDm6zJ0kQu4p4urZCmAXlVJjuw0Z4yhCCJq/RBK/2uiAYrTVQEWGe4p7r
+ 00WdmrinUq5LVjAj1NBRwBPUhAilg9utJA+qSej74JO2pEWVncsnwHJrl8X54+/i4o8gffk7Q
+ hGOsX6quxtKbYjWHJKRwtaoT/+XPlPWRpFwBHxJProOFav4hU51o7SK05vOM1L1suLxtqHXgV
+ nsEt05FwRyU4hUw/H7boA/Pq2mDzHVoQJiNdEFzwFi1Tt9C0LLtj+Uu4SrHgTCSeU8ZHd2hJz
+ WtSoiyRL62avg+MOY7t98DPIeKCJ4fO2i6Qe0R5xfeSEcYau7YBGRGt44HOIlGEBb9Oy4kcAC
+ edK4wU8Cn4nNaz9ioAKEHvjgdHMclIiBuQZF/JD050PUiHzSNnpxXvHvhRENkBKQ11a//94/c
+ n7ZL5s91ObujhPS/p067goD4RABlxJhh7O/Sfzhoq8A/1dYB6Nwh9JCvDLs=
+X-Spam-Status: No, score=-95.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_FAIL, SPF_HELO_NONE, TXREP,
  T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
@@ -49,65 +58,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 09 Jul 2022 05:55:53 -0000
+X-List-Received-Date: Mon, 11 Jul 2022 07:45:02 -0000
 
----
- winsup/cygwin/fhandler_console.cc | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+On Jul  7 12:43, Jon Turney wrote:
+> Update FAQs for removal of 32-bit Cygwin
+> Also update FAQs for dropping support for Windows Vista/Server 20008
+> ---
+>  winsup/doc/faq-programming.xml |  4 +---
+>  winsup/doc/faq-setup.xml       |  3 ---
+>  winsup/doc/faq-what.xml        | 12 +++++-------
+>  3 files changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 47d30bc88..c542fa46e 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -296,7 +296,11 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-     (INPUT_RECORD *) malloc (inrec_size * sizeof (INPUT_RECORD));
- 
-   if (!input_rec || !input_tmp)
--    return; /* Cannot continue */
-+    { /* Cannot continue */
-+      free (input_rec);
-+      free (input_tmp);
-+      return;
-+    }
- 
-   DWORD inrec_size1 =
-     wincap.cons_need_small_input_record_buf () ? INREC_SIZE : inrec_size;
-@@ -343,13 +347,15 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 	  DWORD new_inrec_size = total_read + additional_space;
- 	  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
- 	    realloc (input_rec, m::bytes (new_inrec_size));
-+	  if (new_input_rec)
-+	    input_rec = new_input_rec;
- 	  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
- 	    realloc (input_tmp, m::bytes (new_inrec_size));
-+	  if (new_input_tmp)
-+	    input_tmp = new_input_tmp;
- 	  if (new_input_rec && new_input_tmp)
- 	    {
- 	      inrec_size = new_inrec_size;
--	      input_rec = new_input_rec;
--	      input_tmp = new_input_tmp;
- 	      if (!wincap.cons_need_small_input_record_buf ())
- 		inrec_size1 = inrec_size;
- 	    }
-@@ -478,13 +484,15 @@ remove_record:
- 		  DWORD new_inrec_size = n + additional_space;
- 		  INPUT_RECORD *new_input_rec = (INPUT_RECORD *)
- 		    realloc (input_rec, m::bytes (new_inrec_size));
-+		  if (new_input_rec)
-+		    input_rec = new_input_rec;
- 		  INPUT_RECORD *new_input_tmp = (INPUT_RECORD *)
- 		    realloc (input_tmp, m::bytes (new_inrec_size));
-+		  if (new_input_tmp)
-+		    input_tmp = new_input_tmp;
- 		  if (new_input_rec && new_input_tmp)
- 		    {
- 		      inrec_size = new_inrec_size;
--		      input_rec = new_input_rec;
--		      input_tmp = new_input_tmp;
- 		      if (!wincap.cons_need_small_input_record_buf ())
- 			inrec_size1 = inrec_size;
- 		    }
--- 
-2.37.0
+LGTM
 
+Thanks,
+Corinna
