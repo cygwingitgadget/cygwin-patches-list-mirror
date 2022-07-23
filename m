@@ -1,53 +1,47 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 303053858C55
- for <cygwin-patches@cygwin.com>; Thu, 14 Jul 2022 14:54:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 303053858C55
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta001.cacentral1.a.cloudfilter.net
+ (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
+ by sourceware.org (Postfix) with ESMTPS id 080AE3858C39
+ for <cygwin-patches@cygwin.com>; Sat, 23 Jul 2022 20:46:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 080AE3858C39
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MJmCV-1nwwM10eAz-00K7ji for <cygwin-patches@cygwin.com>; Thu, 14 Jul 2022
- 16:54:12 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id B7713A80771; Thu, 14 Jul 2022 16:54:11 +0200 (CEST)
-Date: Thu, 14 Jul 2022 16:54:11 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH rebase] Add support for Compact OS compression for Cygwin
-Message-ID: <YtAuE1Po5QmnviT2@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <e281c355-1ea1-eefa-12d8-17f7538edb60@t-online.de>
- <Ys/u2QmY8E1s0hZd@calimero.vinschen.de>
- <ae3b7f6f-cb27-3ffa-3b47-300db32ffc25@t-online.de>
- <YtAoF7HvCTw177IB@calimero.vinschen.de>
- <f8f4e3af-c39b-415a-7d6e-5e9a7aa07162@t-online.de>
+ spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
+ by cmsmtp with ESMTP
+ id FAzaotzMzS8WrFM10ogXBj; Sat, 23 Jul 2022 20:46:22 +0000
+Received: from [10.0.0.5] ([184.64.124.72]) by cmsmtp with ESMTP
+ id FM0zofYCgGRNlFM0zoXIdE; Sat, 23 Jul 2022 20:46:22 +0000
+X-Authority-Analysis: v=2.4 cv=Sfrky9du c=1 sm=1 tr=0 ts=62dc5e1e
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=JYDileg9wNlxFN0D:21 a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=hGzw-44bAAAA:8
+ a=mDV3o1hIAAAA:8 a=CCpqsmhAAAAA:8 a=94nOnFI1EgyDtX4ev68A:9 a=QEXdDO2ut3YA:10
+ a=NEMXJcwN1a4A:10 a=hf7a2FvunDcA:10 a=OWQaqklJ0g0A:10
+ a=wMWlw4UXOv7VJ8S2T32r:22 a=sRI3_1zDfAgwuvI8zelB:22 a=HvKuF1_PTVFglORKqfwH:22
+ a=_FVE-zBwftR9WsbkzFJk:22 a=ul9cdbp4aOFLsgKbc677:22
+Message-ID: <91d1d17c-27d2-a271-a9b6-bcd3811084ca@SystematicSw.ab.ca>
+Date: Sat, 23 Jul 2022 14:46:21 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f8f4e3af-c39b-415a-7d6e-5e9a7aa07162@t-online.de>
-X-Provags-ID: V03:K1:xaafs6bMk2vrFvQVFWQbWIQ/lLM9PoypI6QhVJnjWd7CX6vVf0f
- 6CLx4QhgMR0gQDPmJpl2g3pS33OF/WEc01K9wFOWeF3HTg5poLxV0XzB+pE/t71cgoobVfy
- sjNBgJ+8Ro/2idgmsyEwfhXMw/Aktx25irhDovGStiux5fKojmHiMNRaECGTv47qjtCdJsA
- YLBht4RXTQ8soyqZEkaBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SLK4ik5EM64=:3dyLl/MtHFP0oJ6VxnhYeO
- +cDtywEebCgCknAivaweDQN7nPLdjUbaWoLUs1tfYfwXfZt13EwohFPG+tyz45Fp/ESRUPY6Q
- v7Zp9EVqB+bVeOWK9buXx7xKLp7nHfUs09NLLzJKmoZS/HwWBza49S51QdvAHsRUeUnC199+D
- r55ZUEAX8O1WzONdDh/dGexssHxKTmRwN0GDu+0jfeQG+XY4lzdntuIQwzuUmdDOcREPsLb3R
- CMIf2uIkEMSPHhCzfk+Rtws4ryxU0aW23Yi8n7A//y8apkziENsnaE8VT9cFGqCA+Pi1XAeks
- dygzp9o6CYH7/L2rAXosA1/+ovvsOl4nTs+QQZt3f+ImgNsbmlirU6qDQ9SPO4kk9a2hrtAU6
- CijdGVDnPlhkA1/FBUQHxbXUTeU2Vmc01ShKqT4fbDTXTYvYpSmJP1ZF3ifUjVO1t7opGSqMv
- k74VhR8/5YMPZWtzu410PmcxY9SygVUPyF5L6FCVHWgmKtNPvW1ydlpYFaXDcZw6rfSkNttwE
- /suvlr55qikfkg2+C4DPa8VPFaucq8E6VghdRm4elgBntNF0DvWOpuHlgOIbzH6CaLhAqMOT6
- fldWt3zRq3bVxaNKid1KALDed7ATpA2WOJF8nkQPlAYjy4PjgI6ncQo0Igws5WIfPnE4DgU3r
- XoVK04jhAJKZ8Tq2gzy1+wrlFScCLlAiCaslxn9WtJzWbZVWD6EW71L9S/Z1/AEdULyTovrmE
- JMeMC7j33yzwTxHhSoDJaSibSuiEdJCVsoEm55Xt+FbP5D2ePkoqKeR7wPI=
-X-Spam-Status: No, score=-95.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_MSPIKE_H2,
- SPF_FAIL, SPF_HELO_NONE, TXREP,
- T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Update FAQs which are out of date on the details of setup
+ UI
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <20220707114428.65374-1-jon.turney@dronecode.org.uk>
+ <YsvVC4qwC9Lao/Ho@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+In-Reply-To: <YsvVC4qwC9Lao/Ho@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfBLmoqCYVR9kXULaBw25XeM/zHYw/Nv6Khkvf3abeP7g1Jr8DhOzVZsHzPkXDQmGnOHLNQbTeR/9CrM1+uVJYpcNPWkIM27mSzwvFpGfBEV1h2Ji98RQ
+ ySihfxxxlnl7q1rWEF79VlM7mUJqpdKO/5qKVm60K/+jrLILUFNUfbXuHy4bZdZzLfNqLPBxT2q9FS/RJ86lCEMKHs9Dq1x3qeg=
+X-Spam-Status: No, score=-1169.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT, NICE_REPLY_A,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,33 +56,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 14 Jul 2022 14:54:16 -0000
+X-List-Received-Date: Sat, 23 Jul 2022 20:46:25 -0000
 
-On Jul 14 16:41, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > On Jul 14 14:12, Christian Franke wrote:
-> > 
-> > > > > +#endif
-> > > > This ifdef still makes sense, of course ...
-> > > Could possibly also be enhanced to __MSYS__ and msys1.dll.
-> > Not sure this makes sense.  Does their installer support CompactOS?
-> 
-> No, AFIAK. Then only (nonexistent?) users who run 'compact /c /exe:lzx ...'
-> manually on their installation would benefit.
-> 
-> 
-> > > 
-> > > > ... and on first glance, the
-> > > > remainder of the patch LGTM.
-> > > Thanks. Attached is an alternative patch with most ifdefs removed.
-> > LGTM.  I'm not going to push it, yet, because... do you still want to
-> > add the aforementioned MSYS support?  If not, I'll just go ahead.
-> 
-> Please go ahead. I don't want to add platform specific code not actually
-> tested on that platform.
+On 2022-07-11 01:45, Corinna Vinschen wrote:
+> On Jul  7 12:44, Jon Turney wrote:
+>> ---
+>>   winsup/doc/faq-setup.xml | 11 ++++++-----
+>>   winsup/doc/faq-using.xml | 14 +++++++-------
+>>   2 files changed, 13 insertions(+), 12 deletions(-)
+> LGTM
 
-Pushed.
+[original did not make it to me; caught up on archive and noticed]
 
+URL duplicates .html:
 
-Thanks,
-Corinna
+	<ulink url="https://cygwin.com/package-server.html.html">
+
+should perhaps also have the self-closing tag delimiter "/>":
+
+	<ulink url="https://cygwin.com/package-server.html" />
+
+where the extra space ensures it is also valid XHTML/XML so it can be 
+checked or processed with better tools that can catch issues ;^>
+
+[attachment extract]
+
+diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
+index ce1069616..da9fce534 100644
+--- a/winsup/doc/faq-setup.xml
++++ b/winsup/doc/faq-setup.xml
+...
+@@ -688,7 +689,7 @@ files, reinstall the "<literal>cygwin</literal>" 
+package using the Cygwin Setup
+  this purpose.  See <ulink url="http://rsync.samba.org/"/>,
+  <ulink url="http://www.gnu.org/software/wget/"/> for utilities that 
+can do this for you.
+  For more information on setting up a custom Cygwin package server, see
+-the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin 
+Setup program page</ulink>.
++the <ulink url="https://cygwin.com/package-server.html.html">Cygwin 
+Package Server page</ulink>.
+
+  </para>
+  </answer></qandaentry>
+...
+
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
