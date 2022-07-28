@@ -1,32 +1,32 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 439A63858D33
- for <cygwin-patches@cygwin.com>; Thu, 28 Jul 2022 15:13:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 439A63858D33
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 3D941385AE40
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jul 2022 15:14:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3D941385AE40
 Authentication-Results: sourceware.org;
  dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
  [119.150.44.95]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 26SFDVpY011517;
- Fri, 29 Jul 2022 00:13:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26SFDVpY011517
+ by conuserg-10.nifty.com with ESMTP id 26SFE5Dj022987;
+ Fri, 29 Jul 2022 00:14:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 26SFE5Dj022987
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1659021215;
- bh=V1GjeNYvqklR0Qfo8RKs+S0kCtHSrQG0rwfYxkF58C0=;
+ s=dec2015msa; t=1659021251;
+ bh=6hu/ISPsT3gaL6zYMsXUram29GJB2w/184YrN+vn2fU=;
  h=From:To:Cc:Subject:Date:From;
- b=bHYzuXit44064EFyKoualSNT1pF8R53lNRD/rYgT6AGTfh4R7TrMaQ924bt7X0tFz
- hDJkbOvtvhtLk4hyVSBnUAKt8XKIBItjknpOMUrADrTrRTKnzbGKrSI+LgjJJL+BRm
- tyttvFbcntwh8JYID+GICFMZYK5T+8jPrfvsnT+1nyWYI7dnWquik9qeLiK7+WmdGV
- jq/tL0J+rBsIyEn4SDdLlYDb64f70LRy+9x66JwakzfyEpLvVoJ40Z3qY/BFpAoIYN
- gVs5mQcuLTsZJxC+1p2k8YSjlnikG5nccwZ0y36PKRdAb4R5gFZ48sA/jHvoQEfBNc
- 4VdUgSB8/J85g==
+ b=zdqWayCLXsTyaBF01HVTsrNcyWRVRf4BxvIJgQY6y6kK4dkBIVV7M2yjYtPBlSHwm
+ cI8TVbIGDTikRp1S9PEkKmRCTP4SRsWf67YQTbDx1tCqzAhWOUmkt4hSXmLHSo6h4f
+ CO8QzQ2A7E6+EsUGQzxeXWjmSl4LuUfZOBCMBTAjoqSm2T2pcldvwFwEGApsU4Rvro
+ 3dspbLVffzm5rzrIc1VT67oWaXcHdC/953zt+mTKkHJO0tfsHx+C/VK6t/Z3cbaPMp
+ PrklNTzGN48OudyzuZUqP9Vd6sLbcVOXZ4jgZcdrWHMN1DiVqlSpUFKnEPAjkJ3X6y
+ 9giB3WXX3xhEw==
 X-Nifty-SrcIP: [119.150.44.95]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Add missing input_mutex guard.
-Date: Fri, 29 Jul 2022 00:13:20 +0900
-Message-Id: <20220728151320.1834-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Add workaround for ConEmu cygwin connector.
+Date: Fri, 29 Jul 2022 00:13:55 +0900
+Message-Id: <20220728151355.1844-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,100 +47,79 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jul 2022 15:13:51 -0000
+X-List-Received-Date: Thu, 28 Jul 2022 15:14:41 -0000
 
-- Setting con.disable_master_thread flag should be guarded by
-  input_mutex, however, it was not. This patch fixes that.
+- ConEmu cygwin connector conflicts with cons_master_thread since
+  it does not use read() to read console input. With this patch,
+  cons_master_thread is disabled in ConEmu cygwin connector.
 ---
- winsup/cygwin/fhandler.h          |  1 +
- winsup/cygwin/fhandler_console.cc | 23 +++++++++++++++++------
- 2 files changed, 18 insertions(+), 6 deletions(-)
+ winsup/cygwin/fhandler_console.cc | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 2b403d06e..e47b38e9a 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2294,6 +2294,7 @@ private:
-   static void cleanup_for_non_cygwin_app (handle_set_t *p);
-   static void set_console_mode_to_native ();
-   bool need_console_handler ();
-+  static void set_disable_master_thread (bool x);
- 
-   friend tty_min * tty_list::get_cttyp ();
- };
 diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index e080fd6c8..e90b8d5ee 100644
+index c20239d13..37262f638 100644
 --- a/winsup/cygwin/fhandler_console.cc
 +++ b/winsup/cygwin/fhandler_console.cc
-@@ -790,7 +790,7 @@ fhandler_console::setup_for_non_cygwin_app ()
-     (get_ttyp ()->getpgid ()== myself->pgid) ? tty::native : tty::restore;
-   set_input_mode (conmode, &tc ()->ti, get_handle_set ());
-   set_output_mode (conmode, &tc ()->ti, get_handle_set ());
--  con.disable_master_thread = true;
-+  set_disable_master_thread (true);
+@@ -1604,6 +1604,8 @@ fhandler_console::dup (fhandler_base *child, int flags)
+   return 0;
  }
  
- void
-@@ -806,7 +806,7 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
-     (con.owner == myself->pid) ? tty::restore : tty::cygwin;
-   set_output_mode (conmode, ti, p);
-   set_input_mode (conmode, ti, p);
--  con.disable_master_thread = (con.owner == myself->pid);
-+  set_disable_master_thread (con.owner == myself->pid);
- }
- 
- /* Return the tty structure associated with a given tty number.  If the
-@@ -984,7 +984,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
-   if (sig == SIGTTIN)
-     {
-       set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
--      con.disable_master_thread = false;
-+      set_disable_master_thread (false);
-     }
-   if (sig == SIGTTOU)
-     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
-@@ -1715,7 +1715,7 @@ fhandler_console::post_open_setup (int fd)
-   if (fd == 0)
-     {
-       set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
--      con.disable_master_thread = false;
-+      set_disable_master_thread (false);
-     }
-   else if (fd == 1 || fd == 2)
-     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
-@@ -1743,7 +1743,7 @@ fhandler_console::close ()
- 	  /* Cleaning-up console mode for cygwin apps. */
- 	  set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
- 	  set_input_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
--	  con.disable_master_thread = true;
-+	  set_disable_master_thread (true);
- 	}
-     }
- 
-@@ -3969,7 +3969,7 @@ fhandler_console::set_console_mode_to_native ()
- 	    termios *cons_ti = &cons->tc ()->ti;
- 	    set_input_mode (tty::native, cons_ti, cons->get_handle_set ());
- 	    set_output_mode (tty::native, cons_ti, cons->get_handle_set ());
--	    con.disable_master_thread = true;
-+	    set_disable_master_thread (true);
- 	    break;
- 	  }
-       }
-@@ -4322,3 +4322,14 @@ fhandler_console::need_console_handler ()
- {
-   return con.disable_master_thread || con.master_thread_suspended;
- }
++static void hook_conemu_cygwin_connector();
 +
-+void
-+fhandler_console::set_disable_master_thread (bool x)
+ int
+ fhandler_console::open (int flags, mode_t)
+ {
+@@ -1691,6 +1693,8 @@ fhandler_console::open (int flags, mode_t)
+ 
+   if (myself->pid == con.owner)
+     {
++      if (GetModuleHandle ("ConEmuHk64.dll"))
++	hook_conemu_cygwin_connector ();
+       char name[MAX_PATH];
+       shared_name (name, CONS_THREAD_SYNC, get_minor ());
+       thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
+@@ -3982,6 +3986,7 @@ fhandler_console::set_console_mode_to_native ()
+ DEF_HOOK (CreateProcessA);
+ DEF_HOOK (CreateProcessW);
+ DEF_HOOK (ContinueDebugEvent);
++DEF_HOOK (LoadLibraryA); /* Hooked for ConEmu cygwin connector */
+ 
+ static BOOL WINAPI
+ CreateProcessA_Hooked
+@@ -4023,6 +4028,20 @@ ContinueDebugEvent_Hooked
+   return ContinueDebugEvent_Orig (p, t, s);
+ }
+ 
++/* Hooked for ConEmu cygwin connector */
++static HMODULE WINAPI
++LoadLibraryA_Hooked (LPCSTR m)
 +{
-+  if (cygheap->ctty->get_major () != DEV_CONS_MAJOR)
-+    return;
-+  fhandler_console *cons = (fhandler_console *) cygheap->ctty;
-+  cons->acquire_input_mutex (mutex_timeout);
-+  con.disable_master_thread = x;
-+  cons->release_input_mutex ();
++  const char *p;
++  if ((p = strrchr(m, '\\')))
++    p++;
++  else
++    p = m;
++  if (strcasecmp(p, "ConEmuHk64.dll") == 0)
++    fhandler_console::set_disable_master_thread (true);
++  return LoadLibraryA_Orig (m);
 +}
++
+ void
+ fhandler_console::fixup_after_fork_exec (bool execing)
+ {
+@@ -4046,6 +4065,12 @@ fhandler_console::fixup_after_fork_exec (bool execing)
+   DO_HOOK (NULL, ContinueDebugEvent);
+ }
+ 
++static void
++hook_conemu_cygwin_connector()
++{
++  DO_HOOK (NULL, LoadLibraryA);
++}
++
+ /* Ugly workaround to create invisible console required since Windows 7.
+ 
+    First try to just attach to any console which may have started this
 -- 
 2.37.1
 
