@@ -1,38 +1,52 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 3D941385AE40
- for <cygwin-patches@cygwin.com>; Thu, 28 Jul 2022 15:14:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3D941385AE40
-Authentication-Results: sourceware.org;
- dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
- [119.150.44.95]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 26SFE5Dj022987;
- Fri, 29 Jul 2022 00:14:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 26SFE5Dj022987
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
- s=dec2015msa; t=1659021251;
- bh=6hu/ISPsT3gaL6zYMsXUram29GJB2w/184YrN+vn2fU=;
- h=From:To:Cc:Subject:Date:From;
- b=zdqWayCLXsTyaBF01HVTsrNcyWRVRf4BxvIJgQY6y6kK4dkBIVV7M2yjYtPBlSHwm
- cI8TVbIGDTikRp1S9PEkKmRCTP4SRsWf67YQTbDx1tCqzAhWOUmkt4hSXmLHSo6h4f
- CO8QzQ2A7E6+EsUGQzxeXWjmSl4LuUfZOBCMBTAjoqSm2T2pcldvwFwEGApsU4Rvro
- 3dspbLVffzm5rzrIc1VT67oWaXcHdC/953zt+mTKkHJO0tfsHx+C/VK6t/Z3cbaPMp
- PrklNTzGN48OudyzuZUqP9Vd6sLbcVOXZ4jgZcdrWHMN1DiVqlSpUFKnEPAjkJ3X6y
- 9giB3WXX3xhEw==
-X-Nifty-SrcIP: [119.150.44.95]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Add workaround for ConEmu cygwin connector.
-Date: Fri, 29 Jul 2022 00:13:55 +0900
-Message-Id: <20220728151355.1844-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.37.1
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-046.btinternet.com (mailomta25-re.btinternet.com
+ [213.120.69.118])
+ by sourceware.org (Postfix) with ESMTPS id A1DD23858C51
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jul 2022 16:43:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org A1DD23858C51
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
+ by re-prd-fep-046.btinternet.com with ESMTP id
+ <20220728164259.VKXE3123.re-prd-fep-046.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Thu, 28 Jul 2022 17:42:59 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+ bimi=skipped
+X-SNCR-Rigid: 613A8DE8318891A3
+X-Originating-IP: [86.140.69.48]
+X-OWM-Source-IP: 86.140.69.48 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduhedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefhueeileegudejteeikeevkedvtdduvdfhhfeltddugeefjeeuffeljefhvdduteenucffohhmrghinheptgihghifihhnrdgtohhmpdhsrghmsggrrdhorhhgpdhgnhhurdhorhhgpdhsohhurhgtvgifrghrvgdrohhrghenucfkphepkeeirddugedtrdeiledrgeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdehngdpihhnvghtpeekiedrudegtddrieelrdegkedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepuehrihgrnhdrkfhnghhlihhssefuhihsthgvmhgrthhitgfufidrrggsrdgtrgdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.105] (86.140.69.48) by
+ re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
+ jonturney@btinternet.com)
+ id 613A8DE8318891A3; Thu, 28 Jul 2022 17:42:59 +0100
+Message-ID: <a6958727-80ee-d8a3-3925-470c7f839a59@dronecode.org.uk>
+Date: Thu, 28 Jul 2022 17:42:58 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Update FAQs which are out of date on the details of setup
+ UI
+Content-Language: en-GB
+To: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>,
+ Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20220707114428.65374-1-jon.turney@dronecode.org.uk>
+ <YsvVC4qwC9Lao/Ho@calimero.vinschen.de>
+ <91d1d17c-27d2-a271-a9b6-bcd3811084ca@SystematicSw.ab.ca>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <91d1d17c-27d2-a271-a9b6-bcd3811084ca@SystematicSw.ab.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1198.6 required=5.0 tests=BAYES_00, BODY_8BITS,
+ FORGED_SPF_HELO, GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY,
+ KAM_SHORT, NICE_REPLY_A, RCVD_IN_DNSWL_NONE, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -47,79 +61,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jul 2022 15:14:41 -0000
+X-List-Received-Date: Thu, 28 Jul 2022 16:43:02 -0000
 
-- ConEmu cygwin connector conflicts with cons_master_thread since
-  it does not use read() to read console input. With this patch,
-  cons_master_thread is disabled in ConEmu cygwin connector.
----
- winsup/cygwin/fhandler_console.cc | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On 23/07/2022 21:46, Brian Inglis wrote:
+> On 2022-07-11 01:45, Corinna Vinschen wrote:
+>> On Jul  7 12:44, Jon Turney wrote:
+>>> ---
+>>>   winsup/doc/faq-setup.xml | 11 ++++++-----
+>>>   winsup/doc/faq-using.xml | 14 +++++++-------
+>>>   2 files changed, 13 insertions(+), 12 deletions(-)
+>> LGTM
+> 
+> [original did not make it to me; caught up on archive and noticed]
+> 
+> URL duplicates .html:
+> 
+>      <ulink url="https://cygwin.com/package-server.html.html">
+> 
+> should perhaps also have the self-closing tag delimiter "/>":
+> 
+>      <ulink url="https://cygwin.com/package-server.html" />
+> 
+> where the extra space ensures it is also valid XHTML/XML so it can be 
+> checked or processed with better tools that can catch issues ;^>
+> 
+> [attachment extract]
+> 
+> diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
+> index ce1069616..da9fce534 100644
+> --- a/winsup/doc/faq-setup.xml
+> +++ b/winsup/doc/faq-setup.xml
+> ...
+> @@ -688,7 +689,7 @@ files, reinstall the "<literal>cygwin</literal>" 
+> package using the Cygwin Setup
+>   this purpose.  See <ulink url="http://rsync.samba.org/"/>,
+>   <ulink url="http://www.gnu.org/software/wget/"/> for utilities that 
+> can do this for you.
+>   For more information on setting up a custom Cygwin package server, see
+> -the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin 
+> Setup program page</ulink>.
+> +the <ulink url="https://cygwin.com/package-server.html.html">Cygwin 
+> Package Server page</ulink>.
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index c20239d13..37262f638 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -1604,6 +1604,8 @@ fhandler_console::dup (fhandler_base *child, int flags)
-   return 0;
- }
- 
-+static void hook_conemu_cygwin_connector();
-+
- int
- fhandler_console::open (int flags, mode_t)
- {
-@@ -1691,6 +1693,8 @@ fhandler_console::open (int flags, mode_t)
- 
-   if (myself->pid == con.owner)
-     {
-+      if (GetModuleHandle ("ConEmuHk64.dll"))
-+	hook_conemu_cygwin_connector ();
-       char name[MAX_PATH];
-       shared_name (name, CONS_THREAD_SYNC, get_minor ());
-       thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
-@@ -3982,6 +3986,7 @@ fhandler_console::set_console_mode_to_native ()
- DEF_HOOK (CreateProcessA);
- DEF_HOOK (CreateProcessW);
- DEF_HOOK (ContinueDebugEvent);
-+DEF_HOOK (LoadLibraryA); /* Hooked for ConEmu cygwin connector */
- 
- static BOOL WINAPI
- CreateProcessA_Hooked
-@@ -4023,6 +4028,20 @@ ContinueDebugEvent_Hooked
-   return ContinueDebugEvent_Orig (p, t, s);
- }
- 
-+/* Hooked for ConEmu cygwin connector */
-+static HMODULE WINAPI
-+LoadLibraryA_Hooked (LPCSTR m)
-+{
-+  const char *p;
-+  if ((p = strrchr(m, '\\')))
-+    p++;
-+  else
-+    p = m;
-+  if (strcasecmp(p, "ConEmuHk64.dll") == 0)
-+    fhandler_console::set_disable_master_thread (true);
-+  return LoadLibraryA_Orig (m);
-+}
-+
- void
- fhandler_console::fixup_after_fork_exec (bool execing)
- {
-@@ -4046,6 +4065,12 @@ fhandler_console::fixup_after_fork_exec (bool execing)
-   DO_HOOK (NULL, ContinueDebugEvent);
- }
- 
-+static void
-+hook_conemu_cygwin_connector()
-+{
-+  DO_HOOK (NULL, LoadLibraryA);
-+}
-+
- /* Ugly workaround to create invisible console required since Windows 7.
- 
-    First try to just attach to any console which may have started this
--- 
-2.37.1
+I am confused.
 
+The <ulink> tag is closed by the </ulink> tag later on the same line, 
+after enclosing the link text 'Cygwin Package Server page'
+
+> 
+>   </para>
+>   </answer></qandaentry>
+> ...
