@@ -1,50 +1,39 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta002.cacentral1.a.cloudfilter.net
- (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
- by sourceware.org (Postfix) with ESMTPS id 766313858D33
- for <cygwin-patches@cygwin.com>; Thu, 28 Jul 2022 18:55:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 766313858D33
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id E5A8A3857B80
+ for <cygwin-patches@cygwin.com>; Fri, 29 Jul 2022 12:51:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E5A8A3857B80
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
- by cmsmtp with ESMTP
- id H2I1oQp33Sp39H8fSoxBZN; Thu, 28 Jul 2022 18:55:30 +0000
-Received: from [10.0.0.5] ([184.64.124.72]) by cmsmtp with ESMTP
- id H8fSo6Lm0uJwwH8fSoRmXb; Thu, 28 Jul 2022 18:55:30 +0000
-X-Authority-Analysis: v=2.4 cv=F+BEy4tN c=1 sm=1 tr=0 ts=62e2dba2
- a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
- a=JYDileg9wNlxFN0D:21 a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=hGzw-44bAAAA:8
- a=mDV3o1hIAAAA:8 a=CCpqsmhAAAAA:8 a=uYT-Tk0qkVT609LjNaIA:9 a=QEXdDO2ut3YA:10
- a=NEMXJcwN1a4A:10 a=hf7a2FvunDcA:10 a=OWQaqklJ0g0A:10
- a=wMWlw4UXOv7VJ8S2T32r:22 a=sRI3_1zDfAgwuvI8zelB:22 a=HvKuF1_PTVFglORKqfwH:22
- a=_FVE-zBwftR9WsbkzFJk:22 a=ul9cdbp4aOFLsgKbc677:22
-Message-ID: <6cd85e22-8623-78bc-cbbf-4c768f441423@SystematicSw.ab.ca>
-Date: Thu, 28 Jul 2022 12:55:29 -0600
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-07.nifty.com with ESMTP id 26TCp5rU024774;
+ Fri, 29 Jul 2022 21:51:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 26TCp5rU024774
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1659099071;
+ bh=oW4D1eCplDaE2y45wfJze0vczXHpO7seUp62Wmarw1M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=NEf/2G4+5GJLZaW3NAufkz0/dpnh/fB20sWE8dywtd6RGRf8Dyyt79ExqBm7rRty/
+ +v+Qafl6jwl/YN+2EAcOxsaBdnInU7cOhbRbzLubu4QNKYmXwiCtWO92PdRlIfcntX
+ Tip6UPX6wE5LnxHAjn88hdOWL9wX7g12pr/jnNqo3a0zC3/fNbqnk/swlrvKo0KjaS
+ bh9m55SUZKnJdnO2yMdxSuffGQtuwSI+jizjKhRhRXkvD/21nu9zRvWf9ld7Eh9ZVc
+ qjWSppZ+3/fMTrRk3j+V2ShErEXMD5Vmiw1x7M3Z1vjgvGKqi46yXcExQ6B3sCzWiO
+ ghWlyoWCpNc9A==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: console: Avoid accessing NULL pointer via
+ cygheap->ctty.
+Date: Fri, 29 Jul 2022 21:50:56 +0900
+Message-Id: <20220729125056.452-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Update FAQs which are out of date on the details of setup
- UI
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20220707114428.65374-1-jon.turney@dronecode.org.uk>
- <YsvVC4qwC9Lao/Ho@calimero.vinschen.de>
- <91d1d17c-27d2-a271-a9b6-bcd3811084ca@SystematicSw.ab.ca>
- <a6958727-80ee-d8a3-3925-470c7f839a59@dronecode.org.uk>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <a6958727-80ee-d8a3-3925-470c7f839a59@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfD/B8bIpDx3RZt4nFN7hXcbMpSexdjkk0G52UcZhBMmL4J3oW8Xuq/QaXgc/WTzZeNLpRKtlHpmxbP8mzwScmjI0AOeRoQlRXQDpAT+glTdOZTNXcGGt
- qGXPSeifarHBhBCny+IoSKLDTsv67XyR+AgrmQ4e/wXB6gZfmQyqCdui0y5uEgp/DY8TUu88IuF6kGHvk0rexYJrm/g26vfXegE=
-X-Spam-Status: No, score=-1168.3 required=5.0 tests=BAYES_00, BODY_8BITS,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT,
- NICE_REPLY_A, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,59 +48,99 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jul 2022 18:55:33 -0000
+X-List-Received-Date: Fri, 29 Jul 2022 12:51:52 -0000
 
-On 2022-07-28 10:42, Jon Turney wrote:
-> On 23/07/2022 21:46, Brian Inglis wrote:
->> On 2022-07-11 01:45, Corinna Vinschen wrote:
->>> On Jul  7 12:44, Jon Turney wrote:
->>>> ---
->>>>   winsup/doc/faq-setup.xml | 11 ++++++-----
->>>>   winsup/doc/faq-using.xml | 14 +++++++-------
->>>>   2 files changed, 13 insertions(+), 12 deletions(-)
->>> LGTM
->>
->> [original did not make it to me; caught up on archive and noticed]
->>
->> URL duplicates .html:
->>
->>      <ulink url="https://cygwin.com/package-server.html.html">
->>
->> should perhaps also have the self-closing tag delimiter "/>":
->>
->>      <ulink url="https://cygwin.com/package-server.html" />
->>
->> where the extra space ensures it is also valid XHTML/XML so it can be 
->> checked or processed with better tools that can catch issues ;^>
->>
->> [attachment extract]
->>
->> diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
->> index ce1069616..da9fce534 100644
->> --- a/winsup/doc/faq-setup.xml
->> +++ b/winsup/doc/faq-setup.xml
->> ...
->> @@ -688,7 +689,7 @@ files, reinstall the "<literal>cygwin</literal>" 
->> package using the Cygwin Setup
->>   this purpose.  See <ulink url="http://rsync.samba.org/"/>,
->>   <ulink url="http://www.gnu.org/software/wget/"/> for utilities that 
->> can do this for you.
->>   For more information on setting up a custom Cygwin package server, see
->> -the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin 
->> Setup program page</ulink>.
->> +the <ulink url="https://cygwin.com/package-server.html.html">Cygwin 
->> Package Server page</ulink>.
-> 
-> I am confused.
-> 
-> The <ulink> tag is closed by the </ulink> tag later on the same line, 
-> after enclosing the link text 'Cygwin Package Server page'
+- Recent commit "Cygwin: console: Add missing input_mutex guard."
+  has a problem that causes NULL pointer access if cygheap->ctty
+  is NULL. This patch fixes the issue.
+---
+ winsup/cygwin/fhandler.h          |  2 +-
+ winsup/cygwin/fhandler_console.cc | 22 ++++++++++++++--------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-Sorry I missed those end tags because of the wrap.
-
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index a12e907ff..e4f1a2d94 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2298,7 +2298,7 @@ private:
+   static void cleanup_for_non_cygwin_app (handle_set_t *p);
+   static void set_console_mode_to_native ();
+   bool need_console_handler ();
+-  static void set_disable_master_thread (bool x);
++  static void set_disable_master_thread (bool x, fhandler_console *cons = NULL);
+ 
+   friend tty_min * tty_list::get_cttyp ();
+ };
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 37262f638..d17f03acf 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -791,7 +791,7 @@ fhandler_console::setup_for_non_cygwin_app ()
+     (get_ttyp ()->getpgid ()== myself->pgid) ? tty::native : tty::restore;
+   set_input_mode (conmode, &tc ()->ti, get_handle_set ());
+   set_output_mode (conmode, &tc ()->ti, get_handle_set ());
+-  set_disable_master_thread (true);
++  set_disable_master_thread (true, this);
+ }
+ 
+ void
+@@ -986,7 +986,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
+   if (sig == SIGTTIN)
+     {
+       set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+-      set_disable_master_thread (false);
++      set_disable_master_thread (false, this);
+     }
+   if (sig == SIGTTOU)
+     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+@@ -1721,7 +1721,7 @@ fhandler_console::post_open_setup (int fd)
+   if (fd == 0)
+     {
+       set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+-      set_disable_master_thread (false);
++      set_disable_master_thread (false, this);
+     }
+   else if (fd == 1 || fd == 2)
+     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+@@ -1749,7 +1749,7 @@ fhandler_console::close ()
+ 	  /* Cleaning-up console mode for cygwin apps. */
+ 	  set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
+ 	  set_input_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
+-	  set_disable_master_thread (true);
++	  set_disable_master_thread (true, this);
+ 	}
+     }
+ 
+@@ -3975,7 +3975,7 @@ fhandler_console::set_console_mode_to_native ()
+ 	    termios *cons_ti = &cons->tc ()->ti;
+ 	    set_input_mode (tty::native, cons_ti, cons->get_handle_set ());
+ 	    set_output_mode (tty::native, cons_ti, cons->get_handle_set ());
+-	    set_disable_master_thread (true);
++	    set_disable_master_thread (true, cons);
+ 	    break;
+ 	  }
+       }
+@@ -4321,11 +4321,17 @@ fhandler_console::need_console_handler ()
+ }
+ 
+ void
+-fhandler_console::set_disable_master_thread (bool x)
++fhandler_console::set_disable_master_thread (bool x, fhandler_console *cons)
+ {
+-  if (cygheap->ctty->get_major () != DEV_CONS_MAJOR)
++  if (con.disable_master_thread == x)
+     return;
+-  fhandler_console *cons = (fhandler_console *) cygheap->ctty;
++  if (cons == NULL)
++    {
++      if (cygheap->ctty && cygheap->ctty->get_major () == DEV_CONS_MAJOR)
++	cons = (fhandler_console *) cygheap->ctty;
++      else
++	return;
++    }
+   cons->acquire_input_mutex (mutex_timeout);
+   con.disable_master_thread = x;
+   cons->release_input_mutex ();
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.37.1
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
