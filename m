@@ -1,52 +1,38 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-045.btinternet.com (mailomta21-re.btinternet.com
- [213.120.69.114])
- by sourceware.org (Postfix) with ESMTPS id C6E633858CDA;
- Sun, 31 Jul 2022 15:03:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C6E633858CDA
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-045.btinternet.com with ESMTP id
- <20220731150315.NKBL3219.re-prd-fep-045.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Sun, 31 Jul 2022 16:03:15 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
- bimi=skipped
-X-SNCR-Rigid: 613A8DE8320DB89A
-X-Originating-IP: [86.139.167.71]
-X-OWM-Source-IP: 86.139.167.71 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvuddgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeihfeghfdviedvjeevkeektdejuddvhedtveetgeevkefgtdeigeejvdeutefhvdenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeekiedrudefledrudeijedrjedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdehngdpihhnvghtpeekiedrudefledrudeijedrjedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegtohhrihhnnhgrqdgthihgfihinhestgihghifihhnrdgtohhmpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.105] (86.139.167.71) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as
- jonturney@btinternet.com)
- id 613A8DE8320DB89A; Sun, 31 Jul 2022 16:03:15 +0100
-Message-ID: <4863473c-48a0-0da0-7e32-6d1cf5522ead@dronecode.org.uk>
-Date: Sun, 31 Jul 2022 16:03:13 +0100
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id 9A496385803E
+ for <cygwin-patches@cygwin.com>; Mon,  1 Aug 2022 23:04:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9A496385803E
+Authentication-Results: sourceware.org;
+ dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (ak044095.dynamic.ppp.asahi-net.or.jp
+ [119.150.44.95]) (authenticated)
+ by conuserg-07.nifty.com with ESMTP id 271N46sG027927;
+ Tue, 2 Aug 2022 08:04:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 271N46sG027927
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+ s=dec2015msa; t=1659395054;
+ bh=3FXV4523omJZvlnqjD0IvmfA9Mgb5pKamVkmz62wVpY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Az+PK+bBzaZ1Bjfbip9pZXRh3x3SkSifqpL6MSXmU50KLxrTKEjKXObarFXbBWA99
+ +4PTK1H4P7LHRLaNQNBKbyOlfG8Tos6muYjrm+rU68TCAiBq90n+A2QoY8UcKSd8QL
+ Ou2ZeoFQU68l1PaQlKnSNKlA8f7PoBVxaFMQ4rDZSeq8IgjYxul+qi7ObtQwkB9uF2
+ dyx9ZjeEJNZLh08q/ehM3rbDrev+kxvdH247JdFqhYEOeHkNChZv6pmeWYzclNozZ4
+ ODn6hfdxN+FvQOXAbOE6FeUQFFDIKc/iunvrfcjR2DREIV6nOh9SWc6YBSTZ7CnjAu
+ pYCZ0sUcdTYJQ==
+X-Nifty-SrcIP: [119.150.44.95]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: console: Modify ConEmu cygwin connector hook.
+Date: Tue,  2 Aug 2022 08:03:57 +0900
+Message-Id: <20220801230357.1799-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [newlib-cygwin] Cygwin: Set threadnames with
- SetThreadDescription()
-Content-Language: en-GB
-To: Corinna Vinschen <corinna-cygwin@cygwin.com>,
- Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20220729110147.4E6F43858424@sourceware.org>
- <YuPLd2hlbaNwxAJ0@calimero.vinschen.de>
- <78af80e5-baed-5ebb-314f-99d13f2a25ca@sourceware.org>
- <YuQm5xcBC+1LJSJk@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <YuQm5xcBC+1LJSJk@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1192.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_PASS, SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,70 +47,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 31 Jul 2022 15:03:18 -0000
+X-List-Received-Date: Mon, 01 Aug 2022 23:04:37 -0000
 
-On 29/07/2022 19:28, Corinna Vinschen wrote:
-> On Jul 29 15:14, Jon Turney wrote:
->> On 29/07/2022 12:58, Corinna Vinschen wrote:
->>> Hi Jon,
->>>
->>> On Jul 29 11:01, Jon TURNEY via Cygwin-cvs wrote:
->>>> https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=d4689b99c68628d9ec2fc1ac7884906ddbf6a2fc
->>>>
->>>> commit d4689b99c68628d9ec2fc1ac7884906ddbf6a2fc
->>>> Author: Jon Turney <jon.turney@dronecode.org.uk>
->>>> Date:   Thu May 19 17:27:39 2022 +0100
->>>>
->>>>       Cygwin: Set threadnames with SetThreadDescription()
->>>>       [...]
->>>> +      /* SetThreadDescription only exists in a wide-char version, so we must
->>>> +	 convert threadname to wide-char.  The encoding of threadName is
->>>> +	 unclear, so use UTF8 until we know better. */
->>>> +      int bufsize = MultiByteToWideChar (CP_UTF8, 0, threadName, -1, NULL, 0);
->>>> +      WCHAR buf[bufsize];
->>>> +      bufsize = MultiByteToWideChar (CP_UTF8, 0, threadName, -1, buf, bufsize);
->>>
->>> I think this is wrong.  The function should use stock mbstowcs instead
->>> to get the externally used encoding.  Think of SetThreadName called with
->>> program_invocation_short_name in pthread::thread_init_wrapper, or called
->>> from pthread_setname_np with an externally provided thread name.  This
->>> thread name will use the locale of the application code it's called by.
->>
->> I'm not sure.
->>
->> The linux manpage for pthread_setname_np() says "The thread name is a
->> meaningful C language string", which I think means it's ASCII-encoded, not
->> locale-encoded.
-> 
-> I think this only means, it's a NUL-terminated string. "Meaningful" is
-> just trying to nudge developers into using meaningful names, not
-> something like "blurb".
+- Previously, LoadLibraryA() is hooked for ConEmu cygwin connector.
+  With this patch, GetProcAddress() for "RequestTermConnector" is
+  hooked instead which is more essential for ConEmu cygwin connector.
+---
+ winsup/cygwin/fhandler_console.cc | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-Oh yeah, that reading makes more sense!
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index d17f03acf..e3d87331f 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -3986,7 +3986,7 @@ fhandler_console::set_console_mode_to_native ()
+ DEF_HOOK (CreateProcessA);
+ DEF_HOOK (CreateProcessW);
+ DEF_HOOK (ContinueDebugEvent);
+-DEF_HOOK (LoadLibraryA); /* Hooked for ConEmu cygwin connector */
++DEF_HOOK (GetProcAddress); /* Hooked for ConEmu cygwin connector */
+ 
+ static BOOL WINAPI
+ CreateProcessA_Hooked
+@@ -4029,17 +4029,12 @@ ContinueDebugEvent_Hooked
+ }
+ 
+ /* Hooked for ConEmu cygwin connector */
+-static HMODULE WINAPI
+-LoadLibraryA_Hooked (LPCSTR m)
++static FARPROC WINAPI
++GetProcAddress_Hooked (HMODULE h, LPCSTR n)
+ {
+-  const char *p;
+-  if ((p = strrchr(m, '\\')))
+-    p++;
+-  else
+-    p = m;
+-  if (strcasecmp(p, "ConEmuHk64.dll") == 0)
++  if (strcmp(n, "RequestTermConnector") == 0)
+     fhandler_console::set_disable_master_thread (true);
+-  return LoadLibraryA_Orig (m);
++  return GetProcAddress_Orig (h, n);
+ }
+ 
+ void
+@@ -4068,7 +4063,7 @@ fhandler_console::fixup_after_fork_exec (bool execing)
+ static void
+ hook_conemu_cygwin_connector()
+ {
+-  DO_HOOK (NULL, LoadLibraryA);
++  DO_HOOK (NULL, GetProcAddress);
+ }
+ 
+ /* Ugly workaround to create invisible console required since Windows 7.
+-- 
+2.37.1
 
-Still I think the threadname is just really just an opaque NULL 
-terminated byte sequence which you can get back with pthread_getname_np().
-
-If there are other mechanisms which make that threadname available to 
-other processes (which might have a different locale), it's unclear how 
-the encoding is supposed to be handled...
-
->> (The solaris manpage explicitly says that the thread name is utf8 encoded)
-> 
-> Ok, that's an interesting point.
-> 
->> The encoding for program_invocation_short_name was also unclear to me.
->> (It's the same as argv[0], so I guess it's in whatever encoding the
->> filesystem uses, which doesn't have to match the process locale encoding)
->>
->> Expecting this function to work with non-ASCII names seems optimistic :)
-> 
-> Well, for Linux it's certainly just an arbitrary, NUL-terminated byte
-> stream, but yeah, it's certainly the only portable way to expect
-> the portable codeset.
-> 
-> Anyway, feel free to just keep the code as is.  We're typically using
-> UTF-8 anyway and people switching to one of the legacy codesets are
-> supposed to know what they are doing.
-
-Yes, I think I'll leave this as is until someone complains! :)
