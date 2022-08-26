@@ -1,16 +1,16 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-042.btinternet.com (mailomta26-re.btinternet.com [213.120.69.119])
-	by sourceware.org (Postfix) with ESMTPS id 7E2753851A96
-	for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2022 13:00:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7E2753851A96
+Received: from re-prd-fep-049.btinternet.com (mailomta26-re.btinternet.com [213.120.69.119])
+	by sourceware.org (Postfix) with ESMTPS id 7C05F3858428
+	for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2022 13:00:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7C05F3858428
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
 Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
-          by re-prd-fep-042.btinternet.com with ESMTP
-          id <20220826130002.WKJT3291.re-prd-fep-042.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
-          Fri, 26 Aug 2022 14:00:02 +0100
+          by re-prd-fep-049.btinternet.com with ESMTP
+          id <20220826130004.LENA3069.re-prd-fep-049.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
+          Fri, 26 Aug 2022 14:00:04 +0100
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 61A69BAC2ADD0816
+X-SNCR-Rigid: 61A69BAC2ADD085B
 X-Originating-IP: [86.139.158.127]
 X-OWM-Source-IP: 86.139.158.127 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
@@ -19,13 +19,13 @@ X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejhedgheejucetufdoteggod
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.158.127) by re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
-        id 61A69BAC2ADD0816; Fri, 26 Aug 2022 14:00:02 +0100
+        id 61A69BAC2ADD085B; Fri, 26 Aug 2022 14:00:04 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 1/6] Cygwin: testsuite: Don't write coredump in a child which is expected to segfault
-Date: Fri, 26 Aug 2022 13:59:37 +0100
-Message-Id: <20220826125943.49-2-jon.turney@dronecode.org.uk>
+Subject: [PATCH 2/6] Cygwin: testsuite: Remove passing tests from XFAIL list
+Date: Fri, 26 Aug 2022 13:59:38 +0100
+Message-Id: <20220826125943.49-3-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220826125943.49-1-jon.turney@dronecode.org.uk>
 References: <20220826125943.49-1-jon.turney@dronecode.org.uk>
@@ -35,32 +35,23 @@ X-Spam-Status: No, score=-1197.3 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
+Remove ltp/fcntl05.c from XFAIL list, since it now PASSes.
+Remove ltp/dup03.c from XFAIL list, since it now PASSes.
 ---
- winsup/testsuite/winsup.api/resethand.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ winsup/testsuite/winsup.api/known_bugs.tcl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/testsuite/winsup.api/resethand.c b/winsup/testsuite/winsup.api/resethand.c
-index 7d58dcd2c..4bd0fa072 100644
---- a/winsup/testsuite/winsup.api/resethand.c
-+++ b/winsup/testsuite/winsup.api/resethand.c
-@@ -15,6 +15,9 @@ ouch (int sig)
- int
- main (int argc, char **argv)
- {
-+  static struct rlimit nocore = { 0,0 };
-+  setrlimit(RLIMIT_CORE, &nocore);
-+
-   static struct sigaction act;
-   if (argc == 1)
-     act.sa_flags = SA_RESETHAND;
-@@ -31,6 +34,6 @@ main (int argc, char **argv)
-       exit (0x42);
-     }
-   status &= ~0x80;	// remove core dump flag
--  printf ("pid %d exited with status %p\n", pid, (void *) status);
-+  printf ("pid %d exited with status %x\n", pid, status);
-   exit (argc == 1 ? !(status == SIGSEGV) : !(status == SIGTERM));
- }
+diff --git a/winsup/testsuite/winsup.api/known_bugs.tcl b/winsup/testsuite/winsup.api/known_bugs.tcl
+index e063ee6bb..4f13c90e0 100644
+--- a/winsup/testsuite/winsup.api/known_bugs.tcl
++++ b/winsup/testsuite/winsup.api/known_bugs.tcl
+@@ -1,4 +1,4 @@
+-set xfail_list [list dup03 \
+-    fcntl05 setgroups01 setuid02 \
++set xfail_list [list \
++    setgroups01 setuid02 \
+     ulimit01 unlink08 \
+     sample-fail sample-miscompile]
 -- 
 2.37.2
 
