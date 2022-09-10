@@ -1,54 +1,105 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by sourceware.org (Postfix) with ESMTPS id 73E93384D179
-	for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2022 16:08:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 73E93384D179
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M1aQN-1oQDtr0QyR-00329g for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2022
- 18:08:00 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 1C34AA806D1; Fri, 26 Aug 2022 18:07:59 +0200 (CEST)
-Date: Fri, 26 Aug 2022 18:07:59 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <>
+Received: from mda.extendcp.co.uk (unknown [80.90.192.197])
+	by sourceware.org (Postfix) with ESMTPS id B1CB83858CDB
+	for <cygwin-patches@cygwin.com>; Sat, 10 Sep 2022 18:20:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B1CB83858CDB
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=mda.extendcp.co.uk
+Authentication-Results: sourceware.org; spf=none smtp.helo=mda.extendcp.co.uk
+Received: from mail by mda.extendcp.co.uk with local (Exim 4.94.2)
+	id 1oX55V-00Dzuk-8u
+	for cygwin-patches@cygwin.com; Sat, 10 Sep 2022 19:20:17 +0100
+X-Failed-Recipients: eotcband@gmail.com
+Auto-Submitted: auto-replied
+From: Mail Delivery System <Mailer-Daemon@mda.extendcp.co.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/6] testsuite: various fixes
-Message-ID: <Ywjv3xnhMP4rYlMW@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20220826125943.49-1-jon.turney@dronecode.org.uk>
+References: <202209110220138711160@cygwin.com>
+Content-Type: multipart/report; report-type=delivery-status; boundary=1662834017-eximdsn-622678352
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220826125943.49-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:YDd94HMf0dh53bt7eTmv+iY/M9fFSszo0ywMSdZKxZ1e/D4GnPf
- vjNiteq3XfTl3hQ/+PwYdZEVu3tqPembbu6HjKt1z3x+bNulBs3XUtnxYfeF0Hepcplx4xV
- fG3n3IQvyIrptCb+gx26kLcoDPLSbCdUTjwQ2IsraLDY4mgrHVIheyJFbO6M3fxwnsKa7Zr
- teuWRPMbaGUIUp87UWV9A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0WNXh/Fdkr8=:RtTkKTDZKAlUbftaBgT0N3
- nv/fTIZO80IDK7DNxJ7B/pgFtcGL0/6ND6sw6NvGDUkZF/UIGHhNIj3qiKO5c1nzQTHBWDnme
- 7AnSkceRFlBUf8opJRquiHkHezqATawvA1hdA8B/MA7jb6fnzUarA6yvRetvJu58HaPC4IyR9
- I0HCj+uSWCwrUoEwtXmgvEVaQ9UtsLbQurJA09o6WQE+UFaAZWGKZ0v4xCfc45aUYXXDLDkLv
- fhiyo7RDa/6uvYggSXNGgeXcFPqUN2CH+poFFCGZG6l16beJuwPWgQsUe7D9S0eCyeWCQee3k
- SvlZnTGVChBuEj3UPYwiIXCPuyYNG8fXT3KC/1f0LxFCsdAit0bja41olvZZ8H32KUxGy7NmE
- V7nq+7t92nCfGytiPZ4XRpWzv6zCpLa5igW0ryi+vGWIj7AgEhiKqt4sGKEobZVPAMKdmFTz6
- uQfzneM/OmeP3ajMRJJLYGVYRfY9cfs4W54rGMUpXh11k7jeMvPkCrv10uGCM9YueoCJ23y6/
- Dq3Uu6f0BJKMoOm6v494UBVqs1i3rmKHiwkZU3i31GtwhpcpUgmjTSoyIUZG0NfgoK7oqIBFC
- 0MjaIxYZ6jOxVfiX8lKcP7rg3PhrwnsZ0fbltCmbQhLRbZ0qU2bR+DkKYQZ1FfZowK0vH8Yaw
- 67CIegj4t5J49DWPhz5ePP7Rt5oh6qWkwDz+sIPOdCww5P2eGxjH0ZVRQqAqIjG8hOULyDGXD
- y+k0STdZ6JjpF6XJIHJ2+ha7ARV6pnfXl8B8C+zl5154Ip6GCml3KH+IvVU=
-X-Spam-Status: No, score=-95.8 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Mail delivery failed: returning message to sender
+Message-Id: <E1oX55V-00Dzuk-8u@mda.extendcp.co.uk>
+Date: Sat, 10 Sep 2022 19:20:17 +0100
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,KAM_COUK,KAM_DMARC_STATUS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Aug 26 13:59, Jon Turney wrote:
-> This are some fixes for the testsuite I wrote back when I was looking at the
-> automake conversion, which mainly fix x86_64-specific problems in the
-> testsuite.
+--1662834017-eximdsn-622678352
+Content-type: text/plain; charset=us-ascii
 
-LGTM
+This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  eotcband@gmail.com
+    (ultimately generated from Webmaster@eotc.co.uk)
+    
+
+--1662834017-eximdsn-622678352
+Content-type: message/delivery-status
+
+Reporting-MTA: dns; mda.extendcp.co.uk
+
+Action: failed
+Final-Recipient: rfc822;Webmaster@eotc.co.uk
+Status: 5.0.0
+
+--1662834017-eximdsn-622678352
+Content-type: text/rfc822-headers
+
+Return-path: <cygwin-patches@cygwin.com>
+Received: from mail by mda.extendcp.co.uk with spamvirus-scanned (Exim 4.94.2)
+	id 1oX55U-00Dzu4-6y
+	for Webmaster@eotc.co.uk; Sat, 10 Sep 2022 19:20:17 +0100
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on scan7.hi.local
+X-Spam-Flag: YES
+X-Spam-Level: ******************
+X-Spam-Status: Yes, score=18.4 required=7.0 tests=CMCL_1,
+	FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HTML_IMAGE_ONLY_04,
+	HTML_MESSAGE,HTML_MIME_NO_HTML_TAG,MIME_HTML_ONLY,MPART_ALT_DIFF,
+	PDS_TONAME_EQ_TOLOCAL_FREEM_FORGE,RCVD_IN_VALIDITY_RPBL,RDNS_NONE,
+	SPF_HELO_FAIL,T_OBFU_JPG_ATTACH,T_SCC_BODY_TEXT_LINE autolearn=disabled
+	version=3.4.0
+X-Spam-Report: 
+	*  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+	*      https://senderscore.org/blocklistlookup/
+	*      [115.226.168.247 listed in bl.score.senderscore.com]
+	*  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in digit
+	*      (alnb7891[at]21cn.com)
+	*  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
+	*      [SPF failed: Please see http://www.openspf.net/Why?s=helo;id=cygwin.com;ip=115.226.168.247;r=scan7.hi.local]
+	*  0.0 HTML_MESSAGE BODY: HTML included in message
+	*  0.7 MPART_ALT_DIFF BODY: HTML and text parts are different
+	*  0.0 T_OBFU_JPG_ATTACH BODY: JPG attachment with generic MIME type
+	*  0.1 MIME_HTML_ONLY BODY: Message only has text/html MIME parts
+	*  0.3 HTML_IMAGE_ONLY_04 BODY: HTML: images with 0-400 bytes of words
+	*   10 CMCL_1 Cloudmark Authority detected spam
+	*  1.3 RDNS_NONE Delivered to internal network by a host with no rDNS
+	*  0.6 HTML_MIME_NO_HTML_TAG HTML-only message, but there is no HTML tag
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+	*  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+	*  1.3 PDS_TONAME_EQ_TOLOCAL_FREEM_FORGE Forged replyto and
+	*      __PDS_TONAME_EQ_TOLOCAL
+X-Spam-CMAuthority: v=2.4 cv=CPXv4TnD c=0 sm=1 tr=0 ts=631cd561
+	p=TLbLnxVyYxFkqrjO2L0A:9 a=PCK+PfzFzHJtzAM8Hxm1Ug==:17 a=_l4uJm6h9gAA:10
+	a=xOM3xZuef0cA:10 a=9DvhAHx2yrWFMPxQWpQA:9 a=tWMloKG_feIIU6U4h_QA:9
+	a=lqcHg5cX4UMA:10 a=mFyHDrcPJccA:10
+Received: from [115.226.168.247] (helo=cygwin.com)
+	by mda.extendcp.co.uk with esmtp (Exim 4.94.2)
+	id 1oX55R-00DzrQ-Dg
+	for Webmaster@eotc.co.uk; Sat, 10 Sep 2022 19:20:16 +0100
+X-GUID: EAEF8CD5-9FF3-47F4-AE2A-AA30601446E8
+X-Has-Attach: yes
+From: "30591" <cygwin-patches@cygwin.com>
+Subject: [SPAM] Looking for agents
+To: "Webmaster" <Webmaster@eotc.co.uk>
+Content-Type: multipart/mixed; charset=GB2312; boundary="----=_981_NextPart912335004343_=----"
+MIME-Version: 1.0
+Reply-To: alnb7891@21cn.com
+Date: Sun, 11 Sep 2022 02:20:17 +0800
+Message-Id: <202209110220138711160@cygwin.com>
+X-Mailer: Foxmail 7, 2, 5, 140[cn]
+X-Spam-Prev-Subject: Looking for agents
+X-Exim-DSN-Information: Due to administrative limits only headers are returned
 
 
-Corinna
+--1662834017-eximdsn-622678352--
