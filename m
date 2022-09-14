@@ -1,59 +1,46 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta001.cacentral1.a.cloudfilter.net (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
-	by sourceware.org (Postfix) with ESMTPS id 89D373858407
-	for <cygwin-patches@cygwin.com>; Wed, 14 Sep 2022 03:27:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 89D373858407
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
-	by cmsmtp with ESMTP
-	id Y9ePog1k3S8WrYJ3eoHwKZ; Wed, 14 Sep 2022 03:27:26 +0000
-Received: from [10.0.0.5] ([184.64.124.72])
-	by cmsmtp with ESMTP
-	id YJ3dob6TUGRNlYJ3eoKYj7; Wed, 14 Sep 2022 03:27:26 +0000
-X-Authority-Analysis: v=2.4 cv=Sfrky9du c=1 sm=1 tr=0 ts=63214a1e
- a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
- a=IkcTkHD0fZMA:10 a=MaTqHXpsqfzHccmfshIA:9 a=QEXdDO2ut3YA:10
-Message-ID: <fb1170f1-b58f-b428-fb2e-647930315db4@SystematicSw.ab.ca>
-Date: Tue, 13 Sep 2022 21:27:25 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Subject: Cygwin 32 Build Branch
-Organization: Systematic Software
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfGCcACv0WGiLEsbgeR9y+UqWrbywU2HvzKp9y8oHBs4HMunoP9GOVt+4F5QxodFl59Jcm6ACWkGaQYQzMsceW5F6tRbAEZyG5WGw9KoqpZGbARAWZ/8U
- xckpKxawIG7hY8tMAIC5tvhG+9KYJJgR3QjIxhayKTZE++sZYR8ilwFi43ig9OcEVMQ0dxcseVtS45B5sXL0tLyfw/36DDJtDf8=
-X-Spam-Status: No, score=-1163.7 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+	by sourceware.org (Postfix) with ESMTPS id D5A07386545B
+	for <cygwin-patches@cygwin.com>; Wed, 14 Sep 2022 04:41:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D5A07386545B
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 (aj136180.dynamic.ppp.asahi-net.or.jp [220.150.136.180]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 28E4f4EK011920;
+	Wed, 14 Sep 2022 13:41:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28E4f4EK011920
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1663130465;
+	bh=gukW/uMKw0iIA3tKyEJhLno5Ie6wLhJqCDrIx3RoZl4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CAdmHhkBaT0hgmYRPM8f2+cpABCyduR+LestVWYLqgfj8InUO/PXbAfo9IY8SJ7L3
+	 oHXqbAgziC5S/MFVl2tkQR4Zz/iLq4xGjK7voMxGAosyovD2Ir7CrJIxylOTKCmcYJ
+	 NLYcwfWRX4Gr3p1GzbOQyAKDHH9W8H+XT6TXxu5TYoO9S3Qms8mrJh1CRg72d4Xw+R
+	 Rm2Jy1ohxF325IewoqSngwARVjVlLnsgx8bvB3NiXt6swap4yG7nSN+6Hmo8/QwVNv
+	 6KgsiuqRwvJfYXLLViik8Gr57ktOKUUYq7fHniQtJk5or7EtdnjcZxuotyw94P94qE
+	 9cXiCIyI97jGQ==
+X-Nifty-SrcIP: [220.150.136.180]
+Date: Wed, 14 Sep 2022 13:41:06 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: Cygwin 32 Build Branch
+Message-Id: <20220914134106.3fbad135a1f6627457ae3ec3@nifty.ne.jp>
+In-Reply-To: <fb1170f1-b58f-b428-fb2e-647930315db4@SystematicSw.ab.ca>
+References: <fb1170f1-b58f-b428-fb2e-647930315db4@SystematicSw.ab.ca>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi folks,
+On Tue, 13 Sep 2022 21:27:25 -0600
+Brian Inglis wrote:
+> What is the branch to checkout to build Cygwin 32?
 
-What is the branch to checkout to build Cygwin 32?
-
-Build master fails with:
-   CC       libm/math/libm_a-k_standard.o
-In file included from .../newlib/libc/include/sys/config.h:238,
-                  from .../newlib/libc/include/_ansi.h:11,
-                  from .../newlib/libc/include/sys/reent.h:13,
-                  from .../newlib/libc/include/math.h:5,
-                  from .../newlib/libm/common/fdlibm.h:15,
-                  from .../newlib/libm/math/k_standard.c:15:
-.../winsup/cygwin/include/cygwin/config.h: In function ‘__getreent’:
-.../winsup/cygwin/include/cygwin/config.h:42:2: error: #error 
-unimplemented for this target
-    42 | #error unimplemented for this target
-       |  ^~~~~
-make[3]: *** [Makefile:36280: libm/math/libm_a-k_standard.o] Error 1
-...
+cygwin-3_3-branch
 
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-[Please Reply All due to ml email issues]
+Takashi Yano <takashi.yano@nifty.ne.jp>
