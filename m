@@ -1,59 +1,68 @@
-Return-Path: <crd@acm.org>
-Received: from resqmta-h1p-028596.sys.comcast.net (resqmta-h1p-028596.sys.comcast.net [IPv6:2001:558:fd02:2446::4])
-	by sourceware.org (Postfix) with ESMTPS id 1F1163858D28
-	for <cygwin-patches@cygwin.com>; Fri,  7 Oct 2022 17:27:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1F1163858D28
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=acm.org
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=acm.org
-Received: from resomta-h1p-027910.sys.comcast.net ([96.102.179.196])
-	by resqmta-h1p-028596.sys.comcast.net with ESMTP
-	id gnsUoFFpD4RFhgr8Jo4Hqs; Fri, 07 Oct 2022 17:27:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=comcastmailservice.net; s=20211018a; t=1665163655;
-	bh=piZKuDW7nwJG3RiHlUYoqZBeryeHNDpSx1zl1F10/Hw=;
-	h=Received:Received:From:To:Subject:Date:Message-Id:MIME-Version;
-	b=qO4EWb7f62gnY3BUS8yVSGWJ+rzcZNLhxSgh5Arei9P1PJLPYO0zC0MDQt6sGTDos
-	 W7xWCSrkf/vF1u8uKu6PDlnE7Vv57F+GeWRJrw2X3lxlZetFKyCXEWyifq3LTFLqVF
-	 yzp08duC+iIrKSmeExxzNH8YGw4mMNnKsHGZKYukrAM+4edob9IPesDTjODZQV/iYI
-	 UTpPIlGjgmL6SSxtXHyYYHewWq841y7LJS8A5gERA7s/bszEDzHIrAQgW+3x2xU3Ht
-	 yhRGs0xLiS+6v4ANScAq2qOfLDRXdKa+2hArAcu52IqxDnwRyPZErvwVS0FcWu7jlZ
-	 MSn9A0NwbfYZA==
-Received: from localhost.localdomain
- ([IPv6:2601:547:c500:dbe:1951:24e:458f:9dd])
-	by resomta-h1p-027910.sys.comcast.net with ESMTPA
-	id gr7soaB7RbHKHgr7voROsB; Fri, 07 Oct 2022 17:27:12 +0000
-X-Xfinity-VMeta: sc=0.00;st=legit
-From: Chad Dougherty <crd@acm.org>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	by sourceware.org (Postfix) with ESMTPS id 05318385828A
+	for <cygwin-patches@cygwin.com>; Tue, 18 Oct 2022 15:45:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 05318385828A
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MpUQk-1pTpEs05F6-00pvD4 for <cygwin-patches@cygwin.com>; Tue, 18 Oct 2022
+ 17:45:54 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id F01A7A80706; Tue, 18 Oct 2022 17:45:52 +0200 (CEST)
+Date: Tue, 18 Oct 2022 17:45:52 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Chad Dougherty <crd@acm.org>
-Subject: [PATCH 2/2] typo: that -> than
-Date: Fri,  7 Oct 2022 13:26:43 -0400
-Message-Id: <20221007172644.15168-1-crd@acm.org>
-X-Mailer: git-send-email 2.38.0
+Subject: Re: [PATCH] Cygwin: select: don't report read ready on a FIFO never,
+ opened for writing
+Message-ID: <Y07KMM0XyO6ua9/Q@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <7163de6a-758b-5268-8ed1-eaa34fea7d94@cornell.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,GIT_PATCH_0,KAM_DMARC_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7163de6a-758b-5268-8ed1-eaa34fea7d94@cornell.edu>
+X-Provags-ID: V03:K1:0CeWbNLA1j0NQdiQ9GBa+9NQxYSnJWjY2s4KyCi5y5beyvSk0+w
+ Tljl2M6lvoYLtfhYePGc39MUgfEitoXsJQQb7KQce+9WJTumT7WtUGRTgw7ZUrdgmG2IR+2
+ ncq+2oIcCnWczcwj6pXljws+MJIbpjA+vX+KHecUu/IlkBYEkmNYkoCtDrvQcKKJEYv0bg+
+ 88F3FNNCOwkwF4vk+5/Sw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fh1/Kfqhh0Q=:FEPmvzubY2pHemSTyyFwUP
+ zUpVzmuJXmXSRGqqQBmOxm7INIxd8kQ3VSpFRCCO3KRGwY6uvoJ6De9VnPhtOsVq91uYUoSt2
+ EtMUCyprcHu3NHxqIJx715FaaEEnZa5abwxCMkyrQIzCp/341n/ICOtBBXs3qKNIUkBQR3BSm
+ jKcP9MVw7gI6qMQeBU/q6B5htkRLhTknu4bQoBEO2IDUA5bcocHIbIm2ohOzC3rFHK5tBHgmk
+ JSHknIBTkZUZtws8M9W5afbQHO4K6pB9x6EA3sqygPHQrmxnz+IHB5ln7k5A+x/XqfIecuRey
+ 2AdY4dd5EUSaOxsDNmUKkjRtk2nIvPPHNiHGs/ys+aiQOy5a2sYSso81coJ3E+hW0DG5+oZgi
+ Wk/rKAWvQGhASe1hPyUzf7yPzFKVqMvgtTcF3d2d5K0UnthnIx/eKVlEImXhat481Xm5j+fJe
+ t7rE2lB9CCDJmzo+MNRU4h2dmLDHu5izMnzNo7P/ujv787At5IKoTgrV3LArPDlfB4MCEtHJH
+ O/joZ1YE3PqGuoGUMOuAUmg3qw9tD+wJDnC3aBiOrjaQxrMYJYNsFCyNjIR7L4oZLstvfLwQ/
+ OiI35Xq6fvqXypYv8BuXrBLkPzPWT4JQC0EVQJLX7ub3D6hsqQsq/b6B8d+Yn2Ok1A0TV/zV1
+ o0nWDNBMUkEVRWfv3I6rftcKrWlHbm7yeS4p7waHlYRlGXSOQND6fSwXbxu0uRLmFFxWkQCbW
+ iO2ZCK9OBVddUhMc3wUJejiumfCNn4mmgzLQ6ZHGRKOCpDHrfUd7bJW46hoBF8znjCpXUTPe2
+ FkceQfQ0wHyRuC2vf84ga21SJ9ixw==
+X-Spam-Status: No, score=-95.4 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Signed-off-by: Chad Dougherty <crd@acm.org>
----
- contrib.html | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sep 23 11:31, Ken Brown wrote:
+> Patch attached.  I'm also attaching a test case, that behaves the same on
+> Cygwin as on Linux.
 
-diff --git a/contrib.html b/contrib.html
-index d5024694..04dc9726 100755
---- a/contrib.html
-+++ b/contrib.html
-@@ -132,7 +132,7 @@ in git format-patch format.</p>
-       git format-patch [--cover-letter]
- </pre>
- 
--<p>This will produce files with all of your changes newer that origin,
-+<p>This will produce files with all of your changes newer than origin,
- making it easy for someone to review and, if you don't have write
- access, push.  Give them a final once-over.  Ideally you include a good
- description of your change with details what it does, how it works, what
--- 
-2.38.0
+Interesting case, but thinking about the scenario, it seems logical to
+do it this way.
 
+> @@ -1043,6 +1043,8 @@ writer_shmem:
+>    set_pipe_non_blocking (get_handle (), flags & O_NONBLOCK);
+>    nwriters_lock ();
+>    inc_nwriters ();
+> +  if (!writer_opened () )
+> +    set_writer_opened ();
+
+My personal preference would be to skip the writer_opened() check
+and just call set_writer_opened(), but that's just me.  If you like
+it better that way, just push.
+
+
+Thanks,
+Corinna
