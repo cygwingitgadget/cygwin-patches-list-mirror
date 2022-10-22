@@ -1,66 +1,80 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-	by sourceware.org (Postfix) with ESMTPS id BB93B3858407
-	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 01:54:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BB93B3858407
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from HP-Z230 (aj136180.dynamic.ppp.asahi-net.or.jp [220.150.136.180]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 29M1s6qh003396;
-	Sat, 22 Oct 2022 10:54:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 29M1s6qh003396
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1666403646;
-	bh=kdPvs0g6bBiVSV1r9iqJ7miPYWCBx2r89Zq4Py1XEdY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=25I67NhQnhcsFkAi/z17YmUeCgdGnEvhea6A3K8KCup1QeDosjwf47yCAmY8+z+Ok
-	 KLDjsp1JPkGcQOaflR5zXZPdtpArHTw0Uu9kJSfO8oi3yKOpx0kgTnxydW0jfByGhX
-	 2mjnyo+kCwbFtOCIuEG/RtR/igrrlz5zh47+YWsayRvj8mkFXHojylaXStW9hTNSGS
-	 f6uLG17QvRNB94fEcjFaw9OiuUS+snA5eCteoIHhvmH3UqHhsHcHyX07dRo6l1exOv
-	 xYGpV2jdHsfgeRpQGSWG99qO4A+Dk4/grtsC75bF1fGa7VLCOstWkSYfXNQq3P3XUx
-	 XqqQQVi5k7J9w==
-X-Nifty-SrcIP: [220.150.136.180]
-Date: Sat, 22 Oct 2022 10:54:06 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id F28743858D1E
+	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 05:16:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org F28743858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+	by cmsmtp with ESMTP
+	id lsnBomxPHSp39m6rqoNN7X; Sat, 22 Oct 2022 05:16:18 +0000
+Received: from localhost.localdomain ([184.64.124.72])
+	by cmsmtp with ESMTP
+	id m6rpo9xrmkTFZm6rqowd0n; Sat, 22 Oct 2022 05:16:18 +0000
+X-Authority-Analysis: v=2.4 cv=D8dUl9dj c=1 sm=1 tr=0 ts=63537ca2
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=TREZnVsva5QR3Tm_J8MA:9 a=QEXdDO2ut3YA:10
+ a=D8Q_mHDOrX4A:10 a=qynNUJvCSgxBgBsrhb4A:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>
-Subject: Re: [PATCH] Fix `Bad address` when running `cmd /c [...]`
-Message-Id: <20221022105406.12f2c65e497e80df4014a8fb@nifty.ne.jp>
-In-Reply-To: <20221022103639.0be6d01709fc99d06b3d0d41@nifty.ne.jp>
-References: <8rqs6n82-0oq9-2200-944n-74s7o699385o@tzk.qr>
-	<20221022103639.0be6d01709fc99d06b3d0d41@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] strptime.cc(__strptime): add %q GNU quarter
+Date: Fri, 21 Oct 2022 23:16:03 -0600
+Message-Id: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.37.3"
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfP2B4DRn9dVi7bjshITrepqQVgaRsm3vwjrhIO8KjbDGZqHi+ieBYsRsAjgUtqzQkA39UX7iD847qV4oFez3PFXKz60sXw6M0DihbzF+XFzWju2carcj
+ us62miSh+X3FFt1b46s84WkYlBr57McDMtiX0WSVHbOK3p2FTKBMv++wywZ9+TDpAqgY3uy54Kj4MO24uyTXVo7ddwn1fQ1Nzk8wSFAMoapyjCfJrzyfI+9Q
+ zGxGTNmaVdKDqqAHAytty9Ld/PrI5AJBTLw1NbwOr3U=
+X-Spam-Status: No, score=-1169.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 22 Oct 2022 10:36:39 +0900
-Takashi Yano wrote:
-> On Fri, 21 Oct 2022 23:37:35 +0200 (CEST)
-> Johannes Schindelin wrote:
-> > In 2b4f986e49 (Cygwin: pty: Treat *.bat and *.cmd as a non-cygwin
-> > console app., 2022-07-31), we introduced a bug fix that specifically
-> > looks for a suffix of the command's file name.
-> > 
-> > However, that file name might be set to `NULL`, namely when
-> > `null_app_name == true`, which is the case when we detected a
-> > command-line `cmd /c [...]`.
-> 
-> It seems that this is msys2 specific issue.
-> I also noticed that
-> cmd //c 'echo AAA' instead of cmd /c 'echo AAA' works in msys2.
-> 
-> In cygwin, filename is
-> C:\WINDOWS\system32\cmd.exe
-> for cmd /c 'echo AAA'.
-> 
-> Why the filename can be NULL in msys2 in the case of cmd /c 'echo AAA'?
+This is a multi-part message in MIME format.
+--------------2.37.3
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-I can reproduce the issue in cygwin with cmd.exe /c 'echo AAA'
-instead of cmd /c 'echo AAA'.
+---
+ winsup/cygwin/libc/strptime.cc | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+--------------2.37.3
+Content-Type: text/x-patch; name="0001-strptime.cc-__strptime-add-q-GNU-quarter.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-strptime.cc-__strptime-add-q-GNU-quarter.patch"
+
+diff --git a/winsup/cygwin/libc/strptime.cc b/winsup/cygwin/libc/strptime.cc
+index 3a9bdbb300d4..d1e635cd279f 100644
+--- a/winsup/cygwin/libc/strptime.cc
++++ b/winsup/cygwin/libc/strptime.cc
+@@ -570,6 +570,14 @@ literal:
+ 			LEGAL_ALT(0);
+ 			continue;
+ 
++		case 'q':	/* The quarter year. GNU extension. */
++			LEGAL_ALT(0);
++			i = 1;
++			bp = conv_num(bp, &i, 1, 4, ALT_DIGITS);
++			tm->tm_mon = (i - 1)*3;
++			ymd |= SET_MON;
++			continue;
++
+ 		case 'S':	/* The seconds. */
+ 			LEGAL_ALT(ALT_O);
+ 			bp = conv_num(bp, &tm->tm_sec, 0, 61, ALT_DIGITS);
+@@ -655,7 +663,7 @@ literal:
+ 			got_eoff = 0;
+ 			continue;
+ 
+-		case 'y':	/* The year within 100 years of the epoch. */
++		case 'y':	/* The year within 100 years of the century or era. */
+ 			/* LEGAL_ALT(ALT_E | ALT_O); */
+ 			ymd |= SET_YEAR;
+ 			if ((alt_format & ALT_E) && *era_info)
+
+--------------2.37.3--
+
+
