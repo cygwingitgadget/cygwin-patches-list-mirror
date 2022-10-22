@@ -1,80 +1,61 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-	by sourceware.org (Postfix) with ESMTPS id F28743858D1E
-	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 05:16:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org F28743858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=systematicsw.ab.ca
-Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
-	by cmsmtp with ESMTP
-	id lsnBomxPHSp39m6rqoNN7X; Sat, 22 Oct 2022 05:16:18 +0000
-Received: from localhost.localdomain ([184.64.124.72])
-	by cmsmtp with ESMTP
-	id m6rpo9xrmkTFZm6rqowd0n; Sat, 22 Oct 2022 05:16:18 +0000
-X-Authority-Analysis: v=2.4 cv=D8dUl9dj c=1 sm=1 tr=0 ts=63537ca2
- a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
- a=r77TgQKjGQsHNAKrUKIA:9 a=TREZnVsva5QR3Tm_J8MA:9 a=QEXdDO2ut3YA:10
- a=D8Q_mHDOrX4A:10 a=qynNUJvCSgxBgBsrhb4A:9 a=B2y7HmGcmWMA:10
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+	by sourceware.org (Postfix) with ESMTPS id 2EA263858C62
+	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 05:35:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 2EA263858C62
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (aj136180.dynamic.ppp.asahi-net.or.jp [220.150.136.180]) (authenticated)
+	by conuserg-11.nifty.com with ESMTP id 29M5YUqL003731;
+	Sat, 22 Oct 2022 14:34:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 29M5YUqL003731
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1666416875;
+	bh=LRZ0T9rOiKfoEf2ncXs2N1WjccANeygoMTR07H1Yia8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QXyg72pmUeGunfR4mEfldZ4tmIistHlRQemCoM9zWgNf4nr2JUODk6wn4xez0uNo+
+	 9sL2pNY5haOItSaoWbdDpdeRtNo3oLgFvTTuQuAiaIr5l1XhmAvrLSedJCcpFOem41
+	 nPMLnMT/ts2PA+O2TernldJaIImNIb3dbemfkmIwTk5caITpgwr3z4tMkCQ8KGKMrR
+	 gpstQpU5LY1cPP/yHplZDYL6UQNcaS1gLsPnuGixR5fyE5SeQDUjkGsBT6ZaQM9n/E
+	 PCVApSb5eD9lsLQFrj0beVee3vU75y4FKLdjcYegxGxxnFUp0NaVgCkjhLeB7fA2Gj
+	 kVBVIlCzTdm2A==
+X-Nifty-SrcIP: [220.150.136.180]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] strptime.cc(__strptime): add %q GNU quarter
-Date: Fri, 21 Oct 2022 23:16:03 -0600
-Message-Id: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.37.3
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix 'Bad address' error when running 'cmd.exe /c dir'
+Date: Sat, 22 Oct 2022 14:34:20 +0900
+Message-Id: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------2.37.3"
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfP2B4DRn9dVi7bjshITrepqQVgaRsm3vwjrhIO8KjbDGZqHi+ieBYsRsAjgUtqzQkA39UX7iD847qV4oFez3PFXKz60sXw6M0DihbzF+XFzWju2carcj
- us62miSh+X3FFt1b46s84WkYlBr57McDMtiX0WSVHbOK3p2FTKBMv++wywZ9+TDpAqgY3uy54Kj4MO24uyTXVo7ddwn1fQ1Nzk8wSFAMoapyjCfJrzyfI+9Q
- zGxGTNmaVdKDqqAHAytty9Ld/PrI5AJBTLw1NbwOr3U=
-X-Spam-Status: No, score=-1169.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------2.37.3
-Content-Type: text/plain; charset=UTF-8; format=fixed
-Content-Transfer-Encoding: 8bit
+- If the command executed is 'cmd.exe /c [...]', runpath in spawn.cc
+  will be NULL. In this case, is_console_app(runpath) check causes
+  access violation. This case also the command executed is obviously
+  console app., therefore, treat it as console app to fix this issue.
 
+  Addresses: https://github.com/msys2/msys2-runtime/issues/108
 ---
- winsup/cygwin/libc/strptime.cc | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ winsup/cygwin/spawn.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
---------------2.37.3
-Content-Type: text/x-patch; name="0001-strptime.cc-__strptime-add-q-GNU-quarter.patch"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: attachment; filename="0001-strptime.cc-__strptime-add-q-GNU-quarter.patch"
-
-diff --git a/winsup/cygwin/libc/strptime.cc b/winsup/cygwin/libc/strptime.cc
-index 3a9bdbb300d4..d1e635cd279f 100644
---- a/winsup/cygwin/libc/strptime.cc
-+++ b/winsup/cygwin/libc/strptime.cc
-@@ -570,6 +570,14 @@ literal:
- 			LEGAL_ALT(0);
- 			continue;
- 
-+		case 'q':	/* The quarter year. GNU extension. */
-+			LEGAL_ALT(0);
-+			i = 1;
-+			bp = conv_num(bp, &i, 1, 4, ALT_DIGITS);
-+			tm->tm_mon = (i - 1)*3;
-+			ymd |= SET_MON;
-+			continue;
-+
- 		case 'S':	/* The seconds. */
- 			LEGAL_ALT(ALT_O);
- 			bp = conv_num(bp, &tm->tm_sec, 0, 61, ALT_DIGITS);
-@@ -655,7 +663,7 @@ literal:
- 			got_eoff = 0;
- 			continue;
- 
--		case 'y':	/* The year within 100 years of the epoch. */
-+		case 'y':	/* The year within 100 years of the century or era. */
- 			/* LEGAL_ALT(ALT_E | ALT_O); */
- 			ymd |= SET_YEAR;
- 			if ((alt_format & ALT_E) && *era_info)
-
---------------2.37.3--
-
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 5aa52ab1e..4fc842a2b 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -215,6 +215,8 @@ handle (int fd, bool writing)
+ static bool
+ is_console_app (WCHAR *filename)
+ {
++  if (filename == NULL)
++    return true; /* The command executed is command.com or cmd.exe. */
+   HANDLE h;
+   const int id_offset = 92;
+   h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
+-- 
+2.37.2
 
