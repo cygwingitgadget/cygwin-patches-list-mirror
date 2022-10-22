@@ -1,100 +1,91 @@
 Return-Path: <johannes.schindelin@gmx.de>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by sourceware.org (Postfix) with ESMTPS id 83A773858C2C
-	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 05:56:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 83A773858C2C
+	by sourceware.org (Postfix) with ESMTPS id DDADE3858D1E
+	for <cygwin-patches@cygwin.com>; Sat, 22 Oct 2022 05:58:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DDADE3858D1E
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1666418158;
-	bh=/riQ31UE3/ClvnTuoCAK73LgLFQMhmQgM6EtnRVzrVA=;
+	s=badeba3b8450; t=1666418320;
+	bh=sbCxBYvvWsfOCObmp5bWQalK8VRzzLNPUwSb2PqmHSg=;
 	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=iNArRPs87a4g6mn+T4my/8gjlhDrLNBjbRmzo1uDryEMqFjlwmRUNmqcMW1WQS4g3
-	 z+3hO4aNnv2gEQ0TXxJgLaKYOa5Rxcel5o9KuylN6d219lrTjM4P0UgPSBzFQn0DTh
-	 ycX0Pn/h14aUtDoRefZHHZXUo+ZUFOhHdbgonKkk=
+	b=IGX6NCA66XIm37xMcnzlDzSnS3J/s8DJVCSn7bR1dJ2+Or8grnNuAS3nuX/gys8P0
+	 SFoo7q5ZXVuGfGlmOgjHEWHDjR9P/JHqN/B192M04ombrKSX2n8uZp9tVcqXYkZDEu
+	 vCGE2pvx729PNaQwjY8FxZune+e2Oafr3GKLliUY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [127.0.0.1] ([213.196.212.100]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRmjq-1of5FP3brO-00TFCO; Sat, 22
- Oct 2022 07:55:57 +0200
-Date: Sat, 22 Oct 2022 07:55:53 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUXtY-1odQNj3jW4-00QTgI; Sat, 22
+ Oct 2022 07:58:39 +0200
+Date: Sat, 22 Oct 2022 07:58:37 +0200
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>, cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix `Bad address` when running `cmd /c [...]`
+To: cygwin-patches@cygwin.com, Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_Cygwin=3A_pty=3A_Fix_=27Bad_addre?= =?US-ASCII?Q?ss=27_error_when_running_=27cmd=2Eexe_/c_dir=27?=
 User-Agent: K-9 Mail for Android
-In-Reply-To: <20221022143709.b54643c7b29b3d6260382e85@nifty.ne.jp>
-References: <8rqs6n82-0oq9-2200-944n-74s7o699385o@tzk.qr> <20221022103639.0be6d01709fc99d06b3d0d41@nifty.ne.jp> <20221022105406.12f2c65e497e80df4014a8fb@nifty.ne.jp> <20221022143709.b54643c7b29b3d6260382e85@nifty.ne.jp>
-Message-ID: <9E4B94F4-2E88-4B95-AEB0-24B083662D32@gmx.de>
+In-Reply-To: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
+References: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
+Message-ID: <6EED0655-71E5-43B4-988D-B5935AED8EC0@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:sSOlZfQr0D6pZyD7QNtY7BV6HalCLMnZLqgSZ/Tyr6llvCVjnZ8
- Glh2oOM2wBpYZry26g3uOqMbKkGhKQicaI9Sog12GGzV5uV5GrESw51dkQxpsQAspK3g10h
- N9nFDLMSp9lYzNQ8+T6Kj5Jp3xWLqoMguQox4Qz0ZgE3E0NpfRpTWub6w+o3WP7+gBWzmnP
- DthpBHECgOf1jN0DisVzA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7F+gYMlUdhc=:T/3b7xjRZ10pR/Hws9dKK3
- tut4mzMRFfGA5G5UG6Lmi8eyg95a+JkhWpEtX++0gYqv6YtD6pOa/EDi+7a+u/abLGfvsJCS4
- lKddHPWdHhQp3a3ZqE/3h0+bgwb37+5nGRzkuwzYPu+Lp7O5bMDHYcnHrBJtGTHIO/zcaEmu6
- 6uE7pU8RbhrCBSXDnC8bBhtyDmpQeLBAwVGRjcBptre/zo92PCvgpJlB8HeUj4qZ5VzZIQtgI
- lym44OC8KKfiPjC2AQEoWY+b+ISFbtkjYXHjcpOLt+iOHsImrarCaU1vVRmBmLR7xaBWgu+zG
- DGgS1D4yKIzXyFaxQ3X4VNSR06Pj6SGQckZNEtvMi5+g7zgwO7SCiOoNPBI7f1ZdANQMSx5N9
- aJEsVZYrHD+Ae3JdTemmEAmonypqgMX7qpFlp2hUHQho2xEAKp4kXXGdsb28kevtTaoOvF/v6
- 5pYMc8NkDOsKYXnKlRk6N2QmHWIwR53hUtf4ONSA2dQd5fWZ+4NZaB6hEJsT+xw/R+m8iWhHD
- dxOXLx4xxciA/XoQfbRIAbJmHxm/2bcKI6MofXLxcFB4lvp+5BmpNXWpeFXMEBzMAazuO2w6A
- mGb4qsHfN4BaNg7gc9TW3nPECaIVM9a56la7gPazforFgbO+2sxBcnOZubUMNgz7EcC7jVK8k
- Vo1M4e3337nlywFIvvmX2bR+GuMje/GYKfS/3Vy7iIDd6ph4f9tVP5M0TpfqemhOZMNiFwKHw
- 7749DMhzJWdvxMYi/c6hRdOcP6OTRqkIr0CGPQlcQwZmxkgT1s7LLSAyZ4lnMdI/XkzT+hzEJ
- cqDzLdcMsggb52BMoGUVlcvXVY+rIXQUrDr8sNCPwdZ/0rMQZhc/mY/WPuIxu3LzYwza2KH8b
- l09u/veu0kAlkWT+bOghyw3l7YrfDvPT8zz1wh2VtfVVBZ2JjGfaAB8rQNL+IsN6HI+U52dbx
- 9LLxuzdKEP+bs6vS1Ygo4FTk218hrIxDaGuY0cP3BFN92IwXkLu1UlxNAGkGjSB2IPuKt+e07
- hnGEzMrQXpQbKSjdHE85eSAuQcNMEA2Hghuz3Wp9pXi3dvlk62j93LTnTBxWHl4vvPjcu9eWq
- EJhur0HcdHXzmKwQ7H6mqA1Dr9kTZNCLvbTdn0CScJJPzJRv6xapfLgnTuuB5b+bjHhk42ahL
- oT3nfWPjICrgXzuVLFPCvM5TUsg/PmLsEYGsOST2xAC/sGpA5IhINZ7UdpbJFcucA5nBZBAWQ
- QcEkBQ1df6NduqjTU4KwKP/CY+1sIChfTiU7z3QWEcle2+OAY77BPmRUedsC+QrHNoLJ/IeeI
- VFIDnONAvxEcq/mQvlRbPaJMpGVu9zxq8F9yxSRL2JECDz8u5Xq+5O30XUAVkPXbVEXPd752+
- cBqO1LWVPZz+uQezDQ64alOwKpzqo9WkeJppNCPreeXGntXesil2qlkiOLFcOJczKgpIjtbuQ
- iSncqIfVyhvRS9h7ImJwyLPf3gRBMg480eJ55M/LgaUvfBdwDEEBxn7QJddPgKxlz0JkZEB4L
- u7fqIEnRmS3bnCfLHYYNj7TLG51kIXGkteznfdyCke8M3Jxgo18XX53Gl6fCijB/Ulw==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ZT5unV2sng5fwWQ763dyeVvJ25x9k6oWBCzyrv8MZUutTMzAWv1
+ bLfl8E4DVQx+J7D3E91sRao9fGOiTwzYUH9rPR6KxzLe9LtJXBq84Wivfmsn7HNlTgrxJjH
+ /7EZj+AwDGu79Hq1FHW4buus826xefGxzKoH+tChhWdcEnuYs2IMWACQFhx4P1LmYvwK5oq
+ xlsFkg1dFxzna8LNy14eA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Knerituvg8I=:RsH6Tpd1w/bwrZdannrYv6
+ HtR0BSFoDKRwZ1aBmIQMWl0rTa1sk+eVOEgCUbBpnkvKXR+93qLtSVKBIuyeOwM0jgAai0LXC
+ uDowezV0pcqzuPHYtFw0CTIUtTlzQAZADhEnb0uaa7064Gry3CZHRSETenluREJTumrjSGpv1
+ xNkZoO97knPd+jKun5CQu3aMpimuhM/EFxjS4o+sbY4yqJ/7zspxTpjjFmE/Qt81js24hZUcx
+ PaaCPHi5qb01TxjJttAdnph5UhV7OuKbkrFIenadXmWI6Sa2FA4qJm/31nQ1E6Z34iDQHnonN
+ fRGNAKq+h1rpIZT9Fp4kGl3OMhgSvDyQBTgAr8VJCwrRKrWNGpC+5uexGPZ+heOT6clfxTEnR
+ tPe3ZhWOtiV35AgPQbuc/mDlG4suR3vix2VRIJSP0PuoF91xpz8n4BQ6OpFeO+Z52epHbDiMR
+ fd3KV1Pn88y5D5TQJlhLtLXPMzjkue2jFlXjUA+eSK9jUJVwQrzvh4cG+/aRibpaVSBLe+0/e
+ 8MtkWtv+6Bjw7tA/XgizZFrzfpRojafU5vAGsRuOHY2yzKIDtSgYBPjJ0AWKou6VngVV8whzu
+ tqNh32oWaxZDgGNxoA9080FNcwDBXf7PhQA+GcM2ukYyFxEJQMH9fd9bzQduLJ4+3eUYIcnGU
+ E0TRIAS7b5u1oryg7VA8CwTTYjpiABnRHcOZnwoW0weh0ZLQ//ffZa9jRQG02A63aKEKXj9pw
+ rwAWuMJGqO1iuSXNI6r8Faz+oRSgvGf0jvH7pLvwmMr8sDwh4vnGzsEEm0JfcG1Z76ZFsrKXg
+ vn9yKwB7dWY6VKqDTzAEUf5G0+Psthx1dX/NsRu+dDhbTx6IjSYBJ4KGutTlT2tzvI+SrOpqO
+ EgiHPYSYQnGkg2nOTrbFn9nf2HDqbACrMDJylSGFbcETowzVZ4LZAuw8hjGSfSJJYkZ9bhbAx
+ OWZ69GnxpHb3cqPYz1zQsh9IZEdL6r5Voc51R/yYoqthw+ksEj3V9kzwN5kkMoS7TNKAyY0Az
+ QzGxPKuNiJwspXEe2IPw2EzS7axAVHFi+5WvK5L9/89lA6jNngtc0/YAiejx3AQbt10xz7hTK
+ jUfVzQXOxor5IKgFK39TlGrgW+ZOtnlejr/GrKWGwf1ptxGYNyd2trKZ6lqrZPi/6D21jbBYo
+ vLksaCe4K5/RlU6EB4D78K0nqu3yDMpCQNI4FH7mIAgTFHoh05rc29nMqZO7rDMuyQdE0hsJ6
+ W8woT2IGoAYAkmNbyDDPtuyZviFKOzBPInYQD4CAEPLSPr4glPO0CpWSW8IY5qj4uNGGTVTm8
+ +gOtyKWY21xlm8gOl9HP5+FgXkEcB4Y79JMjDSOtuhhTCzRtDVwZace9MQ4cRhHAZV5QmfqZI
+ I4+2ynhSgRnPed6zuPMigGkZ/lp7xNhCwrdwZHxje5dxe74CHOTZqCZ2GFVzJK/9McQckBTR2
+ GR+7Eoy34SZ6qFPxiTWl13/FSgA7kRr6HVJpcGyFLCTAHDfFG7xtAKdf0o/rp1E0PwM8Ok/Z7
+ kTtmyW8TMf6HLybcOcM+FV9XMp1auFJHiJQlFSxHwcgu5C8z8jpvhkgqnv6fOPq9akw==
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On October 22, 2022 7:37:09 AM GMT+02:00, Takashi Yano <takashi=2Eyano@nift=
+On October 22, 2022 7:34:20 AM GMT+02:00, Takashi Yano <takashi=2Eyano@nift=
 y=2Ene=2Ejp> wrote:
->On Sat, 22 Oct 2022 10:54:06 +0900
->Takashi Yano wrote:
->> On Sat, 22 Oct 2022 10:36:39 +0900
->> Takashi Yano wrote:
->> > On Fri, 21 Oct 2022 23:37:35 +0200 (CEST)
->> > Johannes Schindelin wrote:
->> > > In 2b4f986e49 (Cygwin: pty: Treat *=2Ebat and *=2Ecmd as a non-cygw=
-in
->> > > console app=2E, 2022-07-31), we introduced a bug fix that specifica=
-lly
->> > > looks for a suffix of the command's file name=2E
->> > >=20
->> > > However, that file name might be set to `NULL`, namely when
->> > > `null_app_name =3D=3D true`, which is the case when we detected a
->> > > command-line `cmd /c [=2E=2E=2E]`=2E
->> >=20
->> > It seems that this is msys2 specific issue=2E
->> > I also noticed that
->> > cmd //c 'echo AAA' instead of cmd /c 'echo AAA' works in msys2=2E
->> >=20
->> > In cygwin, filename is
->> > C:\WINDOWS\system32\cmd=2Eexe
->> > for cmd /c 'echo AAA'=2E
->> >=20
->> > Why the filename can be NULL in msys2 in the case of cmd /c 'echo AAA=
-'?
->>=20
->> I can reproduce the issue in cygwin with cmd=2Eexe /c 'echo AAA'
->> instead of cmd /c 'echo AAA'=2E
+>- If the command executed is 'cmd=2Eexe /c [=2E=2E=2E]', runpath in spawn=
+=2Ecc
+>  will be NULL=2E In this case, is_console_app(runpath) check causes
+>  access violation=2E This case also the command executed is obviously
+>  console app=2E, therefore, treat it as console app to fix this issue=2E
 >
->I have just pushed a counter patch=2E Thanks for the report=2E
+>  Addresses: https://github=2Ecom/msys2/msys2-runtime/issues/108
+>---
+> winsup/cygwin/spawn=2Ecc | 2 ++
+> 1 file changed, 2 insertions(+)
 >
+>diff --git a/winsup/cygwin/spawn=2Ecc b/winsup/cygwin/spawn=2Ecc
+>index 5aa52ab1e=2E=2E4fc842a2b 100644
+>--- a/winsup/cygwin/spawn=2Ecc
+>+++ b/winsup/cygwin/spawn=2Ecc
+>@@ -215,6 +215,8 @@ handle (int fd, bool writing)
+> static bool
+> is_console_app (WCHAR *filename)
+> {
+>+  if (filename =3D=3D NULL)
+>+    return true; /* The command executed is command=2Ecom or cmd=2Eexe=
+=2E */
+>   HANDLE h;
+>   const int id_offset =3D 92;
+>   h =3D CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
 
-Thanks, I guess?
-
-It's not very nice to simply drop my work, and then not even link to your =
-"counter"=2E
+The commit message of the original patch was substantially clearer and off=
+ered a thorough analysis=2E This patch lost that=2E
