@@ -1,90 +1,86 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	by sourceware.org (Postfix) with ESMTPS id 4E002385840A
-	for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022 11:37:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 4E002385840A
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	by sourceware.org (Postfix) with ESMTPS id 79564385840A
+	for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022 12:09:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 79564385840A
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MxV8b-1p2eEd1TIH-00xqYg for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022
- 13:37:22 +0200
+ id 1N7Qkv-1pAJE10og9-017i1i for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022
+ 14:09:48 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EBCD0A80CFE; Mon, 24 Oct 2022 13:37:20 +0200 (CEST)
-Date: Mon, 24 Oct 2022 13:37:20 +0200
+	id B5B68A80CFE; Mon, 24 Oct 2022 14:09:47 +0200 (CEST)
+Date: Mon, 24 Oct 2022 14:09:47 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/2] Allow deriving the current user's home directory
- via the HOME variable
-Message-ID: <Y1Z48Mdk79/Qtwc9@calimero.vinschen.de>
+Subject: Re: [PATCH] strptime.cc(__strptime): add %q GNU quarter
+Message-ID: <Y1aAi3WLLlDEzJJF@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <0Lg1Tn-1YnzUw0ScN-00pcgi@mail.gmx.com>
- <cover.1450375424.git.johannes.schindelin@gmx.de>
- <047fe1d78c365afca7edfdf169fff5e1940c3837.1450375424.git.johannes.schindelin@gmx.de>
- <20151217202023.GA3507@calimero.vinschen.de>
- <1r1pq0r7-o3s3-so08-o426-296542797q94@tzk.qr>
- <Y07cOhhwu4ExRDzb@calimero.vinschen.de>
- <0q096627-r8pr-rno5-0863-s6n90psosq07@tzk.qr>
+References: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0q096627-r8pr-rno5-0863-s6n90psosq07@tzk.qr>
-X-Provags-ID: V03:K1:Bd7UtGjeURWNWMTRQrHTaHeYXRRM8ajqR3RlehbVcxZY/13I7xQ
- 6KjHlLfq6FU37e8F4dSncolpBB/Lk8eGbnlfEXD+oDFHrFxvBIeyDNIdr+GdsD9t2y2Dtpp
- s4XgCBjt1iiWuV4KjofAE0TIFq9zWHvxnTvt72RpES38nscpzcKNcaqHs4vMo1/2jvEgRCa
- 3J7ppMCqfmEHiAt4D2Aag==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hYPQi+E5hmY=:AzauJOJocW1ZGtKUc28mtQ
- jEW/ytngUH+JmSAy3jMoSeUfRAL0w9EdzXandtnZ95wRd1DfG37xnMh08fhOEVQjXy/Lltn0Q
- r5APemOYtGsPeX70wZtwh6JeCjdU0KHQzhFPoeGMFIZTS3/g4PjCRHvcHuC+umb52a/OgYFZ5
- uJAbUv8EkAz6rTSye6Hf3hWHPYLgALLcc7nS6SfGdkZsfle519HK9rbFdR3SBzT2Sx887DrvK
- c87OscKPq3UBJ6qsyN4O4vByKTIwg57Diw8lxV8MK2/7mVMz97XNI8lxKEa88CufEDasOlkco
- XA+BIEnzcw4O/80Rj5OC9rVFH+42CSBUQL/Pg2ZbEw0A4+DKWVV2kklC/E9rIIL0Vs4ifItSK
- mj3CAAv+zdln8eYSv6PBzCkC2dx+HDcB0qn+fpZqWVlgVKZm91GbvE1YTTYbEvSU88o12LD5G
- dlYnstL+kVUcsSvlRIpk7+HNCa1hjjD7Sz5txZ7SWG8c54tbRT1a3q5vvuYqd26X9ZxVc14Oz
- bepmaElnmB2wC1bCeruVi5jU4fIPu5UZQtueEXLxmBnl0QgrxUtqX1ECva0Ih7toF0GvapkBr
- npa8UP6S/9r05SibAkomOxfV/IHY1cwdfVnzEHFzCrBWXSsfL+ZJexkS4VNIebnVraxzWmCY7
- k08x+uyPDxzqlBzJvqGZ3RbSdYiQy4D3O05xLB0dDhMvIlb1E2WBhyTmMf5321vgRrhTwlnVh
- TbN4nBbksYcAzzZQd6yirBclHrdNFbSRSlGBIAdVI0mVFAnnV1+BUBkxmiZPnmUGYIDzrTiNM
- vDsOJttdYFGFqyuVsbnCrTQdeEGYA==
-X-Spam-Status: No, score=-95.5 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:EwIinlS5lmO3BUQq4iphut9HPh7KYuS0VOZ9KdZfLTfhqyUpL2L
+ Tw7WewFpK4sruDvgLbM8sM2zgceuyWn0GuB0VhJmhT19zAXTd4uhyOARSjgsG/3wc1g0wz3
+ W5DveRjvq+8RRV5xVTCmYbDax9AyXQKizFqDoqNxFfvGCRpJq5aLa1s/WdNCQ5YAtqjgkBR
+ HMUcXbQeWPKY2Imi8ffcg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TAQcPn/7w0k=:Rz4uWGtwYCVeSr7wPnicOO
+ Cc9gcHX2okyW7QPoajUbHMpjS8Cgcpp5Kw3SbJqlONiAFxFHyEcfOACsxU2U2iNrMR6mFE7sX
+ qP5aDlccyVncgAamVWLn3yRGVuP+Y5K4SYT9qpxJeWrwUHgiHcGWj80xMKT5kbO2F4CBJP/Tr
+ CCG8n1GottQUgo98U93GxVIjLAQeOARhTJmA5JfEfCvuINmj4l4y0JZNDBBDD/laiteUQi/iv
+ 9J1t6PNqS8wq51DpPLbszzhmUIOuRCd1E771/cAO3M3TLoh29ShSGqyL9E1czGBKUemmX9fVV
+ HZ4KNxBSEGd49gbmnz9zNYtcKvenyX9BPjueHtZxHPt+VTrZDfoJgrX6CcTVEuGgKeUji6SXL
+ qGCIvs/KhYw8yBMfVagScBvwShkHpQphI2bui67CgDEDbYYlwEk1tgRFeVb9CAO+rvr35wwwX
+ At5sxdKiG/9FkTRX7MamQJI+JrglOKje9qG8OVzvkYq9oz5dNIzoY4iGEEHino8/Jo+gof+y1
+ yhBdXAbwBfpBif0yxUZsERzFdqIBCOHRHxMrAgY8XF6OG8ZyEMSGABtoINToLZRD7GLtR4DHR
+ +U5To7HxTn4CAVHDorkpm6Na5tSTJlYZRajhwPBBbloltaePpES+Q7Ys/n5fI6OvYY6/C9rdE
+ OxLqT+10aKXLdC7MtSbQw+GLy2NbScq4jitOVYwKlvaWf+oV/ngBd1GCdt7FuKQmbZJqkwsIQ
+ xG8HmuNhn/VVBLIdbdoW2YuWpOPoCUXeqa0IFLiXLDHLUQRgm4bPdIBtDiIWeeCVVigd+h77j
+ U4zV7cC2gSeQn1cF2uA4szLv7myKg==
+X-Spam-Status: No, score=-101.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Oct 23 23:04, Johannes Schindelin wrote:
-> On Tue, 18 Oct 2022, Corinna Vinschen wrote:
-> [...]
-> > That means, the results from the "env" method is equivalent to the
-> > "windows" method, just after checking $HOME.  That's a bit of a downer.
-> >
-> > Assuming the "env" method would *only* check for $HOME, the user would
-> > have the same result by simply setting nsswitch.conf accordingly:
-> >
-> >   home: env windows
+On Oct 21 23:16, Brian Inglis wrote:
+> ---
+>  winsup/cygwin/libc/strptime.cc | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> Except when the domain controller is (temporarily) unreachable, e.g. when
-> sitting in a train with poor or no internet connection. Then that latter
-> approach would have the "benefit" of having to wait 10-15 seconds before
-> the network call says "nope".
-> 
-> This particular issue has hit enough Git for Windows users that I found
-> myself being forced to implement these patches and run with them for the
-> past seven years.
-> 
-> Given the scenario of an unreachable domain controller, I hope you agree
-> that the `env` support added in the proposed patches _has_ merit.
 
-Yes, I don't doubt an `env' method checking for $HOME even a bit.
+> diff --git a/winsup/cygwin/libc/strptime.cc b/winsup/cygwin/libc/strptime.cc
+> index 3a9bdbb300d4..d1e635cd279f 100644
+> --- a/winsup/cygwin/libc/strptime.cc
+> +++ b/winsup/cygwin/libc/strptime.cc
+> @@ -570,6 +570,14 @@ literal:
+>  			LEGAL_ALT(0);
+>  			continue;
+>  
+> +		case 'q':	/* The quarter year. GNU extension. */
+> +			LEGAL_ALT(0);
+> +			i = 1;
+> +			bp = conv_num(bp, &i, 1, 4, ALT_DIGITS);
+> +			tm->tm_mon = (i - 1)*3;
+> +			ymd |= SET_MON;
+> +			continue;
+> +
+>  		case 'S':	/* The seconds. */
+>  			LEGAL_ALT(ALT_O);
+>  			bp = conv_num(bp, &tm->tm_sec, 0, 61, ALT_DIGITS);
+> @@ -655,7 +663,7 @@ literal:
+>  			got_eoff = 0;
+>  			continue;
+>  
+> -		case 'y':	/* The year within 100 years of the epoch. */
+> +		case 'y':	/* The year within 100 years of the century or era. */
+>  			/* LEGAL_ALT(ALT_E | ALT_O); */
+>  			ymd |= SET_YEAR;
+>  			if ((alt_format & ALT_E) && *era_info)
 
-I'm just not sure as far as HOMEDRIVE/HOMEPATH/USERPROFILE are
-concerned.  Those vars should be left alone, but we can't control that,
-so reading them from genuine sources is preferred.
-
-Sure, the downside in terms of the LDAP server is clear to me
-
-So I guess it's ok to allow the env method to read the values of those
-vars from the env.  I would just feel better if we urge the
-user to set $HOME and read that exclusively.
+Pushed.
 
 
+Thanks,
 Corinna
