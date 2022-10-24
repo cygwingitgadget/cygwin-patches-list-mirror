@@ -1,157 +1,135 @@
-Return-Path: <Johannes.Schindelin@gmx.de>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by sourceware.org (Postfix) with ESMTPS id DAEC33857342
-	for <cygwin-patches@cygwin.com>; Sun, 23 Oct 2022 21:04:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org DAEC33857342
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1666559049;
-	bh=2o76C2HiXPEttB//Ww0cqIO4UnupB9NAZ63gtu7jZPU=;
-	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=bV0G9T/c0133dvA/YUATPxMNlXflGUwVwKdsdIqHZM7URKzCdxrIcuCGre43iL9Nn
-	 yHAkx8oehYkVumQOf31vrBjfiS2vuiNcGoAkJJmYJsgoSRZzSzGgkg5664neatywoH
-	 ao9+322IcL1LmPtzW5YA/5oKnImic22qlIHZhyZU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [172.26.182.144] ([213.196.212.100]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N95iH-1p7nXa2usJ-0168PT for
- <cygwin-patches@cygwin.com>; Sun, 23 Oct 2022 23:04:09 +0200
-Date: Sun, 23 Oct 2022 23:04:08 +0200 (CEST)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+	by sourceware.org (Postfix) with ESMTPS id 095A63858439
+	for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022 09:28:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 095A63858439
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N4h7p-1pC1lJ1BRv-011jOn; Mon, 24 Oct 2022 11:28:46 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id A0354A80CFE; Mon, 24 Oct 2022 11:28:44 +0200 (CEST)
+Date: Mon, 24 Oct 2022 11:28:44 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/2] Allow deriving the current user's home directory
- via the HOME variable
-In-Reply-To: <Y07cOhhwu4ExRDzb@calimero.vinschen.de>
-Message-ID: <0q096627-r8pr-rno5-0863-s6n90psosq07@tzk.qr>
-References: <0Lg1Tn-1YnzUw0ScN-00pcgi@mail.gmx.com> <cover.1450375424.git.johannes.schindelin@gmx.de> <047fe1d78c365afca7edfdf169fff5e1940c3837.1450375424.git.johannes.schindelin@gmx.de> <20151217202023.GA3507@calimero.vinschen.de> <1r1pq0r7-o3s3-so08-o426-296542797q94@tzk.qr>
- <Y07cOhhwu4ExRDzb@calimero.vinschen.de>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: Re: [PATCH] Cygwin: pty: Fix 'Bad address' error when running
+ 'cmd.exe /c dir'
+Message-ID: <Y1ZazH6objN99mSz@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com,
+	Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+References: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
+ <6EED0655-71E5-43B4-988D-B5935AED8EC0@gmx.de>
+ <20221022151247.1b1cf1e3fc13d4c3dabc2191@nifty.ne.jp>
+ <n4on0p20-970q-8693-7n50-4q22370s7rr5@tzk.qr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:vWDPesvoBzacWxs+gfQCIfzssuAVCeeqgpR1gTbLW0pXokBmX4h
- WLxQmLwLToTQIJ6pFmnKhCwLkRtxEQW4yhlelWv8mTZIez/KYw8isXAm78lvtX9u5vxNzfS
- 9sC8Ak+pcZdmj0tSAx2lCCXdNxVf+Kcnn96dfQ/Ub8sr8M2mJay2ZcUStsKzKYsMeJ8DAhQ
- e27RVWdWhgdua4pVFwJQA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QajLWHw3KG8=:lxrw/1F4roM7SB9mUzH+p7
- XReFb7c6QgldrTvpgJjXuiDRNV89/QBa3zrVdeXmhq+Yw5aDYeRYgcP0p6Yr0yiugRUFlClkz
- Gc/nPedi67/j/yHBMX1f7NtHPTb/m6NyJ8ZDb+vfOtA8ZIxgJ0ImoBc1ASjtSFCQchjWoocEY
- O2yHxx+jzMwq68yVCq95cyoiUC2KAXJ7b3yBTM/GVjOjbZa6rNVewxysIlE0aH4tREL2ey3ql
- 2eHqhwwmxODAqL/TvBR/BQqBjuqzvXHPxdIYvsBfG/DDVJlm2zVRKr3i7s1A2ZlkGhaXVpau4
- 29QKoGz8EcZbrjfZVow7ecT5jIeTOl6aa1ekYnJQsImvY1Xh+d3BCAP8Wj84oNgmAM5gMS4G2
- O1FZWUg/iG6zd4Z5HwHokmNwOD/pFcJwAcV7x4g6N2IJwAI2qou6TCnBZKmbGCOc9IEmiIWyW
- LOIN/vOUdYEHDgC3vrxRzxiLxwyJvRHSLPcZxqH8YZ/NGIEKYmH3XqytjAkojui/tVMM+xOI2
- GA+dEY3EX+EK0QN1ztScSi7Xf0xSHBBzRtfLhfrl/6kaVL0dnuJbX9iuY601fpkLV6DjtBsZo
- V938jvUKgaC1BmnqceT/BYqGsN3s5kJOWKIwIRQPBjjHo58UxSjPsqPyoWUrFsjxFfgG92mF7
- ettWhiZRJw8xj5WSxppVoda43UDDD5qLcy5QU/tcfIWudtArsA3K6695hZqLxDwyB+iyHbg0L
- 7Rdmxk+pzy1RkTpBGoPJUaxKnOqQol7nRDgcma2lyykOBJpcaKWK088yG6uMyCkrqMcXE5/PN
- olLmUtkJpEJ2PpXltfO3fy1DHWxknh/H9cGrQ+G6+zWH9S5S877y6YTG2oOmDUHmjSYhIVnKV
- h56OK/w5nDulKO371JsP3MXcQRwujfBOFIEaFylcS8YQ8csUDE0z6cfgFBLKHGXCeceUzXhEr
- iWb3TgfOxZ1iYIDxl+48IEUdl89UredzmtU/KXkMQMDZ9I1hga7RHL0ruSCvrjxZ9OrwPqZZG
- 8yNbHYpRNTCktsEYrRu+asixJqw1ZhxPSuwyReTLLrM+u4YpHoWskd4UdMcsoMfwbSK+ScpGh
- N8pE5u5z1n78KwyjPjt5U9hzBYB0n0dGnJzR676sqfRdNrXPtq6p2q4gcHKfnN9PtFpU1nAqE
- kHssnr83JpL6662sps0z4m3xkDqcf1NQ/27bqALqwl43PMB0KCY/5A5eqfbUDlDq6Oba0leZe
- hxcHTbL1+gRWrfSRnWRoD40pSYwp/2voLUctvetRa9NKg/UbhKSA8CMYetMNPvAZJz1RV7Er2
- Lyyhx0AUFhxdSds30mNaNScobb5ztnp2pTXgR8oGck1tfMlr+cHfuKIZhSBcgG3ly3Vb2mo3U
- kq/gX6VWx9edAT/akA2m6p2xvnOAnxzTVv0I7gtjuU7B/MScKRmsaoh1rJun0DiFbrxEL3yr+
- x5stVX/IROGLwj63FFXspjEvw0IdietqtLRMhkuJ/XPY7PjgIE9nd8RjILQ5emQiMC4938RAM
- t6fSq36QFHK5AqHpP3qq3/MouxaWYkl4qmVOHHNr93ICei9biPMa+vCKaX7u918rtTQ==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <n4on0p20-970q-8693-7n50-4q22370s7rr5@tzk.qr>
+X-Provags-ID: V03:K1:JqSAJedLbVCjBWUSvBg3YlNMl6OfxxoDX31HMDBgq/upuhmkzAj
+ JyTyMfdG7N2CHiU6J4dqYeGdAxZaXvMsaNnc4Ns2Wen+G5OLveswEa4SX6fT0604n6pejK8
+ Q6Ed9HyNQ4087kKHLu419sYZb8S6ua0iW2G5aZdA4IHt1XIuCRBiBji+xGjhjiMuWFotyfZ
+ tZ+C2aZtWThla/FifFi0A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dNzZbqdtUSU=:0zXLFP9mmvgGRlD1Z6ZLaL
+ mqgdec5J0mT46S5SiTQkfMO3+YBhnD4M1JeHxNjhTxgyDOV5HoyjYYZJQ7EmKrjvhpWvuMpNM
+ YLQYKNl5wTnU7K5nSDIOQARXTVV40ncLZBFH3DWvULRHIuIdDglJlFOgKfU3ybQEVJTla93i3
+ 0+1lHF4pM1ehhct8y6LjZNl4Os8VJyW3fg3XT6GCyjosYTa+tNPS8uFKN2PmdGdvR4Mf92vnt
+ IC4mtWeMjIelzfI88HPUckzVv28/7VsmDK6d7X3onTsoqXfPXEwaeWvsNMkmyYF3Zi7jgOApb
+ SMB9S/VMkKfVdMfrm8DOPvsmexlW+Upib1NlgWeyK5xaivbYa6Eue/c/K4Kv0aF817wecN83l
+ /kHvDvfBSXaktFCqbUKUl5fG47NViEVj7Gq5Qufnn30qlSGzGOwtHHJ7tTDkxBJBiYrIofrc8
+ DBUwINR4QHOwBAIyceVnLnxRUqDblp3GQgcDq+Ad14HM4MJ+/TW3Mg1E9iGwqaFqzBIl412by
+ aecf/Iw+olz4RfXRw4waRCLO9tGK4OmJ6z6EbBb4VDB1bme+GRzsFW05fXcbvTQ4nC7Udp6rf
+ BDDu7AtwJZuUZd7aVSoHGV9yqdQJOmtQgIVL3XDFtGRj8BOJf6WJTz17vOZPS1Krn+NDIDY7p
+ fjquPSUgX9GfV6NdP4Em+7sVBDW+t6a10QMaaf89eE82ZEsLHh1xmZzn1yWntZew3NugXoLXD
+ vjHpSBotV+scEgE6F8OPXnTZH14iaDC+8D+WncHpGRnlJgHpFwZc8HuXMq6eHcsL4oGyKHJBE
+ IW3xntql/MAG1d61MZMN+mV/PoQfg==
+X-Spam-Status: No, score=-101.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna,
-
-On Tue, 18 Oct 2022, Corinna Vinschen wrote:
-
-> On Sep 21 13:58, Johannes Schindelin wrote:
-> > Hi Corinna,
-> >
-> > sorry for the blast from the past, but I am renewing my efforts to
-> > upstream Git for Windows' patches that can be upstreamed.
-> >
-> > On Thu, 17 Dec 2015, Corinna Vinschen wrote:
->
-> Well, not even 7 years, so what? :)
-
-True :-)
-
-> > > On Dec 17 19:05, Johannes Schindelin wrote:
-> > > > +  DWORD max =3D sizeof wbuf / sizeof *wbuf;
-> > > > +  DWORD len =3D GetEnvironmentVariableW (key, wbuf, max);
+On Oct 23 22:42, Johannes Schindelin wrote:
+> On Sat, 22 Oct 2022, Takashi Yano wrote:
+> > On Sat, 22 Oct 2022 07:58:37 +0200
+> > Johannes Schindelin wrote:
+> > > On October 22, 2022 7:34:20 AM GMT+02:00, Takashi Yano <takashi.yano@nifty.ne.jp> wrote:
+> > > >- If the command executed is 'cmd.exe /c [...]', runpath in spawn.cc
+> > > >  will be NULL. In this case, is_console_app(runpath) check causes
+> > > >  access violation. This case also the command executed is obviously
+> > > >  console app., therefore, treat it as console app to fix this issue.
+> > > >
+> > > >  Addresses: https://github.com/msys2/msys2-runtime/issues/108
+> > > >---
+> > > > winsup/cygwin/spawn.cc | 2 ++
+> > > > 1 file changed, 2 insertions(+)
+> > > >
+> > > >diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+> > > >index 5aa52ab1e..4fc842a2b 100644
+> > > >--- a/winsup/cygwin/spawn.cc
+> > > >+++ b/winsup/cygwin/spawn.cc
+> > > >@@ -215,6 +215,8 @@ handle (int fd, bool writing)
+> > > > static bool
+> > > > is_console_app (WCHAR *filename)
+> > > > {
+> > > >+  if (filename == NULL)
+> > > >+    return true; /* The command executed is command.com or cmd.exe. */
+> > > >   HANDLE h;
+> > > >   const int id_offset = 92;
+> > > >   h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
 > > >
-> > > This call to GetEnvironmentVariableW looks gratuitous to me.  Why do=
-n't
-> > > you simply call getenv?  It did the entire job already, it avoids th=
-e
-> > > requirement for a local buffer, and in case of $HOME it even did the
-> > > Win32->POSIX path conversion.  If there's a really good reason for u=
-sing
-> > > GetEnvironmentVariableW it begs at least for a longish comment.
+> > > The commit message of the original patch was substantially clearer and offered a thorough analysis. This patch lost that.
 > >
-> > My only worry is that `getenv("HOME")` might receive a "Cygwin-ified"
-> > version of the value. That is, `getenv("HOME")` might return something
-> > like `/cygdrive/c/Users/corinna` when we expect it to return
-> > `C:\Users\corinna` instead.
->
-> Haha, yeah, that's exactly what it does.  Look at environ.cc, search for
-> conv_envvars.  There's a list of env vars which are converted
-> automatically.  So getenv ("HOME") already does what you need, you just
-> have to adapt the code accordingly, i. e.
->
->   if ((home =3D getenv ("HOME")))
->     return strdup (home);
->   if (((home_drive =3D getenv ("HOMEDRIVE")
->            [...]
->     return (char *) cygwin_create_path (CCP_WIN_A_TO_POSIX, home);
->
-> However, on second thought, I wonder if the HOMEDRIVE/HOMEPATH/USERPROFI=
-LE
-> code is really required.  AFAICS, it's just a duplication of the effort
-> already done in fetch_windows_home(), isn't it?
+> > The reason which I did not apply your patch as-is is:
+> > is_console_app() returns false for 'cmd.exe /c [...]' case
+> > with your patch, while it should return true.
 
-You mean the case where _both_ `pldap` and `ui` are `NULL`, i.e. where
-`get_user_profile_directory()` is called?
+I'm a bit concerned here.
 
-Correct me if I'm wrong, but that does not at all look at the environment
-variables, but instead queries the registry.
+Did you notice the fact that a NULL filename *also* results in calling
+CreateFileW with a NULL filename, in calling ReadFile and CloseHandle
+with a INVALID_HANDLE_VALUE, and running memmem on an uninitialized
+buffer?  This doesn't result in an immediate crash, but it's a serious
+problem nevertheless.
 
-And _if_ we want to do that (which I would rather want to avoid, for
-simplicity and speed), shouldn't we call the
-`get_user_profile_directory()` function directly instead of going through
-`fetch_windows_home()`?
+Johannes' patch didn't fix that.  Takashi's patch does, but somehow you
+both don't even mention it.
 
-But if you meant to still have a non-`NULL` `pldap`, the results are
-definitely not the same, not only because users can easily modify their
-environment variables while they cannot easily modify what is retrieved
-from the DB: [see below].
+> Sure. And a simple "can you please modify the patch to return `true` in
+> the `cmd /c <command>` case" feedback would have avoided all the
+> contention.
 
-> HOMEDRIVE/HOMEPATH are generated from the DB data returned in
-> USER_INFO_3 or via ldap anyway, and fetch_windows_home() also falls back
-> to fetching the user profile path, albeit from the registry.
+Well...
 
-The big difference of using ldap is that retrieving the environment
-variable is instantaneous whereas there is a multi-second delay if the
-domain controller is temporarily unreachable.
+> Having said that, I fear that you completely misread what I wrote, as I
+> did not comment on your diff but on your quite improvable commit message.
 
-> That means, the results from the "env" method is equivalent to the
-> "windows" method, just after checking $HOME.  That's a bit of a downer.
->
-> Assuming the "env" method would *only* check for $HOME, the user would
-> have the same result by simply setting nsswitch.conf accordingly:
->
->   home: env windows
+Sorry, but we can't change the commit message retroactively because of
+the commit hooks which disallow forced commits on non-topic branches.
 
-Except when the domain controller is (temporarily) unreachable, e.g. when
-sitting in a train with poor or no internet connection. Then that latter
-approach would have the "benefit" of having to wait 10-15 seconds before
-the network call says "nope".
+However, two points:
 
-This particular issue has hit enough Git for Windows users that I found
-myself being forced to implement these patches and run with them for the
-past seven years.
+- I'm wondering if the patch (both of yours) doesn't actually just cover
+  a problem in child_info_spawn::worker().  Different runpath values,
+  depending on the app path being "cmd" or "cmd.exe"?  That sounds like
+  worker() is doing weird stuff.  And it does in line 400ff.
 
-Given the scenario of an unreachable domain controller, I hope you agree
-that the `env` support added in the proposed patches _has_ merit.
+  So, if the else branch of this code is apparently working fine for
+  "cmd" per Takashi's observation in
+  https://cygwin.com/pipermail/cygwin-patches/2022q4/012032.html, how
+  much sense is in the if branch handling "command.com" and "cmd.exe"
+  specially?  Wouldn't a better patch get rid of this extra if and
+  the null_app_name variable instead?
 
-Ciao,
-Dscho
+- While we never had a rule for that, it would be great in future,
+  if the commit message contains a "Fixes:" tag, if it's clear that
+  the patch fixes an older patch, along the lines as the Linux
+  kernel does it.  As an example, for this patch it would have been
+  great to see a footer in the commit message like this:
+
+  Fixes: 2b4f986e499f ("Cygwin: pty: Treat *.bat and *.cmd as a non-cygwin console app.")
+
+
+Corinna
