@@ -1,86 +1,76 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by sourceware.org (Postfix) with ESMTPS id 79564385840A
-	for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022 12:09:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 79564385840A
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N7Qkv-1pAJE10og9-017i1i for <cygwin-patches@cygwin.com>; Mon, 24 Oct 2022
- 14:09:48 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B5B68A80CFE; Mon, 24 Oct 2022 14:09:47 +0200 (CEST)
-Date: Mon, 24 Oct 2022 14:09:47 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] strptime.cc(__strptime): add %q GNU quarter
-Message-ID: <Y1aAi3WLLlDEzJJF@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <cygwin@hamishmb.com>
+Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
+	by sourceware.org (Postfix) with ESMTPS id D736D3858410
+	for <cygwin-patches@cygwin.com>; Tue, 25 Oct 2022 18:50:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D736D3858410
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=hamishmb.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hamishmb.com
+ARC-Seal: i=1; a=rsa-sha256; t=1666723848; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=XcktJW5+6NvfjwWeS98fok0bUt2RVk4HZbKc/SSIlAOyllMFZeOPz38XEmgbOqCYUq0OE7Jip5aFP92GncBlAxj4NxpF2Sd6HHtUC5wj1qXywn5wf5e6D4/rgA3Is0jkpJDsAtunokmsTAv3YXv+LsWGCPWYEU/vgTQM8QVye4o=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1666723848; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
+	bh=UNLZFEJhe7lkqiOAsDOzWqqiQm4JxZGCRqPr3hKWdIQ=; 
+	b=XZ0UPOeRjKq2L5uplSVBXnR1IUEVBHV+hm92mW/tVaCclF5+KVzApSrTsaXWxLTgnsjkDjAK/Ex+y7DUcbkKD5ORzFeVMBaxzpW4ZMBKGIf3mS7JAFvzOFp2RkUjGLJ49a1EDJzznYnds+3y74ZTO6UX64t0pS4kvnaBOU/l2LE=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=hamishmb.com;
+	spf=pass  smtp.mailfrom=cygwin@hamishmb.com;
+	dmarc=pass header.from=<cygwin@hamishmb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666723848;
+	s=zmail; d=hamishmb.com; i=cygwin@hamishmb.com;
+	h=Message-ID:Date:Date:MIME-Version:To:To:From:From:Subject:Subject:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+	bh=UNLZFEJhe7lkqiOAsDOzWqqiQm4JxZGCRqPr3hKWdIQ=;
+	b=un3jCd6Jk8udqkaYu5km5bD3t2k9lHyH7X4zoU6tqpO1g2s1ISDVZRTDHit/YVrw
+	sT/kLY77AeJ4rpVm/Ixagz65eFbzXC7JHfMbT0AYWpk1UYyzfLmcQEk+k1VF3KV10hU
+	i1eDKhGkX6XNviiiMx9mORujYBjeP3c5eThRt+ZY=
+Received: from [192.168.10.213] (host86-149-41-78.range86-149.btcentralplus.com [86.149.41.78]) by mx.zoho.eu
+	with SMTPS id 1666723847689774.0276813567498; Tue, 25 Oct 2022 20:50:47 +0200 (CEST)
+Message-ID: <6a50dd6a-e805-bbf0-200a-25a1892bfa5b@hamishmb.com>
+Date: Tue, 25 Oct 2022 19:50:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221022051603.2787-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:EwIinlS5lmO3BUQq4iphut9HPh7KYuS0VOZ9KdZfLTfhqyUpL2L
- Tw7WewFpK4sruDvgLbM8sM2zgceuyWn0GuB0VhJmhT19zAXTd4uhyOARSjgsG/3wc1g0wz3
- W5DveRjvq+8RRV5xVTCmYbDax9AyXQKizFqDoqNxFfvGCRpJq5aLa1s/WdNCQ5YAtqjgkBR
- HMUcXbQeWPKY2Imi8ffcg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TAQcPn/7w0k=:Rz4uWGtwYCVeSr7wPnicOO
- Cc9gcHX2okyW7QPoajUbHMpjS8Cgcpp5Kw3SbJqlONiAFxFHyEcfOACsxU2U2iNrMR6mFE7sX
- qP5aDlccyVncgAamVWLn3yRGVuP+Y5K4SYT9qpxJeWrwUHgiHcGWj80xMKT5kbO2F4CBJP/Tr
- CCG8n1GottQUgo98U93GxVIjLAQeOARhTJmA5JfEfCvuINmj4l4y0JZNDBBDD/laiteUQi/iv
- 9J1t6PNqS8wq51DpPLbszzhmUIOuRCd1E771/cAO3M3TLoh29ShSGqyL9E1czGBKUemmX9fVV
- HZ4KNxBSEGd49gbmnz9zNYtcKvenyX9BPjueHtZxHPt+VTrZDfoJgrX6CcTVEuGgKeUji6SXL
- qGCIvs/KhYw8yBMfVagScBvwShkHpQphI2bui67CgDEDbYYlwEk1tgRFeVb9CAO+rvr35wwwX
- At5sxdKiG/9FkTRX7MamQJI+JrglOKje9qG8OVzvkYq9oz5dNIzoY4iGEEHino8/Jo+gof+y1
- yhBdXAbwBfpBif0yxUZsERzFdqIBCOHRHxMrAgY8XF6OG8ZyEMSGABtoINToLZRD7GLtR4DHR
- +U5To7HxTn4CAVHDorkpm6Na5tSTJlYZRajhwPBBbloltaePpES+Q7Ys/n5fI6OvYY6/C9rdE
- OxLqT+10aKXLdC7MtSbQw+GLy2NbScq4jitOVYwKlvaWf+oV/ngBd1GCdt7FuKQmbZJqkwsIQ
- xG8HmuNhn/VVBLIdbdoW2YuWpOPoCUXeqa0IFLiXLDHLUQRgm4bPdIBtDiIWeeCVVigd+h77j
- U4zV7cC2gSeQn1cF2uA4szLv7myKg==
-X-Spam-Status: No, score=-101.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+X-Mozilla-News-Host: news://news.gmane.io:119
+Content-Language: en-US
+To: cygwin-patches@cygwin.com
+From: Hamish McIntyre-Bhatty <cygwin@hamishmb.com>
+Subject: [PATCH] Fix typo in faq-programming.xml
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Oct 21 23:16, Brian Inglis wrote:
-> ---
->  winsup/cygwin/libc/strptime.cc | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
+Hi there,
 
-> diff --git a/winsup/cygwin/libc/strptime.cc b/winsup/cygwin/libc/strptime.cc
-> index 3a9bdbb300d4..d1e635cd279f 100644
-> --- a/winsup/cygwin/libc/strptime.cc
-> +++ b/winsup/cygwin/libc/strptime.cc
-> @@ -570,6 +570,14 @@ literal:
->  			LEGAL_ALT(0);
->  			continue;
->  
-> +		case 'q':	/* The quarter year. GNU extension. */
-> +			LEGAL_ALT(0);
-> +			i = 1;
-> +			bp = conv_num(bp, &i, 1, 4, ALT_DIGITS);
-> +			tm->tm_mon = (i - 1)*3;
-> +			ymd |= SET_MON;
-> +			continue;
-> +
->  		case 'S':	/* The seconds. */
->  			LEGAL_ALT(ALT_O);
->  			bp = conv_num(bp, &tm->tm_sec, 0, 61, ALT_DIGITS);
-> @@ -655,7 +663,7 @@ literal:
->  			got_eoff = 0;
->  			continue;
->  
-> -		case 'y':	/* The year within 100 years of the epoch. */
-> +		case 'y':	/* The year within 100 years of the century or era. */
->  			/* LEGAL_ALT(ALT_E | ALT_O); */
->  			ymd |= SET_YEAR;
->  			if ((alt_format & ALT_E) && *era_info)
+This is my first time submitting a patch over email, so hopefully I'll 
+get it right. Are there eventually plans for submitting merge requests 
+directly with git in some way?
 
-Pushed.
+This is a simple one-line patch to fix a typo I noticed in the 
+programming FAQ. Patch follows below. I follow the list via GMANE, but 
+to make sure I see any replies, it's probably best to reply to cygwin at 
+hamishmb dot com.
 
+Hamish
 
-Thanks,
-Corinna
+diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+index c2c4004c1..7945b6b88 100644
+--- a/winsup/doc/faq-programming.xml
++++ b/winsup/doc/faq-programming.xml
+@@ -1051,7 +1051,7 @@ a Windows environment which Cygwin handles 
+automatically.
+  <question><para>How should I port my Unix GUI to 
+Windows?</para></question>
+  <answer>
+
+-<para>Like other Unix-like platforms, the Cygwin distribtion includes 
+many of
++<para>Like other Unix-like platforms, the Cygwin distribution includes 
+many of
+  the common GUI toolkits, including X11, X Athena widgets, Motif, Tk, GTK+,
+  and Qt. Many programs which rely on these toolkits will work with 
+little, if
+  any, porting work if they are otherwise portable.  However, there are 
+a few
