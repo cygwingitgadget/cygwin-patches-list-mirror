@@ -1,74 +1,78 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	by sourceware.org (Postfix) with ESMTPS id BDC34385356C
-	for <cygwin-patches@cygwin.com>; Thu, 27 Oct 2022 11:32:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BDC34385356C
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MRmo8-1ocMGk0LCk-00T9MV; Thu, 27 Oct 2022 13:32:44 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B3AAEA807CD; Thu, 27 Oct 2022 13:32:42 +0200 (CEST)
-Date: Thu, 27 Oct 2022 13:32:42 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Cc: Hamish McIntyre-Bhatty <contact@hamishmb.com>
-Subject: Re: [PATCH] Fix typo in faq-programming.xml
-Message-ID: <Y1psWqiNnWpDSGDs@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
-	Hamish McIntyre-Bhatty <contact@hamishmb.com>
-References: <20221026132616.280324-1-cygwin@hamishmb.com>
+Return-Path: <cygwin@hamishmb.com>
+Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
+	by sourceware.org (Postfix) with ESMTPS id B2F623851512
+	for <cygwin-patches@cygwin.com>; Thu, 27 Oct 2022 13:21:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B2F623851512
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=hamishmb.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hamishmb.com
+ARC-Seal: i=1; a=rsa-sha256; t=1666876892; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=DS8dLmxo5sUxX3RlSQbTR7TyxeaXo9VBDS4FXRNnYM4nO4fV0d2myhma9x2CSE4Ir1ajxLiCK6w/6mO/kJVDIb3akuEOfBMnOt+fTWAk6P1OKc+c+OJYjL23QF2aU8UfM2nWrwD3/Bg3cLzCgcZ6DLeZ05Q2MsBUheVONIBnzBs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1666876892; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+	bh=JBDB1DuAHvUzRCs3+mM3ebkF4mCW4qIPD8ityr8t15E=; 
+	b=Z1i9uf/SfTjotkf4IGxKOzjexxib/gfLV4AMYME/k3+vIujsvV+mWCYlBKfKDn303KRY7iYn+gajeLyatBFBqm2EtxljOIh13wr24ee8WH+W9TmfUjHDGBJe4NKUCxgX7r7Qlv3kl/y9n+NGj1ShhmPYLn5F3WuUbEnWvUFF8C8=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=hamishmb.com;
+	spf=pass  smtp.mailfrom=cygwin@hamishmb.com;
+	dmarc=pass header.from=<cygwin@hamishmb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666876892;
+	s=zmail; d=hamishmb.com; i=cygwin@hamishmb.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+	bh=JBDB1DuAHvUzRCs3+mM3ebkF4mCW4qIPD8ityr8t15E=;
+	b=iPTLu+dZwed+fwHLBQf9KZMTmgYInjnLfrQBv/0h+a/iNAbrMknDsXLS9QvKihk6
+	MwmgZiaxRiXNEdrk525AG4OMKWMx6WbiUbvFdzlKY3NhOfaqaismLKzW/858aqEwKYD
+	nHKS1rR4vCksVKutuJwpORgIntp/d0wcm4yeaVZo=
+Received: from [192.168.10.213] (host86-149-41-78.range86-149.btcentralplus.com [86.149.41.78]) by mx.zoho.eu
+	with SMTPS id 1666876890105341.3047228546135; Thu, 27 Oct 2022 15:21:30 +0200 (CEST)
+Message-ID: <2fb67d5d-0557-707b-4ee8-82e2bf90a5b8@hamishmb.com>
+Date: Thu, 27 Oct 2022 14:21:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221026132616.280324-1-cygwin@hamishmb.com>
-X-Provags-ID: V03:K1:k4BjXHsbaAizYq/k6Vv7WORVjIYARTVl7VpCUmn1AVFGw3QBjXf
- fhOwoeOqxcyyLHE63k8IWBOs3MOlWTKrGUnKTzNUNCCHxmky/eVPuNS4+CLI2Hd0Mo34Fux
- IL6c8jv/5EiCi4C6n+hdy9jfqBSoKZC4vb17xYD0h1VNJViEoRGwALlK85oBggLwID55TZI
- 6amjcpKnIJ2KFs2N+QKsw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tQN17/m0+cE=:7CTZWUmk4uPf4Xstr5GvBn
- aHD58rtXrksB3UjVMHVL5f55qvRMp/E7K3tA2JRB7X2ThwitlVOgOCIHNS58aZyiik3/kWO/Q
- Lcx6SV0JEDSoGVdnZqYoeZAAwEemMnTgZYXOwRmhimsiypBivg/jZmqW9Y6Kv1iL7Fh3xLVUs
- PkiFS5ZXVk/ZA1k+SwpCJJUWbMBYqnzo5p95DR+tb+KxEs5LZRQyyDPjWr1Ed5X93BzoBYxAR
- K8GL1f7OsDZAmjpxp04zgwFRSqzQ5brhvotq5bg1cIpcE8FPNX1fmD5Ek8tw6kutxYzQVubZQ
- Ds0iAE7z6jaqXqInyWdms4T2/yNG83kXyHxE5QNKCk11phIKPhmVl0OsdJQgWuqpNmIV61dkU
- QdPbQO8/LrH6x7kaJnpgsJ8QLeM3+V3bXoJPEGmgN5+2Lp6Lb3yI/XH9sk5TgQk9UM2x+Y0xM
- R3ukkUUqJLAtKMZz9t8/TzF9mkQe6RqVsxBnp+/oyg5M736yygjlfY7S+KX0wFmJixYftDdwg
- gHsg7c2Oe7vY5qcTCGL9Dh/NXn1ZS6F3tzVRyVT3L8S6yuH55yhK0c3U/64gfo6vH4xigvOWZ
- 0c8AZ93wgoY6c12DkFGtTNiR5gfkUJRVVQWq1DoMJSoS28m92Yty8btzxsYZIG9YZKp0ZWpto
- fBEZBiIe/oYU9UUwhnk3l3zLuE3LdBTefEzFKcLr0oAYbhTI7eEE26nHz49NWaM6LhLRnNHgh
- +nbWRCqDPEVmiy4VpJlKz40oBrV29a/cdYqTCQ1dTcqEB3121oP0wgyaSmh9jt0ywmRwOwH4U
- fgBBIaevOkJXlCkpJYViNKsch2rvQ==
-X-Spam-Status: No, score=-101.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] Fix typo in faq-programming.xml
+Content-Language: en-US
+To: cygwin-patches@cygwin.com
+References: <20221026132616.280324-1-cygwin@hamishmb.com>
+ <Y1psWqiNnWpDSGDs@calimero.vinschen.de>
+From: Hamish McIntyre-Bhatty <cygwin@hamishmb.com>
+In-Reply-To: <Y1psWqiNnWpDSGDs@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Oct 26 14:26, Hamish McIntyre-Bhatty wrote:
-> From: Hamish McIntyre-Bhatty <contact@hamishmb.com>
-> 
-> ---
->  winsup/doc/faq-programming.xml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
-> index c2c4004c1..7945b6b88 100644
-> --- a/winsup/doc/faq-programming.xml
-> +++ b/winsup/doc/faq-programming.xml
-> @@ -1051,7 +1051,7 @@ a Windows environment which Cygwin handles automatically.
->  <question><para>How should I port my Unix GUI to Windows?</para></question>
->  <answer>
->  
-> -<para>Like other Unix-like platforms, the Cygwin distribtion includes many of
-> +<para>Like other Unix-like platforms, the Cygwin distribution includes many of
->  the common GUI toolkits, including X11, X Athena widgets, Motif, Tk, GTK+,
->  and Qt. Many programs which rely on these toolkits will work with little, if
->  any, porting work if they are otherwise portable.  However, there are a few
-> -- 
-> 2.25.1
+On 27/10/2022 12:32, Corinna Vinschen wrote:
+> On Oct 26 14:26, Hamish McIntyre-Bhatty wrote:
+>> From: Hamish McIntyre-Bhatty <contact@hamishmb.com>
+>>
+>> ---
+>>   winsup/doc/faq-programming.xml | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+>> index c2c4004c1..7945b6b88 100644
+>> --- a/winsup/doc/faq-programming.xml
+>> +++ b/winsup/doc/faq-programming.xml
+>> @@ -1051,7 +1051,7 @@ a Windows environment which Cygwin handles automatically.
+>>   <question><para>How should I port my Unix GUI to Windows?</para></question>
+>>   <answer>
+>>   
+>> -<para>Like other Unix-like platforms, the Cygwin distribtion includes many of
+>> +<para>Like other Unix-like platforms, the Cygwin distribution includes many of
+>>   the common GUI toolkits, including X11, X Athena widgets, Motif, Tk, GTK+,
+>>   and Qt. Many programs which rely on these toolkits will work with little, if
+>>   any, porting work if they are otherwise portable.  However, there are a few
+>> -- 
+>> 2.25.1
+> Pushed.
+>
+> Thanks,
+> Corinna
 
-Pushed.
+Cheers,
 
-Thanks,
-Corinna
+Hamish
+
