@@ -1,78 +1,71 @@
-Return-Path: <cygwin@hamishmb.com>
-Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
-	by sourceware.org (Postfix) with ESMTPS id B2F623851512
-	for <cygwin-patches@cygwin.com>; Thu, 27 Oct 2022 13:21:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B2F623851512
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=hamishmb.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hamishmb.com
-ARC-Seal: i=1; a=rsa-sha256; t=1666876892; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=DS8dLmxo5sUxX3RlSQbTR7TyxeaXo9VBDS4FXRNnYM4nO4fV0d2myhma9x2CSE4Ir1ajxLiCK6w/6mO/kJVDIb3akuEOfBMnOt+fTWAk6P1OKc+c+OJYjL23QF2aU8UfM2nWrwD3/Bg3cLzCgcZ6DLeZ05Q2MsBUheVONIBnzBs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1666876892; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-	bh=JBDB1DuAHvUzRCs3+mM3ebkF4mCW4qIPD8ityr8t15E=; 
-	b=Z1i9uf/SfTjotkf4IGxKOzjexxib/gfLV4AMYME/k3+vIujsvV+mWCYlBKfKDn303KRY7iYn+gajeLyatBFBqm2EtxljOIh13wr24ee8WH+W9TmfUjHDGBJe4NKUCxgX7r7Qlv3kl/y9n+NGj1ShhmPYLn5F3WuUbEnWvUFF8C8=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=hamishmb.com;
-	spf=pass  smtp.mailfrom=cygwin@hamishmb.com;
-	dmarc=pass header.from=<cygwin@hamishmb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666876892;
-	s=zmail; d=hamishmb.com; i=cygwin@hamishmb.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-	bh=JBDB1DuAHvUzRCs3+mM3ebkF4mCW4qIPD8ityr8t15E=;
-	b=iPTLu+dZwed+fwHLBQf9KZMTmgYInjnLfrQBv/0h+a/iNAbrMknDsXLS9QvKihk6
-	MwmgZiaxRiXNEdrk525AG4OMKWMx6WbiUbvFdzlKY3NhOfaqaismLKzW/858aqEwKYD
-	nHKS1rR4vCksVKutuJwpORgIntp/d0wcm4yeaVZo=
-Received: from [192.168.10.213] (host86-149-41-78.range86-149.btcentralplus.com [86.149.41.78]) by mx.zoho.eu
-	with SMTPS id 1666876890105341.3047228546135; Thu, 27 Oct 2022 15:21:30 +0200 (CEST)
-Message-ID: <2fb67d5d-0557-707b-4ee8-82e2bf90a5b8@hamishmb.com>
-Date: Thu, 27 Oct 2022 14:21:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] Fix typo in faq-programming.xml
-Content-Language: en-US
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-046.btinternet.com (mailomta17-re.btinternet.com [213.120.69.110])
+	by sourceware.org (Postfix) with ESMTPS id E43E7384B832
+	for <cygwin-patches@cygwin.com>; Fri, 28 Oct 2022 15:06:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E43E7384B832
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
+          by re-prd-fep-046.btinternet.com with ESMTP
+          id <20221028150613.ZOT3123.re-prd-fep-046.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>;
+          Fri, 28 Oct 2022 16:06:13 +0100
+Authentication-Results: btinternet.com; none
+X-SNCR-Rigid: 613A91243FFB1233
+X-Originating-IP: [86.139.199.187]
+X-OWM-Source-IP: 86.139.199.187 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeigdekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkeeirddufeelrdduleelrddukeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudelledrudekjedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.139.199.187) by re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
+        id 613A91243FFB1233; Fri, 28 Oct 2022 16:06:13 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-References: <20221026132616.280324-1-cygwin@hamishmb.com>
- <Y1psWqiNnWpDSGDs@calimero.vinschen.de>
-From: Hamish McIntyre-Bhatty <cygwin@hamishmb.com>
-In-Reply-To: <Y1psWqiNnWpDSGDs@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 1/3] Cygwin: Tidy up formatting of stackdump
+Date: Fri, 28 Oct 2022 16:05:56 +0100
+Message-Id: <20221028150558.2300-2-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221028150558.2300-1-jon.turney@dronecode.org.uk>
+References: <20221028150558.2300-1-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1199.0 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 27/10/2022 12:32, Corinna Vinschen wrote:
-> On Oct 26 14:26, Hamish McIntyre-Bhatty wrote:
->> From: Hamish McIntyre-Bhatty <contact@hamishmb.com>
->>
->> ---
->>   winsup/doc/faq-programming.xml | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
->> index c2c4004c1..7945b6b88 100644
->> --- a/winsup/doc/faq-programming.xml
->> +++ b/winsup/doc/faq-programming.xml
->> @@ -1051,7 +1051,7 @@ a Windows environment which Cygwin handles automatically.
->>   <question><para>How should I port my Unix GUI to Windows?</para></question>
->>   <answer>
->>   
->> -<para>Like other Unix-like platforms, the Cygwin distribtion includes many of
->> +<para>Like other Unix-like platforms, the Cygwin distribution includes many of
->>   the common GUI toolkits, including X11, X Athena widgets, Motif, Tk, GTK+,
->>   and Qt. Many programs which rely on these toolkits will work with little, if
->>   any, porting work if they are otherwise portable.  However, there are a few
->> -- 
->> 2.25.1
-> Pushed.
->
-> Thanks,
-> Corinna
+Resize stackdump headers for b9e97f58
+Consistently use \r\n line endings
+---
+ winsup/cygwin/exceptions.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Cheers,
-
-Hamish
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index e6f868511..a15bc16c5 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -342,7 +342,7 @@ cygwin_exception::dumpstack ()
+       int i;
+ 
+       thestack.init (framep, 1, ctx);	/* Initialize from the input CONTEXT */
+-      small_printf ("Stack trace:\r\nFrame        Function    Args\r\n");
++      small_printf ("Stack trace:\r\nFrame         Function      Args\r\n");
+       for (i = 0; i < DUMPSTACK_FRAME_LIMIT && thestack++; i++)
+ 	{
+ 	  small_printf ("%012X  %012X", thestack.sf.AddrFrame.Offset,
+@@ -352,9 +352,9 @@ cygwin_exception::dumpstack ()
+ 			  thestack.sf.Params[j]);
+ 	  small_printf (")\r\n");
+ 	}
+-      small_printf ("End of stack trace%s\n",
++      small_printf ("End of stack trace%s\r\n",
+ 		    i == DUMPSTACK_FRAME_LIMIT ?
+-		        " (more stack frames may be present)" : "");
++		    " (more stack frames may be present)" : "");
+       if (h)
+ 	NtClose (h);
+     }
+-- 
+2.38.1
 
