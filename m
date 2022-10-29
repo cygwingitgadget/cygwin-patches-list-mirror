@@ -1,98 +1,62 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by sourceware.org (Postfix) with ESMTPS id 9B7743858D3C
-	for <cygwin-patches@cygwin.com>; Sat, 29 Oct 2022 08:33:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 9B7743858D3C
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	by sourceware.org (Postfix) with ESMTPS id 0AD323858D38
+	for <cygwin-patches@cygwin.com>; Sat, 29 Oct 2022 08:34:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0AD323858D38
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N49xZ-1pF84a1wCP-0101U7; Sat, 29 Oct 2022 10:32:53 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MxEcg-1ozW4H46em-00xaIr; Sat, 29 Oct 2022 10:34:02 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9A162A80A3C; Sat, 29 Oct 2022 10:32:52 +0200 (CEST)
-Date: Sat, 29 Oct 2022 10:32:52 +0200
+	id E8380A80A3C; Sat, 29 Oct 2022 10:34:00 +0200 (CEST)
+Date: Sat, 29 Oct 2022 10:34:00 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: Jon Turney <jon.turney@dronecode.org.uk>
 Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] Cygwin: Add loaded module base address list to
- stackdump
-Message-ID: <Y1zlNBjeblW9dvfW@calimero.vinschen.de>
+Subject: Re: [PATCH 0/3] Stackdump improvements
+Message-ID: <Y1zleJNr1nz65QoE@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Jon Turney <jon.turney@dronecode.org.uk>,
 	cygwin-patches@cygwin.com
 References: <20221028150558.2300-1-jon.turney@dronecode.org.uk>
- <20221028150558.2300-4-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221028150558.2300-4-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:PxrIxgl8+bye4FHg6C6RFvb4ZRZBiZRiZm2+uIQnz7WI+zaskSn
- 2TXTfZmjGDzJY1GUbsNHg2KLKv8H5EVfUKmT7KLklzHmCp0AEfyVIOUerdXXuhALiFjUJd7
- XxTHO+sIL9gnnBEfZJMMkjaFf8wsa+PEN0nL002rBB39FJ5Bwrzj25evgBqhF+07ZRKmY2m
- pRRAGqteWEegUm+SFk6pw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7bagk3RoAIk=:lv6Or394lVkQ7KCwvfv7qz
- Lstm6Iha6rVguG5/AMvh7YyhbQLgQjjcvHYmU+TVHf6igYpRE+T6786vS/0ZjIUQkY7GdzgvP
- FdBBG1eL1CYT5Ra4q4q7NpQyIsANbSsf2ZcpGu7zTj9nDWOjFRthFW4J4BA7Io14SckBhRkdp
- XLjsgM0xsvBRK8MrfZpOXHxMpSpCMk9F2KNLZOba2e0pjWnO2JebNjfN548IoV9U/OH8/l177
- i6OLrBEKbHij4B3jjZ25nrbIyRxfnrcGSvAwmftzfPy3Ona0iuokPrnIL9ETSnBjTOAX/YclB
- cMs8+nFzhhZDHAa1wwchrWFmnxeJVEmkyXVEejcUkqoi+bAjCaTMEg1TCQLqAfvuWHgbAWK6w
- mC7amTIOBpE/vWx2QLcz8stPIwjBPXWEbIsdOotWSAO3EH8XTln+kvVw2a8/YHTOfPLkL20HB
- kqQFVbpnAMsCUywXdTGW+2yPVAqweIqkTNqNvji34VAcfTbxrlxmg8D8drXD7F0X7ez99+bVr
- lUNFOexaF8O+bx8LvheEuEZmz8b5harg2ezijEWHTL/SNJcstdK4kDCpeCCYPr+UfhKapj3jM
- diImkoVUSRH3nnyQzd3DLiNZbizHUfO3KrS+elElGsVuC2u90CCEzsWxaDCpnuXKEkMWCTEr1
- LjVWOT0RRcaMokVcRG5IE4R+O3v2gWbxdNbf9ATOGepssOIHLMRuWXADt2yHRLCL+pIYtkIKV
- bZpL5scZ81jgCiz7/z5Nr9AG7x44SnAtH7KiMxDGqVIgpzgDRyetbmC10d4XPQw2l6WHmqvKd
- hPNmDlZ1amHrKVCqXugadCtifZBAg==
-X-Spam-Status: No, score=-101.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221028150558.2300-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:1YQ6VM4SReK213eypRPCORNwuiu4+7ETgdpKe1IGWkDtOylDUj3
+ Cus6shOZPaBtRpDUJhQsZqNY8bEPGucj2H+EmwKdg43Zc92HL76Gx6k3bS9Vakr4jFnuBfR
+ 0qkaCdME34oLldQ6jnqOIKE0af0x/6caci/dfZzR1GkvSADGXfOhFaXBXex/lmW1Ee3rG1b
+ FbCjiHycL0Ge4n/E6JgaQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:acq8Ci0stX0=:Uf3t4cmHqqv4yfz7DE5qKM
+ 4dGGFwFJjZu7LQIKSLgAPAgNOYKl/MkVPVII5mLa33e4XnOE8KlKNz9rstvbhsG4T8pSw2Z1p
+ QgvKcC2swvILH6POqRcamlaU/zk5NYn/BJtkvEbzjcdrTPR/YdHToWdJaaAs8Ev49Jc1jNQS/
+ WPD6bofBUKkR+HONl37QLeGRG/2GYlr37V6W8+oJhfuRTdiEk6oKIeR30H2OZT1pHiDjvKZ6c
+ XXzxK8ry5/4dtqwP0fmKbGXskxcIHQa3oLZ6zrxsbxlKgsN9AYHPo0TMBe/Cqt3XHOgRwEIbd
+ w3dqDU1wUnmPGAfw1PX0X9NvHLk+PSo54oDGD/R6FfcyTX/+YjVhFHQ3GpKyX/Rke1p5a6OnK
+ tyNF6tQB+mKzo9VkQtU+XWoXJbm8sFkiPdXS8YN0yWAz7mnNHV7umECLxx+MbJ/IJDR2OIRqo
+ AeL39k6hAiacJOrqoCFnqeDnb+nz6Kw5nQYs4g7eaaUrTOHsdN6cnrckJP5Eol51fV7W3BMV1
+ QU2RJiT8wX/S5/x5R8jInbUbI+iHmvn4U/g5OJ9Fe8yd+a0VyasuDmjosNAMpCzTM9x+gwE0V
+ HgtTL82h6h8FNXTaudHIugBObzmhuOyh2P7nSxau4Bs1tnr5KG4Sp8iwck5lZrq0uA8yu8hWg
+ Eupf4dfjXRPs49P+ihbtgLsIZcy4CkDdKc2PvXmIkmo0q+39P7/LkY+NLdtvLszUiuLTj1XQt
+ Yvq6g7rqmlpyFzU21xv8jY/1BOd5L+qXjaAZ65DWMcD5gJp5Isn49qk0lq5cQWmwnXKuGM/2Z
+ 8sPL0Hfae27PVQAhVi197TJ7u3t7Q==
+X-Spam-Status: No, score=-95.7 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 On Oct 28 16:05, Jon Turney wrote:
-> This adds an extra section to the stackdump, which lists the loaded
-> modules and their base address.  This is perhaps useful as it makes it
-> immediately clear if RandomCrashInjectedDll.dll is loaded...
+> Jon Turney (3):
+>   Cygwin: Tidy up formatting of stackdump
+>   Cygwin: Add addresses as module offsets in .stackdump file
+>   Cygwin: Add loaded module base address list to stackdump
 > 
-> XXX: It seems like the 'InMemoryOrder' part of 'InMemoryOrderModuleList' is a lie?
+>  winsup/cygwin/exceptions.cc | 46 +++++++++++++++++++++++++++++++++----
+>  1 file changed, 42 insertions(+), 4 deletions(-)
 
-Probably just an alternative fact...
+Looks really good to me and will be quite helpful as soon as
+ASLR is used.  Please push.
 
-> 
-> > Loaded modules
-> > 000100400000 segv-test.exe
-> > 7FFF2AC30000 ntdll.dll
-> > 7FFF29050000 KERNEL32.DLL
-> > 7FFF28800000 KERNELBASE.dll
-> > 000180040000 cygwin1.dll
-> > 7FFF28FA0000 advapi32.dll
-> > 7FFF29F20000 msvcrt.dll
-> > 7FFF299E0000 sechost.dll
-> > 7FFF29B30000 RPCRT4.dll
-> > 7FFF27C10000 CRYPTBASE.DLL
-> > 7FFF28770000 bcryptPrimitives.dll
-> ---
->  winsup/cygwin/exceptions.cc | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-> index 1e9ea26bf..7dde44140 100644
-> --- a/winsup/cygwin/exceptions.cc
-> +++ b/winsup/cygwin/exceptions.cc
-> @@ -383,6 +383,16 @@ cygwin_exception::dumpstack ()
->        small_printf ("End of stack trace%s\r\n",
->  		    i == DUMPSTACK_FRAME_LIMIT ?
->  		    " (more stack frames may be present)" : "");
-> +
-> +      small_printf ("Loaded modules\r\n");
-> +      PLIST_ENTRY head = &NtCurrentTeb()->Peb->Ldr->InMemoryOrderModuleList;
-> +      for (PLIST_ENTRY x = head->Flink; x != head; x = x->Flink)
-> +	{
-> +	  PLDR_DATA_TABLE_ENTRY mod = CONTAINING_RECORD (x, LDR_DATA_TABLE_ENTRY,
-> +							 InMemoryOrderLinks);
-> +	  small_printf ("%012X %S\r\n", mod->DllBase, &mod->BaseDllName);
-> +	}
-> +
->        if (h)
->  	NtClose (h);
->      }
-> -- 
-> 2.38.1
+
+Thanks,
+Corinna
