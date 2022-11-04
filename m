@@ -1,110 +1,95 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-	by sourceware.org (Postfix) with ESMTPS id E722A3858418
-	for <cygwin-patches@cygwin.com>; Fri,  4 Nov 2022 11:10:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E722A3858418
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=tempfail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MCsDe-1oi4tF0hIO-008s1s for <cygwin-patches@cygwin.com>; Fri, 04 Nov 2022
- 12:10:41 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E5404A80B6D; Fri,  4 Nov 2022 11:34:14 +0100 (CET)
-Date: Fri, 4 Nov 2022 11:34:14 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] Cygwin: Add loaded module base address list to
- stackdump
-Message-ID: <Y2Tqpl1TuQc588N2@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20221028150558.2300-1-jon.turney@dronecode.org.uk>
- <20221028150558.2300-4-jon.turney@dronecode.org.uk>
- <Y1zlNBjeblW9dvfW@calimero.vinschen.de>
- <d82f87ff-6708-b3bb-60f4-7f77ea47fd66@dronecode.org.uk>
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-048.btinternet.com (mailomta5-sa.btinternet.com [213.120.69.11])
+	by sourceware.org (Postfix) with ESMTPS id 84B873858C60
+	for <cygwin-patches@cygwin.com>; Fri,  4 Nov 2022 12:53:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 84B873858C60
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+          by sa-prd-fep-048.btinternet.com with ESMTP
+          id <20221104125308.LCWX3226.sa-prd-fep-048.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>
+          for <cygwin-patches@cygwin.com>; Fri, 4 Nov 2022 12:53:08 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 6139452E41C1989E
+X-Originating-IP: [81.153.98.206]
+X-OWM-Source-IP: 81.153.98.206 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurheptgfkffggfgfuvfhfhfgjsehmtderredtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeelffdvveeihfdthfdthefftefghfeitdejhefhudfgvdevueehvdehgfdttedtvdenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeekuddrudehfedrleekrddvtdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdeingdpihhnvghtpeekuddrudehfedrleekrddvtdeipdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.106] (81.153.98.206) by sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
+        id 6139452E41C1989E for cygwin-patches@cygwin.com; Fri, 4 Nov 2022 12:53:08 +0000
+Content-Type: multipart/mixed; boundary="------------FuNJ1aAoCE6BLkn6H1TWMQU4"
+Message-ID: <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk>
+Date: Fri, 4 Nov 2022 12:53:07 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d82f87ff-6708-b3bb-60f4-7f77ea47fd66@dronecode.org.uk>
-X-Provags-ID: V03:K1:FF5O/C0X0STzELk16URcYR3fo+082JsU/NKnZlHSCXgey2uWOHn
- qD49Pg2xpl5o4jChM6rhz2nexYfPq3jOIKIKKxgGXzjknmp71oUffBr7xFSDjjbhDDhP6mx
- 6dR2nxqCjpWjBS4Bq2MbtPL1+zqSJiccvCVP71rkmqBalnAHiKoINY5sQCqfdAr82YdOsUD
- DYytXiw93Z3AML4lr2lyw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IbccnpsmSOg=:KH99fvhle2vEgUhHKRLKm4
- 8H6r2qYaZ2eRkFi452my46vNCrPsBI5GUAOZOa04Q8oaTfNKRXojegcepiZOYycUGqCqKV8uz
- ol+DwWzl8bnqcxJVC+IR4tcRxdaWib6Iy5te7tXxNiLXmfAUnhYPAN5PQWJ6x+s2yG3UrZTqH
- Paa6D3gI59+MB6ddrhGsWLrhW4GRFoB1jDo/RFI4YpZ0WYXXPyfqUR905jc+5KOSTybqmxyQp
- aufucvt/tDVI0UrUBmJzO5z56Nn2QwvFkut0AoQgqcfs2rCTrR8fqiBY0eC5+5YjQi/cC9M84
- 3pgNqTZNhSjFNY3xObIBZ1odHhQrck2ZQIFJO1DHapHrIpqjziYwooE7UsP90hCmr2jb2SVkP
- xRxnrttsyXAkxNfj9x6oSaSeNtdzxaODNKtT66kUFDedeIqGL7R7Rs1yAIW6kMQ11guoU1aVz
- D3kVmyWpD15cB0VbDc5GZRVQm/qrGYIt91X2u865uM9xCW/hFSyYFt9mxDM320yjH78FpAxla
- FKT6n1brMhvPy2k85cx3JC8updF88UYnCDqXlnHDLtcCA5h48VbaLkXhNyvAxZMSbbgmiV5Fo
- QnOZuCqoB5ja87pP7KDKpDc3ZtRx7vYyaajm49waKPk+Soc8swztgTiS1KApmQzm12oabac9y
- r/+9of0X9JmdHx7m9Qifa5Z76Aqy2B6cAifnDky1lMQQa1tSffRCkEKwd/FearXItWRmWqjOw
- dvPTkHComfBK2sg1uJ1bVHEKi9iysrJcwi+2Ep6fTdQzeuTSRTJkMyDTxKWRFJFtftOJfZUtK
- QRP6NWrtsori31VHVy11fIqV9JazA==
-X-Spam-Status: No, score=-101.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,TXREP,T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Cygwin: Improve FAQ on early breakpoint for ASLR
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20221103170430.4448-1-jon.turney@dronecode.org.uk>
+ <alpine.BSO.2.21.2211031120540.30152@resin.csoft.net>
+ <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de>
+X-Spam-Status: No, score=-1196.6 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,KAM_LOTSOFHASH,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov  3 17:02, Jon Turney wrote:
-> On 29/10/2022 09:32, Corinna Vinschen wrote:
-> > On Oct 28 16:05, Jon Turney wrote:
-> > > This adds an extra section to the stackdump, which lists the loaded
-> > > modules and their base address.  This is perhaps useful as it makes it
-> > > immediately clear if RandomCrashInjectedDll.dll is loaded...
-> > > 
-> > > XXX: It seems like the 'InMemoryOrder' part of 'InMemoryOrderModuleList' is a lie?
-> > 
-> > Probably just an alternative fact...
-> 
-> Yeah.  I did stared a bit at the code wondering if the structure layouts
-> were incorrect so we were somehow traversing one of the other module lists
-> with a different ordering, but everything looks correct.
-> 
-> The attached might be a good idea, then, to ensure that module+offset is
-> calculated correctly.
+This is a multi-part message in MIME format.
+--------------FuNJ1aAoCE6BLkn6H1TWMQU4
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Good idea, please push.
-
-
-Corinna
-
-> From ea47826047e8bb175b1b0e0286d7d7b8cf15c7fe Mon Sep 17 00:00:00 2001
-> From: Jon Turney <jon.turney@dronecode.org.uk>
-> Date: Tue, 1 Nov 2022 14:01:08 +0000
-> Subject: [PATCH] Cygwin: Handle out of order modules for module offsets in
->  stackdump
+On 04/11/2022 10:34, Corinna Vinschen wrote:
+> On Nov  3 11:22, Jeremy Drake via Cygwin-patches wrote:
+>> On Thu, 3 Nov 2022, Jon Turney wrote:
+>>
+>>> gdb supports 'set disable-randomization off' on Windows since [1]
+>>> (included in gdb 13).
+>>>
+>>> https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=bcb9251f029da8dcf360a4f5acfa3b4211c87bb0;hp=8fea1a81c7d9279a6f91e49ebacfb61e0f8ce008
+>>
+>> Is it really *disable*-randomization *off*?  The double-negative seems to
+>> suggest that in that case ASLR would be left *on*.
 > 
-> Improve address to module+offset conversion, to work correctly in the
-> presence of out-of-order elements in InMemoryOrderModuleList.
-> 
-> Fixes: d59651d4
-> ---
->  winsup/cygwin/exceptions.cc | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-> index 8cc454c90..c3433ab94 100644
-> --- a/winsup/cygwin/exceptions.cc
-> +++ b/winsup/cygwin/exceptions.cc
-> @@ -342,11 +342,13 @@ prettyprint_va (PVOID func_va)
->      {
->        PLDR_DATA_TABLE_ENTRY mod = CONTAINING_RECORD (x, LDR_DATA_TABLE_ENTRY,
->  						     InMemoryOrderLinks);
-> -      if (mod->DllBase > func_va)
-> +      if ((func_va < mod->DllBase) ||
-> +	  (func_va > (PVOID)((DWORD_PTR)mod->DllBase + mod->SizeOfImage)))
->  	continue;
->  
->        __small_sprintf (buf, "%S+0x%x", &mod->BaseDllName,
->  		       (DWORD_PTR)func_va - (DWORD_PTR)mod->DllBase);
-> +      break;
->      }
->  
->    return buf;
-> -- 
-> 2.38.1
-> 
+> Yeah, sounds weird....
 
+Yes, this is just stupidity.  Revised patch attached.
+
+--------------FuNJ1aAoCE6BLkn6H1TWMQU4
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-Improve-FAQ-on-early-breakpoint-for-ASLR.patch"
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-Improve-FAQ-on-early-breakpoint-for-ASLR.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA5ZmZjZTBkNjEyNDkzM2NmMTZhZWUzYWQwMDZlMzI4NThmZTA3NTRhIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVHVybmV5IDxqb24udHVybmV5QGRyb25lY29k
+ZS5vcmcudWs+CkRhdGU6IFR1ZSwgMSBOb3YgMjAyMiAxNjo1Mjo1NyArMDAwMApTdWJqZWN0
+OiBbUEFUQ0hdIEN5Z3dpbjogSW1wcm92ZSBGQVEgb24gZWFybHkgYnJlYWtwb2ludCBmb3Ig
+QVNMUgoKZ2RiIHN1cHBvcnRzIHRoZSAnZGlzYWJsZS1yYW5kb21pemF0aW9uJyBzZXR0aW5n
+IG9uIFdpbmRvd3Mgc2luY2UgWzFdCihpbmNsdWRlZCBpbiBnZGIgMTMpLgoKaHR0cHM6Ly9z
+b3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD1i
+Y2I5MjUxZjAyOWRhOGRjZjM2MGE0ZjVhY2ZhM2I0MjExYzg3YmIwO2hwPThmZWExYTgxYzdk
+OTI3OWE2ZjkxZTQ5ZWJhY2ZiNjFlMGY4Y2UwMDgKLS0tCiB3aW5zdXAvZG9jL2ZhcS1wcm9n
+cmFtbWluZy54bWwgfCA2ICsrKysrKwogMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygr
+KQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9kb2MvZmFxLXByb2dyYW1taW5nLnhtbCBiL3dpbnN1
+cC9kb2MvZmFxLXByb2dyYW1taW5nLnhtbAppbmRleCA3OTQ1YjZiODguLjM2ZDBhNDAxZiAx
+MDA2NDQKLS0tIGEvd2luc3VwL2RvYy9mYXEtcHJvZ3JhbW1pbmcueG1sCisrKyBiL3dpbnN1
+cC9kb2MvZmFxLXByb2dyYW1taW5nLnhtbApAQCAtODQ0LDYgKzg0NCwxMiBAQCBHdWlkZSBo
+ZXJlOiA8dWxpbmsgdXJsPSJodHRwczovL2N5Z3dpbi5jb20vY3lnd2luLXVnLW5ldC9kbGwu
+aHRtbCIvPi4KICAgTm90ZSB0aGF0IHRoZSBEbGxNYWluIGVudHJ5cG9pbnRzIGZvciBsaW5r
+ZWQgRExMcyB3aWxsIGhhdmUgYmVlbiBleGVjdXRlZAogICBiZWZvcmUgdGhpcyBicmVha3Bv
+aW50IGlzIGhpdC4KIDwvcGFyYT4KKworPHBhcmE+CisgIChJdCBtYXkgYmUgbmVjZXNzYXJ5
+IHRvIHVzZSB0aGUgPGNvbW1hbmQ+Z2RiPC9jb21tYW5kPiBjb21tYW5kIDxjb21tYW5kPnNl
+dAorICBkaXNhYmxlLXJhbmRvbWl6YXRpb24gb248L2NvbW1hbmQ+IHRvIHR1cm4gb2ZmIEFT
+TFIgZm9yIHRoZSBkZWJ1Z2VlIHRvCisgIHByZXZlbnQgdGhlIGJhc2UgYWRkcmVzcyBnZXR0
+aW5nIHJhbmRvbWl6ZWQuKQorPC9wYXJhPgogPC9hbnN3ZXI+PC9xYW5kYWVudHJ5PgogCiA8
+cWFuZGFlbnRyeSBpZD0iZmFxLnByb2dyYW1taW5nLmRlYnVnIj4KLS0gCjIuMzguMQoK
+
+--------------FuNJ1aAoCE6BLkn6H1TWMQU4--
