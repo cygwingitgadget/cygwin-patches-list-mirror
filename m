@@ -1,76 +1,150 @@
-Return-Path: <alves.ped@gmail.com>
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by sourceware.org (Postfix) with ESMTPS id B9AB43858414
-	for <cygwin-patches@cygwin.com>; Fri,  4 Nov 2022 15:29:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org B9AB43858414
+Return-Path: <andy.koppe@gmail.com>
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+	by sourceware.org (Postfix) with ESMTPS id D84EA3858D28
+	for <cygwin-patches@cygwin.com>; Wed,  9 Nov 2022 21:36:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D84EA3858D28
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-x435.google.com with SMTP id h9so7613343wrt.0
-        for <cygwin-patches@cygwin.com>; Fri, 04 Nov 2022 08:29:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id s12so243598edd.5
+        for <cygwin-patches@cygwin.com>; Wed, 09 Nov 2022 13:36:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:cc:from:references:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cVjkRYIcrrDLfuQwYmR3N5p1UxsCiu3f0wzE6ymq4bY=;
-        b=kN1hXFsHpZH8WmlfBAVrTEp7LaaMdR6vJjB3jTKGmJFp6VuSZ8NSqiNX2eW8mEDGq5
-         4Sy/fVxrqZgOQA91q36bC46+I6bucEOjzcZnACTgHOksLun7jw5kc3jodSHm5M9yD3+y
-         x/f7qUVmTH7B8az1LrljSri5spCTar3Zj/j0RY+9nTrk/eNTO482pDw9ckIGxEJw8A1R
-         HXcu51oUEMgxVPjBB5aF9PabsKPUYzhtprb2IB2FpkkF9AU47VIsFBYqRA2ksK+/+83T
-         oJrPb97ubyvDdQjZsMA9qbC0m0huRgtmYCz3gnBw7QlPPvWiysnu8SCiMq5B79Bmn78C
-         dLrA==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vM9BInueLI8Q8ol1IlYhM5Q0X/EexlMbrQxI22WherU=;
+        b=L76TZih7rHAgeVqG4NjRBTJ4t1qirOAJIBd4AuPgyT6IsoRz0TYm3urALMH/hYhfFL
+         Hr3Jlfop50xeTHZoEQdiNmu4KRZT++pXqxznMmbVjL2Ra1XnoHcFZbGFUVXTKp8hjY4F
+         plN/GjcHUWi3jyh01T3uY2Aj7nTh3wHKhy52L7sHOq4aYUaHN+5T/S5i6xlukvu2SUKr
+         p1fsxmk44/WKg3xZ5R6LOUDd5fd3vwPC9sIp2jLSbD6CF0UQOErpisKp+AC25Occr1gE
+         qqbkQsjqYzbR4ig6RTgK/5nEAUBromCV1krk4m+gBqpv2sV1/7gzAqKCQHMh+CZV4I5O
+         oyJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:cc:from:references:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVjkRYIcrrDLfuQwYmR3N5p1UxsCiu3f0wzE6ymq4bY=;
-        b=G9vLeyzF2dpBEKc91CRN1ExDRKMzIzGV5CkjTV2LI8tg+5/hlPgFXOsmewVqCC8TAL
-         HeuRCB101WBZ3uxCAFTiUz2+yu9ekL65wzI26X6f/lmmvptGku9jgwqRXH2DkgI+Y158
-         5cRvj0IXa+WaI6ZMUh5xGNCqQZcF11L8vE4rRYaYSoURmcm7N/PXGMa3jgy0Zjd5BA1q
-         8nCSqT4yJfmW8dd+0H/9Ca0fS+vvYmH/FGvbrfpT0uDjPTQrLM9gu18zp2FNL5tHad03
-         NaxeWFqLZTgrawvsaOj8F/skJEHT02qWnM6uYbzSbooavLs9zj/hJrjCbqUfOjYB3zNz
-         Z+PQ==
-X-Gm-Message-State: ACrzQf2LXvnDs8lM0+aEUxg+e1fApsx5vDJ35uK56UWtUbduf4Q0EOBw
-	HV4gLlo2vlyh2M/icWC/97I=
-X-Google-Smtp-Source: AMsMyM6OpO4zaaRhnSrZrQhVV5J91YiHKqhJYFlf4Tf8r9P0tXlJw+J610p0qVeC5M8tH/JyTKl1Qw==
-X-Received: by 2002:a5d:534b:0:b0:236:73ff:3605 with SMTP id t11-20020a5d534b000000b0023673ff3605mr22237720wrv.521.1667575781169;
-        Fri, 04 Nov 2022 08:29:41 -0700 (PDT)
-Received: from ?IPv6:2001:8a0:f93a:3b00:e038:5cdc:b8bf:4653? ([2001:8a0:f93a:3b00:e038:5cdc:b8bf:4653])
-        by smtp.gmail.com with ESMTPSA id z11-20020a5d654b000000b0023662d97130sm3609850wrv.20.2022.11.04.08.29.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 08:29:40 -0700 (PDT)
-Subject: Re: [PATCH] Cygwin: Improve FAQ on early breakpoint for ASLR
-To: Jon Turney <jon.turney@dronecode.org.uk>,
- Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20221103170430.4448-1-jon.turney@dronecode.org.uk>
- <alpine.BSO.2.21.2211031120540.30152@resin.csoft.net>
- <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de>
- <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk>
-From: Pedro Alves <alves.ped@gmail.com>
-Cc: pedro@palves.net
-Message-ID: <f2942e0e-ea5e-7ba9-8770-b422628dafad@gmail.com>
-Date: Fri, 4 Nov 2022 15:29:39 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vM9BInueLI8Q8ol1IlYhM5Q0X/EexlMbrQxI22WherU=;
+        b=lYIx3Z3YE4q1Z1cr9cA5niyKK0PA5yH8GH23DBI+s7jihLovDDIkJXJTDjK405+Xkx
+         s9Pm3QGp+niOY25fQ/XCKmBYznmGU+knio11qxyv2VZOMeGTHQamQxBc/571B4Nx5U65
+         s/M13uKTkmKYV+17YsZcUf+qqb5pavyqosvrZtWInySerOat4K5Ge3tgGuIJ2VvDgQni
+         zjkZuTGrDjiyT8mGuK7QahiUNcrWVP4y5Jb3N0nwE0DAV7ZRrqet/vtinZgQwf9/9dHg
+         4T3NG4YWKjg7tIEIFcVk4GM1J1bV/FCT83/CRFZ4u3B7BfXutUlo81cD2qPVBz4jvM7T
+         /STQ==
+X-Gm-Message-State: ACrzQf3XPEHNlDwcr+gkcR99bPTCYceLWx586IMiB14xddd6YNF798xg
+	+wvlb3RUUmnPFPmBFjYQcB26SXBS3V3Z+ikG+yP0eDyutYMl3A==
+X-Google-Smtp-Source: AMsMyM7BwFtt6zdGgFNuCKWQSCrtCDmKDlhdfdd6QMOtPANu4mWm4NTHxuHgCvBQxHVj/LTxd3XDXhFTJT6B/yU2p7E=
+X-Received: by 2002:a05:6402:210:b0:464:67ff:5e47 with SMTP id
+ t16-20020a056402021000b0046467ff5e47mr28873087edv.417.1668029804245; Wed, 09
+ Nov 2022 13:36:44 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+From: Andy Koppe <andy.koppe@gmail.com>
+Date: Wed, 9 Nov 2022 21:36:30 +0000
+Message-ID: <CAHWeT-a3FhOO2Fc6bEm6ZuW4qcHkY2wz47OMuXKzfSgROzUOMg@mail.gmail.com>
+Subject: [PATCH] Cygwin: Correct /proc/*/stat for processes without ctty
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary="000000000000f5121f05ed107348"
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2022-11-04 12:53 p.m., Jon Turney wrote:
-> +<para>
-> +  (It may be necessary to use the <command>gdb</command> command <command>set
-> +  disable-randomization on</command> to turn off ASLR for the debugee to
-> +  prevent the base address getting randomized.)
-> +</para>
->  </answer></qandaentry>
->  
+--000000000000f5121f05ed107348
+Content-Type: text/plain; charset="UTF-8"
 
-Typo: debugee -> debuggee
+Hi,
 
-Note that "on" is the default.
+I had noticed that selecting or excluding processes without a
+controlling terminal doesn't work in procps on Cygwin.
+
+For example, the mintty process shouldn't appear in the following, as
+the 'f' (for forest) argument triggers procps's "BSD personality",
+where processes without a controlling terminal are supposed to be
+excluded by default:
+
+$ procps f
+    PID TTY    STAT  STIME COMMAND
+   1809 ?      Ss    19:49 /usr/bin/mintty -
+   1810 pty0   Ss    19:49  \_ -zsh
+   2075 pty0   R     21:14      \_ procps f
+
+Similarly, this should list the processes without a terminal, but
+comes up empty:
+
+$ procps -t -
+
+I tracked this down to a difference in the tty field of /proc/*/stat
+(which is the 7th field). On Linux, processes without a terminal have
+value 0 there, and that's what procps expects.
+
+Cygwin 3.3 has -1 instead, whereas on master the bits of the tty field
+were rearranged in commit 437d0a8f88, which turns the -1 into
+268435455 (i.e. 0xFFFFFFF). Either way, procps treats such processes
+as having terminals. (The ? in the TTY column output is generated by a
+different code path in procps that uses /proc/*/ctty on Cygwin.)
+
+Patches for the 3.3 branch and master attached.
+
+Regards,
+Andy
+
+--000000000000f5121f05ed107348
+Content-Type: application/octet-stream; 
+	name="0001-Cygwin-proc-stat-ctty.patch"
+Content-Disposition: attachment; filename="0001-Cygwin-proc-stat-ctty.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_laa4zbxu0>
+X-Attachment-Id: f_laa4zbxu0
+
+RnJvbSAwOWUxMzRiZGQ0NTk0YjE3MjdjZGJlMjgxMTA5MTVmZDg0MjRjM2E4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbmR5IEtvcHBlIDxhbmR5LmtvcHBlQGdtYWlsLmNvbT4KRGF0
+ZTogV2VkLCA5IE5vdiAyMDIyIDIwOjM0OjMwICswMDAwClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2lu
+OiBDb3JyZWN0IC9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgY3R0eQoKUmVwb3J0
+IDAgaW5zdGVhZCBvZiAyNjg0MzU0NTUgKGkuZS4gMHhGRkZGRkZGKSBpbiB0aGUgdHR5IGZpZWxk
+IG9mCi9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgYSBjb250cm9sbGluZyB0ZXJt
+aW5hbC4gVGhpcyBpcyB3aGF0CnRoZSBwcm9jcHMgdXRpbGl0eSBleHBlY3RzIHdoZW4gc2VsZWN0
+aW5nIG9yIGV4Y2x1ZGluZyBzdWNoIHByb2Nlc3Nlcy4KLS0tCiB3aW5zdXAvY3lnd2luL2ZoYW5k
+bGVyL3Byb2Nlc3MuY2MgfCA4ICsrKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25z
+KCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIv
+cHJvY2Vzcy5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvY2Vzcy5jYwppbmRleCBhOGMx
+N2YxYjAuLmIwYWVmMmViZSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlci9wcm9j
+ZXNzLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvY2Vzcy5jYwpAQCAtMTA5Miw5
+ICsxMDkyLDExIEBAIGZvcm1hdF9wcm9jZXNzX3N0YXQgKHZvaWQgKmRhdGEsIGNoYXIgKiZkZXN0
+YnVmKQogICBpbnQgbmljZSA9IDA7CiAvKiBjdHR5IG1haiBpcyAzMToxNiwgbWluIGlzIDE1OjA7
+IHR0eV9uciBzL2IgbWFqIDE1OjgsIG1pbiAzMToyMCwgNzowOwogICAgbWFqIGlzIDMxOjE2ID4+
+IDE2ICYgZmZmIDw8IDg7IG1pbiBpcyAxNTowID4+IDggJiBmZiA8PCAyMCB8ICYgZmYgKi8KLSAg
+aW50IHR0eV9uciA9ICAgICgoKHAtPmN0dHkgPj4gIDgpICYgMHhmZikgIDw8IDIwKQotCQl8ICgo
+KHAtPmN0dHkgPj4gMTYpICYgMHhmZmYpIDw8ICA4KQotCQl8ICAgKHAtPmN0dHkgICAgICAgICYg
+MHhmZik7CisgIGludCB0dHlfbnIgPSAwOworICBpZiAocC0+Y3R0eSA+IDApCisgICAgdHR5X25y
+ID0gICAoKChwLT5jdHR5ID4+ICA4KSAmIDB4ZmYpICA8PCAyMCkKKwkgICAgIHwgKCgocC0+Y3R0
+eSA+PiAxNikgJiAweGZmZikgPDwgIDgpCisJICAgICB8ICAgKHAtPmN0dHkgICAgICAgICYgMHhm
+Zik7CiAKICAgaWYgKHAtPnByb2Nlc3Nfc3RhdGUgJiBQSURfRVhJVEVEKQogICAgIHN0cmNweSAo
+Y21kLCAiPGRlZnVuY3Q+Iik7Ci0tIAoyLjM4LjEKCg==
+--000000000000f5121f05ed107348
+Content-Type: application/octet-stream; 
+	name="0001-Cygwin-proc-stat-ctty-3.3.patch"
+Content-Disposition: attachment; 
+	filename="0001-Cygwin-proc-stat-ctty-3.3.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_laa4zbyn1>
+X-Attachment-Id: f_laa4zbyn1
+
+RnJvbSAyNTllMWJkNDI1ZGE4OTAwNDNkYTEzN2JiOTYzYTY2MzQwNDAwNDNjIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbmR5IEtvcHBlIDxhbmR5LmtvcHBlQGdtYWlsLmNvbT4KRGF0
+ZTogV2VkLCA5IE5vdiAyMDIyIDIxOjAxOjU4ICswMDAwClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2lu
+OiBDb3JyZWN0IC9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgY3R0eQoKUmVwb3J0
+IDAgaW5zdGVhZCBvZiAtMSBpbiB0aGUgdHR5IGZpZWxkIG9mIC9wcm9jLyovc3RhdCBmb3IgcHJv
+Y2Vzc2VzCndpdGhvdXQgYSBjb250cm9sbGluZyB0ZXJtaW5hbC4gVGhpcyBpcyB3aGF0IHRoZSBw
+cm9jcHMgdXRpbGl0eSBleHBlY3RzCndoZW4gc2VsZWN0aW5nIG9yIGV4Y2x1ZGluZyBzdWNoIHBy
+b2Nlc3Nlcy4KLS0tCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3Byb2Nlc3MuY2MgfCA0ICsrLS0K
+IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0t
+Z2l0IGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9wcm9jZXNzLmNjIGIvd2luc3VwL2N5Z3dpbi9m
+aGFuZGxlcl9wcm9jZXNzLmNjCmluZGV4IGI1YmMwZTRmYy4uN2Y0NzU1ODBkIDEwMDY0NAotLS0g
+YS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3Byb2Nlc3MuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9m
+aGFuZGxlcl9wcm9jZXNzLmNjCkBAIC0xMTgzLDggKzExODMsOCBAQCBmb3JtYXRfcHJvY2Vzc19z
+dGF0ICh2b2lkICpkYXRhLCBjaGFyIComZGVzdGJ1ZikKIAkJCQkgICAiJVUgJWx1ICIKIAkJCQkg
+ICAiJWxkICVsdVxuIiwKIAkJCSAgcC0+cGlkLCBjbWQsIHN0YXRlLAotCQkJICBwLT5wcGlkLCBw
+LT5wZ2lkLCBwLT5zaWQsIHAtPmN0dHksIC0xLAotCQkJICAwLCBmYXVsdF9jb3VudCwgZmF1bHRf
+Y291bnQsIDAsIDAsIHV0aW1lLCBzdGltZSwKKwkJCSAgcC0+cHBpZCwgcC0+cGdpZCwgcC0+c2lk
+LCAocC0+Y3R0eSA+IDAgPyBwLT5jdHR5IDogMCksCisJCQkgIC0xLCAwLCBmYXVsdF9jb3VudCwg
+ZmF1bHRfY291bnQsIDAsIDAsIHV0aW1lLCBzdGltZSwKIAkJCSAgdXRpbWUsIHN0aW1lLCBOWkVS
+TyArIG5pY2UsIG5pY2UsIDAsIDAsCiAJCQkgIHN0YXJ0X3RpbWUsIHZtc2l6ZSwKIAkJCSAgdm1y
+c3MsIHZtbWF4cnNzCi0tIAoyLjM4LjEKCg==
+--000000000000f5121f05ed107348--
