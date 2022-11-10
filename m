@@ -1,150 +1,85 @@
-Return-Path: <andy.koppe@gmail.com>
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-	by sourceware.org (Postfix) with ESMTPS id D84EA3858D28
-	for <cygwin-patches@cygwin.com>; Wed,  9 Nov 2022 21:36:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D84EA3858D28
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-x529.google.com with SMTP id s12so243598edd.5
-        for <cygwin-patches@cygwin.com>; Wed, 09 Nov 2022 13:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vM9BInueLI8Q8ol1IlYhM5Q0X/EexlMbrQxI22WherU=;
-        b=L76TZih7rHAgeVqG4NjRBTJ4t1qirOAJIBd4AuPgyT6IsoRz0TYm3urALMH/hYhfFL
-         Hr3Jlfop50xeTHZoEQdiNmu4KRZT++pXqxznMmbVjL2Ra1XnoHcFZbGFUVXTKp8hjY4F
-         plN/GjcHUWi3jyh01T3uY2Aj7nTh3wHKhy52L7sHOq4aYUaHN+5T/S5i6xlukvu2SUKr
-         p1fsxmk44/WKg3xZ5R6LOUDd5fd3vwPC9sIp2jLSbD6CF0UQOErpisKp+AC25Occr1gE
-         qqbkQsjqYzbR4ig6RTgK/5nEAUBromCV1krk4m+gBqpv2sV1/7gzAqKCQHMh+CZV4I5O
-         oyJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vM9BInueLI8Q8ol1IlYhM5Q0X/EexlMbrQxI22WherU=;
-        b=lYIx3Z3YE4q1Z1cr9cA5niyKK0PA5yH8GH23DBI+s7jihLovDDIkJXJTDjK405+Xkx
-         s9Pm3QGp+niOY25fQ/XCKmBYznmGU+knio11qxyv2VZOMeGTHQamQxBc/571B4Nx5U65
-         s/M13uKTkmKYV+17YsZcUf+qqb5pavyqosvrZtWInySerOat4K5Ge3tgGuIJ2VvDgQni
-         zjkZuTGrDjiyT8mGuK7QahiUNcrWVP4y5Jb3N0nwE0DAV7ZRrqet/vtinZgQwf9/9dHg
-         4T3NG4YWKjg7tIEIFcVk4GM1J1bV/FCT83/CRFZ4u3B7BfXutUlo81cD2qPVBz4jvM7T
-         /STQ==
-X-Gm-Message-State: ACrzQf3XPEHNlDwcr+gkcR99bPTCYceLWx586IMiB14xddd6YNF798xg
-	+wvlb3RUUmnPFPmBFjYQcB26SXBS3V3Z+ikG+yP0eDyutYMl3A==
-X-Google-Smtp-Source: AMsMyM7BwFtt6zdGgFNuCKWQSCrtCDmKDlhdfdd6QMOtPANu4mWm4NTHxuHgCvBQxHVj/LTxd3XDXhFTJT6B/yU2p7E=
-X-Received: by 2002:a05:6402:210:b0:464:67ff:5e47 with SMTP id
- t16-20020a056402021000b0046467ff5e47mr28873087edv.417.1668029804245; Wed, 09
- Nov 2022 13:36:44 -0800 (PST)
-MIME-Version: 1.0
-From: Andy Koppe <andy.koppe@gmail.com>
-Date: Wed, 9 Nov 2022 21:36:30 +0000
-Message-ID: <CAHWeT-a3FhOO2Fc6bEm6ZuW4qcHkY2wz47OMuXKzfSgROzUOMg@mail.gmail.com>
-Subject: [PATCH] Cygwin: Correct /proc/*/stat for processes without ctty
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	by sourceware.org (Postfix) with ESMTPS id 99D8A3858D35
+	for <cygwin-patches@cygwin.com>; Thu, 10 Nov 2022 09:10:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 99D8A3858D35
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1N3bb1-1p2ZdE19z1-010YgI for <cygwin-patches@cygwin.com>; Thu, 10 Nov 2022
+ 10:10:07 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id BE767A8088D; Thu, 10 Nov 2022 10:10:06 +0100 (CET)
+Date: Thu, 10 Nov 2022 10:10:06 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary="000000000000f5121f05ed107348"
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: Correct /proc/*/stat for processes without ctty
+Message-ID: <Y2y/7kG3wQ19/VoU@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <CAHWeT-a3FhOO2Fc6bEm6ZuW4qcHkY2wz47OMuXKzfSgROzUOMg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHWeT-a3FhOO2Fc6bEm6ZuW4qcHkY2wz47OMuXKzfSgROzUOMg@mail.gmail.com>
+X-Provags-ID: V03:K1:zrh6VdCwCLS/Gv+g/SE5yRvoxJ+bgIeXynYZX7FNLqP4cBoVNja
+ HoNgZhxWGXowBuZAP/Ld7us21UrMiL9k1JxCT2aviyjLKtXgaqhCVsbJyQjRSTu3F7/kib+
+ teAxiKTwzY6w0gVw8YTkTIoVjSosNBtETuJRDtDfXUznyTZkH4sxJueiXDjwqZIRocLIVlu
+ QObWzPNDwNBDgmImDuApA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:z9CrLQH8myk=:WA0dqa66UCO6T1BEgDKaXc
+ yEXRit2cnJkqDwY4Sg+MTsmGNVDU6JiC8TdUEIWfpcw2Oqkr6SQJR7VpJU9Hde9Z7GnnjkwE8
+ /1KYA2sp+aKIuMaU4IVrdyubc9vGhjox49Qwx7OcxW+ivTB0Z+VwosNO1OO+Bf89wtgScjqrx
+ xLuYJvUW/aSB38vISS1rkysynk/+1HPhkDtPnwWPoxR78AqGi4sWZQyNgzPzkoUy7f/7A2VfB
+ 2gAXmaMDOjkLLVDHx8FIVsj2bdWlhMUqEBxX1qCA6tMDVdJd/xPxwDNX5ukbqUQJY8HB8Ef+O
+ 4lxwZA2coc3UvnveJNye0eFgIPq63HYHntQl+rPn6cLV8nGju93kw1MN2uQWGqo4lhLzfe1kj
+ ctOyJNrSnLswaDLCbcZ7T7l2Px+bsPrUUDeBLbhVP9kuIqDgpnq6hz/asNCPhE1hBjHm25Jyy
+ qVFw78J8UeYgtYGUD9m1J6RLMTAAByDy0d+nsWXJDTUVMr3r2NT0U2AWXQo6NYgBVaQcsauOW
+ 83RUwQwRyD435s/J3Hd0AARhl5+xMaY5gMPBYg9AxFUgzq57Y0tzgnJDKzN+HLM8eGdYA2FgA
+ TsSecY2Gv2GL61c2/nOdi5qK6aAWSGdmkCCxH3WTDNMBS2l9hOyO0S2j5Ze42L79TLVtZ68YG
+ XIN/lGVnZtaBmYIAJ6ZRaEB0EMs/ovubUh/BOIymW4M1emNVSPs+I2AAQ0EHtnXm6QB/gFOrh
+ r5wqgmcb1LNAtko7VTxUL83+yksOT0+F4RY8D1I/j6JP+LCvI+xkMif22D7ototFwPGw7r2IH
+ aalTWyvAQxRi5dvsxq7s24n1vqtHQ==
+X-Spam-Status: No, score=-95.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---000000000000f5121f05ed107348
-Content-Type: text/plain; charset="UTF-8"
+On Nov  9 21:36, Andy Koppe wrote:
+> Hi,
+> 
+> I had noticed that selecting or excluding processes without a
+> controlling terminal doesn't work in procps on Cygwin.
+> 
+> For example, the mintty process shouldn't appear in the following, as
+> the 'f' (for forest) argument triggers procps's "BSD personality",
+> where processes without a controlling terminal are supposed to be
+> excluded by default:
+> 
+> $ procps f
+>     PID TTY    STAT  STIME COMMAND
+>    1809 ?      Ss    19:49 /usr/bin/mintty -
+>    1810 pty0   Ss    19:49  \_ -zsh
+>    2075 pty0   R     21:14      \_ procps f
+> 
+> Similarly, this should list the processes without a terminal, but
+> comes up empty:
+> 
+> $ procps -t -
+> 
+> I tracked this down to a difference in the tty field of /proc/*/stat
+> (which is the 7th field). On Linux, processes without a terminal have
+> value 0 there, and that's what procps expects.
+> 
+> Cygwin 3.3 has -1 instead, whereas on master the bits of the tty field
+> were rearranged in commit 437d0a8f88, which turns the -1 into
+> 268435455 (i.e. 0xFFFFFFF). Either way, procps treats such processes
+> as having terminals. (The ? in the TTY column output is generated by a
+> different code path in procps that uses /proc/*/ctty on Cygwin.)
+> 
+> Patches for the 3.3 branch and master attached.
 
-Hi,
+Pushed in master.  We won't do another 3.3, so I skipped it.
 
-I had noticed that selecting or excluding processes without a
-controlling terminal doesn't work in procps on Cygwin.
 
-For example, the mintty process shouldn't appear in the following, as
-the 'f' (for forest) argument triggers procps's "BSD personality",
-where processes without a controlling terminal are supposed to be
-excluded by default:
-
-$ procps f
-    PID TTY    STAT  STIME COMMAND
-   1809 ?      Ss    19:49 /usr/bin/mintty -
-   1810 pty0   Ss    19:49  \_ -zsh
-   2075 pty0   R     21:14      \_ procps f
-
-Similarly, this should list the processes without a terminal, but
-comes up empty:
-
-$ procps -t -
-
-I tracked this down to a difference in the tty field of /proc/*/stat
-(which is the 7th field). On Linux, processes without a terminal have
-value 0 there, and that's what procps expects.
-
-Cygwin 3.3 has -1 instead, whereas on master the bits of the tty field
-were rearranged in commit 437d0a8f88, which turns the -1 into
-268435455 (i.e. 0xFFFFFFF). Either way, procps treats such processes
-as having terminals. (The ? in the TTY column output is generated by a
-different code path in procps that uses /proc/*/ctty on Cygwin.)
-
-Patches for the 3.3 branch and master attached.
-
-Regards,
-Andy
-
---000000000000f5121f05ed107348
-Content-Type: application/octet-stream; 
-	name="0001-Cygwin-proc-stat-ctty.patch"
-Content-Disposition: attachment; filename="0001-Cygwin-proc-stat-ctty.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_laa4zbxu0>
-X-Attachment-Id: f_laa4zbxu0
-
-RnJvbSAwOWUxMzRiZGQ0NTk0YjE3MjdjZGJlMjgxMTA5MTVmZDg0MjRjM2E4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbmR5IEtvcHBlIDxhbmR5LmtvcHBlQGdtYWlsLmNvbT4KRGF0
-ZTogV2VkLCA5IE5vdiAyMDIyIDIwOjM0OjMwICswMDAwClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2lu
-OiBDb3JyZWN0IC9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgY3R0eQoKUmVwb3J0
-IDAgaW5zdGVhZCBvZiAyNjg0MzU0NTUgKGkuZS4gMHhGRkZGRkZGKSBpbiB0aGUgdHR5IGZpZWxk
-IG9mCi9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgYSBjb250cm9sbGluZyB0ZXJt
-aW5hbC4gVGhpcyBpcyB3aGF0CnRoZSBwcm9jcHMgdXRpbGl0eSBleHBlY3RzIHdoZW4gc2VsZWN0
-aW5nIG9yIGV4Y2x1ZGluZyBzdWNoIHByb2Nlc3Nlcy4KLS0tCiB3aW5zdXAvY3lnd2luL2ZoYW5k
-bGVyL3Byb2Nlc3MuY2MgfCA4ICsrKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25z
-KCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIv
-cHJvY2Vzcy5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvY2Vzcy5jYwppbmRleCBhOGMx
-N2YxYjAuLmIwYWVmMmViZSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlci9wcm9j
-ZXNzLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvY2Vzcy5jYwpAQCAtMTA5Miw5
-ICsxMDkyLDExIEBAIGZvcm1hdF9wcm9jZXNzX3N0YXQgKHZvaWQgKmRhdGEsIGNoYXIgKiZkZXN0
-YnVmKQogICBpbnQgbmljZSA9IDA7CiAvKiBjdHR5IG1haiBpcyAzMToxNiwgbWluIGlzIDE1OjA7
-IHR0eV9uciBzL2IgbWFqIDE1OjgsIG1pbiAzMToyMCwgNzowOwogICAgbWFqIGlzIDMxOjE2ID4+
-IDE2ICYgZmZmIDw8IDg7IG1pbiBpcyAxNTowID4+IDggJiBmZiA8PCAyMCB8ICYgZmYgKi8KLSAg
-aW50IHR0eV9uciA9ICAgICgoKHAtPmN0dHkgPj4gIDgpICYgMHhmZikgIDw8IDIwKQotCQl8ICgo
-KHAtPmN0dHkgPj4gMTYpICYgMHhmZmYpIDw8ICA4KQotCQl8ICAgKHAtPmN0dHkgICAgICAgICYg
-MHhmZik7CisgIGludCB0dHlfbnIgPSAwOworICBpZiAocC0+Y3R0eSA+IDApCisgICAgdHR5X25y
-ID0gICAoKChwLT5jdHR5ID4+ICA4KSAmIDB4ZmYpICA8PCAyMCkKKwkgICAgIHwgKCgocC0+Y3R0
-eSA+PiAxNikgJiAweGZmZikgPDwgIDgpCisJICAgICB8ICAgKHAtPmN0dHkgICAgICAgICYgMHhm
-Zik7CiAKICAgaWYgKHAtPnByb2Nlc3Nfc3RhdGUgJiBQSURfRVhJVEVEKQogICAgIHN0cmNweSAo
-Y21kLCAiPGRlZnVuY3Q+Iik7Ci0tIAoyLjM4LjEKCg==
---000000000000f5121f05ed107348
-Content-Type: application/octet-stream; 
-	name="0001-Cygwin-proc-stat-ctty-3.3.patch"
-Content-Disposition: attachment; 
-	filename="0001-Cygwin-proc-stat-ctty-3.3.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_laa4zbyn1>
-X-Attachment-Id: f_laa4zbyn1
-
-RnJvbSAyNTllMWJkNDI1ZGE4OTAwNDNkYTEzN2JiOTYzYTY2MzQwNDAwNDNjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbmR5IEtvcHBlIDxhbmR5LmtvcHBlQGdtYWlsLmNvbT4KRGF0
-ZTogV2VkLCA5IE5vdiAyMDIyIDIxOjAxOjU4ICswMDAwClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2lu
-OiBDb3JyZWN0IC9wcm9jLyovc3RhdCBmb3IgcHJvY2Vzc2VzIHdpdGhvdXQgY3R0eQoKUmVwb3J0
-IDAgaW5zdGVhZCBvZiAtMSBpbiB0aGUgdHR5IGZpZWxkIG9mIC9wcm9jLyovc3RhdCBmb3IgcHJv
-Y2Vzc2VzCndpdGhvdXQgYSBjb250cm9sbGluZyB0ZXJtaW5hbC4gVGhpcyBpcyB3aGF0IHRoZSBw
-cm9jcHMgdXRpbGl0eSBleHBlY3RzCndoZW4gc2VsZWN0aW5nIG9yIGV4Y2x1ZGluZyBzdWNoIHBy
-b2Nlc3Nlcy4KLS0tCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3Byb2Nlc3MuY2MgfCA0ICsrLS0K
-IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9wcm9jZXNzLmNjIGIvd2luc3VwL2N5Z3dpbi9m
-aGFuZGxlcl9wcm9jZXNzLmNjCmluZGV4IGI1YmMwZTRmYy4uN2Y0NzU1ODBkIDEwMDY0NAotLS0g
-YS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3Byb2Nlc3MuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9m
-aGFuZGxlcl9wcm9jZXNzLmNjCkBAIC0xMTgzLDggKzExODMsOCBAQCBmb3JtYXRfcHJvY2Vzc19z
-dGF0ICh2b2lkICpkYXRhLCBjaGFyIComZGVzdGJ1ZikKIAkJCQkgICAiJVUgJWx1ICIKIAkJCQkg
-ICAiJWxkICVsdVxuIiwKIAkJCSAgcC0+cGlkLCBjbWQsIHN0YXRlLAotCQkJICBwLT5wcGlkLCBw
-LT5wZ2lkLCBwLT5zaWQsIHAtPmN0dHksIC0xLAotCQkJICAwLCBmYXVsdF9jb3VudCwgZmF1bHRf
-Y291bnQsIDAsIDAsIHV0aW1lLCBzdGltZSwKKwkJCSAgcC0+cHBpZCwgcC0+cGdpZCwgcC0+c2lk
-LCAocC0+Y3R0eSA+IDAgPyBwLT5jdHR5IDogMCksCisJCQkgIC0xLCAwLCBmYXVsdF9jb3VudCwg
-ZmF1bHRfY291bnQsIDAsIDAsIHV0aW1lLCBzdGltZSwKIAkJCSAgdXRpbWUsIHN0aW1lLCBOWkVS
-TyArIG5pY2UsIG5pY2UsIDAsIDAsCiAJCQkgIHN0YXJ0X3RpbWUsIHZtc2l6ZSwKIAkJCSAgdm1y
-c3MsIHZtbWF4cnNzCi0tIAoyLjM4LjEKCg==
---000000000000f5121f05ed107348--
+Thanks,
+Corinna
