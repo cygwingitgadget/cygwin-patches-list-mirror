@@ -1,100 +1,111 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-049.btinternet.com (mailomta6-sa.btinternet.com [213.120.69.12])
-	by sourceware.org (Postfix) with ESMTPS id D89893858C1F
-	for <cygwin-patches@cygwin.com>; Sat, 12 Nov 2022 14:31:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D89893858C1F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.38.6])
-          by sa-prd-fep-049.btinternet.com with ESMTP
-          id <20221112143100.IJEC3227.sa-prd-fep-049.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>
-          for <cygwin-patches@cygwin.com>; Sat, 12 Nov 2022 14:31:00 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 61394290430E000D
-X-Originating-IP: [81.153.98.246]
-X-OWM-Source-IP: 81.153.98.246 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvgedrfeekgdeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurheptgfkffggfgfufhfhvfgjsehmtderredtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeelvdevveelkeetffevleektdfgteejkedukeejveffhfehvdfhheetgfffhfevgfenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtiegnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.106] (81.153.98.246) by sa-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
-        id 61394290430E000D for cygwin-patches@cygwin.com; Sat, 12 Nov 2022 14:31:00 +0000
-Content-Type: multipart/mixed; boundary="------------2aessfp3w0dQf0faDlyv8rsP"
-Message-ID: <a2e01953-f6ef-cf08-f6e1-0c7632391ede@dronecode.org.uk>
-Date: Sat, 12 Nov 2022 14:30:59 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	by sourceware.org (Postfix) with ESMTPS id 06275392AC33
+	for <cygwin-patches@cygwin.com>; Tue, 15 Nov 2022 10:46:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 06275392AC33
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N0nOF-1p908N1b1B-00wlBN for <cygwin-patches@cygwin.com>; Tue, 15 Nov 2022
+ 11:46:50 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id A97B9A8088F; Tue, 15 Nov 2022 11:46:49 +0100 (CET)
+Date: Tue, 15 Nov 2022 11:46:49 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: Improve FAQ on early breakpoint for ASLR
+Message-ID: <Y3NuGWbczdW5f+rC@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20221103170430.4448-1-jon.turney@dronecode.org.uk>
  <alpine.BSO.2.21.2211031120540.30152@resin.csoft.net>
  <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de>
  <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk>
  <f2942e0e-ea5e-7ba9-8770-b422628dafad@gmail.com>
-Content-Language: en-GB
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-In-Reply-To: <f2942e0e-ea5e-7ba9-8770-b422628dafad@gmail.com>
-X-Spam-Status: No, score=-1198.4 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ <a2e01953-f6ef-cf08-f6e1-0c7632391ede@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a2e01953-f6ef-cf08-f6e1-0c7632391ede@dronecode.org.uk>
+X-Provags-ID: V03:K1:dXTHHYZm3VoWdpXr9CcgwS13iksGrR0RjW7vd5DjzwEsgO86Wts
+ i4KPw29QlXRw5gqWx115pdFSfPSH+4GX4kz3EP5HcQoHjQx3ECpIhgueiFOTETF6+13I3z+
+ CWmAwfx6wrzV8a3geg/3FQ+42gs41Ujo7uWbxklcuocLdsC7wPd6oXGyJWGCb6Qx0dAVCUS
+ Bq+P3GkiPPaFFQluNdNJw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cVpKO4zi6ws=:ZW7VQtQTa4aRM7FBFbpHvC
+ Dlxo3uoosIjuPylHg8b/91HgiRJ+InUKTSYm2apkmvcZPiu0LtzRqjG7YtzyKoNmF49hcEW4x
+ HEB/ClEJiYebRgsFItxj4pm8RG0M1RD232ZgDF2mCKmp/R/VCAsvFRawIAbfcPjaIpriEmiVK
+ m9RyM9FrZkreMOiw+yz8VfLNQ8r7RBLBoGI42+nAVt/lfqQklBtsPqMPOyhyXFCWkZI/VadVl
+ giN9zR0W7ELnfG9LtWuyOloD7KJ3hj7UjF2akXhrQ53qLVn/L+TwxTlpFcTjOJHvlDrehAToT
+ tSuEvf89Sca484mXG9lUJFI2MI44vVbFBqBOJBCsYNOrPlh/NhRYbpB57Rs3j3U1yku7qOVeW
+ VdnC59FsNYcBoPU7rtTV4lhG/4wfH/Uwta93D7ggUkupKc2nKXa3zYFWg0sAsyqDg4BjJvs8R
+ EhwcvWqXEXcdoykWY59LY/ScE43/4fPKjM6Kvtci+mLZKipLYC2WtIbYgRaihyiIUyKZK+WIM
+ IJsjqnl4Zwv6gQW07uBJ02PCcl6wNceUFphaYG619+hsvNNB2t73j13kA4hxBa9f3YM0H9XyF
+ aB4Pmu/XvevG2G/K2pFYHdbogssjpPzNm5bf3O80jMKajAhU3whl4h/lT30S9RbcNkBnjLnZ+
+ CSTBjlSRzAzEmJB+/qIZ+R7/ocR1t19zCQD1MdA4NW9qLnCta8WYmF+lYEm8LVlUNQbGT6FOn
+ KDwIGAJd+D5Xb1+1AXfSsSelTHd6gsUTPcU7muARrJfum5BhkbHvXUIoghrY6ut2u10Wmn2/n
+ 0mgHuWvHOFnOnhatIE1eGkglF81zJr8YdXE7k7Fscj2ZBPVEs99wloHx6AqgI08jnCzWosYLI
+ nZKnPRALochE5k7AsKtUR2Bjt0FDCnHnFWCtwmUcmwHhCVoUvZrDBGSMp5JSnfkom4vydJ2Vh
+ 1MKuQAgpvKEmUWLwcJjSGWDzL9efMiS2ledDSfrol0NeTSQkKBiu26ceKIInHEWaaIMfxFBUq
+ fim/edYZ8t4075jpNaIJmRxk/d+yHvKv35hfADZGsyqgqnRBVrjl5hvDNrJjUzNtQVDoJz+I4
+ XO7WklymK1SXh8Q7IqO72O5Osf/IjcglO3q8ALwEIYrd3LLYiAwxsn4fmH3/rcpKSQzsh/j97
+ DanxiXaWPOD6YN4tC0sX+0CNMf+8W+4c5jI0XkyYFzDaEt1zF8nzKgFUzk6zwYTGdRHMzoPIl
+ fmPQ2iuq84EpN7NSoM/YEgb6q8PRzs3u3XicNbuRAoUNN7fgDFr6YFyZUgKL8FLbXgjYY0OC5
+ GkoauuzXrorMwmZwzeP/2+dFfZVSwg==
+X-Spam-Status: No, score=-95.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------2aessfp3w0dQf0faDlyv8rsP
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Jon,
 
-On 04/11/2022 15:29, Pedro Alves wrote:
-> On 2022-11-04 12:53 p.m., Jon Turney wrote:
->> +<para>
->> +  (It may be necessary to use the <command>gdb</command> command <command>set
->> +  disable-randomization on</command> to turn off ASLR for the debugee to
->> +  prevent the base address getting randomized.)
->> +</para>
->>   </answer></qandaentry>
->>   
+the patch is fine, but...
+
+On Nov 12 14:30, Jon Turney wrote:
+> On 04/11/2022 15:29, Pedro Alves wrote:
+> > On 2022-11-04 12:53 p.m., Jon Turney wrote:
+> > > +<para>
+> > > +  (It may be necessary to use the <command>gdb</command> command <command>set
+> > > +  disable-randomization on</command> to turn off ASLR for the debugee to
+> > > +  prevent the base address getting randomized.)
+> > > +</para>
+> > >   </answer></qandaentry>
+> > 
+> > Typo: debugee -> debuggee
 > 
-> Typo: debugee -> debuggee
+> Thanks for catching that.
+> 
+> Patch attached.
+> 
+> > Note that "on" is the default.
+> 
+> True.  But the API used by gdb to turn off ASLR isn't supported by some
+> versions of Windows.
+> 
+> This sentence could be a lot more explicit about all the details here, but
+> I'm just trying to be brief.
 
-Thanks for catching that.
+> From be24c9b69e72648690a477fd2f15b0a9c6374713 Mon Sep 17 00:00:00 2001
+> From: Jon Turney <jon.turney@dronecode.org.uk>
+> Date: Sat, 12 Nov 2022 14:16:36 +0000
+> Subject: [PATCH] Cygwin: Fix typo in FAQ
+> 
+> The consonant in 'debug' is doubled in 'debuggee' just as it is in
+> 'debugger'.
+> 
+> Fixes: 8c68a8a4
 
-Patch attached.
+It would be great if we could get used to using the same syntax as the
+Linux kernel project to document stuff.  I'm trying to follow their lead
+for a while.  For fixes to former commits, it looks like this in the
+kernel, at the end of the commit message:
 
-> Note that "on" is the default.
+Fixes: 123456789012 ("title of commit 123456789012")
 
-True.  But the API used by gdb to turn off ASLR isn't supported by some 
-versions of Windows.
+Yeah, core.abbrev is 12 digits.  I'm using this setting for quite some
+time locally.
 
-This sentence could be a lot more explicit about all the details here, 
-but I'm just trying to be brief.
+Anyway, please push.
 
---------------2aessfp3w0dQf0faDlyv8rsP
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-Fix-typo-in-FAQ.patch"
-Content-Disposition: attachment; filename="0001-Cygwin-Fix-typo-in-FAQ.patch"
-Content-Transfer-Encoding: base64
 
-RnJvbSBiZTI0YzliNjllNzI2NDg2OTBhNDc3ZmQyZjE1YjBhOWM2Mzc0NzEzIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVHVybmV5IDxqb24udHVybmV5QGRyb25lY29k
-ZS5vcmcudWs+CkRhdGU6IFNhdCwgMTIgTm92IDIwMjIgMTQ6MTY6MzYgKzAwMDAKU3ViamVj
-dDogW1BBVENIXSBDeWd3aW46IEZpeCB0eXBvIGluIEZBUQoKVGhlIGNvbnNvbmFudCBpbiAn
-ZGVidWcnIGlzIGRvdWJsZWQgaW4gJ2RlYnVnZ2VlJyBqdXN0IGFzIGl0IGlzIGluCidkZWJ1
-Z2dlcicuCgpGaXhlczogOGM2OGE4YTQKLS0tCiB3aW5zdXAvZG9jL2ZhcS1wcm9ncmFtbWlu
-Zy54bWwgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
-b24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvZG9jL2ZhcS1wcm9ncmFtbWluZy54bWwgYi93
-aW5zdXAvZG9jL2ZhcS1wcm9ncmFtbWluZy54bWwKaW5kZXggMzZkMGE0MDFmLi44OWMzMDlh
-ZjIgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9kb2MvZmFxLXByb2dyYW1taW5nLnhtbAorKysgYi93
-aW5zdXAvZG9jL2ZhcS1wcm9ncmFtbWluZy54bWwKQEAgLTg0Nyw3ICs4NDcsNyBAQCBHdWlk
-ZSBoZXJlOiA8dWxpbmsgdXJsPSJodHRwczovL2N5Z3dpbi5jb20vY3lnd2luLXVnLW5ldC9k
-bGwuaHRtbCIvPi4KIAogPHBhcmE+CiAgIChJdCBtYXkgYmUgbmVjZXNzYXJ5IHRvIHVzZSB0
-aGUgPGNvbW1hbmQ+Z2RiPC9jb21tYW5kPiBjb21tYW5kIDxjb21tYW5kPnNldAotICBkaXNh
-YmxlLXJhbmRvbWl6YXRpb24gb248L2NvbW1hbmQ+IHRvIHR1cm4gb2ZmIEFTTFIgZm9yIHRo
-ZSBkZWJ1Z2VlIHRvCisgIGRpc2FibGUtcmFuZG9taXphdGlvbiBvbjwvY29tbWFuZD4gdG8g
-dHVybiBvZmYgQVNMUiBmb3IgdGhlIGRlYnVnZ2VlIHRvCiAgIHByZXZlbnQgdGhlIGJhc2Ug
-YWRkcmVzcyBnZXR0aW5nIHJhbmRvbWl6ZWQuKQogPC9wYXJhPgogPC9hbnN3ZXI+PC9xYW5k
-YWVudHJ5PgotLSAKMi4zOC4xCgo=
-
---------------2aessfp3w0dQf0faDlyv8rsP--
+Thanks,
+Corinna
