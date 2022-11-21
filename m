@@ -1,79 +1,85 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-	by sourceware.org (Postfix) with ESMTPS id 0B4BF385840C
-	for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022 11:41:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0B4BF385840C
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	by sourceware.org (Postfix) with ESMTPS id BB4583858413
+	for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022 11:47:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BB4583858413
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MRSdf-1obrOh0ZS1-00NPFa for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022
- 12:41:38 +0100
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M7auL-1orKVj1m9t-0086PW for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022
+ 12:47:22 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id F3881A80884; Mon, 21 Nov 2022 12:41:36 +0100 (CET)
-Date: Mon, 21 Nov 2022 12:41:36 +0100
+	id EE59CA80974; Mon, 21 Nov 2022 12:47:21 +0100 (CET)
+Date: Mon, 21 Nov 2022 12:47:21 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/2] Allow deriving the current user's home directory
- via the HOME variable
-Message-ID: <Y3tj8Os0p2a43rhx@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Fix 'Bad address' error when running
+ 'cmd.exe /c dir'
+Message-ID: <Y3tlSXz6UBGPXaeu@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <cover.1450375424.git.johannes.schindelin@gmx.de>
- <047fe1d78c365afca7edfdf169fff5e1940c3837.1450375424.git.johannes.schindelin@gmx.de>
- <20151217202023.GA3507@calimero.vinschen.de>
- <1r1pq0r7-o3s3-so08-o426-296542797q94@tzk.qr>
- <Y07cOhhwu4ExRDzb@calimero.vinschen.de>
- <0q096627-r8pr-rno5-0863-s6n90psosq07@tzk.qr>
- <Y1Z48Mdk79/Qtwc9@calimero.vinschen.de>
- <66o0nq89-4599-np26-625n-2n8oon6p558q@tzk.qr>
- <Y20XK4VybCriMmn/@calimero.vinschen.de>
- <qn135110-43r6-o86o-887o-1rn29574s263@tzk.qr>
+References: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
+ <6EED0655-71E5-43B4-988D-B5935AED8EC0@gmx.de>
+ <20221022151247.1b1cf1e3fc13d4c3dabc2191@nifty.ne.jp>
+ <n4on0p20-970q-8693-7n50-4q22370s7rr5@tzk.qr>
+ <Y1ZazH6objN99mSz@calimero.vinschen.de>
+ <s1268p66-18rs-9q3r-07oo-11o128pp06po@tzk.qr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <qn135110-43r6-o86o-887o-1rn29574s263@tzk.qr>
-X-Provags-ID: V03:K1:+WFRQyIA5Z9I4a0g+U/ewR6SOKgVb5DjQWTTVRU8iJvvrumJFa0
- StbfnLWZA2qQuos5TuDRmkRR+YF4y7hxBAooIBH4yrVzSxBKdxtuqi+DP3EdZv6S+FnxTO3
- 5L0AhsULL0iKjUSssAGEEZXc3g/l/tTLYQwmtHjvatroboxbZ3C7VnTJNbV6fBe7uPBqYPi
- WPZ4U/zl6ed6U6tCVvuQQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CneSKlZScOo=:EsCdB9RWs3aINdVIF/kZBR
- 7GEeOUW9pX1elxHHGZQBuo0kozy0H3DDQB9JFgwQh/6peZBIUJGX7TJGIG2FkgTrDya32F6YW
- s4tEnWUPT/FqsAvSsAmfPrGni09LViGBEpZwvJLMM7n/y4olpXEBl7AbWfdGQgoAs1Uzhhyk/
- 1WMhEPRn/0yqmcWI6zgiSMl2rEmbYzQxcGaz0Kyyid6FwLadwBMSakJsBmESeLpuHdSRI+7f0
- 5c3QaURpOBylAwDT6TT1dS4z3EKXo7UUJ5arOavnBnM8wAdzu+OZpWJcwdSUyckFGLmm5lIce
- TOHKJGfTz4lpz6/gXXgoiKe8fe/vQrlVn8UKyvEPOvQOJV/2J9AQaPuokmuqlAFp2cTunYPBa
- htktpCw3TBX8tz+NMFAU9hKwdsMYpNpilvJpkI6dlpyl9eH7CtE1iMRw9oeA9/8/kcnonshMD
- NUYHdtow+68mHIzIFXR9l7yoai5GqNSx4tx9czKpww+mSnKxUY/WC15MMFAKBuuUAwzoMQna9
- X0ne12b5ZKF9iOIQG6WTiCfUqpA1uThYkrMNjcfsc72GGP1is8K+4yEuh2TgWSwTPpGEvb0VH
- iFpaEA3gd4jfDKxrb89j5TwWP7qXMNNXf6/8D7WCj5l4zOzKJ9y5xIgKYpkiTGbc2xK90U5nl
- syn5O8yEjLZhJY28bkblCEF9a+jLQXRM573wWAvyd4mJlpelQZ2ioAHEom6nylConT97TkoPM
- nAp4nd55Rd3xxSrfvgcdyUARPE3hPhusnQLVWQNBx5fB1MzjblAkN+A3aZ8K86/1UgNtkqsGz
- 80eiHNYr1gUEoF/lAfctKBRRDjP/w==
+In-Reply-To: <s1268p66-18rs-9q3r-07oo-11o128pp06po@tzk.qr>
+X-Provags-ID: V03:K1:5HM6fJ89dPr3JgUZ72RzL1an0MsD3dVcMfkt60USqRvVZlF/aPH
+ fvZcTy738qf7e5MX/fGAy6BwRGF7/wauNT//pmuCLvRYoKpRLgr2pmPP5iWEWKtSAnlPqNp
+ ue4CjkOkuBf+QAPW6FVXRwfYJKiPcR0LaNOVN599HXPmeZ9BNsGSI9RcEP2Z9csBQON5G+X
+ 1TtUA2MY5XyDNhSQmt8Sw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:p86h13V4DEg=:Ov0wu3x2s9kOBcNvMUQSRn
+ oSb67NFtcxjTQgXcUepHdBUhe/D/qFs7NMiqEZtHNh+aUDA2GYBDKdw7QxPUx38+LS4mnXKQ0
+ fghiySnd4eYQ4ZQMpASoegcMkA/Q5ECjtodALq4qvFguffwWL/UpqDGWfLqC3j32zEmBvIZoT
+ JJsgrEXZdGaHFQJlOFBEqnHGSFHgr3xr5hKttg9CDdGHoV+EUzP37Us1Oa/IJg3DOBotPOMPe
+ sQbbAiZeUMGHegOl0IvYeQolhhqFnVxIFIg1FCz7Poc5AX3nksjzrOs/Z6DMcwLwis3z4sB6a
+ y/ZagaGDVleb79pFbm421ADsQQVbPdyUK4nNQUGQR0WhSMBrvjo/Twa42PN8mSTH8lpcUX91H
+ ajEeNuUfvXgGOVEycK1rzwSFK0Zc1GLB+I/zQ76GqacAeqTIYpHnYXLxCIO7rfw0Ho5AVbjYZ
+ j8oRYp9Iz/PXFaJAkM1Cg6ogf7cHLam0y1ReGfSuyrifG34jgEOR2i69NrzEmi1fUId3+Gy+R
+ pyOYle+6lwArwFszW8BIqDm0PwrBElx6lhowkKzGSANGek/l4s5P1GKtmiE8mc1N3057/YXTr
+ vn+ptJHguPh0IFE0KuHvwwqZ+sNqrIoIKNfGHiUMnZpmkuWwONLFjDSMD/9dWS+lMt/NW+nli
+ n+is8EFPFm1Uba2cH32FyIuGHYKe48HONKyfBrBV5lQoHVt3m8Xrhb8U8Kdg5+dce396ldB4b
+ PFmIvQGP4wk8DDzmYZ+qGXEvCfUT+o8mWezkJM7sRm9gZ6adaAvS/wRaYdpqJHjW6xR+FOBkX
+ EPyjTzF/AB7mASutOTffIVMqoknLQ==
 X-Spam-Status: No, score=-96.0 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 18 09:18, Johannes Schindelin wrote:
+On Nov 18 09:23, Johannes Schindelin wrote:
 > Hi Corinna,
 > 
-> On Thu, 10 Nov 2022, Corinna Vinschen wrote:
-> > On Nov 10 16:16, Johannes Schindelin wrote:
-> > > With this context in mind, I would like to ask to integrate the patch
-> > > as-is, including the HOMEDRIVE/HOMEPATH and USERPROFILE fall-backs.
-> >
-> > Can't do that, sorry.  Two replies before I sent a necessary change,
-> > which needs inclusion first.
+> On Mon, 24 Oct 2022, Corinna Vinschen wrote:
 > 
-> I am a bit confused. Do you need anything from me to move this along, i.e.
-> are those two replies you mention some emails I failed to address yet?
+> > However, two points:
+> >
+> > - I'm wondering if the patch (both of yours) doesn't actually just cover
+> >   a problem in child_info_spawn::worker().  Different runpath values,
+> >   depending on the app path being "cmd" or "cmd.exe"?  That sounds like
+> >   worker() is doing weird stuff.  And it does in line 400ff.
+> >
+> >   So, if the else branch of this code is apparently working fine for
+> >   "cmd" per Takashi's observation in
+> >   https://cygwin.com/pipermail/cygwin-patches/2022q4/012032.html, how
+> >   much sense is in the if branch handling "command.com" and "cmd.exe"
+> >   specially?  Wouldn't a better patch get rid of this extra if and
+> >   the null_app_name variable instead?
+> 
+> I never understood why the pcon code was allowed to be so Hydra-like as to
+> sprawl into corners far, far beyond `winsup/cygwin/fhandler*`.
+> 
+> FWIW I would be in favor of getting rid of this special handling (unless
+> it causes a regression).
 
-I didn't mean two different replies, but my second-last reply before
-that one, i. e.
-https://cygwin.com/pipermail/cygwin-patches/2022q4/012025.html
+I'm a bit surprised to read that, you should already have seen that.
+I did so end of October:
 
-Sorry if that wasn't clear.  Basically your handling of $HOME was
-wrong and I suggested a fix.
+https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=f33635ae6076
+https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=213b53ed3557
 
 
 Corinna
