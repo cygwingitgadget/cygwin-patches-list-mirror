@@ -1,85 +1,57 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-	by sourceware.org (Postfix) with ESMTPS id BB4583858413
-	for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022 11:47:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org BB4583858413
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	by sourceware.org (Postfix) with ESMTPS id 76A4B385840C
+	for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022 11:48:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 76A4B385840C
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M7auL-1orKVj1m9t-0086PW for <cygwin-patches@cygwin.com>; Mon, 21 Nov 2022
- 12:47:22 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MYNW8-1oReTy2O0Y-00VQWT; Mon, 21 Nov 2022 12:48:08 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EE59CA80974; Mon, 21 Nov 2022 12:47:21 +0100 (CET)
-Date: Mon, 21 Nov 2022 12:47:21 +0100
+	id 506B5A80974; Mon, 21 Nov 2022 12:48:07 +0100 (CET)
+Date: Mon, 21 Nov 2022 12:48:07 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix 'Bad address' error when running
- 'cmd.exe /c dir'
-Message-ID: <Y3tlSXz6UBGPXaeu@calimero.vinschen.de>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty, console: Encapsulate spawn.cc code related
+ to pty/console.
+Message-ID: <Y3tldy9QiY4mN8A1@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20221022053420.1842-1-takashi.yano@nifty.ne.jp>
- <6EED0655-71E5-43B4-988D-B5935AED8EC0@gmx.de>
- <20221022151247.1b1cf1e3fc13d4c3dabc2191@nifty.ne.jp>
- <n4on0p20-970q-8693-7n50-4q22370s7rr5@tzk.qr>
- <Y1ZazH6objN99mSz@calimero.vinschen.de>
- <s1268p66-18rs-9q3r-07oo-11o128pp06po@tzk.qr>
+Mail-Followup-To: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	cygwin-patches@cygwin.com
+References: <20221120094336.1637-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <s1268p66-18rs-9q3r-07oo-11o128pp06po@tzk.qr>
-X-Provags-ID: V03:K1:5HM6fJ89dPr3JgUZ72RzL1an0MsD3dVcMfkt60USqRvVZlF/aPH
- fvZcTy738qf7e5MX/fGAy6BwRGF7/wauNT//pmuCLvRYoKpRLgr2pmPP5iWEWKtSAnlPqNp
- ue4CjkOkuBf+QAPW6FVXRwfYJKiPcR0LaNOVN599HXPmeZ9BNsGSI9RcEP2Z9csBQON5G+X
- 1TtUA2MY5XyDNhSQmt8Sw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:p86h13V4DEg=:Ov0wu3x2s9kOBcNvMUQSRn
- oSb67NFtcxjTQgXcUepHdBUhe/D/qFs7NMiqEZtHNh+aUDA2GYBDKdw7QxPUx38+LS4mnXKQ0
- fghiySnd4eYQ4ZQMpASoegcMkA/Q5ECjtodALq4qvFguffwWL/UpqDGWfLqC3j32zEmBvIZoT
- JJsgrEXZdGaHFQJlOFBEqnHGSFHgr3xr5hKttg9CDdGHoV+EUzP37Us1Oa/IJg3DOBotPOMPe
- sQbbAiZeUMGHegOl0IvYeQolhhqFnVxIFIg1FCz7Poc5AX3nksjzrOs/Z6DMcwLwis3z4sB6a
- y/ZagaGDVleb79pFbm421ADsQQVbPdyUK4nNQUGQR0WhSMBrvjo/Twa42PN8mSTH8lpcUX91H
- ajEeNuUfvXgGOVEycK1rzwSFK0Zc1GLB+I/zQ76GqacAeqTIYpHnYXLxCIO7rfw0Ho5AVbjYZ
- j8oRYp9Iz/PXFaJAkM1Cg6ogf7cHLam0y1ReGfSuyrifG34jgEOR2i69NrzEmi1fUId3+Gy+R
- pyOYle+6lwArwFszW8BIqDm0PwrBElx6lhowkKzGSANGek/l4s5P1GKtmiE8mc1N3057/YXTr
- vn+ptJHguPh0IFE0KuHvwwqZ+sNqrIoIKNfGHiUMnZpmkuWwONLFjDSMD/9dWS+lMt/NW+nli
- n+is8EFPFm1Uba2cH32FyIuGHYKe48HONKyfBrBV5lQoHVt3m8Xrhb8U8Kdg5+dce396ldB4b
- PFmIvQGP4wk8DDzmYZ+qGXEvCfUT+o8mWezkJM7sRm9gZ6adaAvS/wRaYdpqJHjW6xR+FOBkX
- EPyjTzF/AB7mASutOTffIVMqoknLQ==
+In-Reply-To: <20221120094336.1637-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:J4342RJHIm4OMFWfvk6ea3TUFivivv87TR1fPbu8KN5eAhFopu4
+ /t5kfSJhgaZ4H/mDDny4s9sZ01bm0M61XZijbWqCtv9IPWceylpJe+80BipN9pfksd161Xw
+ pCPyGdviggoO7oAIJ6eIBkIVL9wGtfL23nwr5GjvNTqwr8ulbyWiXnzeWin6/DJls+VoIff
+ Tge6089zaNVpIwuaG1AxA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:s4+1NuPmFrY=:4Q6Mjvu9Xq3gkgSNEsa1Ax
+ +B4LfJH+DNaQ09Eyf0e4o+O03Yo83uENt0A7Uk5O9IdwgrJLz8NEFW/ThBJINNdKra0Zr0MN5
+ dqn6lnXoRmeCw0m/o5klm2sTYlDp6XLwRpITSsPtYeKmeIEMyCNAurWW05jQMpIAhBoZMDYCR
+ yPHYqPLSAqQ89vev92Mqm28WxIX9U1FegKlefcdwX/vcs4zdjW5+IFy8mXuGd1XbrnTx2QFHQ
+ p3aW+zsI8AedgQ3NjN7SpbYKiIICbEm/lNta0So10jIVEqPK/IMQJ5fHy1JtgUAq7IGgzViJ0
+ EhmAzLLumKTnSHTB2+uF9dtQxXZEGaCkxRjvI8xBWDP87sF8M69sDgZwNjgorEDCmbXcH3Nhk
+ gUi72CP/d8IK4NnegDHqipapG+ikecwgpIoaqXHFD5Nm5DMiEjvAaOJUTk+D5E1cnYSag1a22
+ iWt5GWs0F9nNoPpaKiAudc/E83/tOpUqeiq0eAr/GvVwbd8JnAv0zE/h3rXhAAwK/5/NrQHHL
+ D95kn5OwkrYU0sB86QhobojhJXKTCcbeNfU90/0QnYczcHNz1b1tJVcaTowvj3jssPiICLN/y
+ wunFR0GBd2Z56vM/mubutV80dm9dnxbHhRAvEbW7kR9sTz0VdJaI846JHqJlRWtFcP8UZgY9K
+ mmnceZ6rKNHoNEVBJJJGnnStO5oFokIJvhdFH17b0GeR6LNXpkohzadTCEOqn00znsBPlYCTl
+ FI1B2G2QTdo+JE5t1y9C8jJqSeSJUpcEKkOIgLHfOb/VixwyQM4+ppUUnMXHG/PsVv/faQHGx
+ ynpXMfxs+6k+Y8cc5+9o8IxqVqlAQ==
 X-Spam-Status: No, score=-96.0 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 18 09:23, Johannes Schindelin wrote:
-> Hi Corinna,
-> 
-> On Mon, 24 Oct 2022, Corinna Vinschen wrote:
-> 
-> > However, two points:
-> >
-> > - I'm wondering if the patch (both of yours) doesn't actually just cover
-> >   a problem in child_info_spawn::worker().  Different runpath values,
-> >   depending on the app path being "cmd" or "cmd.exe"?  That sounds like
-> >   worker() is doing weird stuff.  And it does in line 400ff.
-> >
-> >   So, if the else branch of this code is apparently working fine for
-> >   "cmd" per Takashi's observation in
-> >   https://cygwin.com/pipermail/cygwin-patches/2022q4/012032.html, how
-> >   much sense is in the if branch handling "command.com" and "cmd.exe"
-> >   specially?  Wouldn't a better patch get rid of this extra if and
-> >   the null_app_name variable instead?
-> 
-> I never understood why the pcon code was allowed to be so Hydra-like as to
-> sprawl into corners far, far beyond `winsup/cygwin/fhandler*`.
-> 
-> FWIW I would be in favor of getting rid of this special handling (unless
-> it causes a regression).
+On Nov 20 18:43, Takashi Yano wrote:
+> - The codes related to pty and console in spawn.cc have been moved
+>   into the new class fhandler_termios::spawn_worker, and make spawn.cc
+>   call them. The functionality has not been changed at all.
 
-I'm a bit surprised to read that, you should already have seen that.
-I did so end of October:
-
-https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=f33635ae6076
-https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=213b53ed3557
+This is great, thanks!
 
 
 Corinna
