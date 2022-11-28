@@ -1,64 +1,66 @@
-Return-Path: <SRS0=VkZR=3Y=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-	by sourceware.org (Postfix) with ESMTPS id C9F2F3852C45
-	for <cygwin-patches@cygwin.com>; Thu, 24 Nov 2022 10:57:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org C9F2F3852C45
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (w165151.dynamic.ppp.asahi-net.or.jp [121.1.165.151]) (authenticated)
-	by conuserg-09.nifty.com with ESMTP id 2AOAvMDh029593;
-	Thu, 24 Nov 2022 19:57:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 2AOAvMDh029593
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1669287447;
-	bh=4mVvnX1o8yk+3grGGu9ZZF06XOmmV2eXxaAJ14GDd1w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PgPOqbcaCw76c0y9WmYiV547d9OdtC+TcE27V8pQsS5VfI+81G7AqQ5/7a/e6VHOQ
-	 QL6hTYCKbwMyvG+FfD7SlOUKETDEoXU6PiBKN2mv2iXgsPYObMmdJBAK42KUFjs+T/
-	 +Pab6WOfbwkuTOgMYK7U6oTlOrQcixR/gXqhrSP4GBcH1q5bKCNyh9oY9DDFJZ7Apo
-	 fb3Loi84ri7hBgAt5RBQIcmrYVNC7z+2SkhXDxonLjtl5yDxkN1y5vWCPLcEkdUPKP
-	 A1IfHkhBWh42ca/YW6nABJlLPcJeu3n4XOMk8BkkVkn9DLLe9COZe99DNaHQaj49M1
-	 s4op7c10r0qZQ==
-X-Nifty-SrcIP: [121.1.165.151]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Rename fhandler/tty.cc to fhandler/pty.cc.
-Date: Thu, 24 Nov 2022 19:57:12 +0900
-Message-Id: <20221124105712.2296-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.38.1
+Return-Path: <SRS0=Xogn=34=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from sa-prd-fep-043.btinternet.com (mailomta5-sa.btinternet.com [213.120.69.11])
+	by sourceware.org (Postfix) with ESMTPS id 8379B385782B
+	for <cygwin-patches@cygwin.com>; Mon, 28 Nov 2022 13:00:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 8379B385782B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+          by sa-prd-fep-043.btinternet.com with ESMTP
+          id <20221128130048.WATJ10574.sa-prd-fep-043.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>
+          for <cygwin-patches@cygwin.com>; Mon, 28 Nov 2022 13:00:48 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 62E573CC12BB802D
+X-Originating-IP: [81.153.98.246]
+X-OWM-Source-IP: 81.153.98.246 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffekiefgudejheetudeigfejledtleegleetkeduteeftdfffefhueefgfeutedtnecukfhppeekuddrudehfedrleekrddvgeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdeingdpihhnvghtpeekuddrudehfedrleekrddvgeeipdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.106] (81.153.98.246) by sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
+        id 62E573CC12BB802D for cygwin-patches@cygwin.com; Mon, 28 Nov 2022 13:00:48 +0000
+Message-ID: <8a0287ed-6f20-4a05-b584-966bfded6833@dronecode.org.uk>
+Date: Mon, 28 Nov 2022 13:00:46 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] Cygwin: Improve FAQ on early breakpoint for ASLR
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20221103170430.4448-1-jon.turney@dronecode.org.uk>
+ <alpine.BSO.2.21.2211031120540.30152@resin.csoft.net>
+ <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de>
+ <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk>
+ <f2942e0e-ea5e-7ba9-8770-b422628dafad@gmail.com>
+ <a2e01953-f6ef-cf08-f6e1-0c7632391ede@dronecode.org.uk>
+ <Y3NuGWbczdW5f+rC@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <Y3NuGWbczdW5f+rC@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1192.4 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-- Previously, we have two tty.cc, one is winsup/cygwin/tty.cc and
-  the other is winsup/cygwin/fhandler/tty.cc. This is somewhat
-  confusing. This patch renames fhandler/tty.cc to fhandler/pty.cc.
----
- winsup/cygwin/Makefile.am                 | 2 +-
- winsup/cygwin/fhandler/{tty.cc => pty.cc} | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename winsup/cygwin/fhandler/{tty.cc => pty.cc} (100%)
+On 15/11/2022 10:46, Corinna Vinschen wrote:
+> 
+> It would be great if we could get used to using the same syntax as the
+> Linux kernel project to document stuff.  I'm trying to follow their lead
+> for a while.  For fixes to former commits, it looks like this in the
+> kernel, at the end of the commit message:
+> 
+> Fixes: 123456789012 ("title of commit 123456789012")
+> 
+> Yeah, core.abbrev is 12 digits.  I'm using this setting for quite some
+> time locally.
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index c321a38fe..1d57e8492 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -108,7 +108,7 @@ FHANDLER_FILES= \
- 	fhandler/tape.cc \
- 	fhandler/termios.cc \
- 	fhandler/timerfd.cc \
--	fhandler/tty.cc \
-+	fhandler/pty.cc \
- 	fhandler/virtual.cc \
- 	fhandler/windows.cc \
- 	fhandler/zero.cc
-diff --git a/winsup/cygwin/fhandler/tty.cc b/winsup/cygwin/fhandler/pty.cc
-similarity index 100%
-rename from winsup/cygwin/fhandler/tty.cc
-rename to winsup/cygwin/fhandler/pty.cc
--- 
-2.38.1
+Sounds good.  Is there some script to automate generating this kind of 
+comment from a commit-id?
+
+> Anyway, please push.
+
+Thanks
 
