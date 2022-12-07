@@ -1,93 +1,74 @@
-Return-Path: <SRS0=l5Hp=4D=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	by sourceware.org (Postfix) with ESMTPS id 39D6038AA245;
-	Mon,  5 Dec 2022 15:23:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 39D6038AA245
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1670253809; bh=HLyVQukMAysTnbvVip7GUI0LMr8Np4vaWc6AoCs57QY=;
-	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
-	b=R544N0squxIM+zgtwCdbR4fIvuT1ogGEbhT+IRps44LGnX0K36qNLX6L8lsR5rZ0c
-	 KNDoFIZP7SnyU5JfLWvkRdqSGaTRxES043ONmOVhapA0JgcZrfXVyk9Mp5spKzX1wm
-	 7lQtXvlehNR0maiLvs6nrDWQA7Df6iioXKFGIuKEGy+Mrd2i22L4R5wdslPKEsEphw
-	 r0BDAkKY7pX77Yyx8PApfZsEK01D3T+2EFmVnXhaZROEk0mqaqppjfN35wkUwQHGYq
-	 f/mq9fOd5MsxlgergnQIgjLgps3XUHVhN9UzrnCjngFoLH5pq7QVRWLQHXzof6rHtx
-	 kg53o6grsvfwQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.24.155.134] ([89.1.213.44]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJE6L-1pHOv53aqx-00Keol; Mon, 05
- Dec 2022 16:23:28 +0100
-Date: Mon, 5 Dec 2022 16:23:27 +0100 (CET)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Corinna Vinschen <corinna-cygwin@cygwin.com>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Improve FAQ on early breakpoint for ASLR
-In-Reply-To: <Y4TImGsIsHnJya3W@calimero.vinschen.de>
-Message-ID: <5spqn8n0-q9r4-48r5-qo91-0o4qs27358s1@tzk.qr>
-References: <20221103170430.4448-1-jon.turney@dronecode.org.uk> <alpine.BSO.2.21.2211031120540.30152@resin.csoft.net> <Y2TqvPTB7Hui2jmJ@calimero.vinschen.de> <4ccbb5e1-ee4f-8944-ed44-4af7fa79f048@dronecode.org.uk> <f2942e0e-ea5e-7ba9-8770-b422628dafad@gmail.com>
- <a2e01953-f6ef-cf08-f6e1-0c7632391ede@dronecode.org.uk> <Y3NuGWbczdW5f+rC@calimero.vinschen.de> <8a0287ed-6f20-4a05-b584-966bfded6833@dronecode.org.uk> <Y4TImGsIsHnJya3W@calimero.vinschen.de>
+Return-Path: <SRS0=2vOY=4F=systematicsw.ab.ca=brian.inglis@sourceware.org>
+Received: from omta001.cacentral1.a.cloudfilter.net (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
+	by sourceware.org (Postfix) with ESMTPS id E1903382CE0D
+	for <cygwin-patches@cygwin.com>; Wed,  7 Dec 2022 01:39:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org E1903382CE0D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=systematicsw.ab.ca
+Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+	by cmsmtp with ESMTP
+	id 2aGkpcUetMsxD2jPUp6nUT; Wed, 07 Dec 2022 01:39:44 +0000
+Received: from [10.0.0.5] ([184.64.124.72])
+	by cmsmtp with ESMTP
+	id 2jPTpyuOOomIw2jPTpwz3y; Wed, 07 Dec 2022 01:39:44 +0000
+X-Authority-Analysis: v=2.4 cv=LM91/ba9 c=1 sm=1 tr=0 ts=638feee0
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=wWxrkrgXVDeLx27K:21 a=IkcTkHD0fZMA:10 a=24AZYWMyAAAA:8 a=pZDQcMS7AAAA:8
+ a=wECf3xPYAAAA:8 a=RDPWCpjeqOG6PyUTIioA:9 a=QEXdDO2ut3YA:10
+ a=XVph6ibSE44aNfnlHGDp:22 a=bG88sKzkDEFeXWNnvthB:22 a=ASFzenCU2jlfK5-GQJ3J:22
+ a=ccNonjl4-tybilS9-zgM:22
+Message-ID: <b318c461-8f14-96ba-8594-9e945ca18a2e@SystematicSw.ab.ca>
+Date: Tue, 6 Dec 2022 18:39:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:nZsp0OiQ+olLqmyAJe5aatlOKKCCjcDe6llDjO8DFf9GaR5yXwz
- 7niyZocpb8hydnMfVLRfM29YU9utlQ8XDXg6hV5o3NdAol6KyYsbsJNf6t4gGLMbgFupbLV
- I90bibOTgPDGIHPgClh8gBs/JCjAdbDY+FoNXWBsR4o/FnKtvhYK9kvMNRrBvqmXcqzQfJe
- 80ztn/V+E9XG5wA3bZ0JA==
-UI-OutboundReport: notjunk:1;M01:P0:FC9AywtYoAk=;woq0FCcdYZScI5Q2va7zpmZWPtD
- LvQhDTAMEs0fLgbSdHDvcoTWkIC0K+UmyKA5/GyZych8TS7yHvzNz6T8k5fIk+siuFLqoS+Ez
- sgguQJCFCrKLmCHuyelK3IA7He08PT6zjwVbiFipr8OTOsDmoA/tfWnqgcwfJpP52ba7+0XCT
- Oel/XuTZT2kXGrZZI6qL2Vr1mGjwVGYc039ZMXA+nIPgdwBcNatXq5FAnMTowQAPomOdTuqLo
- OdKhUuT0PlgWb+EZ5e5r2hltyHadYVZyJEKG1qSR03U2eozq8sFPeLr8EQzfPg2i86GiZFvqW
- jrhe2r1pZThIA0K5CarS7kN3rs1L7WOQjG/WmgbgQr8fiTNpAG8NVqz/rVV+6XeEr+wtKFz0o
- CGZCpnc37evsTEjWtWJVBtjMGMrryO0k2+WZmiyuoytH6eYj/zXYqzWFDstt9jUII5LAuy08T
- qlAPWH2zvoObKE+wcrxoqYdjSOSit5/tymIRQxvATFEKecgRI2qQklyGGCdwDc6v4eQG2YmEM
- k6F00q+RupyAdwmfjdRUf9xG5+Sw+YGLDhn6FTq98z+sUTNPBjYjgKujmGj2Fq08Gde/QZ0rw
- HmNMhYK5gUynlCxlv0qcxbH4gyqXYRe9aATXh3RBegiwO3baauD90EJFCbbkzj59j0GAkFZx1
- bXaDbOSWckK3lKI7nYZ5A/njVvDjhSec3XgfVbwZCIuKgk/PmZ0UtUY0RJG2E5S844AHSncd2
- pV64VqPoQlTzYy0T+9Rf2IMKDy8OQhRsnIBBTPFZb0k5q4fImi+wGYLQUS7TK3F4KHq1sRR7O
- 9dbAuwkBV4J9NGJfUCYTB8+N0jNOthouYdANDHCxmdIAh0lv140TDo1rJFaXGZpLi1jBoNeCf
- G73kN/uExyy2DAE7C7mKSifYlL5nBA636LEy731YA1cI38RhBC394nQKRv9L9Qpd4rcl20Di+
- /zZ++yVOBXuTkiYIbtKxPaHFOrw=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] add a reference to the official SPDX License List
+Content-Language: en-CA
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfNvA/v7Pl9X3lJDkSYwtNtEIDAqEa3OrB4aeKX+4djw9Z6CuMaHY6wMmewpEm/hs4yqojUMfbvtiScVOONqR3z4Xr0a3lm21b/hOJYl5+ybrwIT4c+ST
+ 6HGcC1A60ftwr7kdXwfZNbxh85w2BVVG3dkLCjZhVbSl7mjmXQgnPoIpSlTBoWMueXnSpb+vR6lpLj6GlGAj1TxM8c6xWqBBJic=
+X-Spam-Status: No, score=-1169.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,KAM_SHORT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi,
+Spec link is already 404, so brittle, not necessarily current, and that licence 
+list appendix is only informative and not current, so link to the actual current 
+license list instead:
 
-On Mon, 28 Nov 2022, Corinna Vinschen wrote:
+	https://spdx.org/licenses/
 
-> On Nov 28 13:00, Jon Turney wrote:
-> > On 15/11/2022 10:46, Corinna Vinschen wrote:
-> > >
-> > > It would be great if we could get used to using the same syntax as t=
-he
-> > > Linux kernel project to document stuff.  I'm trying to follow their =
-lead
-> > > for a while.  For fixes to former commits, it looks like this in the
-> > > kernel, at the end of the commit message:
-> > >
-> > > Fixes: 123456789012 ("title of commit 123456789012")
-> > >
-> > > Yeah, core.abbrev is 12 digits.  I'm using this setting for quite so=
-me
-> > > time locally.
-> >
-> > Sounds good.  Is there some script to automate generating this kind of
-> > comment from a commit-id?
->
-> I don't think so, at least I don't see anything like that in git docs...
+and provide a link to the generic current spec page which offers different formats:
 
-It's note _quite_ what you asked for, but `git show --pretty=3Dreference -=
-s
-<commit>` (https://git-scm.com/docs/git-show#_pretty_formats) gives you
-_almost_ what you are looking for.
+	https://spdx.dev/specifications/#current-version
 
-But you can always call `git show -s --format=3D'%h ("%s")' <commit>`, and
-even configure an alias for this:
+with something like (hacked from previous email):
 
-	git config --global alias.pretty-print-commit \
-		"-c core.abbrev=3D12 show -s --format=3D'%h (\"%s\")'"
+diff --git a/packaging-hint-files.html b/packaging-hint-files.html
+--- a/packaging-hint-files.html
++++ b/packaging-hint-files.html
+@@ -406,7 +406,7 @@ version: <i>version</i>
+      <p>
+-      <code>license</code> is
+-      a <a href="https://spdx.github.io/spdx-spec/SPDX-license-expressions/">SPDX
+-      license expression</a> for the <a href="https://spdx.org/licenses/">open 
+source license(s)</a> of the package
++      <a href="https://spdx.org/licenses/"><code>license</code></a> is an SPDX
++      <a href="https://spdx.dev/specifications/#current-version">license 
+expression</a>
++      for the open source license(s)</a> of the package
+        source code.
+      </p>
+    </li>
 
-Ciao,
-Johannes
+-- 
+Take care. Thanks, Brian Inglis			Calgary, Alberta, Canada
+
+La perfection est atteinte			Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter	not when there is no more to add
+mais lorsqu'il n'y a plus rien à retirer	but when there is no more to cut
+			-- Antoine de Saint-Exupéry
