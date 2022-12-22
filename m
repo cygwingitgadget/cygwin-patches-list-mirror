@@ -1,32 +1,31 @@
 Return-Path: <SRS0=bHOJ=4U=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-	by sourceware.org (Postfix) with ESMTPS id 0B9773858281
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 09:07:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0B9773858281
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+	by sourceware.org (Postfix) with ESMTPS id 334043858D1E
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 11:48:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 334043858D1E
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
 Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conuserg-08.nifty.com with ESMTP id 2BM97b2E010291;
-	Thu, 22 Dec 2022 18:07:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2BM97b2E010291
+	by conuserg-12.nifty.com with ESMTP id 2BMBmN1N003810;
+	Thu, 22 Dec 2022 20:48:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2BMBmN1N003810
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1671700061;
-	bh=nfD8+R2egLDLO/dd1ZuwWEYX8vvTk9LdmJAx5gj9pBc=;
+	s=dec2015msa; t=1671709707;
+	bh=27cFlE5caV/WTpssN+wWhSl8sQzpx9PtJmtfQ6byjzw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ti5uoUqPiNeDlGpHu1ixmN6geu67BtmMzgmep2xbdCMqZAhKmief68G/qtJg9O6Kt
-	 X8rKmFKZVeB/rSB00lorFN0GmSKk+5DVxIMz5JkdKNfqfiEPWJmqpk3rXrlb+WsD1q
-	 FBKFjgF8v8M68IM++7e8ROevB3bWq5nWdck5F5dMcEqXOdIaOj0xezPPERzEB6Vcim
-	 OBwprWcAMVYrKKbnzB/tnE+R0yIM0Bdq+O4Ynk111xJGzPz13X1u/QrXQKDzDB7Pm/
-	 gAGW0nh3VVUzroI1t1eamXlgUr+6oFu47+4oecRJGMQ2UFY49onkgozStItQ1Kjjc2
-	 fFvUg7MnnjLdA==
+	b=rTnc6sr1RA4KXajwa/gJb6Po2C/X51w6mK8Xle4YsGthwmjNelu468ua64Ixzrwnh
+	 mxPSvPIOVS1cfy14SUamYBIcKhAMYM7ReC/y201fnYNH8h4kh2j7iVjcz2Ddsd5+MU
+	 A8yCCOj1rQgPVinN01YLDInWY2A6S6goxryuyhQSvB+ORkSpiGeBJc7QFpYQHQ3JkQ
+	 SnaSjrt9stiJc58wYCrneV4WVRjM9hVgL8aeDNAus3KWBkqaJhQ8ocN9fB85a0xWq5
+	 sYx6F7Jfvv5477agtIrgij8fb6v/sbLz+wJaMz2S7jrA5rkBusEdIqoc241WAl8FQs
+	 Z7O6dB1tUcWpQ==
 X-Nifty-SrcIP: [220.150.135.41]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-        Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
-Date: Thu, 22 Dec 2022 18:07:27 +0900
-Message-Id: <20221222090727.97-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>, Gregory Mason <grmason@epic.com>
+Subject: [PATCH] Cygwin: console: Fix hangup of less on quit after the window is resized.
+Date: Thu, 22 Dec 2022 20:48:13 +0900
+Message-Id: <20221222114813.1220-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -34,102 +33,51 @@ X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALI
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-POSIX states "A terminal may be the controlling terminal for at most
-one session."
-https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap11.html
+https://cygwin.com/pipermail/cygwin/2022-December/252737.html
 
-However, in cygwin, multiple sessions could be associated with the
-same TTY. This patch aligns CTTY behavior to the statement of POSIX.
+If the less is started from non-cygwin shell and window size is
+changed, it will hang-up when quitting. The cause of the proglem is
+that less uses longjump() in signal handler. If the signal handler
+is called while cygwin is acquiring the mutex, cygwin loses the
+chance to release mutex. With this patch, the mutex is released
+just before calling kill_pgrp() and re-acquired when kill_pgrp()
+returns.
 
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+Reported-by: Gregory Mason <grmason@epic.com>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/fhandler/termios.cc |  6 ++++-
- winsup/cygwin/mm/cygheap.cc       |  2 ++
- winsup/cygwin/pinfo.cc            | 38 ++++++++++++++++++-------------
- 3 files changed, 29 insertions(+), 17 deletions(-)
+ winsup/cygwin/fhandler/console.cc | 4 ++++
+ winsup/cygwin/release/3.4.4       | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index fe4dfd13e..f94e20ff6 100644
---- a/winsup/cygwin/fhandler/termios.cc
-+++ b/winsup/cygwin/fhandler/termios.cc
-@@ -737,7 +737,11 @@ fhandler_termios::ioctl (int cmd, void *varg)
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index bbf4b0103..ee07c84f8 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -928,7 +928,11 @@ fhandler_console::send_winch_maybe ()
+       if (wincap.has_con_24bit_colors () && !con_is_legacy
+ 	  && wincap.has_con_broken_tabs ())
+ 	fix_tab_position (get_output_handle ());
++      /* longjmp() may be called in the signal handler like less,
++	 so release input_mutex temporarily before kill_pgrp(). */
++      release_input_mutex ();
+       get_ttyp ()->kill_pgrp (SIGWINCH);
++      acquire_input_mutex (mutex_timeout);
+       return true;
      }
+   return false;
+diff --git a/winsup/cygwin/release/3.4.4 b/winsup/cygwin/release/3.4.4
+index 6ac702375..3331b3166 100644
+--- a/winsup/cygwin/release/3.4.4
++++ b/winsup/cygwin/release/3.4.4
+@@ -3,3 +3,7 @@ Bug Fixes
  
-   myself->ctty = -1;
--  myself->set_ctty (this, 0);
-+  if (!myself->set_ctty (this, 0))
-+    {
-+      set_errno (EPERM);
-+      return -1;
-+    }
-   return 0;
- }
- 
-diff --git a/winsup/cygwin/mm/cygheap.cc b/winsup/cygwin/mm/cygheap.cc
-index a305570df..72861d8d7 100644
---- a/winsup/cygwin/mm/cygheap.cc
-+++ b/winsup/cygwin/mm/cygheap.cc
-@@ -127,6 +127,8 @@ void
- init_cygheap::close_ctty ()
- {
-   debug_printf ("closing cygheap->ctty %p", cygheap->ctty);
-+  if (cygheap->ctty->tc ()->getsid () == pid)
-+    cygheap->ctty->tc ()->setsid (0); /* Release CTTY ownership */
-   cygheap->ctty->close_with_arch ();
-   cygheap->ctty = NULL;
- }
-diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-index e086ab9a8..586a4204d 100644
---- a/winsup/cygwin/pinfo.cc
-+++ b/winsup/cygwin/pinfo.cc
-@@ -530,24 +530,30 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
-   debug_printf ("old %s, ctty device number %y, tc.ntty device number %y flags & O_NOCTTY %y", __ctty (), ctty, tc.ntty, flags & O_NOCTTY);
-   if (fh && (ctty <= 0 || ctty == tc.ntty) && !(flags & O_NOCTTY))
-     {
--      ctty = tc.ntty;
--      if (cygheap->ctty != fh->archetype)
-+      if (tc.getsid () && tc.getsid () != sid)
-+	; /* Do nothing if another session is associated with the TTY. */
-+      else
- 	{
--	  debug_printf ("cygheap->ctty %p, archetype %p", cygheap->ctty, fh->archetype);
--	  if (!cygheap->ctty)
--	    syscall_printf ("ctty was NULL");
--	  else
--	    {
--	      syscall_printf ("ctty %p, usecount %d", cygheap->ctty,
--			      cygheap->ctty->archetype_usecount (0));
--	      cygheap->ctty->close ();
--	    }
--	  cygheap->ctty = (fhandler_termios *) fh->archetype;
--	  if (cygheap->ctty)
-+	  ctty = tc.ntty;
-+	  if (cygheap->ctty != fh->archetype)
- 	    {
--	      fh->archetype_usecount (1);
--	      /* guard ctty fh */
--	      report_tty_counts (cygheap->ctty, "ctty", "");
-+	      debug_printf ("cygheap->ctty %p, archetype %p",
-+			    cygheap->ctty, fh->archetype);
-+	      if (!cygheap->ctty)
-+		syscall_printf ("ctty was NULL");
-+	      else
-+		{
-+		  syscall_printf ("ctty %p, usecount %d", cygheap->ctty,
-+				  cygheap->ctty->archetype_usecount (0));
-+		  cygheap->ctty->close ();
-+		}
-+	      cygheap->ctty = (fhandler_termios *) fh->archetype;
-+	      if (cygheap->ctty)
-+		{
-+		  fh->archetype_usecount (1);
-+		  /* guard ctty fh */
-+		  report_tty_counts (cygheap->ctty, "ctty", "");
-+		}
- 	    }
- 	}
- 
+ - Fix an uninitialized variable having weird side-effects in path handling.
+   Addresses: https://cygwin.com/pipermail/cygwin/2022-December/252734.html
++
++- Fix hang-up of less on quit which occurs when it is started from non-cygwin
++  shell and window is resized.
++  Addresses: https://cygwin.com/pipermail/cygwin/2022-December/252737.html
 -- 
 2.39.0
 
