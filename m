@@ -1,111 +1,83 @@
-Return-Path: <SRS0=xEb7=4T=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from re-prd-fep-046.btinternet.com (mailomta7-re.btinternet.com [213.120.69.100])
-	by sourceware.org (Postfix) with ESMTPS id 1834F385802F
-	for <cygwin-patches@cygwin.com>; Wed, 21 Dec 2022 16:18:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 1834F385802F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
-          by re-prd-fep-046.btinternet.com with ESMTP
-          id <20221221161856.MBMU7994.re-prd-fep-046.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Wed, 21 Dec 2022 16:18:56 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 613A8CC347ECE37D
-X-Originating-IP: [81.153.98.246]
-X-OWM-Source-IP: 81.153.98.246 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrgeekgdekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.153.98.246) by re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
-        id 613A8CC347ECE37D; Wed, 21 Dec 2022 16:18:55 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <SRS0=bHOJ=4U=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+	by sourceware.org (Postfix) with ESMTPS id 7493A3858281
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 09:06:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7493A3858281
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 2BM963Vs020999
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 18:06:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2BM963Vs020999
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1671699963;
+	bh=lxj8P6qQuJiRTZHr+t6myz5H9pflXiNzsdo5AswnkwY=;
+	h=Date:From:To:Subject:In-Reply-To:References:From;
+	b=b1h9PBgWnvfvlnpbz/0K/h7fEU1roWqZ13/Xd8jv0nYh+LOxsBk9cewxnBipW4ehL
+	 cB9N6xDb4iIqbkBR1XUpgZYmL0liZH2fG0eF842QTxbemZPfhRVlbr8WKZYR2nZP5e
+	 xmZuo/zWzUlSQJgrZyvOQJPcGpMPGrhpvFXM8y7V5O+MDLzDLIt3KA0F0aksRNN5mT
+	 EN3b/X97VEEP1QkBIaZCZfLlID7xqj8Z326tisURXUAYgxzBJQbgUKc0nUcXwh6efA
+	 AoCokUVxVyWiyHGXtQ6ADwi27R+cojEiJ72RpA5dIdSbdVl1lbQZUyO+i0GeogRMCw
+	 8xDjFuvBn0PYw==
+X-Nifty-SrcIP: [220.150.135.41]
+Date: Thu, 22 Dec 2022 18:06:03 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Makefile: Drop all the "test dll" considerations
-Date: Wed, 21 Dec 2022 16:18:34 +0000
-Message-Id: <20221221161834.45553-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221221134907.40359-1-jon.turney@dronecode.org.uk>
-References: <20221221134907.40359-1-jon.turney@dronecode.org.uk>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1197.8 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: console: Make the console accessible from other
+ terminals.
+Message-Id: <20221222180603.9a8dedadfee6c59cdf073e36@nifty.ne.jp>
+In-Reply-To: <Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
+References: <20221220124521.499-1-takashi.yano@nifty.ne.jp>
+	<Y6ItllXJ8J20cEbp@calimero.vinschen.de>
+	<20221221192343.32699d22e6d113ce9195de8f@nifty.ne.jp>
+	<Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-After 90236c3a2cf6, the testsuite is failing, as the cygwin0.dll that
-the implib testsuite programs are linked with references doesn't exist
-anymore.
+On Wed, 21 Dec 2022 13:56:25 +0100
+Corinna Vinschen wrote:
+> However, there's something broken with these patches in terms of
+> debugging:
+> 
+> With current origin/master:
+> 
+>   $ ls -l  /dev/cons0
+>   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:46 /dev/cons0
+>   $ strace -o xxx /bin/ls /dev/cons0
+>   /dev/cons0
+> 
+> After applying "pinfo: Align CTTY behavior to the statement of POSIX."
+> 
+>   $ ls -l /dev/cons0
+>   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:51 /dev/cons0
+>   $ strace -o xxx /bin/ls /dev/cons0
+>   /usr/bin/ls: cannot access '/dev/cons0': No such device or address
+> 
+> "devices: Make generic console devices invisible from pty." doesn't
+> change this, but after applying "console: Make the console accessible
+> from other terminals.":
+> 
+>   $ ls -l /dev/cons0
+>   crw------- 4 corinna vinschen 3, 0 Dec 21 13:55 /dev/cons0
+>   $ strace -o xxx /bin/ls /dev/cons0
+>    670400 [main] ls 1630 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
+>    674526 [main] ls 1630 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
+> 
+> FWIW:
+> 
+>   $ strace -o xxx /bin/ls
+>    673796 [main] ls 1633 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
+>    676814 [main] ls 1633 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
 
-We don't need to make and link with a specially named DLL, as the cygwin
-DLL (for a long time now) takes into consideration the path it's
-executing from to define separate "cygwin installations", which don't
-interact.
+Thank you for finding this. I think this can be easily fixed.
+Please see v3 patch.
 
-Fixes: 90236c3a2cf6 ("Cygwin: Makefile: build new-cygwin1.dll in a single step")
----
- winsup/cygwin/Makefile.am              | 9 ++-------
- winsup/testsuite/winsup.api/winsup.exp | 2 +-
- 2 files changed, 3 insertions(+), 8 deletions(-)
+[PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index 0200f6e2a..2faa867f9 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -43,7 +43,6 @@ DLL_NAME=cygwin1.dll
- NEW_DLL_NAME=new-cygwin1.dll
- DEF_FILE=cygwin.def
- LIB_NAME=libcygwin.a
--TEST_LIB_NAME=libcygwin0.a
- 
- #
- # sources
-@@ -618,10 +617,6 @@ LIBCOS=$(addsuffix .o,$(basename $(LIB_FILES)))
- $(LIB_NAME): $(DEF_FILE) $(LIBCOS) | $(NEW_DLL_NAME)
- 	$(AM_V_GEN)$(srcdir)/scripts/mkimport $(toolopts) $(NEW_FUNCTIONS) $@ cygdll.a $(wordlist 2,99,$^)
- 
--# cygwin import library used by testsuite
--$(TEST_LIB_NAME): $(LIB_NAME)
--	$(AM_V_GEN)perl -p -e 'BEGIN{binmode(STDIN); binmode(STDOUT);}; s/cygwin1/cygwin0/g' < $? > $@
--
- # sublibs
- # import libraries for some subset of symbols indicated by given objects
- speclib=\
-@@ -664,7 +659,7 @@ libssp.a: $(LIB_NAME) $(wildcard $(newlib_build)/libc/ssp/*.o)
- # all
- #
- 
--all-local: $(LIB_NAME) $(TEST_LIB_NAME) $(SUBLIBS)
-+all-local: $(LIB_NAME) $(SUBLIBS)
- 
- #
- # clean
-@@ -675,7 +670,7 @@ clean-local:
- 	-rm -f $(DEF_FILE) sigfe.s
- 	-rm -f cygwin.sc cygdll.a cygwin.map
- 	-rm -f $(NEW_DLL_NAME)
--	-rm -f $(LIB_NAME) $(TEST_LIB_NAME) $(SUBLIBS)
-+	-rm -f $(LIB_NAME) $(SUBLIBS)
- 	-rm -f version.cc
- 	-rm -f tlsoffsets
- 
-diff --git a/winsup/testsuite/winsup.api/winsup.exp b/winsup/testsuite/winsup.api/winsup.exp
-index 584aa5755..f755c82d9 100644
---- a/winsup/testsuite/winsup.api/winsup.exp
-+++ b/winsup/testsuite/winsup.api/winsup.exp
-@@ -61,7 +61,7 @@ foreach src [lsort [glob -nocomplain $srcdir/$subdir/*.c $srcdir/$subdir/*/*.{cc
-     if [ file exists "$srcdir/$subdir/$basename.exp" ] then {
- 	source "$srcdir/$subdir/$basename.exp"
-     } else {
--	ws_spawn "$CC -nodefaultlibs -mwin32 $CFLAGS $src $add_includes $add_libs $runtime_root/binmode.o -lgcc $runtime_root/libcygwin0.a -lkernel32 -luser32 -o $base.exe"
-+	ws_spawn "$CC -nodefaultlibs -mwin32 $CFLAGS $src $add_includes $add_libs $runtime_root/binmode.o -lgcc $runtime_root/libcygwin.a -lkernel32 -luser32 -o $base.exe"
- 	if { $rv } {
- 	    fail "$testcase (compile)"
- 	} else {
 -- 
-2.39.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
