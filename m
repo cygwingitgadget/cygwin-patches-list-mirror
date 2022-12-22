@@ -1,103 +1,81 @@
-Return-Path: <SRS0=bHOJ=4U=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-	by sourceware.org (Postfix) with ESMTPS id D79EB3858D1E
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 13:13:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org D79EB3858D1E
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 2BMDCjkc018848
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 22:12:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2BMDCjkc018848
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1671714765;
-	bh=+q+M6tVPhFkyHT0y0yYDmQV7PAzt1VTszSW/n/MSkFk=;
-	h=Date:From:To:Subject:In-Reply-To:References:From;
-	b=RNqKgogQmjnHTszHhZ14Q8o+z7M7AQhW1puF3Qw6wTpZuSHfTqCUZulV63cUSv18Q
-	 6S+oec+1OMQFC2e11OH2MbdA0sIdgLPklUbx+lvJaYXejqOj/tTsVS93HJs0ukHT6+
-	 WXjFHv+cCWSimqWOyBokx8aSe1wdGUAQo+prIDZk/fx1LwYD/VAJVkgAhIrY9Md2W4
-	 it/5rCmIVKPrYrqOXPCuTee2QMrolm3kLy7NHK7gn0IVMHgIvJcijibTLZ002dIRxP
-	 X2z/M2gFd/vYLS/e7jEmSeRESDh3W4r3hJEsynNnUE63EL6x3/bM69JHAx27Va8Lbn
-	 hupD/jA42aD/g==
-X-Nifty-SrcIP: [220.150.135.41]
-Date: Thu, 22 Dec 2022 22:12:45 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Make the console accessible from other
- terminals.
-Message-Id: <20221222221245.25cac3bec4b6d36136c5abe6@nifty.ne.jp>
-In-Reply-To: <Y6RSs9d1atkWcPiJ@calimero.vinschen.de>
-References: <20221220124521.499-1-takashi.yano@nifty.ne.jp>
-	<Y6ItllXJ8J20cEbp@calimero.vinschen.de>
-	<20221221192343.32699d22e6d113ce9195de8f@nifty.ne.jp>
-	<Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
-	<20221222180603.9a8dedadfee6c59cdf073e36@nifty.ne.jp>
-	<Y6RSs9d1atkWcPiJ@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Return-Path: <SRS0=lxoL=4U=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id 3FF6D3857026
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 20:26:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 3FF6D3857026
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
+Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+	by cmsmtp with ESMTP
+	id 8Hc0pJPk3l2xS8S8opBL4O; Thu, 22 Dec 2022 20:26:10 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1671740770; bh=Mc1R92iIhC7u5ILKqXMJpT8GwSZJ6OjSAT7m2THnJc0=;
+	h=Date:From:Subject:To:Reply-To;
+	b=gRVyXN0G9hlm+H44Ku4/ekYAUY8rvvYeLDoueoxMCJE69aZMpkUM3mrKiV7LghSLd
+	 4+/f+vyMd0keh7881gBGnXcS7PtPyKOz904HSbz+DQ9UA7QtpSGaMq5oFk86ZU1ZnL
+	 3pr4a3Sdywq0QP7b/ysUUNpybgob46cEykEHr3icH93uAWGuLfGr7IXomTPuQSJFmj
+	 Hkad0xVSl3mATgOcCoWfoVtQFUa4J3RmHTHRG+HlRcVy419XMaWhMueFfRwBPPZYJZ
+	 Iw65E/cAtg0gWOCSh0xBHBzRtuwHYu1hRK3C3GW5+182gO3/mhQNYBnce3JEmAbZaA
+	 oWfbMikqWyvxw==
+Received: from [10.0.0.5] ([184.64.124.72])
+	by cmsmtp with ESMTP
+	id 8S8npB1yOyAOe8S8npdvLu; Thu, 22 Dec 2022 20:26:10 +0000
+X-Authority-Analysis: v=2.4 cv=e5oV9Il/ c=1 sm=1 tr=0 ts=63a4bd62
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=uaBMWcycIeZdFX-EFUsA:9 a=QEXdDO2ut3YA:10
+ a=k4UfgQKOEQEA:10 a=RdwwBK8X-F3Ms-17ZgIA:9 a=B2y7HmGcmWMA:10
+Content-Type: multipart/mixed; boundary="------------5uDAcGlsLFufycc9RMRI5Tzd"
+Message-ID: <4d0d6a99-5f21-33dc-c9fa-7d73eef030bd@Shaw.ca>
+Date: Thu, 22 Dec 2022 13:26:09 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+Subject: [PATCH] fhandler/proc.cc(format_proc_cpuinfo): add Linux 6.1 cpuinfo
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Content-Language: en-CA
+Organization: Inglis
+X-CMAE-Envelope: MS4xfBbs5+s31VSyf0EvUjoHJ3cIoIKCS9Anizh1wI8rPkuOKeZCLnSVfLnkeKGG1za6ABp31rj6gfEzZ1tgIypRz8O3H2qR09ikbeqlnvW3xyYfaLrMD9Zl
+ 4k00Qn1MKsvyM2LMEKjm8TOPpXHS+pBtaIpoRqyRZkdojkQGfYADiICSMYHpVsap7QRZUbvK/N37U2BiEyM98fBDYRaQT1HQDbqccVoWQd54zgkTllCrWS2z
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 22 Dec 2022 13:50:59 +0100
-Corinna Vinschen wrote:
-> On Dec 22 18:06, Takashi Yano wrote:
-> > On Wed, 21 Dec 2022 13:56:25 +0100
-> > Corinna Vinschen wrote:
-> > > However, there's something broken with these patches in terms of
-> > > debugging:
-> > > 
-> > > With current origin/master:
-> > > 
-> > >   $ ls -l  /dev/cons0
-> > >   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:46 /dev/cons0
-> > >   $ strace -o xxx /bin/ls /dev/cons0
-> > >   /dev/cons0
-> > > 
-> > > After applying "pinfo: Align CTTY behavior to the statement of POSIX."
-> > > 
-> > >   $ ls -l /dev/cons0
-> > >   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:51 /dev/cons0
-> > >   $ strace -o xxx /bin/ls /dev/cons0
-> > >   /usr/bin/ls: cannot access '/dev/cons0': No such device or address
-> > > 
-> > > "devices: Make generic console devices invisible from pty." doesn't
-> > > change this, but after applying "console: Make the console accessible
-> > > from other terminals.":
-> > > 
-> > >   $ ls -l /dev/cons0
-> > >   crw------- 4 corinna vinschen 3, 0 Dec 21 13:55 /dev/cons0
-> > >   $ strace -o xxx /bin/ls /dev/cons0
-> > >    670400 [main] ls 1630 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
-> > >    674526 [main] ls 1630 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
-> > > 
-> > > FWIW:
-> > > 
-> > >   $ strace -o xxx /bin/ls
-> > >    673796 [main] ls 1633 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
-> > >    676814 [main] ls 1633 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
-> > 
-> > Thank you for finding this. I think this can be easily fixed.
-> > Please see v3 patch.
-> > 
-> > [PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
-> 
-> LGTM.  Please push all three patches.
-> 
-> However, I'm not really sure we should merge "Align CTTY behavior to the
-> statement of POSIX." to 3.4.  It's a behavioral change, and how sure are
-> we that it has no side-effects?
+This is a multi-part message in MIME format.
+--------------5uDAcGlsLFufycc9RMRI5Tzd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thanks for reviewing. OK, I will push tha patch: "Align CTTY behavior
-to the statement of POSIX." only for master branch.
 
-How about
- [PATCH] Cygwin: devices: Make generic console devices invisible from pty.
-?
+Intel 0x00000007:1 EAX:26 lam	Linear Address Masking (& recent entries)
+---
+  winsup/cygwin/fhandler/proc.cc | 4 ++++
+  1 file changed, 4 insertions(+)
 
-Do you think this also should be only for master?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+--------------5uDAcGlsLFufycc9RMRI5Tzd
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-fhandler-proc.cc-format_proc_cpuinfo-add-Linux-6.1-cpuinfo.patch"
+Content-Disposition: attachment;
+ filename*0="0001-fhandler-proc.cc-format_proc_cpuinfo-add-Linux-6.1-cpui";
+ filename*1="nfo.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvYy5jYyBiL3dpbnN1cC9j
+eWd3aW4vZmhhbmRsZXIvcHJvYy5jYw0KaW5kZXggNjY0M2QxZjFhYTBmLi43NWE2YTg1NTE3
+Y2QgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3Byb2MuY2MNCisrKyBi
+L3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcHJvYy5jYw0KQEAgLTE0ODQsNiArMTQ4NCwxMCBA
+QCBmb3JtYXRfcHJvY19jcHVpbmZvICh2b2lkICosIGNoYXIgKiZkZXN0YnVmKQ0KIA0KIAkg
+IGZ0Y3ByaW50IChmZWF0dXJlczEsICA0LCAiYXZ4X3ZubmkiKTsJICAgIC8qIHZleCBlbmMg
+Tk4gdmVjICovDQogCSAgZnRjcHJpbnQgKGZlYXR1cmVzMSwgIDUsICJhdng1MTJfYmYxNiIp
+OyAgLyogdmVjIGJmbG9hdDE2IHNob3J0ICovDQorLyoJICBmdGNwcmludCAoZmVhdHVyZXMx
+LCAgNywgImNtcGNjeGFkZCIpOyAqLyAvKiBDTVBjY1hBREQgaW5zdHJ1Y3Rpb25zICovDQor
+LyoJICBmdGNwcmludCAoZmVhdHVyZXMxLCAyMSwgImFteF9mcDE2Iik7CSAqLyAvKiBBTVgg
+ZnAxNiBTdXBwb3J0ICovDQorLyoJICBmdGNwcmludCAoZmVhdHVyZXMxLCAyMywgImF2eF9p
+Zm1hIik7CSAqLyAvKiBTdXBwb3J0IGZvciBWUE1BREQ1MltILExdVVEgKi8NCisJICBmdGNw
+cmludCAoZmVhdHVyZXMxLCAyNiwgImxhbSIpOwkgICAgLyogTGluZWFyIEFkZHJlc3MgTWFz
+a2luZyAqLw0KIAl9DQogDQogICAgICAgLyogQU1EIGNwdWlkIDB4ODAwMDAwMDggZWJ4ICov
+DQoNCg==
+
+--------------5uDAcGlsLFufycc9RMRI5Tzd--
