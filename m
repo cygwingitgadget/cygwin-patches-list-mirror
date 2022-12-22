@@ -1,83 +1,135 @@
 Return-Path: <SRS0=bHOJ=4U=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-	by sourceware.org (Postfix) with ESMTPS id 7493A3858281
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 09:06:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 7493A3858281
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+	by sourceware.org (Postfix) with ESMTPS id 0B9773858281
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 09:07:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 0B9773858281
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 2BM963Vs020999
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 18:06:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2BM963Vs020999
+Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conuserg-08.nifty.com with ESMTP id 2BM97b2E010291;
+	Thu, 22 Dec 2022 18:07:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2BM97b2E010291
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1671699963;
-	bh=lxj8P6qQuJiRTZHr+t6myz5H9pflXiNzsdo5AswnkwY=;
-	h=Date:From:To:Subject:In-Reply-To:References:From;
-	b=b1h9PBgWnvfvlnpbz/0K/h7fEU1roWqZ13/Xd8jv0nYh+LOxsBk9cewxnBipW4ehL
-	 cB9N6xDb4iIqbkBR1XUpgZYmL0liZH2fG0eF842QTxbemZPfhRVlbr8WKZYR2nZP5e
-	 xmZuo/zWzUlSQJgrZyvOQJPcGpMPGrhpvFXM8y7V5O+MDLzDLIt3KA0F0aksRNN5mT
-	 EN3b/X97VEEP1QkBIaZCZfLlID7xqj8Z326tisURXUAYgxzBJQbgUKc0nUcXwh6efA
-	 AoCokUVxVyWiyHGXtQ6ADwi27R+cojEiJ72RpA5dIdSbdVl1lbQZUyO+i0GeogRMCw
-	 8xDjFuvBn0PYw==
+	s=dec2015msa; t=1671700061;
+	bh=nfD8+R2egLDLO/dd1ZuwWEYX8vvTk9LdmJAx5gj9pBc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ti5uoUqPiNeDlGpHu1ixmN6geu67BtmMzgmep2xbdCMqZAhKmief68G/qtJg9O6Kt
+	 X8rKmFKZVeB/rSB00lorFN0GmSKk+5DVxIMz5JkdKNfqfiEPWJmqpk3rXrlb+WsD1q
+	 FBKFjgF8v8M68IM++7e8ROevB3bWq5nWdck5F5dMcEqXOdIaOj0xezPPERzEB6Vcim
+	 OBwprWcAMVYrKKbnzB/tnE+R0yIM0Bdq+O4Ynk111xJGzPz13X1u/QrXQKDzDB7Pm/
+	 gAGW0nh3VVUzroI1t1eamXlgUr+6oFu47+4oecRJGMQ2UFY49onkgozStItQ1Kjjc2
+	 fFvUg7MnnjLdA==
 X-Nifty-SrcIP: [220.150.135.41]
-Date: Thu, 22 Dec 2022 18:06:03 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Make the console accessible from other
- terminals.
-Message-Id: <20221222180603.9a8dedadfee6c59cdf073e36@nifty.ne.jp>
-In-Reply-To: <Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
-References: <20221220124521.499-1-takashi.yano@nifty.ne.jp>
-	<Y6ItllXJ8J20cEbp@calimero.vinschen.de>
-	<20221221192343.32699d22e6d113ce9195de8f@nifty.ne.jp>
-	<Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+        Corinna Vinschen <corinna@vinschen.de>
+Subject: [PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
+Date: Thu, 22 Dec 2022 18:07:27 +0900
+Message-Id: <20221222090727.97-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 21 Dec 2022 13:56:25 +0100
-Corinna Vinschen wrote:
-> However, there's something broken with these patches in terms of
-> debugging:
-> 
-> With current origin/master:
-> 
->   $ ls -l  /dev/cons0
->   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:46 /dev/cons0
->   $ strace -o xxx /bin/ls /dev/cons0
->   /dev/cons0
-> 
-> After applying "pinfo: Align CTTY behavior to the statement of POSIX."
-> 
->   $ ls -l /dev/cons0
->   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:51 /dev/cons0
->   $ strace -o xxx /bin/ls /dev/cons0
->   /usr/bin/ls: cannot access '/dev/cons0': No such device or address
-> 
-> "devices: Make generic console devices invisible from pty." doesn't
-> change this, but after applying "console: Make the console accessible
-> from other terminals.":
-> 
->   $ ls -l /dev/cons0
->   crw------- 4 corinna vinschen 3, 0 Dec 21 13:55 /dev/cons0
->   $ strace -o xxx /bin/ls /dev/cons0
->    670400 [main] ls 1630 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
->    674526 [main] ls 1630 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
-> 
-> FWIW:
-> 
->   $ strace -o xxx /bin/ls
->    673796 [main] ls 1633 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
->    676814 [main] ls 1633 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
+POSIX states "A terminal may be the controlling terminal for at most
+one session."
+https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap11.html
 
-Thank you for finding this. I think this can be easily fixed.
-Please see v3 patch.
+However, in cygwin, multiple sessions could be associated with the
+same TTY. This patch aligns CTTY behavior to the statement of POSIX.
 
-[PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
+Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/termios.cc |  6 ++++-
+ winsup/cygwin/mm/cygheap.cc       |  2 ++
+ winsup/cygwin/pinfo.cc            | 38 ++++++++++++++++++-------------
+ 3 files changed, 29 insertions(+), 17 deletions(-)
 
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index fe4dfd13e..f94e20ff6 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -737,7 +737,11 @@ fhandler_termios::ioctl (int cmd, void *varg)
+     }
+ 
+   myself->ctty = -1;
+-  myself->set_ctty (this, 0);
++  if (!myself->set_ctty (this, 0))
++    {
++      set_errno (EPERM);
++      return -1;
++    }
+   return 0;
+ }
+ 
+diff --git a/winsup/cygwin/mm/cygheap.cc b/winsup/cygwin/mm/cygheap.cc
+index a305570df..72861d8d7 100644
+--- a/winsup/cygwin/mm/cygheap.cc
++++ b/winsup/cygwin/mm/cygheap.cc
+@@ -127,6 +127,8 @@ void
+ init_cygheap::close_ctty ()
+ {
+   debug_printf ("closing cygheap->ctty %p", cygheap->ctty);
++  if (cygheap->ctty->tc ()->getsid () == pid)
++    cygheap->ctty->tc ()->setsid (0); /* Release CTTY ownership */
+   cygheap->ctty->close_with_arch ();
+   cygheap->ctty = NULL;
+ }
+diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
+index e086ab9a8..586a4204d 100644
+--- a/winsup/cygwin/pinfo.cc
++++ b/winsup/cygwin/pinfo.cc
+@@ -530,24 +530,30 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
+   debug_printf ("old %s, ctty device number %y, tc.ntty device number %y flags & O_NOCTTY %y", __ctty (), ctty, tc.ntty, flags & O_NOCTTY);
+   if (fh && (ctty <= 0 || ctty == tc.ntty) && !(flags & O_NOCTTY))
+     {
+-      ctty = tc.ntty;
+-      if (cygheap->ctty != fh->archetype)
++      if (tc.getsid () && tc.getsid () != sid)
++	; /* Do nothing if another session is associated with the TTY. */
++      else
+ 	{
+-	  debug_printf ("cygheap->ctty %p, archetype %p", cygheap->ctty, fh->archetype);
+-	  if (!cygheap->ctty)
+-	    syscall_printf ("ctty was NULL");
+-	  else
+-	    {
+-	      syscall_printf ("ctty %p, usecount %d", cygheap->ctty,
+-			      cygheap->ctty->archetype_usecount (0));
+-	      cygheap->ctty->close ();
+-	    }
+-	  cygheap->ctty = (fhandler_termios *) fh->archetype;
+-	  if (cygheap->ctty)
++	  ctty = tc.ntty;
++	  if (cygheap->ctty != fh->archetype)
+ 	    {
+-	      fh->archetype_usecount (1);
+-	      /* guard ctty fh */
+-	      report_tty_counts (cygheap->ctty, "ctty", "");
++	      debug_printf ("cygheap->ctty %p, archetype %p",
++			    cygheap->ctty, fh->archetype);
++	      if (!cygheap->ctty)
++		syscall_printf ("ctty was NULL");
++	      else
++		{
++		  syscall_printf ("ctty %p, usecount %d", cygheap->ctty,
++				  cygheap->ctty->archetype_usecount (0));
++		  cygheap->ctty->close ();
++		}
++	      cygheap->ctty = (fhandler_termios *) fh->archetype;
++	      if (cygheap->ctty)
++		{
++		  fh->archetype_usecount (1);
++		  /* guard ctty fh */
++		  report_tty_counts (cygheap->ctty, "ctty", "");
++		}
+ 	    }
+ 	}
+ 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.39.0
+
