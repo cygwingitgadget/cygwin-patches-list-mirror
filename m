@@ -1,83 +1,93 @@
 Return-Path: <SRS0=bHOJ=4U=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-	by sourceware.org (Postfix) with ESMTPS id 334043858D1E
-	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 11:48:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 334043858D1E
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+	by sourceware.org (Postfix) with ESMTPS id 6D1AE3858284
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 12:15:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 6D1AE3858284
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conuserg-12.nifty.com with ESMTP id 2BMBmN1N003810;
-	Thu, 22 Dec 2022 20:48:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2BMBmN1N003810
+Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 2BMCF437016487
+	for <cygwin-patches@cygwin.com>; Thu, 22 Dec 2022 21:15:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2BMCF437016487
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1671709707;
-	bh=27cFlE5caV/WTpssN+wWhSl8sQzpx9PtJmtfQ6byjzw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rTnc6sr1RA4KXajwa/gJb6Po2C/X51w6mK8Xle4YsGthwmjNelu468ua64Ixzrwnh
-	 mxPSvPIOVS1cfy14SUamYBIcKhAMYM7ReC/y201fnYNH8h4kh2j7iVjcz2Ddsd5+MU
-	 A8yCCOj1rQgPVinN01YLDInWY2A6S6goxryuyhQSvB+ORkSpiGeBJc7QFpYQHQ3JkQ
-	 SnaSjrt9stiJc58wYCrneV4WVRjM9hVgL8aeDNAus3KWBkqaJhQ8ocN9fB85a0xWq5
-	 sYx6F7Jfvv5477agtIrgij8fb6v/sbLz+wJaMz2S7jrA5rkBusEdIqoc241WAl8FQs
-	 Z7O6dB1tUcWpQ==
+	s=dec2015msa; t=1671711305;
+	bh=kXTjw/WxREDiFBtyAyyd6kVa5kmUU6FyBVNhjhxBSyE=;
+	h=Date:From:To:Subject:In-Reply-To:References:From;
+	b=SAU7A4dcMI17+sLziwXq6RXwUNCTQZ1tPZ5lTpUPLIsxkzcV1nvhEg0V5D1v3z4G1
+	 HyGq1djHz79D9xeMon9pptnSMhUOGJ9O439g0kozfZBHYeXqyDze9BeidbCysTvKot
+	 XW5oEdKU9dI7lOV7/+GgLHUmLFIAFK9kllTM+Ruv6fHXvWoYlmYqpD4N/uaXd6Jg8z
+	 kCWPZ3wNYGQ7MotcTsZ1l7IJ01/Vxna4DFuQq4Z5XmUd4MzNNSyqaSPI6chYS+XbFg
+	 UQZA+Uy3TqKAWnHSbJHoKmay65owxMYRbRKQrzCGOFCOEivQ6Nuh7Ah6DdkDjWuz7R
+	 Fo2m/WfjbITSQ==
 X-Nifty-SrcIP: [220.150.135.41]
+Date: Thu, 22 Dec 2022 21:15:04 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>, Gregory Mason <grmason@epic.com>
-Subject: [PATCH] Cygwin: console: Fix hangup of less on quit after the window is resized.
-Date: Thu, 22 Dec 2022 20:48:13 +0900
-Message-Id: <20221222114813.1220-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: console: Make the console accessible from other
+ terminals.
+Message-Id: <20221222211504.2153a5d688181d1d21b8a882@nifty.ne.jp>
+In-Reply-To: <20221222180603.9a8dedadfee6c59cdf073e36@nifty.ne.jp>
+References: <20221220124521.499-1-takashi.yano@nifty.ne.jp>
+	<Y6ItllXJ8J20cEbp@calimero.vinschen.de>
+	<20221221192343.32699d22e6d113ce9195de8f@nifty.ne.jp>
+	<Y6MCeRdiRCJAQMbV@calimero.vinschen.de>
+	<20221222180603.9a8dedadfee6c59cdf073e36@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-https://cygwin.com/pipermail/cygwin/2022-December/252737.html
+On Thu, 22 Dec 2022 18:06:03 +0900
+Takashi Yano <takashi.yano@nifty.ne.jp> wrote:
 
-If the less is started from non-cygwin shell and window size is
-changed, it will hang-up when quitting. The cause of the proglem is
-that less uses longjump() in signal handler. If the signal handler
-is called while cygwin is acquiring the mutex, cygwin loses the
-chance to release mutex. With this patch, the mutex is released
-just before calling kill_pgrp() and re-acquired when kill_pgrp()
-returns.
+> On Wed, 21 Dec 2022 13:56:25 +0100
+> Corinna Vinschen wrote:
+> > However, there's something broken with these patches in terms of
+> > debugging:
+> > 
+> > With current origin/master:
+> > 
+> >   $ ls -l  /dev/cons0
+> >   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:46 /dev/cons0
+> >   $ strace -o xxx /bin/ls /dev/cons0
+> >   /dev/cons0
+> > 
+> > After applying "pinfo: Align CTTY behavior to the statement of POSIX."
+> > 
+> >   $ ls -l /dev/cons0
+> >   crw-rw-rw- 4 corinna vinschen 3, 0 Dec 21 13:51 /dev/cons0
+> >   $ strace -o xxx /bin/ls /dev/cons0
+> >   /usr/bin/ls: cannot access '/dev/cons0': No such device or address
+> > 
+> > "devices: Make generic console devices invisible from pty." doesn't
+> > change this, but after applying "console: Make the console accessible
+> > from other terminals.":
+> > 
+> >   $ ls -l /dev/cons0
+> >   crw------- 4 corinna vinschen 3, 0 Dec 21 13:55 /dev/cons0
+> >   $ strace -o xxx /bin/ls /dev/cons0
+> >    670400 [main] ls 1630 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
+> >    674526 [main] ls 1630 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
+> > 
+> > FWIW:
+> > 
+> >   $ strace -o xxx /bin/ls
+> >    673796 [main] ls 1633 C:\cygwin64\bin\ls.exe: *** fatal error - MapViewOfFileEx '(null)'(0x54), Win32 error 487.  Terminating.
+> >    676814 [main] ls 1633 cygwin_exception::open_stackdumpfile: Dumping stack trace to ls.exe.stackdump
+> 
+> Thank you for finding this. I think this can be easily fixed.
+> Please see v3 patch.
+> 
+> [PATCH v3] Cygwin: pinfo: Align CTTY behavior to the statement of POSIX.
 
-Reported-by: Gregory Mason <grmason@epic.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/console.cc | 4 ++++
- winsup/cygwin/release/3.4.4       | 4 ++++
- 2 files changed, 8 insertions(+)
+After the commit f6e4e98d3071, the patch
+[PATCH v2] Cygwin: console: Make the console accessible from other terminals.
+cannot be applied cleanly.
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index bbf4b0103..ee07c84f8 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -928,7 +928,11 @@ fhandler_console::send_winch_maybe ()
-       if (wincap.has_con_24bit_colors () && !con_is_legacy
- 	  && wincap.has_con_broken_tabs ())
- 	fix_tab_position (get_output_handle ());
-+      /* longjmp() may be called in the signal handler like less,
-+	 so release input_mutex temporarily before kill_pgrp(). */
-+      release_input_mutex ();
-       get_ttyp ()->kill_pgrp (SIGWINCH);
-+      acquire_input_mutex (mutex_timeout);
-       return true;
-     }
-   return false;
-diff --git a/winsup/cygwin/release/3.4.4 b/winsup/cygwin/release/3.4.4
-index 6ac702375..3331b3166 100644
---- a/winsup/cygwin/release/3.4.4
-+++ b/winsup/cygwin/release/3.4.4
-@@ -3,3 +3,7 @@ Bug Fixes
- 
- - Fix an uninitialized variable having weird side-effects in path handling.
-   Addresses: https://cygwin.com/pipermail/cygwin/2022-December/252734.html
-+
-+- Fix hang-up of less on quit which occurs when it is started from non-cygwin
-+  shell and window is resized.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2022-December/252737.html
+Please review v3 patch.
+
 -- 
-2.39.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
