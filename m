@@ -1,74 +1,103 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	by sourceware.org (Postfix) with ESMTPS id DCA2E3858D1E
-	for <cygwin-patches@cygwin.com>; Fri, 23 Dec 2022 09:15:05 +0000 (GMT)
-Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MTAJr-1pIjRv1uEp-00UXQl for <cygwin-patches@cygwin.com>; Fri, 23 Dec 2022
- 10:15:04 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C21A8A80CC3; Fri, 23 Dec 2022 10:15:03 +0100 (CET)
-Date: Fri, 23 Dec 2022 10:15:03 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=l16K=42=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+	by sourceware.org (Postfix) with ESMTPS id 5A7B93858D37
+	for <cygwin-patches@cygwin.com>; Wed, 28 Dec 2022 08:36:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5A7B93858D37
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conuserg-12.nifty.com with ESMTP id 2BS8ZPde012762;
+	Wed, 28 Dec 2022 17:35:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2BS8ZPde012762
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1672216551;
+	bh=YmtOqWkAj6z/lihsY7CCslJTrjzLa75U7qz4VMGQf8M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GwcVu3BPLy5xiGcafLXWdgfm0qyU7rcUbe8MMZiYvbrYVFFSfXEUW6zTqXXk4nA8o
+	 DaPIh8YJMD0wdaP0pAopH5Td7aqf6MAQmoEUO+G4p63jlL3ncn35ETL3aPq8BYr3Th
+	 pxsLv8k5rbCJ/Jl3ipKtzMZFItPz9PFtVF9eAN0+YzxDSsZNEeFyDXl5ktUmktkH+k
+	 zyGN3qHrmHzWJvgcVBNt1I+vBf5uak7SJNWR0j2dL3vXp1OrjPXkd8g1o05LEwUlei
+	 SqFdr4WPlQ9tVgv8J/h/hGvXrxJ2AWJu5DdUXFreYPJ83oTOMadH9D6+48JT2aGbzR
+	 sYXyBNY7nOoXQ==
+X-Nifty-SrcIP: [220.150.135.41]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler/proc.cc(format_proc_cpuinfo): add Linux 6.1
- cpuinfo
-Message-ID: <Y6Vxl/D9h/JytK7z@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4d0d6a99-5f21-33dc-c9fa-7d73eef030bd@Shaw.ca>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pinfo: Additional fix for CTTY behavior.
+Date: Wed, 28 Dec 2022 17:35:16 +0900
+Message-Id: <20221228083516.1226-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4d0d6a99-5f21-33dc-c9fa-7d73eef030bd@Shaw.ca>
-X-Provags-ID: V03:K1:ZI/+p47zwdZTpF50BfLfnFHvk8svgXZAEk8VC1LpyX6o+CwJYel
- q4D4L8ke4heLhZfE2y1h+f8OpnjmO91BYnfQtj3ytLZcgTawliYhJdT1ioNYwaSFwmlXCqB
- 4t5BMD8C1dSJ1Kd4Ny+BHN+l2+0y7fa4dBuOQ4aGtBGZhQm9KrsV4IJMKbzzHd4cmP5uESB
- ZE4zX/KPBY4N7T+psT7RQ==
-UI-OutboundReport: notjunk:1;M01:P0:u1IRmwG5k+k=;4ggB+u2BH3WdfivQLkh7h4d1lBw
- F28HdrTKDc49+Zgjz4J5d9l0/O3pGdMYKZfuF+oEKX35IOynM64xUltUNezf6xWU9xJUtbbHp
- A9tUeOj73BFG2HPGMfwtaUMBOrme9cwFRWMp9v6Pyg1AS3pTiU8H0scli20f3d0+8PvLHRlEs
- VZXVpv7wYdcoYakEVyQUtrtjiP8wz41hR5eOJ2JpHyOfWC45UqIgqo7RTeys8GzUHGu3lWHwy
- iOv8rsLLclUtUEJ8v9BC/sBjFV0zz9yofR2LqgmWE29Hw4bxuOtPBRvNGIa9ekXqMgc+UDxlT
- FZfZraL8HgJrppoaecN379IAXYYSnCiXgeY6F+N6ymFRbvRHNPq+/IaxvgKo5uE5HkfgwXXkv
- 0dYuMJu6/hY3JowqRnUvn2sFZKumnxUXSRQo9oieQd/lHbJXOH4Guy+kB4uRq3d4s/5dMh4GA
- OQGxTg9CKfc+YkZGmRrklI3UuFvWpIAAdDRXV42UmZzMPH0XSWK0zy9sgZfdEU8tW5NaJNTsH
- e0v12Y5kuaCKsQrWuifrgxwf2xq3g35E89TYWd2slZ32ZJzwwnmlx60a7IqC1EaOjs679vwJK
- hGbOGLV0okjCiDPWSNVy92oM8cAeomANO3jopab9tobVCaXVTbhn7SOvN8itr6kkUoMz7AoPN
- EO3skYbZcbuudlRZ2Jw5+dqnRP4fHhT/AbxMFFpB5w==
-X-Spam-Status: No, score=-102.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec 22 13:26, Brian Inglis wrote:
-> 
-> Intel 0x00000007:1 EAX:26 lam	Linear Address Masking (& recent entries)
-> ---
->  winsup/cygwin/fhandler/proc.cc | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+The commit 25c4ad6ea52f did not fix the CTTY behavior enough. For
+example, in the following test case, TTY will be associated as
+a CTTY on the second open() call even though the TTY is already
+CTTY of another session. This patch fixes the issue.
 
-> diff --git a/winsup/cygwin/fhandler/proc.cc b/winsup/cygwin/fhandler/proc.cc
-> index 6643d1f1aa0f..75a6a85517cd 100644
-> --- a/winsup/cygwin/fhandler/proc.cc
-> +++ b/winsup/cygwin/fhandler/proc.cc
-> @@ -1484,6 +1484,10 @@ format_proc_cpuinfo (void *, char *&destbuf)
->  
->  	  ftcprint (features1,  4, "avx_vnni");	    /* vex enc NN vec */
->  	  ftcprint (features1,  5, "avx512_bf16");  /* vec bfloat16 short */
-> +/*	  ftcprint (features1,  7, "cmpccxadd"); */ /* CMPccXADD instructions */
-> +/*	  ftcprint (features1, 21, "amx_fp16");	 */ /* AMX fp16 Support */
-> +/*	  ftcprint (features1, 23, "avx_ifma");	 */ /* Support for VPMADD52[H,L]UQ */
-> +	  ftcprint (features1, 26, "lam");	    /* Linear Address Masking */
->  	}
->  
->        /* AMD cpuid 0x80000008 ebx */
-> 
+  #include <unistd.h>
+  #include <sys/fcntl.h>
 
-Pushed.
+  int main()
+  {
+    if (fork () == 0) {
+      char *tty = ttyname(0);
+      int fd;
+      setsid();
+      fd = open(tty, O_RDWR);
+      close(fd);
+      fd = open(tty, O_RDWR);
+      usleep (60000000L);
+    }
+    return 0;
+  }
 
+Fixes: 25c4ad6ea52f ("Cygwin: pinfo: Align CTTY behavior to the
+statement of POSIX.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/termios.cc | 1 -
+ winsup/cygwin/pinfo.cc            | 5 +++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index f94e20ff6..5b92cdd31 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -736,7 +736,6 @@ fhandler_termios::ioctl (int cmd, void *varg)
+       return -1;
+     }
+ 
+-  myself->ctty = -1;
+   if (!myself->set_ctty (this, 0))
+     {
+       set_errno (EPERM);
+diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
+index 586a4204d..735b3be8e 100644
+--- a/winsup/cygwin/pinfo.cc
++++ b/winsup/cygwin/pinfo.cc
+@@ -530,7 +530,7 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
+   debug_printf ("old %s, ctty device number %y, tc.ntty device number %y flags & O_NOCTTY %y", __ctty (), ctty, tc.ntty, flags & O_NOCTTY);
+   if (fh && (ctty <= 0 || ctty == tc.ntty) && !(flags & O_NOCTTY))
+     {
+-      if (tc.getsid () && tc.getsid () != sid)
++      if (tc.getsid () && tc.getsid () != sid && ctty == -2)
+ 	; /* Do nothing if another session is associated with the TTY. */
+       else
+ 	{
+@@ -576,7 +576,8 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
+ 	 an obvious bug surfaces. */
+       if (sid == pid && !tc.getsid ())
+ 	tc.setsid (sid);
+-      sid = tc.getsid ();
++      if (ctty > 0)
++	sid = tc.getsid ();
+       /* See above */
+       if ((!tc.getpgid () || being_debugged ()) && pgid == pid)
+ 	tc.setpgid (pgid);
+-- 
+2.39.0
+
