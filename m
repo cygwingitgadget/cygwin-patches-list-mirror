@@ -1,103 +1,74 @@
-Return-Path: <SRS0=l16K=42=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-	by sourceware.org (Postfix) with ESMTPS id 5A7B93858D37
-	for <cygwin-patches@cygwin.com>; Wed, 28 Dec 2022 08:36:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.1 sourceware.org 5A7B93858D37
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conuserg-12.nifty.com with ESMTP id 2BS8ZPde012762;
-	Wed, 28 Dec 2022 17:35:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2BS8ZPde012762
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1672216551;
-	bh=YmtOqWkAj6z/lihsY7CCslJTrjzLa75U7qz4VMGQf8M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GwcVu3BPLy5xiGcafLXWdgfm0qyU7rcUbe8MMZiYvbrYVFFSfXEUW6zTqXXk4nA8o
-	 DaPIh8YJMD0wdaP0pAopH5Td7aqf6MAQmoEUO+G4p63jlL3ncn35ETL3aPq8BYr3Th
-	 pxsLv8k5rbCJ/Jl3ipKtzMZFItPz9PFtVF9eAN0+YzxDSsZNEeFyDXl5ktUmktkH+k
-	 zyGN3qHrmHzWJvgcVBNt1I+vBf5uak7SJNWR0j2dL3vXp1OrjPXkd8g1o05LEwUlei
-	 SqFdr4WPlQ9tVgv8J/h/hGvXrxJ2AWJu5DdUXFreYPJ83oTOMadH9D6+48JT2aGbzR
-	 sYXyBNY7nOoXQ==
-X-Nifty-SrcIP: [220.150.135.41]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pinfo: Additional fix for CTTY behavior.
-Date: Wed, 28 Dec 2022 17:35:16 +0900
-Message-Id: <20221228083516.1226-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
+Return-Path: <SRS0=ZLqz=5A=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta001.cacentral1.a.cloudfilter.net (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
+	by sourceware.org (Postfix) with ESMTPS id 974CA3858D37
+	for <cygwin-patches@cygwin.com>; Tue,  3 Jan 2023 01:44:11 +0000 (GMT)
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+	by cmsmtp with ESMTP
+	id CPdQpb050c9C4CWLbpdy3q; Tue, 03 Jan 2023 01:44:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1672710251; bh=bzwVg7LCEN3uuKuzPyBeO3YBPFCort2IrziuFrAG0tk=;
+	h=Date:Reply-To:To:From:Subject;
+	b=Hkz/FrkWHPpOq6GhpeyclRkfGKXHimdDdMHwV0+Zihq01poSHcoGrRBAmjTAeZzXX
+	 oZZYgorFo1NeaXJHU1i1QKkCeB5mffn4+ZqiA5pdjWiW/jQqiyQaJtsJLMqVT75WAD
+	 wX39oMHpxPHMYI/bPFWVolIm5wNdtKgMJH0A5vgBF3uEDBSxpQ+elH7SCyo/RD9sG+
+	 a/EzXKZdizTnzavMB3bxpF05+V60+8DUgiUuCNAwVy2fbMjY6QDY0x/aLIJB3f3Bzg
+	 BkrZQ7t7LCb4T2rJkliHuaRRKvz28aw/fhQO1cjNKfiLnAE3AD3fssZHJJVkf4ihmM
+	 ojwd4znjaFDOg==
+Received: from [10.0.0.5] ([184.64.124.72])
+	by cmsmtp with ESMTP
+	id CWLapoB4EHFsOCWLapoV2m; Tue, 03 Jan 2023 01:44:11 +0000
+X-Authority-Analysis: v=2.4 cv=XZqaca15 c=1 sm=1 tr=0 ts=63b3886b
+ a=oHm12aVswOWz6TMtn9zYKg==:117 a=oHm12aVswOWz6TMtn9zYKg==:17
+ a=IkcTkHD0fZMA:10 a=CCpqsmhAAAAA:8 a=mJCVXRSeM0gsWaSQ8n8A:9 a=QEXdDO2ut3YA:10
+ a=ul9cdbp4aOFLsgKbc677:22
+Message-ID: <a50c2610-3fb0-f1d6-0e89-a7b622f768b3@Shaw.ca>
+Date: Mon, 2 Jan 2023 18:44:10 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Content-Language: en-CA
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+Subject: newlib-cygwin master shortlog missing cygwin release tags
+Organization: Inglis
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfJIPoT7pww7gkZCN3FlJlMVCtHI6XD1DL/J6M10LBW03BwAnszd06aZyljsX6XI9CxwxFw03tzGk9OlxgOu4myMhODUQCQgk+qI/f6zNUpnExyb9dJAT
+ 3oa41PzeT1YXumYH18DbtKkoSsUOVBgwLMjFd40AvA9cxZqgfwBGwgO0pPG6/q1gxevw47kFGAb2Mw==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The commit 25c4ad6ea52f did not fix the CTTY behavior enough. For
-example, in the following test case, TTY will be associated as
-a CTTY on the second open() call even though the TTY is already
-CTTY of another session. This patch fixes the issue.
+I am confused looking at master shortlog missing cygwin release tags:
 
-  #include <unistd.h>
-  #include <sys/fcntl.h>
+https://sourceware.org/git/?p=newlib-cygwin.git;a=shortlog;h=refs/heads/master
 
-  int main()
-  {
-    if (fork () == 0) {
-      char *tty = ttyname(0);
-      int fd;
-      setsid();
-      fd = open(tty, O_RDWR);
-      close(fd);
-      fd = open(tty, O_RDWR);
-      usleep (60000000L);
-    }
-    return 0;
-  }
+the only cygwin tags shown are cygwin-3.5.0-dev and cygwin-3.4.0 the day before 
+and nothing else back until 2021-10-28 cygwin-3.4.0-dev and cygwin-3_3_0-release 
+the day before, whereas the summary page shows more tags and different dates:
 
-Fixes: 25c4ad6ea52f ("Cygwin: pinfo: Align CTTY behavior to the
-statement of POSIX.")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/termios.cc | 1 -
- winsup/cygwin/pinfo.cc            | 5 +++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+tags
+2 weeks ago	cygwin-3.4.3		Cygwin 3.4.3 release	tag
+3 weeks ago	cygwin-3.4.2		Cygwin 3.4.2 release	tag
+3 weeks ago	cygwin-3.4.1		Cygwin 3.4.1 release	tag
+4 weeks ago	cygwin-3.5.0-dev				tag
+4 weeks ago	cygwin-3.4.0		Cygwin 3.4.0 release	tag
+5 weeks ago	cygwin-3.4.0-dev				tag
+3 months ago	cygwin-3_3_6-release	Cygwin 3.3.6 release	tag
+7 months ago	cygwin-3_3_5-release	Cygwin 3.3.5 release	tag
+11 months ago	cygwin-3_3_4-release	Cygwin 3.3.4 release	tag
+12 months ago	cygwin-3_3_3-release	Cygwin 3.3.3 release	tag
+13 months ago	cygwin-3_3_2-release	Cygwin 3.3.2 release	tag
+14 months ago	cygwin-3_3_1-release	Cygwin 3.3.1 release	tag
+14 months ago	cygwin-3_3_0-release	Cygwin 3.3.0 release	tag
 
-diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index f94e20ff6..5b92cdd31 100644
---- a/winsup/cygwin/fhandler/termios.cc
-+++ b/winsup/cygwin/fhandler/termios.cc
-@@ -736,7 +736,6 @@ fhandler_termios::ioctl (int cmd, void *varg)
-       return -1;
-     }
- 
--  myself->ctty = -1;
-   if (!myself->set_ctty (this, 0))
-     {
-       set_errno (EPERM);
-diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-index 586a4204d..735b3be8e 100644
---- a/winsup/cygwin/pinfo.cc
-+++ b/winsup/cygwin/pinfo.cc
-@@ -530,7 +530,7 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
-   debug_printf ("old %s, ctty device number %y, tc.ntty device number %y flags & O_NOCTTY %y", __ctty (), ctty, tc.ntty, flags & O_NOCTTY);
-   if (fh && (ctty <= 0 || ctty == tc.ntty) && !(flags & O_NOCTTY))
-     {
--      if (tc.getsid () && tc.getsid () != sid)
-+      if (tc.getsid () && tc.getsid () != sid && ctty == -2)
- 	; /* Do nothing if another session is associated with the TTY. */
-       else
- 	{
-@@ -576,7 +576,8 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
- 	 an obvious bug surfaces. */
-       if (sid == pid && !tc.getsid ())
- 	tc.setsid (sid);
--      sid = tc.getsid ();
-+      if (ctty > 0)
-+	sid = tc.getsid ();
-       /* See above */
-       if ((!tc.getpgid () || being_debugged ()) && pgid == pid)
- 	tc.setpgid (pgid);
+so what am I not getting?
+
 -- 
-2.39.0
+Take care. Thanks, Brian Inglis			Calgary, Alberta, Canada
 
+La perfection est atteinte			Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter	not when there is no more to add
+mais lorsqu'il n'y a plus rien à retirer	but when there is no more to cut
+			-- Antoine de Saint-Exupéry
