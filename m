@@ -1,85 +1,156 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	by sourceware.org (Postfix) with ESMTPS id 80F953841889
-	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023 14:35:37 +0000 (GMT)
-Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MIKs0-1p0ths0Yi4-00EQpq for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023
- 15:35:36 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B29FBA80A3A; Tue, 10 Jan 2023 15:35:35 +0100 (CET)
-Date: Tue, 10 Jan 2023 15:35:35 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=Pl6r=5H=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from re-prd-fep-048.btinternet.com (mailomta6-re.btinternet.com [213.120.69.99])
+	by sourceware.org (Postfix) with ESMTPS id A62783858CDA
+	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023 16:37:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A62783858CDA
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
+          by re-prd-fep-048.btinternet.com with ESMTP
+          id <20230110163730.YOT25570.re-prd-fep-048.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
+          Tue, 10 Jan 2023 16:37:30 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 61A69BAC3ED8A2A5
+X-Originating-IP: [81.153.98.246]
+X-OWM-Source-IP: 81.153.98.246 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeehuedutdehhfeutefgieefgfelieettdeigfdtfffhvdevgeegteejfeeftdehgfenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.153.98.246) by re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
+        id 61A69BAC3ED8A2A5; Tue, 10 Jan 2023 16:37:30 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pinfo: Additional fix for CTTY behavior.
-Message-ID: <Y713t43ryah6qmHw@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20221228083516.1226-1-takashi.yano@nifty.ne.jp>
- <Y7vdjTREYWiLAJ9N@calimero.vinschen.de>
- <20230110223706.1d38233b6be7d03f512275dc@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/8] Further testsuite fixes
+Date: Tue, 10 Jan 2023 16:37:01 +0000
+Message-Id: <20230110163709.16265-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230110223706.1d38233b6be7d03f512275dc@nifty.ne.jp>
-X-Provags-ID: V03:K1:aDSSfFMdPrQ6SGtLu0pRYDD9WuQaPmH8S2BeY/VImLQRKGuHfz4
- VLri4Se33PR/GrWm0uFdfAf4D1EJ50cwHT7gM/wZWm/3l+FO0rsH+pc4efkRhb+ug9rdSFX
- 87+LqA8EuXJ87vLdC++0Qd/0Y4pUBAOMI7aP4tBpF7SDXLKd4AKrhuD/9MJqCmgqw/Ng6zB
- ayVz9BfLYoeHze2+pIjKQ==
-UI-OutboundReport: notjunk:1;M01:P0:ALWMnLNr9uA=;EnNO5Z5MTJEXxP+Zjd0qjzzSTvG
- 6KHgw6ZgL5EzDm6ldeoP6izHjRGY5gs5F7jFVLqPuIcXbYKshYbDxgGwyh5DMer2za8V3XbgV
- qj6i1cj4330evLfVIGiIMeH6j84hvIyBbrC1wIzr3gISGsMyLuwrz/kBwjIVGzaqUezPggnSF
- 6xaSSGPfE90fTShKETwQVlqZF4JAlAm87zdYiCGCqH0FvBfRWUAOB7yAnIUVST1/mEjncODjl
- LZEAGP5ISnTERMXVMofwOI6H4ZrBz0t2tWgM/uCw1ba2WkiXNoixfa8uawFDA33w43H+3VqGh
- ZIl55BnESKXeZwv9vULvtoySRaKlwmSEsWfU2gszFrQrH2aib2mTFJjOeRs0WKFiuE2gXcgc2
- ufqNg0+rUkb5XKWSrHehbSmGdPaXKRZdCanD33eTVWD3GoyDpzWQfJFNz8E/sCcEIWEpGvWu4
- V5Ra08eGSmp6q6/oSdge9theoclWmJz+jQ6F6YzHONloQvt//v0RC8lBFusbLzW6DNDGZS+Xt
- zfTX+nQraNk1jU1rvacWA5/yCdVSfahZ/fLgMFUw54cWaQo3AR+N3m5WVp+JKbvPBXH6y3Se4
- 4iV6tzs4SUrZdH++hSwvcaQNb3MXrLym6LgLok94d7iu1+inOMKydiTuEcluZOQcrBx3QjQJq
- cK7zEp8HJcPuSjARoyH9Ri4cdFgfGmjeuUzyjvnbAQ==
-X-Spam-Status: No, score=-96.7 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3569.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 10 22:37, Takashi Yano wrote:
-> On Mon, 9 Jan 2023 10:25:33 +0100
-> Corinna Vinschen wrote:
-> > Also, given this was a "kludge" from 10 years ago, is it really still
-> > needed?
-> 
-> Ah, do you mean the "kludge":
-> winsup/cygwin/syscalls.cc: 1455:
->       /* This is a temporary kludge until all utilities can catch up
-> 	 with a change in behavior that implements linux functionality:
-> 	 opening a tty should not automatically cause it to become the
-> 	 controlling tty for the process.  */
->       if (!(flags & O_NOCTTY) && fd > 2 && myself->ctty != -2)
-> 	{
-> 	  flags |= O_NOCTTY;
-> 	  /* flag that, if opened, this fhandler could later be capable
-> 	     of being a controlling terminal if /dev/tty is opened. */
-> 	  opt |= PC_CTTY;
-> 	}
-> 
-> and
-> 
-> winsup/cygwin/dtable.cc: 767:
->   /* This is a temporary kludge until all utilities can catch up with
->      a change in behavior that implements linux functionality:  opening
->      a tty should not automatically cause it to become the controlling
->      tty for the process.  */
->   if (newfd > 2)
->     flags |= O_NOCTTY;
-> ?
-> 
-> These codes might be able to be deleted. I'll check if these
-> are not needed.
+This gets us from:
 
-Actually I meant commit c38a2d837303, introducing the -2 value for ctty.
-But yeah, the above stuff is also interesting and every opportunity to
-get rid of old workarounds is nice.
+> FAIL: cygload (execute)
+> FAIL: devdsp.c (execute)
+> FAIL: ltp/access05.c (execute)
+> FAIL: ltp/fcntl07.c (execute)
+> FAIL: ltp/fcntl07B.c (execute)
+> FAIL: ltp/fork09.c (execute)
+> FAIL: ltp/link04.c (execute)
+> FAIL: ltp/symlink03.c (execute)
+> FAIL: msgtest.c (execute)
+> FAIL: pthread/cancel11.c (execute)
+> FAIL: pthread/cancel3.c (execute)
+> FAIL: pthread/cancel5.c (execute)
+> FAIL: pthread/inherit1.c (execute)
+> FAIL: pthread/mutex5.c (execute)
+> FAIL: pthread/mutex7.c (execute)
+> FAIL: pthread/mutex7d.c (execute)
+> FAIL: pthread/mutex7n.c (execute)
+> FAIL: pthread/priority1.c (execute)
+> FAIL: pthread/priority2.c (execute)
+> FAIL: pthread/rwlock6.c (execute)
+> FAIL: semtest.c (execute)
+> FAIL: shmtest.c (execute)
+> FAIL: systemcall.c (execute)
+> 
+> 		=== winsup Summary ===
+> 
+> # of expected passes		255
+> # of unexpected failures	23
+> # of expected failures		6
 
+to:
 
-Corinna
+> FAIL: cygload
+> FAIL: devdsp.c
+> FAIL: ltp/access05.c
+> FAIL: ltp/fcntl07.c
+> FAIL: ltp/fork09.c
+> FAIL: ltp/symlink01.c
+> FAIL: ltp/symlink03.c
+> FAIL: ltp/umask03.c
+> FAIL: pthread/cancel11.c
+> FAIL: pthread/cancel3.c
+> FAIL: pthread/cancel5.c
+> FAIL: pthread/inherit1.c
+> FAIL: pthread/priority1.c
+> FAIL: pthread/priority2.c
+> FAIL: systemcall.c
+> 
+> 		=== winsup Summary ===
+> 
+> # of expected passes		263
+> # of unexpected failures	15
+> # of expected failures		5
+
+which is almost manageable!
+
+Jon Turney (8):
+  Cygwin: testsuite: automake doesn't define objdir
+  Cygwin: testsuite: Build testcases using automake
+  Cygwin: testsuite: Fix compilation warnings
+  Cygwin: testsuite: 64-bit fixes in pthread testcases
+  Cygwin: testsuite: Update mutex tests for changed default mutex type
+  Cygwin: testsuite: Update pthread tests for default SCHED_FIFO
+  Cygwin: testsuite: Drop appending 'ntsec' to CYGWIN in cygrun wrapper
+  Cygwin: CI: Run cygserver for tests
+
+ .github/workflows/cygwin.yml                  |  16 +-
+ winsup/configure.ac                           |   2 +-
+ winsup/testsuite/Makefile.am                  | 309 +++++++++++++++++-
+ winsup/testsuite/README                       |   2 +-
+ winsup/testsuite/cygrun.c                     |  16 -
+ winsup/testsuite/libltp/include/usctest.h     |   2 +-
+ .../testsuite/{cygrun => mingw}/Makefile.am   |  11 +-
+ winsup/testsuite/winsup.api/cygload.exp       |  32 +-
+ winsup/testsuite/winsup.api/ltp/execv01.c     |   2 +-
+ winsup/testsuite/winsup.api/ltp/execve01.c    |   2 +-
+ winsup/testsuite/winsup.api/ltp/execvp01.c    |   2 +-
+ winsup/testsuite/winsup.api/ltp/mmap02.c      |  10 +-
+ winsup/testsuite/winsup.api/ltp/mmap03.c      |  10 +-
+ winsup/testsuite/winsup.api/ltp/mmap04.c      |  10 +-
+ winsup/testsuite/winsup.api/ltp/mmap05.c      |  10 +-
+ winsup/testsuite/winsup.api/ltp/mmap06.c      |   8 +-
+ winsup/testsuite/winsup.api/ltp/mmap07.c      |   8 +-
+ winsup/testsuite/winsup.api/ltp/mmap08.c      |   8 +-
+ winsup/testsuite/winsup.api/mmaptest03.c      |   2 +-
+ winsup/testsuite/winsup.api/pthread/cancel2.c |  10 +-
+ winsup/testsuite/winsup.api/pthread/cancel3.c |  10 +-
+ winsup/testsuite/winsup.api/pthread/cancel4.c |  10 +-
+ winsup/testsuite/winsup.api/pthread/cancel5.c |  12 +-
+ .../testsuite/winsup.api/pthread/cleanup2.c   |  10 +-
+ .../testsuite/winsup.api/pthread/cleanup3.c   |   8 +-
+ .../testsuite/winsup.api/pthread/condvar2_1.c |  12 +-
+ .../testsuite/winsup.api/pthread/condvar3_1.c |  12 +-
+ .../testsuite/winsup.api/pthread/condvar3_2.c |  14 +-
+ winsup/testsuite/winsup.api/pthread/exit3.c   |   2 +-
+ .../testsuite/winsup.api/pthread/inherit1.c   |  12 +-
+ winsup/testsuite/winsup.api/pthread/join1.c   |  10 +-
+ winsup/testsuite/winsup.api/pthread/join2.c   |   8 +-
+ winsup/testsuite/winsup.api/pthread/mutex4.c  |   2 +-
+ winsup/testsuite/winsup.api/pthread/mutex5.c  |   2 +-
+ winsup/testsuite/winsup.api/pthread/mutex7.c  |   3 +-
+ winsup/testsuite/winsup.api/pthread/mutex7d.c |   3 +-
+ winsup/testsuite/winsup.api/pthread/mutex7n.c |   1 -
+ .../testsuite/winsup.api/pthread/priority1.c  |  10 +-
+ .../testsuite/winsup.api/pthread/priority2.c  |  12 +-
+ winsup/testsuite/winsup.api/pthread/rwlock6.c |  22 +-
+ .../winsup.api/samples/sample-miscompile.c    |   1 -
+ winsup/testsuite/winsup.api/systemcall.c      |   2 +-
+ winsup/testsuite/winsup.api/user_malloc.c     |   4 +-
+ winsup/testsuite/winsup.api/winsup.exp        |  37 +--
+ 44 files changed, 470 insertions(+), 221 deletions(-)
+ rename winsup/testsuite/{cygrun => mingw}/Makefile.am (58%)
+ delete mode 100644 winsup/testsuite/winsup.api/samples/sample-miscompile.c
+
+-- 
+2.39.0
+
