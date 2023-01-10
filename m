@@ -1,76 +1,85 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-	by sourceware.org (Postfix) with ESMTPS id C61693842405;
-	Tue, 10 Jan 2023 14:29:21 +0000 (GMT)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	by sourceware.org (Postfix) with ESMTPS id 80F953841889
+	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023 14:35:37 +0000 (GMT)
 Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MsI0I-1ow4ss0qzq-00tmpy; Tue, 10 Jan 2023 15:29:20 +0100
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MIKs0-1p0ths0Yi4-00EQpq for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023
+ 15:35:36 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9472EA80A3A; Tue, 10 Jan 2023 15:29:19 +0100 (CET)
-Date: Tue, 10 Jan 2023 15:29:19 +0100
+	id B29FBA80A3A; Tue, 10 Jan 2023 15:35:35 +0100 (CET)
+Date: Tue, 10 Jan 2023 15:35:35 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Takashi Yano <tyan0@sourceware.org>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [newlib-cygwin] Cygwin: ctty: Add comments for the special
- values: -1 and -2.
-Message-ID: <Y712P2K2u15BNnZS@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pinfo: Additional fix for CTTY behavior.
+Message-ID: <Y713t43ryah6qmHw@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Takashi Yano <tyan0@sourceware.org>,
-	cygwin-patches@cygwin.com
-References: <20230110131557.3B148385843E@sourceware.org>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20221228083516.1226-1-takashi.yano@nifty.ne.jp>
+ <Y7vdjTREYWiLAJ9N@calimero.vinschen.de>
+ <20230110223706.1d38233b6be7d03f512275dc@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230110131557.3B148385843E@sourceware.org>
-X-Provags-ID: V03:K1:j7ms8FbbFNLzJKkjzwJLJCqbwGhGwItBB0pT++eS9BU3bXPqyzp
- j7TpV9xyDcQeXew0Yj067J0iKu6K7GVzsB8WnvmvZ8ZJsmGr8kCLp+SvkObgKwuc1OrcUJA
- KnX4yS4uVt25HhilqMkgOn7Kgv/3UtRQlw69Z8kVu85E1uSw9p0FykclxVHlbh7xu1fKRJO
- QMlqupgo8z4fHSaR7pi5Q==
-UI-OutboundReport: notjunk:1;M01:P0:pDWLsyJ3zuI=;o0DyKmxIPqephsR1EkJAf3Zh2Sm
- STvJYCLP+8vz+pWB8jXf0UoI0a1E3oUzeW/HvygCCRwpgJ4nNeWVStKe2yTREE3u0PX7EHmZ1
- GYoePhHAE59+e+Xu+IySeSbQwMPUilf3fpaDvDNTEnSpMy+MyGaLsb5Bcbo8YVax3QMVF4MPv
- xvegUNaFckZvPXdJ4z/t6Qrz34AStXOizqpqQwZyXRSpo2cVFpyOSyPfJOO67675wTLcXsmmR
- ju+hhWLtMOaQk+xZoDpOpGTXdRplCV9pczwlxHNrvhVaZpjVmehenblWZ2W1GrHMWzBBhIjyT
- Lb7kadwbmRMX2UobPiDi5vkG1XxgxsatCsN/M4fL0f1HWQRNJ5A4XXKry6REmHm74DFdnEzLt
- 6LPt8AEaa8uCFW/unY9NsPDa196aDvNBX+zOXfgfhqekszpjc22H8JSRqMm354GL2Nh0GlSPg
- odFpWngvMjxFsE5YVzYaRimUfA/T1zJ9XPICAMmfpw3rhIJwrwgSKvIW2SbFQq+Dt7AKJerRa
- rM5HqUASEAmE43MBJjP4ktlxJpdOEX6zqDmI3NRK4CHOYbMY/L6xMhXf6hqrP/0KeZdJhxL0I
- CBax43vB9L4lEsw/GqPnBMK3hEA2N7VnJ+tBN2vBCB0yyRyiKFA4kh14xzbIerjclbRQ90KHt
- V7HY6BtofzbxMpsUt2/49TMe0bUECsGbRCtZucC6nQ==
+In-Reply-To: <20230110223706.1d38233b6be7d03f512275dc@nifty.ne.jp>
+X-Provags-ID: V03:K1:aDSSfFMdPrQ6SGtLu0pRYDD9WuQaPmH8S2BeY/VImLQRKGuHfz4
+ VLri4Se33PR/GrWm0uFdfAf4D1EJ50cwHT7gM/wZWm/3l+FO0rsH+pc4efkRhb+ug9rdSFX
+ 87+LqA8EuXJ87vLdC++0Qd/0Y4pUBAOMI7aP4tBpF7SDXLKd4AKrhuD/9MJqCmgqw/Ng6zB
+ ayVz9BfLYoeHze2+pIjKQ==
+UI-OutboundReport: notjunk:1;M01:P0:ALWMnLNr9uA=;EnNO5Z5MTJEXxP+Zjd0qjzzSTvG
+ 6KHgw6ZgL5EzDm6ldeoP6izHjRGY5gs5F7jFVLqPuIcXbYKshYbDxgGwyh5DMer2za8V3XbgV
+ qj6i1cj4330evLfVIGiIMeH6j84hvIyBbrC1wIzr3gISGsMyLuwrz/kBwjIVGzaqUezPggnSF
+ 6xaSSGPfE90fTShKETwQVlqZF4JAlAm87zdYiCGCqH0FvBfRWUAOB7yAnIUVST1/mEjncODjl
+ LZEAGP5ISnTERMXVMofwOI6H4ZrBz0t2tWgM/uCw1ba2WkiXNoixfa8uawFDA33w43H+3VqGh
+ ZIl55BnESKXeZwv9vULvtoySRaKlwmSEsWfU2gszFrQrH2aib2mTFJjOeRs0WKFiuE2gXcgc2
+ ufqNg0+rUkb5XKWSrHehbSmGdPaXKRZdCanD33eTVWD3GoyDpzWQfJFNz8E/sCcEIWEpGvWu4
+ V5Ra08eGSmp6q6/oSdge9theoclWmJz+jQ6F6YzHONloQvt//v0RC8lBFusbLzW6DNDGZS+Xt
+ zfTX+nQraNk1jU1rvacWA5/yCdVSfahZ/fLgMFUw54cWaQo3AR+N3m5WVp+JKbvPBXH6y3Se4
+ 4iV6tzs4SUrZdH++hSwvcaQNb3MXrLym6LgLok94d7iu1+inOMKydiTuEcluZOQcrBx3QjQJq
+ cK7zEp8HJcPuSjARoyH9Ri4cdFgfGmjeuUzyjvnbAQ==
 X-Spam-Status: No, score=-96.7 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 10 13:15, Takashi Yano via Cygwin-cvs wrote:
-> https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;h=3b7df69aaa5752f78537eafa5838f65a1ddfc938
+On Jan 10 22:37, Takashi Yano wrote:
+> On Mon, 9 Jan 2023 10:25:33 +0100
+> Corinna Vinschen wrote:
+> > Also, given this was a "kludge" from 10 years ago, is it really still
+> > needed?
 > 
-> commit 3b7df69aaa5752f78537eafa5838f65a1ddfc938
-> Author: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Date:   Tue Jan 10 22:04:40 2023 +0900
+> Ah, do you mean the "kludge":
+> winsup/cygwin/syscalls.cc: 1455:
+>       /* This is a temporary kludge until all utilities can catch up
+> 	 with a change in behavior that implements linux functionality:
+> 	 opening a tty should not automatically cause it to become the
+> 	 controlling tty for the process.  */
+>       if (!(flags & O_NOCTTY) && fd > 2 && myself->ctty != -2)
+> 	{
+> 	  flags |= O_NOCTTY;
+> 	  /* flag that, if opened, this fhandler could later be capable
+> 	     of being a controlling terminal if /dev/tty is opened. */
+> 	  opt |= PC_CTTY;
+> 	}
 > 
->     Cygwin: ctty: Add comments for the special values: -1 and -2.
->     
->     _pinfo::ctty has two special values other than the device id of
->     the allocated ctty:
->     -1: CTTY is not initialized yet. Can be associated with the TTY
->         which is associated with the session leader.
->     -2: CTTY has been released by setsid(). Can be associate only with
->         new TTY which is not associated with any other session as CTTY,
->         but cannot be associate with the TTYs already associated with
->         other sessions.
->     This patch adds the comments in some source files.
+> and
+> 
+> winsup/cygwin/dtable.cc: 767:
+>   /* This is a temporary kludge until all utilities can catch up with
+>      a change in behavior that implements linux functionality:  opening
+>      a tty should not automatically cause it to become the controlling
+>      tty for the process.  */
+>   if (newfd > 2)
+>     flags |= O_NOCTTY;
+> ?
+> 
+> These codes might be able to be deleted. I'll check if these
+> are not needed.
 
-Oh, ok.  I was more thinking along the lines of using symbolic values,
-kind of like this:
-
-  #define CTTY_UNINITIALIZED -1
-  #define CTTY_RELEASED      -2
-  #define CTTY_IS_FREE(_c)   ((_c) < 0)
-
-I'm not sure the names make sense, but you see what I mean.  The
-comments could precede the definitions in the header file then.
+Actually I meant commit c38a2d837303, introducing the -2 value for ctty.
+But yeah, the above stuff is also interesting and every opportunity to
+get rid of old workarounds is nice.
 
 
 Corinna
