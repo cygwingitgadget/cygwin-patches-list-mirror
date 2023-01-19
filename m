@@ -1,83 +1,97 @@
-Return-Path: <SRS0=Pl6r=5H=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from re-prd-fep-047.btinternet.com (mailomta1-re.btinternet.com [213.120.69.94])
-	by sourceware.org (Postfix) with ESMTPS id B6B4738493F9
-	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2023 16:37:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B6B4738493F9
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
-          by re-prd-fep-047.btinternet.com with ESMTP
-          id <20230110163756.TCKF20465.re-prd-fep-047.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>;
-          Tue, 10 Jan 2023 16:37:56 +0000
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 61A69BAC3ED8A59A
-X-Originating-IP: [81.153.98.246]
-X-OWM-Source-IP: 81.153.98.246 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeelveekheevhffgtdfffeefgfeljedtteegffeijeduffeugeekudekffejhfejgeenucffohhmrghinhepmhgrthhrihigrdhtrghrghgvthenucfkphepkedurdduheefrdelkedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduheefrdelkedrvdegiedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.153.98.246) by re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as jonturney@btinternet.com)
-        id 61A69BAC3ED8A59A; Tue, 10 Jan 2023 16:37:56 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <SRS0=YyUz=5Q=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+	by sourceware.org (Postfix) with ESMTPS id 22D3D3858C52
+	for <cygwin-patches@cygwin.com>; Thu, 19 Jan 2023 13:10:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 22D3D3858C52
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conuserg-09.nifty.com with ESMTP id 30JDAFnW014716;
+	Thu, 19 Jan 2023 22:10:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 30JDAFnW014716
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1674133819;
+	bh=AM4pulie0abHy0O9T9RpliX2HZJkXIyGaUVUYRptsQo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cwA9Ln9NJGvO53k4EO4bPySDsIwn1U0KVQi7OXFMp/PvNyUHTuatXPuMRHdYI6g4j
+	 VXRpPVdEAxrymk5JloDUfEYZIu4k5iNCX4XFIepM+2am4sU2Ku1b5STi36VBQ0wQ5l
+	 a2RzaS0hOvTSiqAYYjh7gXoPR/AlGIdiK4gn3dp+n8TreTqXWBszdGwfUkQeFlK90/
+	 1ocxnAh5aNfvOmOK35+BLE/GL7JpqSiQN06XXg6qRvCLQcP8214BWRKQjRzXeUaz72
+	 bEq4K8LVboiSm+nCoiGVH7nn6UmP6MTL8r1sNepRy/HiLbn39++PI5gcRycbOUvlTC
+	 YNm7G0r1d/ulA==
+X-Nifty-SrcIP: [220.150.135.41]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 8/8] Cygwin: CI: Run cygserver for tests
-Date: Tue, 10 Jan 2023 16:37:09 +0000
-Message-Id: <20230110163709.16265-9-jon.turney@dronecode.org.uk>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: dsp: Fix a problem that fcntl() does not take effect.
+Date: Thu, 19 Jan 2023 22:10:05 +0900
+Message-Id: <20230119131005.2012-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230110163709.16265-1-jon.turney@dronecode.org.uk>
-References: <20230110163709.16265-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1197.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Note that cygserver must be run using the same cygwin1.DLL as test
-programs, as they communicate over a named pipe whose name contains the
-'installation key' (which is a hash of the cygwin1.dll's path).
+Previously, fhandler_dev_dsp (OSS) has a problem that fcntl() does
+not take effect at all. This patch fixes the issue.
 
-We run cygserver via 'cmd' to avoid the special code which handles a
-cygwin parent process starting a cygwin child process, which assumes the
-same version of cygwin in both.
+Sighed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- .github/workflows/cygwin.yml | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ winsup/cygwin/fhandler/dsp.cc           | 12 ++++++++++++
+ winsup/cygwin/local_includes/fhandler.h |  2 ++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
-index ac167e748..10d0255ef 100644
---- a/.github/workflows/cygwin.yml
-+++ b/.github/workflows/cygwin.yml
-@@ -52,7 +52,8 @@ jobs:
-       fail-fast: false
-       matrix:
-         include:
--        - pkgarch: x86_64
-+        - target: x86_64-pc-cygwin
-+          pkgarch: x86_64
-     name: Windows native ${{ matrix.pkgarch }}
+diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
+index c37bedea5..8798cf876 100644
+--- a/winsup/cygwin/fhandler/dsp.cc
++++ b/winsup/cygwin/fhandler/dsp.cc
+@@ -1038,6 +1038,12 @@ fhandler_dev_dsp::ioctl (unsigned int cmd, void *buf)
+   return base ()->_ioctl (cmd, buf);
+ }
  
-     steps:
-@@ -105,6 +106,15 @@ jobs:
-         make &&
-         make install &&
-         (cd */newlib; make info man) &&
--        (cd */newlib; make install-info install-man) &&
--        (cd */winsup; make check || true)
-+        (cd */newlib; make install-info install-man)
-+      shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
++int
++fhandler_dev_dsp::fcntl (int cmd, intptr_t arg)
++{
++  return base ()->_fcntl (cmd, arg);
++}
 +
-+    # test
-+    - name: Test Cygwin
-+      run: >-
-+        export PATH=/usr/bin:$(cygpath ${SYSTEMROOT})/system32 &&
-+        export MAKEFLAGS=-j$(nproc) &&
-+        cd build &&
-+        (export PATH=${{ matrix.target }}/winsup/testsuite/runtime:${PATH} && cmd /c $(cygpath -wa ${{ matrix.target }}/winsup/cygserver/cygserver) &) &&
-+        (cd ${{ matrix.target }}/winsup; make check || true)
-       shell: C:\cygwin\bin\bash.exe --noprofile --norc -eo pipefail '{0}'
+ void
+ fhandler_dev_dsp::fixup_after_fork (HANDLE parent)
+ {
+@@ -1417,6 +1423,12 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+     }
+ }
+ 
++int
++fhandler_dev_dsp::_fcntl (int cmd, intptr_t arg)
++{
++  return fhandler_base::fcntl(cmd, arg);
++}
++
+ void
+ fhandler_dev_dsp::_fixup_after_fork (HANDLE parent)
+ { // called from new child process
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index bc02eae66..5fe979538 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2766,6 +2766,7 @@ class fhandler_dev_dsp: public fhandler_base
+   ssize_t write (const void *, size_t);
+   void read (void *, size_t&);
+   int ioctl (unsigned int, void *);
++  int fcntl (int cmd, intptr_t);
+   int close ();
+   void fixup_after_fork (HANDLE);
+   void fixup_after_exec ();
+@@ -2774,6 +2775,7 @@ class fhandler_dev_dsp: public fhandler_base
+   ssize_t _write (const void *, size_t);
+   void _read (void *, size_t&);
+   int _ioctl (unsigned int, void *);
++  int _fcntl (int cmd, intptr_t);
+   void _fixup_after_fork (HANDLE);
+   void _fixup_after_exec ();
+ 
 -- 
 2.39.0
 
