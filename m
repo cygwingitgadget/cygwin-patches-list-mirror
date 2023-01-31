@@ -1,60 +1,47 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-	by sourceware.org (Postfix) with ESMTPS id E83E03858D35
-	for <cygwin-patches@cygwin.com>; Tue, 31 Jan 2023 09:28:43 +0000 (GMT)
-Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N2EHo-1oe3SJ2P2U-013bGe for <cygwin-patches@cygwin.com>; Tue, 31 Jan 2023
- 10:28:41 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9C7E4A81B7B; Tue, 31 Jan 2023 10:28:40 +0100 (CET)
-Date: Tue, 31 Jan 2023 10:28:40 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=s/Q1=54=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+	by sourceware.org (Postfix) with ESMTPS id 71CBB3858D28
+	for <cygwin-patches@cygwin.com>; Tue, 31 Jan 2023 11:18:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 71CBB3858D28
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conssluserg-06.nifty.com with ESMTP id 30VBIVnY027778
+	for <cygwin-patches@cygwin.com>; Tue, 31 Jan 2023 20:18:31 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 30VBIVnY027778
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
+	s=dec2015msa; t=1675163911;
+	bh=CFQGeQoGP0oxkTRYU82Z9uG/1yU82xdWoPsuH/DntA8=;
+	h=Date:From:To:Subject:In-Reply-To:References:From;
+	b=whBDCOnKzsPk4i4d4W1icOfeHVlfGBe4T8v6nRvLloajEeVQ1Uok+uq9ZdDW7gAJQ
+	 L7GNL5OwAUaVkk83KnO6vmShxqSwQUP+JG+FUessqsfbiOXI2i5PubPNxQoWAO60Vj
+	 5kFMI6Ox+nGQz34a3Udsh65i37xkGUN9Xw8hjL0jjNcXQZ3ZNNEepsiBZZLaVJblNa
+	 VFad+ySxoe2CSv32zseHMQRk80okCg5zSz/NFIuPONgVTwk0YKWfTkE+cayG2L5oKK
+	 TMFFPe76zIZ3ySSUjY1bl5XaslQEVEOEDVnqUZTUVI1x6Xk0Da1hzaisMFR21YTh8o
+	 NwNHouhYldLFg==
+X-Nifty-SrcIP: [220.150.135.41]
+Date: Tue, 31 Jan 2023 20:18:30 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: dsp: Implement SNDCTL_DSP_SETFRAGMENT ioctl().
-Message-ID: <Y9jfSM8nB6Z+eT3O@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Message-Id: <20230131201830.e558ac83a4b0ab3f5cdd4914@nifty.ne.jp>
+In-Reply-To: <Y9jfSM8nB6Z+eT3O@calimero.vinschen.de>
 References: <20230130130916.47489-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230130130916.47489-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:d2zY3oPlxytA7K377aDmrxlKDCKDh8PncIpSZIKF1lqzHhBfOqY
- KFFomSYODZgnjkIIO/TgvgQxV2F6+8HRcuGYcTON86pm9Kw/wyKj1+Mq3FyoE77Vzwoxdnj
- h0XbIHSH1kM/t7HJTFQ4xx6XtO1MUahAYKEBgx8rZQZO9gIpkUYj9/2YUtXAFpEkGglRh9e
- 7V7J7CSfKYVQPBJDALbLg==
-UI-OutboundReport: notjunk:1;M01:P0:2EjnlmLXgtA=;ylyvTC4Vl4llPkT2WS+6K3zF7CS
- +y7gHsG9biGUBf6W5iduXEjvVqSkWKw4wqirHthJrhWZow/F0DAxm4F7kgPXibsC9AdhRZ7Sh
- znhhWB4zBpWw3EGP3zpsGpnO64Vttqua03rQ8Q71Z6wr3AEZq7HyM/gnkLbQT+iQcWPfSoKy0
- 2tXD+VP3oHI1R2DHOXt9xjGmUFn9lbi1TavrehHT6jTiavT9m/yeLu0O4eOZPtM5u+lv20hbT
- i6b/6M/7Izap+TQNc+phtOuVFfv0azlappcexjtDAJzi0Xl2z5fN1ZiZpkwgJhB/CGHJpHGSV
- 5ug+FdCD+1kcJXxDbQvSrpV0YQXtph9ULizin1OHk7K7A7sykFMLWx/GNNr2IDY6Ikv0x7qWK
- aR9RM1+wgfq+2VG0w/ansvt+xE49gZ/ElS5h7wm9zJyrCiKvcxKfJQWYLN8JAG8XkQk3vP6Px
- yQDq1vRzGehV6BdqlLRnkJMRS9bQFefkmxT80zIkaqRsv8tyQVR5pBeFqgysAsZK+Xw2zTYUc
- uNxINL+aZTGZrlAs5nKDfpdbaqtHIKyL/c69PFepXo1qwl9mmYWjC85RkfuASyVCLRtyh6Fcy
- zl5mOUxR8aGF4W+JN+0w+pEFiWSXeDOp8PCP+KeQYj3OfBxQ6VpfzUitxUsF19MhZNHiDlNwq
- ESnbkpHoPrInAXO4TIeap1DmIututL01Wn49fAlvRQ==
-X-Spam-Status: No, score=-97.1 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+	<Y9jfSM8nB6Z+eT3O@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 30 22:09, Takashi Yano wrote:
-> Previously, SNDCTL_DSP_SETFRAGMENT was just a fake. In this patch,
-> it has been implemented to allow latency control in some apps.
-> 
-> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/fhandler/dsp.cc           | 78 ++++++++++++-------------
->  winsup/cygwin/local_includes/fhandler.h |  3 +
->  2 files changed, 42 insertions(+), 39 deletions(-)
+On Tue, 31 Jan 2023 10:28:40 +0100
+Corinna Vinschen wrote:
+> LGTM.  Given how much I *don't* use the audio stuff in Cygwin,
+> would you just like to take over maintainership for this code?
 
-LGTM.  Given how much I *don't* use the audio stuff in Cygwin,
-would you just like to take over maintainership for this code?
+Thanks. I could take care of it if you don't mind?
 
-
-Thanks,
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
