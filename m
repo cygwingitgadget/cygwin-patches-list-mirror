@@ -1,98 +1,242 @@
-Return-Path: <SRS0=ZEYn=6K=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-	by sourceware.org (Postfix) with ESMTPS id 86D0B3858D33
-	for <cygwin-patches@cygwin.com>; Tue, 14 Feb 2023 14:36:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 86D0B3858D33
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conuserg-09.nifty.com with ESMTP id 31EEa7GI018928;
-	Tue, 14 Feb 2023 23:36:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 31EEa7GI018928
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1676385372;
-	bh=nOpHJac8ywikPxuc/XBKvquhfFsHVxGwW78l5L9nB04=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eZaUcaWaq+PZk/f5Lp9HqushBvzSj3dVipYvMD3yUVMAwF6yzzJjwYzQeQ27VHRiZ
-	 48VEyxxVObribvDxYFzMATQbm2onvdOgD6uPC1h9RBYd04wjUQkc54l/hNFWmFWUdB
-	 UWHgXRAyS+aqDL/ZdQ7DttnWBilHTAwCWix9V+GJ2jPrQXBt+4gLljLxf1BqiYKhf0
-	 n2L+a4SOTTJ1csV3XY8+CUUTW2nJ/4fZ7fOpt5i6IPc0C48ze2WnKbitwzGU8P14Ut
-	 e8Opeef0dIgI1n1x7dW5A16U60du2wo6X1dxCEYOr2x8wlITi2gnbKt2/Cpmb+/6y2
-	 4RCIT1RfjxeOQ==
-X-Nifty-SrcIP: [220.150.135.41]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: dsp: Fix SNDCTL_DSP_GET[IO]SPACE before read()/write().
-Date: Tue, 14 Feb 2023 23:35:55 +0900
-Message-Id: <20230214143555.42161-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
+Return-Path: <SRS0=+Z9a=6M=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id D62AF3858D33
+	for <cygwin-patches@cygwin.com>; Thu, 16 Feb 2023 23:02:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D62AF3858D33
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+	by cmsmtp with ESMTP
+	id SkV3pDD3ll2xSSnGgp4tEM; Thu, 16 Feb 2023 23:02:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1676588542; bh=KpAlx3//qCL4eVwJ8tjgDD6X8+VEvJTtB5FTO0S4taI=;
+	h=Date:Reply-To:To:From:Subject;
+	b=Bxt0KD5plyjSApUwT0HfMfY1Lf6gxplgPZb09Yui4GSNf+Mx+sF1aZ/sWWbU82Zgh
+	 Ak0gTEdUWMg5kBFHGWbIbDbox5ALroq3wIobsZWLiMSySF8o1IsYWg2SYkaoPV52rr
+	 yikcxAhaW7USgzAcaGrwV/S1OqrayfzJumAHL011KAaHpEHTHYWkUHwmXNf3ntDRYp
+	 O+tao4+boN6ahjhaNyQR4GgVS6pdiEWVZ1REA/B6W/8vF2mM82O23uOEeQUNF82MGA
+	 vLZ+VqhOv+3oh3FFHINdTKq39T/7p67xCn8acOOLZ9lFZKf5SZf+hbEFtLVnGaYHAg
+	 xpopZd8oWQ9VA==
+Received: from [10.0.0.5] ([184.64.102.149])
+	by cmsmtp with ESMTP
+	id SnGfpfADEHFsOSnGfpVkc1; Thu, 16 Feb 2023 23:02:22 +0000
+X-Authority-Analysis: v=2.4 cv=XZqaca15 c=1 sm=1 tr=0 ts=63eeb5fe
+ a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=VNTh86AYCRvf4nd6ItoA:9 a=QEXdDO2ut3YA:10
+ a=uYOKM1HZZumVjRcFczQA:9 a=ITdVHhY7-e0A:10
+Content-Type: multipart/mixed; boundary="------------O8IDURDHMG8W00IY5wtMoqAD"
+Message-ID: <545a5149-0470-6541-9a27-5cdb74f646c6@Shaw.ca>
+Date: Thu, 16 Feb 2023 16:02:21 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Content-Language: en-CA
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+Subject: Cygwin build utils dumper fails - new prereqs required?
+Organization: Inglis
+X-CMAE-Envelope: MS4xfLNjgcqsuHfsLT0sVB5BoBLwIqZBPlPys3YYTzp5NpeAFvGMRkuC61BVdRsbrNe0/yS2yAtdko2ZCVbycvo2sNMf8A2bLV4qCBGMteLBxUQ/PCM1j6g6
+ PWjasOJS2NFEgZDMHFasdc5DfXplOHqOkmFAnAqOeYjCi35A7A4HzFAzNLUWCUfkF7U0kUF89nHE7Qsfj8pTv2aSgX4s+mAeFQQ=
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Even with the commit 3a4c740f59c0, SNDCTL_DSP_GET[IO]SPACE ioctl()
-does not return the fragment set by SNDCTL_DSP_SETFRAGMENT if it
-is issued before read()/write(). This patch fixes the issue.
+This is a multi-part message in MIME format.
+--------------O8IDURDHMG8W00IY5wtMoqAD
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Fixes: 3a4c740f59c0 ("Cygwin: dsp: Implement SNDCTL_DSP_SETFRAGMENT ioctl().")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/dsp.cc | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+Hi folks,
 
-diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
-index dd1aac8e2..16db6bb29 100644
---- a/winsup/cygwin/fhandler/dsp.cc
-+++ b/winsup/cygwin/fhandler/dsp.cc
-@@ -1369,11 +1369,17 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
- 	    return -1;
- 	  }
- 	audio_buf_info *p = (audio_buf_info *) buf;
--        if (audio_out_) {
--            audio_out_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
--        } else {
--            Audio_out::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
--        }
-+	if (audio_out_)
-+	  audio_out_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
-+	else if (fragment_has_been_set)
-+	  {
-+	    p->bytes = fragsize_ * fragstotal_;
-+	    p->fragsize = fragsize_;
-+	    p->fragstotal = fragstotal_;
-+	    p->fragments = fragstotal_;
-+	  }
-+	else
-+	  Audio_out::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
-         debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
-                       buf, p->fragments, p->fragsize, p->bytes);
- 	return 0;
-@@ -1387,11 +1393,17 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
- 	    return -1;
- 	  }
- 	audio_buf_info *p = (audio_buf_info *) buf;
--        if (audio_in_) {
--            audio_in_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
--        } else {
--            Audio_in::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
--        }
-+	if (audio_in_)
-+	  audio_in_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
-+	else if (fragment_has_been_set)
-+	  {
-+	    p->bytes = 0;
-+	    p->fragsize = fragsize_;
-+	    p->fragstotal = fragstotal_;
-+	    p->fragments = 0;
-+	  }
-+	else
-+	  Audio_in::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
-         debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
-                       buf, p->fragments, p->fragsize, p->bytes);
- 	return 0;
+Building Cygwin from latest repo testing some unrelated doc patches and updated 
+Unicode tables.
+Cygwin utils fails to build dumper.
+References to elf and binutils debuginfo, and undefined references to 
+sframe_de-/encode ZSTD_de-/compress/_isError in attached log - config and normal 
+processing suppressed and paths sanitized!
+Are new prereqs required to be installed to satisfy, or something changed to 
+suppress these references?
+
 -- 
-2.39.0
+Take care. Thanks, Brian Inglis			Calgary, Alberta, Canada
 
+La perfection est atteinte			Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter	not when there is no more to add
+mais lorsqu'il n'y a plus rien à retirer	but when there is no more to cut
+			-- Antoine de Saint-Exupéry
+--------------O8IDURDHMG8W00IY5wtMoqAD
+Content-Type: text/plain; charset=UTF-8; name="newlib-cygwin-build64.log"
+Content-Disposition: attachment; filename="newlib-cygwin-build64.log"
+Content-Transfer-Encoding: base64
+
+bWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvLi4uL2J1aWxkNjQnCm1ha2VbMl06IEVu
+dGVyaW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3aW4vbmV3bGli
+JwptYWtlWzNdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMt
+Y3lnd2luL25ld2xpYicKbWFrZVs0XTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvLi4uL2J1aWxk
+NjQveDg2XzY0LXBjLWN5Z3dpbi9uZXdsaWInCm1ha2VbNF06IExlYXZpbmcgZGlyZWN0b3J5
+ICcvLi4uL2J1aWxkNjQveDg2XzY0LXBjLWN5Z3dpbi9uZXdsaWInCm1ha2VbNF06IEVudGVy
+aW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3aW4vbmV3bGliJwpt
+YWtlWzRdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3
+aW4vbmV3bGliJwptYWtlWzRdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4
+Nl82NC1wYy1jeWd3aW4vbmV3bGliJwptYWtlWzNdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4u
+Li9idWlsZDY0L3g4Nl82NC1wYy1jeWd3aW4vbmV3bGliJwptYWtlWzJdOiBMZWF2aW5nIGRp
+cmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3aW4vbmV3bGliJwptYWtlWzJd
+OiBFbnRlcmluZyBkaXJlY3RvcnkgJy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMtY3lnd2luL3dp
+bnN1cCcKbWFrZVszXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvLi4uL2J1aWxkNjQveDg2XzY0
+LXBjLWN5Z3dpbi93aW5zdXAvY3lnd2luJwptYWtlWzRdOiBFbnRlcmluZyBkaXJlY3Rvcnkg
+Jy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMtY3lnd2luL3dpbnN1cC9jeWd3aW4nCm1ha2VbM106
+IExlYXZpbmcgZGlyZWN0b3J5ICcvLi4uL2J1aWxkNjQveDg2XzY0LXBjLWN5Z3dpbi93aW5z
+dXAvY3lnc2VydmVyJwptYWtlWzNdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy8uLi4vYnVpbGQ2
+NC94ODZfNjQtcGMtY3lnd2luL3dpbnN1cC91dGlscycKbWFrZVs0XTogRW50ZXJpbmcgZGly
+ZWN0b3J5ICcvLi4uL2J1aWxkNjQveDg2XzY0LXBjLWN5Z3dpbi93aW5zdXAvdXRpbHMnCm1h
+a2VbNV06IEVudGVyaW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3
+aW4vd2luc3VwL3V0aWxzL21pbmd3JwptYWtlWzVdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4u
+Li9idWlsZDY0L3g4Nl82NC1wYy1jeWd3aW4vd2luc3VwL3V0aWxzL21pbmd3JwptYWtlWzVd
+OiBFbnRlcmluZyBkaXJlY3RvcnkgJy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMtY3lnd2luL3dp
+bnN1cC91dGlscycKLi4uCiAgQ1hYICAgICAgZHVtcGVyLWR1bXBlci5vCiAgQ1hYICAgICAg
+ZHVtcGVyLW1vZHVsZV9pbmZvLm8KICBDWFhMRCAgICBkdW1wZXIuZXhlCi91c3IvbGliL2dj
+Yy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmlu
+L2xkOiAvdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi9saWIv
+bGliYmZkLmEoZWxmeHgteDg2Lm8pOiBpbiBmdW5jdGlvbiBgX2JmZF94ODZfZWxmX3dyaXRl
+X3NmcmFtZV9wbHQnOgovdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZnh4
+LXg4Ni5jOjE5NzU6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNmcmFtZV9lbmNvZGVyX3dy
+aXRlJwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZf
+NjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2Jm
+ZC9lbGZ4eC14ODYuYzoxOTgxOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVfZW5j
+b2Rlcl9mcmVlJwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8u
+Li94ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3
+aW4vMTEvLi4vLi4vLi4vLi4vbGliL2xpYmJmZC5hKGVsZnh4LXg4Ni5vKTogaW4gZnVuY3Rp
+b24gYF9iZmRfeDg2X2VsZl9jcmVhdGVfc2ZyYW1lX3BsdCc6Ci91c3Ivc3JjL2RlYnVnL2Jp
+bnV0aWxzLTIuNDAtMS9iZmQvZWxmeHgteDg2LmM6MTg3MjogdW5kZWZpbmVkIHJlZmVyZW5j
+ZSB0byBgc2ZyYW1lX2VuY29kZScKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEv
+Li4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2RlYnVnL2Jp
+bnV0aWxzLTIuNDAtMS9iZmQvZWxmeHgteDg2LmM6MTg4MDogdW5kZWZpbmVkIHJlZmVyZW5j
+ZSB0byBgc2ZyYW1lX2NhbGNfZnJlX3R5cGUnCi91c3IvbGliL2djYy94ODZfNjQtcGMtY3ln
+d2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmluL2xkOiAvdXNyL3NyYy9k
+ZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZnh4LXg4Ni5jOjE4ODE6IHVuZGVmaW5lZCBy
+ZWZlcmVuY2UgdG8gYHNmcmFtZV9mZGVfY3JlYXRlX2Z1bmNfaW5mbycKL3Vzci9saWIvZ2Nj
+L3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4v
+bGQ6IC91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQvZWxmeHgteDg2LmM6MTkx
+MTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2ZyYW1lX2ZkZV9jcmVhdGVfZnVuY19pbmZv
+JwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQt
+cGMtY3lnd2luL2Jpbi9sZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9l
+bGZ4eC14ODYuYzoxOTE3OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVfZW5jb2Rl
+cl9hZGRfZnVuY2Rlc2MnCi91c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4u
+Ly4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmluL2xkOiAvdXNyL3NyYy9kZWJ1Zy9iaW51dGls
+cy0yLjQwLTEvYmZkL2VsZnh4LXg4Ni5jOjE5Mjk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8g
+YHNmcmFtZV9lbmNvZGVyX2FkZF9mcmUnCi91c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2lu
+LzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmluL2xkOiAvdXNyL3NyYy9kZWJ1
+Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZnh4LXg4Ni5jOjE4ODk6IHVuZGVmaW5lZCByZWZl
+cmVuY2UgdG8gYHNmcmFtZV9lbmNvZGVyX2FkZF9mdW5jZGVzYycKL3Vzci9saWIvZ2NjL3g4
+Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6
+IC91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQvZWxmeHgteDg2LmM6MTg5OTog
+dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2ZyYW1lX2VuY29kZXJfYWRkX2ZyZScKL3Vzci9s
+aWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dp
+bi9iaW4vbGQ6IC91c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4u
+L2xpYi9saWJiZmQuYShlbGYtc2ZyYW1lLm8pOiBpbiBmdW5jdGlvbiBgX2JmZF9lbGZfcGFy
+c2Vfc2ZyYW1lJzoKL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9lbGYtc2Zy
+YW1lLmM6MjE5OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVfZGVjb2RlJwovdXNy
+L2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3ln
+d2luL2Jpbi9sZDogL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4v
+Li4vbGliL2xpYmJmZC5hKGVsZi1zZnJhbWUubyk6IGluIGZ1bmN0aW9uIGBzZnJhbWVfZGVj
+b2Rlcl9pbml0X2Z1bmNfYmZkaW5mbyc6Ci91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIuNDAt
+MS9iZmQvZWxmLXNmcmFtZS5jOjEwNzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2ZyYW1l
+X2RlY29kZXJfZ2V0X251bV9maWR4JwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8x
+MS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9saWIvZ2NjL3g4
+Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4vbGliL2xpYmJmZC5hKGVsZi1zZnJhbWUu
+byk6IGluIGZ1bmN0aW9uIGBfYmZkX2VsZl9wYXJzZV9zZnJhbWUnOgovdXNyL3NyYy9kZWJ1
+Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZi1zZnJhbWUuYzoyMjg6IHVuZGVmaW5lZCByZWZl
+cmVuY2UgdG8gYHNmcmFtZV9kZWNvZGVyX2ZyZWUnCi91c3IvbGliL2djYy94ODZfNjQtcGMt
+Y3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmluL2xkOiAvdXNyL2xp
+Yi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi9saWIvbGliYmZkLmEoZWxm
+LXNmcmFtZS5vKTogaW4gZnVuY3Rpb24gYF9iZmRfZWxmX2Rpc2NhcmRfc2VjdGlvbl9zZnJh
+bWUnOgovdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZi1zZnJhbWUuYzoy
+Nzc6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNmcmFtZV9kZWNvZGVyX2dldF9udW1fZmlk
+eCcKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0
+LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4u
+Ly4uLy4uLy4uL2xpYi9saWJiZmQuYShlbGYtc2ZyYW1lLm8pOiBpbiBmdW5jdGlvbiBgX2Jm
+ZF9lbGZfbWVyZ2Vfc2VjdGlvbl9zZnJhbWUnOgovdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0y
+LjQwLTEvYmZkL2VsZi1zZnJhbWUuYzozOTM6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNm
+cmFtZV9kZWNvZGVyX2dldF9hYmlfYXJjaCcKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3
+aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2Rl
+YnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQvZWxmLXNmcmFtZS5jOjM5NDogdW5kZWZpbmVkIHJl
+ZmVyZW5jZSB0byBgc2ZyYW1lX2VuY29kZXJfZ2V0X2FiaV9hcmNoJwovdXNyL2xpYi9nY2Mv
+eDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9s
+ZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9lbGYtc2ZyYW1lLmM6NDA3
+OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVfZGVjb2Rlcl9nZXRfbnVtX2ZpZHgn
+Ci91c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1w
+Yy1jeWd3aW4vYmluL2xkOiAvdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2Vs
+Zi1zZnJhbWUuYzo0MDg6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNmcmFtZV9lbmNvZGVy
+X2dldF9udW1fZmlkeCcKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4v
+Li4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2RlYnVnL2JpbnV0aWxz
+LTIuNDAtMS9iZmQvZWxmLXNmcmFtZS5jOjQyMTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBg
+c2ZyYW1lX2RlY29kZXJfZ2V0X2Z1bmNkZXNjJwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5
+Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9zcmMv
+ZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9lbGYtc2ZyYW1lLmM6NDUwOiB1bmRlZmluZWQg
+cmVmZXJlbmNlIHRvIGBzZnJhbWVfZGVjb2Rlcl9nZXRfaGRyX3NpemUnCi91c3IvbGliL2dj
+Yy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4vYmlu
+L2xkOiAvdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZi1zZnJhbWUuYzo0
+NzY6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNmcmFtZV9lbmNvZGVyX2FkZF9mdW5jZGVz
+YycKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0
+LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQv
+ZWxmLXNmcmFtZS5jOjQ4NjogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2ZyYW1lX2RlY29k
+ZXJfZ2V0X2ZyZScKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4v
+Li4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIu
+NDAtMS9iZmQvZWxmLXNmcmFtZS5jOjQ4ODogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2Zy
+YW1lX2VuY29kZXJfYWRkX2ZyZScKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEv
+Li4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2RlYnVnL2Jp
+bnV0aWxzLTIuNDAtMS9iZmQvZWxmLXNmcmFtZS5jOjQ5NjogdW5kZWZpbmVkIHJlZmVyZW5j
+ZSB0byBgc2ZyYW1lX2RlY29kZXJfZnJlZScKL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3
+aW4vMTEvLi4vLi4vLi4vLi4veDg2XzY0LXBjLWN5Z3dpbi9iaW4vbGQ6IC91c3Ivc3JjL2Rl
+YnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQvZWxmLXNmcmFtZS5jOjM1NTogdW5kZWZpbmVkIHJl
+ZmVyZW5jZSB0byBgc2ZyYW1lX2RlY29kZXJfZ2V0X2FiaV9hcmNoJwovdXNyL2xpYi9nY2Mv
+eDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9s
+ZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9lbGYtc2ZyYW1lLmM6MzU2
+OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVfZGVjb2Rlcl9nZXRfZml4ZWRfZnBf
+b2Zmc2V0JwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94
+ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0x
+L2JmZC9lbGYtc2ZyYW1lLmM6MzU3OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBzZnJhbWVf
+ZGVjb2Rlcl9nZXRfZml4ZWRfcmFfb2Zmc2V0JwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5
+Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9zcmMv
+ZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9lbGYtc2ZyYW1lLmM6MzYzOiB1bmRlZmluZWQg
+cmVmZXJlbmNlIHRvIGBzZnJhbWVfZW5jb2RlJwovdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5
+Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2luL2Jpbi9sZDogL3Vzci9saWIv
+Z2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4vbGliL2xpYmJmZC5hKGVsZi1z
+ZnJhbWUubyk6IGluIGZ1bmN0aW9uIGBfYmZkX2VsZl93cml0ZV9zZWN0aW9uX3NmcmFtZSc6
+Ci91c3Ivc3JjL2RlYnVnL2JpbnV0aWxzLTIuNDAtMS9iZmQvZWxmLXNmcmFtZS5jOjUyNjog
+dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgc2ZyYW1lX2VuY29kZXJfd3JpdGUnCi91c3IvbGli
+L2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1jeWd3aW4v
+YmluL2xkOiAvdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2VsZi1zZnJhbWUu
+Yzo1NDE6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHNmcmFtZV9lbmNvZGVyX2ZyZWUnCi91
+c3IvbGliL2djYy94ODZfNjQtcGMtY3lnd2luLzExLy4uLy4uLy4uLy4uL3g4Nl82NC1wYy1j
+eWd3aW4vYmluL2xkOiAvdXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8u
+Li8uLi9saWIvbGliYmZkLmEoY29tcHJlc3Mubyk6IGluIGZ1bmN0aW9uIGBkZWNvbXByZXNz
+X2NvbnRlbnRzJzoKL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9jb21wcmVz
+cy5jOjUxNzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgWlNURF9kZWNvbXByZXNzJwovdXNy
+L2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3ln
+d2luL2Jpbi9sZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9jb21wcmVz
+cy5jOjUxOTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgWlNURF9pc0Vycm9yJwovdXNyL2xp
+Yi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMtY3lnd2lu
+L2Jpbi9sZDogL3Vzci9saWIvZ2NjL3g4Nl82NC1wYy1jeWd3aW4vMTEvLi4vLi4vLi4vLi4v
+bGliL2xpYmJmZC5hKGNvbXByZXNzLm8pOiBpbiBmdW5jdGlvbiBgYmZkX2NvbXByZXNzX3Nl
+Y3Rpb25fY29udGVudHMnOgovdXNyL3NyYy9kZWJ1Zy9iaW51dGlscy0yLjQwLTEvYmZkL2Nv
+bXByZXNzLmM6NjU2OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBaU1REX2NvbXByZXNzJwov
+dXNyL2xpYi9nY2MveDg2XzY0LXBjLWN5Z3dpbi8xMS8uLi8uLi8uLi8uLi94ODZfNjQtcGMt
+Y3lnd2luL2Jpbi9sZDogL3Vzci9zcmMvZGVidWcvYmludXRpbHMtMi40MC0xL2JmZC9jb21w
+cmVzcy5jOjY2MTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgWlNURF9pc0Vycm9yJwpjb2xs
+ZWN0MjogZXJyb3I6IGxkIHJldHVybmVkIDEgZXhpdCBzdGF0dXMKbWFrZVs1XTogKioqIFtN
+YWtlZmlsZTo2MDA6IGR1bXBlci5leGVdIEVycm9yIDEKbWFrZVs1XTogTGVhdmluZyBkaXJl
+Y3RvcnkgJy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMtY3lnd2luL3dpbnN1cC91dGlscycKbWFr
+ZVs0XTogKioqIFtNYWtlZmlsZTo4NjQ6IGFsbC1yZWN1cnNpdmVdIEVycm9yIDEKbWFrZVs0
+XTogTGVhdmluZyBkaXJlY3RvcnkgJy8uLi4vYnVpbGQ2NC94ODZfNjQtcGMtY3lnd2luL3dp
+bnN1cC91dGlscycKbWFrZVszXTogKioqIFtNYWtlZmlsZTo1MDk6IGFsbF0gRXJyb3IgMgpt
+YWtlWzNdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0L3g4Nl82NC1wYy1jeWd3
+aW4vd2luc3VwL3V0aWxzJwptYWtlWzJdOiAqKiogW01ha2VmaWxlOjM5ODogYWxsLXJlY3Vy
+c2l2ZV0gRXJyb3IgMQptYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSAnLy4uLi9idWlsZDY0
+L3g4Nl82NC1wYy1jeWd3aW4vd2luc3VwJwptYWtlWzFdOiAqKiogW01ha2VmaWxlOjk0NjQ6
+IGFsbC10YXJnZXQtd2luc3VwXSBFcnJvciAyCm1ha2VbMV06IExlYXZpbmcgZGlyZWN0b3J5
+ICcvLi4uL2J1aWxkNjQnCm1ha2U6ICoqKiBbTWFrZWZpbGU6ODgzOiBhbGxdIEVycm9yIDIK
+
+
+--------------O8IDURDHMG8W00IY5wtMoqAD--
