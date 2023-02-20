@@ -1,75 +1,92 @@
-Return-Path: <SRS0=Q8LB=6N=shaw.ca=brian.inglis@sourceware.org>
+Return-Path: <SRS0=TASg=6Q=shaw.ca=brian.inglis@sourceware.org>
 Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-	by sourceware.org (Postfix) with ESMTPS id 876BA385781F
-	for <cygwin-patches@cygwin.com>; Fri, 17 Feb 2023 17:35:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 876BA385781F
+	by sourceware.org (Postfix) with ESMTPS id 78BD8385B51F
+	for <cygwin-patches@cygwin.com>; Mon, 20 Feb 2023 20:20:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 78BD8385B51F
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
-Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
 	by cmsmtp with ESMTP
-	id T4RqpEhnBl2xST4dsp7CiO; Fri, 17 Feb 2023 17:35:28 +0000
+	id U3kYpYuG3jvm1UCe1pWqYI; Mon, 20 Feb 2023 20:20:17 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-	t=1676655328; bh=SeCaUhG3RJCOI1NtbTtNRiMbQYF0j5SEjah3+65zwEk=;
-	h=Date:Reply-To:Subject:To:References:From:In-Reply-To;
-	b=QEtKSrL7dyFmrrdW5fbh+UsaNdoUZ4/Fckq/klrwFdQGUNFjyMN3w+TnFh+PsGmjp
-	 0ue0G/Q6UzfiqBGTCBR4wqpjD2i5vTiW3HGjHCc8yP2DwMQa8j29TFj8mm3+LyHX1g
-	 qgUYPIgdaZtvFqTfHAdLSnX1MI1GG7+fmnc1E636u4SFsKm/kUNBsKKiXcfSyF1CtL
-	 VHyN/YZZPYIfiyRK55/yuhv15mN2m+ev5wjOqxS7Z20Mjm4kYK3Pc/+p3w7a6SdY82
-	 7c98+1t4ajL1p4ZEZwVLZ0Z571xO6h6z0yywDruifZf7AEqgPU/KKoGvOi5qXfajcf
-	 AykigJwFu5pkA==
+	t=1676924417; bh=PPSmNNCKKkyhSax58oqughlF4mowztS/Uz32tqxMQOY=;
+	h=Date:Reply-To:To:From:Subject;
+	b=DjZE/2uBoaYrqrgZ2QVR6NSAAsaW/WsndNSZcDds1xrs6TmQe9xXNA0Eb7DZkIM4r
+	 619GhNd9DlLSnmWLvDnibsQpcaRUFdK2GX4Xvlx4eCGejp5Oz8UYDPH7NPgB9PAYoz
+	 VKCSajkZdjkpgVvPqyYd3vXVRHKwrVjIA4PLc7WlSlUnt0WTpbBp8HlASBfYyMdtj1
+	 eQ/8E3w2hI9zCEbgNRE4KcuQEwppiBXzbAfFDNR7BNA6Ood7CkzRX77QRbnfthdx21
+	 qRhLEg2EoTVVpTJcuFSN7wJtjcI9g1B67QDbMblVbY6xDwu/d3TURtKwi4WrIP8+tr
+	 Ak3F1luPCRQ9A==
 Received: from [10.0.0.5] ([184.64.102.149])
 	by cmsmtp with ESMTP
-	id T4drpCGRfyAOeT4dspgoq0; Fri, 17 Feb 2023 17:35:28 +0000
-X-Authority-Analysis: v=2.4 cv=e5oV9Il/ c=1 sm=1 tr=0 ts=63efbae0
+	id UCe0pBuRO3fOSUCe0po3D0; Mon, 20 Feb 2023 20:20:17 +0000
+X-Authority-Analysis: v=2.4 cv=J8G5USrS c=1 sm=1 tr=0 ts=63f3d601
  a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
- a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=kE3qPM3sFhkr_6mp_J4A:9 a=QEXdDO2ut3YA:10
+ a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=vsmOMZeAlzyJapgw8ukA:9 a=QEXdDO2ut3YA:10
+ a=OCWz5_UTjG4A:10 a=9c8rtzwoRDUA:10 a=yipANtDfiQYA:10
  a=sRI3_1zDfAgwuvI8zelB:22
-Message-ID: <c3d45391-cbfe-3939-f990-0a127651693c@Shaw.ca>
-Date: Fri, 17 Feb 2023 10:35:27 -0700
+Message-ID: <6b01a995-96e5-7b46-3323-1cf348d25252@Shaw.ca>
+Date: Mon, 20 Feb 2023 13:20:16 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.2
 Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: Cygwin build utils dumper fails - new prereqs required?
 Content-Language: en-CA
 To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <545a5149-0470-6541-9a27-5cdb74f646c6@Shaw.ca>
- <cf7530d5-2b99-b6b1-1b14-42c2707ac10c@dronecode.org.uk>
 From: Brian Inglis <Brian.Inglis@Shaw.ca>
+Subject: Copyright outdated? in Cygwin/X FAQ 12.6 and not addressed in Cygwin
+ FAQ 7.1 link
 Organization: Inglis
-In-Reply-To: <cf7530d5-2b99-b6b1-1b14-42c2707ac10c@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfCsM0oToG3UznVEM931sF6jfjG5nwyfNDVnepgrSAy8KbRVQGk6AvH9AhDOGraNXulr/6sP0K8ACt6/bULgCDujppC4osy/p+994halty+l9JUk/ECT3
- MyamdKfGV2f+ubGETNyFOQ5Ffc47P/x7njAL+wHRy2JNNf6cYSqM9kcVt9nCOFIyI/XYaQyaD7Wri6IHyE02HMkvEKcVtOxB+TU=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfHFTwg9inxqN7UsctLG3fM8eVz/lhvPHZLosM7DmdYxjTjaI7fA/fkTCWJngRWk1dT/JpFacyuhDTm5jtXwkqtrjenKhtkEdu/QMgtcVZpVctOzB5vHh
+ C/QsPFKlizk5azTMqjDiwORhRhkctdiE7HCkHm8WOUrfFduJvFwxtTxVUgJG/C7j2Fbfrr4/679+xqXK5sCWoh0beGZQavhZDlg=
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2023-02-17 06:14, Jon Turney wrote:
-> On 16/02/2023 23:02, Brian Inglis wrote:
->> Hi folks,
->>
->> Building Cygwin from latest repo testing some unrelated doc patches and 
->> updated Unicode tables.
->> Cygwin utils fails to build dumper.
->> References to elf and binutils debuginfo, and undefined references to 
->> sframe_de-/encode ZSTD_de-/compress/_isError in attached log - config and 
->> normal processing suppressed and paths sanitized!
->> Are new prereqs required to be installed to satisfy, or something changed to 
->> suppress these references?
-> 
-> Yes, to build dumper with libbfd from binutils 2.40, you need libzstd-devel and
-> 
-> https://cygwin.com/git/?p=newlib-cygwin.git;a=commit;h=1387ea9f984d5a7aa096a66b67d61dc2cc565d21
+Hi folks,
+[Addressing to patches as that's where we'll fix it, and not a general issue.]
 
-Thanks Jon,
+Noticed that:
 
-I saw that after I emailed, and both zstd and -devel, like lzip/-devel, have 
-been in my Cygwin build install for a while.
-I have since rebuilt without any issues.
-Weird!
-Could I have got a messed up git pull --ff without error messages?
+https://x.cygwin.com/docs/faq/cygwin-x-faq.html#q-copyright-cygwin
+
+"12.6. Who holds the copyright on the Cygwin source code?
+
+Red Hat owns the copyright on the Cygwin source code. Red Hat requires that 
+copyright be assigned to Red Hat for non-trivial changes to Cygwin. You must 
+fill out a copyright transfer form if you are going to contribute substantial 
+changes to Cygwin."
+
+Has that not been assigned to the project?
+
+And also:
+
+https://cygwin.com/faq/faq.html#faq.what.copyright
+
+"7.1. What are the copyrights?
+7.1.
+What are the copyrights?
+Please see https://cygwin.com/licensing.html for more information about Cygwin 
+copyright and licensing."
+
+->
+
+"Cygwin™ Linking Exception
+As a special exception, the copyright holders of the Cygwin library"
+
+Is that the project?
+
+Or does it belong to the authors individually and/or the project or the "Cygwin 
+authors" collectively?
+
+Could we please be as current and explicit as possible in the FAQs once current 
+situation is clear and wording is agreed?
+
+Thinking that Cygwin/X FAQ 12.6 should defer to Cygwin FAQ 7.1.
+
+Willing to submit FAQ patches ;^>
 
 -- 
 Take care. Thanks, Brian Inglis			Calgary, Alberta, Canada
