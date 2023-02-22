@@ -1,116 +1,111 @@
-Return-Path: <SRS0=R+fa=6R=shaw.ca=brian.inglis@sourceware.org>
-Received: from omta001.cacentral1.a.cloudfilter.net (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
-	by sourceware.org (Postfix) with ESMTPS id 0F43D385841C
-	for <cygwin-patches@cygwin.com>; Tue, 21 Feb 2023 14:38:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0F43D385841C
+Return-Path: <SRS0=RIIT=6S=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id 4ED733858D33
+	for <cygwin-patches@cygwin.com>; Wed, 22 Feb 2023 23:53:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4ED733858D33
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
-Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
+Received: from shw-obgw-4003a.ext.cloudfilter.net ([10.228.9.183])
 	by cmsmtp with ESMTP
-	id U9fKpUgDOuZMSUTmypmtIi; Tue, 21 Feb 2023 14:38:40 +0000
+	id UtIZpcVmojvm1Uyv0pf1mn; Wed, 22 Feb 2023 23:53:02 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-	t=1676990320; bh=Msv1FdLQ3AmL7HrBDBZhMDdwdqnSq7rjNXrg6+WpuRY=;
-	h=Date:Reply-To:Subject:To:References:From:In-Reply-To;
-	b=hMvursUMpnLyO6FCmmAqztu0AJdbjMgk5BsqQTuJxAsOQagKH5Wsu+u2DiDO4TnbG
-	 CEgG4S27aA8/9e0YVfNAukD0q5mLjuaZqVDGA8d6aLc/C7M1mMWbfQWcPyRifABXKM
-	 Dl9ksXsE9KFJLA0fQHFuwNv5AELJmTvMBY8WIKCZdTFOsv1j69pvwdF6tfbX6+erIi
-	 VPlxkal0uCCIk1/8qRoNKhCk+kVWowgD5wwn0DFxql+H7Po21kutMDg1pmlyDY2MKq
-	 jo9Y/M19bG5iIA3HKNQ2OrYpzf7fFxIcyLgnqnlQ/t2a7WlCjm+Kz/QBXuVu0Hy4RS
-	 NJvS5t0TurpNw==
+	t=1677109982; bh=3rN6zbJOq1a72pFCOSfeFR6W3TxAEOwzoE37JVN9N7o=;
+	h=Date:Reply-To:Subject:References:From:To:In-Reply-To;
+	b=k9UrVG7AGmbTnTP1log9BaubYsBSngvlEw4qmCOdIyEBCFcvr/5JJLtwv3kP97BBz
+	 glLYulkvamrHF6Ye6oaw3KcpkSjSKZGy+LaO6sOigcpPHQISpz4VU2EBMY0Onv6Yj8
+	 Ut2RgoYkWclb4s4+2gNMy0MaSFhjC5n/0vHI1i2N8uIOIuO3lknaWKhZJo4TC54Ovk
+	 Di3rRG4GRa1VsHEW/Tgjotizev1ktvHL/8duRChdqXfmZG07gL3ljgjTuF1dLLlDAw
+	 PbykX3e1nV+JpmhBGKHo3QmjMLEldGkm76fmFcZp9DU5HCOa0QN+SSAd3uRjGj3HAF
+	 PkMStk+Gq8aMg==
 Received: from [10.0.0.5] ([184.64.102.149])
 	by cmsmtp with ESMTP
-	id UTmypFzUy3fOSUTmyppNmp; Tue, 21 Feb 2023 14:38:40 +0000
-X-Authority-Analysis: v=2.4 cv=J8G5USrS c=1 sm=1 tr=0 ts=63f4d770
+	id Uyv0pr4sWcyvuUyv0pKAGr; Wed, 22 Feb 2023 23:53:02 +0000
+X-Authority-Analysis: v=2.4 cv=VbHkgXl9 c=1 sm=1 tr=0 ts=63f6aade
  a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
- a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=qfbqWCo9KFbHWd945IcA:9 a=QEXdDO2ut3YA:10
- a=OCWz5_UTjG4A:10 a=9c8rtzwoRDUA:10 a=yipANtDfiQYA:10
- a=sRI3_1zDfAgwuvI8zelB:22
-Message-ID: <1ebd89f7-eeec-c019-0f2f-8d71afd0c602@Shaw.ca>
-Date: Tue, 21 Feb 2023 07:38:39 -0700
+ a=IkcTkHD0fZMA:10 a=mDV3o1hIAAAA:8 a=iWCPi50BE3ZMo2So59YA:9 a=QEXdDO2ut3YA:10
+ a=AP3JQZ_qGYIA:10 a=_FVE-zBwftR9WsbkzFJk:22
+Message-ID: <2fe87524-51a6-bba6-4ba3-2c8c15cb406a@Shaw.ca>
+Date: Wed, 22 Feb 2023 16:53:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: Copyright outdated? in Cygwin/X FAQ 12.6 and not addressed in
- Cygwin FAQ 7.1 link
+ Thunderbird/102.8.0
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH v3 0/2] newlib/libc/time/strftime: fix multi-page table
+ format issues
 Content-Language: en-CA
-To: cygwin-patches@cygwin.com
-References: <6b01a995-96e5-7b46-3323-1cf348d25252@Shaw.ca>
- <Y/SLEH6/phijPZb4@calimero.vinschen.de>
+References: <20230217204902.3735-1-Brian.Inglis@Shaw.ca>
+ <20230221041801.51970-1-Brian.Inglis@Shaw.ca>
+ <Y/SLtmUi8dilWqCL@calimero.vinschen.de>
+ <d5eae973-93af-1480-7292-4cfa8503b419@dronecode.org.uk>
 From: Brian Inglis <Brian.Inglis@Shaw.ca>
 Organization: Inglis
-In-Reply-To: <Y/SLEH6/phijPZb4@calimero.vinschen.de>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+In-Reply-To: <d5eae973-93af-1480-7292-4cfa8503b419@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfDlpNRDQP4glVj2JAIW2aAI+tFZAsD8aTfRgQlfkQbQ8G2U+ESJUhSuhTvAMo9warCpRtYXYQ7Uw9Sv3GincaHWsbKibvSsDsSRrunrZ/V8X/fw1HwG/
- hwehl3fQE4TQnP1gLOoxa06TBFdMtANZlVcbP89m5mP2R8QSJr59wCA2ma3W/YQrz9bTqZDC84SOVopcdE2q4VpSv2u7mNZ+VNk=
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfBSFlovhxKvw3PwQ7X3XH0BYn/V+OYxIUHt1FSF+Fft4fHC/law8OoFvleuxsZgAtMRDzvcV5J/0OHpy7Uvv2ivVcFnJaiOLMfkX4/3aGDRGsdUUyWPO
+ w9tMQl/aEsqIawZOVQ/e9xFfMfmKVl0lfGppKCLBgUr4T4jluiM5KQxlslBo2H0rYLTdLyNasut3k41OBWmj8QhYSaLpE5asJ3U=
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2023-02-21 02:12, Corinna Vinschen wrote:
-> On Feb 20 13:20, Brian Inglis wrote:
->> Hi folks,
->> [Addressing to patches as that's where we'll fix it, and not a general issue.]
->> Noticed that:
->> https://x.cygwin.com/docs/faq/cygwin-x-faq.html#q-copyright-cygwin
->> "12.6. Who holds the copyright on the Cygwin source code?
->> Red Hat owns the copyright on the Cygwin source code. Red Hat requires that
->> copyright be assigned to Red Hat for non-trivial changes to Cygwin. You must
->> fill out a copyright transfer form if you are going to contribute
->> substantial changes to Cygwin."
->> Has that not been assigned to the project?
->> And also:
->> https://cygwin.com/faq/faq.html#faq.what.copyright
->> "7.1. What are the copyrights?
->> 7.1.
->> What are the copyrights?
->> Please see https://cygwin.com/licensing.html for more information about
->> Cygwin copyright and licensing."
->> ->
->> "Cygwin™ Linking Exception
->> As a special exception, the copyright holders of the Cygwin library"
->> Is that the project?
+On 2023-02-22 13:10, Jon Turney wrote:
+> On 21/02/2023 09:15, Corinna Vinschen wrote:
+>> Jon,
+>> I'd like your GTG on the patchset before merging it.
 
-> Yes, that's the Cygwin project, not the distro as a whole.  All packages
-> in the distro have their own license.  THe above is strictly only about
-> the Cygwin project license as defined by ...
+> Sorry, I don't think this patchset is good as is.
 
->> [...]
->> Or does it belong to the authors individually and/or the project or the
+>> On Feb 20 21:17, Brian Inglis wrote:
+>>> Discussion about why newlib man generation by docbook2man is
+>>> incompatible with how man is incompatible with groff/tbl/grohtml:
+>>>     https://lists.gnu.org/archive/html/bug-groff/2023-02/msg00118.html
+>>> There does not appear to be good way to deal in docbook2man processing
+>>> with generation of tables > "page" size, or that may not adversely affect
+>>> other [newlib] doc man page tables, as the problem occurs solely on the
+>>> strftime.3 man page!
 
-> https://cygwin.com/git/?p=newlib-cygwin.git;a=blob;f=winsup/CYGWIN_LICENSE
-> After Red Hat stopped selling the Cygwin buyout license, Red Hat changed
-> the license of the DLL to "GPLv3+ w/ linking exception" and handed the
-> copyright over to the community, so the copyright holders are the
-> individual contributors, most of which are mentioned in
-> https://cygwin.com/git/?p=newlib-cygwin.git;a=blob;f=winsup/CONTRIBUTORS
-> The former buyout licenses had a pretty long lifetime, so it was
-> necessary from a legal perspective, that contributors passed over the
-> code under a BSD-2-clause license as long as the buyout licenses were
-> active.  This time has passed in the meantime, so we don't really need
-> the CONTRIBUTORS file anymore.
+> So, this seems to be saying that "strftime manpage misrenders under some 
+> circumstances", but I even after re-reading several times, I have no clear sense 
+> what that circumstance is exactly: generating html output? with current version 
+> of groff? a future one?
+> (Your answer should be a single sentence)
 
->> "Cygwin authors" collectively?
+Current groff tbl pre-/processing generates table images for non-tty 
+"devices"/file formats where tables > "page" size disappear if it is not handled 
+appropriately, but the proper solution for tbl preprocessor output from groff 
+can not be used, as there is a conflict between man requiring macro .TH and tbl 
+needing command .TH to be passed thru to fix the problem - can't be done!
 
-> The project doesn't "belong" anybody anymore.  The project has copyright
-> holders. Those are the developers contributing code to the project
-> collectively.
+>>> The imminent groff/tbl release fixes a number of tbl issues, so may
+>>> affect man pages with tables differently.
+>>> The following groff/grohtml release plans to change grohtml, from
+>>> generating tables as PNG graphics, which don't work reliably on some
+>>> "devices"/file formats, and are not searchable, to generating tables in
+>>> searchable text form on all "devices"/file formats, and fix other
+>>> related issues, so may also affect man pages with tables differently.
+>>> So for the current release, localize the changes to the man page chew
+>>> input embedded in the strftime.c source comments, and the generated
+>>> strftime.3 man page table formatting.
+>>> Be prepared to tweak formatting if doc generation needs it, and
+>>> eventually eliminate custom processing.
 
-Thanks Corinna,
+> I'm not sure "make it look worse in the typical case (someone looking at it in a 
+> terminal with 'man strftime') to make it look better in the atypical case (?)" 
+> is a good trade-off.
 
-That makes sense and I will see how I can tweak the FAQs to reflect the current 
-status, likely X 12.6 refers to Cygwin 7.1, which makes that explicit statement.
-I will make and send patches.
+We could mess up other tables in other man pages if we tried to change 
+makedocbook/docbook2man processing to try to split "long" tables as that depends 
+on the length of the descriptive text column entries in lines and pages, which 
+depends on the "device"/file format!
 
-It is still worth getting licence agreements and updating and maintaining the 
-CONTRIBUTORS file to acknowledge the copyright holders, and give the project a 
-basis for contact in case there is ever any need to modify licences, or any 
-other reason to contact copyright holders.
-Without that list, the project can not contact copyright holders, so terms or 
-licences can never change, if the current sources or licence(s) ever have 
-problem(s) for any reason, so the project could have to reconstituted on some 
-other basis, or else abandoned!
+It seems easier, given the future changes above with unknown impacts, to handle 
+the strftime long man page table rendering by splitting the (chew) table about 
+the middle +/-%Ox, which fixes the table length > page length issue, then 
+correcting the generated man page markup, which fixes the non-tty table 
+rendering issue.
+We could also do all the work just on the generated man page markup, but that 
+seems even "hack"ier to me, than the current proposal.
 
 -- 
 Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
