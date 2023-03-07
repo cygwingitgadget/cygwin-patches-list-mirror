@@ -1,92 +1,63 @@
 Return-Path: <SRS0=/Ih6=67=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-	by sourceware.org (Postfix) with ESMTPS id 997793858C66
-	for <cygwin-patches@cygwin.com>; Tue,  7 Mar 2023 02:34:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 997793858C66
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+	by sourceware.org (Postfix) with ESMTPS id 38AE03858C66
+	for <cygwin-patches@cygwin.com>; Tue,  7 Mar 2023 03:30:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 38AE03858C66
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
-	by conuserg-12.nifty.com with ESMTP id 3272YIar022788;
-	Tue, 7 Mar 2023 11:34:24 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 3272YIar022788
+Received: from HP-Z230 (aj135041.dynamic.ppp.asahi-net.or.jp [220.150.135.41]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 3273U6sn010998;
+	Tue, 7 Mar 2023 12:30:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 3273U6sn010998
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;
-	s=dec2015msa; t=1678156464;
-	bh=hJpY+bLqGziuOjbhBVhNe9B9GNx8kVSlUWLHgm261pM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=d9tJtbo6wVjDaEX+88Cwwr9S56R8BNoSCQWeln2qnEEa3pC/uIfO9pJhENcrzCA8z
-	 gMc3YMcQwk9BQXR+nsK/V10r9wlE0ehTzFv1UK41KVdQTb568UCcOW5OPEne09DmtA
-	 O+r0UfdZ9zNlcMaHigYcL6UPdoCDbNONp87N9+IOevVLZcCCXVy1yQpj9V3bYmIQXe
-	 JSJapc2eigcsxA9j2SjFnHidhbblndAD8bOyDI2+BWYMurBg4XLlMJe96MlHbhGZC/
-	 u69cvDJabyNMpgLooqM0rm0WcY5Mrngj7L4Tk4+3YffVx/33KrNJA9gj7ykpGhyGYw
-	 bMWy1nfHFBw4w==
+	s=dec2015msa; t=1678159806;
+	bh=dWaoIYq3oDrp9jdUfUdEES6qW2LMIlQgoqVJh/mpoeU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ztcao5C2eOc9xZKckoL0E7DZ3QwOxa659ED3UtV0eoqk0/tXx0QeDMte4casHeJ74
+	 RN0q4dvGxsxQFFJVJ1VSRM7rRnhY+ibFhM0ZipEZQnjQJTgr+Eox5YRKyogPSuOekY
+	 DyF7uSHqvdjamXxKm4cB7n706wbW9g3aAJtbllmKfQZHL8vSpZgCGv8bv9gWyj8Xm7
+	 QCtb3/95Il5WFcnKqRUSRK0gubDo0Bpz0+sGV5+6Y2N9MtYLWHcxYWauvcyoj+LCbp
+	 ZglwLRje2sXtchshOlsCfvjGlAtvyfpckegoyt1Nw7ujfNa5rInjGoXZWbJ+Tdi0tO
+	 KEPNpQfOBlBVg==
 X-Nifty-SrcIP: [220.150.135.41]
+Date: Tue, 7 Mar 2023 12:30:06 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: ctty: Remove old 'kludge' code.
-Date: Tue,  7 Mar 2023 11:34:10 +0900
-Message-Id: <20230307023410.1200-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+To: "Lavrentiev, Anton (NIH/NLM/NCBI) [C]" <lavr@ncbi.nlm.nih.gov>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [EXTERNAL] [PATCH] Cygwin: ctty: Replace ctty constant with
+ more descriptive macros.
+Message-Id: <20230307123006.17e133d2bc274354f965badb@nifty.ne.jp>
+In-Reply-To: <DM8PR09MB7095179671A47284BE556204A5B79@DM8PR09MB7095.namprd09.prod.outlook.com>
+References: <20230307023316.1190-1-takashi.yano@nifty.ne.jp>
+	<DM8PR09MB7095179671A47284BE556204A5B79@DM8PR09MB7095.namprd09.prod.outlook.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Remove old 'kludge' code which does not seem necessary anymore. The
-comment of the 'kludge' is as follows.
+On Tue, 7 Mar 2023 02:42:49 +0000
+"Lavrentiev, Anton (NIH/NLM/NCBI) [C]" wrote:
 
-  * syscalls.cc (setsid): On second thought, in the spirit of keeping
-    things kludgy, set ctty to -2 here as a special flag, and...
-    (open): ...only eschew setting O_NOCTTY when that case is detected.
+> Can't help but notice that these two lines are not exactly logically equivalent:
+>  format_process_ctty (void *data, char *&destbuf)
+>  {
+>    _pinfo *p = (_pinfo *) data;
+> -  if (p->ctty < 0)
+> +  if (!CTTY_IS_VALID (p->ctty))
+> 
+> And here as well:
+> 
+> {
+>    if (str == NULL)
+>      str = _my_tls.locals.ttybuf;
+> -  if (myself->ctty < 0)
+> +  if (!CTTY_IS_VALID (myself->ctty))
 
-Fixes: c38a2d837303
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/dtable.cc   |  7 -------
- winsup/cygwin/syscalls.cc | 11 -----------
- 2 files changed, 18 deletions(-)
+Thanks.
+You are right, however, ctty value 0 is never used, so no problem I think.
 
-diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-index 6b2394814..0ed3ea85d 100644
---- a/winsup/cygwin/dtable.cc
-+++ b/winsup/cygwin/dtable.cc
-@@ -764,13 +764,6 @@ dtable::dup3 (int oldfd, int newfd, int flags)
-       return -1;
-     }
- 
--  /* This is a temporary kludge until all utilities can catch up with
--     a change in behavior that implements linux functionality:  opening
--     a tty should not automatically cause it to become the controlling
--     tty for the process.  */
--  if (newfd > 2)
--    flags |= O_NOCTTY;
--
-   if ((newfh = dup_worker (fds[oldfd], flags)) == NULL)
-     {
-       res = -1;
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 15ddbb0a8..c529192b4 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -1452,17 +1452,6 @@ open (const char *unix_path, int flags, ...)
-       int opt = PC_OPEN | PC_SYM_NOFOLLOW_PROCFD;
-       opt |= (flags & (O_NOFOLLOW | O_EXCL)) ? PC_SYM_NOFOLLOW
- 					     : PC_SYM_FOLLOW;
--      /* This is a temporary kludge until all utilities can catch up
--	 with a change in behavior that implements linux functionality:
--	 opening a tty should not automatically cause it to become the
--	 controlling tty for the process.  */
--      if (!(flags & O_NOCTTY) && fd > 2 && myself->ctty != -2)
--	{
--	  flags |= O_NOCTTY;
--	  /* flag that, if opened, this fhandler could later be capable
--	     of being a controlling terminal if /dev/tty is opened. */
--	  opt |= PC_CTTY;
--	}
- 
-       /* If we're opening a FIFO, we will call device_access_denied
- 	 below.  This leads to a call to fstat, which can use the
 -- 
-2.39.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
