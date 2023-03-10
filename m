@@ -1,112 +1,192 @@
-Return-Path: <SRS0=6j3Y=7A=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-047.btinternet.com (mailomta17-sa.btinternet.com [213.120.69.23])
-	by sourceware.org (Postfix) with ESMTPS id 7E1B53858289
-	for <cygwin-patches@cygwin.com>; Wed,  8 Mar 2023 14:17:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7E1B53858289
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
-          by sa-prd-fep-047.btinternet.com with ESMTP
-          id <20230308141733.ENVL13453.sa-prd-fep-047.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
-          Wed, 8 Mar 2023 14:17:33 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 6406812D002EE769
-X-Originating-IP: [86.139.167.71]
-X-OWM-Source-IP: 86.139.167.71 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedgudehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheehtddtueekfeeuuedtjeeluedvledvkeegheekjeevhfduiedtuedvieevtdegnecuffhomhgrihhnpegthihgfihinhdqughotgdrshhhnecukfhppeekiedrudefledrudeijedrjedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrjedupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqdejuddrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhr
-	nhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttdeg
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.167.71) by sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 6406812D002EE769; Wed, 8 Mar 2023 14:17:33 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <SRS0=QR/d=7C=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id B7FA73858C54
+	for <cygwin-patches@cygwin.com>; Fri, 10 Mar 2023 10:18:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B7FA73858C54
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 32AAInh2070872;
+	Fri, 10 Mar 2023 02:18:49 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 76-217-4-51.lightspeed.irvnca.sbcglobal.net(76.217.4.51), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdYdtZ4R; Fri Mar 10 02:18:39 2023
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: doc: Update postinstall/preremove scripts
-Date: Wed,  8 Mar 2023 14:17:19 +0000
-Message-Id: <20230308141719.7361-1-jon.turney@dronecode.org.uk>
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Cygwin: Fix type mismatch on sys/cpuset.h
+Date: Fri, 10 Mar 2023 02:18:21 -0800
+Message-Id: <20230310101821.18319-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1198.3 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Update postinstall/preremove scripts to use CYGWIN_START_MENU_SUFFIX and
-CYGWIN_SETUP_OPTIONS.
----
- winsup/doc/etc.postinstall.cygwin-doc.sh | 19 +++++++++++++++----
- winsup/doc/etc.preremove.cygwin-doc.sh   |  8 ++++++--
- 2 files changed, 21 insertions(+), 6 deletions(-)
+Addresses https://cygwin.com/pipermail/cygwin/2023-March/253220.html
 
-diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
-index 97f88a16d..313c1d3ff 100755
---- a/winsup/doc/etc.postinstall.cygwin-doc.sh
-+++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
-@@ -36,9 +36,20 @@ do
- 	fi
- done
+Take the opportunity to follow FreeBSD's and Linux's lead in recasting
+macro inline code as calls to static inline functions.  This allows the
+macros to be type-safe.  In addition, added a lower bound check to the
+functions that use a cpu number to avoid a potential buffer underrun on
+a bad argument.  h/t to Corinna for the advice on recasting.
+
+---
+ winsup/cygwin/include/sys/cpuset.h | 138 ++++++++++++++++++++---------
+ 1 file changed, 96 insertions(+), 42 deletions(-)
+
+diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
+index 572565165..d83359fdf 100644
+--- a/winsup/cygwin/include/sys/cpuset.h
++++ b/winsup/cygwin/include/sys/cpuset.h
+@@ -31,50 +31,104 @@ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
  
-+# setup was run with options not to create startmenu items
-+case ${CYGWIN_SETUP_OPTIONS} in
-+  *no-startmenu*)
-+    exit 0
-+    ;;
-+esac
+ /* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
+    Allocations are padded such that full-word operations can be done easily. */
+-#define CPU_ALLOC_SIZE(num) ((num+__NCPUBITS-1) / __NCPUBITS) * sizeof (__cpu_mask)
+-#define CPU_ALLOC(num)      __builtin_malloc (CPU_ALLOC_SIZE(num))
+-#define CPU_FREE(set)       __builtin_free (set)
++#define CPU_ALLOC_SIZE(num) __cpuset_alloc_size (num)
++static inline size_t
++__cpuset_alloc_size (int num)
++{
++  return (size_t) (((num + __NCPUBITS - 1) / __NCPUBITS) * sizeof (__cpu_mask));
++}
 +
- # Cygwin Start Menu directory
--case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
--smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
-+if [ ! -v CYGWIN_START_MENU_SUFFIX ]
-+then
-+  case $(uname -s) in *-WOW*) CYGWIN_START_MENU_SUFFIX=" (32-bit)" ;; esac
-+fi
++#define CPU_ALLOC(num) __cpuset_alloc (num)
++static inline cpu_set_t *
++__cpuset_alloc (int num)
++{
++  return (cpu_set_t *) __builtin_malloc (CPU_ALLOC_SIZE(num));
++}
 +
-+smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${CYGWIN_START_MENU_SUFFIX}"
++#define CPU_FREE(set) __cpuset_free (set)
++static inline void
++__cpuset_free (cpu_set_t *set)
++{
++  __builtin_free (set);
++}
  
- # ensure Cygwin Start Menu directory exists
- /usr/bin/mkdir -p "$smpc_dir"
-@@ -53,7 +64,7 @@ fi
- # create User Guide and API PDF and HTML shortcuts
- while read target name desc
- do
--	[ -r "$target" ] && $mks $CYGWINFORALL -P -n "Cygwin${wow64}/$name" -d "$desc" -- $target
-+	[ -r "$target" ] && $mks $CYGWINFORALL -P -n "Cygwin${CYGWIN_START_MENU_SUFFIX}/$name" -d "$desc" -- $target
- done <<EOF
- $doc/cygwin-ug-net.pdf		User\ Guide\ \(PDF\)  Cygwin\ User\ Guide\ PDF
- $html/cygwin-ug-net/index.html	User\ Guide\ \(HTML\) Cygwin\ User\ Guide\ HTML
-@@ -64,7 +75,7 @@ EOF
- # create Home Page and FAQ URL link shortcuts
- while read target name desc
- do
--	$mks $CYGWINFORALL -P -n "Cygwin${wow64}/$name" -d "$desc" -a $target -- $launch
-+	$mks $CYGWINFORALL -P -n "Cygwin${CYGWIN_START_MENU_SUFFIX}/$name" -d "$desc" -a $target -- $launch
- done <<EOF
- $site/index.html	Home\ Page	Cygwin\ Home\ Page\ Link
- $site/faq.html		FAQ	Cygwin\ Frequently\ Asked\ Questions\ Link
-diff --git a/winsup/doc/etc.preremove.cygwin-doc.sh b/winsup/doc/etc.preremove.cygwin-doc.sh
-index b098e6dac..cac29ee21 100755
---- a/winsup/doc/etc.preremove.cygwin-doc.sh
-+++ b/winsup/doc/etc.preremove.cygwin-doc.sh
-@@ -26,8 +26,12 @@ do
- done
- 
- # Cygwin Start Menu directory
--case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
--smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
-+if [ ! -v CYGWIN_START_MENU_SUFFIX ]
-+then
-+  case $(uname -s) in *-WOW*) CYGWIN_START_MENU_SUFFIX=" (32-bit)" ;; esac
-+fi
+ /* These _S macros operate on dynamically-sized cpu sets of size 'siz' bytes */
+-#define CPU_ZERO_S(siz, set)    __builtin_memset (set, 0, siz)
+-
+-#define CPU_SET_S(cpu,siz,set) \
+-	if (cpu < 8 * siz) \
+-	  (set)->__bits[__CPUELT(cpu)] |= __CPUMASK(cpu);
+-
+-#define CPU_CLR_S(cpu,siz,set) \
+-	if (cpu < 8 * siz) \
+-	  (set)->__bits[__CPUELT(cpu)] &= ~(__CPUMASK(cpu));
+-
+-#define CPU_ISSET_S(cpu,siz,set) \
+-      ({int res = 0; \
+-	if (cpu < 8 * siz) \
+-	  res = !!((set)->__bits[__CPUELT(cpu)] & __CPUMASK(cpu)); \
+-	res;})
+-
+-#define CPU_COUNT_S(siz, set) \
+-      ({int tot = 0;\
+-	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
+-	  tot += __builtin_popcountl ((set)->__bits[i]); \
+-	tot;})
+-
+-#define CPU_AND_S(siz, dst, src1, src2) \
+-	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
+-	  (dst)->__bits[i] = (src1)->__bits[i] & (src2)->__bits[i];
+-
+-#define CPU_OR_S(siz, dst, src1, src2) \
+-	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
+-	  (dst)->__bits[i] = (src1)->__bits[i] | (src2)->__bits[i];
+-
+-#define CPU_XOR_S(siz, dst, src1, src2) \
+-	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
+-	  (dst)->__bits[i] = (src1)->__bits[i] ^ (src2)->__bits[i];
+-
+-#define CPU_EQUAL_S(siz, src1, src2) \
+-      ({int res = 1; \
+-	for (int i = 0; res && i < siz / sizeof (__cpu_mask); i++) \
+-	  res &= (src1)->__bits[i] == (src2)->__bits[i]; \
+-	res;})
++#define CPU_ZERO_S(siz, set) __cpuset_zero_s (siz, set)
++static inline void
++__cpuset_zero_s (size_t siz, cpu_set_t *set)
++{
++  (void) __builtin_memset (set, 0, siz);
++}
 +
-+smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${CYGWIN_START_MENU_SUFFIX}"
++#define CPU_SET_S(cpu, siz, set) __cpuset_set_s (cpu, siz, set)
++static inline void
++__cpuset_set_s (int cpu, size_t siz, cpu_set_t *set)
++{
++  if (cpu >= 0 && cpu < 8 * siz)
++    (set)->__bits[__CPUELT(cpu)] |= __CPUMASK(cpu);
++}
++
++#define CPU_CLR_S(cpu, siz, set) __cpuset_clr_s (cpu, siz, set)
++static inline void
++__cpuset_clr_s (int cpu, size_t siz, cpu_set_t *set)
++{
++  if (cpu >= 0 && cpu < 8 * siz)
++    (set)->__bits[__CPUELT(cpu)] &= ~(__CPUMASK(cpu));
++}
++
++#define CPU_ISSET_S(cpu, siz, set) __cpuset_isset_s (cpu, siz, set)
++static inline int
++__cpuset_isset_s (int cpu, size_t siz, cpu_set_t *set)
++{
++  int res = 0;
++  if (cpu >= 0 && cpu < 8 * siz)
++    res = !!((set)->__bits[__CPUELT(cpu)] & __CPUMASK(cpu));
++  return res;
++}
++
++#define CPU_COUNT_S(siz, set) __cpuset_count_s (siz, set)
++static inline int
++__cpuset_count_s (size_t siz, cpu_set_t *set)
++{
++  int res = 0;
++  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
++    res += __builtin_popcountl ((set)->__bits[i]);
++  return res;
++}
++
++#define CPU_AND_S(siz, dst, src1, src2) __cpuset_and_s (siz, dst, src1, src2)
++static inline void
++__cpuset_and_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
++{
++  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
++    (dst)->__bits[i] = (src1)->__bits[i] & (src2)->__bits[i];
++}
++
++#define CPU_OR_S(siz, dst, src1, src2) __cpuset_or_s (siz, dst, src1, src2)
++static inline void
++__cpuset_or_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
++{
++  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
++    (dst)->__bits[i] = (src1)->__bits[i] | (src2)->__bits[i];
++}
++
++#define CPU_XOR_S(siz, dst, src1, src2) __cpuset_xor_s (siz, dst, src1, src2)
++static inline void
++__cpuset_xor_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
++{
++  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
++    (dst)->__bits[i] = (src1)->__bits[i] ^ (src2)->__bits[i];
++}
++
++#define CPU_EQUAL_S(siz, src1, src2) __cpuset_equal_s (siz, src1, src2)
++static inline int
++__cpuset_equal_s (size_t siz, cpu_set_t *src1, cpu_set_t *src2)
++{
++  int res = 1;
++  for (int i = 0; res && i < siz / sizeof (__cpu_mask); i++)
++    res &= (src1)->__bits[i] == (src2)->__bits[i];
++  return res;
++}
  
- # check Cygwin Start Menu directory still exists
- [ -d "$smpc_dir/" ] || exit 0
+ /* These macros operate on fixed-size cpu sets of size __CPU_SETSIZE cpus */
+ #define CPU_ZERO(set)             CPU_ZERO_S(sizeof (cpu_set_t), set)
 -- 
 2.39.0
 
