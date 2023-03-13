@@ -1,97 +1,107 @@
-Return-Path: <SRS0=ciRW=7F=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-041.btinternet.com (mailomta7-sa.btinternet.com [213.120.69.13])
-	by sourceware.org (Postfix) with ESMTPS id EE5E438582A4
-	for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 14:18:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE5E438582A4
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
-          by sa-prd-fep-041.btinternet.com with ESMTP
-          id <20230313141833.ZRMB4274.sa-prd-fep-041.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
-          for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 14:18:33 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 6406812D00BEA1CD
-X-Originating-IP: [86.139.167.100]
-X-OWM-Source-IP: 86.139.167.100 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeetffeftdeftedtleduteehleelgfelfffhjedvueekveefvefgueehtdekkefgkeenucffohhmrghinheptgihghifihhnqdguohgtrdhshhenucfkphepkeeirddufeelrdduieejrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdeingdpihhnvghtpeekiedrudefledrudeijedruddttddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqddutddtrdhrrghnghgvkeeiqddufeelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtgho
-	mhdpghgvohfkrfepifeupdfovfetjfhoshhtpehsrgdqphhrugdqrhhgohhuthdqtddtge
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.106] (86.139.167.100) by sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 6406812D00BEA1CD for cygwin-patches@cygwin.com; Mon, 13 Mar 2023 14:18:33 +0000
-Message-ID: <0cef86b3-ea03-a627-2847-2130a93872b3@dronecode.org.uk>
-Date: Mon, 13 Mar 2023 14:18:33 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	by sourceware.org (Postfix) with ESMTPS id 356823858D1E
+	for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 16:06:50 +0000 (GMT)
+Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MfI21-1qCTDf3QYF-00gnGG for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023
+ 17:06:48 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 1608FA80C87; Mon, 13 Mar 2023 17:06:48 +0100 (CET)
+Date: Mon, 13 Mar 2023 17:06:48 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: doc: Update postinstall/preremove scripts
-Content-Language: en-GB
-To: Cygwin Patches <cygwin-patches@cygwin.com>
+Message-ID: <ZA9KGLJj1jHCoI0t@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20230308141719.7361-1-jon.turney@dronecode.org.uk>
  <ZA7tWpqAmlcKg+v7@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <ZA7tWpqAmlcKg+v7@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1197.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ <0cef86b3-ea03-a627-2847-2130a93872b3@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0cef86b3-ea03-a627-2847-2130a93872b3@dronecode.org.uk>
+X-Provags-ID: V03:K1:8PwNPgA/Xv76jRe2ZezUEY1PMaVIMxjk/gSOm7ZUUKrpFVqE9d/
+ /3EXEe10KAiIJxaJDrg/5pa7EehEtP8PFXQ3CJIpGpiE2C/9VgNVDHYWQXMPxFQfJhO5xZo
+ L3Z1ZFCFo678PS3hp7m3IKcOyaQWqyEV5j2rhapBBjRCLMhUkUXtb2Bq3tSRyv5vbzJDBbS
+ DvgTnA7x9kMDuERT1B8ug==
+UI-OutboundReport: notjunk:1;M01:P0:kQHUiuH7qt8=;03mieSeTBMrx4v34o1i+Xmssd1a
+ 8cigopjfbVIt5d+HqopfECKS9yMdlp1pe7tPrhIwyvb4g8X0iii636EjXHBulcwudlZ8llVsD
+ tCfGexGqtzVpKJLEUWtyNIEwrXpuytECIzbXbCAVnj8tWvtxHYxrij+lFm2Vz8F1XTNmHBFct
+ 5YsuoJXgR8DN5/bCSMS2ij0yzH4hjx8Z2uUmyhX2kE+o7+RLj/hzhwHTiPEFSw9ZtSLQ/9TaV
+ 3zlzsnJLlVN/QOHoK4RuiMjqEB/KLxDdNFyODEt9NQ1MU9qoXc/B5rlBPAUmYv3cmHlWUaBXN
+ Flm62+bDdFVK+fRZJyG9mQfsF16lNuKeEoSRx7WQtgKWkJyDZ0P/HhBDIwcTW3mBmC/5iE2vL
+ 5TD8n7D6geZ7843abQKkncQ/ad9xZCF7f/TzRUvFcMkdaTwd+NkExYmhLtxUJjpTMCzppRNTy
+ w0oE317XroEtEVdEOtQzRapi/3lYoPN+qHKQlziJNXaLbroULu/FYHr+WzcysACKo6uU3lCEQ
+ WnttX7TFeFHFUsX96aVLeb7D02qJa+oAzWgP6FNEnOZchrAGdq1HmZzHWy1CoILauuGaWXTtG
+ lR7qVRsmnh7W7drHXvn7C/oI9vf3zfaLuDbY3SWTv0X1hY86pQ4DQn2JGGw3Mkl++2UXLUhtF
+ UJyiu9PgrgBcEEBObCMVIH6LYr3FCH5Mi/Y5PZy77A==
+X-Spam-Status: No, score=-103.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 13/03/2023 09:31, Corinna Vinschen wrote:
-> Hi Jon,
+On Mar 13 14:18, Jon Turney wrote:
+> On 13/03/2023 09:31, Corinna Vinschen wrote:
+> > Hi Jon,
+> > 
+> > On Mar  8 14:17, Jon Turney wrote:
+> > > Update postinstall/preremove scripts to use CYGWIN_START_MENU_SUFFIX and
+> > > CYGWIN_SETUP_OPTIONS.
+> > 
+> > It would be great if you could explain your change in the commit
+> > message...
+> > 
 > 
-> On Mar  8 14:17, Jon Turney wrote:
->> Update postinstall/preremove scripts to use CYGWIN_START_MENU_SUFFIX and
->> CYGWIN_SETUP_OPTIONS.
+> Yeah, that's fair. How about:
 > 
-> It would be great if you could explain your change in the commit
-> message...
+> "Since setup 2.925, it indicates to postinstall and preremove scripts the
+> start menu suffix to use via the CYGWIN_START_MENU_SUFFIX env var.
 > 
-
-Yeah, that's fair. How about:
-
-"Since setup 2.925, it indicates to postinstall and preremove scripts 
-the start menu suffix to use via the CYGWIN_START_MENU_SUFFIX env var.
-
-It also indicates, via the CYGWIN_SETUP_OPTIONS env var, if the option 
-to disable startmenu shortcut creation is supplied.
-
-Update the Cygwin documentation postinstall and preremove scripts to 
-take these env vars into consideration."
-
->>   winsup/doc/etc.postinstall.cygwin-doc.sh | 19 +++++++++++++++----
->>   winsup/doc/etc.preremove.cygwin-doc.sh   |  8 ++++++--
->>   2 files changed, 21 insertions(+), 6 deletions(-)
->>
->> diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
->> index 97f88a16d..313c1d3ff 100755
->> --- a/winsup/doc/etc.postinstall.cygwin-doc.sh
->> +++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
->> @@ -36,9 +36,20 @@ do
->>   	fi
->>   done
->>   
->> +# setup was run with options not to create startmenu items
->> +case ${CYGWIN_SETUP_OPTIONS} in
->> +  *no-startmenu*)
->> +    exit 0
->> +    ;;
->> +esac
->> +
->>   # Cygwin Start Menu directory
->> -case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
->> -smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
->> +if [ ! -v CYGWIN_START_MENU_SUFFIX ]
+> It also indicates, via the CYGWIN_SETUP_OPTIONS env var, if the option to
+> disable startmenu shortcut creation is supplied.
 > 
-> Isn't -v a bash extension? Ideally the shebang should reflect that.
-> Otherwise, -z?
+> Update the Cygwin documentation postinstall and preremove scripts to take
+> these env vars into consideration."
 
-This is actually controlled by setup, which runs postinstall and 
-preremove scripts with an .sh extension using bash.
+Sure, sounds good
 
-But yeah, I'll change the shebang.
+> 
+> > >   winsup/doc/etc.postinstall.cygwin-doc.sh | 19 +++++++++++++++----
+> > >   winsup/doc/etc.preremove.cygwin-doc.sh   |  8 ++++++--
+> > >   2 files changed, 21 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
+> > > index 97f88a16d..313c1d3ff 100755
+> > > --- a/winsup/doc/etc.postinstall.cygwin-doc.sh
+> > > +++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
+> > > @@ -36,9 +36,20 @@ do
+> > >   	fi
+> > >   done
+> > > +# setup was run with options not to create startmenu items
+> > > +case ${CYGWIN_SETUP_OPTIONS} in
+> > > +  *no-startmenu*)
+> > > +    exit 0
+> > > +    ;;
+> > > +esac
+> > > +
+> > >   # Cygwin Start Menu directory
+> > > -case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
+> > > -smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
+> > > +if [ ! -v CYGWIN_START_MENU_SUFFIX ]
+> > 
+> > Isn't -v a bash extension? Ideally the shebang should reflect that.
+> > Otherwise, -z?
+> 
+> This is actually controlled by setup, which runs postinstall and preremove
+> scripts with an .sh extension using bash.
+> 
+> But yeah, I'll change the shebang.
 
+Great. Just push when you're ready.
+
+
+Thanks,
+Corinna
