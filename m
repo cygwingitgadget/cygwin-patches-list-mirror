@@ -1,64 +1,97 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-	by sourceware.org (Postfix) with ESMTPS id B7C5F3858D39
-	for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 09:32:07 +0000 (GMT)
-Authentication-Results: sourceware.org; dmarc=permerror header.from=cygwin.com
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MhDEq-1qEa7I2Dh4-00ePdG for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023
- 10:32:06 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 2FA74A80D02; Mon, 13 Mar 2023 10:32:06 +0100 (CET)
-Date: Mon, 13 Mar 2023 10:32:06 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Fix type mismatch on sys/cpuset.h -- relnote
- 3.4.6
-Message-ID: <ZA7tluJyrfjgeLP7@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230311233628.18424-1-mark@maxrnd.com>
+Return-Path: <SRS0=ciRW=7F=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from sa-prd-fep-041.btinternet.com (mailomta7-sa.btinternet.com [213.120.69.13])
+	by sourceware.org (Postfix) with ESMTPS id EE5E438582A4
+	for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 14:18:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE5E438582A4
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
+          by sa-prd-fep-041.btinternet.com with ESMTP
+          id <20230313141833.ZRMB4274.sa-prd-fep-041.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
+          for <cygwin-patches@cygwin.com>; Mon, 13 Mar 2023 14:18:33 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 6406812D00BEA1CD
+X-Originating-IP: [86.139.167.100]
+X-OWM-Source-IP: 86.139.167.100 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeetffeftdeftedtleduteehleelgfelfffhjedvueekveefvefgueehtdekkefgkeenucffohhmrghinheptgihghifihhnqdguohgtrdhshhenucfkphepkeeirddufeelrdduieejrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdeingdpihhnvghtpeekiedrudefledrudeijedruddttddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqddutddtrdhrrghnghgvkeeiqddufeelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtgho
+	mhdpghgvohfkrfepifeupdfovfetjfhoshhtpehsrgdqphhrugdqrhhgohhuthdqtddtge
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.106] (86.139.167.100) by sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
+        id 6406812D00BEA1CD for cygwin-patches@cygwin.com; Mon, 13 Mar 2023 14:18:33 +0000
+Message-ID: <0cef86b3-ea03-a627-2847-2130a93872b3@dronecode.org.uk>
+Date: Mon, 13 Mar 2023 14:18:33 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230311233628.18424-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:CyQBWGcnWexfoVBixryZoLBVYDxWM5+BWYd7+OFj23lL1yEEruG
- lJQ2YN4QD+NSGXVumO0BTimoKTmR+Xt75BKaM0Ob2NhwBS0jubXm/b1nbjzkUMzVn8LO2qM
- GwVs3X1p9bUQhxYVUvlJkyifXl0Db8696mVucnnPaB+bJHEdHQ8qLw85fjE9twxi+iAanYB
- c8iuAPp98d7T98nX/frag==
-UI-OutboundReport: notjunk:1;M01:P0:YSuk4n4EZgI=;WCxxohYCkH50Lgon+zH61DXHYlk
- Qh6PSEFYLeX2o6kMdnBsl5hQG4sEFmqV9NOoPYPZMPMjn+5OjgmvaIyD3jy1XcK+XxlBlMdBe
- 8dz/2vD2efYpke/qzXizyj/NjOlR74EiVvad3nJp+sbH6lVuPYDdhD9lWLxEzcC1E+grrA/4g
- +/T34aFXeYx5mP4+67T9WqA08vXo8IZoLdjrNWBdXdtuVFIIMhpWVCyEpJxHuhdO37i5UcG6D
- aggaxubca813i9u9aRQCZXqgg2UUhNCc8BV+B2avnupTEgA+L967PQRowq7TepqUP7pq3ewcJ
- wBaZ5k+uHRjBzNQzJfVp6a3DDx+rrOx+oLh/T3zl7pCG37VLA3KxY1GTy/A8U73R6PKsvSYoD
- 2Spvonwfp6rdoUD83Xayetn2rKRDk8YvUde+RlA6ZnFCRlUQhKmEFp+84C3PCr2tNbOGvf4KG
- +tyn6zGDJpOOUur9eelxpIoCP2+ssOqTstF+40cpCYHkCYJRheBSZqLunR8ScHoHhc0Z1MxZi
- PkIHSXmIf1W9XRRq5Au9nt/NGWl78uSRW6F9OMfXRqWLWJCkepeMSfFoTNeaGYeYYUnb0WrZH
- FZIo62Xes8kEWVDAyiQ2PpkSsQoG6YDs1GLjmxle209xpIP42rPEzvP0aGtOjcP2Wth3r7OuW
- kiD9CRu/bUTAr9AVrolHJbQE6hLHaExmSOnO3FKNKQ==
-X-Spam-Status: No, score=-103.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_STATUS,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] Cygwin: doc: Update postinstall/preremove scripts
+Content-Language: en-GB
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20230308141719.7361-1-jon.turney@dronecode.org.uk>
+ <ZA7tWpqAmlcKg+v7@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <ZA7tWpqAmlcKg+v7@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1197.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This should go into the 3.4.7 release message...
-
-On Mar 11 15:36, Mark Geisert wrote:
-> ---
->  winsup/cygwin/release/3.4.6 | 3 +++
->  1 file changed, 3 insertions(+)
+On 13/03/2023 09:31, Corinna Vinschen wrote:
+> Hi Jon,
 > 
-> diff --git a/winsup/cygwin/release/3.4.6 b/winsup/cygwin/release/3.4.6
-> index ccc168a95..ed124ed37 100644
-> --- a/winsup/cygwin/release/3.4.6
-> +++ b/winsup/cygwin/release/3.4.6
-> @@ -12,3 +12,6 @@ Addresses: https://cygwin.com/pipermail/cygwin/2023-February/253037.html
->  
->  Don't accidentally drop the default ACEs when chmod'ing directories.
->  Addresses: https://cygwin.com/pipermail/cygwin/2023-February/253037.html
-> +
-> +Fix CPU_SET(3) macro type mismatch by making the macros type-safe.
-> +Addresses https://cygwin.com/pipermail/cygwin/2023-March/253220.html
-> -- 
-> 2.39.0
+> On Mar  8 14:17, Jon Turney wrote:
+>> Update postinstall/preremove scripts to use CYGWIN_START_MENU_SUFFIX and
+>> CYGWIN_SETUP_OPTIONS.
+> 
+> It would be great if you could explain your change in the commit
+> message...
+> 
+
+Yeah, that's fair. How about:
+
+"Since setup 2.925, it indicates to postinstall and preremove scripts 
+the start menu suffix to use via the CYGWIN_START_MENU_SUFFIX env var.
+
+It also indicates, via the CYGWIN_SETUP_OPTIONS env var, if the option 
+to disable startmenu shortcut creation is supplied.
+
+Update the Cygwin documentation postinstall and preremove scripts to 
+take these env vars into consideration."
+
+>>   winsup/doc/etc.postinstall.cygwin-doc.sh | 19 +++++++++++++++----
+>>   winsup/doc/etc.preremove.cygwin-doc.sh   |  8 ++++++--
+>>   2 files changed, 21 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
+>> index 97f88a16d..313c1d3ff 100755
+>> --- a/winsup/doc/etc.postinstall.cygwin-doc.sh
+>> +++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
+>> @@ -36,9 +36,20 @@ do
+>>   	fi
+>>   done
+>>   
+>> +# setup was run with options not to create startmenu items
+>> +case ${CYGWIN_SETUP_OPTIONS} in
+>> +  *no-startmenu*)
+>> +    exit 0
+>> +    ;;
+>> +esac
+>> +
+>>   # Cygwin Start Menu directory
+>> -case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
+>> -smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
+>> +if [ ! -v CYGWIN_START_MENU_SUFFIX ]
+> 
+> Isn't -v a bash extension? Ideally the shebang should reflect that.
+> Otherwise, -z?
+
+This is actually controlled by setup, which runs postinstall and 
+preremove scripts with an .sh extension using bash.
+
+But yeah, I'll change the shebang.
+
