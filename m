@@ -1,58 +1,86 @@
-Return-Path: <SRS0=t9Gj=7J=ac.auone-net.jp=ysno@sourceware.org>
-Received: from dmta0007.auone-net.jp (snd00006.auone-net.jp [111.86.247.6])
-	by sourceware.org (Postfix) with ESMTPS id 34C273850841
-	for <cygwin-patches@cygwin.com>; Fri, 17 Mar 2023 14:44:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 34C273850841
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=ac.auone-net.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ac.auone-net.jp
-Received: from localhost.localdomain by dmta0007.auone-net.jp with ESMTP
-          id <20230317144439179.DWWY.36104.localhost.localdomain@dmta0007.auone-net.jp>;
-          Fri, 17 Mar 2023 23:44:39 +0900
-From: YO4 <ysno@ac.auone-net.jp>
-To: cygwin-patches@cygwin.com
-Cc: YO4 <ysno@ac.auone-net.jp>
-Subject: [PATCH 3/3] log disabling posix semantics
-Date: Fri, 17 Mar 2023 23:43:46 +0900
-Message-Id: <20230317144346.871-4-ysno@ac.auone-net.jp>
-X-Mailer: git-send-email 2.40.0.windows.1
-In-Reply-To: <20230317144346.871-1-ysno@ac.auone-net.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+	by sourceware.org (Postfix) with ESMTPS id 3855838582A4
+	for <cygwin-patches@cygwin.com>; Fri, 17 Mar 2023 19:15:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3855838582A4
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MKsWr-1pwHRO1XWH-00LArW; Fri, 17 Mar 2023 20:15:55 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id DF844A8073F; Fri, 17 Mar 2023 20:15:53 +0100 (CET)
+Date: Fri, 17 Mar 2023 20:15:53 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: YO4 <ysno@ac.auone-net.jp>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 0/3] fix unlink/rename failure in hyper-v container
+Message-ID: <ZBS8aRN0HDdm3yZM@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: YO4 <ysno@ac.auone-net.jp>, cygwin-patches@cygwin.com
 References: <20230317144346.871-1-ysno@ac.auone-net.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230317144346.871-1-ysno@ac.auone-net.jp>
+X-Provags-ID: V03:K1:TVXPlbmFwG63CRzkAkmQdEyJvMbnP7Jbbx541vyFTdOwQKMkRXL
+ 7CPoH7BNyTP/9c3gTXuUyYxja0/JgyVjkALOWNrS9ZNN5eUwcpVtGitgJ4MGsahWLcgcA2I
+ CADO5gTCnI0w5P4Q9DZGLgr4yIOjEXvSKBbyU7Zsegu4Ut8Y2XYM0B/wVNExb/pMqvtoqdw
+ NpLAfwLT4Rf2G2JriDVUw==
+UI-OutboundReport: notjunk:1;M01:P0:i7R05E/hTPk=;V+UTjjJEY/Ssleh9HsGmPqoSJNk
+ afFIXfPymWi3M0S8t2kKcAkNXSXX/J60PYSNmo6q7kG9PWkDXmYy+XXcKJkpKTSCN0tzh/Jo8
+ FxTah0glEmGbmtaETqrx+ARUGQ2kSNPYQsLzvVlK8n5guXH8Z9POSJrZDvM7rvcuK1r4hmhX1
+ VaAJ+v2XKymc16supcNCFmgPyVy7/O9zDkQTXgFPvZmaoxiBqrdMr/m8iGTt1uGVzD36qa2NE
+ QBbF4mJtN+78aMEcPZrbgyi4I+ugDuP/SHCwTjqtJvGjQalmL2h///9ZlRVSCz/PQ8mWsz2Pn
+ wGAXMLzKsEdduuYPcGelzMJPeg+N7MD7vwo9Es1831RbBMD8Rx/jbYpu35E7UkrHiqPDE/5pl
+ /mO6c4TXB8fzLS6DRqCu3xZu7KUMSSPprY6UxafBsxHGUcUPdFuQNPNK1HuH5MN7XDLyhfkAk
+ 8yR/zq+Df8pQigtRBR1pPktj3bR82YW+96T/WLc23BQmvXjH9BG7nDcGW8mK6hoobhDq/6byl
+ rQ7HUzifTZdBnIx3FjILtyx4cbMlNmvJSwKyFT5snHA+nXnSlpddLSsgCmYPQ09k4YoebnNov
+ YLbWtCUuO/OcRVOfVTS+nfj6ZI6d6Rni+P4nZOl0BDoaLtenmzT+IH+xS/ne37XJz07jnPnXc
+ wRXsqI99S9fCsiZyMuCiAnjIGtwGGcw6MMuJHaMTrg==
+X-Spam-Status: No, score=-97.5 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
----
- winsup/cygwin/syscalls.cc | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi,
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 69699c8aa..ca40681cd 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -736,6 +736,9 @@ _unlink_nt (path_conv &pc, bool shareable)
-       if (status != STATUS_CANNOT_DELETE
-           && status != STATUS_INVALID_PARAMETER)
- 	goto out;
-+      debug_printf ("NtSetInformationFile (%S, FileDispositionInformationEx)"
-+                    " returns %y with posix semantics. Disable it and retry.",
-+                    pc.get_nt_native_path (), status);
-     }
- 
-   /* If the R/O attribute is set, we have to open the file with
-@@ -2689,6 +2692,11 @@ skip_pre_W10_checks:
-              on a bind mounted file system in hyper-v container
-              with FILE_RENAME_POSIX_SEMANTICS.
-              Disable the use_posix semntics flag and retry. */
-+          debug_printf ("NtSetInformationFile "
-+                        "(%S, %S, FileRenameInformationEx) failed "
-+                        "with posix semantics. Disable it and retry.",
-+                        oldpc.get_nt_native_path (),
-+                        newpc.get_nt_native_path ());
-           use_posix_semantics = 0;
-           goto ignore_posix_semantics_retry;
-         }
--- 
-2.40.0.windows.1
+On Mar 17 23:43, YO4 wrote:
+> Hello, cygwin developers.
+> I am using msys2 and it is based on the cygwin codebase.
+> I was working inside a windows container and encountered rm.exe and mv.exe failures.
+> I would be honored if you could merge my patch into upstream.
 
+The patchset looks basically ok, and I'm not opposed to apply it.
+But I do wonder if we cant't come up with a better solution somehow.
+
+The problem is that you will suffer another performance hit on top
+of the fact that Cygwin is already slow anyway.  Every time you
+run rm or rename, you will have to call the OS function twice.
+So rm -r will become even slower.
+
+The question here is, do we have a way to recognize a Hyper-V mount?
+
+Have a look at fs_info::update() in mount.cc.  There's a lot of checking
+for various filesystems and their quirks.  If we have a way to
+distinguish a Hyper-V mount from a "normal" NTFS, we could add it as a
+filesystem type of its own, and the "use_posix_semantics" flag would
+simply never be set.
+
+If we can do that, it's the cleaner solution, IMHO.
+
+For that, can we start with you running 
+
+  $ cd <your Hyper-V dir>
+  $ /usr/lib/csih/getVolInfo .
+
+and paste the output here?  If there's any chance we can recognize
+a Hyper-V dir, we should take it.
+
+Oh, and, btw., would you mind to recreate your git patches with your
+real name, please?  I'm not hot on adding pseudonyms into the git
+repo.  We all use our real names.  Also, a matching `Signed-Off-By:'
+would be helpful.
+
+
+Thanks,
+Corinna
