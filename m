@@ -1,61 +1,69 @@
-Return-Path: <SRS0=WBac=7G=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from re-prd-fep-047.btinternet.com (mailomta20-re.btinternet.com [213.120.69.113])
-	by sourceware.org (Postfix) with ESMTPS id 4F8D93858D37
-	for <cygwin-patches@cygwin.com>; Tue, 14 Mar 2023 14:16:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4F8D93858D37
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
-          by re-prd-fep-047.btinternet.com with ESMTP
-          id <20230314141629.UIUU20465.re-prd-fep-047.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
-          Tue, 14 Mar 2023 14:16:29 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 63FE976D018ABF66
-X-Originating-IP: [86.139.167.100]
-X-OWM-Source-IP: 86.139.167.100 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhephfeugfehhedtgfefvedtveelkefgjeelgeffgfeijeeluefgffetgfdvudduiedunecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepkeeirddufeelrdduieejrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedruddttddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudefledqudeijedquddttddrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhr
-	nhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhstheprhgvqdhprhguqdhrghhouhhtqddttddv
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.167.100) by re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 63FE976D018ABF66; Tue, 14 Mar 2023 14:16:29 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <SRS0=t9Gj=7J=ac.auone-net.jp=ysno@sourceware.org>
+Received: from dmta0007.auone-net.jp (snd00007.auone-net.jp [111.86.247.7])
+	by sourceware.org (Postfix) with ESMTPS id 5A5D538582B0
+	for <cygwin-patches@cygwin.com>; Fri, 17 Mar 2023 14:44:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5A5D538582B0
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=ac.auone-net.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ac.auone-net.jp
+Received: from localhost.localdomain by dmta0007.auone-net.jp with ESMTP
+          id <20230317144412085.DWWS.36104.localhost.localdomain@dmta0007.auone-net.jp>;
+          Fri, 17 Mar 2023 23:44:12 +0900
+From: YO4 <ysno@ac.auone-net.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: doc: Upate a link from gitweb to cgit
-Date: Tue, 14 Mar 2023 14:16:16 +0000
-Message-Id: <20230314141616.9110-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.39.0
+Cc: YO4 <ysno@ac.auone-net.jp>
+Subject: [PATCH 0/3] fix unlink/rename failure in hyper-v container
+Date: Fri, 17 Mar 2023 23:43:43 +0900
+Message-Id: <20230317144346.871-1-ysno@ac.auone-net.jp>
+X-Mailer: git-send-email 2.40.0.windows.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1197.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Also, reword 'considerable patch' to be more idomatic.
----
- winsup/doc/faq-api.xml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello, cygwin developers.
+I am using msys2 and it is based on the cygwin codebase.
+I was working inside a windows container and encountered rm.exe and mv.exe failures.
+I would be honored if you could merge my patch into upstream.
 
-diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
-index 6b5824cf2..c9b35f6b0 100644
---- a/winsup/doc/faq-api.xml
-+++ b/winsup/doc/faq-api.xml
-@@ -41,8 +41,8 @@ deprecated by regular, automated test releases.  See the next FAQ entry
- <answer>
- 
- <para>Yes.  Starting December 2022, regular, automated test releases
--are created whenever a considerable patch is pushed to the Cygwin git
--repo at <ulink url="https://cygwin.com/git/newlib-cygwin.git"/>.
-+are created whenever a significant patch is pushed to the Cygwin git
-+repo at <ulink url="https://cygwin.com/cgit/newlib-cygwin/"/>.
- You can download the cygwin package test releases just like any other
- test release for any Cgywin package using the Cygwin Setup program.
- For more info, see
+How to reproduce:
+Use a version of windows that supports POSIX unlink/rename semantics as a container.
+In a windows container using hyper-v isolation, rm.exe and mv.exe fail on bind mounted (also volume mounted) directories.
+
+What this patch does
+This patch will disable POSIX semantics and retry on the above failures.
+
+The strace on failure is as follows
+  806  192814 [main] rm 1473 _unlink_nt: Trying to delete \??\C:\binded_dir\file_to_unlink, isdir = 0
+ 1236  194050 [main] rm 1473 _unlink_nt: \??\C:\binded_dir\file_to_unlink, return status = 0xC000000D
+  574  194624 [main] rm 1473 seterrno_from_nt_status: /c/S/msys2-runtime/src/msys2-runtime/winsup/cygwin/syscalls.cc:1120 status 0xC000000D -> windows error 87
+  490  195114 [main] rm 1473 geterrno_from_win_error: windows error 87 == errno 22
+  494  195608 [main] rm 1473 unlink: -1 = unlink(C:/binded_dir/file_to_unlink), errno 22
+
+The strace with the patch is as follows
+  737  234961 [main] rm 1822 _unlink_nt: Trying to delete \??\C:\binded_dir\file_to_unlink, isdir = 0
+ 1277  236238 [main] rm 1822 _unlink_nt: NtSetInformationFile (\??\C:\binded_dir\file_to_unlink, FileDispositionInformationEx) returns 0xC000000D with posix semantics. Disable it and retry.
+ 1411  237649 [main] rm 1822 _unlink_nt: \??\C:\binded_dir\file_to_unlink, return status = 0x0
+  558  238207 [main] rm 1822 unlink: 0 = unlink(C:/binded_dir/file_to_unlink)
+
+I ran the test in Appveyor so you can view the entire log at
+https://ci.appveyor.com/project/YO4/test-msys2-in-container/builds/46532757/job/qinojh64uo6el78s
+strace logs are available for download as artifacts.
+
+This issue was first discussed here
+https://github.com/msys2/msys2-runtime/issues/59
+This patch is first available at 
+https://github.com/msys2/msys2-runtime/pull/141
+
+
+YO4 (3):
+  fix unlink in container
+  fix rename in container
+  log disabling posix semantics
+
+ winsup/cygwin/syscalls.cc | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
 -- 
-2.39.0
+2.40.0.windows.1
 
