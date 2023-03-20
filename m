@@ -1,21 +1,21 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	by sourceware.org (Postfix) with ESMTPS id BF6D53858413
-	for <cygwin-patches@cygwin.com>; Mon, 20 Mar 2023 14:54:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BF6D53858413
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	by sourceware.org (Postfix) with ESMTPS id 87B0A3858D32
+	for <cygwin-patches@cygwin.com>; Mon, 20 Mar 2023 20:37:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 87B0A3858D32
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MkYkC-1qLpeC3MlC-00m5TZ; Mon, 20 Mar 2023 15:54:38 +0100
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Ma1D8-1q1RX10c7g-00VvO8; Mon, 20 Mar 2023 21:37:11 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 163DFA80BBE; Mon, 20 Mar 2023 15:54:38 +0100 (CET)
-Date: Mon, 20 Mar 2023 15:54:38 +0100
+	id 7770CA80BBE; Mon, 20 Mar 2023 21:37:09 +0100 (CET)
+Date: Mon, 20 Mar 2023 21:37:09 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: Yoshinao Muramatsu <ysno@ac.auone-net.jp>
 Cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 0/3] fix unlink/rename failure in hyper-v container
-Message-ID: <ZBhzrsckUqyn7dDZ@calimero.vinschen.de>
+Message-ID: <ZBjD9exM9ZBGDzK3@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Yoshinao Muramatsu <ysno@ac.auone-net.jp>,
 	cygwin-patches@cygwin.com
@@ -29,21 +29,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <ZBhy7E4vKHTRNW6k@calimero.vinschen.de>
-X-Provags-ID: V03:K1:GOWJ7hQhgA1Mh+lH8Uax1Ln4iBbBPswJNxSbMoPi9OeWXyJv/2D
- Y4X23PepXnokgGkZqJyl+MLaco7b2kWVBuh5AtFnkh8YnrBW5OTp/6Y0JJX7q1CMMBz37Wx
- UKADGj/sDyzU0jfdfEaTK2wfnPJ/PEoF1a1kLaHrmnZVur4FkjFYhhnDNqa2jWz7oApwegf
- ZuPMBK6swWsuIVSNb9oxQ==
-UI-OutboundReport: notjunk:1;M01:P0:MeiLaOPAt8k=;RxF8FQ2DxhmzRcqc/uJnCQrtbdh
- /5HxOIgEVjFXmWQKXfbpzd03SYGw/AMavXohQlz0buCGviCnWBqY4CRhWXgMdfwpKqPAd5yNP
- jQ6k+GAlZJrmciToAJLXLu3YhG18LjVOzD9tfY+LKVhrIQGVbvSJD6SuLDYCBt8STv8ATEN8U
- S0BiEptZc/iHi0zEpQpSw6fbo0jBs8k3B3v37sdE8FA8dfybEic9Ieq5QP9AF6SKj6PNJ18ev
- 6/5hzKNuzvimPXstF4pBcC/TpNolnqgdjMjzpKH5eWr65GWTn+a5zDZdaZOVc6fY8F7cG93J6
- HGOglGPklDZQGK3BJWr7JEgVW7uZ4a2dOlyqRrXGI7UgQcgpwlEtIZBeaq12Rq1D+4B5wl3ul
- MCHeb224na7Abuz5egm+sPrQ7rzabeZ7qRDMCn3RrS8QMlu/l6AQcEp1qtq6M3RTHpht4hNIZ
- Drxm/Jj81iN4S2+7Xr81UDyCmU7XBqO3556TBADxxDS8VBuBNDpHAaOGNIuopaXhLT1cBt/hF
- n08BL5Y1MfKQ4VGgiG4t4P6oVEmTeB7kNHE32ZMZ71grRUBtxE8AvKJv5/UysGzTRy/vVXVG1
- Lh0rVoq2H/7Yl8sBhhlJxTCuqMi2lAglHWqd5RfBWucLmfw4yGw4WqtAnWtK8j6yLzavIuo3g
- H0BtdNYv+v+904b0gcBW4Qncohdr8RbitdVOiYU56w==
+X-Provags-ID: V03:K1:gDLvjhY4DCXtchC05TuILxQWZHn7UmybTLk1Wz/pPa3JXugGUG1
+ DQp8uxAWmebyPAhmT1e2L3I+7IyO9coxajKgIQwaAB3x6exhAit4xYiCHM92/p8kBvw7hgA
+ fl00fbeE8Sr7tTljufLSn4yJpjhc/k2ftlsDcNEwjRUQicBucyQDLJ2kNEBLF3p895sDNSl
+ TRvKxh08gXkCEfBoHKMzA==
+UI-OutboundReport: notjunk:1;M01:P0:mDF3ifuxqqI=;7nUQRswrL/sUoewUH6c+qlelw0o
+ wnt5wgvrrdtZOUtbkr8n3eFtkwZMmgmXpiNQvUsj9KkThI7odc7GUnIGCIYz+cKH4Ao84bQ6w
+ TXvhz+j2L37HaiYGy7mLQIcGYxsI69bj/RvHjdTEwPtJt1Gc7nAsTQxKAKjoh1cowGGWQaEPC
+ wypsPZ6z68RX0MCZRW9NYUAUUN4ZpbOcuftArGOIUzlJlR7Zp0kwELrPA4fJrcaYGk/6LzP5S
+ SxvEq+jWg/4u8Xxyl+usmAVHHDmcDRzf/I3syU2RtAhjAlKreRiSSz+O1qovzVWYQG70T7XgH
+ zJCL1vQYffj75bjHpaNO7BWaUAL0PIqn47rWY8YwhOHkIAEc3WU3nRbSlG0LaRpbJDYiKh3xS
+ U3dfTfpGHHE3y/6l+hKt6fiNC7FR4MkPoSTZGFq7OXjTvdsUMS4144QJEP3A5d4qHNyqHW/CM
+ gcVpQsiOqPDrlGuSg3M49pBJ8yH897CPNftb4+Ig1FX5IrU8AVXM9al02MR8/gGKMPbO7VQLE
+ +X/3u6tcx+BgC3zc3xCmSZh0Z7mMFJYfYLQfJqdWxeiHJDP/qiCqPsGDDCavl3gaHIqYA3M+V
+ V7/YKDWnd/xz8eS9LHYQLnig+2DQucXR2cQkz9gwTe+8mjXjRY0p13dW8OK9FsKZewV8WkcTs
+ Z4cLBsQaTRT7ZKSiOl3jiLNH2w/u7THuN8YsCTa3bg==
 X-Spam-Status: No, score=-97.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
@@ -73,9 +73,30 @@ On Mar 20 15:51, Corinna Vinschen wrote:
 > this flag is missing *is* a pattern we can use.  It allows us to
 > distinguish the hyper-v isolated NTFS from a standard NTFS and thus,
 > we can immediately do the right thing.
+> 
+> > ps
+> > Corinna, I read the new email about fs_info::update patch
+> > you posted while I was writing this.
+> > I will report back when I test it, but it may take some time
+> > as I usually use msys2 and don't have a cygwin development environment.
+> 
+> No worries!
 
-...and if Microsoft actually changes that at one point, your fallback
-code will still work :)
+Wait.  I might have misunderstood something.  This is about accessing a
+host NTFS from inside a Hyper-V isolated process, right?  So from the
+point of view of the Hyper-V isolated Cygwin process, the NTFS
+filesystem is a *local* filesystem?  Or is it mapped as a remote
+filesystem?
+
+The difference is important, because my patch would only change the
+outcome if the Cygwin process in the Hyper-V container gets the
+NTFS filesystem presented as a remote filesystem.
+
+I noticed this problem when I was looking into implementing the
+FILE_SUPPORTS_OPEN_BY_FILE_ID flag checking.  I have a different
+solution from the one I pushed today in the loop which probably
+makesmuch more sense and is independent of the subtil difference
+between loca and remote FS.
 
 
 Corinna
