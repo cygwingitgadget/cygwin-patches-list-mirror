@@ -1,57 +1,67 @@
 Return-Path: <SRS0=aWaS=7M=ac.auone-net.jp=ysno@sourceware.org>
-Received: from dmta0005.auone-net.jp (snd00001.auone-net.jp [111.86.247.1])
-	by sourceware.org (Postfix) with ESMTPS id 4E20E3851143
-	for <cygwin-patches@cygwin.com>; Mon, 20 Mar 2023 11:51:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4E20E3851143
+Received: from dmta0005.auone-net.jp (snd00007.auone-net.jp [111.86.247.7])
+	by sourceware.org (Postfix) with ESMTPS id 333EE3854830
+	for <cygwin-patches@cygwin.com>; Mon, 20 Mar 2023 11:51:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 333EE3854830
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=ac.auone-net.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ac.auone-net.jp
 Received: from DELL-39.sekkei.local by dmta0005.auone-net.jp with ESMTP
-          id <20230320115135274.GZXM.37033.DELL-39.sekkei.local@dmta0005.auone-net.jp>;
-          Mon, 20 Mar 2023 20:51:35 +0900
+          id <20230320115140279.GZXO.37033.DELL-39.sekkei.local@dmta0005.auone-net.jp>;
+          Mon, 20 Mar 2023 20:51:40 +0900
 From: Yoshinao Muramatsu <ysno@ac.auone-net.jp>
 To: cygwin-patches@cygwin.com
 Cc: Yoshinao Muramatsu <ysno@ac.auone-net.jp>
-Subject: [PATCH 1/3] fix unlink in container
-Date: Mon, 20 Mar 2023 20:51:00 +0900
-Message-Id: <20230320115102.1692-2-ysno@ac.auone-net.jp>
+Subject: [PATCH 2/3] fix rename in container
+Date: Mon, 20 Mar 2023 20:51:01 +0900
+Message-Id: <20230320115102.1692-3-ysno@ac.auone-net.jp>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20230320115102.1692-1-ysno@ac.auone-net.jp>
 References: <ZBS8aRN0HDdm3yZM@calimero.vinschen.de>
  <20230320115102.1692-1-ysno@ac.auone-net.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Deleting files returns STATUS_INVALID_PARAMETE on a bind mountedfile system
-in hyper-v container with FILE_DISPOSITION_POSIX_SEMANTICS.
-Therefore fall back to default method.
+Renaming files returns STATUS_INVALID_PARAMETE on a bind mounted file system
+in hyper-v container with FILE_RENAME_POSIX_SEMANTICS.
 
-This code is suggeted by Johannes Schindelin on github
-and I change it more simple.
+Disable the use_posix_semantics flag and retry.
 
 Signed-off-by: Yoshinao Muramatsu <ysno@ac.auone-net.jp>
 ---
- winsup/cygwin/syscalls.cc | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ winsup/cygwin/syscalls.cc | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 8ae0397fb..7430fad65 100644
+index 7430fad65..57bfab9d3 100644
 --- a/winsup/cygwin/syscalls.cc
 +++ b/winsup/cygwin/syscalls.cc
-@@ -731,7 +731,10 @@ _unlink_nt (path_conv &pc, bool shareable)
-       /* Trying to delete in-use executables and DLLs using
-          FILE_DISPOSITION_POSIX_SEMANTICS returns STATUS_CANNOT_DELETE.
- 	 Fall back to the default method. */
--      if (status != STATUS_CANNOT_DELETE)
-+      /* Additionaly that returns STATUS_INVALID_PARAMETER
-+         on a bind mounted fs in hyper-v container. Falling back too. */
-+      if (status != STATUS_CANNOT_DELETE
-+          && status != STATUS_INVALID_PARAMETER)
- 	goto out;
-     }
+@@ -2427,6 +2427,7 @@ rename2 (const char *oldpath, const char *newpath, unsigned int at2flags)
+ 			    && !oldpc.isremote ()
+ 			    && oldpc.fs_is_ntfs ();
  
++ignore_posix_semantics_retry:
+       /* Opening the file must be part of the transaction.  It's not sufficient
+ 	 to call only NtSetInformationFile under the transaction.  Therefore we
+ 	 have to start the transaction here, if necessary.  Don't start
+@@ -2671,6 +2672,15 @@ skip_pre_W10_checks:
+ 	    unlink_nt (*removepc);
+ 	  res = 0;
+ 	}
++      else if (use_posix_semantics && status == STATUS_INVALID_PARAMETER)
++        {
++          /* NtSetInformationFile returns STATUS_INVALID_PARAMETER
++             on a bind mounted file system in hyper-v container
++             with FILE_RENAME_POSIX_SEMANTICS.
++             Disable the use_posix semntics flag and retry. */
++          use_posix_semantics = 0;
++          goto ignore_posix_semantics_retry;
++        }
+       else
+ 	__seterrno_from_nt_status (status);
+     }
 -- 
 2.37.3.windows.1
 
