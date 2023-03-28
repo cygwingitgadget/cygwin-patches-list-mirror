@@ -1,127 +1,95 @@
-Return-Path: <SRS0=deyK=7U=gmx.de=johannes.schindelin@sourceware.org>
+Return-Path: <SRS0=deyK=7U=gmx.de=Johannes.Schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by sourceware.org (Postfix) with ESMTPS id 72ACC3857B93
-	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 08:17:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 72ACC3857B93
+	by sourceware.org (Postfix) with ESMTPS id EC5823858D39
+	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 08:21:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC5823858D39
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1679991446; i=johannes.schindelin@gmx.de;
-	bh=5LQUrqmI7XGa7+3RC4f+CsYFf+R2VQ5ModZbV3onOWU=;
+	t=1679991711; i=johannes.schindelin@gmx.de;
+	bh=fE1RAMV5QjEkufB4ZQeNMlj81wG4VVWK/jT7FR/shlE=;
 	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=mWBxNQgrXEelTqjywjzYYiBva1zYCrWH/U30+wOL2LArawFGRZVf7pVqX0oQBw1RL
-	 ND7BaNwN7qUczZDL/29Spn15drdpSOuJohLBPd637KGV2Md9AtGX6N7KV8fyta4KE1
-	 EkthlZi31hMWo+d95tBjxA5y2E2dm3OW6SLMRA0YKnueOXjgLGnf+KcOr8AMmld3t4
-	 POPqH3KcgyNFDykWYbZER+enw7yaEZ/7gqCVW/FnsGzm4Stp0hqnQWgiOcr3IGfwCZ
-	 buovwRkajjxF9kbFLJT9TaIiejS+HOki38rVs6HHcWSXDmCHIcM2J1d3pJBCH4DO/Q
-	 1/DPSc5Ub00nA==
+	b=DU98U8qOm+hZ3OMUoE6Frpgs2SYqR0PhTusKdcQD3aHjCwcG1W+V/bJfP62T5kcGV
+	 CWZYXA/UxF75xSZHDzzbxXx2b0Wi049X+sEr0Ae5aF5/UdO3kn0I/BTiGInd8KJDW+
+	 /nBC/f2KYdv0B53eM46bxMR7Lj0zUnwiY0tA3nueHL2CXrgetOWkR6nq9ljofov1Mf
+	 QPKpi71MCGbLsdzYOEu/+kOb2KtrMlgerNaUSjSTFz8t5kGIiWWRGERxsRbbdJlskr
+	 Ly1eNDZLMVb7zp3pa90zpOM7txfrUGIfkbfyooKgcPRzEZHOzMQN7MLjWyXWdvQoAk
+	 FNfD4vUUK6kOQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([213.196.212.93]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPokN-1q2sej17gJ-00MqD3 for
- <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:17:26 +0200
-Date: Tue, 28 Mar 2023 10:17:25 +0200 (CEST)
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+Received: from [172.23.242.68] ([213.196.212.93]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRmjq-1prZ012uZW-00THgl for
+ <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:21:51 +0200
+Date: Tue, 28 Mar 2023 10:21:50 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v4 3/3] Respect `db_home: env` even when no uid can be
- determined
-In-Reply-To: <cover.1679991274.git.johannes.schindelin@gmx.de>
-Message-ID: <4cd6ae73074f327064b54a08392906dbc140714a.1679991274.git.johannes.schindelin@gmx.de>
-References: <cover.1663761086.git.johannes.schindelin@gmx.de> <cover.1679991274.git.johannes.schindelin@gmx.de>
+Subject: Re: [PATCH v2 1/2] Allow deriving the current user's home directory
+ via the HOME variable
+In-Reply-To: <Y3tj8Os0p2a43rhx@calimero.vinschen.de>
+Message-ID: <b927da65-c500-a331-eea9-eae18199511a@gmx.de>
+References: <cover.1450375424.git.johannes.schindelin@gmx.de> <047fe1d78c365afca7edfdf169fff5e1940c3837.1450375424.git.johannes.schindelin@gmx.de> <20151217202023.GA3507@calimero.vinschen.de> <1r1pq0r7-o3s3-so08-o426-296542797q94@tzk.qr>
+ <Y07cOhhwu4ExRDzb@calimero.vinschen.de> <0q096627-r8pr-rno5-0863-s6n90psosq07@tzk.qr> <Y1Z48Mdk79/Qtwc9@calimero.vinschen.de> <66o0nq89-4599-np26-625n-2n8oon6p558q@tzk.qr> <Y20XK4VybCriMmn/@calimero.vinschen.de> <qn135110-43r6-o86o-887o-1rn29574s263@tzk.qr>
+ <Y3tj8Os0p2a43rhx@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:ph2AuDoaNJFukpQ70UgLfkaJmSzgrWlaxW7w/+tcciHFKRdLrbw
- X1XIgzgmgVXFL/WGRPgLBCf4W5EjNBMguk+S1R+ylfCJMJv6llZEs4pBCZiRsaURxz2C35E
- NcpnkFaiE0XgLZ03+4PgjSDHxKJF+JBEk228x/WjD2bkXU6P8jASXb9wzBnrhOnTHgfrPz3
- gACuF5a22LV4ejUctHLiA==
-UI-OutboundReport: notjunk:1;M01:P0:du2RGYpxOT4=;p4Ve2vEBFcHCMzMTEw0Ao0cNNG9
- lDp8eD/ckRP3QPWe/3WNrGnj1gsPmFBtQS+kuefLcqTGNVpTvbTq3d6wM+uNr9fe0UAdezwKk
- u6dBq9tnQZ/GnkWJztljgGpm9TzF9R+RraOTYP329qOBG00Qd5e3Sgs7HrFWaK1jtsr9pgRZz
- t8aI770nQRTSOc/4sGYEK90ywlzJfXs0+4g1VSIi1Qf/7lLYB0chdC/6o6Caht0WD1E0Lht3z
- ha3j2Yx2wkghFr/V2qDfF3IW4xvWfqDvk8tV9Mk4qXUOzkqRk9TSzm1gYnG0RuQpt9k+YWXBB
- cM/0C0GTzNsEwQUQy6hb3phLhasasHzQQQf5YJw7vvviJa2eH0Yp0/ztBpk24wR8FDBS+VffF
- LsoqiFH1Y+arkkmEoftiypFaay/58yvbBDMLiiPOPFVBF7jVFQqu+j4PYx64ue0DD8og7VuSq
- OmePFB9hto3cYw/lUJdNUrj92yAFz+e0g0ktVgIwiGKmTXtWNoIojOC5gyz3TVAcpqRx6oaWj
- 7fvsZEh8btiISThn8cqQ73unprJ9rpyuyKvx5PRpytfY+hn/+Cad4shSIguhWkwnO5lKI5yeQ
- o7ZFoyK1qRgr6hq6CjjQx5Hp4q9Dih0h2DUTtTDNeICQs/tYWCMBJotM5KEfQSIT96/tMgDqN
- PBdeR711S8yw8yX/WdQtlB2fQnXMAkcnoFr2dBoNGkarWmFvka9qjEKt4g+On7ufeM3vBPg86
- jWnBIqUj4t9cHew1VW4j529D75A68vuq5H6qCE3lzBzdyNBV9x0GwgcjMTSIwfJ1uQ5wLtIe6
- l7Frw+6BkOL8uTFMPC1i2E5yfNLf8SqvmwhXFG3EpnyLnjaNyvGCEHi7/MQ7MOaW6GkhWsRb7
- uV/ykFHcA8p+VxGKizIiXl/N38YQcQf2dUqeXAzbVsX4N1Eto24mN7UytL6wc17UOrFoMT20I
- U1CmMPvmfO9qgJGH35WhA/b9Nxo=
+X-Provags-ID: V03:K1:ii9ODGQOlw00qMGB/kF9f4KViNVvDCs281XwaL7wwx/J8QOLDI/
+ oWH2Zbzx2w1ff6HJYGsfHHWuQGIXepJYz91aQmA/wfMhxaULPuiG1Q+9/WA6KFYtWGI8Jcg
+ IB+oW1aNZHQWlNwUnX73P315mpyEfSr5gUGbYA5KhZoFhZ766kMqRT2c5cJXt+ESVziIyty
+ mFZ1kQUupbJA8cErA0/gQ==
+UI-OutboundReport: notjunk:1;M01:P0:lBZ2KGl47fU=;h6I+GWNwjus7tvLbdvVj/aPex3A
+ lLkDSmEgm+2btrzc5kNQMM7A2DDoc6ZL8FEaoVO1QiM8pc58FepSuSw5/6skYTfLUjHzW8uMo
+ 4fXwKOeTKtqSGdSmgLN5rGHGGTXtOXbTk6nbTavqi7iW24A0uAPUC7pn010zHkVVO7LQAslGE
+ PUjZvTRKi9UXLBnXJ48E+9vFWF00oTuYBO0mnx29pvimR3P5EzHw4LbUq8PTSuamqjHypj2ed
+ GE3QHv1MMGR9ScrNwOfqq1sSe0YxCpbM4X3p6HEkIIjOWcbupee6/8Tnk8+9tmAqd2iIXw5Fb
+ lwetDPJiuo8y1XjgBBlFL4in5RJZ0pL2bQ/c7rMKdku7oxg29kdGc9QH2sz+Fvc/LOVUmZv5e
+ ii30C+950deUsQFh7wr9h5ySrGxNiCY/mWIYW1oDeZvEwkb5X50BABkgK6m9Dll1feqbTKH3v
+ mJI80DyV9nAPQgMwFcvqpSt2Te/Cw9qLyS6Nxz28UWbleThnhH0fduhYeGFwPK1oVkzcmQrv6
+ 6vS2868LCpJqtTP2z4K0vtVOWfkJSJ4YqDG0iWE2gM7kpqt4/zRjNzRJXe7IhyDQp6zNi6lQo
+ DvuxjJ4nEdjRYSaGXEI6y332Fk6Wpjb3UnO7rUZenbu3sahRbkjlfd9gE1TFnn51GjLPKN6OX
+ eYFG8JW6V5hR4q+EqMXiskFxzSb5+VO/w9+3eijgvP5z/p08bq07C85/g1UBmebChdMyIWtfz
+ AUAjHjCYsvokdpFA4U+AoaInZk6FBmdOwKJYZCMV57+ueiAZxBpg+Qn4Uy2eFTorN8Xdgmpie
+ GLCvp4HUPITPI6O72UbHsQwSDOOsRf43nbU7k+kLyldo/jlRPwDDDA9DZizKXYYHMR1p9fXM6
+ eMkBrGJ3NWmLrQW0rUkboKLL0IGpc3ATp1vTt7blw7hVfv1XQAwFnAGE7wMhXcLsC9WA2kL3p
+ 9NGfGfrY0CJxdu/f5JvhPDQqBRA=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-In particular when we cannot figure out a uid for the current user, we
-should still respect the `db_home: env` setting. Such a situation occurs
-for example when the domain returned by `LookupAccountSid()` is not our
-machine name and at the same time our machine is no domain member: In
-that case, we have nobody to ask for the POSIX offset necessary to come
-up with the uid.
+Hi Corinna,
 
-It is important that even in such cases, the `HOME` environment variable
-can be used to override the home directory, e.g. when Git for Windows is
-used by an account that was generated on the fly, e.g. for transient use
-in a cloud scenario.
+On Mon, 21 Nov 2022, Corinna Vinschen wrote:
 
-Reported by David Ebbo.
+> On Nov 18 09:18, Johannes Schindelin wrote:
+> > Hi Corinna,
+> >
+> > On Thu, 10 Nov 2022, Corinna Vinschen wrote:
+> > > On Nov 10 16:16, Johannes Schindelin wrote:
+> > > > With this context in mind, I would like to ask to integrate the pa=
+tch
+> > > > as-is, including the HOMEDRIVE/HOMEPATH and USERPROFILE fall-backs=
+.
+> > >
+> > > Can't do that, sorry.  Two replies before I sent a necessary change,
+> > > which needs inclusion first.
+> >
+> > I am a bit confused. Do you need anything from me to move this along, =
+i.e.
+> > are those two replies you mention some emails I failed to address yet?
+>
+> I didn't mean two different replies, but my second-last reply before
+> that one, i. e.
+> https://cygwin.com/pipermail/cygwin-patches/2022q4/012025.html
+>
+> Sorry if that wasn't clear.  Basically your handling of $HOME was
+> wrong and I suggested a fix.
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-=2D--
- winsup/cygwin/uinfo.cc | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Sorry about being so thick! I thought I had done exactly what you asked
+for, but had missed that `getenv("HOME")` already converts the path to a
+Unix-y form but the same is untrue when getting `HOMEDRIVE`, `HOMEPATH`
+and `USERPROFILE`.
 
-diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index d493d29b3b..b01bcff5cb 100644
-=2D-- a/winsup/cygwin/uinfo.cc
-+++ b/winsup/cygwin/uinfo.cc
-@@ -883,6 +883,8 @@ fetch_from_path (cyg_ldap *pldap, PUSER_INFO_3 ui, cyg=
-psid &sid, PCWSTR str,
- 	    case L'u':
- 	      if (full_qualified)
- 		{
-+		  if (!dom)
-+		    break;
- 		  w =3D wcpncpy (w, dom, we - w);
- 		  if (w < we)
- 		    *w++ =3D NSS_SEPARATOR_CHAR;
-@@ -893,6 +895,8 @@ fetch_from_path (cyg_ldap *pldap, PUSER_INFO_3 ui, cyg=
-psid &sid, PCWSTR str,
- 	      w =3D wcpncpy (w, name, we - w);
- 	      break;
- 	    case L'D':
-+	      if (!dom)
-+		break;
- 	      w =3D wcpncpy (w, dom, we - w);
- 	      break;
- 	    case L'H':
-@@ -2181,6 +2185,10 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
- 	{
- 	  /* Just some fake. */
- 	  sid =3D csid.create (99, 1, 0);
-+	  if (arg.id =3D=3D cygheap->user.real_uid)
-+	    home =3D cygheap->pg.get_home ((PUSER_INFO_3) NULL,
-+					 cygheap->user.sid(),
-+					 NULL, NULL, false);
- 	  break;
- 	}
-       else if (arg.id >=3D UNIX_POSIX_OFFSET)
-@@ -2710,10 +2718,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg=
-_t &arg, cyg_ldap *pldap)
-      logon.  Unless it's the SYSTEM account.  This conveniently allows to
-      logon interactively as SYSTEM for debugging purposes. */
-   else if (acc_type !=3D SidTypeUser && sid !=3D well_known_system_sid)
--    __small_sprintf (linebuf, "%W:*:%u:%u:U-%W\\%W,%s:/:/sbin/nologin",
-+    __small_sprintf (linebuf, "%W:*:%u:%u:U-%W\\%W,%s:%s:/sbin/nologin",
- 		     posix_name, uid, gid,
- 		     dom, name,
--		     sid.string ((char *) sidstr));
-+		     sid.string ((char *) sidstr),
-+		     home ? home : "/");
-   else
-     __small_sprintf (linebuf, "%W:*:%u:%u:%s%sU-%W\\%W,%s:%s%W:%s",
- 		     posix_name, uid, gid,
-=2D-
-2.40.0.windows.1
+I took the opportunity to unclutter the `fetch_home_env()` function and
+document it, to improve the readability by strides.
+
+Ciao,
+Johannes
