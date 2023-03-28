@@ -1,114 +1,82 @@
-Return-Path: <SRS0=deyK=7U=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by sourceware.org (Postfix) with ESMTPS id 902203858C00
-	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 08:36:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 902203858C00
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1679992589; i=johannes.schindelin@gmx.de;
-	bh=CYWXhwTe9lOSoSnC+t1laSdCzLRulDbC/UV/+aFvRf8=;
-	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=QBUK9OjIYlifhDt5Io5DFDcZWyLE/iWgW/3oRqiN9CZZMJZb3qR/uSsTnYWDgrQ14
-	 CWGsOfo7FNIu2tohIAL3Rrtd71SEKRErxLLPWTWKIkOBu9xuFOEWqijHuIIDwYCoM9
-	 TNJr25IBokJLE1wY9HoG98XT2c/pf2uVYLPKyURZZ+U/zP42m3gM2wgvlRBvnu4niM
-	 6XOg0AH6/yJ1aI0tSVsst6c4hOSL2vaSvXFJCEwcUzQcoQCH9IJF3ac2LX7oyF3i9C
-	 6UGIpcaH78T/3am2PpDGxXd+smMDmeOsUd9CDz6iztJiLdh8ePTSZJWWxJ2Jw4Qas1
-	 iuPnPauyL02vg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([213.196.212.93]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIwzA-1q0Ous3kB0-00KPgy for
- <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:36:28 +0200
-Date: Tue, 28 Mar 2023 10:36:27 +0200 (CEST)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin,stdout,stderr}
- symlinks
-In-Reply-To: <2526762f-71f0-2341-03cc-27f18c0c30f3@SystematicSw.ab.ca>
-Message-ID: <c0814aec-3f82-673b-37b7-e7b20c9c1f15@gmx.de>
-References: <cover.1645450518.git.johannes.schindelin@gmx.de> <2526762f-71f0-2341-03cc-27f18c0c30f3@SystematicSw.ab.ca>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	by sourceware.org (Postfix) with ESMTPS id D3F2B3858D39
+	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:17:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D3F2B3858D39
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MAtoX-1pajfU3gdd-00BPOn; Tue, 28 Mar 2023 12:16:57 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id BFA74A80BFF; Tue, 28 Mar 2023 12:16:56 +0200 (CEST)
+Date: Tue, 28 Mar 2023 12:16:56 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Johannes Schindelin <johannes.schindelin@gmx.de>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v4 2/3] Respect `db_home` setting even for
+ SYSTEM/Microsoft accounts
+Message-ID: <ZCK+mOdyaAQnLBwF@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Johannes Schindelin <johannes.schindelin@gmx.de>,
+	cygwin-patches@cygwin.com
+References: <cover.1663761086.git.johannes.schindelin@gmx.de>
+ <cover.1679991274.git.johannes.schindelin@gmx.de>
+ <a70c77dc8f0d8417537557ea8e3a38f85bc582dd.1679991274.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:DUkwK4nLXCnCGeOxxYS9jv8V8J27TOFZmAc1cO/MvjTNW/pTTL+
- EMF5JXnAOO62vI8jzN+oibVIoKmhXDTFEveO+cOs+XZGobsVC6CEOZu7eH4SBIOp4N2dsjx
- HLVu61eiXB5baGeiRTLhYi9AwQp60u8tHZM3krDrVb9zACHze8PZRzXkKDrXQ/2QQFacWYS
- 8QF0gznwkiY9d4V8TaMFA==
-UI-OutboundReport: notjunk:1;M01:P0:htv8pZoLcrI=;JfFhJ5M+BGfAlVVNn66E2vbEKrO
- RXlKGa0CfCCMGYCKR1sx6+pMvm9+eBH4ViJzKMOIbwYTACxouzqp7ATesiKn7iTcxlIhmXjBW
- E/oJWAWMWUQK+EgBougDbr6dnuCVdMgGA15elekueipead6PnOtqVjcv9woNCijTZaK6zvYul
- aCy1+MVGyXjcDsClknDtHdKJv9QK4OSi1+J8FASnPwF3l8i6BS6zdVzp+ycwPLxyd1Y56gcI6
- mnzBRNBkMIfk7IvqmEN2ByPlGw6DqMvoE7S+Ue8y5aADh2YM3j7naspv6PQB6IGK/370NC4G9
- lOT92H/QZBVIvTsVSKLm1yGzO3PlbD51p0EzCSC7apnYte7vVa8fKpWt5hTwLVIeKsW8DF0b5
- eGYb3Yc0szHpgz+Fl+M0aUH6EkpRoaX9YCiiFz+k8v2f5vDw50/b3BlnUj9MwQapAr5ZaRgVV
- cQnJrUSM2AaO4L1fQelVg/zBRg6KqyJuo2XKVn1FpdbVGuwttLcT2gEf3FsOFvOV7woBrVTfS
- VnbGj//AFYlRmKnDyAQuJhVxt5JKK2G7qT1A7q/fXOLW6cXBacUGebZwu+1XMeCYzLZnvFli5
- v8zPBMjN1ynkyTPyZyf24UvVnRO3Sobig0oZaKLAbfojRArFd/aDWQLVvqxiJOa0ugSO4alpU
- bY6lvT4s97a/pIJXONpvdLEo9u4S2bj6tKrmJcNogGvg+J3AUDfUlnhiNVh9ZXRPtGW3jViCQ
- Xfe1jyyHQpmvPVIdzZrGs4A7I+RhDd0l7cvy0meGl6zzPva/DDAovnNBOWjnMe1FVC+VcpVhg
- KGlgIRY7rvBtZ4J6ob0EL02LN7HgVcsggw/vPjRdudWHoFSfzv7PTqMuZUsZF4OPDICydwQyi
- /BHhSF9UuYNFiO51BdYQGbTGFEkvGObtQuVbtKLns97YpOjin8rjIKiUaohINKw1ahDMGoEhP
- feOP5K5Vi/rJ4pXGraCxjSJ/8E8=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a70c77dc8f0d8417537557ea8e3a38f85bc582dd.1679991274.git.johannes.schindelin@gmx.de>
+X-Provags-ID: V03:K1:nUK/yjQRddZAytgKuZE9Agx9i4ESFoZNvW/dn5LHcLwBLOE58C/
+ k0gA6hwlu0UbE29ucv/kyKRuKOJX6C3FtwWIJ7mRaRJy2jwxiuZ1ebJdSrmikDi5tgbFPQF
+ mbndDzcmSQ+fyjROCQ4HHOMWuYW4cYGwdFGdyng65tBCnIeAZBPqbmauVobg31+3C/ZYab2
+ CZGN12oVc16n67l2efGwA==
+UI-OutboundReport: notjunk:1;M01:P0:flcDPGQGtxE=;o0tf4gBSCRULZz/VY9fL1YYyYnx
+ DZBdPBfRchFx0Oq2qJ3MtqeTlTPSBMJz2mc0pMCwFHXyCVI9WtUVrJ870Zqokm6S8Fv4xU0HH
+ R0j3aE1hzSP1BBAIJOZyrfhoU80TBPbS/qBbk6GY1cqPWc4iN609BNQPIgKlyaSUWTYAWwezp
+ lt+XoxMVWOLYW7DQ9Og954oSHjxWwY08NU+ijUxTS9FA+IA2esOREKP+uXTdmLiLznua4RUf2
+ +soaqzQ3oOp5mAzCjI3XLegxzJJykPxM16v5BTi4iu/KjengynICvbx2YebaSX3fKOKdoqjW7
+ 4gSH51p2uhkvgoRClWCdsAsQxomOlJSSf8oDvOaA8DrcTFhX8ow95Qs7/vPi8TnsgWSPpPy84
+ Cyh9v0P5YNKeoBoVTV5E6TtRbO5Bw54V0u/0fpHVkO9T2FcSg7d6fPyU4+U0bSfLDbg4KSBZP
+ qF2/dSZVPcWR5eU9tz6tTkPjqLMJV6587QXo299KQbBC5Pgo8sFQ1HBBAmm/FDviez4PWhQdo
+ EALc1d9xtO7OFfoj3IOzBKrMhUtOC5rFB8Oie/1h00jj+U9LwkHPiX1bkOs/6qWXMu+4CQ+C6
+ RKV11ckleG39zKx+2hvxqeCubichpcZZ3WYd0ElGR94KSGZEgkVj2x1MfD0N+xnpTCVd8Qu3G
+ +ZAIWEECk7bs3FZLeW9gZ0ddzXrEzM4JivzhxYUPqg==
+X-Spam-Status: No, score=-103.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Brian,
+On Mar 28 10:17, Johannes Schindelin wrote:
+> We should not blindly set the home directory of the SYSTEM account (or
+> of Microsoft accounts) to /home/SYSTEM, especially not when that value
+                                  ^^^^^^
+That should probably better be <username>, no?
 
-On Fri, 25 Feb 2022, Brian Inglis wrote:
-
-> On 2022-02-21 06:36, Johannes Schindelin wrote:
-> > These symbolic links are crucial e.g. to support process substitution
-> > (Bash's
-> > very nice `<(SOME-COMMAND)` feature).
-> >
-> > For various reasons, it is a bit cumbersome (or impossible) to generat=
-e
-> > these
-> > symbolic links in all circumstances where Git for Windows wants to use=
- its
-> > close fork of the Cygwin runtime.
-> >
-> > Therefore, let's just handle these symbolic links as implicit, virtual=
- ones.
-> >
-> > If there is appetite for it, I wonder whether we should do something s=
-imilar
-> > for `/dev/shm` and `/dev/mqueue`? Are these even still used in Cygwin?
->
-> Looks like that would make sense, as Cygwin appears to create all of tho=
-se
-> only on first startup (and probably rechecks if they need created every
-> startup) e.g.
->
-> Cygwin-32 $ ls -Fglot /dev/ | tail -6
-> lrwxrwxrwx  1       13 Apr 29  2012 fd -> /proc/self/fd/
-> lrwxrwxrwx  1       15 Apr 29  2012 stderr -> /proc/self/fd/2
-> lrwxrwxrwx  1       15 Apr 29  2012 stdout -> /proc/self/fd/1|
-> lrwxrwxrwx  1       15 Apr 29  2012 stdin -> /proc/self/fd/0
-> drwxr-xr-x+ 1        0 Apr 29  2012 mqueue/
-> drwxr-xr-x+ 1        0 Apr 29  2012 shm/
->
-> Cygwin-64 $ ls -Fglot /dev/ | tail -6
-> drwxrwxrwt+ 1        0 Dec  2  2017 shm/
-> lrwxrwxrwx  1       13 May 14  2013 fd -> /proc/self/fd/
-> lrwxrwxrwx  1       15 May 14  2013 stderr -> /proc/self/fd/2
-> lrwxrwxrwx  1       15 May 14  2013 stdout -> /proc/self/fd/1|
-> lrwxrwxrwx  1       15 May 14  2013 stdin -> /proc/self/fd/0
-> drwxrwxrwt+ 1        0 May 14  2013 mqueue/
->
-> so they would all get 2006-12-01 00:00:00+0000 birth time.
->
-> [Looks like I ran something using shm in 2017!]
-
-Thank you for that additional context!
-
-As Corinna pointed out, the directories currently need to exist on disk
-(so that mmap()able files can be created in them), though, and even if
-there _might_ be a way to avoid this (which would be good, in Git for
-Windows' context, where the runtime's pseudo root directory is inside
-`C:\Program Files`, i.e. read-only) it looks like a bit too much of a
-challenge for me to take on, at least for now.
-
-Ciao,
-Johannes
+> disagrees with what is configured via the `db_home` line in the
+> `/etc/nsswitch.conf` file.
+> 
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> ---
+>  winsup/cygwin/uinfo.cc | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+> index baa670478d..d493d29b3b 100644
+> --- a/winsup/cygwin/uinfo.cc
+> +++ b/winsup/cygwin/uinfo.cc
+> @@ -2234,7 +2234,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t &arg, cyg_ldap *pldap)
+>  	 it to a well-known group here. */
+>        if (acc_type == SidTypeUser
+>  	  && (sid_sub_auth_count (sid) <= 3 || sid_id_auth (sid) == 11))
+> -	acc_type = SidTypeWellKnownGroup;
+> +	{
+> +	  acc_type = SidTypeWellKnownGroup;
+> +	  home = cygheap->pg.get_home ((PUSER_INFO_3) NULL, sid, dom, name,
+> +				       fully_qualified_name);
+> +	}
+>        switch ((int) acc_type)
+>  	{
+>  	case SidTypeUser:
+> --
+> 2.40.0.windows.1
+> 
