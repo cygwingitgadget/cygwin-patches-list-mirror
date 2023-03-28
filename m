@@ -1,92 +1,118 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-	by sourceware.org (Postfix) with ESMTPS id B279D3858D39
-	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:17:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B279D3858D39
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	by sourceware.org (Postfix) with ESMTPS id B70ED3858D39
+	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:35:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B70ED3858D39
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MGQax-1pgDKn1LWn-00GtX8; Tue, 28 Mar 2023 12:17:36 +0200
+ id 1N2V8T-1qRy482owh-013tkM; Tue, 28 Mar 2023 12:35:03 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EED74A80BFF; Tue, 28 Mar 2023 12:17:35 +0200 (CEST)
-Date: Tue, 28 Mar 2023 12:17:35 +0200
+	id 00DFFA80BFF; Tue, 28 Mar 2023 12:35:02 +0200 (CEST)
+Date: Tue, 28 Mar 2023 12:35:02 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Johannes Schindelin <johannes.schindelin@gmx.de>
+To: Johannes Schindelin <johannes.schindelin@gmx.de>,
+	Jon TURNEY <jon.turney@dronecode.org.uk>
 Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4 3/3] Respect `db_home: env` even when no uid can be
- determined
-Message-ID: <ZCK+v7yBxRBft3UK@calimero.vinschen.de>
+Subject: Re: [PATCH v4 1/3] Allow deriving the current user's home directory
+ via the HOME variable
+Message-ID: <ZCLC1kvfb5Gdk+Cd@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Johannes Schindelin <johannes.schindelin@gmx.de>,
-	cygwin-patches@cygwin.com
+	Jon TURNEY <jon.turney@dronecode.org.uk>, cygwin-patches@cygwin.com
 References: <cover.1663761086.git.johannes.schindelin@gmx.de>
  <cover.1679991274.git.johannes.schindelin@gmx.de>
- <4cd6ae73074f327064b54a08392906dbc140714a.1679991274.git.johannes.schindelin@gmx.de>
+ <7a074997ea64d9f9d6dab766d1c49627e762cbed.1679991274.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4cd6ae73074f327064b54a08392906dbc140714a.1679991274.git.johannes.schindelin@gmx.de>
-X-Provags-ID: V03:K1:/Y8B6tIQOepK5u1iZEwWqZzEs8bxurvaY4j2iCYrLdOsAv9fNMa
- W2NLxnmUEKnsB9F2j0MShsv7XX5+IjDUrJN0LchZoNn50MvXdlWsm0H46+zB6BBvgPCZ59N
- dPoGKHz+1GHFcIsKBKjzQ6aTDy90422v8TqlJVpFFheRgsUChx1cQ1A7wLpm4HKRtFdA/Wv
- vWv7wASo6SE2GdR/5eaFw==
-UI-OutboundReport: notjunk:1;M01:P0:n5EqAceEExk=;p8VcPXa25xKCOBZuOMuPHLm4mek
- ppk3WhkJUYHtu2AOFDZ8nHuMM7DrebzgDlWiO1GGsbXg3YHX9XR8+x+/FdsxAoiaHJvmmE13r
- RBQjh96mHdMLLJwON9XFtO6Ta1aOYOqTlKxefmxpwD2VOcRVSMDlmHuemO4xUcLrMUum/yVDJ
- 5/d5uGStZdWEMP/ulWDq/iyykZvXighRnB8poJwwuZcssY1GfR1XJSFEWcFMJsxuxTl9FCV21
- P/mTGRf9RLJVuNsHvymLAtOZ2pQS0OjABiY1kV5mJfQTewD7AlaU1+L6UEHd2XFpe1VBSlAyf
- +780aofTsQjQDlz3SG4B2jeam4VFb+zbbbe/BUFTRdNl3lffjmq3LQYNqW6SOLbLQg4YsqnRb
- cetxRHADeG8luHn4zQB0VIyoPMD+vAPQ7A6hX8uV1Mij2fdrbvbOnU2D4AkQXTb63UmUs/n16
- 3YKBXt0UZ8hYgOvOCG7fIz8Xgg7PdjQtU54jJL22u890+oKwst9RPZXNqbdmuE91FD3GbbDut
- xDchzoyIY0DBAogM15w6FMR/Rx+ocsZXp5NjrsmQOgqnKIDzqaGV5Qpb4VKDwDj3kGdCTHMo5
- /eoPUfxXbykJkurPGXOiJqkNzZ+wpLS2gNBCQMmSqgocLtR9zBR6Tz+dUXJwRHdQ67e2Udx2S
- E+Nt1yR0yYJNYHPbTvRko/frI/t1IaeihE7d+HqBfg==
+In-Reply-To: <7a074997ea64d9f9d6dab766d1c49627e762cbed.1679991274.git.johannes.schindelin@gmx.de>
+X-Provags-ID: V03:K1:HoBafcCOjxQndBAoYZLeiW3422O12ctjE9yynhiRKDDtYXZ51GW
+ pOfWv2DA4qsyWr4M9OrpLyZExQxZcImjxiNsV2bKDF2T8NNJ71oJhsxYg0hDZ/jux3Aw3Ky
+ FaNbY/tro9iQESktbandts9/xO8LQjl0j/RjYK9iE8buS/0U9A9iJNGF8AK1CySlZ1lwpAn
+ A4MULYUky0f63NOKnifSg==
+UI-OutboundReport: notjunk:1;M01:P0:8Rs9/d7whwQ=;q3t2r/bTxKheKNarKinsAfKAGWp
+ 50jRV5xTnOvJKiQx6op0oWMkY6ZhHU/yKyjS3IhBlXJra/62wHc73dRRX2v22r/CIISup3wqw
+ 0a3JjxjsQTAJUY3/XXX9z0fnee+eafY0ED0CtZVbEScc1O1bNo4V3qL0a0HNs20vMLYXoFyVO
+ bHkMEusNVRbBVCK0unfCSjNPyO2tjRUd+yhKN46uz0SlE0FTmnjNaRpdXHIjCLya+tGwA80CM
+ xjA0lhPkD4Jyu9LOu97l1HpF59Yxf6pm41SVD1yEJqz72OB9jskWMysO4/sve4hAVp/qZxkU7
+ nQz26AnuHqwBOPaUUt+2Zi4hDIqqYSBmzV4LqTHPJ/b3hLgeaPC8fmR8x3nTR/KG0Ot7nZZF3
+ tl9kc2IVRPLTeZi+wBvsAXIiiWaRWAdwn2GdTM+f6fCmZd+pewQyewSo2oyjX6SQsf6lfQQzd
+ XKrkQlXhFhNwle1X16hcpAfLF8mS0LF1RpQVcDz27UYQM0+WCAN66BTBftB/eMoAoG6eiPN19
+ SBn9YXGK9j+ps7HV58dkbbExG1ZGrsEDj/cZl2TSABQ5rK2VlAMFb5BSY0nCb3decAzVT46Rx
+ zTdVBAK1Vyb6YMQUy19mCmoA4DeEAHJQSNwzDvpkCeVsJ1uYdsVzWptMK+isvBzHYKYeP4SrP
+ yQJLT5NhxO9N9/kdrTqXNHUANxJ0TZcUmRwSkaVoiA==
 X-Spam-Status: No, score=-103.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,GOOD_FROM_CORINNA_CYGWIN,KAM_DMARC_NONE,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
+Apart from the doc change, the patch is ok now.
+
 On Mar 28 10:17, Johannes Schindelin wrote:
-> In particular when we cannot figure out a uid for the current user, we
-> should still respect the `db_home: env` setting. Such a situation occurs
-> for example when the domain returned by `LookupAccountSid()` is not our
-> machine name and at the same time our machine is no domain member: In
-> that case, we have nobody to ask for the POSIX offset necessary to come
-> up with the uid.
-> 
-> It is important that even in such cases, the `HOME` environment variable
-> can be used to override the home directory, e.g. when Git for Windows is
-> used by an account that was generated on the fly, e.g. for transient use
-> in a cloud scenario.
+> diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+> index c6871ecf05..1678ff6575 100644
+> --- a/winsup/doc/ntsec.xml
+> +++ b/winsup/doc/ntsec.xml
+> @@ -1203,6 +1203,17 @@ schemata are the following:
+>  	      See <xref linkend="ntsec-mapping-nsswitch-desc"></xref>
+>  	      for a more detailed description.</listitem>
+>    </varlistentry>
+> +  <varlistentry>
+> +    <term><literal>env</literal></term>
+> +    <listitem>Derives the home directory of the current user from the
+> +	      environment variable <literal>HOME</literal> (falling back to
+> +	      <literal>HOMEDRIVE\HOMEPATH</literal> and
+> +	      <literal>USERPROFILE</literal>, in that order).  This is faster
+> +	      than the <term><literal>windows</literal></term> schema at the
+> +	      expense of determining only the current user's home directory
+> +	      correctly.  This schema is skipped for any other account.
+> +	      </listitem>
+> +  </varlistentry>
+>  </variablelist>
 
-How does this kind of account look like?  I'd like to see the contants
-of name, domain, and the SID.  Isn't that just an account closely
-resembling Micorosft Accounts or AzureAD accounts?  Can't we somehow
-handle them alike?
+I'd rephrase that a bit here.  This is the description of the scheme
+itself, so this should be something along the lines of "utilizes the
+current environment ..." and "Right now only valid for db_home, see xref
+linkend="ntsec-mapping-nsswitch-home"...
 
-> Reported by David Ebbo.
+However, there's something strange going on, see below.
 
-This should be
+>  <para>
+> @@ -1335,6 +1346,17 @@ of each schema when used with <literal>db_home:</literal>
+>  	      See <xref linkend="ntsec-mapping-nsswitch-desc"></xref>
+>  	      for a detailed description.</listitem>
+>    </varlistentry>
+> +  <varlistentry>
+> +    <term><literal>env</literal></term>
+> +    <listitem>Derives the home directory of the current user from the
+> +	      environment variable <literal>HOME</literal> (falling back to
+> +	      <literal>HOMEDRIVE\HOMEPATH</literal> and
+> +	      <literal>USERPROFILE</literal>, in that order).  This is faster
+> +	      than the <term><literal>windows</literal></term> schema at the
+> +	      expense of determining only the current user's home directory
+> +	      correctly.  This schema is skipped for any other account.
+> +	      </listitem>
+> +  </varlistentry>
+>    <varlistentry>
+>      <term><literal>@ad_attribute</literal></term>
+>      <listitem>AD only: The user's home directory is set to the path given
 
-  Reported-By: David Ebbo <email address>
+There's something wrong here. Building the docs, I get these new error
+messages:
 
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> ---
->  winsup/cygwin/uinfo.cc | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-> index d493d29b3b..b01bcff5cb 100644
-> --- a/winsup/cygwin/uinfo.cc
-> +++ b/winsup/cygwin/uinfo.cc
-> @@ -883,6 +883,8 @@ fetch_from_path (cyg_ldap *pldap, PUSER_INFO_3 ui, cygpsid &sid, PCWSTR str,
->  	    case L'u':
->  	      if (full_qualified)
->  		{
-> +		  if (!dom)
-> +		    break;
+  docbook2texi://sect4[@id='ntsec-mapping-nsswitch-passwd']/variablelist[1]/varlistentry[5]/listitem/term: element not matched by any template
+  docbook2texi://sect4[@id='ntsec-mapping-nsswitch-home']/variablelist/varlistentry[5]/listitem/term: element not matched by any template
+  Element term in namespace '' encountered in listitem, but no template matches.
+  Element term in namespace '' encountered in listitem, but no template matches.
+  Element term in namespace '' encountered in listitem, but no template matches.
+  Element term in namespace '' encountered in listitem, but no template matches.
+  No template matches term in listitem.
+  No template matches term in listitem.
 
-No domain?  Really?
+It looks like this has something to do with the <term> expression?
+
+Jon, do you have an idea?
 
 
 Corinna
