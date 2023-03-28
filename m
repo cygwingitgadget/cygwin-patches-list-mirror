@@ -1,116 +1,114 @@
 Return-Path: <SRS0=deyK=7U=gmx.de=Johannes.Schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by sourceware.org (Postfix) with ESMTPS id DC8C23858C53;
-	Tue, 28 Mar 2023 08:34:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DC8C23858C53
+	by sourceware.org (Postfix) with ESMTPS id 902203858C00
+	for <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 08:36:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 902203858C00
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1679992450; i=johannes.schindelin@gmx.de;
-	bh=dUEYelXrHoeAoF/P7wT7f8RM1YJpVax/tL34U6tsHqQ=;
-	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
-	b=lM0IJVmXWaOhfuFXVK5UqLR+rQ1zNTWz5yFKZdw0mju6AI+gWL19mWaJkHbB96YIa
-	 O5fbjeC4B6gTRKnqS4zrazPmOpmSUPUssAZXkEE06SwQ1cVwLyLjjF+d+MYk5Yv4M3
-	 8BBj/n3yyNsycXLjpO2iDftqynaIVXCpAC6df1SQq3N5goM45QYm5xuStOfgl94+6w
-	 LgAf/I4YnsDPZ3LD1Zb6fvPIVZ9Y77EUpy7DkMZCj5uJR9fyon0aRPENOMw1M0szeh
-	 zQqfsUwbpVlTxAF/9vCjASBFHdEUnpzuBK/UK8WuttBwoO/XTU+NfByhfGDTZUbuen
-	 /JFCiSVYGi1JA==
+	t=1679992589; i=johannes.schindelin@gmx.de;
+	bh=CYWXhwTe9lOSoSnC+t1laSdCzLRulDbC/UV/+aFvRf8=;
+	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
+	b=QBUK9OjIYlifhDt5Io5DFDcZWyLE/iWgW/3oRqiN9CZZMJZb3qR/uSsTnYWDgrQ14
+	 CWGsOfo7FNIu2tohIAL3Rrtd71SEKRErxLLPWTWKIkOBu9xuFOEWqijHuIIDwYCoM9
+	 TNJr25IBokJLE1wY9HoG98XT2c/pf2uVYLPKyURZZ+U/zP42m3gM2wgvlRBvnu4niM
+	 6XOg0AH6/yJ1aI0tSVsst6c4hOSL2vaSvXFJCEwcUzQcoQCH9IJF3ac2LX7oyF3i9C
+	 6UGIpcaH78T/3am2PpDGxXd+smMDmeOsUd9CDz6iztJiLdh8ePTSZJWWxJ2Jw4Qas1
+	 iuPnPauyL02vg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([213.196.212.93]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbzuH-1qJADt2Wbf-00dXLI; Tue, 28
- Mar 2023 10:34:10 +0200
-Date: Tue, 28 Mar 2023 10:34:09 +0200 (CEST)
+Received: from [172.23.242.68] ([213.196.212.93]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIwzA-1q0Ous3kB0-00KPgy for
+ <cygwin-patches@cygwin.com>; Tue, 28 Mar 2023 10:36:28 +0200
+Date: Tue, 28 Mar 2023 10:36:27 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Corinna Vinschen <corinna-cygwin@cygwin.com>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin, stdout,
- stderr} symlinks
-In-Reply-To: <YhyccZ1dGKVeRNdp@calimero.vinschen.de>
-Message-ID: <4d1cc2a4-040b-d037-50bf-bd162cbd387b@gmx.de>
-References: <cover.1645450518.git.johannes.schindelin@gmx.de> <YhTYazKXC+2X2TbU@calimero.vinschen.de> <nycvar.QRO.7.76.6.2202251645090.11118@tvgsbejvaqbjf.bet> <YhyUwucjllyFpkRy@calimero.vinschen.de> <YhyccZ1dGKVeRNdp@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 0/2] Provide virtual /dev/fd and /dev/{stdin,stdout,stderr}
+ symlinks
+In-Reply-To: <2526762f-71f0-2341-03cc-27f18c0c30f3@SystematicSw.ab.ca>
+Message-ID: <c0814aec-3f82-673b-37b7-e7b20c9c1f15@gmx.de>
+References: <cover.1645450518.git.johannes.schindelin@gmx.de> <2526762f-71f0-2341-03cc-27f18c0c30f3@SystematicSw.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:agUFD+8QiB8Mvz4ddpE8WPymm3NfbQLBQiS0RbWgNYjDySm5URd
- AxklUDeS+M/5xCVpZQTRE3IBc0NKhzwtHwDTWqTv3QH5vLJ6+kHJrS3vIqmMKkRFJHR5amz
- h47UShn6jifId1KaMP2n7rHLNzjZKJynNyIb/FDQP0Tu3ESP6cZ2WxqHSIo4Im5pS2JRLtE
- rfDgxaKNbOJWRmtLu7NhA==
-UI-OutboundReport: notjunk:1;M01:P0:DtGOqwsztP4=;Gk64K8YP0g6/pl6kXjXQ5mfdOxF
- QKP8KYSYxN1PXdCTsKEYRH2dADq829qqYsku7AlyaoH6am1cu4DJdjD0wRHU3diG8dRnISUfK
- 83lJzG/2h/KmbLEAzviek2gezMVk7+99qdoK3I+4vBd6EX8/KDg7laU0yQxQj8dejJaBjjkM/
- 52X4gsZgxBAoPCZUM1FWcGrUgSG9W65et33mcdiZaGGmnW375+yuVyUhu+glntE4ZzDUpclXR
- j089fkVrxC08VqGDU1XK0Ykj92HDQBupOx4opbjoXlTYKGMntEq8eVdm44Tw4F3HFARr8zOzq
- tziOw2P9/aDQe/+rH/d0y3b9hS+K88+zt+ayTMfaWT24fS2WEcw/sRzdAsg29YRQ55vboHB8j
- fJ9wGIb8Y7FMfesTndTw106Ogk9hm8yLwmAI2DRATGq5W5/lptkOHqCCiYfKleSaZs5Yqq9Rw
- 1OEUGlp9T37lnOCSyqFwYDlPeu8c6qfzGPrzKwnZ5k9iF3KxgdbCWADFXbJtFJltmouDYU+1G
- vqW+TnMXALLxVGB8+2YSdbte9slhgebuVp2O74ww/rn2iz/CcuOGngRl8H1i9enYAAsI90LmE
- qxJ227r/RIEy34HBIu0OXUxjG/9c2KtCmwmOp8qWM3X8FVTPaPDQfHqo5ksphVU9QBaUzffYt
- asbylzxokDNBeO72aKdggm9H7udlJje4TNEZAUKjs4afWgzhpKXqMVzhjqFzUMlb4DnH4oNEO
- wnRS2o6mT87oAUAli4/7oeFZtPYjbDnd1dpnmsEb4JH474xD4M0NtAt5vNLzdV/SyHUhPbB0Z
- TYYmcGZjki3NgdMktp+uSQJwq4JGpkI4Y+TYYRbIXdBVWlxRJRp31uY9Uvig/im2PnnVjZtCw
- vZeDC1rYu3EFHRAD8Y9IcARYHTEmwQ0CQMGt6IyHeCIpZlzeoZbwqeXLhdg4hE4zfUxr5FPKv
- 55FsDmyvVhJuWnIhQnvZV+0BhOE=
+X-Provags-ID: V03:K1:DUkwK4nLXCnCGeOxxYS9jv8V8J27TOFZmAc1cO/MvjTNW/pTTL+
+ EMF5JXnAOO62vI8jzN+oibVIoKmhXDTFEveO+cOs+XZGobsVC6CEOZu7eH4SBIOp4N2dsjx
+ HLVu61eiXB5baGeiRTLhYi9AwQp60u8tHZM3krDrVb9zACHze8PZRzXkKDrXQ/2QQFacWYS
+ 8QF0gznwkiY9d4V8TaMFA==
+UI-OutboundReport: notjunk:1;M01:P0:htv8pZoLcrI=;JfFhJ5M+BGfAlVVNn66E2vbEKrO
+ RXlKGa0CfCCMGYCKR1sx6+pMvm9+eBH4ViJzKMOIbwYTACxouzqp7ATesiKn7iTcxlIhmXjBW
+ E/oJWAWMWUQK+EgBougDbr6dnuCVdMgGA15elekueipead6PnOtqVjcv9woNCijTZaK6zvYul
+ aCy1+MVGyXjcDsClknDtHdKJv9QK4OSi1+J8FASnPwF3l8i6BS6zdVzp+ycwPLxyd1Y56gcI6
+ mnzBRNBkMIfk7IvqmEN2ByPlGw6DqMvoE7S+Ue8y5aADh2YM3j7naspv6PQB6IGK/370NC4G9
+ lOT92H/QZBVIvTsVSKLm1yGzO3PlbD51p0EzCSC7apnYte7vVa8fKpWt5hTwLVIeKsW8DF0b5
+ eGYb3Yc0szHpgz+Fl+M0aUH6EkpRoaX9YCiiFz+k8v2f5vDw50/b3BlnUj9MwQapAr5ZaRgVV
+ cQnJrUSM2AaO4L1fQelVg/zBRg6KqyJuo2XKVn1FpdbVGuwttLcT2gEf3FsOFvOV7woBrVTfS
+ VnbGj//AFYlRmKnDyAQuJhVxt5JKK2G7qT1A7q/fXOLW6cXBacUGebZwu+1XMeCYzLZnvFli5
+ v8zPBMjN1ynkyTPyZyf24UvVnRO3Sobig0oZaKLAbfojRArFd/aDWQLVvqxiJOa0ugSO4alpU
+ bY6lvT4s97a/pIJXONpvdLEo9u4S2bj6tKrmJcNogGvg+J3AUDfUlnhiNVh9ZXRPtGW3jViCQ
+ Xfe1jyyHQpmvPVIdzZrGs4A7I+RhDd0l7cvy0meGl6zzPva/DDAovnNBOWjnMe1FVC+VcpVhg
+ KGlgIRY7rvBtZ4J6ob0EL02LN7HgVcsggw/vPjRdudWHoFSfzv7PTqMuZUsZF4OPDICydwQyi
+ /BHhSF9UuYNFiO51BdYQGbTGFEkvGObtQuVbtKLns97YpOjin8rjIKiUaohINKw1ahDMGoEhP
+ feOP5K5Vi/rJ4pXGraCxjSJ/8E8=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna,
+Hi Brian,
 
-On Mon, 28 Feb 2022, Corinna Vinschen wrote:
+On Fri, 25 Feb 2022, Brian Inglis wrote:
 
-> On Feb 28 10:24, Corinna Vinschen wrote:
-> > On Feb 25 16:46, Johannes Schindelin wrote:
-> > > On Tue, 22 Feb 2022, Corinna Vinschen wrote:
-> > > > On Feb 21 14:36, Johannes Schindelin wrote:
-> > > > > If there is appetite for it, I wonder whether we should do somet=
-hing similar
-> > > > > for `/dev/shm` and `/dev/mqueue`? Are these even still used in C=
-ygwin?
-> > > >
-> > > > "still used"?  These are the dirs to store POSIX semaphors, messag=
+> On 2022-02-21 06:36, Johannes Schindelin wrote:
+> > These symbolic links are crucial e.g. to support process substitution
+> > (Bash's
+> > very nice `<(SOME-COMMAND)` feature).
+> >
+> > For various reasons, it is a bit cumbersome (or impossible) to generat=
 e
-> > > > queues and shared mem objects.
-> > >
-> > > Okay. I guess we do not really use them in Git for Windows ;-)
+> > these
+> > symbolic links in all circumstances where Git for Windows wants to use=
+ its
+> > close fork of the Cygwin runtime.
 > >
-> > Probably not.  I'm not aware that git uses POSIX IPC objects.
+> > Therefore, let's just handle these symbolic links as implicit, virtual=
+ ones.
 > >
-> > > > These have to be real on-disk dirs.
-> > >
-> > > Could I ask you to help me understand why? Do they have to be writab=
-le? Or
-> > > do the things that are written into them have to be persisted betwee=
-n
-> > > Cygwin sessions?
-> >
-> > Cygwin uses ordinary on-disk files to emulate the objects, and
-> > they have to persist over process exits.  Unfortunately I don't
-> > see any other way to create persistent objects from user space.
+> > If there is appetite for it, I wonder whether we should do something s=
+imilar
+> > for `/dev/shm` and `/dev/mqueue`? Are these even still used in Cygwin?
 >
-> Btw., you don't have to create those dirs.  Only if you actually use
-> POSIX IPC calls, the directories are required.
+> Looks like that would make sense, as Cygwin appears to create all of tho=
+se
+> only on first startup (and probably rechecks if they need created every
+> startup) e.g.
 >
-> In fact, the IPC objects are just mmaps (message queues, shared mem
-> objects), or the file is just used to store the values after closing
-> the object (semaphores).
-
-Okay, I _think_ I understand the issue better now. Thank you for indulging
-me!
-
-> With "persistent" I mean, "DLL lifetime persistent".  It's not required
-> that the objects are persistent until system shutdown, as it is now with
-> file-based objects.
+> Cygwin-32 $ ls -Fglot /dev/ | tail -6
+> lrwxrwxrwx  1       13 Apr 29  2012 fd -> /proc/self/fd/
+> lrwxrwxrwx  1       15 Apr 29  2012 stderr -> /proc/self/fd/2
+> lrwxrwxrwx  1       15 Apr 29  2012 stdout -> /proc/self/fd/1|
+> lrwxrwxrwx  1       15 Apr 29  2012 stdin -> /proc/self/fd/0
+> drwxr-xr-x+ 1        0 Apr 29  2012 mqueue/
+> drwxr-xr-x+ 1        0 Apr 29  2012 shm/
 >
-> It would be sufficient if the objects persist until the last Cygwin
-> process of a Cygwin process tree exits.  I'm open to ideas, but they
-> shouldn't further slow down the startup of a Cygwin process tree.
+> Cygwin-64 $ ls -Fglot /dev/ | tail -6
+> drwxrwxrwt+ 1        0 Dec  2  2017 shm/
+> lrwxrwxrwx  1       13 May 14  2013 fd -> /proc/self/fd/
+> lrwxrwxrwx  1       15 May 14  2013 stderr -> /proc/self/fd/2
+> lrwxrwxrwx  1       15 May 14  2013 stdout -> /proc/self/fd/1|
+> lrwxrwxrwx  1       15 May 14  2013 stdin -> /proc/self/fd/0
+> drwxrwxrwt+ 1        0 May 14  2013 mqueue/
+>
+> so they would all get 2006-12-01 00:00:00+0000 birth time.
+>
+> [Looks like I ran something using shm in 2017!]
 
-=46rom my limited understanding, that _sounds_ as if a shared object might
-be enough (similar to the shared parent directory that
-`winsup/cygwin/shared.cc` is all about).
+Thank you for that additional context!
 
-If this sounds like a viable approach, I'll put it into my ever-growing
-backlog ;-)
+As Corinna pointed out, the directories currently need to exist on disk
+(so that mmap()able files can be created in them), though, and even if
+there _might_ be a way to avoid this (which would be good, in Git for
+Windows' context, where the runtime's pseudo root directory is inside
+`C:\Program Files`, i.e. read-only) it looks like a bit too much of a
+challenge for me to take on, at least for now.
 
 Ciao,
 Johannes
