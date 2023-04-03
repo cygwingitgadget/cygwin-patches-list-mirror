@@ -1,84 +1,126 @@
 Return-Path: <SRS0=7Fjc=72=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by sourceware.org (Postfix) with ESMTPS id 9C4CD3858C50;
-	Mon,  3 Apr 2023 06:39:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9C4CD3858C50
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id B5AC93858C50;
+	Mon,  3 Apr 2023 06:45:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B5AC93858C50
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1680503970; i=johannes.schindelin@gmx.de;
-	bh=OY/ArA+oKh3T6Rr4j+xa9j/r2AugRIwM7elvi5U3vek=;
+	t=1680504333; i=johannes.schindelin@gmx.de;
+	bh=skKu86uEv5cKwnS0Gm+gII0UX7Rec1r+ytsuPt/RtS4=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
-	b=r4D0fvEGV1MUltqf92SXtV1LVpFad41KrjwpNVzOWCW0y2MPdBQlOUyZvTP7l/xwJ
-	 j+IoQbBdjg49u3xUjCsEKb6Edf5zy8I4dUqKzogNrPWhBxONpPmJ/kd0rFmDl9O+po
-	 vzJcaO2UXDY2QzKZG1gllLWHpcAl7sC5X6ZzstmQ2rICHNDWiZFNFqaD6kfLS1/8Ak
-	 5eZLKCVcCmqk1LDXfQjm2yT1saWgwVFTIiQlINJHWZE6Nm5Vt+vmyPRgFPKjnijFHI
-	 C/uYWfyS5GJlIg5cWqJdHshwRMk9J54QkV8Wa1qhMvI1ejrfLqakQJmyfE2qpqeAsU
-	 xLMlGgc6IjmLQ==
+	b=HYLEBSZO2goncWljfW0Jf+YkJhgtv34wFlv6ZnT7cUCnfNgp4lBwo2kYMRuAw3zkl
+	 b/HmQJVEeqjVR7yGPqIArOvl1A83gsSHvx7XwEwIK7VZnZkYsKnma8DHSC4yrrFIhT
+	 w068ByLFakhvYhtFZbdnvzPaYJ//77RllEB1UK7t8Y9OOjbD6mNOiZQU4qPdv67Q6c
+	 rk/F8drg3B2x1wFlGIBZ0AR+nKZn+PeAJIr3jKegdN/nzp3sKsmoGZ46xIoA8yKCvK
+	 WQUvf5oUx+r+dGT8Zca7sJYxKnpt4ggWwoLpj23JOBzyZrczlKGGu4kRXah1Tt0gWl
+	 2n0mHcr7voO8g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKKh-1pcr7r0XBB-00FhQ0; Mon, 03
- Apr 2023 08:39:30 +0200
-Date: Mon, 3 Apr 2023 08:39:29 +0200 (CEST)
+Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MyKHm-1qdNR31nH2-00yl2G; Mon, 03
+ Apr 2023 08:45:33 +0200
+Date: Mon, 3 Apr 2023 08:45:32 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Corinna Vinschen <corinna-cygwin@cygwin.com>
-cc: Jon Turney <jon.turney@dronecode.org.uk>, cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4 1/3] Allow deriving the current user's home directory
- via the HOME variable
-In-Reply-To: <ZCP4h7fDkj+60DEh@calimero.vinschen.de>
-Message-ID: <4903e63c-8e54-e341-72ca-a083f9f5d77a@gmx.de>
-References: <cover.1663761086.git.johannes.schindelin@gmx.de> <cover.1679991274.git.johannes.schindelin@gmx.de> <7a074997ea64d9f9d6dab766d1c49627e762cbed.1679991274.git.johannes.schindelin@gmx.de> <ZCLC1kvfb5Gdk+Cd@calimero.vinschen.de>
- <2ef9176e-9282-d0d1-b047-d8555d4434da@dronecode.org.uk> <ZCLsFCguNjGi5Ga9@calimero.vinschen.de> <ZCP4h7fDkj+60DEh@calimero.vinschen.de>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v4 3/3] Respect `db_home: env` even when no uid can be
+ determined
+In-Reply-To: <ZCK+v7yBxRBft3UK@calimero.vinschen.de>
+Message-ID: <97e5226e-60c6-9d03-0c71-72e3192abe59@gmx.de>
+References: <cover.1663761086.git.johannes.schindelin@gmx.de> <cover.1679991274.git.johannes.schindelin@gmx.de> <4cd6ae73074f327064b54a08392906dbc140714a.1679991274.git.johannes.schindelin@gmx.de> <ZCK+v7yBxRBft3UK@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:JiTr6SdilnWCOzTtG6WvNFtZ6v0OTtvjGvswFsnQAr7sE2j6VYE
- Brd0e/GCxot2+tw6/MBs3blVKgZqKWDCV91IyZkRsQMMbVI8DQ2FsevvF3VnvIUT+BBCIZd
- H90egB7RMtEXca/fdGG1pVlcjHyTgcEnu3b/yXl1v2SOluoV2S/unblAGS41dzO8gHBp2cw
- PbWwwheXEBtic4Jr5+pzQ==
-UI-OutboundReport: notjunk:1;M01:P0:Ucl2RkXC8q0=;jOzytygbPucGlMfL7fgXTJ/MTdF
- hh0C1dOZ8oZHWnc6llLPe4c/xLwahq+LzTZ+ZseQ9oLPjq+DMYmPhTW5FI7dw1XiVUaztrfWQ
- UulO7b8j/P2q3DBG+gXfT9tbtdek8Nc1D4Bcy1BNFPaaYNHsY7bVM9LuVj2du/rPZdkidZfoV
- X5XRt3XuxsGDVB9wdK9ws6p7eF3lCWZVA0IZIpcLc+hNLY7X7ZZsN+7tOnJfzTbpyHv3qdiSb
- arfUoalxxZ4R7mkhLR+ex8nLZGFZLwVk3hDK8tAdjwGIeo1/x82Ds70xnXIv+Co+ykKK17zRt
- H/8yWxeQAxg7twPtzY2wzX9+CXJgKVe3tOEe3vIB9+FF9Ks/rQ5LOZCyWc7OxI+gT50/RNdrg
- LuPTyurB3dgY1gYVGzXCrbaUDUoIOkdVLvzT1UiSNvTx2KXaBGuXWnKN0ESIwIfRGOymdWTEA
- 2p0vvnM4PovCH6vHi/jLChMellmpNRxc4FVToOnHxbS3XqkCAveNrd3n4hpgE8skGWygpbmRM
- G2ATPmExWPzovLeGlkSUO35/yMLqPzWlMaDYgBopS4ISe7SEthgFObrhViI0Fk8Jg+d7fQUTG
- 278FEni1EWn1QVfGQRIARUyV+Nme+J7jLl3HKmseptkdVluCcWMBMHcUAL51Ro7dTgMANM6fV
- LK6UPSuzsJmuPoMBnGAL2yxdqsQtpY5d0Z62r/Y8CHATXx49Uut5NTS/mPD2JzMLuPYKzNI45
- +ABGhHh/JgLgPFGyIpEtPwl54DgvTUFERUkX3KJG2mLGTW6pxvw6Jr94dZ9kX1Qzi1av2Q4m4
- Hm4wJp55tSTMSsIdbYFxlKK9ME2s2yvanbpH86M5d7NaODg9nOvkc6KWjUZt59hEBu6vNyq3D
- PMzhRYpY9sj71sG99L694QKF3ckRIED0b2xIDUSkjzIEOxY1Gz6klEIyvTMIh/ew/qBDs3CXn
- r2g1jw==
+X-Provags-ID: V03:K1:JybAcFepd1EHjAzOdoQ2PVVsYsIvYzD79IP0echmle9kkaSrRTq
+ V0V2+JN+Kaj7ZESb1bGV1PGz5RRhI4Fd3OdOKPV74eool8pzebkA45UBBHrKdCnwr6T/jA8
+ Yvx6I8XNNFLQ9oXb9zHVtGwv+qgtc9IRTh9iyw9N6wlWKJvSFd5rK2K9SJBacvAoNmkMikr
+ xj6lNemYgTGp8gVeTdKOg==
+UI-OutboundReport: notjunk:1;M01:P0:qoh4XB7QxkE=;d5wV+Dj/ew1gacv29KjnXxocORy
+ wuCi+PIf62DCd/faG/rAkVUNI6rKh+LwRcsi/pq9ThrNTjCaLzfyMNiDtbYckqKxdG7kn9HKO
+ JbK7GzMKHJiD4IXp2l5LGamtE2JLncfVrks89tDh6C4brAHhb/6RxwAYNlKvSWnhQj4djF4sE
+ ciY+xknFXI9pueyLNPat4QYJ3X4b5on7fFmmZxQDNqAjGnVNC6z8prKym6wFAuZAkte2oiyu/
+ EJTifemPu84+BXO19wvfBrbUDfc9+SzJe1b9AekjVyVF7bf1+IzHrDoZ4+yhdcy2gKWnoX6Pm
+ H82RJ3ZW1Z+cA+oPQKxI6q6C//kADWV2HSLFILnnmuotb2V+EIyL/RPEPJTTF8wPVQ84PcafT
+ LJ8T3lpstNM/U0GvcMtV8jrNrIIhxqoZX42BSIZMScNO+slVBX795YwLRgw6flhsiUnleDxBD
+ ez6NmKjUUNr2l4UMu8iQcRtsI8NIEeQstm/TXjVWm5/x5sqlqIdiV5ttOdcmk4CFOn1HkilOq
+ vIhk0K7d5gHMLQQqgwaOlOwRmUvNWXEyxsnKWcsscM2ROuYCgjgCOWvZweV7xmkgf7+vsQGml
+ NVNDGKggLQOjaueyT1NA8EJxy3XTrjLkIxqiH25izYvdf/bfs0sLNQynLkd4fjKWWUbEXkH6+
+ VuQ+bNQB99zAlWAHVaY0dSHTThIpcIA7RK1pxLbMLEdo7ntQi6UpUW2J56TGeauOjF4+EqfYj
+ URN4pIPzZqrkQCQ4sRo3EkDerrzyTgCWWN2UW/79miMqfRHUlj9icM89Me0K5p1EPhwgCJk0l
+ 5OTGiVIWHtFb8GV0ecJUr5aSfXsqHjxbHPe4tj9HnrHFVbOBgeCfW5XStDGR00jWWOdvuz1Vb
+ sjw9gKfnvFPbjiPva5hScsh1KndBS2gOA4jmJnxm3+WmD1soAkolduvHTV1jtFWffn+jRrSQU
+ MNZDyaCCW02axnE03op2nDKgaKo=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna & Jon,
+Hi Corinna,
 
-On Wed, 29 Mar 2023, Corinna Vinschen wrote:
+On Tue, 28 Mar 2023, Corinna Vinschen wrote:
 
-> On Mar 28 15:31, Corinna Vinschen wrote:
-> > On Mar 28 13:34, Jon Turney wrote:
-> > > On 28/03/2023 11:35, Corinna Vinschen wrote:
-> > > > Apart from the doc change, the patch is ok now.
-> > >
-> > > The preceding text says "Four schema are predefined, two schemata ar=
+> On Mar 28 10:17, Johannes Schindelin wrote:
+> > In particular when we cannot figure out a uid for the current user, we
+> > should still respect the `db_home: env` setting. Such a situation occu=
+rs
+> > for example when the domain returned by `LookupAccountSid()` is not ou=
+r
+> > machine name and at the same time our machine is no domain member: In
+> > that case, we have nobody to ask for the POSIX offset necessary to com=
 e
-> > > variable", then we add "env" to both lists? That doesn't make much s=
-ense to
-> > > me.  Surely it's just a "predefined schema"?  In any case that text =
-should
-> > > be updated.
+> > up with the uid.
 > >
-> > Ouch, yeah, I missed that.  Thanks for catching!
+> > It is important that even in such cases, the `HOME` environment variab=
+le
+> > can be used to override the home directory, e.g. when Git for Windows =
+is
+> > used by an account that was generated on the fly, e.g. for transient u=
+se
+> > in a cloud scenario.
 >
-> I accidentally already pushed this patch, so I took it on me to fix up
-> the documentation.
+> How does this kind of account look like?  I'd like to see the contants
+> of name, domain, and the SID.  Isn't that just an account closely
+> resembling Micorosft Accounts or AzureAD accounts?  Can't we somehow
+> handle them alike?
 
-Thank you for fixing my mistake! 93b05a87c2 (Cygwin: doc: fix description
-of new "env" schema for /etc/nsswitch.conf, 2023-03-29) looks good to me.
+It took a good while to remind me what was going on there. Essentially, I
+had to dig up a mail from 2016 that David Ebbo sent me via my work email
+(because he was working on Kudu, the Azure shell, where this issue arose).
+Sadly, David is no longer a colleague of mine (he seems to work at Google
+now), so I cannot pester him about details. Besides, it might be too long
+ago to remember details, anyways.
+
+What I _can_ do is try to recreate the problem (the report said that this
+happens in a Kudu console of an Azure Web App, see
+https://github.com/projectkudu/kudu/wiki/Kudu-console) by creating a new
+Azure Web App and opening that console and run Cygwin within it, which is
+what I am going to do now.
+
+> > Reported by David Ebbo.
+>
+> This should be
+>
+>   Reported-By: David Ebbo <email address>
+
+Will fix. Naturally, it won't be his Microsoft email address any longer,
+but the recent patches I obtained from repositories at
+https://github.com/davidebbo/ have a GMail address on record.
+
+> > diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+> > index d493d29b3b..b01bcff5cb 100644
+> > --- a/winsup/cygwin/uinfo.cc
+> > +++ b/winsup/cygwin/uinfo.cc
+> > @@ -883,6 +883,8 @@ fetch_from_path (cyg_ldap *pldap, PUSER_INFO_3 ui,=
+ cygpsid &sid, PCWSTR str,
+> >  	    case L'u':
+> >  	      if (full_qualified)
+> >  		{
+> > +		  if (!dom)
+> > +		    break;
+>
+> No domain?  Really?
+
+Yes, I distinctly remember that I had to do that, otherwise the code would
+not work as intended.
 
 Ciao,
 Johannes
