@@ -1,120 +1,123 @@
-Return-Path: <SRS0=8BlN=73=gmx.de=johannes.schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by sourceware.org (Postfix) with ESMTPS id EC49238515F9
-	for <cygwin-patches@cygwin.com>; Tue,  4 Apr 2023 15:08:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC49238515F9
+Return-Path: <SRS0=8BlN=73=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by sourceware.org (Postfix) with ESMTPS id 792403858C62;
+	Tue,  4 Apr 2023 15:11:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 792403858C62
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1680620880; i=johannes.schindelin@gmx.de;
-	bh=VvoNz9MyM9Q4jMjW+7dD0Z5xk31OyH8+RfVPGXgG+g0=;
-	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=FOtfUU51NQ7J8DmwHXBNgniW1pFQotPrK8E1nYYXKYQqsq1e/4Xa0AGcs2aPyl0YD
-	 bWXzBskEqVaDnfy5nbmy5C2JaCcNUL/ohkEO9qOeZQ0uQMlPzGcnwwXp96O6yoX+AR
-	 s2kKXgynevII2Lf+48xbqdZUCKDv2TwW7jRtQ1kUEFjFcQ8HjF1MHhzmZF93b8LyXO
-	 5Y9l706IWp94VSiVzWURfRSS/7pf3zQxEoG4FZtHEDR0W/zPcfUG4BCJ+KfdDXbpXK
-	 I4ZiOsH14/tADhYYB5Ro9ARHAYD5xNDLrm+7KJ7Pngi5la36ataD582+LqwBTABf05
-	 YRXACe6RCcDfQ==
+	t=1680621077; i=johannes.schindelin@gmx.de;
+	bh=AtFXUvjjraocWiV5FbZRxjFIoVBKapj2nt/30x+Y6G8=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
+	b=HGX9Z9SR9o+DL/n98dctwEtRTt1Lh/k/MC91eSA7mDPyBqXM95VNAMvARc7QD0Sp3
+	 kHf4fqk830AiaXlCWUKvNxU9mGZtOSmfoKP1/WGaMbg7yEaveBbvPShHyC8r7h0Mmf
+	 oBgFGhEJX7YX27Rig8XgVMdtcpng8m5qNnXiE2WnUafE8OmbsmGd8wnDScgYzLtPte
+	 2ZpcgeUjSqgMds7VPjZUYKSHde73aXjmYGPYRSmAG0jS19mBYsZAc/e5bRXzUGkjTC
+	 nkIxFCmf1HDJ3sB4vA/Z2Z8Vz3X9nRFrD0fHUDNKMbeCLEgzUJRxROcb6nSeiZM7Y0
+	 i6zVQh9nD9rcw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpSb-1qLUr31jWj-00gH91 for
- <cygwin-patches@cygwin.com>; Tue, 04 Apr 2023 17:08:00 +0200
-Date: Tue, 4 Apr 2023 17:07:59 +0200 (CEST)
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v6 4/4] Do not rely on `getenv ("HOME")`'s path conversion
-In-Reply-To: <cover.1680620830.git.johannes.schindelin@gmx.de>
-Message-ID: <8ac1548b9216b5b014947bb3278f9c647103fa91.1680620830.git.johannes.schindelin@gmx.de>
-References: <cover.1680532960.git.johannes.schindelin@gmx.de> <cover.1680620830.git.johannes.schindelin@gmx.de>
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0G1n-1qeos61Ehz-00xOID; Tue, 04
+ Apr 2023 17:11:17 +0200
+Date: Tue, 4 Apr 2023 17:11:16 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Corinna Vinschen <corinna-cygwin@cygwin.com>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v4 3/3] Respect `db_home: env` even when no uid can be
+ determined
+In-Reply-To: <ZCsnyGMLSGY1nHbe@calimero.vinschen.de>
+Message-ID: <330cda66-a65f-6f91-7669-d4d21443b4f3@gmx.de>
+References: <cover.1663761086.git.johannes.schindelin@gmx.de> <cover.1679991274.git.johannes.schindelin@gmx.de> <4cd6ae73074f327064b54a08392906dbc140714a.1679991274.git.johannes.schindelin@gmx.de> <ZCK+v7yBxRBft3UK@calimero.vinschen.de>
+ <97e5226e-60c6-9d03-0c71-72e3192abe59@gmx.de> <8b84ada5-ae6c-febf-e412-365fe2f919fe@gmx.de> <ZCrUq1P4kOr7D44O@calimero.vinschen.de> <f6abb639-8120-fdb1-86ae-103565730789@gmx.de> <ZCsnyGMLSGY1nHbe@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:SvD0xD2wQ/gWXFCYLIqY528/pfh4ILb06lWV5Ud8gAqtRrR2PXi
- c/CKZAVsGShcvYWZKNrFz/K1QbGLEHUlr3D4s+KVK2k+MyccGXeqgXIyZYKErPDLkk3RBiP
- uTOjcGTCqPtlDVUaunyQvaNaGn9PVbehQXHeyTUk5hP9MQcpLdwwktSkev2k4hwgT0SsfT5
- Ahr1p41ybVd0p1DIdahEA==
-UI-OutboundReport: notjunk:1;M01:P0:zXDiVCOrHeg=;h5n2yn1OESEIPWI+XEdhSMHOwdB
- a0BlabiWayNmhUzeQAiyEFOnTPQHx04nq+dzIUcjB5jfmoEdKGnrwhHEjtTHwpiGhERulhQ5o
- 3wsdW0gYh6CoSG9WmR8fDjoPW2YVgDberVzdhEFnBwCHJKZrw86lUoP+hbsR++vTnXUWNOC7y
- EXO+aiNcygKx+gTqtCxvYlxz6uLQvD/p9TK2go7+ZUmoLqvjT+RWd1WES2zlDTvhbA4ZB4/fn
- rQxwI1i4N7ava8LZaTRyZMmu/DEsoJa6vXmM2Fsdg9Fn4ltaQ9+3zSoN7uRqiXMhuOa52JIWl
- nKU72Xfm6agr6c2xA6/CHYuLwBRz7rGh29raTIAOHIc7xq4y3VvPp/xCReNUurpTbCYbe4049
- PiMHr/dBykuKnEN4H2bMUF8rn0mm+C+hI4r3YLSrVlebN1o1Zcj0k+HsdXsTusQJ4ogUENbgV
- typjRwM5vZGLKgmCOgdfy8zckqAq0aOMR3TNllQQXGRvLpfnhYUbssMnlithuH+X79rFv+sIt
- de/wvH+2FMRMlhyc2bKw+gVO+kp8dLwFnqsTrgfpGi5uNVasuhsT/6CVjnboXkXdLGswX/dLf
- 2csc3Znhi5EiVd8b46dvE09IxOeuzyMVf2GjmkQtlFJO+z/7WKpe2ahUTwcl3+saJHsHESgih
- B1OZ0lA9h5m4Flz/9zjGfeTLrylrYs0GrbZjTb+G10h5PUHI0EUIlVaWCAldLoed0zEsGXIBO
- BRX8wQWds8RDfisyXmcFTnWGLEmzJwDzthu0+DEl6m+Hl6ZLrtEdmA0wX9E4ZmJGmz0qLfzSH
- QqmEAsqz2EEJWOo8D9Wh0tnITvOvZbtXKA3ePZWjSmp/FGx4vhCwbx67jPYcL8obclx/5Qb2e
- rP7ImjbJ06b/QQcAwSDniIRWGxyf51b4LfZtw1zOyFuP7cUX+IyOwP3SpBL3UcVHo6e5W3kfB
- 0msojwhBqW8I19klfBa4hJgw3QA=
+X-Provags-ID: V03:K1:ZjrW+tghPdh3lm0fpSpuZoqwXvirq8cxA6vAiihdhhlcU/bcpj9
+ gVeTtc01cJFDVdSGH2WFeFMh2QC9UkxeDgcRxG/TxKYVRHlNxkI+U/O5tqnr73lizomIY2e
+ iC6FhkxuYPCa+hh+VYnvczQrgRo2ET4gK7tphut85LIVwKJcyCJxRnXyauMJJWmjZD6ryks
+ Q9DtvnBZvBqnK5/6Xi0Mw==
+UI-OutboundReport: notjunk:1;M01:P0:RN5WMBDukzk=;7ISRYJ4CSpSsJ6FszAzVpbYryhw
+ Q0FUuW120z1QQ5GKkAd2g/RL3LPrnySwNm9XcHrsGAx0yWVVG8QwNAt5njEPW3a/mWq9FWzP/
+ hY8QwV56xG0jhd71xwDrv/YkIhV1PwU7VeOMkCgT525c3xrIHsPKEtCJ3tw/xcFmrqm1B/7S+
+ HHOzv+i+abJM+8b1Mk5o5kuNG0SB9OAYyaZvX7HVl8eZy9dmGKnqClmE1qS9zGuHvqoDwjhRh
+ w5a+V98gQBkqCcnb0+kVIBmL+H0mlXyHdlrdnmUw9FyEZ6KQ7fHiKzsAVSBkH2JGWzf+6G18G
+ t/DoIg7Baqsgf/XPZFx24S+ZB8gQvn8hw55rD/8vJPWqZrOBiPFMEqSBAwNjTsUVjhg2cQkZC
+ 4vWkZRaguzpqBLC//ArjctYUdev8enK7ZLit88ShhGwClALhp0GYhi2M3ypbfWPWbd6lsNdwk
+ 4lygu87e9tcX6Ev+1tK51D2B3U05dKML+gcytNUsbkIcAhS8Ca/cW3HJMOmWq1GmqCO8jI/m4
+ 7gonEAumicmaTmwIZ0gUPiDOp4BjbPt+IwwuRc/AtQtffZ8MPl1/3X9x5f4qfsmEi5EBUMnF4
+ yOf4+tfI23Xf94icZ+jZd7X4jAzjgkMSo0lcdsgs+klK8XgdSUMeC+OSAUJvGsi6T+yZPloh+
+ KUKjD6qD4UVrHgEnMvafj+mI6KCw+k48ILlDCu088MlK42V8/IlpOW0xfdlbqG/osYkgfcjAs
+ DzfQV3ckL7gT+MJCIPEvUpS2eF85SOR9Oe8vXQ6deeLnH5PY3CEKKJpCI0+iz/7iSEPHZ6R1c
+ aVsTD596VBe+Jcn5g8uNabzVtSEy93/DUf0j4Aw8JetaBiFrJWCe7Bfn1Zb/tT9hHLM78rTZP
+ auoftwGZ/zSjJJpFmlj25tPWr5JECnYQO+VKjRigFPsJQI3TdaaTlASn7hmx8uBm445zh9NAI
+ tfTCyA==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-In the very early code path where `dll_crt0_1 ()` calls
-`user_shared->initialize ()`, the Cygwin runtime calls `internal_pwsid ()`
-to initialize the user name in preparation for reading the `fstab` file.
+Hi Corinna,
 
-In case `db_home: env` is defined in `/etc/nsswitch.conf`, we need to
-look at the environment variable `HOME` and use it, if set.
+On Mon, 3 Apr 2023, Corinna Vinschen wrote:
 
-When all of this happens, though, the `pinfo_init ()` function has had no
-change to run yet (and therefore, `environ_init ()`). At this stage,
-therefore, `getenv ()`'s `findenv_func ()` call still finds `getearly ()`
-and we get the _verbatim_ value of `HOME`. That is, the Windows form.
-But we need the "POSIX" form.
+> On Apr  3 15:57, Johannes Schindelin wrote:
+> > On Mon, 3 Apr 2023, Corinna Vinschen wrote:
+> > > > So here is what is going on:
+> > > >
+> > > > - The domain is 'IIS APPPOOL'
+> > >
+> > > There's a domain, so why not pass it to the called function?>
+> >
+> > Sorry, I was unclear. This domain _is_ used when looking for the uid, =
+but
+> > then we run into a code path where the UID cannot be determined (becau=
+se
+> > the domain of the account is not the machine name and the machine is n=
+o
+> > domain member). The clause in question is here:
+> > https://github.com/cygwin/cygwin/blob/cygwin-3.4.6/winsup/cygwin/uinfo=
+.cc#L2303-L2310.
+> > The Cygwin runtime then returns -1 as UID.
+> >
+> > The _subsequent_ call to `getpwuid(-1)` is the one where we need to te=
+ach
+> > Cygwin to respect `db_home: env`. This is the code path taken by OpenS=
+SH.
+> > And that code path only has an `arg.id` to work with (the `type` is
+> > `ID_arg`), and that `arg.id` is invalid. There is no domain in that co=
+de
+> > path that we could possibly pass to the `get_home()` method.
+>
+> That makes a lot of sense.  However, wouldn't it be better to return
+> some kind of valid uid, rather than working around uid -1?
 
-To add insult to injury, later calls to `getpwuid (getuid ())` will
-receive a cached version of the home directory via
-`cygheap->pg.pwd_cache.win.find_user ()` thanks to the first
-`internal_pwsid ()` call caching the result via
-`add_user_from_cygserver ()`, read: we will never receive the converted
-`HOME` but always the Windows variant.
+It would!
 
-So, contrary to the assumptions made in 27376c60a9 (Allow deriving the
-current user's home directory via the HOME variable, 2023-03-28), we
-cannot assume that `getenv ("HOME")` returned a "POSIX" path.
+> > > > - The name is the name of the Azure Web App
+> > > >
+> > > > - The sid is 'S-1-5-82-3932326390-3052311582-2886778547-4123178866=
+-1852425102'
+> > >
+> > > Oh well. These are basically the same thing as 1-5-80 service accoun=
+ts.
+> > > It would be great if we could handle them gracefully instead of
+> > > special-case them in a piece of code we just reach because we don't
+> > > handle them yet.
+> >
+> > True, but I don't really understand how they could be handled.
+>
+> We do something along these lines already for the AzureAD SIDs of type
+> S-1-12-1-what-the-heck.  If we do the same for the S-1-5-82 IIS AppPool
+> accounts, we may be able to handle this more sanely.  Just search for
+> AzureAD in uinfo.cc.
+>
+> What do you think?
 
-This is a real problem. Even setting aside that common callers of
-`getpwuid ()` (such as OpenSSH) are unable to handle Windows paths in the
-`pw_dir` attribute, the Windows path never makes it back to the caller
-unscathed. The value returned from `fetch_home_env ()` is not actually
-used as-is. Instead, the `fetch_account_from_windows ()` method uses it
-to write a pseudo `/etc/passwd`-formatted line that is _then_ parsed via
-the `pwdgrp::parse_passwd ()` method which sees no problem with
-misinterpreting the colon after the drive letter as a field separator of
-that `/etc/passwd`-formatted line, and instead of a Windows path, we now
-have a mere drive letter.
+I implemented that, as patch 3 of 4 in the sixth iteration of the patch
+series.
 
-Let's detect when the `HOME` value is still in Windows format in
-`fetch_home_env ()`, and convert it in that case.
+It is a bit more involved than I would have loved, but it does the job in
+my tests (although I now need the fourth patch for it to work, which was
+not the case previously, for obvious reasons).
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-=2D--
- winsup/cygwin/uinfo.cc | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index 5e2d88bcd7..bc9e926159 100644
-=2D-- a/winsup/cygwin/uinfo.cc
-+++ b/winsup/cygwin/uinfo.cc
-@@ -929,7 +929,13 @@ fetch_home_env (void)
-   /* If `HOME` is set, prefer it */
-   const char *home =3D getenv ("HOME");
-   if (home)
--    return strdup (home);
-+    {
-+      /* In the very early code path of `user_info::initialize ()`, the v=
-alue
-+         of the environment variable `HOME` is still in its Windows form.=
- */
-+      if (isdrive (home))
-+	return (char *) cygwin_create_path (CCP_WIN_A_TO_POSIX, home);
-+      return strdup (home);
-+    }
-
-   /* If `HOME` is unset, fall back to `HOMEDRIVE``HOMEPATH`
-      (without a directory separator, as `HOMEPATH` starts with one). */
-=2D-
-2.40.0.windows.1
+Ciao,
+Johannes
