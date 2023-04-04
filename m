@@ -1,287 +1,120 @@
 Return-Path: <SRS0=8BlN=73=gmx.de=johannes.schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by sourceware.org (Postfix) with ESMTPS id 8F4B238582A4
-	for <cygwin-patches@cygwin.com>; Tue,  4 Apr 2023 15:07:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8F4B238582A4
+	by sourceware.org (Postfix) with ESMTPS id EC49238515F9
+	for <cygwin-patches@cygwin.com>; Tue,  4 Apr 2023 15:08:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC49238515F9
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1680620875; i=johannes.schindelin@gmx.de;
-	bh=nWInKePtD14mrfP9c6dDYpR/nESNgAlacvk08H6ZEK0=;
+	t=1680620880; i=johannes.schindelin@gmx.de;
+	bh=VvoNz9MyM9Q4jMjW+7dD0Z5xk31OyH8+RfVPGXgG+g0=;
 	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=XFU22ScgX1WwIOrPpLySh88rkVciIkJwqWJJ8gmRJCFyRF5grw2xM2IXE0oFedl+F
-	 tJXgVSMOLL827y4SXmSq4uXUnslKkrZA7yduUZKxh6GbYvC5NZ+qLMSveLcY8FwZq7
-	 Kr86gJk6xwxpqaYMVz98NIjaU/LbDbNXW4WZtdY7tbCWfdQ3UHKtY8KVO73h21sKjJ
-	 eOCNrIf3mJfYnIiNIwARhk2aqRGCwTrksAS0LKNx2GHTBSc0ZtpJ+rfsdVG7oQUJzT
-	 ZuNWlT7CMAxK2u8EDM67O3TURTvyjiMqwgqckeCB6hRL2F5IPAP2SZZwZyABxodqun
-	 yaIPISkdt8fmw==
+	b=FOtfUU51NQ7J8DmwHXBNgniW1pFQotPrK8E1nYYXKYQqsq1e/4Xa0AGcs2aPyl0YD
+	 bWXzBskEqVaDnfy5nbmy5C2JaCcNUL/ohkEO9qOeZQ0uQMlPzGcnwwXp96O6yoX+AR
+	 s2kKXgynevII2Lf+48xbqdZUCKDv2TwW7jRtQ1kUEFjFcQ8HjF1MHhzmZF93b8LyXO
+	 5Y9l706IWp94VSiVzWURfRSS/7pf3zQxEoG4FZtHEDR0W/zPcfUG4BCJ+KfdDXbpXK
+	 I4ZiOsH14/tADhYYB5Ro9ARHAYD5xNDLrm+7KJ7Pngi5la36ataD582+LqwBTABf05
+	 YRXACe6RCcDfQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MybGX-1qc3lu3Ndd-00z00c for
- <cygwin-patches@cygwin.com>; Tue, 04 Apr 2023 17:07:55 +0200
-Date: Tue, 4 Apr 2023 17:07:54 +0200 (CEST)
+Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpSb-1qLUr31jWj-00gH91 for
+ <cygwin-patches@cygwin.com>; Tue, 04 Apr 2023 17:08:00 +0200
+Date: Tue, 4 Apr 2023 17:07:59 +0200 (CEST)
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v6 3/4] uinfo: special-case IIS APPPOOL accounts
+Subject: [PATCH v6 4/4] Do not rely on `getenv ("HOME")`'s path conversion
 In-Reply-To: <cover.1680620830.git.johannes.schindelin@gmx.de>
-Message-ID: <9b79624368e13aef1e71eaee17c422df794ebe5d.1680620830.git.johannes.schindelin@gmx.de>
+Message-ID: <8ac1548b9216b5b014947bb3278f9c647103fa91.1680620830.git.johannes.schindelin@gmx.de>
 References: <cover.1680532960.git.johannes.schindelin@gmx.de> <cover.1680620830.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:WS6lUIymgrzrxCqToya45Tb1tVUUTrgt7MIZ+mo3lU+lzfv6Rn5
- fWYk/uKaX5aVsCnTeTQbEysJC3WNcoo//CV49KaeeZMJl1jkja6NNvgZcIVUuOZ9sO2Y3X8
- vH1pe4E168SQwf2GPcByO+/tJhALFavVViifheKiKh28Eodz1uI/poE652xJfZeGCpsOOUN
- VT9gPHZgP3L+xoZRArXUg==
-UI-OutboundReport: notjunk:1;M01:P0:9fe2EDr7zMQ=;WqnBFagD6hr/GhW+ETPkCv8h4WU
- WU2wjDCnbJ4lInDyyUTsPlXwef3UaEpekYNUA/qK3TSW2XFPz54LNLklLIMTEqWDTuBlsCa2k
- CB3pS/z8ku0WO5WgW3eX1ejcAHXfLoBBaePoREOAb0Kq7YOycCFunGPRO+2jiIxI7tT0zNZkh
- w3+Wxwr/aUyWgoFl95Q28SuL7S9X2c9eb0ww3i95+rG6hyRCryVkmD6oMH/EdPqLDypxew2H2
- IV1xWO0J+HOcXnZSBv44XEwMof0N+QCcXwglaPCzO21s9RkGZ2mvyta1vrl7ET/eIZ4185lQi
- XsFqk0IYnVAe0GkMFIcVssFMITLPQ1aNy30dRhVoYi3Zm96P/vyncL4T3EIF+pCco/B3LIgHE
- L/dRfqOAuWLqRWyg+19hz1WBfAqgZbgu3MU2OsuF62HpZzcc97Li2C/23065mYbQetMXiYv+C
- bwfPKLNBUNRhS6HhqCwIoY4jHnrEJfugnuY/drSVZsMddJvbcr0XGBSTTz+bPala6Lyo9RRaQ
- 99jINAGM0chOXSKdbMwTRjKvQHWRDJk13bRtor3IUcxQ4DJ6g9gxRc6PbzE80gBWgKlm1lsWf
- bPQnwz+/bu7Dqg6yTADDMazsvpThUYIvM7SqGQ1bTaDxV9Q7oREe4irjx4snlkioBsRJX3v4X
- Md9KsAAj3dgi40svu/5hCfmK8fSFEdjzq1VeIySDWiQW68Vvz1iQhFmA1iusxr7Oho0VYaadK
- rOfKGQTbRPpv2FBHwlNxOzkmJ9kKPpPnv2qDoHresZO9qgRDjwETsvmM/4qBBUYLFjjxiN1fv
- nngbeSdAhg7xFbac9Z/92uoB4iKzzMmcHINy0eylbRV0IpQIl9RGEccgzzlOeEDhz9tNWtKIn
- 9TDjHXWuuHV+YUeF+FrgKzU3nN0WieRvbKUN0XBaRIBOdkRG2icQatlVZQ/HzwcWlDVguK4de
- Sw1a5g==
+X-Provags-ID: V03:K1:SvD0xD2wQ/gWXFCYLIqY528/pfh4ILb06lWV5Ud8gAqtRrR2PXi
+ c/CKZAVsGShcvYWZKNrFz/K1QbGLEHUlr3D4s+KVK2k+MyccGXeqgXIyZYKErPDLkk3RBiP
+ uTOjcGTCqPtlDVUaunyQvaNaGn9PVbehQXHeyTUk5hP9MQcpLdwwktSkev2k4hwgT0SsfT5
+ Ahr1p41ybVd0p1DIdahEA==
+UI-OutboundReport: notjunk:1;M01:P0:zXDiVCOrHeg=;h5n2yn1OESEIPWI+XEdhSMHOwdB
+ a0BlabiWayNmhUzeQAiyEFOnTPQHx04nq+dzIUcjB5jfmoEdKGnrwhHEjtTHwpiGhERulhQ5o
+ 3wsdW0gYh6CoSG9WmR8fDjoPW2YVgDberVzdhEFnBwCHJKZrw86lUoP+hbsR++vTnXUWNOC7y
+ EXO+aiNcygKx+gTqtCxvYlxz6uLQvD/p9TK2go7+ZUmoLqvjT+RWd1WES2zlDTvhbA4ZB4/fn
+ rQxwI1i4N7ava8LZaTRyZMmu/DEsoJa6vXmM2Fsdg9Fn4ltaQ9+3zSoN7uRqiXMhuOa52JIWl
+ nKU72Xfm6agr6c2xA6/CHYuLwBRz7rGh29raTIAOHIc7xq4y3VvPp/xCReNUurpTbCYbe4049
+ PiMHr/dBykuKnEN4H2bMUF8rn0mm+C+hI4r3YLSrVlebN1o1Zcj0k+HsdXsTusQJ4ogUENbgV
+ typjRwM5vZGLKgmCOgdfy8zckqAq0aOMR3TNllQQXGRvLpfnhYUbssMnlithuH+X79rFv+sIt
+ de/wvH+2FMRMlhyc2bKw+gVO+kp8dLwFnqsTrgfpGi5uNVasuhsT/6CVjnboXkXdLGswX/dLf
+ 2csc3Znhi5EiVd8b46dvE09IxOeuzyMVf2GjmkQtlFJO+z/7WKpe2ahUTwcl3+saJHsHESgih
+ B1OZ0lA9h5m4Flz/9zjGfeTLrylrYs0GrbZjTb+G10h5PUHI0EUIlVaWCAldLoed0zEsGXIBO
+ BRX8wQWds8RDfisyXmcFTnWGLEmzJwDzthu0+DEl6m+Hl6ZLrtEdmA0wX9E4ZmJGmz0qLfzSH
+ QqmEAsqz2EEJWOo8D9Wh0tnITvOvZbtXKA3ePZWjSmp/FGx4vhCwbx67jPYcL8obclx/5Qb2e
+ rP7ImjbJ06b/QQcAwSDniIRWGxyf51b4LfZtw1zOyFuP7cUX+IyOwP3SpBL3UcVHo6e5W3kfB
+ 0msojwhBqW8I19klfBa4hJgw3QA=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The account under which Azure Web Apps run is an IIS APPOOL account that
-is generated on the fly.
+In the very early code path where `dll_crt0_1 ()` calls
+`user_shared->initialize ()`, the Cygwin runtime calls `internal_pwsid ()`
+to initialize the user name in preparation for reading the `fstab` file.
 
-These are special because the virtual machines on which thes Apps run
-are not domain-joined, yet the accounts are domain accounts.
+In case `db_home: env` is defined in `/etc/nsswitch.conf`, we need to
+look at the environment variable `HOME` and use it, if set.
 
-To support the use case where such a Web App needs to call `ssh` (e.g.
-to deploy from a Git repository that is accessible only via SSH), we do
-need OpenSSH's `getpwuid (getuid ())` invocation to work.
+When all of this happens, though, the `pinfo_init ()` function has had no
+change to run yet (and therefore, `environ_init ()`). At this stage,
+therefore, `getenv ()`'s `findenv_func ()` call still finds `getearly ()`
+and we get the _verbatim_ value of `HOME`. That is, the Windows form.
+But we need the "POSIX" form.
 
-But currently it does not. Concretely, `getuid ()` returns -1 for these
-accounts, and OpenSSH fails to find the correct home directory
-(_especially_ when that home directory was overridden via a `db_home:
-env` line in `/etc/nsswitch.conf`).
+To add insult to injury, later calls to `getpwuid (getuid ())` will
+receive a cached version of the home directory via
+`cygheap->pg.pwd_cache.win.find_user ()` thanks to the first
+`internal_pwsid ()` call caching the result via
+`add_user_from_cygserver ()`, read: we will never receive the converted
+`HOME` but always the Windows variant.
 
-This can be verified e.g. in a Kudu console (for details about Kudu
-consoles, see https://github.com/projectkudu/kudu/wiki/Kudu-console):
-the domain is `IIS APPPOOL`, the account name is the name of the Azure
-Web App, the SID starts with 'S-1-5-82-`, and
-`pwdgrp::fetch_account_from_windows()` runs into the code path where
-"[...] the domain returned by LookupAccountSid is not our machine name,
-and if our machine is no domain member, we lose.  We have nobody to ask
-for the POSIX offset."
+So, contrary to the assumptions made in 27376c60a9 (Allow deriving the
+current user's home directory via the HOME variable, 2023-03-28), we
+cannot assume that `getenv ("HOME")` returned a "POSIX" path.
 
-Since these IIS APPPOOL accounts are relatively similar to AzureAD
-accounts in this scenario, let's imitate the latter to support also the
-former.
+This is a real problem. Even setting aside that common callers of
+`getpwuid ()` (such as OpenSSH) are unable to handle Windows paths in the
+`pw_dir` attribute, the Windows path never makes it back to the caller
+unscathed. The value returned from `fetch_home_env ()` is not actually
+used as-is. Instead, the `fetch_account_from_windows ()` method uses it
+to write a pseudo `/etc/passwd`-formatted line that is _then_ parsed via
+the `pwdgrp::parse_passwd ()` method which sees no problem with
+misinterpreting the colon after the drive letter as a field separator of
+that `/etc/passwd`-formatted line, and instead of a Windows path, we now
+have a mere drive letter.
 
-Reported-by: David Ebbo <david.ebbo@gmail.com>
-Helped-by: Corinna Vinschen <corinna@vinschen.de>
+Let's detect when the `HOME` value is still in Windows format in
+`fetch_home_env ()`, and convert it in that case.
+
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 =2D--
- winsup/cygwin/uinfo.cc | 107 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 98 insertions(+), 9 deletions(-)
+ winsup/cygwin/uinfo.cc | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index d493d29b3b..5e2d88bcd7 100644
+index 5e2d88bcd7..bc9e926159 100644
 =2D-- a/winsup/cygwin/uinfo.cc
 +++ b/winsup/cygwin/uinfo.cc
-@@ -1485,9 +1485,9 @@ get_logon_sid ()
-     }
- }
-
--/* Fetch special AzureAD group, which is part of the token group list but
--   *not* recognized by LookupAccountSid (ERROR_NONE_MAPPED). */
--static cygsid azure_grp_sid ("");
-+/* Fetch special AzureAD and IIS APPPOOL groups, which are part of the to=
-ken
-+   group list but *not* recognized by LookupAccountSid (ERROR_NONE_MAPPED=
-). */
-+static cygsid azure_grp_sid (""), iis_apppool_grp_sid ("");
-
- static void
- get_azure_grp_sid ()
-@@ -1515,6 +1515,36 @@ get_azure_grp_sid ()
-     }
- }
-
-+static void
-+get_iis_apppool_grp_sid ()
-+{
-+  if (PSID (iis_apppool_grp_sid) =3D=3D NO_SID)
+@@ -929,7 +929,13 @@ fetch_home_env (void)
+   /* If `HOME` is set, prefer it */
+   const char *home =3D getenv ("HOME");
+   if (home)
+-    return strdup (home);
 +    {
-+      NTSTATUS status;
-+      ULONG size;
-+      tmp_pathbuf tp;
-+      PTOKEN_GROUPS groups =3D (PTOKEN_GROUPS) tp.w_get ();
-+
-+      status =3D NtQueryInformationToken (hProcToken, TokenGroups, groups=
-,
-+					2 * NT_MAX_PATH, &size);
-+      if (!NT_SUCCESS (status))
-+	debug_printf ("NtQueryInformationToken (TokenGroups) %y", status);
-+      else
-+	{
-+	  for (DWORD pg =3D 0; pg < groups->GroupCount; ++pg)
-+	    {
-+	      PSID sid =3D groups->Groups[pg].Sid;
-+	      if (sid_id_auth (sid) =3D=3D 5 &&
-+		  sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID)
-+		{
-+		  iis_apppool_grp_sid =3D sid;
-+		  break;
-+		}
-+	    }
-+	}
++      /* In the very early code path of `user_info::initialize ()`, the v=
+alue
++         of the environment variable `HOME` is still in its Windows form.=
+ */
++      if (isdrive (home))
++	return (char *) cygwin_create_path (CCP_WIN_A_TO_POSIX, home);
++      return strdup (home);
 +    }
-+}
-+
- void *
- pwdgrp::add_account_post_fetch (char *line, bool lock)
- {
-@@ -1796,6 +1826,16 @@ pwdgrp::construct_sid_from_name (cygsid &sid, wchar=
-_t *name, wchar_t *sep)
- 	}
-       return false;
-     }
-+  if (sep && wcscmp (name, L"IIS APPPOOL\\Group") =3D=3D 0)
-+    {
-+      get_iis_apppool_grp_sid ();
-+      if (PSID (logon_sid) !=3D NO_SID)
-+	{
-+	  sid =3D iis_apppool_grp_sid;
-+	  return true;
-+	}
-+      return false;
-+    }
-   if (!sep && wcscmp (name, L"CurrentSession") =3D=3D 0)
-     {
-       get_logon_sid ();
-@@ -2018,8 +2058,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
-       /* Last but not least, some validity checks on the name style. */
-       if (!fq_name)
- 	{
--	  /* AzureAD user must be prepended by "domain" name. */
--	  if (sid_id_auth (sid) =3D=3D 12)
-+	  /* AzureAD and IIS APPPOOL users must be prepended by "domain"
-+	     name. */
-+	  if (sid_id_auth (sid) =3D=3D 12 ||
-+	      (sid_id_auth (sid) =3D=3D 5 &&
-+	       sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID))
- 	    return NULL;
- 	  /* name_only account is either builtin or primary domain, or
- 	     account domain on non-domain machines. */
-@@ -2045,8 +2088,10 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
- 	}
-       else
- 	{
--	  /* AzureAD accounts should be fully qualifed either. */
--	  if (sid_id_auth (sid) =3D=3D 12)
-+	  /* AzureAD and IIS APPPOOL accounts should be fully qualifed either. *=
-/
-+	  if (sid_id_auth (sid) =3D=3D 12 ||
-+	      (sid_id_auth (sid) =3D=3D 5 &&
-+	       sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID))
- 	    break;
- 	  /* Otherwise, no fully_qualified for builtin accounts, except for
- 	     NT SERVICE, for which we require the prefix.  Note that there's
-@@ -2125,6 +2170,19 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
- 	  sid =3D csid =3D azure_grp_sid;
- 	  break;
- 	}
-+      else if (arg.id =3D=3D 0x1002)
-+        {
-+	  /* IIS APPPOOL S-1-5-82-* user */
-+	  csid =3D cygheap->user.saved_sid ();
-+	}
-+      else if (arg.id =3D=3D 0x1003)
-+        {
-+	  /* Special IIS APPPOOL group SID */
-+	  get_iis_apppool_grp_sid ();
-+	  /* LookupAccountSidW will fail. */
-+	  sid =3D csid =3D iis_apppool_grp_sid;
-+	  break;
-+	}
-       else if (arg.id =3D=3D 0xfffe)
- 	{
- 	  /* Special case "nobody" for reproducible construction of a
-@@ -2253,7 +2311,9 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t=
- &arg, cyg_ldap *pldap)
 
- 		 Those we let pass, but no others. */
- 	      bool its_ok =3D false;
--	      if (sid_id_auth (sid) =3D=3D 12)
-+	      if (sid_id_auth (sid) =3D=3D 12 ||
-+		  (sid_id_auth (sid) =3D=3D 5 &&
-+		   sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID))
- 		its_ok =3D true;
- 	      else /* Microsoft Account */
- 		{
-@@ -2342,7 +2402,7 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t=
- &arg, cyg_ldap *pldap)
- 		    posix_offset =3D fetch_posix_offset (td, &loc_ldap);
- 		}
- 	    }
--	  /* AzureAD S-1-12-1-W-X-Y-Z user */
-+	  /* AzureAD S-1-12-1-W-X-Y-Z and IIS APPOOL S-1-5-82-* user */
- 	  else if (sid_id_auth (sid) =3D=3D 12)
- 	    {
- 	      uid =3D gid =3D 0x1000;
-@@ -2355,6 +2415,21 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
- 					     name, fully_qualified_name);
- 	      break;
- 	    }
-+	  /* IIS APPOOL S-1-5-82-* user */
-+	  else if (sid_id_auth (sid) =3D=3D 5 &&
-+		   sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID)
-+	    {
-+	      uid =3D 0x1002;
-+	      gid =3D 0x1003;
-+	      fully_qualified_name =3D true;
-+	      home =3D cygheap->pg.get_home ((PUSER_INFO_3) NULL, sid, dom, name=
-,
-+					   fully_qualified_name);
-+	      shell =3D cygheap->pg.get_shell ((PUSER_INFO_3) NULL, sid, dom,
-+					     name, fully_qualified_name);
-+	      gecos =3D cygheap->pg.get_gecos ((PUSER_INFO_3) NULL, sid, dom,
-+					     name, fully_qualified_name);
-+	      break;
-+	    }
- 	  /* If the domain returned by LookupAccountSid is not our machine
- 	     name, and if our machine is no domain member, we lose.  We have
- 	     nobody to ask for the POSIX offset. */
-@@ -2614,6 +2689,20 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_=
-t &arg, cyg_ldap *pldap)
-       fully_qualified_name =3D true;
-       acc_type =3D SidTypeUnknown;
-     }
-+  else if (sid_id_auth (sid) =3D=3D 5 &&
-+	   sid_sub_auth (sid, 0) =3D=3D SECURITY_APPPOOL_ID_BASE_RID)
-+    {
-+      /* Special IIS APPPOOL group SID which can't be resolved by
-+         LookupAccountSid (ERROR_NONE_MAPPED).  This is only allowed
-+	 as group entry, not as passwd entry. */
-+      if (is_passwd ())
-+	return NULL;
-+      uid =3D gid =3D 0x1003;
-+      wcpcpy (dom, L"IIS APPPOOL");
-+      wcpcpy (name =3D namebuf, L"Group");
-+      fully_qualified_name =3D true;
-+      acc_type =3D SidTypeUnknown;
-+    }
-   else if (sid_id_auth (sid) =3D=3D 5 /* SECURITY_NT_AUTHORITY */
- 	   && sid_sub_auth (sid, 0) =3D=3D SECURITY_LOGON_IDS_RID)
-     {
+   /* If `HOME` is unset, fall back to `HOMEDRIVE``HOMEPATH`
+      (without a directory separator, as `HOMEPATH` starts with one). */
 =2D-
 2.40.0.windows.1
-
-
