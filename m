@@ -1,151 +1,269 @@
 Return-Path: <SRS0=8BlN=73=gmx.de=johannes.schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id 7ECA13858434
-	for <cygwin-patches@cygwin.com>; Tue,  4 Apr 2023 15:07:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7ECA13858434
+	by sourceware.org (Postfix) with ESMTPS id 9B3513858407
+	for <cygwin-patches@cygwin.com>; Tue,  4 Apr 2023 15:07:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9B3513858407
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1680620861; i=johannes.schindelin@gmx.de;
-	bh=2+jCq8wZf9SYxD8xnf9o+QXJBTlNfgX3A4uVo2jQCHY=;
+	t=1680620866; i=johannes.schindelin@gmx.de;
+	bh=DzFTO2RzBVGtYoad6nKPpXGUueF5OTmDENSjulnQcys=;
 	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-	b=E4cU2InAztqz0WGCTaq8KKbl4Bnhl45fRFcfwzyu32KJIqbinOtF05zKICwi0ynkX
-	 VWMIxdo4qR480GIK7TiEQzmQQbwkcNHCDxXlP+3LmhRAp1I5ZVtyOUb1zM1vyUSkUp
-	 t1FvTQtXDMVo/oDZI/gAv3CP3l9U74OaoR4a/LqbSMuq7j2//btxveOZC3de9ygFGa
-	 Rcr5zIWSaSf2B0US7dV2nASi7Q+AH37h290lw2RuBGlyQxWU2Ov3YUUWi8vVRmyUlL
-	 9UCW6T1brB4bGGzV8jouT/HgpzU5ipiA0KtqMrh87rOfN201Q7DXuemWvvRVkdc+Pu
-	 z1rdpPpmt+dbg==
+	b=IRts1A7xxD5mPtPyPW+rdIhpGU5KY+QrJ1hZQZqAat3lr/XYKi+igdGATG5rIE9z9
+	 2LTC0GuPBiluCdpjoRVJs59Ia34oyug+eLHiKijVc/WKrchMG1iyu5MD4CMSADTOOv
+	 gX8uPDB/lT8rQOP4isJMr7uLGPZR8CjoZsZOF8jdatlzf6f4ooWfvyw7qpBskfxdhM
+	 rZXXJx/eybbsjQzMPf42KQlGeDWrVoy6f+88yT1X/tw+KLKwQrWPNUIre4ocm01pIo
+	 51yeJPkOomfNazZBOESQq9URoL7SS4b+Gtdw62YRJ9ux0YDKo3lWzFMJF1KbZYvPX+
+	 wqvcfzn/yAmAQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQeA2-1q5D9H30cw-00Njtw for
- <cygwin-patches@cygwin.com>; Tue, 04 Apr 2023 17:07:41 +0200
-Date: Tue, 4 Apr 2023 17:07:40 +0200 (CEST)
+Received: from [172.23.242.68] ([89.1.213.182]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrQJ5-1qEJrZ1hXL-00oUan for
+ <cygwin-patches@cygwin.com>; Tue, 04 Apr 2023 17:07:46 +0200
+Date: Tue, 4 Apr 2023 17:07:45 +0200 (CEST)
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v6 0/4] Support deriving the current user's home directory
- via HOME
-In-Reply-To: <cover.1680532960.git.johannes.schindelin@gmx.de>
-Message-ID: <cover.1680620830.git.johannes.schindelin@gmx.de>
-References: <cover.1680532960.git.johannes.schindelin@gmx.de>
+Subject: [PATCH v6 1/4] Allow deriving the current user's home directory via
+ the HOME variable
+In-Reply-To: <cover.1680620830.git.johannes.schindelin@gmx.de>
+Message-ID: <e26cae9439b01c8a958eb19072c88e9db3abd36e.1680620830.git.johannes.schindelin@gmx.de>
+References: <cover.1680532960.git.johannes.schindelin@gmx.de> <cover.1680620830.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:Vq6rvcz0pq88kQIb18TV6mZ98w0s+B8cj1bk0n7fJTexbvk7tXc
- hXTE3WZB5LnuCJvqK0xN3aRLRPjsC/HeYlLSOtsgb83SJakrIa+ezSSkECBcBtuja3lI58h
- Xn5tQRWQRQ2hsctqFgNZzJotOPzH4HYR3psHZg5gHoUhYKPPOC/xIMwyPXJHxD43+fhwZDm
- vjvCO/t0nZouy4MGjxJNQ==
-UI-OutboundReport: notjunk:1;M01:P0:AFrLXAuGXQg=;2r45KkP6U1nvqEgz3kqIDxs92PC
- KGi2UCpmuuj6OfmoZuwERKMJbaJGgM/leY/iF9UqcdXG2MZ4jbX55kobJcsxLDutDQNeZVmZq
- qbMOSxyLCarjtCA2iC7yHvTW29grvEmgTwi7YZvUUcdSjC35tZRi54XfTn8vV5P+/MmnIekbF
- xShkkIpN2QsqwX/dXMC97t4EJtpU4ZlklM0lEAFOys502k1RY/wscnGZ5UFyv1fTdje9lKrkv
- 13C3v+FFqw+POOI1w5W4CJ5lTLlW0HFVeKwWG0lf3koy1ylwvcUgW2tQiyA00vdqFEf71tiU7
- XlqhD8NySeiPCL3MRZSwh927qh4LtC9K+ml10V76Wy9p2L37ik64yJ5NYzsPuVDhDAcf3po+u
- AqrxaWIStzq/O5QUNOMTOLYs4p58QYI0/t5fKs/SMwNzUDS/Xmn4xKWDN5/AjrY7XbAVLjyhS
- U5G/UkWa2j0+q4tYzCzaHFLKUswcQMvDlitHBMyzub65/Lvu0fxBBv7nqXLR49K0qANqG6lS/
- AXbKAIBQA8+YI3d1uKbO8lgZ1QT2U2qYWICg6q7R5p7l1gq/3fKtxp7Hatw5kqDR5mJzsMnD5
- Iu2uVdpb0bud/PRVuLCc7GPoQGuoBBx6/IGbMrXVsjCmfHtnJ+6L92jDIhHb0Y75A26CXs1Sw
- A1c/oG27HMbWC+RW+KtC2vhazi2n6zcmHcn7GcHN3ePqz1HaIrALv8226IfsiZOQRMQzFfNxv
- GolTbiHrxszTqmXZdiM++5VwWI+V++n7M3c83H0t45OlIaAtZ6kVIpvYxVI3e2EtaRwS4yhFV
- tJzqDQ3bU1hyDBJsmEZfDGhzQRRM+/b5juGvC5q7Cimdm/YvLoj8aAxlZSK5iwt6Q5dDZMFLU
- I4IOtETalQCft6k9WB7362eCVd61LTfEAGiNyEtWp/E8ErJ6OLrsXN0Z5Tp/iuHOLY4+FBrSX
- HMWh3Q==
+X-Provags-ID: V03:K1:buMBb6vOQ22HFn5k2kmXShu9E915ceWo0guu3+VeOYwrpu+aTYZ
+ 8O0yB34EJZjDSoH/tivFtVtZ5a4EG3lZ4CJ636AAB1yCK96vEhikXf3u04ti0Erf4yF8Vjp
+ G1meLivxxmhV+HT0GdntBzaxj/jHdqp8jbkpzxWoXC+uRRG5+pisQd7LX3rNJe/XRkUYFF5
+ 4Niv4Wp4sLsPMlC6KQY4g==
+UI-OutboundReport: notjunk:1;M01:P0:oXCB6OY/cN8=;9FTBKtOlw/xKKH3jk2zVbbeTytv
+ DhyJrQmS6FM3t8/hVLidBdgHi73k4RF3yy2tHo6VDYBTAolg1VPlRbwtHJZnf5z2LMviaHlgE
+ GTRS7Rwcr+pzvAskmDAQa38i0glGRIANljEm85ekQXiASkuJGYfePqxdEsfADhQVIP+JXds+Q
+ 21/M8c3zr93RVg4FixLqau3Dt0Q4sD4MYnPDFuJXEhBUUh/xkzfZ4X3btDmk0iy90dshRDtCA
+ 3JvJic2cKvJarSfJ0vx8O4840FgCrqSOo1h4qlxsSK+DgL4qacGevA7n9yNdtiVZpE63QEn36
+ PSFCJN18Fa8KvaJ04PP4/24mZHMTJ9z/urt0s+YHH/IITU1cvX4eC1srPzpUaVGswcBQp2V3K
+ 0em9AcD4/jJx8U2UsaxnbAoSBQioBpGaR4OK/sO8tpUCbif67X4VmAZf9J49RcYI1ORKEQHut
+ zfYPidTaMWcHFQZ+XFkNkcc1UPsA7ud+kTiSYjIY+quB6lkUQm5zzIXPXPFP0iqy7UVQa+k1y
+ G+Fh/kLHdPhSAjXVq1WvbXmocw8tqQ4lrnAFvjDh+5+fNETnxaDiozS18uQthV0fAaAEoucey
+ 3aGPQrm/yQHRSstOUGetwbZW26dt/ySG2Gs6K7iLShpBV5KHkx8J6k6BQGRi6VHBEauPXhorK
+ F96oGaEs5N3uMyctaR0D5Te5TgwJrhO1o/p63NmiqeRMod1t/O7yXIvGIUGKszLrLrYb1QjK7
+ Cl/0FT3dJEOzwnmYrraFBzYkOD/bM3V0Chdoy9jewQSbbuJHdmBd+LNUOCDVcSI6PmHdULoS4
+ yhzMI2goO5y410jjrS8sla6IguEhuMAP5gJMIAeJ92GBjCq+XkEfepk78XSUFeBceakTutF8B
+ sUKUHrmu1DD5cItbO18RyiYZKCXIzAZcfMwXsWYgxrZygLQuENaBucxIs+B29sDIJG+b/sWtM
+ usJ2Mg==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This patch series supports Git for Windows' default strategy to
-determine the current user's home directory by looking at the
-environment variable HOME, falling back to HOMEDRIVE and HOMEPATH, and
-if these variables are also unset, to USERPROFILE.
+This patch hails from Git for Windows (where the Cygwin runtime is used
+in the form of a slightly modified MSYS2 runtime), where it is a
+well-established technique to let the `$HOME` variable define where the
+current user's home directory is, falling back to `$HOMEDRIVE$HOMEPATH`
+and `$USERPROFILE`.
 
-This strategy is a quick method to determine the home directory,
-certainly quicker than looking at LDAP, even more so when a domain
-controller is unreachable and causes long hangs in Cygwin's startup.
+The idea is that we want to share user-specific settings between
+programs, whether they be Cygwin, MSYS2 or not.  Unfortunately, we
+cannot blindly activate the "db_home: windows" setting because in some
+setups, the user's home directory is set to a hidden directory via an
+UNC path (\\share\some\hidden\folder$) -- something many programs
+cannot handle correctly, e.g. `cmd.exe` and other native Windows
+applications that users want to employ as Git helpers.
 
-This strategy also allows users to override the home directory easily
-(e.g. in case that their real home directory is a network share that is
-not all that well handled by some commands such as cmd.exe's cd
-command).
+The established technique is to allow setting the user's home directory
+via the environment variables mentioned above: `$HOMEDRIVE$HOMEPATH` or
+`$USERPROFILE`.  This has the additional advantage that it is much
+faster than querying the Windows user database.
 
-NOTE! This iteration presents patches 1 & 2 only for completeness' sake
-and for backporting, as they have been applied to Cygwin's main branch
-already.
+Of course this scheme needs to be opt-in.  For that reason, it needs
+to be activated explicitly via `db_home: env` in `/etc/nsswitch.conf`.
 
-Changes since v5:
+Documentation-fixes-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+=2D--
+ winsup/cygwin/local_includes/cygheap.h |  3 +-
+ winsup/cygwin/uinfo.cc                 | 51 ++++++++++++++++++++++++++
+ winsup/doc/ntsec.xml                   | 20 +++++++++-
+ 3 files changed, 72 insertions(+), 2 deletions(-)
 
-- Replaced the third patch by a patch that imitates AzureAD account
-  handling also for IIS APPPPOOL ones.
+diff --git a/winsup/cygwin/local_includes/cygheap.h b/winsup/cygwin/local_=
+includes/cygheap.h
+index d885ca1230..b6acdf7f18 100644
+=2D-- a/winsup/cygwin/local_includes/cygheap.h
++++ b/winsup/cygwin/local_includes/cygheap.h
+@@ -358,7 +358,8 @@ public:
+     NSS_SCHEME_UNIX,
+     NSS_SCHEME_DESC,
+     NSS_SCHEME_PATH,
+-    NSS_SCHEME_FREEATTR
++    NSS_SCHEME_FREEATTR,
++    NSS_SCHEME_ENV
+   };
+   struct nss_scheme_t {
+     nss_scheme_method	method;
+diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+index 30df6db6d8..baa670478d 100644
+=2D-- a/winsup/cygwin/uinfo.cc
++++ b/winsup/cygwin/uinfo.cc
+@@ -733,6 +733,8 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+ 		    scheme[idx].method =3D NSS_SCHEME_UNIX;
+ 		  else if (NSS_CMP ("desc"))
+ 		    scheme[idx].method =3D NSS_SCHEME_DESC;
++		  else if (NSS_CMP ("env"))
++		    scheme[idx].method =3D NSS_SCHEME_ENV;
+ 		  else if (NSS_NCMP ("/"))
+ 		    {
+ 		      const char *e =3D c + strcspn (c, " \t");
+@@ -921,6 +923,42 @@ fetch_from_path (cyg_ldap *pldap, PUSER_INFO_3 ui, cy=
+gpsid &sid, PCWSTR str,
+   return ret;
+ }
 
-- Added a fourth patch to fix a bug in the first patch (which
-  unfortunately was already applied in the buggy form) where _very
-  early_ calls to `internal_pwsid ()` would result in completely bogus
-  home directory values.
++static char *
++fetch_home_env (void)
++{
++  /* If `HOME` is set, prefer it */
++  const char *home =3D getenv ("HOME");
++  if (home)
++    return strdup (home);
++
++  /* If `HOME` is unset, fall back to `HOMEDRIVE``HOMEPATH`
++     (without a directory separator, as `HOMEPATH` starts with one). */
++  const char *home_drive =3D getenv ("HOMEDRIVE");
++  if (home_drive)
++    {
++      const char *home_path =3D getenv ("HOMEPATH");
++      if (home_path)
++	{
++	  tmp_pathbuf tp;
++	  char *p =3D tp.c_get (), *q;
++
++	  // concatenate HOMEDRIVE and HOMEPATH
++	  q =3D stpncpy (p, home_drive, NT_MAX_PATH);
++	  strlcpy (q, home_path, NT_MAX_PATH - (q - p));
++	  return (char *) cygwin_create_path (CCP_WIN_A_TO_POSIX, p);
++	}
++    }
++
++  /* If neither `HOME` nor `HOMEDRIVE``HOMEPATH` are set, fall back
++     to `USERPROFILE`; In corporate setups, this might point to a
++     disconnected network share, hence this is the last fall back. */
++  home =3D getenv ("USERPROFILE");
++  if (home)
++    return (char *) cygwin_create_path (CCP_WIN_A_TO_POSIX, home);
++
++  return NULL;
++}
++
+ char *
+ cygheap_pwdgrp::get_home (cyg_ldap *pldap, cygpsid &sid, PCWSTR dom,
+ 			  PCWSTR dnsdomain, PCWSTR name, bool full_qualified)
+@@ -980,6 +1018,10 @@ cygheap_pwdgrp::get_home (cyg_ldap *pldap, cygpsid &=
+sid, PCWSTR dom,
+ 		}
+ 	    }
+ 	  break;
++	case NSS_SCHEME_ENV:
++	  if (RtlEqualSid (sid, cygheap->user.sid ()))
++	    home =3D fetch_home_env ();
++	  break;
+ 	}
+     }
+   return home;
+@@ -1012,6 +1054,10 @@ cygheap_pwdgrp::get_home (PUSER_INFO_3 ui, cygpsid =
+&sid, PCWSTR dom,
+ 	  home =3D fetch_from_path (NULL, ui, sid, home_scheme[idx].attrib,
+ 				  dom, NULL, name, full_qualified);
+ 	  break;
++	case NSS_SCHEME_ENV:
++	  if (RtlEqualSid (sid, cygheap->user.sid ()))
++	    home =3D fetch_home_env ();
++	  break;
+ 	}
+     }
+   return home;
+@@ -1031,6 +1077,7 @@ cygheap_pwdgrp::get_shell (cyg_ldap *pldap, cygpsid =
+&sid, PCWSTR dom,
+ 	case NSS_SCHEME_FALLBACK:
+ 	  return NULL;
+ 	case NSS_SCHEME_WINDOWS:
++	case NSS_SCHEME_ENV:
+ 	  break;
+ 	case NSS_SCHEME_CYGWIN:
+ 	  if (pldap->fetch_ad_account (sid, false, dnsdomain))
+@@ -1095,6 +1142,7 @@ cygheap_pwdgrp::get_shell (PUSER_INFO_3 ui, cygpsid =
+&sid, PCWSTR dom,
+ 	case NSS_SCHEME_CYGWIN:
+ 	case NSS_SCHEME_UNIX:
+ 	case NSS_SCHEME_FREEATTR:
++	case NSS_SCHEME_ENV:
+ 	  break;
+ 	case NSS_SCHEME_DESC:
+ 	  if (ui)
+@@ -1176,6 +1224,8 @@ cygheap_pwdgrp::get_gecos (cyg_ldap *pldap, cygpsid =
+&sid, PCWSTR dom,
+ 		sys_wcstombs_alloc (&gecos, HEAP_NOTHEAP, val);
+ 	    }
+ 	  break;
++	case NSS_SCHEME_ENV:
++	  break;
+ 	}
+     }
+   if (gecos)
+@@ -1202,6 +1252,7 @@ cygheap_pwdgrp::get_gecos (PUSER_INFO_3 ui, cygpsid =
+&sid, PCWSTR dom,
+ 	case NSS_SCHEME_CYGWIN:
+ 	case NSS_SCHEME_UNIX:
+ 	case NSS_SCHEME_FREEATTR:
++	case NSS_SCHEME_ENV:
+ 	  break;
+ 	case NSS_SCHEME_DESC:
+ 	  if (ui)
+diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+index c6871ecf05..687789076c 100644
+=2D-- a/winsup/doc/ntsec.xml
++++ b/winsup/doc/ntsec.xml
+@@ -1167,7 +1167,7 @@ and on non-AD machines.
+ </para>
 
-Changes since v4:
+ <para>
+-Four schemata are predefined, two schemata are variable.  The predefined
++Five schemata are predefined, two schemata are variable.  The predefined
+ schemata are the following:
+ </para>
 
-- Squashed in Corinna's documentation fixes (read: patch 1 should not be
-  applied to Cygwin's main branch, it's presented here for backporting
-  purposes).
+@@ -1203,6 +1203,13 @@ schemata are the following:
+ 	      See <xref linkend=3D"ntsec-mapping-nsswitch-desc"></xref>
+ 	      for a more detailed description.</listitem>
+   </varlistentry>
++  <varlistentry>
++    <term><literal>env</literal></term>
++    <listitem>Utilizes the user's environment.  This schema is only suppo=
+rted
++	      for setting the home directory yet.
++	      See <xref linkend=3D"ntsec-mapping-nsswitch-home"></xref> for
++	      the description.</listitem>
++  </varlistentry>
+ </variablelist>
 
-- Fixed the commit message of the second patch that mistakenly claimed
-  that Microsoft accounts would be associated with `/home/SYSTEM`.
-
-- Completely overhauled the commit message of the third patch to motivate
-  much better why this fix is needed.
-
-Changes since v3:
-
-- Fixed the bug in v2 where `getenv("HOME")` would convert the value to
-  a Unix-y path and the `fetch_home_env()` function would then try to
-  convert it _again_.
-
-- Disentangled the logic in `fetch_home_env()` instead of doing
-  everything in one big, honking, unreadable `if` condition.
-
-- Commented the code in `fetch_home_env()`.
-
-Changes since v2:
-
-- Using `getenv()` and `cygwin_create_path()` instead of the
-  `GetEnvironmentVariableW()`/`cygwin_conv_path()` dance
-
-- Adjusted the documentation to drive home that this only affects the
-  _current_ user's home directory
-
-- Using the `PUSER_INFO_3` variant of `get_home()`
-
-- Adjusted the commit messages
-
-- Added another patch, to support "ad-hoc cloud accounts"
-
-Johannes Schindelin (4):
-  Allow deriving the current user's home directory via the HOME variable
-  Respect `db_home` setting even for SYSTEM/Microsoft accounts
-  uinfo: special-case IIS APPPOOL accounts
-  Do not rely on `getenv ("HOME")`'s path conversion
-
- winsup/cygwin/local_includes/cygheap.h |   3 +-
- winsup/cygwin/uinfo.cc                 | 170 +++++++++++++++++++++++--
- winsup/doc/ntsec.xml                   |  20 ++-
- 3 files changed, 181 insertions(+), 12 deletions(-)
-
-Range-diff:
-1:  e26cae9439 =3D 1:  e26cae9439 Allow deriving the current user's home d=
-irectory via the HOME variable
-2:  085d4dd8b6 =3D 2:  085d4dd8b6 Respect `db_home` setting even for SYSTE=
-M/Microsoft accounts
-3:  cf47afceba < -:  ---------- Respect `db_home: env` even when no uid ca=
-n be determined
--:  ---------- > 3:  9b79624368 uinfo: special-case IIS APPPOOL accounts
--:  ---------- > 4:  8ac1548b92 Do not rely on `getenv ("HOME")`'s path co=
-nversion
-
-base-commit: a9a17f5fe51498b182d4a11ac48207b8c7ffe8ec
-Published-As: https://github.com/dscho/msys2-runtime/releases/tag/home-env=
--cygwin-v6
-Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime home-env-cy=
-gwin-v6
-
+ <para>
+@@ -1335,6 +1342,17 @@ of each schema when used with <literal>db_home:</li=
+teral>
+ 	      See <xref linkend=3D"ntsec-mapping-nsswitch-desc"></xref>
+ 	      for a detailed description.</listitem>
+   </varlistentry>
++  <varlistentry>
++    <term><literal>env</literal></term>
++    <listitem>Derives the home directory of the current user from the
++	      environment variable <literal>HOME</literal> (falling back to
++	      <literal>HOMEDRIVE\HOMEPATH</literal> and
++	      <literal>USERPROFILE</literal>, in that order).  This is faster
++	      than the <literal>windows</literal> schema at the
++	      expense of determining only the current user's home directory
++	      correctly.  This schema is skipped for any other account.
++	      </listitem>
++  </varlistentry>
+   <varlistentry>
+     <term><literal>@ad_attribute</literal></term>
+     <listitem>AD only: The user's home directory is set to the path given
 =2D-
 2.40.0.windows.1
+
 
