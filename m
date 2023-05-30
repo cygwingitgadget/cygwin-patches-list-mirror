@@ -1,56 +1,130 @@
-Return-Path: <SRS0=KXep=BN=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-048.btinternet.com (mailomta11-sa.btinternet.com [213.120.69.17])
-	by sourceware.org (Postfix) with ESMTPS id EF2253858289
-	for <cygwin-patches@cygwin.com>; Wed, 24 May 2023 19:51:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EF2253858289
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
-          by sa-prd-fep-048.btinternet.com with ESMTP
-          id <20230524195131.YFZH1091.sa-prd-fep-048.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
-          Wed, 24 May 2023 20:51:31 +0100
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 64067E9B09523335
-X-Originating-IP: [86.139.158.65]
-X-OWM-Source-IP: 86.139.158.65 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfeludfggefhteetueelieeltddufeevieduiefgudelueektdeutefftedvheejnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepkeeirddufeelrdduheekrdeiheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtiegnpdhinhgvthepkeeirddufeelrdduheekrdeihedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhhrghnnhgvshdrshgthhhinhguvghlihhnsehgmhigrdguvgdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduheekqdeihedrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhh
-	pghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttddv
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.106] (86.139.158.65) by sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 64067E9B09523335; Wed, 24 May 2023 20:51:31 +0100
-Message-ID: <4697cccf-90f3-35e7-c5f0-4c29a2f5ec09@dronecode.org.uk>
-Date: Wed, 24 May 2023 20:51:29 +0100
+Return-Path: <SRS0=r+DF=BT=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id 9D7473858C5E
+	for <cygwin-patches@cygwin.com>; Tue, 30 May 2023 20:04:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9D7473858C5E
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
+Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+	by cmsmtp with ESMTP
+	id 3xsmqYXPp6Nwh45aJq8ZIn; Tue, 30 May 2023 20:04:47 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1685477087; bh=JGqBLRiTWCAPZBEwMgpZUeN9TsWKjc3L2T+QFCmPcss=;
+	h=Date:Subject:Reply-To:References:To:Cc:From:In-Reply-To;
+	b=TN8zkVSi5Byo1oWFhY6ak4TsrvbOE3DXUBXhgzF9Sn0biVUq8aDgcFTVGge71n5eN
+	 8pBQoPC7OiHMLe/MkcBRJS/rASKk2eXzNPWdc3R/oh7bg0nYY7hKIIXn5466h2h5lu
+	 RCbeoo1Sg0Xq/lB8/1QJtm/Tuop5Hew/kncHlPXWWrmxVgqsQJYpUF9Layil2bc7ak
+	 AIY2bMo59StVQzsu2YDIvqYeEoj6I9SJqmawn/ynbIJE0L/pXUK37zhEGix9OjnXV+
+	 m7tjZEVcmjTio95RrT771++7USPPrpvJ0FWy31YGYjxGSBDDuXNxzXHgJQtPzokVb3
+	 3u+qCMy7p3Uqw==
+Received: from [10.0.0.5] ([184.64.102.149])
+	by cmsmtp with ESMTP
+	id 45aIqPrQryAOe45aIqJZEy; Tue, 30 May 2023 20:04:47 +0000
+X-Authority-Analysis: v=2.4 cv=e5oV9Il/ c=1 sm=1 tr=0 ts=647656df
+ a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=NEAV23lmAAAA:8 a=w_pzkKWiAAAA:8
+ a=7V-0JTp32qI25L6YbXcA:9 a=QEXdDO2ut3YA:10 a=pGLkceISAAAA:8
+ a=TqqW1sFldYH_MiWqHD0A:9 a=B2y7HmGcmWMA:10 a=sRI3_1zDfAgwuvI8zelB:22
+Content-Type: multipart/mixed; boundary="------------JgJgJ7eefapa1A6iRfOKe2dQ"
+Message-ID: <f4106af5-ed7a-0df5-a870-b87bb729f862@Shaw.ca>
+Date: Tue, 30 May 2023 14:04:46 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] Adjust CWD magic to accommodate for the latest Windows
- previews
-To: Johannes Schindelin <johannes.schindelin@gmx.de>,
- Cygwin Patches <cygwin-patches@cygwin.com>
-References: <60e1e112b1c293a69bfa4df3fe5094e562898bbb.1684755365.git.johannes.schindelin@gmx.de>
-Content-Language: en-GB
-From: Jon Turney <jon.turney@dronecode.org.uk>
-In-Reply-To: <60e1e112b1c293a69bfa4df3fe5094e562898bbb.1684755365.git.johannes.schindelin@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: [PATCH] include/cygwin/limits.h: add XATTR_{NAME,SIZE,LIST}_MAX
+Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
+Content-Language: en-CA
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Cc: newlib@sourceware.org, Philippe Cerfon <philcerf@gmail.com>
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+Organization: Inglis
+In-Reply-To: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
+X-Forwarded-Message-Id: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
+X-CMAE-Envelope: MS4xfMkEn5dneIAuOKFn+sG2glIf+EKRJba3oQCn9SDVG42ET6tBvcKr4JyFlKgrU8p3rsHl/VL3PBnDsfccm8fZuZTQ3KbgReaxDg4TVMpRFsRk6u5RLr49
+ ruAk+cLPczLNO9KjY7f435MngYJbSvy3bjTsHtbrwnxyCn+ZvJHxqh1GhO8yThYdYzj8SWj/h7ZHn2llibVm/odq7rMT8hjyyd1zIizBPLbP8EbPiZxzoAHF
+ uhILf43xA0q3+yT0yLS9jw==
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 22/05/2023 12:36, Johannes Schindelin wrote:
-> Reportedly Windows 11 build 25*** from Insider changed the current
-> working directory logic a bit, and Cygwin's "magic" (or:
-> "technologically sufficiently advanced") code needs to be adjusted
-> accordingly.
-> 
-> This fixes https://github.com/git-for-windows/git/issues/4429
-> 
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+This is a multi-part message in MIME format.
+--------------JgJgJ7eefapa1A6iRfOKe2dQ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Applied. Thanks.
+On Tue, 30 May 2023 13:25:38 +0200, Philippe Cerfon wrote:
+> Hey there.
+> 
+> Linux exports XATTR_{NAME,SIZE,LIST}_MAX in it's linux/limits.h and
+> e.g. the CPython interpreter uses them for it's XATTRs functions.
+> 
+> I made a corresponding PR at CPython
+> https://github.com/python/cpython/pull/105075 to get the code built
+> for Cygwin, but right now this would fail due to the missing
+> XATTR_*_MAX symbols.
+> 
+> The attached patch below would add them to cygwin/limits.h.
 
+Patches for Cygwin under winsup are submitted to cygwin-patches@cygwin.com 
+(forwarded there).
+
+> But beware, I'm absolutely no Windows/Cygwin expert ^^ - so whether
+> the values I've chosen are actually correct, is more guesswork rather
+> than definite knowledge.
+> 
+> As written in the commit message, I think:
+> - XATTR_NAME_MAX corresponds to MAX_EA_NAME_LEN
+> and
+> - XATTR_SIZE_MAX to MAX_EA_VALUE_LEN
+> 
+> though I have no idea, whether these are just lower boundaries used by
+> Cygwin, while e.g. Windows itself might set longer names or value
+> lenghts, and thus - when Cygwin would try to read such - it might get
+> into troubles (or rather e.g. CPython, as it's buffers wouldn't
+> suffice to read the EA respectively XATTR.
+> 
+> Neither to i have an idea about XATTR_LIST_MAX. I'm not even 100% sure
+> what it means (I guess the max number of XATTRs per file). Not to
+> speak about whether there's such maximum for Windows EAs,
+> And again - as above - what would happen if Windows itself would set
+> more than that limit and within Cygwin one would try to read/list all.
+> 
+> Thanks,
+> Philippe
+
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+--------------JgJgJ7eefapa1A6iRfOKe2dQ
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-export-XATTR_-NAME-SIZE-LIST-_MAX.patch"
+Content-Disposition: attachment;
+ filename="0001-export-XATTR_-NAME-SIZE-LIST-_MAX.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA4MjRiY2RmMDUzYmZiODY1NzBjN2VkZGEzYzAxODYyNmRjODU3YThiIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBQaGlsaXBwZSBDZXJmb24gPHBoaWxjZXJmQGdtYWls
+LmNvbT4KRGF0ZTogVHVlLCAzMCBNYXkgMjAyMyAxMzoxNjoxOCArMDIwMApTdWJqZWN0OiBb
+UEFUQ0hdIGV4cG9ydCBYQVRUUl97TkFNRSxTSVpFLExJU1R9X01BWAoKVGhlc2UgYXJlIHVz
+ZWQgZm9yIGV4YW1wbGUgYnkgQ1B5dGhvbi4gWEFUVFJfTkFNRV9NQVggc2hvdWxkIGNvcnJl
+c3BvbmQgdG8KTUFYX0VBX05BTUVfTEVOIGFuZCBYQVRUUl9TSVpFX01BWCB0byBNQVhfRUFf
+VkFMVUVfTEVOLgoKSXQncyB1bmNsZWFyIHdoZXRoZXIgV2luZG93cyBpbXBvc2VzIGEgbWF4
+aW11bSBudW1iZXIgb2YgRUEncyBwZXIgZmlsZSBhbmQgd2hpY2gKdmFsdWUgc2hvdWxkIGJl
+IHVzZWQgZm9yIFhBVFRSX0xJU1RfTUFYLCBzbyBmb3Igbm93IExpbnV4JyB2YWx1ZS4KClNp
+Z25lZC1vZmYtYnk6IFBoaWxpcHBlIENlcmZvbiA8cGhpbGNlcmZAZ21haWwuY29tPgotLS0K
+IHdpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vbGltaXRzLmggfCA3ICsrKysrKysKIDEg
+ZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS93aW5zdXAvY3ln
+d2luL2luY2x1ZGUvY3lnd2luL2xpbWl0cy5oIGIvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5
+Z3dpbi9saW1pdHMuaAppbmRleCBhZWZjN2M3YmQuLjkzOWFiNGYzOCAxMDA2NDQKLS0tIGEv
+d2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9saW1pdHMuaAorKysgYi93aW5zdXAvY3ln
+d2luL2luY2x1ZGUvY3lnd2luL2xpbWl0cy5oCkBAIC01Niw0ICs1NiwxMSBAQCBkZXRhaWxz
+LiAqLwogI2RlZmluZSBfX1BBVEhfTUFYIDQwOTYKICNkZWZpbmUgX19QSVBFX0JVRiA0MDk2
+CiAKKy8qIEtlZXAgaW4gc3luYyB3aXRoIE1BWF9FQV9OQU1FX0xFTiByZXNwZWN0aXZlbHkg
+TUFYX0VBX1ZBTFVFX0xFTiBpbgorICogd2luc3VwL2N5Z3dpbi9udGVhLmNjIGJ1dCBkb24g
+bm90IHVzZSB2YWx1ZXMgdGhhdCBleGNlZWQgdGhlaXIgTGludXgKKyAqIGNvdW50ZXJwYXJ0
+cyBhcyBkZWZpbmVkIGluIGxpbnV4L2xpbWl0cy5oLiAqLworI2RlZmluZSBYQVRUUl9OQU1F
+X01BWCAyNTUKKyNkZWZpbmUgWEFUVFJfU0laRV9NQVggNjU1MzYKKyNkZWZpbmUgWEFUVFJf
+TElTVF9NQVggNjU1MzYKKwogI2VuZGlmIC8qIF9DWUdXSU5fTElNSVRTX0hfXyAqLwotLSAK
+Mi40MC4xCgo=
+
+--------------JgJgJ7eefapa1A6iRfOKe2dQ--
