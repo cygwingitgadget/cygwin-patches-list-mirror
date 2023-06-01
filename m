@@ -1,130 +1,83 @@
-Return-Path: <SRS0=r+DF=BT=shaw.ca=brian.inglis@sourceware.org>
-Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-	by sourceware.org (Postfix) with ESMTPS id 9D7473858C5E
-	for <cygwin-patches@cygwin.com>; Tue, 30 May 2023 20:04:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9D7473858C5E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
-Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
-	by cmsmtp with ESMTP
-	id 3xsmqYXPp6Nwh45aJq8ZIn; Tue, 30 May 2023 20:04:47 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-	t=1685477087; bh=JGqBLRiTWCAPZBEwMgpZUeN9TsWKjc3L2T+QFCmPcss=;
-	h=Date:Subject:Reply-To:References:To:Cc:From:In-Reply-To;
-	b=TN8zkVSi5Byo1oWFhY6ak4TsrvbOE3DXUBXhgzF9Sn0biVUq8aDgcFTVGge71n5eN
-	 8pBQoPC7OiHMLe/MkcBRJS/rASKk2eXzNPWdc3R/oh7bg0nYY7hKIIXn5466h2h5lu
-	 RCbeoo1Sg0Xq/lB8/1QJtm/Tuop5Hew/kncHlPXWWrmxVgqsQJYpUF9Layil2bc7ak
-	 AIY2bMo59StVQzsu2YDIvqYeEoj6I9SJqmawn/ynbIJE0L/pXUK37zhEGix9OjnXV+
-	 m7tjZEVcmjTio95RrT771++7USPPrpvJ0FWy31YGYjxGSBDDuXNxzXHgJQtPzokVb3
-	 3u+qCMy7p3Uqw==
-Received: from [10.0.0.5] ([184.64.102.149])
-	by cmsmtp with ESMTP
-	id 45aIqPrQryAOe45aIqJZEy; Tue, 30 May 2023 20:04:47 +0000
-X-Authority-Analysis: v=2.4 cv=e5oV9Il/ c=1 sm=1 tr=0 ts=647656df
- a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
- a=r77TgQKjGQsHNAKrUKIA:9 a=NEAV23lmAAAA:8 a=w_pzkKWiAAAA:8
- a=7V-0JTp32qI25L6YbXcA:9 a=QEXdDO2ut3YA:10 a=pGLkceISAAAA:8
- a=TqqW1sFldYH_MiWqHD0A:9 a=B2y7HmGcmWMA:10 a=sRI3_1zDfAgwuvI8zelB:22
-Content-Type: multipart/mixed; boundary="------------JgJgJ7eefapa1A6iRfOKe2dQ"
-Message-ID: <f4106af5-ed7a-0df5-a870-b87bb729f862@Shaw.ca>
-Date: Tue, 30 May 2023 14:04:46 -0600
+Return-Path: <SRS0=Yn/K=BV=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta1019.nifty.com (mta-snd01003.nifty.com [106.153.227.35])
+	by sourceware.org (Postfix) with ESMTPS id 3B1963858421
+	for <cygwin-patches@cygwin.com>; Thu,  1 Jun 2023 11:07:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3B1963858421
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain by dmta1019.nifty.com with ESMTP
+          id <20230601110729024.TUUP.25661.localhost.localdomain@nifty.com>;
+          Thu, 1 Jun 2023 20:07:29 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix transferring type-ahead input between input pipes.
+Date: Thu,  1 Jun 2023 20:07:04 +0900
+Message-Id: <20230601110704.242-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: [PATCH] include/cygwin/limits.h: add XATTR_{NAME,SIZE,LIST}_MAX
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Cc: newlib@sourceware.org, Philippe Cerfon <philcerf@gmail.com>
-From: Brian Inglis <Brian.Inglis@Shaw.ca>
-Organization: Inglis
-In-Reply-To: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
-X-Forwarded-Message-Id: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
-X-CMAE-Envelope: MS4xfMkEn5dneIAuOKFn+sG2glIf+EKRJba3oQCn9SDVG42ET6tBvcKr4JyFlKgrU8p3rsHl/VL3PBnDsfccm8fZuZTQ3KbgReaxDg4TVMpRFsRk6u5RLr49
- ruAk+cLPczLNO9KjY7f435MngYJbSvy3bjTsHtbrwnxyCn+ZvJHxqh1GhO8yThYdYzj8SWj/h7ZHn2llibVm/odq7rMT8hjyyd1zIizBPLbP8EbPiZxzoAHF
- uhILf43xA0q3+yT0yLS9jw==
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------JgJgJ7eefapa1A6iRfOKe2dQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+After the commit e5fcc5837c95, transferring type-ahead input between
+the pipe for cygwin app and the pipe for non-cygwin app will not be
+done appropriately when the stdin of the non-cygwin app is not pty.
+Due to this issue, sometimes the keyboard input might be lost which
+should be sent to cygwin app. This patch fixes the issue.
 
-On Tue, 30 May 2023 13:25:38 +0200, Philippe Cerfon wrote:
-> Hey there.
-> 
-> Linux exports XATTR_{NAME,SIZE,LIST}_MAX in it's linux/limits.h and
-> e.g. the CPython interpreter uses them for it's XATTRs functions.
-> 
-> I made a corresponding PR at CPython
-> https://github.com/python/cpython/pull/105075 to get the code built
-> for Cygwin, but right now this would fail due to the missing
-> XATTR_*_MAX symbols.
-> 
-> The attached patch below would add them to cygwin/limits.h.
+Fixes: e5fcc5837c95 ("Cygwin: pty: Fix reading CONIN$ when stdin is not a pty.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/pty.cc | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-Patches for Cygwin under winsup are submitted to cygwin-patches@cygwin.com 
-(forwarded there).
-
-> But beware, I'm absolutely no Windows/Cygwin expert ^^ - so whether
-> the values I've chosen are actually correct, is more guesswork rather
-> than definite knowledge.
-> 
-> As written in the commit message, I think:
-> - XATTR_NAME_MAX corresponds to MAX_EA_NAME_LEN
-> and
-> - XATTR_SIZE_MAX to MAX_EA_VALUE_LEN
-> 
-> though I have no idea, whether these are just lower boundaries used by
-> Cygwin, while e.g. Windows itself might set longer names or value
-> lenghts, and thus - when Cygwin would try to read such - it might get
-> into troubles (or rather e.g. CPython, as it's buffers wouldn't
-> suffice to read the EA respectively XATTR.
-> 
-> Neither to i have an idea about XATTR_LIST_MAX. I'm not even 100% sure
-> what it means (I guess the max number of XATTRs per file). Not to
-> speak about whether there's such maximum for Windows EAs,
-> And again - as above - what would happen if Windows itself would set
-> more than that limit and within Cygwin one would try to read/list all.
-> 
-> Thanks,
-> Philippe
-
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 03c859172..207f37463 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1297,17 +1297,7 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+   else if (InterlockedDecrement (&num_reader) == 0)
+     CloseHandle (slave_reading);
+ 
+-  /* This is needed when cygwin-app is started from non-cygwin app if
+-     pseudo console is disabled. */
+-  bool need_xfer = get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
+-    && get_ttyp ()->switch_to_nat_pipe && !get_ttyp ()->pcon_activated;
+-
+-  /* In GDB, transfer input based on setpgid() does not work because
+-     GDB may not set terminal process group properly. Therefore,
+-     transfer input here if isHybrid is set. */
+-  bool need_gdb_xfer =
+-    isHybrid && GetStdHandle (STD_INPUT_HANDLE) == get_handle ();
+-  if (!!masked != mask && xfer && (need_gdb_xfer || need_xfer))
++  if (!!masked != mask && xfer && get_ttyp ()->switch_to_nat_pipe)
+     {
+       if (mask && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+ 	{
+@@ -2238,11 +2228,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+       if (!get_ttyp ()->pcon_start)
+ 	{ /* Pseudo console initialization has been done in above code. */
+ 	  pinfo pp (get_ttyp ()->pcon_start_pid);
+-	  bool pcon_fg = (pp && get_ttyp ()->getpgid () == pp->pgid);
+-	  /* GDB may set WINPID rather than cygwin PID to process group
+-	     when the debugged process is a non-cygwin process.*/
+-	  pcon_fg |= !pinfo (get_ttyp ()->getpgid ());
+-	  if (get_ttyp ()->switch_to_nat_pipe && pcon_fg
++	  if (get_ttyp ()->switch_to_nat_pipe
+ 	      && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+ 	    {
+ 	      /* This accept_input() call is needed in order to transfer input
+@@ -4089,7 +4075,7 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 						DWORD force_switch_to)
+ {
+   ttyp->wait_fwd ();
+-  if (ttyp->getpgid () == myself->pgid && stdin_is_ptys
++  if ((ttyp->pcon_activated || stdin_is_ptys)
+       && ttyp->pty_input_state_eq (tty::to_nat))
+     {
+       WaitForSingleObject (p->input_mutex, mutex_timeout);
 -- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
---------------JgJgJ7eefapa1A6iRfOKe2dQ
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-export-XATTR_-NAME-SIZE-LIST-_MAX.patch"
-Content-Disposition: attachment;
- filename="0001-export-XATTR_-NAME-SIZE-LIST-_MAX.patch"
-Content-Transfer-Encoding: base64
+2.39.0
 
-RnJvbSA4MjRiY2RmMDUzYmZiODY1NzBjN2VkZGEzYzAxODYyNmRjODU3YThiIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBQaGlsaXBwZSBDZXJmb24gPHBoaWxjZXJmQGdtYWls
-LmNvbT4KRGF0ZTogVHVlLCAzMCBNYXkgMjAyMyAxMzoxNjoxOCArMDIwMApTdWJqZWN0OiBb
-UEFUQ0hdIGV4cG9ydCBYQVRUUl97TkFNRSxTSVpFLExJU1R9X01BWAoKVGhlc2UgYXJlIHVz
-ZWQgZm9yIGV4YW1wbGUgYnkgQ1B5dGhvbi4gWEFUVFJfTkFNRV9NQVggc2hvdWxkIGNvcnJl
-c3BvbmQgdG8KTUFYX0VBX05BTUVfTEVOIGFuZCBYQVRUUl9TSVpFX01BWCB0byBNQVhfRUFf
-VkFMVUVfTEVOLgoKSXQncyB1bmNsZWFyIHdoZXRoZXIgV2luZG93cyBpbXBvc2VzIGEgbWF4
-aW11bSBudW1iZXIgb2YgRUEncyBwZXIgZmlsZSBhbmQgd2hpY2gKdmFsdWUgc2hvdWxkIGJl
-IHVzZWQgZm9yIFhBVFRSX0xJU1RfTUFYLCBzbyBmb3Igbm93IExpbnV4JyB2YWx1ZS4KClNp
-Z25lZC1vZmYtYnk6IFBoaWxpcHBlIENlcmZvbiA8cGhpbGNlcmZAZ21haWwuY29tPgotLS0K
-IHdpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vbGltaXRzLmggfCA3ICsrKysrKysKIDEg
-ZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS93aW5zdXAvY3ln
-d2luL2luY2x1ZGUvY3lnd2luL2xpbWl0cy5oIGIvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5
-Z3dpbi9saW1pdHMuaAppbmRleCBhZWZjN2M3YmQuLjkzOWFiNGYzOCAxMDA2NDQKLS0tIGEv
-d2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9saW1pdHMuaAorKysgYi93aW5zdXAvY3ln
-d2luL2luY2x1ZGUvY3lnd2luL2xpbWl0cy5oCkBAIC01Niw0ICs1NiwxMSBAQCBkZXRhaWxz
-LiAqLwogI2RlZmluZSBfX1BBVEhfTUFYIDQwOTYKICNkZWZpbmUgX19QSVBFX0JVRiA0MDk2
-CiAKKy8qIEtlZXAgaW4gc3luYyB3aXRoIE1BWF9FQV9OQU1FX0xFTiByZXNwZWN0aXZlbHkg
-TUFYX0VBX1ZBTFVFX0xFTiBpbgorICogd2luc3VwL2N5Z3dpbi9udGVhLmNjIGJ1dCBkb24g
-bm90IHVzZSB2YWx1ZXMgdGhhdCBleGNlZWQgdGhlaXIgTGludXgKKyAqIGNvdW50ZXJwYXJ0
-cyBhcyBkZWZpbmVkIGluIGxpbnV4L2xpbWl0cy5oLiAqLworI2RlZmluZSBYQVRUUl9OQU1F
-X01BWCAyNTUKKyNkZWZpbmUgWEFUVFJfU0laRV9NQVggNjU1MzYKKyNkZWZpbmUgWEFUVFJf
-TElTVF9NQVggNjU1MzYKKwogI2VuZGlmIC8qIF9DWUdXSU5fTElNSVRTX0hfXyAqLwotLSAK
-Mi40MC4xCgo=
-
---------------JgJgJ7eefapa1A6iRfOKe2dQ--
