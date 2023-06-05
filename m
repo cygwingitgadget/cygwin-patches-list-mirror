@@ -1,65 +1,78 @@
-Return-Path: <SRS0=VaJW=BW=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0015.nifty.com (mta-snd00007.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id 38E423858C50
-	for <cygwin-patches@cygwin.com>; Fri,  2 Jun 2023 01:30:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 38E423858C50
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain by dmta0015.nifty.com with ESMTP
-          id <20230602013033027.RSMQ.104591.localhost.localdomain@nifty.com>;
-          Fri, 2 Jun 2023 10:30:33 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Additional fix for transferring input at exit.
-Date: Fri,  2 Jun 2023 10:30:20 +0900
-Message-Id: <20230602013020.1938-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 224CD3883028; Mon,  5 Jun 2023 16:55:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 224CD3883028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1685984119;
+	bh=6dQH1e85mVA3LJlGs1MzIM85fGQu7KxF3S1pde/ELLw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Gx3g6v88bFX4mF477gopzsaPsh77fQh7eDdGe9rAPLICM00ck+QO6vAXMnP/64W/3
+	 5PdnJVy+I8zWqsf3QjRQnswDFyOaj08a89BzwtuJoTof7awsgu3mLIlxqLkzXQ2V+F
+	 evYCndzzczhse9LFkmzkFXViqug8TZgitRvIvzUc=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 17D98A80D4E; Mon,  5 Jun 2023 18:55:17 +0200 (CEST)
+Date: Mon, 5 Jun 2023 18:55:17 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Jon Turney <jon.turney@dronecode.org.uk>
+Cc: cygwin-patches@cygwin.com, Brian Inglis <Brian.Inglis@shaw.ca>
+Subject: Re: [PATCH] fhandler/proc.cc(format_proc_cpuinfo): Add Linux 6.3
+ cpuinfo
+Message-ID: <ZH4TdYlr+RAFbOHe@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Jon Turney <jon.turney@dronecode.org.uk>,
+	cygwin-patches@cygwin.com, Brian Inglis <Brian.Inglis@shaw.ca>
+References: <68bbf3607bdf37fcd32613aa962abe50846d968a.1682994011.git.Brian.Inglis@Shaw.ca>
+ <0a50e9ad-59c8-65e9-95f5-f53843fbf918@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0a50e9ad-59c8-65e9-95f5-f53843fbf918@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-The commit 9fc746d17dc3 does not fix transferring input at exit
-appropriately. If the more than one non-cygwin apps are executed
-simultaneously and one of them is terminated, the pty master failed
-to send input to the other non-cygwin apps. This patch fixes that.
+On May 12 16:36, Jon Turney wrote:
+> On 08/05/2023 04:12, Brian Inglis wrote:
+> > cpuid    0x00000007:0 ecx:7 shstk Shadow Stack support & Windows [20]20H1/[20]2004+
+> > 		    => user_shstk User mode program Shadow Stack support
+> > AMD SVM  0x8000000a:0 edx:25 vnmi virtual Non-Maskable Interrrupts
+> > Sync AMD 0x80000008:0 ebx flags across two output locations
+> 
+> Thanks.  I applied this.
+> 
+> Does this need applying to the 3.4 branch as well?
+> 
+> > ---
+> >   winsup/cygwin/fhandler/proc.cc | 29 ++++++++++++++++++++++-------
+> 
+> > +      /* cpuid 0x00000007 ecx & Windows [20]20H1/[20]2004+ */
+> > +      if (maxf >= 0x00000007 && wincap.osname () >= "10.0"
+> > +					 && wincap.build_number () >= 19041)
 
-Fixes: 9fc746d17dc3 ("Cygwin: pty: Fix transferring type-ahead input between input pipes.")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/pty.cc | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+No problems checking for the OS versions, but not like this.
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 207f37463..1f2b634a0 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -4075,7 +4075,14 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
- 						DWORD force_switch_to)
- {
-   ttyp->wait_fwd ();
--  if ((ttyp->pcon_activated || stdin_is_ptys)
-+  DWORD current_pid = myself->exec_dwProcessId ?: myself->dwProcessId;
-+  DWORD switch_to = force_switch_to;
-+  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
-+  if (!switch_to)
-+    switch_to = get_console_process_id (current_pid, false, true, true);
-+  if (!switch_to)
-+    switch_to = get_console_process_id (current_pid, false, true, false);
-+  if ((!switch_to && (ttyp->pcon_activated || stdin_is_ptys))
-       && ttyp->pty_input_state_eq (tty::to_nat))
-     {
-       WaitForSingleObject (p->input_mutex, mutex_timeout);
-@@ -4085,7 +4092,6 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
-       release_attach_mutex ();
-       ReleaseMutex (p->input_mutex);
-     }
--  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
-   if (ttyp->pcon_activated)
-     close_pseudoconsole (ttyp, force_switch_to);
-   else
--- 
-2.39.0
+  wincap.osname () >= "10.0"   ?
 
+That will not do what you expect it to do.  wincap.osname() is a char *
+and the >= operator will not work as on cstring in C++, but compare the
+pointer values of the two strings instead.
+
+While changing this to
+
+  strcmp (wincap.osname (), "10.0") >= 0
+
+is possible, it doesn't make sense.  For all supported Windows versions,
+the build number is unambiguously bumped with each new release.  So
+there's no older OS version with a build number >= 19041.  As a result,
+the check for osname() can simply go away.
+
+But then again, this is a windows feature which would best served by
+adding a bit flag to the wincaps array, *and* we already have a wincaps
+array for windows versions starting with build number 19041
+(wincap_10_2004).
+
+So, Brian, would you mind to create a followup patch which rather defines
+a new bitflag in the wincaps array, set it to false or true according
+to the OS version, and check this flag instead?
+
+
+Thanks,
+Corinna
