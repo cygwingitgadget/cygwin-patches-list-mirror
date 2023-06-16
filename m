@@ -1,71 +1,95 @@
-Return-Path: <SRS0=2n0R=CE=shaw.ca=brian.inglis@sourceware.org>
-Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-	by sourceware.org (Postfix) with ESMTPS id 5F3CD3858D35
-	for <cygwin-patches@cygwin.com>; Fri, 16 Jun 2023 17:20:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5F3CD3858D35
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
-Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
-	by cmsmtp with ESMTP
-	id A96vqzKrc6NwhAD7PqzCnw; Fri, 16 Jun 2023 17:20:15 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-	t=1686936015; bh=E6Fd10+IzM0mVNzJgfMGz/Jv3SsVS3YhDehNX6oVjd4=;
-	h=From:To:Subject:Date:In-Reply-To:References;
-	b=jChA7BO/ehp+uZ/tREAvmWu4wFsy4FX9KqbOAHyEOR/jdNfP2Gf5++UmuFVq9AKLR
-	 6GJ5zudDcGt+to/DMchxWW8dbnbXNE/AGZxXBXM/e5WoaZyz0SMOYTepOzpwgAgoir
-	 jFxcTim1kcvfM7DRco8otA7VRstDESQKLSwm20+FQVPiGJUt7FoebuYWmxI/8AKfsd
-	 JEE2sjmysC5f43XpPW/1xoXv8ngQCYiBeVI+Ke/MmoRv+7+52AGNXQxyoYMNcrqh2d
-	 oqzCrcp96WP8X0yuEYxAt66w7w7wjK/VCN7Xs6nL1BQM7VtBA6wEqkyYaJ5oUqu1Z/
-	 iTPoTb8YK2CRg==
-Received: from BWINGLISD.cg.shawcable.net. ([184.64.102.149])
-	by cmsmtp with ESMTP
-	id AD7OqnqXXHFsOAD7OqoQ6m; Fri, 16 Jun 2023 17:20:15 +0000
-X-Authority-Analysis: v=2.4 cv=XZqaca15 c=1 sm=1 tr=0 ts=648c99cf
- a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17 a=_Dj-zB-qAAAA:8
- a=SFGEnkTAR_NGIzSk_2gA:9
-From: Brian Inglis <Brian.Inglis@Shaw.ca>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v3 3/3] fhandler/proc.cc: use wincap.has_user_shstk
-Date: Fri, 16 Jun 2023 11:17:10 -0600
-Message-Id: <336c97a31de9e273e5ace0badeb6312d10da4ebb.1686934097.git.Brian.Inglis@Shaw.ca>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1686934096.git.Brian.Inglis@Shaw.ca>
-References: <cover.1686934096.git.Brian.Inglis@Shaw.ca>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 4216F3858031; Fri, 16 Jun 2023 19:49:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4216F3858031
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1686944969;
+	bh=kVZ657I5NztOBx/JobGxAr3qHLTM/tBHEchma4d8UmY=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=bAm/Ife27yiDMvvK5KFYAsqnIVRV0uOTVxug8f5Xi01Hp1264OFn1HCxr9VK4lOYx
+	 ytiss/4G30WLdcTtWzHUbsPIDh95pQ1xzpsAIfmkPOtnf7k03ayzGqjowcJL9ixC5D
+	 Aod7T2KsNldPSQTvo264iBUKgcOHCi5sM9CekUoQ=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 7ED79A80940; Fri, 16 Jun 2023 21:49:27 +0200 (CEST)
+Date: Fri, 16 Jun 2023 21:49:27 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Philippe Cerfon <philcerf@gmail.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] include/cygwin/limits.h: add XATTR_{NAME,SIZE,LIST}_MAX
+Message-ID: <ZIy8x7cxIQhTmO9U@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Philippe Cerfon <philcerf@gmail.com>,
+	cygwin-patches@cygwin.com
+References: <CAN+za=MhQdD2mzYxqVAm9ZwBUBKsyPiH+9T5xfGXtgxq1X1LAA@mail.gmail.com>
+ <f4106af5-ed7a-0df5-a870-b87bb729f862@Shaw.ca>
+ <ZH4yDkPXLU9cYsrn@calimero.vinschen.de>
+ <CAN+za=MTBHNWV+-4rMoBb_zefPO7OG2grySUFdV-Eoa2aQg_uw@mail.gmail.com>
+ <ZH80lgpsfWwCZp+R@calimero.vinschen.de>
+ <CAN+za=NXXrn_atWyWi4zUgELkhvm5qecB-hQYFJ7Q4bdFHopFA@mail.gmail.com>
+ <ZIBWqTEkn9c9GWfF@calimero.vinschen.de>
+ <CAN+za=NjpooX1JrwbgDgX8yzHkn6AwtYH8yCOjzkUspMZd1W6g@mail.gmail.com>
+ <ZIx55su+P5zInrqa@calimero.vinschen.de>
+ <CAN+za=P4Ra6-4Hc6P1HVODT3B5JtrJvV7bFWt-PkOeiawr=4NQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfPPBGCuC/N+42x7ylbEF24oktk6tBm/DlbcapoW3CRUPudninWEYFqDpO5lbp9jYkUraZqTMIM5fOvBpQbT58yT+6PSYb/ynm6x3/myT0b+OdZ4v0Jz9
- oPvvX4lqpYzKIB2qQbLThOCJkUANnXHQOoSG7AlLb0j9TYH4GCTEk7QeR1EJPpDbboOi3b88Hu3mm2Mg1cGptTp8iC+SEahwik2DT33TI1R1CxHrrG+gauLY
- SFYwY4MRGzKD5mJqalW1arH/BAmD+ghaK2qs6LYc82w=
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+In-Reply-To: <CAN+za=P4Ra6-4Hc6P1HVODT3B5JtrJvV7bFWt-PkOeiawr=4NQ@mail.gmail.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Signed-off-by: Brian Inglis <Brian.Inglis@Shaw.ca>
----
- winsup/cygwin/fhandler/proc.cc | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Jun 16 17:43, Philippe Cerfon wrote:
+> Hey.
+> 
+> On Fri, Jun 16, 2023 at 5:04 PM Corinna Vinschen
+> <corinna-cygwin@cygwin.com> wrote:
+> > Oh well. Now that I see it in real life, my idea to use the entire
+> > expression inline wasn't that great, it seems...
+> 
+> ^^
+> 
+> 
+> > I didn't want to keep MAX_EA_NAME_LEN because now that we have an
+> > official name for the value, having an unofficial name using a different
+> > naming convention is a bit weird.
+> >
+> > On the other hand, having a macro for the expression certainly looks
+> > much cleaner.  Also, only one place to change (should a change ever be
+> > necessary).
+> 
+> Does both make sense.
+> 
+> 
+> > Sorry about that.
+> 
+> No worries :-)
+> 
+> 
+> > What do you think about something like _XATTR_NAME_MAX_ONDISK_?
+> 
+> Really with trailing/leading underscores? If you try to keep it out of
+> the "official namespace", then I'd would perhaps make more sense to
+> mark this as being cygwin specific like CYGWIN_XATTR_NAME_MAX_ONDISK
+> or so?
+> Also - may be nitpicking - but storage is not really guaranteed to be
+> a disk anymore. Maybe ONSTORAGE instead? But admittedly ONDISK sounds
+> more common ("on disk format", etc.).
 
-diff --git a/winsup/cygwin/fhandler/proc.cc b/winsup/cygwin/fhandler/proc.cc
-index 3c79762e0fbd..cbc49a12a417 100644
---- a/winsup/cygwin/fhandler/proc.cc
-+++ b/winsup/cygwin/fhandler/proc.cc
-@@ -1486,12 +1486,12 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- /*	  ftcprint (features1,  6, "split_lock_detect");*//* MSR_TEST_CTRL split lock */
- 
--      /* cpuid 0x00000007 ecx & Windows [20]20H1/[20]2004+ */
--      if (maxf >= 0x00000007 && wincap.osname () >= "10.0"
--					 && wincap.build_number () >= 19041)
-+      /* Windows [20]20H1/[20]2004/19041 user shadow stack */
-+      if (maxf >= 0x00000007 && wincap.has_user_shstk ())
-         {
-+	  /* cpuid 0x00000007 ecx CET shadow stack */
- 	  cpuid (&unused, &unused, &features1, &unused, 0x00000007, 0);
--	  ftcprint (features1,  7, "user_shstk");	/* "user shadow stack" */
-+	  ftcprint (features1,  7, "user_shstk");	/* user shadow stack */
- 	}
- 
-       /* cpuid 0x00000007:1 eax */
--- 
-2.39.0
+You're right, of course.  Disk is just like everyone talks about it.
+Even a SSD has "disk" in it's name :)
 
+> > I can also just push the patches and we discuss this further afterwards,
+> > your call.
+> 
+> Well you know the naming convention used in your code much better than I do.
+> 
+> Attached patches use _XATTR_NAME_MAX_ONDISK_ as you proposed.
+> 
+> Just pick whichever name you like best, and either tell me and I
+> provide a new patch, or just sed 's/_XATTR_NAME_MAX_ONDISK_/foobar/g'
+> (+ maybe align text wrapping of comments if necessary).
+
+Let's keep it at that.  I pushed your patchset.
+
+
+Thanks!
+Corinna
