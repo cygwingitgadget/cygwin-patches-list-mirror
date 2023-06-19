@@ -1,63 +1,60 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 20E953858D28; Mon, 19 Jun 2023 08:56:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 20E953858D28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1687164962;
-	bh=hwkIefGWHMUJ2wq2GtPt8lUBkFye1h/8jqXIw5GrrPA=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=vjTC/aHqb+5j6s5IkVbMlOYipfVJUFCU5xejXJ0sw0YoLe3D7NP503xC6v6sTum9Y
-	 2G/MZ6o/2EzEa/RHLhEOnEbKrk+HQrSZSoISnA8e4ei3udgL7u4uCE3soD4622jTH8
-	 IFZLvtTgNLXp8/djIjZAXPol53Orrg6omvXMQt5I=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 026E5A8078D; Mon, 19 Jun 2023 10:56:00 +0200 (CEST)
-Date: Mon, 19 Jun 2023 10:55:59 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Brian Inglis <Brian.Inglis@shaw.ca>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 0/3] use wincap in format_proc_cpuinfo for user_shstk
-Message-ID: <ZJAYH8XPa6/fzSGG@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Brian Inglis <Brian.Inglis@shaw.ca>,
-	cygwin-patches@cygwin.com
-References: <cover.1686934096.git.Brian.Inglis@Shaw.ca>
- <ZIy9JuA2wxH4i37A@calimero.vinschen.de>
- <5786973b-7343-6a8c-38d0-35212d80a2c2@Shaw.ca>
+Return-Path: <SRS0=lA2L=CH=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id 347D43858D1E
+	for <cygwin-patches@cygwin.com>; Mon, 19 Jun 2023 18:15:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 347D43858D1E
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
+Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
+	by cmsmtp with ESMTP
+	id BF9tq44Y46NwhBJPMq6j3A; Mon, 19 Jun 2023 18:15:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1687198520; bh=+d9y4wVkQbDFDd7wYP+SkzLBTCj8+LHajxX1Em2apB4=;
+	h=From:To:Subject:Date;
+	b=ULJMesLKLoIDoyTUPLnvvWVonZaKhcNcM60my2jM51dPsjyHYGwRYE/vF1yK5oi/9
+	 xM1oP+IA8JcpatG3ePKsubHtpYBid5ry0RBNKfqmsW6JaP1CE09EbSoXPBC21EXQXZ
+	 qOYgF+5sZCQuAP/q0X3f/+B6qis1/1TeEzsvdsmOiWswGe9Y5zH0GPF5lKzha+pdSu
+	 qePsfXPBVLBrX7o3WB4TdlqBPt3/QlUvcmzJ69MLhIxEHazBQjzvvA4DRmNzXYBFYd
+	 UNEQNn6MmX398dWE/OWt5vr4yXQJheZJrt2k3GbW0sNeHLGM84seeEtgZZRolRXtJz
+	 LRAt1qOuGrb3w==
+Received: from BWINGLISD.cg.shawcable.net. ([184.64.102.149])
+	by cmsmtp with ESMTP
+	id BJPMqSjlnyAOeBJPMq3Mu2; Mon, 19 Jun 2023 18:15:20 +0000
+X-Authority-Analysis: v=2.4 cv=e5oV9Il/ c=1 sm=1 tr=0 ts=64909b38
+ a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17 a=_Dj-zB-qAAAA:8
+ a=YpMwFYBWliO98hkeVsAA:9
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH v4 0/3] use wincap in format_proc_cpuinfo for user_shstk
+Date: Mon, 19 Jun 2023 12:15:16 -0600
+Message-Id: <cover.1687198150.git.Brian.Inglis@Shaw.ca>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5786973b-7343-6a8c-38d0-35212d80a2c2@Shaw.ca>
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfKRNrPw5+8BTNJog2vi/mxoL+MdQP/as/CCDL0Ad1610CxmbR+89FlE/KCfJjTj1ru5tIdGtI8YHuuNv0XgLFPWh0Mk5qH2Z+3C7coUkf4x5YnM8LmJS
+ UvS1eR+4mE7j3U0fiZILQuNcRBXjAooR3+ddJ6TfKRH/5kqahCsIPVpVUIKw+mGunZPYB16X8YdRP5ZppmzH0I2/nP0kXsRZwloZsqkOpVA4Nhnvaj2LKTfo
+ WPWzReQoPf05BS7Zlu4PZcCQENM5ZCSIZddCzGgmBQw=
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 16 15:26, Brian Inglis wrote:
-> On 2023-06-16 13:51, Corinna Vinschen wrote:
-> > Hi Brian,
-> > 
-> > On Jun 16 11:17, Brian Inglis wrote:
-> 
-> vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-> > > Fixes: 41fdb869f998 "fhandler/proc.cc(format_proc_cpuinfo): Add Linux 6.3 cpuinfo"
-> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 
-> vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-> > > In test for for AMD/Intel Control flow Enforcement Technology user mode
-> > > shadow stack support replace Windows version tests with test of wincap
-> > > member addition has_user_shstk with Windows version dependent value
-> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 
-> > Is that actually the final version?  It's still missing the commit
-> > message text explaining things and the "Fixes" line...
-> Hi Corinna,
-> 
-> Is more required above?
+In test for for AMD/Intel Control flow Enforcement Technology user mode
+shadow stack support replace Windows version tests with test of wincap
+member addition has_user_shstk with Windows version dependent value
 
-No, it's fine, albeit "Fixes:" is supposed to be kind of like a footer,
-just where the "Signed-off-by:" is, too.
+Fixes: 41fdb869f998 fhandler/proc.cc(format_proc_cpuinfo): Add Linux 6.3 cpuinfo
+Signed-off-by: Brian Inglis <Brian.Inglis@Shaw.ca>
 
-But it's still only in the cover letter.  As I wrote, it needs to go
-into the actual patch, otherwise all the nice info doesn't make it into
-the git repo.
+Brian Inglis (3):
+  wincap.h: add wincap member has_user_shstk
+  wincap.cc: set wincap member has_user_shstk true for 2004+
+  fhandler/proc.cc: use wincap.has_user_shstk
 
+ winsup/cygwin/fhandler/proc.cc        |  8 ++++----
+ winsup/cygwin/local_includes/wincap.h |  2 ++
+ winsup/cygwin/wincap.cc               | 10 ++++++++++
+ 3 files changed, 16 insertions(+), 4 deletions(-)
 
-Thanks,
-Corinna
+-- 
+2.39.0
+
