@@ -1,60 +1,63 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 97A993858D28; Mon, 19 Jun 2023 08:53:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 97A993858D28
+	id 20E953858D28; Mon, 19 Jun 2023 08:56:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 20E953858D28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1687164785;
-	bh=ixj1lhRvIJOhNYeejodKuv4vVMlyxCCgcLRU2gwPz/E=;
+	s=default; t=1687164962;
+	bh=hwkIefGWHMUJ2wq2GtPt8lUBkFye1h/8jqXIw5GrrPA=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=At4c7ycQKBBrizgJneTeA4IL2RRWnqEGkGAt0cajLUUX5x+mMeVnYxgZ13mteRXWS
-	 3xF0o8ULSowm5cohBQtPcoAdzSztsHJSPTK1x6L0HUuiyxeyGGa8DEndA4UhUng+d8
-	 f0z8JzzZdqVK141fgCNith4BYOI8AUQyl0/AQzVs=
+	b=vjTC/aHqb+5j6s5IkVbMlOYipfVJUFCU5xejXJ0sw0YoLe3D7NP503xC6v6sTum9Y
+	 2G/MZ6o/2EzEa/RHLhEOnEbKrk+HQrSZSoISnA8e4ei3udgL7u4uCE3soD4622jTH8
+	 IFZLvtTgNLXp8/djIjZAXPol53Orrg6omvXMQt5I=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 64083A80C7B; Mon, 19 Jun 2023 10:53:03 +0200 (CEST)
-Date: Mon, 19 Jun 2023 10:53:03 +0200
+	id 026E5A8078D; Mon, 19 Jun 2023 10:56:00 +0200 (CEST)
+Date: Mon, 19 Jun 2023 10:55:59 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Philippe Cerfon <philcerf@gmail.com>
+To: Brian Inglis <Brian.Inglis@shaw.ca>
 Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] include/cygwin/limits.h: add XATTR_{NAME,SIZE,LIST}_MAX
-Message-ID: <ZJAXbyh183leZSwM@calimero.vinschen.de>
+Subject: Re: [PATCH v3 0/3] use wincap in format_proc_cpuinfo for user_shstk
+Message-ID: <ZJAYH8XPa6/fzSGG@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Philippe Cerfon <philcerf@gmail.com>,
+Mail-Followup-To: Brian Inglis <Brian.Inglis@shaw.ca>,
 	cygwin-patches@cygwin.com
-References: <ZH4yDkPXLU9cYsrn@calimero.vinschen.de>
- <CAN+za=MTBHNWV+-4rMoBb_zefPO7OG2grySUFdV-Eoa2aQg_uw@mail.gmail.com>
- <ZH80lgpsfWwCZp+R@calimero.vinschen.de>
- <CAN+za=NXXrn_atWyWi4zUgELkhvm5qecB-hQYFJ7Q4bdFHopFA@mail.gmail.com>
- <ZIBWqTEkn9c9GWfF@calimero.vinschen.de>
- <CAN+za=NjpooX1JrwbgDgX8yzHkn6AwtYH8yCOjzkUspMZd1W6g@mail.gmail.com>
- <ZIx55su+P5zInrqa@calimero.vinschen.de>
- <CAN+za=P4Ra6-4Hc6P1HVODT3B5JtrJvV7bFWt-PkOeiawr=4NQ@mail.gmail.com>
- <ZIy8x7cxIQhTmO9U@calimero.vinschen.de>
- <CAN+za=M_UHnv4HTSNFL1sFESgBnoR_3omoj_-VH6jrRvp_7Lyw@mail.gmail.com>
+References: <cover.1686934096.git.Brian.Inglis@Shaw.ca>
+ <ZIy9JuA2wxH4i37A@calimero.vinschen.de>
+ <5786973b-7343-6a8c-38d0-35212d80a2c2@Shaw.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAN+za=M_UHnv4HTSNFL1sFESgBnoR_3omoj_-VH6jrRvp_7Lyw@mail.gmail.com>
+In-Reply-To: <5786973b-7343-6a8c-38d0-35212d80a2c2@Shaw.ca>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 16 21:52, Philippe Cerfon wrote:
-> On Fri, Jun 16, 2023 at 9:49 PM Corinna Vinschen
-> <corinna-cygwin@cygwin.com> wrote:
-> > Even a SSD has "disk" in it's name :)
+On Jun 16 15:26, Brian Inglis wrote:
+> On 2023-06-16 13:51, Corinna Vinschen wrote:
+> > Hi Brian,
+> > 
+> > On Jun 16 11:17, Brian Inglis wrote:
 > 
-> That actually stands for drive :-)
-
-Huh, ok.  To me it always was "solid state disk", but it's certainly
-not the first time I'm wrong :)))
-
-> > Let's keep it at that.  I pushed your patchset.
+> vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+> > > Fixes: 41fdb869f998 "fhandler/proc.cc(format_proc_cpuinfo): Add Linux 6.3 cpuinfo"
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> Thanks for merging! :-)
+> vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+> > > In test for for AMD/Intel Control flow Enforcement Technology user mode
+> > > shadow stack support replace Windows version tests with test of wincap
+> > > member addition has_user_shstk with Windows version dependent value
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> Any rough estimate when this will be in a live release?
+> > Is that actually the final version?  It's still missing the commit
+> > message text explaining things and the "Fixes" line...
+> Hi Corinna,
+> 
+> Is more required above?
 
-End of this year. That's the plan for 3.5.0.
+No, it's fine, albeit "Fixes:" is supposed to be kind of like a footer,
+just where the "Signed-off-by:" is, too.
+
+But it's still only in the cover letter.  As I wrote, it needs to go
+into the actual patch, otherwise all the nice info doesn't make it into
+the git repo.
 
 
-Greets,
+Thanks,
 Corinna
