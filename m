@@ -1,57 +1,64 @@
-Return-Path: <SRS0=qZUn=CQ=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
-	by sourceware.org (Postfix) with ESMTPS id 8DD513858D37
-	for <cygwin-patches@cygwin.com>; Wed, 28 Jun 2023 18:45:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8DD513858D37
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 3C59ACCCC;
-	Wed, 28 Jun 2023 14:45:55 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=xfMnBNGXe1cCy0B4ML52zE+0CXA=; b=bqQeH
-	PtTFmDXkx11X1XCnXlHaS+4QzNPwU8JNf8oLMD2dEcSuCsvoauRnZXVL00fJxJAZ
-	Yn6/OasyuDLA53g9sed3m4Vo8zZDCbtetWfasKogv+k8onxPlK5CR4N4YVjUD7n7
-	a2JPqbIPwCRYuhnbe42fB6rBJGqDd/mh7VmFFg=
-Received: from mail231 (mail231 [96.47.74.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2C74CCC91;
-	Wed, 28 Jun 2023 14:45:55 -0400 (EDT)
-Date: Wed, 28 Jun 2023 11:45:55 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Johannes Schindelin <johannes.schindelin@gmx.de>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fchmodat/fstatat: fix regression with empty `pathname`
-In-Reply-To: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
-Message-ID: <alpine.BSO.2.21.2306281142570.97921@resin.csoft.net>
-References: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
-User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
+Return-Path: <SRS0=32dc=CT=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from re-prd-fep-047.btinternet.com (mailomta10-re.btinternet.com [213.120.69.103])
+	by sourceware.org (Postfix) with ESMTPS id 85E593858D35
+	for <cygwin-patches@cygwin.com>; Sat,  1 Jul 2023 14:20:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 85E593858D35
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+Received: from re-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.54.7])
+          by re-prd-fep-047.btinternet.com with ESMTP
+          id <20230701142015.ENRO28253.re-prd-fep-047.btinternet.com@re-prd-rgout-004.btmx-prd.synchronoss.net>;
+          Sat, 1 Jul 2023 15:20:15 +0100
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 63FE9A2B0E1999AA
+X-Originating-IP: [86.140.193.89]
+X-OWM-Source-IP: 86.140.193.89 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrtdekgdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhephfffveeuieetgfeiledtvdeitdejvdefudeltdegudehfeehffdvtdejtdffleehnecuffhomhgrihhnpegthihgfihinhdrtghomhdpghhithhhuhgsrdgtohhmnecukfhppeekiedrudegtddrudelfedrkeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdeingdpihhnvghtpeekiedrudegtddrudelfedrkeelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepmhgrrhhksehmrgigrhhnugdrtghomhdprhgvvhfkrfephhhoshhtkeeiqddugedtqdduleefqdekledrrhgrnhhgvgekiedqudegtddrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghu
+	shgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhstheprhgvqdhprhguqdhrghhouhhtqddttdeg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.106] (86.140.193.89) by re-prd-rgout-004.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
+        id 63FE9A2B0E1999AA; Sat, 1 Jul 2023 15:20:15 +0100
+Message-ID: <1cf85bfc-9865-e4f7-5c2e-5acc89c3e77f@dronecode.org.uk>
+Date: Sat, 1 Jul 2023 15:20:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] Cygwin: Fix type mismatch on sys/cpuset.h
+To: Mark Geisert <mark@maxrnd.com>, Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20230314085601.18635-1-mark@maxrnd.com>
+Content-Language: en-GB
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <20230314085601.18635-1-mark@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 27 Jun 2023, Johannes Schindelin wrote:
+On 14/03/2023 08:56, Mark Geisert wrote:
+> Addresses https://cygwin.com/pipermail/cygwin/2023-March/253220.html
+> 
+> Take the opportunity to follow FreeBSD's and Linux's lead in recasting
+> macro inline code as calls to static inline functions.  This allows the
+> macros to be type-safe.  In addition, added a lower bound check to the
+> functions that use a cpu number to avoid a potential buffer underrun on
+> a bad argument.  h/t to Corinna for the advice on recasting.
+> 
+> Fixes: 362b98b49af5 ("Cygwin: Implement CPU_SET(3) macros")
+> 
 
-> In 4b8222983f (Cygwin: fix errno values set by readlinkat, 2023-04-18)
-> the code of `readlinkat()` was adjusted to align the `errno` with Linux'
-> behavior.
->
-> 	I noticed this issue when one of my workflows failed consistently
-> 	while trying to untar an archive containing a symbolic link and
-> 	claiming this:
->
-> 		Cannot change mode to rwxr-xr-x: Not a directory
->
+There's been a couple of reports that this leads to compilation failures 
+when this header is included in -std=c89 mode.
 
-I wonder if this is related to the issue from the thread
-https://cygwin.com/pipermail/cygwin/2023-May/253738.html (sounds like it).
-If so, tar was
-rebuilt to pick up the new behavior in 3.4.7 (presumably via configure
-checks), it may need another rebuild to pick up the fixed behavior after
-this fix.
+Solutions are probably something like:
+
+* Use __inline__ rather than inline
+* Don't use initial declaration inside the for loop's init-statement
+
+e.g. https://github.com/tinyproxy/tinyproxy/issues/499
+
