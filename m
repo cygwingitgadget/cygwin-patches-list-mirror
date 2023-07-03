@@ -1,54 +1,81 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 55C213858D1E; Mon,  3 Jul 2023 10:54:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 55C213858D1E
+	id 2F03C3858D32; Mon,  3 Jul 2023 10:56:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2F03C3858D32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688381682;
-	bh=bULpD/LG/rWlaF+0BJG+KnW/2E+Q4amasYyZQsTl+88=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=s4CVcleoJ70DZUZPHSMmxqmkaeh4MlruXlk/AHYBsaxHkK0wtFc1rVoBykBBNzw7Q
-	 WDiTbGB8GvRwHUjRsBcXdFvZjW46T6j6o9kGDAtEFVzdWl1WOJC8r+lA2WxTMB/cIB
-	 8DZ+wGMqJHkcCNf2kENw7hIOXaOxsZ4PXTJlFh4A=
+	s=default; t=1688381766;
+	bh=MqLLAgXw3W201wfWo6FRXTqB9IHYKZxKhP3dsQXR+bM=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Apc81wLBYxFBuyUzLwhxggAt6UWiUMH8YLdCZdlVSRxOe/683mozniES7XrqI3lfv
+	 +p4A4Z18mxZTAhgpNbLIa+MO5peJwy7Yq3/pRnoHjkkdmcwvlC4ZIY4bz9+7GFA0Ha
+	 0J/OgtoCooUQOtTKpHpD+ysfS3tMTMhgLZ8zblgg=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id A291DA80D55; Mon,  3 Jul 2023 12:54:40 +0200 (CEST)
-Date: Mon, 3 Jul 2023 12:54:40 +0200
+	id 68EF6A80F77; Mon,  3 Jul 2023 12:56:04 +0200 (CEST)
+Date: Mon, 3 Jul 2023 12:56:04 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fchmodat/fstatat: fix regression with empty `pathname`
-Message-ID: <ZKKo8Ez3nIf7klxz@calimero.vinschen.de>
+To: Mark Geisert <mark@maxrnd.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: Make <sys/cpuset.h> safe for c89 compilations
+Message-ID: <ZKKpRHhq1K27hnAh@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
+Mail-Followup-To: Mark Geisert <mark@maxrnd.com>, cygwin-patches@cygwin.com
+References: <20230703061730.5147-1-mark@maxrnd.com>
+ <b5d4a958-cab1-ab8f-d268-0be51e4ebf34@Shaw.ca>
+ <ec36ad41-7a70-b0bb-83fe-12fb6e905b3c@maxrnd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ec36ad41-7a70-b0bb-83fe-12fb6e905b3c@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+Hi Mark,
 
-On Jun 27 22:51, Johannes Schindelin wrote:
-> In 4b8222983f (Cygwin: fix errno values set by readlinkat, 2023-04-18)
-> the code of `readlinkat()` was adjusted to align the `errno` with Linux'
-> behavior.
+On Jul  3 02:27, Mark Geisert wrote:
+> Hi Brian,
 > 
-> To accommodate for that, the `gen_full_path_at()` function was modified,
-> and the caller was adjusted to expect either `ENOENT` or `ENOTDIR` in
-> the case of an empty `pathname`, not just `ENOENT`.
-> 
-> However, `readlinkat()` is not the only caller of that helper function.
-> 
-> And while most other callers simply propagate the `errno` produced by
-> `gen_full_path_at()`, two other callers also want to special-case empty
-> `pathnames` much like `readlinkat()`: `fchmodat()` and `fstatat()`.
-> 
-> Therefore, these two callers need to be changed to expect `ENOTDIR` in
-> case of an empty `pathname`, too.
-> 
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> Brian Inglis wrote:
+> > On 2023-07-03 00:17, Mark Geisert wrote:
+> > > Three modifications to include/sys/cpuset.h:
+> > > * Change C++-style comments to C-style also supported by C++
+> > > * Change "inline" to "__inline" on code lines
+> > > * Don't declare loop variables on for-loop init clauses
+> > > 
+> > > Tested by first reproducing the reported issue with home-grown test
+> > > programs by compiling with gcc option "-std=c89", then compiling again
+> > > using the modified <sys/cpuset.h>. Other "-std=" options tested too.
+> > > 
+> > > Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
+> > > Fixes: 315e5fbd99ec ("Cygwin: Fix type mismatch on sys/cpuset.h")
 
-Looks like a good catch. Can you please also add a "Fixes:" tag line
-and move the tar error description up into the commit message?
+Signed-off-by?
+
+> > Does this patch need __inline defined e.g.
+> > 
+> >    +#include <sys/cdefs.h>
+> > 
+> > did you perhaps include this directly in your test cases?
+> > 
+> > > -static inline size_t
+> > > +static __inline size_t
+> > ...
+> 
+> No, not directly.  The test case with the shortest list of #includes has:
+> #define _GNU_SOURCE
+> #include <assert.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+> #include <sys/cpuset.h>
+> #include <sched.h>
+> 
+> So it's apparently defined by one of those or some sub-include.  But indeed
+> it's not safe to depend on that so I will try harder to figure out what
+> other occurrences of __inline in the Cygwin source tree are depending on for
+> the definition.
+> Thanks,
+
+Great.
 
 
 Thanks,
