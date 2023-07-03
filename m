@@ -1,72 +1,54 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A00403858D1E; Mon,  3 Jul 2023 10:52:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A00403858D1E
+	id 55C213858D1E; Mon,  3 Jul 2023 10:54:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 55C213858D1E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688381547;
-	bh=aP3bgmItEusnMZfwQDXtwrqi+pini4ZdLQr0vRVRcig=;
+	s=default; t=1688381682;
+	bh=bULpD/LG/rWlaF+0BJG+KnW/2E+Q4amasYyZQsTl+88=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=DzBxL516gWrCiMdVMNFrZHHEzPy/l+MZHC203mELycLeYsTtf4R24qXsIz8i2dFNj
-	 DK2pevD04KNmapGGbd8S2JqX3aPv22VPgLtZaSy1MXBk/kULfjvigQOuh0tZbcLRg0
-	 sT0ItqBdudIwxz9S40povbZYUQsxgzehbr0jQhWQ=
+	b=s4CVcleoJ70DZUZPHSMmxqmkaeh4MlruXlk/AHYBsaxHkK0wtFc1rVoBykBBNzw7Q
+	 WDiTbGB8GvRwHUjRsBcXdFvZjW46T6j6o9kGDAtEFVzdWl1WOJC8r+lA2WxTMB/cIB
+	 8DZ+wGMqJHkcCNf2kENw7hIOXaOxsZ4PXTJlFh4A=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E4893A80D55; Mon,  3 Jul 2023 12:52:25 +0200 (CEST)
-Date: Mon, 3 Jul 2023 12:52:25 +0200
+	id A291DA80D55; Mon,  3 Jul 2023 12:54:40 +0200 (CEST)
+Date: Mon, 3 Jul 2023 12:54:40 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: dtable: Delete old kludge code for /dev/tty.
-Message-ID: <ZKKoaQlqEXjBjNV7@calimero.vinschen.de>
+Subject: Re: [PATCH] fchmodat/fstatat: fix regression with empty `pathname`
+Message-ID: <ZKKo8Ez3nIf7klxz@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230627132826.9321-1-takashi.yano@nifty.ne.jp>
+References: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230627132826.9321-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Hi Johannes,
 
-On Jun 27 22:28, Takashi Yano wrote:
-> This old kludge code assigns fhandler_console for /dev/tty even
-> if the CTTY is not a console when stat() has been called. Due to
-> this, the problem reported in
-> https://cygwin.com/pipermail/cygwin/2023-June/253888.html
-> occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
-> console accessible from other terminals.").
+On Jun 27 22:51, Johannes Schindelin wrote:
+> In 4b8222983f (Cygwin: fix errno values set by readlinkat, 2023-04-18)
+> the code of `readlinkat()` was adjusted to align the `errno` with Linux'
+> behavior.
 > 
-> This patch fixes the issue by dropping the old kludge code.
+> To accommodate for that, the `gen_full_path_at()` function was modified,
+> and the caller was adjusted to expect either `ENOENT` or `ENOTDIR` in
+> the case of an empty `pathname`, not just `ENOENT`.
 > 
-> Reported-by: Bruce Jerrick <bmj001@gmail.com>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-
-Please add a "Fixes:" tag line.
-
-> ---
->  winsup/cygwin/dtable.cc | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+> However, `readlinkat()` is not the only caller of that helper function.
 > 
-> diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-> index 18e0f3097..9427e238e 100644
-> --- a/winsup/cygwin/dtable.cc
-> +++ b/winsup/cygwin/dtable.cc
-> @@ -598,12 +598,7 @@ fh_alloc (path_conv& pc)
->  	  fh = cnew (fhandler_mqueue);
->  	  break;
->  	case FH_TTY:
-> -	  if (!pc.isopen ())
-> -	    {
-> -	      fhraw = cnew_no_ctor (fhandler_console, -1);
-> -	      debug_printf ("not called from open for /dev/tty");
-> -	    }
+> And while most other callers simply propagate the `errno` produced by
+> `gen_full_path_at()`, two other callers also want to special-case empty
+> `pathnames` much like `readlinkat()`: `fchmodat()` and `fstatat()`.
+> 
+> Therefore, these two callers need to be changed to expect `ENOTDIR` in
+> case of an empty `pathname`, too.
+> 
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-This is ok-ish.  The problem is that the original patch 23771fa1f7028
-does not explain *why* it assigned a console fhandler if the file is not
-open.  Given that, it's not clear what side-effects we might encounter
-if we change this.  Do you understand the situation here can you explain
-why dropping this kludge will do the right thing now?  If so, it would
-be great to have a good description of the original idea behind the
-code and why we don't need it anymore in the commit message.
+Looks like a good catch. Can you please also add a "Fixes:" tag line
+and move the tar error description up into the commit message?
 
 
 Thanks,
