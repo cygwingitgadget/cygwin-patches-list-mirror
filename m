@@ -1,68 +1,72 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 584F33858D1E; Mon,  3 Jul 2023 10:39:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 584F33858D1E
+	id A00403858D1E; Mon,  3 Jul 2023 10:52:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A00403858D1E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688380757;
-	bh=V/ImHsjRMIFM2gNzgunGENfEy5iG3b6R5QgV2zHiiWk=;
+	s=default; t=1688381547;
+	bh=aP3bgmItEusnMZfwQDXtwrqi+pini4ZdLQr0vRVRcig=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=ytid+nTAma9sDev6f3gOSdcLc2abuP3otw3juFMNAhYxr3cBNInBeyK++cm1MNdxs
-	 vAEslYf0oElWWhfwAQTly7WhOC/QToEKmcG7WT59RhqyVUIFikHpVjOjUiiO93EUwg
-	 Q47AzDM/Ume9JGbL6HUlrjYGMBsUm+2QHJkjPqIg=
+	b=DzBxL516gWrCiMdVMNFrZHHEzPy/l+MZHC203mELycLeYsTtf4R24qXsIz8i2dFNj
+	 DK2pevD04KNmapGGbd8S2JqX3aPv22VPgLtZaSy1MXBk/kULfjvigQOuh0tZbcLRg0
+	 sT0ItqBdudIwxz9S40povbZYUQsxgzehbr0jQhWQ=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9562FA8162D; Mon,  3 Jul 2023 12:39:15 +0200 (CEST)
-Date: Mon, 3 Jul 2023 12:39:15 +0200
+	id E4893A80D55; Mon,  3 Jul 2023 12:52:25 +0200 (CEST)
+Date: Mon, 3 Jul 2023 12:52:25 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: thread: Reset _my_tls.tid if it's pthread_null
- in init_mainthread().
-Message-ID: <ZKKlU2kjMudqsBTw@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: dtable: Delete old kludge code for /dev/tty.
+Message-ID: <ZKKoaQlqEXjBjNV7@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230622153008.392-1-takashi.yano@nifty.ne.jp>
+References: <20230627132826.9321-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230622153008.392-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20230627132826.9321-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 23 00:30, Takashi Yano wrote:
-> Currently, _my_tls.tid is set to pthread_null if pthread::self()
-> is called before pthread::init_mainthread(). As a result, pthread::
-> init_mainthread() does not set _my_tls.tid appropriately. Due to
-> this, pthread_join() fails in LDAP environment if the program is
-> the first program which loads cygwin1.dll.
-> 
-> https://cygwin.com/pipermail/cygwin/2023-June/253792.html
-> 
-> With this patch, _my_tls.tid is re-initialized in pthread::
-> init_mainthread() if it is pthread_null.
-> 
-> Reported-by: Mümin A. <muminaydin06@gmail.com>
-> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/thread.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-> index 5c1284a93..f614e01c4 100644
-> --- a/winsup/cygwin/thread.cc
-> +++ b/winsup/cygwin/thread.cc
-> @@ -364,7 +364,7 @@ void
->  pthread::init_mainthread ()
->  {
->    pthread *thread = _my_tls.tid;
-> -  if (!thread)
-> +  if (!thread || thread == pthread_null::get_null_pthread ())
->      {
->        thread = new pthread ();
->        if (!thread)
-> -- 
-> 2.39.0
+Hi Takashi,
 
-LGTM.
+On Jun 27 22:28, Takashi Yano wrote:
+> This old kludge code assigns fhandler_console for /dev/tty even
+> if the CTTY is not a console when stat() has been called. Due to
+> this, the problem reported in
+> https://cygwin.com/pipermail/cygwin/2023-June/253888.html
+> occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
+> console accessible from other terminals.").
+> 
+> This patch fixes the issue by dropping the old kludge code.
+> 
+> Reported-by: Bruce Jerrick <bmj001@gmail.com>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Please add a "Fixes:" tag line.
+
+> ---
+>  winsup/cygwin/dtable.cc | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
+> index 18e0f3097..9427e238e 100644
+> --- a/winsup/cygwin/dtable.cc
+> +++ b/winsup/cygwin/dtable.cc
+> @@ -598,12 +598,7 @@ fh_alloc (path_conv& pc)
+>  	  fh = cnew (fhandler_mqueue);
+>  	  break;
+>  	case FH_TTY:
+> -	  if (!pc.isopen ())
+> -	    {
+> -	      fhraw = cnew_no_ctor (fhandler_console, -1);
+> -	      debug_printf ("not called from open for /dev/tty");
+> -	    }
+
+This is ok-ish.  The problem is that the original patch 23771fa1f7028
+does not explain *why* it assigned a console fhandler if the file is not
+open.  Given that, it's not clear what side-effects we might encounter
+if we change this.  Do you understand the situation here can you explain
+why dropping this kludge will do the right thing now?  If so, it would
+be great to have a good description of the original idea behind the
+code and why we don't need it anymore in the commit message.
 
 
 Thanks,
