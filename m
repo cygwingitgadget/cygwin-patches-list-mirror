@@ -1,97 +1,69 @@
-Return-Path: <SRS0=gc88=CV=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 4954A38582A3
-	for <cygwin-patches@cygwin.com>; Mon,  3 Jul 2023 09:27:20 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4954A38582A3
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 3639SbE6069465
-	for <cygwin-patches@cygwin.com>; Mon, 3 Jul 2023 02:28:37 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "[192.168.4.100]"
- via SMTP by m0.truegem.net, id smtpdB7SuXX; Mon Jul  3 02:28:31 2023
-Subject: Re: [PATCH] Cygwin: Make <sys/cpuset.h> safe for c89 compilations
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 584F33858D1E; Mon,  3 Jul 2023 10:39:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 584F33858D1E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1688380757;
+	bh=V/ImHsjRMIFM2gNzgunGENfEy5iG3b6R5QgV2zHiiWk=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=ytid+nTAma9sDev6f3gOSdcLc2abuP3otw3juFMNAhYxr3cBNInBeyK++cm1MNdxs
+	 vAEslYf0oElWWhfwAQTly7WhOC/QToEKmcG7WT59RhqyVUIFikHpVjOjUiiO93EUwg
+	 Q47AzDM/Ume9JGbL6HUlrjYGMBsUm+2QHJkjPqIg=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 9562FA8162D; Mon,  3 Jul 2023 12:39:15 +0200 (CEST)
+Date: Mon, 3 Jul 2023 12:39:15 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20230703061730.5147-1-mark@maxrnd.com>
- <b5d4a958-cab1-ab8f-d268-0be51e4ebf34@Shaw.ca>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <ec36ad41-7a70-b0bb-83fe-12fb6e905b3c@maxrnd.com>
-Date: Mon, 3 Jul 2023 02:27:13 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
+Subject: Re: [PATCH] Cygwin: thread: Reset _my_tls.tid if it's pthread_null
+ in init_mainthread().
+Message-ID: <ZKKlU2kjMudqsBTw@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20230622153008.392-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <b5d4a958-cab1-ab8f-d268-0be51e4ebf34@Shaw.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,BODY_8BITS,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+In-Reply-To: <20230622153008.392-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Brian,
+On Jun 23 00:30, Takashi Yano wrote:
+> Currently, _my_tls.tid is set to pthread_null if pthread::self()
+> is called before pthread::init_mainthread(). As a result, pthread::
+> init_mainthread() does not set _my_tls.tid appropriately. Due to
+> this, pthread_join() fails in LDAP environment if the program is
+> the first program which loads cygwin1.dll.
+> 
+> https://cygwin.com/pipermail/cygwin/2023-June/253792.html
+> 
+> With this patch, _my_tls.tid is re-initialized in pthread::
+> init_mainthread() if it is pthread_null.
+> 
+> Reported-by: Mümin A. <muminaydin06@gmail.com>
+> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/thread.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+> index 5c1284a93..f614e01c4 100644
+> --- a/winsup/cygwin/thread.cc
+> +++ b/winsup/cygwin/thread.cc
+> @@ -364,7 +364,7 @@ void
+>  pthread::init_mainthread ()
+>  {
+>    pthread *thread = _my_tls.tid;
+> -  if (!thread)
+> +  if (!thread || thread == pthread_null::get_null_pthread ())
+>      {
+>        thread = new pthread ();
+>        if (!thread)
+> -- 
+> 2.39.0
 
-Brian Inglis wrote:
-> On 2023-07-03 00:17, Mark Geisert wrote:
->> Three modifications to include/sys/cpuset.h:
->> * Change C++-style comments to C-style also supported by C++
->> * Change "inline" to "__inline" on code lines
->> * Don't declare loop variables on for-loop init clauses
->>
->> Tested by first reproducing the reported issue with home-grown test
->> programs by compiling with gcc option "-std=c89", then compiling again
->> using the modified <sys/cpuset.h>. Other "-std=" options tested too.
->>
->> Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
->> Fixes: 315e5fbd99ec ("Cygwin: Fix type mismatch on sys/cpuset.h")
->>
->> ---
->>   winsup/cygwin/include/sys/cpuset.h | 47 ++++++++++++++++--------------
->>   winsup/cygwin/release/3.4.7        |  3 ++
->>   2 files changed, 28 insertions(+), 22 deletions(-)
->>
->> diff --git a/winsup/cygwin/include/sys/cpuset.h 
->> b/winsup/cygwin/include/sys/cpuset.h
->> index d83359fdf..01576b041 100644
->> --- a/winsup/cygwin/include/sys/cpuset.h
->> +++ b/winsup/cygwin/include/sys/cpuset.h
->> @@ -14,9 +14,9 @@ extern "C" {
->>   #endif
->>   typedef __SIZE_TYPE__ __cpu_mask;
->> -#define __CPU_SETSIZE 1024  // maximum number of logical processors tracked
->> -#define __NCPUBITS (8 * sizeof (__cpu_mask))  // max size of processor group
->> -#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  // maximum group number
->> +#define __CPU_SETSIZE 1024  /* maximum number of logical processors tracked */
->> +#define __NCPUBITS (8 * sizeof (__cpu_mask))  /* max size of processor group */
->> +#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  /* maximum group number */
->>   #define __CPUELT(cpu)  ((cpu) / __NCPUBITS)
->>   #define __CPUMASK(cpu) ((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
->> @@ -32,21 +32,21 @@ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
->>   /* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
->>      Allocations are padded such that full-word operations can be done easily. */
->>   #define CPU_ALLOC_SIZE(num) __cpuset_alloc_size (num)
-> 
-> Does this patch need __inline defined e.g.
-> 
->    +#include <sys/cdefs.h>
-> 
-> did you perhaps include this directly in your test cases?
-> 
->> -static inline size_t
->> +static __inline size_t
-> ...
+LGTM.
 
-No, not directly.  The test case with the shortest list of #includes has:
-#define _GNU_SOURCE
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/cpuset.h>
-#include <sched.h>
 
-So it's apparently defined by one of those or some sub-include.  But indeed it's 
-not safe to depend on that so I will try harder to figure out what other 
-occurrences of __inline in the Cygwin source tree are depending on for the definition.
 Thanks,
-
-..mark
+Corinna
