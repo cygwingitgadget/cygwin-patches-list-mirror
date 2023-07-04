@@ -1,71 +1,51 @@
-Return-Path: <SRS0=VUiZ=CW=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta1010.nifty.com (mta-snd01004.nifty.com [106.153.227.36])
-	by sourceware.org (Postfix) with ESMTPS id 15D393858D35
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jul 2023 10:03:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 15D393858D35
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain by dmta1010.nifty.com with ESMTP
-          id <20230704100355841.CFJT.19104.localhost.localdomain@nifty.com>;
-          Tue, 4 Jul 2023 19:03:55 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 1C8E63857723; Tue,  4 Jul 2023 14:33:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1C8E63857723
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1688481201;
+	bh=6z9qD+EQwppLwEBzwrGNHOsdV2NJbmeJ31CQzW+U4YM=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=o53Uoal6D1Fz6zqQizIqdB9Hnkx/RUfP/D99KudvCX5MtBRGG9MOdaEkO5rhqwynf
+	 yxXXUYqm2t4qr/N7Ie8oG7M591Z3UDT722C6KOFzUvvnlxP6GSzixi+2wg7rWTxKck
+	 x5KINfvojrFh3owW6oZF7mgtoYAjqOxJvfsTZ614=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 7500CA80F7A; Tue,  4 Jul 2023 16:33:19 +0200 (CEST)
+Date: Tue, 4 Jul 2023 16:33:19 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Bruce Jerrick <bmj001@gmail.com>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v2] Cygwin: dtable: Delete old kludge code for /dev/tty.
-Date: Tue,  4 Jul 2023 19:03:38 +0900
-Message-Id: <20230704100338.255-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH v2] Cygwin: Make <sys/cpuset.h> safe for c89 compilations
+Message-ID: <ZKQtr5+C7B+gLQtT@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20230704005141.5334-1-mark@maxrnd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230704005141.5334-1-mark@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-This old kludge code assigns fhandler_console for /dev/tty even
-if the CTTY is not a console when stat() has been called. Due to
-this, the problem reported in
-https://cygwin.com/pipermail/cygwin/2023-June/253888.html
-occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
-console accessible from other terminals.").
+On Jul  3 17:51, Mark Geisert wrote:
+> Four modifications to include/sys/cpuset.h:
+> * Change C++-style comments to C-style also supported by C++
+> * Change "inline" to "__inline" on code lines
+> * Add "#include <sys/cdefs.h>" to make sure __inline is defined
+> * Don't declare loop variables on for-loop init clauses
+> 
+> Tested by first reproducing the reported issue with home-grown test
+> programs by compiling with gcc option "-std=c89", then compiling again
+> using the modified <sys/cpuset.h>. Other "-std=" options tested too.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
+> Fixes: 315e5fbd99ec ("Cygwin: Fix type mismatch on sys/cpuset.h")
+> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+> 
+> ---
+>  winsup/cygwin/include/sys/cpuset.h | 49 ++++++++++++++++--------------
+>  winsup/cygwin/release/3.4.7        |  3 ++
+>  2 files changed, 30 insertions(+), 22 deletions(-)
 
-This patch fixes the issue by dropping the old kludge code.
+Pushed.
 
-Though the exact reason why the kludge code was necessary is not
-clear enough, this kluge code has no longer seemed to be necessary
-after the commit 6ae28c22639d. This is because even when /dev/tty
-is not opened, /dev/tty became able to be refered via last_tty_dev,
-which was introduced by the commit 6ae28c22639d.
-
-Fixes: 23771fa1f7028 ("dtable.cc (fh_alloc): Make different decisions
-  when generating fhandler for not-opened devices. Add kludge to deal
-  with opening /dev/tty.")
-Reported-by: Bruce Jerrick <bmj001@gmail.com>
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/dtable.cc | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-index 18e0f3097..9427e238e 100644
---- a/winsup/cygwin/dtable.cc
-+++ b/winsup/cygwin/dtable.cc
-@@ -598,12 +598,7 @@ fh_alloc (path_conv& pc)
- 	  fh = cnew (fhandler_mqueue);
- 	  break;
- 	case FH_TTY:
--	  if (!pc.isopen ())
--	    {
--	      fhraw = cnew_no_ctor (fhandler_console, -1);
--	      debug_printf ("not called from open for /dev/tty");
--	    }
--	  else if (!CTTY_IS_VALID (myself->ctty) && last_tty_dev
-+	  if (!CTTY_IS_VALID (myself->ctty) && last_tty_dev
- 		   && !myself->set_ctty (fh_last_tty_dev, 0))
- 	    debug_printf ("no /dev/tty assigned");
- 	  else if (CTTY_IS_VALID (myself->ctty))
--- 
-2.39.0
-
+Thanks,
+Corinna
