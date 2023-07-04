@@ -1,204 +1,85 @@
-Return-Path: <SRS0=ML/7=CW=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 299423858D35
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jul 2023 00:51:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 299423858D35
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 3640rDsG083768;
-	Mon, 3 Jul 2023 17:53:13 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdR5p1BG; Mon Jul  3 17:53:08 2023
-From: Mark Geisert <mark@maxrnd.com>
+Return-Path: <SRS0=VUiZ=CW=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta1009.nifty.com (mta-snd01012.nifty.com [106.153.227.44])
+	by sourceware.org (Postfix) with ESMTPS id 153883858D35
+	for <cygwin-patches@cygwin.com>; Tue,  4 Jul 2023 09:58:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 153883858D35
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 by dmta1009.nifty.com with ESMTP
+          id <20230704095811825.CCZW.19111.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 4 Jul 2023 18:58:11 +0900
+Date: Tue, 4 Jul 2023 18:58:11 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH v2] Cygwin: Make <sys/cpuset.h> safe for c89 compilations
-Date: Mon,  3 Jul 2023 17:51:41 -0700
-Message-Id: <20230704005141.5334-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: dtable: Delete old kludge code for /dev/tty.
+Message-Id: <20230704185811.484bec81a144b726c0b54e25@nifty.ne.jp>
+In-Reply-To: <ZKKoaQlqEXjBjNV7@calimero.vinschen.de>
+References: <20230627132826.9321-1-takashi.yano@nifty.ne.jp>
+	<ZKKoaQlqEXjBjNV7@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Four modifications to include/sys/cpuset.h:
-* Change C++-style comments to C-style also supported by C++
-* Change "inline" to "__inline" on code lines
-* Add "#include <sys/cdefs.h>" to make sure __inline is defined
-* Don't declare loop variables on for-loop init clauses
+Hi Corinna,
 
-Tested by first reproducing the reported issue with home-grown test
-programs by compiling with gcc option "-std=c89", then compiling again
-using the modified <sys/cpuset.h>. Other "-std=" options tested too.
+Thanks for reviewing the patch.
 
-Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
-Fixes: 315e5fbd99ec ("Cygwin: Fix type mismatch on sys/cpuset.h")
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
+On Mon, 3 Jul 2023 12:52:25 +0200
+Corinna Vinschen wrote:
+> Hi Takashi,
+> 
+> On Jun 27 22:28, Takashi Yano wrote:
+> > This old kludge code assigns fhandler_console for /dev/tty even
+> > if the CTTY is not a console when stat() has been called. Due to
+> > this, the problem reported in
+> > https://cygwin.com/pipermail/cygwin/2023-June/253888.html
+> > occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
+> > console accessible from other terminals.").
+> > 
+> > This patch fixes the issue by dropping the old kludge code.
+> > 
+> > Reported-by: Bruce Jerrick <bmj001@gmail.com>
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> 
+> Please add a "Fixes:" tag line.
+> 
+> > ---
+> >  winsup/cygwin/dtable.cc | 7 +------
+> >  1 file changed, 1 insertion(+), 6 deletions(-)
+> > 
+> > diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
+> > index 18e0f3097..9427e238e 100644
+> > --- a/winsup/cygwin/dtable.cc
+> > +++ b/winsup/cygwin/dtable.cc
+> > @@ -598,12 +598,7 @@ fh_alloc (path_conv& pc)
+> >  	  fh = cnew (fhandler_mqueue);
+> >  	  break;
+> >  	case FH_TTY:
+> > -	  if (!pc.isopen ())
+> > -	    {
+> > -	      fhraw = cnew_no_ctor (fhandler_console, -1);
+> > -	      debug_printf ("not called from open for /dev/tty");
+> > -	    }
+> 
+> This is ok-ish.  The problem is that the original patch 23771fa1f7028
+> does not explain *why* it assigned a console fhandler if the file is not
+> open.  Given that, it's not clear what side-effects we might encounter
+> if we change this.  Do you understand the situation here can you explain
+> why dropping this kludge will do the right thing now?  If so, it would
+> be great to have a good description of the original idea behind the
+> code and why we don't need it anymore in the commit message.
 
----
- winsup/cygwin/include/sys/cpuset.h | 49 ++++++++++++++++--------------
- winsup/cygwin/release/3.4.7        |  3 ++
- 2 files changed, 30 insertions(+), 22 deletions(-)
+I am not really sure the reason why the kludge code was needed.
+However, I noticed stat() fails before the commit 6ae28c22639d
+without the kludge code if the program calls setsid(). After the
+commit 6ae28c22639d, this does not happen. Therefore, I think
+this kludge code is no longer necessary.
 
-diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
-index d83359fdf..0c95134ff 100644
---- a/winsup/cygwin/include/sys/cpuset.h
-+++ b/winsup/cygwin/include/sys/cpuset.h
-@@ -9,14 +9,16 @@ details. */
- #ifndef _SYS_CPUSET_H_
- #define _SYS_CPUSET_H_
- 
-+#include <sys/cdefs.h>
-+
- #ifdef __cplusplus
- extern "C" {
- #endif
- 
- typedef __SIZE_TYPE__ __cpu_mask;
--#define __CPU_SETSIZE 1024  // maximum number of logical processors tracked
--#define __NCPUBITS (8 * sizeof (__cpu_mask))  // max size of processor group
--#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  // maximum group number
-+#define __CPU_SETSIZE 1024  /* maximum number of logical processors tracked */
-+#define __NCPUBITS (8 * sizeof (__cpu_mask))  /* max size of processor group */
-+#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  /* maximum group number */
- 
- #define __CPUELT(cpu)  ((cpu) / __NCPUBITS)
- #define __CPUMASK(cpu) ((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
-@@ -32,21 +34,21 @@ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
- /* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
-    Allocations are padded such that full-word operations can be done easily. */
- #define CPU_ALLOC_SIZE(num) __cpuset_alloc_size (num)
--static inline size_t
-+static __inline size_t
- __cpuset_alloc_size (int num)
- {
-   return (size_t) (((num + __NCPUBITS - 1) / __NCPUBITS) * sizeof (__cpu_mask));
- }
- 
- #define CPU_ALLOC(num) __cpuset_alloc (num)
--static inline cpu_set_t *
-+static __inline cpu_set_t *
- __cpuset_alloc (int num)
- {
-   return (cpu_set_t *) __builtin_malloc (CPU_ALLOC_SIZE(num));
- }
- 
- #define CPU_FREE(set) __cpuset_free (set)
--static inline void
-+static __inline void
- __cpuset_free (cpu_set_t *set)
- {
-   __builtin_free (set);
-@@ -54,14 +56,14 @@ __cpuset_free (cpu_set_t *set)
- 
- /* These _S macros operate on dynamically-sized cpu sets of size 'siz' bytes */
- #define CPU_ZERO_S(siz, set) __cpuset_zero_s (siz, set)
--static inline void
-+static __inline void
- __cpuset_zero_s (size_t siz, cpu_set_t *set)
- {
-   (void) __builtin_memset (set, 0, siz);
- }
- 
- #define CPU_SET_S(cpu, siz, set) __cpuset_set_s (cpu, siz, set)
--static inline void
-+static __inline void
- __cpuset_set_s (int cpu, size_t siz, cpu_set_t *set)
- {
-   if (cpu >= 0 && cpu < 8 * siz)
-@@ -69,7 +71,7 @@ __cpuset_set_s (int cpu, size_t siz, cpu_set_t *set)
- }
- 
- #define CPU_CLR_S(cpu, siz, set) __cpuset_clr_s (cpu, siz, set)
--static inline void
-+static __inline void
- __cpuset_clr_s (int cpu, size_t siz, cpu_set_t *set)
- {
-   if (cpu >= 0 && cpu < 8 * siz)
-@@ -77,7 +79,7 @@ __cpuset_clr_s (int cpu, size_t siz, cpu_set_t *set)
- }
- 
- #define CPU_ISSET_S(cpu, siz, set) __cpuset_isset_s (cpu, siz, set)
--static inline int
-+static __inline int
- __cpuset_isset_s (int cpu, size_t siz, cpu_set_t *set)
- {
-   int res = 0;
-@@ -87,45 +89,48 @@ __cpuset_isset_s (int cpu, size_t siz, cpu_set_t *set)
- }
- 
- #define CPU_COUNT_S(siz, set) __cpuset_count_s (siz, set)
--static inline int
-+static __inline int
- __cpuset_count_s (size_t siz, cpu_set_t *set)
- {
--  int res = 0;
--  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
-+  int i, res = 0;
-+  for (i = 0; i < siz / sizeof (__cpu_mask); i++)
-     res += __builtin_popcountl ((set)->__bits[i]);
-   return res;
- }
- 
- #define CPU_AND_S(siz, dst, src1, src2) __cpuset_and_s (siz, dst, src1, src2)
--static inline void
-+static __inline void
- __cpuset_and_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
- {
--  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
-+  int i;
-+  for (i = 0; i < siz / sizeof (__cpu_mask); i++)
-     (dst)->__bits[i] = (src1)->__bits[i] & (src2)->__bits[i];
- }
- 
- #define CPU_OR_S(siz, dst, src1, src2) __cpuset_or_s (siz, dst, src1, src2)
--static inline void
-+static __inline void
- __cpuset_or_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
- {
--  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
-+  int i;
-+  for (i = 0; i < siz / sizeof (__cpu_mask); i++)
-     (dst)->__bits[i] = (src1)->__bits[i] | (src2)->__bits[i];
- }
- 
- #define CPU_XOR_S(siz, dst, src1, src2) __cpuset_xor_s (siz, dst, src1, src2)
--static inline void
-+static __inline void
- __cpuset_xor_s (size_t siz, cpu_set_t *dst, cpu_set_t *src1, cpu_set_t *src2)
- {
--  for (int i = 0; i < siz / sizeof (__cpu_mask); i++)
-+  int i;
-+  for (i = 0; i < siz / sizeof (__cpu_mask); i++)
-     (dst)->__bits[i] = (src1)->__bits[i] ^ (src2)->__bits[i];
- }
- 
- #define CPU_EQUAL_S(siz, src1, src2) __cpuset_equal_s (siz, src1, src2)
--static inline int
-+static __inline int
- __cpuset_equal_s (size_t siz, cpu_set_t *src1, cpu_set_t *src2)
- {
--  int res = 1;
--  for (int i = 0; res && i < siz / sizeof (__cpu_mask); i++)
-+  int i, res = 1;
-+  for (i = 0; res && i < siz / sizeof (__cpu_mask); i++)
-     res &= (src1)->__bits[i] == (src2)->__bits[i];
-   return res;
- }
-diff --git a/winsup/cygwin/release/3.4.7 b/winsup/cygwin/release/3.4.7
-index 0e6922163..923408ec2 100644
---- a/winsup/cygwin/release/3.4.7
-+++ b/winsup/cygwin/release/3.4.7
-@@ -25,3 +25,6 @@ Bug Fixes
- - Fix return code and errno set by renameat2, if oldfile and newfile
-   refer to the same file, and the RENAME_NOREPLACE flag is set.
-   Addresses: https://cygwin.com/pipermail/cygwin/2023-April/253514.html
-+
-+- Make <sys/cpuset.h> safe for c89 compilations.
-+  Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
+I will submit v2 patch where the commit message is updated.
+
 -- 
-2.39.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
