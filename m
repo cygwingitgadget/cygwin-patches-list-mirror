@@ -1,70 +1,58 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 07E2338515F4; Fri,  7 Jul 2023 09:44:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 07E2338515F4
+	id 9CD9F3865460; Fri,  7 Jul 2023 09:46:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9CD9F3865460
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688723050;
-	bh=gIrqCdywGGtYsSq9pbBH7ZbFGqRVsG+84Jwk6YQxZFQ=;
+	s=default; t=1688723177;
+	bh=eVVsVhCuEPNIXhGYWd7T/QHp6LhsVZVc5RKDVkviaik=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=QeIntWXjRL4WBHKh8O3N0zHSDzxPwfXt5bIMvgHzunLD6+s0h1SA08G5458sceQot
-	 rwerClQGPSbI9TEMTiQJNE2z4zriBRY6lNvu1e76TmHxX31pEa/qfvqoKP4rMiirj0
-	 1FUg4VAx8Vk7mn+izp/eBXpTjiI2E6CboFnehmIc=
+	b=yPl4j/LqlRNRs4ORYfGoZ6XqyD7XEWTd2WSAxhP/lMm4PCsgvCrtXDtiCaBaqiwWL
+	 66R9EakcCt1TOYZ7qjHHYKqSiHOyKOIaFv4fR6+0MC57J+GZeiErGfra6Qj44Cgcaa
+	 NOHfTUDhK1++gzPtrmEE01FlARhmxCjtr5+ucCG0=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 4E5E2A80BDA; Fri,  7 Jul 2023 11:44:08 +0200 (CEST)
-Date: Fri, 7 Jul 2023 11:44:08 +0200
+	id E4CDBA80BDA; Fri,  7 Jul 2023 11:46:15 +0200 (CEST)
+Date: Fri, 7 Jul 2023 11:46:15 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Make gcc-specific code in <sys/cpuset.h>
- compiler-agnostic
-Message-ID: <ZKfeaMftPy8HmXyy@calimero.vinschen.de>
+Subject: Re: [PATCH 1/2] Cygwin: stat(): Fix "Bad address" error on stat()
+ for /dev/tty.
+Message-ID: <ZKfe55PgjTJwWmIQ@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230707074121.7880-1-mark@maxrnd.com>
+References: <20230707033458.1034-1-takashi.yano@nifty.ne.jp>
+ <20230707033458.1034-2-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230707074121.7880-1-mark@maxrnd.com>
+In-Reply-To: <20230707033458.1034-2-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Mark,
+Hi Takashi,
 
-On Jul  7 00:41, Mark Geisert wrote:
-> The current version of <sys/cpuset.h> cannot be compiled by Clang due to
-> the use of __builtin* functions.  Their presence here was a dubious
-> optimization anyway, so their usage has been converted to standard
-> library functions.  A popcnt (population count of 1 bits in a word)
-> function is provided here because there isn't one in the standard library
-> or elsewhere in the Cygwin DLL.
+On Jul  7 12:34, Takashi Yano wrote:
+> diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
+> index 18e0f3097..2aae2fd65 100644
+> --- a/winsup/cygwin/dtable.cc
+> +++ b/winsup/cygwin/dtable.cc
+> @@ -600,7 +600,13 @@ fh_alloc (path_conv& pc)
+>  	case FH_TTY:
+>  	  if (!pc.isopen ())
+>  	    {
+> -	      fhraw = cnew_no_ctor (fhandler_console, -1);
+> +	      if (CTTY_IS_VALID (myself->ctty))
+> +		{
+> +		  if (iscons_dev (myself->ctty))
+> +		    fhraw = cnew_no_ctor (fhandler_console, -1);
+> +		  else
+> +		    fhraw = cnew_no_ctor (fhandler_pty_slave, -1);
+> +		}
 
-And clang really doesn't provide it?  That's unfortunate.
+What happens if CTTY_IS_VALID fails at this point?  There's no
+`else' catching that situation?
 
-Do you really think it's not worth to use it if it's available?
-
-You could workaround it like this:
-
-> +/* Modern CPUs have popcnt* instructions but the need here is not worth
-> + * worrying about builtins or inline assembler for different compilers. */ 
-> +static inline int
-> +__maskpopcnt (__cpu_mask mask)
-> +{
-#if (__GNUC__ >= 4)
-     return __builtin_popcountl (mask);
-#else
-> +  int res = 0;
-> +  unsigned long ulmask = (unsigned long) mask;
-> +
-> +  while (ulmask != 0)
-> +    {
-> +      if (ulmask & 1)
-> +        ++res;
-> +      ulmask >>= 1;
-> +    }
-> +  return res;
-#endif
-> +}
-> +
-
-But, if you think that's not worth it, I'll push your patch as is.
+>  	      debug_printf ("not called from open for /dev/tty");
+>  	    }
+>  	  else if (!CTTY_IS_VALID (myself->ctty) && last_tty_dev
 
 
 Thanks,
