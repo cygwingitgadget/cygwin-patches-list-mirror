@@ -1,62 +1,63 @@
-Return-Path: <SRS0=ML/7=CW=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 1256D3858D32
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jul 2023 18:42:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1256D3858D32
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 364IhJVr016101
-	for <cygwin-patches@cygwin.com>; Tue, 4 Jul 2023 11:43:19 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "[192.168.4.100]"
- via SMTP by m0.truegem.net, id smtpdy34DqF; Tue Jul  4 11:43:14 2023
-Subject: Re: [PATCH v2] Cygwin: Make <sys/cpuset.h> safe for c89 compilations
+Return-Path: <SRS0=MpmZ=CZ=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta0020.nifty.com (mta-snd00010.nifty.com [106.153.226.42])
+	by sourceware.org (Postfix) with ESMTPS id D87373858D38
+	for <cygwin-patches@cygwin.com>; Fri,  7 Jul 2023 03:30:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D87373858D38
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 by dmta0020.nifty.com with ESMTP
+          id <20230707033005636.TYZM.104723.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 7 Jul 2023 12:30:05 +0900
+Date: Fri, 7 Jul 2023 12:30:05 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20230704005141.5334-1-mark@maxrnd.com>
- <ZKQtr5+C7B+gLQtT@calimero.vinschen.de>
- <ZKQy5w2OlDmv/5iF@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <d2d1c436-f3f9-8e67-1645-0a6d29741973@maxrnd.com>
-Date: Tue, 4 Jul 2023 11:41:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
-MIME-Version: 1.0
-In-Reply-To: <ZKQy5w2OlDmv/5iF@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2] Cygwin: dtable: Delete old kludge code for /dev/tty.
+Message-Id: <20230707123005.493ee21ae5ad31500af6415c@nifty.ne.jp>
+In-Reply-To: <ZKQualiRASkQFC8N@calimero.vinschen.de>
+References: <20230704100338.255-1-takashi.yano@nifty.ne.jp>
+	<ZKQualiRASkQFC8N@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
+Hi Corinna,
+
+On Tue, 4 Jul 2023 16:36:26 +0200
 Corinna Vinschen wrote:
-> On Jul  4 16:33, Corinna Vinschen wrote:
->> On Jul  3 17:51, Mark Geisert wrote:
->>> Four modifications to include/sys/cpuset.h:
->>> * Change C++-style comments to C-style also supported by C++
->>> * Change "inline" to "__inline" on code lines
->>> * Add "#include <sys/cdefs.h>" to make sure __inline is defined
->>> * Don't declare loop variables on for-loop init clauses
->>>
->>> Tested by first reproducing the reported issue with home-grown test
->>> programs by compiling with gcc option "-std=c89", then compiling again
->>> using the modified <sys/cpuset.h>. Other "-std=" options tested too.
->>>
->>> Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
->>> Fixes: 315e5fbd99ec ("Cygwin: Fix type mismatch on sys/cpuset.h")
->>> Signed-off-by: Mark Geisert <mark@maxrnd.com>
->>>
->>> ---
->>>   winsup/cygwin/include/sys/cpuset.h | 49 ++++++++++++++++--------------
->>>   winsup/cygwin/release/3.4.7        |  3 ++
->>>   2 files changed, 30 insertions(+), 22 deletions(-)
->>
->> Pushed.
+> On Jul  4 19:03, Takashi Yano wrote:
+> > This old kludge code assigns fhandler_console for /dev/tty even
+> > if the CTTY is not a console when stat() has been called. Due to
+> > this, the problem reported in
+> > https://cygwin.com/pipermail/cygwin/2023-June/253888.html
+> > occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
+> > console accessible from other terminals.").
+> > 
+> > This patch fixes the issue by dropping the old kludge code.
+> > 
+> > Though the exact reason why the kludge code was necessary is not
+> > clear enough, this kluge code has no longer seemed to be necessary
+>                                 ^^^^^^^^^^^^^^^^^^^^
+> I'm not a native speaker myself, but
 > 
-> FYI, I missed to notice that you added the release message to the
-> already existing 3.4.7 release.  I moved it into a new file for 3.4.8.
+> 				no longer seems
+> 
+> might be better here.
+> 
+> Anyway, this is GTG.
 
-Thank you for cleaning up after my goof on the version.
-Cheers & Regards,
+I think I understand correctly the concept of cnew_no_ctor macro in
+dtable.cc now. cnew_no_ctor calls fhandler_console(void *) instead of
+fhandler_console(fh_devices) to omits initialization of instance for
+stat() call. This might make stat() slightly faster.
 
-..mark
+Based on this understanding, I would like to withdraw the previous
+patch, and propose new patch series.
+
+Could you please review the patch seriese?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
