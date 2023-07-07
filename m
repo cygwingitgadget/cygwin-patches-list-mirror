@@ -1,92 +1,62 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 40C2438013B0; Fri,  7 Jul 2023 10:46:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 40C2438013B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688726760;
-	bh=EwXbcJrQMh7uVs1xNCRqY1JLir9X7VS7bY75PR4su8E=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=Tn1Kl8WJtgaH9Cz8TUCqWf5nNLCXzmMGCXWqvXpXbzxOD9IeTXGhi55M1rDFf2W5y
-	 QdA1FhAx05VD5EKly+s6E11BsDa+a9I0rs8LjECaBxSweXzM2DAf4uk1wvvYHRwNdY
-	 RKKMgB5O/wFL42/FBbqsCE47BHUj2b+L5eWKVf3U=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 69073A80BDA; Fri,  7 Jul 2023 12:45:58 +0200 (CEST)
-Date: Fri, 7 Jul 2023 12:45:58 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+Return-Path: <SRS0=giei=CZ=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from sa-prd-fep-042.btinternet.com (mailomta1-sa.btinternet.com [213.120.69.7])
+	by sourceware.org (Postfix) with ESMTPS id 406E7384F4A3
+	for <cygwin-patches@cygwin.com>; Fri,  7 Jul 2023 15:46:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 406E7384F4A3
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+          by sa-prd-fep-042.btinternet.com with ESMTP
+          id <20230707154626.DDPD20040.sa-prd-fep-042.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>
+          for <cygwin-patches@cygwin.com>; Fri, 7 Jul 2023 16:46:26 +0100
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 640682870E40B473
+X-Originating-IP: [86.140.69.67]
+X-OWM-Source-IP: 86.140.69.67 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrvddugdelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffekiefgudejheetudeigfejledtleegleetkeduteeftdfffefhueefgfeutedtnecukfhppeekiedrudegtddrieelrdeijeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtiegnpdhinhgvthepkeeirddugedtrdeiledrieejpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrvghvkffrpehhohhsthekiedqudegtddqieelqdeijedrrhgrnhhgvgekiedqudegtddrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghho
+	uhhtqddttdeh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.106] (86.140.69.67) by sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
+        id 640682870E40B473 for cygwin-patches@cygwin.com; Fri, 7 Jul 2023 16:46:26 +0100
+Message-ID: <8bc70b04-7c0b-15de-b090-e2f38c424dd9@dronecode.org.uk>
+Date: Fri, 7 Jul 2023 16:46:24 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Subject: Re: [PATCH] Cygwin: Make gcc-specific code in <sys/cpuset.h>
  compiler-agnostic
-Message-ID: <ZKfs5ivJ94sVv77t@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20230707074121.7880-1-mark@maxrnd.com>
  <ZKfeaMftPy8HmXyy@calimero.vinschen.de>
- <465f8863-6559-e061-684a-a2a812e9c4c6@maxrnd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <465f8863-6559-e061-684a-a2a812e9c4c6@maxrnd.com>
+Content-Language: en-GB
+From: Jon Turney <jon.turney@dronecode.org.uk>
+In-Reply-To: <ZKfeaMftPy8HmXyy@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  7 03:13, Mark Geisert wrote:
-> Hi Corinna,
+On 07/07/2023 10:44, Corinna Vinschen wrote:
+> Hi Mark,
 > 
-> Corinna Vinschen wrote:
-> > On Jul  7 00:41, Mark Geisert wrote:
-> > > The current version of <sys/cpuset.h> cannot be compiled by Clang due to
-> > > the use of __builtin* functions.  Their presence here was a dubious
-> > > optimization anyway, so their usage has been converted to standard
-> > > library functions.  A popcnt (population count of 1 bits in a word)
-> > > function is provided here because there isn't one in the standard library
-> > > or elsewhere in the Cygwin DLL.
-> > 
-> > And clang really doesn't provide it?  That's unfortunate.
-> > 
-> > Do you really think it's not worth to use it if it's available?
+> On Jul  7 00:41, Mark Geisert wrote:
+>> The current version of <sys/cpuset.h> cannot be compiled by Clang due to
+>> the use of __builtin* functions.  Their presence here was a dubious
+>> optimization anyway, so their usage has been converted to standard
+>> library functions.  A popcnt (population count of 1 bits in a word)
+>> function is provided here because there isn't one in the standard library
+>> or elsewhere in the Cygwin DLL.
 > 
-> I don't know for sure.  I'd guess the popcnt op should be optimized if
-> available; the others probably don't need it.
-> 
-> > You could workaround it like this:
-> > 
-> > > +/* Modern CPUs have popcnt* instructions but the need here is not worth
-> > > + * worrying about builtins or inline assembler for different compilers. */
-> > > +static inline int
-> > > +__maskpopcnt (__cpu_mask mask)
-> > > +{
-> > #if (__GNUC__ >= 4)
-> >       return __builtin_popcountl (mask);
-> > #else
-> > > +  int res = 0;
-> > > +  unsigned long ulmask = (unsigned long) mask;
-> > > +
-> > > +  while (ulmask != 0)
-> > > +    {
-> > > +      if (ulmask & 1)
-> > > +        ++res;
-> > > +      ulmask >>= 1;
-> > > +    }
-> > > +  return res;
-> > #endif
-> > > +}
-> > > +
-> 
-> The first version of the patch (unsubmitted) worked something like that,
-> though it was a chore figuring out how to tell the difference between gcc
-> and clang.  clang #defines __GNUC__ (?!) for example.  I ended up using
+> And clang really doesn't provide it?  That's unfortunate.
 
-Oh well...
+I suspect if we had a current clang this would not be a problem.
 
-> __GNUC_PREREQ__ with the hope clang version numbers stay lower than gcc
-> version numbers.  Has to be a better way than that.
-> 
-> On the other hand, one compilation with clang or clang++, I forget which,
-> and with some optimization flag, recognized the 'while' loop in that
-> function and turned it into the Hackers Delight algorithm for popcnt in ~20
-> instructions and no loop.
-> 
-> TL;DR let me ponder this over the weekend.
-> Thanks for listening,
+There's probably something to be said for solving this problem by 
+removing our old and unmaintained clang packages...
 
-No worries,
-Corinna
