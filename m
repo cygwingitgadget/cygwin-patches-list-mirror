@@ -1,58 +1,42 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 9CD9F3865460; Fri,  7 Jul 2023 09:46:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9CD9F3865460
+	id 09BCB385DC29; Fri,  7 Jul 2023 10:10:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 09BCB385DC29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688723177;
-	bh=eVVsVhCuEPNIXhGYWd7T/QHp6LhsVZVc5RKDVkviaik=;
+	s=default; t=1688724656;
+	bh=yEsd0y6aquBubF4SkUoq2RVUXHKiFayf9cvoLnptVnc=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=yPl4j/LqlRNRs4ORYfGoZ6XqyD7XEWTd2WSAxhP/lMm4PCsgvCrtXDtiCaBaqiwWL
-	 66R9EakcCt1TOYZ7qjHHYKqSiHOyKOIaFv4fR6+0MC57J+GZeiErGfra6Qj44Cgcaa
-	 NOHfTUDhK1++gzPtrmEE01FlARhmxCjtr5+ucCG0=
+	b=AXnJ4L57UkXAPYBhD0kfEIAyukbS8lj6Oe++j607+RKCwB4JYUpF1+Z6OFBETB6QY
+	 Qa4jNIV500YLJwJDNOc+WRongGGorktK0GJb/fEbOBWbD6M/3Pz6Zl8dJLnyKCTYxc
+	 pslEkwyeKXPVyXEvDaXRt8K39bmdKgoQekuMGJJ4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E4CDBA80BDA; Fri,  7 Jul 2023 11:46:15 +0200 (CEST)
-Date: Fri, 7 Jul 2023 11:46:15 +0200
+	id 4B84FA80BDA; Fri,  7 Jul 2023 12:10:54 +0200 (CEST)
+Date: Fri, 7 Jul 2023 12:10:54 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: stat(): Fix "Bad address" error on stat()
- for /dev/tty.
-Message-ID: <ZKfe55PgjTJwWmIQ@calimero.vinschen.de>
+Subject: Re: [PATCH 2/2] Cygwin: fstat(): Fix st_rdev returned by fstat() for
+ /dev/tty.
+Message-ID: <ZKfkrrnMdbVv0N11@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20230707033458.1034-1-takashi.yano@nifty.ne.jp>
- <20230707033458.1034-2-takashi.yano@nifty.ne.jp>
+ <20230707033458.1034-3-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230707033458.1034-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20230707033458.1034-3-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
-
 On Jul  7 12:34, Takashi Yano wrote:
-> diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-> index 18e0f3097..2aae2fd65 100644
-> --- a/winsup/cygwin/dtable.cc
-> +++ b/winsup/cygwin/dtable.cc
-> @@ -600,7 +600,13 @@ fh_alloc (path_conv& pc)
->  	case FH_TTY:
->  	  if (!pc.isopen ())
->  	    {
-> -	      fhraw = cnew_no_ctor (fhandler_console, -1);
-> +	      if (CTTY_IS_VALID (myself->ctty))
-> +		{
-> +		  if (iscons_dev (myself->ctty))
-> +		    fhraw = cnew_no_ctor (fhandler_console, -1);
-> +		  else
-> +		    fhraw = cnew_no_ctor (fhandler_pty_slave, -1);
-> +		}
-
-What happens if CTTY_IS_VALID fails at this point?  There's no
-`else' catching that situation?
-
->  	      debug_printf ("not called from open for /dev/tty");
->  	    }
->  	  else if (!CTTY_IS_VALID (myself->ctty) && last_tty_dev
+> While st_rdev returned by fstat() for /dev/tty should be FH_TTY,
+> the current cygwin1.dll returns FH_PTYS+minor or FH_CONS+minor.
+> Similarly, fstat() does not return correct value for /dev/console,
+> /dev/conout, /dev/conin or /dev/ptmx.
+> 
+> This patch fixes the issue by:
+> 1) Introduce dev_refered_via in fhandler_termios.
+                       ^
+               dev_referred_via, please
 
 
 Thanks,
