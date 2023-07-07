@@ -1,120 +1,70 @@
-Return-Path: <SRS0=7Azx=CZ=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id EE8E13858C60
-	for <cygwin-patches@cygwin.com>; Fri,  7 Jul 2023 07:41:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE8E13858C60
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 3677gq2e063058;
-	Fri, 7 Jul 2023 00:42:52 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdOvyRrk; Fri Jul  7 00:42:46 2023
-From: Mark Geisert <mark@maxrnd.com>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 785723853D07; Fri,  7 Jul 2023 09:34:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 785723853D07
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1688722459;
+	bh=HFeR407YZ3pT2YcsRtYrtvgDp9+Gpw3WGi8vCLHB4zo=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=MDdbCCaZBcP/mVMl8jKTrgx0jRdh3SlToPQIx0YEFmxYO7SRmmfPBS1Y7r1dKbOZW
+	 RtbyW7BkE9Zq6e+u/afPNNR9y87mfiIO8ukvRpcw/XfNBc7xMLvEjVp0YLA96rhdFG
+	 9Y6zJhMH6DryHKtvWAB5D0K1pc2VuQMDBwxbaCo8=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id A384BA80BDA; Fri,  7 Jul 2023 11:34:17 +0200 (CEST)
+Date: Fri, 7 Jul 2023 11:34:17 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Cygwin: Make gcc-specific code in <sys/cpuset.h> compiler-agnostic
-Date: Fri,  7 Jul 2023 00:41:21 -0700
-Message-Id: <20230707074121.7880-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH v2] Cygwin: dtable: Delete old kludge code for /dev/tty.
+Message-ID: <ZKfcGQgQmUfb7gH5@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20230704100338.255-1-takashi.yano@nifty.ne.jp>
+ <ZKQualiRASkQFC8N@calimero.vinschen.de>
+ <20230707123005.493ee21ae5ad31500af6415c@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230707123005.493ee21ae5ad31500af6415c@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-The current version of <sys/cpuset.h> cannot be compiled by Clang due to
-the use of __builtin* functions.  Their presence here was a dubious
-optimization anyway, so their usage has been converted to standard
-library functions.  A popcnt (population count of 1 bits in a word)
-function is provided here because there isn't one in the standard library
-or elsewhere in the Cygwin DLL.
+On Jul  7 12:30, Takashi Yano wrote:
+> Hi Corinna,
+> 
+> On Tue, 4 Jul 2023 16:36:26 +0200
+> Corinna Vinschen wrote:
+> > On Jul  4 19:03, Takashi Yano wrote:
+> > > This old kludge code assigns fhandler_console for /dev/tty even
+> > > if the CTTY is not a console when stat() has been called. Due to
+> > > this, the problem reported in
+> > > https://cygwin.com/pipermail/cygwin/2023-June/253888.html
+> > > occurs after the commit 3721a756b0d8 ("Cygwin: console: Make the
+> > > console accessible from other terminals.").
+> > > 
+> > > This patch fixes the issue by dropping the old kludge code.
+> > > 
+> > > Though the exact reason why the kludge code was necessary is not
+> > > clear enough, this kluge code has no longer seemed to be necessary
+> >                                 ^^^^^^^^^^^^^^^^^^^^
+> > I'm not a native speaker myself, but
+> > 
+> > 				no longer seems
+> > 
+> > might be better here.
+> > 
+> > Anyway, this is GTG.
+> 
+> I think I understand correctly the concept of cnew_no_ctor macro in
+> dtable.cc now. cnew_no_ctor calls fhandler_console(void *) instead of
+> fhandler_console(fh_devices) to omits initialization of instance for
+> stat() call. This might make stat() slightly faster.
+> 
+> Based on this understanding, I would like to withdraw the previous
+> patch, and propose new patch series.
+> 
+> Could you please review the patch seriese?
 
-The "#include <sys/cdefs>" here to define __inline can be removed since
-both of the new includes sub-include it.
+Great, will do!
 
-Addresses: https://cygwin.com/pipermail/cygwin/2023-July/253927.html
-Fixes: 9cc910dd33a5 (Cygwin: Make <sys/cpuset.h> safe for c89 compilations)
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
 
----
- winsup/cygwin/include/sys/cpuset.h | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
-index 0c95134ff..f76e788d5 100644
---- a/winsup/cygwin/include/sys/cpuset.h
-+++ b/winsup/cygwin/include/sys/cpuset.h
-@@ -9,7 +9,8 @@ details. */
- #ifndef _SYS_CPUSET_H_
- #define _SYS_CPUSET_H_
- 
--#include <sys/cdefs.h>
-+#include <stdlib.h>
-+#include <string.h>
- 
- #ifdef __cplusplus
- extern "C" {
-@@ -31,6 +32,23 @@ typedef struct
- #if __GNU_VISIBLE
- int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
- 
-+/* Modern CPUs have popcnt* instructions but the need here is not worth
-+ * worrying about builtins or inline assembler for different compilers. */ 
-+static inline int
-+__maskpopcnt (__cpu_mask mask)
-+{
-+  int res = 0;
-+  unsigned long ulmask = (unsigned long) mask;
-+
-+  while (ulmask != 0)
-+    {
-+      if (ulmask & 1)
-+        ++res;
-+      ulmask >>= 1;
-+    }
-+  return res;
-+}
-+
- /* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
-    Allocations are padded such that full-word operations can be done easily. */
- #define CPU_ALLOC_SIZE(num) __cpuset_alloc_size (num)
-@@ -44,14 +62,14 @@ __cpuset_alloc_size (int num)
- static __inline cpu_set_t *
- __cpuset_alloc (int num)
- {
--  return (cpu_set_t *) __builtin_malloc (CPU_ALLOC_SIZE(num));
-+  return (cpu_set_t *) malloc (CPU_ALLOC_SIZE(num));
- }
- 
- #define CPU_FREE(set) __cpuset_free (set)
- static __inline void
- __cpuset_free (cpu_set_t *set)
- {
--  __builtin_free (set);
-+  free (set);
- }
- 
- /* These _S macros operate on dynamically-sized cpu sets of size 'siz' bytes */
-@@ -59,7 +77,7 @@ __cpuset_free (cpu_set_t *set)
- static __inline void
- __cpuset_zero_s (size_t siz, cpu_set_t *set)
- {
--  (void) __builtin_memset (set, 0, siz);
-+  (void) memset (set, 0, siz);
- }
- 
- #define CPU_SET_S(cpu, siz, set) __cpuset_set_s (cpu, siz, set)
-@@ -94,7 +112,7 @@ __cpuset_count_s (size_t siz, cpu_set_t *set)
- {
-   int i, res = 0;
-   for (i = 0; i < siz / sizeof (__cpu_mask); i++)
--    res += __builtin_popcountl ((set)->__bits[i]);
-+    res += __maskpopcnt ((set)->__bits[i]);
-   return res;
- }
- 
--- 
-2.39.0
-
+Thanks,
+Corinna
