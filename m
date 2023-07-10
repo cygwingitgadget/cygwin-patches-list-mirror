@@ -1,74 +1,53 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 4808D3858D35; Mon, 10 Jul 2023 08:31:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4808D3858D35
+	id 5431E3858D35; Mon, 10 Jul 2023 08:43:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5431E3858D35
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688977876;
-	bh=yDeWqLgQS+prXwIKlbQKuUbuerej5QPlA5pJYzJMU3E=;
+	s=default; t=1688978593;
+	bh=OWBnGtkU735/7Sp0nqo8u0+Wi8W5cV6lRaC2xxjpcMc=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=vD+1XlJD2lcKMEm+mdl6NMvryQPVVdsGaAxwoARasmjOqTvvZTF5SNHfv5rzaCF23
-	 xn+jgPGeQregYfnay03ntmj4NiVbXCCiFAPQT0o+yOg0o0JUm8J2V3sZTy4z7KskaR
-	 UpaZUTJLCMS9167mqw9yJkCYuDdsSV0o293x/hkI=
+	b=II+O4xHRtfiDOeqYEqcjJm7Hg/WWvPIrE5oiWJT7G90pdRXO0UhMMhk4Fm1hP4eak
+	 M62w5BgllA61TFOjc0aA3j6DA5KL3RXR+umZzHrm23Zuh9HN8CovjiJXCu/rE1oarO
+	 SFY4oEM2O9LreHvRNzcSBAzODLAHZ5y895auHleY=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 2A290A80CD6; Mon, 10 Jul 2023 10:31:12 +0200 (CEST)
-Date: Mon, 10 Jul 2023 10:31:12 +0200
+	id 8FAC1A80CD6; Mon, 10 Jul 2023 10:43:11 +0200 (CEST)
+Date: Mon, 10 Jul 2023 10:43:11 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: stat(): Fix "Bad address" error on stat()
- for /dev/tty.
-Message-ID: <ZKvB0EJbsYWUerUb@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: Make gcc-specific code in <sys/cpuset.h>
+ compiler-agnostic
+Message-ID: <ZKvEn17628r8CDLa@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230707033458.1034-1-takashi.yano@nifty.ne.jp>
- <20230707033458.1034-2-takashi.yano@nifty.ne.jp>
- <ZKfe55PgjTJwWmIQ@calimero.vinschen.de>
- <20230708075911.61d84f6053821845b39d6d34@nifty.ne.jp>
+References: <20230709075922.8599-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230708075911.61d84f6053821845b39d6d34@nifty.ne.jp>
+In-Reply-To: <20230709075922.8599-1-mark@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  8 07:59, Takashi Yano wrote:
-> Hi Corinna,
+On Jul  9 00:59, Mark Geisert wrote:
+> The current version of <sys/cpuset.h> cannot be compiled by Clang due to
+> the use of builtin versions of malloc, free, and memset.  Their presence
+> here was a dubious optimization anyway, so their usage has been
+> converted to standard library functions.
 > 
-> On Fri, 7 Jul 2023 11:46:15 +0200
-> Corinna Vinschen wrote:
-> > On Jul  7 12:34, Takashi Yano wrote:
-> > > diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-> > > index 18e0f3097..2aae2fd65 100644
-> > > --- a/winsup/cygwin/dtable.cc
-> > > +++ b/winsup/cygwin/dtable.cc
-> > > @@ -600,7 +600,13 @@ fh_alloc (path_conv& pc)
-> > >  	case FH_TTY:
-> > >  	  if (!pc.isopen ())
-> > >  	    {
-> > > -	      fhraw = cnew_no_ctor (fhandler_console, -1);
-> > > +	      if (CTTY_IS_VALID (myself->ctty))
-> > > +		{
-> > > +		  if (iscons_dev (myself->ctty))
-> > > +		    fhraw = cnew_no_ctor (fhandler_console, -1);
-> > > +		  else
-> > > +		    fhraw = cnew_no_ctor (fhandler_pty_slave, -1);
-> > > +		}
-> > 
-> > What happens if CTTY_IS_VALID fails at this point?  There's no
-> > `else' catching that situation?
-> > 
-> > >  	      debug_printf ("not called from open for /dev/tty");
-> > >  	    }
-> > >  	  else if (!CTTY_IS_VALID (myself->ctty) && last_tty_dev
+> The use of __builtin_popcountl remains because Clang implements it just
+> like gcc does.  If/when some other compiler (Rust? Go?) runs into this
+> issue we can deal with specialized handling then.
 > 
-> That happens when CTTY is not assigned. In that case fhandler_nodevice
-> is assigned at:
-> https://cygwin.com/git/?p=newlib-cygwin.git;a=blob;f=winsup/cygwin/dtable.cc;h=18e0f3097823f00ff9651685be06583818eb2140;hb=e38f91d5a96c4554c69c833243e5afec8e3e90eb#l634
+> The "#include <sys/cdefs>" here to define __inline can be removed since
+> both of the new includes sub-include it.
 > 
-> Then fhandler_base::fstat() is called when stat() is called.
+> Addresses: https://cygwin.com/pipermail/cygwin/2023-July/253927.html
+> Fixes: 9cc910dd33a5 (Cygwin: Make <sys/cpuset.h> safe for c89 compilations)
+> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+> 
+> ---
+>  winsup/cygwin/include/sys/cpuset.h | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-Oh, ok.  Sorry, I was a bit puzzled by the missing else.
-
-Please push.
-
+Pushed.
 
 Thanks,
 Corinna
