@@ -1,53 +1,30 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 5431E3858D35; Mon, 10 Jul 2023 08:43:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5431E3858D35
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1688978593;
-	bh=OWBnGtkU735/7Sp0nqo8u0+Wi8W5cV6lRaC2xxjpcMc=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=II+O4xHRtfiDOeqYEqcjJm7Hg/WWvPIrE5oiWJT7G90pdRXO0UhMMhk4Fm1hP4eak
-	 M62w5BgllA61TFOjc0aA3j6DA5KL3RXR+umZzHrm23Zuh9HN8CovjiJXCu/rE1oarO
-	 SFY4oEM2O9LreHvRNzcSBAzODLAHZ5y895auHleY=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 8FAC1A80CD6; Mon, 10 Jul 2023 10:43:11 +0200 (CEST)
-Date: Mon, 10 Jul 2023 10:43:11 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=jS4C=C5=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 5EF6E3858C62
+	for <cygwin-patches@cygwin.com>; Tue, 11 Jul 2023 08:04:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5EF6E3858C62
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
+Received: from localhost (mark@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id 36B85ZRj080731
+	for <cygwin-patches@cygwin.com>; Tue, 11 Jul 2023 01:05:37 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+X-Authentication-Warning: m0.truegem.net: mark owned process doing -bs
+Date: Tue, 11 Jul 2023 01:05:35 -0700 (PDT)
+From: Mark Geisert <mark@maxrnd.com>
+X-X-Sender: mark@m0.truegem.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: Make gcc-specific code in <sys/cpuset.h>
- compiler-agnostic
-Message-ID: <ZKvEn17628r8CDLa@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230709075922.8599-1-mark@maxrnd.com>
+Subject: Where should relnote updates for Cygwin DLL patches be going?
+Message-ID: <Pine.BSF.4.63.2307110101090.79963@m0.truegem.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230709075922.8599-1-mark@maxrnd.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  9 00:59, Mark Geisert wrote:
-> The current version of <sys/cpuset.h> cannot be compiled by Clang due to
-> the use of builtin versions of malloc, free, and memset.  Their presence
-> here was a dubious optimization anyway, so their usage has been
-> converted to standard library functions.
-> 
-> The use of __builtin_popcountl remains because Clang implements it just
-> like gcc does.  If/when some other compiler (Rust? Go?) runs into this
-> issue we can deal with specialized handling then.
-> 
-> The "#include <sys/cdefs>" here to define __inline can be removed since
-> both of the new includes sub-include it.
-> 
-> Addresses: https://cygwin.com/pipermail/cygwin/2023-July/253927.html
-> Fixes: 9cc910dd33a5 (Cygwin: Make <sys/cpuset.h> safe for c89 compilations)
-> Signed-off-by: Mark Geisert <mark@maxrnd.com>
-> 
-> ---
->  winsup/cygwin/include/sys/cpuset.h | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+AIUI for cygwin-3_4-branch they currently go to release/3.4.8.
+For the main|master branch they currently go where?
+I hope to get it right the first time ;-).
+Thank you,
 
-Pushed.
-
-Thanks,
-Corinna
+..mark
