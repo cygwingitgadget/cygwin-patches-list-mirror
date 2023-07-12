@@ -1,74 +1,64 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 105B53858C62; Wed, 12 Jul 2023 11:50:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 105B53858C62
+	id 4D4B73858D20; Wed, 12 Jul 2023 12:08:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4D4B73858D20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1689162617;
-	bh=ho2b5ZawBTzZMSIr5YdmMIRV4AJZ7Bd0Edf8DC4e2vw=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=saeYONo06UPCWT3iME0KiV2GliJBNQYyMhMW+yvq1XlSjCfcW5OdFeYUNBQTs6CVU
-	 55YIAdE4z8exGQP45f/lmgcZp3a3qSLi/QFWdtnldH06+Iyr6KU/xq7TZ6a1qoLaGw
-	 MkvToNZGo596u7AV5PzLSIVX5V4VscS9cnHN36tM=
+	s=default; t=1689163686;
+	bh=F2Im6HvyrRFJrVWrX9s0Uwq7CLjXLZPRWu8rxwooM+M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uV4v3Xau50zgZ/RSbrOb6gZOYZb9PKMhVneQRIT8n+ai2mQFxEsWI6tWMFo5H5gS/
+	 3kkHFifVtUwjZrea3NRBWUWZFNQqPa1VFiIt54FT2wNCudgs9qgct8z7CmznuCqt7Y
+	 A2bxQ2TySOYjLTPocCzagqRJUbSImILuLYAHlDII=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 3D7AAA80CDB; Wed, 12 Jul 2023 13:50:15 +0200 (CEST)
-Date: Wed, 12 Jul 2023 13:50:15 +0200
+	id 9BF12A80F7B; Wed, 12 Jul 2023 14:08:04 +0200 (CEST)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Cc: Johannes Schindelin <johannes.schindelin@gmx.de>
-Subject: Re: [PATCH] fchmodat/fstatat: fix regression with empty `pathname`
-Message-ID: <ZK6Td2TrKNDWZwHp@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
-	Johannes Schindelin <johannes.schindelin@gmx.de>
-References: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
- <ZKKo8Ez3nIf7klxz@calimero.vinschen.de>
- <d983003d-b8e6-e312-2197-499cc7f29306@gmx.de>
- <ZKRnIfNCwKhAGi1d@calimero.vinschen.de>
+Subject: [PATCH 2/5] Define _AT_NULL_PATHNAME_ALLOWED
+Date: Wed, 12 Jul 2023 14:08:01 +0200
+Message-Id: <20230712120804.2992142-3-corinna-cygwin@cygwin.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
+References: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZKRnIfNCwKhAGi1d@calimero.vinschen.de>
+Content-Transfer-Encoding: 8bit
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+From: Corinna Vinschen <corinna@vinschen.de>
 
-On Jul  4 20:38, Corinna Vinschen wrote:
-> On Jul  4 17:45, Johannes Schindelin wrote:
-> > [...]
-> > BTW a colleague and I were wondering whether we really want to set
-> > `errno=ENOTDIR` in `gen_full_path_at()` for empty paths when
-> > `AT_EMPTY_PATH` is _not_ specified. As far as we can tell, Linux sets
-> > `errno=ENOENT` in that instance.
-> 
-> I wonder if that's really what you mean.  gen_full_path_at() generates
-> ENOTDIR in two scenarios:
-> 
-> - At line 4443, if Cygwin can't resolve dirfd into a valid directory.
-> 
-> - At line 4450 if ... actually... never.  Given that p is always
->   set to the end of the directory string copied into path_ret, it
->   can never be NULL. Looks like this check for !p is a remnant from
->   the past.  We should remove it.
-> 
-> The actual check for an empty path is done in line 4457, and this
-> results in ENOENT, as desired.
-> 
-> So, by any chance, do you mean the situation handled in line 4443,
-> that is, returning ENOTDIR if dirfd doesn't resolve to a directory?
-> 
-> Yeah, it slightly complicates the caller, but it's not exactly
-> wrong, given your patch.
-> 
-> OTOH, this entire thing doesn't look overly well thought out.  We try
-> to generate a full path in gen_full_path_at() and if it fails in
-> a certain way and AT_EMPTY_PATH is given, we basically repeat
-> trying to create a full path in the caller.  Maybe some
-> streamlining would be in order...
+Cygwin needs an internal flag to allow specifying an empty pathname
+in utimesat (GLIBC extension). We define it in _default_fcntl.h to
+make sure we never introduce a value collision accidentally.
+While at it, define the values as 16 bit hex values.
 
-I actually found some time, to do that.  So I now have a counter
-proposal to your patch.  I'll send the patch series in a minute.  Would
-you mind to take a discerning look and, perhaps, give it a try, too?
+Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
+---
+ newlib/libc/include/sys/_default_fcntl.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
+diff --git a/newlib/libc/include/sys/_default_fcntl.h b/newlib/libc/include/sys/_default_fcntl.h
+index 48914c92eab4..ce721fa23c02 100644
+--- a/newlib/libc/include/sys/_default_fcntl.h
++++ b/newlib/libc/include/sys/_default_fcntl.h
+@@ -162,12 +162,13 @@ extern "C" {
+ #define AT_FDCWD -2
+ 
+ /* Flag values for faccessat2) et al. */
+-#define AT_EACCESS              1
+-#define AT_SYMLINK_NOFOLLOW     2
+-#define AT_SYMLINK_FOLLOW       4
+-#define AT_REMOVEDIR            8
++#define AT_EACCESS                 0x0001
++#define AT_SYMLINK_NOFOLLOW        0x0002
++#define AT_SYMLINK_FOLLOW          0x0004
++#define AT_REMOVEDIR               0x0008
+ #if __GNU_VISIBLE
+-#define AT_EMPTY_PATH          16
++#define AT_EMPTY_PATH              0x0010
++#define _AT_NULL_PATHNAME_ALLOWED  0x4000 /* Internal flag used by futimesat */
+ #endif
+ #endif
+ 
+-- 
+2.40.1
 
-Thanks,
-Corinna
