@@ -1,90 +1,74 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id C6BF93857733; Tue, 11 Jul 2023 09:45:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C6BF93857733
+	id 105B53858C62; Wed, 12 Jul 2023 11:50:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 105B53858C62
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1689068705;
-	bh=YyD1ujDKvrqow5P+m2joXgOXYLSp6hYm8slIzNug8gY=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=xknytSbzNVlUKawhj3O5SasdtwZF45jwXtX3oKDi8efvY+fRFTuRj+vwwn029v5EX
-	 RNHiAz44gTr05F87Ky5Qqhp07/YFJbIRuNiC/FKlnSicJSn8JkRl2JQ0zWToXKOSW7
-	 qDsPcRHJQcs7CjTVy/VXeQYf7/TdUTbT3KTHNHBk=
+	s=default; t=1689162617;
+	bh=ho2b5ZawBTzZMSIr5YdmMIRV4AJZ7Bd0Edf8DC4e2vw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=saeYONo06UPCWT3iME0KiV2GliJBNQYyMhMW+yvq1XlSjCfcW5OdFeYUNBQTs6CVU
+	 55YIAdE4z8exGQP45f/lmgcZp3a3qSLi/QFWdtnldH06+Iyr6KU/xq7TZ6a1qoLaGw
+	 MkvToNZGo596u7AV5PzLSIVX5V4VscS9cnHN36tM=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E174DA80CC3; Tue, 11 Jul 2023 11:45:03 +0200 (CEST)
-Date: Tue, 11 Jul 2023 11:45:03 +0200
+	id 3D7AAA80CDB; Wed, 12 Jul 2023 13:50:15 +0200 (CEST)
+Date: Wed, 12 Jul 2023 13:50:15 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Where should relnote updates for Cygwin DLL patches be going?
-Message-ID: <ZK0kn/p8lWKDWVBa@calimero.vinschen.de>
+Cc: Johannes Schindelin <johannes.schindelin@gmx.de>
+Subject: Re: [PATCH] fchmodat/fstatat: fix regression with empty `pathname`
+Message-ID: <ZK6Td2TrKNDWZwHp@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.BSF.4.63.2307110101090.79963@m0.truegem.net>
- <ZK0Q/o0zIKHWCJtK@calimero.vinschen.de>
- <29a23afe-7b8f-bee9-a18f-ccf6e8a66991@maxrnd.com>
+Mail-Followup-To: cygwin-patches@cygwin.com,
+	Johannes Schindelin <johannes.schindelin@gmx.de>
+References: <c985ab15b28da4fe6f28da4e20236bc0feb484bd.1687898935.git.johannes.schindelin@gmx.de>
+ <ZKKo8Ez3nIf7klxz@calimero.vinschen.de>
+ <d983003d-b8e6-e312-2197-499cc7f29306@gmx.de>
+ <ZKRnIfNCwKhAGi1d@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <29a23afe-7b8f-bee9-a18f-ccf6e8a66991@maxrnd.com>
+In-Reply-To: <ZKRnIfNCwKhAGi1d@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 11 01:49, Mark Geisert wrote:
-> Hi Corinna,
+Hi Johannes,
+
+On Jul  4 20:38, Corinna Vinschen wrote:
+> On Jul  4 17:45, Johannes Schindelin wrote:
+> > [...]
+> > BTW a colleague and I were wondering whether we really want to set
+> > `errno=ENOTDIR` in `gen_full_path_at()` for empty paths when
+> > `AT_EMPTY_PATH` is _not_ specified. As far as we can tell, Linux sets
+> > `errno=ENOENT` in that instance.
 > 
-> Corinna Vinschen wrote:
-> > On Jul 11 01:05, Mark Geisert wrote:
-> > > AIUI for cygwin-3_4-branch they currently go to release/3.4.8.
-> > > For the main|master branch they currently go where?
-> > 
-> > release/3.5.0
-> > 
-> > An entry there is only necessary if it doesn't get picked for 3.4
-> > anyway.
+> I wonder if that's really what you mean.  gen_full_path_at() generates
+> ENOTDIR in two scenarios:
 > 
-> Ah, that helps me understand.
+> - At line 4443, if Cygwin can't resolve dirfd into a valid directory.
 > 
-> > > I hope to get it right the first time ;-).
-> > 
-> > Is the release model confusing?  If so, can you explain why?
+> - At line 4450 if ... actually... never.  Given that p is always
+>   set to the end of the directory string copied into path_ret, it
+>   can never be NULL. Looks like this check for !p is a remnant from
+>   the past.  We should remove it.
 > 
-> I think I haven't been paying close enough attention and have been doing the
-> relnote updates by rote.  But there being two active branches and I
-> (understandably) don't determine which releases my commits go to means I
-> should wait until they show up on the cvs-patches list, then I will know
-> which relnote files to update.  That should work OK, right?
+> The actual check for an empty path is done in line 4457, and this
+> results in ENOENT, as desired.
 > 
-> Is it preferred that relnote updates should be separate patches from the code updates?
+> So, by any chance, do you mean the situation handled in line 4443,
+> that is, returning ENOTDIR if dirfd doesn't resolve to a directory?
+> 
+> Yeah, it slightly complicates the caller, but it's not exactly
+> wrong, given your patch.
+> 
+> OTOH, this entire thing doesn't look overly well thought out.  We try
+> to generate a full path in gen_full_path_at() and if it fails in
+> a certain way and AT_EMPTY_PATH is given, we basically repeat
+> trying to create a full path in the caller.  Maybe some
+> streamlining would be in order...
 
-The relnote may be a patch on its own in a series. And often is, given
-that developers are not natural documenters :}
-
-Theoretically it's preferred to be a patch on its own, because mixing
-code and docs within the same patch often results in conflicts when
-backporting or if it turns out that a patch has to be reverted.
-Fortunately we don't have to maintain CVS Changelogs anymore...
-
-However, if you're doing a bugfix of stuff which already *is* in the 3.4
-branch (it's what others call the "stable" branch), then the idea is
-that we fix it in the 3.4 branch.
-
-For that, the patch goes into the main branch in the first place, then
-it's cherry-picked into the 3.4 branch, and the relnote logically goes
-into the current release file of the "not-yet-released" 3.4 version.
-
-You can simply grep for CYGWIN_VERSION_DLL_MINOR in the file
-winsup/include/cygwin/version.h in the 3.4 branch to see which release
-message file is the right one at the moment.  If you do this now, you'll
-get
-
-  #define CYGWIN_VERSION_DLL_MINOR 8
-
-Talking about conflicts.  There's always a (small!) chance that your
-patch to main doesn't apply cleanly in the 3.4 branch due to other
-patches already in the main branch. In that case you have to create two
-versions of the patch, one for main, the other for 3.4.  Ideally the 3.4
-backport contains a "Conflicts:" tag which explains why the backport
-differs from it's sibling in main branch patch.  The relnote still goes
-into the 3.4.x release file, though.
+I actually found some time, to do that.  So I now have a counter
+proposal to your patch.  I'll send the patch series in a minute.  Would
+you mind to take a discerning look and, perhaps, give it a try, too?
 
 
-HTH,
+Thanks,
 Corinna
