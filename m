@@ -1,50 +1,59 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 66BA43858D32; Thu, 13 Jul 2023 18:00:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 66BA43858D32
+	id AA6D83858D32; Thu, 13 Jul 2023 18:05:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AA6D83858D32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1689271233;
-	bh=3F5E/wUHxmdSSlYNQKR9SYbGZ9yFxlePDzUBLMTt4ho=;
+	s=default; t=1689271533;
+	bh=a9jhFmi2+LaQBe46CCDXhCmifZ0oEDLK0ra0+2M0MGM=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=X2ytBGlQvI+0oHPrSEyf+cDgQjdK4SVSr0CCkG3s4kOaK1T+QtE75MSJQ7PeD/o+A
-	 2rSLc5wW3ux+P5A2d30wIS5uZP0q861fyK/CPrjcbceQXJvc+n5iBLh3kE78uvr0Uf
-	 dS+TlYlw4FUGBYOzZkVNIRDIZFTcn7sTLXISqwgw=
+	b=WXO5JdINh6WeJQjZ1ySdQoe9Aao4Qc2hT4CwoN6h3odwdsvU0tSDum1cOynmWz5V9
+	 yzxFTVJx5sWX8VonP32N/HRR7cUtisO8dHlPvbetuZiBKfMWI5jOfz+4DDSEdTdqo6
+	 tupmwI2+uyRpPcgROwTDmws2qL+ahyD4xcdV/3+w=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9D623A80B9C; Thu, 13 Jul 2023 20:00:31 +0200 (CEST)
-Date: Thu, 13 Jul 2023 20:00:31 +0200
+	id DA6F9A80B9C; Thu, 13 Jul 2023 20:05:31 +0200 (CEST)
+Date: Thu, 13 Jul 2023 20:05:31 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pthread: Take note of schedparam in
- pthread_create
-Message-ID: <ZLA7vxwYFR0st7Xo@calimero.vinschen.de>
+Subject: Re: [PATCH 00/11] More testsuite fixes
+Message-ID: <ZLA866x5ZVUV3wt2@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230713131414.3013-1-jon.turney@dronecode.org.uk>
+References: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230713131414.3013-1-jon.turney@dronecode.org.uk>
+In-Reply-To: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 13 14:14, Jon Turney wrote:
-> Take note of schedparam in any pthread_attr_t passed to pthread_create.
+On Jul 13 12:38, Jon Turney wrote:
+> This gets us from :
 > 
-> postcreate() (racily, after the thread is actually created), sets the
-> scheduling priority if it's inherited, but precreate() doesn't store any
-> scheduling priority explicitly set via a non-default attr to create, so
-> schedparam.sched_priority has the default value of 0.
+> FAIL: cygload
+> FAIL: devdsp.c
+> FAIL: ltp/access05.c
+> FAIL: ltp/fcntl07.c
+> FAIL: ltp/symlink01.c
+> FAIL: ltp/symlink03.c
+> FAIL: ltp/umask03.c
+> FAIL: pthread/cancel11.c
+> FAIL: pthread/cancel3.c
+> FAIL: pthread/cancel5.c
+> FAIL: pthread/inherit1.c
+> FAIL: pthread/priority1.c
+> FAIL: pthread/priority2.c
+> FAIL: systemcall.c
 > 
-> (I think this is another long-standing bug exposed by 4b51e4c1.  Now we
-> don't lie about the actual thread priority, it's apparent it's not
-> really being set in this case.)
+> to:
 > 
-> Fixes testcase priority2.
+> FAIL: cygload
+> FAIL: devdsp.c
+> FAIL: ltp/umask03.c
+> FAIL: pthread/cancel11.c
+> FAIL: pthread/priority1.c
+> 
+> Notes on the remaining failures:
 
-Fixes: tag?
-Signed-off-by: tag?
-
-Looks good otherwise.
-
+Please add Signed-off-by tags to your patches.
 
 Thanks,
 Corinna
