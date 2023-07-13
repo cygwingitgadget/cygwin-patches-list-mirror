@@ -1,58 +1,107 @@
 Return-Path: <SRS0=uvj4=C7=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-041.btinternet.com (mailomta18-sa.btinternet.com [213.120.69.24])
-	by sourceware.org (Postfix) with ESMTPS id EC3773858412
-	for <cygwin-patches@cygwin.com>; Thu, 13 Jul 2023 11:40:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC3773858412
+Received: from sa-prd-fep-047.btinternet.com (mailomta5-sa.btinternet.com [213.120.69.11])
+	by sourceware.org (Postfix) with ESMTPS id DFD523857352
+	for <cygwin-patches@cygwin.com>; Thu, 13 Jul 2023 11:40:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DFD523857352
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
 Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
-          by sa-prd-fep-041.btinternet.com with ESMTP
-          id <20230713114013.NQIJ7232.sa-prd-fep-041.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Thu, 13 Jul 2023 12:40:13 +0100
+          by sa-prd-fep-047.btinternet.com with ESMTP
+          id <20230713114024.XYDR9056.sa-prd-fep-047.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+          Thu, 13 Jul 2023 12:40:24 +0100
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 64067D310ED320B6
+X-SNCR-Rigid: 64067D310ED3219D
 X-Originating-IP: [81.129.146.179]
 X-OWM-Source-IP: 81.129.146.179 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrfeeggdefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduvdelrddugeeirddujeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrudejledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddquddvledqudegiedqudejledrrhgrnhhgvgekuddquddvledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhm
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrfeeggdefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduvdelrddugeeirddujeelnecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrudejledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddquddvledqudegiedqudejledrrhgrnhhgvgekuddquddvledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhm
 	pdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttddu
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (81.129.146.179) by sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 64067D310ED320B6; Thu, 13 Jul 2023 12:40:13 +0100
+        id 64067D310ED3219D; Thu, 13 Jul 2023 12:40:24 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 03/11] Cygwin: testsuite: Remove const from writable string in fcntl07b
-Date: Thu, 13 Jul 2023 12:38:56 +0100
-Message-Id: <20230713113904.1752-4-jon.turney@dronecode.org.uk>
+Subject: [PATCH 04/11] Cygwin: testsuite: Skip devdsp test when no audio devices present
+Date: Thu, 13 Jul 2023 12:38:57 +0100
+Message-Id: <20230713113904.1752-5-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
 References: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 ---
- winsup/testsuite/winsup.api/ltp/fcntl07B.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/testsuite/Makefile.am         |  3 +++
+ winsup/testsuite/winsup.api/devdsp.c | 15 +++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/winsup/testsuite/winsup.api/ltp/fcntl07B.c b/winsup/testsuite/winsup.api/ltp/fcntl07B.c
-index 4e94ff267..db866fddd 100644
---- a/winsup/testsuite/winsup.api/ltp/fcntl07B.c
-+++ b/winsup/testsuite/winsup.api/ltp/fcntl07B.c
-@@ -170,7 +170,7 @@ const char *File1 = DEFAULT_FILE;
+diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+index 11332eda2..60111a0aa 100644
+--- a/winsup/testsuite/Makefile.am
++++ b/winsup/testsuite/Makefile.am
+@@ -325,6 +325,9 @@ AM_CPPFLAGS = -I$(srcdir)/libltp/include
+ AM_LDFLAGS = $(LDFLAGS_FOR_TESTDLL)
+ LDADD = $(builddir)/libltp.a $(builddir)/../cygwin/binmode.o $(LDADD_FOR_TESTDLL)
  
- #define DEFAULT_SUBPROG "test_open"
- const char *openck = DEFAULT_SUBPROG;	/* support program name to check for open FD */
--const char subprog_path[_POSIX_PATH_MAX];/* path to exec "openck" with */
-+char subprog_path[_POSIX_PATH_MAX];/* path to exec "openck" with */
- #define STRSIZE 255
- #define FIFONAME "FiFo"
++# additional flags for specific test executables
++winsup_api_devdsp_LDADD = -lwinmm $(LDADD)
++
+ DEJATOOL = winsup
  
+ # Add '-v' to RUNTESTFLAGS if V=1
+diff --git a/winsup/testsuite/winsup.api/devdsp.c b/winsup/testsuite/winsup.api/devdsp.c
+index 6c8850a74..0ac76f085 100644
+--- a/winsup/testsuite/winsup.api/devdsp.c
++++ b/winsup/testsuite/winsup.api/devdsp.c
+@@ -27,6 +27,8 @@ details. */
+ #include <errno.h>
+ #include "test.h" /* use libltp framework */
+ 
++#include <windows.h>
++
+ /* Controls if a child can open the device after the parent */
+ #define CHILD_EXPECT 0 /* 0 or 1 */
+ 
+@@ -59,6 +61,7 @@ void playwavtest (void);
+ void syncwithchild (pid_t pid, int expected_exit_status);
+ void cleanup (void);
+ void dup_test (void);
++void devcheck (void);
+ 
+ static int expect_child_failure = 0;
+ 
+@@ -77,6 +80,7 @@ int
+ main (int argc, char *argv[])
+ {
+   /*  tst_brkm(TBROK, cleanup, "see if it breaks all right"); */
++  devcheck ();
+   ioctltest ();
+   playbacktest ();
+   recordingtest ();
+@@ -91,6 +95,17 @@ main (int argc, char *argv[])
+   return 0;
+ }
+ 
++/* skip test if we don't have any audio devices*/
++void
++devcheck (void)
++{
++  if ((waveInGetNumDevs() == 0) || (waveOutGetNumDevs() == 0))
++    {
++      tst_resm (TINFO, "Skipping, no audio devices present");
++      exit(0);
++    }
++}
++
+ /* test some extra ioctls */
+ void
+ ioctltest (void)
 -- 
 2.39.0
 
