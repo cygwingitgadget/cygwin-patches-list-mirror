@@ -1,32 +1,32 @@
 Return-Path: <SRS0=uvj4=C7=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-042.btinternet.com (mailomta18-sa.btinternet.com [213.120.69.24])
-	by sourceware.org (Postfix) with ESMTPS id 4D9923858C1F
-	for <cygwin-patches@cygwin.com>; Thu, 13 Jul 2023 11:40:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4D9923858C1F
+Received: from sa-prd-fep-041.btinternet.com (mailomta18-sa.btinternet.com [213.120.69.24])
+	by sourceware.org (Postfix) with ESMTPS id EC3773858412
+	for <cygwin-patches@cygwin.com>; Thu, 13 Jul 2023 11:40:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC3773858412
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
 Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
-          by sa-prd-fep-042.btinternet.com with ESMTP
-          id <20230713113958.BMXX20040.sa-prd-fep-042.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Thu, 13 Jul 2023 12:39:58 +0100
+          by sa-prd-fep-041.btinternet.com with ESMTP
+          id <20230713114013.NQIJ7232.sa-prd-fep-041.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+          Thu, 13 Jul 2023 12:40:13 +0100
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 64067D310ED31F81
+X-SNCR-Rigid: 64067D310ED320B6
 X-Originating-IP: [81.129.146.179]
 X-OWM-Source-IP: 81.129.146.179 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrfeeggdefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduvdelrddugeeirddujeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrudejledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddquddvledqudegiedqudejledrrhgrnhhgvgekuddquddvledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhm
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrfeeggdefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduvdelrddugeeirddujeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrudejledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddquddvledqudegiedqudejledrrhgrnhhgvgekuddquddvledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhm
 	pdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttddu
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (81.129.146.179) by sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 64067D310ED31F81; Thu, 13 Jul 2023 12:39:58 +0100
+        id 64067D310ED320B6; Thu, 13 Jul 2023 12:40:13 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 02/11] Cygwin: testsuite: Add a simple timeout mechanism
-Date: Thu, 13 Jul 2023 12:38:55 +0100
-Message-Id: <20230713113904.1752-3-jon.turney@dronecode.org.uk>
+Subject: [PATCH 03/11] Cygwin: testsuite: Remove const from writable string in fcntl07b
+Date: Thu, 13 Jul 2023 12:38:56 +0100
+Message-Id: <20230713113904.1752-4-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
 References: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
@@ -36,48 +36,23 @@ X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NE
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Astonishingly, we don't have this already, so tests which hang just stop
-the testsuite dead in it's tracks...
 ---
- winsup/testsuite/cygrun.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ winsup/testsuite/winsup.api/ltp/fcntl07B.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/winsup/testsuite/cygrun.c b/winsup/testsuite/cygrun.c
-index e6c4aa705..925b5513f 100644
---- a/winsup/testsuite/cygrun.c
-+++ b/winsup/testsuite/cygrun.c
-@@ -20,6 +20,7 @@ main (int argc, char **argv)
- {
-   STARTUPINFO sa;
-   PROCESS_INFORMATION pi;
-+  DWORD res;
-   DWORD ec = 1;
-   char *p;
+diff --git a/winsup/testsuite/winsup.api/ltp/fcntl07B.c b/winsup/testsuite/winsup.api/ltp/fcntl07B.c
+index 4e94ff267..db866fddd 100644
+--- a/winsup/testsuite/winsup.api/ltp/fcntl07B.c
++++ b/winsup/testsuite/winsup.api/ltp/fcntl07B.c
+@@ -170,7 +170,7 @@ const char *File1 = DEFAULT_FILE;
  
-@@ -42,9 +43,21 @@ main (int argc, char **argv)
-       exit (1);
-     }
+ #define DEFAULT_SUBPROG "test_open"
+ const char *openck = DEFAULT_SUBPROG;	/* support program name to check for open FD */
+-const char subprog_path[_POSIX_PATH_MAX];/* path to exec "openck" with */
++char subprog_path[_POSIX_PATH_MAX];/* path to exec "openck" with */
+ #define STRSIZE 255
+ #define FIFONAME "FiFo"
  
--  WaitForSingleObject (pi.hProcess, INFINITE);
-+  res = WaitForSingleObject (pi.hProcess, 60 * 1000);
- 
--  GetExitCodeProcess (pi.hProcess, &ec);
-+  if (res == WAIT_TIMEOUT)
-+    {
-+      char cmd[1024];
-+      // there is no simple API to kill a Windows process tree
-+      sprintf(cmd, "taskkill /f /t /pid %lu", GetProcessId(pi.hProcess));
-+      system(cmd);
-+      fprintf (stderr, "Timeout\n");
-+      ec = 124;
-+    }
-+  else
-+    {
-+      GetExitCodeProcess (pi.hProcess, &ec);
-+    }
- 
-   CloseHandle (pi.hProcess);
-   CloseHandle (pi.hThread);
 -- 
 2.39.0
 
