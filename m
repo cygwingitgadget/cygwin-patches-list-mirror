@@ -1,48 +1,44 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 2D5993857C40; Wed, 12 Jul 2023 12:08:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2D5993857C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1689163688;
-	bh=iUG6uepFSBMXGN0MOudGWTMBoOGkLE5+zHvUZT4b18w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tEBNpbv7C6E564ZmPayoX2vL0gQj8n/qDrNqFKNgRADXJi7fvNO16USyGFXISeK9W
-	 Dx0MpWj2DoLf2dmc6qdCLMRggGVBPIdNrvBqYmpAyQve8r1Jx505F0u3F2q6iO51VX
-	 oQp+ccPCRSmEOp7jVRMoTDmxUjUDPMV3blvI47MM=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id AF063A80F81; Wed, 12 Jul 2023 14:08:04 +0200 (CEST)
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=29bO=C7=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 622673858C74
+	for <cygwin-patches@cygwin.com>; Thu, 13 Jul 2023 05:37:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 622673858C74
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 36D5cMjN047151;
+	Wed, 12 Jul 2023 22:38:22 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpd8RxMc0; Wed Jul 12 22:38:18 2023
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>
-Subject: [PATCH 5/5] Cygwin: add AT_EMPTY_PATH fix to release message
-Date: Wed, 12 Jul 2023 14:08:04 +0200
-Message-Id: <20230712120804.2992142-6-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
-References: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Cygwin: Update release/3.4.8 for latest <sys/cpuset.h> commit
+Date: Wed, 12 Jul 2023 22:36:59 -0700
+Message-Id: <20230713053659.379-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
-
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
- winsup/cygwin/release/3.4.8 | 4 ++++
- 1 file changed, 4 insertions(+)
+ winsup/cygwin/release/3.4.8 | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/winsup/cygwin/release/3.4.8 b/winsup/cygwin/release/3.4.8
-index d1e34ce3c633..581ed5a140ff 100644
+index d1e34ce3c..3113be8cb 100644
 --- a/winsup/cygwin/release/3.4.8
 +++ b/winsup/cygwin/release/3.4.8
-@@ -3,3 +3,7 @@ Bug Fixes
+@@ -3,3 +3,6 @@ Bug Fixes
  
  - Make <sys/cpuset.h> safe for c89 compilations.
    Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q3/012308.html
 +
-+- Fix AT_EMPTY_PATH handling in fchmodat and fstatat if dirfd referres to
-+  a file other than a directory
-+  Addresses: https://cygwin.com/pipermail/cygwin-patches/2023q2/012306.html
++- Make gcc-specific code in <sys/cpuset.h> compiler-agnostic.
++  Addresses: https://cygwin.com/pipermail/cygwin/2023-July/253927.html
 -- 
-2.40.1
+2.39.0
 
