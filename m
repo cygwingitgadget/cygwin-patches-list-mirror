@@ -1,21 +1,21 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id EC7D13858D28; Mon, 17 Jul 2023 14:21:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EC7D13858D28
+	id 7F7E03858C2A; Mon, 17 Jul 2023 14:22:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7F7E03858C2A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1689603719;
-	bh=3Q04xXb3LSWvZ9+eB+EsjugXl3g5Y/5vWu+GV1BHfv4=;
+	s=default; t=1689603758;
+	bh=KYGfkhKl5uRouNwW9qju/hfhtYDagxCDW0trcytO7O4=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=QF3mwJd56s+2BsQCQUI/GO5vKBTjQiyAEMnv7z1812ZenHnqbKespYlgfrgqvug4o
-	 XGnfTT820zcsg4Zz37g7SgE6cgfnEWgAUwWB40oDrLklf/z59KcPLvwBO9K+Ft3gCB
-	 fBA280JHzQdf2hNROpX89f1V754GldqVN2whzpQA=
+	b=QAxk9/EjaGUiGXH9enBSh9ghW5vTZEPMXUmlivWXNsqKmC0QQUO6Vf7/k0HkMT2ZH
+	 gE+iz9kFGSyC+5HaVg3V7wYsmS0ekVZa8rtUdQA9ggOhT/0992ACj45tRoTn1Uxkl6
+	 bC3RcJ8HMa3qvc8P3W/yiBmL3GAve/uetFEGbLyU=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C9C92A80BB0; Mon, 17 Jul 2023 16:21:57 +0200 (CEST)
-Date: Mon, 17 Jul 2023 16:21:57 +0200
+	id 70E43A80BB0; Mon, 17 Jul 2023 16:22:36 +0200 (CEST)
+Date: Mon, 17 Jul 2023 16:22:36 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 08/11] Cygwin: testsuite: Busy-wait in cancel3 and cancel5
-Message-ID: <ZLVOhclITbZyDOhF@calimero.vinschen.de>
+Message-ID: <ZLVOrD44M3gCLC0j@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
@@ -24,99 +24,22 @@ References: <20230713113904.1752-1-jon.turney@dronecode.org.uk>
  <ZLBEajmAonZGmsqx@calimero.vinschen.de>
  <ZLBIJTlbCtRvYlU9@calimero.vinschen.de>
  <5aa21952-a13d-f304-8b63-18ee4885c308@dronecode.org.uk>
- <ZLGaf8/nWphfbRI9@calimero.vinschen.de>
- <ZLUgZE5ECv+HaAGI@calimero.vinschen.de>
- <b132e96c-8767-e5b9-1152-c92cd5ad200e@dronecode.org.uk>
+ <8a504ebe-9ce0-867a-f1a3-f38411129019@dronecode.org.uk>
+ <ZLVKU26aNI5oKpQF@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b132e96c-8767-e5b9-1152-c92cd5ad200e@dronecode.org.uk>
+In-Reply-To: <ZLVKU26aNI5oKpQF@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 17 12:51, Jon Turney wrote:
-> On 17/07/2023 12:05, Corinna Vinschen wrote:
-> > On Jul 14 20:57, Corinna Vinschen wrote:
-> > > What if Cygwin checks for a deferred cancellation in pthread::exit,
-> > > too?  It needs to do this by its own, not calling pthread::testcancel,
-> > > otherwise we're in an infinite loop.  Since cancel is basically like
-> > > exit, just with a PTHREAD_CANCELED return value, the only additional
-> > > action would be to set retval to PTHREAD_CANCELED explicitely.
-> > 
-> > Kind of like this:
-> > 
-> > diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-> > index f614e01c42f6..fceb9bda1806 100644
-> > --- a/winsup/cygwin/thread.cc
-> > +++ b/winsup/cygwin/thread.cc
-> > @@ -546,6 +546,13 @@ pthread::exit (void *value_ptr)
-> >     class pthread *thread = this;
-> >     _cygtls *tls = cygtls;	/* Save cygtls before deleting this. */
-> > +  /* Deferred cancellation still pending? */
-> > +  if (canceled)
-> > +    {
-> > +      WaitForSingleObject (cancel_event, INFINITE);
-> > +      value_ptr = PTHREAD_CANCELED;
-> > +    }
-> > +
-> >     // run cleanup handlers
-> >     pop_all_cleanup_handlers ();
-> > What do you think?
+On Jul 17 16:04, Corinna Vinschen wrote:
+> On Jul 17 12:51, Jon Turney wrote:
+> > Perhaps there is a better way to write a test that async cancellation works
+> > in the absence of cancellation points, but it eludes me...
 > 
-> I mean, by your own interpretation of the standard, this isn't required,
-> because we're allowed to take arbitrarily long to deliver the async
-> cancellation, and in this case, we took so long that the thread exited
-> before it happened, too bad...
+> Same here, so just go ahead.
 
-True enough!
-
-> It doesn't seem a bad addition,
-
-On second thought...
-
-One thing bugging me is this:
-
-Looking into pthread::cancel we have this order of things:
-
-    // cancel deferred
-    mutex.unlock ();
-    canceled = true;
-    SetEvent (cancel_event);
-    return 0; 
-
-The canceled var is set before the SetEvent call.
-What if the thread is terminated after canceled is set to true but
-before SetEvent is called?
-
-pthread::testcancel claims:
-
-  We check for the canceled flag first. [...]
-  Only if the thread is marked as canceled, we wait for cancel_event
-  being really set, on the off-chance that pthread_cancel gets
-  interrupted before calling SetEvent.
-
-Neat idea to speed up the code, but doesn't that mean we have a
-potential deadlock, especially given that pthread::testcancel calls WFSO
-with an INFINITE timeout?
-
-And if so, how do we fix this?  Theoretically, the most simple
-solution might be to call SetEvent before setting the canceled
-variable, but in fact we would have to make setting canceld
-and cancel_event an atomic operation.
-
-Another idea is never to wait for an INFINITE time.  Logically, if
-canceled is set and cancel_event isn't, the thread just hasn't been
-canceled yet.
-
-Any better idea?
-
-> but this turns pthread_exit() into a
-> deferred cancellation point as well, so it should be added to the list of
-> "an implementation may also mark other functions not specified in the
-> standard as cancellation points" in our documentation^W the huge comment in
-> threads.cc.
-
-Yes, indeed.
+Actually, it's not just that.  I think this is the right thing to do.
 
 
-Thanks,
 Corinna
