@@ -1,90 +1,54 @@
-Return-Path: <SRS0=fe21=DF=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from sa-prd-fep-046.btinternet.com (mailomta11-sa.btinternet.com [213.120.69.17])
-	by sourceware.org (Postfix) with ESMTPS id 24E7F3858439
-	for <cygwin-patches@cygwin.com>; Wed, 19 Jul 2023 12:42:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 24E7F3858439
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
-          by sa-prd-fep-046.btinternet.com with ESMTP
-          id <20230719124159.XYGE17034.sa-prd-fep-046.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
-          Wed, 19 Jul 2023 13:41:59 +0100
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 64AECEEE00C7CE32
-X-Originating-IP: [81.129.146.179]
-X-OWM-Source-IP: 81.129.146.179 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrgeekgdeflecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeliedtjefhtdevkeehueegffegveeftdejjeevfefhiefffeektddvteehheeijeenucfkphepkedurdduvdelrddugeeirddujeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddruddvledrudegiedrudejledpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddquddvledqudegiedqudejledrrhgrnhhgvgekuddquddvledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhm
-	pdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttddv
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.129.146.179) by sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.814) (authenticated as jonturney@btinternet.com)
-        id 64AECEEE00C7CE32; Wed, 19 Jul 2023 13:41:59 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id AEB883858C33; Wed, 19 Jul 2023 15:33:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AEB883858C33
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1689780825;
+	bh=7mEi3Vx7D+R5cHNuQ6anjpejxtU7PJQP+XGXwDDPP0c=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=ymegla0IHiXE6Xz8Pqiz5QfCK5R0ldj3AFaQ6/ppk9i0Q9VjtMOQDHB/YnaQU0iFp
+	 fHJ77mn6hnpxQOUcTT4SZA3EBzDyFfwNTFNaBoxEWDMl3t31V49sKdyFmEKSgwiSVe
+	 jLjE2yghDgDmTh0H7820QLk2qwEqqKt3Wta0gNUw=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 83F55A81B0B; Wed, 19 Jul 2023 17:33:43 +0200 (CEST)
+Date: Wed, 19 Jul 2023 17:33:43 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 2/2] Cygwin: Fix Windows file handle leak in stat("file", -1)
-Date: Wed, 19 Jul 2023 13:41:42 +0100
-Message-Id: <20230719124142.10310-3-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230719124142.10310-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 0/2] Testsuite adjustment and relevant fix
+Message-ID: <ZLgCVymLYi9ZB0uZ@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20230719124142.10310-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230719124142.10310-1-jon.turney@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-Don't leak a Windows file handle if stat() is called with a valid
-filename, but invalid stat buffer pointer.
+On Jul 19 13:41, Jon Turney wrote:
+> [1/2] has the side effect of flipping test stat06 from working to failing.
+> [2/2] fixes that
+> 
+> When run with TDIRECTORY set, libltp just uses that directory and assumes
+> something else will clean it up.
+> 
+> When TDIRECTORY is not set, libltp creates a subdirectory under /tmp, and when
+> the test is completed, removes the expected files and verifies that the
+> directory is empty.
+> 
+> stat06 fails that check, because it creates the a file named "file" there, and
+> tries stat("file", -1), testing that it returns the expected value EFAULT.
+> 
+> "file" is removed, but lingers in the STATUS_DELETE_PENDING state until the
+> Windows handle which stat_worker() leaks when an exception occurs is closed
+> (when the processes exits).
 
-We do not destroy fh if an exception happens in the __try block, which
-closes a Windows handle it has opened.
+Great find. Please push.
 
-Fixes: 73151c54d581 ("syscalls.cc (stat_worker): Don't call build_fh_pc with invalid pc.")
-Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
----
- winsup/cygwin/syscalls.cc | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Future work: It looks like similar problems might generically occur in similar
+> code througout syscalls.cc.
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 73343ecc1..c6999407e 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -1955,6 +1955,7 @@ int
- stat_worker (path_conv &pc, struct stat *buf)
- {
-   int res = -1;
-+  fhandler_base *fh = NULL;
- 
-   __try
-     {
-@@ -1965,8 +1966,6 @@ stat_worker (path_conv &pc, struct stat *buf)
- 	}
-       else if (pc.exists ())
- 	{
--	  fhandler_base *fh;
--
- 	  if (!(fh = build_fh_pc (pc)))
- 	    __leave;
- 
-@@ -1976,13 +1975,14 @@ stat_worker (path_conv &pc, struct stat *buf)
- 	  res = fh->fstat (buf);
- 	  if (!res)
- 	    fh->stat_fixup (buf);
--	  delete fh;
- 	}
-       else
- 	set_errno (ENOENT);
-     }
-   __except (EFAULT) {}
-   __endtry
-+
-+  delete fh;
-   syscall_printf ("%d = (%S,%p)", res, pc.get_nt_native_path (), buf);
-   return res;
- }
--- 
-2.39.0
+Uh oh...
 
+
+Corinna
