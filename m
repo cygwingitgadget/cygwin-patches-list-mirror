@@ -1,52 +1,53 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 4D42A3858D35; Wed, 26 Jul 2023 13:12:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4D42A3858D35
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1690377126;
-	bh=bDav5ZwcUlLTKSZRTaQ6iCoZWk90HmJtg7u7bpzKb/Q=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=TGkqRxtbKpacaP2W59Jtx9aBXO7SRFOHC0AfdBLTuUHO/EkXM4ksV7vdy1VICf3Gb
-	 Bpv/DpEX4sg3i3CIyx78z1ezrtx3hy3QFNfpuqeQ7tREYEN2Jc6eoJt8xZxQIBFCsm
-	 z13j8Wob7jLtF6aIm2E+LbtBvXo7Ii6HDNBPVHNw=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E7EA1A80889; Wed, 26 Jul 2023 15:12:03 +0200 (CEST)
-Date: Wed, 26 Jul 2023 15:12:03 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/5] Fix AT_EMPTY_PATH handling
-Message-ID: <ZMEbo2OrE9dcaAmK@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
-	cygwin-patches@cygwin.com
-References: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
- <ZL6W9M4TXFv3Igcy@calimero.vinschen.de>
- <c6a8b6d9-0cce-afe8-75b0-71f60b9af0af@gmx.de>
+Return-Path: <SRS0=fhL/=DO=gmail.com=alves.ped@sourceware.org>
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	by sourceware.org (Postfix) with ESMTPS id 801AE3853D26
+	for <cygwin-patches@cygwin.com>; Fri, 28 Jul 2023 16:12:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 801AE3853D26
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=palves.net
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fd190065a8so25441575e9.3
+        for <cygwin-patches@cygwin.com>; Fri, 28 Jul 2023 09:12:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690560726; x=1691165526;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TO1aEX+9yI6n3pYrtyA8r6OiXNfdrekYhCn0sdPp40k=;
+        b=iI80leiad+4IWZbDT/4mpYLpkdsOnuN/LT+9hNyTcir99UWDoHAUd/ylR26YXOWX6J
+         xygyezA1i3HMe2UN/ADVyWQ8jSS9Vz5JY+16H6GD8qq/p+JrQGbu8k6W8RAGg+LZWoUg
+         4IyXvllon9yms7/A9aGvKwTaCPxw/aJqn3H8MC4duNJmduAipVh/pjQWLufYriCQwVUx
+         WwnmrKaSV5Euu4jjzHvaEFq/W+WFw9BO3eDhDsrvgBms/8XFbUDeE1powBTV7rZZ8C+I
+         vOuEYqTx4Qf/9SSKXzjBh0rZ/l+suoUR3RVQNxnMItXLhCpULo3oIRQSKvoSrTTsLNmj
+         4mdA==
+X-Gm-Message-State: ABy/qLap9vKeUiz2SP35Ps0eU6EaIsxs4S8UIyVbkUT7oO/SMLJZUYQf
+	LIol+y1gcoMVjddcgIvkIsptNJ5NcJ8=
+X-Google-Smtp-Source: APBJJlGCkRcc91BsZWa/4xgau2feaPCZIKMBr8cQhCrTpzBJSmgZnOQtvJqVwK3uwCG4H6ZR5UOfzQ==
+X-Received: by 2002:a7b:cb97:0:b0:3fb:b280:f548 with SMTP id m23-20020a7bcb97000000b003fbb280f548mr2456435wmi.0.1690560726300;
+        Fri, 28 Jul 2023 09:12:06 -0700 (PDT)
+Received: from ?IPV6:2001:8a0:f922:de00:5b94:75a9:c970:55df? ([2001:8a0:f922:de00:5b94:75a9:c970:55df])
+        by smtp.gmail.com with ESMTPSA id l23-20020a7bc457000000b003fc02219081sm4453006wmi.33.2023.07.28.09.12.05
+        for <cygwin-patches@cygwin.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 09:12:05 -0700 (PDT)
+Message-ID: <135bb49e-08b3-865e-a19f-6aab03a5f348@palves.net>
+Date: Fri, 28 Jul 2023 17:11:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c6a8b6d9-0cce-afe8-75b0-71f60b9af0af@gmx.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From: Pedro Alves <pedro@palves.net>
+Subject: Re: [PATCH 5/5] Cygwin: add AT_EMPTY_PATH fix to release message
+To: cygwin-patches@cygwin.com
+References: <20230712120804.2992142-1-corinna-cygwin@cygwin.com>
+ <20230712120804.2992142-6-corinna-cygwin@cygwin.com>
+Content-Language: en-US
+In-Reply-To: <20230712120804.2992142-6-corinna-cygwin@cygwin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 26 11:10, Johannes Schindelin wrote:
-> Hi Corinna,
-> 
-> I had a look over the patches and they all make sense. I also tested the
-> code to make sure that the `tar xf` regression I needed to be fixed is
-> also addressed by this patch series.
-> 
-> As I don't really know the customs of the Cygwin project, please feel free
-> to add any Reviewed-by:, Acked-by: or whatever footers (or, if none of
-> those are appropriate, I am of course totally okay with no footer at all).
-> 
-> Thank you so much for fixing this!
-> Johannes
+On 2023-07-12 13:08, Corinna Vinschen wrote:
+> +- Fix AT_EMPTY_PATH handling in fchmodat and fstatat if dirfd referres to
 
-Great, thanks for reviewing and testing!
-
-I'll push it later today.
-
-
-Thanks,
-Corinna
+referres -> refers
