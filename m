@@ -1,63 +1,85 @@
-Return-Path: <SRS0=BFuG=DY=lesderid.net=les@sourceware.org>
-Received: from anna.lesderid.net (anna.lesderid.net [178.62.57.241])
-	by sourceware.org (Postfix) with ESMTP id B45FB3858416
-	for <cygwin-patches@cygwin.com>; Mon,  7 Aug 2023 10:13:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B45FB3858416
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=lesderid.net
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=lesderid.net
-DKIM-Signature: a=rsa-sha256; bh=tbZye0QNfvzeUMFXzS2c7GtYXKYTHqo93UrTrUbp29U=;
- c=relaxed/relaxed; d=lesderid.net;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@lesderid.net; s=default; t=1691403214; v=1; x=1691835214;
- b=c+cG8DQg5dk8D4gWpj2aSPm+hS1fCCyOTBvYxakKROrEkG75jXiq3lmeZQDwL6EzDKWuPolK
- Teo3jU4/w4x5AWueZvmOvwhp/9VRRTmJIrPiQ9p+UG4TWiPKxMifDZ0f6nui9eKWdN3/C7RzkP7
- bggdQsioUbjsaNl9U1jxXdzs70LwFKl4fqBw59eiOLmJTxkncBvJ+uSWvJp5mKIk09DCZNutA7L
- is1qEc6ZMo1DmON6nOtiNgAxYX9Yuy1UkCQpoFZCctTfXRR0tOCldzUtKDiPOqBZ0tQwg64dToB
- tCehQA5DryBo0yyh1bQWqbi483jf8Kpxz6qKPqHd2nE2w==
-Received: by anna.lesderid.net (envelope-sender <les@lesderid.net>) with
- ESMTPS id c61b3c35; Mon, 07 Aug 2023 12:13:34 +0200
-From: Les De Ridder <les@lesderid.net>
-To: cygwin-patches@cygwin.com
-Cc: Les De Ridder <les@lesderid.net>
-Subject: [PATCH 2/2] Use init_reopen_attr in mmap
-Date: Mon,  7 Aug 2023 03:13:15 -0700
-Message-ID: <8ae84e831e6323f8d4e08b8c426b9a50dbd1cab4.1690932049.git.les@lesderid.net>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1690932049.git.les@lesderid.net>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 915793857034; Mon,  7 Aug 2023 11:17:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 915793857034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1691407076;
+	bh=5BQIUzovX9xo6GdWjLteknMzNU+qXk70zCjWh8EiwkE=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=bNEoQv9SVhicUAarOwq6OK9A/o8gIOzXBffxTkwblI+6DhgPKll3N5ICYGp2PpscV
+	 DjYx9h9sGokGf130vK/VOFU0aqN1RIYCG+98nU2D8KwDaQ6l7gNMlzE7bn6eu6RAio
+	 OE11rMqvTm1yWDcEqwIidGZe+gwTHRWV1IBvGq50=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id C0525A80BDA; Mon,  7 Aug 2023 13:17:54 +0200 (CEST)
+Date: Mon, 7 Aug 2023 13:17:54 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Les De Ridder <les@lesderid.net>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/2] Detect RAM disks as a separate filesystem type
+Message-ID: <ZNDS4sMtodnAyOGZ@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Les De Ridder <les@lesderid.net>,
+	cygwin-patches@cygwin.com
 References: <cover.1690932049.git.les@lesderid.net>
+ <9d1cbf57a0ff67bb9d7af619e24a86005cad1cbf.1690932049.git.les@lesderid.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-14.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9d1cbf57a0ff67bb9d7af619e24a86005cad1cbf.1690932049.git.les@lesderid.net>
 List-Id: <cygwin-patches.cygwin.com>
 
-Calling mmap on a file stored on a volume with buggy file re-opening
-currently bugchecks. This commit solves this by using the
-init_reopen_attr helper function.
+Hi Les,
 
-Signed-off-by: Les De Ridder <les@lesderid.net>
----
- winsup/cygwin/mm/mmap.cc | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+your 2nd patch looks good to me, but this patch is a bit questionable.
 
-diff --git a/winsup/cygwin/mm/mmap.cc b/winsup/cygwin/mm/mmap.cc
-index 332c015a7..23bbc3a98 100644
---- a/winsup/cygwin/mm/mmap.cc
-+++ b/winsup/cygwin/mm/mmap.cc
-@@ -956,11 +956,10 @@ mmap (void *addr, size_t len, int prot, int flags, int fd, off_t off)
-       HANDLE h;
-       IO_STATUS_BLOCK io;
- 
--      InitializeObjectAttributes (&attr, &ro_u_empty, fh->pc.objcaseinsensitive (),
--				  fh->get_handle (), NULL);
-       status = NtOpenFile (&h,
- 			   fh->get_access () | GENERIC_EXECUTE | SYNCHRONIZE,
--			   &attr, &io, FILE_SHARE_VALID_FLAGS,
-+			   fh->pc.init_reopen_attr (attr, h), &io,
-+			   FILE_SHARE_VALID_FLAGS,
- 			   FILE_SYNCHRONOUS_IO_NONALERT
- 			   | FILE_OPEN_FOR_BACKUP_INTENT);
-       if (NT_SUCCESS (status))
--- 
-2.41.0
+On Aug  7 03:13, Les De Ridder wrote:
+> diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
+> index 36ab042a7..1950dadb0 100644
+> --- a/winsup/cygwin/mount.cc
+> +++ b/winsup/cygwin/mount.cc
+> @@ -292,6 +292,17 @@ fs_info::update (PUNICODE_STRING upath, HANDLE in_vol)
+>    if (!NT_SUCCESS (status))
+>      ffdi.DeviceType = ffdi.Characteristics = 0;
+>  
+> +  if (upath->Buffer[5] == L':' && upath->Buffer[6] == L'\\')
 
+If that's testing for a local drive path, it's probably wrong.  The
+NtQueryVolumeInformationFile(FileFsDeviceInformation) call returns the
+FILE_REMOTE_DEVICE flag and sets is_remote_drive() in line 298.  You
+should use that flag.
+
+This also means your code is called much too early in fs_info::update.
+The preceeding code for file systems not providing valid serial numbers
+is an exception from the rule because we need the serial number for
+caching.  Generically checking for another local filesystem should be
+performed after the  "if (is_remote_drive ())" expression, so starting
+somewhere below line 495.
+
+> +   {
+> +     WCHAR dos[3] = {upath->Buffer[4], upath->Buffer[5], L'\0'};
+> +     WCHAR dev[MAX_PATH];
+> +     if (QueryDosDeviceW (dos, dev, MAX_PATH))
+> +       {
+> +          is_ramdisk (wcsncmp (dev, L"\\Device\\Ramdisk", 15));
+> +          has_buggy_reopen (is_ramdisk ());
+> +       }
+> +   }
+> +
+
+This gives me headaches.  Did you check *all* the information returned
+by the various NtQueryVolumeInformationFile calls?  I. e., what is
+returned by all these calls?  What is the FS name set to?  Which flags
+are set in FileSystemAttributes?  What is DeviceType and Characterisitics
+set to?
+
+We should really check all info already available from the
+NtQueryVolumeInformationFile calls first, and please paste here the
+information you get from these calls.
+
+Also, even if all else fails, rather than calling QueryDosDeviceW we
+should use NtQueryVolumeInformationFile(FileFsDriverPathInformation)
+instead.
+
+
+Thanks,
+Corinna
