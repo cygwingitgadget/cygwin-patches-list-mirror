@@ -1,85 +1,134 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 915793857034; Mon,  7 Aug 2023 11:17:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 915793857034
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1691407076;
-	bh=5BQIUzovX9xo6GdWjLteknMzNU+qXk70zCjWh8EiwkE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=bNEoQv9SVhicUAarOwq6OK9A/o8gIOzXBffxTkwblI+6DhgPKll3N5ICYGp2PpscV
-	 DjYx9h9sGokGf130vK/VOFU0aqN1RIYCG+98nU2D8KwDaQ6l7gNMlzE7bn6eu6RAio
-	 OE11rMqvTm1yWDcEqwIidGZe+gwTHRWV1IBvGq50=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C0525A80BDA; Mon,  7 Aug 2023 13:17:54 +0200 (CEST)
-Date: Mon, 7 Aug 2023 13:17:54 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Les De Ridder <les@lesderid.net>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Detect RAM disks as a separate filesystem type
-Message-ID: <ZNDS4sMtodnAyOGZ@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Les De Ridder <les@lesderid.net>,
-	cygwin-patches@cygwin.com
-References: <cover.1690932049.git.les@lesderid.net>
- <9d1cbf57a0ff67bb9d7af619e24a86005cad1cbf.1690932049.git.les@lesderid.net>
+Return-Path: <SRS0=rdKM=DZ=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from sa-prd-fep-043.btinternet.com (mailomta27-sa.btinternet.com [213.120.69.33])
+	by sourceware.org (Postfix) with ESMTPS id DF2823858005
+	for <cygwin-patches@cygwin.com>; Tue,  8 Aug 2023 16:02:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DF2823858005
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+          by sa-prd-fep-043.btinternet.com with ESMTP
+          id <20230808160217.FQOQ1396.sa-prd-fep-043.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>;
+          Tue, 8 Aug 2023 17:02:17 +0100
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 64CADCC500AD6584
+X-Originating-IP: [86.140.112.76]
+X-OWM-Source-IP: 86.140.112.76 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdelhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefhuefgheehtdfgfeevtdevleekgfejleegfffgieejleeugffftefgvdduudeiudenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudegtddrudduvddrjeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegtddrudduvddrjeeipdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddugedtqdduuddvqdejiedrrhgrnhhgvgekiedqudegtddrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhies
+	sghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepshgrqdhprhguqdhrghhouhhtqddttdeh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.140.112.76) by sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.814.02) (authenticated as jonturney@btinternet.com)
+        id 64CADCC500AD6584; Tue, 8 Aug 2023 17:02:17 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: testsuite: Add socketpair_full test
+Date: Tue,  8 Aug 2023 17:01:57 +0100
+Message-Id: <20230808160157.6571-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9d1cbf57a0ff67bb9d7af619e24a86005cad1cbf.1690932049.git.les@lesderid.net>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Les,
+Add the socketpair_full test from [1], fixed by [2], slightly improved by
+the addition of a timeout.
 
-your 2nd patch looks good to me, but this patch is a bit questionable.
+This test might perhaps be better named.
 
-On Aug  7 03:13, Les De Ridder wrote:
-> diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
-> index 36ab042a7..1950dadb0 100644
-> --- a/winsup/cygwin/mount.cc
-> +++ b/winsup/cygwin/mount.cc
-> @@ -292,6 +292,17 @@ fs_info::update (PUNICODE_STRING upath, HANDLE in_vol)
->    if (!NT_SUCCESS (status))
->      ffdi.DeviceType = ffdi.Characteristics = 0;
->  
-> +  if (upath->Buffer[5] == L':' && upath->Buffer[6] == L'\\')
+This might also serve as an example of how to add new tests.
 
-If that's testing for a local drive path, it's probably wrong.  The
-NtQueryVolumeInformationFile(FileFsDeviceInformation) call returns the
-FILE_REMOTE_DEVICE flag and sets is_remote_drive() in line 298.  You
-should use that flag.
+[1] https://cygwin.com/pipermail/cygwin-developers/2023-July/012640.html
+[2] dedbbd74d0a8 ("Cygwin: select: workaround FD_WRITE network event handling")
 
-This also means your code is called much too early in fs_info::update.
-The preceeding code for file systems not providing valid serial numbers
-is an exception from the rule because we need the serial number for
-caching.  Generically checking for another local filesystem should be
-performed after the  "if (is_remote_drive ())" expression, so starting
-somewhere below line 495.
+---
+ winsup/testsuite/Makefile.am                  |  1 +
+ winsup/testsuite/winsup.api/socketpair_full.c | 59 +++++++++++++++++++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 winsup/testsuite/winsup.api/socketpair_full.c
 
-> +   {
-> +     WCHAR dos[3] = {upath->Buffer[4], upath->Buffer[5], L'\0'};
-> +     WCHAR dev[MAX_PATH];
-> +     if (QueryDosDeviceW (dos, dev, MAX_PATH))
-> +       {
-> +          is_ramdisk (wcsncmp (dev, L"\\Device\\Ramdisk", 15));
-> +          has_buggy_reopen (is_ramdisk ());
-> +       }
-> +   }
-> +
+diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+index 228955668..28b23b758 100644
+--- a/winsup/testsuite/Makefile.am
++++ b/winsup/testsuite/Makefile.am
+@@ -48,6 +48,7 @@ check_PROGRAMS = \
+ 	winsup.api/shmtest \
+ 	winsup.api/sigchld \
+ 	winsup.api/signal-into-win32-api \
++	winsup.api/socketpair_full \
+ 	winsup.api/systemcall \
+ 	winsup.api/user_malloc \
+ 	winsup.api/waitpid \
+diff --git a/winsup/testsuite/winsup.api/socketpair_full.c b/winsup/testsuite/winsup.api/socketpair_full.c
+new file mode 100644
+index 000000000..d432bc76d
+--- /dev/null
++++ b/winsup/testsuite/winsup.api/socketpair_full.c
+@@ -0,0 +1,59 @@
++//
++// This test verifies that a socket correctly indicates not ready to write when
++// poll()ed if a subsequent write() would block
++//
++//
++
++#include <assert.h>
++#include <poll.h>
++#include <stdio.h>
++#include <sys/socket.h>
++#include <unistd.h>
++
++static void timeout(int signum)
++{
++  exit(1);
++}
++
++int main()
++{
++  char wbuf[100] = { 0, };
++  int out;
++
++  signal(SIGALRM, timeout);
++
++  {
++    int sv[2];
++    int s;
++
++    s = socketpair (AF_UNIX, SOCK_STREAM, 0, sv);
++    assert (s == 0);
++
++    out = sv[0];
++  }
++
++  size_t in_flight = 0;
++  while (1)
++    {
++      struct pollfd fds[1];
++      fds[0].fd = out;
++      fds[0].events = POLLOUT;
++
++      int r = poll(fds, 1, 0);
++      assert(r >= 0);
++
++      // fd is not ready to write
++      if (!(fds[0].revents & POLLOUT))
++        break;
++
++      alarm(5);
++
++      // otherwise, fd is ready to write, implies some data may be written without blocking
++      ssize_t s = write (out, wbuf, sizeof wbuf);
++      assert (s > 0);
++      in_flight += s;
++      printf("%zd written, total in_flight %zd\n", s, in_flight);
++
++      alarm(0);
++    }
++}
+-- 
+2.39.0
 
-This gives me headaches.  Did you check *all* the information returned
-by the various NtQueryVolumeInformationFile calls?  I. e., what is
-returned by all these calls?  What is the FS name set to?  Which flags
-are set in FileSystemAttributes?  What is DeviceType and Characterisitics
-set to?
-
-We should really check all info already available from the
-NtQueryVolumeInformationFile calls first, and please paste here the
-information you get from these calls.
-
-Also, even if all else fails, rather than calling QueryDosDeviceW we
-should use NtQueryVolumeInformationFile(FileFsDriverPathInformation)
-instead.
-
-
-Thanks,
-Corinna
