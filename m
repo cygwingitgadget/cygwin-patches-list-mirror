@@ -1,51 +1,64 @@
 Return-Path: <SRS0=Wqcg=EA=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta1020.nifty.com (mta-snd01004.nifty.com [106.153.227.36])
-	by sourceware.org (Postfix) with ESMTPS id EDF163858002
-	for <cygwin-patches@cygwin.com>; Tue, 15 Aug 2023 23:35:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EDF163858002
+Received: from dmta1009.nifty.com (mta-snd01009.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id D8E873858002
+	for <cygwin-patches@cygwin.com>; Tue, 15 Aug 2023 23:38:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D8E873858002
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain by dmta1020.nifty.com with ESMTP
-          id <20230815233521138.TUUE.131070.localhost.localdomain@nifty.com>;
-          Wed, 16 Aug 2023 08:35:21 +0900
+Received: from localhost.localdomain by dmta1009.nifty.com with ESMTP
+          id <20230815233802780.DHVD.19111.localhost.localdomain@nifty.com>;
+          Wed, 16 Aug 2023 08:38:02 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Add missing pinfo check in transfer_input().
-Date: Wed, 16 Aug 2023 08:35:06 +0900
-Message-Id: <20230815233506.1390-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: shared: Fix access permissions setting in open_shared().
+Date: Wed, 16 Aug 2023 08:37:46 +0900
+Message-Id: <20230815233746.1424-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The commit 10d083c745dd has a bug that lacks a check for pinfo pointer
-value for master_pid. This causes segmentation fault if the process
-whose pid is master_pid no longer exists. This patch fixes the issue.
+After the commit 93508e5bb841, the access permissions argument passed
+to open_shared() is ignored and always replaced with (FILE_MAP_READ |
+FILE_MAP_WRITE). This causes the weird behaviour that sshd service
+process loses its cygwin PID. This triggers the failure in pty that
+transfer_input() does not work properly.
 
-Fixes: 10d083c745dd ("Cygwin: pty: Inherit typeahead data between two input pipes.")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+This patch resumes the access permission settings to fix that.
+
+Fixes: 93508e5bb841 ("Cygwin: open_shared: don't reuse shared_locations parameter as output")
+Signedd-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/fhandler/pty.cc | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ winsup/cygwin/mm/shared.cc | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index db3b77ecf..607333f52 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -3835,7 +3835,9 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
-     to = ttyp->to_slave ();
- 
-   pinfo p (ttyp->master_pid);
--  HANDLE pty_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE, p->dwProcessId);
-+  HANDLE pty_owner = NULL;
-+  if (p)
-+    pty_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE, p->dwProcessId);
-   if (pty_owner)
+diff --git a/winsup/cygwin/mm/shared.cc b/winsup/cygwin/mm/shared.cc
+index 40cdd4722..7977df382 100644
+--- a/winsup/cygwin/mm/shared.cc
++++ b/winsup/cygwin/mm/shared.cc
+@@ -139,8 +139,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
+       if (name)
+ 	mapname = shared_name (map_buf, name, n);
+       if (m == SH_JUSTOPEN)
+-	shared_h = OpenFileMappingW (FILE_MAP_READ | FILE_MAP_WRITE, FALSE,
+-				     mapname);
++	shared_h = OpenFileMappingW (access, FALSE, mapname);
+       else
+ 	{
+ 	  created = true;
+@@ -165,8 +164,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
+   do
      {
-       DuplicateHandle (pty_owner, to, GetCurrentProcess (), &to,
+       addr = (void *) next_address;
+-      shared = MapViewOfFileEx (shared_h, FILE_MAP_READ | FILE_MAP_WRITE,
+-				0, 0, 0, addr);
++      shared = MapViewOfFileEx (shared_h, access, 0, 0, 0, addr);
+       next_address += wincap.allocation_granularity ();
+       if (next_address >= SHARED_REGIONS_ADDRESS_HIGH)
+ 	{
 -- 
 2.39.0
 
