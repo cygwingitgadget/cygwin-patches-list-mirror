@@ -1,31 +1,32 @@
-Return-Path: <SRS0=m8hS=EB=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0012.nifty.com (mta-snd00006.nifty.com [106.153.226.38])
-	by sourceware.org (Postfix) with ESMTPS id B2AB23858002
-	for <cygwin-patches@cygwin.com>; Wed, 16 Aug 2023 00:07:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B2AB23858002
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from HP-Z230 by dmta0012.nifty.com with ESMTP
-          id <20230816000740767.MGUT.104240.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 16 Aug 2023 09:07:40 +0900
-Date: Wed, 16 Aug 2023 09:07:41 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id AAFA63858002; Wed, 16 Aug 2023 07:51:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AAFA63858002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1692172278;
+	bh=8bj/nFPNkOfPEfLP08wKXH1wiSia/Nn6LoQ5vee0rxc=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=r7+3QSn7laxdmStWLoWgFnvMmmbzR4bNYAGXUn3PvhWOzg+l+x2aGfr3ughiDipGq
+	 HPPr07N0pS87jhzOY7wRgCzLnVK8gVyq7o5RrFhxHOX+/R4PSk8OPknJBiwTC/CZ+M
+	 YlKTD+Y5jOKqce9n6ePLALjgBAFWUMAvFnmDq2Ks=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id C90ACA80C03; Wed, 16 Aug 2023 09:51:16 +0200 (CEST)
+Date: Wed, 16 Aug 2023 09:51:16 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: shared: Fix access permissions setting in
  open_shared().
-Message-Id: <20230816090741.3d78d7b6278be4e438ca0ff3@nifty.ne.jp>
-In-Reply-To: <20230815233746.1424-1-takashi.yano@nifty.ne.jp>
+Message-ID: <ZNx/9DTJf9CXTlDU@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20230815233746.1424-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230815233746.1424-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 16 Aug 2023 08:37:46 +0900
-Takashi Yano wrote:
+On Aug 16 08:37, Takashi Yano wrote:
 > After the commit 93508e5bb841, the access permissions argument passed
 > to open_shared() is ignored and always replaced with (FILE_MAP_READ |
 > FILE_MAP_WRITE). This causes the weird behaviour that sshd service
@@ -66,46 +67,11 @@ Takashi Yano wrote:
 >  	{
 > -- 
 > 2.39.0
-> 
 
-cygwin-3_4-branch needs to modify the patch a bit.
-
-diff --git a/winsup/cygwin/mm/shared.cc b/winsup/cygwin/mm/shared.cc
-index 2ea3a4336..20b57ff4d 100644
---- a/winsup/cygwin/mm/shared.cc
-+++ b/winsup/cygwin/mm/shared.cc
-@@ -148,8 +148,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
-       if (name)
- 	mapname = shared_name (map_buf, name, n);
-       if (m == SH_JUSTOPEN)
--	shared_h = OpenFileMappingW (FILE_MAP_READ | FILE_MAP_WRITE, FALSE,
--				     mapname);
-+	shared_h = OpenFileMappingW (access, FALSE, mapname);
-       else
- 	{
- 	  created = true;
-@@ -175,8 +174,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
- 	 Note that we don't actually *need* fixed addresses.  The only
- 	 advantage is reproducibility to help /proc/<PID>/maps along. */
-       addr = (void *) region_address[m];
--      shared = MapViewOfFileEx (shared_h, FILE_MAP_READ | FILE_MAP_WRITE,
--				0, 0, 0, addr);
-+      shared = MapViewOfFileEx (shared_h, access, 0, 0, 0, addr);
-     }
-   /* Also catch the unlikely case that a fixed region can't be mapped at the
-      fixed address. */
-@@ -190,8 +188,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
-       do
- 	{
- 	  addr = (void *) next_address;
--	  shared = MapViewOfFileEx (shared_h, FILE_MAP_READ | FILE_MAP_WRITE,
--				    0, 0, 0, addr);
-+	  shared = MapViewOfFileEx (shared_h, access, 0, 0, 0, addr);
- 	  next_address += wincap.allocation_granularity ();
- 	  if (next_address >= SHARED_REGIONS_ADDRESS_HIGH)
- 	    {
+Oh drat, whatever was I thinking at the time?  Thanks for catching
+and fixing this!  Please push.
 
 
+Corinna
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
