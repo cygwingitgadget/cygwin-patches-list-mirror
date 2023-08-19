@@ -1,81 +1,106 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id A27983858C52; Wed, 16 Aug 2023 07:54:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A27983858C52
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1692172492;
-	bh=EUYmcG67faOqD7x1UxPG0Juo9cx6XWp9m+n6kG3SyL4=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=oiJBQ4Hoze9I2tStSlhi4XIDjoNahCxY3QS0D7OOXBvxyQ/VnsDHUDOxvskDtIgza
-	 LxvcGJsuaMv+p2mAQ2vO9+ulTA/MtdeFL6zfGsiIvetdrxs/7f0rAedPxqzpLKx/Ej
-	 EDrnUlmr7maW3K/4OQt+BtTS5h+B5Iq+tJYqb78I=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EA57EA80C03; Wed, 16 Aug 2023 09:54:50 +0200 (CEST)
-Date: Wed, 16 Aug 2023 09:54:50 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=N3FD=EE=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta1007.nifty.com (mta-snd01011.nifty.com [106.153.227.43])
+	by sourceware.org (Postfix) with ESMTPS id E4922385841C
+	for <cygwin-patches@cygwin.com>; Sat, 19 Aug 2023 06:07:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E4922385841C
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain by dmta1007.nifty.com with ESMTP
+          id <20230819060753603.IITI.19115.localhost.localdomain@nifty.com>;
+          Sat, 19 Aug 2023 15:07:53 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: shared: Fix access permissions setting in
- open_shared().
-Message-ID: <ZNyAyklqKEKianyY@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230815233746.1424-1-takashi.yano@nifty.ne.jp>
- <ZNx/9DTJf9CXTlDU@calimero.vinschen.de>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix failure to clear switch_to_nat_pipe flag.
+Date: Sat, 19 Aug 2023 15:07:39 +0900
+Message-Id: <20230819060739.898-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZNx/9DTJf9CXTlDU@calimero.vinschen.de>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Aug 16 09:51, Corinna Vinschen wrote:
-> On Aug 16 08:37, Takashi Yano wrote:
-> > After the commit 93508e5bb841, the access permissions argument passed
-> > to open_shared() is ignored and always replaced with (FILE_MAP_READ |
-> > FILE_MAP_WRITE). This causes the weird behaviour that sshd service
-> > process loses its cygwin PID. This triggers the failure in pty that
-> > transfer_input() does not work properly.
-> > 
-> > This patch resumes the access permission settings to fix that.
-> > 
-> > Fixes: 93508e5bb841 ("Cygwin: open_shared: don't reuse shared_locations parameter as output")
-> > Signedd-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > ---
-> >  winsup/cygwin/mm/shared.cc | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/mm/shared.cc b/winsup/cygwin/mm/shared.cc
-> > index 40cdd4722..7977df382 100644
-> > --- a/winsup/cygwin/mm/shared.cc
-> > +++ b/winsup/cygwin/mm/shared.cc
-> > @@ -139,8 +139,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
-> >        if (name)
-> >  	mapname = shared_name (map_buf, name, n);
-> >        if (m == SH_JUSTOPEN)
-> > -	shared_h = OpenFileMappingW (FILE_MAP_READ | FILE_MAP_WRITE, FALSE,
-> > -				     mapname);
-> > +	shared_h = OpenFileMappingW (access, FALSE, mapname);
-> >        else
-> >  	{
-> >  	  created = true;
-> > @@ -165,8 +164,7 @@ open_shared (const WCHAR *name, int n, HANDLE& shared_h, DWORD size,
-> >    do
-> >      {
-> >        addr = (void *) next_address;
-> > -      shared = MapViewOfFileEx (shared_h, FILE_MAP_READ | FILE_MAP_WRITE,
-> > -				0, 0, 0, addr);
-> > +      shared = MapViewOfFileEx (shared_h, access, 0, 0, 0, addr);
-> >        next_address += wincap.allocation_granularity ();
-> >        if (next_address >= SHARED_REGIONS_ADDRESS_HIGH)
-> >  	{
-> > -- 
-> > 2.39.0
-> 
-> Oh drat, whatever was I thinking at the time?  Thanks for catching
-> and fixing this!  Please push.
+After the commit fbfea31dd9b9, switch_to_nat_pipe is not cleared
+properly when non-cygwin app is terminated in the case where the
+pseudo console is disabled. This is because get_winpid_to_hand_over()
+sometimes returns PID of cygwin process even though it should return
+only PID of non-cygwin process. This patch fixes the issue by adding
+a new argument which requests only PID of non-cygwin process to
+get_console_process_id().
 
-Please also add a release message to 3.4.8.  I'll create the release
-this week.
+Fixes: fbfea31dd9b9 ("Cygwin: pty: Avoid cutting the branch the pty master is sitting on.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/pty.cc           | 11 ++++++++---
+ winsup/cygwin/local_includes/fhandler.h |  3 ++-
+ winsup/cygwin/release/3.4.9             |  6 ++++++
+ 3 files changed, 16 insertions(+), 4 deletions(-)
+ create mode 100644 winsup/cygwin/release/3.4.9
 
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 607333f52..3f4bc56b5 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -85,7 +85,8 @@ inline static bool process_alive (DWORD pid);
+      stub_only: return only stub process's pid of non-cygwin process. */
+ DWORD
+ fhandler_pty_common::get_console_process_id (DWORD pid, bool match,
+-					     bool cygwin, bool stub_only)
++					     bool cygwin, bool stub_only,
++					     bool nat)
+ {
+   tmp_pathbuf tp;
+   DWORD *list = (DWORD *) tp.c_get ();
+@@ -109,6 +110,8 @@ fhandler_pty_common::get_console_process_id (DWORD pid, bool match,
+ 	else
+ 	  {
+ 	    pinfo p (cygwin_pid (list[i]));
++	    if (nat && !!p && !ISSTATE(p, PID_NOTCYGWIN))
++	      continue;
+ 	    if (!!p && p->exec_dwProcessId)
+ 	      {
+ 		res_pri = stub_only ? p->exec_dwProcessId : list[i];
+@@ -3511,9 +3514,11 @@ fhandler_pty_slave::get_winpid_to_hand_over (tty *ttyp,
+     {
+       /* Search another native process which attaches to the same console */
+       DWORD current_pid = myself->exec_dwProcessId ?: myself->dwProcessId;
+-      switch_to = get_console_process_id (current_pid, false, true, true);
++      switch_to = get_console_process_id (current_pid,
++					  false, true, true, true);
+       if (!switch_to)
+-	switch_to = get_console_process_id (current_pid, false, true, false);
++	switch_to = get_console_process_id (current_pid,
++					    false, true, false, true);
+     }
+   return switch_to;
+ }
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index 03b51a7e4..9af5f716c 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2399,7 +2399,8 @@ class fhandler_pty_common: public fhandler_termios
+   void resize_pseudo_console (struct winsize *);
+   static DWORD get_console_process_id (DWORD pid, bool match,
+ 				       bool cygwin = false,
+-				       bool stub_only = false);
++				       bool stub_only = false,
++				       bool nat = false);
+   bool to_be_read_from_nat_pipe (void);
+   static DWORD attach_console_temporarily (DWORD target_pid);
+   static void resume_from_temporarily_attach (DWORD resume_pid);
+diff --git a/winsup/cygwin/release/3.4.9 b/winsup/cygwin/release/3.4.9
+new file mode 100644
+index 000000000..d089e5a9a
+--- /dev/null
++++ b/winsup/cygwin/release/3.4.9
+@@ -0,0 +1,6 @@
++Bug Fixes
++---------
++
++- Fix a bug introduced in cygwin 3.4.0 that switch_to_nat_pipe flag is
++  not cleared properly when non-cygwin app is terminated in the case
++  where pseudo console is not activated.
+-- 
+2.39.0
 
-Thanks,
-Corinna
