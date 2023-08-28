@@ -1,153 +1,66 @@
 Return-Path: <SRS0=JFVn=EN=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0003.nifty.com (mta-snd00010.nifty.com [106.153.226.42])
-	by sourceware.org (Postfix) with ESMTPS id 69BF43857C41
-	for <cygwin-patches@cygwin.com>; Mon, 28 Aug 2023 09:20:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 69BF43857C41
+Received: from dmta0001.nifty.com (mta-snd00012.nifty.com [106.153.226.44])
+	by sourceware.org (Postfix) with ESMTPS id 73A643857C71
+	for <cygwin-patches@cygwin.com>; Mon, 28 Aug 2023 09:21:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 73A643857C71
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain by dmta0003.nifty.com with ESMTP
-          id <20230828092027316.LJSY.106126.localhost.localdomain@nifty.com>;
-          Mon, 28 Aug 2023 18:20:27 +0900
+Received: from localhost.localdomain by dmta0001.nifty.com with ESMTP
+          id <20230828092143545.FIPK.102246.localhost.localdomain@nifty.com>;
+          Mon, 28 Aug 2023 18:21:43 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Ed Morton <mortoneccc@comcast.net>
-Subject: [PATCH] Cygwin: spawn: Fix segfalt when too many command line args are specified.
-Date: Mon, 28 Aug 2023 18:20:12 +0900
-Message-Id: <20230828092012.751-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: termios: Refactor the function is_console_app().
+Date: Mon, 28 Aug 2023 18:21:29 +0900
+Message-Id: <20230828092129.770-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, the number of command line args was not checked for
-cygwin process. Due to this, segmentation fault was caused if too
-many command line args are specified.
-https://cygwin.com/pipermail/cygwin/2023-August/254333.html
-
-Since char *argv[argc + 1] is placed on the stack in dll_crt0_1(),
-STATUS_STACK_OVERFLOW occurs if the stack does not have enough
-space.
-
-With this patch, the total length of the arguments is restricted to
-1/4 of total stack size for the process, and spawnve() returns E2BIG if
-the size exceeds the limit.
-
-Reported-by: Ed Morton <mortoneccc@comcast.net>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/release/3.4.9 |  3 +++
- winsup/cygwin/spawn.cc      | 41 ++++++++++++++++++++++++++++++++++++-
- winsup/cygwin/sysconf.cc    |  9 +++++++-
- 3 files changed, 51 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler/termios.cc | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/winsup/cygwin/release/3.4.9 b/winsup/cygwin/release/3.4.9
-index 2f2da9e13..53c4e5fc8 100644
---- a/winsup/cygwin/release/3.4.9
-+++ b/winsup/cygwin/release/3.4.9
-@@ -8,3 +8,6 @@ Bug Fixes
- - For the time being, disable creating special files using mknod/mkfifo
-   on NFS.
-   Addresses: https://cygwin.com/pipermail/cygwin/2023-August/254266.html
-+
-+- Fix segfault when too many command line args are specified.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2023-August/254333.html
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index c16fe269a..b38e4de27 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -284,6 +284,29 @@ extern "C" void __posix_spawn_sem_release (void *sem, int error);
- 
- extern DWORD mutex_timeout; /* defined in fhandler_termios.cc */
- 
-+static size_t
-+get_stack_size (const WCHAR *filename)
-+{
-+  HANDLE h;
-+  h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
-+		   NULL, OPEN_EXISTING, 0, NULL);
-+  char buf[1024];
-+  DWORD n;
-+  ReadFile (h, buf, sizeof (buf), &n, 0);
-+  CloseHandle (h);
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index 789ae0179..d106955dc 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -704,22 +704,20 @@ static bool
+ is_console_app (const WCHAR *filename)
+ {
+   HANDLE h;
+-  const int id_offset = 92;
+   h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
+ 		   NULL, OPEN_EXISTING, 0, NULL);
+   char buf[1024];
+   DWORD n;
+   ReadFile (h, buf, sizeof (buf), &n, 0);
+   CloseHandle (h);
+-  char *p = (char *) memmem (buf, n, "PE\0\0", 4);
+-  if (p && p + id_offset < buf + n)
+-    return p[id_offset] == '\003'; /* 02: GUI, 03: console */
+-  else
+-    {
+-      wchar_t *e = wcsrchr (filename, L'.');
+-      if (e && (wcscasecmp (e, L".bat") == 0 || wcscasecmp (e, L".cmd") == 0))
+-	return true;
+-    }
++  /* The offset of Subsystem is the same for both IMAGE_NT_HEADERS32 and
++     IMAGE_NT_HEADERS64, so only IMAGE_NT_HEADERS32 is used here. */
 +  IMAGE_NT_HEADERS32 *p = (IMAGE_NT_HEADERS32 *) memmem (buf, n, "PE\0\0", 4);
-+  if (!p)
-+    return 0;
-+  if ((char *) &p->OptionalHeader.SizeOfStackCommit > buf + n)
-+    return 0; /* buf[] is not enough */
-+  if (p->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
-+    return p->OptionalHeader.SizeOfStackReserve;
-+  IMAGE_NT_HEADERS64 *p64 = (IMAGE_NT_HEADERS64 *) p;
-+  if ((char *) &p64->OptionalHeader.SizeOfStackCommit > buf + n)
-+    return 0; /* buf[] is not enough */
-+  return p64->OptionalHeader.SizeOfStackReserve;
-+}
-+
- int
- child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 			  const char *const envp[], int mode,
-@@ -351,8 +374,9 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	 We need to quote any argument that has whitespace or embedded "'s.  */
++  if (p && (char *) &p->OptionalHeader.DllCharacteristics <= buf + n)
++    return p->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_CUI;
++  wchar_t *e = wcsrchr (filename, L'.');
++  if (e && (wcscasecmp (e, L".bat") == 0 || wcscasecmp (e, L".cmd") == 0))
++    return true;
+   return false;
+ }
  
-       int ac;
-+      size_t arg_len = 0;
-       for (ac = 0; argv[ac]; ac++)
--	/* nothing */;
-+	arg_len += strlen (argv[ac]) + 1;
- 
-       int err;
-       const char *ext;
-@@ -621,6 +645,21 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	    }
- 	}
- 
-+      if (iscygwin ())
-+	{
-+	  size_t child_stack_size = get_stack_size (runpath);
-+	  /* char *argv[] will be placed on the stack in dll_crt0_1(), so
-+	     restrict total argument length to 1/4 of total stack size. */
-+	  bool too_many_args = child_stack_size ?
-+	    arg_len > child_stack_size / 4 : ac >= MAXWINCMDLEN;
-+	  if (too_many_args)
-+	    {
-+	      set_errno (E2BIG);
-+	      res = -1;
-+	      __leave;
-+	    }
-+	}
-+
-       bool no_pcon = mode != _P_OVERLAY && mode != _P_WAIT;
-       term_spawn_worker.setup (iscygwin (), handle (fileno_stdin, false),
- 			       runpath, no_pcon, reset_sendsig, envblock);
-diff --git a/winsup/cygwin/sysconf.cc b/winsup/cygwin/sysconf.cc
-index 2db92e4de..6cb2aecd0 100644
---- a/winsup/cygwin/sysconf.cc
-+++ b/winsup/cygwin/sysconf.cc
-@@ -21,6 +21,13 @@ details. */
- #include "cpuid.h"
- #include "clock.h"
- 
-+#define DEFAULT_STACKGUARD (wincap.def_guard_page_size() + wincap.page_size ())
-+static long
-+get_arg_max (int in)
-+{
-+  return (long) (get_rlimit_stack () + DEFAULT_STACKGUARD) / 4;
-+}
-+
- static long
- get_page_size (int in)
- {
-@@ -485,7 +492,7 @@ static struct
-     };
- } sca[] =
- {
--  {cons, {c:ARG_MAX}},			/*   0, _SC_ARG_MAX */
-+  {func, {f:get_arg_max}},		/*   0, _SC_ARG_MAX */
-   {cons, {c:CHILD_MAX}},		/*   1, _SC_CHILD_MAX */
-   {cons, {c:CLOCKS_PER_SEC}},		/*   2, _SC_CLK_TCK */
-   {cons, {c:NGROUPS_MAX}},		/*   3, _SC_NGROUPS_MAX */
 -- 
 2.39.0
 
