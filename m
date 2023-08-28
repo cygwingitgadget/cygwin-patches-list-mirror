@@ -1,78 +1,75 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 686CD3858D33; Mon, 28 Aug 2023 11:18:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 686CD3858D33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1693221498;
-	bh=Xkvts8lhtzTFFCOK5BwLCrRCeVkbsfq6CZ042iVup00=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=e4SRvKZVielhEOvqvHwdlerLPwUipub0Ka3oarw0ovcrPuVC6CIKSNjiIMwlZtzF4
-	 K6yvAT7NjxxTcEaLKCOw9uVkEy20hbQwLIJ3ICiu4/sXWrBp09iEatekqlhgo++g1a
-	 nQpG3BGeGAPLOTO4VCBJOndFQb46u7n22NkWX1+I=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 97924A80D4E; Mon, 28 Aug 2023 13:18:16 +0200 (CEST)
-Date: Mon, 28 Aug 2023 13:18:16 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=JFVn=EN=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta0013.nifty.com (mta-snd00014.nifty.com [106.153.226.46])
+	by sourceware.org (Postfix) with ESMTPS id 6322A3858D28
+	for <cygwin-patches@cygwin.com>; Mon, 28 Aug 2023 11:53:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6322A3858D28
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from HP-Z230 by dmta0013.nifty.com with ESMTP
+          id <20230828115349294.MXUK.104052.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 28 Aug 2023 20:53:49 +0900
+Date: Mon, 28 Aug 2023 20:53:49 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: spawn: Fix segfalt when too many command line
- args are specified.
-Message-ID: <ZOyCeBEP9MBjosHV@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20230828094605.2405-1-takashi.yano@nifty.ne.jp>
- <ZOx9j/YRr3UX88wV@calimero.vinschen.de>
- <ZOyAXmWkAH1BBCh2@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZOyAXmWkAH1BBCh2@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: termios: Refactor the function
+ is_console_app().
+Message-Id: <20230828205349.5e88f193446048e42337685b@nifty.ne.jp>
+In-Reply-To: <ZOx911vVsEZOgfgI@calimero.vinschen.de>
+References: <20230828092129.770-1-takashi.yano@nifty.ne.jp>
+	<ZOx911vVsEZOgfgI@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Aug 28 13:09, Corinna Vinschen wrote:
-> On Aug 28 12:57, Corinna Vinschen wrote:
-> > On Aug 28 18:46, Takashi Yano wrote:
-> > > Previously, the number of command line args was not checked for
-> > > cygwin process. Due to this, segmentation fault was caused if too
-> > > many command line args are specified.
-> > > https://cygwin.com/pipermail/cygwin/2023-August/254333.html
-> > > 
-> > > Since char *argv[argc + 1] is placed on the stack in dll_crt0_1(),
-> > > STATUS_STACK_OVERFLOW occurs if the stack does not have enough
-> > > space.
-> > > 
-> > > With this patch, the total length of the arguments and the size of
-> > > argv[] is restricted to 1/4 of total stack size for the process, and
-> > > spawnve() returns E2BIG if the size exceeds the limit.
-> > > [...]
-> > I tried this simple patch:
+On Mon, 28 Aug 2023 12:58:31 +0200
+Corinna Vinschen wrote:
+> On Aug 28 18:21, Takashi Yano wrote:
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > ---
+> >  winsup/cygwin/fhandler/termios.cc | 18 ++++++++----------
+> >  1 file changed, 8 insertions(+), 10 deletions(-)
 > > 
-> > diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-> > index 49b7a44aeb15..961dea4ab993 100644
-> > --- a/winsup/cygwin/dcrt0.cc
-> > +++ b/winsup/cygwin/dcrt0.cc
-> > @@ -978,11 +978,8 @@ dll_crt0_1 (void *)
-> >  	 a change to an element of argv[] it does not affect Cygwin's argv.
-> >  	 Changing the the contents of what argv[n] points to will still
-> >  	 affect Cygwin.  This is similar (but not exactly like) Linux. */
-> > -      char *newargv[__argc + 1];
-> > -      char **nav = newargv;
-> > -      char **oav = __argv;
-> > -      while ((*nav++ = *oav++) != NULL)
-> > -	continue;
-> > +      char **newargv = (char **) malloc ((__argc + 1) * sizeof (char **));
-> > +      memcpy (newargv, __argv, (__argc + 1) * sizeof (char **));
-> >        /* Handle any signals which may have arrived */
-> >        sig_dispatch_pending (false);
-> >        _my_tls.call_signal_handler ();
-> > 
-> > and the testcase `LC_ALL=C sed 's/x/y/' $(seq 1000000)' simply ran
-> > as desired.  Combined with a bit of error checking...
+> > diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+> > index 789ae0179..d106955dc 100644
+> > --- a/winsup/cygwin/fhandler/termios.cc
+> > +++ b/winsup/cygwin/fhandler/termios.cc
+> > @@ -704,22 +704,20 @@ static bool
+> >  is_console_app (const WCHAR *filename)
+> >  {
+> >    HANDLE h;
+> > -  const int id_offset = 92;
+> >    h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
+> >  		   NULL, OPEN_EXISTING, 0, NULL);
+> >    char buf[1024];
+> >    DWORD n;
+> >    ReadFile (h, buf, sizeof (buf), &n, 0);
+> >    CloseHandle (h);
+> > -  char *p = (char *) memmem (buf, n, "PE\0\0", 4);
+> > -  if (p && p + id_offset < buf + n)
+> > -    return p[id_offset] == '\003'; /* 02: GUI, 03: console */
+> > -  else
+> > -    {
+> > -      wchar_t *e = wcsrchr (filename, L'.');
+> > -      if (e && (wcscasecmp (e, L".bat") == 0 || wcscasecmp (e, L".cmd") == 0))
+> > -	return true;
+> > -    }
+> > +  /* The offset of Subsystem is the same for both IMAGE_NT_HEADERS32 and
+> > +     IMAGE_NT_HEADERS64, so only IMAGE_NT_HEADERS32 is used here. */
+> > +  IMAGE_NT_HEADERS32 *p = (IMAGE_NT_HEADERS32 *) memmem (buf, n, "PE\0\0", 4);
 > 
-> We may also get away with storing it in the Windows heap, but I didn't
-> test this .
+> Please use PIMAGE_NT_HEADERS instead and just drop the comment.
+> We don't support 32 bit anyway.
 
-No, we don't. The Windows heap would not be inherited by a forked
-child and argv would be lost.  Sounds not great.
+This function is used for determining whether a non-cygwin
+app is console app or not. Even in 64-bit cygwin, 32-bit
+non-cygwin app can be executed. So we should support both
+32-bit and 64-bit binary.
 
+However, using IMAGE_NT_HEADERS may be better. Thanks.
 
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
