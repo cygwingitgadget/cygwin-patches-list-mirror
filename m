@@ -1,212 +1,61 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 12D5C3858D28; Tue, 29 Aug 2023 09:57:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 12D5C3858D28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1693303057;
-	bh=woT7zqOOtLx/yFe/2K8AhsVml+P0Vaz8SDB/FckNexs=;
-	h=From:To:Subject:Date:From;
-	b=yD7JseC5XcNsSjErsGSg2bcreaYtPM9dCajwKpEvt9lp8+U34kRKAJS7rPxKGreIj
-	 uookSMP1Nf35C0CzhBHBPXl/NERj7AL0jYGvSSNhb5jGOZY6qAJ46ftyFREhF65lII
-	 Sfr6lrQXE8Sq3N3jxFkdQQOhz/2df6h17ZDBYL88=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6EE9EA80C7B; Tue, 29 Aug 2023 11:57:26 +0200 (CEST)
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com,
-	Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: execve: drop argument size limit
-Date: Tue, 29 Aug 2023 11:57:26 +0200
-Message-ID: <20230829095726.207922-1-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.41.0
+Return-Path: <SRS0=cvqp=EQ=shaw.ca=brian.inglis@sourceware.org>
+Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
+	by sourceware.org (Postfix) with ESMTPS id 593F63858D20
+	for <cygwin-patches@cygwin.com>; Thu, 31 Aug 2023 04:10:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 593F63858D20
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
+Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
+	by cmsmtp with ESMTP
+	id bOeNqDzaz6NwhbZ0Vq9HkU; Thu, 31 Aug 2023 04:10:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+	t=1693455011; bh=SHoxWQvnxCipQWPK0OK2vaYX7Fkha/7h46uI0+p5ELA=;
+	h=From:To:Subject:Date;
+	b=KBNpWA0lc1qWVMVZiJNd76CPSr2x6GnNuIcRICvvP7GdzeXTVzNQnUW14EtGx1/70
+	 Gdoyaq09g+uwrhgDZN6p2dtEDqUuEJlmvrscadsYT9R7m5scC0Ha2xNWWXENFmMqrQ
+	 OttHZcnb+k9Nvcie2bCL6Mg6zS4/AgVSbRTvaugcy+u/D/ua+NmngUTDVLaIrR5EF+
+	 PRBW3bwJweJhTblzd4T5T91yO5uMusRRncFObdWft224DTJUVkwh34Uj08dnOvEFmG
+	 2c5YS+HVjk0Oe5SX6cfQGlZ3Q7hg+W+LR29thtqktzh4Ew76lali3lVEpryrGMIdPa
+	 JG1KxMUnxxRhg==
+Received: from BWINGLISD.cg.shawcable.net. ([184.64.102.149])
+	by cmsmtp with ESMTP
+	id bZ0UqYUad3fOSbZ0VqV7DE; Thu, 31 Aug 2023 04:10:11 +0000
+X-Authority-Analysis: v=2.4 cv=J8G5USrS c=1 sm=1 tr=0 ts=64f012a3
+ a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17 a=_Dj-zB-qAAAA:8
+ a=8fN2b68Rhf3RMR3bsjMA:9 a=ZXulRonScM0A:10
+From: Brian Inglis <Brian.Inglis@Shaw.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: cpuinfo: Linux 6.5: add AMD 0x8000001f EAX 14 debug_swap SEV-ES full debug state swap
+Date: Wed, 30 Aug 2023 22:10:09 -0600
+Message-Id: <55a6a662221998fa93a01eeb0832e39e510b9cd2.1693454909.git.Brian.Inglis@Shaw.ca>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfHg67FbojSg4o2BebrLngvQw+nP8V8mj9f+xeN/4HGiuKmarLsiriPs1l2HZZ9WYRpLMQDJY9hRkVvLOaFFQ4dPpxkVzPJVImzWqQubSucbPRZO6v7A3
+ G2an3EwAb7PwbZJV0sWWaaXGKbsDHVnsydpdjB1OVLPHAWhd6lkQraZmqIaVHVTO1wq2pBG1X9K7jDiAPsUfxin/mIQqFaLHaW99twDSgxxZKNYqG7thu+fC
+ W5oWzH8sKL1c4RW0CVpUksFeTKOPESWy1tb3PelfYG0=
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
-
-Before commit 44f73c5a6206 ("Cygwin: Fix segfalt when too many command
-line args are specified.") we had no actual argument size limit, except
-for the fact that the child process created another copy of the argv
-array on the stack, which could result in a stack overflow and a
-subsequent SEGV.  Commit 44f73c5a6206 changed that by allocating the
-additional argv array via malloc, and it introduced a new SC_ARG_MAX
-limit along the lines of the typical Linux limit.
-
-However, this new limit is artificial. Cygwin allocates all argument
-and environment data on the cygheap.  We only run out of ARG_MAX space
-if we're out of memory resources.
-
-Change argument size handling accordingly:
-- Drop the args size check from  child_info_spawn::worker.
-- Return -1 from sysconf (SC_ARG_MAX), i. e., the argument size limit
-  is undefined.
-- Change argv handling in class av, so that a failing cmalloc is not
-  fatal.  This allows the parent process to return E2BIG if it's out
-  of cygheap resources.
-- In the child, add a check around the new malloc call, so that it
-  doesn't result in a SEGV if the child process gets unexpectedly into
-  an ENOMEM situation at this point. In this (unlikely) case, proceed
-  with the original __argv array instead.  Add comment to explain why.
-
-Fixes: 44f73c5a6206 ("Cygwin: Fix segfalt when too many command line args are specified.")
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Brian Inglis <Brian.Inglis@Shaw.ca>
 ---
- winsup/cygwin/dcrt0.cc                | 18 +++++++++++++++---
- winsup/cygwin/kernel32.cc             |  7 +++++--
- winsup/cygwin/local_includes/winf.h   | 13 +++++++++----
- winsup/cygwin/local_includes/winsup.h |  4 ----
- winsup/cygwin/spawn.cc                | 18 ++++++++----------
- winsup/cygwin/sysconf.cc              |  2 +-
- 6 files changed, 38 insertions(+), 24 deletions(-)
+ winsup/cygwin/fhandler/proc.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-index 1d8810546314..130d652aac6e 100644
---- a/winsup/cygwin/dcrt0.cc
-+++ b/winsup/cygwin/dcrt0.cc
-@@ -976,10 +976,22 @@ dll_crt0_1 (void *)
-     {
-       /* Create a copy of Cygwin's version of __argv so that, if the user makes
- 	 a change to an element of argv[] it does not affect Cygwin's argv.
--	 Changing the the contents of what argv[n] points to will still
--	 affect Cygwin.  This is similar (but not exactly like) Linux. */
-+	 Changing the contents of what argv[n] points to will still affect
-+	 Cygwin.  This is similar (but not exactly like) Linux.
-+
-+	 We used to allocate newargv on the stack, but all the rest of the
-+	 argument and environment handling does not depend on the stack,
-+	 as it does on Linux.  In fact, everything is stored by the parent
-+	 in the cygheap, so the only reason this may fail is if we're out
-+	 of resources in a big way.  If this malloc fails, we could either
-+	 fail the entire process execution, or we could proceed with the
-+	 original argv and potentially affect output of /proc/self/cmdline.
-+	 We opt for the latter here because it's the lesser evil. */
-       char **newargv = (char **) malloc ((__argc + 1) * sizeof (char *));
--      memcpy (newargv, __argv, (__argc + 1) * sizeof (char *));
-+      if (newargv)
-+	memcpy (newargv, __argv, (__argc + 1) * sizeof (char *));
-+      else
-+	newargv = __argv;
-       /* Handle any signals which may have arrived */
-       sig_dispatch_pending (false);
-       _my_tls.call_signal_handler ();
-diff --git a/winsup/cygwin/kernel32.cc b/winsup/cygwin/kernel32.cc
-index 6248aefd5183..36951f6a87be 100644
---- a/winsup/cygwin/kernel32.cc
-+++ b/winsup/cygwin/kernel32.cc
-@@ -424,8 +424,11 @@ ucmd ()
-       linebuf cmd;
-       path_conv real_path (__argv[0]);
-       av newargv (__argc, __argv);
--      cmd.fromargv (newargv, real_path.get_win32 (), true);
--      RtlInitUnicodeString (&wcmd, cmd);
-+      if (newargv.argc)
-+	{
-+	  cmd.fromargv (newargv, real_path.get_win32 (), true);
-+	  RtlInitUnicodeString (&wcmd, cmd);
-+	}
-     }
-   return &wcmd;
- }
-diff --git a/winsup/cygwin/local_includes/winf.h b/winsup/cygwin/local_includes/winf.h
-index 651f78ba2824..b58693441095 100644
---- a/winsup/cygwin/local_includes/winf.h
-+++ b/winsup/cygwin/local_includes/winf.h
-@@ -23,11 +23,16 @@ class av
-  public:
-   int argc;
-   bool win16_exe;
--  av (): argv (NULL) {}
--  av (int ac_in, const char * const *av_in) : calloced (0), argc (ac_in), win16_exe (false)
-+  av () : argv (NULL), argc (0) {}
-+  av (int ac_in, const char * const *av_in)
-+  : calloced (0), win16_exe (false)
-   {
--    argv = (char **) cmalloc_abort (HEAP_1_ARGV, (argc + 5) * sizeof (char *));
--    memcpy (argv, av_in, (argc + 1) * sizeof (char *));
-+    argv = (char **) cmalloc (HEAP_1_ARGV, (ac_in + 5) * sizeof (char *));
-+    if (argv)
-+      {
-+	argc = ac_in;
-+	memcpy (argv, av_in, (argc + 1) * sizeof (char *));
-+      }
-   }
-   void *operator new (size_t, void *p) __attribute__ ((nothrow)) {return p;}
-   ~av ()
-diff --git a/winsup/cygwin/local_includes/winsup.h b/winsup/cygwin/local_includes/winsup.h
-index 57bd38c9fffd..c9788de8f012 100644
---- a/winsup/cygwin/local_includes/winsup.h
-+++ b/winsup/cygwin/local_includes/winsup.h
-@@ -73,10 +73,6 @@ uint32_t cygwin_inet_addr (const char *cp);
-    application provided path strings we handle. */
- #define NT_MAX_PATH 32768
- 
--/* CYG_ARG_MAX is the maximum total length of command line args.
--   The value 2097152 is the default ARG_MAX value in Linux. */
--#define CYG_ARG_MAX 2097152
--
- /* This definition allows to define wide char strings using macros as
-    parameters.  See the definition of __CONCAT in newlib's sys/cdefs.h
-    and accompanying comment. */
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index c4f1167284be..dc1c4ac17c80 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -351,9 +351,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	 We need to quote any argument that has whitespace or embedded "'s.  */
- 
-       int ac;
--      size_t arg_len = 0;
-       for (ac = 0; argv[ac]; ac++)
--	arg_len += strlen (argv[ac]) + 1;
-+	;
- 
-       int err;
-       const char *ext;
-@@ -522,12 +521,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	  __leave;
+diff --git a/winsup/cygwin/fhandler/proc.cc b/winsup/cygwin/fhandler/proc.cc
+index cbc49a12a417..be107cb8eacc 100644
+--- a/winsup/cygwin/fhandler/proc.cc
++++ b/winsup/cygwin/fhandler/proc.cc
+@@ -1652,7 +1652,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ /*	  ftcprint (features2, 11, "sev_64b");*//* SEV 64 bit host guest only */
+ /*	  ftcprint (features2, 12, "sev_rest_inj");   *//* SEV restricted injection */
+ /*	  ftcprint (features2, 13, "sev_alt_inj");    *//* SEV alternate injection */
+-/*	  ftcprint (features2, 14, "sev_es_dbg_swap");*//* SEV-ES debug state swap */
++	  ftcprint (features2, 14, "debug_swap");   /* SEV-ES full debug state swap */
+ /*	  ftcprint (features2, 15, "no_host_ibs");    *//* host IBS unsupported */
+ /*	  ftcprint (features2, 16, "vte");    *//* virtual transparent encryption */
  	}
-       set (chtype, real_path.iscygexec ());
--      if (iscygwin () && arg_len > (size_t) sysconf (_SC_ARG_MAX))
--	{
--	  set_errno (E2BIG);
--	  res = -1;
--	  __leave;
--	}
-       __stdin = in__stdin;
-       __stdout = in__stdout;
-       record_children ();
-@@ -1130,11 +1123,16 @@ spawnvpe (int mode, const char *file, const char * const *argv,
- 
- int
- av::setup (const char *prog_arg, path_conv& real_path, const char *ext,
--	   int argc, const char *const *argv, bool p_type_exec)
-+	   int ac_in, const char *const *av_in, bool p_type_exec)
- {
-   const char *p;
-   bool exeext = ascii_strcasematch (ext, ".exe");
--  new (this) av (argc, argv);
-+  new (this) av (ac_in, av_in);
-+  if (!argc)
-+    {
-+      set_errno (E2BIG);
-+      return -1;
-+    }
-   if ((exeext && real_path.iscygexec ()) || ascii_strcasematch (ext, ".bat")
-       || (!*ext && ((p = ext - 4) > real_path.get_win32 ())
- 	  && (ascii_strcasematch (p, ".bat") || ascii_strcasematch (p, ".cmd")
-diff --git a/winsup/cygwin/sysconf.cc b/winsup/cygwin/sysconf.cc
-index 7cdfbdb9d403..6529731a51c1 100644
---- a/winsup/cygwin/sysconf.cc
-+++ b/winsup/cygwin/sysconf.cc
-@@ -485,7 +485,7 @@ static struct
-     };
- } sca[] =
- {
--  {cons, {c:CYG_ARG_MAX}},		/*   0, _SC_ARG_MAX */
-+  {cons, {c:-1L}},			/*   0, _SC_ARG_MAX */
-   {cons, {c:CHILD_MAX}},		/*   1, _SC_CHILD_MAX */
-   {cons, {c:CLOCKS_PER_SEC}},		/*   2, _SC_CLK_TCK */
-   {cons, {c:NGROUPS_MAX}},		/*   3, _SC_NGROUPS_MAX */
 -- 
-2.41.0
+2.39.0
 
