@@ -1,135 +1,284 @@
-Return-Path: <SRS0=OLNo=EV=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
-	by sourceware.org (Postfix) with ESMTPS id 2A79A3858C41
-	for <cygwin-patches@cygwin.com>; Tue,  5 Sep 2023 17:01:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2A79A3858C41
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=t-online.de
-Received: from fwd81.aul.t-online.de (fwd81.aul.t-online.de [10.223.144.107])
-	by mailout04.t-online.de (Postfix) with SMTP id A3126199D3
-	for <cygwin-patches@cygwin.com>; Tue,  5 Sep 2023 19:01:38 +0200 (CEST)
-Received: from [192.168.2.101] ([91.57.246.1]) by fwd81.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1qdZQn-1tuxIe0; Tue, 5 Sep 2023 19:01:37 +0200
-From: Christian Franke <Christian.Franke@t-online.de>
+Return-Path: <SRS0=PWM1=EW=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta1015.nifty.com (mta-snd01012.nifty.com [106.153.227.44])
+	by sourceware.org (Postfix) with ESMTPS id 5701B3858C78
+	for <cygwin-patches@cygwin.com>; Wed,  6 Sep 2023 13:11:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5701B3858C78
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+Received: from localhost.localdomain by dmta1015.nifty.com with ESMTP
+          id <20230906131148093.MAQW.25674.localhost.localdomain@nifty.com>;
+          Wed, 6 Sep 2023 22:11:48 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Add initial support for SOURCE_DATE_EPOCH
-Message-ID: <a1890367-b100-2321-aca4-17eec98ebba7@t-online.de>
-Date: Tue, 5 Sep 2023 19:01:37 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.16
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: dsp: Implement select()/poll().
+Date: Wed,  6 Sep 2023 22:11:33 +0900
+Message-Id: <20230906131133.671-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------41473B1490DDFD2E01184F0B"
-X-TOI-EXPURGATEID: 150726::1693933297-41FF92B7-8E7CA856/0/0 CLEAN NORMAL
-X-TOI-MSGID: 61267183-5b10-4890-a411-6a6ce618b731
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------41473B1490DDFD2E01184F0B
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Previously, sound device /dev/dsp did not support select()/poll().
+These have been implemented with this patch.
 
-This patch enables reproducible builds of cygwin package in conjunction 
-with this cygport patch:
-https://sourceware.org/pipermail/cygwin-apps/2023-August/043108.html
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/dsp.cc           |  38 +++++++
+ winsup/cygwin/local_includes/fhandler.h |  11 ++
+ winsup/cygwin/local_includes/select.h   |   9 +-
+ winsup/cygwin/select.cc                 | 130 ++++++++++++++++++++++++
+ 4 files changed, 187 insertions(+), 1 deletion(-)
 
-cygwin.cygport was enhanced for the test as described in the above post.
-
-If the same build path, SOURCE_DATE_EPOCH and toolchain are used, 
-rebuilds with cygport produce identical distribution tarballs. Adding 
-proper -fmacro-prefix-map gcc options (or remove all usages of __FILE__) 
-could possibly make this independent from the build path.
-
-Note that 'u' (replace with newer objects only) flag needed to be 
-removed from ar commands because it is incompatible with 'D' 
-(deterministic archive). I don't expect any negative effect because 
-existing .a files are always removed before ar is run.
-
-Not yet tested with different machines or different users accounts.
-
-Patch would be much simpler (mkvers.sh only) if binutils would support 
-SOURCE_DATE_EPOCH directly.
-
+diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
+index 861443352..f1634f7a8 100644
+--- a/winsup/cygwin/fhandler/dsp.cc
++++ b/winsup/cygwin/fhandler/dsp.cc
+@@ -1483,3 +1483,41 @@ fhandler_dev_dsp::_fixup_after_exec ()
+       audio_out_ = NULL;
+     }
+ }
++
++bool
++fhandler_dev_dsp::_write_ready ()
++{
++  audio_buf_info info;
++  if (audio_out_)
++    {
++      audio_out_->buf_info (&info, audiofreq_, audiobits_, audiochannels_);
++      return info.bytes > 0;
++    }
++  else
++    return true;
++}
++
++bool
++fhandler_dev_dsp::_read_ready ()
++{
++  audio_buf_info info;
++  if (audio_in_)
++    {
++      audio_in_->buf_info (&info, audiofreq_, audiobits_, audiochannels_);
++      return info.bytes > 0;
++    }
++  else
++    return true;
++}
++
++bool
++fhandler_dev_dsp::write_ready ()
++{
++  return base ()->_write_ready ();
++}
++
++bool
++fhandler_dev_dsp::read_ready ()
++{
++  return base ()->_read_ready ();
++}
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index f2658a242..d7dc02e89 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2847,6 +2847,9 @@ class fhandler_dev_dsp: public fhandler_base
+   void close_audio_in ();
+   void close_audio_out (bool = false);
+ 
++  bool _read_ready();
++  bool _write_ready();
++
+  public:
+   bool use_archetype () const {return true;}
+ 
+@@ -2866,6 +2869,14 @@ class fhandler_dev_dsp: public fhandler_base
+     fh->copy_from (this);
+     return fh;
+   }
++
++  /* select.cc */
++  select_record *select_read (select_stuff *);
++  select_record *select_write (select_stuff *);
++  select_record *select_except (select_stuff *);
++
++  bool read_ready();
++  bool write_ready();
+ };
+ 
+ class fhandler_virtual : public fhandler_base
+diff --git a/winsup/cygwin/local_includes/select.h b/winsup/cygwin/local_includes/select.h
+index b794690b6..4e202128f 100644
+--- a/winsup/cygwin/local_includes/select.h
++++ b/winsup/cygwin/local_includes/select.h
+@@ -87,6 +87,11 @@ struct select_socket_info: public select_info
+   select_socket_info (): select_info (), num_w4 (0), ser_num (0), w4 (NULL) {}
+ };
+ 
++struct select_dsp_info: public select_info
++{
++  select_dsp_info (): select_info () {}
++};
++
+ class select_stuff
+ {
+ public:
+@@ -112,6 +117,7 @@ public:
+   select_pipe_info *device_specific_ptys;
+   select_fifo_info *device_specific_fifo;
+   select_socket_info *device_specific_socket;
++  select_dsp_info *device_specific_dsp;
+ 
+   bool test_and_set (int, fd_set *, fd_set *, fd_set *);
+   int poll (fd_set *, fd_set *, fd_set *);
+@@ -125,7 +131,8 @@ public:
+ 		   device_specific_pipe (NULL),
+ 		   device_specific_ptys (NULL),
+ 		   device_specific_fifo (NULL),
+-		   device_specific_socket (NULL)
++		   device_specific_socket (NULL),
++		   device_specific_dsp (NULL)
+ 		   {}
+ };
+ 
+diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+index bad4c37f3..3ad12c262 100644
+--- a/winsup/cygwin/select.cc
++++ b/winsup/cygwin/select.cc
+@@ -2255,3 +2255,133 @@ fhandler_timerfd::select_except (select_stuff *stuff)
+   s->except_ready = false;
+   return s;
+ }
++
++static int
++peek_dsp (select_record *s, bool from_select)
++{
++  int gotone = 0;
++  fhandler_dev_dsp *fh = (fhandler_dev_dsp *)(fhandler_base *) s->fh;
++
++  if (s->read_selected)
++      if (s->read_ready || fh->read_ready ())
++	gotone += s->read_ready = true;
++  if (s->write_selected)
++      if (s->write_ready || fh->write_ready ())
++	gotone += s->write_ready = true;
++  return gotone;
++}
++
++static int start_thread_dsp (select_record *me, select_stuff *stuff);
++
++static DWORD
++thread_dsp (void *arg)
++{
++  select_dsp_info *di = (select_dsp_info *) arg;
++  DWORD sleep_time = 0;
++  bool looping = true;
++
++  while (looping)
++    {
++      for (select_record *s = di->start; (s = s->next); )
++	if (s->startup == start_thread_dsp)
++	  {
++	    if (peek_dsp (s, true))
++	      looping = false;
++	    if (di->stop_thread)
++	      {
++		select_printf ("stopping");
++		looping = false;
++		break;
++	      }
++	  }
++      if (!looping)
++	break;
++      cygwait (sleep_time >> 3);
++      if (sleep_time < 80)
++	++sleep_time;
++      if (di->stop_thread)
++	break;
++    }
++  return 0;
++}
++
++static int
++start_thread_dsp (select_record *me, select_stuff *stuff)
++{
++  select_dsp_info *di = stuff->device_specific_dsp;
++  if (di->start)
++    me->h = *((select_dsp_info *) stuff->device_specific_dsp)->thread;
++  else
++    {
++      di->start = &stuff->start;
++      di->stop_thread = false;
++      di->thread = new cygthread (thread_dsp, di, "dspsel");
++      me->h = *di->thread;
++      if (!me->h)
++	return 0;
++    }
++  return 1;
++}
++
++static void
++dsp_cleanup (select_record *aaa, select_stuff *stuff)
++{
++  select_dsp_info *di = (select_dsp_info *) stuff->device_specific_dsp;
++  if (!di)
++    return;
++  if (di->thread)
++    {
++      di->stop_thread = true;
++      di->thread->detach ();
++    }
++  delete di;
++  stuff->device_specific_dsp = NULL;
++}
++
++select_record *
++fhandler_dev_dsp::select_read (select_stuff *stuff)
++{
++  if (!stuff->device_specific_dsp
++      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
++    return NULL;
++  select_record *s = stuff->start.next;
++  s->startup = start_thread_dsp;
++  s->peek = peek_dsp;
++  s->verify = verify_ok;
++  s->cleanup = dsp_cleanup;
++  s->read_selected = true;
++  s->read_ready = false;
++  return s;
++}
++
++select_record *
++fhandler_dev_dsp::select_write (select_stuff *stuff)
++{
++  if (!stuff->device_specific_dsp
++      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
++    return NULL;
++  select_record *s = stuff->start.next;
++  s->startup = start_thread_dsp;
++  s->peek = peek_dsp;
++  s->verify = verify_ok;
++  s->cleanup = dsp_cleanup;
++  s->write_selected = true;
++  s->write_ready = false;
++  return s;
++}
++
++select_record *
++fhandler_dev_dsp::select_except (select_stuff *stuff)
++{
++  if (!stuff->device_specific_dsp
++      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
++    return NULL;
++  select_record *s = stuff->start.next;
++  s->startup = start_thread_dsp;
++  s->peek = peek_dsp;
++  s->verify = verify_ok;
++  s->cleanup = dsp_cleanup;
++  s->except_selected = true;
++  s->except_ready = false;
++  return s;
++}
 -- 
-Regards,
-Christian
+2.39.0
 
-
---------------41473B1490DDFD2E01184F0B
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Add-initial-support-for-SOURCE_DATE_EPOCH.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Add-initial-support-for-SOURCE_DATE_EPOCH.patch"
-
-RnJvbSBiODc3MzMwZDUzYjk1YTg4ZjFhZWYwZmEzZDE0ZTk3OTEwZDlkZDJhIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUdWUsIDUgU2VwIDIwMjMgMTg6MzI6NDkgKzAyMDAK
-U3ViamVjdDogW1BBVENIXSBBZGQgaW5pdGlhbCBzdXBwb3J0IGZvciBTT1VSQ0VfREFURV9F
-UE9DSAoKSWYgc3BlY2lmaWVkLCBzZXQgdmVyc2lvbiB0aW1lc3RhbXAgdG8gdGhpcyB2YWx1
-ZS4KRW5hYmxlIGRldGVybWluaXN0aWMgYXJjaGl2ZXMgZm9yIGFyIGFuZCByYW5saWIuClNl
-dCBjeWd3aW4xLmRsbCBQRSBhbmQgZXhwb3J0IHRhYmxlIGhlYWRlciB0aW1lc3RhbXBzCnRv
-IHplcm8uCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgotLS0KIHdpbnN1cC9jeWd3aW4vTWFrZWZpbGUuYW0gICAgICAg
-fCA2ICsrKysrKwogd2luc3VwL2N5Z3dpbi9zY3JpcHRzL21raW1wb3J0ICB8IDYgKysrKyst
-CiB3aW5zdXAvY3lnd2luL3NjcmlwdHMvbWt2ZXJzLnNoIHwgNCArKy0tCiB3aW5zdXAvY3ln
-d2luL3NjcmlwdHMvc3BlY2xpYiAgIHwgNiArKysrKy0KIDQgZmlsZXMgY2hhbmdlZCwgMTgg
-aW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3ln
-d2luL01ha2VmaWxlLmFtIGIvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5hbQppbmRleCA5OTEy
-YjUzOTkuLjY0YjI1MmEyMiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5h
-bQorKysgYi93aW5zdXAvY3lnd2luL01ha2VmaWxlLmFtCkBAIC01NzIsNiArNTcyLDEwIEBA
-IHRvb2xsaWJfREFUQSA9IFwKIGxpYmdtb25fYV9TT1VSQ0VTID0gJChHTU9OX0ZJTEVTKQog
-bGliZ21vbl9hX0xJQkFERCA9CiAKKyMgRW5hYmxlIGRldGVybWluaXN0aWMgYXJjaGl2ZXMg
-Zm9yIHJlcHJvZHVjaWJsZSBidWlsZHMuCitBUkZMQUdTID0gY3IkJHtTT1VSQ0VfREFURV9F
-UE9DSDorRH0KK292ZXJyaWRlIFJBTkxJQiA6PSAkKFJBTkxJQikkJHtTT1VSQ0VfREFURV9F
-UE9DSDorIC1EfQorCiAjIGN5Z3NlcnZlciBsaWJyYXJ5CiBjeWdzZXJ2ZXJfYmxkZGlyID0g
-JHt0YXJnZXRfYnVpbGRkaXJ9L3dpbnN1cC9jeWdzZXJ2ZXIKIExJQlNFUlZFUiA9ICQoY3ln
-c2VydmVyX2JsZGRpcikvbGliY3lnc2VydmVyLmEKQEAgLTU4OSwxMiArNTkzLDE0IEBAICQo
-TERTQ1JJUFQpOiAkKExEU0NSSVBUKS5pbgogCSQoQU1fVl9HRU4pJChDQykgLUUgLSAtUCA8
-ICReIC1vICRACiAKICMgY3lnd2luIGRsbAorIyBTZXQgUEUgYW5kIGV4cG9ydCB0YWJsZSBo
-ZWFkZXIgdGltZXN0YW1wcyB0byB6ZXJvIGZvciByZXByb2R1Y2libGUgYnVpbGRzLgogJChO
-RVdfRExMX05BTUUpOiAkKExEU0NSSVBUKSBsaWJkbGwuYSAkKFZFUlNJT05fT0ZJTEVTKSAk
-KExJQlNFUlZFUilcCiAJCSAgJChuZXdsaWJfYnVpbGQpL2xpYm0uYSAkKG5ld2xpYl9idWls
-ZCkvbGliYy5hCiAJJChBTV9WX0NYWExEKSQoQ1hYKSAkKENYWEZMQUdTKSBcCiAJLW1uby11
-c2UtbGlic3RkYy13cmFwcGVycyBcCiAJLVdsLC0tZ2Mtc2VjdGlvbnMgLW5vc3RkbGliIC1X
-bCwtVCQoTERTQ1JJUFQpIFwKIAktV2wsLS1keW5hbWljYmFzZSAtc3RhdGljIFwKKwkkJHtT
-T1VSQ0VfREFURV9FUE9DSDorLVdsLC0tbm8taW5zZXJ0LXRpbWVzdGFtcH0gXAogCS1XbCwt
-LWhlYXA9MCAtV2wsLS1vdXQtaW1wbGliLGN5Z2RsbC5hIC1zaGFyZWQgLW8gJEAgXAogCS1l
-IEBETExfRU5UUllAICQoREVGX0ZJTEUpIFwKIAktV2wsLXdob2xlLWFyY2hpdmUgbGliZGxs
-LmEgLVdsLC1uby13aG9sZS1hcmNoaXZlIFwKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4v
-c2NyaXB0cy9ta2ltcG9ydCBiL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9ta2ltcG9ydAppbmRl
-eCA3Njg0YThmMGUuLjk1MTdjNGU5ZSAxMDA3NTUKLS0tIGEvd2luc3VwL2N5Z3dpbi9zY3Jp
-cHRzL21raW1wb3J0CisrKyBiL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9ta2ltcG9ydApAQCAt
-OTIsOCArOTIsMTIgQEAgZm9yIG15ICRmIChrZXlzICV0ZXh0KSB7CiAgICAgfQogfQogCisj
-IEVuYWJsZSBkZXRlcm1pbmlzdGljIGFyY2hpdmVzIGZvciByZXByb2R1Y2libGUgYnVpbGRz
-LgorbXkgJG9wdHMgPSAnY3JzJzsKKyRvcHRzIC49ICdEJyBpZiAoJEVOVnsnU09VUkNFX0RB
-VEVfRVBPQ0gnfSAhPSAnJyk7CisKIHVubGluayAkbGliZGxsOwotc3lzdGVtICRhciwgJ2Ny
-dXMnLCAkbGliZGxsLCBnbG9iKCcqLm8nKSwgQEFSR1Y7CitzeXN0ZW0gJGFyLCAkb3B0cywg
-JGxpYmRsbCwgZ2xvYignKi5vJyksIEBBUkdWOwogdW5saW5rIGdsb2IoJyoubycpOwogZXhp
-dCAxIGlmICQ/OwogCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3NjcmlwdHMvbWt2ZXJz
-LnNoIGIvd2luc3VwL2N5Z3dpbi9zY3JpcHRzL21rdmVycy5zaAppbmRleCA5NmFmOTM2ZWMu
-LjM4ZjQzOWNkMCAxMDA3NTUKLS0tIGEvd2luc3VwL2N5Z3dpbi9zY3JpcHRzL21rdmVycy5z
-aAorKysgYi93aW5zdXAvY3lnd2luL3NjcmlwdHMvbWt2ZXJzLnNoCkBAIC01Niw5ICs1Niw5
-IEBAIHBhcnNlX3ByZXByb2NfZmxhZ3MgJENDCiAKIAogIwotIyBMb2FkIHRoZSBjdXJyZW50
-IGRhdGUgc28gd2UgY2FuIHdvcmsgb24gaW5kaXZpZHVhbCBmaWVsZHMKKyMgTG9hZCB0aGUg
-Y3VycmVudCBkYXRlIChvciBTT1VSQ0VfREFURV9FUE9DSCkgc28gd2UgY2FuIHdvcmsgb24g
-aW5kaXZpZHVhbCBmaWVsZHMKICMKLXNldCAtJC0gJChkYXRlIC11ICsiJW0gJWQgJVkgJUg6
-JU0iKQorc2V0IC0kLSAkKGRhdGUgJHtTT1VSQ0VfREFURV9FUE9DSDorLWQgQH0ke1NPVVJD
-RV9EQVRFX0VQT0NIfSAtdSArIiVtICVkICVZICVIOiVNIikKIG09JDEgZD0kMiB5PSQzIGho
-bW09JDQKICMKICMgU2V0IGRhdGUgaW50byBZWVlZLU1NLUREIEhIOk1NOlNTIGZvcm1hdApk
-aWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9zY3JpcHRzL3NwZWNsaWIgYi93aW5zdXAvY3ln
-d2luL3NjcmlwdHMvc3BlY2xpYgppbmRleCBlNmQ0ZDhlOTQuLjQxYTNhOGUxMyAxMDA3NTUK
-LS0tIGEvd2luc3VwL2N5Z3dpbi9zY3JpcHRzL3NwZWNsaWIKKysrIGIvd2luc3VwL2N5Z3dp
-bi9zY3JpcHRzL3NwZWNsaWIKQEAgLTc0LDcgKzc0LDExIEBAIEVPRgogY2xvc2UgJGFzX2Zk
-IG9yIGV4aXQgMTsKIHN5c3RlbSAkb2JqY29weSwgJy1qJywgJy5pZGF0YSQ3JywgJGluYW1l
-X287CiAKLSRyZXMgPSBzeXN0ZW0gJGFyLCAnY3J1cycsICRsaWIsIHNvcnQga2V5cyAlZXh0
-cmFjdDsKKyMgRW5hYmxlIGRldGVybWluaXN0aWMgYXJjaGl2ZXMgZm9yIHJlcHJvZHVjaWJs
-ZSBidWlsZHMuCitteSAkb3B0cyA9ICdjcnMnOworJG9wdHMgLj0gJ0QnIGlmICgkRU5WeydT
-T1VSQ0VfREFURV9FUE9DSCd9ICE9ICcnKTsKKworJHJlcyA9IHN5c3RlbSAkYXIsICRvcHRz
-LCAkbGliLCBzb3J0IGtleXMgJWV4dHJhY3Q7CiB1bmxpbmsga2V5cyAlZXh0cmFjdDsKIGRp
-ZSAiJDA6IGFyIGNyZWF0aW9uIG9mICRsaWIgZXhpdGVkIHdpdGggbm9uLXplcm8gc3RhdHVz
-XG4iIGlmICRyZXM7CiBleGl0IDA7Ci0tIAoyLjM5LjAKCg==
---------------41473B1490DDFD2E01184F0B--
