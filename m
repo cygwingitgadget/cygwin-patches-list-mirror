@@ -1,284 +1,161 @@
-Return-Path: <SRS0=PWM1=EW=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta1015.nifty.com (mta-snd01012.nifty.com [106.153.227.44])
-	by sourceware.org (Postfix) with ESMTPS id 5701B3858C78
-	for <cygwin-patches@cygwin.com>; Wed,  6 Sep 2023 13:11:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5701B3858C78
+Return-Path: <SRS0=xe7P=EX=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta0009.nifty.com (mta-snd00014.nifty.com [106.153.226.46])
+	by sourceware.org (Postfix) with ESMTPS id 2D10A3858022
+	for <cygwin-patches@cygwin.com>; Thu,  7 Sep 2023 08:36:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2D10A3858022
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-Received: from localhost.localdomain by dmta1015.nifty.com with ESMTP
-          id <20230906131148093.MAQW.25674.localhost.localdomain@nifty.com>;
-          Wed, 6 Sep 2023 22:11:48 +0900
+Received: from localhost.localdomain by dmta0009.nifty.com with ESMTP
+          id <20230907083647995.CONG.104526.localhost.localdomain@nifty.com>;
+          Thu, 7 Sep 2023 17:36:47 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: dsp: Implement select()/poll().
-Date: Wed,  6 Sep 2023 22:11:33 +0900
-Message-Id: <20230906131133.671-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: dsp: Improve response time of select()/poll().
+Date: Thu,  7 Sep 2023 17:36:34 +0900
+Message-Id: <20230907083634.8110-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, sound device /dev/dsp did not support select()/poll().
-These have been implemented with this patch.
+With this patch, the response time of select()/poll() has been
+improved by utilizing semaphore (select_sem) just like pipe and
+fifo. In addition, notification of exceptional conditions has
+been added.
 
+Fixes: 2c06014f12b0 ("Cygwin: dsp: Implement select()/poll().")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/fhandler/dsp.cc           |  38 +++++++
- winsup/cygwin/local_includes/fhandler.h |  11 ++
- winsup/cygwin/local_includes/select.h   |   9 +-
- winsup/cygwin/select.cc                 | 130 ++++++++++++++++++++++++
- 4 files changed, 187 insertions(+), 1 deletion(-)
+ winsup/cygwin/fhandler/dsp.cc           | 11 ++++++++++-
+ winsup/cygwin/local_includes/fhandler.h |  5 +++--
+ winsup/cygwin/select.cc                 | 16 ++++++++++++++--
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
-index 861443352..f1634f7a8 100644
+index f1634f7a8..5f78821d4 100644
 --- a/winsup/cygwin/fhandler/dsp.cc
 +++ b/winsup/cygwin/fhandler/dsp.cc
-@@ -1483,3 +1483,41 @@ fhandler_dev_dsp::_fixup_after_exec ()
-       audio_out_ = NULL;
-     }
+@@ -536,6 +536,8 @@ inline void
+ fhandler_dev_dsp::Audio_out::callback_sampledone (WAVEHDR *pHdr)
+ {
+   Qisr2app_->send (pHdr);
++  ReleaseSemaphore (fh->get_select_sem (),
++		    get_obj_handle_count (fh->get_select_sem ()) - 1, NULL);
  }
+ 
+ bool
+@@ -994,6 +996,8 @@ inline void
+ fhandler_dev_dsp::Audio_in::callback_blockfull (WAVEHDR *pHdr)
+ {
+   Qisr2app_->send (pHdr);
++  ReleaseSemaphore (fh->get_select_sem (),
++		    get_obj_handle_count (fh->get_select_sem ()) - 1, NULL);
+ }
+ 
+ static void CALLBACK
+@@ -1058,7 +1062,7 @@ fhandler_dev_dsp::fixup_after_exec ()
+ 
+ 
+ int
+-fhandler_dev_dsp::open (int flags, mode_t)
++fhandler_dev_dsp::open (int flags, mode_t mode)
+ {
+   int ret = -1, err = 0;
+   UINT num_in = 0, num_out = 0;
+@@ -1093,6 +1097,8 @@ fhandler_dev_dsp::open (int flags, mode_t)
+   else
+     ret = open_null (flags);
+ 
++  select_sem = CreateSemaphore (sec_none_cloexec (mode), 0, INT32_MAX, NULL);
 +
-+bool
-+fhandler_dev_dsp::_write_ready ()
-+{
-+  audio_buf_info info;
-+  if (audio_out_)
-+    {
-+      audio_out_->buf_info (&info, audiofreq_, audiobits_, audiochannels_);
-+      return info.bytes > 0;
-+    }
-+  else
-+    return true;
-+}
-+
-+bool
-+fhandler_dev_dsp::_read_ready ()
-+{
-+  audio_buf_info info;
-+  if (audio_in_)
-+    {
-+      audio_in_->buf_info (&info, audiofreq_, audiobits_, audiochannels_);
-+      return info.bytes > 0;
-+    }
-+  else
-+    return true;
-+}
-+
-+bool
-+fhandler_dev_dsp::write_ready ()
-+{
-+  return base ()->_write_ready ();
-+}
-+
-+bool
-+fhandler_dev_dsp::read_ready ()
-+{
-+  return base ()->_read_ready ();
-+}
+   debug_printf ("ACCMODE=%y audio_in=%d audio_out=%d, err=%d, ret=%d",
+ 		flags & O_ACCMODE, num_in, num_out, err, ret);
+   if (ret >= 0)
+@@ -1226,6 +1232,9 @@ fhandler_dev_dsp::close ()
+   being_closed = true;
+   close_audio_in ();
+   close_audio_out ();
++  ReleaseSemaphore (select_sem, get_obj_handle_count (select_sem) - 1, NULL);
++  CloseHandle (select_sem);
++  select_sem = NULL;
+   return fhandler_base::close ();
+ }
+ 
 diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index f2658a242..d7dc02e89 100644
+index d7dc02e89..212c22344 100644
 --- a/winsup/cygwin/local_includes/fhandler.h
 +++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2847,6 +2847,9 @@ class fhandler_dev_dsp: public fhandler_base
-   void close_audio_in ();
-   void close_audio_out (bool = false);
+@@ -2875,8 +2875,9 @@ class fhandler_dev_dsp: public fhandler_base
+   select_record *select_write (select_stuff *);
+   select_record *select_except (select_stuff *);
  
-+  bool _read_ready();
-+  bool _write_ready();
-+
-  public:
-   bool use_archetype () const {return true;}
- 
-@@ -2866,6 +2869,14 @@ class fhandler_dev_dsp: public fhandler_base
-     fh->copy_from (this);
-     return fh;
-   }
-+
-+  /* select.cc */
-+  select_record *select_read (select_stuff *);
-+  select_record *select_write (select_stuff *);
-+  select_record *select_except (select_stuff *);
-+
-+  bool read_ready();
-+  bool write_ready();
+-  bool read_ready();
+-  bool write_ready();
++  bool read_ready ();
++  bool write_ready ();
++  bool is_closed () { return being_closed; };
  };
  
  class fhandler_virtual : public fhandler_base
-diff --git a/winsup/cygwin/local_includes/select.h b/winsup/cygwin/local_includes/select.h
-index b794690b6..4e202128f 100644
---- a/winsup/cygwin/local_includes/select.h
-+++ b/winsup/cygwin/local_includes/select.h
-@@ -87,6 +87,11 @@ struct select_socket_info: public select_info
-   select_socket_info (): select_info (), num_w4 (0), ser_num (0), w4 (NULL) {}
- };
- 
-+struct select_dsp_info: public select_info
-+{
-+  select_dsp_info (): select_info () {}
-+};
-+
- class select_stuff
- {
- public:
-@@ -112,6 +117,7 @@ public:
-   select_pipe_info *device_specific_ptys;
-   select_fifo_info *device_specific_fifo;
-   select_socket_info *device_specific_socket;
-+  select_dsp_info *device_specific_dsp;
- 
-   bool test_and_set (int, fd_set *, fd_set *, fd_set *);
-   int poll (fd_set *, fd_set *, fd_set *);
-@@ -125,7 +131,8 @@ public:
- 		   device_specific_pipe (NULL),
- 		   device_specific_ptys (NULL),
- 		   device_specific_fifo (NULL),
--		   device_specific_socket (NULL)
-+		   device_specific_socket (NULL),
-+		   device_specific_dsp (NULL)
- 		   {}
- };
- 
 diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-index bad4c37f3..3ad12c262 100644
+index 3ad12c262..725aab90c 100644
 --- a/winsup/cygwin/select.cc
 +++ b/winsup/cygwin/select.cc
-@@ -2255,3 +2255,133 @@ fhandler_timerfd::select_except (select_stuff *stuff)
-   s->except_ready = false;
-   return s;
+@@ -2268,6 +2268,9 @@ peek_dsp (select_record *s, bool from_select)
+   if (s->write_selected)
+       if (s->write_ready || fh->write_ready ())
+ 	gotone += s->write_ready = true;
++  if (s->except_selected)
++      if (s->except_ready || fh->is_closed ())
++	gotone += s->except_ready = true;
+   return gotone;
  }
-+
-+static int
-+peek_dsp (select_record *s, bool from_select)
-+{
-+  int gotone = 0;
-+  fhandler_dev_dsp *fh = (fhandler_dev_dsp *)(fhandler_base *) s->fh;
-+
-+  if (s->read_selected)
-+      if (s->read_ready || fh->read_ready ())
-+	gotone += s->read_ready = true;
-+  if (s->write_selected)
-+      if (s->write_ready || fh->write_ready ())
-+	gotone += s->write_ready = true;
-+  return gotone;
-+}
-+
-+static int start_thread_dsp (select_record *me, select_stuff *stuff);
-+
-+static DWORD
-+thread_dsp (void *arg)
-+{
-+  select_dsp_info *di = (select_dsp_info *) arg;
-+  DWORD sleep_time = 0;
-+  bool looping = true;
-+
-+  while (looping)
-+    {
-+      for (select_record *s = di->start; (s = s->next); )
-+	if (s->startup == start_thread_dsp)
-+	  {
-+	    if (peek_dsp (s, true))
-+	      looping = false;
-+	    if (di->stop_thread)
-+	      {
-+		select_printf ("stopping");
-+		looping = false;
-+		break;
-+	      }
-+	  }
-+      if (!looping)
-+	break;
-+      cygwait (sleep_time >> 3);
-+      if (sleep_time < 80)
-+	++sleep_time;
-+      if (di->stop_thread)
-+	break;
-+    }
-+  return 0;
-+}
-+
-+static int
-+start_thread_dsp (select_record *me, select_stuff *stuff)
-+{
-+  select_dsp_info *di = stuff->device_specific_dsp;
-+  if (di->start)
-+    me->h = *((select_dsp_info *) stuff->device_specific_dsp)->thread;
-+  else
-+    {
-+      di->start = &stuff->start;
-+      di->stop_thread = false;
-+      di->thread = new cygthread (thread_dsp, di, "dspsel");
-+      me->h = *di->thread;
-+      if (!me->h)
-+	return 0;
-+    }
-+  return 1;
-+}
-+
-+static void
-+dsp_cleanup (select_record *aaa, select_stuff *stuff)
-+{
-+  select_dsp_info *di = (select_dsp_info *) stuff->device_specific_dsp;
-+  if (!di)
-+    return;
-+  if (di->thread)
-+    {
-+      di->stop_thread = true;
-+      di->thread->detach ();
-+    }
-+  delete di;
-+  stuff->device_specific_dsp = NULL;
-+}
-+
-+select_record *
-+fhandler_dev_dsp::select_read (select_stuff *stuff)
-+{
-+  if (!stuff->device_specific_dsp
-+      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
-+    return NULL;
-+  select_record *s = stuff->start.next;
-+  s->startup = start_thread_dsp;
-+  s->peek = peek_dsp;
-+  s->verify = verify_ok;
-+  s->cleanup = dsp_cleanup;
-+  s->read_selected = true;
-+  s->read_ready = false;
-+  return s;
-+}
-+
-+select_record *
-+fhandler_dev_dsp::select_write (select_stuff *stuff)
-+{
-+  if (!stuff->device_specific_dsp
-+      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
-+    return NULL;
-+  select_record *s = stuff->start.next;
-+  s->startup = start_thread_dsp;
-+  s->peek = peek_dsp;
-+  s->verify = verify_ok;
-+  s->cleanup = dsp_cleanup;
-+  s->write_selected = true;
-+  s->write_ready = false;
-+  return s;
-+}
-+
-+select_record *
-+fhandler_dev_dsp::select_except (select_stuff *stuff)
-+{
-+  if (!stuff->device_specific_dsp
-+      && (stuff->device_specific_dsp = new select_dsp_info) == NULL)
-+    return NULL;
-+  select_record *s = stuff->start.next;
-+  s->startup = start_thread_dsp;
-+  s->peek = peek_dsp;
-+  s->verify = verify_ok;
-+  s->cleanup = dsp_cleanup;
-+  s->except_selected = true;
-+  s->except_ready = false;
-+  return s;
-+}
+ 
+@@ -2296,7 +2299,7 @@ thread_dsp (void *arg)
+ 	  }
+       if (!looping)
+ 	break;
+-      cygwait (sleep_time >> 3);
++      cygwait (di->bye, sleep_time >> 3);
+       if (sleep_time < 80)
+ 	++sleep_time;
+       if (di->stop_thread)
+@@ -2313,6 +2316,13 @@ start_thread_dsp (select_record *me, select_stuff *stuff)
+     me->h = *((select_dsp_info *) stuff->device_specific_dsp)->thread;
+   else
+     {
++      di->bye = me->fh->get_select_sem ();
++      if (di->bye)
++	DuplicateHandle (GetCurrentProcess (), di->bye,
++			 GetCurrentProcess (), &di->bye,
++			 0, 0, DUPLICATE_SAME_ACCESS);
++      else
++	di->bye = CreateSemaphore (&sec_none_nih, 0, INT32_MAX, NULL);
+       di->start = &stuff->start;
+       di->stop_thread = false;
+       di->thread = new cygthread (thread_dsp, di, "dspsel");
+@@ -2324,7 +2334,7 @@ start_thread_dsp (select_record *me, select_stuff *stuff)
+ }
+ 
+ static void
+-dsp_cleanup (select_record *aaa, select_stuff *stuff)
++dsp_cleanup (select_record *, select_stuff *stuff)
+ {
+   select_dsp_info *di = (select_dsp_info *) stuff->device_specific_dsp;
+   if (!di)
+@@ -2332,7 +2342,9 @@ dsp_cleanup (select_record *aaa, select_stuff *stuff)
+   if (di->thread)
+     {
+       di->stop_thread = true;
++      ReleaseSemaphore (di->bye, get_obj_handle_count (di->bye), NULL);
+       di->thread->detach ();
++      CloseHandle (di->bye);
+     }
+   delete di;
+   stuff->device_specific_dsp = NULL;
 -- 
 2.39.0
 
