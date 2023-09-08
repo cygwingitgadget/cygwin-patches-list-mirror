@@ -1,53 +1,40 @@
-Return-Path: <SRS0=6K+s=EY=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 2E0403858D35
-	for <cygwin-patches@cygwin.com>; Fri,  8 Sep 2023 05:36:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2E0403858D35
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=maxrnd.com
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 3885atI0017148;
-	Thu, 7 Sep 2023 22:36:55 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-247-226.fiber.dynamic.sonic.net(50.1.247.226), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdGEsAa4; Thu Sep  7 22:36:50 2023
-From: Mark Geisert <mark@maxrnd.com>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 6A31B3858D35; Fri,  8 Sep 2023 14:08:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6A31B3858D35
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1694182090;
+	bh=QX/i1k/evPj04kdDvLYQPZ6lBrVWdT5c4WiTTMw4CLY=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=aQvIXmFvn0gGEOVwRiwWBJRyscECdYPAUsLqXMUz4RIQdn0Lmx8865sV5wrX3nKYi
+	 UARgyNNLmPniWvSI23ULNlD9vpF9hRkcRZluh2P5aLms3025Vk/COqttwvrl5c/9Hs
+	 DaYWPvr1dJjc1vMo4P7VaxK62AWLLBOVKADg/DEM=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 9C0BCA8056F; Fri,  8 Sep 2023 16:08:08 +0200 (CEST)
+Date: Fri, 8 Sep 2023 16:08:08 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>, Marco Mason <marco.mason@gmail.com>
-Subject: [PATCH] Cygwin: Fix __cpuset_zero_s prototype
-Date: Thu,  7 Sep 2023 22:36:39 -0700
-Message-Id: <20230908053639.5689-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH] Cygwin: Fix __cpuset_zero_s prototype
+Message-ID: <ZPsqyAfQi1L7YSEn@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20230908053639.5689-1-mark@maxrnd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230908053639.5689-1-mark@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Add a missing "void" to the prototype for __cpuset_zero_s().
+On Sep  7 22:36, Mark Geisert wrote:
+> Add a missing "void" to the prototype for __cpuset_zero_s().
+> 
+> Reported-by: Marco Mason <marco.mason@gmail.com>
+> Addresses: https://cygwin.com/pipermail/cygwin/2023-September/254423.html
+> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+> Fixes: c6cfc99648d6 (Cygwin: sys/cpuset.h: add cpuset-specific external functions)
 
-Reported-by: Marco Mason <marco.mason@gmail.com>
-Addresses: https://cygwin.com/pipermail/cygwin/2023-September/254423.html
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
-Fixes: c6cfc99648d6 (Cygwin: sys/cpuset.h: add cpuset-specific external functions)
+Thanks, can you also add an entry to the 3.4.10 release file
+(which doesn't exist yet), please?
 
----
- winsup/cygwin/include/sys/cpuset.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
-index a5a8fa81e..3d0874880 100644
---- a/winsup/cygwin/include/sys/cpuset.h
-+++ b/winsup/cygwin/include/sys/cpuset.h
-@@ -48,7 +48,7 @@ void __cpuset_free (cpu_set_t *);
- 
- /* These _S macros operate on dynamically-sized cpu sets of size 'siz' bytes */
- #define CPU_ZERO_S(siz, set) __cpuset_zero_s (siz, set)
--static __inline
-+static __inline void
- __cpuset_zero_s (__size_t siz, cpu_set_t *set)
- {
- #if __GNUC_PREREQ (2, 91)
--- 
-2.39.0
-
+Corinna
