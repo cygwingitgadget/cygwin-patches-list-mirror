@@ -1,62 +1,87 @@
-Return-Path: <SRS0=1PbQ=E2=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
-	by sourceware.org (Postfix) with ESMTPS id 29F313858D33
-	for <cygwin-patches@cygwin.com>; Sun, 10 Sep 2023 17:32:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 29F313858D33
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=t-online.de
-Received: from fwd71.aul.t-online.de (fwd71.aul.t-online.de [10.223.144.97])
-	by mailout05.t-online.de (Postfix) with SMTP id E4CE3EAC6
-	for <cygwin-patches@cygwin.com>; Sun, 10 Sep 2023 19:32:24 +0200 (CEST)
-Received: from [192.168.2.101] ([91.57.246.1]) by fwd71.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1qfOIK-2ZJdnk0; Sun, 10 Sep 2023 19:32:24 +0200
-Subject: Re: [PATCH] Add initial support for SOURCE_DATE_EPOCH
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <a1890367-b100-2321-aca4-17eec98ebba7@t-online.de>
- <ZPsrFKgcmt2qrH34@calimero.vinschen.de>
- <a691f19e-ec1b-3b5e-7495-77156799dbd0@dronecode.org.uk>
-From: Christian Franke <Christian.Franke@t-online.de>
-Message-ID: <c49587a3-61fe-8f91-9abb-7cdcecbb4df1@t-online.de>
-Date: Sun, 10 Sep 2023 19:32:22 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.16
+Return-Path: <SRS0=OUqM=E7=saaswiz.pro=andrey@sourceware.org>
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+	by sourceware.org (Postfix) with ESMTPS id B223A3858C54
+	for <cygwin-patches@cygwin.com>; Fri, 15 Sep 2023 15:31:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B223A3858C54
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=saaswiz.pro
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=saaswiz.pro
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-770ef4d36f2so144446585a.0
+        for <cygwin-patches@cygwin.com>; Fri, 15 Sep 2023 08:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=saaswiz-pro.20230601.gappssmtp.com; s=20230601; t=1694791892; x=1695396692; darn=cygwin.com;
+        h=mime-version:date:subject:to:from:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yZF+qYyTfrMwFg920iBrOsXrhoPKqKCn52okY1Xb04g=;
+        b=Qo9Y8s4LHSWKFHf+v0uDJlhG6cQNFD6klFqqG9GfUSa9JMOgzu12vmpQTNmGqa80Hz
+         cOz/t9PgQBfuUyoIzl4ME3jgyvdw09XG1X0w+g7KGFpJ+GwpnpnC9F4Hd7I5llSM/md5
+         GUlZbXbA5OVFeWWGjM60XH4jwkc6SJJoda1DtZqocU96B0BmmSTtwV7d7pFz/CyVWnOe
+         UkrlZrJBVKsp2qwKYBWRJu++1mPT4xWAW5hUoi6B+gaFcmld3InMep6ZaU4x+PHq6ZfK
+         ap+bswT4xpy/SAWoXcY5Q2nMZn821FntUMsHHeypyFkEpLUkQTlVRuERASDJV57Qb/pf
+         x16g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694791892; x=1695396692;
+        h=mime-version:date:subject:to:from:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yZF+qYyTfrMwFg920iBrOsXrhoPKqKCn52okY1Xb04g=;
+        b=oERzkzU9/sFdHmFz+9wPZgXSbqa71NWP9cSlnsgUn1AeD7oFGSYtY0NPsae0ptqX1A
+         GE1gvURd703YFsUPnSP/V60H+KH3PBE9nLGPNM7wHZLVICnBbkSpBc4ryKe4IUvhT2cW
+         FkgxsInm+427tu0fBmoIfjOC5ejFzqIDxHCH6lMLAyizOLeVStobIytVZ4J98zElOeTJ
+         4wtLwGSzojiEqEkhIjaZYa+9D6iIZAPMoXZVP2ecvU1hXeoUKqqSGm/KroZ7mFWCS0DD
+         fMIhHXf6/+C7B2t+NY8/yB+FVDGBcKME2DGs/3tjoQV70SjVSH7rEPjbMbUW/2p0Q9pC
+         eTvA==
+X-Gm-Message-State: AOJu0YzfdPSn7ZMMOyGQNDBjx3GRCImaLLNAJr7XamrI+4wbIFKTnMwq
+	RkuwhBPUddMRHbaPgug9qrVPTN6lByjRJjyevCw=
+X-Google-Smtp-Source: AGHT+IHZyvVBZipaS06eB5My6zojeSUY9vJBK4pWHw9NHtD0BHWjwQcRbJsjRwoWYbWuprn8nt9wdA==
+X-Received: by 2002:ae9:e515:0:b0:770:f2f6:e184 with SMTP id w21-20020ae9e515000000b00770f2f6e184mr1764212qkf.39.1694791891908;
+        Fri, 15 Sep 2023 08:31:31 -0700 (PDT)
+Received: from Mac-Pro.local (ec2-54-86-182-46.compute-1.amazonaws.com. [54.86.182.46])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac85545000000b004179e79069asm200547qtr.21.2023.09.15.08.31.31
+        for <cygwin-patches@cygwin.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Sep 2023 08:31:31 -0700 (PDT)
+Content-Type: multipart/alternative;
+ boundary="--_NmP-2c2944f9a4243453-Part_1"
+Message-ID: <fe63f211-a8bd-482e-9692-fb1da2f37375@saaswiz.pro>
+From: Andrei Kholkin <andrey@saaswiz.pro>
+To: cygwin-patches@cygwin.com
+Subject: MVP development and cloud consulting
+Date: Fri, 15 Sep 2023 15:31:31 +0000
 MIME-Version: 1.0
-In-Reply-To: <a691f19e-ec1b-3b5e-7495-77156799dbd0@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TOI-EXPURGATEID: 150726::1694367144-D2DC22DD-1451A4D2/0/0 CLEAN NORMAL
-X-TOI-MSGID: 253bc685-f88d-48cd-bb6e-6bf6f38d77fa
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,KAM_LAZY_DOMAIN_SECURITY,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,DKIM_VALID,HTML_IMAGE_ONLY_12,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,T_PDS_PRO_TLD,T_REMOTE_IMAGE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Jon Turney wrote:
-> On 08/09/2023 15:09, Corinna Vinschen wrote:
->> Jon,
->>
->> you did all the latest work in terms of the build machinery.
->> Would you mind to review this patch, please?
->
-> Sure.
->
-> Patch looks all right to me, so I applied it.
+----_NmP-2c2944f9a4243453-Part_1
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+Hello there,
 
-Please note that for reproducible *.exe files and release tarballs ...
+I'm Andrey from BuildByte.
 
+We have a track record in effective MVP development and robust cloud strate=
+gies.
 
->
->> On Sep  5 19:01, Christian Franke wrote:
->>> This patch enables reproducible builds of cygwin package in 
->>> conjunction with
->>> this cygport patch:
->>> https://sourceware.org/pipermail/cygwin-apps/2023-August/043108.html
+I think we can give important insights for Cygwin.
 
-... the above cygport patch is also required.
+Are you available for a brief conversation soon?
 
--- 
 Regards,
-Christian
 
+Andrey Kholkin
+Technical Consultant
+BuildByte.co //BuildByte.co
+t: +1 (650) 529-7225
+
+------------
+Our Main Office:
+Avenida Mendes Silva 15
+3030-193
+Coimbra, Portugal
+
+
+picture [https://trc.saaswiz.pro/tmid_a/u5CCPOyZvgCJ0Jzw-iTnu] logo [https:=
+//trc.saaswiz.pro/tmid_a/u5CCPOyZvgCJ0Jzw-iTnu]=
+
+----_NmP-2c2944f9a4243453-Part_1--
