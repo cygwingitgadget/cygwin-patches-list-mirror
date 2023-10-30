@@ -1,64 +1,218 @@
-Return-Path: <SRS0=FhyQ=GG=proton.me=tryandbuy@sourceware.org>
-Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
-	by sourceware.org (Postfix) with ESMTPS id 9CF733858CDA
-	for <cygwin-patches@cygwin.com>; Tue, 24 Oct 2023 17:43:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9CF733858CDA
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=proton.me
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9CF733858CDA
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=185.70.40.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1698169410; cv=none;
-	b=SMSBg8WnYOmXQR08ppH0sRPUPVxdjo7ioxs6z7YRuYIKRMcZFtC2Y+VwASkAvnZWV6GC8MXELYK1yOLbm44RIZGwW5mi8Wt64P5jKAmcBJx4d73HEb6step/PUaJeo1sG60eBNBakfhvVLIutd0GZsRTuM7nVaKNMNPH373fGhI=
+Return-Path: <SRS0=SG5m=GM=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta0015.nifty.com (mta-snd00014.nifty.com [106.153.226.46])
+	by sourceware.org (Postfix) with ESMTPS id 8570B3858D20
+	for <cygwin-patches@cygwin.com>; Mon, 30 Oct 2023 10:59:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8570B3858D20
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8570B3858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.46
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1698663601; cv=none;
+	b=WH0jwwg3BQfP6HbsyDGg8Vg/vBl6FsFJ2oeb03PLhwxirx5cQ9O/FpA3QRuddArWDBBktnF3rgFyLX/gVcH+8mVcLWkYkBKAtzo+o3KqHyf2sDnNJuSvaMFkvMysGg/f1aJWTnZbvjLsxpZZ05vWp3xLxWSyJuOooJx2uK0ALBI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1698169410; c=relaxed/simple;
-	bh=tKgLGElw02M4IeUfTT6Vsp+Li0SixOPIJEE8Ti1veGI=;
-	h=DKIM-Signature:Date:To:From:Subject:Message-ID:MIME-Version; b=ef3KWrYsDR7+0wCIcGj3z6zn0lIsn4Qk7ztsyuur8smLtsYv55y4A3Nfnje3XaxdyZ/VAgwYbjqyjUp5fR/2TaIK9ILxC8rUd0bUj2GFWyYMXuCOKr4JkwsqOxLAGUuwf5cy0sQr3IMHTQRYctilIHyfv2SYlvE7U2XjiTP5KIU=
+	t=1698663601; c=relaxed/simple;
+	bh=HPj8vpzdTaBoxOjQ/AJNQZcKA1dCJVwGOJPaQ1kGbYE=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=GgA5/eo/ItvZMhtFnh1cWMq+E7C46Rp0YKuYwy7p/2/BN6uCgwcOiyM+9cu+T/pbDBlurqqCrUWW2UtT7H2UJ4cl+wLEl/broY1mINsO1q1++APGCfxzQ7HbqZ02mKMhZ+xFOOP1MvXVH0EH57bANbS+e1HxA7d6Zy/aWfggd0w=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1698169406; x=1698428606;
-	bh=j5/sL/gWnypMdrchEAF3T1ryOydrkWTUwKerOn2eCAg=;
-	h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=JFY0Hat3vvruZsejFfryEdOLeWsxMDnEv+eBtEoxOBUE/RxOe5mHpu9EXXJDd61io
-	 5sQOvBj6H2Uk2NDfZMORJUQeBFDJL6YjK7e4Z+AF2ki70qawicl3g53ctpNC/R6cAj
-	 uObhJvkd6a3ixU6HyEwGHNOljEjXlAmzg/CE5TwudIv202DNDYtaJAevOLUV3PS0fS
-	 VmX/Saf+GRsV6E3LexGxshjSkhczlFvZsUkcUzf1mLA9nsR711/mOWnNzzOpszhEKp
-	 AdcF/g/iePZO7IVBlwzHot7PGcM/QawBSzv0PwdNNmPcMvofVgimOFut/3NvL8Ef74
-	 z5o2vTLP5oB5g==
-Date: Tue, 24 Oct 2023 17:43:16 +0000
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-From: tryandbuy <tryandbuy@proton.me>
-Subject: [PATCH] Cygwin: path: remove unnecessary release_write.
-Message-ID: <dvuNgn8HVJSufnkkXFMyJ0UhWT6zC0WOywU_skxiy-75iGnjKeqGkxi1WYjyACgcAsn_sOzmW_gCcoFhSx5IFDM0TsQzT4uEUn718MoSkVc=@proton.me>
-Feedback-ID: 63211331:user:proton
+Received: from localhost.localdomain by dmta0015.nifty.com with ESMTP
+          id <20231030105955068.XHQF.14278.localhost.localdomain@nifty.com>;
+          Mon, 30 Oct 2023 19:59:55 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: dsp: Improve minimum buffser size estimation.
+Date: Mon, 30 Oct 2023 19:59:38 +0900
+Message-Id: <20231030105938.25790-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_INFOUSMEBIZ,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Fix an old bug that only appeared after replacing muto with SRWLOCK.
+The commit 322c7150b25e restricts buffer size with a fixed length,
+however, the minimum buffer size should be varied by the sample rate.
+With this patch, it is estimated using sample rate, sample width
+and number of channels so that the buffer length is not less than
+80 msec which is almost the minimum value of Win MME to work.
 
-The bug leads to a deadlock under certain conditions:
-https://cygwin.com/pipermail/cygwin/2023-October/254604.html
+Fixes: 322c7150b25e ("Cygwin: dsp: Avoid setting buffer that is too small.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/path.cc | 1 -
- 1 file changed, 1 deletion(-)
+ winsup/cygwin/fhandler/dsp.cc | 60 +++++++++++++++++++++--------------
+ 1 file changed, 37 insertions(+), 23 deletions(-)
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 1c3583d76..7165aa8b7 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -4868,7 +4868,6 @@ cwdstuff::set (path_conv *nat_cwd, const char *posix_=
-cwd)
- =09=09=09peb.ProcessParameters->CurrentDirectoryHandle,
- =09=09=09GetCurrentProcess (), &h, 0, TRUE, 0))
- =09    {
--=09      release_write ();
- =09      if (peb.ProcessParameters->CurrentDirectoryHandle)
- =09=09debug_printf ("...and DuplicateHandle failed with %E.");
- =09      dir =3D NULL;
---=20
-2.42.0.windows.2
+diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
+index 97f3eaa27..682618166 100644
+--- a/winsup/cygwin/fhandler/dsp.cc
++++ b/winsup/cygwin/fhandler/dsp.cc
+@@ -65,7 +65,7 @@ class fhandler_dev_dsp::Audio
+   void convert_S16LE_S16BE (unsigned char *buffer, int size_bytes);
+   void fillFormat (WAVEFORMATEX * format,
+ 		   int rate, int bits, int channels);
+-  static unsigned blockSize (int rate, int bits, int channels);
++  static unsigned blockSize (double ms, int rate, int bits, int channels);
+   void (fhandler_dev_dsp::Audio::*convert_)
+     (unsigned char *buffer, int size_bytes);
+ 
+@@ -352,10 +352,10 @@ fhandler_dev_dsp::Audio::fillFormat (WAVEFORMATEX * format,
+ 
+ // calculate a good block size
+ unsigned
+-fhandler_dev_dsp::Audio::blockSize (int rate, int bits, int channels)
++fhandler_dev_dsp::Audio::blockSize (double ms, int rate, int bits, int channels)
+ {
+   unsigned blockSize;
+-  blockSize = ((bits / 8) * channels * rate) / 8; // approx 125ms per block
++  blockSize = ms * ((bits / 8) * channels * rate) / 1000;
+   // round up to multiple of 64
+   blockSize +=  0x3f;
+   blockSize &= ~0x3f;
+@@ -525,7 +525,7 @@ void fhandler_dev_dsp::Audio_out::default_buf_info (audio_buf_info *p,
+                                                 int rate, int bits, int channels)
+ {
+   p->fragstotal = DEFAULT_BLOCKS;
+-  p->fragsize = blockSize (rate, bits, channels);
++  p->fragsize = blockSize (125, rate, bits, channels);
+   p->fragments = p->fragstotal;
+   p->bytes = p->fragsize * p->fragments;
+ }
+@@ -537,7 +537,7 @@ fhandler_dev_dsp::Audio_out::callback_sampledone (WAVEHDR *pHdr)
+ {
+   Qisr2app_->send (pHdr);
+   ReleaseSemaphore (fh->get_select_sem (),
+-		    get_obj_handle_count (fh->get_select_sem ()) - 1, NULL);
++		    get_obj_handle_count (fh->get_select_sem ()), NULL);
+ }
+ 
+ bool
+@@ -555,8 +555,7 @@ fhandler_dev_dsp::Audio_out::waitforspace ()
+ 	  set_errno (EAGAIN);
+ 	  return false;
+ 	}
+-      debug_printf ("1ms");
+-      switch (cygwait (1))
++      switch (cygwait (fh->get_select_sem (), 10))
+ 	{
+ 	case WAIT_SIGNALED:
+ 	  if (!_my_tls.call_signal_handler ())
+@@ -934,8 +933,7 @@ fhandler_dev_dsp::Audio_in::waitfordata ()
+ 	  set_errno (EAGAIN);
+ 	  return false;
+ 	}
+-      debug_printf ("1ms");
+-      switch (cygwait (1))
++      switch (cygwait (fh->get_select_sem (), 10))
+ 	{
+ 	case WAIT_SIGNALED:
+ 	  if (!_my_tls.call_signal_handler ())
+@@ -967,7 +965,7 @@ void fhandler_dev_dsp::Audio_in::default_buf_info (audio_buf_info *p,
+                                                 int rate, int bits, int channels)
+ {
+   p->fragstotal = DEFAULT_BLOCKS;
+-  p->fragsize = blockSize (rate, bits, channels);
++  p->fragsize = blockSize (125, rate, bits, channels);
+   p->fragments = 0;
+   p->bytes = 0;
+ }
+@@ -998,7 +996,7 @@ fhandler_dev_dsp::Audio_in::callback_blockfull (WAVEHDR *pHdr)
+ {
+   Qisr2app_->send (pHdr);
+   ReleaseSemaphore (fh->get_select_sem (),
+-		    get_obj_handle_count (fh->get_select_sem ()) - 1, NULL);
++		    get_obj_handle_count (fh->get_select_sem ()), NULL);
+ }
+ 
+ static void CALLBACK
+@@ -1127,8 +1125,13 @@ fhandler_dev_dsp::_write (const void *ptr, size_t len)
+     /* nothing to do */;
+   else if (IS_WRITE ())
+     {
+-      if (!fragment_has_been_set)
+-	fragsize_ = Audio::blockSize (audiofreq_, audiobits_, audiochannels_);
++      if (fragment_has_been_set)
++	fragsize_ = max (Audio::blockSize (80.0 / fragstotal_, audiofreq_,
++					   audiobits_, audiochannels_),
++			 fragsize_);
++      else
++	fragsize_ = Audio::blockSize (125, audiofreq_, audiobits_,
++				      audiochannels_);
+       debug_printf ("Allocating");
+       if (!(audio_out_ = new Audio_out (this)))
+ 	return -1;
+@@ -1174,7 +1177,8 @@ fhandler_dev_dsp::_read (void *ptr, size_t& len)
+   else if (IS_READ ())
+     {
+       if (!fragment_has_been_set)
+-	fragsize_ = Audio::blockSize (audiofreq_, audiobits_, audiochannels_);
++	fragsize_ = Audio::blockSize (125, audiofreq_, audiobits_,
++				      audiochannels_);
+       debug_printf ("Allocating");
+       if (!(audio_in_ = new Audio_in (this)))
+ 	{
+@@ -1233,7 +1237,7 @@ fhandler_dev_dsp::close ()
+   being_closed = true;
+   close_audio_in ();
+   close_audio_out ();
+-  ReleaseSemaphore (select_sem, get_obj_handle_count (select_sem) - 1, NULL);
++  ReleaseSemaphore (select_sem, get_obj_handle_count (select_sem), NULL);
+   CloseHandle (select_sem);
+   select_sem = NULL;
+   return fhandler_base::close ();
+@@ -1255,9 +1259,13 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	break;
+ 
+       CASE (SNDCTL_DSP_GETBLKSIZE)
+-	if (!fragment_has_been_set)
+-	  fragsize_ = Audio::blockSize (audiofreq_, audiobits_, audiochannels_);
+-	*intbuf = fragsize_;
++	if (fragment_has_been_set)
++	  *intbuf = max (Audio::blockSize (80.0 / fragstotal_, audiofreq_,
++					   audiobits_, audiochannels_),
++			 fragsize_);
++	else
++	  *intbuf = Audio::blockSize (125, audiofreq_, audiobits_,
++					audiochannels_);
+ 	return 0;
+ 
+       CASE (SNDCTL_DSP_SETFMT)
+@@ -1387,8 +1395,11 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	  audio_out_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
+ 	else if (fragment_has_been_set)
+ 	  {
+-	    p->bytes = fragsize_ * fragstotal_;
+-	    p->fragsize = fragsize_;
++	    p->fragsize = max (Audio::blockSize (80.0 / fragstotal_,
++						 audiofreq_, audiobits_,
++						 audiochannels_),
++			       fragsize_);
++	    p->bytes = p->fragsize * fragstotal_;
+ 	    p->fragstotal = fragstotal_;
+ 	    p->fragments = fragstotal_;
+ 	  }
+@@ -1412,7 +1423,10 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	else if (fragment_has_been_set)
+ 	  {
+ 	    p->bytes = 0;
+-	    p->fragsize = fragsize_;
++	    p->fragsize = max (Audio::blockSize (80.0 / fragstotal_,
++						 audiofreq_, audiobits_,
++						 audiochannels_),
++			       fragsize_);
+ 	    p->fragstotal = fragstotal_;
+ 	    p->fragments = 0;
+ 	  }
+@@ -1430,8 +1444,8 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	int *p = (int *) buf;
+ 	fragstotal_ = min (*p >> 16, MAX_BLOCKS);
+ 	fragsize_ = 1 << (*p & 0xffff);
+-	while (fragsize_ * fragstotal_ < 16384)
+-	  fragsize_ *= 2;
++	if (fragstotal_ < 2)
++	  fragstotal_ = 2;
+ 	fragment_has_been_set = true;
+ 	return 0;
+       }
+-- 
+2.39.0
 
