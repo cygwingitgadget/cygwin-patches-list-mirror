@@ -1,361 +1,191 @@
-Return-Path: <SRS0=fhiB=GY=shaw.ca=brian.inglis@sourceware.org>
-Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-	by sourceware.org (Postfix) with ESMTPS id B05303858D1E
-	for <cygwin-patches@cygwin.com>; Sat, 11 Nov 2023 05:57:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B05303858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=Shaw.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=shaw.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B05303858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=3.97.99.33
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1699682253; cv=none;
-	b=TiGyZit2qrGyiDXKXWUEf7FhO6H8mgIvTMcI1aVvmAvleVRIeusNC9e1r+xc9EY03Jletx4NupWzdtovTSPqX42cHPSpFJqsCmTIwUasXkGJ1rqjZ3MvscNh8KvmyJ8qvsgDvynbHq71KEIFte0ONWhiK6bXCjI3PgQEzZ9ZNj4=
+Return-Path: <SRS0=+5bO=GY=upm.es=pedroluis.castedo@sourceware.org>
+Received: from neon-v2.ccupm.upm.es (neon-v2.ccupm.upm.es [138.100.198.70])
+	by sourceware.org (Postfix) with ESMTPS id DE850385828E
+	for <cygwin-patches@cygwin.com>; Sat, 11 Nov 2023 17:29:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DE850385828E
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=upm.es
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=upm.es
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DE850385828E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=138.100.198.70
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1699723800; cv=none;
+	b=ies1W2bdyk1Vh4N/nHGW9nCFmYjI9BMhQqMsdr4cgU8D0Yw/CqbgOdQWtaPYgT++OA+m/jpyF/ZDHRU/euKnQTKwMEIVegghRVcK/4gnUamwaEVDyU7mJ5ak+N/C0YIVo0wpV25VLJvlkVisWNReHgm9GieawEdsGzkvYJ4la/4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1699682253; c=relaxed/simple;
-	bh=Ckt//uTYivI37SwSua8KshI5ZXlvOLpxGKrhA2Z5RYk=;
-	h=DKIM-Signature:Message-ID:Date:MIME-Version:Subject:To:From; b=CqBgbTDTnZeLnMFBL3K6COKMjzQrMBq901uBPYkULIx1b9UvKddsAdahmLbaGcRyFTII1kuq32D8EYMj1SIWlzIjKjgYBpGcAmCaEiWsa+jFpBRFlmJpiueaoUZw89hFfj/9Svwns2NGcUjtH8HsXeGvZp5eUccTxsOaS5pKK+U=
+	t=1699723800; c=relaxed/simple;
+	bh=Sqyv4Y412w3YTyP/e36VzlEt5Rpjzm65e5UQZ7kqiU4=;
+	h=DKIM-Signature:Message-ID:Date:MIME-Version:Subject:To:From; b=mHjkLVKTb4prCUtFzkLyCLoyc7QB8RGjaLrEWbnR9jlZ7zMVFQFlSzxD+ipV3mRrONHQ3kicTfoMLuf9nMHL2W0EVu2DCpCW1xAwJVaxOX38tldlF0ohT8M4W6+qzl1KsvB3akSPWn6CgU9hPVJgzuM4W0Xr1pbnEdTlOc5jYvM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
-	by cmsmtp with ESMTPS
-	id 1W5Qr1Ct1B0n01gzprW5lB; Sat, 11 Nov 2023 05:57:29 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-	t=1699682249; bh=Ckt//uTYivI37SwSua8KshI5ZXlvOLpxGKrhA2Z5RYk=;
-	h=Date:Reply-To:Subject:To:References:Cc:From:In-Reply-To;
-	b=SHcEaOsktjtGI44RvnwIGrEsHkwhBAa1xzV7k9zmN5IaKkoboZOeZ1el0PbfzPmkJ
-	 qT1kr0/htRxpnYP5Yz5kwUwcXN08sxXKwrrhO42asKoe926B4nPotbi+l7XHSXgZaV
-	 MR81WedYIYcJ3KpKf7OyQkPOVJu/SY4OP2AIuRbbx7OXb8RMnyckPmLrPL9ZSMCiJV
-	 kkc3kxH2WObXvF9AHLtk4bERoHOAxoAbzMcZ1Vqm/MadT20hVRsDF0BA4hgfTTE+fj
-	 W/ifejODGolh3GTqGhZeko1PGogeD8zBcbI4ZhNld+CM/557iK77tO19EiEwl9UH0a
-	 uOP4vQ+YrEJ2A==
-Received: from [10.0.0.5] ([184.64.102.149])
-	by cmsmtp with ESMTP
-	id 1gzorWkuhDqGY1gzprZtFz; Sat, 11 Nov 2023 05:57:29 +0000
-X-Authority-Analysis: v=2.4 cv=Cousz10D c=1 sm=1 tr=0 ts=654f17c9
- a=DxHlV3/gbUaP7LOF0QAmaA==:117 a=DxHlV3/gbUaP7LOF0QAmaA==:17
- a=r77TgQKjGQsHNAKrUKIA:9 a=la9ngaNSal_FxxliCXoA:9 a=QEXdDO2ut3YA:10
- a=5vBiwBzyh50vO3GYXHgA:9 a=JMNH9X61SiQA:10 a=sCr2FYncmchR4cCzvmQA:9
- a=ITdVHhY7-e0A:10
-Content-Type: multipart/mixed; boundary="------------vnvxGOFtE9Fsww0NA8wO9rKM"
-Message-ID: <5cd4b96f-cad1-456c-b4d9-a6a649d36e3a@Shaw.ca>
-Date: Fri, 10 Nov 2023 22:57:28 -0700
+Received: from [10.199.0.25] ([138.100.147.140])
+        (user=pedroluis.castedo@upm.es mech=PLAIN bits=0)
+        by neon-v2.ccupm.upm.es (8.15.2/8.15.2/neon-v2-001) with ESMTPSA id 3ABHTrRB017789
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <cygwin-patches@cygwin.com>; Sat, 11 Nov 2023 17:29:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=upm.es; s=upm;
+	t=1699723793; bh=Sqyv4Y412w3YTyP/e36VzlEt5Rpjzm65e5UQZ7kqiU4=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=k89Rq2OPIgbh0yL5tJ9IF92IrUC5XOpn+RpC9uinYYAqDHM4d+pe7Haz9RCTn+8+u
+	 ci9mp/Wdv7o8zGoHNJBI/5KdYh6kDzqFzIR8a93zg2Jxr6gnm3eyphUDUgY2Py+llo
+	 p0XN9XeXNCM28zO8sLSM+6Yj7c/UUgaex16vnEC4=
+Content-Type: multipart/mixed; boundary="------------5bvHiTLhLNNGaKmH0NPOmSry"
+Message-ID: <ac7355c3-7b25-4410-94eb-9bd2f602f4ac@upm.es>
+Date: Sat, 11 Nov 2023 18:29:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] fix(libc): Fix handle of %E & %O modifiers at end of
  format string
-Content-Language: en-CA
+Content-Language: es-ES
 To: cygwin-patches@cygwin.com
 References: <20231109190441.2826-1-pedroluis.castedo@upm.es>
  <4801ab90-2958-4fa2-87f2-21efdb41bbf4@Shaw.ca>
  <ZU4C+UIcYTtvWrrJ@calimero.vinschen.de>
  <27a7257d-1e06-40ff-89ec-f100b8734802@upm.es>
-Cc: Pedro Luis Castedo Cepeda <pedroluis.castedo@upm.es>
-From: Brian Inglis <Brian.Inglis@Shaw.ca>
-Organization: Inglis
-In-Reply-To: <27a7257d-1e06-40ff-89ec-f100b8734802@upm.es>
-X-CMAE-Envelope: MS4xfJDjD8wgqmtzqO4SG32zoIHM2kp02AuxVuZK4eqd4yi/aPg9H+Z4E6LpLBbYiJlt6Eik5EmZzMSsJ2jIkeGPOKZVVv2CN77K4Q8QOafkLGpinWl5YUfD
- W3kQ7MZlAggr1AXZTsly+DaW7Q6kuieMU/HHC5JV6Luiw8oLWFR888nV0AmaM7YR32QuOVW3Rzn19WIkm2LKcKJQgy3pbdkDZIky+TrCwjg9JqQ7m3ZD6Ngu
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <5cd4b96f-cad1-456c-b4d9-a6a649d36e3a@Shaw.ca>
+From: Pedro Luis Castedo Cepeda <pedroluis.castedo@upm.es>
+Autocrypt: addr=pedroluis.castedo@upm.es; keydata=
+ xsBNBF5YKl0BCACzN1lKiHEXuVVewBovxPa1Mt7MHcmBcrRLSNy79qIcFzjlMI5m4h48X/73
+ NKomCipsOD9o/n3XlVs6G95H4MqdF/1+SZitIFulp2A7Dcaqi16xWJHAAvEb2dbuDxIdZf9z
+ fZ515ZYCarFujQJZ0/0wFm3XG8bkZ1FZA1v1th6m90quGw7FWXPkZW9HPjNEp6RbLJxZug9m
+ kHtFkzu/INWqjF2s/+Mcdq6K9ITJe8Nd18k+N9hj07VUeLQFJ0BAbC/lpiopPKJ8s7cBbmMf
+ /RCxV7sJN6NoHlzYk+NSG59jHgqFyrkAe2WSbDOhoU4NqX5QdqzeF8zdfIeqrGYu0l6/ABEB
+ AAHNNFBlZHJvIEx1aXMgQ2FzdGVkbyBDZXBlZGEgPHBlZHJvbHVpcy5jYXN0ZWRvQHVwbS5l
+ cz7CwJQEEwEIAD4WIQT4JX3bDIHOcDGQIiCmZyXoTSavkgUCZQAzxQIbAwUJCmscAwULCQgH
+ AgYVCgkICwIEFgIDAQIeAQIXgAAKCRCmZyXoTSavkt3ECACGFXic1JvCEo9jGaCZlIkbXBMW
+ MTWdAV2fFpHt8yavuSl9MmJ9tkx6vTeYF8CPzEwxtpioQCpMRi39bD8CdPsFaRklmvAWdsgQ
+ xp/tORGxrQ2XDdx25jJPvMIR7PIMMBXBIYIl5hWKpA4OTKt1jkY1PE5LvgMkuCRAh4iDd2Ad
+ VBo16sp9abNlfMpq9XXDtOse7XarIpA1o/OT2I25tg3zwW1cViUovs7Sy24Ee9EutEEYd5Tc
+ E5skX8+YLygCnMV3pcGbaCB5iWUnK58cPvlvitLj+7beqVoreD4TLcHDYsYI/qf/QPfxbapb
+ rY3sLjS1N5p5B5yhaDiWU6qrLrsFzsBNBF5YKl0BCAC+1kpa9CcXqC/oYaARH/PrLVdUNKIn
+ U2GADlFVY527WHtHKqjABjY14kPq8yNAwwpUVqsA9NnvQAJUVNS3fHe0/IUvayhy45YnVa97
+ d5hK8icdRziPFizVJtlFpu6RJiWH812bgvw3pectdbIS9gT+ZnDoBWbEuUfvphIXZwrQ9DiT
+ yB2a1KLEUqOd9gZIoI2Jbc/ZGi7MTg95zB8WbGCSW+WNBD0LTFzFzCApJldrppgVqe7XXMSS
+ M5sobvgnZH9tkl0MiwCSznol02/xs7Katlkf/7oF8oDbAXNhTELh3d2y5Z8Q/UqQOPuemBma
+ yDiN8/Qq0dpLWA3zHSeuLyHLABEBAAHCwHwEGAEIACYWIQT4JX3bDIHOcDGQIiCmZyXoTSav
+ kgUCZQAzxgIbDAUJCmscAwAKCRCmZyXoTSavkjcCB/40ejE9Sg25x0EXr3eo/blM+VCNjDRn
+ KKLXB+ljw4axwNdQniWuifT7cCUr+srWMPadRHy8I38q6F1DMRIUISgXAYh/LOGs51XFxzLm
+ hmGUUxcptDtLwnFb+NoncyIuayPdL75M7SrdGnBVRSpMXGgiJU4pK/AaXY6ZenV+eJ5P+TVG
+ SA9tzO+nf9B9Rlr0IYNUa7XhxInBJE6wNe9yiKlY38yL88yTYYnjHidmP/d3gMqxhNB1Ukye
+ FesNo7IlwicrkhV8+PqE3vBWoq2MMhjXrV0W3mENORYnNhFKgRG5LlC9kH+UrT3Umr36JEye
+ KbTMJyJRQIdMD6/gE8m0F0gq
+In-Reply-To: <5cd4b96f-cad1-456c-b4d9-a6a649d36e3a@Shaw.ca>
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 This is a multi-part message in MIME format.
---------------vnvxGOFtE9Fsww0NA8wO9rKM
+--------------5bvHiTLhLNNGaKmH0NPOmSry
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2023-11-10 10:44, Pedro Luis Castedo Cepeda wrote:
-> El 10/11/2023 a las 11:16, Corinna Vinschen escribió:
->> On Nov  9 23:17, Brian Inglis wrote:
->>> On 2023-11-09 12:04, Pedro Luis Castedo Cepeda wrote:
->>>> - Prevent strftime to parsing format string beyond its end when
->>>>     it finish with "%E" or "%O".
->>>> ---
->>>>    newlib/libc/time/strftime.c | 2 ++
->>>>    1 file changed, 2 insertions(+)
+El 11/11/2023 a las 6:57, Brian Inglis escribió:
+> On 2023-11-10 10:44, Pedro Luis Castedo Cepeda wrote:
+>> El 10/11/2023 a las 11:16, Corinna Vinschen escribió:
+>>> On Nov  9 23:17, Brian Inglis wrote:
+>>>> On 2023-11-09 12:04, Pedro Luis Castedo Cepeda wrote:
+>>>>> - Prevent strftime to parsing format string beyond its end when
+>>>>>     it finish with "%E" or "%O".
+>>>>> ---
+>>>>>    newlib/libc/time/strftime.c | 2 ++
+>>>>>    1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/newlib/libc/time/strftime.c b/newlib/libc/time/strftime.c
+>>>>> index 56f227c5f..c4e9e45a9 100644
+>>>>> --- a/newlib/libc/time/strftime.c
+>>>>> +++ b/newlib/libc/time/strftime.c
+>>>>> @@ -754,6 +754,8 @@ __strftime (CHAR *s, size_t maxsize, const CHAR 
+>>>>> *format,
+>>>>>          switch (*format)
+>>>>>        {
+>>>>> +    case CQ('\0'):
+>>>>> +      break;
+>>>>>        case CQ('a'):
+>>>>>          _ctloc (wday[tim_p->tm_wday]);
+>>>>>          for (i = 0; i < ctloclen; i++)
 >>>>
->>>> diff --git a/newlib/libc/time/strftime.c b/newlib/libc/time/strftime.c
->>>> index 56f227c5f..c4e9e45a9 100644
->>>> --- a/newlib/libc/time/strftime.c
->>>> +++ b/newlib/libc/time/strftime.c
->>>> @@ -754,6 +754,8 @@ __strftime (CHAR *s, size_t maxsize, const CHAR *format,
->>>>          switch (*format)
->>>>        {
->>>> +    case CQ('\0'):
->>>> +      break;
->>>>        case CQ('a'):
->>>>          _ctloc (wday[tim_p->tm_wday]);
->>>>          for (i = 0; i < ctloclen; i++)
+>>>> These cases appear to already be taken care of by setting and using
+>>>> (depending on the config parameters) the "alt" variable for those 
+>>>> modifiers,
+>>>> and the default: return 0; for the format *character* (possibly 
+>>>> wide) not
+>>>> matching following any modifiers.
+>>>>
+>>>> Patches to newlib should go to the newlib mailing list at sourceware 
+>>>> dot org.
 >>>
->>> These cases appear to already be taken care of by setting and using
->>> (depending on the config parameters) the "alt" variable for those modifiers,
->>> and the default: return 0; for the format *character* (possibly wide) not
->>> matching following any modifiers.
->>>
->>> Patches to newlib should go to the newlib mailing list at sourceware dot org.
+>>> Also, a simple reproducer would be nice.
+> 
+>> My first contribution. Sorry about posting to wrong mail list and, at 
+>> best, minimalistic patch motivation reasoning. First time with git 
+>> send-mail, too.
 >>
->> Also, a simple reproducer would be nice.
+>> I came across this newlib "feature" trying to update GLib port to 
+>> 2.78.1. When trying to find out why test_strftime (glib/test/date.c)
+>> was failing I discovered that one of the test format strings, "%E" was 
+>> triggering a loop in g_date_strftime (glib/gdate.c) requiring more and 
+>> more memory till it was stopped by a fortunate maximum size check in 
+>> function.
+>>
+>> The problem is that __strftime  (newlib/libc/time/strftime.c) doesn't 
+>> check for '\0' after a terminal "%E" and it continues parsing the 
+>> format string. Finally (not sure if intentionally), this triggers a 
+>> direct return 0 from __strftime instead breaking the loop, preventing 
+>> it from add '\0' to the end of returned string. Same for "%O", I think 
+>> (not tested).
+>>
+>> It seems that this trailing '\0' allows to differentiate returning an 
+>> empty string from needing more space (at least, in Glib).
+>>
+>> So, is it a newlib bug? Not really, I think this format string is 
+>> bad-formed (%E should modify something, shouldn't it?) So undefined 
+>> behaviour is OK. I could patch-out these format strings from the port.
+>>
+>> But... from Glib tests, it seems that, at least:
+>>
+>> - If G_OS_WIN32, terminal "%E" & "%O" are silently discarded.
+>> - If __FreeBSD__ || __OpenBSD__ || __APPLE__ they are transformed to E 
+>> & O, respectively.
+>> - And if #else the same thing is expected.
+>>
+>> So it seems that returning 0-terminated string is a common practice 
+>> and I also think that this is more deterministic and, potentially, 
+>> safer. That's why I sent the patch. It tries to be the shortest 
+>> addition to check for end of string after %E & %O modifiers and takes 
+>> G_OS_WIN32 approach (only cause it's the simplest).
+> 
+> Not seeing any issue with any format - see attached source and log 
+> output, built under Cygwin.
+> [Derived from a bash script using printf %(...)T to do the same thing.]
+> 
 
-> My first contribution. Sorry about posting to wrong mail list and, at best, 
-> minimalistic patch motivation reasoning. First time with git send-mail, too.
-> 
-> I came across this newlib "feature" trying to update GLib port to 2.78.1. When 
-> trying to find out why test_strftime (glib/test/date.c)
-> was failing I discovered that one of the test format strings, "%E" was 
-> triggering a loop in g_date_strftime (glib/gdate.c) requiring more and more 
-> memory till it was stopped by a fortunate maximum size check in function.
-> 
-> The problem is that __strftime  (newlib/libc/time/strftime.c) doesn't check for 
-> '\0' after a terminal "%E" and it continues parsing the format string. Finally 
-> (not sure if intentionally), this triggers a direct return 0 from __strftime 
-> instead breaking the loop, preventing it from add '\0' to the end of returned 
-> string. Same for "%O", I think (not tested).
-> 
-> It seems that this trailing '\0' allows to differentiate returning an empty 
-> string from needing more space (at least, in Glib).
-> 
-> So, is it a newlib bug? Not really, I think this format string is bad-formed (%E 
-> should modify something, shouldn't it?) So undefined behaviour is OK. I could 
-> patch-out these format strings from the port.
-> 
-> But... from Glib tests, it seems that, at least:
-> 
-> - If G_OS_WIN32, terminal "%E" & "%O" are silently discarded.
-> - If __FreeBSD__ || __OpenBSD__ || __APPLE__ they are transformed to E & O, 
-> respectively.
-> - And if #else the same thing is expected.
-> 
-> So it seems that returning 0-terminated string is a common practice and I also 
-> think that this is more deterministic and, potentially, safer. That's why I sent 
-> the patch. It tries to be the shortest addition to check for end of string after 
-> %E & %O modifiers and takes G_OS_WIN32 approach (only cause it's the simplest).
+OK. It's not a newlib problem but a GLib one as it is relaying on common 
+but non-standard strftime implementation details.
 
-Not seeing any issue with any format - see attached source and log output, built 
-under Cygwin.
-[Derived from a bash script using printf %(...)T to do the same thing.]
+I attach a short program more focused in g_date_strftime implementation 
+so it can be evaluated if it worths addressing this corner case.
 
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retirer     but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
---------------vnvxGOFtE9Fsww0NA8wO9rKM
-Content-Type: text/plain; charset=UTF-8; name="strftime-formats.c"
-Content-Disposition: attachment; filename="strftime-formats.c"
+Thanks.
+--------------5bvHiTLhLNNGaKmH0NPOmSry
+Content-Type: text/plain; charset=UTF-8; name="strftime_lonelyE.c"
+Content-Disposition: attachment; filename="strftime_lonelyE.c"
 Content-Transfer-Encoding: base64
 
-LyohZ2NjIC1vIHN0cmZ0aW1lLWZvcm1hdHMgc3RyZnRpbWUtZm9ybWF0cy5jCiAqIHN0cmZ0
-aW1lLWZvcm1hdHMuYyAtIGVudW1lcmF0ZSBzdHJmdGltZSBmb3JtYXRzIGFuZCB2YWx1ZXMg
-dXNpbmcgYmFzaCBwcmludGYgJSglLi4uKVQKICoKICogJWEgICAgICAgICAgbG9jYWxlIGFi
-YnJldmlhdGVkIHdlZWtkYXkgbmFtZSBbU3VuLi5TYXRdICBGcmkKICogJUEgICAgICAgICAg
-ICAgIGxvY2FsZSB3ZWVrZGF5IG5hbWUgW1N1bmRheS4uU2F0dXJkYXldICBGcmlkYXkKICog
-JWIgICAgICAgICAgICBsb2NhbGUgYWJicmV2aWF0ZWQgbW9udGggbmFtZSBbSmFuLi5EZWNd
-ICBBdWcKICogJUIgICAgICAgICAgICAgICBsb2NhbGUgbW9udGggbmFtZSBbSmFudWFyeS4u
-RGVjZW1iZXJdICBBdWd1c3QKICogJWMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBsb2NhbGUgZGF0ZSB0aW1lICAyMDIyIEF1ZyAyNiBGcmkgMTI6NDU6MTkKICogJUMg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjZW50dXJ5IFstOTkuLi5dICAy
-MAogKiAlZCAgICAgICAgICAgICAgICAgIGRheSBpbiBtb250aCwgemVyby1wYWRkZWQgWzAx
-Li4zMV0gIDI2CiAqICVEICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFVTIGRh
-dGUgWyVtLyVkLyV5XSAgMDgvMjYvMjIKICogJWUgICAgICAgICAgICAgICAgIGRheSBpbiBt
-b250aCwgYmxhbmstcGFkZGVkIFsgMS4uMzFdICAyNgogKiAlRSAgICAgICAgICAgICAgICAg
-ICAgIGxvY2FsZSBlcmEgZXh0ZW5zaW9ucyBbaWdub3JlZF0gIAogKiAlZiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgaW52YWxpZCBmb3JtYXQgY2hhcmFjdGVyID8gIAogKiAlRiAgICAg
-ICAgICAgICBJU08gODYwMSBkYXRlIHllYXItbW9udGgtZGF5IFslWS0lbS0lZF0gIDIwMjIt
-MDgtMjYKICogJWcgICAgICAgIElTTyA4NjAxIHdlZWsgYmFzZWQgeWVhciBpbiBjZW50dXJ5
-IFswMC4uOTldICAyMgogKiAlRyAgICBJU08gODYwMSB3ZWVrIGJhc2VkIHllYXIgd2l0aCBj
-ZW50dXJ5IFstOTk5OS4uLl0gIDIwMjIKICogJWggICAgICAgICAgICBsb2NhbGUgYWJicmV2
-aWF0ZWQgbW9udGggbmFtZSBbSmFuLi5EZWNdICBBdWcKICogJUggICAgICAgICAgICAgICAg
-ICAgICAgICBob3VyLCAyNC1ob3VyIGNsb2NrIFswMC4uMjNdICAxMgogKiAlaSAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICB5ZWFyIGluIGNlbnR1cnkgWzAwLi45OV0gIAogKiAlSSAg
-ICAgICAgICAgICAgICAgICAgICAgIGhvdXIsIDEyLWhvdXIgY2xvY2sgWzAxLi4xMl0gIDEy
-CiAqICVqICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF5IGluIHllYXIgWzAwMS4u
-MzY2XSAgMjM4CiAqICVKICAgICAgICAgICAgICAgICAgICAgICAgICBpbnZhbGlkIGZvcm1h
-dCBjaGFyYWN0ZXIgPyAgCiAqICVrICAgICAgICAgICAgIGhvdXIsIDI0LWhvdXIgY2xvY2ss
-IGJsYW5rIHBhZCBbIDAuLjIzXSAgMTIKICogJUsgICAgICAgICAgICAgICAgICAgICAgICAg
-IGludmFsaWQgZm9ybWF0IGNoYXJhY3RlciA/ICAKICogJWwgICAgICAgICAgICAgaG91ciwg
-MTItaG91ciBjbG9jaywgYmxhbmsgcGFkIFsgMC4uMTJdICAxMgogKiAlTCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgaW52YWxpZCBmb3JtYXQgY2hhcmFjdGVyID8gIAogKiAlbSAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbW9udGggWzAxLi4xMl0gIDA4CiAq
-ICVNICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1pbnV0ZSBbMDAuLjU5
-XSAgNDUKICogJW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBuZXdsaW5lICcKICogJwogKiAlTiAgICAgICAgICAgICAgICAgICAgICAgICAgIG5hbm9z
-ZWNvbmRzIFswLTk5OTk5OTk5OV0gMTIzNDU2Nzg5IAogKiAlTiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIEVtcGVyb3IvRXJhIE5hbWUgIAogKiAlbyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIEVtcGVyb3IvRXJhIFllYXIgIAogKiAlTyAgICAg
-ICAgIGxvY2FsZSBhbHRlcm5hdGUgZGlnaXQgZXh0ZW5zaW9ucyBbaWdub3JlZF0gIAogKiAl
-cCAgICAgICAgICAgICAgICAgICAgICAgICAgbG9jYWxlIEFNL1BNIDEyLWhvdXIgY2xvY2sg
-IFBNCiAqICVQICAgICAgICAgICAgICAgIGxvY2FsZSBsb3dlcmNhc2UgYW0vcG0gMTItaG91
-ciBjbG9jayAgcG0KICogJXEgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBxdWFy
-dGVyIHllYXIgWzEuLjRdICAKICogJVEgICAgICAgICAgICAgICAgICAgICAgICAgIGludmFs
-aWQgZm9ybWF0IGNoYXJhY3RlciA/ICAKICogJXIgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgdGltZSwgMTItaG91ciBbJUk6JU06JVNdICAxMjo0NToxOQogKiAlUiAgICAgICAgICAg
-ICAgICAgICAgICBJU08gODYwMSB0aW1lLCAyNC1ob3VyIFslSDolTV0gIDEyOjQ1CiAqICVz
-ICAgICAgICAgICAgICAgICAgICBzZWNvbmRzIHNpbmNlIHRoZSBlcG9jaCAtLi4uMC4uLiAg
-MTY2MTUzOTUxOQogKiAlUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBz
-ZWNvbmQgWzAwLi42MF0gIDE5CiAqICV0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIHRhYiAnCScKICogJVQgICAgICAgICAgICAgICAgICAgSVNP
-IDg2MDEgdGltZSwgMjQtaG91ciBbJUg6JU06JVNdICAxMjo0NToxOQogKiAldSAgICAgICAg
-ICAgIElTTyA4NjAxIGRheSBvZiB3ZWVrIFsxLi43LCBNb25kYXkgPT0gMV0gIDUKICogJVUg
-ICAgICAgIHdlZWsgaW4geWVhciwgc3RhcnRpbmcgZmlyc3QgU3VuZGF5IFswMC4uNTNdICAz
-NAogKiAldiAgICAgICAgICAgICAgICAgICAgICAgICAgVk1TL09yYWNsZSBkYXRlIFslZS0l
-Yi0lWV0gIDI2LUF1Zy0yMDIyCiAqICVWICAgICAgICAgICBJU08gODYwMSB3ZWVrIGluIHdl
-ZWsgYmFzZWQgeWVhciBbMDEuLjUzXSAgMzQKICogJXcgICAgICAgICAgICAgICAgICAgICBk
-YXkgb2Ygd2VlayBbMC4uNiwgU3VuZGF5ID09IDBdICA1CiAqICVXICAgICAgICB3ZWVrIGlu
-IHllYXIsIHN0YXJ0aW5nIGZpcnN0IE1vbmRheSBbMDAuLjUzXSAgMzQKICogJXggICAgICAg
-ICAgICAgICAgICAgICAgICAgIGxvY2FsZSBkYXRlIHJlcHJlc2VudGF0aW9uICAyMDIyLTA4
-LTI2CiAqICVYICAgICAgICAgICAgICAgbG9jYWxlIHRpbWUgcmVwcmVzZW50YXRpb24gWyVI
-OiVNOiVTXSAgMTI6NDU6MTkKICogJXkgICAgICAgICAgICAgICAgICAgICAgICAgICAgeWVh
-ciBpbiBjZW50dXJ5IFswMC4uOTldICAyMgogKiAlWSAgICAgICAgICAgICAgICAgICAgICAg
-IHllYXIgd2l0aCBjZW50dXJ5IFstOTk5OS4uLl0gIDIwMjIKICogJXogICAgICAgICAgdGlt
-ZXpvbmUgb2Zmc2V0IGVhc3Qgb2YgR01UIFstMjMwMC4uKzIzMDBdICAtMDYwMAogKiAlWiAg
-dGltZXpvbmUgYWJicmV2aWF0aW9uLCBibGFuayBpZiB1bmRldGVybWluZWQgW1hYWF0gIE1E
-VAogKiAlKyAgICAgIGRlZmF1bHQgbG9jYWxlIGRhdGUgZm9ybWF0IFslYSAlYiAlZSAlVCAl
-WiAlWV0gIEZyaSBBdWcgMjYgMjE6MzQ6MDcgTURUIDIwMjIKICogJSAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgbm8gZm9ybWF0IGNoYXJhY3RlciA/CiAqLwoKCiNpbmNsdWRl
-IDxsb2NhbGUuaD4KI2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDx0aW1lLmg+CgoKY29u
-c3QgY2hhciAqdGZtdFtdID0gewoJIiVhICAgICAgICAgIGxvY2FsZSBhYmJyZXZpYXRlZCB3
-ZWVrZGF5IG5hbWUgW1N1bi4uU2F0XSIsCgkiJUEgICAgICAgICAgICAgIGxvY2FsZSB3ZWVr
-ZGF5IG5hbWUgW1N1bmRheS4uU2F0dXJkYXldIiwKCSIlYiAgICAgICAgICAgIGxvY2FsZSBh
-YmJyZXZpYXRlZCBtb250aCBuYW1lIFtKYW4uLkRlY10iLAoJIiVCICAgICAgICAgICAgICAg
-bG9jYWxlIG1vbnRoIG5hbWUgW0phbnVhcnkuLkRlY2VtYmVyXSIsCgkiJWMgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBsb2NhbGUgZGF0ZSB0aW1lIiwKCSIlQyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNlbnR1cnkgWy05OS4uLl0iLAoJIiVk
-ICAgICAgICAgICAgICAgICAgZGF5IGluIG1vbnRoLCB6ZXJvLXBhZGRlZCBbMDEuLjMxXSIs
-CgkiJUQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVVMgZGF0ZSBbJW0vJWQv
-JXldIiwKCSIlZSAgICAgICAgICAgICAgICAgZGF5IGluIG1vbnRoLCBibGFuay1wYWRkZWQg
-WyAxLi4zMV0iLAoJIiVFICAgICAgICAgICAgICAgICAgICAgIGxvY2FsZSBhbHRlcm5hdGUg
-ZXJhIFtpZ25vcmVkXSIsCgkiJWYgICAgICAgICAgICAgICAgICAgICAgICAgIGludmFsaWQg
-Zm9ybWF0IGNoYXJhY3RlciA/IiwKCSIlRiAgICAgICAgICAgICBJU08gODYwMSBkYXRlIHll
-YXItbW9udGgtZGF5IFslWS0lbS0lZF0iLAoJIiVnICAgICAgICBJU08gODYwMSB3ZWVrIGJh
-c2VkIHllYXIgaW4gY2VudHVyeSBbMDAuLjk5XSIsCgkiJUcgICAgSVNPIDg2MDEgd2VlayBi
-YXNlZCB5ZWFyIHdpdGggY2VudHVyeSBbLTk5OTkuLi5dIiwKCSIlaCAgICAgICAgICAgIGxv
-Y2FsZSBhYmJyZXZpYXRlZCBtb250aCBuYW1lIFtKYW4uLkRlY10iLAoJIiVIICAgICAgICAg
-ICAgICAgICAgICAgICAgaG91ciwgMjQtaG91ciBjbG9jayBbMDAuLjIzXSIsCgkiJWkgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgeWVhciBpbiBjZW50dXJ5IFswMC4uOTldIiwKCSIl
-SSAgICAgICAgICAgICAgICAgICAgICAgIGhvdXIsIDEyLWhvdXIgY2xvY2sgWzAxLi4xMl0i
-LAoJIiVqICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF5IGluIHllYXIgWzAwMS4u
-MzY2XSIsCgkiJUogICAgICAgICAgICAgICAgICAgICAgICAgIGludmFsaWQgZm9ybWF0IGNo
-YXJhY3RlciA/IiwKCSIlayAgICAgICAgICAgICBob3VyLCAyNC1ob3VyIGNsb2NrLCBibGFu
-ayBwYWQgWyAwLi4yM10iLAoJIiVLICAgICAgICAgICAgICAgICAgICAgICAgICBpbnZhbGlk
-IGZvcm1hdCBjaGFyYWN0ZXIgPyIsCgkiJWwgICAgICAgICAgICAgaG91ciwgMTItaG91ciBj
-bG9jaywgYmxhbmsgcGFkIFsgMC4uMTJdIiwKCSIlTCAgICAgICAgICAgICAgICAgICAgICAg
-ICAgaW52YWxpZCBmb3JtYXQgY2hhcmFjdGVyID8iLAoJIiVtICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBtb250aCBbMDEuLjEyXSIsCgkiJU0gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgbWludXRlIFswMC4uNTldIiwKCSIlbiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5ld2xpbmUiLAoJIiVOICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgbmFub3NlY29uZHMgWzAtOTk5OTk5OTk5XSIsCgki
-JU4gICAgICAgICAgICAgICAgICAgbG9jYWxlIGV4dGVuc2lvbiBFbXBlcm9yL0VyYSBOYW1l
-IiwKCSIlbyAgICAgICAgICAgICAgICAgICBsb2NhbGUgZXh0ZW5zaW9uIEVtcGVyb3IvRXJh
-IFllYXIiLAoJIiVPICAgICAgICAgICAgICAgICAgIGxvY2FsZSBhbHRlcm5hdGUgZGlnaXRz
-IFtpZ25vcmVkXSIsCgkiJXAgICAgICAgICAgICAgICAgICAgICAgICAgIGxvY2FsZSAxMi1o
-b3VyIGNsb2NrIEFNL1BNIiwKCSIlUCAgICAgICAgICAgICAgICBsb2NhbGUgMTItaG91ciBj
-bG9jayBsb3dlcmNhc2UgYW0vcG0iLAoJIiVxICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgcXVhcnRlciB5ZWFyIFsxLi40XSIsCgkiJVEgICAgICAgICAgICAgICAgICAgICAg
-ICAgIGludmFsaWQgZm9ybWF0IGNoYXJhY3RlciA/IiwKCSIlciAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICB0aW1lLCAxMi1ob3VyIFslSTolTTolU10iLAoJIiVSICAgICAgICAgICAg
-ICAgICAgICAgIElTTyA4NjAxIHRpbWUsIDI0LWhvdXIgWyVIOiVNXSIsCgkiJXMgICAgICAg
-ICAgICAgICAgICAgIHNlY29uZHMgc2luY2UgdGhlIGVwb2NoIC0uLi4wLi4uIiwKCSIlUyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZWNvbmQgWzAwLi42MF0iLAoJ
-IiV0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRh
-YiIsCgkiJVQgICAgICAgICAgICAgICAgICAgSVNPIDg2MDEgdGltZSwgMjQtaG91ciBbJUg6
-JU06JVNdIiwKCSIldSAgICAgICAgICAgIElTTyA4NjAxIGRheSBvZiB3ZWVrIFsxLi43LCBN
-b25kYXkgPT0gMV0iLAoJIiVVICAgICAgICB3ZWVrIGluIHllYXIsIHN0YXJ0aW5nIGZpcnN0
-IFN1bmRheSBbMDAuLjUzXSIsCgkiJXYgICAgICAgICAgICAgQlNEL09TWC9SdWJ5IFZNUy9P
-cmFjbGUgZGF0ZSBbJWUtJWItJVldIiwKCSIlViAgICAgICAgICAgSVNPIDg2MDEgd2VlayBp
-biB3ZWVrIGJhc2VkIHllYXIgWzAxLi41M10iLAoJIiV3ICAgICAgICAgICAgICAgICAgICAg
-ZGF5IG9mIHdlZWsgWzAuLjYsIFN1bmRheSA9PSAwXSIsCgkiJVcgICAgICAgIHdlZWsgaW4g
-eWVhciwgc3RhcnRpbmcgZmlyc3QgTW9uZGF5IFswMC4uNTNdIiwKCSIleCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgbG9jYWxlIGRhdGUgcmVwcmVzZW50YXRpb24iLAoJIiVYICAgICAg
-ICAgICAgICAgbG9jYWxlIHRpbWUgcmVwcmVzZW50YXRpb24gWyVIOiVNOiVTXSIsCgkiJXkg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgeWVhciBpbiBjZW50dXJ5IFswMC4uOTldIiwK
-CSIlWSAgICAgICAgICAgICAgICAgICAgICAgIHllYXIgd2l0aCBjZW50dXJ5IFstOTk5OS4u
-Ll0iLAoJIiV6ICAgICAgICAgIHRpbWV6b25lIG9mZnNldCBlYXN0IG9mIEdNVCBbLTIzMDAu
-LisyMzAwXSIsCgkiJVogIHRpbWV6b25lIGFiYnJldmlhdGlvbiwgYmxhbmsgaWYgdW5kZXRl
-cm1pbmVkIFtYWFhdIiwKCSIlKyAgICAgIGRlZmF1bHQgbG9jYWxlIGRhdGUgZm9ybWF0IFsl
-YSAlYiAlZSAlVCAlWiAlWV0iLAoJIiUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IG5vIGZvcm1hdCBjaGFyYWN0ZXIgPyIsCiAgICB9OwoKCmludAptYWluKCB2b2lkICkKewog
-ICAgY2hhcglvdXRbNjRdCQk9ICIiOwogICAgY2hhcglmbXRbNF0JCT0gIiUgIjsKICAgIGNo
-YXIgKglmCQk9ICZmbXRbMV07CiAgICB0aW1lX3QJbm93CQk9IHRpbWUoICZub3cgKTsKICAg
-IHN0cnVjdCB0bSAqCWxvY2FsCQk9IGxvY2FsdGltZSggJm5vdyApOwogICAgY2hhciAqCWxv
-Y2FsZQkJPSBzZXRsb2NhbGUoIExDX0FMTCwgIiIpOwogICAgc2l6ZV90CWxlbjsKICAgIGlu
-dAkJcmM7CgoKICAgIGZvciAoc2l6ZV90IHRmID0gMDsgdGYgPCBzaXplb2YoIHRmbXQgKS9z
-aXplb2YoICp0Zm10ICk7ICsrdGYpCiAgICB7CgkqZgk9IHRmbXRbdGZdWzFdOwoJKm91dAk9
-ICdcMCc7CglsZW4JPSBzdHJmdGltZSggb3V0LCBzaXplb2YoIG91dCApLCBmbXQsIGxvY2Fs
-KTsKCglpZiAoIShyYyA9IHByaW50ZiggIiVzXHQnJXMnXHQlMnppXG4iLCB0Zm10W3RmXSwg
-b3V0LCBsZW4pKSkKCXsKCSAgICBwZXJyb3IoICJzdHJmdGltZS1mb3JtYXRzOiBwcmludGYi
-ICk7Cgl9CiAgICB9CgogICAgbG9jYWxlCT0gc2V0bG9jYWxlKCBMQ19BTEwsIGxvY2FsZSk7
-Cn0gLyogbWFpbigpICovCg==
---------------vnvxGOFtE9Fsww0NA8wO9rKM
-Content-Type: text/plain; charset=UTF-8; name="strftime-formats.log"
-Content-Disposition: attachment; filename="strftime-formats.log"
-Content-Transfer-Encoding: base64
+I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRsaWIuaD4KI2luY2x1ZGUgPHN0cmlu
+Zy5oPgojaW5jbHVkZSA8dGltZS5oPgojaW5jbHVkZSA8YXNzZXJ0Lmg+CgppbnQgbWFpbihp
+bnQgYXJnYywgY2hhciAqYXJndltdKQp7CiAgY29uc3Qgc3RydWN0IHRtIGRhdGUgPSB7CiAg
+ICAudG1fc2VjID0gMCwgLnRtX21pbiA9IDAsIC50bV9ob3VyID0gMCwgLnRtX21kYXkgPSAx
+LCAudG1fbW9uID0gMCwKICAgIC50bV95ZWFyID0gLTE4OTksIC50bV93ZGF5ID0gMSwgLnRt
+X3lkYXkgPSAwLCAudG1faXNkc3QgPSAtMSwKICAgIC50bV9nbXRvZmYgPSAwLCAudG1fem9u
+ZSA9IDB4MAogIH07CiAgY29uc3QgY2hhciAqZm10ID0gIiVFIjsKICBjb25zdCBzaXplX3Qg
+bWF4c3ogPSA2NTUzNnU7CgogIHNpemVfdCBidWZzeiA9IDEyODsKICBjaGFyICpidWYgPSBO
+VUxMOwoKICAvLyBNaW1pYyBnX2RhdGVfc3RyZnRpbWUgKGdsaWIvZ2RhdGUuYykgYXBwcm9h
+Y2gKICBkbyB7CiAgICBidWYgPSAoY2hhciAqKXJlYWxsb2MoYnVmLCBidWZzeik7CiAgICBh
+c3NlcnQoYnVmKTsKCiAgICBidWZbMF0gPSAnXDEnOyAvLyBNYXJrIHRvIGd1ZXNzIGlmIGVt
+cHR5IG9yIG5vdCBlbm91Z2ggc3BhY2UKICAgIHNpemVfdCBsZW4gPSBzdHJmdGltZShidWYs
+IGJ1ZnN6LCBmbXQsICZkYXRlKTsKICAgIGlmIChsZW4gIT0gMCB8fCBidWZbMF0gPT0gJ1ww
+JykKICAgICAgYnJlYWs7ICAvLyBPSywgZG9uZS4KCiAgICBidWZzeiAqPSAyOyAgLy8gQXNz
+dW1lIG1vcmUgc3BhY2UgbmVlZGVkCiAgfSB3aGlsZSAoYnVmc3ogPD0gbWF4c3opOyAgLy8g
+Li4gdXAgdG8gYSBsaW1pdAoKICBpbnQgcmM7CiAgaWYgKGJ1ZnN6IDw9IG1heHN6KQogIHsK
+ICAgIHByaW50ZigiRGF0ZTogJXNcbiIsIGJ1Zik7CiAgICByYyA9IEVYSVRfU1VDQ0VTUzsK
+ICB9CiAgZWxzZQogIHsKICAgIHB1dHMoIkRhdGU6IGxvbmdlc3QgZGF0ZSBldmVyIDotXFwi
+KTsKICAgIHJjID0gRVhJVF9GQUlMVVJFOwogIH0KICBmcmVlKGJ1Zik7CgogIHJldHVybiBy
+YzsKfQoK
 
-JWEgICAgICAgICAgbG9jYWxlIGFiYnJldmlhdGVkIHdlZWtkYXkgbmFtZSBbU3VuLi5TYXRd
-CSdGcmknCSAzCiVBICAgICAgICAgICAgICBsb2NhbGUgd2Vla2RheSBuYW1lIFtTdW5kYXku
-LlNhdHVyZGF5XQknRnJpZGF5JwkgNgolYiAgICAgICAgICAgIGxvY2FsZSBhYmJyZXZpYXRl
-ZCBtb250aCBuYW1lIFtKYW4uLkRlY10JJ05vdicJIDMKJUIgICAgICAgICAgICAgICBsb2Nh
-bGUgbW9udGggbmFtZSBbSmFudWFyeS4uRGVjZW1iZXJdCSdOb3ZlbWJlcicJIDgKJWMgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBsb2NhbGUgZGF0ZSB0aW1lCScyMDIz
-IE5vdiAxMCBGcmkgMjI6NTI6NDYnCTI0CiVDICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgY2VudHVyeSBbLTk5Li4uXQknMjAnCSAyCiVkICAgICAgICAgICAgICAgICAg
-ZGF5IGluIG1vbnRoLCB6ZXJvLXBhZGRlZCBbMDEuLjMxXQknMTAnCSAyCiVEICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIFVTIGRhdGUgWyVtLyVkLyV5XQknMTEvMTAvMjMn
-CSA4CiVlICAgICAgICAgICAgICAgICBkYXkgaW4gbW9udGgsIGJsYW5rLXBhZGRlZCBbIDEu
-LjMxXQknMTAnCSAyCiVFICAgICAgICAgICAgICAgICAgICAgIGxvY2FsZSBhbHRlcm5hdGUg
-ZXJhIFtpZ25vcmVkXQknJwkgMAolZiAgICAgICAgICAgICAgICAgICAgICAgICAgaW52YWxp
-ZCBmb3JtYXQgY2hhcmFjdGVyID8JJycJIDAKJUYgICAgICAgICAgICAgSVNPIDg2MDEgZGF0
-ZSB5ZWFyLW1vbnRoLWRheSBbJVktJW0tJWRdCScyMDIzLTExLTEwJwkxMAolZyAgICAgICAg
-SVNPIDg2MDEgd2VlayBiYXNlZCB5ZWFyIGluIGNlbnR1cnkgWzAwLi45OV0JJzIzJwkgMgol
-RyAgICBJU08gODYwMSB3ZWVrIGJhc2VkIHllYXIgd2l0aCBjZW50dXJ5IFstOTk5OS4uLl0J
-JzIwMjMnCSA0CiVoICAgICAgICAgICAgbG9jYWxlIGFiYnJldmlhdGVkIG1vbnRoIG5hbWUg
-W0phbi4uRGVjXQknTm92JwkgMwolSCAgICAgICAgICAgICAgICAgICAgICAgIGhvdXIsIDI0
-LWhvdXIgY2xvY2sgWzAwLi4yM10JJzIyJwkgMgolaSAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB5ZWFyIGluIGNlbnR1cnkgWzAwLi45OV0JJycJIDAKJUkgICAgICAgICAgICAgICAg
-ICAgICAgICBob3VyLCAxMi1ob3VyIGNsb2NrIFswMS4uMTJdCScxMCcJIDIKJWogICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBkYXkgaW4geWVhciBbMDAxLi4zNjZdCSczMTQnCSAz
-CiVKICAgICAgICAgICAgICAgICAgICAgICAgICBpbnZhbGlkIGZvcm1hdCBjaGFyYWN0ZXIg
-PwknJwkgMAolayAgICAgICAgICAgICBob3VyLCAyNC1ob3VyIGNsb2NrLCBibGFuayBwYWQg
-WyAwLi4yM10JJzIyJwkgMgolSyAgICAgICAgICAgICAgICAgICAgICAgICAgaW52YWxpZCBm
-b3JtYXQgY2hhcmFjdGVyID8JJycJIDAKJWwgICAgICAgICAgICAgaG91ciwgMTItaG91ciBj
-bG9jaywgYmxhbmsgcGFkIFsgMC4uMTJdCScxMCcJIDIKJUwgICAgICAgICAgICAgICAgICAg
-ICAgICAgIGludmFsaWQgZm9ybWF0IGNoYXJhY3RlciA/CScnCSAwCiVtICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBtb250aCBbMDEuLjEyXQknMTEnCSAyCiVNICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1pbnV0ZSBbMDAuLjU5XQknNTIn
-CSAyCiVuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbmV3
-bGluZQknCicJIDEKJU4gICAgICAgICAgICAgICAgICAgICAgICAgICBuYW5vc2Vjb25kcyBb
-MC05OTk5OTk5OTldCScnCSAwCiVOICAgICAgICAgICAgICAgICAgIGxvY2FsZSBleHRlbnNp
-b24gRW1wZXJvci9FcmEgTmFtZQknJwkgMAolbyAgICAgICAgICAgICAgICAgICBsb2NhbGUg
-ZXh0ZW5zaW9uIEVtcGVyb3IvRXJhIFllYXIJJycJIDAKJU8gICAgICAgICAgICAgICAgICAg
-bG9jYWxlIGFsdGVybmF0ZSBkaWdpdHMgW2lnbm9yZWRdCScnCSAwCiVwICAgICAgICAgICAg
-ICAgICAgICAgICAgICBsb2NhbGUgMTItaG91ciBjbG9jayBBTS9QTQknUE0nCSAyCiVQICAg
-ICAgICAgICAgICAgIGxvY2FsZSAxMi1ob3VyIGNsb2NrIGxvd2VyY2FzZSBhbS9wbQkncG0n
-CSAyCiVxICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcXVhcnRlciB5ZWFyIFsx
-Li40XQknNCcJIDEKJVEgICAgICAgICAgICAgICAgICAgICAgICAgIGludmFsaWQgZm9ybWF0
-IGNoYXJhY3RlciA/CScnCSAwCiVyICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWUs
-IDEyLWhvdXIgWyVJOiVNOiVTXQknMTA6NTI6NDYnCSA4CiVSICAgICAgICAgICAgICAgICAg
-ICAgIElTTyA4NjAxIHRpbWUsIDI0LWhvdXIgWyVIOiVNXQknMjI6NTInCSA1CiVzICAgICAg
-ICAgICAgICAgICAgICBzZWNvbmRzIHNpbmNlIHRoZSBlcG9jaCAtLi4uMC4uLgknMTY5OTY4
-MTk2NicJMTAKJVMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2Vjb25k
-IFswMC4uNjBdCSc0NicJIDIKJXQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgdGFiCScJJwkgMQolVCAgICAgICAgICAgICAgICAgICBJU08gODYw
-MSB0aW1lLCAyNC1ob3VyIFslSDolTTolU10JJzIyOjUyOjQ2JwkgOAoldSAgICAgICAgICAg
-IElTTyA4NjAxIGRheSBvZiB3ZWVrIFsxLi43LCBNb25kYXkgPT0gMV0JJzUnCSAxCiVVICAg
-ICAgICB3ZWVrIGluIHllYXIsIHN0YXJ0aW5nIGZpcnN0IFN1bmRheSBbMDAuLjUzXQknNDUn
-CSAyCiV2ICAgICAgICAgICAgIEJTRC9PU1gvUnVieSBWTVMvT3JhY2xlIGRhdGUgWyVlLSVi
-LSVZXQknMTAtTm92LTIwMjMnCTExCiVWICAgICAgICAgICBJU08gODYwMSB3ZWVrIGluIHdl
-ZWsgYmFzZWQgeWVhciBbMDEuLjUzXQknNDUnCSAyCiV3ICAgICAgICAgICAgICAgICAgICAg
-ZGF5IG9mIHdlZWsgWzAuLjYsIFN1bmRheSA9PSAwXQknNScJIDEKJVcgICAgICAgIHdlZWsg
-aW4geWVhciwgc3RhcnRpbmcgZmlyc3QgTW9uZGF5IFswMC4uNTNdCSc0NScJIDIKJXggICAg
-ICAgICAgICAgICAgICAgICAgICAgIGxvY2FsZSBkYXRlIHJlcHJlc2VudGF0aW9uCScyMDIz
-LTExLTEwJwkxMAolWCAgICAgICAgICAgICAgIGxvY2FsZSB0aW1lIHJlcHJlc2VudGF0aW9u
-IFslSDolTTolU10JJzIyOjUyOjQ2JwkgOAoleSAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB5ZWFyIGluIGNlbnR1cnkgWzAwLi45OV0JJzIzJwkgMgolWSAgICAgICAgICAgICAgICAg
-ICAgICAgIHllYXIgd2l0aCBjZW50dXJ5IFstOTk5OS4uLl0JJzIwMjMnCSA0CiV6ICAgICAg
-ICAgIHRpbWV6b25lIG9mZnNldCBlYXN0IG9mIEdNVCBbLTIzMDAuLisyMzAwXQknLTA3MDAn
-CSA1CiVaICB0aW1lem9uZSBhYmJyZXZpYXRpb24sIGJsYW5rIGlmIHVuZGV0ZXJtaW5lZCBb
-WFhYXQknTVNUJwkgMwolKyAgICAgIGRlZmF1bHQgbG9jYWxlIGRhdGUgZm9ybWF0IFslYSAl
-YiAlZSAlVCAlWiAlWV0JJycJIDAKJSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-bm8gZm9ybWF0IGNoYXJhY3RlciA/CScnCSAwCg==
-
---------------vnvxGOFtE9Fsww0NA8wO9rKM--
+--------------5bvHiTLhLNNGaKmH0NPOmSry--
