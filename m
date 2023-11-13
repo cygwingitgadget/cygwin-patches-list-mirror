@@ -1,81 +1,58 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 280773858C01; Mon, 13 Nov 2023 16:42:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 280773858C01
+	id 3FDBE3858C01; Mon, 13 Nov 2023 17:04:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3FDBE3858C01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1699893774;
-	bh=0u2b8Jcf0MwmaHbnFJ/8Blx318BSafCyqPpYs6OLs/k=;
+	s=default; t=1699895075;
+	bh=5QqXbXeWNSJ/t9zYYfhYW33meMMAFHAmcrrpf+U9QWw=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=cKP5zWniHazJAhGV1nhnjHp/puoYg+Sr4wXEmKWORb5CXXF7njRtclPFoarJhTm+P
-	 0TzHWSnFPAZyFO4G9vRSUSU9asYCP1uDmRDMXfXGEOdFz1YlCgswtgBTy7NjJ4gZJv
-	 ZTSjJxpsjPEDFVKuoI5DzfPIy25vyoG0DhO+2wHY=
+	b=HE8M/t378tfyqoyfAL7MYIuBiVUM/EHlpFxx+mHadjZZkHIvkcJaf9No8h/nu+03o
+	 7LDM5thAiR3x6t2wWe+jkWUlV0OEb1UrVPepMdCy5anolYjCkoKTGThFtut4e9e5mi
+	 def7VdjWNbHFq7wxwSHtf7rn6+vg4QS0V0okg9n0=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 33B8FA80A3D; Mon, 13 Nov 2023 17:42:52 +0100 (CET)
-Date: Mon, 13 Nov 2023 17:42:52 +0100
+	id 43F80A80A3D; Mon, 13 Nov 2023 18:04:33 +0100 (CET)
+Date: Mon, 13 Nov 2023 18:04:33 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fix(libc): Fix handle of %E & %O modifiers at end of
- format string
-Message-ID: <ZVJSDAyKK/h8bZa/@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Fix profiler error() definition and usage
+Message-ID: <ZVJXISABdv5P8pqw@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20231109190441.2826-1-pedroluis.castedo@upm.es>
- <4801ab90-2958-4fa2-87f2-21efdb41bbf4@Shaw.ca>
- <ZU4C+UIcYTtvWrrJ@calimero.vinschen.de>
- <27a7257d-1e06-40ff-89ec-f100b8734802@upm.es>
- <5cd4b96f-cad1-456c-b4d9-a6a649d36e3a@Shaw.ca>
- <ac7355c3-7b25-4410-94eb-9bd2f602f4ac@upm.es>
+References: <20231113094622.6710-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ac7355c3-7b25-4410-94eb-9bd2f602f4ac@upm.es>
+In-Reply-To: <20231113094622.6710-1-mark@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Pedro,
+Hi Mark,
 
-On Nov 11 18:29, Pedro Luis Castedo Cepeda wrote:
-> OK. It's not a newlib problem but a GLib one as it is relaying on common but
-> non-standard strftime implementation details.
+On Nov 13 01:46, Mark Geisert wrote:
+> Minor updates to profiler and gmondump, which share some code:
+> - fix operation of error() so it actually works as intended
+> - resize 4K-size auto buffer reservations to BUFSIZ (==1K)
+> - remove trailing '\n' from 2nd arg on error() calls everywhere
+> - provide consistent annotation of Windows error number displays
 > 
-> I attach a short program more focused in g_date_strftime implementation so
-> it can be evaluated if it worths addressing this corner case.
+> Fixes: 9887fb27f6126 ("Cygwin: New tool: profiler")
+> Fixes: 087a3d76d7335 ("Cygwin: New tool: gmondump")
+> Signed-off-by: Mark Geisert <mark@maxrnd.com>
 
-Tricky.  I wonder what the GLib test is actually trying to accomplish.
+Looks good basically, but I noticed some minor problem already
+in the former version of this code:
 
-POSIX has this to say:
+> @@ -650,7 +652,7 @@ ctrl_c (DWORD)
+>    static int tic = 1;
+>  
+>    if ((tic ^= 1) && !GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0))
+> -    error (0, "couldn't send CTRL-C to child, win32 error %d\n",
+> +    error (0, "couldn't send CTRL-C to child, Windows error %d",
+>             GetLastError ());
+>    return TRUE;
 
-  RETURN VALUE
-    If the total number of resulting bytes including the  terminating
-    null byte  is not more than maxsize, these functions shall return
-    the number of bytes placed into the array pointed to by s, not
-    including the  terminating NUL character. Otherwise, 0 shall be
-    returned and the contents of the array are unspecified.
-
-  ERRORS
-    No errors are defined.
-
-But, and that's the big problem, POSIX does *not* provide for the
-error case, because it doesn't allow an error like using an incorrect
-format string to occur.  Using an incorrect or undefined format code
-is just not part of the standard.
-
-And the Linux man page has an interesting extension to the above
-POSIX RETURN VALUE section:
-
-    Note  that  the  return value 0 does not necessarily indicate an
-    error.  For example, in many locales %p yields an empty string.  An
-    empty  format string will likewise yield an empty string.
-
-and additionally in the BUGS section:
-
-    If the output string would exceed max bytes, errno is  not  set.
-    This makes it impossible to distinguish this error case from cases
-    where the format  string  legitimately  produces  a  zero-length
-    output  string.  POSIX.1-2001 does not specify any errno settings
-    for strftime().
-
-So the below case tested by GLib is entirely out of scope of the
-standard.
+GetLastError returns a DWORD == unsigned int. %u would be the
+right format specifier.  Care to fix that, too?
 
 
+Thanks,
 Corinna
