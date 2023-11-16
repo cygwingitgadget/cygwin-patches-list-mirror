@@ -1,229 +1,68 @@
-Return-Path: <SRS0=M4NG=G4=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
-	by sourceware.org (Postfix) with ESMTPS id 7B95E3858CDB
-	for <cygwin-patches@cygwin.com>; Wed, 15 Nov 2023 17:23:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7B95E3858CDB
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7B95E3858CDB
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.85
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1700069041; cv=none;
-	b=opdReCMU3eFQt/XBbch19AK3rNKlvJyZsh6lKlVo/O0PX/11+FVZ4v13u5ny/oUYAqR11v+IM8yMCGSQi34gr/nGav+N3+6OQJgs7PJYkLoHka33HTK0MBOGvcIo4nZ9xZYyILu7aWGkGlhJCFZW5ZvIttnaxWE00OizgGwJkWQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1700069041; c=relaxed/simple;
-	bh=yijHikJn6Jl3m60/RFXjfDaLcAUf8vP7jo1bQeiraRw=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=TP+qDaU9D3GnR0Zu4+3xaOQoK/pqDdo4jhPwy1yhe/UKI4NgHVpr3xkXFMWsyDbLaTq3LXKhavFf9lT2BIjDf1uz7ZqTxLNcyhrPVOgFuIM8jTsx4jV6dwc/mNWIH7j+ZrBvpZDI/8kBNGI1Rra1QmCPTyf3jAE1pTb75YV+YHI=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from fwd78.aul.t-online.de (fwd78.aul.t-online.de [10.223.144.104])
-	by mailout11.t-online.de (Postfix) with SMTP id CD36A5369
-	for <cygwin-patches@cygwin.com>; Wed, 15 Nov 2023 18:23:57 +0100 (CET)
-Received: from [192.168.2.101] ([91.57.240.134]) by fwd78.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1r3JcH-0pufSa0; Wed, 15 Nov 2023 18:23:53 +0100
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id B7F953858D20; Thu, 16 Nov 2023 10:36:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B7F953858D20
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1700130975;
+	bh=G7fXgSIziftSe2buFY0esztpEGfxHoSj+Fn2zwzapPk=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=gI1z1yHH7G3ewZai5Z7BFX3xIuGm3xBNt7pGvQkT0zRRlDCFe2VuohNvp3C7RN+jd
+	 Vtw464pyVggT1VXvMpyMb2iZ2E18oOZ3LU0AwlNr8KDkXaRKB276QBnRtn457uLaPk
+	 u6KLSQvM9b/1Zyu4fICVhZOUgRHRv7JdzPR53dWg=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id E265EA80C84; Thu, 16 Nov 2023 11:36:13 +0100 (CET)
+Date: Thu, 16 Nov 2023 11:36:13 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: Add /dev/disk/by-drive and /dev/disk/by-uuid symlinks
-Message-ID: <5db42b33-ed93-2e7c-977a-89d407137d86@t-online.de>
-Date: Wed, 15 Nov 2023 18:23:53 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.16
+Subject: Re: [PATCH] Cygwin: Add /dev/disk/by-drive and /dev/disk/by-uuid
+ symlinks
+Message-ID: <ZVXwnUgd3UnIqBQf@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <5db42b33-ed93-2e7c-977a-89d407137d86@t-online.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------386828027CECA85CBFE98799"
-X-TOI-EXPURGATEID: 150726::1700069033-5DF5F979-3F0EF1E9/0/0 CLEAN NORMAL
-X-TOI-MSGID: c44b8f22-5a3a-408b-bf92-541f7184e5a1
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5db42b33-ed93-2e7c-977a-89d407137d86@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------386828027CECA85CBFE98799
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Christian,
 
-This is the next (and possibly last for now) extension to the /dev/disk 
-directory. Limited to disk related entries which allowed a 
-straightforward extension of the existing code.
+On Nov 15 18:23, Christian Franke wrote:
+> This is the next (and possibly last for now) extension to the /dev/disk
+> directory. Limited to disk related entries which allowed a straightforward
+> extension of the existing code.
+> 
+> My original idea was to add also other drive letters and volume GUIDs. Too
+> complex for now.
+> 
+> Interestingly the volume GUID (by-uuid) for partitions on MBR disks is
+> sometimes identical to the partition "GUID" (by-partuuid), sometimes (always
+> for C:?) not. With GPT disks, both GUIDs are possibly always identical.
 
-My original idea was to add also other drive letters and volume GUIDs. 
-Too complex for now.
+That looks great, but in terms of by-uuid, I'm not sure it's the
+right thing to do.  On Linux I have a vfat partition (/boot/efi).
+The uuid in /dev/disk/by-uuid is the volume serial number, just
+with an extra dash, i.e.
 
-Interestingly the volume GUID (by-uuid) for partitions on MBR disks is 
-sometimes identical to the partition "GUID" (by-partuuid), sometimes 
-(always for C:?) not. With GPT disks, both GUIDs are possibly always 
-identical.
+  057A-B3A7 -> ../../sda1
 
-I will provide a related new-features doc patch later.
+That's what you get for FAT/FAT32/exFAT.
 
--- 
-Regards,
-Christian
+I also tried an NTFS partition and the output looks like this:
+
+  0FD4F62866CFBF09 -> ../../sdc1
+
+This is the 64 bit volume serial number as returned by
+DeviceIoControl(FSCTL_GET_NTFS_VOLUME_DATA)(*).
+
+Wouldn't that be what we want to see, too?
 
 
---------------386828027CECA85CBFE98799
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-Add-dev-disk-by-drive-and-dev-disk-by-uuid-sy.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-Add-dev-disk-by-drive-and-dev-disk-by-uuid-sy.pa";
- filename*1="tch"
+Thanks,
+Corinna
 
-RnJvbSAxZGMzZDNhODM3OGFiMmFlZmY3NjZlYTJkMjExNzUwMDc5ZmQyN2Y4IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBXZWQsIDE1IE5vdiAyMDIzIDE3OjU0OjE4ICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBBZGQgL2Rldi9kaXNrL2J5LWRyaXZlIGFuZCAv
-ZGV2L2Rpc2svYnktdXVpZCBzeW1saW5rcwoKVGhlIG5ldyBkaXJlY3RvcnkgJy9kZXYvZGlz
-ay9ieS1kcml2ZScgcHJvdmlkZXMgc3ltbGlua3MgZm9yIGVhY2gKZGlzayByZWxhdGVkIGRy
-aXZlIGxldHRlcjoKJ3gnIC0+ICcuLi8uLi9zZFhOJwpUaGUgbmV3IGRpcmVjdG9yeSAnL2Rl
-di9kaXNrL2J5LXV1aWQnIHByb3ZpZGVzIHN5bWxpbmtzIGZvciBlYWNoCmRpc2sgcmVsYXRl
-ZCBzdG9yYWdlIHZvbHVtZToKJ01CUl9TRVJJQUwtT0ZGU0VUJyAtPiAnLi4vLi4vc2RYTicK
-J1ZPTFVNRV9HVUlEJyAtPiAnLi4vLi4vc2RYTicKClNpZ25lZC1vZmYtYnk6IENocmlzdGlh
-biBGcmFua2UgPGNocmlzdGlhbi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2luc3VwL2N5
-Z3dpbi9maGFuZGxlci9kZXZfZGlzay5jYyAgICAgIHwgMTQzICsrKysrKysrKysrKysrKysr
-KysrLS0tLQogd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9maGFuZGxlci5oIHwgICAz
-ICstCiAyIGZpbGVzIGNoYW5nZWQsIDEyNiBpbnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMo
-LSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL2Rldl9kaXNrLmNjIGIv
-d2luc3VwL2N5Z3dpbi9maGFuZGxlci9kZXZfZGlzay5jYwppbmRleCAxMWIyNDA0MmYuLjk3
-N2U4YTY0ZiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlci9kZXZfZGlzay5j
-YworKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL2Rldl9kaXNrLmNjCkBAIC0xNTgsNiAr
-MTU4LDkyIEBAIHN0b3Jwcm9wX3RvX2lkX25hbWUgKEhBTkRMRSBkZXZoZGwsIGNvbnN0IFVO
-SUNPREVfU1RSSU5HICp1cGF0aCwKICAgcmV0dXJuIDE7CiB9CiAKKy8qICgiSGFyZGRpc2tO
-IiwgUEFSVF9OVU0pIC0+ICJcXFxcP1xcVm9sdW1le0dVSUR9XFwiICovCitzdGF0aWMgYm9v
-bAorcGFydGl0aW9uX3RvX3ZvbHBhdGggKGNvbnN0IFVOSUNPREVfU1RSSU5HICpkcml2ZV91
-bmFtZSwgRFdPUkQgcGFydF9udW0sCisJCSAgICAgIFdDSEFSICgmIHZvbHBhdGgpW01BWF9Q
-QVRIXSkKK3sKKyAgV0NIQVIgZ3BhdGhbTUFYX1BBVEhdOworICBfX3NtYWxsX3N3cHJpbnRm
-IChncGF0aCwgTCJcXFxcP1xcR0xPQkFMUk9PVFxcRGV2aWNlXFwlU1xcUGFydGl0aW9uJXVc
-XCIsCisJCSAgICBkcml2ZV91bmFtZSwgcGFydF9udW0pOworICBpZiAoIUdldFZvbHVtZU5h
-bWVGb3JWb2x1bWVNb3VudFBvaW50VyAoZ3BhdGgsIHZvbHBhdGgsIHNpemVvZih2b2xwYXRo
-KSkpCisgICAgeworICAgICAgZGVidWdfcHJpbnRmICgiR2V0Vm9sdW1lTmFtZUZvclZvbHVt
-ZU1vdW50UG9pbnRXKCVXKTogJUUiLCBncGF0aCk7CisgICAgICByZXR1cm4gZmFsc2U7Cisg
-ICAgfQorICBkZWJ1Z19wcmludGYgKCIlVyAtPiAlVyIsIGdwYXRoLCB2b2xwYXRoKTsKKyAg
-cmV0dXJuIHRydWU7Cit9CisKKy8qICgiSGFyZGRpc2tOIiwgUEFSVF9OVU0pIC0+ICJ4IiAq
-Lworc3RhdGljIGJvb2wKK3BhcnRpdGlvbl90b19kcml2ZShjb25zdCBVTklDT0RFX1NUUklO
-RyAqZHJpdmVfdW5hbWUsIERXT1JEIHBhcnRfbnVtLAorCQkgICBXQ0hBUiAqd19idWYsIGNo
-YXIgKm5hbWUpCit7CisgIFdDSEFSIHZvbHBhdGhbTUFYX1BBVEhdOworICBpZiAoIXBhcnRp
-dGlvbl90b192b2xwYXRoIChkcml2ZV91bmFtZSwgcGFydF9udW0sIHZvbHBhdGgpKQorICAg
-IHJldHVybiBmYWxzZTsKKworICBEV09SRCBsZW47CisgIGlmICghR2V0Vm9sdW1lUGF0aE5h
-bWVzRm9yVm9sdW1lTmFtZVcgKHZvbHBhdGgsIHdfYnVmLCBOVF9NQVhfUEFUSCwgJmxlbikp
-CisgICAgeworICAgICAgZGVidWdfcHJpbnRmICgiR2V0Vm9sdW1lUGF0aE5hbWVzRm9yVm9s
-dW1lTmFtZVcoJVcpOiAlRSIsIHZvbHBhdGgpOworICAgICAgcmV0dXJuIGZhbHNlOworICAg
-IH0KKyAgZGVidWdfcHJpbnRmICgiJVcgLT4gJyVXJyVzIiwgdm9scGF0aCwgd19idWYsCisJ
-CSh3X2J1ZlswXSAmJiB3Y3NjaHIgKHdfYnVmLCBMJ1wwJylbMV0gPyAiLCAuLi4iIDogIiIp
-KTsKKworICAvKiBGaW5kIGZpcnN0ICJYOlxcIiwgc2tpcCBpZiBub3QgZm91bmQuCisgICAg
-IEZJWE1FOiBTdXBwb3J0IG11bHRpcGxlIGRyaXZlIGxldHRlcnMuICovCisgIFdDSEFSICpw
-OworICBmb3IgKHAgPSB3X2J1ZjsgOyBwID0gd2NzY2hyIChwLCBMJ1wwJykgKyAxKQorICAg
-IHsKKwlpZiAoISpwKQorCSAgcmV0dXJuIGZhbHNlOworCWlmIChMJ0EnIDw9IHBbMF0gJiYg
-cFswXSA8PSBMJ1onICYmIHBbMV0gPT0gTCc6JyAmJiBwWzJdID09IEwnXFwnICYmICFwWzNd
-KQorCSAgYnJlYWs7CisgICAgfQorICBuYW1lWzBdID0gKHBbMF0gLSBMJ0EnKSArICdhJzsK
-KyAgbmFtZVsxXSA9ICdcMCc7CisgIHJldHVybiB0cnVlOworfQorCisvKiAoIkhhcmRkaXNr
-TiIsIFBBUlRfTlVNKSAtPiAiVk9MVU1FX0dVSUQiICovCitzdGF0aWMgYm9vbAorcGFydGl0
-aW9uX3RvX3ZvbHV1aWQoY29uc3QgVU5JQ09ERV9TVFJJTkcgKmRyaXZlX3VuYW1lLCBEV09S
-RCBwYXJ0X251bSwKKwkJICAgICBjaGFyICpuYW1lKQoreworICBXQ0hBUiB2b2xwYXRoW01B
-WF9QQVRIXTsKKyAgaWYgKCFwYXJ0aXRpb25fdG9fdm9scGF0aCAoZHJpdmVfdW5hbWUsIHBh
-cnRfbnVtLCB2b2xwYXRoKSkKKyAgICByZXR1cm4gZmFsc2U7CisKKyAgLyogU2tpcCBpZiBu
-b3QgIlxcXFw/XFxWb2x1bWV7R1VJRH0uLi4iLiAqLworICBzdGF0aWMgY29uc3QgV0NIQVIg
-cHJlZml4W10gPSBMIlxcXFw/XFxWb2x1bWV7IjsKKyAgY29uc3Qgc2l6ZV90IHByZWZpeF9s
-ZW4gPSBzaXplb2YgKHByZWZpeCkgLyBzaXplb2YoV0NIQVIpIC0gMSwgdXVpZF9sZW4gPSAz
-NjsKKyAgaWYgKCEoIXdjc25jbXAgKHZvbHBhdGgsIHByZWZpeCwgcHJlZml4X2xlbikKKyAg
-ICAgICYmIHZvbHBhdGhbcHJlZml4X2xlbiArIHV1aWRfbGVuXSA9PSBMJ30nKSkKKyAgICBy
-ZXR1cm4gZmFsc2U7CisKKyAgLyogRXh0cmFjdCBHVUlELiAqLworICB2b2xwYXRoW3ByZWZp
-eF9sZW4gKyB1dWlkX2xlbl0gPSAwOworICBfX3NtYWxsX3NwcmludGYgKG5hbWUsICIlVyIs
-IHZvbHBhdGggKyBwcmVmaXhfbGVuKTsKKworICBpZiAoIXN0cm5jbXAgKG5hbWUgKyA5LCAi
-MDAwMC0wMDAwLTAwIiwgMTIpICYmICFzdHJjbXAgKG5hbWUgKyAzMiwgIjAwMDAiKSkKKyAg
-ICB7CisgICAgICAvKiBNQlIgIkdVSUQiOiBVc2Ugc2FtZSBTRVJJQUwtT0ZGU0VUIGZvcm1h
-dCBhcyBpbiBieS1wYXJ0dXVpZCBkaXJlY3RvcnkuCisgICAgICAgICBTRVJJQUwtMDAwMC0w
-MDAwLTAwOWEtNzg1NjM0MTIwMDAwIC0+IFNFUklBTC0xMjM0NTY3ODlhMDAgKi8KKyAgICAg
-IGZvciAoaW50IGkgPSA5LCBqID0gMzA7IGkgPCAxOTsgaSArPSAyLCBqIC09IDIpCisJewor
-CSAgaWYgKGogPT0gMjIpIC8vIG5hbWVbaiArIDFdID09ICctJworCSAgICBqLS07CisJICBu
-YW1lW2ldID0gbmFtZVtqXTsKKwkgIG5hbWVbaSArIDFdID0gbmFtZVtqICsgMV07CisJfQor
-ICAgICAgbmFtZVsyMV0gPSAnXDAnOworICAgIH0KKyAgcmV0dXJuIHRydWU7Cit9CisKIHN0
-cnVjdCBieV9pZF9lbnRyeQogewogICBjaGFyIG5hbWVbTkFNRV9NQVggKyAxXTsKQEAgLTIw
-OCw2ICsyOTQsNyBAQCBmb3JtYXRfcGFydHV1aWQgKGNoYXIgKm5hbWUsIGNvbnN0IFBBUlRJ
-VElPTl9JTkZPUk1BVElPTl9FWCAqcGl4KQogCQkgICAgZ3VpZC0+RGF0YTEsIGd1aWQtPkRh
-dGEyLCBndWlkLT5EYXRhMywKIAkJICAgIGd1aWQtPkRhdGE0WzBdLCBndWlkLT5EYXRhNFsx
-XSwgZ3VpZC0+RGF0YTRbMl0sIGd1aWQtPkRhdGE0WzNdLAogCQkgICAgZ3VpZC0+RGF0YTRb
-NF0sIGd1aWQtPkRhdGE0WzVdLCBndWlkLT5EYXRhNFs2XSwgZ3VpZC0+RGF0YTRbN10pOwor
-CiAgICByZXR1cm4gdHJ1ZTsKIH0KIApAQCAtMjM3LDYgKzMyNCw3IEBAIGdldF9ieV9pZF90
-YWJsZSAoYnlfaWRfZW50cnkgKiAmdGFibGUsIGZoYW5kbGVyX2Rldl9kaXNrOjpkZXZfZGlz
-a19sb2NhdGlvbiBsb2MpCiAgIHVuc2lnbmVkIGFsbG9jX3NpemUgPSAwLCB0YWJsZV9zaXpl
-ID0gMDsKICAgdG1wX3BhdGhidWYgdHA7CiAgIGNoYXIgKmlvY3RsX2J1ZiA9IHRwLmNfZ2V0
-ICgpOworICBXQ0hBUiAqd19idWYgPSB0cC53X2dldCAoKTsKICAgRElSRUNUT1JZX0JBU0lD
-X0lORk9STUFUSU9OICpkYmlfYnVmID0KICAgICByZWludGVycHJldF9jYXN0PERJUkVDVE9S
-WV9CQVNJQ19JTkZPUk1BVElPTiAqPih0cC53X2dldCAoKSk7CiAKQEAgLTM2NSw2ICs0NTMs
-MTEgQEAgZ2V0X2J5X2lkX3RhYmxlIChieV9pZF9lbnRyeSAqICZ0YWJsZSwgZmhhbmRsZXJf
-ZGV2X2Rpc2s6OmRldl9kaXNrX2xvY2F0aW9uIGxvYykKIAkgICAgICBjaGFyICpuYW1lID0g
-dGFibGVbdGFibGVfc2l6ZV0ubmFtZTsKIAkgICAgICBzd2l0Y2ggKGxvYykKIAkJeworCQkg
-IGNhc2UgZmhhbmRsZXJfZGV2X2Rpc2s6OmRpc2tfYnlfZHJpdmU6CisJCSAgICBpZiAoIXBh
-cnRpdGlvbl90b19kcml2ZSAoJmRiaS0+T2JqZWN0TmFtZSwgcGFydF9udW0sIHdfYnVmLCBu
-YW1lKSkKKwkJICAgICAgY29udGludWU7CisJCSAgICBicmVhazsKKwogCQkgIGNhc2UgZmhh
-bmRsZXJfZGV2X2Rpc2s6OmRpc2tfYnlfaWQ6CiAJCSAgICBfX3NtYWxsX3NwcmludGYgKG5h
-bWUsICIlcy1wYXJ0JXUiLCBkcml2ZV9uYW1lLCBwYXJ0X251bSk7CiAJCSAgICBicmVhazsK
-QEAgLTM3NCw2ICs0NjcsMTEgQEAgZ2V0X2J5X2lkX3RhYmxlIChieV9pZF9lbnRyeSAqICZ0
-YWJsZSwgZmhhbmRsZXJfZGV2X2Rpc2s6OmRldl9kaXNrX2xvY2F0aW9uIGxvYykKIAkJICAg
-ICAgY29udGludWU7CiAJCSAgICBicmVhazsKIAorCQkgIGNhc2UgZmhhbmRsZXJfZGV2X2Rp
-c2s6OmRpc2tfYnlfdXVpZDoKKwkJICAgIGlmICghcGFydGl0aW9uX3RvX3ZvbHV1aWQgKCZk
-YmktPk9iamVjdE5hbWUsIHBhcnRfbnVtLCBuYW1lKSkKKwkJICAgICAgY29udGludWU7CisJ
-CSAgICBicmVhazsKKwogCQkgIGRlZmF1bHQ6IGNvbnRpbnVlOyAvKiBTaG91bGQgbm90IGhh
-cHBlbi4gKi8KIAkJfQogCSAgICAgIHRhYmxlW3RhYmxlX3NpemVdLmRyaXZlID0gZHJpdmVf
-bnVtOwpAQCAtNDE3LDEwICs1MTUsMTcgQEAgZ2V0X2J5X2lkX3RhYmxlIChieV9pZF9lbnRy
-eSAqICZ0YWJsZSwgZmhhbmRsZXJfZGV2X2Rpc2s6OmRldl9kaXNrX2xvY2F0aW9uIGxvYykK
-IAogY29uc3QgY2hhciBkZXZfZGlza1tdID0gIi9kZXYvZGlzayI7CiBjb25zdCBzaXplX3Qg
-ZGV2X2Rpc2tfbGVuID0gc2l6ZW9mIChkZXZfZGlzaykgLSAxOwotc3RhdGljIGNvbnN0IGNo
-YXIgYnlfaWRbXSA9ICIvYnktaWQiOwotY29uc3Qgc2l6ZV90IGJ5X2lkX2xlbiA9IHNpemVv
-ZihieV9pZCkgLSAxOwotc3RhdGljIGNvbnN0IGNoYXIgYnlfcGFydHV1aWRbXSA9ICIvYnkt
-cGFydHV1aWQiOwotY29uc3Qgc2l6ZV90IGJ5X3BhcnR1dWlkX2xlbiA9IHNpemVvZihieV9w
-YXJ0dXVpZCkgLSAxOworc3RhdGljIGNvbnN0IGNoYXIgYnlfZHJpdmVbXSA9ICIvYnktZHJp
-dmUiOworY29uc3Qgc2l6ZV90IGJ5X2RyaXZlX2xlbiA9IHNpemVvZihieV9kcml2ZSkgLSAx
-OworCisvKiBLZWVwIHRoaXMgaW4gc3luYyB3aXRoIGVudW0gZmhhbmRsZXJfZGV2X2Rpc2s6
-OmRldl9kaXNrX2xvY2F0aW9uIHN0YXJ0aW5nCisgICBhdCBkaXNrX2J5X2RyaXZlLiAqLwor
-c3RhdGljIGNvbnN0IGNoYXIgKiBjb25zdCBieV9kaXJfbmFtZXNbXSB7CisgICIvYnktZHJp
-dmUiLCAiL2J5LWlkIiwgIi9ieS1wYXJ0dXVpZCIsICIvYnktdXVpZCIKK307Citjb25zdCBz
-aXplX3QgYnlfZGlyX25hbWVzX3NpemUgPSBzaXplb2YoYnlfZGlyX25hbWVzKSAvIHNpemVv
-ZihieV9kaXJfbmFtZXNbMF0pOworc3RhdGljX2Fzc2VydCgoc2l6ZV90KSBmaGFuZGxlcl9k
-ZXZfZGlzazo6ZGlza19ieV9kcml2ZSArIGJ5X2Rpcl9uYW1lc19zaXplIC0gMQorCSAgICAg
-ID09IChzaXplX3QpIGZoYW5kbGVyX2Rldl9kaXNrOjpkaXNrX2J5X3V1aWQpOwogCiBmaGFu
-ZGxlcl9kZXZfZGlzazo6ZmhhbmRsZXJfZGV2X2Rpc2sgKCk6CiAgIGZoYW5kbGVyX3ZpcnR1
-YWwgKCksCkBAIC00NDAsMjIgKzU0NSwyMyBAQCBmaGFuZGxlcl9kZXZfZGlzazo6aW5pdF9k
-ZXZfZGlzayAoKQogICAvKiBEZXRlcm1pbmUgbG9jYXRpb24uICovCiAgIGNvbnN0IGNoYXIg
-KnBhdGggPSBnZXRfbmFtZSAoKTsKICAgc2l6ZV90IGRpcmxlbiA9IDA7CisgIGxvYyA9IGlu
-dmFsaWRfbG9jOyAvLyAiL2Rldi9kaXNrL2ludmFsaWQiCiAgIGlmICghcGF0aF9wcmVmaXhf
-cCAoZGV2X2Rpc2ssIHBhdGgsIGRldl9kaXNrX2xlbiwgZmFsc2UpKQotICAgIGxvYyA9IGlu
-dmFsaWRfbG9jOyAvLyBzaG91bGQgbm90IGhhcHBlbgorICAgIDsgLy8gc2hvdWxkIG5vdCBo
-YXBwZW4KICAgZWxzZSBpZiAoIXBhdGhbZGV2X2Rpc2tfbGVuXSkKICAgICBsb2MgPSBkaXNr
-X2RpcjsgLy8gIi9kZXYvZGlzayIKLSAgZWxzZSBpZiAocGF0aF9wcmVmaXhfcCAoYnlfaWQs
-IHBhdGggKyBkZXZfZGlza19sZW4sIGJ5X2lkX2xlbiwgZmFsc2UpKQotICAgIHsKLSAgICAg
-IGxvYyA9IGRpc2tfYnlfaWQ7IC8vICIvZGV2L2Rpc2svYnktaWQuLiIKLSAgICAgIGRpcmxl
-biA9IGRldl9kaXNrX2xlbiArIGJ5X2lkX2xlbjsKLSAgICB9Ci0gIGVsc2UgaWYgKHBhdGhf
-cHJlZml4X3AgKGJ5X3BhcnR1dWlkLCBwYXRoICsgZGV2X2Rpc2tfbGVuLCBieV9wYXJ0dXVp
-ZF9sZW4sIGZhbHNlKSkKLSAgICB7Ci0gICAgICBsb2MgPSBkaXNrX2J5X3BhcnR1dWlkOyAv
-LyAiL2Rldi9kaXNrL2J5LXBhcnR1dWlkLi4uIgotICAgICAgZGlybGVuID0gZGV2X2Rpc2tf
-bGVuICsgYnlfcGFydHV1aWRfbGVuOwotICAgIH0KICAgZWxzZQotICAgICAgbG9jID0gaW52
-YWxpZF9sb2M7IC8vICIvZGV2L2Rpc2svaW52YWxpZCIKKyAgICBmb3IgKHNpemVfdCBpID0g
-MDsgaSA8IGJ5X2Rpcl9uYW1lc19zaXplOyBpKyspCisgICAgICB7CisJY29uc3QgY2hhciAq
-ZGlyID0gYnlfZGlyX25hbWVzW2ldOworCXNpemVfdCBsZW4gPSBzdHJsZW4oZGlyKTsKKwlp
-ZiAocGF0aF9wcmVmaXhfcCAoZGlyLCBwYXRoICsgZGV2X2Rpc2tfbGVuLCBsZW4sIGZhbHNl
-KSkKKwkgIHsKKwkgICAgbG9jID0gKGRldl9kaXNrX2xvY2F0aW9uKSAoZGlza19ieV9kcml2
-ZSArIGkpOyAvLyAiL2Rldi9kaXNrL2J5LS4uLiIKKwkgICAgZGlybGVuID0gZGV2X2Rpc2tf
-bGVuICsgbGVuOworCSAgICBicmVhazsKKwkgIH0KKyAgICAgIH0KIAogICBsb2NfaXNfbGlu
-ayA9IGZhbHNlOwogICBpZiAoZGlybGVuKQpAQCAtNTk0LDEwICs3MDAsOSBAQCBmaGFuZGxl
-cl9kZXZfZGlzazo6cmVhZGRpciAoRElSICpkaXIsIGRpcmVudCAqZGUpCiAgICAgICBkaXIt
-Pl9fZF9wb3NpdGlvbisrOwogICAgICAgcmVzID0gMDsKICAgICB9Ci0gIGVsc2UgaWYgKGxv
-YyA9PSBkaXNrX2RpciAmJiBkaXItPl9fZF9wb3NpdGlvbiA8IDIgKyAyKQorICBlbHNlIGlm
-IChsb2MgPT0gZGlza19kaXIgJiYgZGlyLT5fX2RfcG9zaXRpb24gPCAyICsgKGludCkgYnlf
-ZGlyX25hbWVzX3NpemUpCiAgICAgewotICAgICAgc3RhdGljIGNvbnN0IGNoYXIgKiBjb25z
-dCBuYW1lc1syXSB7YnlfaWQsIGJ5X3BhcnR1dWlkfTsKLSAgICAgIHN0cmNweSAoZGUtPmRf
-bmFtZSwgbmFtZXNbZGlyLT5fX2RfcG9zaXRpb24gLSAyXSArIDEpOworICAgICAgc3RyY3B5
-IChkZS0+ZF9uYW1lLCBieV9kaXJfbmFtZXNbZGlyLT5fX2RfcG9zaXRpb24gLSAyXSArIDEp
-OwogICAgICAgZGUtPmRfdHlwZSA9IERUX0RJUjsKICAgICAgIGRpci0+X19kX3Bvc2l0aW9u
-Kys7CiAgICAgICByZXMgPSAwOwpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9sb2NhbF9p
-bmNsdWRlcy9maGFuZGxlci5oIGIvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9maGFu
-ZGxlci5oCmluZGV4IDYwMTM0OTZkNS4uY2UzYTAzZDBmIDEwMDY0NAotLS0gYS93aW5zdXAv
-Y3lnd2luL2xvY2FsX2luY2x1ZGVzL2ZoYW5kbGVyLmgKKysrIGIvd2luc3VwL2N5Z3dpbi9s
-b2NhbF9pbmNsdWRlcy9maGFuZGxlci5oCkBAIC0zMTk3LDcgKzMxOTcsOCBAQCBjbGFzcyBm
-aGFuZGxlcl9kZXZfZGlzazogcHVibGljIGZoYW5kbGVyX3ZpcnR1YWwKIHB1YmxpYzoKICAg
-ZW51bSBkZXZfZGlza19sb2NhdGlvbiB7CiAgICAgdW5rbm93bl9sb2MsIGludmFsaWRfbG9j
-LCBkaXNrX2RpciwKLSAgICBkaXNrX2J5X2lkLCBkaXNrX2J5X3BhcnR1dWlkCisgICAgLyog
-S2VlcCB0aGVzZSBpbiBzeW5jIHdpdGggZGV2X2Rpc2suY2M6YnlfZGlyX25hbWVzIGFycmF5
-OiAqLworICAgIGRpc2tfYnlfZHJpdmUsIGRpc2tfYnlfaWQsIGRpc2tfYnlfcGFydHV1aWQs
-IGRpc2tfYnlfdXVpZAogICB9OwogCiBwcml2YXRlOgotLSAKMi40Mi4xCgo=
---------------386828027CECA85CBFE98799--
+
+(*) Incidentally the last 8 digits represent the crippled 4 byte
+    serial number returned by
+    NtQueryVolumeInformationFile(..., FileFsVolumeInformation).
