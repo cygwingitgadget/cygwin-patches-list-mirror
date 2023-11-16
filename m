@@ -1,85 +1,239 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id B85E23858D33; Thu, 16 Nov 2023 12:19:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B85E23858D33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1700137195;
-	bh=/9/FCDZqH1CIv2Sr1d9rP3qeAnuBcbBJpiVWqjuYbrE=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=EB/d+fskXnlL/mIIJ1v791tJSGCPOlv8D4sa37yHiUsvwCKHdjBTq+8TgDqgURcDT
-	 D5do/yoHSv1RRbl3NDECFsDB26TSMsHqNtA6HmnVf4zbhoU5g/uSdQQ33+K68cBshX
-	 6IPQWb69HVvsYUmVE6LnKdscOwHooFqcQk0/2aDU=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 06FBFA80C84; Thu, 16 Nov 2023 13:19:54 +0100 (CET)
-Date: Thu, 16 Nov 2023 13:19:53 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+Return-Path: <SRS0=otId=G5=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+	by sourceware.org (Postfix) with ESMTPS id 6368D3858CD1
+	for <cygwin-patches@cygwin.com>; Thu, 16 Nov 2023 17:02:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6368D3858CD1
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6368D3858CD1
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1700154169; cv=none;
+	b=NwRNEHghBASb4iwRmR7AwRY0JzFGQlvBo/IEMZ8l/goxu5439Yb03s3GQ4y4t7EDC55KcNpuEtt3jUpdzymU4z3zEwUSw8a2EsSpU3FZbY3GOKdTMOuYymfrhW6YDCHP+MwO+tDcaqGHPxhRcwXYxeBHPnQnaPUNOGjBPFdhVts=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1700154169; c=relaxed/simple;
+	bh=pXNCVx/9Hg+XkLh3Vmo/mt2OtdZalFkEhPL10b5inKo=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version; b=bYT31X2W6fCSiHRrjZyv+vUphajhxVMyyRsHa25Q0RZ53KmMAttzDPlKd+V8pbBhaloy5g5/x+WRuHPZ591j7Se6obtOJdbHHNaMu68W1az58hc8aCZHBOtuLGXcXn60euswrtyHstdgoYv10BnsJ4vBdpA5iiDiRJ4YnzcI2os=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+Received: from fwd70.aul.t-online.de (fwd70.aul.t-online.de [10.223.144.96])
+	by mailout03.t-online.de (Postfix) with SMTP id 1886F50C37
+	for <cygwin-patches@cygwin.com>; Thu, 16 Nov 2023 18:02:46 +0100 (CET)
+Received: from [192.168.2.101] ([91.57.240.134]) by fwd70.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1r3flM-1OmIvA0; Thu, 16 Nov 2023 18:02:44 +0100
 Subject: Re: [PATCH] Cygwin: Add /dev/disk/by-drive and /dev/disk/by-uuid
  symlinks
-Message-ID: <ZVYI6QQ+zOB2KCPy@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
 References: <5db42b33-ed93-2e7c-977a-89d407137d86@t-online.de>
  <ZVXwnUgd3UnIqBQf@calimero.vinschen.de>
  <d4cd305a-1a23-633b-3327-6ec01cf462b6@t-online.de>
+ <ZVYI6QQ+zOB2KCPy@calimero.vinschen.de>
+From: Christian Franke <Christian.Franke@t-online.de>
+Message-ID: <2d02d56a-a2bc-6c15-10ff-2364aa73fd21@t-online.de>
+Date: Thu, 16 Nov 2023 18:02:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ SeaMonkey/2.53.16
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d4cd305a-1a23-633b-3327-6ec01cf462b6@t-online.de>
+In-Reply-To: <ZVYI6QQ+zOB2KCPy@calimero.vinschen.de>
+Content-Type: multipart/mixed;
+ boundary="------------2101105A8949B44AEBE5C98B"
+X-TOI-EXPURGATEID: 150726::1700154164-32FFA937-3F4F3C21/0/0 CLEAN NORMAL
+X-TOI-MSGID: daa8b2bf-ead8-48c8-bcef-bf6f2cb0da54
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 16 12:50, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > Hi Christian,
-> > 
-> > On Nov 15 18:23, Christian Franke wrote:
-> > > This is the next (and possibly last for now) extension to the /dev/disk
-> > > directory. Limited to disk related entries which allowed a straightforward
-> > > extension of the existing code.
-> > > 
-> > > My original idea was to add also other drive letters and volume GUIDs. Too
-> > > complex for now.
-> > > 
-> > > Interestingly the volume GUID (by-uuid) for partitions on MBR disks is
-> > > sometimes identical to the partition "GUID" (by-partuuid), sometimes (always
-> > > for C:?) not. With GPT disks, both GUIDs are possibly always identical.
-> > That looks great, but in terms of by-uuid, I'm not sure it's the
-> > right thing to do.  On Linux I have a vfat partition (/boot/efi).
-> > The uuid in /dev/disk/by-uuid is the volume serial number, just
-> > with an extra dash, i.e.
-> > 
-> >    057A-B3A7 -> ../../sda1
-> > 
-> > That's what you get for FAT/FAT32/exFAT.
-> 
-> What is the best way to retrieve a FAT* serial? There is
-> GetVolumeInformation{ByHandleW}(), but this may not work with the NT Layer
-> pathnames / handles used here.
+This is a multi-part message in MIME format.
+--------------2101105A8949B44AEBE5C98B
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-It will work, because Windows and NT handles are the same thing as long
-as you created the handle using an operation opening kernel objects, as,
-for instance, files or volumes.
+Corinna Vinschen wrote:
+> On Nov 16 12:50, Christian Franke wrote:
+> ...
+>>> I also tried an NTFS partition and the output looks like this:
+>>>
+>>>     0FD4F62866CFBF09 -> ../../sdc1
+>>>
+>>> This is the 64 bit volume serial number as returned by
+>>> DeviceIoControl(FSCTL_GET_NTFS_VOLUME_DATA)(*).
+>>>
+>>> Wouldn't that be what we want to see, too?
+>> Hmm...... yes. Should both information be provided in by-uuid or only the
+>> serial numbers? In the latter case, should we add e.g. by-voluuid for the
+>> volume GUIDs ?
+> Good question... by-voluuid sounds like a nice idea.  It's a Windows-only
+> concept anyway, so it might make sense to present it in its own directory.
 
-Actually, GetVolumeInformation() is the combination of multiple
-NtQueryVolumeInformationFile calls.  The call retrieving the
-serial number is NtQueryVolumeInformationFile(..., FileFsVolumeInformation),
-as is used in fs_info::update, mount.cc, line 250 ATM.
-
-> > I also tried an NTFS partition and the output looks like this:
-> > 
-> >    0FD4F62866CFBF09 -> ../../sdc1
-> > 
-> > This is the 64 bit volume serial number as returned by
-> > DeviceIoControl(FSCTL_GET_NTFS_VOLUME_DATA)(*).
-> > 
-> > Wouldn't that be what we want to see, too?
-> 
-> Hmm...... yes. Should both information be provided in by-uuid or only the
-> serial numbers? In the latter case, should we add e.g. by-voluuid for the
-> volume GUIDs ?
-
-Good question... by-voluuid sounds like a nice idea.  It's a Windows-only
-concept anyway, so it might make sense to present it in its own directory.
+Then by-voluuid is easy, changed patch is attached. I try to provide a 
+patch for a new by-uuid with filesystem serial numbers soon.
 
 
-Corinna
+--------------2101105A8949B44AEBE5C98B
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-Add-dev-disk-by-drive-and-dev-disk-by-voluuid.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-Add-dev-disk-by-drive-and-dev-disk-by-voluuid.pa";
+ filename*1="tch"
+
+RnJvbSAzOWNkYmFkZWFjZmIyMjZhZDA4MmY0ZjYzNTI4NTI5OGFhNWFkMWJiIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUaHUsIDE2IE5vdiAyMDIzIDE3OjUxOjA4ICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBBZGQgL2Rldi9kaXNrL2J5LWRyaXZlIGFuZCAv
+ZGV2L2Rpc2svYnktdm9sdXVpZAogc3ltbGlua3MKClRoZSBuZXcgZGlyZWN0b3J5ICcvZGV2
+L2Rpc2svYnktZHJpdmUnIHByb3ZpZGVzIHN5bWxpbmtzIGZvciBlYWNoCmRpc2sgcmVsYXRl
+ZCBkcml2ZSBsZXR0ZXI6Cid4JyAtPiAnLi4vLi4vc2RYTicKVGhlIG5ldyBkaXJlY3Rvcnkg
+Jy9kZXYvZGlzay9ieS12b2x1dWlkJyBwcm92aWRlcyBzeW1saW5rcyBmb3IgZWFjaApkaXNr
+IHJlbGF0ZWQgc3RvcmFnZSB2b2x1bWU6CidNQlJfU0VSSUFMLU9GRlNFVCcgLT4gJy4uLy4u
+L3NkWE4nCidWT0xVTUVfR1VJRCcgLT4gJy4uLy4uL3NkWE4nCkJvdGggZGlyZWN0b3JpZXMg
+cHJvdmlkZSBXaW5kb3dzIHNwZWNpZmljIGluZm9ybWF0aW9uIGFuZCBkbyBub3QKZXhpc3Qg
+b24gTGludXguCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4u
+ZnJhbmtlQHQtb25saW5lLmRlPgotLS0KIHdpbnN1cC9jeWd3aW4vZmhhbmRsZXIvZGV2X2Rp
+c2suY2MgICAgICB8IDE0MyArKysrKysrKysrKysrKysrKysrKy0tLS0KIHdpbnN1cC9jeWd3
+aW4vbG9jYWxfaW5jbHVkZXMvZmhhbmRsZXIuaCB8ICAgMyArLQogMiBmaWxlcyBjaGFuZ2Vk
+LCAxMjYgaW5zZXJ0aW9ucygrKSwgMjAgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvd2lu
+c3VwL2N5Z3dpbi9maGFuZGxlci9kZXZfZGlzay5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRs
+ZXIvZGV2X2Rpc2suY2MKaW5kZXggMTFiMjQwNDJmLi41Zjc5YWI1ZTkgMTAwNjQ0Ci0tLSBh
+L3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvZGV2X2Rpc2suY2MKKysrIGIvd2luc3VwL2N5Z3dp
+bi9maGFuZGxlci9kZXZfZGlzay5jYwpAQCAtMTU4LDYgKzE1OCw5MiBAQCBzdG9ycHJvcF90
+b19pZF9uYW1lIChIQU5ETEUgZGV2aGRsLCBjb25zdCBVTklDT0RFX1NUUklORyAqdXBhdGgs
+CiAgIHJldHVybiAxOwogfQogCisvKiAoIkhhcmRkaXNrTiIsIFBBUlRfTlVNKSAtPiAiXFxc
+XD9cXFZvbHVtZXtHVUlEfVxcIiAqLworc3RhdGljIGJvb2wKK3BhcnRpdGlvbl90b192b2xw
+YXRoIChjb25zdCBVTklDT0RFX1NUUklORyAqZHJpdmVfdW5hbWUsIERXT1JEIHBhcnRfbnVt
+LAorCQkgICAgICBXQ0hBUiAoJiB2b2xwYXRoKVtNQVhfUEFUSF0pCit7CisgIFdDSEFSIGdw
+YXRoW01BWF9QQVRIXTsKKyAgX19zbWFsbF9zd3ByaW50ZiAoZ3BhdGgsIEwiXFxcXD9cXEdM
+T0JBTFJPT1RcXERldmljZVxcJVNcXFBhcnRpdGlvbiV1XFwiLAorCQkgICAgZHJpdmVfdW5h
+bWUsIHBhcnRfbnVtKTsKKyAgaWYgKCFHZXRWb2x1bWVOYW1lRm9yVm9sdW1lTW91bnRQb2lu
+dFcgKGdwYXRoLCB2b2xwYXRoLCBzaXplb2Yodm9scGF0aCkpKQorICAgIHsKKyAgICAgIGRl
+YnVnX3ByaW50ZiAoIkdldFZvbHVtZU5hbWVGb3JWb2x1bWVNb3VudFBvaW50VyglVyk6ICVF
+IiwgZ3BhdGgpOworICAgICAgcmV0dXJuIGZhbHNlOworICAgIH0KKyAgZGVidWdfcHJpbnRm
+ICgiJVcgLT4gJVciLCBncGF0aCwgdm9scGF0aCk7CisgIHJldHVybiB0cnVlOworfQorCisv
+KiAoIkhhcmRkaXNrTiIsIFBBUlRfTlVNKSAtPiAieCIgKi8KK3N0YXRpYyBib29sCitwYXJ0
+aXRpb25fdG9fZHJpdmUoY29uc3QgVU5JQ09ERV9TVFJJTkcgKmRyaXZlX3VuYW1lLCBEV09S
+RCBwYXJ0X251bSwKKwkJICAgV0NIQVIgKndfYnVmLCBjaGFyICpuYW1lKQoreworICBXQ0hB
+UiB2b2xwYXRoW01BWF9QQVRIXTsKKyAgaWYgKCFwYXJ0aXRpb25fdG9fdm9scGF0aCAoZHJp
+dmVfdW5hbWUsIHBhcnRfbnVtLCB2b2xwYXRoKSkKKyAgICByZXR1cm4gZmFsc2U7CisKKyAg
+RFdPUkQgbGVuOworICBpZiAoIUdldFZvbHVtZVBhdGhOYW1lc0ZvclZvbHVtZU5hbWVXICh2
+b2xwYXRoLCB3X2J1ZiwgTlRfTUFYX1BBVEgsICZsZW4pKQorICAgIHsKKyAgICAgIGRlYnVn
+X3ByaW50ZiAoIkdldFZvbHVtZVBhdGhOYW1lc0ZvclZvbHVtZU5hbWVXKCVXKTogJUUiLCB2
+b2xwYXRoKTsKKyAgICAgIHJldHVybiBmYWxzZTsKKyAgICB9CisgIGRlYnVnX3ByaW50ZiAo
+IiVXIC0+ICclVyclcyIsIHZvbHBhdGgsIHdfYnVmLAorCQkod19idWZbMF0gJiYgd2NzY2hy
+ICh3X2J1ZiwgTCdcMCcpWzFdID8gIiwgLi4uIiA6ICIiKSk7CisKKyAgLyogRmluZCBmaXJz
+dCAiWDpcXCIsIHNraXAgaWYgbm90IGZvdW5kLgorICAgICBGSVhNRTogU3VwcG9ydCBtdWx0
+aXBsZSBkcml2ZSBsZXR0ZXJzLiAqLworICBXQ0hBUiAqcDsKKyAgZm9yIChwID0gd19idWY7
+IDsgcCA9IHdjc2NociAocCwgTCdcMCcpICsgMSkKKyAgICB7CisJaWYgKCEqcCkKKwkgIHJl
+dHVybiBmYWxzZTsKKwlpZiAoTCdBJyA8PSBwWzBdICYmIHBbMF0gPD0gTCdaJyAmJiBwWzFd
+ID09IEwnOicgJiYgcFsyXSA9PSBMJ1xcJyAmJiAhcFszXSkKKwkgIGJyZWFrOworICAgIH0K
+KyAgbmFtZVswXSA9IChwWzBdIC0gTCdBJykgKyAnYSc7CisgIG5hbWVbMV0gPSAnXDAnOwor
+ICByZXR1cm4gdHJ1ZTsKK30KKworLyogKCJIYXJkZGlza04iLCBQQVJUX05VTSkgLT4gIlZP
+TFVNRV9HVUlEIiAqLworc3RhdGljIGJvb2wKK3BhcnRpdGlvbl90b192b2x1dWlkKGNvbnN0
+IFVOSUNPREVfU1RSSU5HICpkcml2ZV91bmFtZSwgRFdPUkQgcGFydF9udW0sCisJCSAgICAg
+Y2hhciAqbmFtZSkKK3sKKyAgV0NIQVIgdm9scGF0aFtNQVhfUEFUSF07CisgIGlmICghcGFy
+dGl0aW9uX3RvX3ZvbHBhdGggKGRyaXZlX3VuYW1lLCBwYXJ0X251bSwgdm9scGF0aCkpCisg
+ICAgcmV0dXJuIGZhbHNlOworCisgIC8qIFNraXAgaWYgbm90ICJcXFxcP1xcVm9sdW1le0dV
+SUR9Li4uIi4gKi8KKyAgc3RhdGljIGNvbnN0IFdDSEFSIHByZWZpeFtdID0gTCJcXFxcP1xc
+Vm9sdW1leyI7CisgIGNvbnN0IHNpemVfdCBwcmVmaXhfbGVuID0gc2l6ZW9mIChwcmVmaXgp
+IC8gc2l6ZW9mKFdDSEFSKSAtIDEsIHV1aWRfbGVuID0gMzY7CisgIGlmICghKCF3Y3NuY21w
+ICh2b2xwYXRoLCBwcmVmaXgsIHByZWZpeF9sZW4pCisgICAgICAmJiB2b2xwYXRoW3ByZWZp
+eF9sZW4gKyB1dWlkX2xlbl0gPT0gTCd9JykpCisgICAgcmV0dXJuIGZhbHNlOworCisgIC8q
+IEV4dHJhY3QgR1VJRC4gKi8KKyAgdm9scGF0aFtwcmVmaXhfbGVuICsgdXVpZF9sZW5dID0g
+MDsKKyAgX19zbWFsbF9zcHJpbnRmIChuYW1lLCAiJVciLCB2b2xwYXRoICsgcHJlZml4X2xl
+bik7CisKKyAgaWYgKCFzdHJuY21wIChuYW1lICsgOSwgIjAwMDAtMDAwMC0wMCIsIDEyKSAm
+JiAhc3RyY21wIChuYW1lICsgMzIsICIwMDAwIikpCisgICAgeworICAgICAgLyogTUJSICJH
+VUlEIjogVXNlIHNhbWUgU0VSSUFMLU9GRlNFVCBmb3JtYXQgYXMgaW4gYnktcGFydHV1aWQg
+ZGlyZWN0b3J5LgorICAgICAgICAgU0VSSUFMLTAwMDAtMDAwMC0wMDlhLTc4NTYzNDEyMDAw
+MCAtPiBTRVJJQUwtMTIzNDU2Nzg5YTAwICovCisgICAgICBmb3IgKGludCBpID0gOSwgaiA9
+IDMwOyBpIDwgMTk7IGkgKz0gMiwgaiAtPSAyKQorCXsKKwkgIGlmIChqID09IDIyKSAvLyBu
+YW1lW2ogKyAxXSA9PSAnLScKKwkgICAgai0tOworCSAgbmFtZVtpXSA9IG5hbWVbal07CisJ
+ICBuYW1lW2kgKyAxXSA9IG5hbWVbaiArIDFdOworCX0KKyAgICAgIG5hbWVbMjFdID0gJ1ww
+JzsKKyAgICB9CisgIHJldHVybiB0cnVlOworfQorCiBzdHJ1Y3QgYnlfaWRfZW50cnkKIHsK
+ICAgY2hhciBuYW1lW05BTUVfTUFYICsgMV07CkBAIC0yMDgsNiArMjk0LDcgQEAgZm9ybWF0
+X3BhcnR1dWlkIChjaGFyICpuYW1lLCBjb25zdCBQQVJUSVRJT05fSU5GT1JNQVRJT05fRVgg
+KnBpeCkKIAkJICAgIGd1aWQtPkRhdGExLCBndWlkLT5EYXRhMiwgZ3VpZC0+RGF0YTMsCiAJ
+CSAgICBndWlkLT5EYXRhNFswXSwgZ3VpZC0+RGF0YTRbMV0sIGd1aWQtPkRhdGE0WzJdLCBn
+dWlkLT5EYXRhNFszXSwKIAkJICAgIGd1aWQtPkRhdGE0WzRdLCBndWlkLT5EYXRhNFs1XSwg
+Z3VpZC0+RGF0YTRbNl0sIGd1aWQtPkRhdGE0WzddKTsKKwogICAgcmV0dXJuIHRydWU7CiB9
+CiAKQEAgLTIzNyw2ICszMjQsNyBAQCBnZXRfYnlfaWRfdGFibGUgKGJ5X2lkX2VudHJ5ICog
+JnRhYmxlLCBmaGFuZGxlcl9kZXZfZGlzazo6ZGV2X2Rpc2tfbG9jYXRpb24gbG9jKQogICB1
+bnNpZ25lZCBhbGxvY19zaXplID0gMCwgdGFibGVfc2l6ZSA9IDA7CiAgIHRtcF9wYXRoYnVm
+IHRwOwogICBjaGFyICppb2N0bF9idWYgPSB0cC5jX2dldCAoKTsKKyAgV0NIQVIgKndfYnVm
+ID0gdHAud19nZXQgKCk7CiAgIERJUkVDVE9SWV9CQVNJQ19JTkZPUk1BVElPTiAqZGJpX2J1
+ZiA9CiAgICAgcmVpbnRlcnByZXRfY2FzdDxESVJFQ1RPUllfQkFTSUNfSU5GT1JNQVRJT04g
+Kj4odHAud19nZXQgKCkpOwogCkBAIC0zNjUsNiArNDUzLDExIEBAIGdldF9ieV9pZF90YWJs
+ZSAoYnlfaWRfZW50cnkgKiAmdGFibGUsIGZoYW5kbGVyX2Rldl9kaXNrOjpkZXZfZGlza19s
+b2NhdGlvbiBsb2MpCiAJICAgICAgY2hhciAqbmFtZSA9IHRhYmxlW3RhYmxlX3NpemVdLm5h
+bWU7CiAJICAgICAgc3dpdGNoIChsb2MpCiAJCXsKKwkJICBjYXNlIGZoYW5kbGVyX2Rldl9k
+aXNrOjpkaXNrX2J5X2RyaXZlOgorCQkgICAgaWYgKCFwYXJ0aXRpb25fdG9fZHJpdmUgKCZk
+YmktPk9iamVjdE5hbWUsIHBhcnRfbnVtLCB3X2J1ZiwgbmFtZSkpCisJCSAgICAgIGNvbnRp
+bnVlOworCQkgICAgYnJlYWs7CisKIAkJICBjYXNlIGZoYW5kbGVyX2Rldl9kaXNrOjpkaXNr
+X2J5X2lkOgogCQkgICAgX19zbWFsbF9zcHJpbnRmIChuYW1lLCAiJXMtcGFydCV1IiwgZHJp
+dmVfbmFtZSwgcGFydF9udW0pOwogCQkgICAgYnJlYWs7CkBAIC0zNzQsNiArNDY3LDExIEBA
+IGdldF9ieV9pZF90YWJsZSAoYnlfaWRfZW50cnkgKiAmdGFibGUsIGZoYW5kbGVyX2Rldl9k
+aXNrOjpkZXZfZGlza19sb2NhdGlvbiBsb2MpCiAJCSAgICAgIGNvbnRpbnVlOwogCQkgICAg
+YnJlYWs7CiAKKwkJICBjYXNlIGZoYW5kbGVyX2Rldl9kaXNrOjpkaXNrX2J5X3ZvbHV1aWQ6
+CisJCSAgICBpZiAoIXBhcnRpdGlvbl90b192b2x1dWlkICgmZGJpLT5PYmplY3ROYW1lLCBw
+YXJ0X251bSwgbmFtZSkpCisJCSAgICAgIGNvbnRpbnVlOworCQkgICAgYnJlYWs7CisKIAkJ
+ICBkZWZhdWx0OiBjb250aW51ZTsgLyogU2hvdWxkIG5vdCBoYXBwZW4uICovCiAJCX0KIAkg
+ICAgICB0YWJsZVt0YWJsZV9zaXplXS5kcml2ZSA9IGRyaXZlX251bTsKQEAgLTQxNywxMCAr
+NTE1LDE3IEBAIGdldF9ieV9pZF90YWJsZSAoYnlfaWRfZW50cnkgKiAmdGFibGUsIGZoYW5k
+bGVyX2Rldl9kaXNrOjpkZXZfZGlza19sb2NhdGlvbiBsb2MpCiAKIGNvbnN0IGNoYXIgZGV2
+X2Rpc2tbXSA9ICIvZGV2L2Rpc2siOwogY29uc3Qgc2l6ZV90IGRldl9kaXNrX2xlbiA9IHNp
+emVvZiAoZGV2X2Rpc2spIC0gMTsKLXN0YXRpYyBjb25zdCBjaGFyIGJ5X2lkW10gPSAiL2J5
+LWlkIjsKLWNvbnN0IHNpemVfdCBieV9pZF9sZW4gPSBzaXplb2YoYnlfaWQpIC0gMTsKLXN0
+YXRpYyBjb25zdCBjaGFyIGJ5X3BhcnR1dWlkW10gPSAiL2J5LXBhcnR1dWlkIjsKLWNvbnN0
+IHNpemVfdCBieV9wYXJ0dXVpZF9sZW4gPSBzaXplb2YoYnlfcGFydHV1aWQpIC0gMTsKK3N0
+YXRpYyBjb25zdCBjaGFyIGJ5X2RyaXZlW10gPSAiL2J5LWRyaXZlIjsKK2NvbnN0IHNpemVf
+dCBieV9kcml2ZV9sZW4gPSBzaXplb2YoYnlfZHJpdmUpIC0gMTsKKworLyogS2VlcCB0aGlz
+IGluIHN5bmMgd2l0aCBlbnVtIGZoYW5kbGVyX2Rldl9kaXNrOjpkZXZfZGlza19sb2NhdGlv
+biBzdGFydGluZworICAgYXQgZGlza19ieV9kcml2ZS4gKi8KK3N0YXRpYyBjb25zdCBjaGFy
+ICogY29uc3QgYnlfZGlyX25hbWVzW10geworICAiL2J5LWRyaXZlIiwgIi9ieS1pZCIsICIv
+YnktcGFydHV1aWQiLCAiL2J5LXZvbHV1aWQiCit9OworY29uc3Qgc2l6ZV90IGJ5X2Rpcl9u
+YW1lc19zaXplID0gc2l6ZW9mKGJ5X2Rpcl9uYW1lcykgLyBzaXplb2YoYnlfZGlyX25hbWVz
+WzBdKTsKK3N0YXRpY19hc3NlcnQoKHNpemVfdCkgZmhhbmRsZXJfZGV2X2Rpc2s6OmRpc2tf
+YnlfZHJpdmUgKyBieV9kaXJfbmFtZXNfc2l6ZSAtIDEKKwkgICAgICA9PSAoc2l6ZV90KSBm
+aGFuZGxlcl9kZXZfZGlzazo6ZGlza19ieV92b2x1dWlkKTsKIAogZmhhbmRsZXJfZGV2X2Rp
+c2s6OmZoYW5kbGVyX2Rldl9kaXNrICgpOgogICBmaGFuZGxlcl92aXJ0dWFsICgpLApAQCAt
+NDQwLDIyICs1NDUsMjMgQEAgZmhhbmRsZXJfZGV2X2Rpc2s6OmluaXRfZGV2X2Rpc2sgKCkK
+ICAgLyogRGV0ZXJtaW5lIGxvY2F0aW9uLiAqLwogICBjb25zdCBjaGFyICpwYXRoID0gZ2V0
+X25hbWUgKCk7CiAgIHNpemVfdCBkaXJsZW4gPSAwOworICBsb2MgPSBpbnZhbGlkX2xvYzsg
+Ly8gIi9kZXYvZGlzay9pbnZhbGlkIgogICBpZiAoIXBhdGhfcHJlZml4X3AgKGRldl9kaXNr
+LCBwYXRoLCBkZXZfZGlza19sZW4sIGZhbHNlKSkKLSAgICBsb2MgPSBpbnZhbGlkX2xvYzsg
+Ly8gc2hvdWxkIG5vdCBoYXBwZW4KKyAgICA7IC8vIHNob3VsZCBub3QgaGFwcGVuCiAgIGVs
+c2UgaWYgKCFwYXRoW2Rldl9kaXNrX2xlbl0pCiAgICAgbG9jID0gZGlza19kaXI7IC8vICIv
+ZGV2L2Rpc2siCi0gIGVsc2UgaWYgKHBhdGhfcHJlZml4X3AgKGJ5X2lkLCBwYXRoICsgZGV2
+X2Rpc2tfbGVuLCBieV9pZF9sZW4sIGZhbHNlKSkKLSAgICB7Ci0gICAgICBsb2MgPSBkaXNr
+X2J5X2lkOyAvLyAiL2Rldi9kaXNrL2J5LWlkLi4iCi0gICAgICBkaXJsZW4gPSBkZXZfZGlz
+a19sZW4gKyBieV9pZF9sZW47Ci0gICAgfQotICBlbHNlIGlmIChwYXRoX3ByZWZpeF9wIChi
+eV9wYXJ0dXVpZCwgcGF0aCArIGRldl9kaXNrX2xlbiwgYnlfcGFydHV1aWRfbGVuLCBmYWxz
+ZSkpCi0gICAgewotICAgICAgbG9jID0gZGlza19ieV9wYXJ0dXVpZDsgLy8gIi9kZXYvZGlz
+ay9ieS1wYXJ0dXVpZC4uLiIKLSAgICAgIGRpcmxlbiA9IGRldl9kaXNrX2xlbiArIGJ5X3Bh
+cnR1dWlkX2xlbjsKLSAgICB9CiAgIGVsc2UKLSAgICAgIGxvYyA9IGludmFsaWRfbG9jOyAv
+LyAiL2Rldi9kaXNrL2ludmFsaWQiCisgICAgZm9yIChzaXplX3QgaSA9IDA7IGkgPCBieV9k
+aXJfbmFtZXNfc2l6ZTsgaSsrKQorICAgICAgeworCWNvbnN0IGNoYXIgKmRpciA9IGJ5X2Rp
+cl9uYW1lc1tpXTsKKwlzaXplX3QgbGVuID0gc3RybGVuKGRpcik7CisJaWYgKHBhdGhfcHJl
+Zml4X3AgKGRpciwgcGF0aCArIGRldl9kaXNrX2xlbiwgbGVuLCBmYWxzZSkpCisJICB7CisJ
+ICAgIGxvYyA9IChkZXZfZGlza19sb2NhdGlvbikgKGRpc2tfYnlfZHJpdmUgKyBpKTsgLy8g
+Ii9kZXYvZGlzay9ieS0uLi4iCisJICAgIGRpcmxlbiA9IGRldl9kaXNrX2xlbiArIGxlbjsK
+KwkgICAgYnJlYWs7CisJICB9CisgICAgICB9CiAKICAgbG9jX2lzX2xpbmsgPSBmYWxzZTsK
+ICAgaWYgKGRpcmxlbikKQEAgLTU5NCwxMCArNzAwLDkgQEAgZmhhbmRsZXJfZGV2X2Rpc2s6
+OnJlYWRkaXIgKERJUiAqZGlyLCBkaXJlbnQgKmRlKQogICAgICAgZGlyLT5fX2RfcG9zaXRp
+b24rKzsKICAgICAgIHJlcyA9IDA7CiAgICAgfQotICBlbHNlIGlmIChsb2MgPT0gZGlza19k
+aXIgJiYgZGlyLT5fX2RfcG9zaXRpb24gPCAyICsgMikKKyAgZWxzZSBpZiAobG9jID09IGRp
+c2tfZGlyICYmIGRpci0+X19kX3Bvc2l0aW9uIDwgMiArIChpbnQpIGJ5X2Rpcl9uYW1lc19z
+aXplKQogICAgIHsKLSAgICAgIHN0YXRpYyBjb25zdCBjaGFyICogY29uc3QgbmFtZXNbMl0g
+e2J5X2lkLCBieV9wYXJ0dXVpZH07Ci0gICAgICBzdHJjcHkgKGRlLT5kX25hbWUsIG5hbWVz
+W2Rpci0+X19kX3Bvc2l0aW9uIC0gMl0gKyAxKTsKKyAgICAgIHN0cmNweSAoZGUtPmRfbmFt
+ZSwgYnlfZGlyX25hbWVzW2Rpci0+X19kX3Bvc2l0aW9uIC0gMl0gKyAxKTsKICAgICAgIGRl
+LT5kX3R5cGUgPSBEVF9ESVI7CiAgICAgICBkaXItPl9fZF9wb3NpdGlvbisrOwogICAgICAg
+cmVzID0gMDsKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvZmhh
+bmRsZXIuaCBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvZmhhbmRsZXIuaAppbmRl
+eCA2MDEzNDk2ZDUuLjg2YzdiMjBhMiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9sb2Nh
+bF9pbmNsdWRlcy9maGFuZGxlci5oCisrKyBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVk
+ZXMvZmhhbmRsZXIuaApAQCAtMzE5Nyw3ICszMTk3LDggQEAgY2xhc3MgZmhhbmRsZXJfZGV2
+X2Rpc2s6IHB1YmxpYyBmaGFuZGxlcl92aXJ0dWFsCiBwdWJsaWM6CiAgIGVudW0gZGV2X2Rp
+c2tfbG9jYXRpb24gewogICAgIHVua25vd25fbG9jLCBpbnZhbGlkX2xvYywgZGlza19kaXIs
+Ci0gICAgZGlza19ieV9pZCwgZGlza19ieV9wYXJ0dXVpZAorICAgIC8qIEtlZXAgdGhlc2Ug
+aW4gc3luYyB3aXRoIGRldl9kaXNrLmNjOmJ5X2Rpcl9uYW1lcyBhcnJheTogKi8KKyAgICBk
+aXNrX2J5X2RyaXZlLCBkaXNrX2J5X2lkLCBkaXNrX2J5X3BhcnR1dWlkLCBkaXNrX2J5X3Zv
+bHV1aWQKICAgfTsKIAogcHJpdmF0ZToKLS0gCjIuNDIuMQoK
+--------------2101105A8949B44AEBE5C98B--
