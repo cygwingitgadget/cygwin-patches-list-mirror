@@ -1,26 +1,25 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A05F03858C30; Tue, 21 Nov 2023 18:41:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A05F03858C30
+	id 5EBA33858C36; Wed, 22 Nov 2023 09:18:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5EBA33858C36
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1700592085;
-	bh=ZK478lro1PIFU3TwIqgbKcFIIXJCbrfuZ962w+WuLd4=;
+	s=default; t=1700644732;
+	bh=pmUmJkJpV0+8ZG/qgMGD8k5/7Nv85IWVz26VITpjWBE=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=NMcIABBq/Lk3Yh+nvGGPuNXdVLhqb3u1SX7Rgb4CzcuPAHBver4I9fYHOQ8eFOSS2
-	 Hco9mudFrUt3hetxVFcjIb1LIYD820l7RdeI9fMoCqK7joutexKCyFEvmxfzJQJmqb
-	 Fst3/m97BGfncW3FLIXm5oSFLlfSUwwF86qkpRZY=
+	b=L+HPuQ7mMAQ7PTBSWeMU6FHWgvJydKuMiW6nwo2+93YArIQPCXU6RTxYZHPdIENns
+	 LqK0oVJbv771CfINx7vvbZkcRRDoP6xSJybOJhMRf1sbrvJqmtpO/Z+BzcRbhxLPXt
+	 GKX7UMycF2alQAkJxujumLLjXE7z7pCvMhr25qO4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 0057AA8098C; Tue, 21 Nov 2023 19:41:23 +0100 (CET)
-Date: Tue, 21 Nov 2023 19:41:23 +0100
+	id 08444A8098C; Wed, 22 Nov 2023 10:18:50 +0100 (CET)
+Date: Wed, 22 Nov 2023 10:18:49 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: Add /dev/disk/by-label and /dev/disk/by-uuid
  symlinks
-Message-ID: <ZVz50yQyM0bHnbQc@calimero.vinschen.de>
+Message-ID: <ZV3HeSgKxh9MczqQ@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <ZVeZhRmrMlbK7qkz@calimero.vinschen.de>
- <d74801f8-45fb-6a66-cc92-8f021f58c53b@t-online.de>
+References: <d74801f8-45fb-6a66-cc92-8f021f58c53b@t-online.de>
  <ZVfBmQiTGOjx14lW@calimero.vinschen.de>
  <b924c0f6-7ac1-9fa8-f828-0482f1ea5d36@t-online.de>
  <ZVsppVEdC+HW2NE5@calimero.vinschen.de>
@@ -29,71 +28,45 @@ References: <ZVeZhRmrMlbK7qkz@calimero.vinschen.de>
  <0ba1c78e-15e6-65a2-eb4d-16ac2495c356@t-online.de>
  <ZVzLnADL0i2X3orL@calimero.vinschen.de>
  <7d24b7f1-0dae-ad23-6bde-3502716edbad@t-online.de>
+ <ZVz50yQyM0bHnbQc@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7d24b7f1-0dae-ad23-6bde-3502716edbad@t-online.de>
+In-Reply-To: <ZVz50yQyM0bHnbQc@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 21 19:31, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > Hi Christian,
-> > 
-> > Looks good, but I just realized that I was already wondering about the
-> > sanitization and forgot to talk about it:
-> > 
-> > On Nov 21 12:24, Christian Franke wrote:
-> > > diff --git a/winsup/cygwin/fhandler/dev_disk.cc b/winsup/cygwin/fhandler/dev_disk.cc
-> > > index c5d72816f..d12ac52fa 100644
-> > > --- a/winsup/cygwin/fhandler/dev_disk.cc
-> > > +++ b/winsup/cygwin/fhandler/dev_disk.cc
-> > > @@ -64,10 +64,12 @@ sanitize_label_string (WCHAR *s)
-> > >     /* Linux does not skip leading spaces. */
-> > >     return sanitize_string (s, L'\0', L' ', L'_', [] (WCHAR c) -> bool
-> > >       {
-> > > -      /* Labels may contain characters not allowed in filenames.
-> > > -	 Linux replaces spaces with \x20 which is not an option here. */
-> > > +      /* Labels may contain characters not allowed in filenames.  Also
-> > Apart from slash and backslash, we don't have this problem in Cygwin,
-> > usually.  Even control characters are no problem.  All chars not allowed
-> > in filenames are just transposed into the Unicode private use area, as
-> > per strfuncs.cc, line 20ff on the way to storage, and back when reading
-> > the names from storage.  This, and especially in a virtual filesystem
-> > like /proc, there's no reason to avoid these characters.
-> 
-> Thanks for clarification.
-> 
-> 
-> > 
-> > > +         replace '#' to avoid that duplicate markers introduce new
-> > > +	 duplicates.  Linux replaces spaces with \x20 which is not an
-> > > +	 option here. */
-> > >         return !((0 <= c && c <= L' ') || c == L':' || c == L'/' || c == L'\\'
-> > > -	      || c == L'"');
-> > > +	      || c == L'#' || c == L'"');
-> > If you really want to avoid chars not allowed in DOS filenames, the
-> > list seems incomplete, missing '<', '>', '?', '*', '|'.
-> > 
-> > But as I said, there's really no reason for that.  I simply reduced the
-> > above expression to
-> > 
-> >    return !(c == L'/' || c == L'\\' || c == L'#');
-> > 
-> > and created a disk label
-> > 
-> >    test"foo*bar?baz:"
-> > 
-> > It works nicely, including stuff like
-> > 
-> >    $ ls *\"*
-> >    $ ls *\**
-> > 
-> > So, I can push it as is, or we just allow everything and the kitchen sink
-> > as per the reduced filter expression.  What do you prefer?
-> 
-> The latter - patch attached.
+Hi Christian,
 
-Pushed.
 
-Thanks a lot,
+On second thought...
+
+I had a bad night tonight and was thinking a long time about this and
+that.  It suddenly occured to me that there might be another problem
+with this approach, attaching ordinals to the label name.
+
+Assuming you have a single filesystem labled "VOLUME" which is on a
+fixed disk.  So you get something like this:
+
+  $ ls -l /dev/disk/by-label
+  total 0
+  lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:09  VOLUME -> ../../sdb1
+  lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:10  root -> ../../sda3
+
+Now you insert an USB Stick with a FAT32 filesystem, also labeled
+"VOLUME".  Now you get something like this:
+
+  $ ls -l /dev/disk/by-label
+  total 0
+  lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:12 'VOLUME#0' -> ../../sdb1
+  lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:12 'VOLUME#1' -> ../../sdc1
+  lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:10  root -> ../../sda3
+
+So the label name changes, depending on inserting or removing another
+partition.
+
+Not saying I have a good solution myself, so I wonder if we should just
+let it slip, but I thought we should at least talk about it...
+
+
+Thanks,
 Corinna
