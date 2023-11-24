@@ -1,89 +1,183 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 3B33B3870924; Thu, 23 Nov 2023 16:27:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3B33B3870924
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1700756870;
-	bh=/x2HEZb37ZO8BmrhbRpnA6K4xRSROQFRG8Xmj29Z8uc=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=r7OVEUY1bwSEdgzRfA3DV8FJMkYt9XiO8SWgtIMzkqbp7EEYWLj4TDqMdrKUts6cL
-	 HP7zMs7DZ48DTt7DW1hDRmEYrLxmEU/I+smA4n7pOlJp1MD65wha7v0PsYfz2au/LS
-	 6tgkPW+8wCN9GeCZm01FDTXZjCeNgjGlVRZwCzgk=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 4FEC9A80B9F; Thu, 23 Nov 2023 17:27:48 +0100 (CET)
-Date: Thu, 23 Nov 2023 17:27:48 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=Fhgt=HF=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from re-prd-fep-043.btinternet.com (mailomta21-re.btinternet.com [213.120.69.114])
+	by sourceware.org (Postfix) with ESMTPS id 872A53858D32
+	for <cygwin-patches@cygwin.com>; Fri, 24 Nov 2023 17:07:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 872A53858D32
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 872A53858D32
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=213.120.69.114
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1700845637; cv=none;
+	b=GMth7L2nRDss2tsqW898YIuZA2sUrGo9heSNyaqatCD2Qhp1f8ebbVAgaqMiP5vOPcbeQCPGOhYmzuMowM4EDkX5KIURf+aqLEnaLLLZx6oFDPGZA7ErkDinPXSuDf0JjNyB/hqWhmouoxeKan/PU+LznrM0HtQar5WI9SIjN7I=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1700845637; c=relaxed/simple;
+	bh=DIZ7jGXT2PDVJ1w8ksOgOLiV7A+u/Q7qgg6Z9xK+MLw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Xs8qJ5g84osu7T0C3UPtmVO2FrQW5WbecJpbXnx8HJv3S6MFJ0dXk9bDbFaWUkIMtvhPzG7YeWoRHeYod84ui2ew/xngqwHEoFr2fj8k4lghrge9AP8S7jZPGDZdQblKikI70aax+Wg+5Tn+owUWRCJFSG9XRdQR6xHMxtzm378=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
+          by re-prd-fep-043.btinternet.com with ESMTP
+          id <20231124170713.ONYL18910.re-prd-fep-043.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>;
+          Fri, 24 Nov 2023 17:07:13 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 64D174D30B45B1FB
+X-Originating-IP: [81.129.146.217]
+X-OWM-Source-IP: 81.129.146.217 (GB)
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvkedrudehhedgleeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekuddruddvledrudegiedrvddujeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduvdelrddugeeirddvudejpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduvdelqddugeeiqddvudejrdhrrghnghgvkeduqdduvdelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdp
+	ghgvohfkrfepifeupdfovfetjfhoshhtpehrvgdqphhrugdqrhhgohhuthdqtddthe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.129.146.217) by re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.814.02) (authenticated as jonturney@btinternet.com)
+        id 64D174D30B45B1FB; Fri, 24 Nov 2023 17:07:13 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Add /dev/disk/by-label and /dev/disk/by-uuid
- symlinks
-Message-ID: <ZV99hEln6Ze5DaKO@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <b924c0f6-7ac1-9fa8-f828-0482f1ea5d36@t-online.de>
- <ZVsppVEdC+HW2NE5@calimero.vinschen.de>
- <ZVsrDfTnL6Fy3BfM@calimero.vinschen.de>
- <0f8c8b7e-8a67-bc0a-24c3-91d28e2f0972@t-online.de>
- <0ba1c78e-15e6-65a2-eb4d-16ac2495c356@t-online.de>
- <ZVzLnADL0i2X3orL@calimero.vinschen.de>
- <7d24b7f1-0dae-ad23-6bde-3502716edbad@t-online.de>
- <ZVz50yQyM0bHnbQc@calimero.vinschen.de>
- <ZV3HeSgKxh9MczqQ@calimero.vinschen.de>
- <6502e361-6b64-418e-d041-93cf4810f083@t-online.de>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Add '--names-only' flag to cygcheck
+Date: Fri, 24 Nov 2023 17:06:56 +0000
+Message-ID: <20231124170657.28490-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.42.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6502e361-6b64-418e-d041-93cf4810f083@t-online.de>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 22 17:31, Christian Franke wrote:
-> Hi Corinna,
-> 
-> Corinna Vinschen wrote:
-> > Hi Christian,
-> > 
-> > 
-> > On second thought...
-> > 
-> > I had a bad night tonight and was thinking a long time about this and
-> > that.  It suddenly occured to me that there might be another problem
-> > with this approach, attaching ordinals to the label name.
-> > 
-> > Assuming you have a single filesystem labled "VOLUME" which is on a
-> > fixed disk.  So you get something like this:
-> > 
-> >    $ ls -l /dev/disk/by-label
-> >    total 0
-> >    lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:09  VOLUME -> ../../sdb1
-> >    lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:10  root -> ../../sda3
-> > 
-> > Now you insert an USB Stick with a FAT32 filesystem, also labeled
-> > "VOLUME".  Now you get something like this:
-> > 
-> >    $ ls -l /dev/disk/by-label
-> >    total 0
-> >    lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:12 'VOLUME#0' -> ../../sdb1
-> >    lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:12 'VOLUME#1' -> ../../sdc1
-> >    lrwxrwxrwx 1 corinna vinschen 0 Nov 22 10:10  root -> ../../sda3
-> > 
-> > So the label name changes, depending on inserting or removing another
-> > partition.
-> 
-> This is intentional. If the first duplicate appears, it is IMO better to
-> also replace the original name to show that a duplicate exists.
-> 
-> 
-> > 
-> > Not saying I have a good solution myself, so I wonder if we should just
-> > let it slip, but I thought we should at least talk about it...
-> 
-> Users should be aware that unspecific label names like VOLUME could not be
-> used as a persistent link if drives are changed.
-> 
-> Same may apply to by-partuuid names as preformatted SD-cards and USB flash
-> drives may have a null MBR serial number.
+Add '--names-only' flag to cygcheck, to output just the bare package
+names.
+---
 
-Makes total sense.
+Notes:
+    Rather than more hacky aftermarket solutions, let's make cygcheck output
+    something more useful for feeding into setup.
+    
+    Next step would be to adjust setup's argument parsing so 'setup -P
+    "$(cygcheck -n)"' works as expected.
 
+ winsup/utils/mingw/cygcheck.cc   | 18 +++++++++++++-----
+ winsup/utils/mingw/dump_setup.cc | 17 +++++++++++------
+ 2 files changed, 24 insertions(+), 11 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/winsup/utils/mingw/cygcheck.cc b/winsup/utils/mingw/cygcheck.cc
+index 9d6f19203..1dde2ecba 100644
+--- a/winsup/utils/mingw/cygcheck.cc
++++ b/winsup/utils/mingw/cygcheck.cc
+@@ -55,6 +55,7 @@ int givehelp = 0;
+ int keycheck = 0;
+ int check_setup = 0;
+ int dump_only = 0;
++int names_only = 0;
+ int find_package = 0;
+ int list_package = 0;
+ int grep_packages = 0;
+@@ -84,7 +85,7 @@ typedef __int64 longlong;
+ #endif
+ 
+ /* In dump_setup.cc  */
+-void dump_setup (int, char **, bool);
++void dump_setup (int, char **, bool, bool);
+ void package_find (int, char **);
+ void package_list (int, char **);
+ /* In bloda.cc  */
+@@ -2913,7 +2914,8 @@ At least one command option or a PROGRAM is required, as shown above.\n\
+   PROGRAM              list library (DLL) dependencies of PROGRAM\n\
+   -c, --check-setup    show installed version of PACKAGE and verify integrity\n\
+                        (or for all installed packages if none specified)\n\
+-  -d, --dump-only      just list packages, do not verify (with -c)\n\
++  -d, --dump-only      do not verify packages (with -c)\n\
++  -n, --names-only     just list package names (implies -c -d)\n\
+   -s, --sysinfo        produce diagnostic system information (implies -c)\n\
+   -r, --registry       also scan registry for Cygwin settings (with -s)\n\
+   -k, --keycheck       perform a keyboard check session (must be run from a\n\
+@@ -2962,6 +2964,7 @@ Notes:\n\
+ struct option longopts[] = {
+   {"check-setup", no_argument, NULL, 'c'},
+   {"dump-only", no_argument, NULL, 'd'},
++  {"names-only", no_argument, NULL, 'n'},
+   {"sysinfo", no_argument, NULL, 's'},
+   {"registry", no_argument, NULL, 'r'},
+   {"verbose", no_argument, NULL, 'v'},
+@@ -2985,7 +2988,7 @@ struct option longopts[] = {
+   {0, no_argument, NULL, 0}
+ };
+ 
+-static char opts[] = "cdsrvkfliephV";
++static char opts[] = "cdnsrvkfliephV";
+ 
+ static void
+ print_version ()
+@@ -3093,6 +3096,11 @@ main (int argc, char **argv)
+       case 'd':
+ 	dump_only = 1;
+ 	break;
++      case 'n':
++	check_setup = 1;
++	dump_only = 1;
++	names_only = 1;
++	break;
+       case 'r':
+ 	registry = 1;
+ 	break;
+@@ -3205,7 +3213,7 @@ main (int argc, char **argv)
+     }
+ 
+   if (check_setup)
+-    dump_setup (verbose, argv, !dump_only);
++    dump_setup (verbose, argv, !dump_only, names_only);
+   else if (find_package)
+     package_find (verbose, argv);
+   else if (list_package)
+@@ -3224,7 +3232,7 @@ main (int argc, char **argv)
+       if (!check_setup)
+ 	{
+ 	  puts ("");
+-	  dump_setup (verbose, NULL, !dump_only);
++	  dump_setup (verbose, NULL, !dump_only, FALSE);
+ 	}
+ 
+       if (!givehelp)
+diff --git a/winsup/utils/mingw/dump_setup.cc b/winsup/utils/mingw/dump_setup.cc
+index 06aa06f81..050679a0d 100644
+--- a/winsup/utils/mingw/dump_setup.cc
++++ b/winsup/utils/mingw/dump_setup.cc
+@@ -466,11 +466,13 @@ get_installed_packages (char **argv, size_t *count)
+ }
+ 
+ void
+-dump_setup (int verbose, char **argv, bool check_files)
++dump_setup (int verbose, char **argv, bool check_files, bool names_only)
+ {
+   pkgver *packages = get_installed_packages (argv);
+ 
+-  puts ("Cygwin Package Information");
++  if (!names_only)
++    puts ("Cygwin Package Information");
++
+   if (packages == NULL)
+     {
+       puts ("No setup information found");
+@@ -484,12 +486,15 @@ dump_setup (int verbose, char **argv, bool check_files)
+ 	puts ("");
+     }
+ 
+-  printf ("%-*s %-*s%s\n", package_len, "Package",
+-			   check_files ? version_len : 7, "Version",
+-			   check_files ? "     Status" : "");
++  if (!names_only)
++    printf ("%-*s %-*s%s\n", package_len, "Package",
++	    check_files ? version_len : 7, "Version",
++	    check_files ? "	Status" : "");
+   for (int i = 0; packages[i].name; i++)
+     {
+-      if (check_files)
++      if (names_only)
++	printf ("%s\n", packages[i].name);
++      else if (check_files)
+ 	printf ("%-*s %-*s%s\n", package_len, packages[i].name,
+ 		version_len, packages[i].ver,
+ 		check_package_files (verbose, packages[i].name)
+-- 
+2.42.1
+
