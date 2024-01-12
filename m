@@ -1,53 +1,69 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 796633858D1E; Fri, 12 Jan 2024 16:36:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 796633858D1E
+	id 318CA3858C60; Fri, 12 Jan 2024 18:41:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 318CA3858C60
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1705077409;
-	bh=xIdalirAk0Ew0RWK48x0IWQxYaJjEAlB97+QHaJ4bn0=;
+	s=default; t=1705084907;
+	bh=lUO1xpeJ50Bf5Ys+ffHKrJdoks1gGCVXvO4DFcPqjEo=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=Qa5nMN1ZW8jydXHxxoWxVTrA5+697+G7gL+KOantgm9EbvgD6u4t8oPhi8LFz6Err
-	 UnMomGnHKysdssBoW8uZh2PYFrq//vcwuUw/4g1jhWu3iBvhAiSIiyDH3x9fqItV+W
-	 hPnw9wGg0RYJFZQSXlozSKELCVDMFX1wKqDCSwx8=
+	b=OW9KGW+rE9bhWoUraIP8jXJzo/z6FoGUWToGAB3MO31oGJpPI9rM2qlovpzedcOfx
+	 Qkj5NNQkxbWD5+StVXe24JTz3Z+4lcbejoL+wZNlzSWsPTutbYwwJkr/6yWS6mfJ4J
+	 GmOZqiQGIiczxft2xl/XHympo9DQTiBhBo1/uBQs=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C6FCBA807B2; Fri, 12 Jan 2024 17:36:46 +0100 (CET)
-Date: Fri, 12 Jan 2024 17:36:46 +0100
+	id 59590A807B2; Fri, 12 Jan 2024 19:41:45 +0100 (CET)
+Date: Fri, 12 Jan 2024 19:41:45 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: Make 'ulimit -c' control writing a coredump
-Message-ID: <ZaFqnr9n55YHkJ6W@calimero.vinschen.de>
+Subject: Re: [PATCH 0/5] Coredump under 'ulimit -c' control (v2)
+Message-ID: <ZaGH6fKiGx6dBjdO@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20240110135705.557-1-jon.turney@dronecode.org.uk>
- <20240110135705.557-2-jon.turney@dronecode.org.uk>
- <ZZ64BtnmZtmyRZYi@calimero.vinschen.de>
- <b1cbea19-824e-4763-ad69-f634beb0c081@dronecode.org.uk>
- <ZZ-39tW-1UK-69eD@calimero.vinschen.de>
- <78da8311-84d6-452f-a41a-4758e1a1bb3e@dronecode.org.uk>
+References: <20240112140958.1694-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <78da8311-84d6-452f-a41a-4758e1a1bb3e@dronecode.org.uk>
+In-Reply-To: <20240112140958.1694-1-jon.turney@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
 On Jan 12 14:09, Jon Turney wrote:
-> On 11/01/2024 09:42, Corinna Vinschen wrote:
-> > I see.  It's a bit unfortunate though, if dumper tries to create
-> > a 2 Gigs file which is later truncated, if we're low on disk space.
-> > But yeah, disk space isn't much of a problem these days, I guess...
+> Write a coredump under 'ulimit -c' control and related changes.
 > 
-> Assuming there isn't a clear specification of which of these is supposed to
-> happen, I think removing is the better choice, since partial coredumps are
-> just useless.
+> The idea here is to make debugging using a coredump work as usual on a unix,
+> e.g.:
 > 
-> (There's still some potential lossage if the coredump is big enough to fill
-> the disk, but less than the (perhaps badly-chosen) ulimit.  But maybe that
-> could be fixed by having dumper remove the file if it couldn't be written
-> successfully))
+> $ ulimit -c unlimited
+> 
+> $ ./segv-program
+> *** starting '"C:\cygwin64\bin\dumper.exe" "C:\cygwin64\work\segv-program.exe" 16156' for pid 1398, tid 7136
+> 
+> $ gdb segv-program.exe segv-program.exe.core
+> [...]
+> 
+> Jon Turney (5):
+>   Cygwin: Make 'ulimit -c' control writing a coredump
+>   Cygwin: Disable writing core dumps by default.
+>   Cygwin: Define and use __WCOREFLAG
+>   Cygwin: Treat api_fatal() similarly to a core-dumping signal
+>   Cygwin: Update documentation for cygwin_stackdump
+> 
+>  winsup/cygwin/dcrt0.cc                |   6 +-
+>  winsup/cygwin/environ.cc              |   1 +
+>  winsup/cygwin/exceptions.cc           | 122 ++++++++++++++++++++++----
+>  winsup/cygwin/include/cygwin/wait.h   |   5 +-
+>  winsup/cygwin/local_includes/winsup.h |   2 +
+>  winsup/cygwin/mm/cygheap.cc           |   2 +-
+>  winsup/cygwin/release/3.5.0           |   7 ++
+>  winsup/doc/cygwinenv.xml              |  25 ++++--
+>  winsup/doc/misc-funcs.xml             |   4 +
+>  winsup/doc/new-features.xml           |  12 +++
+>  winsup/doc/utils.xml                  |  43 +++++----
+>  11 files changed, 180 insertions(+), 49 deletions(-)
+> 
+> -- 
+> 2.43.0
 
-The Linux kernel actually writes blocks until the next write would
-overrun RLIMIT_CORE.  It would be nice if we could get some similar
-behaviour, but that's something for post 3.5.
+This patchset looks good to me, except one typo in the last patch
+of the series...
 
-
+Thanks,
 Corinna
