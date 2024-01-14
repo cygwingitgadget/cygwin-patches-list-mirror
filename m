@@ -1,159 +1,69 @@
-Return-Path: <SRS0=46A2=IY=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
-	by sourceware.org (Postfix) with ESMTPS id AC7D03858D1E
-	for <cygwin-patches@cygwin.com>; Sun, 14 Jan 2024 16:07:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AC7D03858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AC7D03858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.22
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1705248465; cv=none;
-	b=HDIf+Q8X/0qRIErUJNG0UlTYHuEND6v5ntIFPWdfQxWKQcBG0mCgCHvFmS+DdPWwKBgRlYKIC0tnYeEY0QcjOfu5dYYRUdreyMV80huNIX3NUUjj356O0FjL6ZNtjrj4y3NT3JtoCN63t8BWLnWcgoJB/M82zsqbTCUbuNjmQXw=
+Return-Path: <SRS0=kPGv=IY=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from sa-prd-fep-049.btinternet.com (mailomta6-sa.btinternet.com [213.120.69.12])
+	by sourceware.org (Postfix) with ESMTPS id A321E3858D1E
+	for <cygwin-patches@cygwin.com>; Sun, 14 Jan 2024 17:30:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A321E3858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A321E3858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=213.120.69.12
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1705253429; cv=none;
+	b=UJf2or3G9sVJhllQoy+qP11zQYxJVBl4KUDW89PcGHvnHn/zflMR4ibhVVeZfvwEmlm25XPFKPSIMmZhQTYKeFt1vAxrayd2DmkHq98HoRWH+zMUoTRt78cBnlmRYAiOztuVw8cGlEARnGTQGWdXIjvTVo8SRusNobbuZruZ1D4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1705248465; c=relaxed/simple;
-	bh=5lqj4Gy5ftyGFJyyQFPe1TLV6eQYzVDMrXyxCv76QYM=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=hrsAHrebuWrmIeAGdchrdp7h9Hed0wunSWvEeUmwTCbifxQpXVJjiq+D0a8v0qmhX3XdfTbD9Qt0cYPkQMrDcyernJzOr12TDFq6wdzWErxamkadF17WqAQB7e27x5/4AjroAJziGaSJrv1i8PNE21iLVEur8yjrwxKQhSnlI7E=
+	t=1705253429; c=relaxed/simple;
+	bh=xjzIEVmOM+2lGh6BgxSNa5F8I6uo3uIqq4QRysOOwwk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Vd/KwZ+Q50Fo8qcuO2K3aa9fbH0DFMjPFNDacxRwUsHrhAxE+y5VzU98caTLAHrIOTclNFa6DNhsLxDxFla7OP1rvMlb9ZlJoAMt/HdiCoCTzDeAuC5olqYwjErwBEYGQkRr1q2XxceeczT0PYqw7ZOeMrebdrcnZ9gCCVKnVPI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from fwd72.aul.t-online.de (fwd72.aul.t-online.de [10.223.144.98])
-	by mailout12.t-online.de (Postfix) with SMTP id 4B52663DF
-	for <cygwin-patches@cygwin.com>; Sun, 14 Jan 2024 17:07:42 +0100 (CET)
-Received: from [192.168.2.104] ([79.230.174.55]) by fwd72.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1rP31R-1YzrbU0; Sun, 14 Jan 2024 17:07:41 +0100
-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: introduce close_range
-Message-ID: <83cfd6b3-6824-fd9f-794b-7fc428f8c80d@t-online.de>
-Date: Sun, 14 Jan 2024 17:07:40 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.16
+Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
+          by sa-prd-fep-049.btinternet.com with ESMTP
+          id <20240114173024.PJE27949.sa-prd-fep-049.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
+          Sun, 14 Jan 2024 17:30:24 +0000
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 6567CEC105F8B46B
+X-Originating-IP: [86.139.158.103]
+X-OWM-Source-IP: 86.139.158.103
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeiledguddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefhfeefjeevveejhfffgeeiuedvgfevkeehtedvvdeiffeffeeutefhfeeuueefffenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhfrhgvvggsshgurdhorhhgpdhmrghnjedrohhrghenucfkphepkeeirddufeelrdduheekrddutdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdejngdpihhnvghtpeekiedrudefledrudehkedruddtfedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepvehhrhhishhtihgrnhdrhfhrrghnkhgvsehtqdhonhhlihhnvgdruggvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduheekqddutdefrdhrrghnghgvkeei
+	qddufeelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpehsrgdqphhrugdqrhhgohhuthdqtddtge
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.107] (86.139.158.103) by sa-prd-rgout-004.btmx-prd.synchronoss.net (authenticated as jonturney@btinternet.com)
+        id 6567CEC105F8B46B; Sun, 14 Jan 2024 17:30:24 +0000
+Message-ID: <3ab13e94-fd3a-41c8-8392-fcd72042d0e9@dronecode.org.uk>
+Date: Sun, 14 Jan 2024 17:30:24 +0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------154FAEDBD16D9C71E79A7BDE"
-X-TOI-EXPURGATEID: 150726::1705248461-5181C95D-2100153D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 2e8007ad-c497-47e2-9d1b-6d74c2657094
-X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: introduce close_range
+Content-Language: en-GB
+To: Christian Franke <Christian.Franke@t-online.de>
+References: <83cfd6b3-6824-fd9f-794b-7fc428f8c80d@t-online.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <83cfd6b3-6824-fd9f-794b-7fc428f8c80d@t-online.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------154FAEDBD16D9C71E79A7BDE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 14/01/2024 16:07, Christian Franke wrote:
+> Recently I learned about the existence and usefulness of close_range():
+> https://github.com/smartmontools/smartmontools/issues/235
+> 
+> https://man.freebsd.org/cgi/man.cgi?query=close_range&sektion=2
+> https://man7.org/linux/man-pages/man2/close_range.2.html
+> 
+> Note that the above Linux man page is not fully correct. The include 
+> file "linux/close_range.h" exists, but provides only the defines. It is 
+> sufficient to include "unistd.h" as on FreeBSD.
+> 
+> The attached patch adds this to Cygwin. It does not implement the 
+> Linux-specific CLOSE_RANGE_UNSHARE as I have no idea how to do this :-)
 
-Recently I learned about the existence and usefulness of close_range():
-https://github.com/smartmontools/smartmontools/issues/235
+This API should also be mentioned in the
+"System interfaces compatible with GNU or Linux extensions" section of 
+doc/posix.xml
 
-https://man.freebsd.org/cgi/man.cgi?query=close_range&sektion=2
-https://man7.org/linux/man-pages/man2/close_range.2.html
-
-Note that the above Linux man page is not fully correct. The include 
-file "linux/close_range.h" exists, but provides only the defines. It is 
-sufficient to include "unistd.h" as on FreeBSD.
-
-The attached patch adds this to Cygwin. It does not implement the 
-Linux-specific CLOSE_RANGE_UNSHARE as I have no idea how to do this :-)
-
--- 
-Regards,
-Christian
-
-
---------------154FAEDBD16D9C71E79A7BDE
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-introduce-close_range.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Cygwin-introduce-close_range.patch"
-
-RnJvbSAyMzkzZTgyYTYyZTE5ZTI5ZTYxZWYzMjUzZTIyN2MxOWFlNzIyMmViIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTdW4sIDE0IEphbiAyMDI0IDE2OjU0OjE3ICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBpbnRyb2R1Y2UgY2xvc2VfcmFuZ2UKClRoaXMg
-ZnVuY3Rpb24gY2xvc2VzIG9yIHNldHMgdGhlIGNsb3NlLW9uLWV4ZWMgZmxhZyBmb3IgYSBz
-cGVjaWZpZWQKcmFuZ2Ugb2YgZmlsZSBkZXNjcmlwdG9ycy4gIEl0IGlzIGF2YWlsYWJsZSBv
-biBGcmVlQlNEIGFuZCBMaW51eC4KClNpZ25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFua2Ug
-PGNocmlzdGlhbi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogbmV3bGliL2xpYmMvaW5jbHVk
-ZS9zeXMvdW5pc3RkLmggICAgICAgfCAgNiArKysrCiB3aW5zdXAvY3lnd2luL2N5Z3dpbi5k
-aW4gICAgICAgICAgICAgICB8ICAxICsKIHdpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4v
-dmVyc2lvbi5oIHwgIDMgKy0KIHdpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjUuMCAgICAgICAg
-ICAgIHwgIDIgKysKIHdpbnN1cC9jeWd3aW4vc3lzY2FsbHMuY2MgICAgICAgICAgICAgIHwg
-NDIgKysrKysrKysrKysrKysrKysrKysrKysrKysKIHdpbnN1cC9kb2MvbmV3LWZlYXR1cmVz
-LnhtbCAgICAgICAgICAgIHwgIDQgKysrCiA2IGZpbGVzIGNoYW5nZWQsIDU3IGluc2VydGlv
-bnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9uZXdsaWIvbGliYy9pbmNsdWRl
-L3N5cy91bmlzdGQuaCBiL25ld2xpYi9saWJjL2luY2x1ZGUvc3lzL3VuaXN0ZC5oCmluZGV4
-IDI1NTMyMjUxYy4uZjVmMTk2M2M4IDEwMDY0NAotLS0gYS9uZXdsaWIvbGliYy9pbmNsdWRl
-L3N5cy91bmlzdGQuaAorKysgYi9uZXdsaWIvbGliYy9pbmNsdWRlL3N5cy91bmlzdGQuaApA
-QCAtMjYsNiArMjYsMTIgQEAgaW50ICAgICBjaG93biAoY29uc3QgY2hhciAqX19wYXRoLCB1
-aWRfdCBfX293bmVyLCBnaWRfdCBfX2dyb3VwKTsKIGludCAgICAgY2hyb290IChjb25zdCBj
-aGFyICpfX3BhdGgpOwogI2VuZGlmCiBpbnQgICAgIGNsb3NlIChpbnQgX19maWxkZXMpOwor
-I2lmIGRlZmluZWQoX19DWUdXSU5fXykgJiYgKF9fQlNEX1ZJU0lCTEUgfHwgX19HTlVfVklT
-SUJMRSkKKy8qIEF2YWlsYWJsZSBvbiBGcmVlQlNEIChfX0JTRF9WSVNJQkxFKSBhbmQgTGlu
-dXggKF9fR05VX1ZJU0lCTEUpLiAqLworaW50ICAgICBjbG9zZV9yYW5nZSAodW5zaWduZWQg
-aW50IF9fZmlyc3RmZCwgdW5zaWduZWQgaW50IF9fbGFzdGZkLCBpbnQgX19mbGFncyk7Cisv
-KiAgICAgIENMT1NFX1JBTkdFX1VOU0hBUkUgMHgwMSAqLyAvKiBMaW51eCBvbmx5LCBub3Qg
-eWV0IHN1cHBvcnRlZC4gKi8KKyNkZWZpbmUgQ0xPU0VfUkFOR0VfQ0xPRVhFQyAweDAyCisj
-ZW5kaWYKICNpZiBfX1BPU0lYX1ZJU0lCTEUgPj0gMTk5MjA5CiBzaXplX3QJY29uZnN0ciAo
-aW50IF9fbmFtZSwgY2hhciAqX19idWYsIHNpemVfdCBfX2xlbik7CiAjZW5kaWYKZGlmZiAt
-LWdpdCBhL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbiBiL3dpbnN1cC9jeWd3aW4vY3lnd2lu
-LmRpbgppbmRleCA5Yjc2Y2U2N2EuLjllMzU0YWNjNiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5
-Z3dpbi9jeWd3aW4uZGluCisrKyBiL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbgpAQCAtMzQ3
-LDYgKzM0Nyw3IEBAIGNsb2cxMGwgTk9TSUdGRQogY2xvZ2YgTk9TSUdGRQogY2xvZ2wgTk9T
-SUdGRQogY2xvc2UgU0lHRkUKK2Nsb3NlX3JhbmdlIFNJR0ZFCiBjbG9zZWRpciBTSUdGRQog
-Y2xvc2Vsb2cgU0lHRkUKIGNuZF9icm9hZGNhc3QgU0lHRkUKZGlmZiAtLWdpdCBhL3dpbnN1
-cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oIGIvd2luc3VwL2N5Z3dpbi9pbmNs
-dWRlL2N5Z3dpbi92ZXJzaW9uLmgKaW5kZXggYzgxNzdjMmIxLi4zMDM2ODc4YzQgMTAwNjQ0
-Ci0tLSBhL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oCisrKyBiL3dp
-bnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oCkBAIC00ODQsMTIgKzQ4NCwx
-MyBAQCBkZXRhaWxzLiAqLwogICAzNDc6IEFkZCBjMTZydG9tYiwgYzMycnRvbWIsIG1icnRv
-YzE2LCBtYnJ0b2MzMi4KICAgMzQ4OiBBZGQgYzhydG9tYiwgbWJydG9jLgogICAzNDk6IEFk
-ZCBmYWxsb2NhdGUuCisgIDM1MDogQWRkIGNsb3NlX3JhbmdlLgogCiAgIE5vdGUgdGhhdCB3
-ZSBmb3Jnb3QgdG8gYnVtcCB0aGUgYXBpIGZvciB1YWxhcm0sIHN0cnRvbGwsIHN0cnRvdWxs
-LAogICBzaWdhbHRzdGFjaywgc2V0aG9zdG5hbWUuICovCiAKICNkZWZpbmUgQ1lHV0lOX1ZF
-UlNJT05fQVBJX01BSk9SIDAKLSNkZWZpbmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDM0
-OQorI2RlZmluZSBDWUdXSU5fVkVSU0lPTl9BUElfTUlOT1IgMzUwCiAKIC8qIFRoZXJlIGlz
-IGFsc28gYSBjb21wYXRpYml0eSB2ZXJzaW9uIG51bWJlciBhc3NvY2lhdGVkIHdpdGggdGhl
-IHNoYXJlZCBtZW1vcnkKICAgIHJlZ2lvbnMuICBJdCBpcyBpbmNyZW1lbnRlZCB3aGVuIGlu
-Y29tcGF0aWJsZSBjaGFuZ2VzIGFyZSBtYWRlIHRvIHRoZSBzaGFyZWQKZGlmZiAtLWdpdCBh
-L3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjUuMCBiL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8z
-LjUuMAppbmRleCBkMGE2YzJmYzguLjYyMDkwNjRhNiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5
-Z3dpbi9yZWxlYXNlLzMuNS4wCisrKyBiL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjUuMApA
-QCAtNDMsNiArNDMsOCBAQCBXaGF0J3MgbmV3OgogCiAtIE5ldyBBUEkgY2FsbHM6IGM4cnRv
-bWIsIGMxNnJ0b21iLCBjMzJydG9tYiwgbWJydG9jOCwgbWJydG9jMTYsIG1icnRvYzMyLgog
-CistIE5ldyBBUEkgY2FsbDogY2xvc2VfcmFuZ2UgKGF2YWlsYWJsZSBvbiBGcmVlQlNEIGFu
-ZCBMaW51eCkuCisKIC0gTmV3IEFQSSBjYWxsOiBmYWxsb2NhdGUgKExpbnV4LXNwZWNpZmlj
-KS4KIAogLSBJbXBsZW1lbnQgT1NTLWJhc2VkIHNvdW5kIG1peGVyIGRldmljZSAoL2Rldi9t
-aXhlcikuCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjIGIvd2luc3Vw
-L2N5Z3dpbi9zeXNjYWxscy5jYwppbmRleCA0ODZkYjFkYjYuLmFiYTg2NDQ3NSAxMDA2NDQK
-LS0tIGEvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYworKysgYi93aW5zdXAvY3lnd2luL3N5
-c2NhbGxzLmNjCkBAIC04NSw2ICs4NSw0OCBAQCBjbG9zZV9hbGxfZmlsZXMgKGJvb2wgbm9y
-ZWxlYXNlKQogICBjeWdoZWFwLT5mZHRhYi51bmxvY2sgKCk7CiB9CiAKKy8qIENsb3NlIG9y
-IHNldCB0aGUgY2xvc2Utb24tZXhlYyBmbGFnIGZvciBhbGwgb3BlbiBmaWxlIGRlc2NyaXB0
-b3JzCisgICBmcm9tIGZpcnN0ZmQgdG8gbGFzdGZkLgorICAgQXZhaWxhYmxlIG9uIEZyZWVC
-U0Qgc2luY2UgMTMgYW5kIExpbnV4IHNpbmNlIDUuOSAqLworZXh0ZXJuICJDIiBpbnQKK2Ns
-b3NlX3JhbmdlICh1bnNpZ25lZCBpbnQgZmlyc3RmZCwgdW5zaWduZWQgaW50IGxhc3RmZCwg
-aW50IGZsYWdzKQoreworICBwdGhyZWFkX3Rlc3RjYW5jZWwgKCk7CisKKyAgaWYgKCEoZmly
-c3RmZCA8PSBsYXN0ZmQgJiYgKCFmbGFncyB8fCBmbGFncyA9PSBDTE9TRV9SQU5HRV9DTE9F
-WEVDKSkpCisgICAgeworICAgICAgc2V0X2Vycm5vIChFSU5WQUwpOworICAgICAgcmV0dXJu
-IC0xOworICAgIH0KKworICBjeWdoZWFwLT5mZHRhYi5sb2NrICgpOworCisgIGludCBzaXpl
-ID0gKGludCkgKGxhc3RmZCA8IGN5Z2hlYXAtPmZkdGFiLnNpemUgPyBsYXN0ZmQgKyAxIDoK
-KwkJICAgIGN5Z2hlYXAtPmZkdGFiLnNpemUpOworCisgIGZvciAoaW50IGkgPSAoaW50KSBm
-aXJzdGZkOyBpIDwgc2l6ZTsgaSsrKQorICAgIHsKKyAgICAgIGN5Z2hlYXBfZmRnZXQgY2Zk
-IChpLCBmYWxzZSwgZmFsc2UpOworICAgICAgaWYgKGNmZCA8IDApCisJY29udGludWU7CisK
-KyAgICAgIGlmICghZmxhZ3MpCisJeworCSAgc3lzY2FsbF9wcmludGYgKCJjbG9zaW5nIGZk
-ICVkIiwgaSk7CisJICBjZmQtPmNsb3NlX3dpdGhfYXJjaCAoKTsKKwkgIGNmZC5yZWxlYXNl
-ICgpOworCX0KKyAgICAgIGVsc2UgLyogQ0xPU0VfUkFOR0VfQ0xPRVhFQyAqLworCXsKKwkg
-IHN5c2NhbGxfcHJpbnRmICgic2V0IEZEX0NMT0VYRUMgb24gZmQgJWQiLCBpKTsKKwkgIGNm
-ZC0+ZmNudGwgKEZfU0VURkQsIEZEX0NMT0VYRUMpOworCX0KKyAgICB9CisKKyAgY3lnaGVh
-cC0+ZmR0YWIudW5sb2NrICgpOworICByZXR1cm4gMDsKK30KKwogZXh0ZXJuICJDIiBpbnQK
-IGR1cCAoaW50IGZkKQogewpkaWZmIC0tZ2l0IGEvd2luc3VwL2RvYy9uZXctZmVhdHVyZXMu
-eG1sIGIvd2luc3VwL2RvYy9uZXctZmVhdHVyZXMueG1sCmluZGV4IDZhZTQyMDAzMS4uMGFi
-ZTFjNDFjIDEwMDY0NAotLS0gYS93aW5zdXAvZG9jL25ldy1mZWF0dXJlcy54bWwKKysrIGIv
-d2luc3VwL2RvYy9uZXctZmVhdHVyZXMueG1sCkBAIC03NCw2ICs3NCwxMCBAQCBwb3NpeF9z
-cGF3bl9maWxlX2FjdGlvbnNfYWRkZmNoZGlyX25wLgogTmV3IEFQSSBjYWxsczogYzhydG9t
-YiwgYzE2cnRvbWIsIGMzMnJ0b21iLCBtYnJ0b2M4LCBtYnJ0b2MxNiwgbWJydG9jMzIuCiA8
-L3BhcmE+PC9saXN0aXRlbT4KIAorPGxpc3RpdGVtPjxwYXJhPgorTmV3IEFQSSBjYWxsOiBj
-bG9zZV9yYW5nZSAoYXZhaWxhYmxlIG9uIEZyZWVCU0QgYW5kIExpbnV4KS4KKzwvcGFyYT48
-L2xpc3RpdGVtPgorCiA8bGlzdGl0ZW0+PHBhcmE+CiBOZXcgQVBJIGNhbGw6IGZhbGxvY2F0
-ZSAoTGludXgtc3BlY2lmaWMpLgogPC9wYXJhPjwvbGlzdGl0ZW0+Ci0tIAoyLjQyLjEKCg==
---------------154FAEDBD16D9C71E79A7BDE--
