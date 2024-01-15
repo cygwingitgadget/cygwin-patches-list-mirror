@@ -1,69 +1,204 @@
-Return-Path: <SRS0=46A2=IY=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
-	by sourceware.org (Postfix) with ESMTPS id 9008D3858D20
-	for <cygwin-patches@cygwin.com>; Sun, 14 Jan 2024 18:53:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9008D3858D20
+Return-Path: <SRS0=arxq=IZ=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+	by sourceware.org (Postfix) with ESMTPS id 4CAF3385829C
+	for <cygwin-patches@cygwin.com>; Mon, 15 Jan 2024 08:56:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4CAF3385829C
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9008D3858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1705258415; cv=none;
-	b=RZGbXSorXaDIoZN5EKQc9juFZ3cwD7Hi1WiWVbA4DwXQJlClE5+dMR7lO/UK1Tylw5lW4yIOsBsD2P3+Bi/y7JiDFTWQKHND1X/0mhD2aAyCqH29bmffLM+h2tfHP6G0ED2MHWVjyL4aFn7DG9jvqxNG1jdUrnoyk816DjPWDV4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4CAF3385829C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.20
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1705308980; cv=none;
+	b=gr/C+W8yymsaO+RFWTEIUN2sGAy/RUtPoaCUFVGUlnkHIl7nChDKk9GX9+CiNtwzghMMGn0Q6M0Z8RP3hRQ8/gPltkjdLiSZgb5MZfNneaismP9TWITIeEhBeMe4LKvs4wE88OjfsolwDUN0/Wip4BUsYpWsx83bTQBzsFep7o0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1705258415; c=relaxed/simple;
-	bh=Ae19OITIxwgAEFplh6Joc59dJczdqRMaijwfkDz63uI=;
-	h=Subject:From:To:Message-ID:Date:MIME-Version; b=DMxn4sUmWkMKWaB4Na4+BC9RUXqfGNcB13ErL/IY9GRqihxqdvaQwqDEocvggfUQLsAsPByQzvPquX9Z+onU/tAykhSdVGFHg9jxhoL16Vzm84NvOqxEJpb+IKkxvuYnkfKcAuJBLrVHD1rLNvsWATm9sGK7tTfzzXUI4U3x1Kk=
+	t=1705308980; c=relaxed/simple;
+	bh=W8UmBv7mjP87bkaPN/lYnNS1aMyR8XXZ7hdHjr8y3aE=;
+	h=Subject:From:To:Message-ID:Date:MIME-Version; b=A9z1L4FIn/tAINdlHTxGj20b+Bkv2GsQChXfTL5lCDNJ1MxTtKPvL8aS/qphLusZBVUN/TC52s+D87tpRPv6nNN2wsVOQgSySGb+BuEiuLY3Ln8T9T8MqkfZbL1tSstwTvJGOBELmgn205aL6Xc6mNJJqtSoxaLzScwJrfgQ/vM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from fwd70.aul.t-online.de (fwd70.aul.t-online.de [10.223.144.96])
-	by mailout10.t-online.de (Postfix) with SMTP id 91CBB183C1
-	for <cygwin-patches@cygwin.com>; Sun, 14 Jan 2024 19:53:30 +0100 (CET)
-Received: from [192.168.2.104] ([79.230.174.55]) by fwd70.t-online.de
+Received: from fwd75.aul.t-online.de (fwd75.aul.t-online.de [10.223.144.101])
+	by mailout08.t-online.de (Postfix) with SMTP id A4C9322188
+	for <cygwin-patches@cygwin.com>; Mon, 15 Jan 2024 09:56:16 +0100 (CET)
+Received: from [192.168.2.104] ([79.230.174.55]) by fwd75.t-online.de
 	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1rP5bs-4Wj0am0; Sun, 14 Jan 2024 19:53:28 +0100
+	esmtp id 1rPIlN-1MAcAC0; Mon, 15 Jan 2024 09:56:09 +0100
 Subject: Re: [PATCH] Cygwin: introduce close_range
-References: <83cfd6b3-6824-fd9f-794b-7fc428f8c80d@t-online.de>
- <3ab13e94-fd3a-41c8-8392-fcd72042d0e9@dronecode.org.uk>
 From: Christian Franke <Christian.Franke@t-online.de>
 To: cygwin-patches@cygwin.com
-Message-ID: <6b1723b1-12b1-a240-ff22-1f0f5ba73214@t-online.de>
-Date: Sun, 14 Jan 2024 19:53:27 +0100
+References: <83cfd6b3-6824-fd9f-794b-7fc428f8c80d@t-online.de>
+ <3ab13e94-fd3a-41c8-8392-fcd72042d0e9@dronecode.org.uk>
+ <6b1723b1-12b1-a240-ff22-1f0f5ba73214@t-online.de>
+Message-ID: <2443ab23-4c2f-bf99-c38e-8410e642fe1f@t-online.de>
+Date: Mon, 15 Jan 2024 09:56:07 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  SeaMonkey/2.53.16
 MIME-Version: 1.0
-In-Reply-To: <3ab13e94-fd3a-41c8-8392-fcd72042d0e9@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TOI-EXPURGATEID: 150726::1705258408-33FFC937-423ABA2A/0/0 CLEAN NORMAL
-X-TOI-MSGID: e382bff2-eecb-4a49-acd3-efd8f2029747
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,KAM_SHORT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6b1723b1-12b1-a240-ff22-1f0f5ba73214@t-online.de>
+Content-Type: multipart/mixed;
+ boundary="------------3E17B655AD246BC91C927BD7"
+X-TOI-EXPURGATEID: 150726::1705308969-0E2D7850-79A4E6BC/0/0 CLEAN NORMAL
+X-TOI-MSGID: a88c931f-f0e4-4651-aadc-e933b839201e
+X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,KAM_SHORT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Jon Turney wrote:
-> On 14/01/2024 16:07, Christian Franke wrote:
->> Recently I learned about the existence and usefulness of close_range():
->> https://github.com/smartmontools/smartmontools/issues/235
+This is a multi-part message in MIME format.
+--------------3E17B655AD246BC91C927BD7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Christian Franke wrote:
+> Jon Turney wrote:
+>> On 14/01/2024 16:07, Christian Franke wrote:
+>>> Recently I learned about the existence and usefulness of close_range():
+>>> https://github.com/smartmontools/smartmontools/issues/235
+>>>
+>>> https://man.freebsd.org/cgi/man.cgi?query=close_range&sektion=2
+>>> https://man7.org/linux/man-pages/man2/close_range.2.html
+>>>
+>>> Note that the above Linux man page is not fully correct. The include 
+>>> file "linux/close_range.h" exists, but provides only the defines. It 
+>>> is sufficient to include "unistd.h" as on FreeBSD.
+>>>
+>>> The attached patch adds this to Cygwin. It does not implement the 
+>>> Linux-specific CLOSE_RANGE_UNSHARE as I have no idea how to do this :-)
 >>
->> https://man.freebsd.org/cgi/man.cgi?query=close_range&sektion=2
->> https://man7.org/linux/man-pages/man2/close_range.2.html
+>> This API should also be mentioned in the
+>> "System interfaces compatible with GNU or Linux extensions" section 
+>> of doc/posix.xml
 >>
->> Note that the above Linux man page is not fully correct. The include 
->> file "linux/close_range.h" exists, but provides only the defines. It 
->> is sufficient to include "unistd.h" as on FreeBSD.
 >>
->> The attached patch adds this to Cygwin. It does not implement the 
->> Linux-specific CLOSE_RANGE_UNSHARE as I have no idea how to do this :-)
 >
-> This API should also be mentioned in the
-> "System interfaces compatible with GNU or Linux extensions" section of 
-> doc/posix.xml
+> Thanks for the info. I used the recent "Cygwin: introduce 
+> fallocate(2)" patch as a blueprint for which other files should be 
+> changed (fallocate is also missing in the posix.xml file).
 >
+> I will provide a new patch soon which also fixes an unlikely but 
+> possible corner case: Pass a value larger than MAX_INT as lower limit.
 >
 
-Thanks for the info. I used the recent "Cygwin: introduce fallocate(2)" 
-patch as a blueprint for which other files should be changed (fallocate 
-is also missing in the posix.xml file).
+Attached. I also decided to simply ignore CLOSE_RANGE_UNSHARE for now.
 
-I will provide a new patch soon which also fixes an unlikely but 
-possible corner case: Pass a value larger than MAX_INT as lower limit.
 
+--------------3E17B655AD246BC91C927BD7
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-introduce-close_range-2.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Cygwin-introduce-close_range-2.patch"
+
+RnJvbSBmNzcwNGJmNzdhOTI2ZTUzZTgyMDA1MjhhYjZhYmMxYzlmZGNhNTExIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBNb24sIDE1IEphbiAyMDI0IDA5OjUyOjUwICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBpbnRyb2R1Y2UgY2xvc2VfcmFuZ2UoMikKClRo
+aXMgZnVuY3Rpb24gY2xvc2VzIG9yIHNldHMgdGhlIGNsb3NlLW9uLWV4ZWMgZmxhZyBmb3Ig
+YSBzcGVjaWZpZWQKcmFuZ2Ugb2YgZmlsZSBkZXNjcmlwdG9ycy4gIEl0IGlzIGF2YWlsYWJs
+ZSBvbiBGcmVlQlNEIGFuZCBMaW51eC4KClNpZ25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFu
+a2UgPGNocmlzdGlhbi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogbmV3bGliL2xpYmMvaW5j
+bHVkZS9zeXMvdW5pc3RkLmggICAgICAgfCAgOSArKysrKysKIHdpbnN1cC9jeWd3aW4vY3ln
+d2luLmRpbiAgICAgICAgICAgICAgIHwgIDEgKwogd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5
+Z3dpbi92ZXJzaW9uLmggfCAgMyArLQogd2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNS4wICAg
+ICAgICAgICAgfCAgMiArKwogd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYyAgICAgICAgICAg
+ICAgfCA0MyArKysrKysrKysrKysrKysrKysrKysrKysrKwogd2luc3VwL2RvYy9uZXctZmVh
+dHVyZXMueG1sICAgICAgICAgICAgfCAgNCArKysKIHdpbnN1cC9kb2MvcG9zaXgueG1sICAg
+ICAgICAgICAgICAgICAgIHwgIDUgKysrCiA3IGZpbGVzIGNoYW5nZWQsIDY2IGluc2VydGlv
+bnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9uZXdsaWIvbGliYy9pbmNsdWRl
+L3N5cy91bmlzdGQuaCBiL25ld2xpYi9saWJjL2luY2x1ZGUvc3lzL3VuaXN0ZC5oCmluZGV4
+IDI1NTMyMjUxYy4uMGEzMTU0NGVkIDEwMDY0NAotLS0gYS9uZXdsaWIvbGliYy9pbmNsdWRl
+L3N5cy91bmlzdGQuaAorKysgYi9uZXdsaWIvbGliYy9pbmNsdWRlL3N5cy91bmlzdGQuaApA
+QCAtMjYsNiArMjYsMTUgQEAgaW50ICAgICBjaG93biAoY29uc3QgY2hhciAqX19wYXRoLCB1
+aWRfdCBfX293bmVyLCBnaWRfdCBfX2dyb3VwKTsKIGludCAgICAgY2hyb290IChjb25zdCBj
+aGFyICpfX3BhdGgpOwogI2VuZGlmCiBpbnQgICAgIGNsb3NlIChpbnQgX19maWxkZXMpOwor
+I2lmIGRlZmluZWQoX19DWUdXSU5fXykgJiYgKF9fQlNEX1ZJU0lCTEUgfHwgX19HTlVfVklT
+SUJMRSkKKy8qIEF2YWlsYWJsZSBvbiBGcmVlQlNEIChfX0JTRF9WSVNJQkxFKSBhbmQgTGlu
+dXggKF9fR05VX1ZJU0lCTEUpLiAqLworaW50ICAgICBjbG9zZV9yYW5nZSAodW5zaWduZWQg
+aW50IF9fZmlyc3RmZCwgdW5zaWduZWQgaW50IF9fbGFzdGZkLCBpbnQgX19mbGFncyk7Cisj
+aWYgX19HTlVfVklTSUJMRQorLyogTGludXgtc3BlY2lmaWMsIGlnbm9yZWQgYnkgQ3lnd2lu
+LiAqLworI2RlZmluZSBDTE9TRV9SQU5HRV9VTlNIQVJFICgxIDw8IDEpCisjZW5kaWYKKyNk
+ZWZpbmUgQ0xPU0VfUkFOR0VfQ0xPRVhFQyAoMSA8PCAyKQorI2VuZGlmCiAjaWYgX19QT1NJ
+WF9WSVNJQkxFID49IDE5OTIwOQogc2l6ZV90CWNvbmZzdHIgKGludCBfX25hbWUsIGNoYXIg
+Kl9fYnVmLCBzaXplX3QgX19sZW4pOwogI2VuZGlmCmRpZmYgLS1naXQgYS93aW5zdXAvY3ln
+d2luL2N5Z3dpbi5kaW4gYi93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4KaW5kZXggOWI3NmNl
+NjdhLi45ZTM1NGFjYzYgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbgor
+KysgYi93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4KQEAgLTM0Nyw2ICszNDcsNyBAQCBjbG9n
+MTBsIE5PU0lHRkUKIGNsb2dmIE5PU0lHRkUKIGNsb2dsIE5PU0lHRkUKIGNsb3NlIFNJR0ZF
+CitjbG9zZV9yYW5nZSBTSUdGRQogY2xvc2VkaXIgU0lHRkUKIGNsb3NlbG9nIFNJR0ZFCiBj
+bmRfYnJvYWRjYXN0IFNJR0ZFCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2luY2x1ZGUv
+Y3lnd2luL3ZlcnNpb24uaCBiL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lv
+bi5oCmluZGV4IGM4MTc3YzJiMS4uMzAzNjg3OGM0IDEwMDY0NAotLS0gYS93aW5zdXAvY3ln
+d2luL2luY2x1ZGUvY3lnd2luL3ZlcnNpb24uaAorKysgYi93aW5zdXAvY3lnd2luL2luY2x1
+ZGUvY3lnd2luL3ZlcnNpb24uaApAQCAtNDg0LDEyICs0ODQsMTMgQEAgZGV0YWlscy4gKi8K
+ICAgMzQ3OiBBZGQgYzE2cnRvbWIsIGMzMnJ0b21iLCBtYnJ0b2MxNiwgbWJydG9jMzIuCiAg
+IDM0ODogQWRkIGM4cnRvbWIsIG1icnRvYy4KICAgMzQ5OiBBZGQgZmFsbG9jYXRlLgorICAz
+NTA6IEFkZCBjbG9zZV9yYW5nZS4KIAogICBOb3RlIHRoYXQgd2UgZm9yZ290IHRvIGJ1bXAg
+dGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0b2xsLCBzdHJ0b3VsbCwKICAgc2lnYWx0c3RhY2ss
+IHNldGhvc3RuYW1lLiAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAw
+Ci0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAzNDkKKyNkZWZpbmUgQ1lHV0lO
+X1ZFUlNJT05fQVBJX01JTk9SIDM1MAogCiAvKiBUaGVyZSBpcyBhbHNvIGEgY29tcGF0aWJp
+dHkgdmVyc2lvbiBudW1iZXIgYXNzb2NpYXRlZCB3aXRoIHRoZSBzaGFyZWQgbWVtb3J5CiAg
+ICByZWdpb25zLiAgSXQgaXMgaW5jcmVtZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUgY2hhbmdl
+cyBhcmUgbWFkZSB0byB0aGUgc2hhcmVkCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3Jl
+bGVhc2UvMy41LjAgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy41LjAKaW5kZXggZDBhNmMy
+ZmM4Li42MjA5MDY0YTYgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjUu
+MAorKysgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy41LjAKQEAgLTQzLDYgKzQzLDggQEAg
+V2hhdCdzIG5ldzoKIAogLSBOZXcgQVBJIGNhbGxzOiBjOHJ0b21iLCBjMTZydG9tYiwgYzMy
+cnRvbWIsIG1icnRvYzgsIG1icnRvYzE2LCBtYnJ0b2MzMi4KIAorLSBOZXcgQVBJIGNhbGw6
+IGNsb3NlX3JhbmdlIChhdmFpbGFibGUgb24gRnJlZUJTRCBhbmQgTGludXgpLgorCiAtIE5l
+dyBBUEkgY2FsbDogZmFsbG9jYXRlIChMaW51eC1zcGVjaWZpYykuCiAKIC0gSW1wbGVtZW50
+IE9TUy1iYXNlZCBzb3VuZCBtaXhlciBkZXZpY2UgKC9kZXYvbWl4ZXIpLgpkaWZmIC0tZ2l0
+IGEvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYyBiL3dpbnN1cC9jeWd3aW4vc3lzY2FsbHMu
+Y2MKaW5kZXggNDg2ZGIxZGI2Li4yZTFiNTZiN2YgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3
+aW4vc3lzY2FsbHMuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYwpAQCAtODUs
+NiArODUsNDkgQEAgY2xvc2VfYWxsX2ZpbGVzIChib29sIG5vcmVsZWFzZSkKICAgY3lnaGVh
+cC0+ZmR0YWIudW5sb2NrICgpOwogfQogCisvKiBDbG9zZSBvciBzZXQgdGhlIGNsb3NlLW9u
+LWV4ZWMgZmxhZyBmb3IgYWxsIG9wZW4gZmlsZSBkZXNjcmlwdG9ycworICAgZnJvbSBmaXJz
+dGZkIHRvIGxhc3RmZC4gIENMT1NFX1JBTkdFX1VOU0hBUkUgaXMgaWdub3JlZC4KKyAgIEF2
+YWlsYWJsZSBvbiBGcmVlQlNEIHNpbmNlIDEzIGFuZCBMaW51eCBzaW5jZSA1LjkgKi8KK2V4
+dGVybiAiQyIgaW50CitjbG9zZV9yYW5nZSAodW5zaWduZWQgaW50IGZpcnN0ZmQsIHVuc2ln
+bmVkIGludCBsYXN0ZmQsIGludCBmbGFncykKK3sKKyAgcHRocmVhZF90ZXN0Y2FuY2VsICgp
+OworCisgIGlmICghKGZpcnN0ZmQgPD0gbGFzdGZkICYmCisgICAgICAhKGZsYWdzICYgfihD
+TE9TRV9SQU5HRV9VTlNIQVJFIHwgQ0xPU0VfUkFOR0VfQ0xPRVhFQykpKSkKKyAgICB7Cisg
+ICAgICBzZXRfZXJybm8gKEVJTlZBTCk7CisgICAgICByZXR1cm4gLTE7CisgICAgfQorCisg
+IGN5Z2hlYXAtPmZkdGFiLmxvY2sgKCk7CisKKyAgdW5zaWduZWQgaW50IHNpemUgPSAobGFz
+dGZkIDwgY3lnaGVhcC0+ZmR0YWIuc2l6ZSA/IGxhc3RmZCArIDEgOgorCQkgICAgICBjeWdo
+ZWFwLT5mZHRhYi5zaXplKTsKKworICBmb3IgKHVuc2lnbmVkIGludCBpID0gZmlyc3RmZDsg
+aSA8IHNpemU7IGkrKykKKyAgICB7CisgICAgICBjeWdoZWFwX2ZkZ2V0IGNmZCAoKGludCkg
+aSwgZmFsc2UsIGZhbHNlKTsKKyAgICAgIGlmIChjZmQgPCAwKQorCWNvbnRpbnVlOworCisg
+ICAgICBpZiAoZmxhZ3MgJiBDTE9TRV9SQU5HRV9DTE9FWEVDKQorCXsKKwkgIHN5c2NhbGxf
+cHJpbnRmICgic2V0IEZEX0NMT0VYRUMgb24gZmQgJXUiLCBpKTsKKwkgIGNmZC0+ZmNudGwg
+KEZfU0VURkQsIEZEX0NMT0VYRUMpOworCX0KKyAgICAgIGVsc2UKKwl7CisJICBzeXNjYWxs
+X3ByaW50ZiAoImNsb3NpbmcgZmQgJXUiLCBpKTsKKwkgIGNmZC0+Y2xvc2Vfd2l0aF9hcmNo
+ICgpOworCSAgY2ZkLnJlbGVhc2UgKCk7CisJfQorICAgIH0KKworICBjeWdoZWFwLT5mZHRh
+Yi51bmxvY2sgKCk7CisgIHJldHVybiAwOworfQorCiBleHRlcm4gIkMiIGludAogZHVwIChp
+bnQgZmQpCiB7CmRpZmYgLS1naXQgYS93aW5zdXAvZG9jL25ldy1mZWF0dXJlcy54bWwgYi93
+aW5zdXAvZG9jL25ldy1mZWF0dXJlcy54bWwKaW5kZXggNmFlNDIwMDMxLi4wYWJlMWM0MWMg
+MTAwNjQ0Ci0tLSBhL3dpbnN1cC9kb2MvbmV3LWZlYXR1cmVzLnhtbAorKysgYi93aW5zdXAv
+ZG9jL25ldy1mZWF0dXJlcy54bWwKQEAgLTc0LDYgKzc0LDEwIEBAIHBvc2l4X3NwYXduX2Zp
+bGVfYWN0aW9uc19hZGRmY2hkaXJfbnAuCiBOZXcgQVBJIGNhbGxzOiBjOHJ0b21iLCBjMTZy
+dG9tYiwgYzMycnRvbWIsIG1icnRvYzgsIG1icnRvYzE2LCBtYnJ0b2MzMi4KIDwvcGFyYT48
+L2xpc3RpdGVtPgogCis8bGlzdGl0ZW0+PHBhcmE+CitOZXcgQVBJIGNhbGw6IGNsb3NlX3Jh
+bmdlIChhdmFpbGFibGUgb24gRnJlZUJTRCBhbmQgTGludXgpLgorPC9wYXJhPjwvbGlzdGl0
+ZW0+CisKIDxsaXN0aXRlbT48cGFyYT4KIE5ldyBBUEkgY2FsbDogZmFsbG9jYXRlIChMaW51
+eC1zcGVjaWZpYykuCiA8L3BhcmE+PC9saXN0aXRlbT4KZGlmZiAtLWdpdCBhL3dpbnN1cC9k
+b2MvcG9zaXgueG1sIGIvd2luc3VwL2RvYy9wb3NpeC54bWwKaW5kZXggMTUxYWViOWZlLi40
+ZWNlNzYxYTggMTAwNjQ0Ci0tLSBhL3dpbnN1cC9kb2MvcG9zaXgueG1sCisrKyBiL3dpbnN1
+cC9kb2MvcG9zaXgueG1sCkBAIC0xMTQzLDYgKzExNDMsNyBAQCBhbHNvIElFRUUgU3RkIDEw
+MDMuMS0yMDE3IChQT1NJWC4xLTIwMTcpLjwvcGFyYT4KICAgICBjZm1ha2VyYXcKICAgICBj
+ZnNldHNwZWVkCiAgICAgY2xlYXJlcnJfdW5sb2NrZWQKKyAgICBjbG9zZV9yYW5nZQogICAg
+IGRhZW1vbgogICAgIGRuX2NvbXAKICAgICBkbl9leHBhbmQKQEAgLTEyOTcsNiArMTI5OCw3
+IEBAIGFsc28gSUVFRSBTdGQgMTAwMy4xLTIwMTcgKFBPU0lYLjEtMjAxNykuPC9wYXJhPgog
+ICAgIGNsb2cxMAogICAgIGNsb2cxMGYKICAgICBjbG9nMTBsCisgICAgY2xvc2VfcmFuZ2UJ
+CQkoc2VlIDx4cmVmIGxpbmtlbmQ9InN0ZC1ub3RlcyI+Y2hhcHRlciAiSW1wbGVtZW50YXRp
+b24gTm90ZXMiPC94cmVmPikKICAgICBjcnlwdF9yCQkJKGF2YWlsYWJsZSBpbiBleHRlcm5h
+bCAiY3J5cHQiIGxpYnJhcnkpCiAgICAgZGxhZGRyCQkJKHNlZSA8eHJlZiBsaW5rZW5kPSJz
+dGQtbm90ZXMiPmNoYXB0ZXIgIkltcGxlbWVudGF0aW9uIE5vdGVzIjwveHJlZj4pCiAgICAg
+ZHJlbWYKQEAgLTE2NTUsNiArMTY1Nyw5IEBAIENMT0NLX1JFQUxUSU1FIGFuZCBDTE9DS19N
+T05PVE9OSUMuICA8ZnVuY3Rpb24+Y2xvY2tfc2V0cmVzPC9mdW5jdGlvbj4sCiA8ZnVuY3Rp
+b24+Y2xvY2tfc2V0dGltZTwvZnVuY3Rpb24+LCBhbmQgPGZ1bmN0aW9uPnRpbWVyX2NyZWF0
+ZTwvZnVuY3Rpb24+CiBjdXJyZW50bHkgc3VwcG9ydCBvbmx5IENMT0NLX1JFQUxUSU1FLjwv
+cGFyYT4KIAorPHBhcmE+PGZ1bmN0aW9uPmNsb3NlX3JhbmdlPC9mdW5jdGlvbj4gaWdub3Jl
+cyB0aGUgTGludXgtc3BlY2lmaWMgZmxhZworQ0xPU0VfUkFOR0VfVU5TSEFSRS48L3BhcmE+
+CisKIDxwYXJhPlBPU0lYIGZpbGUgbG9ja3MgdmlhIDxmdW5jdGlvbj5mY250bDwvZnVuY3Rp
+b24+IG9yCiA8ZnVuY3Rpb24+bG9ja2Y8L2Z1bmN0aW9uPiwgYXMgd2VsbCBhcyBCU0QgPGZ1
+bmN0aW9uPmZsb2NrPC9mdW5jdGlvbj4gbG9ja3MKIGFyZSBhZHZpc29yeSBsb2Nrcy4gIFRo
+ZXkgZG9uJ3QgaW50ZXJhY3Qgd2l0aCBXaW5kb3dzIG1hbmRhdG9yeSBsb2Nrcywgbm9yCi0t
+IAoyLjQyLjEKCg==
+--------------3E17B655AD246BC91C927BD7--
