@@ -1,61 +1,59 @@
-Return-Path: <SRS0=o9c9=JC=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0010.nifty.com (mta-snd00012.nifty.com [106.153.226.44])
-	by sourceware.org (Postfix) with ESMTPS id 9D3723858D1E
-	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2024 13:45:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9D3723858D1E
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9D3723858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.44
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706103918; cv=none;
-	b=RikzfgrgP4mehmcxsIszd2FY2Y1i8cuOk7nlSggG9G+uaQsWyeKHKNEtXXWo1vbFOZPf2bbAtxQWzgQLAi8PRg3QrMSetVgd+CiVWpCVwRStyGkKqFLssZ+jtv7GLyPldQV24erTyRHpO0O2o74hIc6Of5q5LayHDiF4rA6iIqw=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1706103918; c=relaxed/simple;
-	bh=BNaXHzRBeB5QXXe5kSBGFVVNzXWDPpkvv0Q0p+byBpc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=UcD1wkb9WOwTNrYXkqHkLd55UBIARNgWzn8uPZw2k/jnhA5M+kT6CwXU/f2C2jUAqk17EUcAH3TRTRc/3ba8msZVPEb1YtRa5IOKm8+AI3ulTxdqjpFyrq1R+7H3obNBoOtHb2jc86WGlKPe7D8FCNu2ksasBBysH5nOxWUzC7c=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by dmta0010.nifty.com with ESMTP
-          id <20240124134513234.ZSBM.108497.localhost.localdomain@nifty.com>;
-          Wed, 24 Jan 2024 22:45:13 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 794073858C20; Wed, 24 Jan 2024 14:39:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 794073858C20
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1706107154;
+	bh=0G24223aOQoGQfYn1N5PBD/LP0xGzZb1Kcv8zBQYSLk=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=IcAPbXXmJoKvwer2LVtYzJVbT5tK0VYue8VbM54gUZjqXwyGtxrr9Lg5+uUeBt502
+	 Cut7vfpgvf9FkwxYJs3JWjWDlrY0wrsi1+5aCyd02BtRrJBKsekJOQW5RymDhL9DEW
+	 ZCsfsEkdBt/xNlC3pry7TK5jnP63cjI9EdllRbLA=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 9377DA80B93; Wed, 24 Jan 2024 15:39:12 +0100 (CET)
+Date: Wed, 24 Jan 2024 15:39:12 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH] Cygwin: pthread: Fix handle leak in pthread_once.
-Date: Wed, 24 Jan 2024 22:44:48 +0900
-Message-ID: <20240124134448.39071-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH 1/5] Cygwin: Make 'ulimit -c' control writing a coredump
+Message-ID: <ZbEhEP-MI7oX_2px@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20240112140958.1694-1-jon.turney@dronecode.org.uk>
+ <20240112140958.1694-2-jon.turney@dronecode.org.uk>
+ <238901bf-db88-4d99-bb82-2b98ff6ebdf6@dronecode.org.uk>
+ <Za_NQNPhRNU7fRv0@calimero.vinschen.de>
+ <c4cde4ee-f908-4944-8a77-8b86f3e51e8f@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c4cde4ee-f908-4944-8a77-8b86f3e51e8f@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-If pthread_once() is called with pthread_once_t initialized using
-PTREAD_ONCE_INIT, pthread_once does not release pthread_mutex used
-internally. This patch fixes that by calling pthread_mutex_destroy()
-in the thread which has called init_routine.
+On Jan 24 13:28, Jon Turney wrote:
+> On 23/01/2024 14:29, Corinna Vinschen wrote:
+> > On Jan 23 14:20, Jon Turney wrote:
+> > 
+> > > Even then this is clearly not totally bullet-proof. Maybe the right thing to
+> > > do is add a suitable timeout here, so even if we fail to notice the
+> > > DebugActiveProcess() (or there's a custom JIT debugger which just writes the
+> > > fact a process crashed to a logfile or something), we'll exit eventually?
+> > 
+> > Timeouts are just that tiny little bit more bullet-proof, they still
+> > aren't totally bullet-proof.
+> > 
+> > What timeout were you thinking of?  milliseconds?
+> 
+> Oh no, tens of seconds or something, just as a fail-safe.
 
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/thread.cc | 3 +++
- 1 file changed, 3 insertions(+)
+Uh, sounds a lot.  10 secs?  Not longer, I think.
 
-diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-index 7bb4f9fc8..0f8327831 100644
---- a/winsup/cygwin/thread.cc
-+++ b/winsup/cygwin/thread.cc
-@@ -2060,6 +2060,9 @@ pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
-     {
-       init_routine ();
-       once_control->state = 1;
-+      pthread_mutex_unlock (&once_control->mutex);
-+      while (pthread_mutex_destroy (&once_control->mutex) == EBUSY);
-+      return 0;
-     }
-   /* Here we must remove our cancellation handler */
-   pthread_mutex_unlock (&once_control->mutex);
--- 
-2.43.0
+If you want to do that for 3.5, please do it this week.  You can
+push the change without waiting for approval.
 
+> (Ofc, all this is working around the fact that Win32 API doesn't have a
+> WaitForDebuggerPresent(timeout) function)
+
+Yeah, and there's no alternative way using the native API afaics :(
+
+
+Corinna
