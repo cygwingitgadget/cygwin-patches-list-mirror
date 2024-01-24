@@ -1,87 +1,61 @@
-Return-Path: <SRS0=9e7z=JC=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from re-prd-fep-048.btinternet.com (mailomta20-re.btinternet.com [213.120.69.113])
-	by sourceware.org (Postfix) with ESMTPS id ED8513858D1E
-	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2024 13:28:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org ED8513858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org ED8513858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=213.120.69.113
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706102940; cv=none;
-	b=AH7kIwztgJfqlQDkYZDGI3yAnp8kOitsQZZ3wPv/vtgyQqFry3UTX8RKqZDZLhRxidJ08oMcFirPhbs7mHRrtue/dJ1MtDHMD6M01HJY7Te+voeeJJ4yvNKpmduOqMdCiYUGD0m1i+xgB19ARhdtp6t3+9AVf3+C461y0s/S/n4=
+Return-Path: <SRS0=o9c9=JC=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta0010.nifty.com (mta-snd00012.nifty.com [106.153.226.44])
+	by sourceware.org (Postfix) with ESMTPS id 9D3723858D1E
+	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2024 13:45:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9D3723858D1E
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9D3723858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.44
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706103918; cv=none;
+	b=RikzfgrgP4mehmcxsIszd2FY2Y1i8cuOk7nlSggG9G+uaQsWyeKHKNEtXXWo1vbFOZPf2bbAtxQWzgQLAi8PRg3QrMSetVgd+CiVWpCVwRStyGkKqFLssZ+jtv7GLyPldQV24erTyRHpO0O2o74hIc6Of5q5LayHDiF4rA6iIqw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1706102940; c=relaxed/simple;
-	bh=9wdNzUHvU26QtqAf0KISnkkwJQr1u2qxChvqFduO4Ak=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=Qbfgy6kh90GCQz8+uqMgspyK5p8uEr9L9xTPC2dpXMhd/rK0JBhXzFfCVGxmYlmJSDtEdA6OF8OCqUNrwafPStvia97wRLSzHaMZqZDtP6uVD2mP70WFYWY8qLNNMmpeYMHrbScFDG7Yrr/8RO+/3lW8h6wLLnqfdkPFq4ON0Ds=
+	t=1706103918; c=relaxed/simple;
+	bh=BNaXHzRBeB5QXXe5kSBGFVVNzXWDPpkvv0Q0p+byBpc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=UcD1wkb9WOwTNrYXkqHkLd55UBIARNgWzn8uPZw2k/jnhA5M+kT6CwXU/f2C2jUAqk17EUcAH3TRTRc/3ba8msZVPEb1YtRa5IOKm8+AI3ulTxdqjpFyrq1R+7H3obNBoOtHb2jc86WGlKPe7D8FCNu2ksasBBysH5nOxWUzC7c=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
-          by re-prd-fep-048.btinternet.com with ESMTP
-          id <20240124132857.LIUB17945.re-prd-fep-048.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>
-          for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2024 13:28:57 +0000
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 6577B9C50521377E
-X-Originating-IP: [86.140.193.68]
-X-OWM-Source-IP: 86.140.193.68
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=30/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeluddghedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecumhhishhsihhnghcuvffquchfihgvlhguucdlfedtmdenucfjughrpefkffggfgfufhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpedvtdfgudduueehveffvdejgfeileeugfeivedvgfehueelffffgeejudduhfegtdenucfkphepkeeirddugedtrdduleefrdeikeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugedtrdduleefrdeikedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgvvhfkrfephhhoshhtkeeiqddugedtqdduleefqdeikedrrhgrnhhgvgekiedqudegtddrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhstheprhgvqdhp
-	rhguqdhrghhouhhtqddttdeh
-X-RazorGate-Vade-Verdict: clean 30
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (86.140.193.68) by re-prd-rgout-005.btmx-prd.synchronoss.net (authenticated as jonturney@btinternet.com)
-        id 6577B9C50521377E for cygwin-patches@cygwin.com; Wed, 24 Jan 2024 13:28:57 +0000
-Message-ID: <c4cde4ee-f908-4944-8a77-8b86f3e51e8f@dronecode.org.uk>
-Date: Wed, 24 Jan 2024 13:28:56 +0000
+Received: from localhost.localdomain by dmta0010.nifty.com with ESMTP
+          id <20240124134513234.ZSBM.108497.localhost.localdomain@nifty.com>;
+          Wed, 24 Jan 2024 22:45:13 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Corinna Vinschen <corinna@vinschen.de>
+Subject: [PATCH] Cygwin: pthread: Fix handle leak in pthread_once.
+Date: Wed, 24 Jan 2024 22:44:48 +0900
+Message-ID: <20240124134448.39071-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] Cygwin: Make 'ulimit -c' control writing a coredump
-References: <20240112140958.1694-1-jon.turney@dronecode.org.uk>
- <20240112140958.1694-2-jon.turney@dronecode.org.uk>
- <238901bf-db88-4d99-bb82-2b98ff6ebdf6@dronecode.org.uk>
- <Za_NQNPhRNU7fRv0@calimero.vinschen.de>
-Content-Language: en-GB
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Za_NQNPhRNU7fRv0@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 23/01/2024 14:29, Corinna Vinschen wrote:
-> On Jan 23 14:20, Jon Turney wrote:
-> 
->> Even then this is clearly not totally bullet-proof. Maybe the right thing to
->> do is add a suitable timeout here, so even if we fail to notice the
->> DebugActiveProcess() (or there's a custom JIT debugger which just writes the
->> fact a process crashed to a logfile or something), we'll exit eventually?
-> 
-> Timeouts are just that tiny little bit more bullet-proof, they still
-> aren't totally bullet-proof.
-> 
-> What timeout were you thinking of?  milliseconds?
+If pthread_once() is called with pthread_once_t initialized using
+PTREAD_ONCE_INIT, pthread_once does not release pthread_mutex used
+internally. This patch fixes that by calling pthread_mutex_destroy()
+in the thread which has called init_routine.
 
-Oh no, tens of seconds or something, just as a fail-safe.
+Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/thread.cc | 3 +++
+ 1 file changed, 3 insertions(+)
 
-To be clear, I'm suggesting something like this:
-
--      while (!being_debugged ())
-+      while (!being_debugged () || GetTickCount64() > timeout)
-         Sleep (0);
-
-
-As the comment above identifies, the concern is that if the executed 
-command runs too quickly, we don't notice and get stuck there.
-
-This isn't a concern when invoking gdb, as if the debugee is allowed to 
-continue, being_debugged will return TRUE and we'll exit the loop.
-
-But if we're invoking dumper, if it attaches and detaches quickly 
-enough, we never notice and just get stuck.
-
-(Ofc, all this is working around the fact that Win32 API doesn't have a
-WaitForDebuggerPresent(timeout) function)
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index 7bb4f9fc8..0f8327831 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -2060,6 +2060,9 @@ pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
+     {
+       init_routine ();
+       once_control->state = 1;
++      pthread_mutex_unlock (&once_control->mutex);
++      while (pthread_mutex_destroy (&once_control->mutex) == EBUSY);
++      return 0;
+     }
+   /* Here we must remove our cancellation handler */
+   pthread_mutex_unlock (&once_control->mutex);
+-- 
+2.43.0
 
