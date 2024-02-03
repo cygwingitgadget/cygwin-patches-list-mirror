@@ -1,51 +1,55 @@
-Return-Path: <SRS0=MPDs=JM=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta1007.nifty.com (mta-snd01008.nifty.com [106.153.227.40])
-	by sourceware.org (Postfix) with ESMTPS id C100D3858403
-	for <cygwin-patches@cygwin.com>; Sat,  3 Feb 2024 15:47:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C100D3858403
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C100D3858403
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706975259; cv=none;
-	b=orZqhI/EX7Gt3Eq/l05zlmAG0JJrUUPXofdCQ45NedmN3SgpK9vnti2rQNS8mgoZ9wKpybBTiRXpJugAhEoeSD1fB+MfIXAiXOR+bAXV7xw5MB2uZKRy+ZeYO2FTL7lCagXESlQJjTglXJ23HdxQXCIJjCHjYL8sUIRCdFxXmAU=
+Return-Path: <SRS0=+TpR=JM=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
+	by sourceware.org (Postfix) with ESMTPS id CFB1B3858289
+	for <cygwin-patches@cygwin.com>; Sat,  3 Feb 2024 18:48:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CFB1B3858289
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CFB1B3858289
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=96.47.74.235
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706986084; cv=none;
+	b=g+iwmyFV1kPJrcMbl6iDprQ0RxK170Wad5nYhsMJlOaI66sr9H9DsWH254Ky6vUmxLC874RFtLxePi3offLwKBqdE2CK7H0OZJZIJczcxmofUk5Bt5vJ1q+1Yga+gmg5RlG7mMnJIdePwFWQND4rzwccGYyED7fAm6Gqx4PV93g=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1706975259; c=relaxed/simple;
-	bh=mr7rFjRvnW15YoihlLzXO59U4unwfEtKArAKInKBw+g=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version; b=GoykebIWom3r69BH44vLSApNZwtetyoxUWoY155MzDNc78M/ZNxo0oI6znQ+Kp8ZbqqN6JXjN37vMMANOH2x4SzWhdS0eCOsFRQTwL6sGtF8VS1r80f4dHX+z/qggw5JlAY1iXvbkN6807zrPyC6WWKg5n6npQVKh0ZoQXJMGCs=
+	t=1706986084; c=relaxed/simple;
+	bh=QY9KvlgDbEuml2B8n0A5ft52GoRu2uRACkvx+p2RYhQ=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=g8A+f2ZPxuMaRV2XJOvCqN7iAFEh8YnG32qr6vprwVrHYrZiB/U9P5EyJGVYqo6MT3d2A6IQhXqR6syYK4w7VwYGvJ/hHd2b6nnyex0QHU4ejqRlnwgTpTbZgunEQTWj+GpwY5+w1zbAbXXI1Xehf6hoguGtnzWqlr2tVAKilss=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by dmta1007.nifty.com with ESMTP
-          id <20240203154734402.NYVS.5813.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 4 Feb 2024 00:47:34 +0900
-Date: Sun, 4 Feb 2024 00:47:33 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id A480BCEAF
+	for <cygwin-patches@cygwin.com>; Sat,  3 Feb 2024 13:48:02 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=ZOzYoI+wtCVCquflNZ498gkpq9o=; b=vTOHk
+	63KJSVmaOeUIaTVacAmH2VgFbjxAsz3NfPLx2/oUby9LPZO8ZF9i6lwaa3YdvVQi
+	btunjIUA4hnyF4seWGN4keBtB0syjSJNDPlMjIkyIcCWlqgaEzFYvcOSWRRHXvFY
+	+t03Ws1YdR+5VmVbjqwS9s7cluZSiN7MxgylW4=
+Received: from mail231 (mail231 [96.47.74.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 92D5ECEAD
+	for <cygwin-patches@cygwin.com>; Sat,  3 Feb 2024 13:48:02 -0500 (EST)
+Date: Sat, 3 Feb 2024 10:48:02 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Avoid slipping past
- disable_master_thread check.
-Message-Id: <20240204004733.1286954060e53f6bb85f09dd@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: console: Avoid slipping past disable_master_thread
+ check.
 In-Reply-To: <c8c3a5c3-72b7-7e1b-3ddf-d399090b49a1@gmx.de>
-References: <20240202161827.1847-1-takashi.yano@nifty.ne.jp>
-	<c8c3a5c3-72b7-7e1b-3ddf-d399090b49a1@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
+Message-ID: <alpine.BSO.2.21.2402031042100.95909@resin.csoft.net>
+References: <20240202161827.1847-1-takashi.yano@nifty.ne.jp> <c8c3a5c3-72b7-7e1b-3ddf-d399090b49a1@gmx.de>
+User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 3 Feb 2024 15:53:29 +0100 (CET)
-Johannes Schindelin wrote:
-> I wonder what could be a symptom of this bug. I ask because we have
-> noticed a couple of inexplicable hangs in GitHub workflow runs in the Git
-> for Windows and the MSYS2 projects, hangs that are almost certainly due to
-> the ConPTY code in Cygwin, and I hope to figure out what causes them, and
-> even more importantly, how to fix those. Maybe the bug you fixed in this
-> patch could explain this?
+Thanks for taking the time to write this up, this issue has been bugging
+me for years... (see also:
+https://cygwin.com/pipermail/cygwin-patches/2021q4/011638.html)
 
-I don't think so. The symptom of this bug is that console input for
-non-cygwin process can be lost or reordered at the starting timing
-of that program for about 40 msec.
+On Sat, 3 Feb 2024, Johannes Schindelin wrote:
 
 > Concretely, the hangs occur typically when some `pacman` process (a
 > package manager using the MSYS2 runtime, i.e. the Cygwin runtime with
@@ -56,35 +60,25 @@ of that program for about 40 msec.
 > signal-handler that is spawned for every non-Cygwin child process) and at
 > that point the program hangs indefinitely (or at least until the GitHub
 > workflow run times out after 6 hours).
-> 
+
+I don't think this requires running non-Cygwin children - I see this most
+often when pacman is using GPGME to validate signatueres.  That
+fork/exec's (Cygwin) gpg.
+
 > I was not able to obtain any helpful stacktraces, they all seem to make no
 > sense, I only vaguely remember that one thread was waiting for an object,
 > but that could be a false flag.
-> 
+
+My recollection when I tried to debug was that every debugger I tried got
+an error trying to get the context of the main thread of the hung process.
+There was another thread, which seemed to be for Cygwin signal handling,
+which was blithely waiting for an object, but I kind of expect that's what
+it was supposed to be doing.
+
 > Stopping those hanging `pacman` processes via `wmic process ... delete`
 > counter-intuitively fails to result in `pacman` to exit with a non-zero
 > exit code. Instead, the program now runs to completion successfully!
-> 
-> Most recently, these hangs became almost reliably reproducible, when we
-> started changing a certain GitHub workflow that runs on a Windows/ARM64
-> build agent. I suspect that Windows/ARM64 just makes this much more
-> likely, but that the bug is also there on regular Windows/x86_64.
-> 
-> What changed in the GitHub workflow is a new PowerShell script that runs
-> `pacman` a couple of times, trying to update packages, and after that
-> force-reinstalls a certain package for the benefit of its post-install
-> script. This post-install script is run using the (MSYS) Bash, and it
-> calls among other things (non-MSYS) `git.exe`. And that's where it hangs
-> almost every time.
-> 
-> When I log into the build agent via RDP, I do not see any `git.exe`
-> process running, but the same type of hanging `pacman` process as
-> indicated above. Using the `wmic` command to stop the hanging process lets
-> the GitHub workflow continue without any indication of failure.
-> 
-> Running the PowerShell script manually succeeds every single time, so I
-> think the hang might be connected to running things headlessly.
-> 
+
 > Do you have any idea what the bug could be? Or how I could diagnose this
 > better? Attaching via `gdb` only produces unhelpful stacktraces (that may
 > even be bogus, by the looks of it). Or do you think that your patch that I
@@ -92,25 +86,3 @@ of that program for about 40 msec.
 > improved to avoid those hangs altogether, or at least to make them easier
 > to diagnose?
 
-Thanks for details of your problem. Unfortunately, I have currently no idea.
-Non-cygwin process is now treated very different from cygwin process because
-it of course does not use cygwin functionality. For example:
-(1) Cygwin setups pseudo-console for non-cygwin process in pty. Because pty is
-    just a pipe for non-cygwin program and some programs do not work correctly
-    on the pipe.
-(2) Cygwin restores the default console mode for non-cygwin process if it is
-    running in console. This is because, cygwin uses xterm compatible mode
-    for cygwin process which is enabled by ENABLE_VIRTUAL_TYERMINAL_PROCESSING
-    and ENABLE_VIRTUAL_TERMINAL_INPUT.
-However, less cygwin users runs non-cygwin process in cygwin than MSYS2 users.
-MSYS2 users uses non-MSYS2 program under MSYS2 environment on a daily basis,
-so probability to hit a bug of (1) and (2) is relatively higher than cygwin
-users.
-
-If you attached gdb to non-msys2 program and failed to retrieve meaningfull
-information, how about attaching gdb to the stub process? Note that the stub
-process is hidden from normal cygwin tools such as 'ps'. However, it is real
-parent process of the non-msys2 program and you can find it in taskmanager.
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
