@@ -1,57 +1,116 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id B48013857C62; Sat,  3 Feb 2024 15:16:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B48013857C62
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1706973362;
-	bh=38Ug2F0DYiC9jd6fItDEAVsQNgKyi5/XHT6bUV8u6g4=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=jQDfO/1RZMk+jFMpUQwglwl2hjGqDL70tfv1DuDXeZ4LtYOJRyDnjSXDegPTF74rb
-	 t5RedZ6PY3V8bfFOpEDFXmPGg6arZo1EM3QrrxZSVubrPPXJwJRcm8q84hK5Z3SgNe
-	 inbBvhGHRy18GexuQRROmsoCr7WSt2wevHfmBw+Q=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id E4016A80C45; Sat,  3 Feb 2024 16:15:59 +0100 (CET)
-Date: Sat, 3 Feb 2024 16:15:59 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=MPDs=JM=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from dmta1007.nifty.com (mta-snd01008.nifty.com [106.153.227.40])
+	by sourceware.org (Postfix) with ESMTPS id C100D3858403
+	for <cygwin-patches@cygwin.com>; Sat,  3 Feb 2024 15:47:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C100D3858403
+Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C100D3858403
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1706975259; cv=none;
+	b=orZqhI/EX7Gt3Eq/l05zlmAG0JJrUUPXofdCQ45NedmN3SgpK9vnti2rQNS8mgoZ9wKpybBTiRXpJugAhEoeSD1fB+MfIXAiXOR+bAXV7xw5MB2uZKRy+ZeYO2FTL7lCagXESlQJjTglXJ23HdxQXCIJjCHjYL8sUIRCdFxXmAU=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1706975259; c=relaxed/simple;
+	bh=mr7rFjRvnW15YoihlLzXO59U4unwfEtKArAKInKBw+g=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version; b=GoykebIWom3r69BH44vLSApNZwtetyoxUWoY155MzDNc78M/ZNxo0oI6znQ+Kp8ZbqqN6JXjN37vMMANOH2x4SzWhdS0eCOsFRQTwL6sGtF8VS1r80f4dHX+z/qggw5JlAY1iXvbkN6807zrPyC6WWKg5n6npQVKh0ZoQXJMGCs=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+Received: from HP-Z230 by dmta1007.nifty.com with ESMTP
+          id <20240203154734402.NYVS.5813.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 4 Feb 2024 00:47:34 +0900
+Date: Sun, 4 Feb 2024 00:47:33 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Fix exit code for non-cygwin process.
-Message-ID: <Zb5Yr-jfdqyl6nF3@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20240202052923.881-1-takashi.yano@nifty.ne.jp>
- <23727ea4-229b-cf13-057d-e9f0e2790b61@gmx.de>
- <9d19f0fe-b547-0ec7-146b-fbaf12baa986@gmx.de>
- <20240204000430.4e0373736deaec9e72a87a0d@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240204000430.4e0373736deaec9e72a87a0d@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: console: Avoid slipping past
+ disable_master_thread check.
+Message-Id: <20240204004733.1286954060e53f6bb85f09dd@nifty.ne.jp>
+In-Reply-To: <c8c3a5c3-72b7-7e1b-3ddf-d399090b49a1@gmx.de>
+References: <20240202161827.1847-1-takashi.yano@nifty.ne.jp>
+	<c8c3a5c3-72b7-7e1b-3ddf-d399090b49a1@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb  4 00:04, Takashi Yano wrote:
-> On Sat, 3 Feb 2024 15:27:06 +0100 (CET)
-> Johannes Schindelin wrote:
-> > On IRC, you reported that the thread would crash if `cons` was not fixed
-> > up. The symptom was that that crash would apparently prevent the exit code
-> > from being read, and it would be left at 0, indicating potentially
-> > incorrectly that the non-Cygwin process succeeded.
-> > 
-> > I wonder: What would it take to change this logic so that the crash would
-> > be detected (and not be misinterpreted as exit code 0)?
+On Sat, 3 Feb 2024 15:53:29 +0100 (CET)
+Johannes Schindelin wrote:
+> I wonder what could be a symptom of this bug. I ask because we have
+> noticed a couple of inexplicable hangs in GitHub workflow runs in the Git
+> for Windows and the MSYS2 projects, hangs that are almost certainly due to
+> the ConPTY code in Cygwin, and I hope to figure out what causes them, and
+> even more importantly, how to fix those. Maybe the bug you fixed in this
+> patch could explain this?
+
+I don't think so. The symptom of this bug is that console input for
+non-cygwin process can be lost or reordered at the starting timing
+of that program for about 40 msec.
+
+> Concretely, the hangs occur typically when some `pacman` process (a
+> package manager using the MSYS2 runtime, i.e. the Cygwin runtime with
+> several dozen patches on top) calls a few non-Cygwin processes. Those
+> processes seem to succeed, but there is an extra `pacman` process left
+> hanging around (reported using the same command-line as its parent
+> process, indicating a `fork()`ed child process or maybe that
+> signal-handler that is spawned for every non-Cygwin child process) and at
+> that point the program hangs indefinitely (or at least until the GitHub
+> workflow run times out after 6 hours).
 > 
-> I am not sure, but I think it is necessary to modify:
-> pinfo::exit()
-> pinfo::meybe_set_exit_code_from_windows()
-> pinfo::set_exit_code()
+> I was not able to obtain any helpful stacktraces, they all seem to make no
+> sense, I only vaguely remember that one thread was waiting for an object,
+> but that could be a false flag.
 > 
-> I guess detecting crash of sbub process needs modification of
-> spawn.cc.
+> Stopping those hanging `pacman` processes via `wmic process ... delete`
+> counter-intuitively fails to result in `pacman` to exit with a non-zero
+> exit code. Instead, the program now runs to completion successfully!
+> 
+> Most recently, these hangs became almost reliably reproducible, when we
+> started changing a certain GitHub workflow that runs on a Windows/ARM64
+> build agent. I suspect that Windows/ARM64 just makes this much more
+> likely, but that the bug is also there on regular Windows/x86_64.
+> 
+> What changed in the GitHub workflow is a new PowerShell script that runs
+> `pacman` a couple of times, trying to update packages, and after that
+> force-reinstalls a certain package for the benefit of its post-install
+> script. This post-install script is run using the (MSYS) Bash, and it
+> calls among other things (non-MSYS) `git.exe`. And that's where it hangs
+> almost every time.
+> 
+> When I log into the build agent via RDP, I do not see any `git.exe`
+> process running, but the same type of hanging `pacman` process as
+> indicated above. Using the `wmic` command to stop the hanging process lets
+> the GitHub workflow continue without any indication of failure.
+> 
+> Running the PowerShell script manually succeeds every single time, so I
+> think the hang might be connected to running things headlessly.
+> 
+> Do you have any idea what the bug could be? Or how I could diagnose this
+> better? Attaching via `gdb` only produces unhelpful stacktraces (that may
+> even be bogus, by the looks of it). Or do you think that your patch that I
+> am replying to could potentially fix this problem? How could the code be
+> improved to avoid those hangs altogether, or at least to make them easier
+> to diagnose?
 
-Dumb question: If, as Johannes said, the error code cannot be fetched,
-can't we set the error code to a POSIX return code indicating a signal?
+Thanks for details of your problem. Unfortunately, I have currently no idea.
+Non-cygwin process is now treated very different from cygwin process because
+it of course does not use cygwin functionality. For example:
+(1) Cygwin setups pseudo-console for non-cygwin process in pty. Because pty is
+    just a pipe for non-cygwin program and some programs do not work correctly
+    on the pipe.
+(2) Cygwin restores the default console mode for non-cygwin process if it is
+    running in console. This is because, cygwin uses xterm compatible mode
+    for cygwin process which is enabled by ENABLE_VIRTUAL_TYERMINAL_PROCESSING
+    and ENABLE_VIRTUAL_TERMINAL_INPUT.
+However, less cygwin users runs non-cygwin process in cygwin than MSYS2 users.
+MSYS2 users uses non-MSYS2 program under MSYS2 environment on a daily basis,
+so probability to hit a bug of (1) and (2) is relatively higher than cygwin
+users.
 
-I.e., checking for WIFSIGNALED() returns 1 and WTERMSIG() returns, say,
-SIGKILL or something?
+If you attached gdb to non-msys2 program and failed to retrieve meaningfull
+information, how about attaching gdb to the stub process? Note that the stub
+process is hidden from normal cygwin tools such as 'ps'. However, it is real
+parent process of the non-msys2 program and you can find it in taskmanager.
 
-
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
