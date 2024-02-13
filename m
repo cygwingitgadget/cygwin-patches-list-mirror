@@ -1,113 +1,129 @@
 Return-Path: <SRS0=edmR=JW=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0015.nifty.com (mta-snd00013.nifty.com [106.153.226.45])
-	by sourceware.org (Postfix) with ESMTPS id 9AB6A385829D
-	for <cygwin-patches@cygwin.com>; Tue, 13 Feb 2024 14:31:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9AB6A385829D
+Received: from dmta1011.nifty.com (mta-snd01007.nifty.com [106.153.227.39])
+	by sourceware.org (Postfix) with ESMTPS id 0DB643858C50
+	for <cygwin-patches@cygwin.com>; Tue, 13 Feb 2024 14:33:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0DB643858C50
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9AB6A385829D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.45
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1707834698; cv=none;
-	b=OGHdIv2mDHaxXjHiM4E1wwF8wGhgw8lIeipmQyZ5l/Zdn6omkSdvhxScGs1y7QqH34AeECpkXnfgVPNrzfGqZ4YRC40VgdQ28rQxqxCcTKa2qjvvlP9Gk9v5GBdtdwyJgex61Dg2wESjGBl8R0xTswpJe0OZKG6IhB/VrWZ2KYs=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0DB643858C50
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1707834809; cv=none;
+	b=ntHJiqLdr2XuBgboXrgvroXwpXCXDO1T7Gtqt/1/2KyT4SpO9PBbSvGKD0Jp7gPXpFQrVmld006hZcPmWbzKhcpsoHXPnrS4GAuZgyuLhfbvgcGw38EXDgTD6t4druolgjT1pRV7EpL17oHq9fh8wrt/3A6VaOOCo6JzS3eQ318=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1707834698; c=relaxed/simple;
-	bh=5hbpLo/Biboo+6Qv5pU7w+ji6aNKX0G8r/Lu7BseViI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=w8yPeCRJljuTyOO7zi+K3elcyfQMuey3GQLTYKAsBeYIHdHu4ZJ5uP1phO41Uu0XELs3X00jYN0p1cGObs/EOWg5a/bvOmi2MoT21a8kcl+eUmtsGnggc73zbrxP4gwANgXsInTvWUbxSTefRmwiIUyGzqL+T2AAru/UxJxNKrg=
+	t=1707834809; c=relaxed/simple;
+	bh=sCwNdPxNcyfVejs125nFQXEr1yrEIw+ruWMK2wKZCI4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=jStt2mQaVHF1LhFsucFVik8+YGNMGwoM/faAS9VTJ51Gtpsc+R2ShlG2yffUSU9CBUufdURgPPJ2E7ovr+y3NEh2GPoxbzNymQGS50i8F1MVGluGuuVM9nr5iocfIs0yNbCQjlWoXP85QGP6lTgiXqboJsDJreP9z//Vlmff410=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by dmta0015.nifty.com with ESMTP
-          id <20240213143133371.OEQ.14278.localhost.localdomain@nifty.com>;
-          Tue, 13 Feb 2024 23:31:33 +0900
+Received: from localhost.localdomain by dmta1011.nifty.com with ESMTP
+          id <20240213143325085.DGZU.3070.localhost.localdomain@nifty.com>;
+          Tue, 13 Feb 2024 23:33:25 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Make VMIN and VTIME work.
-Date: Tue, 13 Feb 2024 23:30:54 +0900
-Message-ID: <20240213143104.1899-2-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Fix a problem that minor ID is incorrect in ConEmu.
+Date: Tue, 13 Feb 2024 23:32:59 +0900
+Message-ID: <20240213143310.1921-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, VMIN and VTIME did not work at all. This patch fixes that.
+Previously, minor device number of console was not assigned correctly
+in ConEmu environment. This is because console window of ConEmu is
+not enumerated by EnumWindows(). This patch fixes the issue.
 
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/fhandler/console.cc | 26 ++++++++++++++++++--------
- winsup/cygwin/release/3.5.1       |  2 ++
- 2 files changed, 20 insertions(+), 8 deletions(-)
+ winsup/cygwin/autoload.cc         |  2 ++
+ winsup/cygwin/devices.cc          |  7 +++++++
+ winsup/cygwin/devices.in          |  7 +++++++
+ winsup/cygwin/fhandler/console.cc | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
 
+diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
+index 7e610bdd0..65e906e8b 100644
+--- a/winsup/cygwin/autoload.cc
++++ b/winsup/cygwin/autoload.cc
+@@ -548,7 +548,9 @@ LoadDLLfunc (DefWindowProcW, user32)
+ LoadDLLfunc (DestroyWindow, user32)
+ LoadDLLfunc (DispatchMessageW, user32)
+ LoadDLLfunc (EmptyClipboard, user32)
++LoadDLLfunc (EnumChildWindows, user32)
+ LoadDLLfunc (EnumWindows, user32)
++LoadDLLfunc (GetClassNameA, user32)
+ LoadDLLfunc (GetClipboardData, user32)
+ LoadDLLfunc (GetDC, user32)
+ LoadDLLfunc (GetForegroundWindow, user32)
+diff --git a/winsup/cygwin/devices.cc b/winsup/cygwin/devices.cc
+index 167b0e4b4..ca1fdf3be 100644
+--- a/winsup/cygwin/devices.cc
++++ b/winsup/cygwin/devices.cc
+@@ -81,6 +81,13 @@ enum_cons_dev (HWND hw, LPARAM lp)
+       UnmapViewOfFile ((void *) cs);
+       CloseHandle (h);
+     }
++  else
++    { /* Only for ConEmu */
++      char class_hw[32];
++      if (19 == GetClassName (hw, class_hw, sizeof (class_hw))
++	  && 0 == strcmp (class_hw, "VirtualConsoleClass"))
++	EnumChildWindows (hw, enum_cons_dev, lp);
++    }
+   return TRUE;
+ }
+ 
+diff --git a/winsup/cygwin/devices.in b/winsup/cygwin/devices.in
+index 48d3843fe..842f09c18 100644
+--- a/winsup/cygwin/devices.in
++++ b/winsup/cygwin/devices.in
+@@ -77,6 +77,13 @@ enum_cons_dev (HWND hw, LPARAM lp)
+       UnmapViewOfFile ((void *) cs);
+       CloseHandle (h);
+     }
++  else
++    { /* Only for ConEmu */
++      char class_hw[32];
++      if (19 == GetClassName (hw, class_hw, sizeof (class_hw))
++	  && 0 == strcmp (class_hw, "VirtualConsoleClass"))
++	EnumChildWindows (hw, enum_cons_dev, lp);
++    }
+   return TRUE;
+ }
+ 
 diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 1c8d383cd..b0907eb31 100644
+index b0907eb31..70824e694 100644
 --- a/winsup/cygwin/fhandler/console.cc
 +++ b/winsup/cygwin/fhandler/console.cc
-@@ -1131,10 +1131,14 @@ fhandler_console::read (void *pv, size_t& buflen)
- 
-   push_process_state process_state (PID_TTYIN);
- 
--  int copied_chars = 0;
-+  size_t copied_chars = 0;
- 
--  DWORD timeout = is_nonblocking () ? 0 : INFINITE;
-+  DWORD timeout = is_nonblocking () ? 0 :
-+    (get_ttyp ()->ti.c_lflag & ICANON ? INFINITE :
-+     (get_ttyp ()->ti.c_cc[VMIN] == 0 ? 0 :
-+      (get_ttyp ()->ti.c_cc[VTIME]*100 ? : INFINITE)));
- 
-+read_more:
-   while (!input_ready && !get_cons_readahead_valid ())
-     {
-       int bgres;
-@@ -1157,6 +1161,11 @@ wait_retry:
- 	  pthread::static_cancel_self ();
- 	  /*NOTREACHED*/
- 	case WAIT_TIMEOUT:
-+	  if (copied_chars)
-+	    {
-+	      buflen = copied_chars;
-+	      return;
-+	    }
- 	  set_sig_errno (EAGAIN);
- 	  buflen = (size_t) -1;
- 	  return;
-@@ -1204,19 +1213,20 @@ wait_retry:
+@@ -250,6 +250,13 @@ enum_windows (HWND hw, LPARAM lp)
+       UnmapViewOfFile ((void *) cs);
+       CloseHandle (h);
      }
++  else
++    { /* Only for ConEmu */
++      char class_hw[32];
++      if (19 == GetClassName (hw, class_hw, sizeof (class_hw))
++	  && 0 == strcmp (class_hw, "VirtualConsoleClass"))
++	EnumChildWindows (hw, enum_windows, lp);
++    }
+   return TRUE;
+ }
  
-   /* Check console read-ahead buffer filled from terminal requests */
--  while (con.cons_rapoi && *con.cons_rapoi && buflen)
--    {
--      buf[copied_chars++] = *con.cons_rapoi++;
--      buflen --;
--    }
-+  while (con.cons_rapoi && *con.cons_rapoi && buflen > copied_chars)
-+    buf[copied_chars++] = *con.cons_rapoi++;
+@@ -656,6 +663,13 @@ scan_console (HWND hw, LPARAM lp)
+       UnmapViewOfFile ((void *) cs);
+       CloseHandle (h);
+     }
++  else
++    { /* Only for ConEmu */
++      char class_hw[32];
++      if (19 == GetClassName (hw, class_hw, sizeof (class_hw))
++	  && 0 == strcmp (class_hw, "VirtualConsoleClass"))
++	EnumChildWindows (hw, scan_console, lp);
++    }
+   return TRUE;
+ }
  
-   copied_chars +=
--    get_readahead_into_buffer (buf + copied_chars, buflen);
-+    get_readahead_into_buffer (buf + copied_chars, buflen - copied_chars);
- 
-   if (!con_ra.ralen)
-     input_ready = false;
-   release_input_mutex ();
- 
-+  if (buflen > copied_chars && !(get_ttyp ()->ti.c_lflag & ICANON)
-+      && copied_chars < get_ttyp ()->ti.c_cc[VMIN])
-+    goto read_more;
-+
- #undef buf
- 
-   buflen = copied_chars;
-diff --git a/winsup/cygwin/release/3.5.1 b/winsup/cygwin/release/3.5.1
-index 715fcf74d..e041f98f3 100644
---- a/winsup/cygwin/release/3.5.1
-+++ b/winsup/cygwin/release/3.5.1
-@@ -16,3 +16,5 @@ Fixes:
- - Fix handle leak in pty master which occurs when non-cygwin process
-   is started in pty.
-   Addresses: https://github.com/msys2/msys2-runtime/issues/198
-+
-+- Fix the problem that VMIN and VTIME does not work at all in console.
 -- 
 2.43.0
 
