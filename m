@@ -1,192 +1,83 @@
-Return-Path: <SRS0=5VGh=KK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from dmta0003.nifty.com (mta-snd00010.nifty.com [106.153.226.42])
-	by sourceware.org (Postfix) with ESMTPS id B22733858D28
-	for <cygwin-patches@cygwin.com>; Mon,  4 Mar 2024 10:59:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B22733858D28
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B22733858D28
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1709549953; cv=none;
-	b=AwD5+nXps6cavB95h86KBBIN30v4cF1fuMr9R9P/e0eZySusZy/bkZ0vd03bdUJ2NFzKjDApZkzTeJEFO7uWe6bUxDXN7Uu0a53cWFz/wFFhqBHxK0aF6AolT1YYAWG4t/l+46eklDFTvUFp0gG+9keHqvd4F/zkWsxNFERjtPA=
+Return-Path: <SRS0=Tv/T=KK=nexgo.de=Stromeko@sourceware.org>
+Received: from mr3.vodafonemail.de (mr3.vodafonemail.de [145.253.228.163])
+	by sourceware.org (Postfix) with ESMTPS id 464A93858C33
+	for <cygwin-patches@cygwin.com>; Mon,  4 Mar 2024 15:45:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 464A93858C33
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=nexgo.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nexgo.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 464A93858C33
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=145.253.228.163
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1709567121; cv=none;
+	b=pmZWFdiSj124Wode/ZgVs0YOB28D1MuvXcuOZAOdl63ABbFov+1Uqs+qGxaan5uzxJOCzjrItdVLXH7esLnU7ucD6w8T78nVXijhdmxFCRy2U4tjNGWdVpugW70nC9LNTNsHJZErJ/QPW52dDxasIFzLrdLg/4mmAOYaaHWUBUs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1709549953; c=relaxed/simple;
-	bh=FgrOfZlAkJtPB2Hk3CW6LmhIaDIhBVLQEXit7aeleZw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=k9MEDpoJ64vlHG2VLepOFa5fplHM730sMEPVofsXnVk3FgDaccg8zphJ4bglcWcp0v/X1SaYskjCZnYtZ7Jc2S72maulyuorY5lMVi/SJU0/GHbuKZdlbncZzhIRHWaionibfnJU/DBZtAaWJDPMBiN7dw9KD+t8UuTAITdsUq8=
+	t=1709567121; c=relaxed/simple;
+	bh=K9sFMXw8UzTCUiYGwEEmoHXYgFPuLmYeg/0/A/yf4Hg=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Z0k9iz4bk+Z1qeaJCRKAdJFrLGVMHCr3xCv+2vDEyC+my/UAoMSdq1ix3cHgkDu0O7NfcXyKEYqXJ1t8/NmVOCLkAmmvoeJZ7Pgoom7H4ZYj89/UrF7dgn3VgtF0QjWfK7Z8EcBufO0GNqKdMVl2xJ9VeBj9moAMc2+mJ6EooHw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by dmta0003.nifty.com with ESMTP
-          id <20240304105907070.GUHP.94728.localhost.localdomain@nifty.com>;
-          Mon, 4 Mar 2024 19:59:07 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nexgo.de;
+	s=vfde-mb-mr2-23sep; t=1709567118;
+	bh=+/6ZDCFYvhkZxmMNcxHk/LSTCzTCYPVbKkUW/GWuZ/8=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:User-Agent:
+	 Content-Type:From;
+	b=R2XmbHsSsg6hZfBXaAMXbDZooKP437osaB3WDnq5UCh4Bv3TcGvuFFvuuX07BONBl
+	 oG9eltOmafMb2LVa/VAPLoqwjAhPIcBKoc+x6jQU4FoJUvigYhuAhYwkkMHMYUgHFc
+	 11lbZBBhIGbKyEXxuEWyREDdOlUg8qWKCsu/qXk0=
+Received: from smtp.vodafone.de (unknown [10.0.0.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mr3.vodafonemail.de (Postfix) with ESMTPS id 4TpNLk69Zfz2Gf7
+	for <cygwin-patches@cygwin.com>; Mon,  4 Mar 2024 15:45:18 +0000 (UTC)
+Received: from Otto (p57b9d928.dip0.t-ipconnect.de [87.185.217.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.vodafone.de (Postfix) with ESMTPSA id 4TpNLf6lyCzHng0
+	for <cygwin-patches@cygwin.com>; Mon,  4 Mar 2024 15:45:11 +0000 (UTC)
+From: ASSI <Stromeko@nexgo.de>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Kate Deplaix <kit-ty-kate@outlook.com>
-Subject: [PATCH] Cygwin: console: Fix a race issue between close() and open().
-Date: Mon,  4 Mar 2024 19:58:29 +0900
-Message-ID: <20240304105849.21549-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] Cygwin: pipe: Give up to use query_hdl for non-cygwin
+ apps.
+In-Reply-To: <ZeWjmEikjIUushtk@calimero.vinschen.de> (Corinna Vinschen's
+	message of "Mon, 4 Mar 2024 11:34:00 +0100")
+References: <20240303050915.2024-1-takashi.yano@nifty.ne.jp>
+	<b0bd6b96-5bd8-7f4e-71ff-4552e5ac1cb5@gmx.de>
+	<20240303192109.9fb4a3a4968bb11ca5d9636a@nifty.ne.jp>
+	<87a5nfbnv7.fsf@Gerda.invalid>
+	<20240303203641.09321b0a0713e8bdb90980b5@nifty.ne.jp>
+	<ZeWjmEikjIUushtk@calimero.vinschen.de>
+Date: Mon, 04 Mar 2024 16:45:07 +0100
+Message-ID: <87edcqgfwc.fsf@>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-size: 903
+X-purgate-ID: 155817::1709567115-507DD693-0B2D960E/0/0
+X-Spam-Status: No, score=-3030.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_MSGID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The open() call for console sometimes fails if the console owner
-process is closing the console by close() at the same time. This
-is due to mismatch state of con.owner variable and attaching state
-to the console. With this patch, checking con.owner and attaching
-to con.owner sequence in open(), and resetting con.owner and freeing
-console sequence in close() are guarded by output_mutex to avoid
-such a race issue.
-Addresses: https://cygwin.com/pipermail/cygwin/2024-March/255575.html
+Corinna Vinschen writes:
+> Right you are.  We always said that independent Cygwin installations
+> are supposed to *stay* independent.
+>
+> Keep in mind that they don't share the same shared objects in the native
+> NT namespace and they don't know of each other.  It's not only the
+> process table but also in-use FIFO stuff, pty info, etc.
 
-Fixes: 3721a756b0d8 ("Cygwin: console: Make the console accessible from other terminals.")
-Reported-by: Kate Deplaix <kit-ty-kate@outlook.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/console.cc | 58 ++++++++++++++++++-------------
- winsup/cygwin/release/3.5.2       |  4 +++
- 2 files changed, 38 insertions(+), 24 deletions(-)
+What I was getting at is that a process not showing up in the process
+list in one Cygwin installation doesn't automatically mean it's a native
+Windows process, it could be a process started by an independent Cygwin
+installation.  So this way of checking for "native" Windows processes
+may or may not do what was originally intended.
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 67ea95466..1c0d5c815 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -687,14 +687,6 @@ fhandler_console::set_unit ()
-     {
-       devset = (fh_devices) shared_console_info[unit]->tty_min_state.getntty ();
-       _tc = &(shared_console_info[unit]->tty_min_state);
--      if (!created)
--	{
--	  while (con.owner > MAX_PID)
--	    Sleep (1);
--	  pinfo p (con.owner);
--	  if (!p)
--	    con.owner = myself->pid;
--	}
-     }
- 
-   dev ().parse (devset);
-@@ -1744,11 +1736,23 @@ fhandler_console::open (int flags, mode_t)
-   set_handle (NULL);
-   set_output_handle (NULL);
- 
-+  setup_io_mutex ();
-+  acquire_output_mutex (mutex_timeout);
-+
-+  do
-+    {
-+      pinfo p (con.owner);
-+      if (!p)
-+	con.owner = myself->pid;
-+    }
-+  while (false);
-+
-   /* Open the input handle as handle_ */
-   bool err = false;
-   DWORD resume_pid = attach_console (con.owner, &err);
-   if (err)
-     {
-+      release_output_mutex ();
-       set_errno (EACCES);
-       return 0;
-     }
-@@ -1759,6 +1763,7 @@ fhandler_console::open (int flags, mode_t)
- 
-   if (h == INVALID_HANDLE_VALUE)
-     {
-+      release_output_mutex ();
-       __seterrno ();
-       return 0;
-     }
-@@ -1768,6 +1773,7 @@ fhandler_console::open (int flags, mode_t)
-   resume_pid = attach_console (con.owner, &err);
-   if (err)
-     {
-+      release_output_mutex ();
-       set_errno (EACCES);
-       return 0;
-     }
-@@ -1778,14 +1784,16 @@ fhandler_console::open (int flags, mode_t)
- 
-   if (h == INVALID_HANDLE_VALUE)
-     {
-+      release_output_mutex ();
-       __seterrno ();
-       return 0;
-     }
-   set_output_handle (h);
-   handle_set.output_handle = h;
-+  release_output_mutex ();
-+
-   wpbuf.init ();
- 
--  setup_io_mutex ();
-   handle_set.input_mutex = input_mutex;
-   handle_set.output_mutex = output_mutex;
- 
-@@ -1895,25 +1903,20 @@ fhandler_console::close ()
- 	}
-     }
- 
--  release_output_mutex ();
--
--  if (shared_console_info[unit] && con.owner == myself->pid
--      && master_thread_started)
-+  if (shared_console_info[unit] && con.owner == myself->pid)
-     {
--      char name[MAX_PATH];
--      shared_name (name, CONS_THREAD_SYNC, get_minor ());
--      thread_sync_event = OpenEvent (MAXIMUM_ALLOWED, FALSE, name);
--      con.owner = MAX_PID + 1;
--      WaitForSingleObject (thread_sync_event, INFINITE);
--      CloseHandle (thread_sync_event);
-+      if (master_thread_started)
-+	{
-+	  char name[MAX_PATH];
-+	  shared_name (name, CONS_THREAD_SYNC, get_minor ());
-+	  thread_sync_event = OpenEvent (MAXIMUM_ALLOWED, FALSE, name);
-+	  con.owner = MAX_PID + 1;
-+	  WaitForSingleObject (thread_sync_event, INFINITE);
-+	  CloseHandle (thread_sync_event);
-+	}
-       con.owner = 0;
-     }
- 
--  CloseHandle (input_mutex);
--  input_mutex = NULL;
--  CloseHandle (output_mutex);
--  output_mutex = NULL;
--
-   CloseHandle (get_handle ());
-   CloseHandle (get_output_handle ());
- 
-@@ -1926,6 +1929,13 @@ fhandler_console::close ()
- 	  || get_device () == (dev_t) myself->ctty))
-     free_console ();
- 
-+  release_output_mutex ();
-+
-+  CloseHandle (input_mutex);
-+  input_mutex = NULL;
-+  CloseHandle (output_mutex);
-+  output_mutex = NULL;
-+
-   if (shared_console_info[unit] && myself->ctty != tc ()->ntty)
-     {
-       UnmapViewOfFile ((void *) shared_console_info[unit]);
-diff --git a/winsup/cygwin/release/3.5.2 b/winsup/cygwin/release/3.5.2
-index 7d8df9489..fd3c768de 100644
---- a/winsup/cygwin/release/3.5.2
-+++ b/winsup/cygwin/release/3.5.2
-@@ -5,3 +5,7 @@ Fixes:
-   is already unmapped due to race condition. To avoid this issue,
-   shared console memory will be kept mapped if it belongs to CTTY.
-   Addresses:  https://cygwin.com/pipermail/cygwin/2024-February/255561.html
-+
-+- Fix a race issue between console open() and close() which is caused
-+  by state mismatch between con.owner and console attaching state.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-March/255575.html
+
+Regards,
+Achim.
 -- 
-2.43.0
++<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
 
+Factory and User Sound Singles for Waldorf Q+, Q and microQ:
+http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
