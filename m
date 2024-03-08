@@ -1,62 +1,52 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 03AEB385843A; Wed,  6 Mar 2024 12:54:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 03AEB385843A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1709729669;
-	bh=FLR5ACr6X9Zvco+hkmjAj16YVm7ZBJKmxpJCorgd1kQ=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=mFz3I5/sq8WZ9n/bpbew7AgFXQEq+A6J1KWDiVJuoOGr2XQw+RGXeBPL7dpI93sin
-	 H05c/QFyZqV8ngvbo6r4ASEKDnhmHQ4woTr0oaepTU/QEP3eWuw7ljIe/2HMs/fXvN
-	 RnjeE4vPHK6WdTyrnt3A/+H1UOuQ1fw/jhrPb7lI=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 1C197A80DA3; Wed,  6 Mar 2024 13:54:27 +0100 (CET)
-Date: Wed, 6 Mar 2024 13:54:27 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pipe: Give up to use query_hdl for non-cygwin
- apps.
-Message-ID: <Zehng9EELCgrrnBA@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <87a5nfbnv7.fsf@Gerda.invalid>
- <20240303203641.09321b0a0713e8bdb90980b5@nifty.ne.jp>
- <ZeWjmEikjIUushtk@calimero.vinschen.de>
- <87edcqgfwc.fsf@>
- <ZeYG_11UfRTLzit1@calimero.vinschen.de>
- <20240305090648.6342d8f9cb8fd4ca64b47d38@nifty.ne.jp>
- <ZebwloVEzedGcBWj@calimero.vinschen.de>
- <20240305234753.b484e79322961aba9f8c9979@nifty.ne.jp>
- <ZedOO5gM1xApOb3A@calimero.vinschen.de>
- <20240306034223.4d02b898542324431341b2bb@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240306034223.4d02b898542324431341b2bb@nifty.ne.jp>
+Return-Path: <SRS0=hLOc=KO=apsgk.com=shevchuk@sourceware.org>
+Received: from mail.aps.org.ua (mail.aps.org.ua [178.20.157.248])
+	by sourceware.org (Postfix) with ESMTP id 0E0713857C65;
+	Fri,  8 Mar 2024 03:20:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0E0713857C65
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=apsgk.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=apsgk.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0E0713857C65
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=178.20.157.248
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1709868058; cv=none;
+	b=P2LuPeonYDZvZokxRkb2wBWRGAAZjUQ7t7qZKjVDcCx861V/Z/DOCEpx5Jlifd3uCLUx68WKCuSl2g/UEbzytB8jMVyz7A+4PV5+nlphoOC678dHZZPMxruUuCK+NNyYyRG3muZiTaRfkZ0wTB4wmFee+MYBMIpN1Wybz8mcpsw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1709868058; c=relaxed/simple;
+	bh=fyI61F/ztWBEfG6h5dWfdpjgkFcj2NBYx/XHYs8Z+/I=;
+	h=Mime-Version:Date:Message-ID:From:Subject; b=XcPn3d+lTI7KvDx7KugIsdrb0yCwiPhVF49DyTi8QBXJPOhNIKRADGRE/0qq84MrN2xooGDQVYwxPlatZzrT4JCGyqFPEvdIOT39wJ2uDepUXydZeuEqt3IHfsaOxi22jp2AUvSJe/YnENTDglbSqv4Xpt4si8wA+AIqZi8ehE4=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+Received: from cloud.local (unknown [31.128.79.174])
+	by mail.aps.org.ua (Postfix) with ESMTP id AE8102EB54;
+	Fri,  8 Mar 2024 05:17:54 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+	by cloud.local (Postfix) with ESMTP id 2557A240738;
+	Fri,  8 Mar 2024 05:20:54 +0200 (EET)
+X-Virus-Scanned: amavisd-new at aps.org.ua
+Received: from cloud.local ([127.0.0.1])
+	by localhost (mail.aps.org.ua [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y5ZFLskdEyph; Fri,  8 Mar 2024 05:20:53 +0200 (EET)
+Received: from mail.apsgk.com (localhost [IPv6:::1])
+	by cloud.local (Postfix) with ESMTP id 50DCA24040C;
+	Fri,  8 Mar 2024 05:20:53 +0200 (EET)
+Mime-Version: 1.0
+Date: Fri, 08 Mar 2024 03:20:53 +0000
+Content-Type: multipart/alternative;
+ boundary="--=_RainLoop_362_351608298.1709868053"
+Message-ID: <7d4dc9981043fb75c37a297e7958e5b4@mail.apsgk.com>
+X-Mailer: RainLoop/1.10.4.183
+From: "=?utf-8?B?0JvRjtC00LzQuNC70LAg0KjQtdCy0YfRg9C6?="
+ <shevchuk@apsgk.com>
+Subject: 
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,HTML_MESSAGE,KAM_BLANKSUBJECT,KAM_DMARC_STATUS,MISSING_HEADERS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar  6 03:42, Takashi Yano wrote:
-> On Tue, 5 Mar 2024 17:54:19 +0100
-> Corinna Vinschen wrote:
-> > On Mar  5 23:47, Takashi Yano wrote:
-> > > On Tue, 5 Mar 2024 11:14:46 +0100
-> > > Corinna Vinschen wrote:
-> > > > This doesn't affect your patch, but while looking into this, what
-> > > > strikes me as weird is that fhandler_pipe::temporary_query_hdl() calls
-> > > > NtQueryObject() and assembles the pipe name via swscanf() every time it
-> > > > is called.
-> > > > 
-> > > > Wouldn't it make sense to store the name in the fhandler's
-> > > > path_conv::wide_path/uni_path at creation time instead?
-> > > > The wide_path member is not used at all in pipes, ostensibly.
-> > > 
-> > > Is the patch attached as you intended?
-> > 
-> > Yes, but it looks like it misses a few potential simplifications:
-> > [...]
-> Thanks for advice. I have revised the patch.
 
-Looks good, thanks!
+----=_RainLoop_362_351608298.1709868053
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
+winter alert, receive facts from {richanino21@gmail.com} regarding policy m=
+emo
 
-Corinna
+----=_RainLoop_362_351608298.1709868053--
