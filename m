@@ -1,188 +1,61 @@
-Return-Path: <SRS0=tMiW=KR=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e06.mail.nifty.com (mta-snd-e06.mail.nifty.com [106.153.226.38])
-	by sourceware.org (Postfix) with ESMTPS id CFB32385841E
-	for <cygwin-patches@cygwin.com>; Mon, 11 Mar 2024 23:17:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CFB32385841E
-Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CFB32385841E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.38
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1710199049; cv=none;
-	b=Xb6sbyoAarQ3ONleV1NDLyjYx3XM9WuBLd3mYbLc92Mm5gwvozgIClzedDVNpmr9VCVAlmxAp3qL5oR5hFht+gRy22/vmmTcQaIV3U5I4cBrLOFuTY22DVfFYo4xQ0D9kcIorX43i2pLJTrfngif6AGcEun+U7w/7MI4fsdPTDI=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1710199049; c=relaxed/simple;
-	bh=4Em7Kss5dmGm3kaY12UChDgEKIMtsPsjivrRe5Gvb3Y=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version; b=fXQ9un7XFqYHR4FVIW1v0scG13K0xWOJT9F/E9uJYGyxkEEKh5d0I4/PshH9imLOg8NOnNeJhqDRc/6q4JD18DU0u1KVJye+GAUoFSI+If/F0qUUKSkD23GbW4o/xoMHcmnHqXE+W0mQZhw7UdH1byLw9GvdoiuEKLRF6egTI60=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by dmta0016.nifty.com with ESMTP
-          id <20240311231723714.PZHD.28881.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 12 Mar 2024 08:17:23 +0900
-Date: Tue, 12 Mar 2024 08:17:22 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 568F63858D32; Tue, 12 Mar 2024 10:53:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 568F63858D32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1710240810;
+	bh=BN8qDhoAv6TBe+OhstK7LFuk/+7CeKvs2KxHzjFnXM8=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=lD1+SEP0bWLKNiN9wRNF+v3u5YOGwYdbbG/i5AYVve+JJsC+YUucFmkKwXuDzJbep
+	 VvUf/5lbk6PRRHAgMLShL7ge66QqJ68MeonBJNRdn7ApX3CvCn6i0JFI55Zf+INs9a
+	 +oeKDBmNT5/XXtQMxwlacRo6q1Tp63Iva52CEQIo=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 61FE6A8096C; Tue, 12 Mar 2024 11:53:28 +0100 (CET)
+Date: Tue, 12 Mar 2024 11:53:28 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: pipe: Restore non-blocking mode which was reset
  for non-cygwin app.
-Message-Id: <20240312081722.511ba60494e73f2fadff1880@nifty.ne.jp>
-In-Reply-To: <20240312080316.51a75358db94bcfe5c8c2c13@nifty.ne.jp>
+Message-ID: <ZfA0KI2lcNEPrbm6@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20240310103202.3753-1-takashi.yano@nifty.ne.jp>
-	<Ze7hRBVYCClZg-Kq@calimero.vinschen.de>
-	<20240311204237.bb2ffef477328542a63b148d@nifty.ne.jp>
-	<20240311221857.7b5175cc76b5c4be7d81896b@nifty.ne.jp>
-	<Ze9qgPIptT3EasMm@calimero.vinschen.de>
-	<20240312080316.51a75358db94bcfe5c8c2c13@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="Multipart=_Tue__12_Mar_2024_08_17_22_+0900_YkRaF5pu=37NC4C="
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+ <Ze7hRBVYCClZg-Kq@calimero.vinschen.de>
+ <20240311204237.bb2ffef477328542a63b148d@nifty.ne.jp>
+ <20240311221857.7b5175cc76b5c4be7d81896b@nifty.ne.jp>
+ <Ze9qgPIptT3EasMm@calimero.vinschen.de>
+ <20240312080316.51a75358db94bcfe5c8c2c13@nifty.ne.jp>
+ <20240312081722.511ba60494e73f2fadff1880@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240312081722.511ba60494e73f2fadff1880@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
+On Mar 12 08:17, Takashi Yano wrote:
+> Subject: [PATCH v4] Cygwin: pipe: Make sure to set read pipe non-blocking for
+>  cygwin apps.
+> 
+> If pipe reader is a non-cygwin app first, and cygwin process reads
+> the same pipe after that, the pipe has been set to bclocking mode
+> for the cygwin app. However, the commit 9e4d308cd592 assumes the
+> pipe for cygwin process always is non-blocking mode. With this patch,
+> the pipe mode is reset to non-blocking when cygwin app is started.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-March/255644.html
+> Fixes: 9e4d308cd592 ("Cygwin: pipe: Adopt FILE_SYNCHRONOUS_IO_NONALERT flag for read pipe.")
+> Reported-by: wh <wh9692@protonmail.com>
+> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/fhandler/pipe.cc          | 63 +++++++++++++++++++++++++
+>  winsup/cygwin/local_includes/fhandler.h |  3 ++
+>  winsup/cygwin/spawn.cc                  | 34 +------------
+>  3 files changed, 68 insertions(+), 32 deletions(-)
 
---Multipart=_Tue__12_Mar_2024_08_17_22_+0900_YkRaF5pu=37NC4C=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Looks good, please push.
 
-On Tue, 12 Mar 2024 08:03:16 +0900
-Takashi Yano wrote:
-> +  /* Set read pipe itself always non-blocking for cygwin process.
-> +     Blocking/non-blocking is simulated in raw_read(). For write
-> +     pipe, follow is_nonblocking(). */
-> +  int fd;
-> +  cygheap_fdenum cfd (false);
-> +  while ((fd = cfd.next ()) >= 0)
-> +    if (cfd->get_dev () == FH_PIPEW
-> +	&& (fd == fileno_stdout || fd == fileno_stderr))
-> +      {
-> +	fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
-> +	pipe->set_pipe_non_blocking (false);
 
-Sorry. Commenting here is not right. v4 patch attached.
+Thanks,
+Corinna
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
-
---Multipart=_Tue__12_Mar_2024_08_17_22_+0900_YkRaF5pu=37NC4C=
-Content-Type: text/plain;
- name="v4-0001-Cygwin-pipe-Make-sure-to-set-read-pipe-non-blocki.patch"
-Content-Disposition: attachment;
- filename="v4-0001-Cygwin-pipe-Make-sure-to-set-read-pipe-non-blocki.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA0YjUzNmY3ZGRhNmM2MDAwZThlY2NiNmFmNmRiZjZhYmQ4MGYxMDIwIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBNb24sIDExIE1hciAyMDI0IDIyOjA4OjAwICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggdjRdIEN5Z3dpbjogcGlwZTogTWFrZSBzdXJlIHRvIHNldCByZWFkIHBpcGUgbm9uLWJsb2Nr
-aW5nIGZvcg0KIGN5Z3dpbiBhcHBzLg0KDQpJZiBwaXBlIHJlYWRlciBpcyBhIG5vbi1jeWd3aW4g
-YXBwIGZpcnN0LCBhbmQgY3lnd2luIHByb2Nlc3MgcmVhZHMNCnRoZSBzYW1lIHBpcGUgYWZ0ZXIg
-dGhhdCwgdGhlIHBpcGUgaGFzIGJlZW4gc2V0IHRvIGJjbG9ja2luZyBtb2RlDQpmb3IgdGhlIGN5
-Z3dpbiBhcHAuIEhvd2V2ZXIsIHRoZSBjb21taXQgOWU0ZDMwOGNkNTkyIGFzc3VtZXMgdGhlDQpw
-aXBlIGZvciBjeWd3aW4gcHJvY2VzcyBhbHdheXMgaXMgbm9uLWJsb2NraW5nIG1vZGUuIFdpdGgg
-dGhpcyBwYXRjaCwNCnRoZSBwaXBlIG1vZGUgaXMgcmVzZXQgdG8gbm9uLWJsb2NraW5nIHdoZW4g
-Y3lnd2luIGFwcCBpcyBzdGFydGVkLg0KDQpBZGRyZXNzZXM6IGh0dHBzOi8vY3lnd2luLmNvbS9w
-aXBlcm1haWwvY3lnd2luLzIwMjQtTWFyY2gvMjU1NjQ0Lmh0bWwNCkZpeGVzOiA5ZTRkMzA4Y2Q1
-OTIgKCJDeWd3aW46IHBpcGU6IEFkb3B0IEZJTEVfU1lOQ0hST05PVVNfSU9fTk9OQUxFUlQgZmxh
-ZyBmb3IgcmVhZCBwaXBlLiIpDQpSZXBvcnRlZC1ieTogd2ggPHdoOTY5MkBwcm90b25tYWlsLmNv
-bT4NClJldmlld2VkLWJ5OiBDb3Jpbm5hIFZpbnNjaGVuIDxjb3Jpbm5hQHZpbnNjaGVuLmRlPg0K
-U2lnbmVkLW9mZi1ieTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUuanA+DQot
-LS0NCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3BpcGUuY2MgICAgICAgICAgfCA2MyArKysrKysr
-KysrKysrKysrKysrKysrKysrDQogd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9maGFuZGxl
-ci5oIHwgIDMgKysNCiB3aW5zdXAvY3lnd2luL3NwYXduLmNjICAgICAgICAgICAgICAgICAgfCAz
-NCArLS0tLS0tLS0tLS0tDQogMyBmaWxlcyBjaGFuZ2VkLCA2OCBpbnNlcnRpb25zKCspLCAzMiBk
-ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcGlwZS5j
-YyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcGlwZS5jYw0KaW5kZXggMjlkM2I0MWQ5Li5hZTQz
-Y2JjMDAgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3BpcGUuY2MNCisrKyBi
-L3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvcGlwZS5jYw0KQEAgLTE4LDYgKzE4LDcgQEAgZGV0YWls
-cy4gKi8NCiAjaW5jbHVkZSAicGluZm8uaCINCiAjaW5jbHVkZSAic2hhcmVkX2luZm8uaCINCiAj
-aW5jbHVkZSAidGxzX3BidWYuaCINCisjaW5jbHVkZSAic2lncHJvYy5oIg0KICNpbmNsdWRlIDxh
-c3NlcnQuaD4NCiANCiAvKiBUaGlzIGlzIG9ubHkgdG8gYmUgdXNlZCBmb3Igd3JpdGluZy4gIFdo
-ZW4gcmVhZGluZywNCkBAIC02MDIsNiArNjAzLDE3IEBAIGZoYW5kbGVyX3BpcGU6OmZpeHVwX2Fm
-dGVyX2ZvcmsgKEhBTkRMRSBwYXJlbnQpDQogICBSZWxlYXNlTXV0ZXggKGhkbF9jbnRfbXR4KTsN
-CiB9DQogDQordm9pZA0KK2ZoYW5kbGVyX3BpcGU6OmZpeHVwX2FmdGVyX2V4ZWMgKCkNCit7DQor
-ICAvKiBTZXQgcmVhZCBwaXBlIGl0c2VsZiBhbHdheXMgbm9uLWJsb2NraW5nIGZvciBjeWd3aW4g
-cHJvY2Vzcy4NCisgICAgIEJsb2NraW5nL25vbi1ibG9ja2luZyBpcyBzaW11bGF0ZWQgaW4gcmF3
-X3JlYWQoKS4gRm9yIHdyaXRlDQorICAgICBwaXBlLCBmb2xsb3cgaXNfbm9uYmxvY2tpbmcoKS4g
-Ki8NCisgIGJvb2wgbW9kZSA9IGdldF9kZXZpY2UgKCkgPT0gRkhfUElQRVcgPyBpc19ub25ibG9j
-a2luZyAoKSA6IHRydWU7DQorICBzZXRfcGlwZV9ub25fYmxvY2tpbmcgKG1vZGUpOw0KKyAgZmhh
-bmRsZXJfYmFzZTo6Zml4dXBfYWZ0ZXJfZXhlYyAoKTsNCit9DQorDQogaW50DQogZmhhbmRsZXJf
-cGlwZTo6ZHVwIChmaGFuZGxlcl9iYXNlICpjaGlsZCwgaW50IGZsYWdzKQ0KIHsNCkBAIC0xMjg4
-LDMgKzEzMDAsNTQgQEAgY2xvc2VfcHJvYzoNCiAgICAgfQ0KICAgcmV0dXJuIE5VTEw7DQogfQ0K
-Kw0KK3ZvaWQNCitmaGFuZGxlcl9waXBlOjpzcGF3bl93b3JrZXIgKGludCBmaWxlbm9fc3RkaW4s
-IGludCBmaWxlbm9fc3Rkb3V0LA0KKwkJCSAgICAgaW50IGZpbGVub19zdGRlcnIpDQorew0KKyAg
-Ym9vbCBuZWVkX3NlbmRfbm9uY3lnY2hsZF9zaWcgPSBmYWxzZTsNCisNCisgIC8qIHNwYXduX3dv
-cmtlcigpIGlzIGNhbGxlZCBmcm9tIHNwYXduLmNjIG9ubHkgd2hlbiBub24tY3lnd2luIGFwcA0K
-KyAgICAgaXMgc3RhcnRlZC4gU2V0IHBpcGUgbW9kZSBibG9ja2luZyBmb3IgdGhlIG5vbi1jeWd3
-aW4gcHJvY2Vzcy4gKi8NCisgIGludCBmZDsNCisgIGN5Z2hlYXBfZmRlbnVtIGNmZCAoZmFsc2Up
-Ow0KKyAgd2hpbGUgKChmZCA9IGNmZC5uZXh0ICgpKSA+PSAwKQ0KKyAgICBpZiAoY2ZkLT5nZXRf
-ZGV2ICgpID09IEZIX1BJUEVXDQorCSYmIChmZCA9PSBmaWxlbm9fc3Rkb3V0IHx8IGZkID09IGZp
-bGVub19zdGRlcnIpKQ0KKyAgICAgIHsNCisJZmhhbmRsZXJfcGlwZSAqcGlwZSA9IChmaGFuZGxl
-cl9waXBlICopKGZoYW5kbGVyX2Jhc2UgKikgY2ZkOw0KKwlwaXBlLT5zZXRfcGlwZV9ub25fYmxv
-Y2tpbmcgKGZhbHNlKTsNCisNCisJLyogU2V0dXAgZm9yIHF1ZXJ5X25kbCBzdHVmZi4gUmVhZCB0
-aGUgY29tbWVudCBiZWxvdy4gKi8NCisJaWYgKHBpcGUtPnJlcXVlc3RfY2xvc2VfcXVlcnlfaGRs
-ICgpKQ0KKwkgIG5lZWRfc2VuZF9ub25jeWdjaGxkX3NpZyA9IHRydWU7DQorICAgICAgfQ0KKyAg
-ICBlbHNlIGlmIChjZmQtPmdldF9kZXYgKCkgPT0gRkhfUElQRVIgJiYgZmQgPT0gZmlsZW5vX3N0
-ZGluKQ0KKyAgICAgIHsNCisJZmhhbmRsZXJfcGlwZSAqcGlwZSA9IChmaGFuZGxlcl9waXBlICop
-KGZoYW5kbGVyX2Jhc2UgKikgY2ZkOw0KKwlwaXBlLT5zZXRfcGlwZV9ub25fYmxvY2tpbmcgKGZh
-bHNlKTsNCisgICAgICB9DQorDQorICAvKiBJZiBtdWx0aXBsZSB3cml0ZXJzIGluY2x1ZGluZyBu
-b24tY3lnd2luIGFwcCBleGlzdCwgdGhlIG5vbi1jeWd3aW4NCisgICAgIGFwcCBjYW5ub3QgZGV0
-ZWN0IHBpcGUgY2xvc3VyZSBvbiB0aGUgcmVhZCBzaWRlIHdoZW4gdGhlIHBpcGUgaXMNCisgICAg
-IGNyZWF0ZWQgYnkgc3lzdGVtIGFjY291bnQgb3IgdGhlIHBpcGUgY3JlYXRvciBpcyBydW5uaW5n
-IGFzIHNlcnZpY2UuDQorICAgICBUaGlzIGlzIGJlY2F1c2UgcXVlcnlfaGRsIHdoaWNoIGlzIGhl
-bGQgaW4gd3JpdGUgc2lkZSBhbHNvIGlzIGEgcmVhZA0KKyAgICAgZW5kIG9mIHRoZSBwaXBlLCBz
-byB0aGUgcGlwZSBpcyBzdGlsbCBhbGl2ZSBmb3IgdGhlIG5vbi1jeWd3aW4gYXBwDQorICAgICBl
-dmVuIGFmdGVyIHRoZSByZWFkZXIgaXMgY2xvc2VkLg0KKw0KKyAgICAgVG8gYXZvaWQgdGhpcyBw
-cm9ibGVtLCBsZXQgYWxsIHByb2Nlc3NlcyBpbiB0aGUgc2FtZSBwcm9jZXNzDQorICAgICBncm91
-cCBjbG9zZSBxdWVyeV9oZGwgdXNpbmcgaW50ZXJuYWwgc2lnbmFsIF9fU0lHTk9OQ1lHQ0hMRCB3
-aGVuDQorICAgICBub24tY3lnd2luIGFwcCBpcyBzdGFydGVkLiAgKi8NCisgIGlmIChuZWVkX3Nl
-bmRfbm9uY3lnY2hsZF9zaWcpDQorICAgIHsNCisgICAgICB0dHlfbWluIGR1bW15X3R0eTsNCisg
-ICAgICBkdW1teV90dHkubnR0eSA9IChmaF9kZXZpY2VzKSBteXNlbGYtPmN0dHk7DQorICAgICAg
-ZHVtbXlfdHR5LnBnaWQgPSBteXNlbGYtPnBnaWQ7DQorICAgICAgdHR5X21pbiAqdCA9IGN5Z3dp
-bl9zaGFyZWQtPnR0eS5nZXRfY3R0eXAgKCk7DQorICAgICAgaWYgKCF0KSAvKiBJZiB0dHkgaXMg
-bm90IGFsbG9jYXRlZCwgdXNlIGR1bW15X3R0eSBpbnN0ZWFkLiAqLw0KKwl0ID0gJmR1bW15X3R0
-eTsNCisgICAgICAvKiBFbWl0IF9fU0lHTk9OQ1lHQ0hMRCB0byBsZXQgYWxsIHByb2Nlc3NlcyBp
-biB0aGUNCisJIHByb2Nlc3MgZ3JvdXAgY2xvc2UgcXVlcnlfaGRsLiAqLw0KKyAgICAgIHQtPmtp
-bGxfcGdycCAoX19TSUdOT05DWUdDSExEKTsNCisgICAgfQ0KK30NCmRpZmYgLS1naXQgYS93aW5z
-dXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL2ZoYW5kbGVyLmggYi93aW5zdXAvY3lnd2luL2xvY2Fs
-X2luY2x1ZGVzL2ZoYW5kbGVyLmgNCmluZGV4IDg3MjllYjI3Ni4uZDllMGEwMTFiIDEwMDY0NA0K
-LS0tIGEvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9maGFuZGxlci5oDQorKysgYi93aW5z
-dXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL2ZoYW5kbGVyLmgNCkBAIC0xMjM0LDYgKzEyMzQsNyBA
-QCBwdWJsaWM6DQogICBpbnQgb3BlbiAoaW50IGZsYWdzLCBtb2RlX3QgbW9kZSA9IDApOw0KICAg
-Ym9vbCBvcGVuX3NldHVwIChpbnQgZmxhZ3MpOw0KICAgdm9pZCBmaXh1cF9hZnRlcl9mb3JrIChI
-QU5ETEUpOw0KKyAgdm9pZCBmaXh1cF9hZnRlcl9leGVjICgpOw0KICAgaW50IGR1cCAoZmhhbmRs
-ZXJfYmFzZSAqY2hpbGQsIGludCk7DQogICB2b2lkIHNldF9jbG9zZV9vbl9leGVjIChib29sIHZh
-bCk7DQogICBpbnQgY2xvc2UgKCk7DQpAQCAtMTI5NSw2ICsxMjk2LDggQEAgcHVibGljOg0KIAl9
-DQogICAgICAgcmV0dXJuIGZhbHNlOw0KICAgICB9DQorICBzdGF0aWMgdm9pZCBzcGF3bl93b3Jr
-ZXIgKGludCBmaWxlbm9fc3RkaW4sIGludCBmaWxlbm9fc3Rkb3V0LA0KKwkJCSAgICBpbnQgZmls
-ZW5vX3N0ZGVycik7DQogfTsNCiANCiAjZGVmaW5lIENZR1dJTl9GSUZPX1BJUEVfTkFNRV9MRU4g
-ICAgIDQ3DQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9zcGF3bi5jYyBiL3dpbnN1cC9jeWd3
-aW4vc3Bhd24uY2MNCmluZGV4IDcxZDc1YmJmNC4uM2RhNzcwODhkIDEwMDY0NA0KLS0tIGEvd2lu
-c3VwL2N5Z3dpbi9zcGF3bi5jYw0KKysrIGIvd2luc3VwL2N5Z3dpbi9zcGF3bi5jYw0KQEAgLTU4
-MCwzOCArNTgwLDggQEAgY2hpbGRfaW5mb19zcGF3bjo6d29ya2VyIChjb25zdCBjaGFyICpwcm9n
-X2FyZywgY29uc3QgY2hhciAqY29uc3QgKmFyZ3YsDQogICAgICAgaW50IGZpbGVub19zdGRlcnIg
-PSAyOw0KIA0KICAgICAgIGlmICghaXNjeWd3aW4gKCkpDQotCXsNCi0JICBib29sIG5lZWRfc2Vu
-ZF9zaWcgPSBmYWxzZTsNCi0JICBpbnQgZmQ7DQotCSAgY3lnaGVhcF9mZGVudW0gY2ZkIChmYWxz
-ZSk7DQotCSAgd2hpbGUgKChmZCA9IGNmZC5uZXh0ICgpKSA+PSAwKQ0KLQkgICAgaWYgKGNmZC0+
-Z2V0X2RldiAoKSA9PSBGSF9QSVBFVw0KLQkJICAgICAmJiAoZmQgPT0gZmlsZW5vX3N0ZG91dCB8
-fCBmZCA9PSBmaWxlbm9fc3RkZXJyKSkNCi0JICAgICAgew0KLQkJZmhhbmRsZXJfcGlwZSAqcGlw
-ZSA9IChmaGFuZGxlcl9waXBlICopKGZoYW5kbGVyX2Jhc2UgKikgY2ZkOw0KLQkJcGlwZS0+c2V0
-X3BpcGVfbm9uX2Jsb2NraW5nIChmYWxzZSk7DQotCQlpZiAocGlwZS0+cmVxdWVzdF9jbG9zZV9x
-dWVyeV9oZGwgKCkpDQotCQkgIG5lZWRfc2VuZF9zaWcgPSB0cnVlOw0KLQkgICAgICB9DQotCSAg
-ICBlbHNlIGlmIChjZmQtPmdldF9kZXYgKCkgPT0gRkhfUElQRVIgJiYgZmQgPT0gZmlsZW5vX3N0
-ZGluKQ0KLQkgICAgICB7DQotCQlmaGFuZGxlcl9waXBlICpwaXBlID0gKGZoYW5kbGVyX3BpcGUg
-KikoZmhhbmRsZXJfYmFzZSAqKSBjZmQ7DQotCQlwaXBlLT5zZXRfcGlwZV9ub25fYmxvY2tpbmcg
-KGZhbHNlKTsNCi0JICAgICAgfQ0KLQ0KLQkgIGlmIChuZWVkX3NlbmRfc2lnKQ0KLQkgICAgew0K
-LQkgICAgICB0dHlfbWluIGR1bW15X3R0eTsNCi0JICAgICAgZHVtbXlfdHR5Lm50dHkgPSAoZmhf
-ZGV2aWNlcykgbXlzZWxmLT5jdHR5Ow0KLQkgICAgICBkdW1teV90dHkucGdpZCA9IG15c2VsZi0+
-cGdpZDsNCi0JICAgICAgdHR5X21pbiAqdCA9IGN5Z3dpbl9zaGFyZWQtPnR0eS5nZXRfY3R0eXAg
-KCk7DQotCSAgICAgIGlmICghdCkgLyogSWYgdHR5IGlzIG5vdCBhbGxvY2F0ZWQsIHVzZSBkdW1t
-eV90dHkgaW5zdGVhZC4gKi8NCi0JCXQgPSAmZHVtbXlfdHR5Ow0KLQkgICAgICAvKiBFbWl0IF9f
-U0lHTk9OQ1lHQ0hMRCB0byBsZXQgYWxsIHByb2Nlc3NlcyBpbiB0aGUNCi0JCSBwcm9jZXNzIGdy
-b3VwIGNsb3NlIHF1ZXJ5X2hkbC4gKi8NCi0JICAgICAgdC0+a2lsbF9wZ3JwIChfX1NJR05PTkNZ
-R0NITEQpOw0KLQkgICAgfQ0KLQl9DQorCWZoYW5kbGVyX3BpcGU6OnNwYXduX3dvcmtlciAoZmls
-ZW5vX3N0ZGluLCBmaWxlbm9fc3Rkb3V0LA0KKwkJCQkgICAgIGZpbGVub19zdGRlcnIpOw0KIA0K
-ICAgICAgIGJvb2wgbm9fcGNvbiA9IG1vZGUgIT0gX1BfT1ZFUkxBWSAmJiBtb2RlICE9IF9QX1dB
-SVQ7DQogICAgICAgdGVybV9zcGF3bl93b3JrZXIuc2V0dXAgKGlzY3lnd2luICgpLCBoYW5kbGUg
-KGZpbGVub19zdGRpbiwgZmFsc2UpLA0KLS0gDQoyLjQzLjANCg0K
-
---Multipart=_Tue__12_Mar_2024_08_17_22_+0900_YkRaF5pu=37NC4C=--
