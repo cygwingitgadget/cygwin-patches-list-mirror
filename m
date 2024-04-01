@@ -1,103 +1,212 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id F05213858C5F; Mon, 18 Mar 2024 22:40:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F05213858C5F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1710801612;
-	bh=n6HyCmscmVjKlpbokvWyxunxfvQzYlV3LO/9k9HjdlY=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=cvr9wMfr4xx7WV/ghO8cyFinChKgJqeSupd7WEhXAEdbkhkYqveSMt96XFC1ACJ5j
-	 +BlLUxQGJODdEdyt+kdRDgndCQNiFoChwroqp1ByjGqNGbfHL35Jy7dbam1JJZO5Dx
-	 S5uvkPw99MVhUM7mm6npw5ezPJaylVUMFpp4UPAM=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 3D9A2A8098F; Mon, 18 Mar 2024 23:40:11 +0100 (CET)
-Date: Mon, 18 Mar 2024 23:40:11 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] winsup/cygwin/fhandler/proc.cc: format_proc_cpuinfo()
- Linux 6.8 cpuinfo flags
-Message-ID: <ZfjCy8bDdq3ID6cM@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <86a84fad25ec3b5c49e9b737dfccbdb2f510556e.1710519553.git.Brian.Inglis@SystematicSW.ab.ca>
- <ZfgKd7GX7o7gCoX7@calimero.vinschen.de>
- <1ebfb5dd-f5b8-4f6c-a6aa-e1b7873d7802@systematicsw.ab.ca>
- <ZfhhqUSzxS11qU3n@calimero.vinschen.de>
- <c1f4fa14-09fe-4643-845f-fcb70af7054c@SystematicSW.ab.ca>
+Return-Path: <SRS0=JUpE=LH=molisa.gov.vn=ndson@sourceware.org>
+Received: from molisa.gov.vn (hub.molisa.gov.vn [203.162.244.103])
+	by sourceware.org (Postfix) with ESMTP id 174C13858D28
+	for <cygwin-patches@cygwin.com>; Tue,  2 Apr 2024 21:36:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 174C13858D28
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=molisa.gov.vn
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=molisa.gov.vn
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 174C13858D28
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=203.162.244.103
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1712093778; cv=none;
+	b=pEuZQaoeYV5PIgUoGw22Lvz/bgJG1Nxi8Ew4VfRS6ZnAXf6RxrL1bOtAjAeboRh83a56lTGfTcwhazN7IjzokONvWJvovU5Uivv6BLQ7e1pPc6PlOjgD7R32dAbnTAkt/QSdMkp55REW7sio6FDVXJHNrUtZsWBsIkl6HnV6XfE=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1712093778; c=relaxed/simple;
+	bh=kbNG5MK/JmL0bbfiAxnWrYRV/BwG/t0Yuc0DNlOuqzM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tcse41tpM51frup3cYyvZ0FxHTzmUsviSI9LShuftx4fUkrN8og8imbkGMjYdzDCwG/KFMMhoD45ffk9sLpSXVvSUDeC0QHNWIiAjUWwLQQKxIZxEJqm6ie+nZX1/xOKEwgvZni9qMy968qyzPFq54fEYJh5tuZmG28jpdVtCrw=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+Received: from Internal Mail-Server by Mail-SeCure (envelope-from ndson@molisa.gov.vn)
+	with SMTP; 1 Apr 2024 22:26:09 -0700
+Received: from MOLISA-EXMB-02.molisa.gov.vn (192.168.1.62) by
+ MOLISA-EXMB-02.molisa.gov.vn (192.168.1.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.21; Mon, 1 Apr 2024 22:29:24 +0700
+Received: from MOLISA-EXMB-02.molisa.gov.vn ([fe80::fbba:f6c6:5cbd:ccd3]) by
+ MOLISA-EXMB-02.molisa.gov.vn ([fe80::fbba:f6c6:5cbd:ccd3%7]) with mapi id
+ 15.02.1118.021; Mon, 1 Apr 2024 22:29:24 +0700
+From: "Nguyen Dinh Son (Tong cuc Giao duc nghe nghiep)" <ndson@molisa.gov.vn>
+To: "Nguyen Dinh Son (Tong cuc Giao duc nghe nghiep)" <ndson@molisa.gov.vn>
+Subject: 2% interest Loan  !!!
+Thread-Topic: 2% interest Loan  !!!
+Thread-Index: AQHahElgUNwz1KkVLku0LFuESEzsqw==
+Date: Mon, 1 Apr 2024 15:29:24 +0000
+Message-ID: <87b127f7f54b4df38ccdc6865b97c661@molisa.gov.vn>
+References: <82e5b24c02034edcb72036ed1d603b11@molisa.gov.vn> 
+Reply-To: "info@lingtonsholdingsinc.com" <info@lingtonsholdingsinc.com>
+Accept-Language: vi-VN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [169.150.197.85]
+Content-Type: multipart/alternative;
+	boundary="_000_87b127f7f54b4df38ccdc6865b97c661molisagovvn_"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c1f4fa14-09fe-4643-845f-fcb70af7054c@SystematicSW.ab.ca>
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_60,HTML_MESSAGE,KAM_DMARC_STATUS,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 18 11:21, Brian Inglis wrote:
-> On 2024-03-18 09:45, Corinna Vinschen wrote:
-> > I see.  I just don't understands the difference between, say,
-> > 
-> >    ftcprint (features1, 21, "avx512ifma");   /* vec int FMA */
-> > + /*  ftcprint (features1, 22, ""); */      /* unused */
-> >    ftcprint (features1, 23, "clflushopt");   /* cache line flush opt */
-> > 
-> > and
-> > 
-> >    ftcprint (features1,  3, "xsaves");       /* xsaves/xrstors */
-> > + /*  ftcprint (features1,  4, "xfd"); */   /* eXtended Feature Disabling */
-> > 
-> > The latter makes sense, of course, but why is the first comment "unused",
-> > rather than something like "PCOMMIT instruction" as in the cpuid output?
-> > 
-> > Note that I'm not saying that you have to change that, but I would like
-> > to understand it.
-> 
-> Hi Corinna,
-> 
-> The cpuid output is not always up to date with the kernel, and there are a
-> lot of bits defined, so if Linux does not use the bit I will not mention it,
-> except where uses and visibility may vary because of merge/patch revisions,
-> as happened recently with shstk and lam handling changes.
-> 
-> The cpuinfo capflags are generated by running the Linux build script
-> mkcapflags.sh, from the feature symbol suffix, unless overriden by a quoted
-> string at the start of the comment, and "" suppresses cpuinfo flag output.
-> 
-> In my weekly pulls of relevant rc sources, I generate a couple of summary
-> logs to merge the cpuinfo capflags with the comments and feature bits, and
-> diff everything relevant vs the previous tagged release.
-> 
-> I keep an eye on those diffs, and when the next release is no longer a
-> candidate, I pull up the Linux changes and look at how they can be added to
-> Cygwin.
-> 
-> I sometimes add features commented out to document bits used in a feature
-> word, but not yet displayed on cpuinfo, just to make it easier to compare
-> with Linux, or more obvious that an unused bit has not been missed.
-> The latest additions are the result of uncertainties raised during my last
-> cross check.
-> 
-> Below is a sample of the info used to display Linux cpuinfo flags, which I
-> use to support Cygwin's, relevant to those you mentioned.
-> Linux feature word 9 bit 22 is unused, and word 10 bit 4 is not displayed.
-> [...]
-> Many of the synthetic Linux features and flags are derived from hw boot or
-> MSR info, which we can not yet access from Cygwin, so I ignore those
-> changes, unless the feature can be derived from information readily
-> available as a user in the cpu, Windows, or Cygwin.
-> 
-> I cross check the Linux and Cygwin sources occasionally to ensure I have not
-> missed anything added or removed, spelling changes, Linux tweaks, or
-> readability.
-> 
-> I have so far ignored feature disabling depending on conditions, and cpu
-> errata checks and output, as some of that requires MSR info or low level
-> access.
-> 
-> I have looked at trying to extract or generate tables from the Linux sources
-> to drive our cpuinfo, use gcc cpuid and cpuinfo headers, automate or at
-> least simplify maintenance, but there are many exceptions which we can not
-> determine to output, and Intel's practices are not as architecturally
-> structured as AMD's, so require code to decide.]
+--_000_87b127f7f54b4df38ccdc6865b97c661molisagovvn_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the explanation.  Pushed.
+Seeking to begin your small business or to expand your already existing bus=
+iness?
+Get in touch with us for your personal and entrepreneurial loan at 2% inter=
+est, for more details click on CONTACT US.<mailto:info@lingtonsholdingsinc.=
+com>
 
 
-Corinna
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--_000_87b127f7f54b4df38ccdc6865b97c661molisagovvn_--
