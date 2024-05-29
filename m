@@ -1,54 +1,97 @@
-Return-Path: <SRS0=tiif=M7=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id DAAD73845140
-	for <cygwin-patches@cygwin.com>; Tue, 28 May 2024 17:49:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DAAD73845140
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DAAD73845140
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1716918586; cv=none;
-	b=od1BzY3LZQtTkCkSuYnuIzH8aJIf38Rmzmhoh5YoX6inCik3+/BCL3O7GtaWL7R5ViZPZU6GxQXKS5/FMoUGabqYqRoNzoS32FWGTNoqN/oZhoVbuLAIQcv3frSXF+knidadgj51k9AJqdwzOO8b70YrQNA8jkbtrvpvPeZT7Ck=
+Return-Path: <SRS0=v+Dn=NA=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.226.35])
+	by sourceware.org (Postfix) with ESMTPS id 3FBA3385840F
+	for <cygwin-patches@cygwin.com>; Wed, 29 May 2024 10:30:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3FBA3385840F
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3FBA3385840F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.35
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1716978653; cv=none;
+	b=waqGFn5vuNykzeVrUeEeKMNcZPvqAp5R1GjBjmiFFjWmFab4vcnAGfcbJyMrIoVgR4lVC3Ic6APdA/3nlUMQPjMtw/Q8Mwyr+yn9kWAgVh53mJf+DLVhoVpOVDBEHz4ZVyeAubUgQK9x9tcVhrg8yNDPtfo1aZtYj+hYZv69ftU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1716918586; c=relaxed/simple;
-	bh=twoPFVF9NImSSkqOWK3EHI91xw3rX3yIfU+srSX1cRM=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=OGjut8Nk+N6MCBgbV9ch+T6xiCbuWX5GMd9reOkqxlvx/1fBQ7qls9gmIACWwX6tC1mEERIyAlzXBBjizvNRvxR6EcjS7a1b0lNXSvjY3d3lHzad0EY7l97Za90b/AINVO1uFFu/HNlKSFUV8R59n4L7zxZj8q9hNyajjrLkfyg=
+	t=1716978653; c=relaxed/simple;
+	bh=zZe/V5TBIwq0Wt0u8AWp+5I2rsILThLM5mUHqubQ2AY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=VTLe1frG6dMb+trD7wPeQVn8bZy4Y7IQnDbkBQLiloCVHp3Wl5s6VnyzlBoRimxSWnKTRkm5N/34GBqbdCtUvg84zK12SR5u+lRpIVDIMlvW6nFnxQIigjYYj3L3YbMYiPilnui6Y8M73NCBzohojf6MCWw96dQN0r4VMEutw04=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id AEC2545B20
-	for <cygwin-patches@cygwin.com>; Tue, 28 May 2024 13:49:44 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=23I6RWm2keO/M+1VsRLsecwYnTs=; b=rgHLN
-	RoTBwzGI6udpRnw10SUxf36GGT6CP2UWnD1fUQRgpkd1w9AcphDz8TKQt0VoMnaP
-	V91Lw9ZmqSvOmtd072nUYjV4MJ/Bp+Nxay9cRbsIKbZ6bpOAhDdlvStn+tE1M6ev
-	e6bYi2Ofh1JyNiuZ3dG5j1ybEUhXGxAvGpzscE=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id A897245B1E
-	for <cygwin-patches@cygwin.com>; Tue, 28 May 2024 13:49:44 -0400 (EDT)
-Date: Tue, 28 May 2024 10:49:44 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+Received: from localhost.localdomain by mta-snd-e03.mail.nifty.com
+          with ESMTP
+          id <20240529103049514.EWIJ.40277.localhost.localdomain@nifty.com>;
+          Wed, 29 May 2024 19:30:49 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v1] Cygwin: disable high-entropy VA for ldh
-In-Reply-To: <651f7e9a-8f59-7874-75ff-be82153e9dd8@jdrake.com>
-Message-ID: <b342b03c-7fea-46e6-1813-dd37923d10cc@jdrake.com>
-References: <651f7e9a-8f59-7874-75ff-be82153e9dd8@jdrake.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Bruno Haible <bruno@clisp.org>
+Subject: [PATCH] Cygwin: pthread: Fix a race issue introduced by the commit 2c5433e5da82
+Date: Wed, 29 May 2024 19:30:12 +0900
+Message-ID: <20240529103020.53514-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1716978649;
+ bh=/lown3lK/vb1OHiwyYFjbrzlybjQ+01xHzXbuxlNpl8=;
+ h=From:To:Cc:Subject:Date;
+ b=VYdPEtLs4xPriziDbyGwwWJw+LndslFtP5ywlblFzTIzDS94EDSewswwLY0L6VP6/TBAYIml
+ cSsPaD/d2axgFZQxeGZSUhB2J6HJQZCx6HZnD49srwVTPUl/Tmv6qoTPlsgWoln3bGIsSqmfML
+ f4ah/uEE9sdn3IX7iDRM0K73sDUeqeHcMSRa9oiOCSbxrOStrMh4vUlvcfKtzo3wmE+XY/qilj
+ N5FFuoyZNRlG3khkvXi801lNd71FWiFPKcbvPSchcZTQMTvEAAud1y4M7St9XuA9XTfwmjcHVe
+ hP7eXW80vZb6mXL78BtaIusq6CfUlLSk/7BYOJ7LGVBM7H8g==
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 28 May 2024, Jeremy Drake via Cygwin-patches wrote:
+To avoid race issues, pthread::once() uses pthread_mutex. This caused
+the handle leak which was fixed by the commit 2c5433e5da82. However,
+this fix introduced another race issue, i.e., the mutex may be used
+after it is destroyed. With this patch, do not use pthread_mutex in
+pthread::once() to avoid both issues. Instead, InterlockedExchage()
+is used.
 
-> @@ -53,6 +53,7 @@ cygcheck_LDADD = -lz -lwininet -lshlwapi -lpsapi -lntdll
+Addresses: https://cygwin.com/pipermail/cygwin/2024-May/255987.html
+Reported-by: Bruno Haible <bruno@clisp.org>
+Fixes: 2c5433e5da82 ("Cygwin: pthread: Fix handle leak in pthread_once.")
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/thread.cc | 25 ++++---------------------
+ 1 file changed, 4 insertions(+), 21 deletions(-)
 
-Oops, I accidentally generated this patch against msys2-3.5.3 branch,
-rather than cygwin master like the last one.  The only difference is the
-line numbers above, and it does apply cleanly to cygwin master, so I won't
-send another version unless I'm requested to.
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index 0f8327831..1e5f9362b 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -2045,27 +2045,10 @@ pthread::create (pthread_t *thread, const pthread_attr_t *attr,
+ int
+ pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
+ {
+-  // already done ?
+-  if (once_control->state)
+-    return 0;
+-
+-  pthread_mutex_lock (&once_control->mutex);
+-  /* Here we must set a cancellation handler to unlock the mutex if needed */
+-  /* but a cancellation handler is not the right thing. We need this in the thread
+-   *cleanup routine. Assumption: a thread can only be in one pthread_once routine
+-   *at a time. Stote a mutex_t *in the pthread_structure. if that's non null unlock
+-   *on pthread_exit ();
+-   */
+-  if (!once_control->state)
+-    {
+-      init_routine ();
+-      once_control->state = 1;
+-      pthread_mutex_unlock (&once_control->mutex);
+-      while (pthread_mutex_destroy (&once_control->mutex) == EBUSY);
+-      return 0;
+-    }
+-  /* Here we must remove our cancellation handler */
+-  pthread_mutex_unlock (&once_control->mutex);
++  /* The type of &once_control->state is int *, which is compatible with
++     LONG * (the type of the first argument of InterlockedExchange()). */
++  if (!InterlockedExchange (&once_control->state, 1))
++    init_routine ();
+   return 0;
+ }
+ 
+-- 
+2.45.1
+
