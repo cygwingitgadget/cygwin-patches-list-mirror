@@ -1,121 +1,121 @@
-Return-Path: <SRS0=PzXf=NB=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w04.mail.nifty.com (mta-snd-w04.mail.nifty.com [106.153.227.36])
-	by sourceware.org (Postfix) with ESMTPS id A7F0E385840F
-	for <cygwin-patches@cygwin.com>; Thu, 30 May 2024 11:59:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A7F0E385840F
+Return-Path: <SRS0=TcHI=ND=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w08.mail.nifty.com (mta-snd-w08.mail.nifty.com [106.153.227.40])
+	by sourceware.org (Postfix) with ESMTPS id A4B2C3858C3A
+	for <cygwin-patches@cygwin.com>; Sat,  1 Jun 2024 06:34:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A4B2C3858C3A
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A7F0E385840F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.36
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717070363; cv=none;
-	b=xfHmJzUzrVZoQN/AdmvMOgJnbvaVUZubPshc3o8bhUDiPAQzWVVQz3OaSx/+lVofditsKasEoAarbcwT+Q3oQHjJM5Kj3geXu9Q1Shpq0W/wt3LfGIorlVyZUQy9OWmXcSECP780tPyyaoSYMQFLYNu/KFo3Wrqzc6ZP47i7YUM=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A4B2C3858C3A
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717223698; cv=none;
+	b=QsSJam0sdzpqij/EuVhJqIWxt51VI6U6JedkRJ98NS2isseCIUOegHUYZ8fH7KGnL2qp07+C7O/XsZ9mC6NE8qFfRRn/KKpXYtzLLSu9lcZVNPO80phXPKg2ab4hVaq3BqwKCDWNa4qyJkBHknBIl/YwJ+i4+C8UmyAa33DGcIE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1717070363; c=relaxed/simple;
-	bh=EoNiMqhkgSPcumihifwT2uCcwQRDNKtFbqJDd7hUwMg=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=HrwugVwLOPYSSOw3ELF/lLgQCjmVEi2URMTZN/ciln3vLfJRxBeY2+xSljby/1DzsRInZXK0IVVm+aACZHqcxvLbVLhjWSvhuRbvS2Je0k2r6xAfGJgTrI6btYb5jwPFs4FVDmE/NizDsHOAnuXKoPSzEclxszXRisRHj7tv0aE=
+	t=1717223698; c=relaxed/simple;
+	bh=grBzZ10W7YjXoJ6wDc0TKThozHhNlyWKmmq1oi+xwGI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=T3a4B2TRE8nYb/q5H2AFS6/STHEG570UIUCHQTnuVQWM7XJMZ5+8bv40QCz4cBg1JhzOfxx8S5aVnfRg7ledXuJGhJpgp+XFhygun9b3+zKXLIev+fgQgg/gm+On8R6HAfLfro5tKeJLhntaDujT6c9qILeg5BjQgXdYswW2e+s=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-w04.mail.nifty.com with ESMTP
-          id <20240530115919828.SQBC.6907.HP-Z230@nifty.com>;
-          Thu, 30 May 2024 20:59:19 +0900
-Date: Thu, 30 May 2024 20:59:18 +0900
+Received: from localhost.localdomain by mta-snd-w08.mail.nifty.com
+          with ESMTP
+          id <20240601063451428.XXGF.116607.localhost.localdomain@nifty.com>;
+          Sat, 1 Jun 2024 15:34:51 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Bruno Haible <bruno@clisp.org>
-Subject: Re: [PATCH v2] Cygwin: pthread: Fix a race issue introduced by the
- commit 2c5433e5da82
-Message-Id: <20240530205918.7c730117b567bb3bec3a0c3f@nifty.ne.jp>
-In-Reply-To: <20240530205012.2aff4d507acac144e50df2a4@nifty.ne.jp>
-References: <20240530050538.53724-1-takashi.yano@nifty.ne.jp>
-	<5613635.1WZ037k8cV@nimes>
-	<20240530205012.2aff4d507acac144e50df2a4@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1717070359;
- bh=3GlUPjdQjBg4582UDPTbnfkhvIZxbvCJRODk7hoSk4I=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=XWfUrtaHVvK4pr6CeZ1SGxLJUxJtHFwZuXwiWSZr08P+5G448RQjpQ1SEgjQHIpjxIZCJWvx
- om4yj/znUG7JnWzjj6484dNPjbbOScFcpxd47kCA/549Su1JPyV+VDfIj2yymUwv2CrR28iAf1
- LBbw0JdyJmIDXEqmTrqbcgiHjdqz/X2BNXk/Vi1kqVnfDaA5Gc/RXr84IdXbTV+/LgRFGn5Qka
- 4sxG2rT25BxTcnP2F+vJkFW3ibq2Q960Z0hW9kAF9ZfNTVegAeiseb7qw1Hk8XmbwdN7eX+P84
- nw5bKahtg62BFXm3WFjSTsMcBRWM4ul6JlFXhm1Xc9nbYQzA==
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,KAM_NUMSUBJECT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: mixer: Fix volume control for no WAVECAPS_LRVOLUME device
+Date: Sat,  1 Jun 2024 15:34:26 +0900
+Message-ID: <20240601063436.61197-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1717223691;
+ bh=DdBUTiz+99vCYvnZxFxoj4iYvmvTWttxKrZ7NNnNAhU=;
+ h=From:To:Cc:Subject:Date;
+ b=XiWwzD9m0nElyXg+M4Kt7RbOQ9GedCTddIl/OVxbcur4vbxDQh1Vt3jFFJOE7FDcamcDNTod
+ vlnL4Lpsh6GVZNWx93feAxMxshNtDxLMLMOp12b2gv0co7O058TWxatCvL0F4zT5GMNAN6osFm
+ rxRjdTT+Lnj0Am3cwpMpNJ3+cbNdz7VSFyaU59L3PbYvGbIn9szqOmdW0wLGPus+HO0zCzFLIf
+ +zemtN4Wrt8JIzCMYi9dQ94SO8F1l0uPUP8R7YiIiAedlgS3JRp7sdh6eGQF4PTi9EFfdApfZL
+ qxJBH9+9N0x09YOH5VzC0VSld5t2q1Trn46Bj4TXDh8Kas2g==
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 30 May 2024 20:50:12 +0900
-Takashi Yano <takashi.yano@nifty.ne.jp> wrote:
-> On Thu, 30 May 2024 12:14:10 +0200
-> Bruno Haible wrote:
-> > Takashi Yano wrote in cygwin-patches:
-> > >  int
-> > >  pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
-> > >  {
-> > > -  // already done ?
-> > > -  if (once_control->state)
-> > > +  /* Sign bit of once_control->state is used as done flag */
-> > > +  if (once_control->state & INT_MIN)
-> > >      return 0;
-> > >  
-> > > +  /* The type of &once_control->state is int *, which is compatible with
-> > > +     LONG * (the type of the first argument of InterlockedIncrement()). */
-> > > +  InterlockedIncrement (&once_control->state);
-> > >    pthread_mutex_lock (&once_control->mutex);
-> > > -  /* Here we must set a cancellation handler to unlock the mutex if needed */
-> > > -  /* but a cancellation handler is not the right thing. We need this in the thread
-> > > -   *cleanup routine. Assumption: a thread can only be in one pthread_once routine
-> > > -   *at a time. Stote a mutex_t *in the pthread_structure. if that's non null unlock
-> > > -   *on pthread_exit ();
-> > > -   */
-> > 
-> > Sorry, in a unified diff form this is unreadable. One needs to look at the
-> > entire function. A context diff would have been better. So:
-> > 
-> > int
-> > pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
-> > {
-> >   /* Sign bit of once_control->state is used as done flag */
-> >   if (once_control->state & INT_MIN)
-> >     return 0;
-> > 
-> >   /* The type of &once_control->state is int *, which is compatible with
-> >      LONG * (the type of the first argument of InterlockedIncrement()). */
-> >   InterlockedIncrement (&once_control->state);
-> >   pthread_mutex_lock (&once_control->mutex);
-> >   if (!(once_control->state & INT_MIN))
-> >     {
-> >       init_routine ();
-> >       once_control->state |= INT_MIN;
-> >     }
-> >   pthread_mutex_unlock (&once_control->mutex);
-> >   if (InterlockedDecrement (&once_control->state) == INT_MIN)
-> >     pthread_mutex_destroy (&once_control->mutex);
-> >   return 0;
-> > }
+Currently, if the device does not have capability WAVECAPS_LRVOLUME,
+the volume control does not work properly. This patch fixes that.
 
-With v3 patch:
-int
-pthread::once (pthread_once_t *once_control, void (*init_routine) (void))
-{
-  /* Sign bit of once_control->state is used as done flag */
-  if (once_control->state & INT_MIN)
-    return 0;
+Fixes: 2a4af3661470 ("Cygwin: Implement sound mixer device.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/autoload.cc       |  2 ++
+ winsup/cygwin/fhandler/mixer.cc | 14 +++++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-  /* The type of &once_control->state is int *, which is compatible with
-     LONG * (the type of the first argument of InterlockedIncrement()). */
-  InterlockedIncrement (&once_control->state);
-  pthread_mutex_lock (&once_control->mutex);
-  if (!(once_control->state & INT_MIN))
-    {
-      init_routine ();
-      InterlockedOr (&once_control->state, INT_MIN);
-    }
-  pthread_mutex_unlock (&once_control->mutex);
-  if (InterlockedDecrement (&once_control->state) == INT_MIN)
-    pthread_mutex_destroy (&once_control->mutex);
-  return 0;
-}
-
+diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
+index c262c7efb..7e882ef1e 100644
+--- a/winsup/cygwin/autoload.cc
++++ b/winsup/cygwin/autoload.cc
+@@ -603,6 +603,8 @@ LoadDLLfuncEx3 (waveOutReset, winmm, 1, 0, 1)
+ LoadDLLfuncEx3 (waveOutSetVolume, winmm, 1, 0, 1)
+ LoadDLLfuncEx3 (waveOutUnprepareHeader, winmm, 1, 0, 1)
+ LoadDLLfuncEx3 (waveOutWrite, winmm, 1, 0, 1)
++LoadDLLfuncEx3 (waveOutMessage, winmm, 1, 0, 1)
++LoadDLLfuncEx3 (waveOutGetDevCapsA, winmm, 1, 0, 1)
+ 
+ LoadDLLfunc (accept, ws2_32)
+ LoadDLLfunc (bind, ws2_32)
+diff --git a/winsup/cygwin/fhandler/mixer.cc b/winsup/cygwin/fhandler/mixer.cc
+index fabd397b7..f4997f952 100644
+--- a/winsup/cygwin/fhandler/mixer.cc
++++ b/winsup/cygwin/fhandler/mixer.cc
+@@ -15,6 +15,7 @@ details. */
+ #include "fhandler.h"
+ #include "dtable.h"
+ #include "cygheap.h"
++#include <mmddk.h>
+ 
+ ssize_t
+ fhandler_dev_mixer::write (const void *ptr, size_t len)
+@@ -88,7 +89,9 @@ int
+ fhandler_dev_mixer::ioctl (unsigned int cmd, void *buf)
+ {
+   int ret = 0;
++  DWORD id, flag;
+   DWORD vol;
++  WAVEOUTCAPS woc;
+   switch (cmd)
+     {
+     case SOUND_MIXER_READ_DEVMASK:
+@@ -115,7 +118,12 @@ fhandler_dev_mixer::ioctl (unsigned int cmd, void *buf)
+       *(int *) buf = 1 << rec_source;
+       break;
+     case MIXER_WRITE (SOUND_MIXER_VOLUME):
++      waveOutMessage ((HWAVEOUT)WAVE_MAPPER, DRVM_MAPPER_PREFERRED_GET,
++		      (DWORD_PTR)&id, (DWORD_PTR)&flag);
++      waveOutGetDevCaps ((UINT)id, &woc, sizeof (woc));
+       vol = volume_oss_to_winmm (*(int *) buf);
++      if (!(woc.dwSupport & WAVECAPS_LRVOLUME))
++	vol = max(vol & 0xffff, (vol >> 16) & 0xffff);
+       if (waveOutSetVolume ((HWAVEOUT)WAVE_MAPPER, vol) != MMSYSERR_NOERROR)
+ 	{
+ 	  set_errno (EINVAL);
+@@ -123,13 +131,17 @@ fhandler_dev_mixer::ioctl (unsigned int cmd, void *buf)
+ 	}
+       break;
+     case MIXER_READ (SOUND_MIXER_VOLUME):
+-      DWORD vol;
++      waveOutMessage ((HWAVEOUT)WAVE_MAPPER, DRVM_MAPPER_PREFERRED_GET,
++		      (DWORD_PTR)&id, (DWORD_PTR)&flag);
++      waveOutGetDevCaps ((UINT)id, &woc, sizeof (woc));
+       if (waveOutGetVolume ((HWAVEOUT)WAVE_MAPPER, &vol) != MMSYSERR_NOERROR)
+ 	{
+ 	  set_errno (EINVAL);
+ 	  ret = -1;
+ 	  break;
+ 	}
++      if (!(woc.dwSupport & WAVECAPS_LRVOLUME))
++	vol |= (vol & 0xffff) << 16;
+       *(int *) buf = volume_winmm_to_oss (vol);
+       break;
+     default:
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.45.1
+
