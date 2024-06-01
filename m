@@ -1,65 +1,76 @@
 Return-Path: <SRS0=TcHI=ND=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
-	by sourceware.org (Postfix) with ESMTPS id D91C63881806
-	for <cygwin-patches@cygwin.com>; Sat,  1 Jun 2024 21:09:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D91C63881806
+Received: from mta-snd-w08.mail.nifty.com (mta-snd-w08.mail.nifty.com [106.153.227.40])
+	by sourceware.org (Postfix) with ESMTPS id C9CFA3865C2B
+	for <cygwin-patches@cygwin.com>; Sat,  1 Jun 2024 22:03:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C9CFA3865C2B
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D91C63881806
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717276195; cv=none;
-	b=JFvR4QyfV23Ao15irOj/1/Xms2GVchjMV8S9dbRnUuPsR38fPzLTT8m5Khmqd+TDbulTR5vOA8FfugrprNDTaqC1GAKo5MiomL6l/hzoXjlkwYPamb39nDrF52hbGFx6QpFRycVifdqJQPTvxOJ3g0gyS60BpRVOUHCV0P2c3gQ=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C9CFA3865C2B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717279430; cv=none;
+	b=ceTXOpYlkDiy/h78UuOANJHu1IwBlrzyL6a6bjyoFCbnAi7Wht0mD7sbR3qtLmKbpjHdR1AIvqb1qaKi4lWw9zxpDuoof29YOUG5K/hLcqj6QWsTGzcBpGw17cqhL7dip7oW1eoVxIL9XjTxY0j8Anz6YOlr1noRxm56D8R2ESY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1717276195; c=relaxed/simple;
-	bh=rs05cAHBHibMc6nJwUEPmphMeG8DeMf9e2VNikHGX28=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=nPWRDSb9/h8Vdks5ZUydsll2nHuCxcrQd5JUHdoLukhyLIgCn//QQ1hH8SCsJNBi8dIPDO3JKCxTDkwPtExQDVl/GTLiyk2VpCcNXrJM2b/4QaUdn7IbvzsRK8RpWcHNVLbbzRDgm2hTmTH9q4VDxSMaiKFgvyzsSluz7ioa0H0=
+	t=1717279430; c=relaxed/simple;
+	bh=RTosrjI+CR5bD0Oh3qgQtjLlYgc4rMdGDnyFfHk7dNg=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=fwjibYn2Z2RDmPcrbUeVmKV5Df2rIhAa1c7hYg0VDiHudPC6bMyPrw72F+hjo3pG18vkBjbjHpM7cbor6NV61ZyiY/OL6KMAcG9XhclLz+g2btbaq64vxjigTQtbTTDLeaMo/7UGxXraQfvvGQSSaHfiVZZGYE2nu0TeEZvCgYc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-e04.mail.nifty.com with ESMTP
-          id <20240601210949586.PLBI.7571.HP-Z230@nifty.com>;
-          Sun, 2 Jun 2024 06:09:49 +0900
-Date: Sun, 2 Jun 2024 06:09:48 +0900
+Received: from HP-Z230 by mta-snd-w08.mail.nifty.com with ESMTP
+          id <20240601220343187.TEAV.4660.HP-Z230@nifty.com>;
+          Sun, 2 Jun 2024 07:03:43 +0900
+Date: Sun, 2 Jun 2024 07:03:42 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: Jeremy Drake <cygwin@jdrake.com>
-Cc: cygwin-patches@cygwin.com, Bruno Haible <bruno@clisp.org>
-Subject: Re: [PATCH v4] Cygwin: pthread: Fix a race issue introduced by the
- commit 2c5433e5da82
-Message-Id: <20240602060948.87af3449689d3f50805702d9@nifty.ne.jp>
-In-Reply-To: <9abc6820-e1a6-b033-5ffe-dfaa32ef62db@jdrake.com>
-References: <20240601141700.3911-1-takashi.yano@nifty.ne.jp>
-	<9abc6820-e1a6-b033-5ffe-dfaa32ef62db@jdrake.com>
+To: cygwin-patches@cygwin.com, Ken Brown <kbrown@cornell.edu>
+Cc: Jeremy Drake <cygwin@jdrake.com>
+Subject: Re: [PATCH v1] Cygwin: disable high-entropy VA for ldh
+Message-Id: <20240602070342.b53b20f7361d58e338dc3618@nifty.ne.jp>
+In-Reply-To: <651f7e9a-8f59-7874-75ff-be82153e9dd8@jdrake.com>
+References: <651f7e9a-8f59-7874-75ff-be82153e9dd8@jdrake.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1717276189;
- bh=FIZ3ORTGE+l5twDC7NvvmnPuCMngbIMd8yD5NUC6Ss8=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1717279423;
+ bh=TNMTAN4nzibLijjDWQJnsu/jn4wYNAk9J1UDQnlXMjE=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=V3eATtOaFlm4w2Sp27ey5/ejP27Q4W8d3hAXNHLSR6OROTnxrJ1PXqfMxGo5Gg9YQ58f9h1o
- fJe3RJbU1d125gKN2p8L1jv9YQzQu3wPQN8c02KrvT13yPAFsdM26jNUkXiFzfwV4OHB2PV4My
- Ou0iDkBcn91pMpZe29qssdGyYq8Y391gI/Y+OD9C4EeC2I2ScQdMQUj/gkgagCJ5QDt0yfhytJ
- D8Grx5sIueCbDgFJBn6RNb7c49I0VrqsmjRpH51NUl2SONMFmBdBmJc5ceow965OkUWLlSOBEM
- 9TVnHsdxe4AR/mszjxnzMig/veDrn8OSpfSP9tApyN6Kw5EA==
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,KAM_NUMSUBJECT,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ b=F3AlqmQvCZ3pX4LPOzwpo8UHPtJZkVPrVLpFdVbdriLcs814PTmzM361QALqwJW23zqMjcK/
+ OnAu/kEySn41bVmGNt5F+YXLWfVq4hnkToJT9v51QweymKCc/7QTWDz7bzCi3IKEPAeuzRSzmi
+ 1P/eBEU9XUhrEvHWJv6Yu0RaNCBtePNtCmbBYr/pN/UeAdyysHB2a/vvQ3LkohEEu7UnVl+OeB
+ vUAX80A/9joOTFC/VWym009xZ1UeWu4jyGP5aiUU4sMNhMcIrh5yoeQpI/w00Ahwp4waLxOW//
+ 3jPWxX22640mh+fmdPwiObIMj/FPb5mUqs9WuzxPQ3lKixIA==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 1 Jun 2024 12:48:07 -0700 (PDT)
-Jeremy Drake <wrote:
-> On Sat, 1 Jun 2024, Takashi Yano wrote:
+Hi Ken,
+
+On Tue, 28 May 2024 10:19:22 -0700 (PDT)
+Jeremy Drake wrote:
+> If ldd is run against a DLL which links to the Cygwin DLL, ldh will end
+> up loading the Cygwin DLL dynamically, much like cygcheck or strace.
 > 
-> > +  const int destroyed = INT_MIN >> 1;	/* 0b1100000000000000 */
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-May/255991.html
+> Fixes: 60675f1a7eb2 ("Cygwin: decouple shared mem regions from Cygwin DLL")
+> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+> ---
+>  winsup/utils/mingw/Makefile.am | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I thought whether or not right shifting a negative number sign-extends was
-> undefined in the C/C++ standards?
+> diff --git a/winsup/utils/mingw/Makefile.am b/winsup/utils/mingw/Makefile.am
+> index b89d89490a..07b9f928d4 100644
+> --- a/winsup/utils/mingw/Makefile.am
+> +++ b/winsup/utils/mingw/Makefile.am
+> @@ -53,6 +53,7 @@ cygcheck_LDADD = -lz -lwininet -lshlwapi -lpsapi -lntdll
+>  cygwin_console_helper_SOURCES = cygwin-console-helper.cc
+> 
+>  ldh_SOURCES = ldh.cc
+> +ldh_LDFLAGS = ${AM_LDFLAGS} -Wl,--disable-high-entropy-va
+> 
+>  strace_SOURCES = \
+>  	path.cc \
+> -- 
+> 2.45.1.windows.1
 
-It seems that it's implementation-defined till C++17 and arithmetic
-shift since C++20.
-
-gcc defines:
-	"Signed ‘>>’ acts on negative numbers by sign extension."
-
-Therefore, this works as intended. However, relying on implementation-defined
-behavior may not be certainly a good idea.
+If this looks good to you too, shall I commit this patch?
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
