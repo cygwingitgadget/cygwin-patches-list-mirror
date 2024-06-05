@@ -1,75 +1,71 @@
-Return-Path: <SRS0=wmYr=NG=jdrake.com=cygwin@sourceware.org>
+Return-Path: <SRS0=POcl=NH=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 4835B385DDF5
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jun 2024 22:37:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4835B385DDF5
+	by sourceware.org (Postfix) with ESMTPS id 436CF383A48F
+	for <cygwin-patches@cygwin.com>; Wed,  5 Jun 2024 02:04:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 436CF383A48F
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4835B385DDF5
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 436CF383A48F
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717540662; cv=none;
-	b=GtkPm0z6PpzTwJAiCXNS9ODBHuvsvUWGFgcfB65gxszG2zNfTpumWSddGh0iTqA0nYE0Zs5Rkww+Epd0Mz3Ki9fiAy0bG+VPeOFhODBGCcppDMmP3dzMVbPzHTiErN0gwtieCot636MGIVwPpWLlZzzwdnKISJeu3f1pNRAU1Uk=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717553068; cv=none;
+	b=Pdkc3MeCCQpbS7Rg3NKOXhJgwpEqqwE4d+dwmDe4NBEg728Tf7OVyv0Lc6jIE7t/STdn4o1o16w55MywHaRMpRP3Uq9J3hyvHkQMQEOKC1KbTjbMolzVoNBiqE8eJ2GZ+YmaZ0JFYIdVO1tCe3wy9EtLSco8/whTPF2GXulYnSM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1717540662; c=relaxed/simple;
-	bh=EJsQhYKhdtd5cF9QX/gqW/hPmiuehW1DiJRA74Kq4/0=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=CZibpBAdO39WrpLk/j5JsxB+inUykIC2iKpYMxNla/YSI+FlcX4ad0DXwOVf8yuR+WL3J9e+2AEP1n0KP35CXddw+pxtc7/vCgrCv98c+de35B16j6+jDwu/J3lcJK4O74SafE2ivwmF8CBkNyd71omA3fceUfKyDfAoi/2gZOs=
+	t=1717553068; c=relaxed/simple;
+	bh=jqZNoUGHVXrn4+5R4oIuZLjYubePFioh+ar9sqFxV8k=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=sHnWQfp+z16dix5SaBYu/WFOs6DNVjg4ekE9NycuXl/4DzAdu/BPBCfuBDVb3Qd95X52jZnDaJyefD5/PyEj6904yuaAz6rQiUWz/PdXj0zdAQwzBptG5OsU64R+g6qjFiXNDWBZ5xvVgxut6XFDZrRcvKeXcqfxs3k1Rcc/OoQ=
 ARC-Authentication-Results: i=1; server2.sourceware.org
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 8335E45B3F
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jun 2024 18:37:37 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 9614645B4A
+	for <cygwin-patches@cygwin.com>; Tue,  4 Jun 2024 22:04:22 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=XsHep
-	xfWX9s81bCcqOZd1h3U+9U=; b=zDrehxthh69vPKDSc7P28xxCnEqki55xyL+AF
-	LRmC9RH4Tn5UUEBJHZHhDgWCJkYf/6DHSSRQ+qXC+owqdQ7Vo53qADUj8lI9UvfI
-	Q7N0Ipb77L5laHv1fzjS2Nbg5TpJtF7fIuyUVfZXDNghPvD8U3ng623n1uaeNGeZ
-	T3v+To=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=1bH75
+	WGlqiBY4r+0/MOmHKuuidQ=; b=FP080p+OUTjzk28IFtHfBGuhHqVeP+g6rxC/9
+	yzO/XT6+JpglWRcti2wFQAtIideypWeBwwTGr0pthgQ/mHFb4NGhiqanTDNgKTIi
+	dr+7yizbh8PMyH4bClcrQ7e0RqLc/lCNz/UWisg/2QqZHnfDllYxJqJqq6IYb4M9
+	SDduvc=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 4F81A45B39
-	for <cygwin-patches@cygwin.com>; Tue,  4 Jun 2024 18:37:37 -0400 (EDT)
-Date: Tue, 4 Jun 2024 15:37:37 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 8F23E45B41
+	for <cygwin-patches@cygwin.com>; Tue,  4 Jun 2024 22:04:22 -0400 (EDT)
+Date: Tue, 4 Jun 2024 19:04:22 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: /proc/<PID>/mount*: escape strings.
-Message-ID: <25845177-e982-8b0e-b4f8-ebd514a209ce@jdrake.com>
+Subject: [PATCH v2] Cygwin: /proc/<PID>/mount*: escape strings.
+Message-ID: <d7c79b40-237b-2f76-fc4d-3b7c3376199d@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 In order for these formats to be machine-parseable, characters used as
-delimiters must be escaped.  Linux escapes space, newline, backslash,
-and hash (because code that parses mounts/mtab and fstab would handle
-comments) using octal escapes.  Replicate that behavior here.
+delimiters must be escaped.  Linux escapes space, tab, newline,
+backslash, and hash (because code that parses mounts/mtab and fstab
+would handle comments) using octal escapes.  Replicate that behavior
+here.
 
 Addresses: https://cygwin.com/pipermail/cygwin/2024-June/256082.html
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
 
-I took a crack at adding escaping to "mountstuff".  It seems like there
-might be other such /proc entries that are expected to be machine-readable
-that might need escaping.  As such, perhaps the escape_string* functions
-should be in some other file (and not static) so other source files can
-call them too.
+Changes from original:
+* forgot to include tab '\t' in characters that need escaping
+* I mis-iterpreted how octal escapes work: they don't require a leading 0,
+but Linux uses a fixed 3 digit format, which makes calculating the length
+cleaner.
 
-I made some effort to match formatting, but I may well have missed
-something (I just noticed I missed space between function name and open
-paren on the new functions, I went ahead and fixed that in the patch
-manually in the email client).
-
- winsup/cygwin/fhandler/process.cc | 81 +++++++++++++++++++++++++++----
- 1 file changed, 71 insertions(+), 10 deletions(-)
+ winsup/cygwin/fhandler/process.cc | 76 +++++++++++++++++++++++++++----
+ 1 file changed, 66 insertions(+), 10 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
-index 37bdff84e3..0ab07bd119 100644
+index 37bdff84e3..db1763d702 100644
 --- a/winsup/cygwin/fhandler/process.cc
 +++ b/winsup/cygwin/fhandler/process.cc
-@@ -1317,9 +1317,44 @@ extern "C" {
+@@ -1317,9 +1317,39 @@ extern "C" {
    struct mntent *getmntent (FILE *);
  };
 
@@ -81,12 +77,7 @@ index 37bdff84e3..0ab07bd119 100644
 +  for (i = strcspn (str, escapees);
 +       str[i];
 +       i += strcspn (str + i + 1, escapees) + 1)
-+    if ((unsigned char) str[i] < 8)
-+      len += 2;
-+    else if ((unsigned char) str[i] < 64)
-+      len += 3;
-+    else
-+      len += 4;
++    len += 3;
 +  return len + i;
 +}
 +
@@ -101,7 +92,7 @@ index 37bdff84e3..0ab07bd119 100644
 +       s = i + 1, i += strcspn (str + s, escapees) + 1)
 +    {
 +      p = stpncpy (p, str + s, i - s);
-+      p += __small_sprintf (p, "\\0%o", (int)(unsigned char) str[i]);
++      p += __small_sprintf (p, "\\%03o", (int)(unsigned char) str[i]);
 +    }
 +  p = stpcpy (p, str + s);
 +  return (p - destbuf);
@@ -110,11 +101,11 @@ index 37bdff84e3..0ab07bd119 100644
  static off_t
  format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
  {
-+  static const char MOUNTSTUFF_ESCAPEES[] = " \n\\#";
++  static const char MOUNTSTUFF_ESCAPEES[] = " \t\n\\#";
    _pinfo *p = (_pinfo *) data;
    user_info *u_shared = NULL;
    HANDLE u_hdl = NULL;
-@@ -1369,9 +1404,9 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
+@@ -1369,9 +1399,9 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
  	    continue;
  	}
        destbuf = (char *) crealloc_abort (destbuf, len
@@ -127,7 +118,7 @@ index 37bdff84e3..0ab07bd119 100644
  						  + strlen (mnt->mnt_opts)
  						  + 30);
        if (mountinfo)
-@@ -1380,18 +1415,44 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
+@@ -1380,18 +1410,44 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
  	  dev_t dev = pc.exists () ? pc.fs_serial_number () : -1;
 
  	  len += __small_sprintf (destbuf + len,
