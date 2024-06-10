@@ -1,77 +1,96 @@
-Return-Path: <SRS0=WSQ1=NK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
-	by sourceware.org (Postfix) with ESMTPS id BE7823858D26
-	for <cygwin-patches@cygwin.com>; Sat,  8 Jun 2024 16:43:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BE7823858D26
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BE7823858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717865029; cv=none;
-	b=bzQ/ILklEQ4zOeWWlJ2rokaSGSE8gROE3R9HY6O+bdViXldLAa9cLteKfGOEfeZaLorB5+b1NM7+xu4qicHyBp6lPzba4Vl5upNuyHe+0zz+9UO986TZ/NmA8lKGfZjv1w2CZNH8/aY+g+DwhciVyV7L59U0lFh1HV793cZOdEU=
+Return-Path: <SRS0=9m/t=NM=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 786523858D28
+	for <cygwin-patches@cygwin.com>; Mon, 10 Jun 2024 04:47:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 786523858D28
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 786523858D28
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1717994855; cv=none;
+	b=iX0zmZpM0X+u/1gjRMWOFbttESx4FHJHvi7V8VkUkuED/NcOP0TsTfwlQIaYZASkiEJg0HeLcdd+PRUSnLTod6XX1GpvD4Gi5hVNqffy4sO+h0n+KtomifMiwrEM2D7Z0Tb0U/SFZdHyzjEdeNzc2UWINtG5JANnHxHFpWuzeuE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1717865029; c=relaxed/simple;
-	bh=/15P7dUhKcCrLSABaNyiHnnpaq6rKw1W75KqRQuJFJE=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=Ql8dR0Z49MfSE3StJ/4uyGTCaSYOntVxV96BHiNHvntXDSVGtmQpuOev/unicHRYMcZX6Ur8P811iZxreY+ejvoU2yBHtUhyc3MTfgJQ/+VuIZb8qXTXVxBFMWB7zxFmac6HI5SwnFm8NlxUcddzmcitrSjprGBeAysmwyZQylU=
+	t=1717994855; c=relaxed/simple;
+	bh=mB7o+Nt2FPMnQZhoMzsJ1MXgoh51cCgx7mcmA/Yc7BE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=JmxmmAnOHMMT8xYaLRj2+DuS6/5M9fJ2E4W8zjW1p0Zv4lmrusUejUWVuCQgRPWOFwW+QG9uG2zDFjz3cegaNsaOtut2XWZrjXe9kIA+V8Kf0Q+STgndfLUpVCVoTeRxKHgixYCH8J7DrzDoNt5Ff2AWC7QDWR0VgBKRbbtFrQo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-w03.mail.nifty.com with ESMTP
-          id <20240608164343267.OMQQ.115271.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 9 Jun 2024 01:43:43 +0900
-Date: Sun, 9 Jun 2024 01:43:42 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 45A4qbgf088700;
+	Sun, 9 Jun 2024 21:52:37 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdHvuSvJ; Sun Jun  9 21:52:27 2024
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Suppress a warning generated with w32api >=
- 12.0.0
-Message-Id: <20240609014342.7d72fdc0b67b0f094963bf2a@nifty.ne.jp>
-In-Reply-To: <20240607163724.29390-1-jon.turney@dronecode.org.uk>
-References: <20240607163724.29390-1-jon.turney@dronecode.org.uk>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1717865023;
- bh=eD2JgoXg06aw9yBlYgUgPd1fLY6gdg1LOUyXHJgKliY=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=uDL1ciPz5r9N46ylv99qS0vLAOJMOfepFKbOq1eYTPnRwidlLNqW5PKEkUkDfcfZRzjcX19k
- Z0SuFJtg3mKdLzp/RDo56yTbsjKJc/ARen/Kd5axnhz/6EZ4I4teo55NehcLv7wBJsmxtaTsgW
- +Maxd5JAW+M+wxm1JKOFiTpzJWippAMYWsDPUp/9vXTidIxVHY9Z72kzfDuGTvKJnUX2ev2Rj0
- hxT0xpBXQyi4PLWuO9HDuLPuTw0yUylNCAoQvxKmsEMKihehJ5OqwXWkg+DoOUjd/cirVVzhPO
- TUDCfCzPX5gXfhPRhm72jMnOgjpRXm2xUqZ7PnV9p3S7aS1g==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] cygwin-htdocs: Upgrade 32-bit note to Q and A
+Date: Sun,  9 Jun 2024 21:47:09 -0700
+Message-ID: <20240610044718.8237-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Fri,  7 Jun 2024 17:37:24 +0100
-Jon Turney wrote:
-> w32api 12.0.0 adds the returns_twice attribute to RtlCaptureContext().
-> There's some data-flow interaction with using it inside a while loop
-> which causes a maybe-uninitialized warning.
-> 
-> ../../../../winsup/cygwin/exceptions.cc: In member function 'int _cygtls::call_signal_handler()':                                                                                                │
-> ../../../../winsup/cygwin/exceptions.cc:1720:33: error: '<anonymous>' may be used uninitialized in this function [-Werror=maybe-uninitialized]                                                   │
-> ---
->  winsup/cygwin/exceptions.cc | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-> index a2a6f9d4c..28d0431d5 100644
-> --- a/winsup/cygwin/exceptions.cc
-> +++ b/winsup/cygwin/exceptions.cc
-> @@ -1717,7 +1717,10 @@ _cygtls::call_signal_handler ()
->  		 context, unwind to the caller and in case we're called
->  		 from sigdelayed, fix the instruction pointer accordingly. */
->  	      context.uc_mcontext.ctxflags = CONTEXT_FULL;
-> +#pragma GCC diagnostic push
-> +#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
->  	      RtlCaptureContext ((PCONTEXT) &context.uc_mcontext);
-> +#pragma GCC diagnostic pop
->  	      __unwind_single_frame ((PCONTEXT) &context.uc_mcontext);
->  	      if (stackptr > stack)
->  		{
-> -- 
-> 2.45.1
+Upgrade the note about 32-bit Cygwin to a full question and answer(s).
+Also close a couple of HTML tags that need it.
 
-It seems that the commit message include non UTF-8 chars.
+---
+ install.html | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
+diff --git a/install.html b/install.html
+index cdb9948b..c948e647 100755
+--- a/install.html
++++ b/install.html
+@@ -201,7 +201,7 @@ version for an old, unsupported Windows?</h2>
+       </p>
+       <p>
+         Also use <code>--no-verify</code> with this URL.
+-      </p
++      </p>
+     </td>
+   </tr>
+   <tr>
+@@ -242,7 +242,7 @@ version for an old, unsupported Windows?</h2>
+       64-bit: http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/64bit/2016/08/30/104235
+       <p>
+         Also use <code>--no-verify</code> with these URLs.
+-      </p
++      </p>
+     </td>
+   </tr>
+   <tr>
+@@ -273,15 +273,23 @@ version for an old, unsupported Windows?</h2>
+   Time Machine</a> for providing this archive.
+ </p>
+ 
+-  <h4>A note about 32-bit Cygwin</h4>
++<h2 class="cartouche" id="unsup32bit">Q: Can I still run unsupported 32-bit Cygwin?</h2>
++
++  <p>
++    A1: You can, but why would you?  32-bit Cygwin was frozen at version
++    3.3.6, around August 2022.  There have been and there will be no bug
++    fixes or security updates, and no new functionality added.  No longer
++    supported on the mailing lists; it has joined the choir invisible.
++  </p>
+ 
+   <p>
+-    The limited address space of 32-bit Windows means that
++    A2: If you're on 32-bit Windows as well,
++    the limited address space there means that
+     <a href="/faq.html#faq.using.fixing-fork-failures">random
+     failures in the fork(2) system call</a> are more likely.  Therefore, we
+-    recommend using 32-bit Cygwin only in limited scenarios, with only a minimum
+-    of necessary packages installed, and only if there's no way to run 64-bit
+-    Cygwin instead.
++    recommend using 32-bit Cygwin only in limited scenarios, with only a
++    minimum of necessary packages installed, and only if there's no way
++    to run 64-bit Cygwin instead.
+   </p>
+ 
+   <p>
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.43.0
+
