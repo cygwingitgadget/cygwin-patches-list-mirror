@@ -1,168 +1,132 @@
-Return-Path: <SRS0=pTTn=N6=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id E0F82382EF3D
-	for <cygwin-patches@cygwin.com>; Fri, 28 Jun 2024 10:56:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E0F82382EF3D
+Return-Path: <SRS0=E7WB=N7=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.227.121])
+	by sourceware.org (Postfix) with ESMTPS id A83853899089
+	for <cygwin-patches@cygwin.com>; Sat, 29 Jun 2024 10:08:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A83853899089
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E0F82382EF3D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1719572179; cv=none;
-	b=eg/R1mxSCkRvPihgguNqG2Pgs/3wVX60vFbpca71FdgaiC9RjoWhSEj2UE2G648cO3jTzbnGXboaj498DKDcWxBoAtGG3h85aVz9L0VQhWtW9PW6k3JgzIuPo4blVGPr5D7bb12zdFgfs5vZGn7LYNjuVmefRzIe2pl1ChSzHFE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A83853899089
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.121
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1719655684; cv=none;
+	b=erP3TOLgXsavcrqxcrI3fHtyQrQ8EPm8czlkxEEdzBBP1+osubCkeI6c/ZkuKp/EcFoOhFjd7X5+PkJLoZcjDkbt8JXEntaUl6zy9MmDDX0+kR09EV2uJYSkz/TvuvKwWH1zYHsu6SEHoV9DcKfrMDym7pHbsjmLdbY5qVjz+Bo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1719572179; c=relaxed/simple;
-	bh=0aV5Wsv3bNiZw0uaOBZ4S5u1Ml1MdPpNV8luLqcD7pU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=skSWfssgHHAhPiAloL55Tfh4TNqx33El5/MAcrG/H+1vkA/vzGFux2TMc7LmvgONzig8m+1R700/lvPkqNbNe1TtLXVBK7nAA6E2zjFEW9DZU5ahDpLnv5/BfPZQjfML3zmfu2eBwh5rIV7SwqY0nvb1qElBq8dcKiIxEBSGJmQ=
+	t=1719655684; c=relaxed/simple;
+	bh=DySuu+I2ZDuvD1ornn7fPgvv2SaDcNqUPa3rfCsTlTs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=PA0pIsdMpcUUCPj8mfJ6DeeXYDtl0abC292OnD1LCAT2O+JnFtPnrwMLfQW8Y1ULYSBgFdJIHMfQjAC3lM8p3aFf0/l5WzDX66BiY4/E9e3xw7/1kJ8/cGnhVUS5y5qoe76IeSxrybJ8Nn0mSy0V1FHf4ePMnUn0a06D2s4D5ug=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-e07.mail.nifty.com
+Received: from localhost.localdomain by mta-snd-e09.mail.nifty.com
           with ESMTP
-          id <20240628105611904.FNRP.55939.localhost.localdomain@nifty.com>;
-          Fri, 28 Jun 2024 19:56:11 +0900
+          id <20240629100758469.CVUF.13245.localhost.localdomain@nifty.com>;
+          Sat, 29 Jun 2024 19:07:58 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: dsp: Fix incorrect openflags when opening multiple /dev/dsp
-Date: Fri, 28 Jun 2024 19:55:42 +0900
-Message-ID: <20240628105552.9507-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Add error handling for thread_sync_event
+Date: Sat, 29 Jun 2024 19:06:50 +0900
+Message-ID: <20240629100742.2343-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1719572171;
- bh=N2gGVnhITQo/YnFrMGrdn0TgAbRJ58p6KKraSho9t2c=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1719655678;
+ bh=yivrOLCn+Le0JfA0PPy4z5quq/0aZNI/q9boj/90jS0=;
  h=From:To:Cc:Subject:Date;
- b=nx2EYK5G6vdElcETEpTfVERzvcwurEWi6wKGMu15KdZ2FZLcvnZ5qI4BGapsKgJIlCizIDI6
- /5nb0aL5h46m9F6CkoEmIxG7MGmLtqfJnBYmIpaXqXIxPTDTiflLalZVkP1eUvNSDtrZnsjG0G
- r2ApZlsdhwNoYfFxUzaMBYbQ+pldQ9QbltpN3WHh5yVLLbOJbHyTCEXoyfK8k5U9OpEK3+CFiP
- hgjY2QvaehWrlRngpplid6v+GRLs9ZqRPe9sbu9DwGsOutqlF7Lawwc5LD332b1UMzIGPp5r9x
- VRlr2d9AyIIMBvNKzBngw6SjTrjF09XHEokJZFAYhhWQpfmg==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=O7iB2ioKFZazj3EJ9dAVQ8WRwA7+gdTu9VIICPB8lpdF5FkjL4mjWjF5httVaZG2gB9fDPJ1
+ AbTCilRtRtBjOOjh/AquXh33/jVrYCVL5C46cpaO1hRKlTdzzmkJIvp2kOZFhD87c1Mvc4Grnb
+ OwFl5ju4393fQqN1TErlj1SUuN5+jm0OMlJE0lFLG9zdeLjJ42Dl77OPtdlZWHCekPsI8eBRfP
+ uw70yNZ8wNPyad2BKfeI5uk1ogVSpWNPx/au43LAiruLb7NbAEJUPWCo2n19L6wDPyMrJbe6ku
+ 0SjlB5bUT1KgYCBmGgb6N2QBso8w9/9Nn2ckyBzGbAugkqFg==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, the following steps failed with error:
-  1) Open /dev/dsp with O_RDONLY
-  2) Open /dev/dsp with O_WRONLY
-  3) Issue SNDCTL_DSP_GETOSPACE ioctl() for 2)
-This is because IS_WRITE() returns false for 2) due to incorrect
-openflags handling in archetype instance. This patch fixes the
-issue by adding open_setup() to fhandler_dev_dsp to set openflags
-correctly for each instance.
-
-Fixes: 92ddb7429065 ("* fhandler_dsp.cc (fhandler_dev_dsp::open): Remove archetype handling.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/fhandler/dsp.cc           | 26 +++++++++++++++----------
- winsup/cygwin/local_includes/fhandler.h |  7 ++++---
- 2 files changed, 20 insertions(+), 13 deletions(-)
+ winsup/cygwin/fhandler/console.cc | 51 ++++++++++++++++++++-----------
+ 1 file changed, 34 insertions(+), 17 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/dsp.cc b/winsup/cygwin/fhandler/dsp.cc
-index 59c11ac23..605a048f3 100644
---- a/winsup/cygwin/fhandler/dsp.cc
-+++ b/winsup/cygwin/fhandler/dsp.cc
-@@ -1026,19 +1026,19 @@ fhandler_dev_dsp::fhandler_dev_dsp ():
- ssize_t
- fhandler_dev_dsp::write (const void *ptr, size_t len)
- {
--  return base ()->_write (ptr, len);
-+  return base ()->_write (ptr, len, this);
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 1c0d5c815..881445824 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -272,17 +272,23 @@ cons_master_thread (VOID *arg)
+   fhandler_console::handle_set_t handle_set;
+   fh->get_duplicated_handle_set (&handle_set);
+   HANDLE thread_sync_event;
+-  DuplicateHandle (GetCurrentProcess (), fh->thread_sync_event,
+-		   GetCurrentProcess (), &thread_sync_event,
+-		   0, FALSE, DUPLICATE_SAME_ACCESS);
+-  SetEvent (thread_sync_event);
+-  master_thread_started = true;
+-  /* Do not touch class members after here because the class instance
+-     may have been destroyed. */
+-  fhandler_console::cons_master_thread (&handle_set, ttyp);
+-  fhandler_console::close_handle_set (&handle_set);
+-  SetEvent (thread_sync_event);
+-  CloseHandle (thread_sync_event);
++  if (DuplicateHandle (GetCurrentProcess (), fh->thread_sync_event,
++		       GetCurrentProcess (), &thread_sync_event,
++		       0, FALSE, DUPLICATE_SAME_ACCESS))
++    {
++      SetEvent (thread_sync_event);
++      master_thread_started = true;
++      /* Do not touch class members after here because the class instance
++	 may have been destroyed. */
++      fhandler_console::cons_master_thread (&handle_set, ttyp);
++      fhandler_console::close_handle_set (&handle_set);
++      SetEvent (thread_sync_event);
++      CloseHandle (thread_sync_event);
++      master_thread_started = false;
++    }
++  else
++    debug_printf ("cons_master_thread not started because thread_sync_event "
++		  "could not be duplicated %08x", GetLastError ());
+   return 0;
  }
  
- void
- fhandler_dev_dsp::read (void *ptr, size_t& len)
- {
--  base ()->_read (ptr, len);
-+  base ()->_read (ptr, len, this);
+@@ -451,6 +457,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	case WAIT_CANCELED:
+ 	  break;
+ 	default: /* Error */
++	  free (input_rec);
++	  free (input_tmp);
+ 	  ReleaseMutex (p->input_mutex);
+ 	  return;
+ 	}
+@@ -1847,9 +1855,12 @@ fhandler_console::open (int flags, mode_t)
+       char name[MAX_PATH];
+       shared_name (name, CONS_THREAD_SYNC, get_minor ());
+       thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
+-      new cygthread (::cons_master_thread, this, "consm");
+-      WaitForSingleObject (thread_sync_event, INFINITE);
+-      CloseHandle (thread_sync_event);
++      if (thread_sync_event)
++	{
++	  new cygthread (::cons_master_thread, this, "consm");
++	  WaitForSingleObject (thread_sync_event, INFINITE);
++	  CloseHandle (thread_sync_event);
++	}
+     }
+   return 1;
  }
- 
- int
- fhandler_dev_dsp::ioctl (unsigned int cmd, void *buf)
- {
--  return base ()->_ioctl (cmd, buf);
-+  return base ()->_ioctl (cmd, buf, this);
- }
- 
- int
-@@ -1065,7 +1065,6 @@ fhandler_dev_dsp::open (int flags, mode_t mode)
- {
-   int ret = -1, err = 0;
-   UINT num_in = 0, num_out = 0;
--  set_flags ((flags & ~O_TEXT) | O_BINARY);
-   // Work out initial sample format & frequency, /dev/dsp defaults
-   audioformat_ = AFMT_U8;
-   audiofreq_ = 8000;
-@@ -1105,11 +1104,11 @@ fhandler_dev_dsp::open (int flags, mode_t mode)
-   return ret;
- }
- 
--#define IS_WRITE() ((get_flags() & O_ACCMODE) != O_RDONLY)
--#define IS_READ() ((get_flags() & O_ACCMODE) != O_WRONLY)
-+#define IS_WRITE() ((fh->get_flags() & O_ACCMODE) != O_RDONLY)
-+#define IS_READ() ((fh->get_flags() & O_ACCMODE) != O_WRONLY)
- 
- ssize_t
--fhandler_dev_dsp::_write (const void *ptr, size_t len)
-+fhandler_dev_dsp::_write (const void *ptr, size_t len, fhandler_dev_dsp *fh)
- {
-   debug_printf ("ptr=%p len=%ld", ptr, len);
-   int len_s = len;
-@@ -1168,7 +1167,7 @@ fhandler_dev_dsp::_write (const void *ptr, size_t len)
- }
- 
- void
--fhandler_dev_dsp::_read (void *ptr, size_t& len)
-+fhandler_dev_dsp::_read (void *ptr, size_t& len, fhandler_dev_dsp *fh)
- {
-   debug_printf ("ptr=%p len=%ld", ptr, len);
- 
-@@ -1244,7 +1243,7 @@ fhandler_dev_dsp::close ()
- }
- 
- int
--fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
-+fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf, fhandler_dev_dsp *fh)
- {
-   debug_printf ("audio_in=%p audio_out=%p", audio_in_, audio_out_);
-   int *intbuf = (int *) buf;
-@@ -1349,7 +1348,7 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
-       CASE (SNDCTL_DSP_STEREO)
-       {
- 	int nChannels = *intbuf + 1;
--	int res = _ioctl (SNDCTL_DSP_CHANNELS, &nChannels);
-+	int res = _ioctl (SNDCTL_DSP_CHANNELS, &nChannels, fh);
- 	*intbuf = nChannels - 1;
- 	return res;
-       }
-@@ -1547,3 +1546,10 @@ fhandler_dev_dsp::read_ready ()
- {
-   return base ()->_read_ready ();
- }
-+
-+bool
-+fhandler_dev_dsp::open_setup (int flags)
-+{
-+  set_flags ((flags & ~O_TEXT) | O_BINARY);
-+  return fhandler_base::open_setup (flags);
-+}
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 978d3e514..fa6159565 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2881,11 +2881,12 @@ class fhandler_dev_dsp: public fhandler_base
-   int close ();
-   void fixup_after_fork (HANDLE);
-   void fixup_after_exec ();
-+  bool open_setup (int);
- 
-  private:
--  ssize_t _write (const void *, size_t);
--  void _read (void *, size_t&);
--  int _ioctl (unsigned int, void *);
-+  ssize_t _write (const void *, size_t, fhandler_dev_dsp *);
-+  void _read (void *, size_t&, fhandler_dev_dsp *);
-+  int _ioctl (unsigned int, void *, fhandler_dev_dsp *);
-   int _fcntl (int cmd, intptr_t);
-   void _fixup_after_fork (HANDLE);
-   void _fixup_after_exec ();
+@@ -1910,9 +1921,15 @@ fhandler_console::close ()
+ 	  char name[MAX_PATH];
+ 	  shared_name (name, CONS_THREAD_SYNC, get_minor ());
+ 	  thread_sync_event = OpenEvent (MAXIMUM_ALLOWED, FALSE, name);
+-	  con.owner = MAX_PID + 1;
+-	  WaitForSingleObject (thread_sync_event, INFINITE);
+-	  CloseHandle (thread_sync_event);
++	  if (thread_sync_event)
++	    {
++	      con.owner = MAX_PID + 1;
++	      WaitForSingleObject (thread_sync_event, INFINITE);
++	      CloseHandle (thread_sync_event);
++	    }
++	  else
++	    debug_printf ("Failed to open thread_sync_event %08x",
++			  GetLastError ());
+ 	}
+       con.owner = 0;
+     }
 -- 
 2.45.1
 
