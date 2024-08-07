@@ -1,210 +1,74 @@
-Return-Path: <SRS0=huW9=PF=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo009.btinternet.com (btprdrgo009.btinternet.com [65.20.50.46])
-	by sourceware.org (Postfix) with ESMTP id BBB463858C56
-	for <cygwin-patches@cygwin.com>; Tue,  6 Aug 2024 19:03:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BBB463858C56
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BBB463858C56
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.46
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1722971025; cv=none;
-	b=nj8pJC2RNf3OmNUwAUfO14k+t3Iql2y8HFd2U2YbtfXLPim+Ca6ygWnoSojxBIu0MrCMV/0384Euu2NrZNOTRB0bCa97fWGBN+Qg63wZMVg4D+Wfqfzv5K5sKT3NTB+MzK8g5XhZTUiJBtEF5+mD86amQ6IUpz1gO2d40HUdBeA=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1722971025; c=relaxed/simple;
-	bh=PqOvvqQImojPyd0VzNEjU4BypsvwTx+g0nVRJSrW5ro=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=KmUoY7cveEyzV47WqVCghlef7CxfN+Zd2aEe9SVdyb2w3rE14KWT42NzoMfXKFFTX2flb8OslAjKsdPXfWqoSprZrfiKO1Ztms2dAz9NT2tqX5fkFWogdrrWuwBvJfk6xlPK4eSmecjwTRwHdi5e0530eJJefS3E/homOIkhXU8=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 669441F402A90377
-X-Originating-IP: [86.140.193.104]
-X-OWM-Source-IP: 86.140.193.104
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=30/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeftddrkeekgddufedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecumhhishhsihhnghcuvffquchfihgvlhguucdlfedtmdenucfjughrpegtkfffgggfufhfhfevjgesmhdtreertddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepleekkeegffekffduieejkeelieekhfffieeiieduudekgeelgffggfetheeitdevnecukfhppeekiedrudegtddrudelfedruddtgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugedtrdduleefrddutdegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrvghvkffrpehhohhsthekiedqudegtddqudelfedquddtgedrrhgrnhhgvgekiedqudegtddrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsght
-	phhrughrghhotddtle
-X-RazorGate-Vade-Verdict: clean 30
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (86.140.193.104) by btprdrgo009.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 669441F402A90377 for cygwin-patches@cygwin.com; Tue, 6 Aug 2024 20:03:42 +0100
-Content-Type: multipart/mixed; boundary="------------0tt4sh02IK4xiO97Mn3V9Fo4"
-Message-ID: <239efff0-ca0b-45f6-98ae-4d0518fea9b6@dronecode.org.uk>
-Date: Tue, 6 Aug 2024 20:03:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] Cygwin: Suppress false positive use-after-free
- warnings in __set_lc_time_from_win()
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 1C0163858432; Wed,  7 Aug 2024 14:06:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1C0163858432
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1723039594;
+	bh=bZ/Dr/19kujHjGlp36Dxqq3t7p2QPorz61EUfn7fYWk=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=upnQODuxkysuUJ6HnIBu90U8w+2XrPql1lYegAlSPOlaFUUD5i9iOazisobP6VOpJ
+	 AUGFEYNmXHfUq6Q/45b4wVQgAHiFEJ9dQhHLctSKkAlxZTJZrGhyn68sy55wz3N/iR
+	 BRheRWT7xXnlYcicBl9l4WAOzOTPVamDVqrXzuPM=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 3E959A80E94; Wed,  7 Aug 2024 16:06:26 +0200 (CEST)
+Date: Wed, 7 Aug 2024 16:06:26 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 5/6] Cygwin: Fix warnings about narrowing conversions of
+ socket ioctls
+Message-ID: <ZrN_YlBeD31PpxN7@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20240804214829.43085-1-jon.turney@dronecode.org.uk>
- <20240804214829.43085-7-jon.turney@dronecode.org.uk>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <20240804214829.43085-7-jon.turney@dronecode.org.uk>
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+ <20240804214829.43085-6-jon.turney@dronecode.org.uk>
+ <ZrCn00PXmRT77OKj@calimero.vinschen.de>
+ <4deb7dbe-1ac0-478c-bd36-76d3937864cc@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4deb7dbe-1ac0-478c-bd36-76d3937864cc@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------0tt4sh02IK4xiO97Mn3V9Fo4
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-On 04/08/2024 22:48, Jon Turney wrote:
-> Supress new use-after-free warnings about realloc(), seen with gcc 12, e.g.:
+On Aug  6 19:58, Jon Turney wrote:
+> On 05/08/2024 11:22, Corinna Vinschen wrote:
+> > On Aug  4 22:48, Jon Turney wrote:
+> > > Fix gcc 12 warnings about narrowing conversions of socket ioctl constants
+> > > when used as case labels, e.g:
+> > > [...]
+> > The only caller, fhandler_socket::ioctl, passes an unsigned int
+> > value to get_ifconf. Given how the value is defined, it would be
+> > more straightforward to convert get_ifconf to
+> > 
+> >    get_ifconf (struct ifconf *ifc, unsigned int what);
+> > 
+> > wouldn't it?
 > 
->> In function ‘void rebase_locale_buf(const void*, const void*, const char*, const char*, const char*)’,
->>      inlined from ‘int __set_lc_time_from_win(const char*, const lc_time_T*, lc_time_T*, char**, wctomb_p, const char*)’ at ../../../../src/winsup/cygwin/nlsfuncs.cc:705:25:
->> ../../../../src/winsup/cygwin/nlsfuncs.cc:338:24: error: pointer ‘new_lc_time_buf’ may be used after ‘void* realloc(void*, size_t)’ [-Werror=use-after-free]
->>    338 |       *ptrs += newbase - oldbase;
->>        |                ~~~~~~~~^~~~~~~~~
->> ../../../../src/winsup/cygwin/nlsfuncs.cc: In function ‘int __set_lc_time_from_win(const char*, const lc_time_T*, lc_time_T*, char**, wctomb_p, const char*)’:
->> ../../../../src/winsup/cygwin/nlsfuncs.cc:699:44: note: call to ‘void* realloc(void*, size_t)’ here
->>    699 |               char *tmp = (char *) realloc (new_lc_time_buf, len);
+> Yeah, I'm not sure why I didn't do that.  I think I got confused about where
+> this is used from.
 > 
-> We do some calculations using the pointer passed to realloc(), but do
-> not not dereference it, so this seems safe?
-  Since this is less than ideal, here's the version where we explicitly 
-malloc() the new buffer, adjust things, then free() the old buffer.
+> (These constants are long int though, for whatever reason, so it's not
 
-This is all quite hairy, though, and I have no idea how to begin to test 
-this, so if you have some pointers to share, that would be good.
+This is really old stuff.  The _IO definitions have been taken from BSD
+in some year with a 19 in front and never changed again.  The fact that
+the sizeof() gets cast to long is probably a remnant from the past when
+the stuff was supposed to be used on 16 bit machines, but the value was
+supposed to be 32 bit.
+
+Given that the values are not supposed to be ever bigger than 32 bit,
+we should fix the definitions of _IOR/_IOW, dropping the (long) cast.
+Compare with current FreeBSD, which does not cast at all.
+
+I did a quick check that dropping the cast does not change the value
+of any of the dependent definitions in Cygwin headers.  That shouldn't
+happen anyway, given sizeof() returns a size_t, i. e. 64 bit unsigned.
+
+> immediately obvious that they all can be converted to unsigned int without
+> loss, but it seems they can)
+> 
+> Revised patch attached.
+
+LGTM.  I will additionally push a patch dropping the useless casts.
 
 
---------------0tt4sh02IK4xiO97Mn3V9Fo4
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-Avoid-use-after-free-warnings-in-__set_lc_tim.patch"
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-Avoid-use-after-free-warnings-in-__set_lc_tim.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA4ZjkwYjIxNGM2N2RiNWZlYzQyYTdlOWI1MWQ1YzJhOGVjNGQxNTEwIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVHVybmV5IDxqb24udHVybmV5QGRyb25lY29k
-ZS5vcmcudWs+CkRhdGU6IFN1biwgNCBBdWcgMjAyNCAxNzoxNTo1MCArMDEwMApTdWJqZWN0
-OiBbUEFUQ0hdIEN5Z3dpbjogQXZvaWQgdXNlLWFmdGVyLWZyZWUgd2FybmluZ3MgaW4KIF9f
-c2V0X2xjX3RpbWVfZnJvbV93aW4oKSBldGMuCk1JTUUtVmVyc2lvbjogMS4wCkNvbnRlbnQt
-VHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOApDb250ZW50LVRyYW5zZmVyLUVuY29k
-aW5nOiA4Yml0CgpSZXdyaXRlIHRvIGF2b2lkIG5ldyB1c2UtYWZ0ZXItZnJlZSB3YXJuaW5n
-cyBhYm91dCByZWFsbG9jKCksIHNlZW4gd2l0aApnY2MgMTIsIGUuZy46Cgo+IEluIGZ1bmN0
-aW9uIOKAmHZvaWQgcmViYXNlX2xvY2FsZV9idWYoY29uc3Qgdm9pZCosIGNvbnN0IHZvaWQq
-LCBjb25zdCBjaGFyKiwgY29uc3QgY2hhciosIGNvbnN0IGNoYXIqKeKAmSwKPiAgICAgaW5s
-aW5lZCBmcm9tIOKAmGludCBfX3NldF9sY190aW1lX2Zyb21fd2luKGNvbnN0IGNoYXIqLCBj
-b25zdCBsY190aW1lX1QqLCBsY190aW1lX1QqLCBjaGFyKiosIHdjdG9tYl9wLCBjb25zdCBj
-aGFyKinigJkgYXQgLi4vLi4vLi4vLi4vc3JjL3dpbnN1cC9jeWd3aW4vbmxzZnVuY3MuY2M6
-NzA1OjI1Ogo+IC4uLy4uLy4uLy4uL3NyYy93aW5zdXAvY3lnd2luL25sc2Z1bmNzLmNjOjMz
-ODoyNDogZXJyb3I6IHBvaW50ZXIg4oCYbmV3X2xjX3RpbWVfYnVm4oCZIG1heSBiZSB1c2Vk
-IGFmdGVyIOKAmHZvaWQqIHJlYWxsb2Modm9pZCosIHNpemVfdCnigJkgWy1XZXJyb3I9dXNl
-LWFmdGVyLWZyZWVdCj4gICAzMzggfCAgICAgICAqcHRycyArPSBuZXdiYXNlIC0gb2xkYmFz
-ZTsKPiAgICAgICB8ICAgICAgICAgICAgICAgIH5+fn5+fn5+Xn5+fn5+fn5+Cj4gLi4vLi4v
-Li4vLi4vc3JjL3dpbnN1cC9jeWd3aW4vbmxzZnVuY3MuY2M6IEluIGZ1bmN0aW9uIOKAmGlu
-dCBfX3NldF9sY190aW1lX2Zyb21fd2luKGNvbnN0IGNoYXIqLCBjb25zdCBsY190aW1lX1Qq
-LCBsY190aW1lX1QqLCBjaGFyKiosIHdjdG9tYl9wLCBjb25zdCBjaGFyKinigJk6Cj4gLi4v
-Li4vLi4vLi4vc3JjL3dpbnN1cC9jeWd3aW4vbmxzZnVuY3MuY2M6Njk5OjQ0OiBub3RlOiBj
-YWxsIHRvIOKAmHZvaWQqIHJlYWxsb2Modm9pZCosIHNpemVfdCnigJkgaGVyZQo+ICAgNjk5
-IHwgICAgICAgICAgICAgICBjaGFyICp0bXAgPSAoY2hhciAqKSByZWFsbG9jIChuZXdfbGNf
-dGltZV9idWYsIGxlbik7CgpUZWNobmljYWxseSwgaXQncyBVQiB0byBsYXRlciByZWZlciB0
-byB0aGUgcmVhbGxvY2VkIHBvaW50ZXIgKGV2ZW4ganVzdApmb3Igb2Zmc2V0IGNvbXB1dGF0
-aW9ucywgd2l0aG91dCBkZWZlcmVuY2luZyBpdCksIHNvIHN3aXRjaCB0byB1c2luZwptYWxs
-b2MoKSB0byBjcmVhdGUgdGhlIHJlc2l6ZWQgY29weS4KClNpZ25lZC1vZmYtYnk6IEpvbiBU
-dXJuZXkgPGpvbi50dXJuZXlAZHJvbmVjb2RlLm9yZy51az4KLS0tCiB3aW5zdXAvY3lnd2lu
-L25sc2Z1bmNzLmNjIHwgOTUgKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tCiAxIGZpbGUgY2hhbmdlZCwgNDEgaW5zZXJ0aW9ucygrKSwgNTQgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9ubHNmdW5jcy5jYyBiL3dpbnN1cC9jeWd3
-aW4vbmxzZnVuY3MuY2MKaW5kZXggYjMyZmVjYzhlLi4xYjMzY2I3OWYgMTAwNjQ0Ci0tLSBh
-L3dpbnN1cC9jeWd3aW4vbmxzZnVuY3MuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9ubHNmdW5j
-cy5jYwpAQCAtMzE5LDggKzMxOSw3IEBAIGxvY2FsZV9jbXAgKGNvbnN0IHZvaWQgKmEsIGNv
-bnN0IHZvaWQgKmIpCiAgIHJldHVybiBzdHJjbXAgKCpsYSwgKmxiKTsKIH0KIAotLyogSGVs
-cGVyIGZ1bmN0aW9uIHRvIHdvcmthcm91bmQgcmVhbGxvY3Mgd2hpY2ggbW92ZSBibG9ja3Mg
-ZXZlbiBpZiB0aGV5IHNocmluay4KLSAgIEN5Z3dpbidzIHJlYWxsb2MgaXMgbm90IGRvaW5n
-IHRoaXMsIGJ1dCB0Y3NoJ3MsIGZvciBpbnN0YW5jZS4gIEFsbCBsY19mb28KKy8qIEhlbHBl
-ciBmdW5jdGlvbiB0byBhZGp1c3QgcG9pbnRlcnMgaW5zaWRlIGEgbGNfZm9vIGJ1ZmZlci4g
-QWxsIGxjX2ZvbwogICAgc3RydWN0dXJlcyBjb25zaXN0IGVudGlyZWx5IG9mIHBvaW50ZXJz
-IHNvIHRoZXkgYXJlIHByYWN0aWNhbGx5IHBvaW50ZXIKICAgIGFycmF5cy4gIFdoYXQgd2Ug
-ZG8gaGVyZSBpcyBqdXN0IHRyZWF0IHRoZSBsY19mb28gcG9pbnRlcnMgYXMgY2hhciAqKiBh
-bmQKICAgIHJlYmFzZSBhbGwgY2hhciAqIHBvaW50ZXJzIHdpdGhpbiwgdXAgdG8gdGhlIGdp
-dmVuIHNpemUgb2YgdGhlIHN0cnVjdHVyZS4gKi8KQEAgLTMzNCw2ICszMzMsMjggQEAgcmVi
-YXNlX2xvY2FsZV9idWYgKGNvbnN0IHZvaWQgKnB0cnYsIGNvbnN0IHZvaWQgKnB0cnZlbmQs
-IGNvbnN0IGNoYXIgKm5ld2Jhc2UsCiAgICAgICAqcHRycyArPSBuZXdiYXNlIC0gb2xkYmFz
-ZTsKIH0KIAorLyogSGVscGVyIGZ1bmN0aW9uIHRvIHNocmluayBhIGxjX2ZvbyBidWZmZXIs
-IGFkanVzdGluZyBwb2ludGVycyAqLworc3RhdGljIGludAorc2hyaW5rX2xvY2FsX2J1ZiAo
-Y29uc3Qgdm9pZCAqcHRydiwgY29uc3Qgdm9pZCAqcHRydmVuZCwKKwkJICBjaGFyICpvbGRi
-YXNlLCBjb25zdCBjaGFyICpvbGRlbmQsCisJCSAgY2hhciAqKnJlc3VsdCkKK3sKKyAgc2l6
-ZV90IG1pbnNpemUgPSBvbGRlbmQgLSBvbGRiYXNlOworICBjaGFyICp0bXAgPSAoY2hhciAq
-KSBtYWxsb2MgKG1pbnNpemUpOworICBpZiAoIXRtcCkKKyAgICB7CisgICAgICBmcmVlIChv
-bGRiYXNlKTsKKyAgICAgIHJldHVybiAtMTsKKyAgICB9CisKKyAgbWVtY3B5ICh0bXAsIG9s
-ZGJhc2UsIG1pbnNpemUpOworICByZWJhc2VfbG9jYWxlX2J1ZiAocHRydiwgcHRydmVuZCwg
-dG1wLCBvbGRiYXNlLCBvbGRlbmQpOworICBmcmVlIChvbGRiYXNlKTsKKworICAqcmVzdWx0
-ID0gdG1wOworICByZXR1cm4gMTsKK30KKwogc3RhdGljIHdjaGFyX3QgKgogX19nZXRsb2Nh
-bGVpbmZvICh3Y2hhcl90ICpsb2MsIExDVFlQRSB0eXBlLCBjaGFyICoqcHRyLCBzaXplX3Qg
-c2l6ZSkKIHsKQEAgLTY4NywxOSArNzA4LDIwIEBAIF9fc2V0X2xjX3RpbWVfZnJvbV93aW4g
-KGNvbnN0IGNoYXIgKm5hbWUsCiAJICBsZW4gKz0gKHdjc2xlbiAoZXJhLT5lcmFfdF9mbXQp
-ICsgMSkgKiBzaXplb2YgKHdjaGFyX3QpOwogCSAgbGVuICs9ICh3Y3NsZW4gKGVyYS0+YWx0
-X2RpZ2l0cykgKyAxKSAqIHNpemVvZiAod2NoYXJfdCk7CiAKLQkgIC8qIE1ha2Ugc3VyZSBk
-YXRhIGZpdHMgaW50byB0aGUgYnVmZmVyICovCisJICAvKiBJZiBuZWNlc3NhcnksIGdyb3cg
-dGhlIGJ1ZmZlciB0byBlbnN1cmUgZGF0YSBmaXRzIGludG8gaXQgKi8KIAkgIGlmIChsY190
-aW1lX3B0ciArIGxlbiA+IGxjX3RpbWVfZW5kKQogCSAgICB7CiAJICAgICAgbGVuID0gbGNf
-dGltZV9wdHIgKyBsZW4gLSBuZXdfbGNfdGltZV9idWY7Ci0JICAgICAgY2hhciAqdG1wID0g
-KGNoYXIgKikgcmVhbGxvYyAobmV3X2xjX3RpbWVfYnVmLCBsZW4pOworCSAgICAgIGNoYXIg
-KnRtcCA9IChjaGFyICopIG1hbGxvYyAobGVuKTsKIAkgICAgICBpZiAoIXRtcCkKIAkJZXJh
-ID0gTlVMTDsKIAkgICAgICBlbHNlCiAJCXsKLQkJICBpZiAodG1wICE9IG5ld19sY190aW1l
-X2J1ZikKLQkJICAgIHJlYmFzZV9sb2NhbGVfYnVmIChfdGltZV9sb2NhbGUsIF90aW1lX2xv
-Y2FsZSArIDEsIHRtcCwKLQkJCQkgICAgICAgbmV3X2xjX3RpbWVfYnVmLCBsY190aW1lX3B0
-cik7CisJCSAgbWVtY3B5ICh0bXAsIG5ld19sY190aW1lX2J1ZiwgTUFYX1RJTUVfQlVGRkVS
-X1NJWkUpOworCQkgIHJlYmFzZV9sb2NhbGVfYnVmIChfdGltZV9sb2NhbGUsIF90aW1lX2xv
-Y2FsZSArIDEsIHRtcCwKKwkJCQkgICAgIG5ld19sY190aW1lX2J1ZiwgbGNfdGltZV9wdHIp
-OwogCQkgIGxjX3RpbWVfcHRyID0gdG1wICsgKGxjX3RpbWVfcHRyIC0gbmV3X2xjX3RpbWVf
-YnVmKTsKKwkJICBmcmVlKG5ld19sY190aW1lX2J1Zik7CiAJCSAgbmV3X2xjX3RpbWVfYnVm
-ID0gdG1wOwogCQkgIGxjX3RpbWVfZW5kID0gbmV3X2xjX3RpbWVfYnVmICsgbGVuOwogCQl9
-CkBAIC03NTIsMTcgKzc3NCw5IEBAIF9fc2V0X2xjX3RpbWVfZnJvbV93aW4gKGNvbnN0IGNo
-YXIgKm5hbWUsCiAJfQogICAgIH0KIAotICBjaGFyICp0bXAgPSAoY2hhciAqKSByZWFsbG9j
-IChuZXdfbGNfdGltZV9idWYsIGxjX3RpbWVfcHRyIC0gbmV3X2xjX3RpbWVfYnVmKTsKLSAg
-aWYgKCF0bXApCi0gICAgewotICAgICAgZnJlZSAobmV3X2xjX3RpbWVfYnVmKTsKLSAgICAg
-IHJldHVybiAtMTsKLSAgICB9Ci0gIGlmICh0bXAgIT0gbmV3X2xjX3RpbWVfYnVmKQotICAg
-IHJlYmFzZV9sb2NhbGVfYnVmIChfdGltZV9sb2NhbGUsIF90aW1lX2xvY2FsZSArIDEsIHRt
-cCwKLQkJICAgICAgIG5ld19sY190aW1lX2J1ZiwgbGNfdGltZV9wdHIpOwotICAqbGNfdGlt
-ZV9idWYgPSB0bXA7Ci0gIHJldHVybiAxOworICByZXR1cm4gc2hyaW5rX2xvY2FsX2J1Zihf
-dGltZV9sb2NhbGUsIF90aW1lX2xvY2FsZSArIDEsCisJCQkgIG5ld19sY190aW1lX2J1Ziwg
-bGNfdGltZV9wdHIsCisJCQkgIGxjX3RpbWVfYnVmKTsKIH0KIAogLyogQ2FsbGVkIGZyb20g
-bmV3bGliJ3Mgc2V0bG9jYWxlKCkgdmlhIF9fY3R5cGVfbG9hZF9sb2NhbGUoKSBpZiBjYXRl
-Z29yeQpAQCAtODI0LDE4ICs4MzgsOSBAQCBfX3NldF9sY19jdHlwZV9mcm9tX3dpbiAoY29u
-c3QgY2hhciAqbmFtZSwKIAl9CiAgICAgfQogCi0gIGNoYXIgKnRtcCA9IChjaGFyICopIHJl
-YWxsb2MgKG5ld19sY19jdHlwZV9idWYsCi0JCQkJbGNfY3R5cGVfcHRyIC0gbmV3X2xjX2N0
-eXBlX2J1Zik7Ci0gIGlmICghdG1wKQotICAgIHsKLSAgICAgIGZyZWUgKG5ld19sY19jdHlw
-ZV9idWYpOwotICAgICAgcmV0dXJuIC0xOwotICAgIH0KLSAgaWYgKHRtcCAhPSBuZXdfbGNf
-Y3R5cGVfYnVmKQotICAgIHJlYmFzZV9sb2NhbGVfYnVmIChfY3R5cGVfbG9jYWxlLCBfY3R5
-cGVfbG9jYWxlICsgMSwgdG1wLAotCQkgICAgICAgbmV3X2xjX2N0eXBlX2J1ZiwgbGNfY3R5
-cGVfcHRyKTsKLSAgKmxjX2N0eXBlX2J1ZiA9IHRtcDsKLSAgcmV0dXJuIDE7CisgIHJldHVy
-biBzaHJpbmtfbG9jYWxfYnVmKF9jdHlwZV9sb2NhbGUsIF9jdHlwZV9sb2NhbGUgKyAxLAor
-CQkJICBuZXdfbGNfY3R5cGVfYnVmLCBsY19jdHlwZV9wdHIsCisJCQkgIGxjX2N0eXBlX2J1
-Zik7CiB9CiAKIC8qIENhbGxlZCBmcm9tIG5ld2xpYidzIHNldGxvY2FsZSgpIHZpYSBfX251
-bWVyaWNfbG9hZF9sb2NhbGUoKSBpZiBjYXRlZ29yeQpAQCAtOTAwLDE4ICs5MDUsOSBAQCBf
-X3NldF9sY19udW1lcmljX2Zyb21fd2luIChjb25zdCBjaGFyICpuYW1lLAogICBfbnVtZXJp
-Y19sb2NhbGUtPmNvZGVzZXQgPSBsY19udW1lcmljX3B0cjsKICAgbGNfbnVtZXJpY19wdHIg
-PSBzdHBjcHkgKGxjX251bWVyaWNfcHRyLCBjaGFyc2V0KSArIDE7CiAKLSAgY2hhciAqdG1w
-ID0gKGNoYXIgKikgcmVhbGxvYyAobmV3X2xjX251bWVyaWNfYnVmLAotCQkJCWxjX251bWVy
-aWNfcHRyIC0gbmV3X2xjX251bWVyaWNfYnVmKTsKLSAgaWYgKCF0bXApCi0gICAgewotICAg
-ICAgZnJlZSAobmV3X2xjX251bWVyaWNfYnVmKTsKLSAgICAgIHJldHVybiAtMTsKLSAgICB9
-Ci0gIGlmICh0bXAgIT0gbmV3X2xjX251bWVyaWNfYnVmKQotICAgIHJlYmFzZV9sb2NhbGVf
-YnVmIChfbnVtZXJpY19sb2NhbGUsIF9udW1lcmljX2xvY2FsZSArIDEsIHRtcCwKLQkJICAg
-ICAgIG5ld19sY19udW1lcmljX2J1ZiwgbGNfbnVtZXJpY19wdHIpOwotICAqbGNfbnVtZXJp
-Y19idWYgPSB0bXA7Ci0gIHJldHVybiAxOworICByZXR1cm4gc2hyaW5rX2xvY2FsX2J1Zihf
-bnVtZXJpY19sb2NhbGUsIF9udW1lcmljX2xvY2FsZSArIDEsCisJCQkgIG5ld19sY19udW1l
-cmljX2J1ZiwgbGNfbnVtZXJpY19wdHIsCisJCQkgIGxjX251bWVyaWNfYnVmKTsKIH0KIAog
-LyogQ2FsbGVkIGZyb20gbmV3bGliJ3Mgc2V0bG9jYWxlKCkgdmlhIF9fbW9uZXRhcnlfbG9h
-ZF9sb2NhbGUoKSBpZiBjYXRlZ29yeQpAQCAtMTAzOSwxOCArMTAzNSw5IEBAIF9fc2V0X2xj
-X21vbmV0YXJ5X2Zyb21fd2luIChjb25zdCBjaGFyICpuYW1lLAogICBfbW9uZXRhcnlfbG9j
-YWxlLT5jb2Rlc2V0ID0gbGNfbW9uZXRhcnlfcHRyOwogICBsY19tb25ldGFyeV9wdHIgPSBz
-dHBjcHkgKGxjX21vbmV0YXJ5X3B0ciwgY2hhcnNldCkgKyAxOwogCi0gIGNoYXIgKnRtcCA9
-IChjaGFyICopIHJlYWxsb2MgKG5ld19sY19tb25ldGFyeV9idWYsCi0JCQkJbGNfbW9uZXRh
-cnlfcHRyIC0gbmV3X2xjX21vbmV0YXJ5X2J1Zik7Ci0gIGlmICghdG1wKQotICAgIHsKLSAg
-ICAgIGZyZWUgKG5ld19sY19tb25ldGFyeV9idWYpOwotICAgICAgcmV0dXJuIC0xOwotICAg
-IH0KLSAgaWYgKHRtcCAhPSBuZXdfbGNfbW9uZXRhcnlfYnVmKQotICAgIHJlYmFzZV9sb2Nh
-bGVfYnVmIChfbW9uZXRhcnlfbG9jYWxlLCBfbW9uZXRhcnlfbG9jYWxlICsgMSwgdG1wLAot
-CQkgICAgICAgbmV3X2xjX21vbmV0YXJ5X2J1ZiwgbGNfbW9uZXRhcnlfcHRyKTsKLSAgKmxj
-X21vbmV0YXJ5X2J1ZiA9IHRtcDsKLSAgcmV0dXJuIDE7CisgIHJldHVybiBzaHJpbmtfbG9j
-YWxfYnVmKF9tb25ldGFyeV9sb2NhbGUsIF9tb25ldGFyeV9sb2NhbGUgKyAxLAorCQkJICBu
-ZXdfbGNfbW9uZXRhcnlfYnVmLCBsY19tb25ldGFyeV9wdHIsCisJCQkgIGxjX21vbmV0YXJ5
-X2J1Zik7CiB9CiAKIGV4dGVybiAiQyIgaW50Ci0tIAoyLjQ1LjEKCg==
-
---------------0tt4sh02IK4xiO97Mn3V9Fo4--
+Thanks,
+Corinna
