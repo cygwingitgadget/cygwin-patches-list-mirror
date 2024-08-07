@@ -1,73 +1,67 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 1C0163858432; Wed,  7 Aug 2024 14:06:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1C0163858432
+	id 8C8AD3858428; Wed,  7 Aug 2024 14:18:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8C8AD3858428
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1723039594;
-	bh=bZ/Dr/19kujHjGlp36Dxqq3t7p2QPorz61EUfn7fYWk=;
+	s=default; t=1723040310;
+	bh=TIIeKyCsSFvJDpiZ/CMn4dj+as2OtJcBpYXaFr5r3u4=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=upnQODuxkysuUJ6HnIBu90U8w+2XrPql1lYegAlSPOlaFUUD5i9iOazisobP6VOpJ
-	 AUGFEYNmXHfUq6Q/45b4wVQgAHiFEJ9dQhHLctSKkAlxZTJZrGhyn68sy55wz3N/iR
-	 BRheRWT7xXnlYcicBl9l4WAOzOTPVamDVqrXzuPM=
+	b=rSiSEhroVMZhez2tuK57ZBWtuPRLAjIrJ1ZrbmTYfi0XH469lIXS0ZIpIDa//AC6j
+	 qD7sc0kBLyBzkh+/PEgi+p0xi/B1F1BhmaGTpKzhIo2scRZKmHDhhnjLXp9LkQVU/u
+	 Z6tg2YkOzPPPYOmG0FgLMTnkILYBi/x+2gpxmbmQ=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 3E959A80E94; Wed,  7 Aug 2024 16:06:26 +0200 (CEST)
-Date: Wed, 7 Aug 2024 16:06:26 +0200
+	id 40890A8045B; Wed,  7 Aug 2024 16:18:28 +0200 (CEST)
+Date: Wed, 7 Aug 2024 16:18:28 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 5/6] Cygwin: Fix warnings about narrowing conversions of
- socket ioctls
-Message-ID: <ZrN_YlBeD31PpxN7@calimero.vinschen.de>
+Subject: Re: [PATCH 6/6] Cygwin: Suppress false positive use-after-free
+ warnings in __set_lc_time_from_win()
+Message-ID: <ZrOCNMbkYKAq4E94@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20240804214829.43085-1-jon.turney@dronecode.org.uk>
- <20240804214829.43085-6-jon.turney@dronecode.org.uk>
- <ZrCn00PXmRT77OKj@calimero.vinschen.de>
- <4deb7dbe-1ac0-478c-bd36-76d3937864cc@dronecode.org.uk>
+ <20240804214829.43085-7-jon.turney@dronecode.org.uk>
+ <239efff0-ca0b-45f6-98ae-4d0518fea9b6@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4deb7dbe-1ac0-478c-bd36-76d3937864cc@dronecode.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <239efff0-ca0b-45f6-98ae-4d0518fea9b6@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Aug  6 19:58, Jon Turney wrote:
-> On 05/08/2024 11:22, Corinna Vinschen wrote:
-> > On Aug  4 22:48, Jon Turney wrote:
-> > > Fix gcc 12 warnings about narrowing conversions of socket ioctl constants
-> > > when used as case labels, e.g:
-> > > [...]
-> > The only caller, fhandler_socket::ioctl, passes an unsigned int
-> > value to get_ifconf. Given how the value is defined, it would be
-> > more straightforward to convert get_ifconf to
+On Aug  6 20:03, Jon Turney wrote:
+> On 04/08/2024 22:48, Jon Turney wrote:
+> > Supress new use-after-free warnings about realloc(), seen with gcc 12, e.g.:
 > > 
-> >    get_ifconf (struct ifconf *ifc, unsigned int what);
+> > > In function ‘void rebase_locale_buf(const void*, const void*, const char*, const char*, const char*)’,
+> > >      inlined from ‘int __set_lc_time_from_win(const char*, const lc_time_T*, lc_time_T*, char**, wctomb_p, const char*)’ at ../../../../src/winsup/cygwin/nlsfuncs.cc:705:25:
+> > > ../../../../src/winsup/cygwin/nlsfuncs.cc:338:24: error: pointer ‘new_lc_time_buf’ may be used after ‘void* realloc(void*, size_t)’ [-Werror=use-after-free]
+> > >    338 |       *ptrs += newbase - oldbase;
+> > >        |                ~~~~~~~~^~~~~~~~~
+> > > ../../../../src/winsup/cygwin/nlsfuncs.cc: In function ‘int __set_lc_time_from_win(const char*, const lc_time_T*, lc_time_T*, char**, wctomb_p, const char*)’:
+> > > ../../../../src/winsup/cygwin/nlsfuncs.cc:699:44: note: call to ‘void* realloc(void*, size_t)’ here
+> > >    699 |               char *tmp = (char *) realloc (new_lc_time_buf, len);
 > > 
-> > wouldn't it?
+> > We do some calculations using the pointer passed to realloc(), but do
+> > not not dereference it, so this seems safe?
+>  Since this is less than ideal, here's the version where we explicitly
+> malloc() the new buffer, adjust things, then free() the old buffer.
 > 
-> Yeah, I'm not sure why I didn't do that.  I think I got confused about where
-> this is used from.
-> 
-> (These constants are long int though, for whatever reason, so it's not
+> This is all quite hairy, though, and I have no idea how to begin to test
+> this, so if you have some pointers to share, that would be good.
 
-This is really old stuff.  The _IO definitions have been taken from BSD
-in some year with a 19 in front and never changed again.  The fact that
-the sizeof() gets cast to long is probably a remnant from the past when
-the stuff was supposed to be used on 16 bit machines, but the value was
-supposed to be 32 bit.
+No pointers as such, but tcsh uses it's own allocator, while bash
+doesn't. So testing involves running bash and tcsh and then changing
+LC_ALL to any odd (but existing) locale, e.g.
 
-Given that the values are not supposed to be ever bigger than 32 bit,
-we should fix the definitions of _IOR/_IOW, dropping the (long) cast.
-Compare with current FreeBSD, which does not cast at all.
+  en_US, de_DE.utf8, fa_IR, fa_IR.utf8, zh_HK, zh_HK.utf8, you name it
 
-I did a quick check that dropping the cast does not change the value
-of any of the dependent definitions in Cygwin headers.  That shouldn't
-happen anyway, given sizeof() returns a size_t, i. e. 64 bit unsigned.
+  bash$ export LC_ALL=foo
+  tcsh$ setenv LC_ALL foo
 
-> immediately obvious that they all can be converted to unsigned int without
-> loss, but it seems they can)
-> 
-> Revised patch attached.
+This shoudn't crash bash nor tcsh.
 
-LGTM.  I will additionally push a patch dropping the useless casts.
+FWIW, your patch looks right to me.
 
 
 Thanks,
