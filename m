@@ -1,138 +1,170 @@
-Return-Path: <SRS0=cVhV=PK=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-	by sourceware.org (Postfix) with ESMTPS id 712F63858D34
-	for <cygwin-patches@cygwin.com>; Sun, 11 Aug 2024 21:37:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 712F63858D34
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 712F63858D34
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1723412260; cv=none;
-	b=x7wsbkhwi2w7SI7paO2snhlNzhd1lNFlWwyDu0p/qi9ODN20/2x2BUChgUvBa6Pn+llHa4D7du9Tz3nirVCZWhTUPMuTsVxiN+nnOnl//oxNUXK6zZO8BmuFg+J8UEiq41rxclTsD/YML84QV1lTBU91ftZu/bJip9i9tKDY5zc=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1723412260; c=relaxed/simple;
-	bh=gXb82/bp9qiYpK1cEM1qvbK2HLqUGrLfv1VwZPiobIY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=kuGaE2fuOEowV9wM4hCdTqxZtjuzFKUzZzCv+UJXduY4qUuO/XemS7bVGD15N1UtNRtMr0IO78PIzHafABLPSmvF9WHpkL8iGg9zzzpcV7l1e68rYOlr9yxK8FKTgyvgVMfixPAM5r168oi2Xi/Mgf+UfQ6Sbc7TT0tH8wKjr2U=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 0806DC054D
-	for <cygwin-patches@cygwin.com>; Sun, 11 Aug 2024 21:37:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf08.hostedemail.com (Postfix) with ESMTPA id 89BF420025
-	for <cygwin-patches@cygwin.com>; Sun, 11 Aug 2024 21:37:36 +0000 (UTC)
-Message-ID: <4bafb2a0-472e-4bfc-9695-ab1ac57eb61a@SystematicSW.ab.ca>
-Date: Sun, 11 Aug 2024 15:37:35 -0600
+Return-Path: <SRS0=r+vf=PS=kneu.ua=yeliena.prokhorova@sourceware.org>
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazlp170100000.outbound.protection.outlook.com [IPv6:2a01:111:f403:c201::])
+	by sourceware.org (Postfix) with ESMTPS id 5C6823858408;
+	Mon, 19 Aug 2024 12:32:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5C6823858408
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kneu.ua
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=kneu.ua
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5C6823858408
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c201::
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1724070756; cv=pass;
+	b=rDIALLXdvjHP+LsbQqfmIGgHr1xSgUUUyTkBMouJ5cH1jQi6pNmJ5jVKH5Wy2hgG+j9CAGP0QeD59LJG9iQXzGf1z7fnBkjb+sup2jwMVc1UQN1tKV4P9REuD+pdmzzPsJZjkiLXQFxpm67lwh6YpJwMkxqrw/9ZFyPhwp+PIRA=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1724070756; c=relaxed/simple;
+	bh=fPGyoNtwtBSJMws3SU02nBp4BDURHDoYqD7TT6kzabA=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=d+nZNGpcvZtd714C0NDHmIUnY/UD8Lso6sWPJQu6guBKle267H7e6kkbhicJ+RUQJgKsZVhQYZAy08cFL9Aay/YZmH9Y08Ob+FW82SZ3toY1rwxfgb/aYaZsOwm8Y8LFjOTiUkYPavpZs5UOoZYq2vgOLLdNZhDiqIRVcQDcOc8=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=h+wvElTqxjkAM4HnizC4DdQ5L3YrvDbOtZV8JsqnbqZd93JmldzT2C4BL4RA5cK+nRVmJJVyQ+OO1dHv69nga+iEsDSiPDQDFmFXaQRnSKmgSjlx/cYDeOt7t4pJyjI2jdh/mMdv8z+B+uTh3OJexBZ3m2RuGk8CGUJKg4PKIOOaoEAv0mA4Uo6kaIPDTk4Twk7ixaAF1gAiVPY42VpKbexgUif9hj3pFxAxgMkzYytpIM9reycTfB06+hy2VII7+L4ntUPOg8TLpClH4G/IUcp1vyF/Yya3aV+wxTGuKIWZBacLRmIoE8UmBE7FgDpAWJXJKMB0Poy/8qI2rhkWOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zhmBtm6TQW4PCPzwX3VrOo5REDokpTmi1KorLVyxpjA=;
+ b=oCUKyzKdVdP395fPcFhatrd27GE4umyhlTUZ5uHGcoHipiNbB4RxUB0G0UBsxyWBSmxmAF69VQTElewF8xNhULsZynMpPIOHUtteA/zK9WEYrGd/HxBbn4P0niDjC8jTJ5ErEG2pGZqfWo64KQWTLTTaCbO/6RxxZxJoRWLa7CIMhBHT96Vym9pvFouZW1N9Vdds3M8WY15+0tL1c9sh12dpLQUJV7z842HEBz0qxsYQ1d1F6DKWBvlMPL3PFSUhlM/DChLzTx3fP0pJ0XYjjjEXZek5FPGLTDWyy251BfnDcqNYj4MDwB+7KjPVk88cNkhbAxe10Ylxmwiw4bh3fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kneu.ua; dmarc=pass action=none header.from=kneu.ua; dkim=pass
+ header.d=kneu.ua; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itkneu.onmicrosoft.com; s=selector2-itkneu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zhmBtm6TQW4PCPzwX3VrOo5REDokpTmi1KorLVyxpjA=;
+ b=Vh5PlpHk9RXt2/mrEPwGWU/IkCt7qlE7CXm5F/t0NEDYtv/bxRSlxeyuqOI9ph0xY8fjBZxtMQrv17CgHgmqVny+XMiyk41wj5W45HSADANmJL7/kfKC8aR05N8pSI71IoYKAllvBoOWTgYWxtLlJreId7IEvTCMLQ42PnaA/Ec=
+Received: from DBBPR04MB7691.eurprd04.prod.outlook.com (2603:10a6:10:201::7)
+ by AS5PR04MB10058.eurprd04.prod.outlook.com (2603:10a6:20b:683::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Mon, 19 Aug
+ 2024 12:32:31 +0000
+Received: from DBBPR04MB7691.eurprd04.prod.outlook.com
+ ([fe80::a3f7:a9e5:b331:3edc]) by DBBPR04MB7691.eurprd04.prod.outlook.com
+ ([fe80::a3f7:a9e5:b331:3edc%6]) with mapi id 15.20.7875.019; Mon, 19 Aug 2024
+ 12:32:31 +0000
+From: =?koi8-u?B?8NLPyM/Sz9fBILTMpM7BIPemy9TP0qbXzsE=?=
+	<yeliena.prokhorova@kneu.ua>
+To: Corporate Finance and Controlling <corporatefinanceandcontrolling@kneu.ua>
+Subject: Read Your eFax  
+Thread-Topic: Read Your eFax  
+Thread-Index: AQHa8jHC602NJDP7iUiWcq+erDoUZw==
+Importance: high
+X-Priority: 1
+Date: Mon, 19 Aug 2024 12:32:31 +0000
+Message-ID:
+ <DBBPR04MB7691320BCBC35C817A9E58B0838C2@DBBPR04MB7691.eurprd04.prod.outlook.com>
+Accept-Language: uk-UA, ru-RU, en-US
+Content-Language: uk-UA
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kneu.ua;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DBBPR04MB7691:EE_|AS5PR04MB10058:EE_
+x-ms-office365-filtering-correlation-id: c1573816-d370-4a85-8fb7-08dcc04afeb7
+x-ld-processed: 726204ed-52fe-41de-b46b-6041c7cb52ef,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|41320700013|1800799024|7416014|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?koi8-u?Q?ToKF6XgQH/2CJf8NB+uS0VH6eSp6LC7iz+9xlDSDaMRqh4+fVVLhjTPf8sm2qx?=
+ =?koi8-u?Q?X7+E/Y29kih97S1BBU09TgEaWlxchVt/x9UwDuNiT9KHQyyB8jFMTp6ZprM3cP?=
+ =?koi8-u?Q?a9HWP8s061OOhAN1GbZRwM3VsSq0s7uJXugzdOsKOEhsGZB6Io3si/Lhnge7CM?=
+ =?koi8-u?Q?4y8x+4oDRJOqz0hzNogMvTJkIYBxYeEO60czpyKYuNmkUKgSduLj1HBg+tzDMG?=
+ =?koi8-u?Q?nHlz+hwAr0WMlE8CruRMtaRp/te3MROrBFzDnm3pbEmL1eaa858qWU48xRglXn?=
+ =?koi8-u?Q?FSHUaACmuASjlNA7sbnoGr+cOLKEpdVrWB9ctXTCpTblKD0bUu7r7r56jh6oqZ?=
+ =?koi8-u?Q?2KEv3TBKVvGax9W3Z2gaEvFecGrbhMrJrsiHwklIMCcfMjqbzdLxJL+HQuSuCx?=
+ =?koi8-u?Q?YYN2PW1fKy7EYx9+ClfldsIjxQy23j4nXrQQr+0c/3mU2qPonBvDxxctjJeXM9?=
+ =?koi8-u?Q?eat78EWPt6xucOT1YjHx0ECiyfF7pdu7VAkpeT4ojtZ3TDNO5TmNBaj+CPPsPv?=
+ =?koi8-u?Q?PRkVEQJgYQwUygQUt26d2rWy8PhcqlK5wr/gwkY5cCPytqHzycz1WJP1uDCIrI?=
+ =?koi8-u?Q?FZ9J3CPE9eBFnQetGuNh9bdjDW2gGuHqh3kQUwfJKiCYb5S1cdhOeOVdF9Mt3j?=
+ =?koi8-u?Q?Fez8uGE7Hb5hsasuits4yoQiIOLh1PR0ncxLRWQPOxFBfMXv8Ud/dTpvoiZQfw?=
+ =?koi8-u?Q?KCBtFMTg0cGQk87a/BekQgipUVBaL8lS7o1z0ZR3Fk6sfVYKVz+GH0XMmROW5W?=
+ =?koi8-u?Q?8AH3D3FI8uMuaT8o05E6kUIiIT7IE35jVip4WXraW0sxPnAG3JXytONVf3bZ0V?=
+ =?koi8-u?Q?x5bag0ptm2FAbzxaLz+Q1WOTJGLlD1MO/z3crxQ8YksyY/p9pMdmxBiCtTzk5C?=
+ =?koi8-u?Q?tpunvN704jG5wMollQVme1W1Abr5o+31KNBJ1frK8u9vRPXlVTUc8x//BV3Gn/?=
+ =?koi8-u?Q?IVaxc48Sj026gneRr3pO/QM7cVQPzQ+LHPizlYaw83B6zNgbliTKG5QIEyzuTJ?=
+ =?koi8-u?Q?00iLNQ3LlSITWfAbjTW6Ed0FeECqs06Bbyx5C6BYF1RiJUs6CylePNdifGVnEe?=
+ =?koi8-u?Q?Cxh/yNewFM6FDR3EvSBgx3IwAqj6kRyn2hyE2AMLZFBxrhP5dXt5G97kC8qw+G?=
+ =?koi8-u?Q?MMd0dtSQ11/xnO+iMtQyVnsHxDQ5Yf7PLNDX6wE0ad6Th7+W2dq0rOcWLD1V06?=
+ =?koi8-u?Q?JEvN/G0uRZi1Xd0asYV1YGP938AMDfOoGAoSQuWV8m8l6/Kg9xFrQn5ThkmM0l?=
+ =?koi8-u?Q?f7owYdJ849OyZ6OOYlOAUd8HM+p0m5Rbe8jHIaq8acajU8N/FjyrVFqg8Lyjqq?=
+ =?koi8-u?Q?oA=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7691.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(41320700013)(1800799024)(7416014)(376014)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?koi8-u?Q?gSkltgVx4pWzy/tMPhRhKFwfpNY3ouz8ubck5ms810394QQjy5N08NO6+bMfgR?=
+ =?koi8-u?Q?sZH39nsYBhU+PngLbgSG7BT/ghZos9bNNTs/wR6H7Qsy1Pvy0IGcoT6LcQSBjP?=
+ =?koi8-u?Q?jaWDPTzqxoF87z4iqf210Ad88a0zL2bTffLnY8qO5phcIpW1MXJ8RTXci9TzN+?=
+ =?koi8-u?Q?vNhvnj98YYrOg9dRhqRa2hF9AMDsQ8Yc5DRIg4UuliE2VwODcAfMjskNpGGjfy?=
+ =?koi8-u?Q?vDZ9EELRhJsg8ShswvwmqJK8LNpbMS+f3KsiRvFUlGi/a0U06WcC30tJ7fOjTY?=
+ =?koi8-u?Q?Zp2aTvrVCdyknO7k97ZoOlIxgz6FlKT1qZoCvtLGV1jZ2/SWnjxfhft+/7j4Yy?=
+ =?koi8-u?Q?Son7Dc7SIta4TAUM6CwqaOg+rzLy8WNn9GRJel0mJ4Z6i6YyfxQTOAGR449h4X?=
+ =?koi8-u?Q?fxZCxNI7kMEIlDwV6QxyfGuk+kXbv9av2UpdH0qr6S0YxF7khn5CnByc/DKEmt?=
+ =?koi8-u?Q?uvWDdaQKLOEw5Dw3c0UZYd7nivFSir/Kdcr++MssC3OB/b90w5IFUoYmIJKaTj?=
+ =?koi8-u?Q?8OYcxnfeZFs1GJOX+KjM0+o4TfW7fq8mTwcgUQhkrg6Nl7sZDVaa3kfX/C9uxD?=
+ =?koi8-u?Q?3o9lxkaFo94zjJA7rBaxaeHeD9kFCPI6KVk1gjFC4SGxmOhUABqpsoEr37L4Gc?=
+ =?koi8-u?Q?+rV/ZBbfVI8Bd2mMDa8t30CCZ8VGoiPkNVZARX2gwPUbQfzyOZNIQKTNr9pDJO?=
+ =?koi8-u?Q?lv0RYZ0U4/nAAWL7dc8LkY0NPEM+ws7Q/N3il+tybRwCyo5gIHJWJ0xyW2YlSb?=
+ =?koi8-u?Q?VFykSYDIU3fLoNwSHIWiwQzDTSzYkfiswUt72H2L9j+d0OwSL4zGD/yoiXJE+5?=
+ =?koi8-u?Q?6Sq2LNXOG519oW5iYr28uQUFaQLFwBFZ03v9HEiYcHvqtkwjIcXR5mFrpHMGIz?=
+ =?koi8-u?Q?on0LLjketjTJE1OW+aNLJI/ojh141O1YEKr8dT1JRLtysphf7JRnP/zp8ni9bw?=
+ =?koi8-u?Q?s8BkI3VJfoe+3eKVT6+RA1sI3BxEmJZe6lXeDTP4sDC66tt24MqEKVCmoZP07w?=
+ =?koi8-u?Q?heanaaD3Y045gmCZo3bD1+1FdR95cAqvTHH+qxQWL4uBmaWWuhK7KuNwqwylba?=
+ =?koi8-u?Q?TUV6RSlTP2hBO0XolstztgQFzH9Wsqxr8WZg24z1AG80vTeL9Qnws6hzHjj7RC?=
+ =?koi8-u?Q?C2sXkK9A40rPyuc8TZs9Xnfx8n1u26NDJEzoqAvkrSHZ96yl6pKx/F02/ES3l/?=
+ =?koi8-u?Q?fjpblCqOCLDJi4Zl3XbOTFGQJwPEDBqyC1M8mgi4uoYJe1na04AXREGRhg2bCm?=
+ =?koi8-u?Q?W9W27obigQb/wJm/BP6i/pxQeFlc9UnSI2dq53ZBJNXXBa4PSwNZRNR10Sb/uN?=
+ =?koi8-u?Q?I9Zc6oJic45pQ9JEkNdtRQ74rh2OSW5qgtHA2NHtK5My7YtoOEczPO7z6Wn2dc?=
+ =?koi8-u?Q?lUAGskaP8YRtP3bTYyI7IrEglKPCzqWSY2QhQ9M2A/yyEGNfDHArIX9XG8cAE3?=
+ =?koi8-u?Q?Nrn+6w72gR7GNxfvDvckJ8OvDa+MG8tvtVALA3EgPamT+ogrJHJekYWAk4WEne?=
+ =?koi8-u?Q?g4jOuFjgg/c1DaR3iz7nyOy/qKUgZVVFH68GMfia4Tl1TldPlW?=
+Content-Type: multipart/alternative;
+	boundary="_000_DBBPR04MB7691320BCBC35C817A9E58B0838C2DBBPR04MB7691eurp_"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 5/6] Cygwin: Fix warnings about narrowing conversions of
- socket ioctls
-Content-Language: en-CA
-To: cygwin-patches@cygwin.com
-References: <20240804214829.43085-1-jon.turney@dronecode.org.uk>
- <20240804214829.43085-6-jon.turney@dronecode.org.uk>
- <ZrCn00PXmRT77OKj@calimero.vinschen.de>
- <4deb7dbe-1ac0-478c-bd36-76d3937864cc@dronecode.org.uk>
- <ZrN_YlBeD31PpxN7@calimero.vinschen.de>
- <659ca957-c6bd-481d-99ef-2516e902be31@SystematicSW.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <659ca957-c6bd-481d-99ef-2516e902be31@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 89BF420025
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,BODY_8BITS,KAM_DMARC_STATUS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: 63fjsoccq7ag4sb9an4aji5oiuterpq7
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX18Q3wZuJ4v99VK59bRj9OifGh3PqOaF+mQ=
-X-HE-Tag: 1723412256-591801
-X-HE-Meta: U2FsdGVkX1+UejMf5v3aMgHX59Aga4LMNUBDwwHm/0zQl7wXRWfapq9CrP13N7KZDIwUqUZdKt8rrv4rexyITXwrtra0/4AzNtfzboipvsHt4eYPnWGntdmzTufiClQc7nlaAXlrHjLHw8lepf4dCGT+Mz1FQ/fmVxW5v91Wz+JB5sHaSb+1QS0SOfEmb6CHhTk9rg5BLy9QsHkxiEPF8PQaGClJWZd+XHBslFu0ziXNa8+7Bsm4BDfMNJZFC15i5IkanM4CprNVyMWAfDHkOGW4haILUCriIXZDGM8xvn5JoRrIopxbIdVnW5TRey6ZILANwVRcJDuALnpzR68UWMCniSoPKNDi
+X-OriginatorOrg: kneu.ua
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7691.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1573816-d370-4a85-8fb7-08dcc04afeb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2024 12:32:31.2769
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 726204ed-52fe-41de-b46b-6041c7cb52ef
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r9N+NpIhd6e+2lf3tWc8z7Xr9QnVjhMOOTVBFq2OCjcvYSXbGV0p+kX6vMeNR/AonSs1o1EeifuBYnPDFhQ5EsRo1P9IOBJ80QMsGkW4VcE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB10058
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,CHARSET_FARAWAY_HEADER,DKIM_SIGNED,DKIM_VALID,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2024-08-11 12:31, Brian Inglis wrote:
-> On 2024-08-07 08:06, Corinna Vinschen wrote:
->> On Aug  6 19:58, Jon Turney wrote:
->>> On 05/08/2024 11:22, Corinna Vinschen wrote:
->>>> On Aug  4 22:48, Jon Turney wrote:
->>>>> Fix gcc 12 warnings about narrowing conversions of socket ioctl constants
->>>>> when used as case labels, e.g:
->>>>> [...]
->>>> The only caller, fhandler_socket::ioctl, passes an unsigned int
->>>> value to get_ifconf. Given how the value is defined, it would be
->>>> more straightforward to convert get_ifconf to
->>>>
->>>>     get_ifconf (struct ifconf *ifc, unsigned int what);
->>>>
->>>> wouldn't it?
->>>
->>> Yeah, I'm not sure why I didn't do that.  I think I got confused about where
->>> this is used from.
-> 
->> LGTM.  I will additionally push a patch dropping the useless casts.
-> 
-> Hi folks,
-> 
-> Trying to rebuild got a couple of issues with gcc12 and likely recent updates to 
-> main, as my previous rebuild for /proc/cpuinfo with gcc11 was fine:
-> 
-> - picky g++
-> 
->    CXX      net.o
-> In file included from 
-> /usr/src/newlib-cygwin/winsup/cygwin/include/cygwin/socket.h:47,
->                   from /usr/src/newlib-cygwin/winsup/cygwin/include/cygwin/if.h:17,
->                   from /usr/src/newlib-cygwin/winsup/cygwin/include/ifaddrs.h:42,
->                   from /usr/src/newlib-cygwin/winsup/cygwin/net.cc:26:
-> /usr/src/newlib-cygwin/winsup/cygwin/net.cc: In function ‘int 
-> get_ifconf(ifconf*, int)’:
-> /usr/src/newlib-cygwin/winsup/cygwin/net.cc:1940:18: error: narrowing conversion 
-> of ‘2152756069’ from ‘long unsigned int’ to ‘int’ [-Wnarrowing]
->   1940 |             case SIOCGIFFLAGS:
->        |                  ^~~~~~~~~~~~
-> ... and so on
-> 
-> 50cf10dfa485 Cygwin: asm/socket.h: drop outdated casts
-> 
-> so change net.cc get_ifconf (struct ifconf *ifc, int what) to unsigned long, and 
-> where it is also declared in fhandler/socket.cc?
-> 
-> - __utoa (and __itoa) declared in stdlib.h inside #ifndef __CYGWIN__
-> 
->    CC       libc/stdlib/libc_a-itoa.o
-> /usr/src/newlib-cygwin/newlib/libc/stdlib/itoa.c: In function ‘__itoa’:
-> /usr/src/newlib-cygwin/newlib/libc/stdlib/itoa.c:57:3: warning: implicit 
-> declaration of function ‘__utoa’; did you mean ‘__itoa’? 
-> [-Wimplicit-function-declaration]
->     57 |   __utoa (uvalue, &str[i], base);
->        |   ^~~~~~
->        |   __itoa
-> 
-> 
-> 31f7cd1e4332 Hide itoa, utoa, __itoa and __utoa in stdlib.h on Cygwin only
-> 
-> $ grep -C2 utoa ../../newlib/libc/include/stdlib.h
-> #ifndef __CYGWIN__
-> char *  __itoa (int, char *, int);
-> char *  __utoa (unsigned, char *, int);
-> # if __MISC_VISIBLE
-> char *  itoa (int, char *, int);
-> char *  utoa (unsigned, char *, int);
-> # endif
-> #endif
-> 
-> so should this be __INSIDE_CYGWIN__ instead or something else?
+--_000_DBBPR04MB7691320BCBC35C817A9E58B0838C2DBBPR04MB7691eurp_
+Content-Type: text/plain; charset="koi8-u"
+Content-Transfer-Encoding: quoted-printable
 
-Sorry folks,
 
-Did not notice patches 5-6/6 have not yet been applied.
-Apply both okay and rebuild proceeding.
+yeliena.prokhorova@kneu.ua    sent you an eFax
 
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retirer     but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+Status:
+Received
+Page Available:
+10
+size:
+3.5Mb
+Priority:
+Very Important
 
+Read Your eFax<https://www.canva.com/design/DAGOS9Q6enk/1nX7YMmmQGIHyv_w64d=
+rFA/view?utm_content=3DDAGOS9Q6enk&utm_campaign=3Ddesignshare&utm_medium=3D=
+link&utm_source=3Deditor>
+
+ The requested email is legitimate, and it has been secure to your email ad=
+dress only. Kindly proceed to review it Here Now<https://www.canva.com/desi=
+gn/DAGOS9Q6enk/1nX7YMmmQGIHyv_w64drFA/view?utm_content=3DDAGOS9Q6enk&utm_ca=
+mpaign=3Ddesignshare&utm_medium=3Dlink&utm_source=3Deditor>
+
+
+Sincerely,
+Yeliena Prokhorova
+
+--_000_DBBPR04MB7691320BCBC35C817A9E58B0838C2DBBPR04MB7691eurp_--
