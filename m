@@ -1,114 +1,113 @@
-Return-Path: <SRS0=y7fT=P2=speed-seo.co=seo@sourceware.org>
-Received: from mail-pj1-x1065.google.com (mail-pj1-x1065.google.com [IPv6:2607:f8b0:4864:20::1065])
-	by sourceware.org (Postfix) with ESMTPS id C8919385EC54
-	for <cygwin-patches@cygwin.com>; Tue, 27 Aug 2024 17:02:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C8919385EC54
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=speed-seo.co
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=speed-seo.co
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C8919385EC54
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::1065
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1724778168; cv=none;
-	b=b9HvwEMtJapSpvDZBnrhTOnMBpDmV7Mbg/G+iVi/jFb8JZ4nU9Taa1Rzvh5UGek6CyOiNjLMhHaIhHghCCYP+RiXcvT/Te8WitVZyQ2kFmHzZsyoWRiFCZIK4y2T/sUuZbmTIrhFvcGlEIrEUdqDPUk+w7TUpnznxl6FXANS4mI=
+Return-Path: <SRS0=tvi8=P5=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.113])
+	by sourceware.org (Postfix) with ESMTPS id 7F2163858435
+	for <cygwin-patches@cygwin.com>; Fri, 30 Aug 2024 14:16:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7F2163858435
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7F2163858435
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.113
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725027377; cv=none;
+	b=AfdSiqDKYQ9rNqH+jx8kj6CzW5cxCNmOs2bNAA+1TqaWhWymuiClDndlfby//vhiPhs5X4qbvDp+LcJG9pS4q4wxuy1HZubIpZ0aGaIucYnf4yCUFkNRzpSGDLNgDkW7suX56mMqAu2lMRp2dvmbQOnxOcuv5SJ3nUkVflTZgps=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1724778168; c=relaxed/simple;
-	bh=Jvj9ZqPX6lvSv5cR3qNwQC1bvBKPQbXrTMKhI4H08gk=;
-	h=DKIM-Signature:Date:To:From:Subject:Message-ID:MIME-Version; b=SE+h62kgPIFpFYvOiKMZp8ABs7EDaqSEVNukAX6A85nmjaj81KSlwwkUwWFqW8e1C7Z5FUK8jNGvDjVqeSQc+L0BWdK0SQ8YpZXqqXbkXi8SDUGxaJndWlXSsEJq/UFpVVd77GVKXzZ6evSHwNpLUGVFMwbL423dtEagEMQeQtA=
+	t=1725027377; c=relaxed/simple;
+	bh=ItC+2+v1f8cParcGk+rijo0biiQc0KPSQT6T7TQ1nOU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Hy0xzeNJZUv6S3f6hYhGGwV5DY9vTjWtfsPqYd6PsO+yL6xZOD+IpWwtAfnWiG9YJ6gnCUVk5Psvfm6UOWApTVZUxI3sGSeQPkwcghP0wjQBRyYTwnZikpcJk/zHJji96+oiBj/o16Cp/Y4E1KeRIKHAW23GMqCSacH7Lebpjh4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: by mail-pj1-x1065.google.com with SMTP id 98e67ed59e1d1-2d3e46ba5bcso4197187a91.0
-        for <cygwin-patches@cygwin.com>; Tue, 27 Aug 2024 10:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=speed-seo.co; s=google; t=1724778166; x=1725382966; darn=cygwin.com;
-        h=content-transfer-encoding:mime-version:list-unsubscribe-post
-         :list-unsubscribe:precedence:message-id:subject:reply-to:from:to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OD7Xw80wRGI916zp8yMB1i1urC/xByWkSREHMsMBI7M=;
-        b=Izwjcbx+ccNqcccCtXZcpBM1h1ej+/3rQXpeSGuGBQBD6Qm1NEIZ/53Z0Pe2nPB4+K
-         X0Mr2U5kpVSB/HXqIeMtNGhKPGlY+rqBEOyNlv5k+i8m/QFCo4UNhHCejEiS4y5jgGRt
-         QNYSxiSUGdqMoZ7lWGtu6MkPhI0q5M177bcBdXmmZl5jFUOQ6xgJVkhFMUkI8fObQlbE
-         KnH+4w8btnH/YBwv3rr48FkfeWZMWgxdJjAj2IFy2qjgzBaJ9SHNB8wYOtHTfZLtdQWW
-         bcoMQ1Q/2TzEYbtd3y/wd5523quVMkqEsyzFf6FCdMbMYY/N57aSJtFhybe794Pr2Ai0
-         4xgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724778166; x=1725382966;
-        h=content-transfer-encoding:mime-version:list-unsubscribe-post
-         :list-unsubscribe:precedence:message-id:subject:reply-to:from:to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OD7Xw80wRGI916zp8yMB1i1urC/xByWkSREHMsMBI7M=;
-        b=ASCeJKOAtoBGYSc0QGnL/83pgsHS6BTGgWR1QDHno6Yzr48gv60hm8eNvbRXD+fMRp
-         QRsikmMr/BnViDpgWQye4G7EbmcIxGihvnkOeJ3NC2IoN0Uqm5rfGLqPlWTPEUegSclE
-         Slm0KbHc/bwqmLISClWtsMOk4+IZU7m1RD549fJ3484JiyHLqOGUxXdtZty3Mdg4i1yP
-         aMYr2oDhPVr59LbReVeeHJG/azsxQvFzHG/P+BKFr3k1ZOzVTfWCA4nJGDjLLmFCgWOR
-         g9VBEdAjh8DSpSddDdq68DFuDdzR0TKS2kWkXjMHd+9mqoOqmMfnWYZDEg7b+yfT1RIU
-         hO+w==
-X-Gm-Message-State: AOJu0YwbjAVodbIdKV3FVBIFP1LtHI/85OJ0OJw5Suj39SZOB9b9gQFQ
-	jP0Li1eJ4LL3znDQsOZLIqryyJphpbsEwG6OKuX9DUUxWufL0shLO/ZaMeWCkUNVBdshN5eF/89
-	D4SfOGY0gLYack38yShDrKTAojOQPAIpSH33vbvoVhsA=
-X-Google-Smtp-Source: AGHT+IF/s+c2nMOz8yQlfNDbUFpTFKG4GB5voFo1qzAxt2+ucvleXTnnc730rbqmVvkucC/jOylhAEdMKJUX
-X-Received: by 2002:a17:90b:4a42:b0:2d3:d7b9:2c7f with SMTP id 98e67ed59e1d1-2d8259f064fmr3753845a91.35.1724778165464;
-        Tue, 27 Aug 2024 10:02:45 -0700 (PDT)
-Received: from clicks.speed-seo.co (rssd9531.webaccountserver.com. [192.245.157.165])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-2d5eb8c9e8asm1146213a91.1.2024.08.27.10.02.45
-        for <cygwin-patches@cygwin.com>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 10:02:45 -0700 (PDT)
-X-Relaying-Domain: speed-seo.co
-Date: Tue, 27 Aug 2024 17:02:44 +0000
+Received: from localhost.localdomain by mta-snd-e01.mail.nifty.com
+          with ESMTP
+          id <20240830141611124.GJQI.9629.localhost.localdomain@nifty.com>;
+          Fri, 30 Aug 2024 23:16:11 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-From: Speed SEO Digital <seo@speed-seo.co>
-Reply-To: seo@speed-seo.co
-Subject: How to Fight Back Negative SEO?
-Message-ID: <0ffOWWQjfFSDXFXz2vo5ZihGbWeBKzCCGxkEYbwc0dg@clicks.speed-seo.co>
-X-Mailer: WPMailSMTP/Mailer/smtp 4.0.2
-Precedence: bulk
-X-Newsletter-Email-Id: 23
-X-Auto-Response-Suppress: OOF, AutoReply
-List-Unsubscribe: <https://clicks.speed-seo.co/?na=ocu&nk=784423-13e104c0b1&nek=23->
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	isaacag,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH] Cygwin: pipe: Restore blocking mode of read pipe on close()
+Date: Fri, 30 Aug 2024 23:15:44 +0900
+Message-ID: <20240830141553.12128-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
- boundary="b1=_0ffOWWQjfFSDXFXz2vo5ZihGbWeBKzCCGxkEYbwc0dg"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTML_MESSAGE,LIKELY_SPAM_BODY,PYZOR_CHECK,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725027371;
+ bh=U0VMZDMO29mehsdSGDrhiRRpXfcKL8JNq1/lRNgr7go=;
+ h=From:To:Cc:Subject:Date;
+ b=tWhbVWvXezJp62OL3ss/7XUbLgDJHhvmWsJeLOwZcP7CYHFHVEViiO405IOc/0NAE/1OjMkv
+ HXle2/eMJJGp1xQo8cDRUO+SqzhcxNT0WF+y9pxBgg1NtPSMO1l/gbNLbXCcIIxIFKmQSPKn9e
+ 5MMiw4RAih4yZXuiUGlY2wdwxIfwpQ7juT24qy120UazOXdgEjZZ++iUUsArvJ3BS9XHtYu82N
+ eG9dBn7ql3StwtIcu/nYVPWrIbujCNA7vbx+PnmRl7kID3XyFfmA8e/Wp/18qz2SZxaoXN3+UC
+ jABgvvXfbUtTNjy1dfY5h61VD+1bJEV6iZ+cr17/gUmSjDTA==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---b1=_0ffOWWQjfFSDXFXz2vo5ZihGbWeBKzCCGxkEYbwc0dg
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+If a cygwin app is executed from a non-cygwin app and the cygwin
+app exits, read pipe remains on non-blocking mode because of the
+commit fc691d0246b9. Due to this behaviour, the non-cygwin app
+cannot read the pipe correctly after that. With this patch, the
+blocking mode of the read pipe is stored into was_blocking_read_pipe
+on set_pipe_non_blocking() when the cygwin app starts and restored
+on close().
 
-  
+Addresses: https://github.com/git-for-windows/git/issues/5115
+Fixes: fc691d0246b9 ("Cygwin: pipe: Make sure to set read pipe non-blocking for cygwin apps.");
+Reported-by: isaacag, Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/pipe.cc          | 12 ++++++++++++
+ winsup/cygwin/local_includes/fhandler.h |  1 +
+ 2 files changed, 13 insertions(+)
 
-Hi there 
-
-Have you been the victim of negative SEO campaigns? 
-
-Now you can fight back against them with proper services that will mess up there SEO 
-
-  
-
-More info: 
-
-https://www.speed-seo.co/negative-seo/  (https://www.speed-seo.co/negative-seo/) 
-
-  
-
-If you want to clean up your links profile from those attacks, reply to us, we will be able to help. 
-
-  
-
-Cheers 
-
-Mike 
-
-  
-
-Speed SEO Team 
-
-Unsubscribe  (https://clicks.speed-seo.co/?na=u&nk=784423-13e104c0b1&nek=23-)    |    Manage your subscription  (https://clicks.speed-seo.co/?na=p&nk=784423-13e104c0b1&nek=23-)    |    View online  (https://clicks.speed-seo.co/?na=v&nk=784423-13e104c0b1&id=23) 
-
-whatsapp  
-
-
---b1=_0ffOWWQjfFSDXFXz2vo5ZihGbWeBKzCCGxkEYbwc0dg--
+diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.cc
+index 852076ccc..5c760d704 100644
+--- a/winsup/cygwin/fhandler/pipe.cc
++++ b/winsup/cygwin/fhandler/pipe.cc
+@@ -55,6 +55,15 @@ fhandler_pipe::set_pipe_non_blocking (bool nonblocking)
+   IO_STATUS_BLOCK io;
+   FILE_PIPE_INFORMATION fpi;
+ 
++  if (get_device () == FH_PIPER && nonblocking && !was_blocking_read_pipe)
++    {
++      status = NtQueryInformationFile (get_handle (), &io, &fpi, sizeof fpi,
++				       FilePipeInformation);
++      if (NT_SUCCESS (status))
++	was_blocking_read_pipe =
++	  (fpi.CompletionMode == FILE_PIPE_QUEUE_OPERATION);
++    }
++
+   fpi.ReadMode = FILE_PIPE_BYTE_STREAM_MODE;
+   fpi.CompletionMode = nonblocking ? FILE_PIPE_COMPLETE_OPERATION
+     : FILE_PIPE_QUEUE_OPERATION;
+@@ -95,6 +104,7 @@ fhandler_pipe::init (HANDLE f, DWORD a, mode_t mode, int64_t uniq_id)
+        even with FILE_SYNCHRONOUS_IO_NONALERT. */
+     set_pipe_non_blocking (get_device () == FH_PIPER ?
+ 			   true : is_nonblocking ());
++  was_blocking_read_pipe = false;
+ 
+   /* Store pipe name to path_conv pc for query_hdl check */
+   if (get_dev () == FH_PIPEW)
+@@ -734,6 +744,8 @@ fhandler_pipe::close ()
+     CloseHandle (query_hdl);
+   if (query_hdl_close_req_evt)
+     CloseHandle (query_hdl_close_req_evt);
++  if (was_blocking_read_pipe)
++    set_pipe_non_blocking (false);
+   int ret = fhandler_base::close ();
+   ReleaseMutex (hdl_cnt_mtx);
+   CloseHandle (hdl_cnt_mtx);
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index 8b02a2b1b..16c39b55b 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -1216,6 +1216,7 @@ private:
+   HANDLE query_hdl_proc;
+   HANDLE query_hdl_value;
+   HANDLE query_hdl_close_req_evt;
++  bool was_blocking_read_pipe;
+   void release_select_sem (const char *);
+   HANDLE get_query_hdl_per_process (OBJECT_NAME_INFORMATION *);
+ public:
+-- 
+2.45.1
 
