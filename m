@@ -1,121 +1,229 @@
-Return-Path: <SRS0=4R0j=QA=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id D68D73858D26
-	for <cygwin-patches@cygwin.com>; Mon,  2 Sep 2024 12:48:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D68D73858D26
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D68D73858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725281328; cv=none;
-	b=TkkFhu9n77Ucwpgz/As7Z6UV2G5uLW8l3dtSgaZ/jacvUv4VSgMHH+tKS45JAPDs2G5TYJoz3ESXVDI8rWQGeqdL4o/rZGY6KY9EAgNWkvwDrqy1W12YXeILdR+yV6DNTmAZJ1kQccNBpcHK4JjgkJF6jWw30VUP0SaYsDEtUjI=
+Return-Path: <SRS0=co2e=QA=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.177])
+	by sourceware.org (Postfix) with ESMTPS id 3D2C23858414
+	for <cygwin-patches@cygwin.com>; Mon,  2 Sep 2024 13:07:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3D2C23858414
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3D2C23858414
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.177
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725282457; cv=none;
+	b=cg1QDQgOjHgyBzuz5FhDnlLYBIC0X/a44S2mTFTYmKtC2qJWFXFx3MjsYDIYlvVdIw4Hlx3zN50ISbboqyemO8AO882ZNSQiO1Q7qISx409kzUQFYAAlZOmQlTrcC3T8ocvlaCkIVI4UuTbudUeeH8MCnctcRwUnnibRlJU8tyk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1725281328; c=relaxed/simple;
-	bh=pkwq4zyrg3phVAR0Wwyq1ehxh1IlSclphEMtnqDeNCk=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=vnNJRvHAT2cRMHRdh5gvdZIeF+yZDrE6zkyxkHgEF1nFfRrkWVgIbPH1LlkcYJG6TprhxGQkEPkhlJ6A9QMGvzmw7e6IlZWshr7029vgs9cpKYyo0/t3a6aqeGpL118SlINYbbexdso9Is0TqHuih5vHBHjkGZGVspUV5Ls5YJY=
+	t=1725282457; c=relaxed/simple;
+	bh=AR0rVaPiFzocxRpav2wvSkqs19jy8bYF69zSR9LGhMg=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=vBO9V/BkU6k1WizZCtzGzf0R35sUexUY7e7jawyUd+7sb5uNN9zERLPuAY2tcoZVEAnjBBQT/ubPlEzUv4h7c/zONxae1tQEmqBMLMw6Ut0iBQaJD+/dA7gBwJER52Wtcpk4Lqz+qwClYm1VACGxd1kcyr5AUfl/A0s+SEUrExY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1725281315; x=1725886115;
-	i=johannes.schindelin@gmx.de;
-	bh=O4lSJBEhtp0d2lV6XWcLF2YAciP++7amd4QOezw7s50=;
-	h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Y0m6of/nVoMZzpVTZC/qyqMdDDTO82yRMReCJavhSmP7yOLPF61s878BZmx+i36D
-	 oVMCi0c0UhJS/W7LP7tPP8pMSR/v2GUJKclfmMBSUO8XplPmVn7EbhV5CMrzobSWU
-	 06zEft6Lz5+Jbj4YbWHw+fcItP2Neda168hm6zT0XJwddVyGwzKr8XQZziTJiCMh1
-	 vhZ0xmTFeRQc3Tl+KRWbQt+o4ZmxQWpJM7XsaxHeH6ul7d2zL++tRctzhmp5fI7bL
-	 cz+ebPwBzrwoEEhHPAIcxCHlwh3V01HN2KKKjcvSFZv5m8xS7jgjyGMGLD4gd9L8O
-	 kliyBr/uX/gXVoQ0pg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([89.1.214.88]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MSKy8-1seXz11ulk-00JBoY for
- <cygwin-patches@cygwin.com>; Mon, 02 Sep 2024 14:48:35 +0200
-Date: Mon, 2 Sep 2024 14:48:35 +0200 (CEST)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
+          id <20240902130728469.WORC.87244.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 2 Sep 2024 22:07:28 +0900
+Date: Mon, 2 Sep 2024 22:07:27 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: pipe: Restore blocking mode of read pipe on
  close()
-In-Reply-To: <ZtWdJ7FtgZcAaA74@calimero.vinschen.de>
-Message-ID: <a2800cf1-6a69-75ee-5494-a14b1a10a1f1@gmx.de>
-References: <20240830141553.12128-1-takashi.yano@nifty.ne.jp> <ZtWdJ7FtgZcAaA74@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:skRbQEXCMrv3LPk3Pe4jmoX3QNXP6OdqyV2OrdaK29t+/Q7Wi7L
- fu8VLvW19xdG+JYRpkB5VXWZMYjb6PVxb4PhlTLByj2/b/teMdqoNyrYQsYhOsPlM02uqTh
- mJU0dIKcwJUhdOjQtBMjG/6Nrk71W+rB260AKSblHlm68ZT9ZVtLE5yxkvTm8uFroVW67fL
- 4kiZRA3O0YQ7vxqZCGhtQ==
-UI-OutboundReport: notjunk:1;M01:P0:WEda/lXxHqQ=;SA0Sg0eieBF0MEuDc+6q6X6qfaS
- KJWE0N6itCGxPF3aRKrlPAyumCWixriOwrVsjox54s1K2HNxmSb/Lrtf8NsOkIgJNqUiXPKa6
- RK/bpO+dTcTuQJm+kiElRkabr4XKvxnqzuRc80SvHxlv/c3yj2RmtqfK7SyKdErvC0Nvh7dqT
- CoNwxhf8tSVRSb2VFIR5E5G9UMF482C5UTMTh644BUK2elf6PGysV/DdDbF2esnTpUgpGbyjc
- 9pEAusZRhr2VVosdV/Ij+MXoI8ZViVvexsz88QuyIAZxM4Mc6HASx6lLAGgODzaAvyHdWV0+o
- twbyrVXIJyIGIdRGi5d/ByO4TL1L4qt0ekW4/kupjv4UiRFWyii1gxj9fkxhUX/joMfxolUQ0
- BJqwRxBdEqZWExnOFOmSYyeDaY4JUN2liwnOfBrGuHhJxa4wT3tq4rqOACuVohI+GpHTcrIgb
- gwS5JYAsXsIq2k+BSHx/vVjxdM1qnCK27J/gdO5GarZmMFZjdxcYq6FwpkCRKNS4NEiC+TRwq
- Dpa8PI31i0LY2c5skoTOY5Sw5oxlr0NSPlnZfrDdOkiBGF70MZWAczpW6ufqDJIetO9L1B3zh
- STnuy6iwqixcmlb9dAw4XyQbB1RA6GFtf+VtiK2jTLipXhlen5xQ1xx34besuIXRpjJcnxMTg
- hEI7GalqCIjcpm7W+rKQW0FpmoFoI4Syo0C6uOItnYviTJMkooZZ9H/otrWOzZpukVhgRfd0z
- uSWd1WKk4VHsHqIhoCWoOxQ+OIn05fbNnPZjLSBaMKtnVV/8EKjqDU5Wr2/5jsNQ4/z0+sLXz
- q7hZbtoeDP+7E0SbbhgRip4w==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20240902220727.373f12e4bdf3f22436903017@nifty.ne.jp>
+In-Reply-To: <20240902204928.66b3d6ff60f8fd420c488bc2@nifty.ne.jp>
+References: <20240830141553.12128-1-takashi.yano@nifty.ne.jp>
+	<ZtWdJ7FtgZcAaA74@calimero.vinschen.de>
+	<20240902204928.66b3d6ff60f8fd420c488bc2@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="Multipart=_Mon__2_Sep_2024_22_07_27_+0900_k2k/x8zAE5pbbSk9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725282448;
+ bh=5R5dq5LMwrIpHHP32MokdbkbmsjwFzU/X/dLOQbbbaI=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=RAXXWSQ5tWju5CBIuzI47pfW7QWbItKCLJEVkePb+QErfgE4Y1l+nJDYHKwvX28xY0OxICvZ
+ 53iS+HC3ClfgCo6V/h+xNuZ6oFaaloS1vijc6r0sUNdRbauQklTcGWoyeyCvuIRVQus9bhsb/I
+ AL643glMrQ+66EeA5ywkl8D1jgbh72ShZ+ZHRT148vN57MopSA3q2GmCpI+TcHa4w/g1SYYw6a
+ GA24ZHz+6qP80FD0wxN4fnmi2oaDOFyEJRAj/+7uWVEcuocSgJ6FlWXGMi0Pa40pYsE5kf1qXc
+ nuUTiMEt6/rDQ7N1loqROt4kB9rerPJV2S4EC7Q2F2zF3mbw==
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna and Takashi,
+This is a multi-part message in MIME format.
 
-On Mon, 2 Sep 2024, Corinna Vinschen wrote:
+--Multipart=_Mon__2_Sep_2024_22_07_27_+0900_k2k/x8zAE5pbbSk9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-> On Aug 30 23:15, Takashi Yano wrote:
-> > If a cygwin app is executed from a non-cygwin app and the cygwin
-> > app exits, read pipe remains on non-blocking mode because of the
-> > commit fc691d0246b9. Due to this behaviour, the non-cygwin app
-> > cannot read the pipe correctly after that. With this patch, the
-> > blocking mode of the read pipe is stored into was_blocking_read_pipe
-> > on set_pipe_non_blocking() when the cygwin app starts and restored
-> > on close().
->
-> Looks ok to me, but it would be helpful if Johannes could test this as
-> well.
+On Mon, 2 Sep 2024 20:49:28 +0900
+Takashi Yano wrote:
+> On Mon, 2 Sep 2024 13:10:31 +0200
+> Corinna Vinschen wrote:
+> > On Aug 30 23:15, Takashi Yano wrote:
+> > > If a cygwin app is executed from a non-cygwin app and the cygwin
+> > > app exits, read pipe remains on non-blocking mode because of the
+> > > commit fc691d0246b9. Due to this behaviour, the non-cygwin app
+> > > cannot read the pipe correctly after that. With this patch, the
+> > > blocking mode of the read pipe is stored into was_blocking_read_pipe
+> > > on set_pipe_non_blocking() when the cygwin app starts and restored
+> > > on close().
+> > 
+> > Looks ok to me, but it would be helpful if Johannes could test this as
+> > well.
+> > 
+> > I just wonder if the whole code could be simplified, if we set
+> > the pipe to non-blocking only temporarily while reading or writing,
+> > while the pipe is blocking all the time otherwise:
+> > 
+> > - Create pipe blocking
+> > 
+> > - set_pipe_non_blocking(true);
+> >   NtReadFile() or NtWriteFile();
+> >   set_pipe_non_blocking(false)
+> > 
+> > How costly is it to call NtSetInformationFile(FilePipeInformation)
+> > for each read/write?
+> 
+> Good point. I'll try performance test for that idea.
 
-I have tested it and the symptom is addressed.
+I did perfomance test using dd command:
+dd if=/dev/zero ibs=1M count=1K obs=WB | dd ibs=RB obs=1M of=/dev/null status=none
+with the patch attached.
 
-I do have to wonder whether it is intentional that calling
-`set_pipe_non_blocking(false)` followed by `set_pipe_non_blocking(true)`
-on an originally-non-blocking pipe will "restore" it to blocking mode,
-though.
+[Current master]
+WB=1M,RB=1M: 1.6GB/s
+WB=1K,RB=1M: 200MB/s
+WB=1M,RB=1K: 245MB/s
+WB=1K,RB=1K: 170MB/s
 
-In other words, where I would have expected undesired logic to be removed,
-or at least to be adjusted, the patch instead adds code on top, adding
-even more logic.
+[With experimental patch]
+WB=1M,RB=1M: 1.5GB/s
+WB=1K,RB=1M: 110MB/s
+WB=1M,RB=1K: 125MB/s
+WB=1K,RB=1K:  95MB/s
 
-> I just wonder if the whole code could be simplified, if we set
-> the pipe to non-blocking only temporarily while reading or writing,
-> while the pipe is blocking all the time otherwise:
->
-> - Create pipe blocking
->
-> - set_pipe_non_blocking(true);
->   NtReadFile() or NtWriteFile();
->   set_pipe_non_blocking(false)
->
-> How costly is it to call NtSetInformationFile(FilePipeInformation)
-> for each read/write?
+With the experimental implementation, the performance degraded quite a bit,
+expecially small read/write block size.
 
-That would potentially be a remedy, but I would worry that this design
-takes a decidedly single-thread world-view. While that may be appropriate
-in the context of the scenario described in the bug report, it may very
-well be inappropriate for Cygwin in general.
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
 
-Speaking of the context of the bug report: On a practical level, there are
-two non-Cygwin processes talking via that pipe, even if one of the two
-processes is spawned by a Cygwin (or MSYS2) process in the middle. It
-might be better if in such scenarios the pipe would be left alone entirely
-by Cygwin instead of toggling the blocking/non-blocking mode to begin
-with. Such use cases are probably not part of the overall design how pipes
-are handled, but maybe they should be.
+--Multipart=_Mon__2_Sep_2024_22_07_27_+0900_k2k/x8zAE5pbbSk9
+Content-Type: text/plain;
+ name="0001-Cygwin-pipe-Experimental-Set-the-default-pipe-mode-b.patch"
+Content-Disposition: attachment;
+ filename="0001-Cygwin-pipe-Experimental-Set-the-default-pipe-mode-b.patch"
+Content-Transfer-Encoding: base64
 
-Ciao,
-Johannes
+RnJvbSAwMmQ0NDk4ZGUxODA1MTE4ZmYyOTg5ZDllNjI1MWEzOTU3OGNmZTdiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
+anA+DQpEYXRlOiBNb24sIDIgU2VwIDIwMjQgMjE6NDY6NDUgKzA5MDANClN1YmplY3Q6IFtQQVRD
+SF0gQ3lnd2luOiBwaXBlOiBbRXhwZXJpbWVudGFsXSBTZXQgdGhlIGRlZmF1bHQgcGlwZSBtb2Rl
+DQogYmxvY2tpbmcNCg0KV2l0aCB0aGlzIHBhdGNoLCBwaXBlIG1vZGUgaXMgc2V0IHRvIGJsb2Nr
+aW5nIHdoZW4gdGhlIHBpcGUgaXMgY3JlYXRlZA0KZm9yIGNvbXBhdGliaWxpdHkgd2l0aCBub24t
+Y3lnd2luIGFwcHMuIEluc3RlYWQsIHJhd19yZWFkKCkvcmF3X3dyaXRlKCkNCnNldCB0aGUgcGlw
+ZSBtb2RlIGFwcHJvcHJpYXRlIGFuZCByZXN0b3JlIGl0IGJsb2NraW5nIG1vZGUgb24gcmV0dXJu
+Lg0KVGhpcyBtYWtlcyB0aGUgY29kZSBzaW1wbGVyIHRoYW4gYmVmb3JlLg0KDQpBZGRyZXNzZXM6
+IGh0dHBzOi8vZ2l0aHViLmNvbS9naXQtZm9yLXdpbmRvd3MvZ2l0L2lzc3Vlcy81MTE1DQpGaXhl
+czogZmM2OTFkMDI0NmI5ICgiQ3lnd2luOiBwaXBlOiBNYWtlIHN1cmUgdG8gc2V0IHJlYWQgcGlw
+ZSBub24tYmxvY2tpbmcgZm9yIGN5Z3dpbiBhcHBzLiIpOw0KUmVwb3J0ZWQtYnk6IGlzYWFjYWcs
+IEpvaGFubmVzIFNjaGluZGVsaW4gPEpvaGFubmVzLlNjaGluZGVsaW5AZ214LmRlPg0KUmV2aWV3
+ZWQtYnk6DQpTaWduZWQtb2ZmLWJ5Og0KLS0tDQogd2luc3VwL2N5Z3dpbi9kdGFibGUuY2MgICAg
+ICAgICAgICAgICAgIHwgIDMgLS0NCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3BpcGUuY2MgICAg
+ICAgICAgfCA1NSArKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tDQogd2luc3VwL2N5Z3dpbi9sb2Nh
+bF9pbmNsdWRlcy9maGFuZGxlci5oIHwgIDIgLQ0KIDMgZmlsZXMgY2hhbmdlZCwgMTggaW5zZXJ0
+aW9ucygrKSwgNDIgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2R0
+YWJsZS5jYyBiL3dpbnN1cC9jeWd3aW4vZHRhYmxlLmNjDQppbmRleCA5NTA4ZjNlMGIuLjRiZmM0
+YzQ2ZiAxMDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vZHRhYmxlLmNjDQorKysgYi93aW5zdXAv
+Y3lnd2luL2R0YWJsZS5jYw0KQEAgLTQxMCw5ICs0MTAsNiBAQCBkdGFibGU6OmluaXRfc3RkX2Zp
+bGVfZnJvbV9oYW5kbGUgKGludCBmZCwgSEFORExFIGhhbmRsZSkNCiAJew0KIAkgIGZoYW5kbGVy
+X3BpcGUgKmZocCA9IChmaGFuZGxlcl9waXBlICopIGZoOw0KIAkgIGZocC0+c2V0X3BpcGVfYnVm
+X3NpemUgKCk7DQotCSAgLyogU2V0IHJlYWQgcGlwZSBhbHdheXMgdG8gbm9uYmxvY2tpbmcgKi8N
+Ci0JICBmaHAtPnNldF9waXBlX25vbl9ibG9ja2luZyAoZmhwLT5nZXRfZGV2aWNlICgpID09IEZI
+X1BJUEVSID8NCi0JCQkJICAgICAgdHJ1ZSA6IGZocC0+aXNfbm9uYmxvY2tpbmcgKCkpOw0KIAl9
+DQogDQogICAgICAgaWYgKCFmaC0+b3Blbl9zZXR1cCAob3BlbmZsYWdzKSkNCmRpZmYgLS1naXQg
+YS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3BpcGUuY2MgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVy
+L3BpcGUuY2MNCmluZGV4IGM2ODZkZjY1MC4uMTI4NTg1MDdjIDEwMDY0NA0KLS0tIGEvd2luc3Vw
+L2N5Z3dpbi9maGFuZGxlci9waXBlLmNjDQorKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyL3Bp
+cGUuY2MNCkBAIC05MSwxMCArOTEsOCBAQCBmaGFuZGxlcl9waXBlOjppbml0IChIQU5ETEUgZiwg
+RFdPUkQgYSwgbW9kZV90IG1vZGUsIGludDY0X3QgdW5pcV9pZCkNCiAgIHNldF9pbm8gKHVuaXFf
+aWQpOw0KICAgc2V0X3VuaXF1ZV9pZCAodW5pcV9pZCB8ICEhKG1vZGUgJiBHRU5FUklDX1dSSVRF
+KSk7DQogICBpZiAob3BlbmVkX3Byb3Blcmx5KQ0KLSAgICAvKiBTZXQgcmVhZCBwaXBlIGFsd2F5
+cyBub25ibG9ja2luZyB0byBhbGxvdyBzaWduYWwgaGFuZGxpbmcNCi0gICAgICAgZXZlbiB3aXRo
+IEZJTEVfU1lOQ0hST05PVVNfSU9fTk9OQUxFUlQuICovDQotICAgIHNldF9waXBlX25vbl9ibG9j
+a2luZyAoZ2V0X2RldmljZSAoKSA9PSBGSF9QSVBFUiA/DQotCQkJICAgdHJ1ZSA6IGlzX25vbmJs
+b2NraW5nICgpKTsNCisgICAgLyogU2V0IHRoZSBwaXBlIGJsb2NraW5nIG1vZGUgZm9yIGNvbXBh
+dGliaWxpdHkgd2l0aCBub24tY3lnd2luIGFwcHMuICovDQorICAgIHNldF9waXBlX25vbl9ibG9j
+a2luZyAoZmFsc2UpOw0KIA0KICAgLyogU3RvcmUgcGlwZSBuYW1lIHRvIHBhdGhfY29udiBwYyBm
+b3IgcXVlcnlfaGRsIGNoZWNrICovDQogICBpZiAoZ2V0X2RldiAoKSA9PSBGSF9QSVBFVykNCkBA
+IC0zMjcsNiArMzI1LDkgQEAgZmhhbmRsZXJfcGlwZTo6cmF3X3JlYWQgKHZvaWQgKnB0ciwgc2l6
+ZV90JiBsZW4pDQogICAgICAgbGVuID0gKHNpemVfdCkgLTE7DQogICAgICAgcmV0dXJuOw0KICAg
+ICB9DQorICAvKiBTZXQgcmVhZCBwaXBlIGFsd2F5cyBub25ibG9ja2luZyB0byBhbGxvdyBzaWdu
+YWwgaGFuZGxpbmcNCisgICAgIGV2ZW4gd2l0aCBGSUxFX1NZTkNIUk9OT1VTX0lPX05PTkFMRVJU
+LiAqLw0KKyAgc2V0X3BpcGVfbm9uX2Jsb2NraW5nICh0cnVlKTsNCiAgIHdoaWxlIChuYnl0ZXMg
+PCBsZW4pDQogICAgIHsNCiAgICAgICBVTE9OR19QVFIgbmJ5dGVzX25vdyA9IDA7DQpAQCAtNDEw
+LDYgKzQxMSw4IEBAIGZoYW5kbGVyX3BpcGU6OnJhd19yZWFkICh2b2lkICpwdHIsIHNpemVfdCYg
+bGVuKQ0KIAkgIHx8IHN0YXR1cyA9PSBTVEFUVVNfQlVGRkVSX09WRVJGTE9XKQ0KIAlicmVhazsN
+CiAgICAgfQ0KKyAgLyogU2V0IHRoZSBwaXBlIGJsb2NraW5nIG1vZGUgZm9yIGNvbXBhdGliaWxp
+dHkgd2l0aCBub24tY3lnd2luIGFwcHMuICovDQorICBzZXRfcGlwZV9ub25fYmxvY2tpbmcgKGZh
+bHNlKTsNCiAgIFJlbGVhc2VNdXRleCAocmVhZF9tdHgpOw0KICAgbGVuID0gbmJ5dGVzOw0KIH0N
+CkBAIC00NTksNiArNDYyLDExIEBAIGZoYW5kbGVyX3BpcGVfZmlmbzo6cmF3X3dyaXRlIChjb25z
+dCB2b2lkICpwdHIsIHNpemVfdCBsZW4pDQogICAgICAgcmV0dXJuIC0xOw0KICAgICB9DQogDQor
+ICBpZiAoZ2V0X2RldmljZSAoKSA9PSBGSF9QSVBFVykNCisgICAgew0KKyAgICAgIGZoYW5kbGVy
+X3BpcGUgKmZoID0gKGZoYW5kbGVyX3BpcGUgKikgdGhpczsNCisgICAgICBmaC0+c2V0X3BpcGVf
+bm9uX2Jsb2NraW5nIChpc19ub25ibG9ja2luZyAoKSk7DQorICAgIH0NCiAgIC8qIFdyaXRlIGlu
+IGNodW5rcywgYWNjdW11bGF0aW5nIGEgdG90YWwuICBJZiB0aGVyZSdzIGFuIGVycm9yLCBqdXN0
+DQogICAgICByZXR1cm4gdGhlIGFjY3VtdWxhdGVkIHRvdGFsIHVubGVzcyB0aGUgZmlyc3Qgd3Jp
+dGUgZmFpbHMsIGluDQogICAgICB3aGljaCBjYXNlIHJldHVybiAtMS4gKi8NCkBAIC02MTAsNiAr
+NjE4LDEyIEBAIGZoYW5kbGVyX3BpcGVfZmlmbzo6cmF3X3dyaXRlIChjb25zdCB2b2lkICpwdHIs
+IHNpemVfdCBsZW4pDQogCWJyZWFrOw0KICAgICB9DQogb3V0Og0KKyAgaWYgKGdldF9kZXZpY2Ug
+KCkgPT0gRkhfUElQRVcpDQorICAgIHsNCisgICAgICAvKiBTZXQgdGhlIHBpcGUgYmxvY2tpbmcg
+bW9kZSBmb3IgY29tcGF0aWJpbGl0eSB3aXRoIG5vbi1jeWd3aW4gYXBwcy4gKi8NCisgICAgICBm
+aGFuZGxlcl9waXBlICpmaCA9IChmaGFuZGxlcl9waXBlICopIHRoaXM7DQorICAgICAgZmgtPnNl
+dF9waXBlX25vbl9ibG9ja2luZyAoZmFsc2UpOw0KKyAgICB9DQogICBDbG9zZUhhbmRsZSAoZXZ0
+KTsNCiAgIGlmIChzdGF0dXMgPT0gU1RBVFVTX1RIUkVBRF9TSUdOQUxFRCAmJiBuYnl0ZXMgPT0g
+MCkNCiAgICAgc2V0X2Vycm5vIChFSU5UUik7DQpAQCAtNjQ5LDE3ICs2NjMsNiBAQCBmaGFuZGxl
+cl9waXBlOjpmaXh1cF9hZnRlcl9mb3JrIChIQU5ETEUgcGFyZW50KQ0KICAgUmVsZWFzZU11dGV4
+IChoZGxfY250X210eCk7DQogfQ0KIA0KLXZvaWQNCi1maGFuZGxlcl9waXBlOjpmaXh1cF9hZnRl
+cl9leGVjICgpDQotew0KLSAgLyogU2V0IHJlYWQgcGlwZSBpdHNlbGYgYWx3YXlzIG5vbi1ibG9j
+a2luZyBmb3IgY3lnd2luIHByb2Nlc3MuDQotICAgICBCbG9ja2luZy9ub24tYmxvY2tpbmcgaXMg
+c2ltdWxhdGVkIGluIHJhd19yZWFkKCkuIEZvciB3cml0ZQ0KLSAgICAgcGlwZSwgZm9sbG93IGlz
+X25vbmJsb2NraW5nKCkuICovDQotICBib29sIG1vZGUgPSBnZXRfZGV2aWNlICgpID09IEZIX1BJ
+UEVXID8gaXNfbm9uYmxvY2tpbmcgKCkgOiB0cnVlOw0KLSAgc2V0X3BpcGVfbm9uX2Jsb2NraW5n
+IChtb2RlKTsNCi0gIGZoYW5kbGVyX2Jhc2U6OmZpeHVwX2FmdGVyX2V4ZWMgKCk7DQotfQ0KLQ0K
+IGludA0KIGZoYW5kbGVyX3BpcGU6OmR1cCAoZmhhbmRsZXJfYmFzZSAqY2hpbGQsIGludCBmbGFn
+cykNCiB7DQpAQCAtMTE3NCwyMiArMTE3Nyw2IEBAIGZoYW5kbGVyX3BpcGU6OmlvY3RsICh1bnNp
+Z25lZCBpbnQgY21kLCB2b2lkICpwKQ0KICAgcmV0dXJuIDA7DQogfQ0KIA0KLWludA0KLWZoYW5k
+bGVyX3BpcGU6OmZjbnRsIChpbnQgY21kLCBpbnRwdHJfdCBhcmcpDQotew0KLSAgaWYgKGNtZCAh
+PSBGX1NFVEZMKQ0KLSAgICByZXR1cm4gZmhhbmRsZXJfYmFzZTo6ZmNudGwgKGNtZCwgYXJnKTsN
+Ci0NCi0gIGNvbnN0IGJvb2wgd2FzX25vbmJsb2NraW5nID0gaXNfbm9uYmxvY2tpbmcgKCk7DQot
+ICBpbnQgcmVzID0gZmhhbmRsZXJfYmFzZTo6ZmNudGwgKGNtZCwgYXJnKTsNCi0gIGNvbnN0IGJv
+b2wgbm93X25vbmJsb2NraW5nID0gaXNfbm9uYmxvY2tpbmcgKCk7DQotICAvKiBEbyBub3Qgc2V0
+IGJsb2NraW5nIG1vZGUgZm9yIHJlYWQgcGlwZSB0byBhbGxvdyBzaWduYWwgaGFuZGxpbmcNCi0g
+ICAgIGV2ZW4gd2l0aCBGSUxFX1NZTkNIUk9OT1VTX0lPX05PTkFMRVJULiAqLw0KLSAgaWYgKG5v
+d19ub25ibG9ja2luZyAhPSB3YXNfbm9uYmxvY2tpbmcgJiYgZ2V0X2RldmljZSAoKSAhPSBGSF9Q
+SVBFUikNCi0gICAgc2V0X3BpcGVfbm9uX2Jsb2NraW5nIChub3dfbm9uYmxvY2tpbmcpOw0KLSAg
+cmV0dXJuIHJlczsNCi19DQotDQogaW50DQogZmhhbmRsZXJfcGlwZTo6ZnN0YXQgKHN0cnVjdCBz
+dGF0ICpidWYpDQogew0KQEAgLTEzNjIsMTcgKzEzNDksMTEgQEAgZmhhbmRsZXJfcGlwZTo6c3Bh
+d25fd29ya2VyIChpbnQgZmlsZW5vX3N0ZGluLCBpbnQgZmlsZW5vX3N0ZG91dCwNCiAJJiYgKGZk
+ID09IGZpbGVub19zdGRvdXQgfHwgZmQgPT0gZmlsZW5vX3N0ZGVycikpDQogICAgICAgew0KIAlm
+aGFuZGxlcl9waXBlICpwaXBlID0gKGZoYW5kbGVyX3BpcGUgKikoZmhhbmRsZXJfYmFzZSAqKSBj
+ZmQ7DQotCXBpcGUtPnNldF9waXBlX25vbl9ibG9ja2luZyAoZmFsc2UpOw0KIA0KIAkvKiBTZXR1
+cCBmb3IgcXVlcnlfbmRsIHN0dWZmLiBSZWFkIHRoZSBjb21tZW50IGJlbG93LiAqLw0KIAlpZiAo
+cGlwZS0+cmVxdWVzdF9jbG9zZV9xdWVyeV9oZGwgKCkpDQogCSAgbmVlZF9zZW5kX25vbmN5Z2No
+bGRfc2lnID0gdHJ1ZTsNCiAgICAgICB9DQotICAgIGVsc2UgaWYgKGNmZC0+Z2V0X2RldiAoKSA9
+PSBGSF9QSVBFUiAmJiBmZCA9PSBmaWxlbm9fc3RkaW4pDQotICAgICAgew0KLQlmaGFuZGxlcl9w
+aXBlICpwaXBlID0gKGZoYW5kbGVyX3BpcGUgKikoZmhhbmRsZXJfYmFzZSAqKSBjZmQ7DQotCXBp
+cGUtPnNldF9waXBlX25vbl9ibG9ja2luZyAoZmFsc2UpOw0KLSAgICAgIH0NCiANCiAgIC8qIElm
+IG11bHRpcGxlIHdyaXRlcnMgaW5jbHVkaW5nIG5vbi1jeWd3aW4gYXBwIGV4aXN0LCB0aGUgbm9u
+LWN5Z3dpbg0KICAgICAgYXBwIGNhbm5vdCBkZXRlY3QgcGlwZSBjbG9zdXJlIG9uIHRoZSByZWFk
+IHNpZGUgd2hlbiB0aGUgcGlwZSBpcw0KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vbG9jYWxf
+aW5jbHVkZXMvZmhhbmRsZXIuaCBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvZmhhbmRs
+ZXIuaA0KaW5kZXggMWMzMzljZmJjLi5lOTcyYzY3MDAgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3ln
+d2luL2xvY2FsX2luY2x1ZGVzL2ZoYW5kbGVyLmgNCisrKyBiL3dpbnN1cC9jeWd3aW4vbG9jYWxf
+aW5jbHVkZXMvZmhhbmRsZXIuaA0KQEAgLTEyMzQsMTMgKzEyMzQsMTEgQEAgcHVibGljOg0KICAg
+aW50IG9wZW4gKGludCBmbGFncywgbW9kZV90IG1vZGUgPSAwKTsNCiAgIGJvb2wgb3Blbl9zZXR1
+cCAoaW50IGZsYWdzKTsNCiAgIHZvaWQgZml4dXBfYWZ0ZXJfZm9yayAoSEFORExFKTsNCi0gIHZv
+aWQgZml4dXBfYWZ0ZXJfZXhlYyAoKTsNCiAgIGludCBkdXAgKGZoYW5kbGVyX2Jhc2UgKmNoaWxk
+LCBpbnQpOw0KICAgdm9pZCBzZXRfY2xvc2Vfb25fZXhlYyAoYm9vbCB2YWwpOw0KICAgaW50IGNs
+b3NlICgpOw0KICAgdm9pZCByYXdfcmVhZCAodm9pZCAqcHRyLCBzaXplX3QmIGxlbik7DQogICBp
+bnQgaW9jdGwgKHVuc2lnbmVkIGludCBjbWQsIHZvaWQgKik7DQotICBpbnQgZmNudGwgKGludCBj
+bWQsIGludHB0cl90KTsNCiAgIGludCBmc3RhdCAoc3RydWN0IHN0YXQgKmJ1Zik7DQogICBpbnQg
+ZnN0YXR2ZnMgKHN0cnVjdCBzdGF0dmZzICpidWYpOw0KICAgaW50IGZhZHZpc2UgKG9mZl90LCBv
+ZmZfdCwgaW50KTsNCi0tIA0KMi40NS4xDQoNCg==
+
+--Multipart=_Mon__2_Sep_2024_22_07_27_+0900_k2k/x8zAE5pbbSk9--
