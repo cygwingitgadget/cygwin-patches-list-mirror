@@ -1,202 +1,242 @@
 Return-Path: <SRS0=8gjk=QE=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.227.114])
-	by sourceware.org (Postfix) with ESMTPS id 462963858408
-	for <cygwin-patches@cygwin.com>; Fri,  6 Sep 2024 08:09:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 462963858408
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:24])
+	by sourceware.org (Postfix) with ESMTPS id 8DA743858408
+	for <cygwin-patches@cygwin.com>; Fri,  6 Sep 2024 08:59:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8DA743858408
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 462963858408
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.114
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725610153; cv=none;
-	b=pJOWwuITNjBE0S7vW6ve/ThhrcUNstJSRgBG0wDa3ICudDE4BL5tCma87Fc551bAVB0ZgI5argKVjZ4ZKyHi3ZEi8sIU03jR8/YaHpZUez7hASciLrw5zIaBYem5IPNAEGcBk/kwrxKOuW/Xz/q9liVeir5fmfKcM0n2GnQrV5s=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8DA743858408
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:24
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725613165; cv=none;
+	b=oNBzZnVuv0suaECo252cIBByfr3XRDtnf0qLhXKz8+cpc2SKOngepMo3tfwbykUsUBx7E6VWpVNRYJwecSKtZGMdv0PftFQXJdL4tDnD1NrLj1S26ctV2srcAf8mUApPFDcFpAVuc/gxP8nYANwFk9mls62nxZmJIRJL6bz5yhs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1725610153; c=relaxed/simple;
-	bh=FgOeQtpfQpLou9f0vA4TQd/MkSz22xG0A+A/iHr7em8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=r2Nfg07UyAL4Vk6yAWhGXpM944j4i3QhXd+ZT6WeyCillES+BwaqtMP9tzdDxZhIUzzVL2RF/YVaXA5wtYiq1VG3EuylfF+KHl6nL/2aG5gid6+6AZes/jlSAzXqIbOL2BZjzYe9TVG3bfAzkr7YLEk2dtjomCdpMdosiQ6GeUc=
+	t=1725613165; c=relaxed/simple;
+	bh=DoHAR+FnF8arwC/ZEok+VpvqB7FDusBT/xkeFTPKecw=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uQnE3xzSa+KAB+E/hHAPCn0XID1LnVHu1qM8YxB8lVffpq6ipOMRfdFVaMpekg/xfue6Q8Q++5kToGxJlad6PzWpNdEtOMtReSUYeN24RGG8fVfTbi+nnFxExOo2jx+sqRZcNrSfP2pRI7nUG7DDeOlWJ4/EUjFgG9gQgv9Oq/Y=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-e02.mail.nifty.com
-          with ESMTP
-          id <20240906080905654.KZBP.83552.localhost.localdomain@nifty.com>;
-          Fri, 6 Sep 2024 17:09:05 +0900
+Received: from HP-Z230 by mta-snd-e04.mail.nifty.com with ESMTP
+          id <20240906085920422.KBNC.84424.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 6 Sep 2024 17:59:20 +0900
+Date: Fri, 6 Sep 2024 17:59:18 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	isaacag,
-	Johannes Schindelin <Johannes.Schindelin@gmx.de>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v2] Cygwin: pipe: Restore blocking mode of read pipe on close()
-Date: Fri,  6 Sep 2024 17:08:40 +0900
-Message-ID: <20240906080850.14853-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725610145;
- bh=3wp+CEITHJ/OMlNY0hxmIUOfyQARRX/abegf47zsr1o=;
- h=From:To:Cc:Subject:Date;
- b=LTz6oQJPJ9tDidT1QdAK0WMVnlIaFWvEjISKR7tQV7/LoOordeiw5WA6kdNJO+yspG14QpLF
- WNUHACrzbcdwAHas39J4b21PRzjEw8XYxgCusyfz8dRZRgLRWvCnfeku8wayBpjJiVB3owjU16
- KCy8h0ImajBQ9DFj1wf6IqrX543nkSDrf20R9Df7mB/yfFRK3JugtVIyrBkcV/JjDjUT6Xh5zu
- 9hFESJswSq3ziLhwwYDAH3DIO/nMj85ZY4zBWN5Z8KM8YiXiiilEcBf8zh5wcokmnWb38goSSj
- a5QOcIovukjXFjutE7IVTzhdh/LJqvVOeC0jpkNjObnNvsUQ==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: pipe: Switch pipe mode to blocking mode by
+ defaut
+Message-Id: <20240906175918.02083a40e35642ed775e8f7a@nifty.ne.jp>
+In-Reply-To: <ZtnLR1gSsDop_nCK@calimero.vinschen.de>
+References: <20240905131857.385-1-takashi.yano@nifty.ne.jp>
+	<ZtnLR1gSsDop_nCK@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725613160;
+ bh=iIsFu1ZYUq5VXMoMLQNXA1/ZNuwescANgo8QDSWYNts=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=m9DBsGpq1ujBmS4Xttkd+DxsI5tKbOqbprXntf3bdPQWFIeRCeD/GJOu59EO/9wlVRczVAcM
+ ifyrqy00JGuDkYCW4iaCP9p2q2Ql4v7TPVYCYb7HfDYSZKrd5xJxZv8taSlwErirzSJeCg8yQR
+ gHV3FaZRxlQdWLQDSCAwOC8efqs0nY63hL5mYGa9iSXrjfA3doY9GOB6ZHZCItXvPyGKmSOkXD
+ m0e5qX1kIWfrCSTrV7WbM7YFq2Mcu6DSs3vZEsl48LQFwtm5tkNpaPJuyw4GusPXbZWrgtziaa
+ F6pwHGQeU2O8BckDJNUTJFK2yBu/6uvCZdMezf4AVSWxiaBg==
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-If a cygwin app is executed from a non-cygwin app and the cygwin
-app exits, the read pipe remains in the non-blocking mode because
-of the commit fc691d0246b9. Due to this behaviour, the non-cygwin
-app cannot read the pipe correctly after that. Similarly, if a
-non-cygwin app is executed from a cygwin app and the non-cygwin
-app exits, the read pipe remains in the blocking mode. With this
-patch, the blocking mode of the read pipe is stored into a variable
-was_blocking_read_pipe on set_pipe_non_blocking() when the cygwin
-app starts and restored on close(). In addition, the pipe mode is
-set to non-blocking mode in raw_read() if the mode is blocking
-mode as well.
+On Thu, 5 Sep 2024 17:16:23 +0200
+Corinna Vinschen wrote:
+> thanks for this patch.  Two points:
 
-Addresses: https://github.com/git-for-windows/git/issues/5115
-Fixes: fc691d0246b9 ("Cygwin: pipe: Make sure to set read pipe non-blocking for cygwin apps.");
-Reported-by: isaacag, Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/pipe.cc          | 41 +++++++++++++++++++++++++
- winsup/cygwin/local_includes/fhandler.h |  3 ++
- winsup/cygwin/sigproc.cc                |  9 +-----
- 3 files changed, 45 insertions(+), 8 deletions(-)
+Thanks for reviewing so quickly!
 
-diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.cc
-index 997346877..3b78cc183 100644
---- a/winsup/cygwin/fhandler/pipe.cc
-+++ b/winsup/cygwin/fhandler/pipe.cc
-@@ -54,6 +54,16 @@ fhandler_pipe::set_pipe_non_blocking (bool nonblocking)
-   NTSTATUS status;
-   IO_STATUS_BLOCK io;
-   FILE_PIPE_INFORMATION fpi;
-+  bool was_blocking_read_pipe_new = was_blocking_read_pipe;
-+
-+  if (get_device () == FH_PIPER && nonblocking && !was_blocking_read_pipe)
-+    {
-+      status = NtQueryInformationFile (get_handle (), &io, &fpi, sizeof fpi,
-+				       FilePipeInformation);
-+      if (NT_SUCCESS (status))
-+	was_blocking_read_pipe_new =
-+	  (fpi.CompletionMode == FILE_PIPE_QUEUE_OPERATION);
-+    }
- 
-   fpi.ReadMode = FILE_PIPE_BYTE_STREAM_MODE;
-   fpi.CompletionMode = nonblocking ? FILE_PIPE_COMPLETE_OPERATION
-@@ -62,6 +72,11 @@ fhandler_pipe::set_pipe_non_blocking (bool nonblocking)
- 				 FilePipeInformation);
-   if (!NT_SUCCESS (status))
-     debug_printf ("NtSetInformationFile(FilePipeInformation): %y", status);
-+  else
-+    {
-+      was_blocking_read_pipe = was_blocking_read_pipe_new;
-+      is_blocking_read_pipe = !nonblocking;
-+    }
- }
- 
- int
-@@ -95,6 +110,8 @@ fhandler_pipe::init (HANDLE f, DWORD a, mode_t mode, int64_t uniq_id)
-        even with FILE_SYNCHRONOUS_IO_NONALERT. */
-     set_pipe_non_blocking (get_device () == FH_PIPER ?
- 			   true : is_nonblocking ());
-+  was_blocking_read_pipe = false;
-+
-   return 1;
- }
- 
-@@ -289,6 +306,9 @@ fhandler_pipe::raw_read (void *ptr, size_t& len)
-   if (!len)
-     return;
- 
-+  if (is_blocking_read_pipe)
-+    set_pipe_non_blocking (true);
-+
-   DWORD timeout = is_nonblocking () ? 0 : INFINITE;
-   DWORD waitret = cygwait (read_mtx, timeout);
-   switch (waitret)
-@@ -721,6 +741,8 @@ fhandler_pipe::close ()
-     CloseHandle (query_hdl);
-   if (query_hdl_close_req_evt)
-     CloseHandle (query_hdl_close_req_evt);
-+  if (was_blocking_read_pipe)
-+    set_pipe_non_blocking (false);
-   int ret = fhandler_base::close ();
-   ReleaseMutex (hdl_cnt_mtx);
-   CloseHandle (hdl_cnt_mtx);
-@@ -1373,6 +1395,7 @@ fhandler_pipe::spawn_worker (int fileno_stdin, int fileno_stdout,
-       {
- 	fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
- 	pipe->set_pipe_non_blocking (false);
-+	need_send_noncygchld_sig = true;
-       }
- 
-   /* If multiple writers including non-cygwin app exist, the non-cygwin
-@@ -1398,3 +1421,21 @@ fhandler_pipe::spawn_worker (int fileno_stdin, int fileno_stdout,
-       t->kill_pgrp (__SIGNONCYGCHLD);
-     }
- }
-+
-+void
-+fhandler_pipe::sigproc_worker (void)
-+{
-+  cygheap_fdenum cfd (false);
-+  while (cfd.next () >= 0)
-+    if (cfd->get_dev () == FH_PIPEW)
-+      {
-+	fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
-+	if (pipe->need_close_query_hdl ())
-+	  pipe->close_query_handle ();
-+      }
-+    else if (cfd->get_dev () == FH_PIPER)
-+      {
-+	fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
-+	pipe->is_blocking_read_pipe = true;
-+      }
-+}
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 10bc9c7ec..000004479 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -1197,6 +1197,8 @@ class fhandler_pipe: public fhandler_pipe_fifo
- private:
-   HANDLE read_mtx;
-   pid_t popen_pid;
-+  bool was_blocking_read_pipe;
-+  bool is_blocking_read_pipe;
-   HANDLE query_hdl;
-   HANDLE hdl_cnt_mtx;
-   HANDLE query_hdl_proc;
-@@ -1287,6 +1289,7 @@ public:
-     }
-   static void spawn_worker (int fileno_stdin, int fileno_stdout,
- 			    int fileno_stderr);
-+  static void sigproc_worker (void);
- };
- 
- #define CYGWIN_FIFO_PIPE_NAME_LEN     47
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 99fa3c342..a758bc8f2 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -1475,14 +1475,7 @@ wait_sig (VOID *)
- 	    }
- 	  break;
- 	case __SIGNONCYGCHLD:
--	  cygheap_fdenum cfd (false);
--	  while (cfd.next () >= 0)
--	    if (cfd->get_dev () == FH_PIPEW)
--	      {
--		fhandler_pipe *pipe = (fhandler_pipe *)(fhandler_base *) cfd;
--		if (pipe->need_close_query_hdl ())
--		  pipe->close_query_handle ();
--	      }
-+	  fhandler_pipe::sigproc_worker ();
- 	  break;
- 	}
-       if (clearwait && !have_execed)
+> On Sep  5 22:18, Takashi Yano wrote:
+> > @@ -446,12 +441,20 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+> >        return -1;
+> >      }
+> >  
+> > -  if (len <= pipe_buf_size || pipe_buf_size == 0)
+> > +  bool query_hdl_available = true;
+> > +  ssize_t avail = pipe_buf_size;
+> > +  if (is_nonblocking ())
+> > +    avail = pipe_data_available (-1, this, get_handle (), PDA_WRITE);
+> > +  if (avail == 0)
+> > +    {
+> > +      set_errno (EAGAIN);
+> > +      return -1;
+> > +    }
+> 
+> avail can only be 0 in nonblocking mode, so this should be checked only
+> for nonblocking pipes.  However, isn't pipe_data_available() a bit
+> costly to be called all the time in nonblocking mode?  The current
+> strategy is to write first and only if that fails, call
+> pipe_data_available().  Also, doesn't this circumvent the mechanism
+> chosing the chunk size to act POSIX-like as per the lengthy comment
+> preceeding the write loop?
+
+Please reffer the comment later.
+
+> > @@ -459,6 +462,28 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+> >        return -1;
+> >      }
+> >  
+> > +  if (is_nonblocking ())
+> > +    {
+> > +      fhandler_pipe *fh = (fhandler_pipe *) this;
+> > +      query_hdl_available =
+> > +	fh->get_query_handle () || fh->temporary_query_hdl ();
+> > +      if (avail > 1 || query_hdl_available)
+> > +	len = chunk;
+> > +      else if (avail == 0) /* The pipe is really full. */
+> > +	{
+> > +	  set_errno (EAGAIN);
+> > +	  return -1;
+> > +	}
+> > +      else if (!fh->set_pipe_non_blocking (true))
+> > +	/* NtSetInformationFile() in set_pipe_non_blocking(true)
+> > +	   fails for unknown reasons if the pipe is not empty.
+> 
+> Which NTSTATUS code does NtSetInformationFile() return in this case?
+> 
+> This sounds pretty ominous. If we can't set the pipe to non-blocking
+> under all circumstances, isn't this bound to fail again, just differently?
+
+NTSTATUS is STATUS_PIPE_BUSY. As far as I tested, this causes if
+the pipe is not empty. In current implementaion, pipe mode is
+set at the initializing, so the pipe is supposed to be empty.
+
+Based on this behaviour of fail and success, I come up with new idea
+that does not need query handle at all. When WriteQuotaAvailable is 0,
+two cases are possible.
+1) The pipe is really full.
+2) The pipe is being read for larger size than pipe size and it is blocked.
+In the case 1), pipe is not empty so NtSetInformationFile() will fail.
+In the case 2), reading is blocked, so the pipe is empty. Therefore,
+NtSetInformationFile() will succeed.
+
+So, we can distinguish these cases by calling NtSetInformationFile().
+Therefore, query handle is not necessary in above cases.
+Currently, query handle is used only when WriteQuotaAvailable is 0,
+so we can drop query handle entirely.
+
+In fact, query handle has meaning when reader requests smaller
+data size than pipe size, however, we do not use query handle
+in such way.
+
+Please review v2 patch. This is much simpler than current implementation.
+
+> > +	   In this case, no pipe reader should be reading the pipe,
+> > +	   so pipe_data_available() has returned correct value. */
+> 
+> I don't understand the conclusion here. The pipe could have 12K data but
+> the pipe reader only reads in 4K chunks. In that case `avail' would be
+> incorrect.
+
+Yeah, you are right. Important thing here is avail is not zero and not
+lager than real pipe space, isn't it?
+
+> > @@ -916,6 +964,11 @@ is_running_as_service (void)
+> >     simplicity, nt_create will omit the 'open_mode' and 'name'
+> >     parameters, which aren't needed for our purposes.  */
+> >  
+> > +/* Regardless of above comment, the current nt_create() is reverted to just
+> > +   call fhandler_pipe::create() to allow adding FILE_FLAG_OVERLAPPED flag.
+> > +   This is needed for query_hdl so that PeekNamedPipe() and NtQueryObject()
+> > +   are not blocked even while reader is reading the pipe. */
+> 
+> Specifying FILE_FLAG_OVERLAPPED on the Win32 API level is the same thing
+> as dropping the FILE_SYNCHRONOUS_IO_NONALERT flag from
+> NtCreateNamedPipeFile.  Perhaps in conjunction with dropping
+> SYNCHRONIZE, but that's theoretically just a way to make the
+> file handle synchronizable, so, may or may not be necessary.
+
+That's too bad. :(
+
+> The other advantage of NtCreateNamedPipeFile is
+> that you can specify exact permission, like FILE_WRITE_ATTRIBUTES,
+> without having to specify the pipe as PIPE_ACCESS_OUTBOUND pipe.
+> This may even explain why
+> NtSetInformationFile() in set_pipe_non_blocking() failed for you.
+> 
+> Either way, *iff* you just call fhandler_pipe::create() from
+> nt_create(), we should drop nt_create entirely.  But actually I'd prefer
+> the NT method, if possible and rather remove fhandler_pipe::create() in
+> the long run.
+
+I'll revert regarding FILE_FLAG_OVERLAPPED changes and revive original
+nt_create().
+
+> > --- a/winsup/cygwin/select.cc
+> > +++ b/winsup/cygwin/select.cc
+> > @@ -642,7 +642,7 @@ pipe_data_available (int fd, fhandler_base *fh, HANDLE h, int flags)
+> >          Consequentially, the only reliable information is available on the
+> >          read side, so fetch info from the read side via the pipe-specific
+> >          query handle.  Use fpli.WriteQuotaAvailable as storage for the actual
+> > -        interesting value, which is the InboundQuote on the write side,
+> > +        interesting value, which is the OutboundQuota on the write side,
+> >          decremented by the number of bytes of data in that buffer. */
+> 
+> >        /* Note: Do not use NtQueryInformationFile() for query_hdl because
+> >  	 NtQueryInformationFile() seems to interfere with reading pipes
+> 
+> Btw., this could be a result of having a SYNCHRONIZE or
+> FILE_SYNCHRONOUS_IO_NONALERT handle.  Maybe something to check at some
+> later point...
+
+Yes. This seems due to FILE_SYNCHRONOUS_IO_NONALERT. If FILE_FLAG_OVERLAPPED
+is specified, this problem does not occur.
+
+> > @@ -659,7 +659,20 @@ pipe_data_available (int fd, fhandler_base *fh, HANDLE h, int flags)
+> >  	  if (!query_hdl)
+> >  	    query_hdl = ((fhandler_pipe *) fh)->temporary_query_hdl ();
+> >  	  if (!query_hdl) /* We cannot know actual write pipe space. */
+> > -	    return (flags & PDA_SELECT) ? PIPE_BUF : 1;
+> > +	    {
+> > +	      /* NtSetInformationFile() in set_pipe_non_blocking(true)
+> > +		 fails for unknown reasons if the pipe is not empty.
+> > +		 In this case, no pipe reader should be reading the pipe,
+> > +		 so the pipe is really full if WriteQuotaAvailable
+> > +		 is zero.*/
+> 
+> Same questions as before.  This sounds still like a big problem.
+
+Same answer as before. :)
+
+> > +	      if (!((fhandler_pipe *) fh)->set_pipe_non_blocking (true))
+> > +		return 0;
+> > +	      /* Restore pipe mode to blocking mode */
+> > +	      ((fhandler_pipe *) fh)->set_pipe_non_blocking (false);
+> > +	      /* The pipe is empty here because set_pipe_non_blocking(true)
+> > +		 has succeeded. */
+> > +	      return fpli.OutboundQuota;;
+> 
+> Two semicolons
+> 
+> > +	    }
+> >  	  DWORD nbytes_in_pipe;
+> >  	  BOOL res =
+> >  	    PeekNamedPipe (query_hdl, NULL, 0, NULL, &nbytes_in_pipe, NULL);
+> > @@ -667,7 +680,7 @@ pipe_data_available (int fd, fhandler_base *fh, HANDLE h, int flags)
+> >  	    CloseHandle (query_hdl); /* Close temporary query_hdl */
+> >  	  if (!res) /* We cannot know actual write pipe space. */
+> >  	    return (flags & PDA_SELECT) ? PIPE_BUF : 1;
+> > -	  fpli.WriteQuotaAvailable = fpli.InboundQuota - nbytes_in_pipe;
+> > +	  fpli.WriteQuotaAvailable = fpli.OutboundQuota - nbytes_in_pipe;
+> 
+> Didn't we use InboundQuota for a reason here?
+
+Yes. We used InboundQuota here, but I thought this should be
+OutboundQuota because, used here is pipe write side.
+
+For testing, I tried to decrease OutboundQuota in read side as follows.
+      status = NtCreateNamedPipeFile (&r, access, &attr, &io,
+                      FILE_SHARE_READ | FILE_SHARE_WRITE,
+                      FILE_CREATE,
+                      FILE_SYNCHRONOUS_IO_NONALERT, pipe_type,
+                      FILE_PIPE_BYTE_STREAM_MODE,
+                      0, 1, psize, psize/4, &timeout); // <====
+Then, the OutboundQuota in write side is decreased!
+Moreover, pipe is full when psize data is written.
+
+So, you are right.
+
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
