@@ -1,44 +1,44 @@
 Return-Path: <SRS0=YzN4=QF=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.226.41])
-	by sourceware.org (Postfix) with ESMTPS id 612F5385DDD5
-	for <cygwin-patches@cygwin.com>; Sat,  7 Sep 2024 02:06:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 612F5385DDD5
+Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [106.153.227.38])
+	by sourceware.org (Postfix) with ESMTPS id 35F043858280
+	for <cygwin-patches@cygwin.com>; Sat,  7 Sep 2024 02:47:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 35F043858280
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 612F5385DDD5
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.41
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725674799; cv=none;
-	b=KYemAokwjtOh/nriYdL87cKVUx4JOBaNyH6gCuyrEuvqr4MGhDbL+9nFOcPOzwG0aFbm22RZGhcAZH61m5w9y/MCfTWrbcDfT+6cH9L5/w7NJ5bIzEKkZ9fWAWZ962+a1uAdaAMMHflOE6BRKfip4ARoe9aBfHZltZV6hmCyxng=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 35F043858280
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.38
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725677267; cv=none;
+	b=I2qiJSzEVOHC6EXpPPrnhlygyp20BskiH3NJ3eDhNrJuuNRAoAhc3bSr7rPprmH+jku7NuXYPu1j1mJmta6co2IQkLSM/reTks3n0nJfsqHeIKVLPL9GX5luvz2ohJAPfIau+kTmn3IRTzgeEyx89Vio1dA7OGY6m01p0U9P77k=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1725674799; c=relaxed/simple;
-	bh=mZMzSIeM7tijBn8cDAsAVAPISaRkl1oRW9DoxC815xI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=CHOD3HJGzg3CkXvtar7bM7aFVlX0V5PAEKdl0UAXbGwVJI5YwyyDz2Qk8dkPKZOGOG8NncsBdGed7OieRtRs2l/YmEFEBhc4/l1Dw50jTa7EHVX2NnG5VnFstveZXHXRZsuM3ztjE3sVNVrNihExtScg+hRxSnr5OO6JvnjvaIk=
+	t=1725677267; c=relaxed/simple;
+	bh=jhYjonXc2aL2FEfZHEKjTPTua7FMxW89Dq/ofXaFsC8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=PbiXKtvND/j2j7q69CtL48W3oNammWAMlz5PUo7hQ9gXad0ZYcBTQsImfyIL3jaVuD3S6mOIS9UMFR4gf1wxyzHgkYDexUUw4nT1EsDrYjQUbl11kXUn93AoMOSLqV52cpQdquTq1rThnvTMLcrCRa55tNF0nSUgAhAuxR8w5JM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-e09.mail.nifty.com
+Received: from localhost.localdomain by mta-snd-w06.mail.nifty.com
           with ESMTP
-          id <20240907020633575.HXOV.13245.localhost.localdomain@nifty.com>;
-          Sat, 7 Sep 2024 11:06:33 +0900
+          id <20240907024740457.UZIQ.90861.localhost.localdomain@nifty.com>;
+          Sat, 7 Sep 2024 11:47:40 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	isaacag,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>,
 	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v4.1] Cygwin: pipe: Switch pipe mode to blocking mode by defaut
-Date: Sat,  7 Sep 2024 11:06:09 +0900
-Message-ID: <20240907020618.1809-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v4.2] Cygwin: pipe: Switch pipe mode to blocking mode by defaut
+Date: Sat,  7 Sep 2024 11:47:17 +0900
+Message-ID: <20240907024725.123-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725674793;
- bh=SAAtCpYx4ZsgcXpSmRcWIymhNOdma2+uG+dbHs1itrc=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725677260;
+ bh=kyNzOcXXTnSptFFo1cea9AMNksMpdy7KJapFWd4M7ck=;
  h=From:To:Cc:Subject:Date;
- b=ZIG1mrlcUAaF4+YXk0FgTQEoUwh7CleoENgBlS6CkBAUN+pTJM2MOys/CHN/j7k1nr47Io/s
- +Y1/NzXApe5ctY9hZi3FYDQjYJoub0OZq4Fk8FfkV7UOpsh0HHDR5eWoxb0hn0fp+dyTP+SW+H
- RWziQCnzOmTheTWLitKuHLLScl0FgDxEpWPrgFk836kXQKM3uKR3vRJm1X+F3tSDlfAkWSk1qO
- BXCt7/UB/nFsBW3ERVhxBcJSQ7ptZ2/tJk7MaLc2a1hkFdJJOjMs8bBYyx2PHqIFgCA5V2Ykd8
- sGh8mdBgVx9nADwVhP6w4vuVTE9UO0ODdk4nRvKvVlLHoNgQ==
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=Cib8A6Zhyrr+Wp47vKHy4bc4JX6vohqBxhr94Mz6YVVTRnmd3lyoJ1kTnzqRa/4QtEo1MS48
+ pTcTRN1usW9X5rsBDV/WXFHRkbb7xMY1kSBiVwHJq71WafGkauKJG8Fp0TG1gjIkFhPz1eUqsG
+ FFMJ7QzbeopYLctDI5jifKyFnK+NTLiAdMMbfYZhen5Mut08XFMuF5DfJCwRKzQ0AC6YZnOG+D
+ a9IFUqsLv8ictG706eY0IURsInW1Ni3rqZDP054oiozA7WF2MxbLvHCwTxc2QanSFYbjzwxGml
+ C64fWJ4ukxIJ28+0XwtFSefE5W+wbjT2iNt8/RrlPlbBMwXg==
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -74,13 +74,13 @@ Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
  winsup/cygwin/dtable.cc                 |   5 +-
- winsup/cygwin/fhandler/pipe.cc          | 480 ++++--------------------
+ winsup/cygwin/fhandler/pipe.cc          | 482 ++++--------------------
  winsup/cygwin/local_includes/fhandler.h |  42 +--
  winsup/cygwin/local_includes/sigproc.h  |   1 -
  winsup/cygwin/select.cc                 |  25 +-
  winsup/cygwin/sigproc.cc                |  10 -
  winsup/cygwin/spawn.cc                  |   4 -
- 7 files changed, 95 insertions(+), 472 deletions(-)
+ 7 files changed, 95 insertions(+), 474 deletions(-)
 
 diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
 index 9508f3e0b..7303f7eac 100644
@@ -99,7 +99,7 @@ index 9508f3e0b..7303f7eac 100644
  
        if (!fh->open_setup (openflags))
 diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.cc
-index c686df650..f167e0c9c 100644
+index c686df650..f99cbbc56 100644
 --- a/winsup/cygwin/fhandler/pipe.cc
 +++ b/winsup/cygwin/fhandler/pipe.cc
 @@ -48,7 +48,7 @@ fhandler_pipe::fhandler_pipe ()
@@ -307,7 +307,7 @@ index c686df650..f167e0c9c 100644
 +	  if (fpli.WriteQuotaAvailable != 0)
 +	    avail = fpli.WriteQuotaAvailable;
 +	  else /* WriteQuotaAvailable == 0 */
-+	    { /* Reffer to the comment in select.cc: pipe_data_available(). */
++	    { /* Refer to the comment in select.cc: pipe_data_available(). */
 +	      /* NtSetInformationFile() in set_pipe_non_blocking(true) seems
 +		 to fail with STATUS_PIPE_BUSY if the pipe is not empty.
 +		 In this case, the pipe is really full if WriteQuotaAvailable
@@ -364,16 +364,17 @@ index c686df650..f167e0c9c 100644
  		  /* Break out on completion */
  		  if (waitret == WAIT_OBJECT_0)
  		    break;
-@@ -531,7 +503,7 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+@@ -530,8 +502,7 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+ 		    }
  		  cygwait (select_sem, 10, cw_cancel);
  		}
- 	      /* Loop in case of blocking write or SA_RESTART */
+-	      /* Loop in case of blocking write or SA_RESTART */
 -	      while (waitret == WAIT_TIMEOUT || waitret == WAIT_SIGNALED);
 +	      while (waitret == WAIT_TIMEOUT);
  	      /* If io.Status is STATUS_CANCELLED after CancelIo, IO has
  		 actually been cancelled and io.Information contains the
  		 number of bytes processed so far.
-@@ -609,7 +581,10 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+@@ -609,7 +580,10 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
        if (nbytes_now == 0 || short_write_once)
  	break;
      }
@@ -385,7 +386,7 @@ index c686df650..f167e0c9c 100644
    CloseHandle (evt);
    if (status == STATUS_THREAD_SIGNALED && nbytes == 0)
      set_errno (EINTR);
-@@ -626,38 +601,16 @@ fhandler_pipe::set_close_on_exec (bool val)
+@@ -626,38 +600,16 @@ fhandler_pipe::set_close_on_exec (bool val)
      set_no_inheritance (read_mtx, val);
    if (select_sem)
      set_no_inheritance (select_sem, val);
@@ -424,7 +425,7 @@ index c686df650..f167e0c9c 100644
  }
  
  int
-@@ -667,7 +620,6 @@ fhandler_pipe::dup (fhandler_base *child, int flags)
+@@ -667,7 +619,6 @@ fhandler_pipe::dup (fhandler_base *child, int flags)
    ftp->set_popen_pid (0);
  
    int res = 0;
@@ -432,7 +433,7 @@ index c686df650..f167e0c9c 100644
    if (fhandler_base::dup (child, flags))
      res = -1;
    else if (read_mtx &&
-@@ -688,34 +640,6 @@ fhandler_pipe::dup (fhandler_base *child, int flags)
+@@ -688,34 +639,6 @@ fhandler_pipe::dup (fhandler_base *child, int flags)
        ftp->close ();
        res = -1;
      }
@@ -467,7 +468,7 @@ index c686df650..f167e0c9c 100644
  
    debug_printf ("res %d", res);
    return res;
-@@ -731,16 +655,7 @@ fhandler_pipe::close ()
+@@ -731,16 +654,7 @@ fhandler_pipe::close ()
      }
    if (read_mtx)
      CloseHandle (read_mtx);
@@ -484,7 +485,7 @@ index c686df650..f167e0c9c 100644
    return ret;
  }
  
-@@ -955,39 +870,9 @@ fhandler_pipe::create (fhandler_pipe *fhs[2], unsigned psize, int mode)
+@@ -955,39 +869,9 @@ fhandler_pipe::create (fhandler_pipe *fhs[2], unsigned psize, int mode)
  			0, sa->bInheritHandle, DUPLICATE_SAME_ACCESS))
      goto err_close_select_sem0;
  
@@ -524,7 +525,15 @@ index c686df650..f167e0c9c 100644
  err_close_select_sem0:
    CloseHandle (fhs[0]->select_sem);
  err_close_read_mtx:
-@@ -1174,22 +1059,6 @@ fhandler_pipe::ioctl (unsigned int cmd, void *p)
+@@ -1038,7 +922,6 @@ nt_create (LPSECURITY_ATTRIBUTES sa_ptr, HANDLE &r, HANDLE &w,
+ 				 GetCurrentProcessId ());
+ 
+   access = GENERIC_READ | FILE_WRITE_ATTRIBUTES | SYNCHRONIZE;
+-  access |= FILE_WRITE_EA; /* Add this right as a marker of cygwin read pipe */
+ 
+   ULONG pipe_type = pipe_byte ? FILE_PIPE_BYTE_STREAM_TYPE
+     : FILE_PIPE_MESSAGE_TYPE;
+@@ -1174,22 +1057,6 @@ fhandler_pipe::ioctl (unsigned int cmd, void *p)
    return 0;
  }
  
@@ -547,7 +556,7 @@ index c686df650..f167e0c9c 100644
  int
  fhandler_pipe::fstat (struct stat *buf)
  {
-@@ -1210,190 +1079,3 @@ fhandler_pipe::fstatvfs (struct statvfs *sfs)
+@@ -1210,190 +1077,3 @@ fhandler_pipe::fstatvfs (struct statvfs *sfs)
    set_errno (EBADF);
    return -1;
  }
