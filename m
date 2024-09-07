@@ -1,44 +1,44 @@
-Return-Path: <SRS0=8gjk=QE=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 40A20385C6E1
-	for <cygwin-patches@cygwin.com>; Fri,  6 Sep 2024 17:14:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 40A20385C6E1
+Return-Path: <SRS0=YzN4=QF=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.227.115])
+	by sourceware.org (Postfix) with ESMTPS id 81A093858280
+	for <cygwin-patches@cygwin.com>; Sat,  7 Sep 2024 01:54:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 81A093858280
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 40A20385C6E1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725642871; cv=none;
-	b=gAIIbiP3CD2RHvBse5j2zmn4NIvkogcFk21M5ZbB4OtIu2qDhsdx0E7hu2V2TLqtkpYbtunosITDPMc5++WBPeBXBGnwuRXhqcuckweqTTWmde/VpyBM9+nWYHQvtz5bFD9127cv7m6wh/sgHZD3FNj0dkUQxSmxFdjOUAOYLeI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 81A093858280
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.115
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1725674121; cv=none;
+	b=M5XQ9qG0MmYcCJpkz2Lh5RTkzmdOQ21S0nfEVjxx/R1uXD7Xfmy7Jb8mk/4DT7A/XHE9g3RSE9Q+/kr3VysQZgTfQive66I9aiibD0K6/NASxy0CFFNV3ti7Nuursp5P9SpIAAeNZ60wKTeRBUTT+TL2kwIvtULzDTdD0RJmiiI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1725642871; c=relaxed/simple;
-	bh=imbHaCUuG0dWehrhlCT6GrOhxUu221V3NM83O+Px+D8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=NN71fA9Iz6tWwOXcelERItGMTONvEnIjtMqQMBrtnux74PZXzSZJv4AWEKo1Zd9Elz0Ae/k2i9G0AtO1eNPpoBveVvWe1sbrhFXujbH6tn7iyBKYSCeysSYUQZhSdoyKDhgSgwuDbA5PGfVg0W0YRGShnBEA0h446BFIUkHK25o=
+	t=1725674121; c=relaxed/simple;
+	bh=0mbtxtxa7wHEHwwFwXjTWZxHMgb1as8wDVSuShRDG98=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=SlnGUcXeomQDWLsrIASMnWSoiJ/6rpe4RchnNksczeTjS1Ij9mAxwycggCxLvMJ7wzyCIpspOLr2aaOnSwFoSOTQ0DC4aEV0KU9/QC/kgpPmE7ZTinVkdgJdM80UvoEEJ380Gl6n9f3/9sH7bD1QTgG4PD2sQfW3otHhjXn+u00=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-w05.mail.nifty.com
+Received: from localhost.localdomain by mta-snd-e03.mail.nifty.com
           with ESMTP
-          id <20240906171425311.NWBP.116458.localhost.localdomain@nifty.com>;
-          Sat, 7 Sep 2024 02:14:25 +0900
+          id <20240907015454060.IFRV.40277.localhost.localdomain@nifty.com>;
+          Sat, 7 Sep 2024 10:54:54 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	isaacag,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>,
 	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v3.2] Cygwin: pipe: Switch pipe mode to blocking mode by defaut
-Date: Sat,  7 Sep 2024 02:13:58 +0900
-Message-ID: <20240906171409.1755-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v4] Cygwin: pipe: Switch pipe mode to blocking mode by defaut
+Date: Sat,  7 Sep 2024 10:54:30 +0900
+Message-ID: <20240907015438.1895-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725642865;
- bh=kNqSNrXObR+1NAm4H9Wpv9RP/tfL6eZNUg1scIfFfr0=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1725674094;
+ bh=YRxASkIONU0spZD+g5qZwyEHrnA9sCovaSPgrlvW4zM=;
  h=From:To:Cc:Subject:Date;
- b=g8ZWEQ7N8Y7NO4Xtx/O+XjaZ3sxwhgm5AGXGuuQZjBHkptGvsrg4l06TCMKl7qQc3V12SPk8
- VGC6fuFcadi5cGZpvIu4EqlaPImqXJOFAQa4qaWNFnFbdiJ2yWQQ96brhU4bHl9Yf0aLCSxYtT
- ar+p9TdQir7ESgQzmnnhkNtMizwSI9IK9dRFi/aMivAmtTx0qA9jln8t0LuzzoCf8FQwbkLaD9
- vZfADylMvZM98duF3c5Y7yKuiHfuNh1RZdnw4v29GY8nYmPpDMC0vKGpq0duD9esI2DTNmpac2
- +fX/ZGntvEJUtluxM6A71jFOazJy1WyE98DwjtIQeS5rLvzQ==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ b=O03Xoi51AwoaawU/WMVaJWDPwogdwri5blpu97Xg5jjcVcCjWMF56yLP/uTisMYMqQtDsuRn
+ a3YDqkw2btX0yg0WXM6Wwc10sUPihRy9Km4rC2EttF0+IDL7HT6qRT7SwUS6haWxIAMRryNgBF
+ GZ+BQU6PcOWg6pvC4BgHVJ2EaaIOzkphxM8xRN8FNZZCz9vlmusLsfVYaNRfMHzGejl1iySjm9
+ zEC4nb6kPAcDwPsK3h7tKG0K7YoLksOiAFE+1M/EsYEBbIfyAQEOMVlyPMfaVYlHtjfYoSFAgR
+ p0ma1LtFXDu0o06nHUD1huoax9VFl0RgX5BOMW3dtoES11Dg==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -74,13 +74,13 @@ Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
  winsup/cygwin/dtable.cc                 |   5 +-
- winsup/cygwin/fhandler/pipe.cc          | 482 ++++--------------------
+ winsup/cygwin/fhandler/pipe.cc          | 474 ++++--------------------
  winsup/cygwin/local_includes/fhandler.h |  42 +--
  winsup/cygwin/local_includes/sigproc.h  |   1 -
  winsup/cygwin/select.cc                 |  25 +-
  winsup/cygwin/sigproc.cc                |  10 -
  winsup/cygwin/spawn.cc                  |   4 -
- 7 files changed, 96 insertions(+), 473 deletions(-)
+ 7 files changed, 92 insertions(+), 469 deletions(-)
 
 diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
 index 9508f3e0b..7303f7eac 100644
@@ -99,7 +99,7 @@ index 9508f3e0b..7303f7eac 100644
  
        if (!fh->open_setup (openflags))
 diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.cc
-index c686df650..acc53502e 100644
+index c686df650..63bab3f4d 100644
 --- a/winsup/cygwin/fhandler/pipe.cc
 +++ b/winsup/cygwin/fhandler/pipe.cc
 @@ -48,7 +48,7 @@ fhandler_pipe::fhandler_pipe ()
@@ -287,7 +287,7 @@ index c686df650..acc53502e 100644
  ssize_t
  fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
  {
-@@ -439,19 +396,48 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+@@ -439,19 +396,45 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
    if (!len)
      return 0;
  
@@ -299,10 +299,7 @@ index c686df650..acc53502e 100644
 -      set_errno (EPIPE);
 -      raise (SIGPIPE);
 -      return -1;
-+      NTSTATUS status;
-+      IO_STATUS_BLOCK io;
 +      FILE_PIPE_LOCAL_INFORMATION fpli;
-+
 +      status = NtQueryInformationFile (get_handle (), &io, &fpli, sizeof fpli,
 +				       FilePipeLocalInformation);
 +      if (NT_SUCCESS (status))
@@ -343,18 +340,18 @@ index c686df650..acc53502e 100644
  
    if (!(evt = CreateEvent (NULL, false, false, NULL)))
      {
-@@ -503,21 +489,7 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+@@ -503,21 +486,10 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
  	    {
  	      do
  		{
 -		  /* To allow constant reader_closed() checking even if the
 -		     signal has been set up with SA_RESTART, we're handling
 -		     the signal here --> cw_sig_eintr. */
--		  waitret = cygwait (evt, (DWORD) 0, cw_cancel | cw_sig_eintr);
+ 		  waitret = cygwait (evt, (DWORD) 0, cw_cancel | cw_sig_eintr);
 -		  /* Break out if no SA_RESTART. */
--		  if (waitret == WAIT_SIGNALED
--		      && !_my_tls.call_signal_handler ())
--		    break;
+ 		  if (waitret == WAIT_SIGNALED
+ 		      && !_my_tls.call_signal_handler ())
+ 		    break;
 -		  if (reader_closed ())
 -		    {
 -		      CancelIo (get_handle ());
@@ -362,7 +359,6 @@ index c686df650..acc53502e 100644
 -		      raise (SIGPIPE);
 -		      goto out;
 -		    }
-+		  waitret = cygwait (evt, (DWORD) 0);
  		  /* Break out on completion */
  		  if (waitret == WAIT_OBJECT_0)
  		    break;
