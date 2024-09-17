@@ -1,150 +1,82 @@
-Return-Path: <SRS0=dU+G=QN=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 0B8DA3858D20
-	for <cygwin-patches@cygwin.com>; Sun, 15 Sep 2024 08:09:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0B8DA3858D20
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0B8DA3858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1726387796; cv=none;
-	b=Y5FgINfcQtjFaz30dKqBN9bAYULRa14/PNaMOaDBye3dBkgGMWrFZoWFVyJrHN75qzmvMnEOOcUzG1uaeaNnbFgfdO+YfH5nmY4cFrGYuyRJdvLtugF9MZTjkc9d+nHO9WEIplMwUR4WdjabZRNtZPwde6GRk5Yuuk0GGFBgEOk=
+Return-Path: <SRS0=EoNB=QP=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w08.mail.nifty.com (mta-snd-w08.mail.nifty.com [106.153.227.40])
+	by sourceware.org (Postfix) with ESMTPS id 3FEE33858D26
+	for <cygwin-patches@cygwin.com>; Tue, 17 Sep 2024 13:06:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3FEE33858D26
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3FEE33858D26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1726578418; cv=none;
+	b=EawsCtFv617UK1N7YmB/d3vXFhxtDxkPBY883+wbGpUslaGB+7Ig8Ej/FngnkxI+VtY3wf30cHFgWSJVcDTbxahEhtAI6Bf6xWeKqKmKAQEGsWCvfOLiiI/DAogyYer/6A3+KCbVQialbP4pOrIajLOELBeCDSqkj+FvfAdqt2E=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1726387796; c=relaxed/simple;
-	bh=iyzjTOGlVI9F5mbc+bLI1HrSZNbLhZJsaRxJzrCdK0w=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=QQ3wYdCObW4+kneRSPDU/txeAsgFd4tbMKYaokv9sc0OrCpF8gfHKvMni+Yoxo0RAQd42msFGHM4A8XQHKQMkNK5ITzuFW6IpLe9Q07q2glDiia26VHRAM5xJScdOLHF5/MxCH2U1+qtI/sOHWatFKUD7GmDjFLEFbdgH/mEHTs=
+	t=1726578418; c=relaxed/simple;
+	bh=OjH+rEkj9c1liTPR5qmf/GvdSAXITj7wmPGWSh7v3hE=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=YANUrqIZ89LR06woRuwhri2hOHoEketS6NQ0MioyjIKXoruYs+wLAv4EswcZI+pplUGNklCp1m00exKX+qtpI7ER/P4PYt6T7JUinZDabLkTCFe+CN42UzQZpOVqGngb5T8qWNzCKuX+FxoufHwS3wuzPuOcn7k/R85mG8EZhDo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 48F8DgTA011556;
-	Sun, 15 Sep 2024 01:13:42 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdWDUEXZ; Sun Sep 15 01:13:38 2024
-From: Mark Geisert <mark@maxrnd.com>
+Received: from HP-Z230 by mta-snd-w08.mail.nifty.com with ESMTP
+          id <20240917130652913.VGI.4660.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 17 Sep 2024 22:06:52 +0900
+Date: Tue, 17 Sep 2024 22:06:51 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Cygwin: Fix pthread_sigqueue to accept thread id
-Date: Sun, 15 Sep 2024 01:09:23 -0700
-Message-ID: <20240915080934.334-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] Cygwin: pipe: Restore blocking mode of read pipe on
+ close()
+Message-Id: <20240917220651.ec05e8f932842438f33d3607@nifty.ne.jp>
+In-Reply-To: <1748f37a-89d2-4245-a3f7-74d0a627a58e@cornell.edu>
+References: <20240906080850.14853-1-takashi.yano@nifty.ne.jp>
+	<1748f37a-89d2-4245-a3f7-74d0a627a58e@cornell.edu>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1726578413;
+ bh=rRRpL45z4ZpG1Q9bKPp8104olocpVkBeERiCQ8ByLdE=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=rjuGGpOb2ZrR/xe7Y9iIrKVkF0EJc3t0wBrJfNCV1s/GkaAUUtT1UlMBJw2/rz6KV2B8BbJT
+ xoOyYAIxvfs5ie11aMr9Ed0Z9bk6RpGyErjRv6W0DOi2zecR78+yDajvShGxtgQUZUyiBN/tyC
+ U0oMzE+MY1bLoRb8PBdMAYiEuZl42ACaBMRGLdRQjlAE1usQUCDjqq5UvnXOzlmTe0i6khttYB
+ eM96LRGSU/yx7TBbiV3rawHLmWBz57L4yRrAcjzu+IYZW8MsJfpm/G4ij4CSf372HMmcuMy8OU
+ V8hUl7z9Q4jbgVPAOAN6wxIvlgG299X+bS5CVgkeiFSrn4Sw==
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Change the prototype for pthread_sigqueue() so the first parameter is a
-thread id. Change the code of the function to deal with the changed
-parameter. This involves adding cheap iteration to the list of threads.
+On Thu, 12 Sep 2024 17:35:52 -0400
+Ken Brown wrote:
+> On 9/6/2024 4:08 AM, Takashi Yano wrote:
+> > If a cygwin app is executed from a non-cygwin app and the cygwin
+> > app exits, the read pipe remains in the non-blocking mode because
+> > of the commit fc691d0246b9. Due to this behaviour, the non-cygwin
+> > app cannot read the pipe correctly after that. Similarly, if a
+> > non-cygwin app is executed from a cygwin app and the non-cygwin
+> > app exits, the read pipe remains in the blocking mode. With this
+> > patch, the blocking mode of the read pipe is stored into a variable
+> > was_blocking_read_pipe on set_pipe_non_blocking() when the cygwin
+> > app starts and restored on close(). In addition, the pipe mode is
+> > set to non-blocking mode in raw_read() if the mode is blocking
+> > mode as well.
+> > 
+> > Addresses: https://github.com/git-for-windows/git/issues/5115
+> > Fixes: fc691d0246b9 ("Cygwin: pipe: Make sure to set read pipe non-blocking for cygwin apps.");
+> > Reported-by: isaacag, Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> > Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > ---
+> >   winsup/cygwin/fhandler/pipe.cc          | 41 +++++++++++++++++++++++++
+> >   winsup/cygwin/local_includes/fhandler.h |  3 ++
+> >   winsup/cygwin/sigproc.cc                |  9 +-----
+> >   3 files changed, 45 insertions(+), 8 deletions(-)
+> 
+> LGTM, but I haven't tried to test it (except to make sure that the 
+> branch still builds).  I assume you've tested it.  My only question is 
+> whether you want to mention the variable is_blocking_read_pipe in the 
+> commit message.
 
-[I have questions about the code (see below) so there will be a v2 patch
-with these paragraphs deleted and Reported-By:, Fixes:, etc lines added.
+Thanks for revewing!
 
-Q1: In pthread_sigqueue(), is there a better way to get the lowest 32
-bits of thread_id? I tried various ways of casting and/or masking but
-all were rejected by g++ with a suggestion to add "-fpermissive".
+I added the description for is_blocking_read_pipe to the commit message
+and pushed.
 
-Q2: Same func, are the sanity checks I've flagged with a FIXME comment
-still useful? Previously users could pass in an arbitrary pointer for
-the first arg so such validation was required for safety. Now they will
-pass in a thread id, which is searched for in Cygwin's thread list.
-Presumably the pointer to a thread with a valid id is valid, right?]
-
----
- winsup/cygwin/include/pthread.h       |  2 +-
- winsup/cygwin/local_includes/thread.h | 18 ++++++++++++++++++
- winsup/cygwin/thread.cc               | 23 +++++++++++++++++++----
- 3 files changed, 38 insertions(+), 5 deletions(-)
-
-diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
-index 66d367d62..a0ec32526 100644
---- a/winsup/cygwin/include/pthread.h
-+++ b/winsup/cygwin/include/pthread.h
-@@ -244,7 +244,7 @@ int pthread_getattr_np (pthread_t, pthread_attr_t *);
- int pthread_getname_np (pthread_t, char *, size_t) __attribute__((__nonnull__(2)));
- int pthread_setaffinity_np (pthread_t, size_t, const cpu_set_t *);
- int pthread_setname_np (pthread_t, const char *) __attribute__((__nonnull__(2)));
--int pthread_sigqueue (pthread_t *, int, const union sigval);
-+int pthread_sigqueue (pthread_t, int, const union sigval);
- int pthread_timedjoin_np (pthread_t, void **, const struct timespec *);
- int pthread_tryjoin_np (pthread_t, void **);
- #endif
-diff --git a/winsup/cygwin/local_includes/thread.h b/winsup/cygwin/local_includes/thread.h
-index b3496281e..a6e9c9b6b 100644
---- a/winsup/cygwin/local_includes/thread.h
-+++ b/winsup/cygwin/local_includes/thread.h
-@@ -199,6 +199,16 @@ template <class list_node> class List
-   fast_mutex mx;
-   list_node *head;
- 
-+  list_node *first ()
-+  {
-+    return head;
-+  }
-+
-+  list_node *next (list_node *cur)
-+  {
-+    return cur->next;
-+  }
-+
- protected:
-   void mx_init ()
-   {
-@@ -439,6 +449,14 @@ public:
-     return t1 == t2;
-   }
- 
-+  static pthread* lookup_by_id (DWORD thread_id)
-+  {
-+    for (pthread *ptr = threads.first (); ptr; ptr = threads.next (ptr))
-+      if (thread_id == ptr->get_thread_id ())
-+        return ptr;
-+    return NULL;
-+  }
-+
-   /* List support calls */
-   class pthread *next;
-   static void fixup_after_fork ()
-diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-index 0c6f57032..627488d23 100644
---- a/winsup/cygwin/thread.cc
-+++ b/winsup/cygwin/thread.cc
-@@ -3300,16 +3300,31 @@ pthread_sigmask (int operation, const sigset_t *set, sigset_t *old_set)
-   return res;
- }
- 
--int
--pthread_sigqueue (pthread_t *thread, int sig, const union sigval value)
--{
--  siginfo_t si = {0};
-+/* This is likely the only pthread_ API function taking a thread id argument.
-+   Note how it's prototyped pthread_t to cosmetically match the func family. */
-+int
-+pthread_sigqueue (pthread_t thread_id, int sig, const union sigval value)
-+{
-+  // Deal with cockamamie use of "pthread_t" to pass in an integer thread id
-+  union {
-+    pthread_t thread_id;
-+    DWORD tid;
-+  } u;
-+  u.thread_id = thread_id;
-+
-+  // This convolution seems to be needed for the sanity checks below.
-+  void *tmp = (void *) pthread::lookup_by_id (u.tid);
-+  pthread_t const* thread = (pthread_t const*) &tmp;
-+  if (!*thread)
-+    return ESRCH;
- 
-+  //FIXME possibly superfluous sanity checks from when pthread_t* passed in
-   if (!pthread::is_good_object (thread))
-     return EINVAL;
-   if (!(*thread)->valid)
-     return ESRCH;
- 
-+  siginfo_t si = {0};
-   si.si_signo = sig;
-   si.si_code = SI_QUEUE;
-   si.si_value = value;
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
