@@ -1,43 +1,43 @@
 Return-Path: <SRS0=nBAb=RK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 62DBC3858C56
-	for <cygwin-patches@cygwin.com>; Mon, 14 Oct 2024 05:38:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 62DBC3858C56
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 3A736385734D
+	for <cygwin-patches@cygwin.com>; Mon, 14 Oct 2024 06:39:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3A736385734D
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 62DBC3858C56
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1728884330; cv=none;
-	b=lbY/uWKBjlTLZ4wU50vMIwGEcUwCrcStb9OQY+XX4Kd8sRswpHXXQQreqLu1y+HLwggkX5tfSHWsRRmUtrTSIQwXoDMZhyCMqeL2vTtI9mNiB8WEFZ7I0/y0AeiTlDrplFen+sngwzzZC41orJdJCbabBZ/12DLfTA4TP5rSZx0=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3A736385734D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1728887976; cv=none;
+	b=SW/7aVJ4cEJsGuEVk5K/u4Txg92gjkRDs/P/hEDgD7w9xnP87hPDBFCcxMiMlEe/A8jNkdOvihWzGdh+cKXClGcprQRAwr8vvhpcf39RLqHSY0Rr7XypRElxJSU8HbMtTcxIRV0IQMq82MN9iU1fUVxASe/uG38XbiqGT/BU5Q8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1728884330; c=relaxed/simple;
-	bh=5sTymZ+TRpqglIcHaD/b93vAsbxXwhcFmqtdZ24bS0A=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=M7CLuHM+zVqxySwyBDyLbDTcM/ABQG0qkDS0f6RTahdkbbc0xDxtDYjqV40L/xEufxedH/ewsRNeeGOdf49szOAY23OUL9aZpsMDYXwTsPcbMsl1NoxY02PYvp6DI9XSG8WTe7c85P8B8ixj00bn2jk9LLBnKS5ehkkFN3AavPM=
+	t=1728887976; c=relaxed/simple;
+	bh=RlczD35A21Mux3nRWky17xfuRE3nFwAo2fSaA1HFjNk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=p7FqCRLwVwyWUFhUV4gwySa7m6VoD1moAeIFCNwcuLchYfTLzIr583ekrkDsSlbPV/Cmu98Pb8cpr3sv4BHPi8ha0f+fIBoV66VaKymkPDfGU577VsKGRPXqZTab+qrVEL6pOCgQ/NDlokxLHpqfAOLnJQFRrz/oKtbJPfcbdK8=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-w10.mail.nifty.com
+Received: from localhost.localdomain by mta-snd-w05.mail.nifty.com
           with ESMTP
-          id <20241014053845765.ZBYA.17412.localhost.localdomain@nifty.com>;
-          Mon, 14 Oct 2024 14:38:45 +0900
+          id <20241014063930292.JDZO.41146.localhost.localdomain@nifty.com>;
+          Mon, 14 Oct 2024 15:39:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Christian Franke <Christian.Franke@t-online.de>,
 	Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Subject: [PATCH v2] Cygwin: sigfe: Fix a bug that signal handler destroys fpu states
-Date: Mon, 14 Oct 2024 14:38:21 +0900
-Message-ID: <20241014053829.1010-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v3] Cygwin: sigfe: Fix a bug that signal handler destroys fpu states
+Date: Mon, 14 Oct 2024 15:39:05 +0900
+Message-ID: <20241014063914.6061-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1728884325;
- bh=N41A1U5F7drbN26A+SxHPYyvKgnIzyPGxGV9lPAWJT0=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1728887970;
+ bh=uY36Jip0oZkHVxx/19UEqtSUN30QvaTn+vv2cNKBI/U=;
  h=From:To:Cc:Subject:Date;
- b=Ff9/eU53hs/HPp5pzAcTJxI6fiUisNkP6AslNg5225TU8tDciSyZMwxDGvG5Mg1coKnzsjI7
- 5cqt8+ttCQhuvQxWr7+z85le/cVv2F8YG+l1JpTMuSkco82h0TgJCpQtrwo8YB+U3BDo4YNpvs
- PfFSxpHWgQ2GRWql2WQufpAFAQyyzI4XT/0g/NKgw76nON3KUGvcDJL3qXZHvnedjt+GCXo7wH
- MSWdnfEWBzN4XmH2J8ehjjyGB0BJULbzrqUo6i7TIDuRKkTAwgT9La3JtL4cqKztFnBu+YHOz6
- z8jf+TP3yRKpKkOwLjDUkBOe9UiXvDhmbfZ0YKicWTVX7wBQ==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=FySAhprwy8v2Mi/FsVCs+JLLZExIvdpH/UMFlUog0HKA/iZHjYOLnYCV1Tn3so9tE0s844Ny
+ Y6FmaqufEPKddaQ8dfDbpeiBKbDkp95qbM37G3cK5iQtqsETzHcQglkuysZqm5KlhCAqkElLvx
+ z80s0QLDiT9CCHHABp4601YsxcqVBdfnigUV9IjtTYFXdGvbRROnNPGLxWPp53rCPsCNji2ZXq
+ 8iMEk6HUaBa86mo7JdhW0t33bCy1X9/YL3KvuMspgUw1DbbgoKnwng8f01a9EacId/UGnyv9ez
+ O0UXUqDDzvYE06C6QhQPeHR3LDwa3wgp0tTO0SLPi8zH42aA==
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -52,14 +52,14 @@ Addresses: https://cygwin.com/pipermail/cygwin/2024-October/256503.html
 Fixes: ed89fbc3ff11 ("* gendef (sigdelayed (x86_64)): Save and restore FPU control word.")
 Reported-by: Christian Franke <Christian.Franke@t-online.de>
 Suggested-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Reviewed-by:
+Reviewed-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/scripts/gendef | 92 ++++++++++++++++++++----------------
- 1 file changed, 51 insertions(+), 41 deletions(-)
+ winsup/cygwin/scripts/gendef | 91 ++++++++++++++++++++----------------
+ 1 file changed, 50 insertions(+), 41 deletions(-)
 
 diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
-index 3b1f8b9da..1b2e41559 100755
+index 3b1f8b9da..04350f1cb 100755
 --- a/winsup/cygwin/scripts/gendef
 +++ b/winsup/cygwin/scripts/gendef
 @@ -185,7 +185,7 @@ sigdelayed:
@@ -71,7 +71,7 @@ index 3b1f8b9da..1b2e41559 100755
  	.seh_setframe %rbp,0
  	pushq	%r15
  	.seh_pushreg %r15
-@@ -213,26 +213,42 @@ sigdelayed:
+@@ -213,26 +213,41 @@ sigdelayed:
  	.seh_pushreg %rbx
  	pushq	%rax
  	.seh_pushreg %rax
@@ -109,32 +109,31 @@ index 3b1f8b9da..1b2e41559 100755
 +	subq	%rbx,%rsp
 +	movl	%ecx,0x20(%rsp)
 +	movl	%ebx,0x24(%rsp)
-+	fxsave64 0x30(%rsp) # x86 CPU in 64-bit mode has fxsave64/fxrstor64
++	fxsave64 0x30(%rsp) # x86 CPU with 64-bit mode has fxsave64/fxrstor64
 +	jmp	2f
 +1:
 +	movl	\$0x0d,%eax
 +	xorl	%ecx,%ecx
 +	cpuid	# get necessary space for xsave
-+	movq	%rcx,%rbx
++	movq	%rbx,%rcx
 +	addq	\$0x48,%rbx # 0x18 for alignment, 0x30 for additinal space
 +	subq	%rbx,%rsp
 +	movl	%ebx,0x24(%rsp)
-+	movl	%eax,0x28(%rsp)
-+	movl	%edx,0x2c(%rsp)
 +	xorq	%rax,%rax
 +	shrq	\$3,%rcx
 +	leaq	0x30(%rsp),%rdi
 +	rep	stosq
++	xgetbv	# get XCR0 (ecx is 0 after rep)
++	movl	%eax,0x28(%rsp)
++	movl	%edx,0x2c(%rsp)
 +	notl	%ecx # set ecx non-zero
 +	movl	%ecx,0x20(%rsp)
-+	movl	0x28(%rsp),%eax
-+	movl	0x2c(%rsp),%edx
 +	xsave64	0x30(%rsp)
 +2:
  	.seh_endprologue
  
  	movq	%gs:8,%r12			# get tls
-@@ -259,26 +275,20 @@ sigdelayed:
+@@ -259,26 +274,20 @@ sigdelayed:
  	xorl	%r11d,%r11d
  	movl	%r11d,_cygtls.incyg(%r12)
  	movl	%r11d,_cygtls.stacklock(%r12)	# unlock
