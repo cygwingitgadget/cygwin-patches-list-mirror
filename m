@@ -1,99 +1,96 @@
-Return-Path: <>
-Received: from ws268.win.arvixe.com (ws268.win.arvixe.com [143.95.254.78])
-	by sourceware.org (Postfix) with ESMTPS id 8733D3858C5F
-	for <cygwin-patches@cygwin.com>; Mon, 14 Oct 2024 09:11:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8733D3858C5F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=systemelements.com
-Authentication-Results: sourceware.org; spf=none smtp.helo=ws268.win.arvixe.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8733D3858C5F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=143.95.254.78
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1728897089; cv=none;
-	b=R/SwYW9b3Sm+BOAb2vdRGVTo/ldyTR+aasim1V6URDYbGJAvlxb6t36pC0GBwPzcF3eRSslbqlkfakTzHhmPvXO+MLLuVX0CtFhIPuiV2JCpyqrIHPOB/AI75fL16+nea7Qg4NUj7FV8OTOoFgqj1F0pvAaXxbAfLWbzDrwZvPw=
+Return-Path: <SRS0=gMO3=RN=skymard.com=flora@sourceware.org>
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+	by sourceware.org (Postfix) with ESMTPS id 0214F385840B
+	for <cygwin-patches@cygwin.com>; Thu, 17 Oct 2024 14:30:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0214F385840B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=skymard.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=skymard.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0214F385840B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=43.155.67.158
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1729175470; cv=none;
+	b=MCqGAzry7P+QBYF/HBMoHm/K9TdFGNj4l3N+lcWfwvebIwWIIMU2jp0Q331q3a02uJYwE23KaFOcWQMu4h1xXoQiZSgufwuLvgU3E8IZYLh6R2HnKeQ9IygXb9d+Mlylsf8FvHZ+a6u9X+bRK78Wp9f6ZnCEfhT+H565kQ2eLTU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1728897089; c=relaxed/simple;
-	bh=UoKVA7kQkdM6YkhRRYIzX6jTLZjfDt/jVMFGQ7YSI4k=;
-	h=From:Date:Subject:Message-Id:To:Message-Id:MIME-Version; b=fSFZVTMgSb+j25LrIQIAcNYKQn9M5SNx82HuF5Om7LCFc7tM1apRTbxCaiNpo+bd8SYN8Ey/5pFrpfKppYfjoBntrkoWZ8ikwLmJZeDZejGoLyJIX0Xv7A7nZiuwmPOUcBlXRncgWAI0aRphA3X8gg/LxWfO8IGBY7bm/MsdonQ=
+	t=1729175470; c=relaxed/simple;
+	bh=DNRt2gPzhAS2M/T2dLZ+AcwiJpQf6R6trN9E3dqdgzk=;
+	h=DKIM-Signature:Date:From:To:Subject:Mime-Version:Message-ID; b=xvbNGiaGp0N/XAS5REBWdTdSd0Vizu+PN/3PTVPMksyBUzhc3WEnEAADIMm/BtQnHqVQ20yIpbySEKjRQSlXDzr0/a4j4zPgjAr8AYMwYM5XeFN4Z3SxETpqMjYGQ0JCN9WYPfoSLvlpDmgXG1wOJjP/PbIcj4rqt6aai5u9g/o=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-From: System Administrator <noreply@systemelements.com>
-Date: Mon, 14 Oct 2024 04:09:12 -0500
-Subject: Failed: FREE Weekly Health e-Letter Signup: from * * *
- =?utf-8?b?8J+Ppw==?= Get Free Bitcoin Now! Click Here:
- https://ftbtrans.com/files/fk2s15.php?hym96uy =?utf-8?b?8J+Ppw==?= * * *
- gbacc2 at 10/14/2024 4:08:25 AM
-Message-Id: <05L9HB7OCOU4.1CU8F1AVCHSM1@ws268>
-X-SmarterMail-SMTP-ID: 31720578
-X-SmarterMail-Delivery-ID: 19679941
-X-SmarterMail-MessageType: Bounce
-To: pmorrison@systemelements.com
-Message-Id: <f64d7f442f234c19b898b031a15fe369@outlook.com>
-X-Origin-Domain: outlook.com
-In-Reply-To: <7d88e919c1ab443d9bb2feebe7ef9f73@30c833aada1246168c9c5c63347b3680>
-References: <7d88e919c1ab443d9bb2feebe7ef9f73@30c833aada1246168c9c5c63347b3680>
-MIME-Version: 1.0
-Content-Type: multipart/report;
-	boundary=SmarterMail_NextPart_14b765e9b764405892ca66d81d59a17d;
-	report-type=delivery-status
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_05,HTML_MESSAGE,HTML_NONELEMENT_30_40,KAM_DMARC_STATUS,LIKELY_SPAM_FROM,PLING_QUERY,SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skymard.com;
+	s=cqen2407; t=1729175455;
+	bh=5va5+fBz0SohdI/4xLpqbiNYyU/50wydhb0eUk0Wv4M=;
+	h=Date:From:To:Subject:Mime-Version:Message-ID;
+	b=UIgeBapu23fZEkloGyk37yP5ZaMIVNaDKQZBBZGzj3nDuGZ5qe0AL3/o8Xfk7J0o3
+	 CpzmDLkdJFwtTRN58qWvWmuP3s77w1jiunfGJtXVsnIssBJrRIkkrqhhmzrF/3hkJn
+	 /MkC/g5Sph/e331cN+mp5sOBLsuHEBGlmBCdBfH0=
+X-QQ-mid: bizesmtpsz9t1729175454tzkrfp7
+X-QQ-Originating-IP: +SxX4JVn1rcPkv29WLJx81Yp/eerD/IxIhiJaBjBPy0=
+Received: from LAPTOP-C8TGA5NJ ( [119.39.114.238])
+	by bizesmtp.qq.com (ESMTP) with SMTP id 0
+	for <cygwin-patches@cygwin.com>; Thu, 17 Oct 2024 22:30:54 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6428990486523829120
+Date: Thu, 17 Oct 2024 22:23:59 +0800
+From: "Flora Li" <flora@skymard.com>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: China Good Construction Machinery Exporter
+X-Priority: 3
+X-GUID: 2191AD8B-7AB8-4C4D-8A59-7EFCD5CB05AC
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.25.306[cn]
+Mime-Version: 1.0
+Message-ID: <5FC4190AAE7C5F9F+202410172223420592259@skymard.com>
+Content-Type: multipart/alternative;
+	boundary="----=_001_NextPart322420814146_=----"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpsz:skymard.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+X-QQ-XMAILINFO: MsthqgywqSPpb17vpQYAH50a8Ld1auchhZJg/oUo34zAazpmQXldjXol
+	QsHDfnF22cb0FpFH0U/CR3K2iD3D1CcCvlg4ih6AanKKgtgxNd35v+wC8JzKaa8CJtoHnHo
+	nC3PiGoOo2mXM19RlB37P0Ujc14qyr3gWU1opggKvpHrjrFDz4/X8mmRk1YkGgMUJ/sL/Bz
+	5KNZdMyEehP3P+bIJVuYFfV3uLk59wm20M0GNvGcf8AGURshYMRFWb0W8ohcnJACj/DOUzw
+	QHj3i/SJjQYOBVRDdcBwA9KtPabMD/QH0esiH784AJS5HE8eYQJmAEyJxwMF9xrQoPppt1H
+	2d104YQEu9IcU4VIqMnMRikyLSoCBXpvgSr+XZwvsXTe8cbXfOCk6+1z/N5U+SPjzf1eb0P
+	nAO6L86JgEef8WBs2I5Budft07aJYlGvZMqbePODRnecBg8hT34Klglrd3K8KG8e4rvvVn7
+	h97hFn0weuSJCJrVcegi00pQHb+VEZPWjgEqBk/ZscfAHXk7IeX9v05/8bM3pd3z4UZSpVA
+	65EWqvU66QwJVr6wawFzFrtnDiAw4piT9Mk2ZLDLfyrwiVY4D3GnxBtqGIOqMk0VHTFGmtR
+	Y2A62IyT18jQnvBMZMhw5djXQzaWmgppF3a3JCtQLWkI2hKYXSP1Gz6fEUO1kUUJDqVRmji
+	b0Qg6hr/tjlOMFoHK5Gp4gR5F5Q2fhxQ32OcAWsNizWuRDL78j0bSkehEXHFX5CMZUoJBSU
+	kwlTsZBJLLtd/q3OoiHsRlEup+GUXwLgeXys8XF96cdvLXrpo5JUh/5ZYjApEOUkCdpDhOI
+	b2nw1GmGW8Q1fVFNMftZDkd+yEgvye3vc8lN5/r/f4pZxMabf2L5pR0apD73Zg+AYpnY8x8
+	kx8bR87LcQqKxkDH8ZG03osUoHDTd7CFtC2NH1/FGbb63IwE5O5ZG+ZLswbW6D0I5ETPYlD
+	4gt2tpTLjryVW13Hc7m2b/M3TY7A4CrIU9ek0loTPgSOYdGM4VGp/mWMoW+dOjNioGkcwQ1
+	9PJW45fXZ6Yn3ChxJvIEqeHPoRzosMqjzrzYJS0P9Vtq9vWLQo9mPrVpKGg5+iZXDtuEK1k
+	yyvrxmg33dgTwT/1PyXieyClxLfLRXvIkDOxH3Q9tGIHw2h3H0/O0kjJ91/6BW2ZE8oEZ3Z
+	S6NoiOotL/K0TqPmhW2dnTWAJHvQMlON9vF/P0yG7rdnO6FeLJzmM68Z/ojgz67mpv/YXXT
+	JFBSmwQk=
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-SPAM: true
+X-QQ-RECHKSPAM: 3
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_80,CHINA_SUBJECT,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTML_IMAGE_RATIO_04,HTML_MESSAGE,MIME_BASE64_TEXT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---SmarterMail_NextPart_14b765e9b764405892ca66d81d59a17d
-Content-Type: multipart/alternative;
-	boundary=SmarterMail_NextPart_a448389ddecb420590d7e3d16c24034a
+This is a multi-part message in MIME format.
 
---SmarterMail_NextPart_a448389ddecb420590d7e3d16c24034a
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Delivery has failed to these recipients:
-
-netdev@outlook.com
-
-Subject: FREE Weekly Health e-Letter Signup: from * * * =F0=9F=8F=A7 Get Fr=
-ee Bitcoin Now! Click Here: https://ftbtrans.com/files/fk2s15.php?hym96uy =
-=F0=9F=8F=A7 * * * gbacc2 at 10/14/2024 4:08:25 AM
-
-Remote Server returned: '550 0H6Pt8cJtSAO30H6QtVGna -  message rejected AUP=
-#SNDR'=
-
---SmarterMail_NextPart_a448389ddecb420590d7e3d16c24034a--
-
---SmarterMail_NextPart_14b765e9b764405892ca66d81d59a17d
-Content-Type: message/delivery-status
-
-Reporting-MTA: dns;ws268.win.arvixe.com
-
-Original-Recipient: rfc822;netdev@outlook.com
-Final-Recipient: rfc822;netdev@outlook.com
-Action: failed
-Status: 5.0.0
-
-
---SmarterMail_NextPart_14b765e9b764405892ca66d81d59a17d
-Content-Type: text/rfc822-headers
-Content-Disposition: attachment
-
-X-Source-Cap: ZHJtb3JyaXNvbjtkcm1vcnJpc29uO21lZHhmbG93LmNvbQ==
-X-Email-Count: 1
-X-Source-Auth: drmorrison@medxflow.com
-X-Local-Domain: Yes
-X-Exim-ID: 1A2MTkJkjgaeub-xG5ey-17tKsH9Ug6
-Return-Path: <cygwin-patches@cygwin.com>
-Received: from ws268 (ws268.win.arvixe.com [143.95.254.78])
-	by ws268.win.arvixe.com with SMTP; Mon, 14 Oct 2024 04:08:25 -0500
-MIME-Version: 1.0
-From: cygwin-patches@cygwin.com
-To: drmorrison@medxflow.com, drmorrison@medxflow.com
-Date: Mon, 14 Oct 2024 04:08:25 -0500
-Subject: FREE Weekly Health e-Letter Signup: from * * * =?utf-8?b?8J+Ppw==?=
- Get Free Bitcoin Now! Click Here:
- https://ftbtrans.com/files/fk2s15.php?hym96uy =?utf-8?b?8J+Ppw==?= * * *
- gbacc2 at 10/14/2024 4:08:25 AM
-Message-Id: <7d88e919c1ab443d9bb2feebe7ef9f73@30c833aada1246168c9c5c63347b3680>
-Content-Type: text/plain; charset=utf-8
+------=_001_NextPart322420814146_=----
+Content-Type: text/plain;
+	charset="us-ascii"
 Content-Transfer-Encoding: base64
 
+SGksIG15IGZyaWVuZCwNCiANCldhcm0gR3JlZXRpbmdzIGZyb20gRmxvcmEu
+DQpXZSBhcmUgYW4gZXhwb3J0ZXIgb2YgY29uc3RydWN0aW9uIG1hY2hpbmVy
+eSBmb3IgMTYgeWVhcnMuDQpXZSBjYW4gcHJvdmlkZSB5b3UgdmFyaW91cyBm
+YW1vdXMgYnJhbmQgbWFjaGluZXJ5LCBzdWNoIGFzIFhDTUcsIFNBTlksIENB
+VCwgU1VOV0FSRCBhbmQgc28gb24uDQpJZiB5b3UgYXJlIGludGVyZXN0ZWQg
+aW4gdGhlbSwgcGxzIGNvbnRhY3QgbWUuDQpMb29raW5nIGZvcndhcmQgdG8g
+eW91ciByZXBseSENCkJlc3QgcmVnYXJkcw0KRmxvcmENCkZsb3JhIExpDQpT
+YWxlcyBNYW5hZ2VyDQpXaGF0c2FwcC9XZWNoYXQvTW9iaWxlOiArODYtMTMz
+MjcyOTI0ODANCkUtbWFpbDpmbG9yYUBza3ltYXJkLmNvbQ0KDQpTa3ltYXJk
+IENvbnN0cnVjdGlvbiBNYWNoaW5lcnkgKEh1bmFuKSBDby4sIEx0ZC4NClNr
+eW1hcmQgQ2hpbmEgTGltaXRlZA0KVGVsOis4Ni0xMzY2MTYyNjQwMQ0KQWRk
+OlJvb20gMzUwMSwgRnV4aW5nIFRpbWVzIEZpbmFuY2lhbCBDZW50ZXIgVDYs
+IERvbmdmZW5nDQpSb2FkIFN0cmVldCwgS2FpZnUgRGlzdHJpY3QsIENoYW5n
+c2hhLCBIdW5hbiwgQ2hpbmENCg0KDQoNCmZsb3JhQHNreW1hcmQuY29tDQo=
 
---SmarterMail_NextPart_14b765e9b764405892ca66d81d59a17d--
+------=_001_NextPart322420814146_=------
 
