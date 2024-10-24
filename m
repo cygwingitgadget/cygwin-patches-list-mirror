@@ -1,163 +1,67 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 1796D3858D21; Thu, 24 Oct 2024 10:21:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1796D3858D21
+	id 3B78D3858D21; Thu, 24 Oct 2024 10:27:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3B78D3858D21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1729765267;
-	bh=v5jbYCnobbhgP3DqHWTjcf3WZli1S7lVES9ek/LewoI=;
+	s=default; t=1729765660;
+	bh=mUa90Yy8h3URJ5c+oxidS5jJBrSj+yPN4o9ZBTpbAog=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=LHdNKrwht9szfRSWqfWY83FwEDmECYbmtGkyu7Ne8OmXC8BowKEEb4BWZPvrlE9dM
-	 OfmaXan9CevKSFB8c0q23p5FZ72nvqLazPJDPYbAfQMaQBFo/W2OCB2QOTNKyWi9iZ
-	 a8OdbQNWThjOSkJKkhmQI8uLF15RumGgMgdMViUw=
+	b=nTXvM3CFIJtNubMgjdCar1+CN+tP817i8n+Rijn07oEi4zROewxp7jVXET/UcXZUA
+	 I+Zbnt+fHNAEf3nIZpzOcWGXJJdrNAslE21enWKhJrgc685VMuITLzIOo7babDqAsf
+	 CfLvG2m3EI2iypU8sEEV6wy5VtHQ9i+44XLNTsVw=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EB693A80965; Thu, 24 Oct 2024 12:21:04 +0200 (CEST)
-Date: Thu, 24 Oct 2024 12:21:04 +0200
+	id 1E387A80965; Thu, 24 Oct 2024 12:27:38 +0200 (CEST)
+Date: Thu, 24 Oct 2024 12:27:38 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v8] Cygwin: pipe: Switch pipe mode to blocking mode by
- default
-Message-ID: <ZxofkPUww7LOZ9ZB@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: lockf: Make lockf() return ENOLCK when too
+ many locks
+Message-ID: <ZxohGlGP4USo-q04@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20240921211508.1196-1-takashi.yano@nifty.ne.jp>
- <Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
- <20241024175845.74efaa1eb6ca067d88d28b51@nifty.ne.jp>
+References: <20241024085921.7156-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="htsT6rwr7GCm+FE5"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241024175845.74efaa1eb6ca067d88d28b51@nifty.ne.jp>
+In-Reply-To: <20241024085921.7156-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-
---htsT6rwr7GCm+FE5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Oct 24 17:58, Takashi Yano wrote:
-> On Wed, 23 Oct 2024 11:00:33 +0200
-> Corinna Vinschen wrote:
-> > This new implementation of raw_write() skips the mechanism added in
-> > commit 170e6badb621 ("Cygwin: pipe: improve writing when pipe buffer is
-> > almost full") for non-blocking pipes, if the pipe has less space than
-> > is requested by user-space.
-> > 
-> > Rather than trying to write multiple of 4K chunks or smaller multiple of
-> > 2 chunks if < 4K, it just writes as much as possible in one go, i.e.
-> > 
-> > Before:
-> > 
-> >   $ ./x 40000
-> >   pipe capacity: 65536
-> >   write: writable 1, 40000 25536
-> >   write: writable 1, 24576 960
-> >   write: writable 0, 512 448
-> >   write: writable 0, 256 192
-> >   write: writable 0, 128 64
-> >   write: writable 0, 64 0
-> >   write: writable 0, -1 / Resource temporarily unavailable
-> > 
-> > After:
-> > 
-> >   $ ./x 40000
-> >   pipe capacity: 65536
-> >   write: writable 1, 40000 25536
-> >   write: writable 1, 25536 0
-> >   write: writable 0, -1 / Resource temporarily unavailable
-> > 
-> > This way, we get into the EAGAIN case much faster again, which was
-> > one reason for 170e6badb621.
-> > 
-> > Does this make more sense, and if so, why?  If this is really the
-> > way to go, the comment starting at line 634 (after applying your patch)
-> > will have to be changed as well.
+On Oct 24 17:59, Takashi Yano wrote:
+> Previously, lockf() printed a warning message when the number of locks
+> per file exceeds the limit (MAX_LOCKF_CNT). This patch makes lockf()
+> return ENOLCK in that case rather than printing the warning message.
 > 
-> Perhaps, I did not understand intent of 170e6badb621. Could you please
-> provide the test program (./x)? I will check my code.
-
-I attached it.  If you call it with just the number of bytes per write,
-e.g. `./x 12345', the writes are blocking.  If you add another parameter,
-e.g. `./x 12345 1', the writes are nonblocking.
-
-> > > +  int64_t unique_id = 0;
-> > 
-> > unique_id will be set by the following nt_create() anyway.
-> > Is there a case where it's not set?  I don't see this.
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-October/256528.html
+> Fixes: 31390e4ca643 ("(inode_t::get_all_locks_list): Use pre-allocated buffer in i_all_lf instead of allocating every lock.  Return pointer to start of linked list of locks.")
+> Reported-by: Christian Franke <Christian.Franke@t-online.de>
+> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/flock.cc | 68 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 60 insertions(+), 8 deletions(-)
 > 
-> Without initialization, compiler complains... due to false positive?
+> diff --git a/winsup/cygwin/flock.cc b/winsup/cygwin/flock.cc
+> index 5550b3a5b..b05005dab 100644
+> --- a/winsup/cygwin/flock.cc
+> +++ b/winsup/cygwin/flock.cc
+> @@ -610,17 +614,13 @@ inode_t::get_all_locks_list ()
+>  	  dbi->ObjectName.Buffer[LOCK_OBJ_NAME_LEN] = L'\0';
+>  	  if (!newlock.from_obj_name (this, &i_all_lf, dbi->ObjectName.Buffer))
+>  	    continue;
+> -	  if (lock - i_all_lf >= MAX_LOCKF_CNT)
+> -	    {
+> -	      system_printf ("Warning, can't handle more than %d locks per file.",
+> -			     MAX_LOCKF_CNT);
+> -	      break;
+> -	    }
+> +	  assert (lock - i_all_lf < MAX_LOCKF_CNT);
 
-It does for you?  For some reason it doesn't complain for me.
-I'm using a gcc 12.4.0 cross compiler on Linux.  Weird.
+Shouldn't that be a <=?  The original test above was off-by-one, right?
 
-Anyway, if it complains for you, it's ok to initialize, of course.
+But I still don't get it.  The successful assert() will end the process
+as well, just like api_fatal.  Shouldn't this situation just return
+ENOLCK as well, as the commit message suggests?
 
 
+Thanks,
 Corinna
-
---htsT6rwr7GCm+FE5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment; filename="x.c"
-
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/select.h>
-
-char buf[32 * 4096];
-
-void
-handler (int sig)
-{
-  fprintf (stderr, "SIGALRM ");
-}
-
-int
-main (int argc, char **argv)
-{
-  int fd[2], max;
-  ssize_t ret;
-  ssize_t to_write, written = 0;
-  struct sigaction sa = { 0 };
-  fd_set fds;
-  struct timeval tv = { 0 };
-
-  int nonblock = (argc == 3) ? O_NONBLOCK : 0;
-
-  if (argc < 2 || argc > 3)
-    return 1;
-  if (pipe2 (fd, nonblock) == -1)
-    return 2;
-  to_write = strtol (argv[1], NULL, 0);
-  if (to_write < 1 || to_write > sizeof buf)
-    return 3;
-  sa.sa_handler = handler;
-  if (sigaction (SIGALRM, &sa, NULL) == -1)
-    return 4;
-  max = 65536;//fcntl (fd[1], F_GETPIPE_SZ);
-  fprintf (stderr, "pipe capacity: %d\n", max);
-  do
-    {
-      sleep (1);
-      alarm (2);
-      FD_ZERO (&fds);
-      FD_SET (fd[1], &fds);
-      ret = select (fd[1] + 1, NULL, &fds, NULL, &tv);
-      fprintf (stderr, "write: writable %d, ", FD_ISSET (fd[1], &fds));
-      ret = write (fd[1], buf, to_write);
-      alarm (0);
-      if (ret < 0)
-	fprintf (stderr, "%zd / %s\n", ret, strerror (errno));
-      else
-	{
-	  written += ret;
-	  fprintf (stderr, "%zd %zd\n", ret, (ssize_t) max - written);
-	}
-    }
-  while (ret >= 0);
-}
-
---htsT6rwr7GCm+FE5--
