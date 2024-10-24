@@ -1,130 +1,81 @@
 Return-Path: <SRS0=lOez=RU=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.177])
-	by sourceware.org (Postfix) with ESMTPS id 25FE23858D21
-	for <cygwin-patches@cygwin.com>; Thu, 24 Oct 2024 08:58:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 25FE23858D21
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
+	by sourceware.org (Postfix) with ESMTPS id C87E73858D21
+	for <cygwin-patches@cygwin.com>; Thu, 24 Oct 2024 08:58:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C87E73858D21
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 25FE23858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.177
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1729760332; cv=none;
-	b=PZi/c2BbKpmCzmp9dOEA9qeDl5Ex5a2nyopjXcx16hY09mhMBA7cT5wW9uYJZJ888FtHyKoYetWpu7xl9PGhca5+beYTEqKmGnTfEfqlDIw1fatLYvifHPEuvZuTODpDXRrtuTJJzejaEoFGTLiRKFBMQJO3W5TS5YVpglnBKms=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C87E73858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1729760341; cv=none;
+	b=cGmI7UU/mpGwgkJpu4s8YRhGpJXgOxG9Ki5rUSgvFyCyvumIH6LYmOacVMsyouAuKCV4+nTd9mhOzals1z78mFHlmD6JUq0bnq6pM9j/6SLT2nPuwuo0CR07KU2OZvQOSgM3oG9zKtGThePM7ovrUb7zw446DkJEacDeUR1FCR8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1729760332; c=relaxed/simple;
-	bh=jETsOvS6GYVwXFufkyxyqPrDVGx3IPdiYnwwNqu6VxI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=LjqYBVldKUGqqatZ1ZAD9De1oUwG2kvyqcnFvjxU2YF1FAiU0RDEBOYUmlntVrPXMfEIr5SgNaXm7yM5RRDoxawi4IJe533N+1ymVam52JasHiJFciGdGSADQPAeQrglofnqCErGJlmvGmDpT/lKjZr+Q4Q/QhmfBl9PNX2JUpQ=
+	t=1729760341; c=relaxed/simple;
+	bh=WC9X2a1zgT/y/56I2GZnvWzmio83O8tziChFFuE2N8Q=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=h3r1+Rs2iRywFIxnBsZCm+nRGCV180sl2Fr7EdboK3KqdU6E1GWl72+VG4ys8phuuPVyeDdwh+QVm6rPV2ytePUuA0rdQCq1v/l6Waa7ORrdXRrYclhyCZYP92x8G6LHTSA/9Dtf4gxzNtxIcMcKg0yVXLyi0TzxQTh4nHCG5PU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
-          id <20241024085847256.UEYV.87244.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 24 Oct 2024 17:58:47 +0900
-Date: Thu, 24 Oct 2024 17:58:45 +0900
+Received: from HP-Z230 by mta-snd-e04.mail.nifty.com with ESMTP
+          id <20241024085856980.LZOJ.7571.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Thu, 24 Oct 2024 17:58:56 +0900
+Date: Thu, 24 Oct 2024 17:58:55 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v8] Cygwin: pipe: Switch pipe mode to blocking mode by
- default
-Message-Id: <20241024175845.74efaa1eb6ca067d88d28b51@nifty.ne.jp>
-In-Reply-To: <Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
-References: <20240921211508.1196-1-takashi.yano@nifty.ne.jp>
-	<Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
+Subject: Re: [PATCH 2/2] Cygwin: lockf: Make lockf() return ENOLCK when too
+ many locks
+Message-Id: <20241024175855.504e05b50902cbd978b217ce@nifty.ne.jp>
+In-Reply-To: <ZxfMeOTgFQHZYTCD@calimero.vinschen.de>
+References: <20241020092650.835-1-takashi.yano@nifty.ne.jp>
+	<20241020092650.835-3-takashi.yano@nifty.ne.jp>
+	<ZxfMeOTgFQHZYTCD@calimero.vinschen.de>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1729760327;
- bh=vATgHDtBlOE8lQr5TiOi0KlK15kM+X1Q1InzUwXD6rk=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1729760337;
+ bh=umGs66yxZtGzUHfQ1vr7GC60f6kmuQv3OGkb7gnfvYc=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=KbO8SsVhF8h8DgNgCKpgOkCd60YJpm0v4NQ1irTLybsXzEiGOtkciMmBd97gx+obdj9vE0Lk
- xDqyZYq32VCPPnPOMnDk+DR2L+aCG5NePGiOn5/KaNv4m5p6JBXqtCxYTrkRTlrYqZG4+uIobz
- wRbBgNU2rwtzPqD17Dzfm+YM6tlnZ6VPZPDhxeba+SwVy18lSD1ZR1VkZx9RsTmX0rvoD/GbKu
- mNYMSJrLqckCpaplGZyI0i4yV74OMspNRHojb+EHQhXrggk0xEUPiBH97kIQ+d9laU7Wzg8ShE
- MObVlERDY7Or6NtOhGmKWYplyP6dioNg3ze+mZD2HW2E+rhQ==
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=AsQL2QJ+afaMsWcAs2ayLx3SBKb7lA5Nab3a8TGQKOv2CGVHSBpGIeAvWKVCYvYMLm1NJboQ
+ 2Eu0R0kGCbI+l4fbxduDPoPsCPsRSxEolDm9lXHcQGKCxEuY8W7XHg8hBphDB4ZUPb0AEWvJ7W
+ LsOvwftNjGN6uqHeqmGM4loY652NUFJILVnFHZ16G9v8KE9TT+aDOfpc66xz0g72EsbqXTKNL2
+ /2vv6Mg7DQbsW/IArYZXDJAUgjNbgYb1fEUiDhIUKwQwHHapc2zhBUtpMMaKlt15Y/daKjezTR
+ gRtjpzIPECZsYpiaILzMy2yG78cqdK6mkm+nayBBEo1iW3Ug==
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 23 Oct 2024 11:00:33 +0200
-Corinna Vinschen wrote:
-> first of all, this is quite a piece of work, thanks for pulling
-> this through!
+On Tue, 22 Oct 2024 18:02:00 +0200
+Corinna Vinschen <corinna-cygwin@cygwin.com> wrote:
+> > @@ -503,7 +506,8 @@ inode_t::get (dev_t dev, ino_t ino, bool create_if_missing, bool lock)
+> >  }
+> >  
+> >  inode_t::inode_t (dev_t dev, ino_t ino)
+> > -: i_lockf (NULL), i_all_lf (NULL), i_dev (dev), i_ino (ino), i_cnt (0L)
+> > +: i_lockf (NULL), i_all_lf (NULL), i_dev (dev), i_ino (ino), i_cnt (0L),
+> > +  i_lock_cnt (0)
+> >  {
+> >    HANDLE parent_dir;
+> >    WCHAR name[48];
+> > @@ -610,17 +614,15 @@ inode_t::get_all_locks_list ()
+> >  	  dbi->ObjectName.Buffer[LOCK_OBJ_NAME_LEN] = L'\0';
+> >  	  if (!newlock.from_obj_name (this, &i_all_lf, dbi->ObjectName.Buffer))
+> >  	    continue;
+> > -	  if (lock - i_all_lf >= MAX_LOCKF_CNT)
+> > -	    {
+> > -	      system_printf ("Warning, can't handle more than %d locks per file.",
+> > -			     MAX_LOCKF_CNT);
+> > -	      break;
+> > -	    }
+> > +	  if (lock - i_all_lf > MAX_LOCKF_CNT)
+> > +	    api_fatal ("Can't handle more than %d locks per file.",
+> > +		       MAX_LOCKF_CNT);
+> 
+> I don't quite get that. The commit message says to return ENOLCK rather
+> than printing a warning, but here you call api_fatal(), which is even
+> more extrem?  Did I miss something?
 
-Thanks!
-
-> Just a few points:
-> 
-> On Sep 22 06:15, Takashi Yano wrote:
-> > @@ -370,35 +415,15 @@ fhandler_pipe::raw_read (void *ptr, size_t& len)
-> >  	      break;
-> >  	    case STATUS_PIPE_LISTENING:
-> >  	    case STATUS_PIPE_EMPTY:
-> > +	      /* Only for real_non_blocking_mode */
-> > +	      if (!is_nonblocking ())
-> > +		/* Should not reach here */
-> > +		continue;
-> 
-> Can you explain why this is necessary at all?
-
-Just in case. We do not need this. I will remove.
-
-> > @@ -439,24 +452,100 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
-> >    if (!len)
-> >      return 0;
-> 
-> This new implementation of raw_write() skips the mechanism added in
-> commit 170e6badb621 ("Cygwin: pipe: improve writing when pipe buffer is
-> almost full") for non-blocking pipes, if the pipe has less space than
-> is requested by user-space.
-> 
-> Rather than trying to write multiple of 4K chunks or smaller multiple of
-> 2 chunks if < 4K, it just writes as much as possible in one go, i.e.
-> 
-> Before:
-> 
->   $ ./x 40000
->   pipe capacity: 65536
->   write: writable 1, 40000 25536
->   write: writable 1, 24576 960
->   write: writable 0, 512 448
->   write: writable 0, 256 192
->   write: writable 0, 128 64
->   write: writable 0, 64 0
->   write: writable 0, -1 / Resource temporarily unavailable
-> 
-> After:
-> 
->   $ ./x 40000
->   pipe capacity: 65536
->   write: writable 1, 40000 25536
->   write: writable 1, 25536 0
->   write: writable 0, -1 / Resource temporarily unavailable
-> 
-> This way, we get into the EAGAIN case much faster again, which was
-> one reason for 170e6badb621.
-> 
-> Does this make more sense, and if so, why?  If this is really the
-> way to go, the comment starting at line 634 (after applying your patch)
-> will have to be changed as well.
-
-Perhaps, I did not understand intent of 170e6badb621. Could you please
-provide the test program (./x)? I will check my code.
-
-> 
-> > +               /* Pipe should be empty because reader is waiting the data. */
->                                                                     ^^^
->                                                                     for
-
-Fixed.
-
-> > @@ -925,7 +952,7 @@ fhandler_pipe::create (fhandler_pipe *fhs[2], unsigned psize, int mode)
-> >    HANDLE r, w;
-> >    SECURITY_ATTRIBUTES *sa = sec_none_cloexec (mode);
-> >    int res = -1;
-> > -  int64_t unique_id;
-> > +  int64_t unique_id = 0;
-> 
-> unique_id will be set by the following nt_create() anyway.
-> Is there a case where it's not set?  I don't see this.
-
-Without initialization, compiler complains... due to false positive?
+Yeah, this should not happen. So assert() might be better approach.
+Please review again for v2 patch. Problems in this patch also has
+been fixed.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
