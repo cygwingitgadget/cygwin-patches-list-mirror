@@ -1,151 +1,176 @@
-Return-Path: <SRS0=KPxw=RX=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.227.114])
-	by sourceware.org (Postfix) with ESMTPS id C37F13858429
-	for <cygwin-patches@cygwin.com>; Sun, 27 Oct 2024 08:57:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C37F13858429
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C37F13858429
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.114
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730019447; cv=none;
-	b=sAGExN99SsOdQC5cTMTfoHpCAIvfWhaSxxWfzyiTyBn0iwQxYFXZWBha3HikGUTxDieix8lQmP7etFLOOe/Xw/Kfe7wzymedQyFcNqE7tTpkONC60yqJ1gt670W+ExkkcnLessFSKUHsSP81FNmqlIKvuQH+ACkNHidI7POgN+Y=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1730019447; c=relaxed/simple;
-	bh=9nfR5HM7tcOMSKnyO/NyuyZCLCcgxQnMkIHUXjvKHXY=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=beprqr54itp7Nm1r8Jo/v6NrIE/BwHmIyY74OkiO7f2gSSqaU5uGdo13jGCbcSifnLqhil+ER7bJvwzBVWlZuXUuO+AQSbW4nEbeC8+CV+Z4/mSAp0TIMbAdVkSxmKKTNOkxW6I2cvvYV/mSn6DuJVCnPv8G6X3tyuZOhe9arQk=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-e02.mail.nifty.com with ESMTP
-          id <20241027085723048.ZRLB.44461.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 27 Oct 2024 17:57:23 +0900
-Date: Sun, 27 Oct 2024 17:57:22 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 21F3E3858D26; Mon, 28 Oct 2024 09:55:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 21F3E3858D26
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1730109334;
+	bh=dIuh+xrWvdKKakdgscbuoo3O9Bg7VJBuGQxPVesMMGk=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=j+O+4gxZbwk7LY6f6qAK/8FSg6QuOMx286XmxUTXY6MVj8DFUb7CE79tQWMC1GJtv
+	 2CRAdRrBdAS/Nz9O2uEINqvP020UT/00BLvTzCW8m7jXP4duJ97rZcVpxiCZ2+951H
+	 TiIB5Qmx9x327bnI74DqErx98HE//OW5SgvU5Rww=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 8F8BAA80A36; Mon, 28 Oct 2024 10:55:31 +0100 (CET)
+Date: Mon, 28 Oct 2024 10:55:31 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v8] Cygwin: pipe: Switch pipe mode to blocking mode by
  default
-Message-Id: <20241027175722.827ae77c67c88a112862e07e@nifty.ne.jp>
-In-Reply-To: <ZxofkPUww7LOZ9ZB@calimero.vinschen.de>
+Message-ID: <Zx9fk6yQ1etCVwek@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20240921211508.1196-1-takashi.yano@nifty.ne.jp>
-	<Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
-	<20241024175845.74efaa1eb6ca067d88d28b51@nifty.ne.jp>
-	<ZxofkPUww7LOZ9ZB@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730019443;
- bh=wzndV2y+yYi6QFBcX4sfh4ipbn2LlEI3ReTHjUDrlWw=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=EFAmrSCXw9ZX8T8CXIsgK0qB997QuY1gkdOZM+594X9aQ04subShiwSYvdEFkP9ThR5YpQKr
- Y9ZU87A/4Sz2MZprUINnXgZUsaTewRh4zWs0ADBhvWmuqQmZqYoenHG0ZsHN2AWqdVgKYWn8Ad
- Mrd6Ew95NbdDG/X7HCo34K9ntIFD/AJt/FRzSX/ZGZt49bug71oLiRdOYTxXp7/CTlkt2b6HDX
- Nq0Y3ayZrBwjexCHsmOPtQmHEJCzEzC7hVXOXyhRpnoO/wj55ct77rRpzqUOGjR8uyAygWvivB
- vr1XdxAN6xNwn/r3Yute5pqXPiIgWU3h4Lwl1lm5ODWbVXpA==
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+ <Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
+ <20241024175845.74efaa1eb6ca067d88d28b51@nifty.ne.jp>
+ <ZxofkPUww7LOZ9ZB@calimero.vinschen.de>
+ <20241027175722.827ae77c67c88a112862e07e@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241027175722.827ae77c67c88a112862e07e@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna,
+Hi Takashi,
 
-On Thu, 24 Oct 2024 12:21:04 +0200
-Corinna Vinschen wrote:
-> > > Before:
-> > > 
-> > >   $ ./x 40000
-> > >   pipe capacity: 65536
-> > >   write: writable 1, 40000 25536
-> > >   write: writable 1, 24576 960
-> > >   write: writable 0, 512 448
-> > >   write: writable 0, 256 192
-> > >   write: writable 0, 128 64
-> > >   write: writable 0, 64 0
-> > >   write: writable 0, -1 / Resource temporarily unavailable
-> > > 
-> > > After:
-> > > 
-> > >   $ ./x 40000
-> > >   pipe capacity: 65536
-> > >   write: writable 1, 40000 25536
-> > >   write: writable 1, 25536 0
-> > >   write: writable 0, -1 / Resource temporarily unavailable
-> > > 
-> > > This way, we get into the EAGAIN case much faster again, which was
-> > > one reason for 170e6badb621.
-> > > 
-> > > Does this make more sense, and if so, why?  If this is really the
-> > > way to go, the comment starting at line 634 (after applying your patch)
-> > > will have to be changed as well.
-> > 
-> > Perhaps, I did not understand intent of 170e6badb621. Could you please
-> > provide the test program (./x)? I will check my code.
+On Oct 27 17:57, Takashi Yano wrote:
+> Hi Corinna,
 > 
-> I attached it.  If you call it with just the number of bytes per write,
-> e.g. `./x 12345', the writes are blocking.  If you add another parameter,
-> e.g. `./x 12345 1', the writes are nonblocking.
+> On Thu, 24 Oct 2024 12:21:04 +0200
+> Corinna Vinschen wrote:
+> > > > Before:
+> > > > 
+> > > >   $ ./x 40000
+> > > >   pipe capacity: 65536
+> > > >   write: writable 1, 40000 25536
+> > > >   write: writable 1, 24576 960
+> > > >   write: writable 0, 512 448
+> > > >   write: writable 0, 256 192
+> > > >   write: writable 0, 128 64
+> > > >   write: writable 0, 64 0
+> > > >   write: writable 0, -1 / Resource temporarily unavailable
+> > > > 
+> > > > After:
+> > > > 
+> > > >   $ ./x 40000
+> > > >   pipe capacity: 65536
+> > > >   write: writable 1, 40000 25536
+> > > >   write: writable 1, 25536 0
+> > > >   write: writable 0, -1 / Resource temporarily unavailable
+> > > > 
+> > > > This way, we get into the EAGAIN case much faster again, which was
+> > > > one reason for 170e6badb621.
+> > > > 
+> > > > Does this make more sense, and if so, why?  If this is really the
+> > > > way to go, the comment starting at line 634 (after applying your patch)
+> > > > will have to be changed as well.
+> > > 
+> > > Perhaps, I did not understand intent of 170e6badb621. Could you please
+> > > provide the test program (./x)? I will check my code.
+> > 
+> > I attached it.  If you call it with just the number of bytes per write,
+> > e.g. `./x 12345', the writes are blocking.  If you add another parameter,
+> > e.g. `./x 12345 1', the writes are nonblocking.
+> 
+> Thanks for the test case.
+> I think I could restore the previous behaviour. Please try v9 patch.
+> 
+> CYGWIN_NT-10.0-19045 HP-Z230 3.5.4-1.x86_64 2024-08-25 16:52 UTC x86_64 Cygwin
+> $ ./a.exe 40000 1
+> pipe capacity: 65536
+> write: writable 1, 40000 25536
+> write: writable 1, 24576 960
+> write: writable 0, -1 / Resource temporarily unavailable
+> 
+> Just after the commit 170e6badb621 (master branch)
 
-Thanks for the test case.
-I think I could restore the previous behaviour. Please try v9 patch.
+Oops.  You tested in the wrong spot.  The original patch wasn't quite
+polished, the followup patches 1ed909e047a2 and 686e46ce7148 are also
+required to show the intended behaviour, and the intended behaviour is
+the same in the blocking and non-blocking case...
 
-CYGWIN_NT-10.0-19045 HP-Z230 3.5.4-1.x86_64 2024-08-25 16:52 UTC x86_64 Cygwin
-$ ./a.exe 40000 1
-pipe capacity: 65536
-write: writable 1, 40000 25536
-write: writable 1, 24576 960
-write: writable 0, -1 / Resource temporarily unavailable
+> $ ./a.exe 40000 1
+> pipe capacity: 65536
+> write: writable 1, 40000 25536
+> write: writable 1, 24576 960
+> write: writable 0, -1 / Resource temporarily unavailable
 
-Just after the commit 170e6badb621 (master branch)
-$ ./a.exe 40000 1
-pipe capacity: 65536
-write: writable 1, 40000 25536
-write: writable 1, 24576 960
-write: writable 0, -1 / Resource temporarily unavailable
+So this should actually be:
 
-With v8 patch:
-$ ./a.exe 40000 1
-pipe capacity: 65536
-write: writable 1, 40000 25536
-write: writable 1, 25536 0
-write: writable 0, -1 / Resource temporarily unavailable
+  pipe capacity: 65536
+  write: writable 1, 40000 25536
+  write: writable 1, 24576 960
+  write: writable 0, 512 448
+  write: writable 0, 256 192
+  write: writable 0, 128 64
+  write: writable 0, 64 0
+  write: writable 0, -1 / Resource temporarily unavailable
 
-With v9 patch:
-$ ./a.exe 40000 1
-pipe capacity: 65536
-write: writable 1, 40000 25536
-write: writable 1, 24576 960
-write: writable 0, -1 / Resource temporarily unavailable
+just as in the blocking case.
 
-However, I am not sure if this is the right thing.
-In Linux (debian), I got the same result as above:
-Linux debian2 6.1.0-26-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 (2024-09-30) x86_64 GNU/Linux
-$ ./a.out 40000 1
-pipe capacity: 65536
-write: writable 1, 40000 25536
-write: writable 1, 24576 960
-write: writable 0, -1 / Resource temporarily unavailable
+The ideal commit for testing the intendend behaviour is f78009cb1ccf,
+because that's your regression fix slowing down writes.
 
-But, even with v9 patch, the behaviour is not same as linux for another
-case.
+As I wrote in the commit message of 170e6badb621, the idea is to defer
+EAGAIN/EINTR when the write buffer starts to be filled up. 
 
-Please try:
-$ ./a.out `expr 65536 - 4096 + 543` 1
-pipe capacity: 65536
-write: writable 1, 61983 3553
-write: writable 0, 543 3010
-write: writable 0, 543 2467
-write: writable 0, 543 1924
-write: writable 0, 543 1381
-write: writable 0, 543 838
-write: writable 0, 543 295
-write: writable 0, -1 / Resource temporarily unavailable
+The code I came up with does NOT resemble Linux closely, because the way
+Linux pipe buffers work is by some simple but fast paging mechanism,
+which may even lead to pipes being smaller than PIPE_BUF.  Nevertheless,
+except in some border cases, Linux often still returns some non-0 value
+when our former code already returned EAGAIN/EINTR.
 
-$ ./a.out `expr 65536 - 4096 + 1234` 1
-pipe capacity: 65536
-write: writable 1, 62674 2862
-write: writable 0, 1234 1628
-write: writable 0, 1234 394
-write: writable 0, -1 / Resource temporarily unavailable
+While this was mainly a problem in the blocking case, I thought the
+buffer usage computation should be identical between blocking and
+non-blocking, just as on Linux.
 
-Is this realy an intentional behaviour? If so, I could not understand
-for what the behaviour is...
+> Please try:
+> $ ./a.out `expr 65536 - 4096 + 543` 1
+> pipe capacity: 65536
+> write: writable 1, 61983 3553
+> write: writable 0, 543 3010
+> write: writable 0, 543 2467
+> write: writable 0, 543 1924
+> write: writable 0, 543 1381
+> write: writable 0, 543 838
+> write: writable 0, 543 295
+> write: writable 0, -1 / Resource temporarily unavailable
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+The intended behaviour (after commit 686e46ce7148) is:
+
+  pipe capacity: 65536
+  write: writable 1, 61983 3553
+  write: writable 0, 2048 1505
+  write: writable 0, 1024 481
+  write: writable 0, 256 225
+  write: writable 0, 128 97
+  write: writable 0, 64 33
+  write: writable 0, 32 1
+  write: writable 0, -1 / Resource temporarily unavailable
+
+> $ ./a.out `expr 65536 - 4096 + 1234` 1
+> pipe capacity: 65536
+> write: writable 1, 62674 2862
+> write: writable 0, 1234 1628
+> write: writable 0, 1234 394
+> write: writable 0, -1 / Resource temporarily unavailable
+
+And here:
+
+  pipe capacity: 65536
+  write: writable 1, 62674 2862
+  write: writable 0, 2048 814
+  write: writable 0, 512 302
+  write: writable 0, 256 46
+  write: writable 0, 32 14
+  write: writable 0, 8 6
+  write: writable 0, 4 2
+  write: writable 0, 2 0
+  write: writable 0, -1 / Resource temporarily unavailable
+
+And if somebody has a better idea instead of the "next-less-power-of-2"
+writing, I'm all ears. We can always come up with another method, as
+long as it's the same usage in the blocking and non-blocking case.
+
+
+Thanks,
+Corinna
