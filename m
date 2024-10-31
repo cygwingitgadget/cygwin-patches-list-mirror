@@ -1,28 +1,28 @@
 Return-Path: <SRS0=MmMu=R3=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id EF8B63858CDB
-	for <cygwin-patches@cygwin.com>; Thu, 31 Oct 2024 16:34:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EF8B63858CDB
+Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [106.153.226.42])
+	by sourceware.org (Postfix) with ESMTPS id 795103858CDB
+	for <cygwin-patches@cygwin.com>; Thu, 31 Oct 2024 16:50:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 795103858CDB
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EF8B63858CDB
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730392494; cv=none;
-	b=RYzyFA6wmR1HUNXAgYKH4NrYnmn7q86ibIRApYfHDGOuy8Q5k9j7gsDKFJhcUjjqMa0JsDtyYqKxp+6TYJ52+nplPo7ZsTsnAUrlmBF/ml47NbxEDWb61jBOwOLI9K0ZZ0HnKaB3tIbw171LTAYIMhsyHwiTu2OmcCJl3sGauHs=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 795103858CDB
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730393442; cv=none;
+	b=eGJcfrShQooJat46N2rnbrTenYpUrXD71XZyGivUG7GBkcXnAWYHBni92DY6N8K8uvQkeR6MaxJKx0uVZHy/gVf1TeomRvSsjM/rrjyAwcAUwz2Sgcz6tvvMR6eo8k7Lscub0s+eMBN/qO2osKMhU67XNZ/bqXTjcaDvXD1zDLk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1730392494; c=relaxed/simple;
-	bh=lSG9dQw/QotdybLQ/PPinsCWNLAlDvylKk2WIZFZ2L8=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uVeFiNL+RIII/uBKx+3Wwap/LuPXdC4A7SegT4EuwLtSLCIibNl9ximG45WaN2wuOsyspDRcVwpBoWuKk/kdmeUU8BzNmThRQWml9k1vciFNaeQx6QTFJEgayXRqOceP19bZ4YLFJQqErcc3Mrbc52fjnCofWCeHrXumsexMP0g=
+	t=1730393442; c=relaxed/simple;
+	bh=Z7kpnmz/euH6HdktSOK3Hm+yzTTof55FVcEivUXThTk=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=v9H4dEtEAjdY1rS7BRlxaEv0VZW6HTl0Vi+CtrCqkir34M3wfyssYoLpuOyeHUW4QC2JADJFrvr7AcNQ/axaDEswghbUx4t0saBMo4Y6K7f4VHmlWihuwcE0k0QTRJMXRCoEzoXMVGg/eeqKRZf+hFbUnSeQWBwiH1FsB4mOXEE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20241031163450233.EGVL.116458.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 1 Nov 2024 01:34:50 +0900
-Date: Fri, 1 Nov 2024 01:34:49 +0900
+Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
+          id <20241031165034946.TOCP.118346.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 1 Nov 2024 01:50:34 +0900
+Date: Fri, 1 Nov 2024 01:50:33 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v8] Cygwin: pipe: Switch pipe mode to blocking mode by
  default
-Message-Id: <20241101013449.24ab0ac8929133f7af12220e@nifty.ne.jp>
+Message-Id: <20241101015033.f3c40670d8c48eff1c0a549c@nifty.ne.jp>
 In-Reply-To: <ZyNY36rwRtAVglBP@calimero.vinschen.de>
 References: <20240921211508.1196-1-takashi.yano@nifty.ne.jp>
 	<Zxi7MaoxQlVrIdPl@calimero.vinschen.de>
@@ -39,29 +39,90 @@ X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730392490;
- bh=jMrnDi9e63CBqAzS/I5+u0P0TbJsHLq0IMX01hmXWDM=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730393435;
+ bh=zD2oFBBX6+bGv0CGk7jTO+Ul63AEl8M/Yhp+OvcTL2Q=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=SbKC+KtATEiqU8EBMooTqJCA3RDF1dx3a7aIwXOnzwAObRVgmhm0aR7LeeZpAHsEAhwIGd0u
- JYxnJicp1vRH+lrzgsPwBkbtdQWLgNeomIczTBPTfexf/2nkzZP+GGKuQb+OL3Wyx6BNIVnA1l
- DkfPxfR6V+tWZTlxweax3TdXOP7s6ldWNAHMEv6sWwlD72ovUvinTVG7Y7VJbYRq3VHtmFeyYp
- Q+k/OQQDEx0xUFht8Bd2j9/XXY6run2HrvCD+JkEtw7CC+rx3W7um7uc3QJIP8XdOdY+JBjoiN
- FbQAzWjb/fg5nTN5/CPE5ytip1ilN1w6nNRGqHaO6fhA7AHw==
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=cTBK+bsY2psKVQG42+Aee65Hx52r+QeYaGAsg7eoUZbuV4b5DFidQEE5gZRAHuFq7+/ocZwk
+ X3JVBjjbb0jZjorzJ9VY1aHb/k4AOYzkQ6GulusHSU9FjfYzYvng3KoddASFa6UrLN3rWMhAWe
+ XO7v2fWp/3CHiAmc0OBa3ytSti0TxJV2+GT7onOLrzm2bhgIE5+apfRANAPtfs34cSvq4eg6LD
+ 3Z5SQpja4sORorzbI4cfdK4b32myBv/Xm0OxgpONqa8LFJg/6DjFwT50WYF9wQLfAczJGlxmxT
+ dpV/xaIAjR+zxeNqEt1YZJagNsRQODWtd+WLNFjsMS7CkDZg==
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 On Thu, 31 Oct 2024 11:15:59 +0100
 Corinna Vinschen wrote:
-> Do you get a different result?  Do you run this on an AMD CPU perhaps,
-> and the AMDs implement the SAL instruction differently?
+> Hi Takashi,
+> 
+> On Oct 31 17:36, Takashi Yano wrote:
+> > Hi Corinna,
+> > 
+> > On Mon, 28 Oct 2024 12:57:05 +0100
+> > Corinna Vinschen wrote:
+> > > On Oct 28 20:25, Takashi Yano wrote:
+> > > > Is the test case I used different from yours? Without the 2nd arg,
+> > > > $ ./a.exe 40000
+> > > > pipe capacity: 65536
+> > > > write: writable 1, 40000 25536
+> > > > write: writable 1, SIGALRM 24576 960
+> > > > write: writable 0, SIGALRM -1 / Interrupted system call
+> > > 
+> > > This is the same testcase I pasted last week:
+> > > 
+> > >   $ ./x 40000
+> > >   pipe capacity: 65536
+> > >   write: writable 1, 40000 25536
+> > >   write: writable 1, SIGALRM 24576 960
+> > >   write: writable 0, SIGALRM 512 448
+> > >   write: writable 0, SIGALRM 256 192
+> > >   write: writable 0, SIGALRM 128 64
+> > >   write: writable 0, SIGALRM 64 0
+> > >   write: writable 0, SIGALRM -1 / Interrupted system call
+> > > 
+> > > So why does it not get into the last else case after calling
+> > > pipe_data_available()?  Do you get a different return value
+> > > from pipe_data_available()? If so, what and why?
+> > 
+> > I checked the behaviour in my environment.
+> > __builtin_clzl(960) returns 54 in my environment.
+> > So, result of
+> > 	len1 = 1 << (31 - __builtin_clzl (avail));
+> > is undefined. If I modify this to:
+> > 	len1 = 1 << (63 - __builtin_clzl (avail));
+> > I can get:
+> > 
+> > $ ./a.exe 40000 1
+> > pipe capacity: 65536
+> > write: writable 1, 40000 25536
+> > write: writable 1, 24576 960
+> > write: writable 0, 512 448
+> > write: writable 0, 256 192
+> > write: writable 0, 128 64
+> > write: writable 0, 64 0
+> > write: writable 0, -1 / Resource temporarily unavailable
+> > 
+> > with the commit 686e46ce7148 as well as with my v9 patch.
+> > 
+> > Could you please fix?
+> 
+> Yes, I will, but [...]
 
-BTW, how could you know I am using AMD cpu? :)
+With your latest patch, my v9 patch works as expected.
 
-$ cat /proc/cpuinfo | grep 'model name' |uniq
-model name      : AMD Ryzen Threadripper 1950X 16-Core Processor
+$ ./a.exe 40000 1
+pipe capacity: 65536
+write: writable 1, 40000 25536
+write: writable 1, 24576 960
+write: writable 0, 512 448
+write: writable 0, 256 192
+write: writable 0, 128 64
+write: writable 0, 64 0
+write: writable 0, -1 / Resource temporarily unavailable
 
-Not ready for Windows 11 :(
+Thanks!
+
+Any other suggestions for v9 patch?
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
