@@ -1,92 +1,97 @@
 Return-Path: <SRS0=MmMu=R3=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.226.34])
-	by sourceware.org (Postfix) with ESMTPS id 0596C3857BA2
-	for <cygwin-patches@cygwin.com>; Thu, 31 Oct 2024 08:36:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0596C3857BA2
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.177])
+	by sourceware.org (Postfix) with ESMTPS id 443A2385772E
+	for <cygwin-patches@cygwin.com>; Thu, 31 Oct 2024 08:36:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 443A2385772E
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0596C3857BA2
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730363800; cv=none;
-	b=Ted/aOY2oKZqU0MKjgB6Hob6s+/QAXPDKCYczIhIbCpAHC4mPbZbEEQUV09sA1pTvqGmiMIF5Y/wcDD4qNFr+UiLjDXzrsSnYjtROKofwno06Uim6IpvW3dzO0Uca0zmuA/6qqDfbaYKAgUc1cEsuVKAGrtN+2ZrkEudj4oOi0Q=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 443A2385772E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.177
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730363809; cv=none;
+	b=H4eSYlmf4FcamS0egFs60QyFcxqUEqMjgkIGG+o4+oykUMZMpv4JNHyIE2VEWgB3RTlCCOA6HUIzRlGMWc7GLPXrDVoCB9FmVyvQu8F00dYC2+/Cfb/isPbhBGfenH3rbwTtA9pEI3S74RqxlxekF9yO5PSXDPlxXQt8CkU0Puk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1730363800; c=relaxed/simple;
-	bh=gGidVGvXwlxl2GNUJ74qA8aV1uPQacCc44KUYt4q8fw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Z1fb1eUdWkXxp1ht+YbfaPATDH+sHNliwOwqALr65jkvYNbUssOz7rtJReSVkEg8QEw6Iz4GoTv/anikIeQkuGPqxOo15vaJ8nWN4Z7A24JicnV0OF3VjIcHSFliFT9vXy7rWh5ISMKk4yHvagL2M7Cylocag8kzM6/g6L4JG4g=
+	t=1730363809; c=relaxed/simple;
+	bh=MAopVh9XEmI3QbiO3e7hX4Tza5lRUq1rp+5ZYB9Uc0s=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=TXQsm3KAPpX9iWjexiw3+Ci9J0BkNcxR1c9HY31xskGQZZWzfnIxwDBC7ehH6Da7z/X8VbyXSF+MiINaU4U8ZtMJvKL8mi4xXSf38ltmT4MeIDqx+e9GDanaPs/0l+5oALD/sVpFcGIhC50cmVHmTio11H8OVe1+SH8Gemx3mbU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-e02.mail.nifty.com
-          with ESMTP
-          id <20241031083629167.SKPQ.44461.localhost.localdomain@nifty.com>;
-          Thu, 31 Oct 2024 17:36:29 +0900
+Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
+          id <20241031083636587.ZRFL.87244.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Thu, 31 Oct 2024 17:36:36 +0900
+Date: Thu, 31 Oct 2024 17:36:36 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH v3_5-branch] Cygwin: cygfe: Fix a bug that signal handler destroys fpu states
-Date: Thu, 31 Oct 2024 17:16:36 +0900
-Message-ID: <20241031081646.958-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730363789;
- bh=V82H/VvftsFOvvQTyAIb/zbKjTDKBErbcqBRJeO/Xtk=;
- h=From:To:Cc:Subject:Date;
- b=sTZ7zD/PiDG7QnJ/CrR/aLJOIpfwXbcpXeko1ofNPVvHptXbi6isIgphuzHApM01EzuA15OH
- NP47du5i+jGQtoC2Dv4svk/b5wp0uISs93qy3aNPqDPJOHR5CyRZTx0HdzyZcG6VdXiUPwtXMM
- MQxgqbup7UfJbZwKy60C2YPtdFXhIvTWqkh5uhwfxzDDscxtbefXbGrvupTmwi8dcdHm0lLIIz
- hP/3e67uPVoLy3MCxexVZl2tHWlNnhYREeZAKmLReKCmRBzAwUSOnhksWWNPZwUWJXFq4YEqkm
- oDvQBdOMZGHWdecz+d7f5YeWsDthAqsx1ahQxnW8kZ4LTRaw==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3] Cygwin: sigfe: Fix a bug that signal handler
+ destroys fpu states
+Message-Id: <20241031173636.a174c2addf42ab8fde68ae81@nifty.ne.jp>
+In-Reply-To: <Zxtbry_Qb70ouRw-@calimero.vinschen.de>
+References: <20241014063914.6061-1-takashi.yano@nifty.ne.jp>
+	<ZxfLig9716RXtWLu@calimero.vinschen.de>
+	<20241024175802.a7d18a8e604ff2d18221cfcb@nifty.ne.jp>
+	<Zxtbry_Qb70ouRw-@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730363796;
+ bh=ikvkO8Tdt6lvDHZXK3Mf1hPRffogvw2wmq0CbIofMo8=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=jYTWSCk9gpDKACxP6DGoZEf3knIr/2hlqI4cDDHe4z3R7GJgjZGjiOH7QaOHF2vFG2yvf0KT
+ L/w0w99pQdIIyCzlx9cK7u1UH9JTGkw+pQ4QvPk2QcdtQ0vrHK4VpUd/8kBg1UcjT4E0izRD5X
+ ZTkIU+3+rBVIbFHPxzboES4GsuC/Tr+n3ewZ+u0i1Ndyp09+UcWvikyHxEO4a8SPA/vK+SgzmS
+ GCZ7ag0jxHg3y14+KQ0ZlHGjys7gaZbUu9gtFWYmqCJPcju6f03s8QqsdlOL4icYt7PcfSX0+S
+ LalqMMPDMUSVLB7+iov4BP5SYeCwMdwvdDoJSz+R0Tx5S7sQ==
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, sigfe had a long-standing problem that the signal handler
-destroys fpu states. This is caused by fninit instruction in sigdelayed.
-With this patch, instead of fnstcw/fldcw and fninit, fnstenv/fldenv
-are used to maintain fpu states.
-Addresses: https://cygwin.com/pipermail/cygwin/2024-October/256503.html
+Hi Corinna,
 
-Fixes: ed89fbc3ff11 ("* gendef (sigdelayed (x86_64)): Save and restore FPU control word.")
-Reported-by: Christian Franke <Christian.Franke@t-online.de>
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/scripts/gendef | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+On Fri, 25 Oct 2024 10:49:51 +0200
+Corinna Vinschen wrote:
+> On Oct 24 17:58, Takashi Yano wrote:
+> > On Tue, 22 Oct 2024 17:58:02 +0200
+> > Corinna Vinschen <corinna-cygwin@cygwin.com> wrote:
+> > > Hi Takashi,
+> > > 
+> > > big change, so, honest question: Do you think this is safe for 3.5.5?
+> > > 
+> > > This certainly also requires an entry in the release text and there
+> > > are just a few minor typos in comments, see below.
+> > 
+> > What about adopting my first idea to 3.5.5
+> > https://cygwin.com/pipermail/cygwin/2024-October/256506.html
+> > and applying this patch to 3.6.0 branch?
+> 
+> Admittedly, I'm also not deep in FPU stuff.
+> 
+> fnstenv/fldenv and dropping fninit look like a simple approach to fix
+> the worst problem.  Did you just discuss this on the mailing list or did
+> you check that it actually fixes the reported problem?
 
-diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
-index 3b1f8b9da..c2ad5c75e 100755
---- a/winsup/cygwin/scripts/gendef
-+++ b/winsup/cygwin/scripts/gendef
-@@ -213,10 +213,10 @@ sigdelayed:
- 	.seh_pushreg %rbx
- 	pushq	%rax
- 	.seh_pushreg %rax
--	subq	\$0x128,%rsp
--	.seh_stackalloc 0x128
--	stmxcsr	0x124(%rsp)
--	fnstcw	0x120(%rsp)
-+	subq	\$0x148,%rsp
-+	.seh_stackalloc 0x148
-+	stmxcsr	0x13c(%rsp)
-+	fnstenv	0x120(%rsp)
- 	movdqa	%xmm15,0x110(%rsp)
- 	movdqa	%xmm14,0x100(%rsp)
- 	movdqa	%xmm13,0xf0(%rsp)
-@@ -275,10 +275,9 @@ sigdelayed:
- 	movdqa	0xf0(%rsp),%xmm13
- 	movdqa	0x100(%rsp),%xmm14
- 	movdqa	0x110(%rsp),%xmm15
--	fninit
--	fldcw	0x120(%rsp)
--	ldmxcsr	0x124(%rsp)
--	addq	\$0x128,%rsp
-+	fldenv	0x120(%rsp)
-+	ldmxcsr	0x13c(%rsp)
-+	addq	\$0x148,%rsp
- 	popq	%rax
- 	popq	%rbx
- 	popq	%rcx
+I tested locally using Christian's test case and confirmed that
+the problem has been fixed as well as that no new problem occurs.
+
+> But either way, I wonder if it's worth the effort to have two different
+> solutions.  This isn't a regression, so we don't have to fix this ASAP
+> in 3.5.5.  It could easily wait a version.
+> 
+> So I'm thinking we should go with your sleek new code in 3.6 and let
+> this simmer for a while, so it's put to use by people running 3.6
+> versions.
+> 
+> Does that sound right?
+
+Hmm, this is not a regression but a long-standing bug which can
+easily be fixed. Also, there is only a very small risk of regression
+with the fnstenv/fldenv patch. Moreover, the bug causes critical
+miscalculations to result in long double processing.
+
+So, I think it is better to apply the v3_5-branch patch (I have just
+submitted) for cygwin-3_5-branch, and to apply the v3 patch (I already
+submitted) to the master branch. v3_5-branch patch is simple and small,
+so it will not be so painful to maintain.
+
+Don't you think so?
+
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
