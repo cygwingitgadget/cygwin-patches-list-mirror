@@ -1,36 +1,36 @@
 Return-Path: <SRS0=2IHS=R6=maxrnd.com=mark@sourceware.org>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 39C303858D26
-	for <cygwin-patches@cygwin.com>; Sun,  3 Nov 2024 08:44:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 39C303858D26
+	by sourceware.org (Postfix) with ESMTPS id EC72A3858D26
+	for <cygwin-patches@cygwin.com>; Sun,  3 Nov 2024 09:31:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC72A3858D26
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 39C303858D26
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EC72A3858D26
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730623464; cv=none;
-	b=M+FLoNr2/tzqHUGcxCsl1WRxNcVHyPTO30BUMrPN6X4Sk5FIrIvaUPSum1i85yNzwINKALB+AuTVPNjZNCfP/5ci0vVyXpBVfesrBKH4LNyOB8Jx4rA9ZweoNXkS2WEpzQz0qas07tgBXHNOkQ1zjkTk74yKiuhWJgKkOFCAWO0=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730626296; cv=none;
+	b=gsyUu15H/1GcYoIaIoDrSpiqZETmGDXzNvo4NQDMA4lUTXtd2EumVhNc2JMNxKVQbg6Qd8hfeVcmrQ4oCxg95WbG6hATrnRDWytPTm/6oLBRNOV6gD0HIRx27HBBWnG/bbfivr9v5n6hMf/OSo2di7tkxkvLFp2mbYjXMVtp934=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1730623464; c=relaxed/simple;
-	bh=7mtUjCnVU6IY2ccQ3Mo6ERobR2jHb6akIZdabYYsS/s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Y0Nv4Fh9J2zck1biexlYxBJOgCQgQHKZGnqAJBHtB72y3fOtGBAZdR8RxSHNMFVOxMKSZ6SPR6/hDiXikV3Ip+5gkl2Bcr608WkOj3Epn26rC1Ya+L2a/1iL0wJLn8LuX5YQL+zNSTP1CfGAZ/5lr3tU1kKq29B1yW2Hz0WAxB0=
+	t=1730626296; c=relaxed/simple;
+	bh=re0eN3XGDc85HhPqLp8ZYumPwHAD5HsI3pwATfXjH8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Z0BpAG/VP1FZVTKwYeZYvGGaQ0rMDWix5lH0J1dVAJHY8iGuMZr6qaVYw9BRjr1xujioP+4B/r9Ttfca8o+Xs9aFp+SnvKNEM9Q1saaB242trSzE21LG47AtRt1bfk4kIa9JmHRhtiejzAanAEX1/UwNJUgJJYf+RGD5+n8YGAY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
 Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 4A38lWMn060951
-	for <cygwin-patches@cygwin.com>; Sun, 3 Nov 2024 01:47:32 -0700 (PDT)
+	by m0.truegem.net (8.12.11/8.12.11) id 4A39YiZw068249
+	for <cygwin-patches@cygwin.com>; Sun, 3 Nov 2024 01:34:44 -0800 (PST)
 	(envelope-from mark@maxrnd.com)
 Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdewZF0F; Sun Nov  3 00:47:28 2024
-Message-ID: <c86bcce2-e705-41e2-a918-d97debc7362b@maxrnd.com>
-Date: Sun, 3 Nov 2024 01:44:17 -0700
+ via SMTP by m0.truegem.net, id smtpd2zVi9s; Sun Nov  3 01:34:43 2024
+Message-ID: <8b57844e-c9fe-4135-99fc-8a1b98be21be@maxrnd.com>
+Date: Sun, 3 Nov 2024 01:31:32 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Cygwin: Change pthread_sigqueue() to accept thread id
+Subject: Re: [PATCH] Cygwin: Minor updates to load average calculations
 To: cygwin-patches@cygwin.com
-References: <20240919091331.1534-1-mark@maxrnd.com>
- <Zxe6gsvAQp7HaeO7@calimero.vinschen.de>
+References: <20241009051950.3170-1-mark@maxrnd.com>
+ <Zxe9cMw7fNi8qImG@calimero.vinschen.de>
 Content-Language: en-US
 From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <Zxe6gsvAQp7HaeO7@calimero.vinschen.de>
+In-Reply-To: <Zxe9cMw7fNi8qImG@calimero.vinschen.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
@@ -39,55 +39,71 @@ List-Id: <cygwin-patches.cygwin.com>
 
 Hi Corinna,
 
-On 10/22/2024 7:45 AM, Corinna Vinschen wrote:
+On 10/22/2024 7:57 AM, Corinna Vinschen wrote:
 > Hi Mark,
 > 
-> Thanks for looking into this.
+> On Oct  8 22:19, Mark Geisert wrote:
+[...]
+>> Some older versions of Windows we still support have a different
 > 
-> On Sep 19 02:13, Mark Geisert wrote:
->> Change the first parameter of pthread_sigqueue() to be a thread id rather
->> than a thread pointer. The change is to match the Linux implementation of
->> this function.
->>
->> The user-visible function prototype is changed. Simple list iteration is
->> added to the threadlist code. A lookup-by-id function is added to class
->> pthread. The pthread_sigqueue() function is modified to work with a
->> passed-in thread id rather than an indirect thread pointer as before.
->> (It was "pthread_t *thread", i.e., class pthread **.) The release note
->> for Cygwin 3.6.0 is updated.
-> 
-> Even if the old prototype was wrong, we probably have to keep it for
-> backward compatibility.  As unlikely as it seems, but there may be
-> binaries out there actually using the old prototype.
-> 
-> We can discuss this probability, but assuming we want to keep backward
-> compat at all cost, we would have to
+> Can you be a bit more specific here, i.e., which Windows versions?
 
-No need to discuss. I'm happy keeping backward compatibility.
+FTR the only example I have is one of my systems running Win10 Pro 21H1. 
+  I solicited more input on the main mailing list but got few replies, 
+none of which exhibited the issue at hand.
 
-> - create a new function like pthread_sigqueue_with_correct_prototype (heh)
-> 
-> - Add this function to cygwin.din as exported symbol
-> 
-> - Add a matching entry to NEW_FUNCTIONS in Makefile.am, e.g.,
-> 
->      pthread_sigqueue=pthread_sigqueue_with_correct_prototype,
-> 
-> - Implement either pthread_sigqueue_with_correct_prototype calling
->    pthread_sigqueue or vice versa, whatever makese more sense.
+In the v2 patch incoming soon, I've mentioned the problematic Windows 
+version in the top matter and in the code comments.
 
-I appreciate your redirecting me towards an acceptable solution. I've 
-re-implemented the fix as you've indicated but there's one thing I 
-cannot figure out. (BTW I implemented a new pthread_sigqueue_portable() 
-calling existing pthread_sigqueue().)
+>> location for the '% Processor Time' counter and are missing the
+>> 'Processor Queue Length' counter entirely.  Code is changed to support
+>> both possible locations of the former and treat the latter as always
+>> reporting 0.0.
+[..]
+>> @@ -101,24 +123,25 @@ static bool get_load (double *load)
+>>     if (ret != ERROR_SUCCESS)
+>>       return false;
+>>   
+>> -  /* Estimate the number of running processes as (NumberOfProcessors) * (%
+>> -     Processor Time) */
+>> +  /* Estimate the number of running processes as
+>> +     (NumberOfProcessors) * (% Processor Time) */
+>>     PDH_FMT_COUNTERVALUE fmtvalue1;
+>>     ret = PdhGetFormattedCounterValue (counter1, PDH_FMT_DOUBLE, NULL, &fmtvalue1);
+>>     if (ret != ERROR_SUCCESS)
+>>       return false;
+>> -
+>>     double running = fmtvalue1.doubleValue * wincap.cpu_count () / 100;
+>>   
+>> -  /* Estimate the number of runnable processes using ProcessorQueueLength */
+>> +  /* Estimate the number of runnable threads using ProcessorQueueLength */
+>>     PDH_FMT_COUNTERVALUE fmtvalue2;
+>> +  fmtvalue2.longValue = 0;
+> 
+> Make that
+> 
+>       PDH_FMT_COUNTERVALUE fmtvalue2 = { 0 };
+> 
+Done.
 
-In cygwin/include/pthread.h, should both function names appear or just 
-pthread_sigqueue? If the latter, which version of prototype? It seems 
-problematic: We want the include file to have the new, portable, 
-prototype for pthread_sigqueue() don't we? Doesn't that require that the 
-original pthread_sigqueue() be renamed to something else and have it 
-call the new pthread_sigqueue()? Maybe that changes one or more of the 
-steps you wrote above?
+>>     ret = PdhGetFormattedCounterValue (counter2, PDH_FMT_LONG, NULL, &fmtvalue2);
+>>     if (ret != ERROR_SUCCESS)
+>> -    return false;
+>> +    ; /* don't return false, just treat as if zero was read */
+>>   
+>> -  LONG rql = fmtvalue2.longValue;
+>> +  /* Divide the runnable thread count among NumberOfProcessors */
+>> +  double rql = (double) fmtvalue2.longValue / (double) wincap.cpu_count ();
+>>   
+>> -  *load = rql + running;
+>> +  *load = running + rql;
+> 
+> Not sure I'm understanding this right, but wouldn't a default queue length
+> of 1 make more sense?
+
+I don't think so. That would make an idle system show a load of 1/ncpus 
+because of the division a couple lines up from the end.
 Thanks & Regards,
 
-..mark
+.mark
+
