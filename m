@@ -1,156 +1,134 @@
-Return-Path: <SRS0=qSGf=SB=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [106.153.227.38])
-	by sourceware.org (Postfix) with ESMTPS id B54673858D28
-	for <cygwin-patches@cygwin.com>; Wed,  6 Nov 2024 13:53:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B54673858D28
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B54673858D28
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.38
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730901187; cv=none;
-	b=RP6YGpPQhl48YbQJ/v0wjKmTTdKQcWIuwYB3QNRz+Lb4tHfaHixq8FvUNdpfDwpJbYK0NNDHKCWqy+0nQJDqC7rwnIqTCopsoPRz9Essh7uBxiUex6QFwUuNk2f8lAadtPMNcknkhEDlHfD8ORgyJJo5QfP0YQpmZOyLHodcSS4=
+Return-Path: <SRS0=bjVK=SC=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 578833858D20
+	for <cygwin-patches@cygwin.com>; Thu,  7 Nov 2024 07:29:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 578833858D20
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 578833858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1730964607; cv=none;
+	b=A1QYC7KilDyaUTStm1Z9mp3FDsUp+jsp+iXAp+BRYjJsZxKH/atDyvwC+VVrxGHWFKa5e2knIoD8Pr7vRAI3jkG6t8M0dhtIzLQX6dyKhfzOaBCkK4H4mQMDz8GsId3Hb7Ic5fSrv14zjWst0Q20rOMJvzOI3XLtQodYAzllIus=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1730901187; c=relaxed/simple;
-	bh=5A4JfiRbbyeWARP3zgOM/RK9xmc98tqJlsiEhELkpF4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=rsGUyLN6PIwjJ9iU18U/UWvIlKokES9yYZeUJHh2x7jveiHAC2mYiVdRRRXBI5mugA1A5nEyCW7u8wibXW2Tt1KX0CADLRyRR25T7a8Ee0ptMzu+s5lq9UFVTHXKzIpu17oW2HUyqwpPTAeiE3N954T8jeC2J+iVnx9GQ0UOTbM=
+	t=1730964607; c=relaxed/simple;
+	bh=tZ02rI6v2P2mzPuuN7tG1MdYgPwn/RDF91p9ce5370g=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=XOfAWLeRXvQ2BVn9rksaXxhUMdoBDVlxIXSvM5pArdLyM+A0TVKQ9CqVR7aw3IIoKke4qRJOsU601AOf/v12V4M/2lcej/IjSe+CEyz1MtyEgL1w9qkfBQfgOQoW74J8CgNMfak+TFLHimdwgMDKc4OX7VGC8YPV0AflC+goqWE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-w06.mail.nifty.com
-          with ESMTP
-          id <20241106135300397.NEJ.13595.localhost.localdomain@nifty.com>;
-          Wed, 6 Nov 2024 22:53:00 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 4A77WxwQ055631;
+	Wed, 6 Nov 2024 23:32:59 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdZtJFBQ; Wed Nov  6 23:32:55 2024
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Use GetCurrentProcessId() instead of myself->dwProcessId
-Date: Wed,  6 Nov 2024 22:52:33 +0900
-Message-ID: <20241106135242.690-1-takashi.yano@nifty.ne.jp>
+Cc: Mark Geisert <mark@maxrnd.com>,
+        Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH v3] Cygwin: Change pthread_sigqueue() to accept thread id
+Date: Wed,  6 Nov 2024 23:29:18 -0800
+Message-ID: <20241107072935.1630-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1730901180;
- bh=Yf++L9pIQYeAOih+dwmqPJLg6Ob/IqCTYflpGEF4k94=;
- h=From:To:Cc:Subject:Date;
- b=bQWNCGLU7ClBfNu1VNE4QviyBihm+BN673ZHLDQO1fd4pUN+8kpeXZbehRTjFyGVhtVDnbAt
- geHlBGTyAJU52lghPnv5zuZrl1uMzPnHh18egQV6KUPI0G6OkiTrFaik6t+8cioo1t3HMMdJ+W
- 1Z62bcg83h5Xv+WBgirfzfAlZ9nSTRQVtCDC8jV4+Og4VIUxbuFy6PSY1CHkSeHs5zaNhecUB+
- yksRYQD8cwK4ERU4blZX4jTSQT1WVjjGwwNfuobr0yynkmWZiV5uPceIhzkIWy6qlk6qFBzLNS
- xNe4UsM4pxsnu3Mg11Afbu6cjgcOWAiTl4c/VvlAq77m8+xA==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The commit 90ddab98780d uses myself->dwProcessId to get windows pid.
-However, it will be overridden in stub process if exec() is called.
-With this patch, GetCurrentProcessId() instead of myself->dwProcessId.
+Change the first parameter of pthread_sigqueue() to be a thread id rather
+than a thread pointer. The change is to match the Linux implementation of
+this function.
 
-Fixes: 90ddab98780d ("Cygwin: console: Re-fix open() failure on exec() by console owner")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+The user-visible function prototype is changed in include/pthread.h.
+The pthread_sigqueue() function is modified to work with a passed-in thread
+id rather than an indirect thread pointer as before.  (It was
+"pthread_t *thread", i.e., class pthread **.)  The release note for Cygwin
+3.5.5 is updated.  CYGWIN_VERSION_API_MINOR is bumped to 351.
+
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Addresses: https://cygwin.com/pipermail/cygwin/2024-September/256439.html
+Signed-off-by: Mark Geisert <mark@maxrnd.com>
+Fixes: 2041af1a535a (cygwin.din (pthread_sigqueue): Export.)
+
 ---
- winsup/cygwin/fhandler/console.cc | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ winsup/cygwin/include/cygwin/version.h | 3 ++-
+ winsup/cygwin/include/pthread.h        | 2 +-
+ winsup/cygwin/release/3.5.5            | 3 +++
+ winsup/cygwin/thread.cc                | 8 ++++----
+ 4 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 7ac926554..4efba61e2 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -85,7 +85,7 @@ fhandler_console::attach_console (DWORD owner, bool *err)
-   if (!attached)
-     {
-       resume_pid =
--	get_console_process_id (myself->dwProcessId, false, false, false);
-+	get_console_process_id (GetCurrentProcessId (), false, false, false);
-       FreeConsole ();
-       BOOL r = AttachConsole (owner);
-       if (!r)
-@@ -110,7 +110,7 @@ fhandler_console::detach_console (DWORD resume_pid, DWORD owner)
-       FreeConsole ();
-       AttachConsole (resume_pid);
-     }
--  else if (myself->dwProcessId != owner)
-+  else if (GetCurrentProcessId () != owner)
-     FreeConsole ();
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index fb821a681..c70d0ee15 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -485,12 +485,13 @@ details. */
+   348: Add c8rtomb, mbrtoc.
+   349: Add fallocate.
+   350: Add close_range.
++  351: Change pthread_sigqueue first arg type.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 350
++#define CYGWIN_VERSION_API_MINOR 351
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
+index 66d367d62..a0ec32526 100644
+--- a/winsup/cygwin/include/pthread.h
++++ b/winsup/cygwin/include/pthread.h
+@@ -244,7 +244,7 @@ int pthread_getattr_np (pthread_t, pthread_attr_t *);
+ int pthread_getname_np (pthread_t, char *, size_t) __attribute__((__nonnull__(2)));
+ int pthread_setaffinity_np (pthread_t, size_t, const cpu_set_t *);
+ int pthread_setname_np (pthread_t, const char *) __attribute__((__nonnull__(2)));
+-int pthread_sigqueue (pthread_t *, int, const union sigval);
++int pthread_sigqueue (pthread_t, int, const union sigval);
+ int pthread_timedjoin_np (pthread_t, void **, const struct timespec *);
+ int pthread_tryjoin_np (pthread_t, void **);
+ #endif
+diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
+index 9cc51dc2e..2ca4572db 100644
+--- a/winsup/cygwin/release/3.5.5
++++ b/winsup/cygwin/release/3.5.5
+@@ -30,3 +30,6 @@ Fixes:
+ 
+ - Fix a problem that signal handler destroys the FPU context.
+   Addresses: https://cygwin.com/pipermail/cygwin/2024-October/256503.html
++
++- Fix type of pthread_sigqueue() first parameter to match Linux.
++  Addresses: https://cygwin.com/pipermail/cygwin/2024-September/256439.html
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index 0c6f57032..9ee96504b 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -3301,13 +3301,13 @@ pthread_sigmask (int operation, const sigset_t *set, sigset_t *old_set)
  }
  
-@@ -395,7 +395,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-       }
-   };
-   termios &ti = ttyp->ti;
--  while (con.owner == myself->dwProcessId)
-+  while (con.owner == GetCurrentProcessId ())
-     {
-       DWORD total_read, n, i;
+ int
+-pthread_sigqueue (pthread_t *thread, int sig, const union sigval value)
++pthread_sigqueue (pthread_t thread, int sig, const union sigval value)
+ {
+   siginfo_t si = {0};
  
-@@ -709,7 +709,7 @@ fhandler_console::set_unit ()
- 		unit = device::minor (cs->tty_min_state.ntty);
- 	      shared_console_info[unit] = cs;
- 	      if (created)
--		con.owner = myself->dwProcessId;
-+		con.owner = GetCurrentProcessId ();
- 	    }
- 	}
-     }
-@@ -917,10 +917,10 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
-   /* conmode can be tty::restore when non-cygwin app is
-      exec'ed from login shell. */
-   tty::cons_mode conmode =
--    (con.owner == myself->dwProcessId) ? tty::restore : tty::cygwin;
-+    (con.owner == GetCurrentProcessId ()) ? tty::restore : tty::cygwin;
-   set_output_mode (conmode, ti, p);
-   set_input_mode (conmode, ti, p);
--  set_disable_master_thread (con.owner == myself->dwProcessId);
-+  set_disable_master_thread (con.owner == GetCurrentProcessId ());
+-  if (!pthread::is_good_object (thread))
++  if (!pthread::is_good_object (&thread))
+     return EINVAL;
+-  if (!(*thread)->valid)
++  if (!thread->valid)
+     return ESRCH;
+ 
+   si.si_signo = sig;
+@@ -3315,7 +3315,7 @@ pthread_sigqueue (pthread_t *thread, int sig, const union sigval value)
+   si.si_value = value;
+   si.si_pid = myself->pid;
+   si.si_uid = myself->uid;
+-  return (int) sig_send (NULL, si, (*thread)->cygtls);
++  return (int) sig_send (NULL, si, thread->cygtls);
  }
  
- /* Return the tty structure associated with a given tty number.  If the
-@@ -1774,7 +1774,7 @@ fhandler_console::open (int flags, mode_t)
-   acquire_output_mutex (mutex_timeout);
- 
-   if (!process_alive (con.owner))
--    con.owner = myself->dwProcessId;
-+    con.owner = GetCurrentProcessId ();
- 
-   /* Open the input handle as handle_ */
-   bool err = false;
-@@ -1838,7 +1838,7 @@ fhandler_console::open (int flags, mode_t)
- 
-   set_open_status ();
- 
--  if (myself->dwProcessId == con.owner && wincap.has_con_24bit_colors ())
-+  if (GetCurrentProcessId () == con.owner && wincap.has_con_24bit_colors ())
-     {
-       bool is_legacy = false;
-       DWORD dwMode;
-@@ -1869,7 +1869,7 @@ fhandler_console::open (int flags, mode_t)
-   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
- 		get_output_handle ());
- 
--  if (myself->dwProcessId == con.owner)
-+  if (GetCurrentProcessId () == con.owner)
-     {
-       if (GetModuleHandle ("ConEmuHk64.dll"))
- 	hook_conemu_cygwin_connector ();
-@@ -1983,9 +1983,9 @@ fhandler_console::close ()
-       NTSTATUS status;
-       status = NtQueryObject (get_handle (), ObjectBasicInformation,
- 			      &obi, sizeof obi, NULL);
--      if ((NT_SUCCESS (status) && obi.HandleCount == 1
--	   && (dev_t) myself->ctty == get_device ())
--	  || myself->dwProcessId == con.owner)
-+      if (NT_SUCCESS (status)
-+	  && obi.HandleCount <= (myself->cygstarted ? 2 : 3)
-+	  && (dev_t) myself->ctty == get_device ())
- 	{
- 	  /* Cleaning-up console mode for cygwin apps. */
- 	  set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
-@@ -1994,7 +1994,7 @@ fhandler_console::close ()
- 	}
-     }
- 
--  if (shared_console_info[unit] && con.owner == myself->dwProcessId)
-+  if (shared_console_info[unit] && con.owner == GetCurrentProcessId ())
-     {
-       if (master_thread_started)
- 	{
+ /* Cancelability */
 -- 
 2.45.1
 
