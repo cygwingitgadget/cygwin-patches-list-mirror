@@ -1,101 +1,107 @@
-Return-Path: <SRS0=f0um=SE=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	by sourceware.org (Postfix) with ESMTPS id 614693858D21
-	for <cygwin-patches@cygwin.com>; Sat,  9 Nov 2024 01:26:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 614693858D21
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 614693858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.15
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731115612; cv=none;
-	b=DCJ+SAHBpjgXnHCKwpjG8jA5PSLuD1fvekBN2wlwmoc2gSjnhw7ACIfhOfqItOVEHYv9enSb/ngYettzULzSyfZmfjqkDF2m2uROhpA/dE3VGx35rytB0bl7fbcZ+wfSWZffhRJ4ccV3ojZ/1U3RvMiiK0yLFOb42ClrNXxpBks=
+Return-Path: <SRS0=Hss8=SF=gmail.com=shnusongshaobo@sourceware.org>
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+	by sourceware.org (Postfix) with ESMTPS id 54DC13858D21
+	for <cygwin-patches@cygwin.com>; Sun, 10 Nov 2024 03:13:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 54DC13858D21
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 54DC13858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::435
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731208388; cv=none;
+	b=QCcanAvyAR6nzux0Wlo81hWHLy0bk8luxJzA3HAynDmdVjprxuvuJyfM80sYQkifPRB7B2ST9WHvWs15pnrgK4ePoqmNxipjwt92e82sSp/Gc1w4WWXXCVpEEzGSaksRiaJsHbCER8xGEExMANUYeisNMkY5wF10srgmBYOSNfs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731115612; c=relaxed/simple;
-	bh=BL1ILUZ+vhbnw7ea7Pw8MCoodb8kI3DxhbF1gNHtdh0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:DKIM-Signature; b=JQ3OHplz+BD8SVTRwCKstzpaY2O72q/2FXdMdE3NcQLNyGAQcBpNkSS/kJ7zze5xrhOjUOt/s9yB4OoLjsQtSR8Z5gB01UxKKEyBoCY7hFWEhabgP+/UattdmCI4zvZ2ZRGE4fP0bCKd4aQUZi4ud6ozyZCNJL0QjmSlVE8bUmU=
+	t=1731208388; c=relaxed/simple;
+	bh=7f+BzpISfyNZpJjS7DrvlEQqn3Eb85jrzpqAD8HHUuY=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=uF56odpJ+JiUMFdRBfvnmXnaQoZRhMhBqA08XUbM66oyQgVhGdnNTQLqSsfB3CuTcqQJ+F9K5ti4lVFxI1LW0n88BSBs/twpiJJQiJp4K6l+bfMdP8RbYBFzjwBz6N5z28NGxa1YBec42Ak0BfTcK9YesxFF6+kw0zFJ2LGY81o=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id E0198A1052
-	for <cygwin-patches@cygwin.com>; Sat,  9 Nov 2024 01:26:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf19.hostedemail.com (Postfix) with ESMTPA id D108E20026
-	for <cygwin-patches@cygwin.com>; Sat,  9 Nov 2024 01:26:44 +0000 (UTC)
-Message-ID: <a18fbf5a-ba01-45e7-b734-6be340837060@SystematicSW.ab.ca>
-Date: Fri, 8 Nov 2024 18:26:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Fix clean up conditions in close()
-Content-Language: en-CA
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-71e61b47c6cso3148398b3a.2
+        for <cygwin-patches@cygwin.com>; Sat, 09 Nov 2024 19:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731208385; x=1731813185; darn=cygwin.com;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vhy14fyjw5yJNN9ZJHqyrNKSv27dGs0/VvglVHeu39k=;
+        b=lY/Veuzb/Mivkh3ibE33Y9BPQV9DftKPCyVIx/n2h0lUvoRqtoTZu8YytDjzBF4T0N
+         ZSZDfowzWYcrORdadPj7o0zn3W50R2yXpb6321bcugU9FrX2Ar9B0BPtkFzoQGZWkLcE
+         OV1a7Mg4NKunAzC1nnNPZBbkJJ+LtUNFhL/7yu3dU0fcu2FBEb/CtCoPN6jQvZGFr/W6
+         5lPGf2vYcArNtfln0vTWkrIW0UigkKbzaWUjfzkUd0ctw2E9HNoSBwmJsRn6prEap9h7
+         /c8h/I5cuaboFO3/U1AP5jmIb4F4Y7siogI81vMXvrRBa0Bc5W6IPXlyaF3pNROq6OI3
+         NOqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731208385; x=1731813185;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vhy14fyjw5yJNN9ZJHqyrNKSv27dGs0/VvglVHeu39k=;
+        b=GAohqKxyY7YwDAFqzZIDrEOFerbOJ3GVQ7dg6cYkYGTR+FJLkf7e78iU4q0gYDSBjo
+         7ClxYTrwD0aYZLAFrpjMR0fgYKSm5gUPHTn5JqAu4+qtiwT2OAalCadIDLcTz/gidnd6
+         5AMFofMO8MULJE6pvOZzk+556sWz604xsSgyeqZMtm7q7xr1HxBaG3ZUopLQHwEUrTXg
+         pjfJ4vAg2UQ3mdyZcj8rt+8QzwaOJDk84hpEDQS1JaKijNeWyST4RnnTabZfbN6IH4ow
+         cetVQGfP8mD2VHvNtca89Ja1ZYA712imjpsReMJKEadcO3Xd8PbYUHTxEdgq9+nNgwTG
+         n0Rw==
+X-Gm-Message-State: AOJu0Ywevh/QjBBjrd1aUzqQRBZn3EN8l2uBuZiZKW+riqiL8nnS6rYu
+	EfDr13Ct6XzgSep+YBgEsogsVL2sUOvnyViJsrmPSIhtGK6Orh2itv2DPb9xzIM=
+X-Google-Smtp-Source: AGHT+IFda5TItoEABYVKqSgjxWAkIdEq4znEmjlNVGwxdk8GWKpvdfTWHRzNRZhCtobXTRpaTtkdFQ==
+X-Received: by 2002:a05:6a20:4313:b0:1db:f0af:2277 with SMTP id adf61e73a8af0-1dc22b90c76mr13049340637.38.1731208385125;
+        Sat, 09 Nov 2024 19:13:05 -0800 (PST)
+Received: from localhost.localdomain ([60.179.215.242])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f65b5afsm5943644a12.76.2024.11.09.19.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Nov 2024 19:13:04 -0800 (PST)
+From: Shaobo Song <shnusongshaobo@gmail.com>
 To: cygwin-patches@cygwin.com
-References: <20241108114309.1718-1-takashi.yano@nifty.ne.jp>
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <20241108114309.1718-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: takashi.yano@nifty.ne.jp,
+	Shaobo Song <shnusongshaobo@gmail.com>
+Subject: [PATCH] Cygwin: pthread: Correct pthread_cleanup macros to avoid potential syntax errors
+Date: Sun, 10 Nov 2024 11:12:39 +0800
+Message-Id: <20241110031239.10960-1-shnusongshaobo@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Stat-Signature: fyi1tgxshdwweekdyn1ioq3u8hrcc4dt
-X-Rspamd-Server: rspamout07
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Queue-Id: D108E20026
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1+fKuR0ZUv6EOakTNE5kq2UPIu7EQZ8C+8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:to:references:from:in-reply-to:content-type:content-transfer-encoding; s=he; bh=8utQMlf+mX0Lvi20k16KH0hZWlW0Y9ZyJPbPI7aTOzs=; b=ckbK/LpRf6CnyTlo4wA4WLoUZCWyw87bZwNXYYHYOY7KOgbQsA+wEq4yBrH1AaI8zCNVe/DUnPUucT8abpZcYRBNOGelLabmsipzNKciWNPz5oaQqAMKRxtolvM810qQ/sZvhyLizTdXfmrJDuXc79Wx2CliqAqG6lJtZks0Rawx4UNcSQkT9Lse3utN6g7Pu4yghieUh2/r9Lw7mpgzCzpqfidlk57LGU7QdWIBGMevPfZ9b2srHFGGp4Q1zN3Lqy1gyr0dvQ63J2sbDmqaDNNkkOzwb/OugUu1LuU51A+TTXW+LxojUy9WEc4TeZpYMSJSOdg88JlmKYFURd6ofA==
-X-HE-Tag: 1731115604-742462
-X-HE-Meta: U2FsdGVkX18mjt8/ucC9QT6JVwC3Cf3+ZpAkDeTqHfkU97ypnOIgKtXCxLqsu/fkJZ9cVOWkvI8oiF4MWmprYqy2ByWRquysK9w4OPVS47va9PqxCq+pZtn46sx0TPojHH8rmycnIKLd4tW9RmEOQWBRQ7L9LCHDulPCLFawVxEgbn8DYbZIxuYgG/76crw3tQhdbf6luqwvH3gA6Eed1Jb+AJuL06i/ErcGK5cuoMF03ZDhxYZtDvzB8AhZBvn/1R6Gpj4eFeXDJ9uqq3eyH7YDQo/3Dam4Ci16Z8a1rU2if56zezHfaGGhDUF4Q9J4Cr4BzCo0/2ghWb8OUa0eAPg+IN9x1r5e
+X-Spam-Status: No, score=-12.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+This commit revises `pthread_cleanup_push` and `pthread_cleanup_pop` macros to
+use a `do { ... } while(0)` wrapper, preventing syntax errors when used in
+certain contexts. The original code could fail if used within a conditional
+statement without braces, causing unintended behavior or compilation issues.
+Example of error:
 
-It might be better if you could please document the wrong premise, as well as 
-the right premise, and the reason for choosing the latter over the former, as in 
-your other console patches?
+  if (condition)
+      pthread_cleanup_push(cleanup_fn, arg);
+  pthread_cleanup_pop(1);
 
-In the comparison vs handle count, the reason for hard coding those magic 
-numbers would perhaps be better expressed by defining meaningful symbolic names 
-for those numbers, maybe also a named macro for picking the magic number to use, 
-and some explanation of what those numbers, comparisons, and settings represent.
+This would fail due to unmatched braces in the macro expansion. The new
+structure ensures the macro expands correctly in all cases.
 
+Signed-off-by: Shaobo Song <shnusongshaobo@gmail.com>
+---
+ winsup/cygwin/include/pthread.h | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-On 2024-11-08 04:43, Takashi Yano wrote:
-> Previously, the condition to clean up input/output mode was based
-> on wrong premise. This patch fixes that.
-> 
-> Fixes: 8ee8b0c974d7 ("Cygwin: console: Use GetCurrentProcessId() instead of myself->dwProcessId")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->   winsup/cygwin/fhandler/console.cc | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> index 4efba61e2..2651e49a6 100644
-> --- a/winsup/cygwin/fhandler/console.cc
-> +++ b/winsup/cygwin/fhandler/console.cc
-> @@ -1976,7 +1976,8 @@ fhandler_console::close ()
->   
->     acquire_output_mutex (mutex_timeout);
->   
-> -  if (shared_console_info[unit])
-> +  if (shared_console_info[unit] && !myself->cygstarted
-> +      && (dev_t) myself->ctty == get_device ())
->       {
->         /* Restore console mode if this is the last closure. */
->         OBJECT_BASIC_INFORMATION obi;
-> @@ -1984,8 +1985,7 @@ fhandler_console::close ()
->         status = NtQueryObject (get_handle (), ObjectBasicInformation,
->   			      &obi, sizeof obi, NULL);
->         if (NT_SUCCESS (status)
-> -	  && obi.HandleCount <= (myself->cygstarted ? 2 : 3)
-> -	  && (dev_t) myself->ctty == get_device ())
-> +	  && obi.HandleCount == (con.owner == GetCurrentProcessId () ? 2 : 3))
->   	{
->   	  /* Cleaning-up console mode for cygwin apps. */
->   	  set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
-
+diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
+index 66d367d62..1f8f0881d 100644
+--- a/winsup/cygwin/include/pthread.h
++++ b/winsup/cygwin/include/pthread.h
+@@ -110,10 +110,13 @@ typedef struct _pthread_cleanup_handler
+ void _pthread_cleanup_push (__pthread_cleanup_handler *handler);
+ void _pthread_cleanup_pop (int execute);
+ 
+-#define pthread_cleanup_push(_fn, _arg) { __pthread_cleanup_handler __cleanup_handler = \
+-					 { _fn, _arg, NULL }; \
+-					 _pthread_cleanup_push( &__cleanup_handler );
+-#define pthread_cleanup_pop(_execute) _pthread_cleanup_pop( _execute ); }
++#define pthread_cleanup_push(_fn, _arg)
++  do { \
++    __pthread_cleanup_handler __cleanup_handler = { _fn, _arg, NULL }; \
++    _pthread_cleanup_push(&__cleanup_handler)
++#define pthread_cleanup_pop(_execute) \
++    _pthread_cleanup_pop(_execute); \
++  } while (0)
+ 
+ /* Condition variables */
+ int pthread_cond_broadcast (pthread_cond_t *);
 -- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+2.25.1
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retirer     but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
