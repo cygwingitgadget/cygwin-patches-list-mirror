@@ -1,60 +1,60 @@
 Return-Path: <SRS0=Hss8=SF=gmail.com=shnusongshaobo@sourceware.org>
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-	by sourceware.org (Postfix) with ESMTPS id 54DC13858D21
-	for <cygwin-patches@cygwin.com>; Sun, 10 Nov 2024 03:13:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 54DC13858D21
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by sourceware.org (Postfix) with ESMTPS id 47E3F3858D28
+	for <cygwin-patches@cygwin.com>; Sun, 10 Nov 2024 03:25:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 47E3F3858D28
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 54DC13858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::435
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731208388; cv=none;
-	b=QCcanAvyAR6nzux0Wlo81hWHLy0bk8luxJzA3HAynDmdVjprxuvuJyfM80sYQkifPRB7B2ST9WHvWs15pnrgK4ePoqmNxipjwt92e82sSp/Gc1w4WWXXCVpEEzGSaksRiaJsHbCER8xGEExMANUYeisNMkY5wF10srgmBYOSNfs=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 47E3F3858D28
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::62f
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731209141; cv=none;
+	b=xxy3KTUWaVwAOi2W4veaCF7TUIbQ9eM0r1wfI88OsdLfrq/nC2HWCdq0VAEa3ubkOcpSj5V9yB5y3gYIO5zCImg7xth0yMjyF14ZXda9HRDNHO1yR1pNg1SwDG7dyIOYu12Dm5ILAtjBGLnl+o2PxbDmhLyU2hMhpTElc7pd/eI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731208388; c=relaxed/simple;
-	bh=7f+BzpISfyNZpJjS7DrvlEQqn3Eb85jrzpqAD8HHUuY=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=uF56odpJ+JiUMFdRBfvnmXnaQoZRhMhBqA08XUbM66oyQgVhGdnNTQLqSsfB3CuTcqQJ+F9K5ti4lVFxI1LW0n88BSBs/twpiJJQiJp4K6l+bfMdP8RbYBFzjwBz6N5z28NGxa1YBec42Ak0BfTcK9YesxFF6+kw0zFJ2LGY81o=
+	t=1731209141; c=relaxed/simple;
+	bh=YGJeTtYGqcBcyBtsJPNLWBHNYrh5AzzL12ESanNsv90=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=c5WjsBY4IPKUhWohFrq0Tdusd/CcJKHppwtJo1XgAQj26svCnml0NBjuXLUEN1ycsjbL0aU8c1nSnUo+1a1WorfNUCC617Mahn/NWKb9OzncUWial2gd+Ys1GOwdxj6UtNGUmrxxfyKV6QGdq8CQKYFQHNiKnOeOaqcNMCM7hYY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-71e61b47c6cso3148398b3a.2
-        for <cygwin-patches@cygwin.com>; Sat, 09 Nov 2024 19:13:06 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-20c8b557f91so37672135ad.2
+        for <cygwin-patches@cygwin.com>; Sat, 09 Nov 2024 19:25:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731208385; x=1731813185; darn=cygwin.com;
+        d=gmail.com; s=20230601; t=1731209136; x=1731813936; darn=cygwin.com;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vhy14fyjw5yJNN9ZJHqyrNKSv27dGs0/VvglVHeu39k=;
-        b=lY/Veuzb/Mivkh3ibE33Y9BPQV9DftKPCyVIx/n2h0lUvoRqtoTZu8YytDjzBF4T0N
-         ZSZDfowzWYcrORdadPj7o0zn3W50R2yXpb6321bcugU9FrX2Ar9B0BPtkFzoQGZWkLcE
-         OV1a7Mg4NKunAzC1nnNPZBbkJJ+LtUNFhL/7yu3dU0fcu2FBEb/CtCoPN6jQvZGFr/W6
-         5lPGf2vYcArNtfln0vTWkrIW0UigkKbzaWUjfzkUd0ctw2E9HNoSBwmJsRn6prEap9h7
-         /c8h/I5cuaboFO3/U1AP5jmIb4F4Y7siogI81vMXvrRBa0Bc5W6IPXlyaF3pNROq6OI3
-         NOqg==
+        bh=u3iUlgmdystCpZqJZXHcGsk8zq4BiJ0yimzEaTMymaM=;
+        b=IzeU6tCTyBs31Dso83KjU5QxfuWPMki15r5X7gqf0kYjPcY/wWKPv/tUXU+8QDU8Sf
+         q1x9mgG/QB0RFr/ZHJU24uneEdUi9KysAAOOdS6Uvamf5oPLNVQ+A6D/m5ScY21N/Pnj
+         NFMsM8NbpUZ/Tw2ZCcl4TVYEWRN+5lfrKauGq/K/OCcfH+5SA8TMzYKjZGkVdmLcEss2
+         yuVyAdTP4Q6sYM2Kmjdcg8ZdUMABGgbs/XXaAKaKAqcTWbLCcf9wSNrs//eywGuCLEs7
+         rauMXGIYH8HCP37TkzZPOZp5sve+n8nE1PpsjwfLQYudlTtj3RRzJb/0naa0QdXkCzWc
+         hk/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731208385; x=1731813185;
+        d=1e100.net; s=20230601; t=1731209136; x=1731813936;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vhy14fyjw5yJNN9ZJHqyrNKSv27dGs0/VvglVHeu39k=;
-        b=GAohqKxyY7YwDAFqzZIDrEOFerbOJ3GVQ7dg6cYkYGTR+FJLkf7e78iU4q0gYDSBjo
-         7ClxYTrwD0aYZLAFrpjMR0fgYKSm5gUPHTn5JqAu4+qtiwT2OAalCadIDLcTz/gidnd6
-         5AMFofMO8MULJE6pvOZzk+556sWz604xsSgyeqZMtm7q7xr1HxBaG3ZUopLQHwEUrTXg
-         pjfJ4vAg2UQ3mdyZcj8rt+8QzwaOJDk84hpEDQS1JaKijNeWyST4RnnTabZfbN6IH4ow
-         cetVQGfP8mD2VHvNtca89Ja1ZYA712imjpsReMJKEadcO3Xd8PbYUHTxEdgq9+nNgwTG
-         n0Rw==
-X-Gm-Message-State: AOJu0Ywevh/QjBBjrd1aUzqQRBZn3EN8l2uBuZiZKW+riqiL8nnS6rYu
-	EfDr13Ct6XzgSep+YBgEsogsVL2sUOvnyViJsrmPSIhtGK6Orh2itv2DPb9xzIM=
-X-Google-Smtp-Source: AGHT+IFda5TItoEABYVKqSgjxWAkIdEq4znEmjlNVGwxdk8GWKpvdfTWHRzNRZhCtobXTRpaTtkdFQ==
-X-Received: by 2002:a05:6a20:4313:b0:1db:f0af:2277 with SMTP id adf61e73a8af0-1dc22b90c76mr13049340637.38.1731208385125;
-        Sat, 09 Nov 2024 19:13:05 -0800 (PST)
+        bh=u3iUlgmdystCpZqJZXHcGsk8zq4BiJ0yimzEaTMymaM=;
+        b=OAiBmDKvXe4P5wirTqtBGxR+22bZ+2x5MyZKzjCLnh7NCJSVOE5Pf72jQpgWpSQZSO
+         q1vLimJUCVFag3yfOsXYpM/dysxA3u9DHwIkJ2FOEV19J7vrT3gGr3SKIXSNIy0WI40O
+         RWpsP0LZKA4LlD75waz/iuF4j/3r92K8NABoWVmUxrkq3MCl559XOYgZOGcrWnvxvyKT
+         AesAnZIcQnwt73RpXZFSgtCdGt1wGoZcf2Kws1t4Qh8mGcvLuWQgb1j2TNhPZ6wKDUjJ
+         KyGNn2gA1QqojIhF8dQtvM2GWGDdwjD2IYGH+XyWyAymOALTtVT+8cbzIEBCW6XygqPP
+         O+Fg==
+X-Gm-Message-State: AOJu0YyqyABTgKkYpyl9p1Mf/6qryF7WjhZRCsW00liXSwtPDRVi+oUs
+	b7KlR4tf9fuYo2cy/UOEO4rIapVnvW90y5Rtwcc9FiunAaEwOo96tlsPRRQaLyI=
+X-Google-Smtp-Source: AGHT+IH9L3uVqjJkxPTd36bzy4VbXGi8nOCZbgg/GlCKgKsuZ4rUeZoDVpwDHdZsQ2jwdA+icumdqw==
+X-Received: by 2002:a17:903:11c6:b0:20e:5792:32ed with SMTP id d9443c01a7336-21183d6795fmr86416945ad.41.1731209135920;
+        Sat, 09 Nov 2024 19:25:35 -0800 (PST)
 Received: from localhost.localdomain ([60.179.215.242])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f65b5afsm5943644a12.76.2024.11.09.19.13.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e590fcsm52156345ad.202.2024.11.09.19.25.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2024 19:13:04 -0800 (PST)
+        Sat, 09 Nov 2024 19:25:35 -0800 (PST)
 From: Shaobo Song <shnusongshaobo@gmail.com>
 To: cygwin-patches@cygwin.com
 Cc: takashi.yano@nifty.ne.jp,
 	Shaobo Song <shnusongshaobo@gmail.com>
-Subject: [PATCH] Cygwin: pthread: Correct pthread_cleanup macros to avoid potential syntax errors
-Date: Sun, 10 Nov 2024 11:12:39 +0800
-Message-Id: <20241110031239.10960-1-shnusongshaobo@gmail.com>
+Subject: [PATCH v2] Cygwin: pthread: Correct pthread_cleanup macros to avoid potential syntax errors
+Date: Sun, 10 Nov 2024 11:25:03 +0800
+Message-Id: <20241110032503.12604-1-shnusongshaobo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,7 +81,7 @@ Signed-off-by: Shaobo Song <shnusongshaobo@gmail.com>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
-index 66d367d62..1f8f0881d 100644
+index 66d367d62..cf2fcb04b 100644
 --- a/winsup/cygwin/include/pthread.h
 +++ b/winsup/cygwin/include/pthread.h
 @@ -110,10 +110,13 @@ typedef struct _pthread_cleanup_handler
@@ -92,7 +92,7 @@ index 66d367d62..1f8f0881d 100644
 -					 { _fn, _arg, NULL }; \
 -					 _pthread_cleanup_push( &__cleanup_handler );
 -#define pthread_cleanup_pop(_execute) _pthread_cleanup_pop( _execute ); }
-+#define pthread_cleanup_push(_fn, _arg)
++#define pthread_cleanup_push(_fn, _arg) \
 +  do { \
 +    __pthread_cleanup_handler __cleanup_handler = { _fn, _arg, NULL }; \
 +    _pthread_cleanup_push(&__cleanup_handler)
