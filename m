@@ -1,60 +1,60 @@
 Return-Path: <SRS0=Hss8=SF=gmail.com=shnusongshaobo@sourceware.org>
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-	by sourceware.org (Postfix) with ESMTPS id 47E3F3858D28
-	for <cygwin-patches@cygwin.com>; Sun, 10 Nov 2024 03:25:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 47E3F3858D28
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+	by sourceware.org (Postfix) with ESMTPS id 433933858D21
+	for <cygwin-patches@cygwin.com>; Sun, 10 Nov 2024 04:15:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 433933858D21
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 47E3F3858D28
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::62f
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731209141; cv=none;
-	b=xxy3KTUWaVwAOi2W4veaCF7TUIbQ9eM0r1wfI88OsdLfrq/nC2HWCdq0VAEa3ubkOcpSj5V9yB5y3gYIO5zCImg7xth0yMjyF14ZXda9HRDNHO1yR1pNg1SwDG7dyIOYu12Dm5ILAtjBGLnl+o2PxbDmhLyU2hMhpTElc7pd/eI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 433933858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::430
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731212155; cv=none;
+	b=f0axWtYHsHVv9DPpeS53aB9UMM1q11/5Lyc9OHcpmlPreHJMUezYh20TIM1R41T7Ic2DyDy0ruXawqs5VFxOgvIkfRt3acOQ/1squLPdnWUaV3wS0UiRrZ3/g5roiURMDyeQ3rU6UMCEteQna8u6bIceDHbTZIBqoT8XeCEUIgs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731209141; c=relaxed/simple;
-	bh=YGJeTtYGqcBcyBtsJPNLWBHNYrh5AzzL12ESanNsv90=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=c5WjsBY4IPKUhWohFrq0Tdusd/CcJKHppwtJo1XgAQj26svCnml0NBjuXLUEN1ycsjbL0aU8c1nSnUo+1a1WorfNUCC617Mahn/NWKb9OzncUWial2gd+Ys1GOwdxj6UtNGUmrxxfyKV6QGdq8CQKYFQHNiKnOeOaqcNMCM7hYY=
+	t=1731212155; c=relaxed/simple;
+	bh=MIE7NMi9DpthtvE0yu6Pz+qTjtlZCMy1EwXazVeAKxo=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=j4XLDtyngqbG7UyjiO4FzQE6KhLOwVFEOMwGYL9ZpyT1FZA/0Utg69GUw3M+7qpc5YJfhfd3hMOn86pcZd1leapFzwDpOkXmrbpkgEkmr+QuBTOKYUCve5yGqRjohWEligFb1MSDsOU3yoAd90OGJIQMZeLJZpcodP/RKL8cGQo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-20c8b557f91so37672135ad.2
-        for <cygwin-patches@cygwin.com>; Sat, 09 Nov 2024 19:25:37 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-71ec997ad06so2849237b3a.3
+        for <cygwin-patches@cygwin.com>; Sat, 09 Nov 2024 20:15:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731209136; x=1731813936; darn=cygwin.com;
+        d=gmail.com; s=20230601; t=1731212152; x=1731816952; darn=cygwin.com;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=u3iUlgmdystCpZqJZXHcGsk8zq4BiJ0yimzEaTMymaM=;
-        b=IzeU6tCTyBs31Dso83KjU5QxfuWPMki15r5X7gqf0kYjPcY/wWKPv/tUXU+8QDU8Sf
-         q1x9mgG/QB0RFr/ZHJU24uneEdUi9KysAAOOdS6Uvamf5oPLNVQ+A6D/m5ScY21N/Pnj
-         NFMsM8NbpUZ/Tw2ZCcl4TVYEWRN+5lfrKauGq/K/OCcfH+5SA8TMzYKjZGkVdmLcEss2
-         yuVyAdTP4Q6sYM2Kmjdcg8ZdUMABGgbs/XXaAKaKAqcTWbLCcf9wSNrs//eywGuCLEs7
-         rauMXGIYH8HCP37TkzZPOZp5sve+n8nE1PpsjwfLQYudlTtj3RRzJb/0naa0QdXkCzWc
-         hk/Q==
+        bh=12KubY/bfbK/3FdfcNtPureX7yM63sySqDwUAyDCbGM=;
+        b=OztGMj09Uv7y3aFEGV1v0L7Viqtaeg98mwpnnFPEAvuvqGFqfudd1B+PNrzhfBLAEN
+         AcPZTsMBvQxAmr2KS5NXT4EnU+TTREs0h7Ef0D2CO84UAQGAT2POCvlOPmpZGVh0v1ci
+         wd67wMGLFTzhkWHPxAULR+AosF4GDBD4KIcKFT52lHTzDU6ujP5Q55UpDwQA/WUu7eRD
+         aVm7Tu4xB3T18AnGb8o9N28C1U16jPovHecm1Hxb7IitjUGGK3oyIOM1x7KOgwqJTaWR
+         suKiAnbGmPirPrZKU05mQzdf5PccaTVIUza+AV2f4Y8JM+q3iApGNDzPfl9mH2f08B/x
+         wN/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731209136; x=1731813936;
+        d=1e100.net; s=20230601; t=1731212152; x=1731816952;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u3iUlgmdystCpZqJZXHcGsk8zq4BiJ0yimzEaTMymaM=;
-        b=OAiBmDKvXe4P5wirTqtBGxR+22bZ+2x5MyZKzjCLnh7NCJSVOE5Pf72jQpgWpSQZSO
-         q1vLimJUCVFag3yfOsXYpM/dysxA3u9DHwIkJ2FOEV19J7vrT3gGr3SKIXSNIy0WI40O
-         RWpsP0LZKA4LlD75waz/iuF4j/3r92K8NABoWVmUxrkq3MCl559XOYgZOGcrWnvxvyKT
-         AesAnZIcQnwt73RpXZFSgtCdGt1wGoZcf2Kws1t4Qh8mGcvLuWQgb1j2TNhPZ6wKDUjJ
-         KyGNn2gA1QqojIhF8dQtvM2GWGDdwjD2IYGH+XyWyAymOALTtVT+8cbzIEBCW6XygqPP
-         O+Fg==
-X-Gm-Message-State: AOJu0YyqyABTgKkYpyl9p1Mf/6qryF7WjhZRCsW00liXSwtPDRVi+oUs
-	b7KlR4tf9fuYo2cy/UOEO4rIapVnvW90y5Rtwcc9FiunAaEwOo96tlsPRRQaLyI=
-X-Google-Smtp-Source: AGHT+IH9L3uVqjJkxPTd36bzy4VbXGi8nOCZbgg/GlCKgKsuZ4rUeZoDVpwDHdZsQ2jwdA+icumdqw==
-X-Received: by 2002:a17:903:11c6:b0:20e:5792:32ed with SMTP id d9443c01a7336-21183d6795fmr86416945ad.41.1731209135920;
-        Sat, 09 Nov 2024 19:25:35 -0800 (PST)
-Received: from localhost.localdomain ([60.179.215.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e590fcsm52156345ad.202.2024.11.09.19.25.34
+        bh=12KubY/bfbK/3FdfcNtPureX7yM63sySqDwUAyDCbGM=;
+        b=I15wCZMbFPGll2we3rTkxGSXGkQcRMlU2lEP27ElD62RTkWG+0SVQop+GomOlrtKYE
+         DSQIxOkPLf0aJaOqk97OfEIAjqqpFpH/V2C018HgA3CQ9M4X14cg8+NqTzN1ERPc026i
+         GYtTL7XDf7F67IJPRUCN9fs2Noxx8WzmtUVkhDn46g/wJhvKiObKC1Py2Ly/zRtC5CBS
+         V3xUO/edYHWIe8DWtDAiWWgg3lozfCPzjnwe0EXgIEKLi1g/IQ4B+UUZ+JUjQ7OoJ5VM
+         JNBPehJE01g6rZRdCljbG+d3HND9xUW/vcWj/xrv37MWl7klbvswC3v+sKDP9LL+n4UW
+         JwRQ==
+X-Gm-Message-State: AOJu0YzFxqKxLs5Gg0Y5Rt/ElmqHSsOSVPfvQ56M3pX6NG6nVateFG5K
+	I24VuvElJb8jP963Ar2rdpcCjmhGSBTE9myEDyyAuneML6NAMFoq/wcB+pxu3Ec=
+X-Google-Smtp-Source: AGHT+IGfujpet53vYq6laUzfMiB7wj/aBo+uxRHLWLzXKZXHgvCC5PZK7d/TThj09O6HTVctNrsI6A==
+X-Received: by 2002:a05:6a00:1819:b0:71d:f510:b791 with SMTP id d2e1a72fcca58-724132cd1b1mr12005328b3a.12.1731212151873;
+        Sat, 09 Nov 2024 20:15:51 -0800 (PST)
+Received: from localhost.localdomain ([148.135.115.90])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724079a8446sm6367179b3a.113.2024.11.09.20.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2024 19:25:35 -0800 (PST)
+        Sat, 09 Nov 2024 20:15:51 -0800 (PST)
 From: Shaobo Song <shnusongshaobo@gmail.com>
 To: cygwin-patches@cygwin.com
 Cc: takashi.yano@nifty.ne.jp,
 	Shaobo Song <shnusongshaobo@gmail.com>
-Subject: [PATCH v2] Cygwin: pthread: Correct pthread_cleanup macros to avoid potential syntax errors
-Date: Sun, 10 Nov 2024 11:25:03 +0800
-Message-Id: <20241110032503.12604-1-shnusongshaobo@gmail.com>
+Subject: [PATCH v3] Cygwin: pthread: Correct pthread_cleanup macros to avoid potential syntax errors
+Date: Sun, 10 Nov 2024 12:15:04 +0800
+Message-Id: <20241110041504.16520-1-shnusongshaobo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,13 +64,33 @@ List-Id: <cygwin-patches.cygwin.com>
 
 This commit revises `pthread_cleanup_push` and `pthread_cleanup_pop` macros to
 use a `do { ... } while(0)` wrapper, preventing syntax errors when used in
-certain contexts. The original code could fail if used within a conditional
-statement without braces, causing unintended behavior or compilation issues.
+certain contexts. The original code could fail when they are wrapped within a
+`do { ... } while(0)`, causing unintended behavior or compilation issues.
 Example of error:
 
-  if (condition)
-      pthread_cleanup_push(cleanup_fn, arg);
-  pthread_cleanup_pop(1);
+  #include <pthread.h>
+
+  #define pthread_cleanup_push_wrapper(_fn, _arg) do { \
+    pthread_cleanup_push(_fn, _arg); \
+  } while (0)
+
+  #define pthread_cleanup_pop_wrapper(_execute) do { \
+    pthread_cleanup_pop(_execute); \
+  } while (0)
+
+  void cleanup_fn (void *arg) {}
+
+  void *thread_func (void *arg)
+  {
+    pthread_cleanup_push_wrapper(cleanup_fn, NULL);
+    pthread_cleanup_pop_wrapper(1);
+    return NULL;
+  }
+
+  int main (int argc, char **argv) {
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, thread_func, NULL);
+  }
 
 This would fail due to unmatched braces in the macro expansion. The new
 structure ensures the macro expands correctly in all cases.
