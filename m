@@ -1,481 +1,171 @@
-Return-Path: <SRS0=g8FB=SI=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 7C3533858D20
-	for <cygwin-patches@cygwin.com>; Wed, 13 Nov 2024 06:22:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7C3533858D20
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7C3533858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731478923; cv=none;
-	b=xCGbMCwIXM6xxfS/v69ALuhL1/zNuk3N93eJo7q0z5MaZDY4RnmGattZHAPw1LGyC2ENiqUdQOMxoSBYSgZlwpQLZYObNYXtjjnRqMvJXFXGyavLTvYx38zx5V4hc7uixmuBjVjIxMrjs+2ckYEA7KG82Q5Wy17/Ym9cSu7EuRU=
+Return-Path: <SRS0=YazL=SI=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by sourceware.org (Postfix) with ESMTPS id EAD223858D26
+	for <cygwin-patches@cygwin.com>; Wed, 13 Nov 2024 10:50:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EAD223858D26
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EAD223858D26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.20
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731495049; cv=none;
+	b=QWajWB99ib73zdEGXL2TU5kop5FRFY6rae9hAyRW80W+6CQkzpwioMz9TDH7aiquWH5yXA860i/JuIgRt5P01uOZ/Om4Ov08RHP6O6LYz33/XkrSwruH2kd8Phlr7atS4Pww987SWiJlbLzfjdPzQmY93iNz3bxTSvIwPQ/7RzA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731478923; c=relaxed/simple;
-	bh=kb0IdWyiXrpQz8LiPC0QeKmEkcUlWlsRiSetZT8uoqw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=NuDVY8nOdpbKfhac0w3Dg4YbG6S5pO6Kd+8G4FIpqXT5WlQ6GVmm4n9EBgH5hTsBxXrfv5spoxGctaqnyxD/aP/95UYNDeiebvb8WrwUbrjYm72bMOkrTRrxhQxjKIp0l7iUbKhlxW3m6dyEXtneOXcgWSubNS2yYaKGQCDWHao=
+	t=1731495049; c=relaxed/simple;
+	bh=aaOxtikn6RlcSTSGftEtJyH3uI8iiXVtJm35L/Zph8Q=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tNK+nUFUwRFxB7vssxDd458iknKLuj1tkYKysPJRKwFq6D/ui2AG+fldtCK27gbjkKzBTr4Ygiu2GmcHbWsD0c9LzKT1+DVMZoRe0ZJRYGEkHFzKhsgWgY0JG6lAmmxkXbgoFUP3xDsTj55MyOuizWcb9VbwN5KnWu4vbuqLwe4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 4AD6P3BS083488;
-	Tue, 12 Nov 2024 22:25:03 -0800 (PST)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdtGpqZC; Tue Nov 12 22:24:58 2024
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>, Mark Liam Brown <brownmarkliam@gmail.com>
-Subject: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
-Date: Tue, 12 Nov 2024 22:21:45 -0800
-Message-ID: <20241113062152.2225-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.45.1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1731495040; x=1732099840;
+	i=johannes.schindelin@gmx.de;
+	bh=0dl8AOO7akcZ/WVM1dqseNIdTQAPBouZqCXW1SyKsAM=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=mORSPTTnC/wYxpe8FsCS8PUPOSCyBB5tg2SD5f29/Jg2Tg9rSmUpypcjXVvSCK8u
+	 f0J8xcIF6czeC8g44F0tItgrxjOLcM+LvAPZe0Px09wHd5RjPFMnyd8UF6CrliJ5/
+	 4MUUS3/h6/YPUH8wfYNkJYtqy6enHpO5DsYHCEH/fyOmagZUe3+yLLE6DVlEpeVTg
+	 IxrazZodcVlt6U9tzGd5efv/AYjq2+ydDE9a6HDNQv6k5lwLatKJGT0PivnxZXT/3
+	 GSVmLvKyjQ8jEuZH+oPWpMXH+Owg0VjMbrvq0ynNAQFnv3Qc1J8RlfXe1yOpt7zEU
+	 EXIBeqLTG3i1p5UMVQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.23.242.68] ([89.1.215.196]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0G1n-1txFF12u07-00zGxE; Wed, 13
+ Nov 2024 11:50:40 +0100
+Date: Wed, 13 Nov 2024 11:50:39 +0100 (CET)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Jeremy Drake <cygwin@jdrake.com>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] cygthread: suspend thread before terminating.
+In-Reply-To: <2c68d6fe-5493-b7e0-6335-de5a68d3cd3f@jdrake.com>
+Message-ID: <eee61bf2-edfe-c06c-bf80-188b7cdf22df@gmx.de>
+References: <2c68d6fe-5493-b7e0-6335-de5a68d3cd3f@jdrake.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:le7RsxMfkS+ZauDNILLutQMRx8bGZXqUrjtKmIHGabzLIvK4QdW
+ bFbiYkdGfWX1iHdZkFECS1gpXAEHIL7F7pIFD7ejMBoQB2vQwoubshckLKyQKqXZGtUBbWH
+ o04/2di1NzzrFrNTnwwHyaNzg0ZqLJgghKSZA39G/1nWAYEn+qWHv6jewUo8eUPaU/kSxII
+ aoGcN0FMjNH8Vhm/DtJtg==
+UI-OutboundReport: notjunk:1;M01:P0:ACc8KrwPCag=;JdIjPI4x8dOHjUa3xtnbQWyIXwT
+ G1uX6lLYw7uW8A23A/SrDPpWWEAGbM++ep1/twFXrv7OgMlpfh2UMSpHiN/6UDdx0JyVAU1rp
+ KqeeTdLoeH5duVn4K4aNIFXPlkdF8UKN2WreOLSKFH5hjhvH3MYLl2bJ9cev1r8R920Ov+9l8
+ 57ynqNOX1yQsrTx88nnmXZNjjnqZIfQc6AbW0hdkzNDVHv++JUwbGGKvGhya5tesmurFqNofZ
+ JQXQWo/27wSkiZ0js2zuvjzz7LKQtJjwA58y9hy4xB/M/Hyl6KWOhzgFgz8ERPio4z9JBy2U2
+ 35ctENDFYj+4RIfp+3ydML8kQJHBeH1wsBof7plKWUJU/APjAWrOp7a81VsJPzNhdvD9Y2nGf
+ d9JXo9gsBi5XEoZ6X/t7t4Y6gPKpAt0b4l+hH9cw7i4zfi7usf6zo4EYyRHhZFJn8PVDO7wHw
+ TBQNvrBxM9jD7ucTBVWfYLPo+CXFoCt/yaEznEPGJLRrqOjQdZNAj5Dkb4UE+cJ3pkqMaM+aM
+ 9xPQTZ48fTm1B2kYRDSgHK9j+/ei8BlD4cOcSPgFV/PYmhbw1baz13GFHAE7D27XoWJwP6m0B
+ GVAjYQzxTtC4N8JkBUFUnELqeecVa+bK1lrmUgPRWZGMh0qJM5gSCbS651fEbYrjoY+5XSyIj
+ mUKBhFMYmK0zj5ZuZCStK5mNvWvKOu49XzpYJ/IHi9+X4ejSJbPBhknyV9q5uXs1ty9J29zpZ
+ 3BOTODrXB/ItgNJPOz72pphDMKi6ulwikfR6hbb4wRT2HwUkP2WJLl9LNVDDiUoFC3VkvgWFt
+ BqkuCmd+LdEvBKhaBk1r5C2e/ip+SY6mkbhWnDysd/NNGfqRHMXpvEgdZEycj1vzCNreJAtH/
+ zlp1065xJ8E+TJNSi+eKbDiaHwvdXd/cC00Dscc5jQAbGUq4wnr2eFHpO
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This program provides an up-to-the-moment load average measurement.  The
-user can take 1 sample, or obtain the average of N samples by number or
-time duration.  There is a daemon mode to have the global load average
-stats updated such that 'uptime' and other tools provide a more reasonable
-load average calculation over time.
+Hi Jeremy,
 
-A release note is provided for Cygwin 3.5.5.
-Documentation for doc/utils.xml is pending.
+On Tue, 12 Nov 2024, Jeremy Drake via Cygwin-patches wrote:
 
-Reported-by: Mark Liam Brown <brownmarkliam@gmail.com>
-Addresses: https://cygwin.com/pipermail/cygwin/2024-August/256361.html
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
-Fixes: N/A (new code)
+> From: Jeremy Drake <cygwin@jdrake.com>
+>
+> This addresses an extremely difficult to debug deadlock when running
+> under emulation on ARM64.
+>
+> A relatively easy way to trigger this bug is to call `fork()`, then with=
+in the
+> child process immediately call another `fork()` and then `exit()` the
+> intermediate process.
+>
+> It would seem that there is a "code emulation" lock on the wait thread a=
+t
+> this stage, and if the thread is terminated too early, that lock still e=
+xists
+> albeit without a thread, and nothing moves forward.
+>
+> It seems that a `SuspendThread()` combined with a `GetThreadContext()`
+> (to force the thread to _actually_ be suspended, for more details see
+> https://devblogs.microsoft.com/oldnewthing/20150205-00/?p=3D44743)
+> makes sure the thread is "booted" from emulation before it is suspended.
+>
+> Hopefully this means it won't be holding any locks or otherwise leave
+> emulation in a bad state when the thread is terminated.
+>
+> Also, attempt to use `CancelSynchonousIo()` (as seen in `flock.cc`) to a=
+void
+> the need for `TerminateThread()` altogether.  This doesn't always work,
+> however, so was not a complete fix for the deadlock issue.
+>
+> Addresses: https://cygwin.com/pipermail/cygwin-developers/2024-May/01269=
+4.html
+> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 
----
- winsup/cygwin/release/3.5.5 |   8 +
- winsup/utils/Makefile.am    |   2 +
- winsup/utils/loadavg.c      | 380 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 390 insertions(+)
- create mode 100644 winsup/utils/loadavg.c
+Excellent work! Thank you for your impressive tenacity to stick with this
+problem. I built an MSYS2 runtime with the fix in
+https://github.com/git-for-windows/msys2-runtime/pull/73, and then started
+your reproducer from
+https://inbox.sourceware.org/cygwin-developers/78f294de-4c94-242a-722e-fd9=
+8e51edff9@jdrake.com/,
+and it failed to dead-lock so far (it's been running for almost an hour).
 
-diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
-index a83ea7d8a..7db82631d 100644
---- a/winsup/cygwin/release/3.5.5
-+++ b/winsup/cygwin/release/3.5.5
-@@ -1,3 +1,11 @@
-+What's New:
-+-----------
-+
-+- New tool loadavg that provides up-to-the-moment load average measurement.
-+  It also has a daemon mode to continuously update the global load average.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-August/256361.html
-+
-+
- Fixes:
- ------
- 
-diff --git a/winsup/utils/Makefile.am b/winsup/utils/Makefile.am
-index 57a4f377c..3cb2f6bac 100644
---- a/winsup/utils/Makefile.am
-+++ b/winsup/utils/Makefile.am
-@@ -25,6 +25,7 @@ bin_PROGRAMS = \
- 	gmondump \
- 	kill \
- 	ldd \
-+	loadavg \
- 	locale \
- 	lsattr \
- 	minidumper \
-@@ -82,6 +83,7 @@ dumper_CXXFLAGS = -I$(top_srcdir)/../include $(AM_CXXFLAGS)
- dumper_LDADD = $(LDADD) -lpsapi -lntdll -lbfd @BFD_LIBS@
- dumper_LDFLAGS =
- ldd_LDADD = $(LDADD) -lpsapi -lntdll
-+loadavg_LDADD = $(LDADD) -lpdh
- mount_CXXFLAGS = -DFSTAB_ONLY $(AM_CXXFLAGS)
- minidumper_LDADD = $(LDADD) -ldbghelp
- pldd_LDADD = $(LDADD) -lpsapi
-diff --git a/winsup/utils/loadavg.c b/winsup/utils/loadavg.c
-new file mode 100644
-index 000000000..0bc3ffe1d
---- /dev/null
-+++ b/winsup/utils/loadavg.c
-@@ -0,0 +1,380 @@
-+/*
-+    loadavg.c
-+    Outputs to stdout an estimate of current cpu load
-+
-+    Written by Mark Geisert <mark@maxrnd.com>
-+    h/t to Jon Turney for Cygwin's loadavg.cc which served as a model
-+
-+    This file is part of Cygwin.
-+
-+    This software is a copyrighted work licensed under the terms of the
-+    Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
-+*/
-+
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <math.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/cygwin.h>
-+#include <sys/stat.h>
-+
-+#include <pdh.h>
-+
-+int once    = 0;
-+int samples = 0;
-+int verbose = 0;
-+SYSTEM_INFO sysinfo;
-+#define PIDFILE "/var/run/loadavg.pid"
-+#define PDHMSGFILE "/usr/include/w32api/pdhmsg.h"
-+
-+/* the following assumes standard 64Hz NT kernel counter update rate */
-+#define UPDATES_PER_MSEC 0.064
-+#define UPDATES_PER_SEC  64
-+#define UPDATES_PER_MIN  3840
-+#define UPDATES_PER_HOUR 230400
-+
-+PDH_HQUERY query;
-+PDH_HCOUNTER counter1;
-+PDH_HCOUNTER counter2;
-+#define c1name  L"\\Processor(_Total)\\% Processor Time"
-+#define c1namex L"\\Processor Information(_Total)\\% Processor Time"
-+#define c2name  L"\\System\\Processor Queue Length"
-+
-+void
-+usage (void)
-+{
-+  printf ("Loadavg estimates current system load average by sampling certain Windows\n");
-+  printf ("kernel counters over time.  The counters are updated 64 times per second.\n");
-+  printf ("\n");
-+  printf ("Usage: loadavg                           take one sample\n");
-+  printf ("\n");
-+  printf ("       loadavg [ -v ] <count>            take <count> samples\n");
-+  printf ("       loadavg [ -v ] <number>h|m|s|ms   take samples for <number> duration\n");
-+  printf ("           (specifying -v displays every sample taken)\n");
-+  printf ("\n");
-+  printf ("       loadavg -h                        this help message\n");
-+  printf ("       loadavg -d                        daemon (background) mode\n");
-+  printf ("           (ensures 1/5/15-minute load averages computed for 'uptime')\n");
-+  printf ("       loadavg -k                        terminates the daemon\n");
-+}
-+
-+/* Convert PDH error status to PDH error name, if possible */
-+char *
-+pdh_status (PDH_STATUS err)
-+{
-+  static FILE *f = NULL;
-+  static char  buf[132];
-+  static char  hexcode[32];
-+         char  line[132];
-+         char  prefix[80];
-+         char  middle[80];
-+  static char  suffix[80];
-+
-+  snprintf (hexcode, sizeof hexcode, "0x%X", err);
-+  if (strstr (suffix, hexcode))
-+    goto done; /* same as last time called */
-+
-+  if (f)
-+    (void) fseek (f, 0, SEEK_SET);
-+  else
-+    f = fopen (PDHMSGFILE, "r");
-+  if (!f)
-+    goto bail;
-+
-+  while (!feof (f)) {
-+    (void) fgets (line, (sizeof line) - 1, f);
-+    if (strncmp (line, "#define PDH_", 12))
-+      continue;
-+    if (!strstr (line, hexcode))
-+      continue;
-+    int num = sscanf (line, "%s %s %s", prefix, middle, suffix);
-+    if (num != 3)
-+      continue;
-+    snprintf (buf, sizeof buf, "returns %s", middle);
-+    goto done;
-+  }
-+
-+bail:
-+  snprintf (buf, sizeof buf, "returns %s", hexcode);
-+
-+done:
-+  return buf;
-+}
-+
-+/* Initialize state for reading counters once or many times */
-+bool
-+load_init (void)
-+{
-+  static bool tried       = false;
-+  static bool initialized = false;
-+
-+  if (!tried)
-+    {
-+      tried = true;
-+
-+      PDH_STATUS ret = PdhOpenQueryW (NULL, 0, &query);
-+      if (ret != ERROR_SUCCESS) {
-+	fprintf (stderr, "PdhOpenQueryW %s\n", pdh_status (ret));
-+	return false;
-+      }
-+
-+      /* The Windows name for counter1 can vary.. look for both alternatives */
-+      ret = PdhAddEnglishCounterW (query, c1name, 0, &counter1);
-+      if (ret != ERROR_SUCCESS) {
-+	fprintf (stderr, "PdhAddEnglishCounterW#1 %s\n", pdh_status (ret));
-+	ret = PdhAddEnglishCounterW (query, c1namex, 0, &counter1);
-+	if (ret != ERROR_SUCCESS) {
-+	  fprintf (stderr, "PdhAddEnglishCounterW#1 %s\n", pdh_status (ret));
-+	  return false;
-+	}
-+      }
-+
-+      /* What we call counter2 might be missing.. carry on anyway */
-+      ret = PdhAddEnglishCounterW (query, c2name, 0, &counter2);
-+      if (ret != ERROR_SUCCESS) {
-+	fprintf (stderr, "PdhAddEnglishCounterW#2 %s\n", pdh_status (ret));
-+      }
-+
-+      GetSystemInfo (&sysinfo); /* get system number of processors, etc. */
-+      initialized = true;
-+
-+      /* obtain+discard first sample now; avoids PDH_INVALID_DATA in get_load */
-+      (void) PdhCollectQueryData (query); /* i.o.w. take the error here */
-+
-+      /* Delay a short time so PdhCQD in caller will have data to collect */
-+      Sleep (16/*ms*/); /* let other procs run; one|more yield()s not enough */
-+    }
-+
-+  return initialized;
-+}
-+
-+/* estimate the current load based on certain counter values */
-+double
-+get_load (void)
-+{
-+  PDH_STATUS ret = PdhCollectQueryData (query);
-+  if (ret != ERROR_SUCCESS) {
-+    fprintf (stderr, "PdhCollectQueryData %s\n", pdh_status (ret));
-+    return 0.0;
-+  }
-+
-+  /* Estimate the number of running processes as
-+     (NumberOfProcessors) * (% Processor Time) */
-+  PDH_FMT_COUNTERVALUE fmtvalue1;
-+  ret = PdhGetFormattedCounterValue (counter1, PDH_FMT_DOUBLE, NULL, &fmtvalue1);
-+  if (ret != ERROR_SUCCESS) {
-+    fprintf (stderr, "PdhGetFormattedCounterValue#1 %s\n", pdh_status (ret));
-+    return 0.0;
-+  }
-+
-+  double ncpus = (double) sysinfo.dwNumberOfProcessors;
-+  if (verbose) {
-+    fprintf (stdout, "%llu ", GetTickCount64 ());
-+
-+    fprintf (stdout, "ncpus: %d, %%ptime: %3.2f, ", (int) ncpus,
-+		     fmtvalue1.doubleValue);
-+  }
-+  double running = fmtvalue1.doubleValue * ncpus / 100.0;
-+
-+  /* Estimate the number of runnable threads as
-+     (ProcessorQueueLength) / (NumberOfProcessors) */
-+  double rql = 0.0;
-+  PDH_FMT_COUNTERVALUE fmtvalue2;
-+  ret = PdhGetFormattedCounterValue (counter2, PDH_FMT_LONG, NULL, &fmtvalue2);
-+  if (ret == ERROR_SUCCESS) {
-+    rql = (double) fmtvalue2.longValue;
-+    rql /= ncpus; /* make the measure a per-cpu queue length */
-+  } else {
-+    ++once; /* counter is missing; just print an error message once (below) */
-+  }
-+
-+  double load = running + rql;
-+  if (verbose ) {
-+    fprintf (stdout, "running: %3.2f, effrql: %3.2f, load: %3.2f\n",
-+		     running, rql, load);
-+  }
-+  if (once == 1)
-+    fprintf (stderr, "PdhGetFormattedCounterValue#2 %s\n", pdh_status (ret));
-+
-+  ++samples;
-+  return load;
-+}
-+
-+int
-+start_daemon (void)
-+{
-+  char  buf[132];
-+  int   fd = -1;
-+  pid_t pid = 0;
-+
-+top:
-+  fd = open (PIDFILE, O_RDWR | O_CREAT | O_EXCL);
-+  if (fd == -1) {
-+    fd = open (PIDFILE, O_RDONLY);
-+    if (fd == -1) {
-+      fprintf (stderr, "unable to open pid file\n");
-+      return 1;
-+    }
-+
-+    memset (buf, 0, sizeof buf);
-+    read (fd, buf, sizeof buf);
-+    close (fd);
-+
-+    pid = atoi (buf);
-+    /* does pid still exist? */
-+    if (kill (pid, 0) == 0) {
-+      fprintf (stderr, "daemon already running as pid %d\n", pid);
-+      return 1;
-+    }
-+    unlink (PIDFILE);
-+    goto top;
-+  }
-+  fchmod (fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+
-+  (void) daemon (0, 0);
-+
-+  /* this code runs in the daemon; the parent process has exited via daemon() */
-+  snprintf (buf, sizeof buf, "%d", getpid ());
-+  write (fd, buf, strlen (buf));
-+  /* don't close(fd).. keep it open to protect against another daemon */
-+
-+  double loadavg[3];
-+  while (1) {
-+    (void) getloadavg (loadavg, 3);
-+    sleep (5/*seconds*/);
-+  }
-+  return 0;
-+}
-+
-+int
-+stop_daemon (void)
-+{
-+  char     buf[132];
-+  int      fd = -1;
-+  ssize_t  len = 0;
-+  pid_t    pid = 0;
-+  char    *winpath = NULL;
-+
-+  fd = open (PIDFILE, O_RDONLY);
-+  if (fd == -1) {
-+    fprintf (stderr, "unable to open pid file\n");
-+    return 1;
-+  }
-+  memset (buf, 0, sizeof buf);
-+  read (fd, buf, sizeof buf);
-+  close (fd);
-+
-+  pid = atoi (buf);
-+  /* does pid still exist? */
-+  if (kill (pid, 0) == -1) {
-+    fprintf (stderr, "daemon pid %d already gone\n", pid);
-+    unlink (PIDFILE);
-+    return 1;
-+  }
-+
-+  /* using kill() to terminate the daemon fails (why?); work around that */
-+  winpath = getenv ("SYSTEMROOT");
-+  len = cygwin_conv_path (CCP_WIN_A_TO_POSIX | CCP_PROC_CYGDRIVE,
-+                          winpath, buf, sizeof buf);
-+  len = strlen (buf);
-+  snprintf (&buf[len], (sizeof buf) - len,
-+            "/System32/taskkill /f /pid `cat /proc/%d/winpid`", pid);
-+  fprintf (stdout, "Windows says: ");
-+  fflush (stdout);
-+  system (buf);
-+
-+  /* if pid is gone, delete pid file */
-+  if (kill (pid, 0) == -1)
-+    unlink (PIDFILE);
-+  return 0;
-+}
-+
-+int
-+main (int argc, char **argv)
-+{
-+  (void) setvbuf (stdout, NULL, _IOLBF, 120);
-+  if (!load_init ())
-+    return 1;
-+
-+  /* If program launched with no args, print load once and exit; else loop */
-+  if (argc == 1)
-+    fprintf (stdout, "%3.2f\n", get_load ());
-+  else {
-+    int     arg = 1;
-+
-+    while (arg < argc && argv[arg][0] == '-') {
-+      switch (argv[arg][1]) {
-+      case '\000':
-+	goto bail;
-+
-+      case 'd':
-+	if (arg != 1 || (arg != argc - 1))
-+	  goto bail;
-+	return start_daemon ();
-+
-+      case 'k':
-+        if (arg != 1 || (arg != argc - 1))
-+          goto bail;
-+	return stop_daemon ();
-+
-+      case 'h':
-+	usage ();
-+	return 0;
-+
-+      case 'v':
-+	++verbose;
-+	break;
-+      }
-+      ++arg;
-+    }
-+    if (arg != argc - 1) {
-+bail:
-+      usage ();
-+      return 1;
-+    }
-+
-+    /* deal with last arg whether it's a number or a duration */
-+    int     count;
-+    double  number = 0.0;
-+    char   *ptr = argv[arg];
-+    char    units[80];
-+
-+    units[0] = '\000';
-+    int num = sscanf (ptr, "%lg%s", &number, units);
-+    switch (num) {
-+    case 1: /* arg looks like just a number */
-+      if (number > 0.0 && !strlen (units))
-+	goto ready;
-+      // fallthru
-+    case 0: /* arg looks like garbage of some kind */
-+      goto bail;
-+
-+    case 2: /* arg looks like it could be a duration */
-+      if (!strcmp (units, "h"))
-+	number *= UPDATES_PER_HOUR;
-+      else if (!strcmp (units, "m"))
-+	number *= UPDATES_PER_MIN;
-+      else if (!strcmp (units, "s"))
-+	number *= UPDATES_PER_SEC;
-+      else if (!strcmp (units, "ms"))
-+	number *= UPDATES_PER_MSEC;
-+      else
-+	goto bail;
-+      // fallthru
-+    }
-+
-+ready:
-+    count = (int) ceil (number);
-+    double totload = 0.0;
-+    while (samples < count) {
-+      totload += get_load ();
-+      Sleep (11/*ms*/); /* tested best at capturing a sample every 15|16ms */
-+    }
-+    fprintf (stdout, "%3.2f\n", totload / samples);
-+  }
-+
-+  return 0;
-+}
--- 
-2.45.1
+In other words, I would like to offer my support for including this in
+Cygwin so that these dead-locks on Windows/ARM64 will be a thing of the
+past.
 
+Thank you so, so much,
+Johannes
+
+> ---
+>  winsup/cygwin/cygthread.cc | 14 ++++++++++++++
+>  winsup/cygwin/sigproc.cc   |  3 ++-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/winsup/cygwin/cygthread.cc b/winsup/cygwin/cygthread.cc
+> index 54918e7677..4f16097531 100644
+> --- a/winsup/cygwin/cygthread.cc
+> +++ b/winsup/cygwin/cygthread.cc
+> @@ -302,6 +302,20 @@ cygthread::terminate_thread ()
+>    if (!inuse)
+>      goto force_notterminated;
+>
+> +  if (_my_tls._ctinfo !=3D this)
+> +    {
+> +      CONTEXT context;
+> +      context.ContextFlags =3D CONTEXT_CONTROL;
+> +      /* SuspendThread makes sure a thread is "booted" from emulation b=
+efore
+> +	 it is suspended.  As such, the emulator hopefully won't be in a bad
+> +	 state (aka, holding any locks) when the thread is terminated. */
+> +      SuspendThread (h);
+> +      /* We need to call GetThreadContext, even though we don't care ab=
+out the
+> +	 context, because SuspendThread is asynchronous and GetThreadContext
+> +	 will make sure the thread is *really* suspended before returning */
+> +      GetThreadContext (h, &context);
+> +    }
+> +
+>    TerminateThread (h, 0);
+>    WaitForSingleObject (h, INFINITE);
+>    CloseHandle (h);
+> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+> index 81b6c31695..360bdac232 100644
+> --- a/winsup/cygwin/sigproc.cc
+> +++ b/winsup/cygwin/sigproc.cc
+> @@ -410,7 +410,8 @@ proc_terminate ()
+>  	  if (!have_execed || !have_execed_cygwin)
+>  	    chld_procs[i]->ppid =3D 1;
+>  	  if (chld_procs[i].wait_thread)
+> -	    chld_procs[i].wait_thread->terminate_thread ();
+> +	    if (!CancelSynchronousIo (chld_procs[i].wait_thread->thread_handle=
+ ()))
+> +	      chld_procs[i].wait_thread->terminate_thread ();
+>  	  /* Release memory associated with this process unless it is 'myself'=
+.
+>  	     'myself' is only in the chld_procs table when we've execed.  We
+>  	     reach here when the next process has finished initializing but we
+> --
+> 2.47.0.windows.2
+>
+>
