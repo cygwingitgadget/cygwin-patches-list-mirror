@@ -1,217 +1,481 @@
 Return-Path: <SRS0=g8FB=SI=maxrnd.com=mark@sourceware.org>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 8D7E73858D20
-	for <cygwin-patches@cygwin.com>; Wed, 13 Nov 2024 06:03:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8D7E73858D20
+	by sourceware.org (Postfix) with ESMTPS id 7C3533858D20
+	for <cygwin-patches@cygwin.com>; Wed, 13 Nov 2024 06:22:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7C3533858D20
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8D7E73858D20
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7C3533858D20
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731477843; cv=none;
-	b=vWXuLppC1KCe2/yDHFiUg6B092xgelc81OkaqPqbnIMIWtV3/dwgm20zwbhuHC7lxJ83xfmCpbF0wj39magFqjA1k6ukCT49bqMyBTG1aPegwd1U3z51bU8jI1WDM+RYY9HsV7xZWT6TQMrO0Ru027rTlLMtF6km/W8YL9vBwYU=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731478923; cv=none;
+	b=xCGbMCwIXM6xxfS/v69ALuhL1/zNuk3N93eJo7q0z5MaZDY4RnmGattZHAPw1LGyC2ENiqUdQOMxoSBYSgZlwpQLZYObNYXtjjnRqMvJXFXGyavLTvYx38zx5V4hc7uixmuBjVjIxMrjs+2ckYEA7KG82Q5Wy17/Ym9cSu7EuRU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731477843; c=relaxed/simple;
-	bh=mtAKmYNK+9GK4RHzefJgGtN8dHYQqA2zLPoN49VmTJs=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=GunX8ZzCmwgsJcMJqOBlfEfk5+NBjr8puuvBROxN2m3UJ1HhF9rGHiGNjOu41c5Wb3oA4qTY5m5D7FI+ZywWuwMV5W9GJ/q1rCsTA1HzeXFcvULVZwW417DLs5QD9qk5eiXGmN07yhbD8/CAN06IdImEiImbNqeM9H+/Sez9X5M=
+	t=1731478923; c=relaxed/simple;
+	bh=kb0IdWyiXrpQz8LiPC0QeKmEkcUlWlsRiSetZT8uoqw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=NuDVY8nOdpbKfhac0w3Dg4YbG6S5pO6Kd+8G4FIpqXT5WlQ6GVmm4n9EBgH5hTsBxXrfv5spoxGctaqnyxD/aP/95UYNDeiebvb8WrwUbrjYm72bMOkrTRrxhQxjKIp0l7iUbKhlxW3m6dyEXtneOXcgWSubNS2yYaKGQCDWHao=
 ARC-Authentication-Results: i=1; server2.sourceware.org
 Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 4AD672wj081416;
-	Tue, 12 Nov 2024 22:07:02 -0800 (PST)
+	by m0.truegem.net (8.12.11/8.12.11) id 4AD6P3BS083488;
+	Tue, 12 Nov 2024 22:25:03 -0800 (PST)
 	(envelope-from mark@maxrnd.com)
 Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdtewICZ; Tue Nov 12 22:07:01 2024
+ via SMTP by m0.truegem.net, id smtpdtGpqZC; Tue Nov 12 22:24:58 2024
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
 Cc: Mark Geisert <mark@maxrnd.com>, Mark Liam Brown <brownmarkliam@gmail.com>
-Subject: [PATCH v2] Cygwin: Minor updates to load average calculations
-Date: Tue, 12 Nov 2024 22:03:46 -0800
-Message-ID: <20241113060354.2185-1-mark@maxrnd.com>
+Subject: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
+Date: Tue, 12 Nov 2024 22:21:45 -0800
+Message-ID: <20241113062152.2225-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Commentary wording adjusted to say ProcessorQueueLength counts threads,
-not processes.  Also mention (upcoming) new tool /bin/loadavg.  The
-release note for Cygwin 3.5.5 is updated.
+This program provides an up-to-the-moment load average measurement.  The
+user can take 1 sample, or obtain the average of N samples by number or
+time duration.  There is a daemon mode to have the global load average
+stats updated such that 'uptime' and other tools provide a more reasonable
+load average calculation over time.
 
-In counting runnable threads, divide by NumberOfProcessors to model
-distributing the threads among all processors.  Otherwise one gets e.g.
-PQLs of 20 or more just running a few lively X applications.  These PQLs
-vary greatly between kernel stats updates every 16ms, so are very clearly
-short-term loads.  This change helps reduce jitter in load average
-calculations.
-
-At end of load_init(), obtain and discard the first measure of the
-counters to deal with the first call always returning error, no data.
-Follow this with a short delay so the next measure actually has data to
-report.
-
-At least one older version of Windows, i.e. Win10 Pro 21H1, has a different
-name/location for the '% Processor Time' counter and is missing the
-'Processor Queue Length' counter entirely.  Code is changed to support
-both possible locations of the former and treat the latter as always
-reporting 0.0.
+A release note is provided for Cygwin 3.5.5.
+Documentation for doc/utils.xml is pending.
 
 Reported-by: Mark Liam Brown <brownmarkliam@gmail.com>
 Addresses: https://cygwin.com/pipermail/cygwin/2024-August/256361.html
 Signed-off-by: Mark Geisert <mark@maxrnd.com>
-Fixes: de7f13aa9ace (Cygwin: loadavg: improve debugging of load_init)
+Fixes: N/A (new code)
 
 ---
- winsup/cygwin/loadavg.cc    | 70 ++++++++++++++++++++++++++-----------
- winsup/cygwin/release/3.5.5 |  3 ++
- 2 files changed, 52 insertions(+), 21 deletions(-)
+ winsup/cygwin/release/3.5.5 |   8 +
+ winsup/utils/Makefile.am    |   2 +
+ winsup/utils/loadavg.c      | 380 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 390 insertions(+)
+ create mode 100644 winsup/utils/loadavg.c
 
-diff --git a/winsup/cygwin/loadavg.cc b/winsup/cygwin/loadavg.cc
-index 127591a2e..37da077fb 100644
---- a/winsup/cygwin/loadavg.cc
-+++ b/winsup/cygwin/loadavg.cc
-@@ -16,16 +16,26 @@
-   A global load average estimate is maintained in shared memory.  Access to that
-   is guarded by a mutex.  This estimate is only updated at most every 5 seconds.
- 
--  We attempt to count running and runnable processes, but unlike linux we don't
--  count processes in uninterruptible sleep (blocked on I/O).
--
--  The number of running processes is estimated as (NumberOfProcessors) * (%
--  Processor Time).  The number of runnable processes is estimated as
--  ProcessorQueueLength.
-+  Responsibility for updating the global load average is distributed among
-+  all callers of the getloadavg() syscall.  If the user finds that that is not
-+  consistent enough (e.g., 'uptime' reporting nonsense load averages), they can
-+  use the new /bin/loadavg tool, which has a daemon mode to keep the global
-+  load average updated consistently.
-+
-+  We attempt to count running processes and runnable threads, but unlike
-+  linux we don't count threads in uninterruptible sleep (blocked on I/O).
-+
-+  The number of running processes is estimated as
-+    (NumberOfProcessors) * (% Processor Time).
-+  The number of runnable threads is estimated as
-+    (ProcessorQueueLength) / (NumberOfProcessors).
-+  The "instantaneous" load estimate is taken to be the sum of the results of
-+  those two expressions.
- 
-   Note that PDH will only return data for '% Processor Time' afer the second
-   call to PdhCollectQueryData(), as it's computed over an interval, so the first
--  attempt to estimate load will fail and 0.0 will be returned.
-+  attempt to estimate load will fail and 0.0 will be returned.  (This nuisance
-+  is now worked-around near the end of load_init() below.)
- 
-   We also assume that '% Processor Time' averaged over the interval since the
-   last time getloadavg() was called is a good approximation of the instantaneous
-@@ -62,31 +72,48 @@ static bool load_init (void)
- 	debug_printf ("PdhOpenQueryW, status %y", status);
- 	return false;
-       }
-+
-     status = PdhAddEnglishCounterW (query,
- 				    L"\\Processor(_Total)\\% Processor Time",
- 				    0, &counter1);
-     if (status != STATUS_SUCCESS)
-       {
- 	debug_printf ("PdhAddEnglishCounterW(time), status %y", status);
--	return false;
-+
-+	/* Windows 10 Pro 21H1, and maybe others, use an alternate name */
-+	status = PdhAddEnglishCounterW (query,
-+			L"\\Processor Information(_Total)\\% Processor Time",
-+			0, &counter1);
-+	if (status != STATUS_SUCCESS)
-+	  {
-+	    debug_printf ("PdhAddEnglishCounterW(alt time), status %y", status);
-+	    return false;
-+	  }
-       }
-+
-+    /* Windows 10 Pro 21H1, and maybe others, are missing this counter */
-     status = PdhAddEnglishCounterW (query,
- 				    L"\\System\\Processor Queue Length",
- 				    0, &counter2);
--
-     if (status != STATUS_SUCCESS)
-       {
- 	debug_printf ("PdhAddEnglishCounterW(queue length), status %y", status);
--	return false;
-+	; /* don't return false, just use zero later in calculations */
-       }
- 
-     mutex = CreateMutex(&sec_all_nih, FALSE, "cyg.loadavg.mutex");
-     if (!mutex) {
--      debug_printf("opening loadavg mutexfailed\n");
-+      debug_printf("opening loadavg mutex failed\n");
-       return false;
-     }
- 
-     initialized = true;
-+
-+    /* obtain+discard first sample now; avoids PDH_INVALID_DATA in get_load */
-+    (void) PdhCollectQueryData (query); /* i.o.w. take the error here */
-+
-+    /* Delay a short time so PdhCQD in caller will have data to collect */
-+    Sleep (16/*ms*/); /* let other procs run; one|more yield()s not enough */
-   }
- 
-   return initialized;
-@@ -101,24 +128,25 @@ static bool get_load (double *load)
-   if (ret != ERROR_SUCCESS)
-     return false;
- 
--  /* Estimate the number of running processes as (NumberOfProcessors) * (%
--     Processor Time) */
-+  /* Estimate the number of running processes as
-+     (NumberOfProcessors) * (% Processor Time) */
-   PDH_FMT_COUNTERVALUE fmtvalue1;
-   ret = PdhGetFormattedCounterValue (counter1, PDH_FMT_DOUBLE, NULL, &fmtvalue1);
-   if (ret != ERROR_SUCCESS)
-     return false;
--
-   double running = fmtvalue1.doubleValue * wincap.cpu_count () / 100;
- 
--  /* Estimate the number of runnable processes using ProcessorQueueLength */
--  PDH_FMT_COUNTERVALUE fmtvalue2;
-+  /* Estimate the number of runnable threads as
-+     (ProcessorQueueLength) / (NumberOfProcessors) */
-+  PDH_FMT_COUNTERVALUE fmtvalue2 = { 0 };
-   ret = PdhGetFormattedCounterValue (counter2, PDH_FMT_LONG, NULL, &fmtvalue2);
-   if (ret != ERROR_SUCCESS)
--    return false;
-+    ; /* don't return false, just treat as if zero was read */
- 
--  LONG rql = fmtvalue2.longValue;
-+  /* Divide the runnable thread count among NumberOfProcessors */
-+  double rql = (double) fmtvalue2.longValue / (double) wincap.cpu_count ();
- 
--  *load = rql + running;
-+  *load = running + rql;
-   return true;
- }
- 
-@@ -147,8 +175,8 @@ void loadavginfo::update_loadavg ()
-   if (!get_load (&active_tasks))
-     return;
- 
--  /* Don't recalculate the load average if less than 5 seconds has elapsed since
--     the last time it was calculated */
-+  /* Don't recalculate the load average if less than 5 seconds has elapsed
-+     since the last time it was calculated */
-   time_t curr_time = time (NULL);
-   int delta_time = curr_time - last_time;
-   if (delta_time < 5) {
 diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
-index 2ca4572db..a83ea7d8a 100644
+index a83ea7d8a..7db82631d 100644
 --- a/winsup/cygwin/release/3.5.5
 +++ b/winsup/cygwin/release/3.5.5
-@@ -33,3 +33,6 @@ Fixes:
- 
- - Fix type of pthread_sigqueue() first parameter to match Linux.
-   Addresses: https://cygwin.com/pipermail/cygwin/2024-September/256439.html
+@@ -1,3 +1,11 @@
++What's New:
++-----------
 +
-+- Minor updates to load average calculations
++- New tool loadavg that provides up-to-the-moment load average measurement.
++  It also has a daemon mode to continuously update the global load average.
 +  Addresses: https://cygwin.com/pipermail/cygwin/2024-August/256361.html
++
++
+ Fixes:
+ ------
+ 
+diff --git a/winsup/utils/Makefile.am b/winsup/utils/Makefile.am
+index 57a4f377c..3cb2f6bac 100644
+--- a/winsup/utils/Makefile.am
++++ b/winsup/utils/Makefile.am
+@@ -25,6 +25,7 @@ bin_PROGRAMS = \
+ 	gmondump \
+ 	kill \
+ 	ldd \
++	loadavg \
+ 	locale \
+ 	lsattr \
+ 	minidumper \
+@@ -82,6 +83,7 @@ dumper_CXXFLAGS = -I$(top_srcdir)/../include $(AM_CXXFLAGS)
+ dumper_LDADD = $(LDADD) -lpsapi -lntdll -lbfd @BFD_LIBS@
+ dumper_LDFLAGS =
+ ldd_LDADD = $(LDADD) -lpsapi -lntdll
++loadavg_LDADD = $(LDADD) -lpdh
+ mount_CXXFLAGS = -DFSTAB_ONLY $(AM_CXXFLAGS)
+ minidumper_LDADD = $(LDADD) -ldbghelp
+ pldd_LDADD = $(LDADD) -lpsapi
+diff --git a/winsup/utils/loadavg.c b/winsup/utils/loadavg.c
+new file mode 100644
+index 000000000..0bc3ffe1d
+--- /dev/null
++++ b/winsup/utils/loadavg.c
+@@ -0,0 +1,380 @@
++/*
++    loadavg.c
++    Outputs to stdout an estimate of current cpu load
++
++    Written by Mark Geisert <mark@maxrnd.com>
++    h/t to Jon Turney for Cygwin's loadavg.cc which served as a model
++
++    This file is part of Cygwin.
++
++    This software is a copyrighted work licensed under the terms of the
++    Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
++*/
++
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <math.h>
++#include <signal.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/cygwin.h>
++#include <sys/stat.h>
++
++#include <pdh.h>
++
++int once    = 0;
++int samples = 0;
++int verbose = 0;
++SYSTEM_INFO sysinfo;
++#define PIDFILE "/var/run/loadavg.pid"
++#define PDHMSGFILE "/usr/include/w32api/pdhmsg.h"
++
++/* the following assumes standard 64Hz NT kernel counter update rate */
++#define UPDATES_PER_MSEC 0.064
++#define UPDATES_PER_SEC  64
++#define UPDATES_PER_MIN  3840
++#define UPDATES_PER_HOUR 230400
++
++PDH_HQUERY query;
++PDH_HCOUNTER counter1;
++PDH_HCOUNTER counter2;
++#define c1name  L"\\Processor(_Total)\\% Processor Time"
++#define c1namex L"\\Processor Information(_Total)\\% Processor Time"
++#define c2name  L"\\System\\Processor Queue Length"
++
++void
++usage (void)
++{
++  printf ("Loadavg estimates current system load average by sampling certain Windows\n");
++  printf ("kernel counters over time.  The counters are updated 64 times per second.\n");
++  printf ("\n");
++  printf ("Usage: loadavg                           take one sample\n");
++  printf ("\n");
++  printf ("       loadavg [ -v ] <count>            take <count> samples\n");
++  printf ("       loadavg [ -v ] <number>h|m|s|ms   take samples for <number> duration\n");
++  printf ("           (specifying -v displays every sample taken)\n");
++  printf ("\n");
++  printf ("       loadavg -h                        this help message\n");
++  printf ("       loadavg -d                        daemon (background) mode\n");
++  printf ("           (ensures 1/5/15-minute load averages computed for 'uptime')\n");
++  printf ("       loadavg -k                        terminates the daemon\n");
++}
++
++/* Convert PDH error status to PDH error name, if possible */
++char *
++pdh_status (PDH_STATUS err)
++{
++  static FILE *f = NULL;
++  static char  buf[132];
++  static char  hexcode[32];
++         char  line[132];
++         char  prefix[80];
++         char  middle[80];
++  static char  suffix[80];
++
++  snprintf (hexcode, sizeof hexcode, "0x%X", err);
++  if (strstr (suffix, hexcode))
++    goto done; /* same as last time called */
++
++  if (f)
++    (void) fseek (f, 0, SEEK_SET);
++  else
++    f = fopen (PDHMSGFILE, "r");
++  if (!f)
++    goto bail;
++
++  while (!feof (f)) {
++    (void) fgets (line, (sizeof line) - 1, f);
++    if (strncmp (line, "#define PDH_", 12))
++      continue;
++    if (!strstr (line, hexcode))
++      continue;
++    int num = sscanf (line, "%s %s %s", prefix, middle, suffix);
++    if (num != 3)
++      continue;
++    snprintf (buf, sizeof buf, "returns %s", middle);
++    goto done;
++  }
++
++bail:
++  snprintf (buf, sizeof buf, "returns %s", hexcode);
++
++done:
++  return buf;
++}
++
++/* Initialize state for reading counters once or many times */
++bool
++load_init (void)
++{
++  static bool tried       = false;
++  static bool initialized = false;
++
++  if (!tried)
++    {
++      tried = true;
++
++      PDH_STATUS ret = PdhOpenQueryW (NULL, 0, &query);
++      if (ret != ERROR_SUCCESS) {
++	fprintf (stderr, "PdhOpenQueryW %s\n", pdh_status (ret));
++	return false;
++      }
++
++      /* The Windows name for counter1 can vary.. look for both alternatives */
++      ret = PdhAddEnglishCounterW (query, c1name, 0, &counter1);
++      if (ret != ERROR_SUCCESS) {
++	fprintf (stderr, "PdhAddEnglishCounterW#1 %s\n", pdh_status (ret));
++	ret = PdhAddEnglishCounterW (query, c1namex, 0, &counter1);
++	if (ret != ERROR_SUCCESS) {
++	  fprintf (stderr, "PdhAddEnglishCounterW#1 %s\n", pdh_status (ret));
++	  return false;
++	}
++      }
++
++      /* What we call counter2 might be missing.. carry on anyway */
++      ret = PdhAddEnglishCounterW (query, c2name, 0, &counter2);
++      if (ret != ERROR_SUCCESS) {
++	fprintf (stderr, "PdhAddEnglishCounterW#2 %s\n", pdh_status (ret));
++      }
++
++      GetSystemInfo (&sysinfo); /* get system number of processors, etc. */
++      initialized = true;
++
++      /* obtain+discard first sample now; avoids PDH_INVALID_DATA in get_load */
++      (void) PdhCollectQueryData (query); /* i.o.w. take the error here */
++
++      /* Delay a short time so PdhCQD in caller will have data to collect */
++      Sleep (16/*ms*/); /* let other procs run; one|more yield()s not enough */
++    }
++
++  return initialized;
++}
++
++/* estimate the current load based on certain counter values */
++double
++get_load (void)
++{
++  PDH_STATUS ret = PdhCollectQueryData (query);
++  if (ret != ERROR_SUCCESS) {
++    fprintf (stderr, "PdhCollectQueryData %s\n", pdh_status (ret));
++    return 0.0;
++  }
++
++  /* Estimate the number of running processes as
++     (NumberOfProcessors) * (% Processor Time) */
++  PDH_FMT_COUNTERVALUE fmtvalue1;
++  ret = PdhGetFormattedCounterValue (counter1, PDH_FMT_DOUBLE, NULL, &fmtvalue1);
++  if (ret != ERROR_SUCCESS) {
++    fprintf (stderr, "PdhGetFormattedCounterValue#1 %s\n", pdh_status (ret));
++    return 0.0;
++  }
++
++  double ncpus = (double) sysinfo.dwNumberOfProcessors;
++  if (verbose) {
++    fprintf (stdout, "%llu ", GetTickCount64 ());
++
++    fprintf (stdout, "ncpus: %d, %%ptime: %3.2f, ", (int) ncpus,
++		     fmtvalue1.doubleValue);
++  }
++  double running = fmtvalue1.doubleValue * ncpus / 100.0;
++
++  /* Estimate the number of runnable threads as
++     (ProcessorQueueLength) / (NumberOfProcessors) */
++  double rql = 0.0;
++  PDH_FMT_COUNTERVALUE fmtvalue2;
++  ret = PdhGetFormattedCounterValue (counter2, PDH_FMT_LONG, NULL, &fmtvalue2);
++  if (ret == ERROR_SUCCESS) {
++    rql = (double) fmtvalue2.longValue;
++    rql /= ncpus; /* make the measure a per-cpu queue length */
++  } else {
++    ++once; /* counter is missing; just print an error message once (below) */
++  }
++
++  double load = running + rql;
++  if (verbose ) {
++    fprintf (stdout, "running: %3.2f, effrql: %3.2f, load: %3.2f\n",
++		     running, rql, load);
++  }
++  if (once == 1)
++    fprintf (stderr, "PdhGetFormattedCounterValue#2 %s\n", pdh_status (ret));
++
++  ++samples;
++  return load;
++}
++
++int
++start_daemon (void)
++{
++  char  buf[132];
++  int   fd = -1;
++  pid_t pid = 0;
++
++top:
++  fd = open (PIDFILE, O_RDWR | O_CREAT | O_EXCL);
++  if (fd == -1) {
++    fd = open (PIDFILE, O_RDONLY);
++    if (fd == -1) {
++      fprintf (stderr, "unable to open pid file\n");
++      return 1;
++    }
++
++    memset (buf, 0, sizeof buf);
++    read (fd, buf, sizeof buf);
++    close (fd);
++
++    pid = atoi (buf);
++    /* does pid still exist? */
++    if (kill (pid, 0) == 0) {
++      fprintf (stderr, "daemon already running as pid %d\n", pid);
++      return 1;
++    }
++    unlink (PIDFILE);
++    goto top;
++  }
++  fchmod (fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++
++  (void) daemon (0, 0);
++
++  /* this code runs in the daemon; the parent process has exited via daemon() */
++  snprintf (buf, sizeof buf, "%d", getpid ());
++  write (fd, buf, strlen (buf));
++  /* don't close(fd).. keep it open to protect against another daemon */
++
++  double loadavg[3];
++  while (1) {
++    (void) getloadavg (loadavg, 3);
++    sleep (5/*seconds*/);
++  }
++  return 0;
++}
++
++int
++stop_daemon (void)
++{
++  char     buf[132];
++  int      fd = -1;
++  ssize_t  len = 0;
++  pid_t    pid = 0;
++  char    *winpath = NULL;
++
++  fd = open (PIDFILE, O_RDONLY);
++  if (fd == -1) {
++    fprintf (stderr, "unable to open pid file\n");
++    return 1;
++  }
++  memset (buf, 0, sizeof buf);
++  read (fd, buf, sizeof buf);
++  close (fd);
++
++  pid = atoi (buf);
++  /* does pid still exist? */
++  if (kill (pid, 0) == -1) {
++    fprintf (stderr, "daemon pid %d already gone\n", pid);
++    unlink (PIDFILE);
++    return 1;
++  }
++
++  /* using kill() to terminate the daemon fails (why?); work around that */
++  winpath = getenv ("SYSTEMROOT");
++  len = cygwin_conv_path (CCP_WIN_A_TO_POSIX | CCP_PROC_CYGDRIVE,
++                          winpath, buf, sizeof buf);
++  len = strlen (buf);
++  snprintf (&buf[len], (sizeof buf) - len,
++            "/System32/taskkill /f /pid `cat /proc/%d/winpid`", pid);
++  fprintf (stdout, "Windows says: ");
++  fflush (stdout);
++  system (buf);
++
++  /* if pid is gone, delete pid file */
++  if (kill (pid, 0) == -1)
++    unlink (PIDFILE);
++  return 0;
++}
++
++int
++main (int argc, char **argv)
++{
++  (void) setvbuf (stdout, NULL, _IOLBF, 120);
++  if (!load_init ())
++    return 1;
++
++  /* If program launched with no args, print load once and exit; else loop */
++  if (argc == 1)
++    fprintf (stdout, "%3.2f\n", get_load ());
++  else {
++    int     arg = 1;
++
++    while (arg < argc && argv[arg][0] == '-') {
++      switch (argv[arg][1]) {
++      case '\000':
++	goto bail;
++
++      case 'd':
++	if (arg != 1 || (arg != argc - 1))
++	  goto bail;
++	return start_daemon ();
++
++      case 'k':
++        if (arg != 1 || (arg != argc - 1))
++          goto bail;
++	return stop_daemon ();
++
++      case 'h':
++	usage ();
++	return 0;
++
++      case 'v':
++	++verbose;
++	break;
++      }
++      ++arg;
++    }
++    if (arg != argc - 1) {
++bail:
++      usage ();
++      return 1;
++    }
++
++    /* deal with last arg whether it's a number or a duration */
++    int     count;
++    double  number = 0.0;
++    char   *ptr = argv[arg];
++    char    units[80];
++
++    units[0] = '\000';
++    int num = sscanf (ptr, "%lg%s", &number, units);
++    switch (num) {
++    case 1: /* arg looks like just a number */
++      if (number > 0.0 && !strlen (units))
++	goto ready;
++      // fallthru
++    case 0: /* arg looks like garbage of some kind */
++      goto bail;
++
++    case 2: /* arg looks like it could be a duration */
++      if (!strcmp (units, "h"))
++	number *= UPDATES_PER_HOUR;
++      else if (!strcmp (units, "m"))
++	number *= UPDATES_PER_MIN;
++      else if (!strcmp (units, "s"))
++	number *= UPDATES_PER_SEC;
++      else if (!strcmp (units, "ms"))
++	number *= UPDATES_PER_MSEC;
++      else
++	goto bail;
++      // fallthru
++    }
++
++ready:
++    count = (int) ceil (number);
++    double totload = 0.0;
++    while (samples < count) {
++      totload += get_load ();
++      Sleep (11/*ms*/); /* tested best at capturing a sample every 15|16ms */
++    }
++    fprintf (stdout, "%3.2f\n", totload / samples);
++  }
++
++  return 0;
++}
 -- 
 2.45.1
 
