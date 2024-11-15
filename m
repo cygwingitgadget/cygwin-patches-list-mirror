@@ -1,149 +1,54 @@
-Return-Path: <SRS0=WwA8=SJ=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 64F7B3858D20
-	for <cygwin-patches@cygwin.com>; Thu, 14 Nov 2024 16:24:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 64F7B3858D20
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 64F7B3858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731601454; cv=none;
-	b=yCgyqYw+Pr692CIXqwNKr4G9l3Gtt9qX6cD0bnWUtbzPTlteqcXddlNvzwbs5btNgoikusVT/GepKy31k14zCk8w72Uh462IGW5tQqDiIenLHGhVKZucioA/lJj+Xmng2AQDuQNYgzDkFHfiyvGcCHsS+KksVkA2g8UnGc2vYPo=
+Return-Path: <SRS0=e08y=SK=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.227.185])
+	by sourceware.org (Postfix) with ESMTPS id 0144C3858CDB
+	for <cygwin-patches@cygwin.com>; Fri, 15 Nov 2024 13:14:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0144C3858CDB
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0144C3858CDB
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.185
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731676481; cv=none;
+	b=XuEM5YjL1V7Nx0EWRevE1GF7TMqj/2e6/v1KiONeAyUyPq7FVRV+SjiKze9rapggW5yUizVON+ZDmW96O5Nr81PGzqjLBYVQQgGjFRgD723+9V2ZEooDHtex3LP+KCCDQKLsuWE6yucYWeCrYT04vlZ1cNAJhobdGbmA7H+gkuI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731601454; c=relaxed/simple;
-	bh=JoPvC1AB/+W45lsy6siHCLcBhGEycj/oT8k6d+H/xtU=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=OLyiqtiiCQXi96EPAggSzPehH0EBCjO7cXfem/9VS6mplZUPPG2TS85zuU9nGbMYjvuXsy2qhe7QFY+hdYNV1Vz6K9Hmpxq1+WCOa4/gKnSDEp6wSR8I8d6g7Ib4xzOTeqZXLDSmSDQhP2BDRZzpPyeyUrYBHjvrP6eCGmwGLc4=
+	t=1731676481; c=relaxed/simple;
+	bh=ltfTc/n27yLlGiYlRKFkoQv3s8J0h+owxyUWN9Ws71E=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Sw7M/xFA/+V/SaY5lEhNWECZYxg9mx177lDtswdEPs+bnsLffSYE/buwsKEtLISQ+0pN3430I9h/2XhnYC7WwgZuIdmJA8bCCJfT6B1GQfSb2GrHPSNTpYSKeMgiFJ4X3k0vk2IP9upYKPXAL+DXeCQG6FLkPWthBwRF36azkfA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 64F7B3858D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0144C3858CDB
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=lnIFLyU0
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 4FBF745C4D
-	for <cygwin-patches@cygwin.com>; Thu, 14 Nov 2024 11:24:13 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=+i5/u
-	Re9eVqH+jB6VO2r6jc+qT8=; b=lnIFLyU0MHzfxqM2ikRZlC2eKC37MboBWufL5
-	x8FyeMbTf19jOTjXA00SEysMFqPvhs0kbYXcGrP6l5FCOwrQjoSb5Cm8E/QsdT3O
-	KVS7uZMXVnrjOwoC0VZOuabCl9UfaN42O8yjhHNtA60MgXGnuzewIVGee9WGH35s
-	8XQ5iU=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2510645C3D
-	for <cygwin-patches@cygwin.com>; Thu, 14 Nov 2024 11:24:13 -0500 (EST)
-Date: Thu, 14 Nov 2024 08:24:11 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=b7MWIT9J
+Received: from localhost.localdomain by mta-snd-e09.mail.nifty.com
+          with ESMTP
+          id <20241115131437732.NHPN.67063.localhost.localdomain@nifty.com>;
+          Fri, 15 Nov 2024 22:14:37 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] cygthread: suspend thread before terminating.
-Message-ID: <ac88704b-3f63-1f14-3412-4acce012f729@jdrake.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/2] Fix stress-ng --lockmix 1 errors
+Date: Fri, 15 Nov 2024 22:14:09 +0900
+Message-ID: <20241115131422.2066-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1731676477;
+ bh=paKbh8tJhPDgNbynl3PA24ZSOv2ISPMD5lSoR9GKBKo=;
+ h=From:To:Cc:Subject:Date;
+ b=b7MWIT9JRG4QvXEsVnM3XaJNnRec36OOOXDUBc91mho51oFi4m3DXcQn21BhUODrTAi3ozmz
+ lTIrNhT8eKM3aVBUQVvQCUbUmntsIlRs1rTJ4SFJPnQyrR2Y+8HaJQQDMkNpV9hNycNWZjnFGq
+ Xb5zsjdhpwvVpmpUYEpl8hG8NrXrbN448dVqyB7gXC8QH1hqMmMR0CMl0y2/pg1C/Ehoyr1zup
+ e3OHklh4tOv0zvQMCoJB/5iuulOBsN71QqENF8mgPrvbz2Slf3HydMAjUhgWCwTyfED7T3FtB3
+ dNAfSgWKS8Zce4cSPNd9xY9jNDL4Kyxi0dm7OBTL/HE7rYIQ==
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_PSBL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Jeremy Drake <cygwin@jdrake.com>
+Takashi Yano (2):
+  Cygwin: lockf: Fix access violation in lf_clearlock().
+  Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
 
-This addresses an extremely difficult to debug deadlock when running
-under emulation on ARM64.
+ winsup/cygwin/flock.cc | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-A relatively easy way to trigger this bug is to call `fork()`, then within the
-child process immediately call another `fork()` and then `exit()` the
-intermediate process.
-
-It would seem that there is a "code emulation" lock on the wait thread at
-this stage, and if the thread is terminated too early, that lock still exists
-albeit without a thread, and nothing moves forward.
-
-It seems that a `SuspendThread()` combined with a `GetThreadContext()`
-(to force the thread to _actually_ be suspended, for more details see
-https://devblogs.microsoft.com/oldnewthing/20150205-00/?p=44743)
-makes sure the thread is "booted" from emulation before it is suspended.
-
-Hopefully this means it won't be holding any locks or otherwise leave
-emulation in a bad state when the thread is terminated.
-
-Also, attempt to use `CancelSynchonousIo()` (as seen in `flock.cc`) to avoid
-the need for `TerminateThread()` altogether.  This doesn't always work,
-however, so was not a complete fix for the deadlock issue.
-
-Addresses: https://cygwin.com/pipermail/cygwin-developers/2024-May/012694.html
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
-
-v2: suppress output for a now-expected error in `proc_waiter` due to the
-addition of the CancelSynchronousIo call in `proc_terminate`
-
-
- winsup/cygwin/cygthread.cc | 14 ++++++++++++++
- winsup/cygwin/pinfo.cc     |  7 ++++---
- winsup/cygwin/sigproc.cc   |  3 ++-
- 3 files changed, 20 insertions(+), 4 deletions(-)
-
-diff --git a/winsup/cygwin/cygthread.cc b/winsup/cygwin/cygthread.cc
-index 54918e7677..4f16097531 100644
---- a/winsup/cygwin/cygthread.cc
-+++ b/winsup/cygwin/cygthread.cc
-@@ -302,6 +302,20 @@ cygthread::terminate_thread ()
-   if (!inuse)
-     goto force_notterminated;
-
-+  if (_my_tls._ctinfo != this)
-+    {
-+      CONTEXT context;
-+      context.ContextFlags = CONTEXT_CONTROL;
-+      /* SuspendThread makes sure a thread is "booted" from emulation before
-+	 it is suspended.  As such, the emulator hopefully won't be in a bad
-+	 state (aka, holding any locks) when the thread is terminated. */
-+      SuspendThread (h);
-+      /* We need to call GetThreadContext, even though we don't care about the
-+	 context, because SuspendThread is asynchronous and GetThreadContext
-+	 will make sure the thread is *really* suspended before returning */
-+      GetThreadContext (h, &context);
-+    }
-+
-   TerminateThread (h, 0);
-   WaitForSingleObject (h, INFINITE);
-   CloseHandle (h);
-diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-index e31a67d8f4..2395c36665 100644
---- a/winsup/cygwin/pinfo.cc
-+++ b/winsup/cygwin/pinfo.cc
-@@ -1252,13 +1252,14 @@ proc_waiter (void *arg)
-
-   for (;;)
-     {
--      DWORD nb;
-+      DWORD nb, err;
-       char buf = '\0';
-
-       if (!ReadFile (vchild.rd_proc_pipe, &buf, 1, &nb, NULL)
--	  && GetLastError () != ERROR_BROKEN_PIPE)
-+	  && (err = GetLastError ()) != ERROR_BROKEN_PIPE)
- 	{
--	  system_printf ("error on read of child wait pipe %p, %E", vchild.rd_proc_pipe);
-+	  if (err != ERROR_OPERATION_ABORTED)
-+	    system_printf ("error on read of child wait pipe %p, %E", vchild.rd_proc_pipe);
- 	  break;
- 	}
-
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 81b6c31695..360bdac232 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -410,7 +410,8 @@ proc_terminate ()
- 	  if (!have_execed || !have_execed_cygwin)
- 	    chld_procs[i]->ppid = 1;
- 	  if (chld_procs[i].wait_thread)
--	    chld_procs[i].wait_thread->terminate_thread ();
-+	    if (!CancelSynchronousIo (chld_procs[i].wait_thread->thread_handle ()))
-+	      chld_procs[i].wait_thread->terminate_thread ();
- 	  /* Release memory associated with this process unless it is 'myself'.
- 	     'myself' is only in the chld_procs table when we've execed.  We
- 	     reach here when the next process has finished initializing but we
 -- 
-2.47.0.windows.2
+2.45.1
 
