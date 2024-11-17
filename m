@@ -1,116 +1,123 @@
-Return-Path: <SRS0=GbLz=SL=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:27])
-	by sourceware.org (Postfix) with ESMTPS id 05D053857C68
-	for <cygwin-patches@cygwin.com>; Sat, 16 Nov 2024 04:42:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 05D053857C68
+Return-Path: <SRS0=Xcl4=SM=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.113])
+	by sourceware.org (Postfix) with ESMTPS id BC6893857341
+	for <cygwin-patches@cygwin.com>; Sun, 17 Nov 2024 15:48:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BC6893857341
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 05D053857C68
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731732125; cv=none;
-	b=jb2u2dkohV2nl/dCU3RKx2ip3kRN8mW0+oVIHL8A9mZHPJ7Q6u8CwWhOapd29ZJ7D57COZsadxov6Iy0W6di4RJgiaAMcvJqeK0JDdlaLu4jxj6Kmc33NAEU3o5jZFvrigMPWsHJPFaOE8VW1/OU/TNq5k+D7aLA5tJUksqNXhI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BC6893857341
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.113
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731858528; cv=none;
+	b=TTCkKVt62w4HyB0RW5DxAzVHFvlgXX/OAIL+eEtq3/OndWa7LUHmcrI5/02OgZ+RLGNPLHs/boV2RR2CKmQailubv+KcOmMkqUbZILZk83nMNOVAAvjWqnWxmZdjHcccrlxSFVnDrqV+0Jt2TpWSR2I38yrjAKdpsv80746mLOk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731732125; c=relaxed/simple;
-	bh=6SyTG2m4ZyZnKUwEKBcD6m6w+g+3PldG2qKWukiG4po=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=BsAuWoyql40WiYBZrOdgxTBQi2tVS2I5by4R0+7HOKmtvOgGDWUzAUP74K1cGAMt1KPN4Sw2onAbJcsSXAZ5yGgbMzIMqEWOVtCAICVuRNkGd9tVQuAf7GK74QVCUmd4CjglQmD8T8QkjSVuQjcPmQn4jy0EY93QxGeX4bPpxhQ=
+	t=1731858528; c=relaxed/simple;
+	bh=BXx/gKGE39jgYR8XH8oxeLDN5IFdyyjcFOQXSscNIqM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=IUUnvQVifgUOQQywJQJ50phKYoRr+EGZY5DdVQvmL/cNaww4lvNS2zndON91dm31RMSa3WKcowKE5sp0Xzv2GXpVck4ASif7G63nL60rqR8bP1ET2d91any5Av+wTiBWF7oY/0A1vpyLpIL4Kr6w+xfdx9kqbVHoRjEh4MawHhw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 05D053857C68
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BC6893857341
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=KJXDFVf1
-Received: from localhost.localdomain by mta-snd-w07.mail.nifty.com
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=C1U8y+uf
+Received: from localhost.localdomain by mta-snd-e01.mail.nifty.com
           with ESMTP
-          id <20241116044202806.RZXR.93209.localhost.localdomain@nifty.com>;
-          Sat, 16 Nov 2024 13:42:02 +0900
+          id <20241117154844414.VPDE.87244.localhost.localdomain@nifty.com>;
+          Mon, 18 Nov 2024 00:48:44 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Sebastian Feld <sebastian.n.feld@gmail.com>
-Subject: [PATCH v2] Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
-Date: Sat, 16 Nov 2024 13:41:36 +0900
-Message-ID: <20241116044145.442-1-takashi.yano@nifty.ne.jp>
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: sigtimedwait: Fix segfault when timeout is used
+Date: Mon, 18 Nov 2024 00:48:21 +0900
+Message-ID: <20241117154829.1578-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1731732122;
- bh=zpXia3vTQEhzUmsYjnlabme9eVoD/U50LPzVCPe0tzI=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1731858524;
+ bh=bawnNGE/gDPhir+5TJq7CnMNTs3RlgWs2SBHqU1alY4=;
  h=From:To:Cc:Subject:Date;
- b=KJXDFVf1uD3eamcjW+tpGv0AuO/6085xK3FzgvWON8PBAboiECvREd7OEG82DJUdnfoAOBvY
- pALnM8Slz5lz4Ky4n0443yHIyteUAFWHyIduVFx6ol6vnFDd76axMjJugWoIWAqdg/mxJCBFHg
- fMn16yFuTWE1YYbfNx+Eeb6r/y+3FXr/2lPNNM1arj312NAKCaAtXpj/m0UCaa0OmL309oTna3
- 5E78mptHDBC4smDIwcbIVRAkD2yU9G+gfMlD8O6FSYT9x3MfZ144C12astaqip3gMe94Iw5ka+
- 0AErGXGF8DJ4yV6mt9OdLfBoxjCKlGphqglynzosOL7O84OA==
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=C1U8y+uftpEYH9HByQSrN5SduLwW66elSjoeiY6K/7YtXEeiAmFjrxHPXmt3VP/1xHfT+EI+
+ 4wkmFYdg9SRS5hGbPjTsdM7Ktq+cQORDDGrSpbwp1BDUk5YEImzItRnin9DTz+d68uyLlV8Yl5
+ 3D7MpvOqE9gutQtLyOollJOtDTBUbZDwNOfVarqqoCjaJnYdzirs9fWcJCfUWbZdgvoyoIT174
+ twa5WZqUQncZP8MOzf7nj0FDMLm0U9tcw3FQLLf8dxUMi4/IxC81Ua0cA7TUl45BX2yPiw80iE
+ wXPYhYYkqsXvSFciwVUWT930PFpFZbSGN5UsoQZoSHL6W9KA==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, create_lock_obj() can create multiple locks with the same
-lock range that have different version number. However, lf_setlock()
-and lf_clearlock() cannot handle this case appropriately. With this
-patch, make lf_setlock() and lf_clearlock() find overlap again even
-when ovcase = 1 (lock and overlap have the same lock range).
+Previously, two bugs exist in sigtimedwait(). One is, that since
+_my_tls.sigwait_mask was left non-zero if the signal arrives after
+the timeout, sigpacket::process() would wrongly try to handle it.
+The other is if a timeout occurs after sigpacket::process() is
+called, but not completed yet, the signal handler can be called
+accidentally. If the signal handler is set to SIG_DFL or SIG_IGN,
+access violation will occur in both cases.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256750.html
-Fixes: 2e560a092c1c ("* flock.cc (LOCK_OBJ_NAME_LEN): Change to accommodate extra lf_ver field.")
-Reported-by: Sebastian Feld <sebastian.n.feld@gmail.com>
+With this patch, in sigwait_common(), check if sigwait_mask == 0
+to confirm that sigpacket::process() cleared it. In this case,
+do not treat WAIT_TIMEOUT, but call cygwait() again to retrieve
+the signal. Furthermore, sigpacket::process() checks whether
+timeout occurs in sigwait_common() and if timeout already happens,
+do not treat the signal as waited. In both cases, to avoid race
+issues, the code is guarded by cygtls::lock().
+
+Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256762.html
+Fixes: 24ff42d79aab ("Cygwin: Implement sigtimedwait")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
 Reviewed-by:
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/flock.cc      | 16 +++++-----------
- winsup/cygwin/release/3.5.5 |  3 +++
- 2 files changed, 8 insertions(+), 11 deletions(-)
+ winsup/cygwin/exceptions.cc |  5 ++++-
+ winsup/cygwin/signal.cc     | 11 +++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/flock.cc b/winsup/cygwin/flock.cc
-index 794e66bd7..7a4c16313 100644
---- a/winsup/cygwin/flock.cc
-+++ b/winsup/cygwin/flock.cc
-@@ -1411,11 +1411,10 @@ lf_setlock (lockf_t *lock, inode_t *node, lockf_t **clean, HANDLE fhdl)
- 	  if (lock_cnt > MAX_LOCKF_CNT - room_for_clearlock)
- 	    return ENOLCK;
- 	  lf_wakelock (overlap, fhdl);
--	  overlap->lf_type = lock->lf_type;
--	  overlap->create_lock_obj ();
--	  lock->lf_next = *clean;
--	  *clean = lock;
--	  break;
-+	  *prev = overlap->lf_next;
-+	  overlap->lf_next = *clean;
-+	  *clean = overlap;
-+	  continue;
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 3195d5719..60c1f594f 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1527,11 +1527,14 @@ sigpacket::process ()
+   if ((HANDLE) *tls)
+     tls->signal_debugger (si);
  
- 	case 2: /* overlap contains lock */
- 	  /*
-@@ -1562,12 +1561,6 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
+-  if (issig_wait)
++  tls->lock ();
++  if (issig_wait && tls->sigwait_mask != 0)
+     {
+       tls->sigwait_mask = 0;
++      tls->unlock ();
+       goto dosig;
+     }
++  tls->unlock ();
  
-       switch (ovcase)
+   if (handler == SIG_IGN)
+     {
+diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
+index 77152910b..74b304606 100644
+--- a/winsup/cygwin/signal.cc
++++ b/winsup/cygwin/signal.cc
+@@ -615,6 +615,7 @@ sigwait_common (const sigset_t *set, siginfo_t *info, PLARGE_INTEGER waittime)
+       set_signal_mask (_my_tls.sigwait_mask, *set);
+       sig_dispatch_pending (true);
+ 
++do_wait:
+       switch (cygwait (NULL, waittime,
+ 		       cw_sig_eintr | cw_cancel | cw_cancel_self))
  	{
--	case 1: /* overlap == lock */
--	  *prev = overlap->lf_next;
--	  overlap->lf_next = *clean;
--	  *clean = overlap;
--	  break;
--
- 	case 2: /* overlap contains lock: split it */
- 	  if (overlap->lf_start == unlock->lf_start)
- 	    {
-@@ -1582,6 +1575,7 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
- 	    overlap->lf_next->create_lock_obj ();
+@@ -640,6 +641,16 @@ sigwait_common (const sigset_t *set, siginfo_t *info, PLARGE_INTEGER waittime)
+ 	    }
  	  break;
- 
-+	case 1: /* overlap == lock */
- 	case 3: /* lock contains overlap */
- 	  *prev = overlap->lf_next;
- 	  lf = overlap->lf_next;
-diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
-index a4817df46..115496c18 100644
---- a/winsup/cygwin/release/3.5.5
-+++ b/winsup/cygwin/release/3.5.5
-@@ -36,3 +36,6 @@ Fixes:
- 
- - Fix access violation in lf_clearlock() called from flock().
-   Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256750.html
-+
-+-Fix NtCreateEvent() error in create_lock_ob() called from flock().
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256750.html
+ 	case WAIT_TIMEOUT:
++	  _my_tls.lock ();
++	  if (_my_tls.sigwait_mask == 0)
++	    {
++	      /* sigpacket::process() already started. */
++	      waittime = cw_infinite;
++	      _my_tls.unlock ();
++	      goto do_wait;
++	    }
++	  _my_tls.sigwait_mask = 0;
++	  _my_tls.unlock ();
+ 	  set_errno (EAGAIN);
+ 	  break;
+ 	default:
 -- 
 2.45.1
 
