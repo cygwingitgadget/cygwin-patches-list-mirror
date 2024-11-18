@@ -1,77 +1,247 @@
-Return-Path: <SRS0=0qDT=SN=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id A46A53858CD9
-	for <cygwin-patches@cygwin.com>; Mon, 18 Nov 2024 18:10:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A46A53858CD9
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A46A53858CD9
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731953442; cv=none;
-	b=sk1/75bqW00oK5yZcV6bCwunxVBxBuhZwsnI8m0u0u+duA4OPF5LeZwzM2/3AC6AyAbJBN6EdB93+0ZA8WW9L+4s4z+R8g6ek2ZhEtK51eHuFPcc9YYUPrc80j7ncVrqWivSnwbuMXxCuJ7mycxEH2zDix67Tvu+p6EXqJPeueY=
+Return-Path: <SRS0=6I6Q=SN=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.180])
+	by sourceware.org (Postfix) with ESMTP id 130663858D21
+	for <cygwin-patches@cygwin.com>; Mon, 18 Nov 2024 20:58:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 130663858D21
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 130663858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.180
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1731963526; cv=none;
+	b=RMyuCE/3NgR9ahaOQ8PbuDlOQnuwFo2g7cV43xlGAT9NcIDvSbDZL97VjzUVwSdfraQ8Zbf2SXHi/ksiHt8ohJqjWCpJrlVnrL9K2NAvNtZ1Kc+xkJ0S+0Xxh08AXZR2l/kp/oc5/SCcvAyHRphQ7KGWwmFDfmC22tfZqxq9Ch4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1731953442; c=relaxed/simple;
-	bh=nsWGYerl1733g5WgAfc9zPha6CN+hEzkUSDfQ8LW29Y=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=HDu24zJRVkT/5/HUNRx0KQytuRR2Agxk+pDq+q45YSwQgzpGDGZ/dSNR5DzAyoEVzh+T83JlE6wK/SRSuvuigNpy/aD44TPDUM5TA8VF8unRnfYzYmXiwQKVVbhkRrzxoCLIWnWZ8/Yvvsw/k/6yQ3DsaRiuo8MDMcsR02G7XkY=
+	t=1731963526; c=relaxed/simple;
+	bh=28XBSD7mhLAfvaKcrAsclIafOTHjIFARuEhMSaNxvIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=rzag1gsxD8A3JuDJf0b43fCy7zxX3xK8ux/bOWKNc7yuFlIfA1ziCRcqfHzGkOl6aoWQMEik1a8lTeH01gPxuQXfCjmDp5VR358ZL727ke0/x4a8mfQF+bYorY8rmEraRbFyTkA+sgUJIW0/RlBrsyxXlS1OX5LlYIJ9kc+Rej0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id A181345C59
-	for <cygwin-patches@cygwin.com>; Mon, 18 Nov 2024 13:10:41 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=TJRwvIJhxm25uxaln3OPjUdZWVg=; b=dHAIV
-	0OQvvu1cKIASn9REWzZhh4jMa0shOAHzHdCn72o6aVxXIf63taevDLfS9T+BKpEn
-	jrFeELCGPw0Tf1nyCXDvRBQmdzWhlxYW2MXS/r2QvfpRZQyLiifDxHKSUJqJ7hUj
-	V7I8PDhTv1WuG/7AgVBeAOtw0pYPTTIJzbkkeg=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 9AC3245C56
-	for <cygwin-patches@cygwin.com>; Mon, 18 Nov 2024 13:10:41 -0500 (EST)
-Date: Mon, 18 Nov 2024 10:10:41 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] cygthread: suspend thread before terminating.
-In-Reply-To: <ZztRRVIiOBcJtnzZ@calimero.vinschen.de>
-Message-ID: <08896610-b789-4b1c-645f-79dfb354ad74@jdrake.com>
-References: <ac88704b-3f63-1f14-3412-4acce012f729@jdrake.com> <ZztRRVIiOBcJtnzZ@calimero.vinschen.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 130663858D21
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6722AF4202270F3B
+X-Originating-IP: [81.152.101.74]
+X-OWM-Source-IP: 81.152.101.74
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefuddrfedtgddugeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfeghfdvvdeijeettdfgleetffetfedtuefgfeevhedthefgffelfeethfdvleffnecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepkedurdduhedvrddutddurdejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduhedvrddutddurdejgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddqudehvddquddtuddqjeegrdhrrghnghgvkeduqdduhedvrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdegpdhnsggprhgtphhtthhopedvpdhrtghpthhtohep
+	tgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopehmrghrkhesmhgrgihrnhgurdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (81.152.101.74) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6722AF4202270F3B; Mon, 18 Nov 2024 20:58:41 +0000
+Message-ID: <3987e096-9510-4fc0-8121-ca32773c09e4@dronecode.org.uk>
+Date: Mon, 18 Nov 2024 20:58:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
+To: Mark Geisert <mark@maxrnd.com>
+References: <20241113062152.2225-1-mark@maxrnd.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <20241113062152.2225-1-mark@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 18 Nov 2024, Corinna Vinschen wrote:
+On 13/11/2024 06:21, Mark Geisert wrote:
+> This program provides an up-to-the-moment load average measurement.  The
+> user can take 1 sample, or obtain the average of N samples by number or
 
-> Neat, but if this only affects the ARM64 emulation, shouldn't this only
-> be called under wincap.cpu_arch() == PROCESSOR_ARCHITECTURE_AMD64?
+Sorry about the inordinate time it's take for me to look at this.
 
-Wouldn't this always be true though?  (Except that I backported this to
-3.3.6 for i686 support, where I'd have to check for that possibility as
-well).  Is this just to avoid the code when a native ARM64 Cygwin appears?
 
-I have been sort of considering if the results from IsWow64Process2 should
-be cached in wincap, then we could check that here if we are running on
-ARM64 under emulation, and also used the cached value in the check around
-FAST_CWD.  In addition, I was thining it might make sense to include this
-info in `uname -s` like -WOW64 used to be when i686 was supported.
+So, this seems like two separate things shoved together
 
-> A one-line comment explain why ERROR_OPERATION_ABORTED is exempt from
-> the debug message might be helpful here.
+* A daemon which calls getloadavg() every 5 seconds
+* A tool which exercises the loadavg estimation code
 
-OK (if I can limit myself to one line ;))
+Does it really make sense to bundle them together?
 
-> > -	    chld_procs[i].wait_thread->terminate_thread ();
-> > +	    if (!CancelSynchronousIo (chld_procs[i].wait_thread->thread_handle ()))
->
-> This expression should be bracketed.  But actually, can you just change
-> this to
->
->    if (chld_procs[i].wait_thread
->        && CancelSynchronousIo())
-> please?  And another comment might be helpful here, too.
+> time duration.  There is a daemon mode to have the global load average
+> stats updated such that 'uptime' and other tools provide a more reasonable
+> load average calculation over time.
 
-OK
+I'm wondering what's "unreasonable" about the current behavior (estimate 
+is calculated on demand, in a rate-limited fashion)
+
+If it's that working correctly (after your fixes), is this actually 
+needed (i.e. what difference does also having loadavg in daemon mode 
+running make)?
+
+> A release note is provided for Cygwin 3.5.5.
+> Documentation for doc/utils.xml is pending.
+
+A man page isn't optional :)
+
+Or, I wonder if it really makes sense to ship this as useful to 
+end-users (as opposed to marking it noinst_ in Makefile.am, so we just 
+keep it around for developers)
+
+> Reported-by: Mark Liam Brown <brownmarkliam@gmail.com>
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-August/256361.html
+> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+> Fixes: N/A (new code)
+> 
+> ---
+>   winsup/cygwin/release/3.5.5 |   8 +
+>   winsup/utils/Makefile.am    |   2 +
+>   winsup/utils/loadavg.c      | 380 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 390 insertions(+)
+>   create mode 100644 winsup/utils/loadavg.c
+> 
+[...]
+> +
+> +/* estimate the current load based on certain counter values */
+> +double
+> +get_load (void)
+> +{
+> +  PDH_STATUS ret = PdhCollectQueryData (query);
+> +  if (ret != ERROR_SUCCESS) {
+> +    fprintf (stderr, "PdhCollectQueryData %s\n", pdh_status (ret));
+> +    return 0.0;
+> +  }
+> +
+> +  /* Estimate the number of running processes as
+> +     (NumberOfProcessors) * (% Processor Time) */
+> +  PDH_FMT_COUNTERVALUE fmtvalue1;
+> +  ret = PdhGetFormattedCounterValue (counter1, PDH_FMT_DOUBLE, NULL, &fmtvalue1);
+> +  if (ret != ERROR_SUCCESS) {
+> +    fprintf (stderr, "PdhGetFormattedCounterValue#1 %s\n", pdh_status (ret));
+> +    return 0.0;
+> +  }
+> +
+> +  double ncpus = (double) sysinfo.dwNumberOfProcessors;
+> +  if (verbose) {
+> +    fprintf (stdout, "%llu ", GetTickCount64 ());
+> +
+> +    fprintf (stdout, "ncpus: %d, %%ptime: %3.2f, ", (int) ncpus,
+> +		     fmtvalue1.doubleValue);
+> +  }
+> +  double running = fmtvalue1.doubleValue * ncpus / 100.0;
+> +
+> +  /* Estimate the number of runnable threads as
+> +     (ProcessorQueueLength) / (NumberOfProcessors) */
+> +  double rql = 0.0;
+> +  PDH_FMT_COUNTERVALUE fmtvalue2;
+> +  ret = PdhGetFormattedCounterValue (counter2, PDH_FMT_LONG, NULL, &fmtvalue2);
+> +  if (ret == ERROR_SUCCESS) {
+> +    rql = (double) fmtvalue2.longValue;
+> +    rql /= ncpus; /* make the measure a per-cpu queue length */
+> +  } else {
+> +    ++once; /* counter is missing; just print an error message once (below) */
+
+I'd tend to make this static with function scope, rather than a global, 
+but you are entitled to a different opinion.
+
+> +  }
+> +
+> +  double load = running + rql;
+> +  if (verbose ) {
+> +    fprintf (stdout, "running: %3.2f, effrql: %3.2f, load: %3.2f\n",
+> +		     running, rql, load);
+> +  }
+> +  if (once == 1)
+> +    fprintf (stderr, "PdhGetFormattedCounterValue#2 %s\n", pdh_status (ret));
+> +
+> +  ++samples;
+> +  return load;
+> +}
+> +
+> +int
+> +start_daemon (void)
+> +{
+> +  char  buf[132];
+> +  int   fd = -1;
+> +  pid_t pid = 0;
+> +
+> +top:
+> +  fd = open (PIDFILE, O_RDWR | O_CREAT | O_EXCL);
+> +  if (fd == -1) {
+> +    fd = open (PIDFILE, O_RDONLY);
+> +    if (fd == -1) {
+> +      fprintf (stderr, "unable to open pid file\n");
+> +      return 1;
+> +    }
+> +
+> +    memset (buf, 0, sizeof buf);
+> +    read (fd, buf, sizeof buf);
+> +    close (fd);
+> +
+> +    pid = atoi (buf);
+> +    /* does pid still exist? */
+> +    if (kill (pid, 0) == 0) {
+> +      fprintf (stderr, "daemon already running as pid %d\n", pid);
+> +      return 1;
+> +    }
+> +    unlink (PIDFILE);
+> +    goto top;
+> +  }
+> +  fchmod (fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+> +
+> +  (void) daemon (0, 0);
+> +
+> +  /* this code runs in the daemon; the parent process has exited via daemon() */
+> +  snprintf (buf, sizeof buf, "%d", getpid ());
+> +  write (fd, buf, strlen (buf));
+> +  /* don't close(fd).. keep it open to protect against another daemon */
+> +
+> +  double loadavg[3];
+> +  while (1) {
+> +    (void) getloadavg (loadavg, 3);
+> +    sleep (5/*seconds*/);
+> +  }
+> +  return 0;
+> +}
+> +
+> +int
+> +stop_daemon (void)
+> +{
+> +  char     buf[132];
+> +  int      fd = -1;
+> +  ssize_t  len = 0;
+> +  pid_t    pid = 0;
+> +  char    *winpath = NULL;
+> +
+> +  fd = open (PIDFILE, O_RDONLY);
+> +  if (fd == -1) {
+> +    fprintf (stderr, "unable to open pid file\n");
+> +    return 1;
+> +  }
+> +  memset (buf, 0, sizeof buf);
+> +  read (fd, buf, sizeof buf);
+> +  close (fd);
+> +
+> +  pid = atoi (buf);
+> +  /* does pid still exist? */
+> +  if (kill (pid, 0) == -1) {
+> +    fprintf (stderr, "daemon pid %d already gone\n", pid);
+> +    unlink (PIDFILE);
+> +    return 1;
+> +  }
+> +
+> +  /* using kill() to terminate the daemon fails (why?); work around that */
+
+Yeah, why! This is hugely suspicious.
+
+I forget if getloadavg() is sigwrapper wrapped, but if not, that might 
+explain it (or not, the daemon should spend nearly all of it's time in 
+sleep(), right?)
+
+> +  winpath = getenv ("SYSTEMROOT");
+> +  len = cygwin_conv_path (CCP_WIN_A_TO_POSIX | CCP_PROC_CYGDRIVE,
+> +                          winpath, buf, sizeof buf);
+> +  len = strlen (buf);
+> +  snprintf (&buf[len], (sizeof buf) - len,
+> +            "/System32/taskkill /f /pid `cat /proc/%d/winpid`", pid);
+> +  fprintf (stdout, "Windows says: ");
+> +  fflush (stdout);
+> +  system (buf);
+> +
+> +  /* if pid is gone, delete pid file */
+> +  if (kill (pid, 0) == -1)
+> +    unlink (PIDFILE);
+> +  return 0;
+> +}
+> +
