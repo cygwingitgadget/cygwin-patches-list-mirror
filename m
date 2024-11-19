@@ -1,91 +1,86 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id B9E6E3858D35; Tue, 19 Nov 2024 09:45:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B9E6E3858D35
+	id 2FA103858CDA; Tue, 19 Nov 2024 09:49:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2FA103858CDA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732009543;
-	bh=cC6eqvB+/ZGsIrm3sOIE7nIIx23rKqsZMr4vaaMcmFo=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=UuKln3jFATkhETWFUy8upCf8yNkpVFdIinzGh/TKD+dg1pbrfg6TioTdbEaMd4+Uf
-	 yrrYqy9ThZQeG3rOUrXvv+8BWekjfEnjuvaJT/33SjudHhmLtOTQR1ytOSdnq+guRy
-	 9UzxwZs43T5TV0VAd08rHoifNPRmC8XgZ4yi12KY=
+	s=default; t=1732009781;
+	bh=uG1MdLV55fesDYWqhRe/sTEsrFjdlC37z4fPGxzeSYs=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=xltC6S+fvwLkkzOL+6OZ2c85LLkpDYk0YacrS5ltz0h2GcABqosEaLET1xgPYTvcj
+	 xC+VHcbunpyk3mhxgAGi1aYo078KUeGC5IeaX4v+zRj291izojBTbzdu92Cx4QqSBa
+	 CxAg60Lxu+cLmvKXSeTSXp0Tp8go91RzBadpMjIA=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 754F6A80A6B; Tue, 19 Nov 2024 10:45:41 +0100 (CET)
-Date: Tue, 19 Nov 2024 10:45:41 +0100
+	id 267C2A80A6B; Tue, 19 Nov 2024 10:49:39 +0100 (CET)
+Date: Tue, 19 Nov 2024 10:49:39 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Jeremy Drake <cygwin@jdrake.com>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] cygthread: suspend thread before terminating.
-Message-ID: <ZzxeRTIcGPxqeJND@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/2] Cygwin: lockf: Fix access violation in
+ lf_clearlock().
+Message-ID: <ZzxfM9T2uy5Bdiao@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Jeremy Drake <cygwin@jdrake.com>,
-	cygwin-patches@cygwin.com
-References: <ac88704b-3f63-1f14-3412-4acce012f729@jdrake.com>
- <ZztRRVIiOBcJtnzZ@calimero.vinschen.de>
- <08896610-b789-4b1c-645f-79dfb354ad74@jdrake.com>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20241115131422.2066-1-takashi.yano@nifty.ne.jp>
+ <20241115131422.2066-2-takashi.yano@nifty.ne.jp>
+ <ZztjYs4Cu28xZgtl@calimero.vinschen.de>
+ <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <08896610-b789-4b1c-645f-79dfb354ad74@jdrake.com>
+In-Reply-To: <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 18 10:10, Jeremy Drake via Cygwin-patches wrote:
-> On Mon, 18 Nov 2024, Corinna Vinschen wrote:
+On Nov 19 17:39, Takashi Yano wrote:
+> On Mon, 18 Nov 2024 16:55:14 +0100
+> Corinna Vinschen wrote:
+> > On Nov 15 22:14, Takashi Yano wrote:
+> > > The commit ae181b0ff122 has a bug that the pointer is referred bofore
+> > > NULL check in the function lf_clearlock(). This patch fixes that.
+> > > 
+> > > Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256750.html
+> > > Fixes: ae181b0ff122 ("Cygwin: lockf: Make lockf() return ENOLCK when too many locks")
+> > > Reported-by: Sebastian Feld <sebastian.n.feld@gmail.com>
+> > > Reviewed-by:
+> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > > ---
+> > >  winsup/cygwin/flock.cc | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/winsup/cygwin/flock.cc b/winsup/cygwin/flock.cc
+> > > index 3821bddd6..794e66bd7 100644
+> > > --- a/winsup/cygwin/flock.cc
+> > > +++ b/winsup/cygwin/flock.cc
+> > > @@ -1524,6 +1524,10 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
+> > >    lockf_t *lf = *head;
+> > >    lockf_t *overlap, **prev;
+> > >    int ovcase;
+> > > +
+> > > +  if (lf == NOLOCKF)
+> > > +    return 0;
+> > > +
+> > >    inode_t *node = lf->lf_inode;
+> > >    tmp_pathbuf tp;
+> > >    node->i_all_lf = (lockf_t *) tp.w_get ();
+> > > @@ -1531,8 +1535,6 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
+> > >    uint32_t lock_cnt = node->get_lock_count ();
+> > >    bool first_loop = true;
+> > >  
+> > > -  if (lf == NOLOCKF)
+> > > -    return 0;
+> > >    prev = head;
+> > >    while ((ovcase = lf_findoverlap (lf, unlock, SELF, &prev, &overlap)))
+> > >      {
+> > > -- 
+> > > 2.45.1
+> > 
+> > LGTM, please push.
 > 
-> > Neat, but if this only affects the ARM64 emulation, shouldn't this only
-> > be called under wincap.cpu_arch() == PROCESSOR_ARCHITECTURE_AMD64?
-> 
-> Wouldn't this always be true though?
+> Thanks for reviewing this patch. Could you please review
+>  [PATCH v2] Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
+> as well?
 
-Copy/Paste and not thinking straight is doing that for me, sorry.
+Give me a bit of time.  While the patch might fix the problem, what
+bugs me is the deviation from upstream code.  We will at least need
+a few comments to explain why we don't follow the upstream behaviour.
 
-The above was supposed to be PROCESSOR_ARCHITECTURE_ARM64, but this is
-obviously dumb either way.  What I *meant* was checking if we're running
-in an emulation vias GetNativeSystemInfo or IsWow64Process2.  We're
-using the latter in find_fast_cwd() already.
 
-> (Except that I backported this to
-> 3.3.6 for i686 support, where I'd have to check for that possibility as
-> well).
-
-Have I missed something?  I thought this only occurs in an
-AMD64-on-ARM64 environment. What is it used for on i686?
-
-> Is this just to avoid the code when a native ARM64 Cygwin appears?
-
-No, the idea was running the code only if we know we're being emulated
-on ARM64.  I just screwed up :}
-
-> I have been sort of considering if the results from IsWow64Process2 should
-> be cached in wincap, then we could check that here if we are running on
-> ARM64 under emulation, and also used the cached value in the check around
-> FAST_CWD.  In addition, I was thining it might make sense to include this
-> info in `uname -s` like -WOW64 used to be when i686 was supported.
-
-That might be a good idea in the long run and patches are welcome.
-Right now we have this isolated usage of IsWow64Process2 in find_fast_cwd().
-Given this function is called at least once in a process tree anyway,
-wincap would be a natural place to keep the info.
-
-And yeah, maybe we can just attach "-ARM64" to the -s info or something.
-
-> 
-> > A one-line comment explain why ERROR_OPERATION_ABORTED is exempt from
-> > the debug message might be helpful here.
-> 
-> OK (if I can limit myself to one line ;))
-> 
-> > > -	    chld_procs[i].wait_thread->terminate_thread ();
-> > > +	    if (!CancelSynchronousIo (chld_procs[i].wait_thread->thread_handle ()))
-> >
-> > This expression should be bracketed.  But actually, can you just change
-> > this to
-> >
-> >    if (chld_procs[i].wait_thread
-> >        && CancelSynchronousIo())
-> > please?  And another comment might be helpful here, too.
-> 
-> OK
-
-Thanks,
 Corinna
