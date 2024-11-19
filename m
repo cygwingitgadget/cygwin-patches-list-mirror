@@ -1,86 +1,70 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 2FA103858CDA; Tue, 19 Nov 2024 09:49:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2FA103858CDA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732009781;
-	bh=uG1MdLV55fesDYWqhRe/sTEsrFjdlC37z4fPGxzeSYs=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=xltC6S+fvwLkkzOL+6OZ2c85LLkpDYk0YacrS5ltz0h2GcABqosEaLET1xgPYTvcj
-	 xC+VHcbunpyk3mhxgAGi1aYo078KUeGC5IeaX4v+zRj291izojBTbzdu92Cx4QqSBa
-	 CxAg60Lxu+cLmvKXSeTSXp0Tp8go91RzBadpMjIA=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 267C2A80A6B; Tue, 19 Nov 2024 10:49:39 +0100 (CET)
-Date: Tue, 19 Nov 2024 10:49:39 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=8FCa=SO=warnr.net=david@sourceware.org>
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+	by sourceware.org (Postfix) with ESMTPS id 2B2783858D35
+	for <cygwin-patches@cygwin.com>; Tue, 19 Nov 2024 09:55:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2B2783858D35
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=warnr.net
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=warnr.net
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2B2783858D35
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=185.70.43.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732010140; cv=none;
+	b=dr8jR5ACg6QOG/pGldwFQZML1jAh18YuLzHVpqK33rirFkRSvVxH/uQ09K2a6nzzr/grcGoSaBZhRi4iKTV1T7GcmgE9hXi8Pzd+EmSrVafpx09kyXuMJVvxIxMFZ5Y8l8+rr1m7smuD6kOZcqLdAm3ORmWFNh6em2UMPC4jN4E=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1732010140; c=relaxed/simple;
+	bh=92/KkDypOHDR6LHZEy0O4YK6OoYV4smrPLCFIXwV9SI=;
+	h=DKIM-Signature:Date:To:From:Subject:Message-ID:MIME-Version; b=TifP2IzGXeFPUgIYQK3q6//4NCKNRCdamJlPbPUthK++KH3eScK94UcJHYIt7iklPjkp4B0uWWFe9qMEA8nxFb5/hLn3MINDbDQaaXEeStH/bry50jmDSltkuru/opBXkdZd7wxcRcG93tavu40spLByxtV5LdQ++68eOPdoIls=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2B2783858D35
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, secure) header.d=warnr.net header.i=@warnr.net header.a=rsa-sha256 header.s=protonmail3 header.b=X1lqOh4a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=warnr.net;
+	s=protonmail3; t=1732010138; x=1732269338;
+	bh=yeKaI0hjAde/dRdXA1v+tzXoI0Kep6K5xHZKPyKcGoc=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=X1lqOh4abdNNBl1P9dpjxdMfVpwI5J4JJbRXE8YsJOXY5oRiB1Ts9roUp4nJrTGSL
+	 ga7uFIpd1dJsR3SEDAqkAc1DqjOx+8tAzbEJjCiSa2ckuYokIaPqmNMS97Gi25j63D
+	 DOxfPzk/ozIkr1XKVg/tAqN/xe4nwRwm+5rMBcGwwbYFnrdtsmqLWCAt/Jixw5UqJv
+	 3ipR0dXjVPYJCI1IyPJbxsApR8KPOH/8UBU9G+GhrmmXo4hNTGWPzif14mb1o3mzg3
+	 ccdWR4uMgwZZcvtaNxI1FWaohRFYNEFLpDs4KPyXxG/vqBPZcCGSPx+NE8mSX+Q478
+	 /llTchXaWHWGg==
+Date: Tue, 19 Nov 2024 09:55:34 +0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: lockf: Fix access violation in
- lf_clearlock().
-Message-ID: <ZzxfM9T2uy5Bdiao@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241115131422.2066-1-takashi.yano@nifty.ne.jp>
- <20241115131422.2066-2-takashi.yano@nifty.ne.jp>
- <ZztjYs4Cu28xZgtl@calimero.vinschen.de>
- <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
+From: David Warner <david@warnr.net>
+Cc: David Warner <david@warnr.net>
+Subject: [PATCH] Add Windows Server 2025 build number
+Message-ID: <20241119095530.41303-1-david@warnr.net>
+Feedback-ID: 42670675:user:proton
+X-Pm-Message-ID: 90d8753244abe244fadc41d7cbf0e6f826387075
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 19 17:39, Takashi Yano wrote:
-> On Mon, 18 Nov 2024 16:55:14 +0100
-> Corinna Vinschen wrote:
-> > On Nov 15 22:14, Takashi Yano wrote:
-> > > The commit ae181b0ff122 has a bug that the pointer is referred bofore
-> > > NULL check in the function lf_clearlock(). This patch fixes that.
-> > > 
-> > > Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256750.html
-> > > Fixes: ae181b0ff122 ("Cygwin: lockf: Make lockf() return ENOLCK when too many locks")
-> > > Reported-by: Sebastian Feld <sebastian.n.feld@gmail.com>
-> > > Reviewed-by:
-> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > > ---
-> > >  winsup/cygwin/flock.cc | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/winsup/cygwin/flock.cc b/winsup/cygwin/flock.cc
-> > > index 3821bddd6..794e66bd7 100644
-> > > --- a/winsup/cygwin/flock.cc
-> > > +++ b/winsup/cygwin/flock.cc
-> > > @@ -1524,6 +1524,10 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
-> > >    lockf_t *lf = *head;
-> > >    lockf_t *overlap, **prev;
-> > >    int ovcase;
-> > > +
-> > > +  if (lf == NOLOCKF)
-> > > +    return 0;
-> > > +
-> > >    inode_t *node = lf->lf_inode;
-> > >    tmp_pathbuf tp;
-> > >    node->i_all_lf = (lockf_t *) tp.w_get ();
-> > > @@ -1531,8 +1535,6 @@ lf_clearlock (lockf_t *unlock, lockf_t **clean, HANDLE fhdl)
-> > >    uint32_t lock_cnt = node->get_lock_count ();
-> > >    bool first_loop = true;
-> > >  
-> > > -  if (lf == NOLOCKF)
-> > > -    return 0;
-> > >    prev = head;
-> > >    while ((ovcase = lf_findoverlap (lf, unlock, SELF, &prev, &overlap)))
-> > >      {
-> > > -- 
-> > > 2.45.1
-> > 
-> > LGTM, please push.
-> 
-> Thanks for reviewing this patch. Could you please review
->  [PATCH v2] Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
-> as well?
+---
+ winsup/utils/mingw/cygcheck.cc | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Give me a bit of time.  While the patch might fix the problem, what
-bugs me is the deviation from upstream code.  We will at least need
-a few comments to explain why we don't follow the upstream behaviour.
+diff --git a/winsup/utils/mingw/cygcheck.cc b/winsup/utils/mingw/cygcheck.c=
+c
+index 1dde2ecba..659e8428a 100644
+--- a/winsup/utils/mingw/cygcheck.cc
++++ b/winsup/utils/mingw/cygcheck.cc
+@@ -1459,7 +1459,9 @@ dump_sysinfo ()
+ =09=09  else if (osversion.dwBuildNumber <=3D 17763)
+ =09=09    strcpy (osname, "Server 2019");
+ =09=09  else if (osversion.dwBuildNumber <=3D 20348)
+-=09=09    strcpy (osname, "Server 2022");
++            strcpy (osname, "Server 2022");
++          else if (osversion.dwBuildNumber <=3D 26100)
++            strcpy (osname, "Server 2025");
+ =09=09  else
+ =09=09    strcpy (osname, "Server 20??");
+ =09=09}
+--=20
+2.47.0
 
 
-Corinna
