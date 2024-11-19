@@ -1,46 +1,68 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 838C33858D34; Tue, 19 Nov 2024 19:32:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 838C33858D34
+	id 76C943858D34; Tue, 19 Nov 2024 21:18:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 76C943858D34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732044769;
-	bh=U9gWQ94edCDBCq+pKtokYzMiK4v8i7F4UHU0oT5ez5c=;
+	s=default; t=1732051124;
+	bh=+yhuKPXL/fnuZhN2cKJIlnQoNImh1ULhrS396t43MIU=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=RUTS4N2N6KvVGyTTEd02sgt2o3TaJppm7PUoGZIYeN71fBD0cqZLn3NU8xtHzkav6
-	 Xk+IIy2Dev+TQBjppI4HyJz7nKZHdlCo8lEPUdfjqi2fLEsU5jxU9QFEDVjGkGR9/5
-	 Rp4KIXTzoDCTRg+wGLol6WJPS0ZP5rwjI7YpjStg=
+	b=UzOCgjC2N5GOVTWUHiuSTuoIhFBJR5XtMKasTm1Sxm9WFfZLtVIMBnHZghLdqmSxe
+	 9yM4rQK1nxr/5n4mtW4u6ArRPpcqgJApDhVtACDeHhVO6HxjzwAFYcdrz6CNZZuBU0
+	 ojtMCWA879yQTCVYwz/o5Z7XE8aX3rx4Wo/9nrxo=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id D3DA2A80D6C; Tue, 19 Nov 2024 20:31:45 +0100 (CET)
-Date: Tue, 19 Nov 2024 20:31:45 +0100
+	id 057A8A814E9; Tue, 19 Nov 2024 22:18:12 +0100 (CET)
+Date: Tue, 19 Nov 2024 22:18:11 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add libaio to SUBLIBS built for Cygwin
-Message-ID: <ZzznoWJXU0E-sfWI@calimero.vinschen.de>
+Subject: Re: [PATCH 1/2] Cygwin: lockf: Fix access violation in
+ lf_clearlock().
+Message-ID: <Zz0Ak0QKKPQdOxfJ@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241119081133.57253-1-mark@maxrnd.com>
+References: <20241115131422.2066-1-takashi.yano@nifty.ne.jp>
+ <20241115131422.2066-2-takashi.yano@nifty.ne.jp>
+ <ZztjYs4Cu28xZgtl@calimero.vinschen.de>
+ <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
+ <ZzxfM9T2uy5Bdiao@calimero.vinschen.de>
+ <20241119191302.9dea6a8aabb69727cdd3feb8@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241119081133.57253-1-mark@maxrnd.com>
+In-Reply-To: <20241119191302.9dea6a8aabb69727cdd3feb8@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Mark,
-
-On Nov 19 00:11, Mark Geisert wrote:
-> Provide libaio.a for those projects (such as stress-ng) checking for
-> POSIX aio support by looking for this library at configure time.
-> A release note is provided for Cygwin 3.6.0.
+On Nov 19 19:13, Takashi Yano wrote:
+> On Tue, 19 Nov 2024 10:49:39 +0100
+> Corinna Vinschen wrote:
+> > >  [PATCH v2] Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
+> > > as well?
+> > 
+> > Give me a bit of time.  While the patch might fix the problem, what
+> > bugs me is the deviation from upstream code.  We will at least need
+> > a few comments to explain why we don't follow the upstream behaviour.
 > 
-> Signed-off-by: Mark Geisert <mark@maxrnd.com>
-> Fixes: N/A (new code)
-> 
-> ---
->  winsup/cygwin/Makefile.am   | 6 +++++-
->  winsup/cygwin/release/3.6.0 | 3 +++
->  2 files changed, 8 insertions(+), 1 deletion(-)
+> I've got it. Does this code come from 'upstream'? From what code?
 
-Pushed.
+This was once ripped from FreeBSD code in 2008.  The upstream code
+has changed considerably, though, so I'm not so sure if my reluctance
+makes any sense.
+
+> Essentially, the ovcase 1 can be a part of ovcase 3. I guess the
+> 'upstream' does not add lock entry having same lock range unlike
+> current cygwin (lf_ver related). So, ovcase 1 can break after
+> handling 1 overlap. However, we need find overlap repeatedly
+> because we have lf_ver.
+
+Yeah, I get that.  What bugs me is that the structure of the upstream
+snippets changed, not the necessity for change.  For that reason alone,
+I would prefer that the `case 1:' expression stays where it is in
+lf_clearlock.  But that's unreasonable.
+
+It's a puzzle of life that one thinks in 2008, that this upstream
+code will always stay what it is. A mere 16 years later...
+
+Ok, never mind that.  Please push.  Maybe add a single-line comment
+why we deviate from the original 2008 FreeBSD code at these points.
 
 
 Thanks,
