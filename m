@@ -1,42 +1,42 @@
 Return-Path: <SRS0=8FCa=SO=warnr.net=david@sourceware.org>
 Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
-	by sourceware.org (Postfix) with ESMTPS id 2B2783858D35
-	for <cygwin-patches@cygwin.com>; Tue, 19 Nov 2024 09:55:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2B2783858D35
+	by sourceware.org (Postfix) with ESMTPS id 10D333858D21
+	for <cygwin-patches@cygwin.com>; Tue, 19 Nov 2024 10:01:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 10D333858D21
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=warnr.net
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=warnr.net
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2B2783858D35
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 10D333858D21
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=185.70.43.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732010140; cv=none;
-	b=dr8jR5ACg6QOG/pGldwFQZML1jAh18YuLzHVpqK33rirFkRSvVxH/uQ09K2a6nzzr/grcGoSaBZhRi4iKTV1T7GcmgE9hXi8Pzd+EmSrVafpx09kyXuMJVvxIxMFZ5Y8l8+rr1m7smuD6kOZcqLdAm3ORmWFNh6em2UMPC4jN4E=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732010516; cv=none;
+	b=kNNj/j69AfHuwoYScQkmLc23gt/7kFM6WgDoR2meIyPV9EvD1nMaE+HMlr/itohSZ98Feb5EX7kCPdt8ie51OUU7+HZ5D63k1leeVL29m37VDUY8YJmWMqY1IK6fK5xExRAHJwzMCuE1cnDC+UPbr0YOqbeRb5hcROpgXsTh7qo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732010140; c=relaxed/simple;
+	t=1732010516; c=relaxed/simple;
 	bh=92/KkDypOHDR6LHZEy0O4YK6OoYV4smrPLCFIXwV9SI=;
-	h=DKIM-Signature:Date:To:From:Subject:Message-ID:MIME-Version; b=TifP2IzGXeFPUgIYQK3q6//4NCKNRCdamJlPbPUthK++KH3eScK94UcJHYIt7iklPjkp4B0uWWFe9qMEA8nxFb5/hLn3MINDbDQaaXEeStH/bry50jmDSltkuru/opBXkdZd7wxcRcG93tavu40spLByxtV5LdQ++68eOPdoIls=
+	h=DKIM-Signature:Date:To:From:Subject:Message-ID:MIME-Version; b=jSu3SPLvKkUTcCMuSEAEIdjbc57gyFfUWUsye9HKYacpknJCoLB/unRXwmfJHhJn2oC5U25islvq2mKYsVY+JuitpJBcS6Mj/QvdthlcHF7OyzOS9xbuJ7jzFKeNfSQp0lReDEoWqXwvbbrC2fL3sk42dc6cZgGGrfsK5iAkscY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2B2783858D35
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 10D333858D21
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=warnr.net header.i=@warnr.net header.a=rsa-sha256 header.s=protonmail3 header.b=X1lqOh4a
+	dkim=pass (2048-bit key, secure) header.d=warnr.net header.i=@warnr.net header.a=rsa-sha256 header.s=protonmail3 header.b=IE833W6Y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=warnr.net;
-	s=protonmail3; t=1732010138; x=1732269338;
+	s=protonmail3; t=1732010514; x=1732269714;
 	bh=yeKaI0hjAde/dRdXA1v+tzXoI0Kep6K5xHZKPyKcGoc=;
 	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
 	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
 	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=X1lqOh4abdNNBl1P9dpjxdMfVpwI5J4JJbRXE8YsJOXY5oRiB1Ts9roUp4nJrTGSL
-	 ga7uFIpd1dJsR3SEDAqkAc1DqjOx+8tAzbEJjCiSa2ckuYokIaPqmNMS97Gi25j63D
-	 DOxfPzk/ozIkr1XKVg/tAqN/xe4nwRwm+5rMBcGwwbYFnrdtsmqLWCAt/Jixw5UqJv
-	 3ipR0dXjVPYJCI1IyPJbxsApR8KPOH/8UBU9G+GhrmmXo4hNTGWPzif14mb1o3mzg3
-	 ccdWR4uMgwZZcvtaNxI1FWaohRFYNEFLpDs4KPyXxG/vqBPZcCGSPx+NE8mSX+Q478
-	 /llTchXaWHWGg==
-Date: Tue, 19 Nov 2024 09:55:34 +0000
+	b=IE833W6YEI4EcVDLULmXWFJC0iZs3AksmgPREYoVJ41MKMGBn4fdIkBIncvMk0xET
+	 /Ck/VLVlNGEmW4Wyb1zg8LyoDCEYNt8vCoXyl9nF7HwP6it5O/ClLbhjiCp1Ro9qVO
+	 9vdZH7HctNVrDxVFXnxKGGlMOwNV+JiBzxdycE/Pc5yVNX4uHdDnKlyn8RLLXn4bnR
+	 HLfHoBPJyBoqzzdWT2aqWjBcLeas1KS8mrjTXwNBj9ezHRYdezjNiklnYjHpk5T7nn
+	 0TrEIXAah13I6xNrJbpyBu1s0PN+jWcinjCRv0smznZi+RZgvQLuFLlWWU5DcNn6z1
+	 O8N1cjdLQWHNA==
+Date: Tue, 19 Nov 2024 10:01:47 +0000
 To: cygwin-patches@cygwin.com
 From: David Warner <david@warnr.net>
 Cc: David Warner <david@warnr.net>
-Subject: [PATCH] Add Windows Server 2025 build number
-Message-ID: <20241119095530.41303-1-david@warnr.net>
+Subject: [PATCH 1/2] Add Windows Server 2025 build number
+Message-ID: <20241119100140.43240-1-david@warnr.net>
 Feedback-ID: 42670675:user:proton
-X-Pm-Message-ID: 90d8753244abe244fadc41d7cbf0e6f826387075
+X-Pm-Message-ID: f23231704b96ae965b2e9abab2f7324c0ea47f66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
