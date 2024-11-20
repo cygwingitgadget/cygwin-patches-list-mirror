@@ -1,77 +1,57 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 943E33858D20; Wed, 20 Nov 2024 13:06:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 943E33858D20
+	id 66F2E3858D20; Wed, 20 Nov 2024 15:26:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 66F2E3858D20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732107971;
-	bh=POcRzG6szveEQU6/rTh/PHRGsXdgMSuYjiXDJcr9sQU=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=BCjBao0iwi9yla7cm/+qBMxvG+e08Wx7vgHmubA6kXAv+cStbFxZR4x9CW+xIywd5
-	 joVjOa2iIfMMFyxu4RzNyAue9f1jkyZ6v1kFEFTqtz6TUPX/fCUBvZvzbMr9jl53AG
-	 4kbaP2tTvVJVU5cA0ZWiA/TmyT3WpRT5Sdl/iKU8=
+	s=default; t=1732116392;
+	bh=6Or7OSlJ/XOQhSH2jnXJOmpU7QztT5xiU8b7/+hJ16o=;
+	h=From:To:Subject:Date:Reply-To:From;
+	b=IS/Uvhi6P3p1qAY3u2q44F/asV2zEIVVaRuK1+/rdEIlsy6R/Qt5SdasEwIZCjMiG
+	 kl6ZeRfXd92fxDYtY1ck6d+gkhVChvbO/IOrqRb/QxClUa6UROl3fewk5WEts3hPov
+	 mgcEJ7TB9P76960dPi5BTeG0rd5Qf1OPGpQy4tkg=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6DBE0A80D6C; Wed, 20 Nov 2024 14:06:09 +0100 (CET)
-Date: Wed, 20 Nov 2024 14:06:09 +0100
+	id 61F6CA80C7E; Wed, 20 Nov 2024 16:26:30 +0100 (CET)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: lockf: Fix access violation in
- lf_clearlock().
-Message-ID: <Zz3ewXTd-0MuEX72@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com,
+	Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: SetThreadName: avoid spurious debug message
+Date: Wed, 20 Nov 2024 16:26:30 +0100
+Message-ID: <20241120152630.1617419-1-corinna-cygwin@cygwin.com>
+X-Mailer: git-send-email 2.47.0
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241115131422.2066-1-takashi.yano@nifty.ne.jp>
- <20241115131422.2066-2-takashi.yano@nifty.ne.jp>
- <ZztjYs4Cu28xZgtl@calimero.vinschen.de>
- <20241119173939.5ba0cb14459b3da22d226262@nifty.ne.jp>
- <ZzxfM9T2uy5Bdiao@calimero.vinschen.de>
- <20241119191302.9dea6a8aabb69727cdd3feb8@nifty.ne.jp>
- <Zz0Ak0QKKPQdOxfJ@calimero.vinschen.de>
- <20241120215222.8ff263bfd7c24cfbe9c64034@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241120215222.8ff263bfd7c24cfbe9c64034@nifty.ne.jp>
+Content-Transfer-Encoding: 8bit
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 20 21:52, Takashi Yano wrote:
-> On Tue, 19 Nov 2024 22:18:11 +0100
-> Corinna Vinschen wrote:
-> > On Nov 19 19:13, Takashi Yano wrote:
-> > > On Tue, 19 Nov 2024 10:49:39 +0100
-> > > Corinna Vinschen wrote:
-> > > > >  [PATCH v2] Cygwin: flock: Fix overlap handling in lf_setlock() and lf_clearlock()
-> > > > > as well?
-> > > > 
-> > > > Give me a bit of time.  While the patch might fix the problem, what
-> > > > bugs me is the deviation from upstream code.  We will at least need
-> > > > a few comments to explain why we don't follow the upstream behaviour.
-> > > 
-> > > I've got it. Does this code come from 'upstream'? From what code?
-> > 
-> > This was once ripped from FreeBSD code in 2008.  The upstream code
-> > has changed considerably, though, so I'm not so sure if my reluctance
-> > makes any sense.
-> > 
-> > > Essentially, the ovcase 1 can be a part of ovcase 3. I guess the
-> > > 'upstream' does not add lock entry having same lock range unlike
-> > > current cygwin (lf_ver related). So, ovcase 1 can break after
-> > > handling 1 overlap. However, we need find overlap repeatedly
-> > > because we have lf_ver.
-> > 
-> > Yeah, I get that.  What bugs me is that the structure of the upstream
-> > snippets changed, not the necessity for change.  For that reason alone,
-> > I would prefer that the `case 1:' expression stays where it is in
-> > lf_clearlock.  But that's unreasonable.
-> > 
-> > It's a puzzle of life that one thinks in 2008, that this upstream
-> > code will always stay what it is. A mere 16 years later...
-> > 
-> > Ok, never mind that.  Please push.  Maybe add a single-line comment
-> > why we deviate from the original 2008 FreeBSD code at these points.
-> 
-> Thanks for reviewing. Pushed.
+From: Corinna Vinschen <corinna@vinschen.de>
 
-Thanks for the comments!
+The following debug message occassionally shows up in strace output:
 
+  SetThreadName: SetThreadDescription() failed. 00000000 10000000
 
-Corinna
+The HRESULT of 0x10000000 is not an error, rather the set bit just
+indicates that this HRESULT has been created from an NTSTATUS value.
+
+Use the IS_ERROR() macro instead of just checking for S_OK.
+
+Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
+---
+ winsup/cygwin/miscfuncs.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+index 767384faa9ae..4220f6275785 100644
+--- a/winsup/cygwin/miscfuncs.cc
++++ b/winsup/cygwin/miscfuncs.cc
+@@ -353,7 +353,7 @@ SetThreadName (DWORD dwThreadID, const char* threadName)
+       WCHAR buf[bufsize];
+       bufsize = MultiByteToWideChar (CP_UTF8, 0, threadName, -1, buf, bufsize);
+       HRESULT hr = SetThreadDescription (hThread, buf);
+-      if (hr != S_OK)
++      if (IS_ERROR (hr))
+ 	{
+ 	  debug_printf ("SetThreadDescription() failed. %08x %08x\n",
+ 			GetLastError (), hr);
+-- 
+2.47.0
+
