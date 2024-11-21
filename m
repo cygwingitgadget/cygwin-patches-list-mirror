@@ -1,50 +1,58 @@
-Return-Path: <SRS0=Byep=SQ=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 6FC7E385802C
-	for <cygwin-patches@cygwin.com>; Thu, 21 Nov 2024 09:17:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6FC7E385802C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6FC7E385802C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732180647; cv=none;
-	b=gL9U6IdjBOTbrk6SzM8XNTxwmDeUed3Nl/nM5SQk+z1YNDzq1DsKCkuBJz6y2bydXKwi5WMEou2a/F7XRh0OZ5O7v9Qyo1BbogqENg0KTI9LrZ+kDNzpfkQGYBYaVkyXYlShoqmrn1U5bUZ0Htt5NT6Hm7yHSPKNo7mfyzInIuM=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732180647; c=relaxed/simple;
-	bh=QMp/hwEMSlH/oJpPcSPwlLZahbscHWN7zj4fIN5/3kI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=LfRodzuy5zg9A0OtuCdluKY1PluYYPGYYNUSobJIwuQhDToykEfBD4HGWvKhnI8iYpTcAFPTotKRf70G3HT3k6gbIicNeh/jeneRZxFBfEMLS18GCZttILY7WQKcx86TX2JY1BO7xSti20uPnolpGME6fB0hYSIzpYneG46Rkqs=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 4AL9KKWT007629
-	for <cygwin-patches@cygwin.com>; Thu, 21 Nov 2024 01:20:20 -0800 (PST)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdsSDoPm; Thu Nov 21 01:20:15 2024
-Message-ID: <ec3c1378-b49b-4bb8-9fcc-e36807a93d08@maxrnd.com>
-Date: Thu, 21 Nov 2024 01:17:19 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 7A80F385802C; Thu, 21 Nov 2024 09:34:32 +0000 (GMT)
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id B8A3BA80C30; Thu, 21 Nov 2024 10:34:29 +0100 (CET)
+Date: Thu, 21 Nov 2024 10:34:29 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20241113062152.2225-1-mark@maxrnd.com>
- <ZzsyaAObt_lYWKUD@calimero.vinschen.de>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <ZzsyaAObt_lYWKUD@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Subject: Re: [PATCH v2] Cygwin: Minor updates to load average calculations
+Message-ID: <Zz7-pdtxYgOCr6p7@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20241113060354.2185-1-mark@maxrnd.com>
+ <ZzsxhLhL_h3xey5h@calimero.vinschen.de>
+ <3a16a22f-3f16-4ebb-ac9b-a1ad3a71b1ec@maxrnd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3a16a22f-3f16-4ebb-ac9b-a1ad3a71b1ec@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On 11/18/2024 4:26 AM, Corinna Vinschen wrote:
-> Hi Mark,
+On Nov 21 01:12, Mark Geisert wrote:
+> Hi Corinna,
 > 
-> Not being a bugfix, this patch should go into the main branch and only
-> update release/3.6.0.
+> On 11/18/2024 4:22 AM, Corinna Vinschen wrote:
+> > Hi Mark,
+> > 
+> > 
+> > Jon, would you mind to take a look, please?
+> 
+> I appreciate the additional eyes, thanks.
+> 
+> > This looks good to me, just one question...
+> > 
+> > On Nov 12 22:03, Mark Geisert wrote:
+> [...]
+> > > +    /* Delay a short time so PdhCQD in caller will have data to collect */
+> > > +    Sleep (16/*ms*/); /* let other procs run; one|more yield()s not enough */
+> > 
+> > Is there a reason you specificially chose 16 msecs here?
+> > 
+> > I'm asking because the usual clock tick is roughly 15.x msecs.
+> > Any Sleep() > 0 but < 16 results in a sleep of a single clock tick, i.e.,
+> > 15 ms.  Occassionally 2 ticks, ~31 msecs, 1 to 5 out of 100 runs.
+> > 
+> > If you choose a value of 15 msecs, the probability of a Sleep() taking
+> > two ticks is much higher and can be 1 out of 2 Sleep().
+>                     ^^^^^^
+>                     lower, I think
 
-Right, OK.  v3 will have the correction.  I was erroneously considering 
-all the load average mods to be one ball of wax, so to speak.
-Thanks,
+No, higher.  In a low load scenario
 
-..mark
+Sleep (1)  -->  < 5% will take two or more clock ticks
+Sleep (15) -->  up to 50 % will take two or more clock ticks
+Sleep (16) -->  100% will take two or more clock ticks
+
+
+Corinna
