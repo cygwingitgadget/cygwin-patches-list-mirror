@@ -1,57 +1,84 @@
-Return-Path: <SRS0=AZ9L=SP=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 71A17385841E
-	for <cygwin-patches@cygwin.com>; Wed, 20 Nov 2024 18:46:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 71A17385841E
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 71A17385841E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732128419; cv=none;
-	b=chLRy33PqLwhgPPSOmY9jWrUI1GDiLJuQPljOJCHdMeecV3eLSXuf6Tb0eoC2NnhWcKcWb5T9bwG1wNetx8PrJa8vEsDefKmJhNjoDwmPLgNs1m3MmDz3mY+XqKYuLbNBQpX+i+C5QpdTxqEOnaL7laQfofhD3WIXda+sBg5/bQ=
+Return-Path: <SRS0=Byep=SQ=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 66D32385801B
+	for <cygwin-patches@cygwin.com>; Thu, 21 Nov 2024 09:12:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 66D32385801B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 66D32385801B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732180364; cv=none;
+	b=Ncg5rs44PlczYnYUo6p/7GOQerlY9oZOxH1wWm5dRkmZindKG5j8ziFJT6zm+8ZwbZoIXjLHqx4Zvb6BJZxgo3bliTi1AaI5uKEQ+7Q8UMVnFAoAlWzE5vVKuXMDUuaq+BcU9Al8ezahp9uUAfAD1nFWk0pxTIvxfzg563XP8hE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732128419; c=relaxed/simple;
-	bh=FnnVMu44GK3sJgSULjb9+TIp3i00j39SUJmxNlI/5AE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=BEyaQFdXIncA2/z1KTNFSeMfBSF7vbCLNtYutBsIweTG2nKsjboO1Qe+bTO9fs1vlX3sgYxpeFkPKRXmSExG3Of8SHO4FcASMv+KFdZ1hFUQ2McT0fh36EKnMEvlwZzedEcZAxH0O7/SfVd06QYNANw3flczR6AJAt6n7nyZiRQ=
+	t=1732180364; c=relaxed/simple;
+	bh=q2n7X7ddoyi1PPl/qIsuRcEjkr9SLBA97uBnOTNCZpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=RN5S1VUijFTJfnDUfUVOvJgY1463sm88nrNn+3AiaP73mTWMZW23dW7AVj8XX0YdL4fgsavcb9lJO5OjYYoeKZ6CMBgHA247JZcFfbT4xjLIxSW7Tkpmz/x3GRT/DzPZGz5l3yVsof8Cf3d5gZjmHImeqEPRUAJfZWVuNV0sueA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 71A17385841E
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=j5GUGMb6
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 0A7F845C85
-	for <cygwin-patches@cygwin.com>; Wed, 20 Nov 2024 13:46:59 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=IrSmdIbWEqR7MddVRjfg+dEuYFo=; b=j5GUG
-	Mb6Ov7nJ7bBzpmWrlhq+fU696DhjAJjimmpVHY/Vp2Fr3uKmK/pLeHwgQx+muL9O
-	Ru5aq/WrmkAP559Jq0W/C9bxzptxg59nBiLCAmwnxOkCsk5fpi330GK+SfKr6pm/
-	/YYKda5B5CLfd8B0L3ylYM6vuQRG1/oQXjMknI=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 0268045C83
-	for <cygwin-patches@cygwin.com>; Wed, 20 Nov 2024 13:46:59 -0500 (EST)
-Date: Wed, 20 Nov 2024 10:46:58 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] cygthread: suspend thread before terminating.
-In-Reply-To: <Zz2_Czrk_qzn2fu6@calimero.vinschen.de>
-Message-ID: <1ce32afc-94ee-af96-db30-26d5f02a07ef@jdrake.com>
-References: <45e536e2-e894-2548-e9d0-5937ff96b0b5@jdrake.com> <Zz0ER77IqtBDV_EU@calimero.vinschen.de> <4e2cbe74-2d1c-f8df-a457-57c0239844c1@jdrake.com> <Zz2_Czrk_qzn2fu6@calimero.vinschen.de>
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 4AL9Fegw007075
+	for <cygwin-patches@cygwin.com>; Thu, 21 Nov 2024 01:15:40 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpdLK1HzS; Thu Nov 21 01:15:39 2024
+Message-ID: <3a16a22f-3f16-4ebb-ac9b-a1ad3a71b1ec@maxrnd.com>
+Date: Thu, 21 Nov 2024 01:12:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Cygwin: Minor updates to load average calculations
+To: cygwin-patches@cygwin.com
+References: <20241113060354.2185-1-mark@maxrnd.com>
+ <ZzsxhLhL_h3xey5h@calimero.vinschen.de>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <ZzsxhLhL_h3xey5h@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 20 Nov 2024, Corinna Vinschen wrote:
+Hi Corinna,
 
-> Patch pushed.
+On 11/18/2024 4:22 AM, Corinna Vinschen wrote:
+> Hi Mark,
+> 
+> 
+> Jon, would you mind to take a look, please?
 
-Thanks, folks on ARM64 will be very happy to see that deadlock gone.
-MSYS2 already made a release based on v2 of the patch, and Git for Windows
-at least merged that version of the patch too, and is looking forward to
-making a release with it.
+I appreciate the additional eyes, thanks.
+
+> This looks good to me, just one question...
+> 
+> On Nov 12 22:03, Mark Geisert wrote:
+[...]
+>> +    /* Delay a short time so PdhCQD in caller will have data to collect */
+>> +    Sleep (16/*ms*/); /* let other procs run; one|more yield()s not enough */
+> 
+> Is there a reason you specificially chose 16 msecs here?
+> 
+> I'm asking because the usual clock tick is roughly 15.x msecs.
+> Any Sleep() > 0 but < 16 results in a sleep of a single clock tick, i.e.,
+> 15 ms.  Occassionally 2 ticks, ~31 msecs, 1 to 5 out of 100 runs.
+> 
+> If you choose a value of 15 msecs, the probability of a Sleep() taking
+> two ticks is much higher and can be 1 out of 2 Sleep().
+                     ^^^^^^
+                     lower, I think
+> 
+> If you choose a value of 16 msecs, all Sleep() invocations will run
+> at least 2 clock ticks.
+
+This Sleep() is only done once for any program that has called 
+getloadavg(); it's in an initialization function.  So it's just one 
+delay we're considering here, not anything in a loop.
+
+That said, the idea is to minimize the delay but ensure one scheduler 
+tick has occurred before this function returns to its caller that tries 
+to read the counters.  I agree with your reasoning that 15ms is better 
+than 16ms at limiting the delay to one tick.  Not perfect (due to 
+Windows being Windows) but better than 16ms.
+
+I'll make that change in the v3 patch forthcoming.
+Thanks & Regards,
+
+..mark
