@@ -1,64 +1,74 @@
-Return-Path: <SRS0=oguS=ST=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 045703858D29
-	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 09:48:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 045703858D29
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 045703858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732441712; cv=none;
-	b=AGL1F0fEiktt8ijmXI0R0hON79U+adVbbtvLRXRCEzPrZhICmYyRLR2oD9zmQed6N2nZA+taEzDf9a8OOB4lYwH9Zq/ZOnPKa9nTZoga86Q2HB5O2X2uPLVLnuaS5GHKSsqZXSgiqVu8s3a5/ij6MMNUBdIScnmWUyzURz2RRi0=
+Return-Path: <SRS0=YD5p=ST=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+	by sourceware.org (Postfix) with ESMTPS id 0C5223858D29
+	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 10:11:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C5223858D29
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C5223858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732443091; cv=none;
+	b=KRvGPIYfou36ziVbATAlcsa/lNb9mNU2nKGL3g3WJ3qleBIxiPPEwA4RR+lsqLyUs5OA/I2QG2i1ay5FUWxQsHRosY81AqrhzI14B5ZyHepMtUHMBFzAB9qii6An8cF/PKPbsE11ZFHRmNS4lZMk3OLc+D4JoeanO2vh+pN//Q8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732441712; c=relaxed/simple;
-	bh=GRN2BzhP47WC5E5aoEp7MgC+2trlYmIPB8hJmSC+Xxw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=jYpxv7dunKOi1RGARqHgV6otLD8R/esL9GI9xdaXudR+10T/88yqH6F2Y+8CES7S911/hNXSJG3sk/6Fp1iERVcRAWBr6l70pwhAl34EY78TIJzzqESDyDi1u/eU6XAWdIVv201mGUoVFNu3hZkR+eMr/2ykM0sLuFcDyppbzpU=
+	t=1732443091; c=relaxed/simple;
+	bh=YjR2+BSYIkVMsimC6tj2TGvk/JlgM6vynzt4Au1VJFc=;
+	h=To:From:Subject:Message-ID:Date:MIME-Version; b=uWjIVgOiq4WUxd9o2TetKsMHdGzDUdRnxZOqmV5CBv2jqxRvWdzikyoOjHrJTk1BZOuDrAFQ10ZUs/dPp6OESGg7WAcCQCUKQCFDBMIBu+/3rjg7R26eJzlpuNld0/xMxGLIDQWDvI6GISDjHn3jWIUTiq+VTLxC2xYmZy2xvx8=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 045703858D29
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 4AO9pQMS029217
-	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 01:51:26 -0800 (PST)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdjxOlCv; Sun Nov 24 01:51:24 2024
-Message-ID: <2410821a-17e0-4436-89d6-3b0e15ad790d@maxrnd.com>
-Date: Sun, 24 Nov 2024 01:48:29 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C5223858D29
+Received: from fwd83.aul.t-online.de (fwd83.aul.t-online.de [10.223.144.109])
+	by mailout02.t-online.de (Postfix) with SMTP id 70D9364A
+	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 11:11:27 +0100 (CET)
+Received: from [192.168.2.101] ([91.57.241.70]) by fwd83.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tF9aN-2LOCES0; Sun, 24 Nov 2024 11:11:23 +0100
 To: cygwin-patches@cygwin.com
-References: <20241113062152.2225-1-mark@maxrnd.com>
- <3987e096-9510-4fc0-8121-ca32773c09e4@dronecode.org.uk>
- <ZzxXmgVc3aAkfJVJ@calimero.vinschen.de>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <ZzxXmgVc3aAkfJVJ@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: cygwin-patches@cygwin.com
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: sched_getscheduler: fix error handling
+Message-ID: <36a9bf51-b331-bb30-1bd3-2e112d9ec3fa@t-online.de>
+Date: Sun, 24 Nov 2024 11:11:23 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ SeaMonkey/2.53.19
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------514BADEEE5E793B3B669BC68"
+X-TOI-EXPURGATEID: 150726::1732443083-617ED96B-C9E2A44F/0/0 CLEAN NORMAL
+X-TOI-MSGID: ee2e0782-ddc7-46dc-9590-82570852f49f
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 11/19/2024 1:17 AM, Corinna Vinschen wrote:
-> On Nov 18 20:58, Jon Turney wrote:
->> On 13/11/2024 06:21, Mark Geisert wrote:
->>> This program provides an up-to-the-moment load average measurement.  The
->>> user can take 1 sample, or obtain the average of N samples by number or
->>
->> Sorry about the inordinate time it's take for me to look at this.
->>
->>
->> So, this seems like two separate things shoved together
->>
->> * A daemon which calls getloadavg() every 5 seconds
->> * A tool which exercises the loadavg estimation code
->>
->> Does it really make sense to bundle them together?
-> 
-> The other question then is, why not just make it a standalone package?
-> As a Cywin-only package it could go into its own git repo under
-> https://sourceware.org/cygwin-apps/
+This is a multi-part message in MIME format.
+--------------514BADEEE5E793B3B669BC68
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I'm amenable to Corinna's proposal.
+Long standing (2001) minor issue.
 
-..mark
+-- 
+Regards,
+Christian
+
+
+--------------514BADEEE5E793B3B669BC68
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-sched_getscheduler-fix-error-handling.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Cygwin-sched_getscheduler-fix-error-handling.patch"
+
+RnJvbSBlYjExYTllZTg1NTA4N2FkNWY5MmY3N2VjMzVjMTJjNDNhNzlkYjY0IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTdW4sIDI0IE5vdiAyMDI0IDEwOjQxOjIxICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzY2hlZF9nZXRzY2hlZHVsZXI6IGZpeCBlcnJv
+ciBoYW5kbGluZwoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFu
+LmZyYW5rZUB0LW9ubGluZS5kZT4KLS0tCiB3aW5zdXAvY3lnd2luL3NjaGVkLmNjIHwgNSAr
+KysrLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoK
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MgYi93aW5zdXAvY3lnd2luL3Nj
+aGVkLmNjCmluZGV4IDcxYTFlODY4Zi4uMjJmZjBjOGU4IDEwMDY0NAotLS0gYS93aW5zdXAv
+Y3lnd2luL3NjaGVkLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MKQEAgLTE0MCw3
+ICsxNDAsMTAgQEAgaW50CiBzY2hlZF9nZXRzY2hlZHVsZXIgKHBpZF90IHBpZCkKIHsKICAg
+aWYgKHBpZCA8IDApCi0gICAgcmV0dXJuIEVTUkNIOworICAgIHsKKyAgICAgIHNldF9lcnJu
+byAoRUlOVkFMKTsKKyAgICAgIHJldHVybiAtMTsKKyAgICB9CiAgIGVsc2UKICAgICByZXR1
+cm4gU0NIRURfRklGTzsKIH0KLS0gCjIuNDUuMQoK
+--------------514BADEEE5E793B3B669BC68--
