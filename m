@@ -1,90 +1,64 @@
-Return-Path: <SRS0=mhqJ=SS=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
-	by sourceware.org (Postfix) with ESMTPS id B00723858C42
-	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2024 18:58:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B00723858C42
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B00723858C42
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.85
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732388281; cv=none;
-	b=XWEcIlvZBLYO/FWVsPiYEtdsAbwt1YC+PFgOpR5Wv5o/x2hyGe/IArNEtuu/oS6A1K44FuJP9fSf7fgr+7hy8iPHvNmYjpmsPMOtCfnVEx9sFYjjyVBZkARisKTTwxuBZqNDX2E+/FHCTM9goff5gMkB0RCCkLr4QJx4PnYjam4=
+Return-Path: <SRS0=oguS=ST=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 045703858D29
+	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 09:48:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 045703858D29
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 045703858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732441712; cv=none;
+	b=AGL1F0fEiktt8ijmXI0R0hON79U+adVbbtvLRXRCEzPrZhICmYyRLR2oD9zmQed6N2nZA+taEzDf9a8OOB4lYwH9Zq/ZOnPKa9nTZoga86Q2HB5O2X2uPLVLnuaS5GHKSsqZXSgiqVu8s3a5/ij6MMNUBdIScnmWUyzURz2RRi0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732388281; c=relaxed/simple;
-	bh=rKxMjptEed6rZjP/0LlEEDuRCW8YSSQo+OATIy54nJ8=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=L53Ee8usgsn3/F0FN5bfc16Oy85IEDd3nTWsmza/f9hqpoLkLyh5nRYv9tSc/7oDPUeoCp3/jfp05jUGLp9cLiHUqPxsoJpNaNFN5NO7bdg4ATuZghc+k4cgo7/o/ISpBIjLUSiO5/j83deWef/nj0JfmNXm0jKl0wbtjm4YDHQ=
+	t=1732441712; c=relaxed/simple;
+	bh=GRN2BzhP47WC5E5aoEp7MgC+2trlYmIPB8hJmSC+Xxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=jYpxv7dunKOi1RGARqHgV6otLD8R/esL9GI9xdaXudR+10T/88yqH6F2Y+8CES7S911/hNXSJG3sk/6Fp1iERVcRAWBr6l70pwhAl34EY78TIJzzqESDyDi1u/eU6XAWdIVv201mGUoVFNu3hZkR+eMr/2ykM0sLuFcDyppbzpU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B00723858C42
-Received: from fwd75.aul.t-online.de (fwd75.aul.t-online.de [10.223.144.101])
-	by mailout11.t-online.de (Postfix) with SMTP id 86EAB423
-	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2024 19:56:53 +0100 (CET)
-Received: from [192.168.2.101] ([91.57.241.70]) by fwd75.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1tEvJK-0nREAa0; Sat, 23 Nov 2024 19:56:50 +0100
-To: cygwin-patches@cygwin.com
-Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-Message-ID: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
-Date: Sat, 23 Nov 2024 19:56:49 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.19
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 045703858D29
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 4AO9pQMS029217
+	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 01:51:26 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpdjxOlCv; Sun Nov 24 01:51:24 2024
+Message-ID: <2410821a-17e0-4436-89d6-3b0e15ad790d@maxrnd.com>
+Date: Sun, 24 Nov 2024 01:48:29 -0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------39D077BD8E8B90932BD903A2"
-X-TOI-EXPURGATEID: 150726::1732388210-FDFF4C97-4DC78420/0/0 CLEAN NORMAL
-X-TOI-MSGID: fa18fcc4-93aa-4b7b-86cd-c500636f8041
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Cygwin: New tool loadavg to maintain load averages
+To: cygwin-patches@cygwin.com
+References: <20241113062152.2225-1-mark@maxrnd.com>
+ <3987e096-9510-4fc0-8121-ca32773c09e4@dronecode.org.uk>
+ <ZzxXmgVc3aAkfJVJ@calimero.vinschen.de>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <ZzxXmgVc3aAkfJVJ@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------39D077BD8E8B90932BD903A2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 11/19/2024 1:17 AM, Corinna Vinschen wrote:
+> On Nov 18 20:58, Jon Turney wrote:
+>> On 13/11/2024 06:21, Mark Geisert wrote:
+>>> This program provides an up-to-the-moment load average measurement.  The
+>>> user can take 1 sample, or obtain the average of N samples by number or
+>>
+>> Sorry about the inordinate time it's take for me to look at this.
+>>
+>>
+>> So, this seems like two separate things shoved together
+>>
+>> * A daemon which calls getloadavg() every 5 seconds
+>> * A tool which exercises the loadavg estimation code
+>>
+>> Does it really make sense to bundle them together?
+> 
+> The other question then is, why not just make it a standalone package?
+> As a Cywin-only package it could go into its own git repo under
+> https://sourceware.org/cygwin-apps/
 
-sched_setscheduler(pid, sched_getscheduler(pid), param) should behave like
-sched_setparam(pid, param).
+I'm amenable to Corinna's proposal.
 
--- 
-Regards,
-Christian
-
-
---------------39D077BD8E8B90932BD903A2
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-sched_setscheduler-allow-changes-of-the-prior.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-sched_setscheduler-allow-changes-of-the-prior.pa";
- filename*1="tch"
-
-RnJvbSBhNjdlNjY3OWNjMmJiMTk5NzEzYjFmNzgzZDUyMTljYjgzNjRmNWY0IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTYXQsIDIzIE5vdiAyMDI0IDE5OjUwOjI5ICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzY2hlZF9zZXRzY2hlZHVsZXI6IGFsbG93IGNo
-YW5nZXMgb2YgdGhlIHByaW9yaXR5CgpCZWhhdmUgbGlrZSBzY2hlZF9zZXRwYXJhbSgpIGlm
-IHRoZSByZXF1ZXN0ZWQgcG9saWN5IGlzIGlkZW50aWNhbAp0byB0aGUgZml4ZWQgdmFsdWUg
-KFNDSEVEX0ZJRk8pIHJldHVybmVkIGJ5IHNjaGVkX2dldHNjaGVkdWxlcigpLgoKU2lnbmVk
-LW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFuLmZyYW5rZUB0LW9ubGluZS5k
-ZT4KLS0tCiB3aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAgfCAzICsrKwogd2luc3VwL2N5
-Z3dpbi9zY2hlZC5jYyAgICAgIHwgNSArKysrLQogMiBmaWxlcyBjaGFuZ2VkLCA3IGluc2Vy
-dGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3Jl
-bGVhc2UvMy42LjAgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAKaW5kZXggNDY4YTJh
-YjI0Li4wOWFhNTM3NmUgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjYu
-MAorKysgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAKQEAgLTQzLDMgKzQzLDYgQEAg
-V2hhdCBjaGFuZ2VkOgogCiAtIE5vdyB1c2luZyBBVlgvQVZYMi9BVlgtNTEyIGluc3RydWN0
-aW9ucyBpbiBzaWduYWwgaGFuZGxlciBkb2VzIG5vdAogICBicmVhayB0aGVpciBjb250ZXh0
-LgorCistIHNjaGVkX3NldHNjaGVkdWxlcigyKSBhbGxvd3MgdG8gY2hhbmdlIHRoZSBwcmlv
-cml0eSBpZiB0aGUgcG9saWN5IGlzCisgIGVxdWFsIHRvIHRoZSB2YWx1ZSByZXR1cm5lZCBi
-eSBzY2hlZF9nZXRzY2hlZHVsZXIoMikuCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3Nj
-aGVkLmNjIGIvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYwppbmRleCA3MWExZTg2OGYuLjMzMzc4
-NmY0NCAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYworKysgYi93aW5zdXAv
-Y3lnd2luL3NjaGVkLmNjCkBAIC0zOTksOCArMzk5LDExIEBAIGludAogc2NoZWRfc2V0c2No
-ZWR1bGVyIChwaWRfdCBwaWQsIGludCBwb2xpY3ksCiAJCSAgICBjb25zdCBzdHJ1Y3Qgc2No
-ZWRfcGFyYW0gKnBhcmFtKQogeworICBpZiAocG9saWN5ID09IFNDSEVEX0ZJRk8pIC8qIHJl
-dHVybmVkIGJ5IHNjaGVkX2dldHNjaGVkdWxlci4gKi8KKyAgICByZXR1cm4gc2NoZWRfc2V0
-cGFyYW0gKHBpZCwgcGFyYW0pOworCiAgIC8qIG9uIHdpbjMyLCB5b3UgY2FuJ3QgY2hhbmdl
-IHRoZSBzY2hlZHVsZXIuIERvaCEgKi8KLSAgc2V0X2Vycm5vIChFTk9TWVMpOworICBzZXRf
-ZXJybm8gKEVJTlZBTCk7CiAgIHJldHVybiAtMTsKIH0KIAotLSAKMi40NS4xCgo=
---------------39D077BD8E8B90932BD903A2--
+..mark
