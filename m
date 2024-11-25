@@ -1,108 +1,102 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 136F53857C78; Mon, 25 Nov 2024 09:44:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 136F53857C78
+	id C7D993857BA9; Mon, 25 Nov 2024 11:22:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C7D993857BA9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732527857;
-	bh=hY+IGRlDopSTCitXFMiLVgmRKDDbySPE2YavmLVnM6M=;
+	s=default; t=1732533724;
+	bh=suUe3TimA+dhgU4b/62eF21X+u3u8hIUjgJGURTjzc8=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=pNW6CoKiWKeRLJZzsjKa4MZbsP8yGHE2A5+WKZty2weoU2n7ATQGHHnxeNfTaprkW
-	 8ivlC2+UXI88Kyk0XwXrC/iz2cfvMpAHTMspKWjv6FVj+B/PcM0Gz3lCHAfKN47PS9
-	 V9qyeXDsMUjzsxYDWWNsf0msY6pSfub+QaXR1rS8=
+	b=ARt234AZ78M+GuiZ4oY2wsOhvE0PaKqmLQi7jwjt/giNbe306w89lTAIEU8ViHv1y
+	 HElO0Lq2jF0CWLW8BecWefqTI03/pKLoS3nk4RB96Ie3fzdWlS5LbYRViUDq1mvHSk
+	 pa8EV0frhFNjuIYTjZF0EDrUYikl7PYNH3kFui24=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 08623A80C06; Mon, 25 Nov 2024 10:44:15 +0100 (CET)
-Date: Mon, 25 Nov 2024 10:44:14 +0100
+	id 6DC1BA80C06; Mon, 25 Nov 2024 12:22:02 +0100 (CET)
+Date: Mon, 25 Nov 2024 12:22:02 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] cygthread: suspend thread before terminating.
-Message-ID: <Z0RG7qrCMbUIuA3p@calimero.vinschen.de>
+Subject: Re: [PATCH 1/2] Cygwin: cache IsWow64Process2 host arch in wincap.
+Message-ID: <Z0Rd2hqxXqhuG3UX@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <45e536e2-e894-2548-e9d0-5937ff96b0b5@jdrake.com>
- <Zz0ER77IqtBDV_EU@calimero.vinschen.de>
- <4e2cbe74-2d1c-f8df-a457-57c0239844c1@jdrake.com>
- <Zz2_Czrk_qzn2fu6@calimero.vinschen.de>
- <1ce32afc-94ee-af96-db30-26d5f02a07ef@jdrake.com>
- <765a746a-b5a1-cdab-242d-1ff3c5bd65ba@jdrake.com>
- <Z0B-ue4nNgCYZDrw@calimero.vinschen.de>
- <15927c29-7e55-f560-ac57-648cb087b452@jdrake.com>
+References: <d544a3f1-3b6f-0392-aecf-65125cf5e8f7@jdrake.com>
+ <Z0CAdVAJgJgvAONa@calimero.vinschen.de>
+ <89834a6f-50c7-b851-76ce-b640e8821f23@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <15927c29-7e55-f560-ac57-648cb087b452@jdrake.com>
+In-Reply-To: <89834a6f-50c7-b851-76ce-b640e8821f23@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 22 09:56, Jeremy Drake via Cygwin-patches wrote:
+On Nov 22 08:54, Jeremy Drake via Cygwin-patches wrote:
 > On Fri, 22 Nov 2024, Corinna Vinschen wrote:
 > 
-> > > wait_thread is happily waiting in ReadFile, while the main thread is
-> > > hanging in ForceCloseHandle1 (close_h, rd_proc_pipe);.
+> > On Nov 21 11:42, Jeremy Drake via Cygwin-patches wrote:
+> > > +#if defined (__x86_64__)
+> > > +      host_mach = IMAGE_FILE_MACHINE_AMD64;
+> > > +#elif defined (__i386__)
+> > > +      host_mach = wow64 ? IMAGE_FILE_MACHINE_AMD64 : IMAGE_FILE_MACHINE_I386;
+> > > +#else
+> > > +      /* this should not happen */
 > >
-> > ....which is one of the great annoyances of Windows.  CloseHandle
-> > on a pipe should never hang, but... well...
-> 
-> Yeah, I thought TerminateThread should never hang either, but I was proved
-> wrong by emulation :P
-> 
-> > > The pinfo::release
-> > > call is after the wait thread should have been terminated, so it's
-> > > apparent the CancelSynchronousIo didn't work for whatever reason (possibly
-> > > due to canceling some other sychronous IO,
+> > It should actually result in
 > >
-> > How would that be possible? A thread can only run a single synchronous
-> > IO at the time, isn't it?
+> >   #error unimplemented for this target
 > 
-> I thought something in the rest of the logic in the thread might be doing
-> a synchronous IO.  I dug through and found a WriteFile somewhere, but I
-> didn't follow the code logic to prove that that happens in the particular
-> cases in this thread.
+> No, because this is the fallback case for when IsWow64Process2 fails.
+> This should only happen on OS versions that don't support it, which in
+> turn don't support anything other than i386 and x86_64.  However, OS
+> versions that do support it also support ARM64.  If/when Cygwin has native
+> ARM64 support, this should not be a compilation error.  If anything it may
+> be a runtime error (assert?)
 
-Ah, ok, I misunderstood what you were trying to say and was thinking
-of multiple parallel synch IOs in the same thread... which I can only
-imagine with a certain amount of squinting...
+Aaaah, yeah, I see what you mean.  In that case, just set host_mach to
+IMAGE_FILE_MACHINE_AMD64 and be done with it.  There's no other choice
+in that case anyway.
 
-> > Rather than calling CancelSynchronousIo(), what about sending a
-> > signal to proc_waiter() via alert_parent(0)?
+> > > +extern const IMAGE_DOS_HEADER
+> > > +dosheader __asm__ ("__image_base__");
+> > > +
+> > > +const USHORT
+> > > +wincapc::current_module_machine () const
+> > > +{
+> > > +  PIMAGE_NT_HEADERS ntheader = (PIMAGE_NT_HEADERS)((LPBYTE) &dosheader
+> > > +                                                   + dosheader.e_lfanew);
+> > > +  return ntheader->FileHeader.Machine;
+> > >  }
+> >
+> > Just scratch that.  First, we're using GetModuleHandle(NULL)
+> > throughout to access the image base, but apart from that,
+> > the info is already available in wincap via cpu_arch().
 > 
-> How would that work?  Wouldn't that have to be done in the child?
+> GetModuleHandle(NULL) is the exe, __image_base__ is the cygwin dll.
+> Theoretically, with ARM64EC, you can mix-and-match x86_64 and ARM64 in the
+> same process,
 
-Hmm, yeah.
+Oh, ok, I read about this a while ago but had completely forgotten.
 
-> > On second thought, the current behaviour after getting an
-> > ERROR_OPERATION_ABORTED error doesn't look right either.
-> >
-> > Rather than entering the error case, it should be exempt from
-> > being handled as error, just as ERROR_BROKEN_PIPE.  Otherwise
-> > it never runs the case 0 code in the following switch statement, but
-> > it should.  Even that change might already fix things...
+> so the most correct answer to the question to "are we being
+> emulated" is whether the current module's architecture matches the host
+> system's architecture.
 > 
-> I thought this was correct, because in the case where CancelSynchronousIo
-> was added the thread otherwise would have been terminated.  Therefore it
-> should exit ASAP, do not pass go, etc.
+> Yes, due to Windows already lying in Get(Native)SystemInfo, cpu_arch()
+> will tell you this, but with *different* enums, which means you'll
+> need a switch somewhere to translate between them, instead of just doing
+> an == or != with the host like this function lets you do.
 
-Yeah, I understand the reasoning, but wasn't CancelSynchronousIo() meant
-to replace TerminateThread() with a *clean* thread termination?  But,
-never mind.
+This OTOH is well known at compile time, so this is where an #ifdef
+may be in order, i .e.
 
-> > Either way, this looks like yet another synchronization problem:
-> >
-> > You can't be sure that ReadFile() actually exited after calling
-> > CancelSynchronousIo().
-> >
-> > And you can't be sure that proc_waiter() was really in the ReadFile call
-> > when you call CancelSynchronousIo().  proc_waiter() could easily be in
-> > the followup code and only enter ReadFile() after your
-> > CancelSynchronousIo() call.
-> >
-> > All in all, it looks like calling alert_parent(0) might be the better
-> > approach, but ultimately, I still don't see a way around
-> > terminate_thread().
-> 
-> I will submit a patch reverting the CancelSynchronousIo changes, since
-> they were not necessary for the ARM64 fix, and were just an attempt to
-> avoid the necessity of using TerminateThread.
+  #if defined __x86_64__
+    current_mach = IMAGE_FILE_MACHINE_AMD64;
+  #else
+    #error unimplemented for this target
+  #endif
 
-Ok, thanks!
+but, yeah, your code is simpler.  I just don't like the name of the
+function, wouldn't something like current_machine() or cygwin_machine()
+be better?
 
 
+Thanks,
 Corinna
+
