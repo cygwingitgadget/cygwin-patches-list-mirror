@@ -1,125 +1,109 @@
-Return-Path: <SRS0=xIql=SU=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id C55F03858D38
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 19:24:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C55F03858D38
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C55F03858D38
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732562666; cv=none;
-	b=okIosmt0FL4wgyCt5k3tZr7+yuR4GqQJdAw5rMJfkGTwz5DX+Q02jNBRdmG+jqLFlsQ+audnQUhUprrWFuQfWmyXw3KLwxGZZ7DvnFOPbgHwpTSHJBVBXsZEZuGlaHRu4ud+moMcclP9eq+rVcZ/MD6g6BQ85e448/j4FMlwcUY=
+Return-Path: <SRS0=f6sa=SU=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+	by sourceware.org (Postfix) with ESMTPS id 252E23858C52
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 20:20:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 252E23858C52
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 252E23858C52
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.21
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732566027; cv=none;
+	b=OtkfVdM3RIEDqNmIIfdId+EH3ZBe8b+A59En9KLnp12qD8SGDL0DYeqbzi7qim2Nx2ZCeeu3S68kP6XZd69g1CQTknE4j2Ip/arl6Hlo01Yo3pAsatjL3vhYxpX5ZCCA++BIj1rYCz8sVXUHMGnwSWUbRVGezvTPAQx+2T5lizs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732562666; c=relaxed/simple;
-	bh=IXq3oOvu8T5NocXuovparJtxzo2hB9REknWm+6IHuMc=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=lM2TWhHCYBvB2i9n6LnWOzFrdQxUX4n2DPPoQ7/UdodxmmSWRvntFMtynzg8pFmWq3p2ZC95i+B47kvV8oJq+Ta04vMMXYw+BWyG/qW7WeuK0toIJYM7cyBscZrmxGRvRiaEChd5w1AwNRdk0ovOtE0DDyvrcWm8LTZ/a5PEYxo=
+	t=1732566027; c=relaxed/simple;
+	bh=EOPA1CciK96jkxznmzk8xbQYM2rCDOXbLRyIJJhfS5s=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version; b=iqExkrBViapLRj1YPz6tsSGOuvJNXGy8HB/OvPCsMv5QrwPfLF4yr4Q+Hq5xYtKAVccGZVtVKKajIGAVhEwiZ7xVE00DHbmlvn61ZJ8Z5n7vKrK99FsXK3vxXLpqUQhEkmb+wO7XpuzOTMRxDEY5xC/HgsurEN53PXwnSEhFZjo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C55F03858D38
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=VnNO9Naq
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 9DA1F45C80
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 14:24:26 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=xg2oA
-	eJyog71HWVZ+C7hpLpXuB4=; b=VnNO9Naq00FfgRxgtLTuyZjW/AJ1AwnHpA6lS
-	uqV/UjDIh8yGMji8kvUUd4eBTa1oVEFOTSClTPvXRD4eFTAhdb70HGJ8BthwpXtY
-	IEfxeqYHSwOjj+7bqdnxJgOV4C3kKEDkqiA/NF/T4j2zI6T5XCa5pIb2CzdPRcWj
-	/EW7tg=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 7376845C7D
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 14:24:26 -0500 (EST)
-Date: Mon, 25 Nov 2024 11:24:26 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 252E23858C52
+Received: from fwd81.aul.t-online.de (fwd81.aul.t-online.de [10.223.144.107])
+	by mailout10.t-online.de (Postfix) with SMTP id 272CE8E4
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 21:20:23 +0100 (CET)
+Received: from [192.168.2.101] ([91.57.241.70]) by fwd81.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tFfZD-34XW6q0; Mon, 25 Nov 2024 21:20:19 +0100
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 2/2] Cygwin: uname: add host machine tag to sysname.
-Message-ID: <ecdfa413-1ad4-ea0e-4f01-33579f1616e9@jdrake.com>
+References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
+ <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
+ <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
+ <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
+From: Christian Franke <Christian.Franke@t-online.de>
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
+Date: Mon, 25 Nov 2024 21:20:19 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ SeaMonkey/2.53.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1732566019-DCFEFD18-DECD427D/0/0 CLEAN NORMAL
+X-TOI-MSGID: 6dd3c349-737c-4b31-9242-7b0de535709d
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,KAM_SHORT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Jeremy Drake <cygwin@jdrake.com>
+Hi Corinna,
 
-If the Cygwin dll's architecture is different from the host system's
-architecture, append an additional tag that indicates the host system
-architecture (the Cygwin dll's architecture is already indicated in
-machine).
+Corinna Vinschen wrote:
+> Hi Christian,
+>
+> On Nov 25 15:00, Christian Franke wrote:
+>> Corinna Vinschen wrote:
+>>> Fixes: ...?
+>> ... the very first commit (cgf 2001) of sched.cc :-)
+>>
+>> New patch attached.
+>>
+>>  From e95fc1aceb5287f9ad65c6c078125fecba6c6de9 Mon Sep 17 00:00:00 2001
+>> From: Christian Franke <christian.franke@t-online.de>
+>> Date: Mon, 25 Nov 2024 14:51:04 +0100
+>> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+>>
+>> Behave like sched_setparam() if the requested policy is identical
+>> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
+>>
+>> Fixes: 6b2a2aa4af1e ("Add missing files.")
+> Huh, yeah, this is spot on.  I wonder if it would make sense to change
+> that to 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
+> though, given that was the patch intended to add sched.cc :)))
+>
+> Sorry, but I have to ask two more questions:
+>
+> - Isn't returning SCHED_FIFO sched_getscheduler() just as wrong?
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
-v2: get rid of hardcoded string lengths, use wincap accessors
-directly instead of caching their returns, actually add "n" variable as
-intended
+Definitly. SCHED_FIFO is a non-preemptive(!) real-time policy. Windows 
+does not offer anything like that to userland (AFAIK).
 
- winsup/cygwin/uname.cc | 38 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
+https://man7.org/linux/man-pages/man7/sched.7.html
 
-diff --git a/winsup/cygwin/uname.cc b/winsup/cygwin/uname.cc
-index dd4160189c..2410dc502e 100644
---- a/winsup/cygwin/uname.cc
-+++ b/winsup/cygwin/uname.cc
-@@ -24,6 +24,38 @@ extern "C" int getdomainname (char *__name, size_t __len);
- #define ATTRIBUTE_NONSTRING
- #endif
+I wonder whether there was a use case for this emulation when this 
+module was introduced in 2001.
 
-+static int
-+append_host_suffix (char * buf)
-+{
-+  int n = 0;
-+  if (wincap.host_machine () != wincap.cygwin_machine ())
-+    {
-+      switch (wincap.host_machine ())
-+	{
-+	  case IMAGE_FILE_MACHINE_AMD64:
-+	    /* special case for backwards compatibility */
-+	    if (wincap.cygwin_machine () == IMAGE_FILE_MACHINE_I386)
-+	      n = stpcpy (buf, "-WOW64") - buf;
-+	    else
-+	      n = stpcpy (buf, "-x64") - buf;
-+	    break;
-+	  case IMAGE_FILE_MACHINE_I386:
-+	    n = stpcpy (buf, "-x86") - buf;
-+	    break;
-+	  case IMAGE_FILE_MACHINE_ARMNT:
-+	    n = stpcpy (buf, "-ARM") - buf;
-+	    break;
-+	  case IMAGE_FILE_MACHINE_ARM64:
-+	    n = strcpy (buf, "-ARM64") - buf;
-+	    break;
-+	  default:
-+	    n = __small_sprintf (buf, "-%04y", (int) wincap.host_machine ());
-+	    break;
-+	}
-+    }
-+  return n;
-+}
-+
- /* uname: POSIX 4.4.1.1 */
 
- /* New entrypoint for applications since API 335 */
-@@ -33,11 +65,13 @@ uname_x (struct utsname *name)
-   __try
-     {
-       char buf[NI_MAXHOST + 1] ATTRIBUTE_NONSTRING;
-+      int n;
+>    Shouldn't that be SCHED_OTHER, and sched_setscheduler() should check
+>    for that instead?  Cygwin in a real-time scenario sounds a bit
+>    far-fetched...
 
-       memset (name, 0, sizeof (*name));
-       /* sysname */
--      __small_sprintf (name->sysname, "CYGWIN_%s-%u",
--		       wincap.osname (), wincap.build_number ());
-+      n = __small_sprintf (name->sysname, "CYGWIN_%s-%u",
-+			   wincap.osname (), wincap.build_number ());
-+      n += append_host_suffix (name->sysname + n);
-       /* nodename */
-       memset (buf, 0, sizeof buf);
-       cygwin_gethostname (buf, sizeof buf - 1);
+Agree.
+
+Note that SCHED_OTHER requires sched_priority == 0, so most of the 
+sched_get/set*() priority related code would no longer make sense then.
+
+A related interesting snippet which I don't understand:
+sys/sched.h:
+#if defined(__CYGWIN__)
+#define SCHED_OTHER    3
+#else
+#define SCHED_OTHER    0
+#endif
+
+> - Don't you want this patch in 3.5.5?  I'd merge the other patch
+>    into 3.5.5 anyway...
+
+OK.
+
 -- 
-2.47.0.windows.2
+Regards,
+Christian
 
