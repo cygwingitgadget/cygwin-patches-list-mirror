@@ -1,158 +1,105 @@
-Return-Path: <SRS0=xIql=SU=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 231F33858D38
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 19:21:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 231F33858D38
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 231F33858D38
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732562484; cv=none;
-	b=HZKWM8nlZH2YshYhUXMWqUb0c+sVI2QRWVjS7Yy0xdWJ2Oo/vvRNNi2/9H5198tJuKE+XqstImVj4z2vBO3VQ2w6ft4RVCVuxzQbIGx4XOiy/Jdp2V1ZKbw0VrRICgqrZOO1NcbULypZXBOxNp5nLqg3jN6Vq3rgJUehDRsiL+E=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732562484; c=relaxed/simple;
-	bh=NXdw2GOvGec2Xjnq5ojfXemqa4uPQzRtFh40lz8gk3s=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=cg6pEkiyEYVgXOnpWROOQj7n6pRA+FCEDrzq1tS3K4N/vtx9Y/hVBSNjTzzXm1+8PHtfCz6P1UejgXIPWlrUyBfjDlktyIlH2g1mZB49A3OmsRbDCi8XCPYDDSEQxcOCxETcgN18qVfpRI/zQrd8Ky673mBJuHwNTVGXhpa7AYo=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 231F33858D38
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=CFKU5BZA
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id B83BB45C80
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 14:21:23 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=z2wEr
-	zKb3NYy22bnuCxSMLox7Ig=; b=CFKU5BZAs44wyenUY3flFaKFV0SeGTw4/y+T5
-	U9fjYUnQcPyisHDiggnJ6JiKw0sYgDse429UBUXxcLP9X15nA6k3cdHprrY220ki
-	13T6Y6n1SVCH7s4CgAsvB+8NddsaFiADoM/RtzCnWvIpj5qQ+yQC8XK/DUaEzwJE
-	Wml21c=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA512)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 899FE45C7D
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 14:21:23 -0500 (EST)
-Date: Mon, 25 Nov 2024 11:21:23 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+Return-Path: <SRS0=ktzv=SU=scientia.org=calestyo@sourceware.org>
+Received: from slateblue.cherry.relay.mailchannels.net (slateblue.cherry.relay.mailchannels.net [23.83.223.168])
+	by sourceware.org (Postfix) with ESMTPS id 18D2F3858D38
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 19:23:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 18D2F3858D38
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=scientia.org
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=scientia.org
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 18D2F3858D38
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=23.83.223.168
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1732562629; cv=pass;
+	b=Sj2j8ETwh0ZYVQBc76lvcqzks8ZQ7CrD/R4qHJMe6SHuZp9NwzO7i+IBBchW/gWUe4HfFsZ8Q8c0N6w+dZZ9mEETIX8BRRoLcjUL08RZrsl15+4ocbdiwpyNnlTysqVSDBm4ACCeEJVePUP9iMgcge3dFotLEs4aMLpZZIz0QXI=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1732562629; c=relaxed/simple;
+	bh=FFAFR/RS74B6zEQRsLECBqhaIuogx9YpdnYWFHOlU4E=;
+	h=Message-ID:Subject:From:To:Date:MIME-Version; b=rIFwr6HobieAVerHR8PSKE7XXb4U40znuQlpAr8ohV1bHarkB80+PWI2wdxu/dCgs2iFJ3BQY/PYJ7ZPfmZ7guCnrQaNoQSqDaBWoK+ikc0tkXpmfY6Z3SPf9IuTfWm+u/2fzCU6kWV1UkZ+L1m0FX54JX7BpsDT2VWXw66FEh0=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 18D2F3858D38
+X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 31F648229E6
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 19:23:48 +0000 (UTC)
+Received: from cpanel-007-fra.hostingww.com (100-125-108-52.trex-nlb.outbound.svc.cluster.local [100.125.108.52])
+	(Authenticated sender: instrampxe0y3a)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 8A1F3822591
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 19:23:47 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1732562627; a=rsa-sha256;
+	cv=none;
+	b=Bos79pMAXSrULBGwd8U1amsflUewxSLFXIoqXPo7xX6qfPt4c3KiXWHXc69XmPNvzjB3Q6
+	7mFGbYqsomjw36TJ6XgXCi62bJnL7aozqMs2oymoIKKHMgMjdktxA3Qawd5I5kCOnGCWHq
+	39gN3HKVsAFK7bKqdgmAMZErTUnh4o8S4tysiNOnf8kCyHg8mdFELG7tGe2XvJ4wSt9cq3
+	xvZS7qki53mw5jEDYIFGNTuWE4G09OCIXrY19ktUZGk/CRvRalPujqTDyHu58oe9sTISVU
+	BX+zGsCpAWMpojLxnCj3AX/7zsPN976Im0MXxCU9TGt7mSKLSFLXIt6gJKLTbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1732562627;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GhhlK4bi0gJKzL8Q9do55RNxIDeRCv/JjJZZTS/F72g=;
+	b=2Ao8v9RCpZtV6cYm+2LQNrkZGQ4x5CWO6PDhZ8x1j2qJyQSAVPyFpdTG5bjSjcZ6KY94+w
+	T/rzKt/a04w9zDfI0DnN6DUkGnhVcZruitCcAKTAAOHSKYElchajQ4ieajlWgTCCnphFL9
+	tqTe76BqAonO9Wvnwq9yjK6lQ7bDjSHVpQ9dk7oKUIdqQw030PZUhHkO48X91sN8XZCa0h
+	lkDEOv7hG9as31t14x1eYi60IONS3TNrMvHjuUgZS8SSvRUlBn2QQ9j0Hyqhx8FXc5cANu
+	HlLvOKPS8lMWO0R+O9IBtSsc0JPRDfYdzOrfs80ZNK4pDWcsWnEQVU31xdlu4w==
+ARC-Authentication-Results: i=1;
+	rspamd-dcc6979f6-pk7z7;
+	auth=pass smtp.auth=instrampxe0y3a smtp.mailfrom=calestyo@scientia.org
+X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: instrampxe0y3a|x-authuser|calestyo@scientia.org
+X-MailChannels-Auth-Id: instrampxe0y3a
+X-Soft-Stop: 77158dde0b9bec3e_1732562628046_716192930
+X-MC-Loop-Signature: 1732562628045:1843797064
+X-MC-Ingress-Time: 1732562628045
+Received: from cpanel-007-fra.hostingww.com (cpanel-007-fra.hostingww.com
+ [3.69.87.180])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.125.108.52 (trex/7.0.2);
+	Mon, 25 Nov 2024 19:23:48 +0000
+Received: from p5090f5d8.dip0.t-ipconnect.de ([80.144.245.216]:62434 helo=heisenberg.fritz.box)
+	by cpanel-007-fra.hostingww.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <calestyo@scientia.org>)
+	id 1tFegS-0000000D0Um-2Xb9
+	for cygwin-patches@cygwin.com;
+	Mon, 25 Nov 2024 19:23:45 +0000
+Message-ID: <e32242c9d3263970801c5f175235db950ee945f9.camel@scientia.org>
+Subject: Re: [PATCH 1/1] make `cygcheck --find-package` output parseable
+From: Christoph Anton Mitterer <calestyo@scientia.org>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 1/2] Cygwin: cache IsWow64Process2 host arch in wincap.
-Message-ID: <9d0630f7-e8d6-b4f6-116b-1df6095877c3@jdrake.com>
+Date: Mon, 25 Nov 2024 20:23:43 +0100
+In-Reply-To: <cc1242a20586e758a709985ba7d87b90bb556dd1.camel@scientia.org>
+References: <20240522003627.486983-1-calestyo@scientia.org>
+		 <20240522003627.486983-2-calestyo@scientia.org>
+		 <a3ab184d-20b1-422f-96c1-c85f115bf16e@dronecode.org.uk>
+	 <cc1242a20586e758a709985ba7d87b90bb556dd1.camel@scientia.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-AuthUser: calestyo@scientia.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Jeremy Drake <cygwin@jdrake.com>
+Hey.
 
-This was already used in the FAST_CWD check, and could be used in a
-couple other places.
+Just wanted to give this a bump, as it wasn't clearly rejected, but
+merged either.
 
-I found the "emulated"/process value returned from the function largely
-useless, so I did not cache it.  It is useless because, as the docs say,
-it is set to IMAGE_FILE_MACHINE_UNKNOWN (0) if the process is not
-running under WOW64, but Microsoft also doesn't consider x64-on-ARM64 to
-be WOW64, so it is set to 0 regardless if the process is ARM64 or x64.
-You can tell the difference via
-GetProcessInformation(ProcessMachineTypeInfo), but for the current
-process even that's overkill: what we really want to know is the
-IMAGE_FILE_MACHINE_* constant for the Cygwin dll itself, which is
-conveniently located in memory already, so make an accessor function to
-access that.  (It could also be cached in a member variable for a
-simpler accessor, and looked up in init).
+I mean the exceptions to the rule mentioned by Jon are still there,
+aren't they.
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
-v2: rename current_module_machine to cygwin_machine, adjust comment and
-remove ifdefs from fallback case when IsWow64Process2 fails.
+And even if someone was going to write some option that provides output
+in a more standardised format, I don't see much harm in making a format
+that's anyway not properly parseable right now, parseable by some
+simply change.
 
- winsup/cygwin/local_includes/wincap.h |  3 +++
- winsup/cygwin/path.cc                 |  6 ++----
- winsup/cygwin/wincap.cc               | 22 ++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/cygwin/local_includes/wincap.h b/winsup/cygwin/local_includes/wincap.h
-index c14872787c..c4554b7a51 100644
---- a/winsup/cygwin/local_includes/wincap.h
-+++ b/winsup/cygwin/local_includes/wincap.h
-@@ -42,6 +42,7 @@ class wincapc
-   RTL_OSVERSIONINFOEXW	version;
-   char			osnam[40];
-   const void		*caps;
-+  USHORT		host_mach;
-   bool			_is_server;
+Cheers,
+Chris
 
- public:
-@@ -61,6 +62,8 @@ public:
- 		     { return (size_t) system_info.dwAllocationGranularity; }
-   const char *osname () const { return osnam; }
-   const DWORD build_number () const { return version.dwBuildNumber; }
-+  const USHORT host_machine () const { return host_mach; }
-+  const USHORT cygwin_machine () const;
-
- #define IMPLEMENT(cap) cap() const { return ((wincaps *) this->caps)->cap; }
-
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 5cfcbc0f2f..869383c836 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -4617,14 +4617,12 @@ find_fast_cwd_pointer ()
- static fcwd_access_t **
- find_fast_cwd ()
- {
--  USHORT emulated, hosted;
-   fcwd_access_t **f_cwd_ptr;
-
--  /* First check if we're running in WOW64 on ARM64 emulating AMD64.  Skip
-+  /* First check if we're running on an ARM64 system.  Skip
-      fetching FAST_CWD pointer as long as there's no solution for finding
-      it on that system. */
--  if (IsWow64Process2 (GetCurrentProcess (), &emulated, &hosted)
--      && hosted == IMAGE_FILE_MACHINE_ARM64)
-+  if (wincap.host_machine () == IMAGE_FILE_MACHINE_ARM64)
-     return NULL;
-
-   /* Fetch the pointer but don't set the global fast_cwd_ptr yet.  First
-diff --git a/winsup/cygwin/wincap.cc b/winsup/cygwin/wincap.cc
-index 30d9c14e8d..5fd657487d 100644
---- a/winsup/cygwin/wincap.cc
-+++ b/winsup/cygwin/wincap.cc
-@@ -238,6 +238,8 @@ wincapc wincap __attribute__((section (".cygwin_dll_common"), shared));
- void
- wincapc::init ()
- {
-+  USHORT emul_mach;
-+
-   if (caps)
-     return;		// already initialized
-
-@@ -282,4 +284,24 @@ wincapc::init ()
-
-   __small_sprintf (osnam, "NT-%d.%d", version.dwMajorVersion,
- 		   version.dwMinorVersion);
-+
-+  if (!IsWow64Process2 (GetCurrentProcess (), &emul_mach, &host_mach))
-+    {
-+      /* If IsWow64Process2 succeeded, it filled in host_mach.  Assume the only
-+	 way it fails for the current process is that we're running on an OS
-+	 version where it's not implemented yet.  As such, the only realistic
-+	 option for host_mach is AMD64 */
-+      host_mach = IMAGE_FILE_MACHINE_AMD64;
-+    }
-+}
-+
-+extern const IMAGE_DOS_HEADER
-+dosheader __asm__ ("__image_base__");
-+
-+const USHORT
-+wincapc::cygwin_machine () const
-+{
-+  PIMAGE_NT_HEADERS ntheader = (PIMAGE_NT_HEADERS)((LPBYTE) &dosheader
-+						   + dosheader.e_lfanew);
-+  return ntheader->FileHeader.Machine;
- }
--- 
-2.47.0.windows.2
-
+PS: Here the link in the archive to the original thread:
+    https://cygwin.com/pipermail/cygwin-patches/2024q2/012690.html
