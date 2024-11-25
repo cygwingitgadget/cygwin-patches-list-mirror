@@ -1,49 +1,61 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id C3FE03857B98; Mon, 25 Nov 2024 11:32:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C3FE03857B98
+	id 79EC43857704; Mon, 25 Nov 2024 11:33:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 79EC43857704
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732534360;
-	bh=KbA+EihinAZuTHvxpdNs/TbTUSVlvX/dpPO0W3bPkXw=;
+	s=default; t=1732534439;
+	bh=YNhce6v6Q167daxX/BHqKCyMhkwtolnSbTduNMHgC5c=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=ruWxNvoqmBDi89ye9ZMSqhGhbrq+GUEbWrae99U3p+BQKHnFx3UFJgO6v7qukVXMP
-	 K6BkdI/mpo5AyeMeDF2biD4z8BPrj9hoXoxoVDJdNFSPyrZmgy6JphQjt7sI0nOC53
-	 lV3OE07fTK2sVUYy1OvLrpjnv/vGQyBwcPoUKR+M=
+	b=mIg4NkKVacaeW8OCW6jYD5e0mdafDmWOkDd/CpSNUqVi9+EVcU1/7VEfS0PyMpx0I
+	 lUuXM8Jms1SqfhaOjDzkGSeYBmWhLkMiLpxa9cuBLOyoKR89VrBMtrqtcO176pSDAX
+	 2Ric+w3VP6B7n+tpT9PkRXjtAvsi0k+cgAHu6wDM=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BB660A80C06; Mon, 25 Nov 2024 12:32:38 +0100 (CET)
-Date: Mon, 25 Nov 2024 12:32:38 +0100
+	id 749E3A80B7F; Mon, 25 Nov 2024 12:33:57 +0100 (CET)
+Date: Mon, 25 Nov 2024 12:33:57 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: revert use of CancelSyncronousIo on wait_thread.
-Message-ID: <Z0RgVp5RHzGRDDCy@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+Message-ID: <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <65158100-4a68-30c8-8060-e8fef1861c5d@jdrake.com>
+References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <65158100-4a68-30c8-8060-e8fef1861c5d@jdrake.com>
+In-Reply-To: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 23 08:37, Jeremy Drake via Cygwin-patches wrote:
-> From: Jeremy Drake <cygwin@jdrake.com>
+Hi Christian,
+
+
+can you please add a Fixes: to the commit messages of both
+of your patches?
+
+On Nov 23 19:56, Christian Franke wrote:
+> sched_setscheduler(pid, sched_getscheduler(pid), param) should behave like
+> sched_setparam(pid, param).
 > 
-> It appears this is causing hangs on native x86_64 in similar scenarios
-> as the hangs on ARM64, because `CancelSynchronousIo` is returning `TRUE`
-> but not canceling the `ReadFile` call as expected.
+> -- 
+> Regards,
+> Christian
 > 
-> Addresses: https://github.com/msys2/MSYS2-packages/issues/4340#issuecomment-2491401847
-> Fixes: b091b47b9e56 ("cygthread: suspend thread before terminating.")
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+
+> From a67e6679cc2bb199713b1f783d5219cb8364f5f4 Mon Sep 17 00:00:00 2001
+> From: Christian Franke <christian.franke@t-online.de>
+> Date: Sat, 23 Nov 2024 19:50:29 +0100
+> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+> 
+> Behave like sched_setparam() if the requested policy is identical
+> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
+> 
+
+Fixes: ...?
+
+> Signed-off-by: Christian Franke <christian.franke@t-online.de>
 > ---
-> see also https://github.com/msys2/msys2-runtime/pull/243
-> 
->  winsup/cygwin/pinfo.cc   | 10 +++-------
->  winsup/cygwin/sigproc.cc | 12 ++----------
->  2 files changed, 5 insertions(+), 17 deletions(-)
-
-Pushed.
-
+>  winsup/cygwin/release/3.6.0 | 3 +++
+>  winsup/cygwin/sched.cc      | 5 ++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 
 Thanks,
 Corinna
