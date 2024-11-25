@@ -1,85 +1,86 @@
 Return-Path: <SRS0=SJZz=SU=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
-	by sourceware.org (Postfix) with ESMTPS id B020C3858D37
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 12:17:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B020C3858D37
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id 720BA3858D29
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 13:15:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 720BA3858D29
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B020C3858D37
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732537074; cv=none;
-	b=AzsqXYkVMSuCYPYI6pe3whGaLI+MR+1UwJt7bjdtjFfb0vpfs4p04E9FWaH1c15grCiBrERVzFBxA9Pf9buBtATmVWsm9uplZtKvavEVMa5WV0Vf8VXS8dkwlPYctxcgfh7rW5M9YYvn+LWPdEhkK+9OGlI1H0TUjHUj/WliDEA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 720BA3858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732540547; cv=none;
+	b=VImlAUdl4gK08PgeyUKM4Y26zOvlJMIoDI6OQvG+B1wvweczDkt8e2yqNTGgetn3yKXxdnnA5L2n6WfRL6xFxXRyzCidu92ioKJ8E0QOOY9v5eZHQ8+VQ0AXcNwqYm8zvUp17hyCX6SwbLWOD5Of6sRXCNxUOXr26xr1hw3meLs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732537074; c=relaxed/simple;
-	bh=Bp1tfdMWPtBTmlWZCM7uXXU4Yac46FMA+8yOinDnvds=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=D4RCffWand6O9uZURwwNXp6u2IOYqyvg8jOe949R93mho0Xs3iDX93/KBPDKaKusG3U3Wj0Lqb7AGkN30rjgO+d0ssHU3DLlFRidWu5dByUcLiJm9RAL1LstTVPTQVBeiXrznpnbItdgoIDlRvb3hyaOCBb8vbCmYJluTEDPY+0=
+	t=1732540547; c=relaxed/simple;
+	bh=SVOWo1YELeL2/vf98e9lf8M3RgKCKfVxdjApdwLHjj0=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=e8muko2i0G0jwISC5TnxmyAnqkhp3k6CCNVJfO9gatpjLHlNTYKBPeMQwfoD8g6bqOG7xbb3NHIvrh3cb6lFj0jn8jcn5M/+XmwzwPebknVItikZuMOTTkGe4LcCc7X8VOUK2L1Qg9WI5GKgNTcE+FoGYLAXStNZkgB+NnPj4ig=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B020C3858D37
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 720BA3858D29
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=UEDDkyzW
-Received: from localhost.localdomain by mta-snd-w02.mail.nifty.com
-          with ESMTP
-          id <20241125121752085.KENK.47547.localhost.localdomain@nifty.com>;
-          Mon, 25 Nov 2024 21:17:52 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PsDiydLr
+Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
+          id <20241125131544405.FSPL.107569.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 22:15:44 +0900
+Date: Mon, 25 Nov 2024 22:15:43 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH 6/6] Cygwin: cygtls: Prompt system to switch tasks explicitly in lock()
-Date: Mon, 25 Nov 2024 21:16:22 +0900
-Message-ID: <20241125121632.1822-7-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20241125121632.1822-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 4/6] Cygwin: signal: Optimize the priority of the sig
+ thread
+Message-Id: <20241125221543.44cec7af64e02490b0e9ca9e@nifty.ne.jp>
+In-Reply-To: <20241125121632.1822-5-takashi.yano@nifty.ne.jp>
 References: <20241125121632.1822-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732537072;
- bh=DWVjf3az0PzTTHqLPIdnY+7+cp6TVCs00i/y9aFhqVY=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=UEDDkyzWTDadKwCqPyDc5OB35CIFV+5TTh/HFFsp+reTPG4AZmiQl2bCf2+aaNMJDh94LMGW
- CQNxuEcAFrJ31udONEa9k7Z6dpypYjnX0nuVQBveoO28e/RCxAv6qIsQzc1lbURKUwmO1hcKDw
- ZM9M5k8GsTotByY1xe6t3rYfdtFWy9dj76nfn7nbLt0GWXTkI2cjAwBdH2y0PEr9NWDYtfwMtk
- kJzbAQ/jBTpWlqBjqRULipnVH8vEYE0dHjvbHeBdGbepteNLJtcCxacQV8InwV4hx5AeQ68V8R
- UTQjmOS9G0UY2A6DqZ3VILUb4T/VahEhNr4z9HFrJ+3znerA==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+	<20241125121632.1822-5-takashi.yano@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732540544;
+ bh=JFPZfmcDye77rOf0aoxFDh4NbZFlHFJkpd3T+LTBQtA=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=PsDiydLrUv7nQrd0NdMOt1ZqcDWEz79a3s3QxX/vyfvh+z3Tp7DJFA5DT4H8MRsD1l9HSDBg
+ LModfY8MQSM0oIY2pZ1Y5dV5iKE4JTsSX/Aerl3e1kkiwXzoKtmnwBFw/kakHatc2/ET73Wot6
+ y8Av6pGVKQaYC+BTEq7mhPTZqt2yDAlvVo3r07hYZvc/aeQ6DJw0WpgJy+1e2fM7BcBQeCkKIO
+ 4XIvSVNbFtNpNNczmVtJdN5aEafsyVb3m+dzyRc6yhRnE3Xfv3T8lvFK6UUrmqK0Rz0ZissWlk
+ DgIduCdxp/kK3juupJpvSbb/Vx65Uz/hR4su9eakUQ2qop3A==
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This patch replaces pause instruction with SwitchToThread() call
-in wait loop in lock() to increase the chance to unlock in other
-threads.
+On Mon, 25 Nov 2024 21:16:20 +0900
+Takashi Yano wrote:
+> Previously, sig thread ran in THREAD_PRIORITY_HIGHEST priority.
+> This caused critical delay in signal handling in the main thread
+> if the too many signales are received rapidly and CPU is very busy.
+> I this case, most of CPU time is allocated to sig thread, so the
+> main thread cannot have a chance to handle signals. With this patch,
+> the sig thread priority is set to the same priority with main thread
+> to avoid such situation. Furthermore, if the signal is alarted to
+> the main thread, but main thread does not handle it yet, in order to
+> increase the chance to handle it in the main thread, reduce the sig
+> thread priority is to THREAD_PRIORITY_LOWEST temporarily.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+> Fixes: 53ad6f1394aa ("(cygthread::cygthread): Use three only arguments for detached threads, and start the thread via QueueUserAPC/async_create.")
+> Reported-by: Christian Franke <Christian.Franke@t-online.de>
+> Reviewed-by:
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/sigproc.cc | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+> index 541f90cb7..75a5142fd 100644
+> --- a/winsup/cygwin/sigproc.cc
+> +++ b/winsup/cygwin/sigproc.cc
+> @@ -1327,6 +1327,10 @@ wait_sig (VOID *)
+>      {
+>        DWORD nb;
+>        sigpacket pack = {};
+> +      /* Follow to the main thread priority */
+> +      int prio = GetThreadPriority (OpenThread (THREAD_QUERY_INFORMATION,
+> +						FALSE, _main_tls->thread_id));
+> +      SetThreadPriority (GetCurrentThread (), prio);
 
-Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-Fixes: 61522196c715 ("* Merge in cygwin-64bit-branch.")
-Reported-by: Christian Franke <Christian.Franke@t-online.de>
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/scripts/gendef | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Oops! I forgot to close thread handle. I will submit v2 patch.
 
-diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
-index 720325fdd..d1bcc5318 100755
---- a/winsup/cygwin/scripts/gendef
-+++ b/winsup/cygwin/scripts/gendef
-@@ -115,6 +115,8 @@ EOF
- 	.include "tlsoffsets"
- 	.text
- 
-+	.global SwitchToThread
-+
- 	.seh_proc _sigfe_maybe
- _sigfe_maybe:					# stack is aligned on entry!
- 	.seh_endprologue
-@@ -334,7 +336,7 @@ _ZN7_cygtls4lockEv:
- 	xchgl	%r11d,_cygtls.stacklock_p(%r12)	# try to acquire lock
- 	testl   %r11d,%r11d
- 	jz	2f
--	pause
-+	call	SwitchToThread
- 	jmp	1b
- 2:	popq	%r12
- 	ret
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
