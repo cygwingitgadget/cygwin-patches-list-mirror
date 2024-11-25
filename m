@@ -1,112 +1,116 @@
-Return-Path: <SRS0=SJZz=SU=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id 9F6223858D33
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 13:55:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9F6223858D33
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9F6223858D33
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732542951; cv=none;
-	b=SaDsTin8554VAZRioSdm2EroUHIwPEqxyHSaYwHRDVrQTlui1WmeseR+hhVEDJYPfoGG6r09BMno/mmhJ5O1P/qps40b7lJ48jQApyRghRo4+ArS3GXxzKWOzbbyXNPm+QpTJG88JinZOpU8j6XJU9nZ0EOYxM3oXD/v8kddhhc=
+Return-Path: <SRS0=f6sa=SU=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+	by sourceware.org (Postfix) with ESMTPS id 1A4903858D29
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 14:00:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1A4903858D29
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1A4903858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732543228; cv=none;
+	b=pEae96tzFRzyQ29AzZg8yQS3Z8ALqn/H0zdUvJWMrXQPICoGO3EadPcJwTGaOIUZBfm+sdWSTuy2j4/7pbj9y0O0bbQUnlFU+d4IY8oegUADziiRup41j/3aTawFoVUqNXjvY1TQXBMDjqNY9aBVOAT0sc0Q/fNvB2Z6Sg/2H/E=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732542951; c=relaxed/simple;
-	bh=vz3O/c0Xc7e8k1v+TbkKI4msQorVRTdjSoUTcyz77kY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=dkStoOKnKFzLN1fRpbKUtNyYKwEuXfu6Cih/1/LzrFcChVdBdKx1PJYEnQYQcBftjL7hVWSohMxQlu1DGUsKCk0yWnJ/LJU7WSpxLPuWFpj2vvLRl/q7HC7lV481rmCP9Tb+Q219wZV3YuI0HxII6sBQjAB8vhc++JJ5sY0uBhs=
+	t=1732543228; c=relaxed/simple;
+	bh=uAVYn8xebwYl6WUncVF/HpB32oadnl4ZoTcSNQHNP9c=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version; b=Cx9xsIvaAm20dXmfai+gZfSbv/6t4W9VEfiM1pECafHhOVTGua5CXvN6gNdxGYQRh/OXTgpwtOOJ4R0s4+Jqaq70189NpeJyHeqLZ0AB0IjK9unZq2u7Vj2kNFLNxHVegAkx+5BvHtm65L2r7QurjNyJk7j60kUTfRLeTfNlg4A=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9F6223858D33
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=L1/vFcPh
-Received: from localhost.localdomain by mta-snd-e07.mail.nifty.com
-          with ESMTP
-          id <20241125135548190.UECP.76216.localhost.localdomain@nifty.com>;
-          Mon, 25 Nov 2024 22:55:48 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1A4903858D29
+Received: from fwd87.aul.t-online.de (fwd87.aul.t-online.de [10.223.144.113])
+	by mailout03.t-online.de (Postfix) with SMTP id CD432AB3
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 15:00:25 +0100 (CET)
+Received: from [192.168.2.101] ([91.57.241.70]) by fwd87.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tFZdV-12SJlo0; Mon, 25 Nov 2024 15:00:21 +0100
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH v2 4/6] Cygwin: signal: Optimize the priority of the sig thread
-Date: Mon, 25 Nov 2024 22:55:23 +0900
-Message-ID: <20241125135532.8344-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
+References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
+ <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
+From: Christian Franke <Christian.Franke@t-online.de>
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
+Date: Mon, 25 Nov 2024 15:00:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ SeaMonkey/2.53.19
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732542948;
- bh=J0FP1Dr2K6KaLtLJkv7+YmMP0TfNs2u3ISfP3Igi770=;
- h=From:To:Cc:Subject:Date;
- b=L1/vFcPhJUTi2OuUwi0yz3+069FkHF0PG6xI3DPz7cQAg+u6LS3PB+jVnN8pOsYGDs+tPw0q
- bKLzDBCp0BU6cxTGMdoydba5Ev597R181C+aLDWQC5fg0zM+m1U2TM6GwL0I4wsS2LvmF+dTIn
- XXWmZMOx4v0s8W18QY36jkWJeGXjMptR3gUxHauZ6/YQYmJuaUKLyoSY73/mr+cQzRCX7bX8gj
- X2M+L5KGutTOLTb1QX7a4mvkXb43nK3NvRF/0lJQ9+ASFBco8dJEY2UUJ5d6vmPVVqOlwWFF0Q
- ezf4tLKDLYtqjJToYdK8akk4MS5zUPeU3WhBQkBESEGgtzrA==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
+Content-Type: multipart/mixed;
+ boundary="------------7E8707D5F8B2BF74152410AB"
+X-TOI-EXPURGATEID: 150726::1732543221-F1FF9700-C23C845B/0/0 CLEAN NORMAL
+X-TOI-MSGID: c9fb1a51-9dab-403d-8955-38d3d42a0c4c
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, sig thread ran in THREAD_PRIORITY_HIGHEST priority.
-This caused critical delay in signal handling in the main thread
-if the too many signales are received rapidly and CPU is very busy.
-I this case, most of CPU time is allocated to sig thread, so the
-main thread cannot have a chance to handle signals. With this patch,
-the sig thread priority is set to the same priority with main thread
-to avoid such situation. Furthermore, if the signal is alarted to
-the main thread, but main thread does not handle it yet, in order to
-increase the chance to handle it in the main thread, reduce the sig
-thread priority is to THREAD_PRIORITY_LOWEST temporarily.
+This is a multi-part message in MIME format.
+--------------7E8707D5F8B2BF74152410AB
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-Fixes: 53ad6f1394aa ("(cygthread::cygthread): Use three only arguments for detached threads, and start the thread via QueueUserAPC/async_create.")
-Reported-by: Christian Franke <Christian.Franke@t-online.de>
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/sigproc.cc | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Corinna Vinschen wrote:
+> Hi Christian,
+>
+>
+> can you please add a Fixes: to the commit messages of both
+> of your patches?
+>
+> On Nov 23 19:56, Christian Franke wrote:
+>> sched_setscheduler(pid, sched_getscheduler(pid), param) should behave like
+>> sched_setparam(pid, param).
+>>
+>> -- 
+>> Regards,
+>> Christian
+>>
+>>  From a67e6679cc2bb199713b1f783d5219cb8364f5f4 Mon Sep 17 00:00:00 2001
+>> From: Christian Franke <christian.franke@t-online.de>
+>> Date: Sat, 23 Nov 2024 19:50:29 +0100
+>> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+>>
+>> Behave like sched_setparam() if the requested policy is identical
+>> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
+>>
+> Fixes: ...?
 
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index b8d961a07..fc4360951 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -1319,6 +1319,23 @@ wait_sig (VOID *)
-     {
-       DWORD nb;
-       sigpacket pack = {};
-+      /* Follow to the main thread priority */
-+      int prio = THREAD_PRIORITY_NORMAL;
-+      if (cygwin_finished_initializing)
-+	{
-+	  HANDLE h_main_thread = NULL;
-+	  threadlist_t *tl_entry = cygheap->find_tls (_main_tls);
-+	  if (_main_tls->thread_id)
-+	    h_main_thread = OpenThread (THREAD_QUERY_INFORMATION,
-+					FALSE, _main_tls->thread_id);
-+	  cygheap->unlock_tls (tl_entry);
-+	  if (h_main_thread)
-+	    {
-+	      prio = GetThreadPriority (h_main_thread);
-+	      CloseHandle (h_main_thread);
-+	    }
-+	}
-+      SetThreadPriority (GetCurrentThread (), prio);
-       if (sigq.retry)
- 	pack.si.si_signo = __SIGFLUSH;
-       else if (sigq.start.next
-@@ -1331,6 +1348,15 @@ wait_sig (VOID *)
- 	  system_printf ("garbled signal pipe data nb %u, sig %d", nb, pack.si.si_signo);
- 	  continue;
- 	}
-+      if (cygwin_finished_initializing)
-+	{
-+	  threadlist_t *tl_entry = cygheap->find_tls (_main_tls);
-+	  if (_main_tls->current_sig)
-+	    /* Decrease the priority in order to make main thread process
-+	       this signal. */
-+	    SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_LOWEST);
-+	  cygheap->unlock_tls (tl_entry);
-+	}
- 
-       sigq.retry = false;
-       /* Don't process signals when we start exiting */
--- 
-2.45.1
+... the very first commit (cgf 2001) of sched.cc :-)
 
+New patch attached.
+
+
+--------------7E8707D5F8B2BF74152410AB
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-sched_setscheduler-allow-changes-of-the-prior.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-sched_setscheduler-allow-changes-of-the-prior.pa";
+ filename*1="tch"
+
+RnJvbSBlOTVmYzFhY2ViNTI4N2Y5YWQ2NWM2YzA3ODEyNWZlY2JhNmM2ZGU5IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBNb24sIDI1IE5vdiAyMDI0IDE0OjUxOjA0ICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzY2hlZF9zZXRzY2hlZHVsZXI6IGFsbG93IGNo
+YW5nZXMgb2YgdGhlIHByaW9yaXR5CgpCZWhhdmUgbGlrZSBzY2hlZF9zZXRwYXJhbSgpIGlm
+IHRoZSByZXF1ZXN0ZWQgcG9saWN5IGlzIGlkZW50aWNhbAp0byB0aGUgZml4ZWQgdmFsdWUg
+KFNDSEVEX0ZJRk8pIHJldHVybmVkIGJ5IHNjaGVkX2dldHNjaGVkdWxlcigpLgoKRml4ZXM6
+IDZiMmEyYWE0YWYxZSAoIkFkZCBtaXNzaW5nIGZpbGVzLiIpClNpZ25lZC1vZmYtYnk6IENo
+cmlzdGlhbiBGcmFua2UgPGNocmlzdGlhbi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2lu
+c3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4wIHwgMyArKysKIHdpbnN1cC9jeWd3aW4vc2NoZWQu
+Y2MgICAgICB8IDUgKysrKy0KIDIgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAx
+IGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4w
+IGIvd2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4wCmluZGV4IDQ2OGEyYWIyNC4uMDlhYTUz
+NzZlIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAKKysrIGIvd2lu
+c3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4wCkBAIC00MywzICs0Myw2IEBAIFdoYXQgY2hhbmdl
+ZDoKIAogLSBOb3cgdXNpbmcgQVZYL0FWWDIvQVZYLTUxMiBpbnN0cnVjdGlvbnMgaW4gc2ln
+bmFsIGhhbmRsZXIgZG9lcyBub3QKICAgYnJlYWsgdGhlaXIgY29udGV4dC4KKworLSBzY2hl
+ZF9zZXRzY2hlZHVsZXIoMikgYWxsb3dzIHRvIGNoYW5nZSB0aGUgcHJpb3JpdHkgaWYgdGhl
+IHBvbGljeSBpcworICBlcXVhbCB0byB0aGUgdmFsdWUgcmV0dXJuZWQgYnkgc2NoZWRfZ2V0
+c2NoZWR1bGVyKDIpLgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYyBiL3dp
+bnN1cC9jeWd3aW4vc2NoZWQuY2MKaW5kZXggNzFhMWU4NjhmLi4zMzM3ODZmNDQgMTAwNjQ0
+Ci0tLSBhL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9zY2hl
+ZC5jYwpAQCAtMzk5LDggKzM5OSwxMSBAQCBpbnQKIHNjaGVkX3NldHNjaGVkdWxlciAocGlk
+X3QgcGlkLCBpbnQgcG9saWN5LAogCQkgICAgY29uc3Qgc3RydWN0IHNjaGVkX3BhcmFtICpw
+YXJhbSkKIHsKKyAgaWYgKHBvbGljeSA9PSBTQ0hFRF9GSUZPKSAvKiByZXR1cm5lZCBieSBz
+Y2hlZF9nZXRzY2hlZHVsZXIuICovCisgICAgcmV0dXJuIHNjaGVkX3NldHBhcmFtIChwaWQs
+IHBhcmFtKTsKKwogICAvKiBvbiB3aW4zMiwgeW91IGNhbid0IGNoYW5nZSB0aGUgc2NoZWR1
+bGVyLiBEb2ghICovCi0gIHNldF9lcnJubyAoRU5PU1lTKTsKKyAgc2V0X2Vycm5vIChFSU5W
+QUwpOwogICByZXR1cm4gLTE7CiB9CiAKLS0gCjIuNDUuMQoK
+--------------7E8707D5F8B2BF74152410AB--
