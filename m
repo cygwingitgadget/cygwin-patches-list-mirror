@@ -1,82 +1,80 @@
 Return-Path: <SRS0=SJZz=SU=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
-	by sourceware.org (Postfix) with ESMTPS id 3C1C3385840F
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 12:17:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3C1C3385840F
+	by sourceware.org (Postfix) with ESMTPS id 89D483858283
+	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 12:17:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 89D483858283
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3C1C3385840F
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 89D483858283
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732537020; cv=none;
-	b=jDQJ/mL9HyjVkHRCkhvUMFumZQG7EtiLcK9aJwLAlkUxhNuOBlyfUZ4tRNCNZw017eTMwJBe9JzlxIMZaybFykfokw9bXVAR7BycKXI5Uq3PCYifs9fx0FWVqJPEDaXkMGnJVbFhAxgQZN1lN86WnVBESlPZtyDCp5X2LxERBiY=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732537028; cv=none;
+	b=g2AAqHRPOdzezkZ8WMoar0TiKuJIqQkdYf+vdjaCbz/5AnG+CP5n3NSOlcEp0rg9EbaW5SCsr1F3mn39CnDzyTJnKcKBLoFIYvlEFAh5ZTIvzaphWX6C/vHhQG7vvh/Roa9qPzH4FhxUOwE7xhdGPABjlxO9j6sac3SgkEjZqdk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732537020; c=relaxed/simple;
-	bh=V9ih2V0BWYzm5+j+Pjaih6LZSHgE06Zdesqiq2G6ouw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=DD4Q6yX+3w5hIBCj2shP5QlgCnReApY7dyPOHcuKGw3ypJq6Q2NZcAfbqJo9fPK9an44FONsEJiFJN61ikGhifoIglP0TDWj6MuXjjhHg3Wuq9g+t/Znpq0rySHqct2oLwZNDZyul8Jt4hLk2bH+7bHAiITKslsrKABh+mazvo0=
+	t=1732537028; c=relaxed/simple;
+	bh=uHrTta6o1G580U6WBvVdCfRTPfQnJa+4ONfhgjFixZE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=TbQZLvAh7ewLutjfNHgftKXZiN0Wh6XaQT7lpzjAw0Mv+KBZii96sFN8wefSNZ2GSNj2dW21jTcXIkJKZjxLenyLuXMm//0++jEBBdqN0vs9mNztDr3X7FQBjQsziI5euE0v8aYfzYDI3KrhodjxPsj0QnKxYcch2Qp+Y2dZ6fk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3C1C3385840F
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 89D483858283
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lvaYdXwV
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PTXA6HRx
 Received: from localhost.localdomain by mta-snd-w02.mail.nifty.com
           with ESMTP
-          id <20241125121658623.KEKE.47547.localhost.localdomain@nifty.com>;
-          Mon, 25 Nov 2024 21:16:58 +0900
+          id <20241125121704972.KEKW.47547.localhost.localdomain@nifty.com>;
+          Mon, 25 Nov 2024 21:17:04 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH 1/6] Cygwin: signal: Fix deadlock between main thread and sig thread
-Date: Mon, 25 Nov 2024 21:16:17 +0900
-Message-ID: <20241125121632.1822-2-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 2/6] Cygwin: signal: Handle queued signal without explicit __SIGFLUSH
+Date: Mon, 25 Nov 2024 21:16:18 +0900
+Message-ID: <20241125121632.1822-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20241125121632.1822-1-takashi.yano@nifty.ne.jp>
 References: <20241125121632.1822-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732537018;
- bh=bJgCPNY4IVnSnCVncx0eAGHoEYLENU1gd7mXhfVZZps=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732537025;
+ bh=7u5ivfiicreKGsZzqmDsZ6twJI1t7AkuoOEybmibkjw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=lvaYdXwVVKIuWWxz/Trzzh6OgfWC8hlG68K2XU85aAwFVTGvrkdzrFDZNS0ujD1/JvLJ9gG/
- /QHQQ6g8ZoLsbqozOt5dt142dIuUxrJyYBFkJqwUhnHZkyFNasoIoGNDjxlWfcaY4U81Ae4wkp
- 8WX8Q5M6zj5MTO5cP0vGfsXFapNN1ZkW24+e6Erx5q46rig2iQ7FKN2AB+cb4tB5/bNZkD8oeA
- 9zprl68DmDnIsVy7Z5O7TCckIztOzcMVY3CX3hNQ5hjCAtBZb+UcgN6cIdPCZFm1WANoMBiKff
- RDDH2BJHrIO8emiZeh6mG+Tz+0geHNTkeP0pvB7sk59qO00A==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=PTXA6HRxYHQzOESu/GBMmBAyDuQAXuqXhvfIBcwCz9ByNAIlJQU6IEEyOQ9kDdkNsB9AsjLi
+ wQkpNE4DLVMGF8C8trRKxuByMJvE5SaVxy1sPJWN/OKbF+J9FL81b83yxvT6b96gNMhVi8GkIu
+ f4S50o99y4w37AudtLiJdTm/J2/5kETmOdgzj2kC9K3IxQ4B84cwM/jHisYyMYaqSb2A6ah59A
+ rf9vOf4tkozj4xj4y80Rhu9VNNt0SwLIcA3h8zi9WciZitZxF50BK6LtUeXVX2EW+Nw2v9UDOA
+ gjrFmk9PB8u8EDeoLtIMCGSJ+D4swCihQL8QRNbGDk6g5FPg==
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, a deadlock happened if many SIGSTOP/SIGCONT signals were
-received rapidly. If the main thread sends __SIGFLUSH at the timing
-when SIGSTOP is handled by sig thread, but not is handled by main
-thread yet (sig_handle_tty_stop() not called yet), and if SIGCONT is
-received, the sig thread waits for cygtls::current_sig (is SIGSTOP now)
-cleared. However, the main thread waits the pack.wakeup using
-WaitForSingleObject(), so the main thread cannot handle SIGSTOP. This
-is the mechanism of the deadlock. This patch uses cygwait() instead of
-WaitForSingleObject() to be able to handle the pending SIGSTOP.
+With previous code, queued signal is tried to resend only when a
+new signal is arrived or pending_signals::pending() is called.
+With this patch, if signal is queued and retry flag is not set
+and new signal is not received yet, sig thread tries to handle
+the queued signal again. Without this patch, the chance to handle
+the queue would be delayed.
 
 Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-Fixes: 7759daa979c4 ("(sig_send): Fill out sigpacket structure to send to signal thread rather than racily sending separate packets.")
+Fixes: 5e31c80e4e8d ("(pending_signals::pending): Force an additional loop through wait_sig by setting retry whenever this function is called.")
 Reported-by: Christian Franke <Christian.Franke@t-online.de>
 Reviewed-by:
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/sigproc.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/sigproc.cc | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 9e20ae6f7..66ffef8f1 100644
+index 66ffef8f1..34e459070 100644
 --- a/winsup/cygwin/sigproc.cc
 +++ b/winsup/cygwin/sigproc.cc
-@@ -764,7 +764,7 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
-   if (wait_for_completion)
-     {
-       sigproc_printf ("Waiting for pack.wakeup %p", pack.wakeup);
--      rc = WaitForSingleObject (pack.wakeup, WSSC);
-+      rc = cygwait (pack.wakeup, WSSC);
-       ForceCloseHandle (pack.wakeup);
-     }
-   else
+@@ -1329,6 +1329,9 @@ wait_sig (VOID *)
+       sigpacket pack = {};
+       if (sigq.retry)
+ 	pack.si.si_signo = __SIGFLUSH;
++      else if (sigq.start.next
++	       && PeekNamedPipe (my_readsig, NULL, 0, NULL, &nb, NULL) && !nb)
++	pack.si.si_signo = __SIGFLUSH;
+       else if (!ReadFile (my_readsig, &pack, sizeof (pack), &nb, NULL))
+ 	Sleep (INFINITE);	/* Assume were exiting.  Never exit this thread */
+       else if (nb != sizeof (pack) || !pack.si.si_signo)
 -- 
 2.45.1
 
