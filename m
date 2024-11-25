@@ -1,74 +1,102 @@
-Return-Path: <SRS0=YD5p=ST=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
-	by sourceware.org (Postfix) with ESMTPS id 0C5223858D29
-	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 10:11:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C5223858D29
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C5223858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732443091; cv=none;
-	b=KRvGPIYfou36ziVbATAlcsa/lNb9mNU2nKGL3g3WJ3qleBIxiPPEwA4RR+lsqLyUs5OA/I2QG2i1ay5FUWxQsHRosY81AqrhzI14B5ZyHepMtUHMBFzAB9qii6An8cF/PKPbsE11ZFHRmNS4lZMk3OLc+D4JoeanO2vh+pN//Q8=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732443091; c=relaxed/simple;
-	bh=YjR2+BSYIkVMsimC6tj2TGvk/JlgM6vynzt4Au1VJFc=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=uWjIVgOiq4WUxd9o2TetKsMHdGzDUdRnxZOqmV5CBv2jqxRvWdzikyoOjHrJTk1BZOuDrAFQ10ZUs/dPp6OESGg7WAcCQCUKQCFDBMIBu+/3rjg7R26eJzlpuNld0/xMxGLIDQWDvI6GISDjHn3jWIUTiq+VTLxC2xYmZy2xvx8=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C5223858D29
-Received: from fwd83.aul.t-online.de (fwd83.aul.t-online.de [10.223.144.109])
-	by mailout02.t-online.de (Postfix) with SMTP id 70D9364A
-	for <cygwin-patches@cygwin.com>; Sun, 24 Nov 2024 11:11:27 +0100 (CET)
-Received: from [192.168.2.101] ([91.57.241.70]) by fwd83.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1tF9aN-2LOCES0; Sun, 24 Nov 2024 11:11:23 +0100
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 37E513857C78; Mon, 25 Nov 2024 09:33:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 37E513857C78
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1732527222;
+	bh=Mo4SwbqnlnFIJGG6qVeBNH0zQHVwGWqOiEgaTM2oJco=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=OTipKz7o4cDWdPRavmy/ZamxiCc0SpD52tzRPRn4QDMhR0oxp7sjT7GDWvwC+BXHw
+	 AgABqmGdZi1d/3EmZCMW3jNOPlNB7ODcx2TLPnUNzuAs1EmL4xnwq9/788bRKi8xVM
+	 uEW0jcIiheHGQjgguytbuVOm4AMZqTiCY4rudRMA=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 03BC8A80C06; Mon, 25 Nov 2024 10:33:39 +0100 (CET)
+Date: Mon, 25 Nov 2024 10:33:39 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] Cygwin: sigtimedwait: Fix segfault when timeout is
+ used
+Message-ID: <Z0REc8wK6_XXALua@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: sched_getscheduler: fix error handling
-Message-ID: <36a9bf51-b331-bb30-1bd3-2e112d9ec3fa@t-online.de>
-Date: Sun, 24 Nov 2024 11:11:23 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.19
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20241119084057.945-1-takashi.yano@nifty.ne.jp>
+ <ZzxtpcNi85kNQX2g@calimero.vinschen.de>
+ <20241120220024.dd039419f2523a6bc3339e26@nifty.ne.jp>
+ <Zz4AgZCApEQEwb-w@calimero.vinschen.de>
+ <287bd7f8-8a86-f269-25e7-521ee09f6348@t-online.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------514BADEEE5E793B3B669BC68"
-X-TOI-EXPURGATEID: 150726::1732443083-617ED96B-C9E2A44F/0/0 CLEAN NORMAL
-X-TOI-MSGID: ee2e0782-ddc7-46dc-9590-82570852f49f
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <287bd7f8-8a86-f269-25e7-521ee09f6348@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------514BADEEE5E793B3B669BC68
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Nov 22 14:37, Christian Franke wrote:
+> Corinna Vinschen wrote:
+> > On Nov 20 22:00, Takashi Yano wrote:
+> > > On Tue, 19 Nov 2024 11:51:17 +0100
+> > > Corinna Vinschen wrote:
+> > > > Maybe we can utilize WaitOnAddress, kind of like this?
+> > > > 
+> > > > sigwait_common, just the fallthrough snippet:
+> > > > 
+> > > >    +       /* sigpacket::process() already started.
+> > > >    +          Go through to WAIT_SIGNALED case. */
+> > > >    +       _my_tls.unlock ();
+> > > >    +       sigset_t compare = 0;
+> > > >    +       WaitOnAddress (&_my_tls.sigwait_mask, &compare,
+> > > >    +                      sizeof (sigset_t), INFINITE);
+> > > >    +       _my_tls.sigwait_mask = 0;
+> > > >    +       fallthrough;
+> > > > 
+> > > > sigpacket::process():
+> > > > 
+> > > > @@ -1457,6 +1457,7 @@ sigpacket::process ()
+> > > >     bool issig_wait = false;
+> > > >     struct sigaction& thissig = global_sigs[si.si_signo];
+> > > >     void *handler = have_execed ? NULL : (void *) thissig.sa_handler;
+> > > > +  sigset_t orig_wait_mask = 0;
+> > > >     threadlist_t *tl_entry = NULL;
+> > > >     _cygtls *tls = NULL;
+> > > > @@ -1527,11 +1528,15 @@ sigpacket::process ()
+> > > >     if ((HANDLE) *tls)
+> > > >       tls->signal_debugger (si);
+> > > > -  if (issig_wait)
+> > > > +  tls->lock ();
+> > > > +  if (issig_wait && tls->sigwait_mask != 0)
+> > > >       {
+> > > > +      orig_wait_mask = tls->sigwait_mask;
+> > > >         tls->sigwait_mask = 0;
+> > > > +      tls->unlock ();
+> > > >         goto dosig;
+> > > >       }
+> > > > +  tls->unlock ();
+> > > >     if (handler == SIG_IGN)
+> > > >       {
+> > > > @@ -1606,6 +1611,11 @@ dosig:
+> > > >     /* Dispatch to the appropriate function. */
+> > > >     sigproc_printf ("signal %d, signal handler %p", si.si_signo, handler);
+> > > >     rc = setup_handler (handler, thissig, tls);
+> > > > +  if (orig_wait_mask)
+> > > > +    {
+> > > > +      tls->sigwait_mask = orig_wait_mask;
+> > > > +      WakeByAddressAll (&tls->sigwait_mask);
+> > > > +    }
+> > > >   done:
+> > > >     cygheap->unlock_tls (tl_entry);
+> > > > 
+> > > > Mind, that's just an idea.  There may be a simpler way to do this.
+> > > > 
+> > > > Alternatively we can just fallback to your version 1.
+> > > Using WaitOnAddress() may be nice idea, however, I prefer my v1 patch.
+> > > It's simpler and the intent of the code is clearer, isn't it?
+> > And somehow an iteration of the above code doesn't actually fix the
+> > problem, your original patch does.  So please push.
+> 
+> Stress-ng upstream recently re-enabled usage of
+> pthread_sigqueue+sigtimedwait on Cygwin. If such a build is used with
+> cygwin1.dll 26144e40, 'stress-ng --pthread' does no longer report any
+> SIGSEGV errors.
 
-Long standing (2001) minor issue.
+Thanks for your feedback!
 
--- 
-Regards,
-Christian
-
-
---------------514BADEEE5E793B3B669BC68
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-sched_getscheduler-fix-error-handling.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Cygwin-sched_getscheduler-fix-error-handling.patch"
-
-RnJvbSBlYjExYTllZTg1NTA4N2FkNWY5MmY3N2VjMzVjMTJjNDNhNzlkYjY0IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTdW4sIDI0IE5vdiAyMDI0IDEwOjQxOjIxICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzY2hlZF9nZXRzY2hlZHVsZXI6IGZpeCBlcnJv
-ciBoYW5kbGluZwoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFu
-LmZyYW5rZUB0LW9ubGluZS5kZT4KLS0tCiB3aW5zdXAvY3lnd2luL3NjaGVkLmNjIHwgNSAr
-KysrLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoK
-ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MgYi93aW5zdXAvY3lnd2luL3Nj
-aGVkLmNjCmluZGV4IDcxYTFlODY4Zi4uMjJmZjBjOGU4IDEwMDY0NAotLS0gYS93aW5zdXAv
-Y3lnd2luL3NjaGVkLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MKQEAgLTE0MCw3
-ICsxNDAsMTAgQEAgaW50CiBzY2hlZF9nZXRzY2hlZHVsZXIgKHBpZF90IHBpZCkKIHsKICAg
-aWYgKHBpZCA8IDApCi0gICAgcmV0dXJuIEVTUkNIOworICAgIHsKKyAgICAgIHNldF9lcnJu
-byAoRUlOVkFMKTsKKyAgICAgIHJldHVybiAtMTsKKyAgICB9CiAgIGVsc2UKICAgICByZXR1
-cm4gU0NIRURfRklGTzsKIH0KLS0gCjIuNDUuMQoK
---------------514BADEEE5E793B3B669BC68--
+Corinna
