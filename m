@@ -1,88 +1,62 @@
-Return-Path: <SRS0=16kU=SU=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo001.btinternet.com (btprdrgo001.btinternet.com [65.20.50.131])
-	by sourceware.org (Postfix) with ESMTP id F3A0A3858420
-	for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2024 22:38:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F3A0A3858420
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F3A0A3858420
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.131
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732574309; cv=none;
-	b=RuXmlaqVRUmmZgo4je4qbQ7Sq/3Iyic78wi/aN+uR8mqucyWMkKJBm2bxAgfz+u46pjBLcEWynKQolNP+lpB7/2c5thi46geyzA9EqbCfHx4mueTHwfB/pRbfa5INvjC3G1Dx3KQDAaBsxOVAUfWjPVijx+ax6Y2Mq1iCZ6aNCo=
+Return-Path: <SRS0=EpSC=SV=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id E66CC3858C50
+	for <cygwin-patches@cygwin.com>; Tue, 26 Nov 2024 08:55:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E66CC3858C50
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E66CC3858C50
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732611340; cv=none;
+	b=RZ7YGupoO8o9KOXzpDJPUrn66Wx5LwOjpipOK5n5WOcr0j9WS0eO67xsafR5ZujlRnfwPjqmzdTgQVeEqJxhX8Eq5c6BrW//HlvX0gaCNfR5m3BudaUFsMJ5cNXT+20Q45Wz6XcTHZtPAOpZZegaonUseTqpnVbwWLoUA13cEq0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732574309; c=relaxed/simple;
-	bh=ksfOUwIqVm5c8hWXvkrs2fsi4ZHkDdcxTlS2azdqhnk=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=C2uCLRMUA9aAhEp2P8OZ6ThP5R1k2H+jJxSvcd8kg4gBAd2/Dfhl0YMHe2I2rspjOJOQPvGAO7LVnYI9faGFn/4UD5b5xM1S99sZzrxYsYRJPNJWr6O5wzfhrj8Sm5RzDPu7D4glt88LzI4bGZvF8uLuIWvq0vqOawOmAxGLu/I=
+	t=1732611340; c=relaxed/simple;
+	bh=lsY7r3DYkdrPFFPxAkCzq1WoBCvkALZtsHZ1Zo15vF0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=JzcrawEpWXvB62CoieswDgaqc4nkP4iqjntGD8StOBYdQQvV0WyrrPQHlQWm13JpNpwLOIp28KvtlM88A2rOG+OO83QuI+9+pt7xSRTD/znO8U3RMzJIzAwVHYyirrCWT4COm+hIg8vJS8gayohpoZMRgMMHPM1qvERYn+1Oz0U=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F3A0A3858420
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67215E3C034FAF32
-X-Originating-IP: [81.152.101.74]
-X-OWM-Source-IP: 81.152.101.74
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=30/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefuddrgeehgdduieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecumhhishhsihhnghcuvffquchfihgvlhguucdlfedtmdenucfjughrpefkffggfgfufhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpedvtdfgudduueehveffvdejgfeileeugfeivedvgfehueelffffgeejudduhfegtdenucfkphepkedurdduhedvrddutddurdejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduhedvrddutddurdejgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddqudehvddquddtuddqjeegrdhrrghnghgvkeduqdduhedvrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttddupdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihg
-	fihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 30
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (81.152.101.74) by btprdrgo001.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67215E3C034FAF32 for cygwin-patches@cygwin.com; Mon, 25 Nov 2024 22:38:27 +0000
-Message-ID: <7e57bfc8-d81b-4017-9b94-5950c0cd96f1@dronecode.org.uk>
-Date: Mon, 25 Nov 2024 22:38:26 +0000
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E66CC3858C50
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=qM+2PBp4
+Received: from localhost.localdomain by mta-snd-w09.mail.nifty.com
+          with ESMTP
+          id <20241126085537053.NQUY.90249.localhost.localdomain@nifty.com>;
+          Tue, 26 Nov 2024 17:55:37 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 0/7] Fix issues when too many signals arrive rapidly
+Date: Tue, 26 Nov 2024 17:54:57 +0900
+Message-ID: <20241126085521.49604-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
- <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
- <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
- <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732611337;
+ bh=EdMN5qroJqCNuU/JVe9jKleMHyU4XSyBnrcBsskVyrU=;
+ h=From:To:Cc:Subject:Date;
+ b=qM+2PBp40GrQmGNMFTmABYnHM8lPhllXzCAv8pYH52S5s0/jBhjd04YTohzwSb7z24ftZlX9
+ p/UKRvmLBgzt3PwGSV0SPcYQt44tXegMHs5HSoMGVLGUvLMSHBoehkkzCdEdnospGMZcSBZoND
+ G57Adf6wD+WJJaRE5SHivLaHIJKy16iYXe8RUWtvFfJ6w7qBGJC0zvhH31BcIH0EbaLHkpNPUV
+ a6XhYjz3MIzjgEY6SJeaCx/v4hceK/jc6uTWjIrmI+3tSy9W2SAAaRL0IiZ400xH998lxgVRaf
+ jmPkd8Av8N1jFbCnPAdJa2KY2p/8C7YfclClObC2bceJf8cQ==
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 25/11/2024 19:15, Corinna Vinschen wrote:
-> Hi Christian,
-> 
-> On Nov 25 15:00, Christian Franke wrote:
->> Corinna Vinschen wrote:
->>> Fixes: ...?
->>
->> ... the very first commit (cgf 2001) of sched.cc :-)
->>
->> New patch attached.
->>
->>  From e95fc1aceb5287f9ad65c6c078125fecba6c6de9 Mon Sep 17 00:00:00 2001
->> From: Christian Franke <christian.franke@t-online.de>
->> Date: Mon, 25 Nov 2024 14:51:04 +0100
->> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
->>
->> Behave like sched_setparam() if the requested policy is identical
->> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
->>
->> Fixes: 6b2a2aa4af1e ("Add missing files.")
-> 
-> Huh, yeah, this is spot on.  I wonder if it would make sense to change
-> that to 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
-> though, given that was the patch intended to add sched.cc :)))
-> 
-> Sorry, but I have to ask two more questions:
-> 
-> - Isn't returning SCHED_FIFO sched_getscheduler() just as wrong?
->    Shouldn't that be SCHED_OTHER, and sched_setscheduler() should check
->    for that instead?  Cygwin in a real-time scenario sounds a bit
->    far-fetched...
+Takashi Yano (7):
+  Cygwin: signal: Fix deadlock between main thread and sig thread
+  Cygwin: signal: Handle queued signal without explicit __SIGFLUSH
+  Cygwin: signal: Cleanup signal queue after processing it
+  Cygwin: signal: Optimize the priority of the sig thread
+  Cygwin: signal: Drop unnecessary queue flush
+  Cygwin: cygtls: Prompt system to switch tasks explicitly in lock()
+  Cygwin: Document several fixes for signal handling in release note
 
-I believe if you look into the git history, we used return SCHED_OTHER 
-and this was changed at some stage to SCHED_FIFO.
+ winsup/cygwin/local_includes/cygtls.h | 13 ++++++--
+ winsup/cygwin/release/3.5.5           |  4 +++
+ winsup/cygwin/scripts/gendef          | 36 ----------------------
+ winsup/cygwin/sigproc.cc              | 44 +++++++++++++++++++++++++--
+ 4 files changed, 56 insertions(+), 41 deletions(-)
 
-I don't know why.
-
-(I came across this when fixing up some testsuite tests of this)
+-- 
+2.45.1
 
