@@ -1,65 +1,102 @@
-Return-Path: <SRS0=EpSC=SV=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
-	by sourceware.org (Postfix) with ESMTPS id 757F43857704
-	for <cygwin-patches@cygwin.com>; Tue, 26 Nov 2024 08:57:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 757F43857704
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 757F43857704
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732611422; cv=none;
-	b=qDH/eG9GoL5kKIpPnBxldEMX0zVO5yjyRyT+khPBHimR6k1KjDX//ZQCy1n8wA9DYCtp4KJeKl/5i411zy+d90sMF3r3+NbgNDuq+b6bFz/VzhA0zRuSNUhI38uOOQ0imtXisTcn34SlG/06/srKWKn0V3Vrd0hc/XWsfyxKTVg=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732611422; c=relaxed/simple;
-	bh=DhW1/Ik2rrOgZPPJ4W/GQSymxh/6IVClOTp8fbAlmGQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Y16RwIPk75fq4bIf/Hnev32vuSHjPM3vynveEKqNn5t9Pq89m4YQkhlJNwjT699uoczfqUgNIkwfeic7zbZWCkeCvNLLZiE9DDLDGyH1eyj71/yAAu1Y/m+sI+fuYZxoixfsq0uMwJlmauPcWdRY7cXUpGfNvEMsdpLmufE1ZXc=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 757F43857704
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=CJuVpWI0
-Received: from localhost.localdomain by mta-snd-w09.mail.nifty.com
-          with ESMTP
-          id <20241126085659776.NQXB.90249.localhost.localdomain@nifty.com>;
-          Tue, 26 Nov 2024 17:56:59 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id DFFED3858D33; Tue, 26 Nov 2024 12:55:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DFFED3858D33
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1732625749;
+	bh=tx96sI4MLtHR+t4EQUupJ18whU5KuIZvgaCuAllniW0=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=xhdOWTgB1MV0QgweNcc5jDgkm0kTyjocGNiZQuzCAVkfMyeaq6Q5VRhtaUWpjEIuX
+	 rnMM8fChZ8wekZXGAhH01kQWwYFqr/dOmZgx+42tDDt9cmOrW4uER7+ldrJY9+8dTq
+	 CiPJHuFbUI02vGeHqwOPccNP2hzgRTrxjpHxW8o4=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 64733A80E83; Tue, 26 Nov 2024 13:55:47 +0100 (CET)
+Date: Tue, 26 Nov 2024 13:55:47 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2 7/7] Cygwin: Document several fixes for signal handling in release note
-Date: Tue, 26 Nov 2024 17:55:04 +0900
-Message-ID: <20241126085521.49604-8-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20241126085521.49604-1-takashi.yano@nifty.ne.jp>
-References: <20241126085521.49604-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+Message-ID: <Z0XFU636aT986Vtn@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
+ <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
+ <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
+ <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
+ <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732611419;
- bh=oxqKhuJxyZ0yiJq6mc8veGlyoDVnDjxkUfFGfTJXnk4=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=CJuVpWI0U6ehRNw5ovyebZGoo0BdJbhNQraHrKbY4AY1pzsxrhAVqQGBNj9AE+lUXvJBVEuQ
- sCLlnJYFYvym5VYBqDns0jnt6TBRVbsDOcMOECvd88HBVYnn2bnnloYqMLgYVL81ohJs8CNFY7
- SBTZnD+WGzDA9ZfeodNLyw+fqaiLP7FoADPafOkgPhKF7F3lvyJ/nXLtCqGNdnWqMMAXIzIAod
- IESbfZQblwM1omW/ZakIecaKUfTSFFP2Tsh6MMh3eijPzHBM+eKDLHUaFp8Nflvj9rCn6ppGjN
- HJBEXYD9oxQ6Y8ML4BebsIaDXyiBXxFv+VKzkHQNtowk26sw==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+In-Reply-To: <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
----
- winsup/cygwin/release/3.5.5 | 4 ++++
- 1 file changed, 4 insertions(+)
+On Nov 25 21:20, Christian Franke wrote:
+> Hi Corinna,
+> 
+> Corinna Vinschen wrote:
+> > Hi Christian,
+> > 
+> > On Nov 25 15:00, Christian Franke wrote:
+> > > Corinna Vinschen wrote:
+> > > > Fixes: ...?
+> > > ... the very first commit (cgf 2001) of sched.cc :-)
+> > > 
+> > > New patch attached.
+> > > 
+> > >  From e95fc1aceb5287f9ad65c6c078125fecba6c6de9 Mon Sep 17 00:00:00 2001
+> > > From: Christian Franke <christian.franke@t-online.de>
+> > > Date: Mon, 25 Nov 2024 14:51:04 +0100
+> > > Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+> > > 
+> > > Behave like sched_setparam() if the requested policy is identical
+> > > to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
+> > > 
+> > > Fixes: 6b2a2aa4af1e ("Add missing files.")
+> > Huh, yeah, this is spot on.  I wonder if it would make sense to change
+> > that to 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
+> > though, given that was the patch intended to add sched.cc :)))
+> > 
+> > Sorry, but I have to ask two more questions:
+> > 
+> > - Isn't returning SCHED_FIFO sched_getscheduler() just as wrong?
+> 
+> Definitly. SCHED_FIFO is a non-preemptive(!) real-time policy. Windows does
+> not offer anything like that to userland (AFAIK).
+> 
+> https://man7.org/linux/man-pages/man7/sched.7.html
+> 
+> I wonder whether there was a use case for this emulation when this module
+> was introduced in 2001.
 
-diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
-index d91f2b92c..e7c0decbf 100644
---- a/winsup/cygwin/release/3.5.5
-+++ b/winsup/cygwin/release/3.5.5
-@@ -45,3 +45,7 @@ Fixes:
- 
- - Fix segfault in sigtimedwait() when using timeout.
-   Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256762.html
-+
-+- Fix several problems triggered when a lot of SIGSTOP/SIGCONT signals
-+  are received rapidly.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
--- 
-2.45.1
+Just guessing here, but using one of the RT schedulers was the only way
+to enable changing the priority from user space and using SCHED_FIFO was
+maybe in error.
 
+> >    Shouldn't that be SCHED_OTHER, and sched_setscheduler() should check
+> >    for that instead?  Cygwin in a real-time scenario sounds a bit
+> >    far-fetched...
+> 
+> Agree.
+> 
+> Note that SCHED_OTHER requires sched_priority == 0, so most of the
+> sched_get/set*() priority related code would no longer make sense then.
+
+This is the other problem. Changing this to SCHED_OTHER sounds like
+dropping potentially used functionality.  Maybe we should just switch to
+SCHED_RR?
+
+> A related interesting snippet which I don't understand:
+> sys/sched.h:
+> #if defined(__CYGWIN__)
+> #define SCHED_OTHER    3
+> #else
+> #define SCHED_OTHER    0
+> #endif
+
+Oh, that's for backward compat.  The original sched.h in Cygwin defined
+SCHED_OTHER as 3, while newlib's sys/sched.h defined SCHED_OTHER as 0.
+The right thing to do in 2001 would have been to define SCHED_OTHER to 0
+for Cygwin as well, but unfortunately nobody really cared at the time.
+
+
+Corinna
