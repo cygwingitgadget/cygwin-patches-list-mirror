@@ -1,141 +1,120 @@
-Return-Path: <SRS0=B7qI=SW=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
-	by sourceware.org (Postfix) with ESMTPS id 1823E3858435
-	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 09:39:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1823E3858435
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1823E3858435
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.80
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732700351; cv=none;
-	b=QlUXiqs1l6slZyeQSm6nnoIRYe7pJ6SvH4B/wS2RC9cFalWsgOCPmdSJqAoucyKNHfVU0vJ88YJ+mXwSZiYmYa4/+neaxrT9SCReTZ/HFhXJ3V/8dvP44gLxmhLKBZz5OfusNqE17MEOa7iaDi7P4zqyJBzuda0HQfJfALwFmAM=
+Return-Path: <SRS0=9b+q=SW=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id 8D3BC3858D34
+	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 11:23:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8D3BC3858D34
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8D3BC3858D34
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732706606; cv=none;
+	b=C/b9DYvI7jADJWrFTkNvz9ULCAm/HHSLZm6Bf0CyGtm9gTzyHLbB0QNKI5gcLOJ/smcVwM53dj9WL2x8Bq0tWGN8mjoxuONFGRjXvP2a/J+Mqt2SqyiApIloucTdhR24Ik7H3c7oiS7m32cfePIUsXCqamgeHW+mfJb3gdKgCNc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732700351; c=relaxed/simple;
-	bh=dgXAt5MfwJVnQfz+wxFrlm38CQROKMkxu3dyy9qGCu0=;
-	h=From:Subject:To:Message-ID:Date:MIME-Version; b=NFDMpK/DcKzUA2IB5lYc0mHlr2IXvVDAw9M1N279FjnfbBfuXD7fhVqyPC5jPjDeRskUp3+oMI0092r7VX09l9tW6Lu/2pk9rJTvjqEi+MVEy1mdSwiwGRLlCqgSKOWuYdKSaVmFeydAznwGRRcBeAEeLxFwP7dpFyhbDuR7obM=
+	t=1732706606; c=relaxed/simple;
+	bh=in9ktMm1k0w77YQBYcWQj8JzgWlpmgksFw3bXq2HFk4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=K7iSdGz63EHQe2/dCkSVuZ0KSjWu3q2xI9a/XD09TgbylNmPQn8pcb0Qazp9f7ferOBV6iecYqb5cco7r3PVXwbnKvuBnzkKvJD6zkol5IQlRbMpaQcbYwdj4h3xj+nzCbVcWWtgDHhVWQYAAX+UfiAqQQZ38iIJZE4jMx2Dau4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1823E3858435
-Received: from fwd85.aul.t-online.de (fwd85.aul.t-online.de [10.223.144.111])
-	by mailout01.t-online.de (Postfix) with SMTP id 76D9DA38
-	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 10:39:09 +0100 (CET)
-Received: from [192.168.2.101] ([91.57.241.70]) by fwd85.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1tGEVo-0lkSXI0; Wed, 27 Nov 2024 10:39:08 +0100
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: setpriority, sched_setparam: fail if Windows sets a
- lower priority
-Reply-To: cygwin-patches@cygwin.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8D3BC3858D34
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JSl5C5f3
+Received: from localhost.localdomain by mta-snd-w10.mail.nifty.com
+          with ESMTP
+          id <20241127112323159.JKHL.96847.localhost.localdomain@nifty.com>;
+          Wed, 27 Nov 2024 20:23:23 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Message-ID: <b34f5c79-b703-7862-c2c3-5cbc0f8dad5c@t-online.de>
-Date: Wed, 27 Nov 2024 10:39:07 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- SeaMonkey/2.53.19
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH 8/8] Cygwin: signal: Fix another deadlock between main and sig thread
+Date: Wed, 27 Nov 2024 20:22:54 +0900
+Message-ID: <20241127112308.6958-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------0408A29C6CF74B0BA1ACA9E5"
-X-TOI-EXPURGATEID: 150726::1732700348-2FFFF786-6BA6371A/0/0 CLEAN NORMAL
-X-TOI-MSGID: 5896726a-88a6-47b9-90b3-e5ba6a19c169
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1732706603;
+ bh=yMJjidreqS7280qv8sp11/q4dJgGszAbt8d5AEthoL4=;
+ h=From:To:Cc:Subject:Date;
+ b=JSl5C5f3OxTuvTcSD4AltzPIzVj6Jt+WAe4TKS/KzTBAbQStC1S4raqVmG4pFTg5eRDfMOtn
+ /W/hDyOUEHCBvQ1iRKoQQ8BYn43Qb5L1T/MaTzJV6ZSdvu42Lv1jOW8Ocbags/iK2OaruXDB7L
+ tF7JNPW0mHd7+pVaoGeOj6V6Qm1biQ+uLqsCXB3Ye6V9e68/jL2OASe86aozLPx0bCaJVAPx1S
+ MS8KkIK2x2vaCzp5UfD+/1CdMhEp2RA7vm9EQdh+0YWxa/4110DXKuWngP2w6Xqz8V7sax7ih8
+ Wqm1BppbKUTpRlNQAK1aSCOb+MLdRtfXwE4CDKPIbTXG8mgw==
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------0408A29C6CF74B0BA1ACA9E5
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In _cygtls::handle_SIGCONT(), the sig thread waits for the main thread
+processing the signal without unlocking tls area. This causes a deadlock
+if the main thread tries to acquire a lock for the tls area meanwhile.
+With this patch, unlock tls before calling yield() in handle_SIGCONT().
 
-A minor improvement of POSIX emulation.
+Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+Fixes: 26158dc3e9c2("* exceptions.cc (sigpacket::process): Lock _cygtls area of thread before accessing it.")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc           | 10 +++++++---
+ winsup/cygwin/local_includes/cygtls.h |  4 +++-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 3b31e65c1..0f8c21939 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1421,7 +1421,7 @@ api_fatal_debug ()
+ 
+ /* Attempt to carefully handle SIGCONT when we are stopped. */
+ void
+-_cygtls::handle_SIGCONT ()
++_cygtls::handle_SIGCONT (threadlist_t * &tl_entry)
+ {
+   if (NOTSTATE (myself, PID_STOPPED))
+     return;
+@@ -1436,7 +1436,11 @@ _cygtls::handle_SIGCONT ()
+   while (1)
+     if (current_sig)	/* Assume that it's ok to just test sig outside of a
+ 			   lock since setup_handler does it this way.  */
+-      yield ();		/* Attempt to schedule another thread.  */
++      {
++	cygheap->unlock_tls (tl_entry);
++	yield ();	/* Attempt to schedule another thread.  */
++	tl_entry = cygheap->find_tls (_main_tls);
++      }
+     else if (sigsent)
+       break;		/* SIGCONT has been recognized by other thread */
+     else
+@@ -1478,7 +1482,7 @@ sigpacket::process ()
+   if (si.si_signo == SIGCONT)
+     {
+       tl_entry = cygheap->find_tls (_main_tls);
+-      _main_tls->handle_SIGCONT ();
++      _main_tls->handle_SIGCONT (tl_entry);
+       cygheap->unlock_tls (tl_entry);
+     }
+ 
+diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
+index fb5b02b4c..ca9ef7dfb 100644
+--- a/winsup/cygwin/local_includes/cygtls.h
++++ b/winsup/cygwin/local_includes/cygtls.h
+@@ -159,6 +159,8 @@ extern "C" int __ljfault (jmp_buf, int);
+ 
+ typedef uintptr_t __tlsstack_t;
+ 
++struct threadlist_t;
++
+ class _cygtls
+ {
+ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+@@ -269,7 +271,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+   {
+     will_wait_for_signal = false;
+   }
+-  void handle_SIGCONT ();
++  void handle_SIGCONT (threadlist_t * &);
+   static void cleanup_early(struct _reent *);
+ private:
+   void call2 (DWORD (*) (void *, void *), void *, void *);
 -- 
-Regards,
-Christian
+2.45.1
 
-
---------------0408A29C6CF74B0BA1ACA9E5
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-setpriority-sched_setparam-fail-if-Windows-se.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-setpriority-sched_setparam-fail-if-Windows-se.pa";
- filename*1="tch"
-
-RnJvbSA3ZDA4OWUxMDlmMzJmZTQ0ZjMzMWNhMTQyZThkYzg3NDdmMGU5ZGIzIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBXZWQsIDI3IE5vdiAyMDI0IDEwOjI2OjM4ICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzZXRwcmlvcml0eSwgc2NoZWRfc2V0cGFyYW06
-IGZhaWwgaWYgV2luZG93cyBzZXRzIGEKIGxvd2VyIHByaW9yaXR5CgpXaW5kb3dzIHNpbGVu
-dGx5IHNldHMgYSBsb3dlciBwcmlvcml0eSB0aGFuIHJlcXVlc3RlZCBpZiB0aGUgbmV3IHBy
-aW9yaXR5CnJlcXVpcmVzIGFkbWluaXN0cmF0b3IgcHJpdmlsZWdlcy4gIFJldmVydCB0byBw
-cmV2aW91cyBwcmlvcml0eSBhbmQgZmFpbAp3aXRoIEVBQ0NFUyBvciBFUEVSTSBpbiB0aGlz
-IGNhc2UuCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgotLS0KIHdpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvbWlz
-Y2Z1bmNzLmggfCAgMSArCiB3aW5zdXAvY3lnd2luL21pc2NmdW5jcy5jYyAgICAgICAgICAg
-ICAgIHwgMjkgKysrKysrKysrKysrKysrKysrKysrKysrCiB3aW5zdXAvY3lnd2luL3JlbGVh
-c2UvMy42LjAgICAgICAgICAgICAgIHwgIDUgKysrKwogd2luc3VwL2N5Z3dpbi9zY2hlZC5j
-YyAgICAgICAgICAgICAgICAgICB8ICAyICstCiB3aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNj
-ICAgICAgICAgICAgICAgIHwgIDQgKystLQogNSBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRp
-b25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vbG9j
-YWxfaW5jbHVkZXMvbWlzY2Z1bmNzLmggYi93aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVz
-L21pc2NmdW5jcy5oCmluZGV4IGQ1MmRlYmFkMS4uZWZkN2U1MTZiIDEwMDY0NAotLS0gYS93
-aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL21pc2NmdW5jcy5oCisrKyBiL3dpbnN1cC9j
-eWd3aW4vbG9jYWxfaW5jbHVkZXMvbWlzY2Z1bmNzLmgKQEAgLTQ2LDYgKzQ2LDcgQEAgaXNf
-YWx0X251bXBhZF9ldmVudCAoUElOUFVUX1JFQ09SRCBwaXJlYykKIAogaW50IHdpbnByaW9f
-dG9fbmljZSAoRFdPUkQpOwogRFdPUkQgbmljZV90b193aW5wcmlvIChpbnQgJik7Citib29s
-IHNldF9hbmRfY2hlY2tfd2lucHJpbyAoSEFORExFIHByb2MsIERXT1JEIHByaW8pOwogCiBi
-b29sIGNyZWF0ZV9waXBlIChQSEFORExFLCBQSEFORExFLCBMUFNFQ1VSSVRZX0FUVFJJQlVU
-RVMsIERXT1JEKTsKIApkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9taXNjZnVuY3MuY2Mg
-Yi93aW5zdXAvY3lnd2luL21pc2NmdW5jcy5jYwppbmRleCA0MjIwZjYyNzUuLmUzYmYzNWNm
-NyAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9taXNjZnVuY3MuY2MKKysrIGIvd2luc3Vw
-L2N5Z3dpbi9taXNjZnVuY3MuY2MKQEAgLTE4Myw2ICsxODMsMzUgQEAgbmljZV90b193aW5w
-cmlvIChpbnQgJm5pY2UpCiAgIHJldHVybiBwcmlvOwogfQogCisvKiBTZXQgV2luMzIgcHJp
-b3JpdHkgb3IgcmV0dXJuIGZhbHNlIG9uIGZhaWx1cmUuICBBbHNvIHJldHVybgorICAgZmFs
-c2UgYW5kIHJldmVydCB0byB0aGUgb3JpZ2luYWwgcHJpb3JpdHkgaWYgYSBkaWZmZXJlbnQg
-KGxvd2VyKQorICAgcHJpb3JpdHkgaXMgc2V0IGluc3RlYWQuICovCitib29sCitzZXRfYW5k
-X2NoZWNrX3dpbnByaW8gKEhBTkRMRSBwcm9jLCBEV09SRCBwcmlvKQoreworICBEV09SRCBw
-cmV2X3ByaW8gPSBHZXRQcmlvcml0eUNsYXNzIChwcm9jKTsKKyAgaWYgKHByZXZfcHJpbyA9
-PSBwcmlvKQorICAgIHJldHVybiB0cnVlOworCisgIGlmICghU2V0UHJpb3JpdHlDbGFzcyAo
-cHJvYywgcHJpbykpCisgICAgcmV0dXJuIGZhbHNlOworCisgIC8qIFdpbmRvd3Mgc2lsZW50
-bHkgc2V0cyBhIGxvd2VyIHByaW9yaXR5IChISUdIX1BSSU9SSVRZX0NMQVNTKSBpZgorICAg
-ICB0aGUgbmV3IHByaW9yaXR5IChSRUFMVElNRV9QUklPUklUWV9DTEFTUykgcmVxdWlyZXMg
-YWRtaW5pc3RyYXRvcgorICAgICBwcml2aWxlZ2VzLiAqLworICBEV09SRCBjdXJyX3ByaW8g
-PSBHZXRQcmlvcml0eUNsYXNzIChwcm9jKTsKKyAgaWYgKGN1cnJfcHJpbyAhPSBwcmlvKQor
-ICAgIHsKKyAgICAgIGRlYnVnX3ByaW50ZiAoIkZhaWxlZCB0byBzZXQgcHJpb3JpdHkgMHgl
-eCwgcmV2ZXJ0IGZyb20gMHgleCB0byAweCV4IiwKKwlwcmlvLCBjdXJyX3ByaW8sIHByZXZf
-cHJpbyk7CisgICAgICBTZXRQcmlvcml0eUNsYXNzIChwcm9jLCBwcmV2X3ByaW8pOworICAg
-ICAgcmV0dXJuIGZhbHNlOworICAgIH0KKworICBkZWJ1Z19wcmludGYgKCJDaGFuZ2VkIHBy
-aW9yaXR5IGZyb20gMHgleCB0byAweCV4IiwgcHJldl9wcmlvLCBjdXJyX3ByaW8pOworICBy
-ZXR1cm4gdHJ1ZTsKK30KKwogLyogTWluaW1hbCBvdmVybGFwcGVkIHBpcGUgSS9PIGltcGxl
-bWVudGF0aW9uIGZvciBzaWduYWwgYW5kIGNvbW11bmUgc3R1ZmYuICovCiAKIEJPT0wKZGlm
-ZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjYuMCBiL3dpbnN1cC9jeWd3aW4v
-cmVsZWFzZS8zLjYuMAppbmRleCA0NjhhMmFiMjQuLmVmN2U0MDE4ZiAxMDA2NDQKLS0tIGEv
-d2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4wCisrKyBiL3dpbnN1cC9jeWd3aW4vcmVsZWFz
-ZS8zLjYuMApAQCAtNDMsMyArNDMsOCBAQCBXaGF0IGNoYW5nZWQ6CiAKIC0gTm93IHVzaW5n
-IEFWWC9BVlgyL0FWWC01MTIgaW5zdHJ1Y3Rpb25zIGluIHNpZ25hbCBoYW5kbGVyIGRvZXMg
-bm90CiAgIGJyZWFrIHRoZWlyIGNvbnRleHQuCisKKy0gbmljZSgyKSwgc2V0cHJpb3JpdHko
-MikgYW5kIHNjaGVkX3NldHBhcmFtKDIpIG5vdyBmYWlsIHdpdGggRUFDQ0VTCisgIG9yIEVQ
-RVJNIGlmIFdpbmRvd3Mgd291bGQgc2lsZW50bHkgc2V0IGEgbG93ZXIgcHJpb3JpdHkKKyAg
-KEhJR0hfUFJJT1JJVFlfQ0xBU1MgaW5zdGVhZCBvZiBSRUFMVElNRV9QUklPUklUWV9DTEFT
-UykgZHVlIHRvCisgIG1pc3NpbmcgYWRtaW5pc3RyYXRvciBwcml2aWxlZ2VzLgpkaWZmIC0t
-Z2l0IGEvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYyBiL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MK
-aW5kZXggNzFhMWU4NjhmLi44NTZkZWY3ODQgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4v
-c2NoZWQuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYwpAQCAtMjYzLDcgKzI2Myw3
-IEBAIHNjaGVkX3NldHBhcmFtIChwaWRfdCBwaWQsIGNvbnN0IHN0cnVjdCBzY2hlZF9wYXJh
-bSAqcGFyYW0pCiAgICAgICBzZXRfZXJybm8gKEVTUkNIKTsKICAgICAgIHJldHVybiAtMTsK
-ICAgICB9Ci0gIGlmICghU2V0UHJpb3JpdHlDbGFzcyAocHJvY2VzcywgcGNsYXNzKSkKKyAg
-aWYgKCFzZXRfYW5kX2NoZWNrX3dpbnByaW8gKHByb2Nlc3MsIHBjbGFzcykpCiAgICAgewog
-ICAgICAgQ2xvc2VIYW5kbGUgKHByb2Nlc3MpOwogICAgICAgc2V0X2Vycm5vIChFUEVSTSk7
-CmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjIGIvd2luc3VwL2N5Z3dp
-bi9zeXNjYWxscy5jYwppbmRleCA0MzM3MzljZGEuLjcyNTM3YmM1YSAxMDA2NDQKLS0tIGEv
-d2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYworKysgYi93aW5zdXAvY3lnd2luL3N5c2NhbGxz
-LmNjCkBAIC0zODI2LDcgKzM4MjYsNyBAQCBzZXRwcmlvcml0eSAoaW50IHdoaWNoLCBpZF90
-IHdobywgaW50IHZhbHVlKQogCXdobyA9IG15c2VsZi0+cGlkOwogICAgICAgaWYgKChwaWRf
-dCkgd2hvID09IG15c2VsZi0+cGlkKQogCXsKLQkgIGlmICghU2V0UHJpb3JpdHlDbGFzcyAo
-R2V0Q3VycmVudFByb2Nlc3MgKCksIHByaW8pKQorCSAgaWYgKCFzZXRfYW5kX2NoZWNrX3dp
-bnByaW8gKEdldEN1cnJlbnRQcm9jZXNzICgpLCBwcmlvKSkKIAkgICAgewogCSAgICAgIHNl
-dF9lcnJubyAoRUFDQ0VTKTsKIAkgICAgICByZXR1cm4gLTE7CkBAIC0zODc1LDcgKzM4NzUs
-NyBAQCBzZXRwcmlvcml0eSAoaW50IHdoaWNoLCBpZF90IHdobywgaW50IHZhbHVlKQogCSAg
-ICBlcnJvciA9IEVQRVJNOwogCSAgZWxzZQogCSAgICB7Ci0JICAgICAgaWYgKCFTZXRQcmlv
-cml0eUNsYXNzIChwcm9jX2gsIHByaW8pKQorCSAgICAgIGlmICghc2V0X2FuZF9jaGVja193
-aW5wcmlvIChwcm9jX2gsIHByaW8pKQogCQllcnJvciA9IEVBQ0NFUzsKIAkgICAgICBlbHNl
-CiAJCXAtPm5pY2UgPSB2YWx1ZTsKLS0gCjIuNDUuMQoK
---------------0408A29C6CF74B0BA1ACA9E5--
