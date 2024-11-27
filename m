@@ -1,47 +1,64 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 2008B3858D34; Wed, 27 Nov 2024 17:06:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2008B3858D34
+	id C83293858CD1; Wed, 27 Nov 2024 17:17:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C83293858CD1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732727168;
-	bh=0VAqIU25Xu5Ria2SvxWyvF0LiaiU+T+MMWakc5XC8Gc=;
+	s=default; t=1732727826;
+	bh=OJg90DmyLyKzN3BFCQSOIHIBf2jrgcrb7PEsLxfaBfM=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=CtSCJAtW3XUzJ2XjG1AcZ8G3Huo98828z4D4HnPO8c3wmWdzxj4ceJv7IiitSFEbo
-	 s+GwQG6pJy/Y1AVui8shkUCgbjp6BNm3OYtOpdP+z9mJTdMgmEokXTjJn8pK2tzCtf
-	 cNW2d2rr/nTKZ9pU9KW/GRwjZpr+7QDctU7GtHe8=
+	b=u+1d2xndJsqLeQrWu+TVaJJvaOF4l9ES4DpDsN/+79aqvHiymTvnuXwduWGgIRi1d
+	 5+9YlBSUZgSvBVKs4rZXaEW9vyJ9ohhnDffKHAremKiYkAt/KeQAWGIrZYpsVF2DLO
+	 a38/oEQDUs4eU2DtBp4IbDPVMDs+1T7Se/puzQBc=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 18A42A80E4D; Wed, 27 Nov 2024 18:06:06 +0100 (CET)
-Date: Wed, 27 Nov 2024 18:06:06 +0100
+	id BB9DBA80E4D; Wed, 27 Nov 2024 18:17:04 +0100 (CET)
+Date: Wed, 27 Nov 2024 18:17:04 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/7] Fix issues when too many signals arrive rapidly
-Message-ID: <Z0dRft_uZx0Us36k@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+Message-ID: <Z0dUEFsMzSI2Lspq@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241126085521.49604-1-takashi.yano@nifty.ne.jp>
- <Z0dQaXYCFSet-Zv7@calimero.vinschen.de>
+References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
+ <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
+ <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
+ <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
+ <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
+ <Z0XFU636aT986Vtn@calimero.vinschen.de>
+ <a4acc9e3-8363-b9af-e92e-b3a865b18d20@t-online.de>
+ <Z0cu7Dzbq9RMSmrD@calimero.vinschen.de>
+ <36947dfd-fa1b-0845-7017-c4f162926e16@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z0dQaXYCFSet-Zv7@calimero.vinschen.de>
+In-Reply-To: <36947dfd-fa1b-0845-7017-c4f162926e16@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 27 18:01, Corinna Vinschen wrote:
-> On Nov 26 17:54, Takashi Yano wrote:
-> > Takashi Yano (7):
-> >   Cygwin: signal: Fix deadlock between main thread and sig thread
-> >   Cygwin: signal: Handle queued signal without explicit __SIGFLUSH
-> >   Cygwin: signal: Cleanup signal queue after processing it
-> >   Cygwin: signal: Optimize the priority of the sig thread
-> >   Cygwin: signal: Drop unnecessary queue flush
-> >   Cygwin: cygtls: Prompt system to switch tasks explicitly in lock()
-> >   Cygwin: Document several fixes for signal handling in release note
+On Nov 27 16:44, Christian Franke wrote:
+> Corinna Vinschen wrote:
+> > And I think your patch here should go in as is, just with the release
+> > message in release/3.5.5 so we can cherry-pick it to the 3.5 branch.
 > 
-> For the time being, patches 1, 2 and 5 are already good to go.
+> Attached. Message moved to 3.5.5 and "Fixes:" changed as suggested.
+> 
 
-Please push only to the main branch for now.  Let's cherry-pick
-them to 3.5 only when finished.
+> From 86266b67334d43ac52a9b7ac1ee879a8d34f0c62 Mon Sep 17 00:00:00 2001
+> From: Christian Franke <christian.franke@t-online.de>
+> Date: Wed, 27 Nov 2024 16:39:37 +0100
+> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
+> 
+> Behave like sched_setparam() if the requested policy is identical
+> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
+> 
+> Fixes: 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
+> Signed-off-by: Christian Franke <christian.franke@t-online.de>
+> ---
+>  winsup/cygwin/release/3.5.5 | 3 +++
+>  winsup/cygwin/sched.cc      | 5 ++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+
+Pushed.
 
 
 Thanks,
 Corinna
+
