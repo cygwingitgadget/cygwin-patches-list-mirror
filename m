@@ -1,122 +1,141 @@
 Return-Path: <SRS0=B7qI=SW=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
-	by sourceware.org (Postfix) with ESMTPS id 2DFAF3857B84
-	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 09:14:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2DFAF3857B84
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+	by sourceware.org (Postfix) with ESMTPS id 1823E3858435
+	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 09:39:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1823E3858435
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2DFAF3857B84
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.19
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732698898; cv=none;
-	b=ZEcDEgF7tnqM01EMQ6KTapQBAd2xO11rIL2OTOKP8DIg5yb9vUibA8SHlzShoFv6C54Nt5b0xIx9Iot+z7MnaLB42ks7oPF/gaM6p8bRyKwXxllqOCTLHweZL934vceCgf02FDkqrWu3w4TOk6wi9Gq8Yg0fvBGdamgkhpJJDSg=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1823E3858435
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.80
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1732700351; cv=none;
+	b=QlUXiqs1l6slZyeQSm6nnoIRYe7pJ6SvH4B/wS2RC9cFalWsgOCPmdSJqAoucyKNHfVU0vJ88YJ+mXwSZiYmYa4/+neaxrT9SCReTZ/HFhXJ3V/8dvP44gLxmhLKBZz5OfusNqE17MEOa7iaDi7P4zqyJBzuda0HQfJfALwFmAM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1732698898; c=relaxed/simple;
-	bh=KneW0hmq5gRiGui+VzOr77pRzUTgPeFTpz+d2CL+5iE=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version; b=RSDiycrjyzf2YGphPSCcXrl76d3q5TWJDftbqud4tkDemFtAiPMr040oIs33ROoMQOcgMuiMqCSZvtMfO8VyrQgdfEnSJ8+KFAkudSw3pgwgHy0q9Z7Q5IqEOet6CqVYkrm5vkemcZfTgpCJ2gseTb4kYMuYNGAdr/JbBcvfbPw=
+	t=1732700351; c=relaxed/simple;
+	bh=dgXAt5MfwJVnQfz+wxFrlm38CQROKMkxu3dyy9qGCu0=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version; b=NFDMpK/DcKzUA2IB5lYc0mHlr2IXvVDAw9M1N279FjnfbBfuXD7fhVqyPC5jPjDeRskUp3+oMI0092r7VX09l9tW6Lu/2pk9rJTvjqEi+MVEy1mdSwiwGRLlCqgSKOWuYdKSaVmFeydAznwGRRcBeAEeLxFwP7dpFyhbDuR7obM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2DFAF3857B84
-Received: from fwd89.aul.t-online.de (fwd89.aul.t-online.de [10.223.144.115])
-	by mailout06.t-online.de (Postfix) with SMTP id 8745C1EC9
-	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 10:14:51 +0100 (CET)
-Received: from [192.168.2.101] ([91.57.241.70]) by fwd89.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1823E3858435
+Received: from fwd85.aul.t-online.de (fwd85.aul.t-online.de [10.223.144.111])
+	by mailout01.t-online.de (Postfix) with SMTP id 76D9DA38
+	for <cygwin-patches@cygwin.com>; Wed, 27 Nov 2024 10:39:09 +0100 (CET)
+Received: from [192.168.2.101] ([91.57.241.70]) by fwd85.t-online.de
 	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1tGE8H-10UE3U0; Wed, 27 Nov 2024 10:14:49 +0100
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-To: cygwin-patches@cygwin.com
-References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
- <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
- <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
- <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
- <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
- <Z0XFU636aT986Vtn@calimero.vinschen.de>
+	esmtp id 1tGEVo-0lkSXI0; Wed, 27 Nov 2024 10:39:08 +0100
 From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: setpriority, sched_setparam: fail if Windows sets a
+ lower priority
 Reply-To: cygwin-patches@cygwin.com
-Message-ID: <a4acc9e3-8363-b9af-e92e-b3a865b18d20@t-online.de>
-Date: Wed, 27 Nov 2024 10:14:48 +0100
+To: cygwin-patches@cygwin.com
+Message-ID: <b34f5c79-b703-7862-c2c3-5cbc0f8dad5c@t-online.de>
+Date: Wed, 27 Nov 2024 10:39:07 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  SeaMonkey/2.53.19
 MIME-Version: 1.0
-In-Reply-To: <Z0XFU636aT986Vtn@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TOI-EXPURGATEID: 150726::1732698889-337E4998-707BAF2D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 5e11f68e-6d03-4373-8a20-8245478f7b97
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,KAM_SHORT,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------0408A29C6CF74B0BA1ACA9E5"
+X-TOI-EXPURGATEID: 150726::1732700348-2FFFF786-6BA6371A/0/0 CLEAN NORMAL
+X-TOI-MSGID: 5896726a-88a6-47b9-90b3-e5ba6a19c169
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Corinna Vinschen wrote:
-> On Nov 25 21:20, Christian Franke wrote:
->> Hi Corinna,
->>
->> Corinna Vinschen wrote:
->>> Hi Christian,
->>>
->>> On Nov 25 15:00, Christian Franke wrote:
->>>> Corinna Vinschen wrote:
->>>>> Fixes: ...?
->>>> ... the very first commit (cgf 2001) of sched.cc :-)
->>>>
->>>> New patch attached.
->>>>
->>>>   From e95fc1aceb5287f9ad65c6c078125fecba6c6de9 Mon Sep 17 00:00:00 2001
->>>> From: Christian Franke <christian.franke@t-online.de>
->>>> Date: Mon, 25 Nov 2024 14:51:04 +0100
->>>> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
->>>>
->>>> Behave like sched_setparam() if the requested policy is identical
->>>> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
->>>>
->>>> Fixes: 6b2a2aa4af1e ("Add missing files.")
->>> Huh, yeah, this is spot on.  I wonder if it would make sense to change
->>> that to 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
->>> though, given that was the patch intended to add sched.cc :)))
->>>
->>> Sorry, but I have to ask two more questions:
->>>
->>> - Isn't returning SCHED_FIFO sched_getscheduler() just as wrong?
->> Definitly. SCHED_FIFO is a non-preemptive(!) real-time policy. Windows does
->> not offer anything like that to userland (AFAIK).
->>
->> https://man7.org/linux/man-pages/man7/sched.7.html
->>
->> I wonder whether there was a use case for this emulation when this module
->> was introduced in 2001.
-> Just guessing here, but using one of the RT schedulers was the only way
-> to enable changing the priority from user space and using SCHED_FIFO was
-> maybe in error.
->
->>>     Shouldn't that be SCHED_OTHER, and sched_setscheduler() should check
->>>     for that instead?  Cygwin in a real-time scenario sounds a bit
->>>     far-fetched...
->> Agree.
->>
->> Note that SCHED_OTHER requires sched_priority == 0, so most of the
->> sched_get/set*() priority related code would no longer make sense then.
-> This is the other problem. Changing this to SCHED_OTHER sounds like
-> dropping potentially used functionality.  Maybe we should just switch to
-> SCHED_RR?
+This is a multi-part message in MIME format.
+--------------0408A29C6CF74B0BA1ACA9E5
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Yes, it at least would be closer to what windows does. It is still 
-non-preemptive from the point of view of lower priorities. I don't know 
-what the Win32 *_PRIORITY_CLASSes actually do.
-
-As far as I understand the related documentation, a more sophisticated 
-emulation (aka fake) of SCHED_* would be:
-
-- Allow to switch between SCHED_OTHER (default) and SCHED_RR with 
-sched_setscheduler().
-
-- If SCHED_OTHER is selected, change PRIORITY_CLASS with setpriority() 
-and ignore (or fail on?) attempts to change sched_priority with 
-sched_setparam().
-
-- If SCHED_RR is selected, ignore setpriority() and change 
-PRIORITY_CLASS with sched_setparam().
-
-Possibly not worth the effort...
+A minor improvement of POSIX emulation.
 
 -- 
 Regards,
 Christian
 
+
+--------------0408A29C6CF74B0BA1ACA9E5
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-setpriority-sched_setparam-fail-if-Windows-se.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-setpriority-sched_setparam-fail-if-Windows-se.pa";
+ filename*1="tch"
+
+RnJvbSA3ZDA4OWUxMDlmMzJmZTQ0ZjMzMWNhMTQyZThkYzg3NDdmMGU5ZGIzIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBXZWQsIDI3IE5vdiAyMDI0IDEwOjI2OjM4ICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBzZXRwcmlvcml0eSwgc2NoZWRfc2V0cGFyYW06
+IGZhaWwgaWYgV2luZG93cyBzZXRzIGEKIGxvd2VyIHByaW9yaXR5CgpXaW5kb3dzIHNpbGVu
+dGx5IHNldHMgYSBsb3dlciBwcmlvcml0eSB0aGFuIHJlcXVlc3RlZCBpZiB0aGUgbmV3IHBy
+aW9yaXR5CnJlcXVpcmVzIGFkbWluaXN0cmF0b3IgcHJpdmlsZWdlcy4gIFJldmVydCB0byBw
+cmV2aW91cyBwcmlvcml0eSBhbmQgZmFpbAp3aXRoIEVBQ0NFUyBvciBFUEVSTSBpbiB0aGlz
+IGNhc2UuCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgotLS0KIHdpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvbWlz
+Y2Z1bmNzLmggfCAgMSArCiB3aW5zdXAvY3lnd2luL21pc2NmdW5jcy5jYyAgICAgICAgICAg
+ICAgIHwgMjkgKysrKysrKysrKysrKysrKysrKysrKysrCiB3aW5zdXAvY3lnd2luL3JlbGVh
+c2UvMy42LjAgICAgICAgICAgICAgIHwgIDUgKysrKwogd2luc3VwL2N5Z3dpbi9zY2hlZC5j
+YyAgICAgICAgICAgICAgICAgICB8ICAyICstCiB3aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNj
+ICAgICAgICAgICAgICAgIHwgIDQgKystLQogNSBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRp
+b25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vbG9j
+YWxfaW5jbHVkZXMvbWlzY2Z1bmNzLmggYi93aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVz
+L21pc2NmdW5jcy5oCmluZGV4IGQ1MmRlYmFkMS4uZWZkN2U1MTZiIDEwMDY0NAotLS0gYS93
+aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL21pc2NmdW5jcy5oCisrKyBiL3dpbnN1cC9j
+eWd3aW4vbG9jYWxfaW5jbHVkZXMvbWlzY2Z1bmNzLmgKQEAgLTQ2LDYgKzQ2LDcgQEAgaXNf
+YWx0X251bXBhZF9ldmVudCAoUElOUFVUX1JFQ09SRCBwaXJlYykKIAogaW50IHdpbnByaW9f
+dG9fbmljZSAoRFdPUkQpOwogRFdPUkQgbmljZV90b193aW5wcmlvIChpbnQgJik7Citib29s
+IHNldF9hbmRfY2hlY2tfd2lucHJpbyAoSEFORExFIHByb2MsIERXT1JEIHByaW8pOwogCiBi
+b29sIGNyZWF0ZV9waXBlIChQSEFORExFLCBQSEFORExFLCBMUFNFQ1VSSVRZX0FUVFJJQlVU
+RVMsIERXT1JEKTsKIApkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9taXNjZnVuY3MuY2Mg
+Yi93aW5zdXAvY3lnd2luL21pc2NmdW5jcy5jYwppbmRleCA0MjIwZjYyNzUuLmUzYmYzNWNm
+NyAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9taXNjZnVuY3MuY2MKKysrIGIvd2luc3Vw
+L2N5Z3dpbi9taXNjZnVuY3MuY2MKQEAgLTE4Myw2ICsxODMsMzUgQEAgbmljZV90b193aW5w
+cmlvIChpbnQgJm5pY2UpCiAgIHJldHVybiBwcmlvOwogfQogCisvKiBTZXQgV2luMzIgcHJp
+b3JpdHkgb3IgcmV0dXJuIGZhbHNlIG9uIGZhaWx1cmUuICBBbHNvIHJldHVybgorICAgZmFs
+c2UgYW5kIHJldmVydCB0byB0aGUgb3JpZ2luYWwgcHJpb3JpdHkgaWYgYSBkaWZmZXJlbnQg
+KGxvd2VyKQorICAgcHJpb3JpdHkgaXMgc2V0IGluc3RlYWQuICovCitib29sCitzZXRfYW5k
+X2NoZWNrX3dpbnByaW8gKEhBTkRMRSBwcm9jLCBEV09SRCBwcmlvKQoreworICBEV09SRCBw
+cmV2X3ByaW8gPSBHZXRQcmlvcml0eUNsYXNzIChwcm9jKTsKKyAgaWYgKHByZXZfcHJpbyA9
+PSBwcmlvKQorICAgIHJldHVybiB0cnVlOworCisgIGlmICghU2V0UHJpb3JpdHlDbGFzcyAo
+cHJvYywgcHJpbykpCisgICAgcmV0dXJuIGZhbHNlOworCisgIC8qIFdpbmRvd3Mgc2lsZW50
+bHkgc2V0cyBhIGxvd2VyIHByaW9yaXR5IChISUdIX1BSSU9SSVRZX0NMQVNTKSBpZgorICAg
+ICB0aGUgbmV3IHByaW9yaXR5IChSRUFMVElNRV9QUklPUklUWV9DTEFTUykgcmVxdWlyZXMg
+YWRtaW5pc3RyYXRvcgorICAgICBwcml2aWxlZ2VzLiAqLworICBEV09SRCBjdXJyX3ByaW8g
+PSBHZXRQcmlvcml0eUNsYXNzIChwcm9jKTsKKyAgaWYgKGN1cnJfcHJpbyAhPSBwcmlvKQor
+ICAgIHsKKyAgICAgIGRlYnVnX3ByaW50ZiAoIkZhaWxlZCB0byBzZXQgcHJpb3JpdHkgMHgl
+eCwgcmV2ZXJ0IGZyb20gMHgleCB0byAweCV4IiwKKwlwcmlvLCBjdXJyX3ByaW8sIHByZXZf
+cHJpbyk7CisgICAgICBTZXRQcmlvcml0eUNsYXNzIChwcm9jLCBwcmV2X3ByaW8pOworICAg
+ICAgcmV0dXJuIGZhbHNlOworICAgIH0KKworICBkZWJ1Z19wcmludGYgKCJDaGFuZ2VkIHBy
+aW9yaXR5IGZyb20gMHgleCB0byAweCV4IiwgcHJldl9wcmlvLCBjdXJyX3ByaW8pOworICBy
+ZXR1cm4gdHJ1ZTsKK30KKwogLyogTWluaW1hbCBvdmVybGFwcGVkIHBpcGUgSS9PIGltcGxl
+bWVudGF0aW9uIGZvciBzaWduYWwgYW5kIGNvbW11bmUgc3R1ZmYuICovCiAKIEJPT0wKZGlm
+ZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjYuMCBiL3dpbnN1cC9jeWd3aW4v
+cmVsZWFzZS8zLjYuMAppbmRleCA0NjhhMmFiMjQuLmVmN2U0MDE4ZiAxMDA2NDQKLS0tIGEv
+d2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNi4wCisrKyBiL3dpbnN1cC9jeWd3aW4vcmVsZWFz
+ZS8zLjYuMApAQCAtNDMsMyArNDMsOCBAQCBXaGF0IGNoYW5nZWQ6CiAKIC0gTm93IHVzaW5n
+IEFWWC9BVlgyL0FWWC01MTIgaW5zdHJ1Y3Rpb25zIGluIHNpZ25hbCBoYW5kbGVyIGRvZXMg
+bm90CiAgIGJyZWFrIHRoZWlyIGNvbnRleHQuCisKKy0gbmljZSgyKSwgc2V0cHJpb3JpdHko
+MikgYW5kIHNjaGVkX3NldHBhcmFtKDIpIG5vdyBmYWlsIHdpdGggRUFDQ0VTCisgIG9yIEVQ
+RVJNIGlmIFdpbmRvd3Mgd291bGQgc2lsZW50bHkgc2V0IGEgbG93ZXIgcHJpb3JpdHkKKyAg
+KEhJR0hfUFJJT1JJVFlfQ0xBU1MgaW5zdGVhZCBvZiBSRUFMVElNRV9QUklPUklUWV9DTEFT
+UykgZHVlIHRvCisgIG1pc3NpbmcgYWRtaW5pc3RyYXRvciBwcml2aWxlZ2VzLgpkaWZmIC0t
+Z2l0IGEvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYyBiL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MK
+aW5kZXggNzFhMWU4NjhmLi44NTZkZWY3ODQgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4v
+c2NoZWQuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9zY2hlZC5jYwpAQCAtMjYzLDcgKzI2Myw3
+IEBAIHNjaGVkX3NldHBhcmFtIChwaWRfdCBwaWQsIGNvbnN0IHN0cnVjdCBzY2hlZF9wYXJh
+bSAqcGFyYW0pCiAgICAgICBzZXRfZXJybm8gKEVTUkNIKTsKICAgICAgIHJldHVybiAtMTsK
+ICAgICB9Ci0gIGlmICghU2V0UHJpb3JpdHlDbGFzcyAocHJvY2VzcywgcGNsYXNzKSkKKyAg
+aWYgKCFzZXRfYW5kX2NoZWNrX3dpbnByaW8gKHByb2Nlc3MsIHBjbGFzcykpCiAgICAgewog
+ICAgICAgQ2xvc2VIYW5kbGUgKHByb2Nlc3MpOwogICAgICAgc2V0X2Vycm5vIChFUEVSTSk7
+CmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjIGIvd2luc3VwL2N5Z3dp
+bi9zeXNjYWxscy5jYwppbmRleCA0MzM3MzljZGEuLjcyNTM3YmM1YSAxMDA2NDQKLS0tIGEv
+d2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYworKysgYi93aW5zdXAvY3lnd2luL3N5c2NhbGxz
+LmNjCkBAIC0zODI2LDcgKzM4MjYsNyBAQCBzZXRwcmlvcml0eSAoaW50IHdoaWNoLCBpZF90
+IHdobywgaW50IHZhbHVlKQogCXdobyA9IG15c2VsZi0+cGlkOwogICAgICAgaWYgKChwaWRf
+dCkgd2hvID09IG15c2VsZi0+cGlkKQogCXsKLQkgIGlmICghU2V0UHJpb3JpdHlDbGFzcyAo
+R2V0Q3VycmVudFByb2Nlc3MgKCksIHByaW8pKQorCSAgaWYgKCFzZXRfYW5kX2NoZWNrX3dp
+bnByaW8gKEdldEN1cnJlbnRQcm9jZXNzICgpLCBwcmlvKSkKIAkgICAgewogCSAgICAgIHNl
+dF9lcnJubyAoRUFDQ0VTKTsKIAkgICAgICByZXR1cm4gLTE7CkBAIC0zODc1LDcgKzM4NzUs
+NyBAQCBzZXRwcmlvcml0eSAoaW50IHdoaWNoLCBpZF90IHdobywgaW50IHZhbHVlKQogCSAg
+ICBlcnJvciA9IEVQRVJNOwogCSAgZWxzZQogCSAgICB7Ci0JICAgICAgaWYgKCFTZXRQcmlv
+cml0eUNsYXNzIChwcm9jX2gsIHByaW8pKQorCSAgICAgIGlmICghc2V0X2FuZF9jaGVja193
+aW5wcmlvIChwcm9jX2gsIHByaW8pKQogCQllcnJvciA9IEVBQ0NFUzsKIAkgICAgICBlbHNl
+CiAJCXAtPm5pY2UgPSB2YWx1ZTsKLS0gCjIuNDUuMQoK
+--------------0408A29C6CF74B0BA1ACA9E5--
