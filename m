@@ -1,64 +1,51 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id C83293858CD1; Wed, 27 Nov 2024 17:17:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C83293858CD1
+	id 4EC1A3858D34; Wed, 27 Nov 2024 17:17:55 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4EC1A3858D34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732727826;
-	bh=OJg90DmyLyKzN3BFCQSOIHIBf2jrgcrb7PEsLxfaBfM=;
+	s=default; t=1732727875;
+	bh=R0YV+anATmm8ZSphVuChCoMZObgJlE+pWUhbJ6y6Llg=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=u+1d2xndJsqLeQrWu+TVaJJvaOF4l9ES4DpDsN/+79aqvHiymTvnuXwduWGgIRi1d
-	 5+9YlBSUZgSvBVKs4rZXaEW9vyJ9ohhnDffKHAremKiYkAt/KeQAWGIrZYpsVF2DLO
-	 a38/oEQDUs4eU2DtBp4IbDPVMDs+1T7Se/puzQBc=
+	b=FFr6gTkW/UnYGlMh7DG9+ofB+lsxSmX93/CLYY6t0SYgRojm56dLJS56VWrKsd9bQ
+	 4TiN454GqXULOHitUi0yk92jKZv7uPAFgn2p5whJJxNzCJ+dcvmE/yfifF9dODJHjU
+	 ZeCqMcpO82rWHswFWN+baDkA3zIN85+hQkloVrAk=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BB9DBA80E4D; Wed, 27 Nov 2024 18:17:04 +0100 (CET)
-Date: Wed, 27 Nov 2024 18:17:04 +0100
+	id 46BB1A80901; Wed, 27 Nov 2024 18:17:53 +0100 (CET)
+Date: Wed, 27 Nov 2024 18:17:53 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-Message-ID: <Z0dUEFsMzSI2Lspq@calimero.vinschen.de>
+Subject: Re: [PATCH v2 2/2] Cygwin: uname: add host machine tag to sysname.
+Message-ID: <Z0dUQXouuPfhc9u4@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
- <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
- <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
- <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
- <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
- <Z0XFU636aT986Vtn@calimero.vinschen.de>
- <a4acc9e3-8363-b9af-e92e-b3a865b18d20@t-online.de>
- <Z0cu7Dzbq9RMSmrD@calimero.vinschen.de>
- <36947dfd-fa1b-0845-7017-c4f162926e16@t-online.de>
+References: <ecdfa413-1ad4-ea0e-4f01-33579f1616e9@jdrake.com>
+ <Z0XNgZoVQI_P5FMD@calimero.vinschen.de>
+ <42819a86-1e9f-6569-a08e-fd719115a2c3@jdrake.com>
+ <Z0c71iqtu1Zk2vNK@calimero.vinschen.de>
+ <4cdfd5dc-dfe0-7b71-3e3b-59469b2fe094@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <36947dfd-fa1b-0845-7017-c4f162926e16@t-online.de>
+In-Reply-To: <4cdfd5dc-dfe0-7b71-3e3b-59469b2fe094@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 27 16:44, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > And I think your patch here should go in as is, just with the release
-> > message in release/3.5.5 so we can cherry-pick it to the 3.5 branch.
+On Nov 27 08:47, Jeremy Drake via Cygwin-patches wrote:
+> On Wed, 27 Nov 2024, Corinna Vinschen wrote:
 > 
-> Attached. Message moved to 3.5.5 and "Fixes:" changed as suggested.
+> > I'm not opposed to a switch statement consisting of an
+> > IMAGE_FILE_MACHINE_ARM64 case and a default case adding "-???" or
+> > something.  Chances are so extremly slim that we'll ever see another
+> > CPU emulated on x86_64, we can always add a case for that if it turns
+> > out that I'm totally wrong, right?
 > 
+> OK, does the default case have to be a fixed string or can I use the hex?
+> Lately it seems like MS is making the hex form almost "meaningful" - AMD64
+> is 0x8664 and ARM64 is 0xaa64.  I don't know if they can keep that up for
+> any new arch, but putting the value in there at least gives us something
+> to go on until a new case can be added.
 
-> From 86266b67334d43ac52a9b7ac1ee879a8d34f0c62 Mon Sep 17 00:00:00 2001
-> From: Christian Franke <christian.franke@t-online.de>
-> Date: Wed, 27 Nov 2024 16:39:37 +0100
-> Subject: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-> 
-> Behave like sched_setparam() if the requested policy is identical
-> to the fixed value (SCHED_FIFO) returned by sched_getscheduler().
-> 
-> Fixes: 9a08b2c02eea ("* sched.cc: New file.  Implement sched*.")
-> Signed-off-by: Christian Franke <christian.franke@t-online.de>
-> ---
->  winsup/cygwin/release/3.5.5 | 3 +++
->  winsup/cygwin/sched.cc      | 5 ++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
-
-Pushed.
+Ok.
 
 
 Thanks,
 Corinna
-
