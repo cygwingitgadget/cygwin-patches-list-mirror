@@ -1,90 +1,69 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id BEFF23858D28; Wed, 27 Nov 2024 14:38:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BEFF23858D28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732718318;
-	bh=W1Vp4McRZejlquIW3QCoiwHwIYCrbRTZQxnmnZaPWkQ=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=oqsoz6oR13FQPTV6hUPKOf+V/7K/h0HxJYaYK9FyhqfNX2BF/yHM+Y1l6bS+DtdYX
-	 eM5NbLWLL9lWyp8xkAXfWu+yB6faOccINQBczImVikZEwgSFCeBaUhgxJttn3MPKYr
-	 KLBpwJFI9vJ/XrtrzCZSoXZ+YIzEo8TDeZL6O4cE=
+	id B30893858D33; Wed, 27 Nov 2024 15:24:30 +0000 (GMT)
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B1C57A80E4D; Wed, 27 Nov 2024 15:38:36 +0100 (CET)
-Date: Wed, 27 Nov 2024 15:38:36 +0100
+	id 6FE9EA80E4D; Wed, 27 Nov 2024 16:24:28 +0100 (CET)
+Date: Wed, 27 Nov 2024 16:24:28 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: allow changes of the priority
-Message-ID: <Z0cu7Dzbq9RMSmrD@calimero.vinschen.de>
+Subject: Re: [PATCH v2 1/2] Cygwin: cache IsWow64Process2 host arch in wincap.
+Message-ID: <Z0c5rFZNulvQU5bE@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4df78487-fdbd-7b63-d7ab-92377d44b213@t-online.de>
- <Z0RgpZA35z9S-ksG@calimero.vinschen.de>
- <42b59f14-19bf-c7c6-4acc-b5b91921af52@t-online.de>
- <Z0TM0zIpjWHTRpsq@calimero.vinschen.de>
- <5d40600d-8929-ebc4-d417-6e8b3221d09e@t-online.de>
- <Z0XFU636aT986Vtn@calimero.vinschen.de>
- <a4acc9e3-8363-b9af-e92e-b3a865b18d20@t-online.de>
+References: <9d0630f7-e8d6-b4f6-116b-1df6095877c3@jdrake.com>
+ <Z0XK-JE0c950m0um@calimero.vinschen.de>
+ <a943634d-7c63-9383-442c-d9162497b516@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a4acc9e3-8363-b9af-e92e-b3a865b18d20@t-online.de>
+In-Reply-To: <a943634d-7c63-9383-442c-d9162497b516@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 27 10:14, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > On Nov 25 21:20, Christian Franke wrote:
-> > > Corinna Vinschen wrote:
-> > > > - Isn't returning SCHED_FIFO sched_getscheduler() just as wrong?
-> > > Definitly. SCHED_FIFO is a non-preemptive(!) real-time policy. Windows does
-> > > not offer anything like that to userland (AFAIK).
-> > > 
-> > > https://man7.org/linux/man-pages/man7/sched.7.html
-> > > 
-> > > I wonder whether there was a use case for this emulation when this module
-> > > was introduced in 2001.
-> > Just guessing here, but using one of the RT schedulers was the only way
-> > to enable changing the priority from user space and using SCHED_FIFO was
-> > maybe in error.
-> > 
-> > > >     Shouldn't that be SCHED_OTHER, and sched_setscheduler() should check
-> > > >     for that instead?  Cygwin in a real-time scenario sounds a bit
-> > > >     far-fetched...
-> > > Agree.
-> > > 
-> > > Note that SCHED_OTHER requires sched_priority == 0, so most of the
-> > > sched_get/set*() priority related code would no longer make sense then.
-> > This is the other problem. Changing this to SCHED_OTHER sounds like
-> > dropping potentially used functionality.  Maybe we should just switch to
-> > SCHED_RR?
+On Nov 26 10:16, Jeremy Drake via Cygwin-patches wrote:
+> On Tue, 26 Nov 2024, Corinna Vinschen wrote:
 > 
-> Yes, it at least would be closer to what windows does. It is still
-> non-preemptive from the point of view of lower priorities. I don't know what
-> the Win32 *_PRIORITY_CLASSes actually do.
+> > On Nov 25 11:21, Jeremy Drake via Cygwin-patches wrote:
+> > > +extern const IMAGE_DOS_HEADER
+> > > +dosheader __asm__ ("__image_base__");
+> >
+> > On second thought, shouldn't we just use GetModuleHandle ("cygwin1.dll")
+> > instead of going asm here?
+> 
+> I was hoping to avoid another place where MSYS2 would have to patch the
+> name change to msys-2.0.dll.  I almost went with GetModuleHandleEx
+> (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT)
+> but the overhead of either call seemed silly when the linker already knows
+> the address...
 
-Who does? :}
+Got it.
 
-> As far as I understand the related documentation, a more sophisticated
-> emulation (aka fake) of SCHED_* would be:
+> If the __asm__ setting the symbol name is an issue, pseudo-reloc.cc also
+> accesses __image_base__ like so:
+> #ifndef __MINGW_LSYMBOL
+> #define __MINGW_LSYMBOL(sym) sym
+> #endif
 > 
-> - Allow to switch between SCHED_OTHER (default) and SCHED_RR with
-> sched_setscheduler().
+> extern char __MINGW_LSYMBOL(_image_base__);
 > 
-> - If SCHED_OTHER is selected, change PRIORITY_CLASS with setpriority() and
-> ignore (or fail on?) attempts to change sched_priority with
-> sched_setparam().
+> &__MINGW_LSYMBOL(_image_base__)
 > 
-> - If SCHED_RR is selected, ignore setpriority() and change PRIORITY_CLASS
-> with sched_setparam().
-> 
-> Possibly not worth the effort...
+> I found the __asm__ method cleaner.  But I could name the extern
+> __MINGW_LSYMBOL(_image_base__) instead of dosheader to avoid __asm__.
 
-Why not?  It should probably also allow SCHED_FIFO for backward compat,
-since, in a way, it doesn't really matter anyway.  This would be nice
-for 3.6.
+No, that's not necessary.  Actually, this code is only used in the
+non-Cygwin (Mingw-w64) case.  For Cygwin, it refers to
+per_process::image_base, which is the image base of the executable, not
+the image base of the Cygwin DLL.
 
-And I think your patch here should go in as is, just with the release
-message in release/3.5.5 so we can cherry-pick it to the 3.5 branch.
+But you don't really need the asm.  Just define extern const
+IMAGE_DOS_HEADER __image_base__ and use it in the expression extracting
+FileHeader.Machine.
+
+Another point: Theoretically we want wincap to contain static data,
+which will get inherited by child processes.
+
+So, would you mind to add a member cygwin_mach and change
+cygwin_machine() to an inline function just returning cygwin_mach?
 
 
 Thanks,
