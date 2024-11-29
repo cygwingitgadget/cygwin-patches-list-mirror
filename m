@@ -1,51 +1,58 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 669EC3858D29; Fri, 29 Nov 2024 09:58:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 669EC3858D29
+	id 343253858D26; Fri, 29 Nov 2024 10:24:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 343253858D26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1732874321;
-	bh=ZkMVn813HnyBAR7L0YnMyA3Edgt2UQuqoCEwsTwo9NI=;
+	s=default; t=1732875890;
+	bh=PUi3motHEE7XeSw4BFZe4KPpcReVw/ampKHyBs3xAlI=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=JiBkzbBbqVtCFJkdlhB+aOxLODh18WQXi9S1Xb0R7pKFQM7VtqZnqwLeBzN+moT3u
-	 1cBIo9q022FWKl3G4bBizvqYlbnnyI0wrKm7EQZZ/Nuiy5Qp9K/uUaC2FkozvyOo7A
-	 32q0nAdTkZ/mSQFBclec349DaEGa3lpQ0H3SdPDQ=
+	b=XSBTgvK2xiVHut6LUxIDW4zvPSTLEvGrFZu5Gw+rCru5vDGORR1ppXc4/y1aejbXx
+	 fZ7+iLCCOm/0l7bVTDPlpq/RCpt4hAJblZ699mvGVAr0tsNG9Pj7kF2lXI7HJv2FYS
+	 EwuMb4LJ51CKJEJti9x/H6TWOQLC2fRA0eOXuqzc=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 62AEFA80984; Fri, 29 Nov 2024 10:58:39 +0100 (CET)
-Date: Fri, 29 Nov 2024 10:58:39 +0100
+	id 2FB9FA80984; Fri, 29 Nov 2024 11:24:48 +0100 (CET)
+Date: Fri, 29 Nov 2024 11:24:48 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 2/2] Cygwin: uname: add host machine tag to sysname.
-Message-ID: <Z0mQT_vVL3e62dmZ@calimero.vinschen.de>
+Subject: Re: finding fast_cwd_pointer on ARM64
+Message-ID: <Z0mWcOh_WWtGKN1s@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <018bf8a4-0aa3-8885-8532-d2db9e73e390@jdrake.com>
+References: <9d0630f7-e8d6-b4f6-116b-1df6095877c3@jdrake.com>
+ <Z0XOOW365ff53K6B@calimero.vinschen.de>
+ <59f580ca-bded-6d45-c624-fd1ca13bd744@jdrake.com>
+ <ec73a729-57e8-11f7-78be-ab78bde6c0a6@jdrake.com>
+ <Z0c50yOraHdefcmw@calimero.vinschen.de>
+ <ee47c1e8-13c0-73cc-b479-62d20c9874cd@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <018bf8a4-0aa3-8885-8532-d2db9e73e390@jdrake.com>
+In-Reply-To: <ee47c1e8-13c0-73cc-b479-62d20c9874cd@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Nov 27 11:26, Jeremy Drake via Cygwin-patches wrote:
-> From: Jeremy Drake <cygwin@jdrake.com>
+On Nov 27 14:04, Jeremy Drake via Cygwin-patches wrote:
+> > > > On Tue, 26 Nov 2024, Corinna Vinschen wrote:
+> > > >
+> > > > > Btw...
+> > > > >
+> > > > > We're doing this because nobody being able to debug ARM64 assembler came
+> > > > > up with a piece of code checking the ntdll assembler code to find the
+> > > > > address of the fast_cwd_pointer on ARM64.
+> > > > >
+> > > > > You seem to have the knowledge and the means to do that, Jeremy.
+> > > > >
+> > > > > Any fun tracking this down?
 > 
-> If the Cygwin dll's architecture is different from the host system's
-> architecture, append an additional tag that indicates the host system
-> architecture (the Cygwin dll's architecture is already indicated in
-> machine).
+> I decided to hack together a bit of an ugly proof-of-concept.  No error
+> checking or validating that it's finding the right instructions, but it
+> does work for native arm64, x86_64, and i686 on windows 10 22h2 (not
+> x86_64 of course) and windows 11 23h2.  It doesn't work on 32-bit arm, but
+> I'm sure nobody cares ;)
 > 
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
-> v2: get rid of hardcoded string lengths, use wincap accessors
-> directly instead of caching their returns, actually add "n" variable as
-> intended
-> 
-> v3: inline append_host_suffix, remove unnecessary switch cases, fix typo
-> strcpy -> stpcpy in ARM64 case
-> 
->  winsup/cygwin/uname.cc | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
+> https://gist.github.com/jeremyd2019/aa167df0a0ae422fa6ebaea5b60c80c9
 
-Pushed.
+Nice!  If you feel confident to merge something like this into
+Cygwin, feel free to send patches.
 
 
 Thanks,
