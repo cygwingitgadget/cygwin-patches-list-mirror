@@ -1,78 +1,65 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 4B9923858417; Mon,  2 Dec 2024 15:20:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4B9923858417
+	id B4F693858C52; Mon,  2 Dec 2024 15:21:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B4F693858C52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1733152841;
-	bh=1H/H4M3tStJUwz6GXwDfP/c8Q10OlbghnBjkQ1aW5/A=;
+	s=default; t=1733152873;
+	bh=FpKHAaPJ/wsuTXnaN7T/UE9MwXXHAUqdyluGr5tcdKQ=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=uXvJHpIy8E3NhBjC5A13HTwg7X6tFefBAqtaOAtt6eMhhOoHNewCj8WMyPhiB1/44
-	 rpdYMYeG71a7knIgZxUPMTVBQ4L5Sal8R6vpcavGM/N/OCBX4d2K8crPXHe5nooJDe
-	 OMUkekOBanBYRTjNxjTKZP/h67Vvy4ucaZRsfeGg=
+	b=TMx/NWTXXMUS6OMS3uCeNghB3Ev5uaE72KOXxtv6TkpGHz7SJWdf6G0zlGWEn+IY/
+	 +0NNvS9dkRz+3LUd98YK7rel7y9g/eQqNl4uVV3ntYkH7S9YF1rgG0xiJkH4rqrtQR
+	 KmZexozcMN6njokEgj6hfV4DjEQ9ay9Cca5bL2cw=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 45EE7A80BC2; Mon,  2 Dec 2024 16:20:39 +0100 (CET)
-Date: Mon, 2 Dec 2024 16:20:39 +0100
+	id AF17DA80BC2; Mon,  2 Dec 2024 16:21:11 +0100 (CET)
+Date: Mon, 2 Dec 2024 16:21:11 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 6/9] Cygwin: cygtls: Prompt system to switch tasks
- explicitly in lock()
-Message-ID: <Z03QRzM62josjo37@calimero.vinschen.de>
+Subject: Re: [PATCH 9/9] Cygwin: signal: Fix a short period of deadlock
+Message-ID: <Z03QZ4FGdzxbYvBr@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20241129120007.14516-1-takashi.yano@nifty.ne.jp>
- <20241129120007.14516-2-takashi.yano@nifty.ne.jp>
+ <20241129120007.14516-3-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241129120007.14516-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20241129120007.14516-3-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
 On Nov 29 20:59, Takashi Yano wrote:
-> This patch calls Sleep(0) in the wait loop in lock() to increase the
-> chance of being unlocked in other threads. The lock(), unlock() and
-> locked() are moved from sigfe.s to cygtls.h so that allows inline
-> expansion.
+> The main thread waits for the sig thread to read the signal pipe by
+> calling Sleep(10) if writing to the signal pipe has failed. However,
+> if the signal thread waiting for another signal being handled in the
+> main thread, the sig thread does not read the signal pipe. To avoid
+> such a situation, this patch replaces Sleep(10) to cygwait().
 > 
 > Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-> Fixes: 61522196c715 ("* Merge in cygwin-64bit-branch.")
+> Fixes: 6f05b327678f ("(sig_send): Retry WriteFiles which fail when there is no error but packbytes have not been sent.")
 > Reported-by: Christian Franke <Christian.Franke@t-online.de>
-> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> Reviewed-by:
 > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 > ---
->  winsup/cygwin/local_includes/cygtls.h | 17 ++++++++++---
->  winsup/cygwin/scripts/gendef          | 36 ---------------------------
->  2 files changed, 13 insertions(+), 40 deletions(-)
+>  winsup/cygwin/sigproc.cc | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
-> index e5a377d6b..57a0ec042 100644
-> --- a/winsup/cygwin/local_includes/cygtls.h
-> +++ b/winsup/cygwin/local_includes/cygtls.h
-> @@ -197,7 +197,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
->    int current_sig;
->    unsigned incyg;
->    unsigned spinning;
-> -  unsigned stacklock;
-> +  volatile unsigned stacklock;
->    __tlsstack_t *stackptr;
->    __tlsstack_t stack[TLS_STACK_SIZE];
->    unsigned initialized;
-> @@ -225,9 +225,18 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
->    int call_signal_handler ();
->    void remove_wq (DWORD);
->    void fixup_after_fork ();
-> -  void lock ();
-> -  void unlock ();
-> -  bool locked ();
-> +  void lock ()
-> +  {
-> +    while (InterlockedExchange (&stacklock, 1))
-> +      {
-> +#ifdef __x86_64__
-> +	__asm__ ("pause");
+> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+> index 8c788bd20..4c557f048 100644
+> --- a/winsup/cygwin/sigproc.cc
+> +++ b/winsup/cygwin/sigproc.cc
+> @@ -741,7 +741,8 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+>        res = WriteFile (sendsig, leader, packsize, &nb, NULL);
+>        if (!res || packsize == nb)
+>  	break;
+> -      Sleep (10);
+> +      if (cygwait (NULL, 10, cw_sig_eintr) == WAIT_SIGNALED)
+> +	_my_tls.call_signal_handler ();
+>        res = 0;
+>      }
+>  
+> -- 
+> 2.45.1
 
-At this point, add an #else / ##error unimplemented for this target
-
-With this, the patch is GTG.  Just push it.
+LGTM.
 
 
 Thanks,
