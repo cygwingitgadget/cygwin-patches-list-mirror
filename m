@@ -1,92 +1,82 @@
-Return-Path: <SRS0=ZTWV=S4=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
-	by sourceware.org (Postfix) with ESMTPS id A32603858D3C
-	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 12:39:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A32603858D3C
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A32603858D3C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733229576; cv=none;
-	b=Kz/2Y7ZSwvNIg8Q26yqhXUZnhdKndsKUuMiDFOr+h2ZkPGQ/KMERtcWTWpE8jyy4nh/RPiWkUmEM/YFdIrMj+4Mqlje2gofMD/BgGb8aWkKWON1jT6OJnBvKwR5gQr/W7ST7ASED+MNQ5ev6HRsSJjTss7D8S9+kE+GbCcgTLyI=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1733229576; c=relaxed/simple;
-	bh=e2kcH8Dwc6a0P08BPYtCpEel43z4tjuaCnjuSZpj6AE=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uXqV8P1VADKuJvCPbcD9EWBPEcGjNWvqyD2prnycWKm7vJ/uiaPcg/1HAt5Jgb5VS+MNoHVo7RwnchTLMjGYxsZ0IjzL01i0XongYsdtAcSirEb0H6IAeQhcR2ThL+hjnAyCUjoHoJz4ZAclzg/jemON6rGehFWjio1LKzG2l8Q=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A32603858D3C
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=blo9gpYr
-Received: from HP-Z230 by mta-snd-w03.mail.nifty.com with ESMTP
-          id <20241203123933913.DXZZ.115271.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 3 Dec 2024 21:39:33 +0900
-Date: Tue, 3 Dec 2024 21:39:33 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 222393858D38; Tue,  3 Dec 2024 13:14:01 +0000 (GMT)
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id EBBFDA80B66; Tue,  3 Dec 2024 14:13:58 +0100 (CET)
+Date: Tue, 3 Dec 2024 14:13:58 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 4/9] Cygwin: signal: Optimize the priority of the sig
- thread
-Message-Id: <20241203213933.8a2c2d15027e63b887e7ed0b@nifty.ne.jp>
-In-Reply-To: <Z03PtxZzigl-xvU0@calimero.vinschen.de>
-References: <20241129120007.14516-1-takashi.yano@nifty.ne.jp>
-	<Z03PtxZzigl-xvU0@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733229574;
- bh=fGzccZKtQaYa5UbeTX2LKCLP2ZJypNI+KlVGDLEReHo=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=blo9gpYrns8gn7qEcWGVBgt3V+k2aP1tIcs9EfuaE/zbJV4P1GE8dYGW0L/ehALemRuD1x2L
- 91ysicodKkjZUpY47mUA1BFLddUHSbcvCf4MFRBfJNl62qiIjKWKn/4zrLrY7LcDozFpnFPuYK
- BUoidsxgstEmgzKHlsgXXwo+/KQZev2iNRH4jjAeqbGTM/1ei1+lJ9YF8Y9gkWNtlsuNrJJKFt
- uss4B7Dje000psW5sOZaFMwAhe3TlguX+Wjw7EFjefEW1BnlTrKj20Ul/b40OcWiTGG5WtPlff
- eFmlzcvCobSIg8QGAquZuhSiqTJDj3vMnCTIqwNDlzLKLIvg==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: accept SCHED_OTHER,
+ SCHED_FIFO and SCHED_RR
+Message-ID: <Z08EFs_LTnjKL6xr@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <eabbcf15-1605-8b77-bf77-ec5fde2d6001@t-online.de>
+ <Z03Tik1rbM4sMpKl@calimero.vinschen.de>
+ <e79eb78a-c8a1-d2c6-4a8d-9c21415b15e9@t-online.de>
+ <8734j6q6qk.fsf@Gerda.invalid>
+ <c6f21ed2-679d-4a89-a8a3-b0b1e9d1714f@SystematicSW.ab.ca>
+ <80e1716d-d268-e5cd-b9ff-484aa5dcc344@t-online.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <80e1716d-d268-e5cd-b9ff-484aa5dcc344@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 2 Dec 2024 16:18:15 +0100
-Corinna Vinschen wrote:
-> On Nov 29 20:59, Takashi Yano wrote:
-> > Previously, the sig thread ran in THREAD_PRIORITY_HIGHEST priority.
-> > This causes a critical delay in the signal handling in the main
-> > thread if too many signals are received rapidly and the CPU is very
-> > busy. In this case, most of the CPU time is allocated to the sig
-> > thread, so the main thread cannot have a chance of handling signals.
-> > With this patch, to avoid such a situation, the priority of the sig
-> > thread is set to THREAD_PRIORITY_NORMAL priority. Furthermore, if
-> > the signal is alerted to the main thread, but the main thread does
-> > not handle it yet, to increase the chance of handling it in the main
-> > thread, reduce the sig thread priority to THREAD_PRIORITY_LOWEST
-> > priority temporarily before calling _cygtls::handle_SIGCONT().
+On Dec  3 10:20, Christian Franke wrote:
+> Brian Inglis wrote:
+> > On 2024-12-02 11:28, ASSI wrote:
+> > > Christian Franke writes:
+> > > > +    nice value   sched_priority Windows priority class
+> > > > +     12...19      1....6          IDLE_PRIORITY_CLASS
+> > > > +      4...11      7...12          BELOW_NORMAL_PRIORITY_CLASS
+> > > > +     -4....3     13...18          NORMAL_PRIORITY_CLASS
+> > > > +    -12...-5     19...24          ABOVE_NORMAL_PRIORITY_CLASS
+> > > > +    -13..-19     25...30          HIGH_PRIORITY_CLASS
+> > > > +         -20     31...32          REALTIME_PRIORITY_CLASS
+> > > 
+> > > That mapping looks odd… care to explain why the number of nice values
+> > > and sched_priorities doesn't match up for each priority class? 39
+> > > possible values for one can't match to 32 for the other of course, but
+> > > which ones are skipped and why?
 > > 
-> > Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-> > Fixes: 53ad6f1394aa ("(cygthread::cygthread): Use three only arguments for detached threads, and start the thread via QueueUserAPC/async_create.")
-> > Reported-by: Christian Franke <Christian.Franke@t-online.de>
-> > Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > ---
-> >  winsup/cygwin/exceptions.cc | 6 ++++++
-> >  winsup/cygwin/sigproc.cc    | 1 +
-> >  2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-> > index 0f8c21939..7fc644af1 100644
-> > --- a/winsup/cygwin/exceptions.cc
-> > +++ b/winsup/cygwin/exceptions.cc
-> > @@ -978,6 +978,9 @@ sigpacket::setup_handler (void *handler, struct sigaction& siga, _cygtls *tls)
-> >    CONTEXT cx;
-> >    bool interrupted = false;
-> >  
-> > +  for (int i = 0; i < 100 && tls->current_sig; i++)
-> > +    yield ();
-> > +
+> > See also miscfuncs.cc which maps nice<->winprio with a 40 entry table,
+> > and cygwin-doc proc(5) or cygwin-ug-net/proc.html which explains the
+> > mapping to scheduler priorities and policies.
 > 
-> Is that a piece of stray code left from testing, or is that actually
-> part of the patch?  The commit message doesn't explain it...
+> No *_PRIORITY_CLASS is mentioned in current newlib-cygwin/winsup/doc/*.
+> 
+> 
+> > 
+> > Also relevant may be man-pages-posix sched.h(0p), man-pages-linux
+> > sched(7) and proc_pid_stat(5).
+> > 
+> > You may also wish to consider whether SCHED_SPORADIC should be somewhat
+> > supported for POSIX compatibility, and SCHED_IDLE, SCHED_BATCH,
+> > SCHED_DEADLINE for Linux compatibility?
+> 
+> SCHED_IDLE: Ignore nice value and set IDLE_PRIORITY_CLASS ?
 
-Oops! Sorry, this is test code for another patch I tested now.
-I'll submit v4 patch as well as another patch signal-related.
+Would make sense, I guess.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+> SCHED_BATCH: Reduced mapping, e.g. nice=0 -> BELOW_NORMAL_PRIORITY_CLASS ?
+
+Sounds good.
+
+> SCHED_SPORADIC, SCHED_DEADLINE: ?
+
+We can't model SCHED_DEADLINE in Windows.
+
+> The current newlib/libc/include/sys/sched.h only defines SCHED_OTHER,
+> SCHED_FIFO, SCHED_RR and SCHED_SPORADIC. The latter is guarded by
+> _POSIX_SPORADIC_SERVER which is only set for RTEMS (#ifdef __rtems__) in
+> features.h.
+
+SCHED_SPORADIC is a bit of a problem.  It requires extension of the
+sched_param struct with values we're not able to handle.
+
+Also, SCHED_SPORADIC doesn't exist in Linux either, so why bother.
+
+
+Corinna
