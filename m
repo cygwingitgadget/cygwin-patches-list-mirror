@@ -1,94 +1,130 @@
-Return-Path: <SRS0=ZTWV=S4=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 169063858D33
-	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 15:03:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 169063858D33
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 169063858D33
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733238213; cv=none;
-	b=cQg5uqEmU9wkyWbGHp10d/5ksjawdxOYmF3X41xr5dnXs2JssL/DCzGZk1D3kbca4DXIFa7FzwJ8ndNtD6uiNPKlWOcgNRsoqGjvrrHIFDmxOd0fq95+4r991FROFVeq5mIOW19ul4WtFzYcMKXI7qhe9vYCc5t5J0wTodH7Wvs=
+Return-Path: <SRS0=vp5K=S4=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	by sourceware.org (Postfix) with ESMTPS id 191D53858D33
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 15:23:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 191D53858D33
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 191D53858D33
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.14
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733239413; cv=none;
+	b=LaguCdyCdX9+Tqg5RpNix6sV4EaEULVWC8fJx7Mbw3rAdtx+MeeIgnylmtZItuo3LGFM+i5P/SH7QgGuvtQyNcAjfcUycQthun3Ne7De00eCsgfKcOiVNA2oLwDHU8SipRFf2V+ovppibY+vX+RjfdZ8IRnSspaW0dfK2yCoQoM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1733238213; c=relaxed/simple;
-	bh=V8+ysC5IKB0EIES1HQPo7q+qX0dVeros7qxPpohzJIs=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=qJ5zmcHD1TdOIOl1iQpuuyNGcPS1knmfq6mbwv9Z7p7er+mqfRN6d8oh2qjR6Ln0tHq/obe3OUR2XCozy051vE34UW9f5GDzmZICNrqbEAgUZSwTDq9id0A0mpI3w6qVNXX+F6fRGxIO/1pYerKZyuxmAE9XJ3DCuDYuycROfiw=
+	t=1733239413; c=relaxed/simple;
+	bh=M3R77ghPymTSHVHHUkojHe3xJ9IVP5bj4r+ri8VUBqU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:DKIM-Signature; b=VNKrgQlMFeo03fG5ScW52BdeMlMc5hiF/Kc6AVDWNsEbePx224Npuw3sRXJk3KrGxbQyBmizkLZezp1twxwfCNCDRWhSugHbUn9n8I/EQBfU5v7jQAEw+01z1oF+RDTKNE4upaf3O9EQJlAagNs+hvPZ1E1Uvt/+9ZXOuNz7Jng=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 169063858D33
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 191D53858D33
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=baXy3ijl
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20241203150327904.JAUX.116458.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 4 Dec 2024 00:03:27 +0900
-Date: Wed, 4 Dec 2024 00:03:27 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=B+epBxJP
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id A3D6012095C
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 15:23:32 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf17.hostedemail.com (Postfix) with ESMTPA id B5E0218
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 15:23:18 +0000 (UTC)
+Message-ID: <cb5f0aa9-82f7-4a1f-9788-05b05162923a@SystematicSW.ab.ca>
+Date: Tue, 3 Dec 2024 08:23:30 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: accept SCHED_OTHER,
+ SCHED_FIFO and SCHED_RR
+Content-Language: en-CA
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4] Cygwin: signal: Optimize the priority of the sig
- thread
-Message-Id: <20241204000327.ed60cd7b8425880ca63be68a@nifty.ne.jp>
-In-Reply-To: <Z08WJazDsg535Bew@calimero.vinschen.de>
-References: <20241203140203.8351-1-takashi.yano@nifty.ne.jp>
-	<Z08WJazDsg535Bew@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733238207;
- bh=jwuwP2e0xMI835qA/6K8Nl2n5lMsSwEgAO/EYm+UVbU=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=baXy3ijlH7z/wP9Vnh+j9E3s3AEtrUne/H+/KJ5a89dclY7YphqxoLPLL4JCrXopKt6XJs34
- 44YwAVpvIwxl52BVMx2kyZW9ulGmzpN9UQHRNX9LkhEPIsdeT5ZMkNJAGeMKQjBaBSGoCSWOjC
- k8hcCb9oRnDpHwnBkTHkXLuICq1j73VrxzGx9ilaR5dr0iluPphxMCp17FhoU3hx8KQjJr6r1L
- KmqX2WWEkgOxWVFuB/3u7SK1RF0glCkvyLcbagjFQRxrLxKvCmtzQp4F06DPqlVAVxkqgbZgxA
- ZI/p5KM01IKk+NGBsTTDxTSQgsnNsqQkAL3ABHPHy/KGZbqw==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <eabbcf15-1605-8b77-bf77-ec5fde2d6001@t-online.de>
+ <Z03Tik1rbM4sMpKl@calimero.vinschen.de>
+ <e79eb78a-c8a1-d2c6-4a8d-9c21415b15e9@t-online.de>
+ <8734j6q6qk.fsf@Gerda.invalid>
+ <c6f21ed2-679d-4a89-a8a3-b0b1e9d1714f@SystematicSW.ab.ca>
+ <80e1716d-d268-e5cd-b9ff-484aa5dcc344@t-online.de>
+ <Z08EFs_LTnjKL6xr@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Organization: Systematic Software
+In-Reply-To: <Z08EFs_LTnjKL6xr@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: B5E0218
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout08
+X-Stat-Signature: u97fnte41ah9m81xiwpjqa91t368yexk
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1+S9UKtunHROUtZHoQ1GUXWXuyy0ysWzRA=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:to:references:from:in-reply-to:content-type:content-transfer-encoding; s=he; bh=uVnG3T+YAe2xOH4pI/HQ+tpfDGatkKP/dmh6znTgmiY=; b=B+epBxJP1pgCOIZlCLIsbmmLo8KGVQ0KVp429/1mVRGwsgmaSZOr5pPg4LGc6x3qEf56A7L/nGsw78MvEPKozyI/2Y+nHKc4s6Wm/QJeiGExI+fIpaiiivGFPOzjw+dNrhrsfPCC1n/17NgIj5w8uHTEt7Bl5IUvDtTOgpxr8Q6Bf2ZpJ8oHUFG7TffVSfG5Gm76u7ujVOrFwIi5ir1WTuIfGgLmtV+hDqhctU2zCfV1sVevzi3rAagFJOlVjd3g04bl+wRFxb/2f01vcFPnzx5vYSIUAoZ8RGHOYVaDjOhm1gYBJBPPGyYYJbiBVcKAteQxye0HsW1sykAKR+pITA==
+X-HE-Tag: 1733239398-436936
+X-HE-Meta: U2FsdGVkX18e4puAlB5ed7p6gUqYnVF3stlKkmyWr/jRTKvdoMNDOw4nSf17xch64Ay23oLK6ORxDjAe4iMBwNqeul7ttFJV1fCB3VCWEE0RhHDEg/1ACdOCAk0L2gCURLMDKCXYnBMkLYTDdbV/+SI36VJfeV8yxedWw2EviT/uaRqY85sCw6BMXAll4UUDIR7PLZpuiVnRGCyPimOa/KYBGFo2UuKxgJPFQKf17uQzMHAXIe3iqtZgh+esxW+CRIZVdhI6z23XB6CaMEsMPy0db4kCOVkl8/EMl+FcfJ8ROVcaEbjxnXRJrh2wAaHmqhdLv45GdwSZY33JMxFQ51A93AoBJwTrVsuMMTOwJ2r8JZjNPYrSGLr/He068tShBFtBzRe/l8UADFY7Es5O1g==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 3 Dec 2024 15:31:01 +0100
-Corinna Vinschen wrote:
-> On Dec  3 23:01, Takashi Yano wrote:
-> > Previously, the sig thread ran in THREAD_PRIORITY_HIGHEST priority.
-> > This causes a critical delay in the signal handling in the main
-> > thread if too many signals are received rapidly and the CPU is very
-> > busy. In this case, most of the CPU time is allocated to the sig
-> > thread, so the main thread cannot have a chance of handling signals.
-> > With this patch, to avoid such a situation, the priority of the sig
-> > thread is set to THREAD_PRIORITY_NORMAL priority.
-> > 
-> > Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-> > Fixes: 53ad6f1394aa ("(cygthread::cygthread): Use three only arguments for detached threads, and start the thread via QueueUserAPC/async_create.")
-> > Reported-by: Christian Franke <Christian.Franke@t-online.de>
-> > Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > ---
-> >  winsup/cygwin/sigproc.cc | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-> > index 730259484..4c557f048 100644
-> > --- a/winsup/cygwin/sigproc.cc
-> > +++ b/winsup/cygwin/sigproc.cc
-> > @@ -1333,6 +1333,7 @@ wait_sig (VOID *)
-> >  
-> >    hntdll = GetModuleHandle ("ntdll.dll");
-> >  
-> > +  SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_NORMAL);
-> >    for (;;)
-> >      {
-> >        DWORD nb;
-> > -- 
-> > 2.45.1
-> 
-> Yep, please push.  This is the one you can eventually push to
-> the 3.5 branch.
-> 
-> For 3.6 I suggest that you or I'll submit a patch removing this line
-> again, in favor of dropping the line in cygthread::async_create
-> setting the prio to HIGHEST.  But only after the threasd series is
-> complete, ok?
+On 2024-12-03 06:13, Corinna Vinschen wrote:
+> On Dec  3 10:20, Christian Franke wrote:
+>> Brian Inglis wrote:
+>>> On 2024-12-02 11:28, ASSI wrote:
+>>>> Christian Franke writes:
+>>>>> +    nice value   sched_priority Windows priority class
+>>>>> +     12...19      1....6          IDLE_PRIORITY_CLASS
+>>>>> +      4...11      7...12          BELOW_NORMAL_PRIORITY_CLASS
+>>>>> +     -4....3     13...18          NORMAL_PRIORITY_CLASS
+>>>>> +    -12...-5     19...24          ABOVE_NORMAL_PRIORITY_CLASS
+>>>>> +    -13..-19     25...30          HIGH_PRIORITY_CLASS
+>>>>> +         -20     31...32          REALTIME_PRIORITY_CLASS
+>>>>
+>>>> That mapping looks odd… care to explain why the number of nice values
+>>>> and sched_priorities doesn't match up for each priority class? 39
+>>>> possible values for one can't match to 32 for the other of course, but
+>>>> which ones are skipped and why?
+>>>
+>>> See also miscfuncs.cc which maps nice<->winprio with a 40 entry table,
+>>> and cygwin-doc proc(5) or cygwin-ug-net/proc.html which explains the
+>>> mapping to scheduler priorities and policies.
+>>
+>> No *_PRIORITY_CLASS is mentioned in current newlib-cygwin/winsup/doc/*.
 
-I see.
+>>> Also relevant may be man-pages-posix sched.h(0p), man-pages-linux
+>>> sched(7) and proc_pid_stat(5).
+>>>
+>>> You may also wish to consider whether SCHED_SPORADIC should be somewhat
+>>> supported for POSIX compatibility, and SCHED_IDLE, SCHED_BATCH,
+>>> SCHED_DEADLINE for Linux compatibility?
+>>
+>> SCHED_IDLE: Ignore nice value and set IDLE_PRIORITY_CLASS ?
+> 
+> Would make sense, I guess.
+> 
+>> SCHED_BATCH: Reduced mapping, e.g. nice=0 -> BELOW_NORMAL_PRIORITY_CLASS ?
+> 
+> Sounds good.
+> 
+>> SCHED_SPORADIC, SCHED_DEADLINE: ?
+> 
+> We can't model SCHED_DEADLINE in Windows.
+> 
+>> The current newlib/libc/include/sys/sched.h only defines SCHED_OTHER,
+>> SCHED_FIFO, SCHED_RR and SCHED_SPORADIC. The latter is guarded by
+>> _POSIX_SPORADIC_SERVER which is only set for RTEMS (#ifdef __rtems__) in
+>> features.h.
+> 
+> SCHED_SPORADIC is a bit of a problem.  It requires extension of the
+> sched_param struct with values we're not able to handle.
+
+=> SCHED_IDLE?
+Could be something like a background process on a real time system?
+
+> Also, SCHED_SPORADIC doesn't exist in Linux either, so why bother.
+
+	https://pubs.opengroup.org/onlinepubs/9799919799/
+
+sched.h Change History:
+
+"Sporadic server members are added to the sched_param structure, and the 
+SCHED_SPORADIC scheduling policy is added for alignment with IEEE Std 1003.1d-1999."
+
+It's been in POSIX since at least Issue 6 thru 8, with no changes in last go 
+round, so presumably it exists and is used on some major platform(s)?
 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retirer     but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
