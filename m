@@ -1,76 +1,233 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 2B4F43858D33; Tue,  3 Dec 2024 19:42:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2B4F43858D33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1733254927;
-	bh=+LZ3G0Brtv95Y1niRvijeqW6hBYhGBDk6XNJvr/L/wc=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=isV7EM1nP0lsKBpcKDomXFDBtWIp06PksHsS3k371CvGpGcHYlnYAwTOJtJg4VsZM
-	 upYl3TjM6l+G8bRu+kSd4mUSLOE50fOlYMjxFXLUh/KwEW5SuAsllV1j3TmbJ4AYFx
-	 0oJTiWn++lplE4fJtwlJQyrSXtap11xJ16scr1T4=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B7968A80B66; Tue,  3 Dec 2024 20:42:04 +0100 (CET)
-Date: Tue, 3 Dec 2024 20:42:04 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=rkh/=S4=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id A73F43858D33
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 21:01:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A73F43858D33
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A73F43858D33
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733259665; cv=none;
+	b=ijS9hoaAeuG+lX02jZyFkC2SIkEWzGCrgvBqla4aSh9LOIKdIi5wrKbYfRwA/hZgmgF9jWFZoxIXlJyJikvu+ZgYEMJBBKi7rC0jETx7wLaG4mSM/ocRNtkb4cndkLWoCjd1ibgIdVjfojH96FRpAC5WSfHpruHNBE+dQIgoaVY=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1733259665; c=relaxed/simple;
+	bh=oWfF6ElnKo7VK5aD4po4H6P0E1M2LojCMXeTh0VzOwI=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=YQkrjUUT/dB4hKj/vltAVumjuLp0vGt6piwbJG+2PIITeK0E2AKsSspBglXUnp1Z5ResJgfQN/qHf6QlINj3lOY5KTZaXfC9QUvwLmq73r1XBz0aSeJP/E0p0B35ApL/30sEZIxgtQU+MDeg8OVPoQBN8kliC/7a/0wCg7O3RqU=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A73F43858D33
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=vn02U+7B
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 407B345C71
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 16:01:05 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=ZNgir4FmLd+hsq9zP8GZ3hh7ngI=; b=vn02U
+	+7BXy0O3qdK4y/zHeLJPWUaUZCK+BwbxJKM86u7y2suJuiLG0sGTQWdysnvKLoLN
+	VJI54DSDddAJo7UU4ngIFqk41+GNck8+nKDxCGEmh0u5CV3DxmyR3zJxAdK97ONk
+	kLZRtMGQuT1tkZoub1Xvkrosh1/FN0OYRh2fkQ=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 3967C45C6E
+	for <cygwin-patches@cygwin.com>; Tue,  3 Dec 2024 16:01:05 -0500 (EST)
+Date: Tue, 3 Dec 2024 13:01:05 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: accept SCHED_OTHER,
- SCHED_FIFO and SCHED_RR
-Message-ID: <Z09fDDuScXc7Ro6b@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <eabbcf15-1605-8b77-bf77-ec5fde2d6001@t-online.de>
- <Z03Tik1rbM4sMpKl@calimero.vinschen.de>
- <e79eb78a-c8a1-d2c6-4a8d-9c21415b15e9@t-online.de>
- <8734j6q6qk.fsf@Gerda.invalid>
- <c6f21ed2-679d-4a89-a8a3-b0b1e9d1714f@SystematicSW.ab.ca>
- <80e1716d-d268-e5cd-b9ff-484aa5dcc344@t-online.de>
- <Z08EFs_LTnjKL6xr@calimero.vinschen.de>
- <cb5f0aa9-82f7-4a1f-9788-05b05162923a@SystematicSW.ab.ca>
+Subject: Re: finding fast_cwd_pointer on ARM64
+In-Reply-To: <Z0mWcOh_WWtGKN1s@calimero.vinschen.de>
+Message-ID: <8e380bf6-5647-0abd-c315-800824bc0845@jdrake.com>
+References: <9d0630f7-e8d6-b4f6-116b-1df6095877c3@jdrake.com> <Z0XOOW365ff53K6B@calimero.vinschen.de> <59f580ca-bded-6d45-c624-fd1ca13bd744@jdrake.com> <ec73a729-57e8-11f7-78be-ab78bde6c0a6@jdrake.com> <Z0c50yOraHdefcmw@calimero.vinschen.de>
+ <ee47c1e8-13c0-73cc-b479-62d20c9874cd@jdrake.com> <Z0mWcOh_WWtGKN1s@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cb5f0aa9-82f7-4a1f-9788-05b05162923a@SystematicSW.ab.ca>
+Content-Type: multipart/mixed; boundary="4548370366464-265707146-1733259665=:57769"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,KAM_NUMSUBJECT,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec  3 08:23, Brian Inglis wrote:
-> On 2024-12-03 06:13, Corinna Vinschen wrote:
-> > On Dec  3 10:20, Christian Franke wrote:
-> > > SCHED_IDLE: Ignore nice value and set IDLE_PRIORITY_CLASS ?
-> > 
-> > Would make sense, I guess.
-> > [...]
-> > SCHED_SPORADIC is a bit of a problem.  It requires extension of the
-> > sched_param struct with values we're not able to handle.
-> 
-> => SCHED_IDLE?
-> Could be something like a background process on a real time system?
-> 
-> > Also, SCHED_SPORADIC doesn't exist in Linux either, so why bother.
-> 
-> 	https://pubs.opengroup.org/onlinepubs/9799919799/
-> 
-> sched.h Change History:
-> 
-> "Sporadic server members are added to the sched_param structure, and the
-> SCHED_SPORADIC scheduling policy is added for alignment with IEEE Std
-> 1003.1d-1999."
-> 
-> It's been in POSIX since at least Issue 6 thru 8, with no changes in last go
-> round, so presumably it exists and is used on some major platform(s)?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Nevertheless, it's optional:
+--4548370366464-265707146-1733259665=:57769
+Content-Type: text/plain; charset=US-ASCII
 
-[SS] Process Sporadic Server 
-    The functionality described is optional. The functionality described
-    is also an extension to the ISO C standard.
+On Fri, 29 Nov 2024, Corinna Vinschen wrote:
 
-It's only supported on systems defining _POSIX_SPORADIC_SERVER or
-_POSIX_THREAD_SPORADIC_SERVER.
+> On Nov 27 14:04, Jeremy Drake via Cygwin-patches wrote:
+> > https://gist.github.com/jeremyd2019/aa167df0a0ae422fa6ebaea5b60c80c9
+>
+> Nice!  If you feel confident to merge something like this into
+> Cygwin, feel free to send patches.
 
-Also, the desired behavior is quite complex. Check out
-https://pubs.opengroup.org/onlinepubs/9799919799/functions/V2_chap02.html#tag_16_08_04_01
-We'll never be able to model it and given Linux doesn't support it...
+I've found a little time to add in the additional checking that I noticed
+in the path.cc code for x64 (make sure the load of the RtlpCurDirRef is
+followed immediately by a NULL check, and that it is preceded by a call to
+RtlEnterCriticalSection with the FastPebLock as its parameter).  I tested
+this on Windows builds 16299 (the oldest version I could easily figure out
+how to pull from uupdump), 19045, 22631, and 26100 for arm64, x32 and x64
+(where possible).
 
+I don't know when or if I'll have time to try to integrate this into
+Cygwin, but I've updated the gist (and you can see revision history
+there) and also attached the latest version for the mailing list archives
+if somebody else wants to.
+--4548370366464-265707146-1733259665=:57769
+Content-Type: text/x-c; name=find_fast_cwd_arm.c
+Content-Transfer-Encoding: BASE64
+Content-ID: <c1961434-ea68-69e5-f298-ff9845c07676@jdrake.com>
+Content-Description: 
+Content-Disposition: attachment; filename=find_fast_cwd_arm.c
 
-Corinna
+I2luY2x1ZGUgPHdpbmRvd3MuaD4NCi8qIGhhY2tzIG9uIHRvcCBvZiBoYWNr
+cyAuLi4gKi8NCiNkZWZpbmUgX1BFQiBfTk9UX19QRUINCiNkZWZpbmUgUEVC
+IF9OT1RfUEVCDQojZGVmaW5lIFBQRUIgX05PVF9QUEVCDQojZGVmaW5lIF9U
+RUIgX05PVF9fVEVCDQojZGVmaW5lIFRFQiBfTk9UX1RFQg0KI2RlZmluZSBQ
+VEVCIF9OT1RfUFRFQg0KI2luY2x1ZGUgPHdpbnRlcm5sLmg+DQojdW5kZWYg
+X1BFQg0KI3VuZGVmIFBFQg0KI3VuZGVmIFBQRUINCiN1bmRlZiBfVEVCDQoj
+dW5kZWYgVEVCDQojdW5kZWYgUFRFQg0KI2luY2x1ZGUgPHN0ZGludC5oPg0K
+I2luY2x1ZGUgPHN0ZGlvLmg+DQojaW5jbHVkZSA8YXNzZXJ0Lmg+DQoNCi8q
+IGhhY2tzIGZyb20gY3lnd2luIGZvciB0ZXN0aW5nICovDQp0eXBlZGVmIHN0
+cnVjdCBfUEVCDQp7DQogIEJZVEUgUmVzZXJ2ZWQxWzJdOw0KICBCWVRFIEJl
+aW5nRGVidWdnZWQ7DQogIEJZVEUgUmVzZXJ2ZWQyWzFdOw0KICBQVk9JRCBS
+ZXNlcnZlZDNbMl07DQogIFBWT0lEIExkcjsNCiAgUFZPSUQgUHJvY2Vzc1Bh
+cmFtZXRlcnM7DQogIFBWT0lEIFJlc2VydmVkNDsNCiAgUFZPSUQgUHJvY2Vz
+c0hlYXA7DQogIFBSVExfQ1JJVElDQUxfU0VDVElPTiBGYXN0UGViTG9jazsN
+CiAgLyogQSBsb3QgbW9yZSBmb2xsb3dzLi4uICovDQp9IFBFQiwgKlBQRUI7
+DQoNCnR5cGVkZWYgc3RydWN0IF9URUINCnsNCiAgTlRfVElCIFRpYjsNCiAg
+UFZPSUQgRW52aXJvbm1lbnRQb2ludGVyOw0KICBDTElFTlRfSUQgQ2xpZW50
+SWQ7DQogIFBWT0lEIEFjdGl2ZVJwY0hhbmRsZTsNCiAgUFZPSUQgVGhyZWFk
+TG9jYWxTdG9yYWdlUG9pbnRlcjsNCiAgUFBFQiBQZWI7DQogIC8qIEEgbG90
+IG1vcmUgZm9sbG93cy4uLiAqLw0KfSBURUIsICpQVEVCOw0KDQovKiBUaGlz
+IGlzIHRoZSBsYXlvdXQgdXNlZCBpbiBXaW5kb3dzIDggYW5kIGxhdGVyLiAq
+Lw0Kc3RydWN0IEZBU1RfQ1dEXzggew0KICBMT05HICAgICAgICAgICBSZWZl
+cmVuY2VDb3VudDsJLyogT25seSByZWxlYXNlIHdoZW4gdGhpcyBpcyAwLiAq
+Lw0KICBIQU5ETEUgICAgICAgICBEaXJlY3RvcnlIYW5kbGU7DQogIFVMT05H
+ICAgICAgICAgIE9sZERpc21vdW50Q291bnQ7CS8qIFJlZmxlY3RzIHRoZSBz
+eXN0ZW0gRGlzbW91bnRDb3VudA0KCQkJCQkgYXQgdGhlIHRpbWUgdGhlIENX
+RCBoYXMgYmVlbiBzZXQuICovDQogIFVOSUNPREVfU1RSSU5HIFBhdGg7CQkv
+KiBQYXRoJ3MgQnVmZmVyIG1lbWJlciBhbHdheXMgcmVmZXJzDQoJCQkJCSB0
+byB0aGUgZm9sbG93aW5nIEJ1ZmZlciBhcnJheS4gKi8NCiAgTE9ORyAgICAg
+ICAgICAgRlNDaGFyYWN0ZXJpc3RpY3M7CS8qIFRha2VuIGZyb20gRmlsZUZz
+RGV2aWNlSW5mb3JtYXRpb24gKi8NCiAgV0NIQVIgICAgICAgICAgQnVmZmVy
+W01BWF9QQVRIXSBfX2F0dHJpYnV0ZSAoKGFsaWduZWQgKDgpKSk7DQp9Ow0K
+DQovKiBlbmQgaGFja3MgZnJvbSBjeWd3aW4gZm9yIHRlc3RpbmcgKi8NCg0K
+TFBDVk9JRCBHZXRBcm02NFByb2NBZGRyZXNzKEhNT0RVTEUgaE1vZHVsZSwg
+TFBDU1RSIHByb2NuYW1lKQ0Kew0KICBjb25zdCBCWVRFICogcHJvYyA9IChj
+b25zdCBCWVRFICopIEdldFByb2NBZGRyZXNzIChoTW9kdWxlLCBwcm9jbmFt
+ZSk7DQojaWYgZGVmaW5lZCAoX19hYXJjaDY0X18pDQogIHJldHVybiBwcm9j
+Ow0KI2Vsc2UNCiNpZiBkZWZpbmVkKF9faTM4Nl9fKQ0KICBzdGF0aWMgY29u
+c3QgQllURSB0aHVua1tdID0gIlx4OGJceGZmXHg1NVx4OGJceGVjXHg1ZFx4
+OTBceGU5IjsNCiNlbGlmIGRlZmluZWQoX194ODZfNjRfXykNCiAgLyogc2Vl
+DQogICAgIGh0dHBzOi8vbGVhcm4ubWljcm9zb2Z0LmNvbS9lbi11cy93aW5k
+b3dzL2FybS9hcm02NGVjLWFiaSNmYXN0LWZvcndhcmQtc2VxdWVuY2VzICov
+DQogIHN0YXRpYyBjb25zdCBCWVRFIHRodW5rW10gPSAiXHg0OFx4OGJceGM0
+XHg0OFx4ODlceDU4XHgyMFx4NTVceDVkXHhlOSI7DQojZWxzZQ0KI2Vycm9y
+ICJVbmhhbmRsZWQgYXJjaGl0ZWN0dXJlIGZvciB0aHVuayBkZXRlY3Rpb24i
+DQojZW5kaWYNCiAgaWYgKG1lbWNtcChwcm9jLCB0aHVuaywgc2l6ZW9mKHRo
+dW5rKSAtIDEpID09IDApDQogIHsNCiAgICBwcm9jICs9IHNpemVvZih0aHVu
+aykgLSAxOw0KICAgIHByb2MgKz0gNCArICooY29uc3QgaW50MzJfdCAqKXBy
+b2M7DQogIH0NCiAgcmV0dXJuIHByb2M7DQojZW5kaWYNCn0NCg0KI2RlZmlu
+ZSBJU19JTlNOKHBjLCBuYW1lKSAoKCoocGMpICYgbmFtZSMjX21hc2spID09
+IG5hbWUjI19pZCkNCnN0YXRpYyBjb25zdCB1aW50MzJfdCBhZGRfaWQgPSAw
+eDExMDAwMDAwOw0Kc3RhdGljIGNvbnN0IHVpbnQzMl90IGFkZF9tYXNrID0g
+MHg3ZmMwMDAwMDsNCnN0YXRpYyBjb25zdCB1aW50MzJfdCBhZHJwX2lkID0g
+MHg5MDAwMDAwMDsNCnN0YXRpYyBjb25zdCB1aW50MzJfdCBhZHJwX21hc2sg
+PSAweDlmMDAwMDAwOw0Kc3RhdGljIGNvbnN0IHVpbnQzMl90IGJsX2lkID0g
+MHg5NDAwMDAwMDsNCnN0YXRpYyBjb25zdCB1aW50MzJfdCBibF9tYXNrID0g
+MHhmYzAwMDAwMDsNCi8qIG1hdGNoZXMgYm90aCBjYnogYW5kIGNibnogKi8N
+CnN0YXRpYyBjb25zdCB1aW50MzJfdCBjYnpfaWQgPSAweDM0MDAwMDAwOw0K
+c3RhdGljIGNvbnN0IHVpbnQzMl90IGNiel9tYXNrID0gMHg3ZTAwMDAwMDsN
+CnN0YXRpYyBjb25zdCB1aW50MzJfdCBsZHJfaWQgPSAweGI5NDAwMDAwOw0K
+c3RhdGljIGNvbnN0IHVpbnQzMl90IGxkcl9tYXNrID0gMHhiZmMwMDAwMDsN
+Cg0Kc3RhdGljIGlubGluZSBMUENWT0lEIGV4dHJhY3RfYmxfdGFyZ2V0KGNv
+bnN0IHVpbnQzMl90ICogcGMpDQp7DQogIGFzc2VydCAoSVNfSU5TTihwYywg
+YmwpKTsNCiAgaW50MzJfdCBvZmZzZXQgPSAqcGMgJiB+YmxfbWFzazsNCiAg
+Lyogc2lnbiBleHRlbmQgKi8NCiAgaWYgKG9mZnNldCAmICgxIDw8IDI1KSkN
+CiAgICBvZmZzZXQgfD0gYmxfbWFzazsNCiAgLyogTm90ZSB1aW50MzJfdCAq
+IGFydGl0aG1hdGljIHdpbGwgaW1wbGljaXRseSBtdWx0aXBseSB0aGUgb2Zm
+c2V0IGJ5IDQgKi8NCiAgcmV0dXJuIHBjICsgb2Zmc2V0Ow0KfQ0KDQpzdGF0
+aWMgaW5saW5lIHVpbnQ2NF90IGV4dHJhY3RfYWRycF9hZGRyZXNzKGNvbnN0
+IHVpbnQzMl90ICogcGMpDQp7DQogIGFzc2VydCAoSVNfSU5TTihwYywgYWRy
+cCkpOw0KICB1aW50NjRfdCBhZHJwX2Jhc2UgPSAodWludDY0X3QpcGMgJiB+
+MHhGRkY7DQogIGludDY0X3QgIGFkcnBfaW1tID0gKCpwYyA+PiAoNSsxOSs1
+KSkgJiAweDM7DQogIGFkcnBfaW1tIHw9ICgoKnBjID4+IDUpICYgMHg3RkZG
+RikgPDwgMjsNCiAgLyogc2lnbiBleHRlbmQgKi8NCiAgaWYgKGFkcnBfaW1t
+ICYgKDEgPDwgMjApKQ0KICAgIGFkcnBfaW1tIHw9IH4oKDEgPDwgMjEpIC0g
+MSk7DQogIGFkcnBfaW1tIDw8PSAxMjsNCiAgcmV0dXJuIGFkcnBfYmFzZSAr
+IGFkcnBfaW1tOw0KfQ0KDQpMUFZPSUQgZmluZF9mYXN0X2N3ZF9wb2ludGVy
+X29uX2FybTY0ICgpDQp7DQogIExQQ1ZPSUQgcHJvYyA9IEdldEFybTY0UHJv
+Y0FkZHJlc3MoR2V0TW9kdWxlSGFuZGxlKCJudGRsbCIpLCAiUnRsR2V0Q3Vy
+cmVudERpcmVjdG9yeV9VIik7DQogIHByaW50ZigiJXBcbiIsIHByb2MpOw0K
+ICBjb25zdCB1aW50MzJfdCAqIHN0YXJ0ID0gKHVpbnQzMl90ICopcHJvYzsN
+CiAgY29uc3QgdWludDMyX3QgKiBwYyA9IHN0YXJ0Ow0KICAvKiBmaW5kIHRo
+ZSBjYWxsIHRvIFJ0bHBSZWZlcmVuY2VDdXJyZW50RGlyZWN0b3J5LCBhbmQg
+Z2V0IGl0cyBhZGRyZXNzICovDQogIGZvciAoOyBwYyA8IHN0YXJ0ICsgMjA7
+IHBjKyspDQogIHsNCiAgICBpZiAoSVNfSU5TTihwYywgYmwpKQ0KICAgIHsN
+CiAgICAgIHByb2MgPSBleHRyYWN0X2JsX3RhcmdldCAocGMpOw0KICAgICAg
+YnJlYWs7DQogICAgfQ0KICB9DQogIHByaW50ZigiJXBcbiIsIHByb2MpOw0K
+ICBpZiAocHJvYyA9PSBzdGFydCkNCiAgICByZXR1cm4gTlVMTDsNCg0KICBz
+dGFydCA9IHBjID0gKHVpbnQzMl90ICopcHJvYzsNCg0KICBjb25zdCB1aW50
+MzJfdCAqIGxkcnBjID0gTlVMTDsNCiAgdWludDMyX3QgbGRyb2Zmc2V0LCBs
+ZHJzejsNCiAgdWludDMyX3QgbGRycm4sIGxkcnJkOw0KDQogIC8qIGZpbmQg
+dGhlIGxkciAoaW1tZWRpYXRlIHVuc2lnbmVkIG9mZnNldCkgZm9yIFJ0bHBD
+dXJEaXJSZWYgKi8NCiAgZm9yICg7IHBjIDwgc3RhcnQgKyAyMDsgcGMrKykN
+CiAgew0KICAgIGlmIChJU19JTlNOKHBjLCBsZHIpKQ0KICAgIHsNCiAgICAg
+IGxkcnBjID0gcGM7DQogICAgICBsZHJzeiA9ICgqcGMgJiAweDQwMDAwMDAw
+KTsNCiAgICAgIGxkcm9mZnNldCA9ICgqcGMgPj4gKDUrNSkpICYgMHhGRkY7
+DQogICAgICBsZHJvZmZzZXQgPDw9IGxkcnN6ID8gMyA6IDI7DQogICAgICBs
+ZHJybiA9ICgqcGMgPj4gNSkgJiAweDFGOw0KICAgICAgbGRycmQgPSAqcGMg
+JiAweDFGOw0KICAgICAgYnJlYWs7DQogICAgfQ0KICB9DQogIHByaW50Zigi
+JXAgLT4gJXhcbiIsIHBjLCBsZHJvZmZzZXQpOw0KICBpZiAobGRycGMgPT0g
+TlVMTCkNCiAgICByZXR1cm4gTlVMTDsNCg0KICAvKiB0aGUgbmV4dCBpbnN0
+cnVjdGlvbiBhZnRlciB0aGUgbGRyIHNob3VsZCBiZSBjaGVja2luZyBpZiBp
+dCB3YXMgTlVMTDoNCiAgICAgZWl0aGVyIGEgY29tcGFyZSBhbmQgYnJhbmNo
+IGlmIHplcm8gb3Igbm90IHplcm8gKGhlbmNlIHdoeSBjYnpfbWFzayBpcyA3
+ZQ0KICAgICBpbnN0ZWFkIG9mIDdmKSAqLw0KICBpZiAoIUlTX0lOU04ocGMg
+KyAxLCBjYnopIHx8ICgqKHBjICsgMSkgJiAweDFGKSAhPSBsZHJyZA0KICAg
+ICAgfHwgKCoocGMgKyAxKSAmIDB4ODAwMDAwMDApICE9IChsZHJzeiA8PCAx
+KSkNCiAgICByZXR1cm4gTlVMTDsNCg0KICAvKiB3b3JrIGJhY2t3YXJkcywg
+ZmluZCBhIGJsIHRvIFJ0bEVudGVyQ3JpdGljYWxTZWN0aW9uIHdob3NlIGFy
+Z3VtZW50DQogICAgIGlzIHRoZSBmYXN0IHBlYiBsb2NrICovDQoNCiAgcHJv
+YyA9IEdldEFybTY0UHJvY0FkZHJlc3MoR2V0TW9kdWxlSGFuZGxlKCJudGRs
+bCIpLCAiUnRsRW50ZXJDcml0aWNhbFNlY3Rpb24iKTsNCiAgZm9yIChwYyA9
+IGxkcnBjOyBwYyA+PSBzdGFydDsgcGMtLSkNCiAgew0KICAgIGlmIChJU19J
+TlNOKHBjLCBibCkgJiYgZXh0cmFjdF9ibF90YXJnZXQocGMpID09IHByb2Mp
+DQogICAgICBicmVhazsNCiAgfQ0KICB1aW50MzJfdCBhZGRvZmZzZXQ7DQog
+IHVpbnQzMl90IGFkZHJuOw0KICBmb3IgKDsgcGMgPj0gc3RhcnQ7IHBjLS0p
+DQogIHsNCiAgICBpZiAoSVNfSU5TTihwYywgYWRkKSAmJiAoKnBjICYgMHgx
+RikgPT0gMCkNCiAgICB7DQogICAgICBhZGRvZmZzZXQgPSAoKnBjID4+ICg1
+KzUpKSAmIDB4RkZGOw0KICAgICAgYWRkcm4gPSAoKnBjID4+IDUpICYgMHgx
+RjsNCiAgICAgIGJyZWFrOw0KICAgIH0NCiAgfQ0KICBMUFZPSUQgY3JpdHNl
+YyA9IE5VTEw7DQogIGZvciAoOyBwYyA+PSBzdGFydDsgcGMtLSkNCiAgew0K
+ICAgIGlmIChJU19JTlNOKHBjLCBhZHJwKSAmJiAoKnBjICYgMHgxRikgPT0g
+YWRkcm4pDQogICAgew0KICAgICAgY3JpdHNlYyA9IChMUFZPSUQpKGV4dHJh
+Y3RfYWRycF9hZGRyZXNzKHBjKSArIGFkZG9mZnNldCk7DQogICAgICBicmVh
+azsNCiAgICB9DQogIH0NCiAgaWYgKGNyaXRzZWMgIT0gTnRDdXJyZW50VGVi
+ICgpLT5QZWItPkZhc3RQZWJMb2NrKQ0KICAgIHJldHVybiBOVUxMOw0KDQog
+IC8qIHdvcmsgYmFja3dhcmRzIGZyb20gdGhlIGxkciB0byBmaW5kIHRoZSBj
+b3JyZXNwb25kaW5nIGFkcnAgKi8NCiAgTFBWT0lEIFJ0bHBDdXJEaXJSZWYg
+PSBOVUxMOw0KICBmb3IgKHBjID0gbGRycGM7IHBjID49IHN0YXJ0OyBwYy0t
+KQ0KICB7DQogICAgaWYgKElTX0lOU04ocGMsIGFkcnApICYmICgqcGMgJiAw
+eDFGKSA9PSBsZHJybikNCiAgICB7DQogICAgICBSdGxwQ3VyRGlyUmVmID0g
+KExQVk9JRCkoZXh0cmFjdF9hZHJwX2FkZHJlc3MocGMpICsgbGRyb2Zmc2V0
+KTsNCiAgICAgIGJyZWFrOw0KICAgIH0NCiAgfQ0KICBwcmludGYoIiVwIC0+
+ICVwXG4iLCBwYywgUnRscEN1ckRpclJlZik7DQoNCiAgcmV0dXJuIFJ0bHBD
+dXJEaXJSZWY7DQp9DQppbnQgbWFpbiAodm9pZCkNCnsNCiAgdHlwZWRlZiBV
+TE9ORyAoV0lOQVBJICogUnRsR2V0Q3VycmVudERpcmVjdG9yeV9VX3QpIChV
+TE9ORywgTFBXU1RSKTsNCiAgUnRsR2V0Q3VycmVudERpcmVjdG9yeV9VX3Qg
+cFJ0bEdldEN1cnJlbnREaXJlY3RvcnlfVSA9IChSdGxHZXRDdXJyZW50RGly
+ZWN0b3J5X1VfdCkgR2V0UHJvY0FkZHJlc3MoR2V0TW9kdWxlSGFuZGxlKCJu
+dGRsbCIpLCAiUnRsR2V0Q3VycmVudERpcmVjdG9yeV9VIik7DQogIHByaW50
+ZigiJXBcbiIsIHBSdGxHZXRDdXJyZW50RGlyZWN0b3J5X1UpOw0KICANCiAg
+c3RydWN0IEZBU1RfQ1dEXzggKiogUnRscEN1ckRpclJlZiA9IGZpbmRfZmFz
+dF9jd2RfcG9pbnRlcl9vbl9hcm02NCAoKTsNCiAgcHJpbnRmKCIlcFxuIiwg
+UnRscEN1ckRpclJlZik7DQogIGdldGNoYXIoKTsNCiAgcHJpbnRmKCIlU1xu
+IiwgKCpSdGxwQ3VyRGlyUmVmKS0+UGF0aC5CdWZmZXIpOw0KDQogIFdDSEFS
+IGJ1ZltNQVhfUEFUSF07DQogIHBSdGxHZXRDdXJyZW50RGlyZWN0b3J5X1Ug
+KHNpemVvZihidWYpLCBidWYpOw0KICBwcmludGYoIiVTXG4iLCBidWYpOw0K
+DQogIHJldHVybiAwOw0KfQ0K
+
+--4548370366464-265707146-1733259665=:57769--
