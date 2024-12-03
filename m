@@ -1,566 +1,72 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id E27573858D26; Tue,  3 Dec 2024 14:25:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E27573858D26
+	id 285A53858D33; Tue,  3 Dec 2024 14:31:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 285A53858D33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1733235948;
-	bh=R+mUHBffhHA9PXkv+fSwRp/PN2bqLkW/UljYgLLVmk4=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=KzikOE6No4phRclL9PQy9MxEyZJX7QUXoN1hOXDDZPxGipmtXpojektKdbMfkBrtE
-	 zu9n9ulO65IIyKJunRQDbhG20oOO1zt2CEltRr6t46y+DTRbHOiR+dStQ/lEEBlKG7
-	 2gCj/ivmqlc+cG7JLO8ShnUXuh0Vzq/Z3kiHJkGc=
+	s=default; t=1733236264;
+	bh=+wE4l7j9/R/oujNVqq65qpymW/nsS+btVF0TrRrarRA=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=O70CfXJJBSZWg77PzJGgRrUdhfd00l1qeyuiqFVCWgerYhTXJjoLQFIujQRELVeSt
+	 eLinXTqgcSJOAF+bFvO9lFaiFoEGffSjNNitvq8a0hlVivzAUYqL4Tfe06eRmmWKGO
+	 Tw8sou8FQBms7OL6tOuvKHhNqRZ57KbzWdRHNe1k=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9606AA8056F; Tue,  3 Dec 2024 15:25:46 +0100 (CET)
-Date: Tue, 3 Dec 2024 15:25:46 +0100
+	id 06457A80BDA; Tue,  3 Dec 2024 15:31:02 +0100 (CET)
+Date: Tue, 3 Dec 2024 15:31:01 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Radek Barton <radek.barton@microsoft.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Fix compatibility with GCC 15
-Message-ID: <Z08U6riwO_OA0hmk@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v4] Cygwin: signal: Optimize the priority of the sig
+ thread
+Message-ID: <Z08WJazDsg535Bew@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <VI0PR83MB0738D008CBD47680FAFCA78692362@VI0PR83MB0738.EURPRD83.prod.outlook.com>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20241203140203.8351-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <VI0PR83MB0738D008CBD47680FAFCA78692362@VI0PR83MB0738.EURPRD83.prod.outlook.com>
+In-Reply-To: <20241203140203.8351-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Radek,
+On Dec  3 23:01, Takashi Yano wrote:
+> Previously, the sig thread ran in THREAD_PRIORITY_HIGHEST priority.
+> This causes a critical delay in the signal handling in the main
+> thread if too many signals are received rapidly and the CPU is very
+> busy. In this case, most of the CPU time is allocated to the sig
+> thread, so the main thread cannot have a chance of handling signals.
+> With this patch, to avoid such a situation, the priority of the sig
+> thread is set to THREAD_PRIORITY_NORMAL priority.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+> Fixes: 53ad6f1394aa ("(cygthread::cygthread): Use three only arguments for detached threads, and start the thread via QueueUserAPC/async_create.")
+> Reported-by: Christian Franke <Christian.Franke@t-online.de>
+> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/sigproc.cc | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+> index 730259484..4c557f048 100644
+> --- a/winsup/cygwin/sigproc.cc
+> +++ b/winsup/cygwin/sigproc.cc
+> @@ -1333,6 +1333,7 @@ wait_sig (VOID *)
+>  
+>    hntdll = GetModuleHandle ("ntdll.dll");
+>  
+> +  SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_NORMAL);
+>    for (;;)
+>      {
+>        DWORD nb;
+> -- 
+> 2.45.1
 
-can you send this patch, as well as the newlib patch, as git patch with
-subject line commit message and Signed-off-by, please?
+Yep, please push.  This is the one you can eventually push to
+the 3.5 branch.
 
-`git format-patch' and `git send-email' are a great help there.
+For 3.6 I suggest that you or I'll submit a patch removing this line
+again, in favor of dropping the line in cygthread::async_create
+setting the prio to HIGHEST.  But only after the threasd series is
+complete, ok?
 
 
 Thanks,
 Corinna
-
-
-On Dec  3 11:32, Radek Barton via Cygwin-patches wrote:
-> GCC 15 enables `-std=gnu23` by default which breaks build of `newlib` and `winsup` on old-style C function declarations. This patch changes the declarations to ANSI style.
-
-> diff --git a/winsup/cygwin/libc/fts.c b/winsup/cygwin/libc/fts.c
-> index 1826d2213..6f060e54e 100644
-> --- a/winsup/cygwin/libc/fts.c
-> +++ b/winsup/cygwin/libc/fts.c
-> @@ -1111,8 +1111,7 @@ fts_padjust(FTS *sp, FTSENT *head)
->  }
->  
->  static size_t
-> -fts_maxarglen(argv)
-> -	char * const *argv;
-> +fts_maxarglen(char * const *argv)
->  {
->  	size_t len, max;
->  
-> diff --git a/winsup/cygwin/libc/inet_network.c b/winsup/cygwin/libc/inet_network.c
-> index 43a394cf4..17b61f7aa 100644
-> --- a/winsup/cygwin/libc/inet_network.c
-> +++ b/winsup/cygwin/libc/inet_network.c
-> @@ -56,8 +56,7 @@ __FBSDID("$FreeBSD$");
->   * network numbers.
->   */
->  in_addr_t
-> -cygwin_inet_network(cp)
-> -	const char *cp;
-> +cygwin_inet_network(const char *cp)
->  {
->  	in_addr_t val, base, n;
->  	char c;
-> diff --git a/winsup/testsuite/libltp/include/test.h b/winsup/testsuite/libltp/include/test.h
-> index 757f3b8a1..af7c3c0c8 100644
-> --- a/winsup/testsuite/libltp/include/test.h
-> +++ b/winsup/testsuite/libltp/include/test.h
-> @@ -225,7 +225,7 @@ extern void tt_exit();
->  extern int  t_environ();
->  extern void t_breakum(char *tcid, int total, int typ, char *msg, void (*fnc)());
->  
-> -extern void tst_sig(int fork_flag, void (*handler)(), void (*cleanup)());
-> +extern void tst_sig(int fork_flag, void (*handler)(int), void (*cleanup)());
->  extern void tst_tmpdir();
->  extern void tst_rmdir();
->  
-> diff --git a/winsup/testsuite/libltp/include/usctest.h b/winsup/testsuite/libltp/include/usctest.h
-> index 637635a25..08db49551 100644
-> --- a/winsup/testsuite/libltp/include/usctest.h
-> +++ b/winsup/testsuite/libltp/include/usctest.h
-> @@ -198,7 +198,7 @@ struct tblock {
->   * in the macros that follow.
->   ***********************************************************************/
->  extern struct tblock tblock;
-> -extern void STD_go();
-> +extern void STD_go(int);
->  extern int (*_TMP_FUNC)(void);
->  extern void STD_opts_help();
->  
-> diff --git a/winsup/testsuite/libltp/include/write_log.h b/winsup/testsuite/libltp/include/write_log.h
-> index 784d5b3eb..505d2c08a 100644
-> --- a/winsup/testsuite/libltp/include/write_log.h
-> +++ b/winsup/testsuite/libltp/include/write_log.h
-> @@ -154,7 +154,7 @@ extern int	wlog_close(struct wlog_file *wfile);
->  extern int	wlog_record_write(struct wlog_file *wfile,
->  				  struct wlog_rec *wrec, long offset);
->  extern int	wlog_scan_backward(struct wlog_file *wfile, int nrecs,
-> -				   int (*func)(struct wlog_rec *rec),
-> +				   int (*func)(struct wlog_rec *rec, long),
->  				   long data);
->  #else
->  int	wlog_open();
-> diff --git a/winsup/testsuite/libltp/lib/dataascii.c b/winsup/testsuite/libltp/lib/dataascii.c
-> index 5bc201852..41ed440c0 100644
-> --- a/winsup/testsuite/libltp/lib/dataascii.c
-> +++ b/winsup/testsuite/libltp/lib/dataascii.c
-> @@ -43,11 +43,12 @@
->  static char Errmsg[80];
->  
->  int
-> -dataasciigen(listofchars, buffer, bsize, offset)
-> -char *listofchars;	/* a null terminated list of characters */
-> -char *buffer;
-> -int bsize;
-> -int offset;
-> +dataasciigen(
-> +	char *listofchars,	/* a null terminated list of characters */
-> +	char *buffer,
-> +	int bsize,
-> +	int offset
-> +)
->  {
->     int cnt;
->     int total;
-> @@ -78,12 +79,13 @@ int offset;
->  }	/* end of dataasciigen */
->  
->  int
-> -dataasciichk(listofchars, buffer, bsize, offset, errmsg)
-> -char *listofchars;	/* a null terminated list of characters */
-> -char *buffer;
-> -int bsize;
-> -int offset;
-> -char **errmsg;
-> +dataasciichk(
-> +	char *listofchars,	/* a null terminated list of characters */
-> +	char *buffer,
-> +	int bsize,
-> +	int offset,
-> +	char **errmsg
-> +)
->  {
->     int cnt;
->     int total;
-> diff --git a/winsup/testsuite/libltp/lib/databin.c b/winsup/testsuite/libltp/lib/databin.c
-> index e43fef4e4..6cf27f77c 100644
-> --- a/winsup/testsuite/libltp/lib/databin.c
-> +++ b/winsup/testsuite/libltp/lib/databin.c
-> @@ -42,11 +42,12 @@
->  static char Errmsg[80];
->  
->  void
-> -databingen (mode, buffer, bsize, offset)
-> -int mode;	/* either a, c, r, o, z or C */
-> -unsigned char *buffer;	/* buffer pointer */
-> -int bsize;	/* size of buffer */
-> -int offset;	/* offset into the file where buffer starts */
-> +databingen (
-> +    int mode,	/* either a, c, r, o, z or C */
-> +    unsigned char *buffer,	/* buffer pointer */
-> +    int bsize,	/* size of buffer */
-> +    int offset	/* offset into the file where buffer starts */
-> +)
->  {
->  int ind;
->  
-> @@ -89,12 +90,13 @@ int ind;
->   *      < 0  : no error
->   ***********************************************************************/
->  int
-> -databinchk(mode, buffer, bsize, offset, errmsg)
-> -int mode;	/* either a, c, r, z, o, or C */
-> -unsigned char *buffer;	/* buffer pointer */
-> -int bsize;	/* size of buffer */
-> -int offset;	/* offset into the file where buffer starts */
-> -char **errmsg;
-> +databinchk(
-> +    int mode,	/* either a, c, r, z, o, or C */
-> +    unsigned char *buffer,	/* buffer pointer */
-> +    int bsize,	/* size of buffer */
-> +    int offset,	/* offset into the file where buffer starts */
-> +    char **errmsg
-> +)
->  {
->      int cnt;
->      unsigned char *chr;
-> diff --git a/winsup/testsuite/libltp/lib/datapid.c b/winsup/testsuite/libltp/lib/datapid.c
-> index 9414eae90..ca091311b 100644
-> --- a/winsup/testsuite/libltp/lib/datapid.c
-> +++ b/winsup/testsuite/libltp/lib/datapid.c
-> @@ -83,11 +83,12 @@ static char Errmsg[80];
->   * Thus, offset 8 is in middle of word 1
->   ***********************************************************************/
->  int
-> -datapidgen(pid, buffer, bsize, offset)
-> -int pid;
-> -char *buffer;
-> -int bsize;
-> -int offset;
-> +datapidgen(
-> +    int pid,
-> +    char *buffer,
-> +    int bsize,
-> +    int offset
-> +)
->  {
->  #if CRAY
->  	
-> @@ -178,12 +179,13 @@ printf("partial at end\n");
->   *
->   ***********************************************************************/
->  int
-> -datapidchk(pid, buffer, bsize, offset, errmsg)
-> -int pid;
-> -char *buffer;
-> -int bsize;
-> -int offset;
-> -char **errmsg;
-> +datapidchk(
-> +    int pid,
-> +    char *buffer,
-> +    int bsize,
-> +    int offset,
-> +    char **errmsg
-> +)
->  {
->  #if CRAY
->  	
-> diff --git a/winsup/testsuite/libltp/lib/forker.c b/winsup/testsuite/libltp/lib/forker.c
-> index 99bc58550..65f1036a3 100644
-> --- a/winsup/testsuite/libltp/lib/forker.c
-> +++ b/winsup/testsuite/libltp/lib/forker.c
-> @@ -133,8 +133,7 @@ int Forker_npids=0;             /* number of entries in Forker_pids */
->   *  !0 : if fork failed, the return value will be the errno.
->   ***********************************************************************/
->  int
-> -background(prefix)
-> -char *prefix;
-> +background(char *prefix)
->  {
->    switch (fork()) {
->    case -1:
-> @@ -159,12 +158,13 @@ char *prefix;
->   * 
->   ***********************************************************************/
->  int
-> -forker(ncopies, mode, prefix)
-> -int ncopies;
-> -int mode;	/* 0 - all childern of parent, 1 - only 1 direct child */
-> -char *prefix;   /* if ! NULL, an message will be printed to stderr */
-> -		/* if fork fails.  The prefix (program name) will */
-> -	        /* preceed the message */
-> +forker(
-> +	int ncopies,
-> +	int mode,		/* 0 - all childern of parent, 1 - only 1 direct child */
-> +	char *prefix	/* if ! NULL, an message will be printed to stderr */
-> +					/* if fork fails.  The prefix (program name) will */
-> +					/* preceed the message */
-> +)
->  {
->      int cnt;
->      int pid;
-> diff --git a/winsup/testsuite/libltp/lib/parse_opts.c b/winsup/testsuite/libltp/lib/parse_opts.c
-> index 1f41bfdd2..0d1b80247 100644
-> --- a/winsup/testsuite/libltp/lib/parse_opts.c
-> +++ b/winsup/testsuite/libltp/lib/parse_opts.c
-> @@ -198,7 +198,11 @@ int STD_ERRNO_LIST[USC_MAX_ERRNO];
->  #define STRLEN 2048
->  
->  static char Mesg2[STRLEN];	/* holds possible return string */
-> -static void usc_recressive_func();
-> +static void usc_recressive_func(
-> +	int cnt,
-> +	int max,
-> +	struct usc_bigstack_t **bstack
-> +);
->  
->  /*
->   * Define bits for options that might have env variable default
-> @@ -633,7 +637,7 @@ usc_global_setup_hook()
->      if ( STD_PAUSE ) {                                      
->          _TMP_FUNC = (int (*)())signal(SIGUSR1, STD_go);   
->          pause();                                          
-> -        signal(SIGUSR1, (void (*)())_TMP_FUNC);          
-> +        signal(SIGUSR1, (_sig_func_ptr)_TMP_FUNC);          
->      }
->  
->  
-> @@ -693,8 +697,7 @@ get_current_time()
->   * counter integer is supplied by the user program.
->   ***********************************************************************/
->  int
-> -usc_test_looping(counter)
-> -int counter;
-> +usc_test_looping(int counter)
->  {
->      static int first_time = 1;
->      static int stop_time = 0;	/* stop time in rtc or usecs */
-> @@ -803,10 +806,11 @@ int counter;
->   * This function recressively calls itself max times.
->   */ 
->  static void
-> -usc_recressive_func(cnt, max, bstack)
-> -int cnt;
-> -int max;
-> -struct usc_bigstack_t bstack;
-> +usc_recressive_func(
-> +    int cnt,
-> +    int max,
-> +    struct usc_bigstack_t **bstack
-> +)
->  {
->      if ( cnt < max )
->  	usc_recressive_func(cnt+1, max, bstack);
-> diff --git a/winsup/testsuite/libltp/lib/pattern.c b/winsup/testsuite/libltp/lib/pattern.c
-> index 7f4d5873e..5a88bfd3b 100644
-> --- a/winsup/testsuite/libltp/lib/pattern.c
-> +++ b/winsup/testsuite/libltp/lib/pattern.c
-> @@ -38,12 +38,13 @@
->   */
->  
->  int
-> -pattern_check(buf, buflen, pat, patlen, patshift)
-> -char	*buf;
-> -int	buflen;
-> -char	*pat;
-> -int	patlen;
-> -int	patshift;
-> +pattern_check(
-> +	char *buf,
-> +	int	buflen,
-> +	char *pat,
-> +	int	patlen,
-> +	int	patshift
-> +)
->  {
->      int		nb, ncmp, nleft;
->      char	*cp;
-> @@ -105,12 +106,13 @@ int	patshift;
->  }
->  
->  int
-> -pattern_fill(buf, buflen, pat, patlen, patshift)
-> -char	*buf;
-> -int	buflen;
-> -char	*pat;
-> -int	patlen;
-> -int	patshift;
-> +pattern_fill(
-> +	char *buf,
-> +	int	buflen,
-> +	char *pat,
-> +	int	patlen,
-> +	int	patshift
-> +)
->  {
->      int		trans, ncopied, nleft;
->      char	*cp;
-> diff --git a/winsup/testsuite/libltp/lib/search_path.c b/winsup/testsuite/libltp/lib/search_path.c
-> index 697b4037b..f6936094a 100644
-> --- a/winsup/testsuite/libltp/lib/search_path.c
-> +++ b/winsup/testsuite/libltp/lib/search_path.c
-> @@ -103,11 +103,12 @@ char **argv;
->  /*
->   */
->  int
-> -search_path(cmd, res_path, access_mode, fullpath)
-> -const char *cmd;	/* The requested filename */
-> -char *res_path; /* The resulting path or error mesg */
-> -int access_mode; /* the mode used by access(2) */
-> -int fullpath;	/* if set, cwd will be prepended to all non-full paths */
-> +search_path(
-> +	const char *cmd,	/* The requested filename */
-> +	char *res_path,		/* The resulting path or error mesg */
-> +	int access_mode,	/* the mode used by access(2) */
-> +	int fullpath		/* if set, cwd will be prepended to all non-full paths */
-> +)
->  {
->      char *cp;   /* used to scan PATH for directories */
->      int ret;      /* return value from access */
-> diff --git a/winsup/testsuite/libltp/lib/str_to_bytes.c b/winsup/testsuite/libltp/lib/str_to_bytes.c
-> index beecb71b6..70157dcde 100644
-> --- a/winsup/testsuite/libltp/lib/str_to_bytes.c
-> +++ b/winsup/testsuite/libltp/lib/str_to_bytes.c
-> @@ -75,8 +75,7 @@
->  #define T_MULT	1099511627776	/* tera or 2^40 */
->  
->  int
-> -str_to_bytes(s)
-> -char    *s;
-> +str_to_bytes(char *s)
->  {
->      char    mult, junk;
->      int	    nconv;
-> @@ -110,8 +109,7 @@ char    *s;
->  }
->  
->  long
-> -str_to_lbytes(s)
-> -char    *s;
-> +str_to_lbytes(char *s)
->  {
->      char    mult, junk;
->      long    nconv;
-> @@ -150,8 +148,7 @@ char    *s;
->   */
->  
->  long long
-> -str_to_llbytes(s)
-> -char    *s;
-> +str_to_llbytes(char *s)
->  {
->      char    mult, junk;
->      long    nconv;
-> diff --git a/winsup/testsuite/libltp/lib/string_to_tokens.c b/winsup/testsuite/libltp/lib/string_to_tokens.c
-> index 6f0d775dd..a2b3a7617 100644
-> --- a/winsup/testsuite/libltp/lib/string_to_tokens.c
-> +++ b/winsup/testsuite/libltp/lib/string_to_tokens.c
-> @@ -80,7 +80,7 @@ int
->  string_to_tokens(char *arg_string, char *arg_array[], int array_size, char *separator)
->  {
->     int num_toks = 0;  /* number of tokens found */
-> -   char *strtok();
-> +   char *strtok(char *, const char *);
->  	
->     if ( arg_array == NULL || array_size <= 1 || separator == NULL )
->  	return -1;
-> diff --git a/winsup/testsuite/libltp/lib/tst_res.c b/winsup/testsuite/libltp/lib/tst_res.c
-> index 99767ec9b..731dcbc1b 100644
-> --- a/winsup/testsuite/libltp/lib/tst_res.c
-> +++ b/winsup/testsuite/libltp/lib/tst_res.c
-> @@ -563,8 +563,6 @@ tst_exit()
->  int
->  tst_environ()
->  {
-> -   FILE *fdopen();
-> -
->     if ( (T_out = fdopen(dup(fileno(stdout)), "w")) == NULL )
->        return(-1);
->     else
-> diff --git a/winsup/testsuite/libltp/lib/tst_sig.c b/winsup/testsuite/libltp/lib/tst_sig.c
-> index f5b64b666..976b5eecb 100644
-> --- a/winsup/testsuite/libltp/lib/tst_sig.c
-> +++ b/winsup/testsuite/libltp/lib/tst_sig.c
-> @@ -81,7 +81,7 @@
->  void (*T_cleanup)();		/* pointer to cleanup function */
->  
->  extern int errno;
-> -static void def_handler();		/* default signal handler */
-> +static void def_handler(int);		/* default signal handler */
->  
->  /****************************************************************************
->   * tst_sig() : set-up to catch unexpected signals.  fork_flag is set to NOFORK
-> @@ -93,7 +93,7 @@ static void def_handler();		/* default signal handler */
->   ***************************************************************************/
->  
->  void
-> -tst_sig(int fork_flag, void (*handler)(), void (*cleanup)())
-> +tst_sig(int fork_flag, void (*handler)(int), void (*cleanup)())
->  {
->  	char mesg[MAXMESG];		/* message buffer for tst_res */
->  	int sig;
-> diff --git a/winsup/testsuite/libltp/lib/write_log.c b/winsup/testsuite/libltp/lib/write_log.c
-> index 8104b05ac..bfbf6adfa 100644
-> --- a/winsup/testsuite/libltp/lib/write_log.c
-> +++ b/winsup/testsuite/libltp/lib/write_log.c
-> @@ -115,10 +115,11 @@ static int	wlog_rec_unpack();
->   */
->  
->  int
-> -wlog_open(wfile, trunc, mode)
-> -struct wlog_file	*wfile;
-> -int			trunc;
-> -int			mode;
-> +wlog_open(
-> +	struct wlog_file *wfile,
-> +	int trunc,
-> +	int mode
-> +)
->  {
->  	int	omask, oflags;
->  
-> @@ -166,8 +167,7 @@ int			mode;
->   */
->  
->  int
-> -wlog_close(wfile)
-> -struct wlog_file	*wfile;
-> +wlog_close(struct wlog_file *wfile)
->  {
->  	close(wfile->w_afd);
->  	close(wfile->w_rfd);
-> @@ -201,10 +201,11 @@ struct wlog_file	*wfile;
->   */
->  
->  int
-> -wlog_record_write(wfile, wrec, offset)
-> -struct wlog_file	*wfile;
-> -struct wlog_rec		*wrec;
-> -long			offset;
-> +wlog_record_write(
-> +	struct wlog_file *wfile,
-> +	struct wlog_rec *wrec,
-> +	long offset
-> +)
->  {
->      int		reclen;
->      char	wbuf[WLOG_REC_MAX_SIZE + 2];
-> @@ -249,11 +250,12 @@ long			offset;
->   */
->  
->  int
-> -wlog_scan_backward(wfile, nrecs, func, data)
-> -struct wlog_file	*wfile;
-> -int 			nrecs;
-> -int 			(*func)();
-> -long			data;
-> +wlog_scan_backward(
-> +	struct wlog_file *wfile,
-> +	int nrecs,
-> +	int (*func)(struct wlog_rec*, long),
-> +	long data
-> +)
->  {
->  	int		fd, leftover, nbytes, recnum, reclen, rval;
->  	off_t		offset;
-> @@ -381,10 +383,11 @@ long			data;
->   */
->  
->  static int
-> -wlog_rec_pack(wrec, buf, flag)
-> -struct wlog_rec	*wrec;
-> -char		*buf;
-> -int             flag;
-> +wlog_rec_pack(
-> +	struct wlog_rec	*wrec,
-> +	char *buf,
-> +	int flag
-> +)
->  {
->  	char			*file, *host, *pattern;
->  	struct wlog_rec_disk	*wrecd;
-> @@ -430,9 +433,10 @@ int             flag;
->  }
->  
->  static int
-> -wlog_rec_unpack(wrec, buf)
-> -struct wlog_rec	*wrec;
-> -char		*buf;
-> +wlog_rec_unpack(
-> +	struct wlog_rec *wrec,
-> +	char *buf
-> +)
->  {
->  	char			*file, *host, *pattern;
->  	struct wlog_rec_disk	*wrecd;
-
