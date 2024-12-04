@@ -1,281 +1,101 @@
 Return-Path: <SRS0=jFRs=S5=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
-	by sourceware.org (Postfix) with ESMTPS id 991073858D20
-	for <cygwin-patches@cygwin.com>; Wed,  4 Dec 2024 11:41:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 991073858D20
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 56B0B3858D26
+	for <cygwin-patches@cygwin.com>; Wed,  4 Dec 2024 11:53:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 56B0B3858D26
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 991073858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733312502; cv=none;
-	b=uCKEVHAKKV04ytYPRJqqJoS+i53WbhI6KdulMr8icE+8hGdPsAiUDX2/tql+gOngLRE2ojDdTAuqwykQ+61bpr9ZQapfOvUmpgEBD9WIHS1bt3G8i0HQ8gdyY5F972o19OdJjZDNtfSbE6a8MkmO46BWPGen8sNZYkc9WLgXYYk=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 56B0B3858D26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733313235; cv=none;
+	b=Wyacc2Fq6i92FIriQbn/9ABTNJz8zggCnIJb2kLE5S9QZgyQ6kbUuIwaevQsBftLB6wInr3eb/OU6hOTV92PqrrSYLBs7Kpf0vZdvTtwMieCt+DYwM79cIkc+UaqWxSePcLRhB1fNnJ7GW/9ucwTxQzNN3RhRJz+8jQm2QORuac=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1733312502; c=relaxed/simple;
-	bh=ghHE9GKOjoR7ZiUoqNnHWhNH4n3slmI0s1Dtn3bkpGU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=AvZZiSfFzXZliYwpVksdEe83LnPgKyIUgUndr5Aq4Dq6/vnbmh76Wm7NsOsGpUUX6Ae3icgTJVT7unLTe1dUouZlBQvxbVRvA/HRtAqDlhEYsPbSw7t2+WnBwQa4IfdHt5lEHNWzqnpYUgHaq+29f5MYUwYESCnT+FdZyRMAAlg=
+	t=1733313235; c=relaxed/simple;
+	bh=8Rc6AkqUL4dHHJNyAjCwjeA9+MlhIpnO0Litaf3aNOY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=M7PPUPAlyhuRtpWHoCw2NH3jk0REcaMlCcnE6oO8W1NCcRrUZ3bkKDJWmyCSW8zfAjcjjXjWBrZJXlfLl3O2OXjCaBIUlEoGy60NpAaTtYgsKUTRhpj7D6GDELYtQSrzpBsXLffBeMG7uATScZrXLC3CDBHevkWJD+GWvnwUB8I=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 991073858D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 56B0B3858D26
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=W3MZezUe
-Received: from localhost.localdomain by mta-snd-w03.mail.nifty.com
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=EoB0ylvf
+Received: from localhost.localdomain by mta-snd-w05.mail.nifty.com
           with ESMTP
-          id <20241204114139904.LCCM.120248.localhost.localdomain@nifty.com>;
-          Wed, 4 Dec 2024 20:41:39 +0900
+          id <20241204115353619.MNRG.116458.localhost.localdomain@nifty.com>;
+          Wed, 4 Dec 2024 20:53:53 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH] Cygwin: signal: Introduce a lock for the signal queue
-Date: Wed,  4 Dec 2024 20:41:12 +0900
-Message-ID: <20241204114124.1246-1-takashi.yano@nifty.ne.jp>
+	Steven Buehler <buehlersj@outlook.com>
+Subject: [PATCH] Cygwin: termios: Trim buffer size for GetConsoleProcessList()
+Date: Wed,  4 Dec 2024 20:53:27 +0900
+Message-ID: <20241204115337.1211-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733312499;
- bh=BRANSlTPJqCpYsp37uEbnPexJd6Ek6ZoznA1zMObll4=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733313233;
+ bh=BD5qIXL1k7ENo59gEGlWdkTkKarnTo5FGy1f1imaq/s=;
  h=From:To:Cc:Subject:Date;
- b=W3MZezUeuEh9wZdqDOwSt6YrHaDoBQgxFzCXf/rRqwhfvDeAm8OOHOq0Fj02mp0ELBorhHZa
- 7ew4/dE6aOpeUJCbwg4LkBHxazZMSfuQplQuJMUxTVHNwEpz2S2UdYX7rAhOk1n7u77tC7JB3A
- BAWrgvmy5PtYBONzwA5Xh2wbAMMskAOBMrpEi4BeUkuLJGbsCpXcrZn1ULvOXOCMsRJuW3/PtS
- CKU+7flcLWi/eZwH0Jo6WcA7CUYPamGeTbu11KMRUm0ZN8jsLGA8XZM/QTwIIeZw79Z/MfoiFh
- jcYBjeix1HQwQwE7RV/S2j5oLDQ2bV2AjK1ts6Cm+SbRU9+w==
+ b=EoB0ylvfflFe/vicKA7gg+M+hRYhA7v+GRoA62vKwLH+0MnjNDE7JHs+bZAypFih7rkdXa0t
+ UPtEaZ2OJ7/AMJaHcRIhAQ4sNpIH2O+XX+ODsbeQPCv7CbgEpWRnTsAYc0FUMMsVRlITgvc9dg
+ /u6+Pt66svPOwS2FRjs3J+pVzPGmtjc2OkDySIdJD9BrE9vkgshAudpGsaZfkRnrQfjGcAjajf
+ GSAU0GKxo9w6l4eHQCevNhsVA/noXcIoLyO2FUyXGkd1O7Au2ypmLz3IGjughJXS8RL6XI/CF+
+ DlLu9pp25q4O8NQ1+wY6Pz0N1adGORpwhv1fKfqjvYz4mn9g==
 X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, the signal queue is touched by the thread sig as well as
-other threads that call sigaction_worker(). This potentially has
-a possibility to destroy the signal queue chain. A possible worst
-result may be a self-loop chain which causes infinite loop. With
-this patch, lock()/unlock() are introduce to avoid such a situation.
+Currently, the buffer of 128KB is passed to GetConsoleProcessList().
+This causes page fault in the select() loop for console due to:
+https://github.com/microsoft/terminal/issues/18264
+because the previous code calls GetConsoleProcessList() with large
+buffer and PeekConsoleInput() with small buffer alternately.
+With this patch, the minimum buffer size is used that is determined
+by GetConsoleProcessList() with small buffer passed.
 
-Fixes: 474048c26edf ("* sigproc.cc (pending_signals::add): Just index directly into signal array rather than treating the array as a heap.")
-Suggested-by: Corinna Vinschen <corinna@vinschen.de>
-Reviewed-by:
+Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256841.html
+Fixes: 72770148ad0a ("Cygwin: pty: Prevent pty from changing code page of parent console.")
+Reported-by: Steven Buehler <buehlersj@outlook.com>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/exceptions.cc            | 12 ++++----
- winsup/cygwin/local_includes/sigproc.h |  2 +-
- winsup/cygwin/signal.cc                |  4 +--
- winsup/cygwin/sigproc.cc               | 39 ++++++++++++++++++++++----
- 4 files changed, 43 insertions(+), 14 deletions(-)
+ winsup/cygwin/fhandler/termios.cc | 14 ++++++++++++--
+ winsup/cygwin/release/3.5.5       |  3 +++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index 0f8c21939..35a4a0b47 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -1450,10 +1450,10 @@ _cygtls::handle_SIGCONT (threadlist_t * &tl_entry)
- 	sigsent = true;
-       }
-   /* Clear pending stop signals */
--  sig_clear (SIGSTOP);
--  sig_clear (SIGTSTP);
--  sig_clear (SIGTTIN);
--  sig_clear (SIGTTOU);
-+  sig_clear (SIGSTOP, false);
-+  sig_clear (SIGTSTP, false);
-+  sig_clear (SIGTTIN, false);
-+  sig_clear (SIGTTOU, false);
- }
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index 585e6ac4a..3cbdf7fca 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -870,8 +870,18 @@ fhandler_termios::get_console_process_id (DWORD pid, bool match,
+   DWORD *list = (DWORD *) tp.c_get ();
+   const DWORD buf_size = NT_MAX_PATH / sizeof (DWORD);
  
- int
-@@ -1554,14 +1554,14 @@ sigpacket::process ()
-     goto exit_sig;
-   if (si.si_signo == SIGSTOP)
-     {
--      sig_clear (SIGCONT);
-+      sig_clear (SIGCONT, false);
-       goto stop;
-     }
- 
-   /* Clear pending SIGCONT on stop signals */
-   if (si.si_signo == SIGTSTP || si.si_signo == SIGTTIN
-       || si.si_signo == SIGTTOU)
--    sig_clear (SIGCONT);
-+    sig_clear (SIGCONT, false);
- 
-   if (handler == (void *) SIG_DFL)
-     {
-diff --git a/winsup/cygwin/local_includes/sigproc.h b/winsup/cygwin/local_includes/sigproc.h
-index 8b7062aae..ce7263338 100644
---- a/winsup/cygwin/local_includes/sigproc.h
-+++ b/winsup/cygwin/local_includes/sigproc.h
-@@ -62,7 +62,7 @@ void set_signal_mask (sigset_t&, sigset_t);
- int handle_sigprocmask (int sig, const sigset_t *set,
- 				  sigset_t *oldset, sigset_t& opmask);
- 
--void sig_clear (int);
-+void sig_clear (int, bool);
- void sig_set_pending (int);
- int handle_sigsuspend (sigset_t);
- 
-diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
-index a7af604df..0bd64963f 100644
---- a/winsup/cygwin/signal.cc
-+++ b/winsup/cygwin/signal.cc
-@@ -451,9 +451,9 @@ sigaction_worker (int sig, const struct sigaction *newact,
- 	      if (!(gs.sa_flags & SA_NODEFER))
- 		gs.sa_mask |= SIGTOMASK(sig);
- 	      if (gs.sa_handler == SIG_IGN)
--		sig_clear (sig);
-+		sig_clear (sig, true);
- 	      if (gs.sa_handler == SIG_DFL && sig == SIGCHLD)
--		sig_clear (sig);
-+		sig_clear (sig, true);
- 	      if (sig == SIGCHLD)
- 		{
- 		  myself->process_state &= ~PID_NOCLDSTOP;
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 7e02e61f7..cc3113b88 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -106,12 +106,27 @@ class pending_signals
- {
-   sigpacket sigs[_NSIG + 1];
-   sigpacket start;
-+  volatile unsigned locked;
-   bool retry;
-+  void lock ()
-+  {
-+    while (InterlockedExchange (&locked, 1))
-+      {
-+#ifdef __x86_64__
-+	__asm__ ("pause");
-+#else
-+#error unimplemented for this target
-+#endif
-+	yield ();
-+      }
+-  DWORD num = GetConsoleProcessList (list, buf_size);
+-  if (num == 0 || num > buf_size)
++  DWORD buf_size1 = 1;
++  DWORD num;
++  /* The buffer of too large size does not seem to be expected by new condrv.
++     https://github.com/microsoft/terminal/issues/18264#issuecomment-2515448548
++     Use the minimum buffer size in the loop. */
++  while ((num = GetConsoleProcessList (list, buf_size1)) > buf_size1)
++    {
++      if (num > buf_size)
++	return 0;
++      buf_size1 = num;
 +    }
-+  void unlock () { locked = 0; }
++  if (num == 0)
+     return 0;
  
- public:
-+  pending_signals (): locked(0) {}
-   void add (sigpacket&);
-   bool pending () {retry = !!start.next; return retry;}
--  void clear (int sig);
-+  void clear (int sig, bool need_lock);
-   void clear (_cygtls *tls);
-   friend void sig_dispatch_pending (bool);
-   friend void wait_sig (VOID *arg);
-@@ -427,23 +442,27 @@ proc_terminate ()
+   DWORD res_pri = 0, res = 0;
+diff --git a/winsup/cygwin/release/3.5.5 b/winsup/cygwin/release/3.5.5
+index d41d168c6..7ccf28abf 100644
+--- a/winsup/cygwin/release/3.5.5
++++ b/winsup/cygwin/release/3.5.5
+@@ -48,3 +48,6 @@ Fixes:
  
- /* Clear pending signal */
- void
--sig_clear (int sig)
-+sig_clear (int sig, bool need_lock)
- {
--  sigq.clear (sig);
-+  sigq.clear (sig, need_lock);
- }
- 
- /* Clear pending signals of specific si_signo.
-    Called from sigpacket::process(). */
- void
--pending_signals::clear (int sig)
-+pending_signals::clear (int sig, bool need_lock)
- {
-   sigpacket *q = sigs + sig;
-   if (!sig || !q->si.si_signo)
-     return;
-+  if (need_lock)
-+    lock ();
-   q->si.si_signo = 0;
-   q->prev->next = q->next;
-   if (q->next)
-     q->next->prev = q->prev;
-+  if (need_lock)
-+    unlock ();
- }
- 
- /* Clear pending signals of specific thread.  Called under TLS lock from
-@@ -453,6 +472,7 @@ pending_signals::clear (_cygtls *tls)
- {
-   sigpacket *q = &start;
- 
-+  lock ();
-   while ((q = q->next))
-     if (q->sigtls == tls)
-       {
-@@ -461,6 +481,7 @@ pending_signals::clear (_cygtls *tls)
- 	if (q->next)
- 	  q->next->prev = q->prev;
-       }
-+  unlock ();
- }
- 
- /* Clear pending signals of specific thread.  Called from _cygtls::remove */
-@@ -1313,11 +1334,13 @@ pending_signals::add (sigpacket& pack)
-   if (se->si.si_signo)
-     return;
-   *se = pack;
-+  lock ();
-   se->next = start.next;
-   se->prev = &start;
-   se->prev->next = se;
-   if (se->next)
-     se->next->prev = se;
-+  unlock ();
- }
- 
- /* Process signals by waiting for signal data to arrive in a pipe.
-@@ -1398,6 +1421,7 @@ wait_sig (VOID *)
- 	    bool issig_wait;
- 
- 	    *pack.mask = 0;
-+	    sigq.lock ();
- 	    while ((q = q->next))
- 	      {
- 		_cygtls *sigtls = q->sigtls ?: _main_tls;
-@@ -1411,6 +1435,7 @@ wait_sig (VOID *)
- 		      }
- 		  }
- 	      }
-+	    sigq.unlock ();
- 	  }
- 	  break;
- 	case __SIGPENDING:
-@@ -1419,6 +1444,7 @@ wait_sig (VOID *)
- 
- 	    *pack.mask = 0;
- 	    tl_entry = cygheap->find_tls (pack.sigtls);
-+	    sigq.lock ();
- 	    while ((q = q->next))
- 	      {
- 		/* Skip thread-specific signals for other threads. */
-@@ -1427,6 +1453,7 @@ wait_sig (VOID *)
- 		if (pack.sigtls->sigmask & (bit = SIGTOMASK (q->si.si_signo)))
- 		  *pack.mask |= bit;
- 	      }
-+	    sigq.unlock ();
- 	    cygheap->unlock_tls (tl_entry);
- 	  }
- 	  break;
-@@ -1461,7 +1488,7 @@ wait_sig (VOID *)
- 	  break;
- 	default:	/* Normal (positive) signal */
- 	  if (pack.si.si_signo < 0)
--	    sig_clear (-pack.si.si_signo);
-+	    sig_clear (-pack.si.si_signo, true);
- 	  else
- 	    sigq.add (pack);
- 	  fallthrough;
-@@ -1474,6 +1501,7 @@ wait_sig (VOID *)
- 	    {
- 	      /* Check the queue for signals.  There will always be at least one
- 		 thing on the queue if this was a valid signal.  */
-+	      sigq.lock ();
- 	      while ((q = q->next))
- 		{
- 		  if (q->si.si_signo && q->process () > 0)
-@@ -1484,6 +1512,7 @@ wait_sig (VOID *)
- 			q->next->prev = q->prev;
- 		    }
- 		}
-+	      sigq.unlock ();
- 	      /* At least one signal still queued?  The event is used in select
- 		 only, and only to decide if WFMO should wake up in case a
- 		 signalfd is waiting via select/poll for being ready to read a
+ - sched_setscheduler(2) allows to change the priority if the policy is
+   equal to the value returned by sched_getscheduler(2).
++
++- Fix frequent page fault caused in Windows Terminal.
++  Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256841.html
 -- 
 2.45.1
 
