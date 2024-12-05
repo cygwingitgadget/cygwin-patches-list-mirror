@@ -1,179 +1,270 @@
 Return-Path: <SRS0=XFaT=S6=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [106.153.227.38])
-	by sourceware.org (Postfix) with ESMTPS id 4A2933858D21
-	for <cygwin-patches@cygwin.com>; Thu,  5 Dec 2024 01:14:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4A2933858D21
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id F3A583858D21
+	for <cygwin-patches@cygwin.com>; Thu,  5 Dec 2024 03:26:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F3A583858D21
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4A2933858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.38
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733361267; cv=none;
-	b=I9cN2DHqqhWDWyWeVAvmTYTyoT7IdDjpaDi5sUIysPgyFswNSBf+KyG2d6PugatHIpd15xG0Oek6rK3gZMv9B3FrQwOCcC0Yodj6/PO90t26PetaBukCgppX+vZ+GlxTL+Zi8bstJfOzBUO+NRqVpeFlBBZ65ZzlaKtlBUjH8ZA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F3A583858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733369172; cv=none;
+	b=t52jRDQ7mSoUqXEvz1HeQTH1VvR+rcplDQr0NcC1PARdi4p2o1c3tvtk2WNVM+zX/vzeBruVtIrGpDFmo3bD1XSZMK8E15h21hTET02zhNfN9OBPyMRQ7I5geqs1KpYje8QC2o/6bi1faUt18Zkb/H/BdDJOlHQw4vqRLCB1i2U=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1733361267; c=relaxed/simple;
-	bh=8eLX6im0UtTQg6rUP9uMIDPGE2nG8COim0gG0g3jgE0=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=Yx7Yk2dOJA6CfygZoZzJoH0oBteYMVoyUWUAvzxlP+Bff3MBRlNOJ77KIMAAMUH7u4J6dcAgB29bL4gin62u3BC0oI1MT2CY5usN2L7Vzn5aVW8FGc4aBxri1iGKVZtdXowTOTMPVCqKiNKcYl+NV6vpS7XqFx5tKagFBBsX88k=
+	t=1733369172; c=relaxed/simple;
+	bh=YPP1ez77m7B1gNI6mJojpZfBj0hn3ZmFGAP0AuXYX98=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=XXbru5/mBqDz+AA0FE/GolCNHO6beIJi/W3RBBLncwrUUMPurosbW/hYTI6Irx5LfeTOgUJigfYascVwA83si//2IvTveODXiqTbl4zTx1DB+0m+P6oKns7+c90J5WptKCcWothGH6FIMuxDsGEYZQi4imPxME1bZTjjle5YiYg=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4A2933858D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F3A583858D21
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=leSHcC5I
-Received: from HP-Z230 by mta-snd-w06.mail.nifty.com with ESMTP
-          id <20241205011424060.SORU.90861.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 5 Dec 2024 10:14:24 +0900
-Date: Thu, 5 Dec 2024 10:14:22 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=aHKNaK6n
+Received: from localhost.localdomain by mta-snd-e05.mail.nifty.com
+          with ESMTP
+          id <20241205032604903.CRJS.81160.localhost.localdomain@nifty.com>;
+          Thu, 5 Dec 2024 12:26:04 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: setjmp/longjmp: decrement incyg after signal
- handling
-Message-Id: <20241205101422.ef6a17a0e3b8f313c1f76638@nifty.ne.jp>
-In-Reply-To: <20241204125447.316279-1-corinna-cygwin@cygwin.com>
-References: <20241204125447.316279-1-corinna-cygwin@cygwin.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="Multipart=_Thu__5_Dec_2024_10_14_22_+0900_AFjBrY2S7KL+tgDQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733361264;
- bh=FoSV66R+AwMGk3SCU+vLCaPNo3wBzUiV+4/6CxwlbbA=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=leSHcC5IZACRTJIe0lZQNZXTKxgEnmhbybmY16OEOVB4dvK0WJJyjPU9YIZjeilKcDjaoxsD
- +DPOE74Bl6vltwuvFAde0YokSUWxBqhGryLFshT58+KZk0nitjWsyrwK55pYlykK/L3p5lht5M
- baaQ9AkDpj6Bs9k5nfk1gwZeLAtRvEhiv9yVVsnZrMFMXLiozy+z5A2oR+n5C1gpdfcHAFd+j7
- KooWE5cLOjym+tMGB6oVYkIOj9PVDtlTccK5ZLfgJSU86UQdiRbMPSNb3P5uISuzLhALvtzboa
- NGsJRatCtkBPzieLHsUO5fvhSSwVVpag+VUXRTPjZzCO7QIw==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Corinna Vinschen <corinna@vinschen.de>
+Subject: [PATCH v2] Cygwin: signal: Introduce a lock for the signal queue
+Date: Thu,  5 Dec 2024 12:25:40 +0900
+Message-ID: <20241205032548.29799-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733369164;
+ bh=9kizsjew8eOXSQd+hyOvXYkUevZ2hGOvIYV71qesTn4=;
+ h=From:To:Cc:Subject:Date;
+ b=aHKNaK6nbmN6XC3+Sn71fYyRrBcRlqpUyh4uLP3ISByfapWSIM2EXBZIT3asmTC5gixe5/qY
+ foj51d3wtcpt3Pd3c7ry1sge80frY0ToGyizP++hnazRic/2PWB2j53o/Q3tpZOv52sQJKqeAk
+ TnhSHBdnUHNNhWKIy3P93FNN1U8epArERFWhRCF7Zxd/1jpokgJCBZ6CQQx05U+GZFq3HZ2SwH
+ oSXGRPbnikxuZhB7E3X2KTi99lZWMpNoi24WGSQ1pzupuyJz8j61KPiPcPb74FmWYiDC7Ugtir
+ jBoEqpXz0jS79BEQ0LUf5rk5X4KCffVmdHHnZgFcJ0ESUmdA==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
+Currently, the signal queue is touched by the thread sig as well as
+other threads that call sigaction_worker(). This potentially has
+a possibility to destroy the signal queue chain. A possible worst
+result may be a self-loop chain which causes infinite loop. With
+this patch, lock()/unlock() are introduce to avoid such a situation.
 
---Multipart=_Thu__5_Dec_2024_10_14_22_+0900_AFjBrY2S7KL+tgDQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Fixes: 474048c26edf ("* sigproc.cc (pending_signals::add): Just index directly into signal array rather than treating the array as a heap.")
+Suggested-by: Corinna Vinschen <corinna@vinschen.de>
+Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc            | 12 +++++------
+ winsup/cygwin/local_includes/sigproc.h |  2 +-
+ winsup/cygwin/signal.cc                |  4 ++--
+ winsup/cygwin/sigproc.cc               | 28 +++++++++++++++++++++-----
+ 4 files changed, 32 insertions(+), 14 deletions(-)
 
-Hi Corinna,
-
-On Wed,  4 Dec 2024 13:54:47 +0100
-Corinna Vinschen wrote:
-> From: Corinna Vinschen <corinna@vinschen.de>
-> 
-> Commit 0b6fbd396ca2f ("* exceptions.cc (_cygtls::interrupt_now): Revert
-> to checking for "spinning" when choosing to defer signal.") introduced
-> a bug in the loop inside the stabilize_sig_stack subroutine:
-> 
-> First, stabilize_sig_stack grabs the stacklock. The _cygtls::incyg
-> flag is then incremented before checking if a signal has to be handled
-> for the current thread.
-> 
-> If no signal waits, the code simply jumps out, decrements _cygtls::incyg
-> and returns to the caller, which eventually releases the stacklock.
-> 
-> However, if a signal is waiting, stabilize_sig_stack releases the
-> stacklock, calls _cygtls::call_signal_handler(), and returns to
-> the start of the subroutine, trying to grab the lock.
-> 
-> After grabbing the lock, it increments _cygtls::incyg... wait...
-> again?
-> 
-> The loop does not decrement _cygtls::incyg after
-> _cygtls::call_signal_handler(), which returns with _cygtls::incyg
-> set to 1.  So it increments incyg to 2.  If no other signal is
-> waiting, stabilize_sig_stack jumps out and decrements _cygtls::incyg
-> to 1.  Eventually, setjmp or longjmp both will return to user
-> code with _cygtls::incyg set to 1.  This *may* be fixed at some later
-> point when signals arrive, but there will be a time when the application
-> runs in user code with broken signal handling.
-> 
-> Fixes: 0b6fbd396ca2f ("* exceptions.cc (_cygtls::interrupt_now): Revert to checking for "spinning" when choosing to defer signal.")
-> Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
-> ---
->  winsup/cygwin/scripts/gendef | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
-> index 7e14f69cf71c..377ceb59b2c8 100755
-> --- a/winsup/cygwin/scripts/gendef
-> +++ b/winsup/cygwin/scripts/gendef
-> @@ -344,6 +344,7 @@ stabilize_sig_stack:
->  	movq	\$_cygtls.start_offset,%rcx	# point to beginning
->  	addq	%r12,%rcx			#  of tls block
->  	call	_ZN7_cygtls19call_signal_handlerEv
-> +	decl	_cygtls.incyg(%r12)
->  	jmp	1b
->  3:	decl	_cygtls.incyg(%r12)
->  	addq	\$0x20,%rsp
-> -- 
-> 2.47.0
-> 
-
-I tested this patch with Christian's longjmp test case, but
-the problem does not seem to be fixed.
-
-However, if additional patch attached as well as this patch are
-applied, the problem does not happen anymore. The additional
-patch removes the spinning flag completely.
-
-What do you think?
-
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 0f8c21939..35a4a0b47 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1450,10 +1450,10 @@ _cygtls::handle_SIGCONT (threadlist_t * &tl_entry)
+ 	sigsent = true;
+       }
+   /* Clear pending stop signals */
+-  sig_clear (SIGSTOP);
+-  sig_clear (SIGTSTP);
+-  sig_clear (SIGTTIN);
+-  sig_clear (SIGTTOU);
++  sig_clear (SIGSTOP, false);
++  sig_clear (SIGTSTP, false);
++  sig_clear (SIGTTIN, false);
++  sig_clear (SIGTTOU, false);
+ }
+ 
+ int
+@@ -1554,14 +1554,14 @@ sigpacket::process ()
+     goto exit_sig;
+   if (si.si_signo == SIGSTOP)
+     {
+-      sig_clear (SIGCONT);
++      sig_clear (SIGCONT, false);
+       goto stop;
+     }
+ 
+   /* Clear pending SIGCONT on stop signals */
+   if (si.si_signo == SIGTSTP || si.si_signo == SIGTTIN
+       || si.si_signo == SIGTTOU)
+-    sig_clear (SIGCONT);
++    sig_clear (SIGCONT, false);
+ 
+   if (handler == (void *) SIG_DFL)
+     {
+diff --git a/winsup/cygwin/local_includes/sigproc.h b/winsup/cygwin/local_includes/sigproc.h
+index 8b7062aae..ce7263338 100644
+--- a/winsup/cygwin/local_includes/sigproc.h
++++ b/winsup/cygwin/local_includes/sigproc.h
+@@ -62,7 +62,7 @@ void set_signal_mask (sigset_t&, sigset_t);
+ int handle_sigprocmask (int sig, const sigset_t *set,
+ 				  sigset_t *oldset, sigset_t& opmask);
+ 
+-void sig_clear (int);
++void sig_clear (int, bool);
+ void sig_set_pending (int);
+ int handle_sigsuspend (sigset_t);
+ 
+diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
+index a7af604df..0bd64963f 100644
+--- a/winsup/cygwin/signal.cc
++++ b/winsup/cygwin/signal.cc
+@@ -451,9 +451,9 @@ sigaction_worker (int sig, const struct sigaction *newact,
+ 	      if (!(gs.sa_flags & SA_NODEFER))
+ 		gs.sa_mask |= SIGTOMASK(sig);
+ 	      if (gs.sa_handler == SIG_IGN)
+-		sig_clear (sig);
++		sig_clear (sig, true);
+ 	      if (gs.sa_handler == SIG_DFL && sig == SIGCHLD)
+-		sig_clear (sig);
++		sig_clear (sig, true);
+ 	      if (sig == SIGCHLD)
+ 		{
+ 		  myself->process_state &= ~PID_NOCLDSTOP;
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index 7e02e61f7..c4c159578 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -106,12 +106,16 @@ class pending_signals
+ {
+   sigpacket sigs[_NSIG + 1];
+   sigpacket start;
++  SRWLOCK queue_lock;
+   bool retry;
++  void lock () { AcquireSRWLockExclusive (&queue_lock); }
++  void unlock () { ReleaseSRWLockExclusive (&queue_lock); }
+ 
+ public:
++  pending_signals (): queue_lock (SRWLOCK_INIT) {}
+   void add (sigpacket&);
+   bool pending () {retry = !!start.next; return retry;}
+-  void clear (int sig);
++  void clear (int sig, bool need_lock);
+   void clear (_cygtls *tls);
+   friend void sig_dispatch_pending (bool);
+   friend void wait_sig (VOID *arg);
+@@ -427,23 +431,27 @@ proc_terminate ()
+ 
+ /* Clear pending signal */
+ void
+-sig_clear (int sig)
++sig_clear (int sig, bool need_lock)
+ {
+-  sigq.clear (sig);
++  sigq.clear (sig, need_lock);
+ }
+ 
+ /* Clear pending signals of specific si_signo.
+    Called from sigpacket::process(). */
+ void
+-pending_signals::clear (int sig)
++pending_signals::clear (int sig, bool need_lock)
+ {
+   sigpacket *q = sigs + sig;
+   if (!sig || !q->si.si_signo)
+     return;
++  if (need_lock)
++    lock ();
+   q->si.si_signo = 0;
+   q->prev->next = q->next;
+   if (q->next)
+     q->next->prev = q->prev;
++  if (need_lock)
++    unlock ();
+ }
+ 
+ /* Clear pending signals of specific thread.  Called under TLS lock from
+@@ -453,6 +461,7 @@ pending_signals::clear (_cygtls *tls)
+ {
+   sigpacket *q = &start;
+ 
++  lock ();
+   while ((q = q->next))
+     if (q->sigtls == tls)
+       {
+@@ -461,6 +470,7 @@ pending_signals::clear (_cygtls *tls)
+ 	if (q->next)
+ 	  q->next->prev = q->prev;
+       }
++  unlock ();
+ }
+ 
+ /* Clear pending signals of specific thread.  Called from _cygtls::remove */
+@@ -1313,11 +1323,13 @@ pending_signals::add (sigpacket& pack)
+   if (se->si.si_signo)
+     return;
+   *se = pack;
++  lock ();
+   se->next = start.next;
+   se->prev = &start;
+   se->prev->next = se;
+   if (se->next)
+     se->next->prev = se;
++  unlock ();
+ }
+ 
+ /* Process signals by waiting for signal data to arrive in a pipe.
+@@ -1398,6 +1410,7 @@ wait_sig (VOID *)
+ 	    bool issig_wait;
+ 
+ 	    *pack.mask = 0;
++	    sigq.lock ();
+ 	    while ((q = q->next))
+ 	      {
+ 		_cygtls *sigtls = q->sigtls ?: _main_tls;
+@@ -1411,6 +1424,7 @@ wait_sig (VOID *)
+ 		      }
+ 		  }
+ 	      }
++	    sigq.unlock ();
+ 	  }
+ 	  break;
+ 	case __SIGPENDING:
+@@ -1419,6 +1433,7 @@ wait_sig (VOID *)
+ 
+ 	    *pack.mask = 0;
+ 	    tl_entry = cygheap->find_tls (pack.sigtls);
++	    sigq.lock ();
+ 	    while ((q = q->next))
+ 	      {
+ 		/* Skip thread-specific signals for other threads. */
+@@ -1427,6 +1442,7 @@ wait_sig (VOID *)
+ 		if (pack.sigtls->sigmask & (bit = SIGTOMASK (q->si.si_signo)))
+ 		  *pack.mask |= bit;
+ 	      }
++	    sigq.unlock ();
+ 	    cygheap->unlock_tls (tl_entry);
+ 	  }
+ 	  break;
+@@ -1461,7 +1477,7 @@ wait_sig (VOID *)
+ 	  break;
+ 	default:	/* Normal (positive) signal */
+ 	  if (pack.si.si_signo < 0)
+-	    sig_clear (-pack.si.si_signo);
++	    sig_clear (-pack.si.si_signo, true);
+ 	  else
+ 	    sigq.add (pack);
+ 	  fallthrough;
+@@ -1474,6 +1490,7 @@ wait_sig (VOID *)
+ 	    {
+ 	      /* Check the queue for signals.  There will always be at least one
+ 		 thing on the queue if this was a valid signal.  */
++	      sigq.lock ();
+ 	      while ((q = q->next))
+ 		{
+ 		  if (q->si.si_signo && q->process () > 0)
+@@ -1484,6 +1501,7 @@ wait_sig (VOID *)
+ 			q->next->prev = q->prev;
+ 		    }
+ 		}
++	      sigq.unlock ();
+ 	      /* At least one signal still queued?  The event is used in select
+ 		 only, and only to decide if WFMO should wake up in case a
+ 		 signalfd is waiting via select/poll for being ready to read a
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.45.1
 
---Multipart=_Thu__5_Dec_2024_10_14_22_+0900_AFjBrY2S7KL+tgDQ
-Content-Type: text/plain;
- name="no-spinning.patch"
-Content-Disposition: attachment;
- filename="no-spinning.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vY3lndGxzLmNjIGIvd2luc3VwL2N5Z3dpbi9jeWd0
-bHMuY2MNCmluZGV4IDI4NDJjMjczMy4uYmZhYTE5ODY3IDEwMDY0NA0KLS0tIGEvd2luc3VwL2N5
-Z3dpbi9jeWd0bHMuY2MNCisrKyBiL3dpbnN1cC9jeWd3aW4vY3lndGxzLmNjDQpAQCAtODEsNyAr
-ODEsNyBAQCBfY3lndGxzOjpmaXh1cF9hZnRlcl9mb3JrICgpDQogICAgICAgcG9wICgpOw0KICAg
-ICAgIGN1cnJlbnRfc2lnID0gMDsNCiAgICAgfQ0KLSAgc3RhY2tsb2NrID0gc3Bpbm5pbmcgPSAw
-Ow0KKyAgc3RhY2tsb2NrID0gMDsNCiAgIHNpZ25hbF9hcnJpdmVkID0gTlVMTDsNCiAgIGxvY2Fs
-cy5zZWxlY3Quc29ja2V2dCA9IE5VTEw7DQogICBsb2NhbHMuY3dfdGltZXIgPSBOVUxMOw0KZGlm
-ZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZXhjZXB0aW9ucy5jYyBiL3dpbnN1cC9jeWd3aW4vZXhj
-ZXB0aW9ucy5jYw0KaW5kZXggMzVhNGEwYjQ3Li40ZGM0YmUyNzggMTAwNjQ0DQotLS0gYS93aW5z
-dXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MNCisrKyBiL3dpbnN1cC9jeWd3aW4vZXhjZXB0aW9ucy5j
-Yw0KQEAgLTkyMCw5ICs5MjAsOCBAQCBfY3lndGxzOjppbnRlcnJ1cHRfbm93IChDT05URVhUICpj
-eCwgc2lnaW5mb190JiBzaSwgdm9pZCAqaGFuZGxlciwNCiANCiAgIC8qIERlbGF5IHRoZSBpbnRl
-cnJ1cHQgaWYgd2UgYXJlDQogICAgICAxKSBzb21laG93IGluc2lkZSB0aGUgRExMDQotICAgICAy
-KSBpbiBfc2lnZmUgKHNwaW5uaW5nIGlzIHRydWUpIGFuZCBhYm91dCB0byBlbnRlciBjeWd3aW4g
-RExMDQotICAgICAzKSBpbiBhIFdpbmRvd3MgRExMLiAgKi8NCi0gIGlmIChpbmN5ZyB8fCBzcGlu
-bmluZyB8fCBpbnNpZGVfa2VybmVsIChjeCkpDQorICAgICAyKSBpbiBhIFdpbmRvd3MgRExMLiAg
-Ki8NCisgIGlmIChpbmN5ZyB8fCBpbnNpZGVfa2VybmVsIChjeCkpDQogICAgIGludGVycnVwdGVk
-ID0gZmFsc2U7DQogICBlbHNlDQogICAgIHsNCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2xv
-Y2FsX2luY2x1ZGVzL2N5Z3Rscy5oIGIvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9jeWd0
-bHMuaA0KaW5kZXggZWZiZDU1N2IxLi4yZDQ5MDY0NmEgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3ln
-d2luL2xvY2FsX2luY2x1ZGVzL2N5Z3Rscy5oDQorKysgYi93aW5zdXAvY3lnd2luL2xvY2FsX2lu
-Y2x1ZGVzL2N5Z3Rscy5oDQpAQCAtMTk2LDcgKzE5Niw2IEBAIHB1YmxpYzogLyogRG8gTk9UIHJl
-bW92ZSB0aGlzIHB1YmxpYzogbGluZSwgaXQncyBhIG1hcmtlciBmb3IgZ2VudGxzX29mZnNldHMu
-ICovDQogICB3YWl0cSB3cTsNCiAgIGludCBjdXJyZW50X3NpZzsNCiAgIHVuc2lnbmVkIGluY3ln
-Ow0KLSAgdW5zaWduZWQgc3Bpbm5pbmc7DQogICB2b2xhdGlsZSB1bnNpZ25lZCBzdGFja2xvY2s7
-DQogICBfX3Rsc3N0YWNrX3QgKnN0YWNrcHRyOw0KICAgX190bHNzdGFja190IHN0YWNrW1RMU19T
-VEFDS19TSVpFXTsNCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmIGIv
-d2luc3VwL2N5Z3dpbi9zY3JpcHRzL2dlbmRlZg0KaW5kZXggMzc3Y2ViNTliLi41MjE1NTAxNzUg
-MTAwNzU1DQotLS0gYS93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmDQorKysgYi93aW5zdXAv
-Y3lnd2luL3NjcmlwdHMvZ2VuZGVmDQpAQCAtMTM0LDcgKzEzNCw2IEBAIF9zaWdmZToJCQkJCQkj
-IHN0YWNrIGlzIGFsaWduZWQgb24gZW50cnkhDQogCW1vdnEJJWdzOjgsJXIxMAkJCSMgbG9jYXRp
-b24gb2YgYm90dG9tIG9mIHN0YWNrDQogMToJbW92bAlcJDEsJXIxMWQNCiAJeGNoZ2wJJXIxMWQs
-X2N5Z3Rscy5zdGFja2xvY2soJXIxMCkJIyB0cnkgdG8gYWNxdWlyZSBsb2NrDQotCW1vdmwJJXIx
-MWQsX2N5Z3Rscy5zcGlubmluZyglcjEwKQkjIGZsYWcgaWYgd2UgYXJlIHdhaXRpbmcgZm9yIGxv
-Y2sNCiAJdGVzdGwJJXIxMWQsJXIxMWQJCQkjIGl0IHdpbGwgYmUgemVybw0KIAlqegkyZgkJCQkj
-ICBpZiBzbw0KIAlwYXVzZQ0KQEAgLTE1OCw3ICsxNTcsNiBAQCBfc2lnYmU6CQkJCQkJIyByZXR1
-cm4gaGVyZSBhZnRlciBjeWd3aW4gc3lzY2FsbA0KIAltb3ZxCSVnczo4LCVyMTAJCQkjIGFkZHJl
-c3Mgb2YgYm90dG9tIG9mIHRscw0KIDE6CW1vdmwJXCQxLCVyMTFkDQogCXhjaGdsCSVyMTFkLF9j
-eWd0bHMuc3RhY2tsb2NrKCVyMTApCSMgdHJ5IHRvIGFjcXVpcmUgbG9jaw0KLQltb3ZsCSVyMTFk
-LF9jeWd0bHMuc3Bpbm5pbmcoJXIxMCkJIyBmbGFnIGlmIHdlIGFyZSB3YWl0aW5nIGZvciBsb2Nr
-DQogCXRlc3RsCSVyMTFkLCVyMTFkCQkJIyBpdCB3aWxsIGJlIHplcm8NCiAJanoJMmYJCQkJIyAg
-aWYgc28NCiAJcGF1c2UNCkBAIC0yNTgsNyArMjU2LDYgQEAgc2lnZGVsYXllZDoNCiANCiAxOglt
-b3ZsCVwkMSwlcjExZA0KIAl4Y2hnbAklcjExZCxfY3lndGxzLnN0YWNrbG9jayglcjEyKQkjIHRy
-eSB0byBhY3F1aXJlIGxvY2sNCi0JbW92bAklcjExZCxfY3lndGxzLnNwaW5uaW5nKCVyMTIpCSMg
-ZmxhZyBpZiB3ZSBhcmUgd2FpdGluZyBmb3IgbG9jaw0KIAl0ZXN0bAklcjExZCwlcjExZAkJCSMg
-aXQgd2lsbCBiZSB6ZXJvDQogCWp6CTJmCQkJCSMgIGlmIHNvDQogCXBhdXNlDQpAQCAtMzMyLDcg
-KzMyOSw2IEBAIHN0YWJpbGl6ZV9zaWdfc3RhY2s6DQogCW1vdnEJJWdzOjgsJXIxMg0KIDE6CW1v
-dmwJXCQxLCVyMTBkDQogCXhjaGdsCSVyMTBkLF9jeWd0bHMuc3RhY2tsb2NrKCVyMTIpCSMgdHJ5
-IHRvIGFjcXVpcmUgbG9jaw0KLQltb3ZsCSVyMTBkLF9jeWd0bHMuc3Bpbm5pbmcoJXIxMikJIyBm
-bGFnIGlmIHdlIGFyZSB3YWl0aW5nIGZvciBsb2NrDQogCXRlc3RsCSVyMTBkLCVyMTBkDQogCWp6
-CTJmDQogCXBhdXNlDQo=
-
---Multipart=_Thu__5_Dec_2024_10_14_22_+0900_AFjBrY2S7KL+tgDQ--
