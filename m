@@ -1,90 +1,42 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id B430B3858D34; Mon,  9 Dec 2024 12:13:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B430B3858D34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1733746382;
-	bh=I8iGf1wNyLfCH5mCyzL5fpKvxtPvZlrSt6B+Yo85Yrw=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=FrTLI0N3bsJtJ/etve+5O1VHOz5uNIkP6sk8IblCUyLDqds40nTY4C206GzGe3T0L
-	 21JgBeBTtXhOlOD3XQuGsXVKJHdILmstxuGGxW/vtv1xGhHC1P9SCF2NSWyFTwiVaV
-	 OeGZcs0NO7715kRdIi0sBEksUt1vBKgm5Ht+0JH0=
+	id CC8923858D34; Mon,  9 Dec 2024 12:28:04 +0000 (GMT)
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id AEC22A8093F; Mon,  9 Dec 2024 13:13:00 +0100 (CET)
-Date: Mon, 9 Dec 2024 13:13:00 +0100
+	id C5B97A8093F; Mon,  9 Dec 2024 13:28:02 +0100 (CET)
+Date: Mon, 9 Dec 2024 13:28:02 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: disk_file: Add error handling to
- fhandler_base::fstat_helper
-Message-ID: <Z1bezEg87t-BRgHU@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: sched_setscheduler: accept SCHED_BATCH
+Message-ID: <Z1biUqJeeCbOZMcQ@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241208074410.1772-1-takashi.yano@nifty.ne.jp>
+References: <3a052da3-f60e-1d7a-f741-956926af23da@t-online.de>
+ <Z1bEgYIYR43Jn45A@calimero.vinschen.de>
+ <9362a9a5-2ec9-0c89-9d2a-5b5f357857ad@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241208074410.1772-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <9362a9a5-2ec9-0c89-9d2a-5b5f357857ad@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
-
-On Dec  8 16:43, Takashi Yano wrote:
-> Previous fhandler_base::fstat_helper() does not assume get_stat_handle()
-> returns NULL. Due to this, access() for network share which has not been
-> authenticated returns 0 (success). This patch add error handling to
-> fhandler_base::fstat_helper() for get_stat_handle() failure.
+On Dec  9 11:52, Christian Franke wrote:
+> Corinna Vinschen wrote:
+> > I would prefer that SCHED_BATCH gets its own, single value.
+> > There's no good reason to add another ifdef for that.  Why
+> > not just #define SCHED_BATCH 6?
 > 
-> Fixed: 5a0d1edba4b3 [...]
-  ^^^^^
-  Fixes
+> The idea was to keep the non-Cygwin value in sync with Linux.
+> https://github.com/torvalds/linux/blob/fac04ef/include/uapi/linux/sched.h#L111
+> Of course we could drop this idea and use 6.
 
-> Reviewed-by:
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/fhandler/disk_file.cc | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/winsup/cygwin/fhandler/disk_file.cc b/winsup/cygwin/fhandler/disk_file.cc
-> index 2008fb61b..7c3c805fd 100644
-> --- a/winsup/cygwin/fhandler/disk_file.cc
-> +++ b/winsup/cygwin/fhandler/disk_file.cc
-> @@ -400,6 +400,11 @@ fhandler_base::fstat_helper (struct stat *buf)
->    IO_STATUS_BLOCK st;
->    FILE_COMPRESSION_INFORMATION fci;
->    HANDLE h = get_stat_handle ();
-> +  if (h == NULL)
-> +    {
-> +      __seterrno ();
-> +      return -1;
-> +    }
->    PFILE_ALL_INFORMATION pfai = pc.fai ();
->    ULONG attributes = pc.file_attributes ();
+I see, but I wonder if Linux binary compatibility for flag values is
+really important.  From the readability POV it's bad enough that we have
+two different values for SCHED_OTHER.  And SCHED_SPORADIC is already
+breaking Linux binary compat since it clashes with SCHED_ISO (which,
+funny enough, isn't documented in sched(7), afaics).
 
-This introduces a regression from the user perspective.
-
-The underlying fstat functions were meant to return *something*, no
-matter how few information we got, as long as the file exists.
-
-The reason is, for example, that Windows disallows to fetch stat(2)
-information on files you don't have permissions on. For instance,
-pagefile.sys.  On POSIX, you don't expect that stat(2) fails for these
-files, even if you can't access them in any other way.
-
-So prior to your patch, ls doesn't fail on pagefile.sys:
-
-  $ ls -l /cygdrive/c/pagefile.sys
-  -rw-r----- 1 Unknown+User Unknown+Group 2550136832 Dec  1 11:45 /cygdrive/c/pagefile.sys
-
-The file exists, the stat(2) info is partially available.
-
-After your patch:
-
-  $ ls -l /cygdrive/c/pagefile.sys
-  ls: cannot access '/cygdrive/c/pagefile.sys': Device or resource busy
-
-Along these lines, if a share exists and is visible, stat(2) info should
-be available just the same as for pagefile.sys, even if you can't access
-the share otherwise.
+Maybe you'd like to ask on the newlib ML if somebody prefers Linux
+binary compat for SCHED_BATCH?
 
 
 Corinna
