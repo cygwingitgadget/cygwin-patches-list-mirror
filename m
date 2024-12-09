@@ -1,213 +1,138 @@
 Return-Path: <SRS0=IKhM=TC=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.113])
-	by sourceware.org (Postfix) with ESMTPS id C387A3857C4F
-	for <cygwin-patches@cygwin.com>; Mon,  9 Dec 2024 14:00:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C387A3857C4F
+Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [106.153.226.42])
+	by sourceware.org (Postfix) with ESMTPS id 38A2C3858D33
+	for <cygwin-patches@cygwin.com>; Mon,  9 Dec 2024 14:13:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 38A2C3858D33
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C387A3857C4F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.113
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733752813; cv=none;
-	b=hCd+9qtxkCYaFtIkm6lRa2gjeq/sgZz11D38SYCPHsvlXABOnyJC0SSt1CAIaQSesCknqKlmpTkG4/eU6YwOMwXJ/ftVqrpki6pSxlgwtsSveaAPkstAj1Ibi61tIqHztHP75M+5L0MjMvxfyEUkkEevV9mxdD6Puc081lfYtA8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 38A2C3858D33
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1733753635; cv=none;
+	b=EO8KKYOpJ3P9nb0EarczZBewJZDHoC6hiUZsp8aRWqxPqhpRqBvl4ikmI0c2pyyH5VWABGT4/9ee/6jNuEHI8JE5NTQf997zt5SQ3Nsd1aPWNccEupti8K9MaMV5NeT/xtU5NmivSclxXYadjqNFUojW7LMlI46ZwHaNe59Iipk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1733752813; c=relaxed/simple;
-	bh=VgvtGuOlMzoZlBkuNvWZA54Qv1YcObyyjSgoy9gq8xI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=XKpVuKrHQz4wfTRtOMEv2x1AurPvBUxGiVmP9Ncow6187uW5+L8HwLVdV/l7MxUg22Sri1xM/veMs9Mg7F7s20rMhZQeZv7d0MOLVA5BPImYBZIUnrOu6T+B/UOAZUYY+O/yjlH9ufleJAiIimsS9RiK1yeeQuGhN/KPs7LjZFc=
+	t=1733753635; c=relaxed/simple;
+	bh=3JXmiTAoVU1pjC5/iM/3B4EER/9jbNtoMxDITU+T46M=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=pmuv4vzFcg4UELtbB8SOB2tJF9wuU3ycP0xc+3XDObGbNWVPPR30CfsH2iz7XTontinN1ihg9x6NAvb1km9njY2i1cI7bcLIHCspw4MikR9Z85Dx2tHw/hekEJEJ5J450JeBPAPmUmHHJKJNMYdMvTDE1ahpPOHEz/egVs1je4w=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C387A3857C4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 38A2C3858D33
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=D+YpePCZ
-Received: from localhost.localdomain by mta-snd-e01.mail.nifty.com
-          with ESMTP
-          id <20241209140011046.PWZJ.9629.localhost.localdomain@nifty.com>;
-          Mon, 9 Dec 2024 23:00:11 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=euQRP3Wj
+Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
+          id <20241209141353480.LVEU.33191.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 9 Dec 2024 23:13:53 +0900
+Date: Mon, 9 Dec 2024 23:13:52 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v2] Cygwin: access: Correction for samba/SMB share
-Date: Mon,  9 Dec 2024 22:59:46 +0900
-Message-ID: <20241209135955.1345-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733752811;
- bh=PsSuznKt8PaKSbkdKHLIwOgXfB8GO1vKoK/K1l2gJkU=;
- h=From:To:Cc:Subject:Date;
- b=D+YpePCZoMZstiMMsStnxssj2l7q8Ovj2AMu1hC0nA6W2Q9dwuxa+0VTtYM3oy2XAfyYw/4O
- AgWXgKCAwcIeW4LZ2I0fazjKWZLFV7BSPKOpCOHW+zOL/k1bEnScxi9pZxGqWuV5JM7Sly7gXC
- 2uR0WMWlVr8uUtTa8V5AyUg/nOz6hx+eUgMiTrFLWZCGKZmvhkB4UrFH4KZBG3FJ/HBUuN/qSo
- 1uFm1ZAod6CeQztcBxjcnhGZEN0Z4jyRO/2FGYQSQ2JIBIeyrPU41eWBHdBYaBSLy7FFl1Xhqd
- JnlhwgVsSCvVGrciA0pk0it0tkYNZwJQfDeYFheCkFyjWMpw==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: disk_file: Add error handling to
+ fhandler_base::fstat_helper
+Message-Id: <20241209231352.af7a0e0eef3bf4d7703f0649@nifty.ne.jp>
+In-Reply-To: <Z1bezEg87t-BRgHU@calimero.vinschen.de>
+References: <20241208074410.1772-1-takashi.yano@nifty.ne.jp>
+	<Z1bezEg87t-BRgHU@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1733753633;
+ bh=Qr31i40YMWZxxe3+a7Jn2VkdGFn074Zc2kV1vjO7Xp0=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=euQRP3WjLh6jq+4Sp2GNZR8aImYlYGw+R6ATwZruEje70YPsfgtAq3rNuKVj/+lQmWU2OFMt
+ h8NERsQiebB/+71v+NgnS/62Z1szcM1cT/g4r6UY5LhDe+SKk0xOfh+YJ6VjCkOPP8K6N6oBk/
+ 5ZLSv0Hz/MIphHXlqvdItgA/43J4UAMC6Gxj75BeRwkrwRgfRbWh/JOKlRkNYd5IxABaMmzATv
+ 7LrxPMMCS9bae6a71y58zosdSy0yzViW51YjtX2lmTjCiHzB5l7XWkQWuH697PXYhtOJhOL2YU
+ rZE36unNQSZsilwDWKtN1jF3E1BybuQEJI0uhBFGEYqBEoTQ==
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, access() and eaccess() does not determine the permissions
-for files on samba/SMB share correctly. Even if the user logs-in as
-the owner of the file, access() and eaccess() referes to others'
-permissions. With this patch, to determine the permissions correctly,
-NtOpenFile() with desired access mask is used.
+On Mon, 9 Dec 2024 13:13:00 +0100
+Corinna Vinschen wrote:
+> Hi Takashi,
+> 
+> On Dec  8 16:43, Takashi Yano wrote:
+> > Previous fhandler_base::fstat_helper() does not assume get_stat_handle()
+> > returns NULL. Due to this, access() for network share which has not been
+> > authenticated returns 0 (success). This patch add error handling to
+> > fhandler_base::fstat_helper() for get_stat_handle() failure.
+> > 
+> > Fixed: 5a0d1edba4b3 [...]
+>   ^^^^^
+>   Fixes
+> 
+> > Reviewed-by:
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > ---
+> >  winsup/cygwin/fhandler/disk_file.cc | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/winsup/cygwin/fhandler/disk_file.cc b/winsup/cygwin/fhandler/disk_file.cc
+> > index 2008fb61b..7c3c805fd 100644
+> > --- a/winsup/cygwin/fhandler/disk_file.cc
+> > +++ b/winsup/cygwin/fhandler/disk_file.cc
+> > @@ -400,6 +400,11 @@ fhandler_base::fstat_helper (struct stat *buf)
+> >    IO_STATUS_BLOCK st;
+> >    FILE_COMPRESSION_INFORMATION fci;
+> >    HANDLE h = get_stat_handle ();
+> > +  if (h == NULL)
+> > +    {
+> > +      __seterrno ();
+> > +      return -1;
+> > +    }
+> >    PFILE_ALL_INFORMATION pfai = pc.fai ();
+> >    ULONG attributes = pc.file_attributes ();
+> 
+> This introduces a regression from the user perspective.
+> 
+> The underlying fstat functions were meant to return *something*, no
+> matter how few information we got, as long as the file exists.
+> 
+> The reason is, for example, that Windows disallows to fetch stat(2)
+> information on files you don't have permissions on. For instance,
+> pagefile.sys.  On POSIX, you don't expect that stat(2) fails for these
+> files, even if you can't access them in any other way.
+> 
+> So prior to your patch, ls doesn't fail on pagefile.sys:
+> 
+>   $ ls -l /cygdrive/c/pagefile.sys
+>   -rw-r----- 1 Unknown+User Unknown+Group 2550136832 Dec  1 11:45 /cygdrive/c/pagefile.sys
+> 
+> The file exists, the stat(2) info is partially available.
+> 
+> After your patch:
+> 
+>   $ ls -l /cygdrive/c/pagefile.sys
+>   ls: cannot access '/cygdrive/c/pagefile.sys': Device or resource busy
 
-Fixes: cf762b08cfb0 ("* security.cc (check_file_access): Create.")
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/sec/base.cc | 122 +++++++-------------------------------
- 1 file changed, 23 insertions(+), 99 deletions(-)
+Indeed. This seems due to:
+$ icacls 'c:\pagefile.sys'
+c:\pagefile.sys: The process cannot access the file because it is being used by another process.
+Successfully processed 0 files; Failed processing 1 files
 
-diff --git a/winsup/cygwin/sec/base.cc b/winsup/cygwin/sec/base.cc
-index d5e39d281..3799d9ca8 100644
---- a/winsup/cygwin/sec/base.cc
-+++ b/winsup/cygwin/sec/base.cc
-@@ -28,10 +28,6 @@ details. */
- 				  | GROUP_SECURITY_INFORMATION \
- 				  | OWNER_SECURITY_INFORMATION)
- 
--static GENERIC_MAPPING NO_COPY_RO file_mapping = { FILE_GENERIC_READ,
--						   FILE_GENERIC_WRITE,
--						   FILE_GENERIC_EXECUTE,
--						   FILE_ALL_ACCESS };
- LONG
- get_file_sd (HANDLE fh, path_conv &pc, security_descriptor &sd,
- 	     bool justcreated)
-@@ -608,99 +604,9 @@ check_access (security_descriptor &sd, GENERIC_MAPPING &mapping,
-   return ret;
- }
- 
--/* Samba override.  Check security descriptor for Samba UNIX user and group
--   accounts and check if we have an RFC 2307 mapping to a Windows account.
--   Create a new security descriptor with all of the UNIX accounts with
--   valid mapping replaced with their Windows counterpart. */
--static void
--convert_samba_sd (security_descriptor &sd_ret)
--{
--  NTSTATUS status;
--  BOOLEAN dummy;
--  PSID sid;
--  cygsid owner;
--  cygsid group;
--  SECURITY_DESCRIPTOR sd;
--  cyg_ldap cldap;
--  tmp_pathbuf tp;
--  PACL acl, oacl;
--  size_t acl_len;
--  PACCESS_ALLOWED_ACE ace;
--
--  if (!NT_SUCCESS (RtlGetOwnerSecurityDescriptor (sd_ret, &sid, &dummy)))
--    return;
--  owner = sid;
--  if (!NT_SUCCESS (RtlGetGroupSecurityDescriptor (sd_ret, &sid, &dummy)))
--    return;
--  group = sid;
--
--  if (sid_id_auth (owner) == 22)
--    {
--      struct passwd *pwd;
--      uid_t uid = owner.get_uid (&cldap);
--      if (uid < UNIX_POSIX_OFFSET && (pwd = internal_getpwuid (uid)))
--	owner.getfrompw (pwd);
--    }
--  if (sid_id_auth (group) == 22)
--    {
--      struct group *grp;
--      gid_t gid = group.get_gid (&cldap);
--      if (gid < UNIX_POSIX_OFFSET && (grp = internal_getgrgid (gid)))
--	group.getfromgr (grp);
--    }
--
--  if (!NT_SUCCESS (RtlGetDaclSecurityDescriptor (sd_ret, &dummy,
--						 &oacl, &dummy)))
--    return;
--  acl = (PACL) tp.w_get ();
--  RtlCreateAcl (acl, ACL_MAXIMUM_SIZE, ACL_REVISION);
--  acl_len = sizeof (ACL);
--
--  for (DWORD i = 0; i < oacl->AceCount; ++i)
--    if (NT_SUCCESS (RtlGetAce (oacl, i, (PVOID *) &ace)))
--      {
--	cygsid ace_sid ((PSID) &ace->SidStart);
--	if (sid_id_auth (ace_sid) == 22)
--	  {
--	    if (sid_sub_auth (ace_sid, 0) == 1) /* user */
--	      {
--		struct passwd *pwd;
--		uid_t uid = ace_sid.get_uid (&cldap);
--		if (uid < UNIX_POSIX_OFFSET && (pwd = internal_getpwuid (uid)))
--		  ace_sid.getfrompw (pwd);
--	      }
--	    else if (sid_sub_auth (ace_sid, 0) == 2) /* group */
--	      {
--		struct group *grp;
--		gid_t gid = ace_sid.get_gid (&cldap);
--		if (gid < UNIX_POSIX_OFFSET && (grp = internal_getgrgid (gid)))
--		  ace_sid.getfromgr (grp);
--	      }
--	  }
--	if (!add_access_allowed_ace (acl, ace->Mask, ace_sid, acl_len,
--				     ace->Header.AceFlags))
--	  return;
--      }
--  acl->AclSize = acl_len;
--
--  RtlCreateSecurityDescriptor (&sd, SECURITY_DESCRIPTOR_REVISION);
--  RtlSetControlSecurityDescriptor (&sd, SE_DACL_PROTECTED, SE_DACL_PROTECTED);
--  RtlSetOwnerSecurityDescriptor (&sd, owner, FALSE);
--  RtlSetGroupSecurityDescriptor (&sd, group, FALSE);
--
--  status = RtlSetDaclSecurityDescriptor (&sd, TRUE, acl, FALSE);
--  if (!NT_SUCCESS (status))
--    return;
--  DWORD sd_size = 0;
--  status = RtlAbsoluteToSelfRelativeSD (&sd, sd_ret, &sd_size);
--  if (sd_size > 0 && sd_ret.malloc (sd_size))
--    RtlAbsoluteToSelfRelativeSD (&sd, sd_ret, &sd_size);
--}
--
- int
- check_file_access (path_conv &pc, int flags, bool effective)
- {
--  security_descriptor sd;
-   int ret = -1;
-   ACCESS_MASK desired = 0;
-   if (flags & R_OK)
-@@ -709,13 +615,31 @@ check_file_access (path_conv &pc, int flags, bool effective)
-     desired |= FILE_WRITE_DATA;
-   if (flags & X_OK)
-     desired |= FILE_EXECUTE;
--  if (!get_file_sd (pc.handle (), pc, sd, false))
-+
-+  if (!effective)
-+    cygheap->user.deimpersonate ();
-+
-+  OBJECT_ATTRIBUTES attr;
-+  if (pc.handle ())
-+    pc.init_reopen_attr (attr, pc.handle ());
-+  else
-+    pc.get_object_attr (attr, sec_none_nih);
-+  NTSTATUS status;
-+  IO_STATUS_BLOCK io;
-+  HANDLE h;
-+  status = NtOpenFile (&h, desired, &attr, &io, FILE_SHARE_VALID_FLAGS,
-+		       FILE_OPEN_FOR_BACKUP_INTENT);
-+  if (NT_SUCCESS (status))
-     {
--      /* Tweak Samba security descriptor as necessary. */
--      if (pc.fs_is_samba ())
--	convert_samba_sd (sd);
--      ret = check_access (sd, file_mapping, desired, flags, effective);
-+      NtClose (h);
-+      ret = 0;
-     }
-+  else
-+    __seterrno_from_nt_status (status);
-+
-+  if (!effective)
-+    cygheap->user.reimpersonate ();
-+
-   debug_printf ("flags %y, ret %d", flags, ret);
-   return ret;
- }
+So, it looks very natural to me that stat() fails.
+However, it is very annoying that ls /cygdrive/c shows a lot of errors.
+
+$ ls /cygdrive/c
+ls: cannot access '/cygdrive/c/Config.Msi': Permission denied
+ls: cannot access '/cygdrive/c/DumpStack.log': Permission denied
+ls: cannot access '/cygdrive/c/DumpStack.log.tmp': Device or resource busy
+ls: cannot access '/cygdrive/c/hiberfil.sys': Device or resource busy
+ls: cannot access '/cygdrive/c/pagefile.sys': Device or resource busy
+ls: cannot access '/cygdrive/c/swapfile.sys': Device or resource busy
+ls: cannot access '/cygdrive/c/System Volume Information': Permission denied
+'$GetCurrent'                      AMD                       ESD                    ProgramData                  Windows          gtk-build      vfcompat.dll
+'$Recycle.Bin'                     BOOTNXT                   Microsoft              Qt                           appverifUI.dll   hiberfil.sys
+'$WINDOWS.~BT'                     Config.Msi               'NVIDIA Corporation'    Recovery                     bootmgr          inetpub
+'$WINRE_BACKUP_PARTITION.MARKER'  'Documents and Settings'   PerfLogs               Symbols                      cygwin           msys64
+'$WinREAgent'                      DumpStack.log            'Program Files'        'System Volume Information'   cygwin64         pagefile.sys
+'$Windows.~WS'                     DumpStack.log.tmp        'Program Files (x86)'   Users                        etaxSign         swapfile.sys
+$ 
+
+> Along these lines, if a share exists and is visible, stat(2) info should
+> be available just the same as for pagefile.sys, even if you can't access
+> the share otherwise.
+
+This sounds reasonable, so I'd withdraw this patch.
+Thanks!
+
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
