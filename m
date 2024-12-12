@@ -1,85 +1,126 @@
-Return-Path: <SRS0=5kDa=TF=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.48])
-	by sourceware.org (Postfix) with ESMTP id 4A80A3858D29
-	for <cygwin-patches@cygwin.com>; Thu, 12 Dec 2024 14:14:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4A80A3858D29
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4A80A3858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.48
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1734012862; cv=none;
-	b=QnQQYsMDtrrdoVDDwLbGCey37/2k/zOWJht/dsXsWVByHar03kWZ+6BFjtbakknwGjRq4ozaXGrRJiS0jMHJ09VyhrqZOg/3WbxIaBA2M3BaeacyISCu9Nq9tJZhnVbm3jNqGKpRvoNNu5PYIjz9knzhTJMCtieaYLn1/f5v0Hg=
+Return-Path: <SRS0=cOsh=TF=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+	by sourceware.org (Postfix) with ESMTPS id 619653858D35
+	for <cygwin-patches@cygwin.com>; Thu, 12 Dec 2024 16:36:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 619653858D35
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 619653858D35
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.80
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1734021369; cv=none;
+	b=DEaell09UcbmWF5grEmFRy+Le0EK8Aj0MpMSDLceDK8A+YoOk0txGxfLUaOZRHZdk1YJC9Deig/jsopeefTiZCuRE5ARb2FsWt8BBJDwo7JzcsPuqX4f8QSYEn+PWvLeEoow9q8fdUvUbku8phMVO8w07wa6vgiLHxjs7uGlME8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1734012862; c=relaxed/simple;
-	bh=4YEsxPPPbpGCbHx+teHB4QvcduGGPEV2cBBvoJ8qZQg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=tpwf1fMJJiLcEXPlT+dvCnxJrP/QjJoNcfd5V6+N+0ahQsOcTskgwrNLOefD0C9XNCHUVI1SEL69VNY0AntO5pRnxh/3mzJNvymcr8jSt0Ulro/3cg15R7yfbLnIK6fVzp3BWrXmV9pIPmjsS8ZCCMf3rboe480AaLi1L8mRU4w=
+	t=1734021369; c=relaxed/simple;
+	bh=9nl1Z1DvA6Mh8tWFjUcaZO+YFfTgLtd/x/mfSc2y2vo=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version; b=Ulami8VGCbnmvEaQjfJLnse5//scFzeXht96lzpU753eoW1OSRdZDDN3BQjC3FGS23LbFIAPDaWghl0UJrBJZPH8xn2a2JaZ8q03LOKn2cC0nZQMGn31Jw80UYl/TdvL0g2CidaRx/oc5Rk98eBjk+FFpZ4Y0BbCY2cujIZ8MFU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4A80A3858D29
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 674901E8017017F5
-X-Originating-IP: [86.143.185.89]
-X-OWM-Source-IP: 86.143.185.89
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefuddrkeehgdeitdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtkeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeffheeljeevgeeigeelgeettdehffekueethffghfevledvheejudevfeffvefgieenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudegfedrudekhedrkeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudegfedrudekhedrkeelpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddugeefqddukeehqdekledrrhgrnhhgvgekiedqudegfedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtfedpnhgspghrtghpthhtohepvddprhgtphhtthhopegt
-	hihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepthgrkhgrshhhihdrhigrnhhosehnihhfthihrdhnvgdrjhhp
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.143.185.89) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 674901E8017017F5; Thu, 12 Dec 2024 14:14:07 +0000
-Message-ID: <35f88d3c-f8b7-4ab2-9549-fddd5f3dd068@dronecode.org.uk>
-Date: Thu, 12 Dec 2024 14:14:06 +0000
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 619653858D35
+Received: from fwd84.aul.t-online.de (fwd84.aul.t-online.de [10.223.144.110])
+	by mailout01.t-online.de (Postfix) with SMTP id 46EB2AA4
+	for <cygwin-patches@cygwin.com>; Thu, 12 Dec 2024 17:36:07 +0100 (CET)
+Received: from [192.168.2.103] ([91.57.250.70]) by fwd84.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tLmAX-1US0TQ0; Thu, 12 Dec 2024 17:36:05 +0100
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: doc: add SCHED_BATCH, SCHED_IDLE and
+ SCHED_RESET_ON_FORK
+To: cygwin-patches@cygwin.com
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <e6173854-bc4f-b498-0a93-7044f4049b89@t-online.de>
+Date: Thu, 12 Dec 2024 17:36:04 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ SeaMonkey/2.53.19
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: signal: Fix high load when retrying to process
- pending signal
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-References: <20241212083223.1891-1-takashi.yano@nifty.ne.jp>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <20241212083223.1891-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------8DA6D5F713DABBD6C10BFCBE"
+X-TOI-EXPURGATEID: 150726::1734021365-0D7F99DE-827B5F5B/0/0 CLEAN NORMAL
+X-TOI-MSGID: 1ccdda39-5117-43b3-8f5f-ad65b6dd7a8d
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 12/12/2024 08:32, Takashi Yano wrote:
-> The commit e10f822a2b39 has a problem that CPU load gets high if
-> pending signal is not processed successfully for a long time.
-> With this patch, wait_sig() calls Sleep(1), rather than yield(),
-> if the pending signal has not been processed successfully for a
-> predetermined time to prevent CPU from high load.
-> 
-> Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256884.html
-> Fixes: e10f822a2b39 ("Cygwin: signal: Handle queued signal without explicit __SIGFLUSH")
-> Reported-by: 凯夏 <walkerxk@gmail.com>
-> Reviewed-by:
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->   winsup/cygwin/sigproc.cc | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-> index 59b4208a6..e01a67ebe 100644
-> --- a/winsup/cygwin/sigproc.cc
-> +++ b/winsup/cygwin/sigproc.cc
-> @@ -1345,6 +1345,12 @@ wait_sig (VOID *)
->   
->     hntdll = GetModuleHandle ("ntdll.dll");
->   
-> +  /* GetTickCount() here is enough because GetTickCount() - t0 does
-> +     not overflow until 49 days psss. Even if GetTickCount() overflows,
-> +     GetTickCount() - t0 returns correct value, since underflow in
-> +     unsigned wraps correctly. Pending a signal for more thtn 49
+This is a multi-part message in MIME format.
+--------------8DA6D5F713DABBD6C10BFCBE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-"than"
+Aligns doc with recent commits...
 
-> +     days would be noncense. */
+-- 
+Regards,
+Christian
 
-"nonsense"
 
-(makes no sense)
+--------------8DA6D5F713DABBD6C10BFCBE
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-doc-add-SCHED_BATCH-SCHED_IDLE-and-SCHED_RESE.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-doc-add-SCHED_BATCH-SCHED_IDLE-and-SCHED_RESE.pa";
+ filename*1="tch"
 
+RnJvbSA3OTZlMzc4M2E0NzczYzQ4MzEyYjVjOGEwOWI5Mjg2N2NlZGU5ZmM4IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUaHUsIDEyIERlYyAyMDI0IDE3OjIyOjU1ICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBkb2M6IGFkZCBTQ0hFRF9CQVRDSCwgU0NIRURf
+SURMRSBhbmQKIFNDSEVEX1JFU0VUX09OX0ZPUksKClNpZ25lZC1vZmYtYnk6IENocmlzdGlh
+biBGcmFua2UgPGNocmlzdGlhbi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2luc3VwL2Rv
+Yy9wb3NpeC54bWwgfCAzNyArKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0t
+CiAxIGZpbGUgY2hhbmdlZCwgMjIgaW5zZXJ0aW9ucygrKSwgMTUgZGVsZXRpb25zKC0pCgpk
+aWZmIC0tZ2l0IGEvd2luc3VwL2RvYy9wb3NpeC54bWwgYi93aW5zdXAvZG9jL3Bvc2l4Lnht
+bAppbmRleCA0MzZhYjAwYTcuLjU5MzA0YzUxYSAxMDA2NDQKLS0tIGEvd2luc3VwL2RvYy9w
+b3NpeC54bWwKKysrIGIvd2luc3VwL2RvYy9wb3NpeC54bWwKQEAgLTE3NzEsMjUgKzE3NzEs
+MzIgQEAgT3Zlci1hbGxvY2F0aW9uIG9uIHNwYXJzZSBmaWxlcyBpcyBlbnRpcmVseSBpZ25v
+cmVkIG9uIFdpbmRvd3MuPC9wYXJhPgogCiA8cGFyYT48ZnVuY3Rpb24+c2NoZWRfc2V0cG9s
+aWN5PC9mdW5jdGlvbj4gb25seSBlbXVsYXRlcyBBUEkgYmVoYXZpb3IKIGJlY2F1c2UgV2lu
+ZG93cyBkb2VzIG5vdCBvZmZlciBhbHRlcm5hdGl2ZSBzY2hlZHVsaW5nIHBvbGljaWVzLgot
+SWYgPGxpdGVyYWw+U0NIRURfT1RIRVI8L2xpdGVyYWw+IGlzIHNlbGVjdGVkLCB0aGUgV2lu
+ZG93cyBwcmlvcml0eSBpcwotc2V0IGFjY29yZGluZyB0byB0aGUgbmljZSB2YWx1ZS4gIElm
+IDxsaXRlcmFsPlNDSEVEX0ZJRk88L2xpdGVyYWw+Ci1vciA8bGl0ZXJhbD5TQ0hFRF9SUjwv
+bGl0ZXJhbD4gaXMgc2VsZWN0ZWQsIHRoZSBuaWNlIHZhbHVlIGlzIHByZXNlcnZlZAotYW5k
+IHRoZSBXaW5kb3dzIHByaW9yaXR5IGlzIHNldCBhY2NvcmRpbmcgdG8gdGhlCi08bGl0ZXJh
+bD5zY2hlZF9wcmlvcml0eTwvbGl0ZXJhbD4gdmFsdWUuPC9wYXJhPgorSWYgPGxpdGVyYWw+
+U0NIRURfT1RIRVI8L2xpdGVyYWw+IG9yIDxsaXRlcmFsPlNDSEVEX0JBVENIPC9saXRlcmFs
+PiBpcworc2VsZWN0ZWQsIHRoZSBXaW5kb3dzIHByaW9yaXR5IGlzIHNldCBhY2NvcmRpbmcg
+dG8gdGhlIG5pY2UgdmFsdWUuCitJZiA8bGl0ZXJhbD5TQ0hFRF9JRExFPC9saXRlcmFsPiBp
+cyBzZWxlY3RlZCwgdGhlIFdpbmRvd3MgcHJpb3JpdHkgaXMKK3NldCB0byA8L2xpdGVyYWw+
+SURMRV9QUklPUklUWV9DTEFTUzwvbGl0ZXJhbD4uCitJZiA8bGl0ZXJhbD5TQ0hFRF9GSUZP
+PC9saXRlcmFsPiBvciA8bGl0ZXJhbD5TQ0hFRF9SUjwvbGl0ZXJhbD4gaXMKK3NlbGVjdGVk
+LCB0aGUgbmljZSB2YWx1ZSBpcyBwcmVzZXJ2ZWQgYW5kIHRoZSBXaW5kb3dzIHByaW9yaXR5
+IGlzIHNldAorYWNjb3JkaW5nIHRvIHRoZSA8bGl0ZXJhbD5zY2hlZF9wcmlvcml0eTwvbGl0
+ZXJhbD4gdmFsdWUuCitJZiB0aGUgPGxpdGVyYWw+U0NIRURfUkVTRVRfT05fRk9SSzwvbGl0
+ZXJhbD4gZmxhZyBpcyBzZXQsIHJlYWx0aW1lCitwb2xpY2llcyBhbmQgbmVnYXRpdmUgbmlj
+ZSB2YWx1ZXMgYXJlIGRyb3BwZWQgb24KKzxmdW5jdGlvbj5mb3JrPC9mdW5jdGlvbj4uPC9w
+YXJhPgogCiA8cGFyYT48ZnVuY3Rpb24+bmljZTwvZnVuY3Rpb24+LCA8ZnVuY3Rpb24+c2V0
+cHJpb3JpdHk8L2Z1bmN0aW9uPiwKIDxmdW5jdGlvbj5zY2hlZF9zZXRwYXJhbTwvZnVuY3Rp
+b24+IGFuZCA8ZnVuY3Rpb24+c2NoZWRfc2V0cG9saWN5PC9mdW5jdGlvbj4KLW1hcCB0aGUg
+bmljZSB2YWx1ZSAoPGxpdGVyYWw+U0NIRURfT1RIRVI8L2xpdGVyYWw+KSBvciB0aGUKLTxs
+aXRlcmFsPnNjaGVkX3ByaW9yaXR5PC9saXRlcmFsPiAoPGxpdGVyYWw+U0NIRURfRklGTzwv
+bGl0ZXJhbD4sCi08bGl0ZXJhbD5TQ0hFRF9SUjwvbGl0ZXJhbD4pIHRvIFdpbmRvd3MgcHJp
+b3JpdHkgY2xhc3NlcyBhcyBmb2xsb3dzOjwvcGFyYT4KK21hcCB0aGUgbmljZSB2YWx1ZSAo
+PGxpdGVyYWw+U0NIRURfT1RIRVI8L2xpdGVyYWw+LAorPGxpdGVyYWw+U0NIRURfQkFUQ0g8
+L2xpdGVyYWw+KSBvciB0aGUgPGxpdGVyYWw+c2NoZWRfcHJpb3JpdHk8L2xpdGVyYWw+Ciso
+PGxpdGVyYWw+U0NIRURfRklGTzwvbGl0ZXJhbD4sIDxsaXRlcmFsPlNDSEVEX1JSPC9saXRl
+cmFsPikgdG8gV2luZG93cworcHJpb3JpdHkgY2xhc3NlcyBhcyBmb2xsb3dzOjwvcGFyYT4K
+IDxzY3JlZW4+Ci0gICAgbmljZSB2YWx1ZSAgIHNjaGVkX3ByaW9yaXR5ICAgV2luZG93cyBw
+cmlvcml0eSBjbGFzcwotICAgICAxMi4uLjE5ICAgICAgMS4uLi42ICAgICAgICAgIElETEVf
+UFJJT1JJVFlfQ0xBU1MKLSAgICAgIDQuLi4xMSAgICAgIDcuLi4xMiAgICAgICAgICBCRUxP
+V19OT1JNQUxfUFJJT1JJVFlfQ0xBU1MKLSAgICAgLTQuLi4uMyAgICAgMTMuLi4xOCAgICAg
+ICAgICBOT1JNQUxfUFJJT1JJVFlfQ0xBU1MKLSAgICAtMTIuLi4tNSAgICAgMTkuLi4yNCAg
+ICAgICAgICBBQk9WRV9OT1JNQUxfUFJJT1JJVFlfQ0xBU1MKLSAgICAtMTMuLi0xOSAgICAg
+MjUuLi4zMCAgICAgICAgICBISUdIX1BSSU9SSVRZX0NMQVNTCi0gICAgICAgICAtMjAgICAg
+IDMxLi4uMzIgICAgICAgICAgUkVBTFRJTUVfUFJJT1JJVFlfQ0xBU1MKKyAgICBTQ0hFRF9P
+VEhFUiAgU0NIRURfQkFUQ0ggIFNDSEVEX0ZJRk8vUlIKKyAgICBuaWNlIHZhbHVlICAgbmlj
+ZSB2YWx1ZSAgIHNjaGVkX3ByaW9yaXR5ICAgV2luZG93cyBwcmlvcml0eSBjbGFzcworICAg
+ICAxMi4uLjE5ICAgICAgIDQuLi4xOSAgICAgIDEuLi4uNiAgICAgICAgICBJRExFX1BSSU9S
+SVRZX0NMQVNTCisgICAgICA0Li4uMTEgICAgICAtNC4uLi4zICAgICAgNy4uLjEyICAgICAg
+ICAgIEJFTE9XX05PUk1BTF9QUklPUklUWV9DTEFTUworICAgICAtNC4uLi4zICAgICAtMTIu
+Li4tNSAgICAgMTMuLi4xOCAgICAgICAgICBOT1JNQUxfUFJJT1JJVFlfQ0xBU1MKKyAgICAt
+MTIuLi4tNSAgICAgLTEzLi4tMTkgICAgIDE5Li4uMjQgICAgICAgICAgQUJPVkVfTk9STUFM
+X1BSSU9SSVRZX0NMQVNTCisgICAgLTEzLi4tMTkgICAgICAgICAgLTIwICAgICAyNS4uLjMw
+ICAgICAgICAgIEhJR0hfUFJJT1JJVFlfQ0xBU1MKKyAgICAgICAgIC0yMCAgICAgICAgICAg
+IC0gICAgIDMxLi4uMzIgICAgICAgICAgUkVBTFRJTUVfUFJJT1JJVFlfQ0xBU1MKIDwvc2Ny
+ZWVuPgogVGhlIHVzZSBvZiB2YWx1ZXMgd2hpY2ggYXJlIG1hcHBlZCB0byB0aGUKIDxsaXRl
+cmFsPlJFQUxUSU1FX1BSSU9SSVRZX0NMQVNTPC9saXRlcmFsPiByZXF1aXJlIGFkbWluaXN0
+cmF0aXZlCi0tIAoyLjQ1LjEKCg==
+--------------8DA6D5F713DABBD6C10BFCBE--
