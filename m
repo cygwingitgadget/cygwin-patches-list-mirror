@@ -1,128 +1,101 @@
-Return-Path: <SRS0=b6FN=TQ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
-	by sourceware.org (Postfix) with ESMTPS id C4EEA3858D1E
-	for <cygwin-patches@cygwin.com>; Mon, 23 Dec 2024 01:33:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C4EEA3858D1E
+Return-Path: <SRS0=UkoZ=TT=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 88C773858D20
+	for <cygwin-patches@cygwin.com>; Thu, 26 Dec 2024 12:34:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 88C773858D20
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C4EEA3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1734917631; cv=none;
-	b=Xyr7wZ+bK+sYwlrsXSJnwmqwqS6nDYKAIOSsN/aH7sRmBVX2ELf8xXqWR1c+qvedwzv7Fyf5wc8DYURXWGzV82A4J8/wyirlLVaqG03nzZeY5OB5SRYndB8h1qM/XtEgjdxWsFZQJVJ0VKNtygWYS9wa66bDx9GgBOm1/3gSqI0=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 88C773858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1735216469; cv=none;
+	b=LSfbL6KfZQ1U9xb537FAUGKf5s3o9WCd+Zqes1d5ArKBRF75aB/5VoNOpkNEbWUv3Kh8Xmip6jjrYQ9GNjkFe5x2n+Yt9WL34SVs+/QbRBzWRtpMWEbnuFAbnxPXkbRa54Rx6v4DK/tMNtX5y65By7lm5hw0zQkGsIasF9mtVWY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1734917631; c=relaxed/simple;
-	bh=zmvNBKCNMp36cRborsM7jfvckG1HUsIze8vWme5HrS0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=AiAyW87Cg6hkNe9Kc/OWlXWno9pcHdjuaAZdqhpX8xEnE7BJtMhkh34gBZ0quiUX5KlRp2LL3RrScz1bMKYOytFoAjdIwKVWWMQR/0QmDweAF56ZMo1xjm2mAQkPXs4sK5SQTqlnhtGbBol+uLzb7bz4hpXCM/vXQgtxupRl0MA=
+	t=1735216469; c=relaxed/simple;
+	bh=Xr1GMSCWelfVxNbFQo95b0OV+RuChMCy2bLS/ueU1uw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=k2jHU/H9KVq8s1v5PctswbezttNwz8A4Lo0UPm4lgqtXHHjuq25J9f0uEYqwpdjq+sHriwWxFjmkAa4TRQs65y++x5daOCfXjTW/1Ha2brsO5v2jqr8R4+LpKHlCqtQZXBKY1kPb539Ek8Pd5NvQBMwPyAqefTpjTWCrOtRui/8=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C4EEA3858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 88C773858D20
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Ro9ykbU6
-Received: from localhost.localdomain by mta-snd-w02.mail.nifty.com
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PcJdwUeD
+Received: from localhost.localdomain by mta-snd-e05.mail.nifty.com
           with ESMTP
-          id <20241223013347001.ILRR.47547.localhost.localdomain@nifty.com>;
-          Mon, 23 Dec 2024 10:33:46 +0900
+          id <20241226123426290.NTJS.81160.localhost.localdomain@nifty.com>;
+          Thu, 26 Dec 2024 21:34:26 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Daisuke Fujimura <booleanlabel@gmail.com>
-Subject: [PATCH v2] Cygwin: signal: Do not handle signal when __SIGFLUSHFAST is sent
-Date: Mon, 23 Dec 2024 10:33:25 +0900
-Message-ID: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
+	Bruno Haible <bruno@clisp.org>
+Subject: [PATCH] Cygwin: access: Fix X_OK behaviour for administrator
+Date: Thu, 26 Dec 2024 21:34:01 +0900
+Message-ID: <20241226123410.126087-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1734917627;
- bh=QnVwHdeoFHC1Vb2FO3IzYX7cNu5QEE9llBrIy46HW0g=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1735216466;
+ bh=myO2cVK+xIbT4W52Bz+3WfplpIsIQpPi99+OHTKsiqA=;
  h=From:To:Cc:Subject:Date;
- b=Ro9ykbU6gTWHQscp9kJ2tH2AFSlQu1vdk42CJ5BGuNApoOLLrj0xS3ThoCnvPSanMGZqM4Zr
- ApypibDIoSmmWyeJpK1d4LaHyhk7csLO42rfbOV5h2PyGzHMLO0TCNoQZ6Nciqzc6AXfk+dq64
- 7yfO+TSCnUKN4Lb4rG3eZ0FPHHmhGS5BSVLB6XQwNk2gko848duKUteQZG+bi8dfavfyiFtQG1
- UbzNm2bzNSTLrnuxruvRWLp1wqtp+03Zi3psdfUn5QHpfCE16Gp/QO0b5pRAuEe7mUZcc4pPCi
- RFrBYb2k9v8U0cqozr+84s9XXPUaK1xriXE9bY0syoz3UtWg==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=PcJdwUeD7UD6gEudo4slpdg0Yp5K7lwYH69RUEJFYk24vZY1tWi3nBIgVt4mZPczIFG60Srd
+ rgcs9aiXPxIQvZShS/LAfyC9kccY/VSxm/ifWvHN5o/Ik4hMTxlToaV8nE0MPah9naU61LnNl8
+ mD5QQ09SjWzzwF4lxfDKaut2OscAS9aslMqtgWz7GFEmdaJJs6uF1H3qRhHoScph44lGgz2vWm
+ ALM+Fv6pO4zLECMdT/W8sYCXfOUjQI2JEYb+4fuGr4rOOz2VCjccC82vP2yJsQaJF8N11QakqT
+ odaDvDXvT+rY887PHMaFYO97smyzR3uNSVesijQ9qbxIzXsw==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-After the commit d243e51ef1d3, zsh sometimes hangs at startup. This
-occurs because SIGCHLD, which should trigger sigsuspend(), is handled
-in cygwait() that is used to wait for a wakeup event in sig_send(),
-even when __SIGFLUSHFAST is sent. Despite __SIGFLUSHFAST being
-required to return before handling the signal, this does not happen.
-With this patch, if the signal currently being sent is __SIGFLUSHFAST,
-do not handle the received signal and keep it asserted after the
-cygwait() for the wakeup event.  Apply the same logic to the cygwait()
-in the retrying loop for WriteFile() as well.
+After the commit a0933cd17d19, access(_, X_OK) returns 0 for the
+file without execution permission if the account is administrator
+while it should return -1. The Administrator has full access
+permission regardless of ACL, however, access() should return -1
+if execution permission is set for neither user, group nor others,
+even though NtOpenFile() succeeds. This patch checks result of
+stat() before calling NtOpenFile() when the X_OK permissions is
+specified for access().
 
-Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256954.html
-Fixes: d243e51ef1d3 ("Cygwin: signal: Fix deadlock between main thread and sig thread")
-Reported-by: Daisuke Fujimura <booleanlabel@gmail.com>
+Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256972.html
+Fixes: a0933cd17d19 ("Correction for samba/SMB share")
+Reported-by: Bruno Haible <bruno@clisp.org>
 Reviewed-by:
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/release/3.5.6 |  5 +++++
- winsup/cygwin/sigproc.cc    | 20 +++++++++++++++-----
- 2 files changed, 20 insertions(+), 5 deletions(-)
- create mode 100644 winsup/cygwin/release/3.5.6
+ winsup/cygwin/sec/base.cc | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/winsup/cygwin/release/3.5.6 b/winsup/cygwin/release/3.5.6
-new file mode 100644
-index 000000000..643d58e58
---- /dev/null
-+++ b/winsup/cygwin/release/3.5.6
-@@ -0,0 +1,5 @@
-+Fixes:
-+------
-+
-+- Fix zsh hang at startup.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256954.html
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index ba7818a68..35ec3e70e 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -751,10 +751,14 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
-       res = WriteFile (sendsig, leader, packsize, &nb, NULL);
-       if (!res || packsize == nb)
- 	break;
--      if (cygwait (NULL, 10, cw_sig_eintr) == WAIT_SIGNALED)
-+      if (cygwait (NULL, 10, cw_sig_eintr) == WAIT_SIGNALED
-+	  && pack.si.si_signo != __SIGFLUSHFAST)
- 	_my_tls.call_signal_handler ();
-       res = 0;
-     }
-+  /* Re-assert signal_arrived which has been cleared in cygwait(). */
-+  if (_my_tls.current_sig)
-+    _my_tls.set_signal_arrived ();
+diff --git a/winsup/cygwin/sec/base.cc b/winsup/cygwin/sec/base.cc
+index 647c27ec6..666d257e3 100644
+--- a/winsup/cygwin/sec/base.cc
++++ b/winsup/cygwin/sec/base.cc
+@@ -613,6 +613,22 @@ check_file_access (path_conv &pc, int flags, bool effective)
+   if (flags & X_OK)
+     desired |= FILE_EXECUTE;
  
-   if (!res)
-     {
-@@ -785,7 +789,16 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
-   if (wait_for_completion)
-     {
-       sigproc_printf ("Waiting for pack.wakeup %p", pack.wakeup);
--      rc = cygwait (pack.wakeup, WSSC);
-+      do
++  /* The Administrator has full access permission regardless of ACL,
++     however, access() should return -1 if 'x' permission is set
++     for neither user, group nor others, even though NtOpenFile()
++     succeeds. */
++  if ((flags & X_OK) && !pc.isdir ())
++    {
++      struct stat st;
++      if (stat (pc.get_posix (), &st))
++	goto out;
++      else if ((st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) == 0)
 +	{
-+	  rc = cygwait (pack.wakeup, WSSC, cw_sig_eintr);
-+	  if (rc == WAIT_SIGNALED && pack.si.si_signo != __SIGFLUSHFAST)
-+	    _my_tls.call_signal_handler ();
++	  set_errno (EACCES);
++	  goto out;
 +	}
-+      while (rc != WAIT_OBJECT_0 && rc != WAIT_TIMEOUT);
-+      /* Re-assert signal_arrived which has been cleared in cygwait(). */
-+      if (_my_tls.current_sig)
-+	_my_tls.set_signal_arrived ();
-       ForceCloseHandle (pack.wakeup);
-     }
-   else
-@@ -806,9 +819,6 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
-       rc = -1;
-     }
++    }
++
+   if (!effective)
+     cygheap->user.deimpersonate ();
  
--  if (wait_for_completion && si.si_signo != __SIGFLUSHFAST)
--    _my_tls.call_signal_handler ();
--
- out:
-   if (communing && rc)
-     {
+@@ -634,6 +650,7 @@ check_file_access (path_conv &pc, int flags, bool effective)
+   if (!effective)
+     cygheap->user.reimpersonate ();
+ 
++out:
+   debug_printf ("flags %y, ret %d", flags, ret);
+   return ret;
+ }
 -- 
 2.45.1
 
