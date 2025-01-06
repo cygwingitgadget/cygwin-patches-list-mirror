@@ -1,46 +1,46 @@
 Return-Path: <SRS0=1+8C=T6=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id 0C1743858D21
-	for <cygwin-patches@cygwin.com>; Mon,  6 Jan 2025 19:51:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C1743858D21
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	by sourceware.org (Postfix) with ESMTPS id DE53B3858D28
+	for <cygwin-patches@cygwin.com>; Mon,  6 Jan 2025 22:07:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DE53B3858D28
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C1743858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736193083; cv=none;
-	b=r8ZKbYqkPlR2jbK+IASiK+Gs5zzgZWyGT4BaWnwZbZcae8LyGlgW7HAnezsiH4I2uImZJiw79MRJNmX4Uhv66kzKAQSVh9chNoONn8SxlXCdcQFqYQ/UeG7ImLW5sa8QU2DKHig91ymqgCLypnoC/uf2DASD3hMCHePfDChIMsw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DE53B3858D28
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736201279; cv=none;
+	b=TR9eYm7OI4YPL1tryuCWUxjP32CMPAe8oPrKUEuyqQQWe2L9N3giBZtbpa5z4fMNqDoy1ukcLoLMJfwyHvNUg8rZWQ/L/wphNJzEl98UERqdZC+4dpKkN5mFuyfA9ffYfvPouMUnP2Lr6p/6kzOn9rq3crYncDwKk9lWCtITCyg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736193083; c=relaxed/simple;
-	bh=5dp5bLQxaKkLV5CQ9+05dvsZGd5zdaivPWFgjIZKkEM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=T9woQIexjBMVsOZcAddMD+XtyjpO0qbcpb49aIsighVetg6rk1gfeI8FKjKtbKwItTSBpo9AetSF1wFt0bMUnvBGHvfb9dI3rxaNnVtBg46Rw8DazxDbkmnPRtqHRgR4TUvDTbud/+x+EJo8JcWSlk0DNC52aCrP4/srJHxx+n8=
+	t=1736201279; c=relaxed/simple;
+	bh=ZkvfqFOr5y94GbynjHi9BPYYxHX8PatQ2wNv3xeTFT8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=QYlj3sAYE2Lbq5WSMNYEN7sth2+EGQwhuzSAzj90WxOAmY79T931nt53CgWRzfbqMln5kW9esAUnGJuksOy9qaCHzolCErS3I581lUd1RwStNX0vv5YBtMZ1sGuWz7WkE837at52/pG136ieIQf0Tq0EU431MHfjC8Lu9+0BbZ0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C1743858D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DE53B3858D28
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=LuyiILhA
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 8431780295;
-	Mon,  6 Jan 2025 19:51:22 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf17.hostedemail.com (Postfix) with ESMTPA id 0B3FE17;
-	Mon,  6 Jan 2025 19:51:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=a1xXLVhm
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 388CA803D5;
+	Mon,  6 Jan 2025 22:07:58 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf06.hostedemail.com (Postfix) with ESMTPA id A44932001C;
+	Mon,  6 Jan 2025 22:07:56 +0000 (UTC)
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: cygwin-patches@cygwin.com (Cygwin Patches)
-Subject: [PATCH] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
-Date: Mon,  6 Jan 2025 12:51:01 -0700
-Message-ID: <09e9e4bd4864f985995729ab8c1234a7af560106.1736192867.git.Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH v2] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
+Date: Mon,  6 Jan 2025 15:07:42 -0700
+Message-ID: <c71ee7a81f91ac883a0c78dc170322601e4dde58.1736201056.git.Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Organization: Systematic Software
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 0B3FE17
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: A44932001C
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Rspamd-Server: rspamout01
-X-Stat-Signature: e8nutkjpf89zn71urfjc93q75rny66d8
+X-Stat-Signature: i866sfwq3itkh3uwc7ignt8381uo4xet
 X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1+6Urf4NomH99uy7QCx8cYeQiaQO9ApNHQ=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=w/RB4vVg0rJXdsueP6OhrkJbe/4O8hKPov+j9C6Plt8=; b=LuyiILhAqNDj2K15Qu+7zWlbwu+yBzXFPf2Ij+yBm8AL2vzd85yBYuSdcVGRXvTiqDNxXgHcOybdh8AP2GXzPQGuAJz05YHWURNeMXZZj3f6OwvxFrphbw5+c4dtEL0IoCiVMGUeQxYNn6WedB8ctLxdQAPojvVFe15uI1oECN0VlMhTH6Hj1ZhT4qxpp8M8FC35XxhSh87AsyTtDz7y/g9TuKKctSmd4S1cc2ov76Ei8qvJ2aPO8H089zJBaLR2DCWqQNaBWECM0inRA1GLKIsU7pd2YUagnjrJkjMPTlb7fOSBD82vpOt5pk3ooMmEZikqiIhpQdpa7TyXHwaKaQ==
-X-HE-Tag: 1736193080-577883
-X-HE-Meta: U2FsdGVkX186ULByijtg8jpIcrzc8l1G98f2P9Z9LYnJRvPWOKTMqhAOChEBMx1aWGhqBWZLARbYflLdbPW9PuNY3OksjLuXWuLz8SjNZxbz7LG4pd+CRhuiXE3WDpYb7/NoSatNmPKSGD2AmS478MVEh/1JA7z/Y9y+NOH7WqlN4IyOm60o+n/cHVfYunEaumYJfEa0emmQ3p0xlax0dwqvWFVEMv1LTaQRJOo7zyHLDIp7YgIVlFupl37SMVW9dkDbAStAMttJM9xoAEdps77ORuLiCU4eQX6/Hr5Ewyu9PPRk3R8vQE7Npm1XBlpYFs8sQRMCiBMPDmPL9aQLXh1Zupda6RpiObGSP84SAnlaVN/z3C6C5Mx5ITx2fZiAFolej5nvh3BmBb3GkpFqaFdJoLZMektBgdemmHsfHrI2ovghM3WLpBYXkuwpv0B+2/IUyt8Xiax0hF9JayrEZ1RSqGNhen5Zs3JhA77cMiGtypqAUAu04N6sZck5lGVDucZKE49pCCYhtrsko/KUyPgyBSLCTkT8cXzvgE1DQ2Wx8Ni0H7p++Q==
+X-Session-ID: U2FsdGVkX19einlHnDQmJrsy81fOs5PIEdP6fZzjzwA=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=P/jo74joLsL73QrGHI2SC8OI4MaDR6XX0Q+dtHpnwtY=; b=a1xXLVhma/8O+1E6LSlwh2GcPkXbepBb5vlRRfzGcNcXPBziQAcLE8BrEIaAIVhZIXzHL1dM4N3w2qXcP7yepu9KY7befopV6EITQEXickK37R23kifZm5JzyMHFgpOpKtt+l68GJK91qtPyrclP41m8SP/uK+pqsvWVqQ1wBXo6gP49C7tPP8zex5eF4gHLSZ2g7l8ExISGzbnIzjkW8aBNTL57DOTTFn0oi/rBKODgCbZeWVAZpD5HMeE0AwVwdDH9L48H8EOcqNgYu7gG3wbNafw0gVSJWExCNzAcGbU6TzJFrEAY0gl1XrhI56c5U+vAIBmgyW/Js0ihTXEH9g==
+X-HE-Tag: 1736201276-164101
+X-HE-Meta: U2FsdGVkX18nRdkkxhdXnhTBJjVDXBMEq2+Lhs/1RD1ur2y9EIqcZKNqFyy9bJXfVCmlt59TIPnJXpouY5fxcImRFxbOCqY7z1S1LsD4MHQ1rZOUr0SqsJGWCh/bV72uNmfyESdfH2OCgVt5tAOEfAJPJlv6l9rjH1FvZuwgGhnYu6Y7rZoBBdwQDwhvfGmAgWsjhRv1hxdUWWEwIeXuseBu0cZes1lquMM4Lz2Kln0BEbFncMzvNw4q0TPzoWBs6BY6xD+gOzsQY/HKKoQ5BdvSP6mrDfFf/22lXnOmhdn5ADbFd1/zwNvpCnQ9j8kdCch0GzpJGtgyMsJWlg+4aBpicI3DHErYZQXpndeptOrGS9gWbLPTcrCXAh469+hXW9Y7Uo611tH/bfLELTYIUbp/1ZrSEZF7adCrgElldvs0hjEyLzaKZNIXr0XQZ8rtIFTaFRf97ED+G9IRgSH5g+SEvIxXymedIQb5Qd1OPtOi93D7jgsmuyPH1YIgqtHz8+qXUxHbCvVeQtaia8pEAn5uK3s4TworKLpYH7JG8+E27TykaplptA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -57,15 +57,16 @@ Interfaces section and mark with (SUSv4).
 Move circular TRIGl functions before hyperbolic TRIGh? entries to keep
 each together: should we keep them on separate lines out of order, so we
 can check if they exist, concatenate onto the same lines with slashes,
-or just add the suffixes /f/l on to the base entry?
+or just add the suffixes /f/l on to the base entry, and do the same with
+other math functions?
 
 Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 ---
- winsup/doc/posix.xml | 289 ++++++++++++++++++++++++++-----------------
- 1 file changed, 178 insertions(+), 111 deletions(-)
+ winsup/doc/posix.xml | 287 +++++++++++++++++++++++++++----------------
+ 1 file changed, 178 insertions(+), 109 deletions(-)
 
 diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index 2782beb86547..e9d1d3486caf 100644
+index 2782beb86547..cd24af73162c 100644
 --- a/winsup/doc/posix.xml
 +++ b/winsup/doc/posix.xml
 @@ -5,10 +5,16 @@
@@ -541,14 +542,7 @@ index 2782beb86547..e9d1d3486caf 100644
      setpriority			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      setprotoent
      setpwent
-@@ -867,33 +949,26 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     setuid
-     setutxent
-     setvbuf
--    shm_open
--    shm_unlink
-     shmat			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     shmctl			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+@@ -874,26 +956,21 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      shmdt			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      shmget			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      shutdown
@@ -576,7 +570,7 @@ index 2782beb86547..e9d1d3486caf 100644
      sigsetjmp
      sigsuspend
      sigtimedwait
-@@ -901,10 +976,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -901,10 +978,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      sigwaitinfo
      sin
      sinf
@@ -588,7 +582,7 @@ index 2782beb86547..e9d1d3486caf 100644
      sleep
      snprintf
      sockatmark
-@@ -925,6 +1000,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -925,6 +1002,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      stdout
      stpcpy
      stpncpy
@@ -596,7 +590,7 @@ index 2782beb86547..e9d1d3486caf 100644
      strcasecmp
      strcasecmp_l
      strcat
-@@ -942,6 +1018,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -942,6 +1020,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      strfmon_l
      strftime
      strftime_l
@@ -605,7 +599,7 @@ index 2782beb86547..e9d1d3486caf 100644
      strlen
      strncasecmp
      strncasecmp_l
-@@ -980,10 +1058,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -980,10 +1060,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      system
      tan
      tanf
@@ -617,7 +611,7 @@ index 2782beb86547..e9d1d3486caf 100644
      tcdrain
      tcflow
      tcflush
-@@ -995,11 +1073,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -995,11 +1075,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      tcsetpgrp
      tdelete
      telldir
@@ -638,7 +632,7 @@ index 2782beb86547..e9d1d3486caf 100644
      time
      timer_create		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      timer_delete
-@@ -1007,6 +1093,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1007,6 +1095,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      timer_gettime
      timer_settime
      times
@@ -646,7 +640,7 @@ index 2782beb86547..e9d1d3486caf 100644
      timezone
      tmpfile
      tmpnam
-@@ -1025,6 +1112,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1025,6 +1114,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      truncf
      truncl
      tsearch
@@ -657,7 +651,7 @@ index 2782beb86547..e9d1d3486caf 100644
      ttyname
      ttyname_r
      twalk
-@@ -1039,13 +1130,13 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1039,13 +1132,13 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      unlockpt
      unsetenv
      uselocale
@@ -672,7 +666,7 @@ index 2782beb86547..e9d1d3486caf 100644
      vdprintf
      vfprintf
      vfscanf
-@@ -1076,6 +1167,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1076,6 +1169,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      wcscspn
      wcsdup
      wcsftime
@@ -681,7 +675,7 @@ index 2782beb86547..e9d1d3486caf 100644
      wcslen
      wcsncasecmp
      wcsncasecmp_l
-@@ -1213,10 +1306,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1213,10 +1308,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      madvise
      mkstemps
      openpty
@@ -692,7 +686,7 @@ index 2782beb86547..e9d1d3486caf 100644
      reallocf
      res_close
      res_init
-@@ -1249,8 +1340,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1249,8 +1342,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      setusershell
      statfs
      strcasestr
@@ -701,7 +695,7 @@ index 2782beb86547..e9d1d3486caf 100644
      strsep
      timingsafe_bcmp
      timingsafe_memcmp
-@@ -1266,8 +1355,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1266,8 +1357,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      wait4
      warn
      warnx
@@ -710,7 +704,7 @@ index 2782beb86547..e9d1d3486caf 100644
  </screen>
  
  </sect1>
-@@ -1276,7 +1363,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1276,7 +1365,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
  
  <screen>
      __mempcpy
@@ -718,7 +712,7 @@ index 2782beb86547..e9d1d3486caf 100644
      argz_add
      argz_add_sep
      argz_append
-@@ -1290,7 +1376,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1290,7 +1378,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      argz_replace
      argz_stringify
      asnprintf
@@ -726,7 +720,7 @@ index 2782beb86547..e9d1d3486caf 100644
      asprintf_r
      basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      canonicalize_file_name
-@@ -1300,7 +1385,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1300,7 +1387,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      clog10l
      close_range			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
      crypt_r			(available in external "crypt" library)
@@ -734,7 +728,7 @@ index 2782beb86547..e9d1d3486caf 100644
      dremf
      dup3
      envz_add
-@@ -1322,8 +1406,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1322,8 +1408,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      fedisableexcept
      feenableexcept
      fegetexcept
@@ -743,7 +737,7 @@ index 2782beb86547..e9d1d3486caf 100644
      fgets_unlocked
      fgetwc_unlocked
      fgetws_unlocked
-@@ -1352,35 +1434,23 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1352,35 +1436,23 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      llistxattr
      lremovexattr
      lsetxattr
@@ -779,7 +773,7 @@ index 2782beb86547..e9d1d3486caf 100644
      quotactl
      rawmemchr
      removexattr
-@@ -1388,8 +1458,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1388,8 +1460,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      sched_getaffinity
      sched_getcpu
      sched_setaffinity
@@ -788,7 +782,7 @@ index 2782beb86547..e9d1d3486caf 100644
      setxattr
      signalfd
      sincos
-@@ -1416,7 +1484,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1416,7 +1486,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      updwtmpx
      utmpxname
      vasnprintf
@@ -796,7 +790,7 @@ index 2782beb86547..e9d1d3486caf 100644
      vasprintf_r
      versionsort
      wcsftime_l
-@@ -1461,8 +1528,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1461,8 +1530,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      getmntent
      memalign
      setmntent
@@ -805,7 +799,12 @@ index 2782beb86547..e9d1d3486caf 100644
      xdr_array			(available in external "libtirpc" library)
      xdr_bool			(available in external "libtirpc" library)
      xdr_bytes			(available in external "libtirpc" library)
-@@ -1517,49 +1582,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1514,52 +1581,24 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     xdrstdio_create		(available in external "libtirpc" library)
+ </screen>
+ 
++</sect1>
++
  <sect1 id="std-iso"><title>System interfaces not in POSIX but compatible with ISO C requirements:</title>
  
  <screen>
@@ -860,7 +859,7 @@ index 2782beb86547..e9d1d3486caf 100644
      bcmp			(POSIX.1-2001, SUSv3)
      bcopy			(SUSv3)
      bzero			(SUSv3)
-@@ -1570,12 +1605,16 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1570,12 +1609,16 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      endutent			(XPG2)
      fcvt			(SUSv3)
      ftime			(SUSv3)
@@ -877,7 +876,7 @@ index 2782beb86547..e9d1d3486caf 100644
      getutent			(XPG2)
      getutid			(XPG2)
      getutline			(XPG2)
-@@ -1583,6 +1622,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1583,6 +1626,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      getwd			(SUSv3)
      h_errno			(SUSv3)
      index			(SUSv3)
@@ -886,7 +885,7 @@ index 2782beb86547..e9d1d3486caf 100644
      makecontext			(SUSv3)
      mallinfo			(SVID)
      mallopt			(SVID)
-@@ -1591,56 +1632,82 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1591,56 +1636,80 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
      pthread_attr_getstackaddr	(SUSv3)
      pthread_attr_setstackaddr	(SUSv3)
      pthread_continue		(XPG2)
@@ -904,8 +903,6 @@ index 2782beb86547..e9d1d3486caf 100644
 +    setitimer			(SUSv4, see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
 +    setpgrp			(SUSv4)
      setutent			(XPG2)
-+    shm_open			(SUSv4)
-+    shm_unlink			(SUSv4)
 +    sighold			(SUSv4)
 +    sigignore			(SUSv4)
 +    siginterrupt		(SUSv4)
