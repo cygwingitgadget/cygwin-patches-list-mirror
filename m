@@ -1,266 +1,982 @@
-Return-Path: <SRS0=odvg=T2=cornell.edu=kbrown@sourceware.org>
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070c.outbound.protection.outlook.com [IPv6:2a01:111:f403:2418::70c])
-	by sourceware.org (Postfix) with ESMTPS id D338C3858D1E
-	for <cygwin-patches@cygwin.com>; Thu,  2 Jan 2025 21:42:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D338C3858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=cornell.edu
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D338C3858D1E
-Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:2418::70c
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1735854137; cv=pass;
-	b=wfSmwkRDkS3qSUXZjARTOtI7pyss4yjjICu4C6Vvqj13mjn45k3S2IAdVqf3WiKDgleMiLTvMV8JNtHNYko1vcusQTI58MOJQYd3ZTDTQM8c2xasMQTIb08cu4Vmc55hbTMUkTuVCFDec0Qz43uWDN4NyZbb/DrGs7vxKkw6plY=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1735854137; c=relaxed/simple;
-	bh=ZNVWpGCOw9U67ojb7qXGTVWVhSH+G0QW8hheQKfNrfA=;
-	h=DKIM-Signature:Message-ID:Date:Subject:To:From:MIME-Version; b=bt0oJiltvjm0ujwmBqOcT9G3DiupuglAXryK6pcgcmdk4Qar3rh0bjb9F5KsDlB4RP5r1lxZ+iqEyp3XbvCCXcmPbjJaG6UtMm7X1fvlxTd8jAvAXZLZdQtk7cmcWOCdJxOe2hb2EVBTtEyOphllKjHzVLrxHO6jmqsGTJxsc+I=
-ARC-Authentication-Results: i=2; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D338C3858D1E
+Return-Path: <SRS0=1+8C=T6=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+	by sourceware.org (Postfix) with ESMTPS id 0C1743858D21
+	for <cygwin-patches@cygwin.com>; Mon,  6 Jan 2025 19:51:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C1743858D21
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C1743858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736193083; cv=none;
+	b=r8ZKbYqkPlR2jbK+IASiK+Gs5zzgZWyGT4BaWnwZbZcae8LyGlgW7HAnezsiH4I2uImZJiw79MRJNmX4Uhv66kzKAQSVh9chNoONn8SxlXCdcQFqYQ/UeG7ImLW5sa8QU2DKHig91ymqgCLypnoC/uf2DASD3hMCHePfDChIMsw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1736193083; c=relaxed/simple;
+	bh=5dp5bLQxaKkLV5CQ9+05dvsZGd5zdaivPWFgjIZKkEM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=T9woQIexjBMVsOZcAddMD+XtyjpO0qbcpb49aIsighVetg6rk1gfeI8FKjKtbKwItTSBpo9AetSF1wFt0bMUnvBGHvfb9dI3rxaNnVtBg46Rw8DazxDbkmnPRtqHRgR4TUvDTbud/+x+EJo8JcWSlk0DNC52aCrP4/srJHxx+n8=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C1743858D21
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cornell.edu header.i=@cornell.edu header.a=rsa-sha256 header.s=selector2 header.b=O0arCqk/
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=f6nEOx4SCPUEW7qY/o6z99YpNcih6A7lvxiCLwpbA/o9tXLtoJ0o5ujE0Bsnj+t2O6Q+8rirzXSjd5dvRjgs5fQyYv+XvET0GDjGmPF9jsVvc+aBEQBgQcoThE3fd7JbSNUKTZmVcZndpxN24kiiuBzd1NpPiAZykBVWTEkHoHfGL5MKgZ8lf03HTm+hrkRaC8hWWG1TWZJkx9PVUTJ9UviTzTz2v69fEciEm1mx2FzShWR7LFmrwmoZoQNsLjhoUEx+7/IyilLBxzH2ccxHisdrMSePBCDLoeOz01L75krVYqqwWxYDAeID2M5jNUCPwMNPvNOj3yOQT2Pr5togKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mA8f+d5iIgoMT5OfLwTVIhq6ai0+KOPFQ2IXjPvaRpI=;
- b=WRShSEctPllqZ7T+/CzxAM8EJBlE8z881P26PWJif6xBIcUSqnKRb3Ww49gRuSp6U56OAVC8T4VoxCP6xQJ07GJNTbXEg2tGGNua4eWGNMPBvsghD6G57vxCNXoB7X1tN48PEAelGwzpCxG2ak93E1ueIFC83T8ObpthCjJs0302i99nhyiOJ23V98h/YO5X68mnKwPwczPv1XLAPvm+PZhS3X+xG0XlV3RG/e+7JTYiiUymC8zA/D1H7q357SjIQf87HwKRpLg3zZm1Bij2msAaJOLSz3joRjVCYJAXIkDyvTABirCdb0EdKaHP2LrHSHYqFM8CLYpAcYewa1FSJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mA8f+d5iIgoMT5OfLwTVIhq6ai0+KOPFQ2IXjPvaRpI=;
- b=O0arCqk/Vi+460jaFSZ2clKqxB7baJRNoKA7eJAAWTXVAJnZU8ukDwSEEAYh+KqjQjb0ltD4wbO6bd0s9/vrm9Rreu5i5qePLyQF2/8+waZSEHEb7ge74+Qe6iIOcrcWND8KdV1HBTrWSPtUhm0Svs9QSPJY2wPHkts8CTtBv7U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornell.edu;
-Received: from SN6PR04MB5151.namprd04.prod.outlook.com (2603:10b6:805:90::25)
- by BN0PR04MB7982.namprd04.prod.outlook.com (2603:10b6:408:155::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.14; Thu, 2 Jan
- 2025 21:42:10 +0000
-Received: from SN6PR04MB5151.namprd04.prod.outlook.com
- ([fe80::5ff0:555f:8712:42dd]) by SN6PR04MB5151.namprd04.prod.outlook.com
- ([fe80::5ff0:555f:8712:42dd%6]) with mapi id 15.20.8314.011; Thu, 2 Jan 2025
- 21:42:10 +0000
-Content-Type: multipart/mixed; boundary="------------XVN9V10ylJnKEQuhWav61Oa6"
-Message-ID: <9b717926-06fb-4d34-a473-a709316de429@cornell.edu>
-Date: Thu, 2 Jan 2025 16:42:08 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: mmap: allow remapping part of an existing
- anonymous, mapping
-To: cygwin-patches@cygwin.com
-References: <a9ebb720-13a9-4903-adfb-ca0ff9a4d82d@cornell.edu>
-Content-Language: en-US
-From: Ken Brown <kbrown@cornell.edu>
-In-Reply-To: <a9ebb720-13a9-4903-adfb-ca0ff9a4d82d@cornell.edu>
-X-ClientProxiedBy: MN2PR08CA0014.namprd08.prod.outlook.com
- (2603:10b6:208:239::19) To SN6PR04MB5151.namprd04.prod.outlook.com
- (2603:10b6:805:90::25)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=LuyiILhA
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 8431780295;
+	Mon,  6 Jan 2025 19:51:22 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf17.hostedemail.com (Postfix) with ESMTPA id 0B3FE17;
+	Mon,  6 Jan 2025 19:51:20 +0000 (UTC)
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com (Cygwin Patches)
+Subject: [PATCH] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
+Date: Mon,  6 Jan 2025 12:51:01 -0700
+Message-ID: <09e9e4bd4864f985995729ab8c1234a7af560106.1736192867.git.Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR04MB5151:EE_|BN0PR04MB7982:EE_
-X-MS-Office365-Filtering-Correlation-Id: afe5778a-252a-42d8-cfa5-08dd2b764ff9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WHFXSGxMMUYrczUydTFOU3FQaUc4NW13cUFRNHk2NGlhaWpaYUd5MjlnaVpx?=
- =?utf-8?B?bjRJeU4wbUpxU29rbHptMzhuTjU3K1FaWXZmb2U4QlBoQUlkR0JWRmZtbGlV?=
- =?utf-8?B?TGI3eHNpamdaUm9CMFRjZE5GaGFsVGRGY1NhWUpOcnZMQkpQd2hqeGFkSzkv?=
- =?utf-8?B?STRCUFlMSTUwQzJ6c3JNT2oxcW91d3B1dTNZZVJWK0NZWVBrZFF5R1BPbDBv?=
- =?utf-8?B?RWRHNXRqTUF0YXE3RDBqMHpNUTVHVVQ0ajg5YmtEQWFrd0ZkT3crOUZodWdo?=
- =?utf-8?B?bUxUd3B0R3paUEw0ZVlzZy81MUY0WVdqRE00L1oyYzRLVXh6WjU4MFltRm5p?=
- =?utf-8?B?QXc3V28xUU1KT3dPNGtDRXFaaEZEUWNkdXVsWDZwRVlHWXhoYVpxYlp6U1Jj?=
- =?utf-8?B?aFVub0xTYlp2eUhmMXhveEF4SFUvWDZGZklISXoxL3ppTXdCYjNwVENObmZR?=
- =?utf-8?B?Z1NVTWRDVWhFYnVITXVYU3U5NXZvNWFZL3AwSVN4TE01Q1A0STh5L3ZVR0xJ?=
- =?utf-8?B?QWpiTDZ6dU1tbHd6aTVnbjlGRERzWGFId2xlWGd5Z3J4dVN3UmpJUGxQd3J3?=
- =?utf-8?B?a0VqTmN5cUZZV3VBMDdlRGlvNlZGZXdlYTFLOUNBdXUzWHJ3Wkt1Z0N5b0Z6?=
- =?utf-8?B?M01rZGRhVDkzcmo2dUNTWTN6R0YrMDVRZml0anRGNFlLdVJpcmhLc2MyL2Nt?=
- =?utf-8?B?TVFYcE41ZFJvTnV4bHhRdkhsV3FJb2h2Sjc3dDVqY2FWNG10NUt1L2h2eTZq?=
- =?utf-8?B?WDlNQ2piVWl0cE15VzJDKzY0ZkVWbXlydmpGZHFTaG5BTDN4V2JHVzNjTTky?=
- =?utf-8?B?QS9PT1BNdjg5UmRiYnZ4cmljeVc4TFJESnBUbHp2SEwvaGJKTkxQVlk5RURx?=
- =?utf-8?B?K3lxQThPMXlmczEvZHh5V0FVc3J4dmpON2dST0hSZlNFYmJlelBOUUlWcFRk?=
- =?utf-8?B?alZEVi9Pam1FR1hjdUtneXFiTkY1ckdMU2dRSzdhaTFZaDE0S1gwZjh2dWVK?=
- =?utf-8?B?MWFNOHl5Unk0ZFExMkxOeXhRSzdROXlLZ0hkWXpLNWIyNzFQaGFnM21YSlRI?=
- =?utf-8?B?cE02Z01oSkxOd1R4RE0zWUhoQU5yendCdWtleWVDdzhzS2hlN1ZkMnVEWmZx?=
- =?utf-8?B?a0p1cE1DeGlUd1AxcHFFdE93djU3Ty84eHpJTHRBTzA0eUZZWi8wTE5vZFBI?=
- =?utf-8?B?VHhYRmt4WWVCOENHNVduTVN2bDU3VzlDRGlZTGpMMzVmZ0doRExXZjlIdFp5?=
- =?utf-8?B?VldSMjdkVjZ4WjdzcWZ5d1FuNmF3MXEvR1FNU2JCWExMVXRxSXVhcVpld2V5?=
- =?utf-8?B?WkRIMGs3SU5nUTdvTE5NM2taaXFyYy9xTHA5MFhUYjF6RDE3anlnbFVLSFZl?=
- =?utf-8?B?bTBVMEtoUWRyNXQvbnA3cGQvZXhZcFdUQ0huRVk2M1Y4WjFxUWhueElZSGd3?=
- =?utf-8?B?QkI5SUs4SjRXNzM1djZLUStjcE95Mk9iNDJ6MkZPUlcyb3RmR1UxM0lVdGkv?=
- =?utf-8?B?OEFsMTRGZ0o2R0hORVZyWWd3aDVHdG1ydDlPMUp0Z1FuaTUxWU5tdjhRZU9Q?=
- =?utf-8?B?U2x6TCtJK3E3dUJqTmY0Sy9LT1NZSkt4MTlLU1ZIR0k3OWlxbnVyQU9PMm9z?=
- =?utf-8?B?eEM3UlA2bGFpTngvNUpGM1ZIdEtMMTV5VGNlOEV3THFRN2xyMjdCaWZ6dUx4?=
- =?utf-8?B?aUNudTc5VHdNcFMzQkExdzNPaVhrdmRQY0p2NUk5UTNlREFVQ0VXajFWQ1BZ?=
- =?utf-8?B?THQvYVRHZXNWSFZvWG1rZUtreHRpUFlWdDRWTFYvWTh5VVB5VHlVTWJyTkNR?=
- =?utf-8?B?cDBSKzN2cVF5SEZkRkh3UT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB5151.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VGNaZzE1ZjN1Z1VLelpJa2JjbWp0KzdQT25mbjRYUzRRRHdOOEhpRTU2UnNF?=
- =?utf-8?B?SzdvalRMOTladm1jVGp2T0hNNTRsdHJlQkNvbGlJcFlsSm5qdnhSdUhaVjc0?=
- =?utf-8?B?Mmk1Q0IyellndlEyV3lGejBxMlBZWWh6OFd6WUpUMTNCM3BaMVg0eVQ4QmdP?=
- =?utf-8?B?YzRmd211a0thYWlKNnJ0OXJnRmlsbVJXYytscGNFSGVLYWd3WHdrL0g2ZDlG?=
- =?utf-8?B?UTluU2U4R1lZNjhoUUlXTlJJdFhBQ210MFNFNk1XVlIwTG5hVWhNUWJSbllx?=
- =?utf-8?B?QjBhRkdwb2ZGU2R1U21zREtFdks4M3ZXVXZsUHZjM2VqTk5tOTJOdkhkbE9D?=
- =?utf-8?B?R3BaR0xWcUJ1WjNjUHhNRGEwYjlKQTFrN05Sb2ZFdDhpWWd0VHVoclNIQVNM?=
- =?utf-8?B?WHNMK3M2NFA3Yi9oS04xTGVQWFNwbTF6emVvekVHZWk3ak0yU1BwUzdpTEVV?=
- =?utf-8?B?Q2ZzZWlCQ1RzdFQzZEZnSDlGNkRnSmpPWHA4NC9yZjJyc3RtWjVKRExFdDRB?=
- =?utf-8?B?VkZkWGhKRjZ6YnBNNG5hWkxJdmRBSWpZR2QzNUhqU0lnRUtmQ2NRYVRtQzkz?=
- =?utf-8?B?WW1ydEY5dExLYkpMWFpzV1B3dWZXRkMwUlFySllhVDJFblIxR3M2em93Wm9G?=
- =?utf-8?B?V0tWNWM1TWhMVEwvTlhsVVpWeDIyNWdaczFjNi80NDJzWTF3NlFMRk0xV294?=
- =?utf-8?B?R1BwQmRDVzdtcmpDK1kwTm5pcURNT05nMnp2aHdSTk9TNkwwRmtOWjI4VVJK?=
- =?utf-8?B?SmJ6TXpMTTA4SjhBKzVITjIwaEJjeUpUcS82NnN1OGwxU2p0ejJTT1l1QjRM?=
- =?utf-8?B?KzJpSHlDVHFPdStWSXJrYjlKMGVLTUt6SkRKWGhCcFh2SVB2ZWJyeWQrWExj?=
- =?utf-8?B?WjlHRHdjT28wdC9TbGFUSmt3WHpucHQwMld5YXlrU2V3d1ZyeGhvQnovRjRR?=
- =?utf-8?B?VTJsWEt2SmFWUjM0TXZiYTg5ZjY1VlE0TFpzY2cybFQ1OGcyUXE4L29TNElu?=
- =?utf-8?B?QUV1R1AxNW52N1Y2V2h2M0J6TFJHbGlXT2lUOE9TWVd6ZjYxMXhHRmREUmhJ?=
- =?utf-8?B?WGJPaFZMQXg0WldCM1ZFUnEyMlJWMjUreE9xbW1RWEg0Si9xMTFHL2p4V3lz?=
- =?utf-8?B?Wi9ZL2VmbWpPMUFab3lGc3ZyY1k4SG1Fd3Z4ZnFQRkZyVEJFcnRHeVo0Q1U4?=
- =?utf-8?B?STFDa1d6dnlscjU5aVNsU2dEMllXMjNtakg3aEloeC9mVlpVUTNZQmFNeVpK?=
- =?utf-8?B?bUxBRm1KT3ZjR0lFWkJTaWRZTkUrQVNnakIrcUpQTUl6V3dEak9DOEtHT3Q0?=
- =?utf-8?B?MjhxUm0vZExPVlArSEZ0bXRMZVV4QkhBU1lRNUt3eG9MYnZDVGtKOGtFaENt?=
- =?utf-8?B?Q2pYTk8zRGM2b3I0Z0FwTDFMUGlndmV2S3A3T1ExN3pGeExFbnBUM0tlQVZw?=
- =?utf-8?B?T2dQMXRlTFdRNzcrZWFTUzhJUjFzbVpWT0RXM0dIZEFQUHFVbzRna0d1TU1U?=
- =?utf-8?B?WlJGQzN1RGF2dDZJZktGWjBIZDdIa0FtNTdEN3d1WFI0UEhBQkZxeTZ4ZCtn?=
- =?utf-8?B?QWFvWHFMUWxDamNyM01GNnl5YUVSNzdYUUdmZFJwTktFNzdOdWtFUTFTZVM5?=
- =?utf-8?B?elY1anRkc0xJbjdTL0Rpa252WnRzeWNUSlg1T3NTK1JzWE1nenJ4QTQrc1ZG?=
- =?utf-8?B?Zk1JRnl3QjhxRmN3MVpuYkQ4MGhPZy92SE1ucndYTUZxNmNrWURsZlp6dmZK?=
- =?utf-8?B?VGg4eTBabDJiRmdCcVZ1bmx6Y1dPT05MS1Mvd2hCZk9yYU43YlFNSkZ1N2c3?=
- =?utf-8?B?d0RIN2FOOCtkN2puVnRDbWpOYkljaDZWK0wwQkZyTjRvbW5lVTFPNForTW12?=
- =?utf-8?B?VE54Q09wYTRzWDh4bGRMQlUyeHozM3A0eU1CajIvcVBnRHpoZTJvRmx2Y0Fm?=
- =?utf-8?B?SzQxTFhORXErMG5zOFBVcXNJOVYxSVJlUzNvRitkUDQ5YmhDM0JERGtNM0Nq?=
- =?utf-8?B?Wm1OMHRpclFxMFI4dzZiMXI2ZW0zTmxNZ1ZrdlRURTRWL3NlK3plU0p3U3pZ?=
- =?utf-8?B?R1IrV3RxOEc3U2dGaG5zY29meHpjK2M2eW1YZ2IzWWUyTlVsTWtBZUg2T1ZV?=
- =?utf-8?Q?sIKQ7dOAcLrst8tDR1x9zdatJ?=
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: afe5778a-252a-42d8-cfa5-08dd2b764ff9
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR04MB5151.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2025 21:42:10.5762
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sLmx4IpIjKTaxrEPgaEumSBJWBl36ouuNl5sGhhxce1wZLtbZMHveRxW7KylYpZ/LadRRVq3L80AuTOoh/dVsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR04MB7982
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,JMQ_SPF_NEUTRAL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Organization: Systematic Software
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 0B3FE17
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout01
+X-Stat-Signature: e8nutkjpf89zn71urfjc93q75rny66d8
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1+6Urf4NomH99uy7QCx8cYeQiaQO9ApNHQ=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=w/RB4vVg0rJXdsueP6OhrkJbe/4O8hKPov+j9C6Plt8=; b=LuyiILhAqNDj2K15Qu+7zWlbwu+yBzXFPf2Ij+yBm8AL2vzd85yBYuSdcVGRXvTiqDNxXgHcOybdh8AP2GXzPQGuAJz05YHWURNeMXZZj3f6OwvxFrphbw5+c4dtEL0IoCiVMGUeQxYNn6WedB8ctLxdQAPojvVFe15uI1oECN0VlMhTH6Hj1ZhT4qxpp8M8FC35XxhSh87AsyTtDz7y/g9TuKKctSmd4S1cc2ov76Ei8qvJ2aPO8H089zJBaLR2DCWqQNaBWECM0inRA1GLKIsU7pd2YUagnjrJkjMPTlb7fOSBD82vpOt5pk3ooMmEZikqiIhpQdpa7TyXHwaKaQ==
+X-HE-Tag: 1736193080-577883
+X-HE-Meta: U2FsdGVkX186ULByijtg8jpIcrzc8l1G98f2P9Z9LYnJRvPWOKTMqhAOChEBMx1aWGhqBWZLARbYflLdbPW9PuNY3OksjLuXWuLz8SjNZxbz7LG4pd+CRhuiXE3WDpYb7/NoSatNmPKSGD2AmS478MVEh/1JA7z/Y9y+NOH7WqlN4IyOm60o+n/cHVfYunEaumYJfEa0emmQ3p0xlax0dwqvWFVEMv1LTaQRJOo7zyHLDIp7YgIVlFupl37SMVW9dkDbAStAMttJM9xoAEdps77ORuLiCU4eQX6/Hr5Ewyu9PPRk3R8vQE7Npm1XBlpYFs8sQRMCiBMPDmPL9aQLXh1Zupda6RpiObGSP84SAnlaVN/z3C6C5Mx5ITx2fZiAFolej5nvh3BmBb3GkpFqaFdJoLZMektBgdemmHsfHrI2ovghM3WLpBYXkuwpv0B+2/IUyt8Xiax0hF9JayrEZ1RSqGNhen5Zs3JhA77cMiGtypqAUAu04N6sZck5lGVDucZKE49pCCYhtrsko/KUyPgyBSLCTkT8cXzvgE1DQ2Wx8Ni0H7p++Q==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---------------XVN9V10ylJnKEQuhWav61Oa6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Update anchor id and description to current version, year, issue, etc.
+Move new POSIX entries in other sections to the SUS/POSIX section.
+Add new POSIX entries from din entries.
+Add new entries with interfaces available in headers and packages.
+Add those missing to Not Implemented section, with mentions of headers,
+packages, etc.
 
-On 12/28/2024 4:40 PM, Ken Brown wrote:
-> Patch attached.
-> 
-> I'm not sure I handled the noreserve case in the best possible way, but 
-> at least I didn't make it worse.  The behavior in that case after my 
-> patch is the same as before.
-> 
-> Ken
-> 
-> P.S. If no one has any comments in the next week or so, I might just go 
-> ahead and push it (to main only), so it can get some testing.  Corinna 
-> has already said that's OK in https://cygwin.com/pipermail/cygwin- 
-> developers/2024-December/012723.html
+Move dropped entries out of the SUS/POSIX section to Deprecated
+Interfaces section and mark with (SUSv4).
 
-v2 is attached.  The only difference is that I clarified in the log 
-message and the release note that this affects only the MAP_FIXED case.
+Move circular TRIGl functions before hyperbolic TRIGh? entries to keep
+each together: should we keep them on separate lines out of order, so we
+can check if they exist, concatenate onto the same lines with slashes,
+or just add the suffixes /f/l on to the base entry?
 
-Ken
---------------XVN9V10ylJnKEQuhWav61Oa6
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-mmap-allow-remapping-part-of-an-existing-anon.patch"
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-mmap-allow-remapping-part-of-an-existing-anon.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
+Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+---
+ winsup/doc/posix.xml | 289 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 178 insertions(+), 111 deletions(-)
 
-RnJvbSA2MjVjNzdhODI5MjUxODU4MDVhZDU3ZDVlZjNmMGQwZDkwZGM5YjU3IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGticm93bkBjb3JuZWxsLmVkdT4KRGF0ZTog
-RnJpLCAyNyBEZWMgMjAyNCAxNjowOTo0MCAtMDUwMApTdWJqZWN0OiBbUEFUQ0ggdjJdIEN5Z3dp
-bjogbW1hcDogYWxsb3cgcmVtYXBwaW5nIHBhcnQgb2YgYW4gZXhpc3RpbmcKIGFub255bW91cyBt
-YXBwaW5nCgpQcmV2aW91c2x5IG1tYXAgd2l0aCBNQVBfRklYRUQgd291bGQgZmFpbCB3aXRoIEVJ
-TlZBTCBvbiBhbiBhdHRlbXB0IHRvCm1hcCBhbiBhZGRyZXNzIHJhbmdlIGNvbnRhaW5lZCBpbiB0
-aGUgY2h1bmsgb2YgYW4gZXhpc3RpbmcgbWFwcGluZy4KV2l0aCB0aGlzIGNvbW1pdCwgbW1hcCB3
-aWxsIHN1Y2NlZWQsIHByb3ZpZGVkIHRoZSBtYXBwaW5ncyBhcmUKYW5vbnltb3VzLCB0aGUgTUFQ
-X1NIQVJFRC9NQVBfUFJJVkFURSBmbGFncyBhZ3JlZSwgYW5kIE1BUF9OT1JFU0VSVkUKaXMgbm90
-IHNldCBmb3IgZWl0aGVyIG1hcHBpbmcuCgpBZGRyZXNzZXM6IGh0dHBzOi8vY3lnd2luLmNvbS9w
-aXBlcm1haWwvY3lnd2luLzIwMjQtRGVjZW1iZXIvMjU2OTAxLmh0bWwKU2lnbmVkLW9mZi1ieTog
-S2VuIEJyb3duIDxrYnJvd25AY29ybmVsbC5lZHU+Ci0tLQogd2luc3VwL2N5Z3dpbi9tbS9tbWFw
-LmNjICAgIHwgNDUgKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLQogd2luc3Vw
-L2N5Z3dpbi9yZWxlYXNlLzMuNi4wIHwgIDYgKysrKysKIDIgZmlsZXMgY2hhbmdlZCwgMzMgaW5z
-ZXJ0aW9ucygrKSwgMTggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9t
-bS9tbWFwLmNjIGIvd2luc3VwL2N5Z3dpbi9tbS9tbWFwLmNjCmluZGV4IGZjMTI2YTg3MDcyYS4u
-MDIyNDc3OTQ1OGVmIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL21tL21tYXAuY2MKKysrIGIv
-d2luc3VwL2N5Z3dpbi9tbS9tbWFwLmNjCkBAIC00OTQsMTggKzQ5NCwyNCBAQCBtbWFwX3JlY29y
-ZDo6bWFwX3BhZ2VzIChjYWRkcl90IGFkZHIsIFNJWkVfVCBsZW4sIGludCBuZXdfcHJvdCkKICAg
-b2ZmX3Qgb2ZmID0gYWRkciAtIGdldF9hZGRyZXNzICgpOwogICBvZmYgLz0gd2luY2FwLnBhZ2Vf
-c2l6ZSAoKTsKICAgbGVuID0gUEFHRV9DTlQgKGxlbik7Ci0gIC8qIEZpcnN0IGNoZWNrIGlmIHRo
-ZSBhcmVhIGlzIHVudXNlZCByaWdodCBub3cuICovCi0gIGZvciAoU0laRV9UIGwgPSAwOyBsIDwg
-bGVuOyArK2wpCi0gICAgaWYgKE1BUF9JU1NFVCAob2ZmICsgbCkpCi0gICAgICB7Ci0Jc2V0X2Vy
-cm5vIChFSU5WQUwpOwotCXJldHVybiBmYWxzZTsKLSAgICAgIH0KLSAgaWYgKCFub3Jlc2VydmUg
-KCkKLSAgICAgICYmICFWaXJ0dWFsUHJvdGVjdCAoZ2V0X2FkZHJlc3MgKCkgKyBvZmYgKiB3aW5j
-YXAucGFnZV9zaXplICgpLAotCQkJICBsZW4gKiB3aW5jYXAucGFnZV9zaXplICgpLAotCQkJICA6
-Omdlbl9wcm90ZWN0IChuZXdfcHJvdCwgZ2V0X2ZsYWdzICgpKSwKLQkJCSAgJm9sZF9wcm90KSkK
-KyAgLyogVmlydHVhbFByb3RlY3QgY2FuIG9ubHkgYmUgY2FsbGVkIG9uIGNvbW1pdHRlZCBwYWdl
-cywgc28gaXQncyBub3QKKyAgICAgY2xlYXIgaG93IHRvIGNoYW5nZSBwcm90ZWN0aW9uIGluIHRo
-ZSBub3Jlc2VydmUgY2FzZS4gIEluIHRoaXMKKyAgICAgY2FzZSB3ZSB3aWxsIHRoZXJlZm9yZSBy
-ZXF1aXJlIHRoYXQgdGhlIHBhZ2VzIGFyZSB1bm1hcHBlZCwgaW4KKyAgICAgb3JkZXIgdG8ga2Vl
-cCB0aGUgYmVoYXZpb3IgdGhlIHNhbWUgYXMgaXQgd2FzIGJlZm9yZSBuZXdfcHJvdCB3YXMKKyAg
-ICAgaW50cm9kdWNlZC4gIEZJWE1FOiBJcyB0aGVyZSBhIGJldHRlciB3YXkgdG8gaGFuZGxlIHRo
-aXM/ICovCisgIGlmIChub3Jlc2VydmUgKCkpCisgICAgeworICAgICAgZm9yIChTSVpFX1QgbCA9
-IDA7IGwgPCBsZW47ICsrbCkKKwlpZiAoTUFQX0lTU0VUIChvZmYgKyBsKSkKKwkgIHsKKwkgICAg
-c2V0X2Vycm5vIChFSU5WQUwpOworCSAgICByZXR1cm4gZmFsc2U7CisJICB9CisgICAgfQorICBl
-bHNlIGlmICghVmlydHVhbFByb3RlY3QgKGdldF9hZGRyZXNzICgpICsgb2ZmICogd2luY2FwLnBh
-Z2Vfc2l6ZSAoKSwKKwkJCSAgICBsZW4gKiB3aW5jYXAucGFnZV9zaXplICgpLAorCQkJICAgIDo6
-Z2VuX3Byb3RlY3QgKG5ld19wcm90LCBnZXRfZmxhZ3MgKCkpLAorCQkJICAgICZvbGRfcHJvdCkp
-CiAgICAgewogICAgICAgX19zZXRlcnJubyAoKTsKICAgICAgIHJldHVybiBmYWxzZTsKQEAgLTYy
-NSw4ICs2MzEsOSBAQCBtbWFwX2xpc3Q6OnRyeV9tYXAgKHZvaWQgKmFkZHIsIHNpemVfdCBsZW4s
-IGludCBuZXdfcHJvdCwgaW50IGZsYWdzLCBvZmZfdCBvZmYpCiAKICAgaWYgKG9mZiA9PSAwICYm
-ICFmaXhlZCAoZmxhZ3MpKQogICAgIHsKLSAgICAgIC8qIElmIE1BUF9GSVhFRCBpc24ndCBnaXZl
-biwgY2hlY2sgaWYgdGhpcyBtYXBwaW5nIG1hdGNoZXMgaW50byB0aGUKLQkgY2h1bmsgb2YgYW5v
-dGhlciBhbHJlYWR5IHBlcmZvcm1lZCBtYXBwaW5nLiAqLworICAgICAgLyogSWYgTUFQX0ZJWEVE
-IGlzbid0IGdpdmVuLCB0cnkgdG8gc2F0aXNmeSB0aGlzIG1hcHBpbmcgcmVxdWVzdAorCSBieSBy
-ZWN5Y2xpbmcgdW5tYXBwZWQgcGFnZXMgaW4gdGhlIGNodW5rIG9mIGFuIGV4aXN0aW5nCisJIG1h
-cHBpbmcuICovCiAgICAgICBTSVpFX1QgcGxlbiA9IFBBR0VfQ05UIChsZW4pOwogICAgICAgTElT
-VF9GT1JFQUNIIChyZWMsICZyZWNzLCBtcl9uZXh0KQogCWlmIChyZWMtPmZpbmRfdW51c2VkX3Bh
-Z2VzIChwbGVuKSAhPSAoU0laRV9UKSAtMSkKQEAgLTY0MCw5ICs2NDcsMTAgQEAgbW1hcF9saXN0
-Ojp0cnlfbWFwICh2b2lkICphZGRyLCBzaXplX3QgbGVuLCBpbnQgbmV3X3Byb3QsIGludCBmbGFn
-cywgb2ZmX3Qgb2ZmKQogICAgIH0KICAgZWxzZSBpZiAoZml4ZWQgKGZsYWdzKSkKICAgICB7Ci0g
-ICAgICAvKiBJZiBNQVBfRklYRUQgaXMgZ2l2ZW4sIHRlc3QgaWYgdGhlIHJlcXVlc3RlZCBhcmVh
-IGlzIGluIGFuCi0JIHVubWFwcGVkIHBhcnQgb2YgYW4gc3RpbGwgYWN0aXZlIG1hcHBpbmcuICBU
-aGlzIGNhbiBoYXBwZW4KLQkgaWYgYSBtZW1vcnkgcmVnaW9uIGlzIHVubWFwcGVkIGFuZCByZW1h
-cHBlZCB3aXRoIE1BUF9GSVhFRC4gKi8KKyAgICAgIC8qIElmIE1BUF9GSVhFRCBpcyBnaXZlbiwg
-dGVzdCBpZiB0aGUgcmVxdWVzdGVkIGFyZWEgaXMKKwkgY29udGFpbmVkIGluIHRoZSBjaHVuayBv
-ZiBhbiBleGlzdGluZyBtYXBwaW5nLiAgSWYgc28sIGFuZCBpZgorCSB0aGUgZmxhZ3Mgb2YgdGhh
-dCBtYXBwaW5nIGFyZSBjb21wYXRpYmxlIHdpdGggdGhvc2UgaW4gdGhlCisJIHJlcXVlc3QsIHRy
-eSB0byByZXNldCB0aGUgcHJvdGVjdGlvbiBvbiB0aGUgcmVxdWVzdGVkIGFyZWEuICovCiAgICAg
-ICBjYWRkcl90IHVfYWRkcjsKICAgICAgIFNJWkVfVCB1X2xlbjsKIApAQCAtMTA2MSw3ICsxMDY5
-LDggQEAgZ29fYWhlYWQ6CiAgIExJU1RfV1JJVEVfTE9DSyAoKTsKICAgbWFwX2xpc3QgPSBtbWFw
-cGVkX2FyZWFzLmdldF9saXN0X2J5X2ZkIChmZCwgJnN0KTsKIAotICAvKiBUZXN0IGlmIGFuIGV4
-aXN0aW5nIGFub255bW91cyBtYXBwaW5nIGNhbiBiZSByZWN5Y2xlZC4gKi8KKyAgLyogVHJ5IHRv
-IHNhdGlzZnkgdGhlIHJlcXVlc3QgYnkgcmVzZXR0aW5nIHRoZSBwcm90ZWN0aW9uIG9uIHBhcnQg
-b2YKKyAgICAgYW4gZXhpc3RpbmcgYW5vbnltb3VzIG1hcHBpbmcuICovCiAgIGlmIChtYXBfbGlz
-dCAmJiBhbm9ueW1vdXMgKGZsYWdzKSkKICAgICB7CiAgICAgICBjYWRkcl90IHRyaWVkID0gbWFw
-X2xpc3QtPnRyeV9tYXAgKGFkZHIsIGxlbiwgcHJvdCwgZmxhZ3MsIG9mZik7CmRpZmYgLS1naXQg
-YS93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42
-LjAKaW5kZXggNGI3NjA0OTA3OTAyLi4xNzFlZDE1ZTE0NmEgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9j
-eWd3aW4vcmVsZWFzZS8zLjYuMAorKysgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAKQEAg
-LTc4LDMgKzc4LDkgQEAgV2hhdCBjaGFuZ2VkOgogLSBSYWlzZSBtYXhpbXVtIHBpZCBmcm9tIDY1
-NTM2IHRvIDQxOTQzMDQgdG8gYWNjb3VudCBmb3Igc2NlbmFyaW9zCiAgIHdpdGggbG90cyBvZiBD
-UFVzIGFuZCBsb3RzIG9mIHRhc2tzLgogICBBZGRyZXNzZXM6IGh0dHBzOi8vY3lnd2luLmNvbS9w
-aXBlcm1haWwvY3lnd2luLzIwMjQtRGVjZW1iZXIvMjU2OTI3Lmh0bWwKKworLSBBbGxvdyBtbWFw
-IHdpdGggTUFQX0ZJWEVEIHRvIHN1Y2NlZWQgb24gYW4gYWRkcmVzcyByYW5nZSBjb250YWluZWQK
-KyAgaW4gdGhlIGNodW5rIG9mIGFuIGV4aXN0aW5nIGFub255bW91cyBtYXBwaW5nLCBwcm92aWRl
-ZCB0aGUKKyAgTUFQX1NIQVJFRC9NQVBfUFJJVkFURSBmbGFncyBhZ3JlZSBhbmQgTUFQX05PUkVT
-RVJWRSBpcyBub3Qgc2V0IGZvcgorICBlaXRoZXIgbWFwcGluZy4KKyAgQWRkcmVzc2VzOiBodHRw
-czovL2N5Z3dpbi5jb20vcGlwZXJtYWlsL2N5Z3dpbi8yMDI0LURlY2VtYmVyLzI1NjkwMS5odG1s
-Ci0tIAoyLjQ1LjEKCg==
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 2782beb86547..e9d1d3486caf 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -5,10 +5,16 @@
+ <chapter id="compatibility" xmlns:xi="http://www.w3.org/2001/XInclude">
+ <title>Compatibility</title>
+ 
+-<sect1 id="std-susv4"><title>System interfaces compatible with the Single Unix Specification, Version 7:</title>
++<sect1 id="std-susv5"><title>System interfaces compatible with the Single UNIX® Specification Version 5:</title>
+ 
+-<para>Note that the core of the Single Unix Specification, Version 7 is
+-also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
++<para>Note that the core of the Single UNIX® Specification Version 5 is
++POSIX®.1-2024 also simultaneously IEEE Std 1003.1™-2024 Edition,
++The Open Group Base Specifications Issue 8
++(see https://pubs.opengroup.org/onlinepubs/9799919799/), and 
++ISO/IEC DIS 9945 Information technology
++- Portable Operating System Interface (POSIX®) base specifications
++- Issue 8 (expected to replace ISO/IEC/IEEE 9945:2009 - Issue 7 in the coming months
++- see https://www.iso.org/standard/86539.html).</para>
+ 
+ <screen>
+     FD_CLR
+@@ -17,21 +23,18 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     FD_ZERO
+     _Exit
+     _exit
+-    _longjmp
+-    _setjmp
+-    _tolower
+-    _toupper
+     a64l
+     abort
+     abs
+     accept
++    accept4
+     access
+     acos
+     acosf
++    acosl
+     acosh
+     acoshf
+     acoshl
+-    acosl
+     aio_cancel
+     aio_error
+     aio_fsync
+@@ -40,59 +43,98 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     aio_suspend
+     aio_write
+     alarm
++    aligned_alloc		(ISO C11)
+     alphasort
+     asctime
+     asctime_r
+     asin
+     asinf
++    asinl
+     asinh
+     asinhf
+     asinhl
+-    asinl
++    asprintf
++    at_quick_exit		(ISO C11)
+     atan
++    atanf
++    atanl
+     atan2
+     atan2f
+     atan2l
+-    atanf
+     atanh
+     atanhf
+     atanhl
+-    atanl
+     atexit
+     atof
+     atoff
+     atoi
+     atol
+     atoll
++    atomic_compare_exchange_strong		(available in external "stdatomic.h" header)
++    atomic_compare_exchange_strong_explicit	(available in external "stdatomic.h" header)
++    atomic_compare_exchange_weak		(available in external "stdatomic.h" header)
++    atomic_compare_exchange_weak_explicit	(available in external "stdatomic.h" header)
++    atomic_exchange		(available in external "stdatomic.h" header)
++    atomic_exchange_explicit	(available in external "stdatomic.h" header)
++    atomic_fetch_add		(available in external "stdatomic.h" header)
++    atomic_fetch_add_explicit	(available in external "stdatomic.h" header)
++    atomic_fetch_and		(available in external "stdatomic.h" header)
++    atomic_fetch_and_explicit	(available in external "stdatomic.h" header)
++    atomic_fetch_or		(available in external "stdatomic.h" header)
++    atomic_fetch_or_explicit	(available in external "stdatomic.h" header)
++    atomic_fetch_sub		(available in external "stdatomic.h" header)
++    atomic_fetch_sub_explicit	(available in external "stdatomic.h" header)
++    atomic_fetch_xor		(available in external "stdatomic.h" header)
++    atomic_fetch_xor_explicit	(available in external "stdatomic.h" header)
++    atomic_flag_clear		(available in external "stdatomic.h" header)
++    atomic_flag_clear_explicit	(available in external "stdatomic.h" header)
++    atomic_flag_test_and_set	(available in external "stdatomic.h" header)
++    atomic_flag_test_and_set_explicit	(available in external "stdatomic.h" header)
++    atomic_init			(available in external "stdatomic.h" header)
++    atomic_is_lock_free		(available in external "stdatomic.h" header)
++    atomic_load			(available in external "stdatomic.h" header)
++    atomic_load_explicit	(available in external "stdatomic.h" header)
++    atomic_signal_fence		(available in external "stdatomic.h" header)
++    atomic_store		(available in external "stdatomic.h" header)
++    atomic_store_explicit	(available in external "stdatomic.h" header)
++    atomic_thread_fence		(available in external "stdatomic.h" header)
+     basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
++    be16toh			(available in external "endian.h" header)
++    be32toh			(available in external "endian.h" header)
++    be64toh			(available in external "endian.h" header)
+     bind
++    bind_textdomain_codeset	(available in external gettext "libintl" library)
++    bindtextdomain		(available in external gettext "libintl" library)
+     bsearch
+     btowc
++    c16rtomb			(ISO C11)
++    c32rtomb			(ISO C11)
+     cabs
+     cabsf
+     cabsl
+     cacos
+     cacosf
++    cacosl
+     cacosh
+     cacoshf
+     cacoshl
+-    cacosl
++    call_once			(ISO C11)
+     calloc
+     carg
+     cargf
+     cargl
+     casin
+     casinf
++    casinl
+     casinh
+     casinhf
+     casinhl
+-    casinl
+     catan
+     catanf
++    catanl
+     catanh
+     catanhf
+     catanhl
+-    catanl
+     catclose
+     catgets
+     catopen
+@@ -101,10 +143,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     cbrtl
+     ccos
+     ccosf
++    ccosl
+     ccosh
+     ccoshf
+     ccoshl
+-    ccosl
+     ceil
+     ceilf
+     ceill
+@@ -134,6 +176,12 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     close
+     closedir
+     closelog
++    cnd_broadcast		(ISO C11)
++    cnd_destroy			(ISO C11)
++    cnd_init			(ISO C11)
++    cnd_signal			(ISO C11)
++    cnd_timedwait		(ISO C11)
++    cnd_wait			(ISO C11)
+     confstr
+     conj
+     conjf
+@@ -161,19 +209,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     crypt			(available in external "crypt" library)
+     csin
+     csinf
++    csinl
+     csinh
+     csinhf
+     csinhl
+-    csinl
+     csqrt
+     csqrtf
+     csqrtl
+     ctan
+     ctanf
++    ctanl
+     ctanh
+     ctanhf
+     ctanhl
+-    ctanl
+     ctermid
+     ctime
+     ctime_r
+@@ -187,14 +235,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     dbm_nextkey			(available in external "libgdbm" library)
+     dbm_open			(available in external "libgdbm" library)
+     dbm_store			(available in external "libgdbm" library)
++    dcgettext			(available in external gettext "libintl" library)
++    dcngettext			(available in external gettext "libintl" library)
++    dgettext			(available in external gettext "libintl" library)
+     difftime
+     dirfd
+     dirname
+     div
++    dladdr			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     dlclose
+     dlerror
+     dlopen
+     dlsym
++    dngettext			(available in external gettext "libintl" library)
+     dprintf
+     drand48
+     dup
+@@ -265,6 +318,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     fexecve
+     fflush
+     ffs
++    ffsl
++    ffsll
+     fgetc
+     fgetpos
+     fgets
+@@ -319,7 +374,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     ftok
+     ftruncate
+     ftrylockfile
+-    ftw
+     funlockfile
+     futimens
+     fwide
+@@ -336,6 +390,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getdelim
+     getdomainname
+     getegid
++    getentropy			(din)
+     getenv
+     geteuid
+     getgid
+@@ -347,8 +402,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getgroups
+     gethostid
+     gethostname
+-    getitimer			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     getline
++    getlocalename_l		(din)
+     getlogin
+     getlogin_r
+     getnameinfo
+@@ -369,7 +424,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getpwuid_r
+     getrlimit			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     getrusage
+-    gets
+     getservbyname
+     getservbyport
+     getservent
+@@ -377,7 +431,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getsockname
+     getsockopt
+     getsubopt
+-    gettimeofday
++    gettext			(available in external gettext "libintl" library)
+     getuid
+     getutxent
+     getutxid
+@@ -392,6 +446,12 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     hcreate
+     hdestroy
+     hsearch
++    htobe16			(available in external "endian.h" header)
++    htobe32			(available in external "endian.h" header)
++    htobe64			(available in external "endian.h" header)
++    htole16			(available in external "endian.h" header)
++    htole32			(available in external "endian.h" header)
++    htole64			(available in external "endian.h" header)
+     htonl
+     htons
+     hypot
+@@ -409,18 +469,18 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     ilogbl
+     imaxabs
+     imaxdiv
++    in6addr_any			(din)
++    in6addr_loopback		(din)
+     inet_addr
+     inet_ntoa
+     inet_ntop
+     inet_pton
+     initstate
+     insque
+-    ioctl
+     isalnum
+     isalnum_l
+     isalpha
+     isalpha_l
+-    isascii
+     isatty
+     isblank
+     isblank_l
+@@ -492,6 +552,9 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     ldexpf
+     ldexpl
+     ldiv
++    le16toh			(available in external "endian.h" header)
++    le32toh			(available in external "endian.h" header)
++    le64toh			(available in external "endian.h" header)
+     lfind
+     lgamma
+     lgammaf
+@@ -551,6 +614,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     memchr
+     memcmp
+     memcpy
++    memmem
+     memmove
+     memset
+     mkdir
+@@ -560,6 +624,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     mkfifoat
+     mknod
+     mknodat
++    mkostemp
+     mkstemp
+     mktime
+     mlock
+@@ -584,6 +649,12 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     msgrcv			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     msgsnd			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     msync
++    mtx_destroy			(ISO C11)
++    mtx_init			(ISO C11)
++    mtx_lock			(ISO C11)
++    mtx_timedlock		(ISO C11)
++    mtx_trylock			(ISO C11)
++    mtx_unlock			(ISO C11)
+     munlock
+     munmap
+     nan
+@@ -601,6 +672,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     nexttowardf
+     nexttowardl
+     nftw
++    ngettext			(available in external gettext "libintl" library)
+     nice			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     nl_langinfo
+     nl_langinfo_l
+@@ -622,16 +694,20 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pclose
+     perror
+     pipe
++    pipe2
+     poll
+     popen
+     posix_fadvise
+     posix_fallocate
++    posix_getdents		(din)
+     posix_madvise
+     posix_memalign
+     posix_openpt
+     posix_spawn
++    posix_spawn_file_actions_addchdir	(available as posix_spawn_file_actions_addchdir_np)
+     posix_spawn_file_actions_addclose
+     posix_spawn_file_actions_adddup2
++    posix_spawn_file_actions_addfchdir	(available as posix_spawn_file_actions_addfchdir_np)
+     posix_spawn_file_actions_addopen
+     posix_spawn_file_actions_destroy
+     posix_spawn_file_actions_init
+@@ -653,6 +729,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pow
+     powf
+     powl
++    ppoll
+     pread
+     printf
+     pselect
+@@ -686,6 +763,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_barrierattr_setpshared
+     pthread_cancel
+     pthread_cond_broadcast
++    pthread_cond_clockwait
+     pthread_cond_destroy
+     pthread_cond_init
+     pthread_cond_signal
+@@ -701,7 +779,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_detach
+     pthread_equal
+     pthread_exit
+-    pthread_getconcurrency
+     pthread_getcpuclockid
+     pthread_getschedparam
+     pthread_getspecific
+@@ -709,6 +786,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_key_create
+     pthread_key_delete
+     pthread_kill
++    pthread_mutex_clocklock
+     pthread_mutex_destroy
+     pthread_mutex_getprioceiling
+     pthread_mutex_init
+@@ -728,6 +806,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_mutexattr_setpshared
+     pthread_mutexattr_settype
+     pthread_once
++    pthread_rwlock_clockrdlock
++    pthread_rwlock_clockwrlock
+     pthread_rwlock_destroy
+     pthread_rwlock_init
+     pthread_rwlock_rdlock
+@@ -744,7 +824,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_self
+     pthread_setcancelstate
+     pthread_setcanceltype
+-    pthread_setconcurrency
+     pthread_setschedparam
+     pthread_setschedprio
+     pthread_setspecific
+@@ -756,6 +835,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_spin_unlock
+     pthread_testcancel
+     ptsname
++    ptsname_r
+     putc
+     putc_unlocked
+     putchar
+@@ -767,9 +847,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     putwchar
+     pwrite
+     qsort
++    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
++    quick_exit			(ISO C11)
+     raise
+     rand
+-    rand_r
+     random
+     read
+     readdir
+@@ -778,6 +859,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     readlinkat
+     readv
+     realloc
++    reallocarray
+     realpath
+     recv
+     recvfrom
+@@ -821,9 +903,11 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     sched_setparam		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     sched_setscheduler		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     sched_yield
++    secure_getenv
+     seed48
+     seekdir
+     select
++    sem_clockwait
+     sem_close
+     sem_destroy
+     sem_getvalue
+@@ -847,13 +931,11 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     setgid
+     setgrent
+     sethostent
+-    setitimer			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     setjmp
+     setkey			(available in external "crypt" library)
+     setlocale
+     setlogmask
+     setpgid
+-    setpgrp
+     setpriority			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     setprotoent
+     setpwent
+@@ -867,33 +949,26 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     setuid
+     setutxent
+     setvbuf
+-    shm_open
+-    shm_unlink
+     shmat			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     shmctl			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     shmdt			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     shmget			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     shutdown
++    sig2str
+     sigaction
+     sigaddset
+     sigaltstack
+     sigdelset
+     sigemptyset
+     sigfillset
+-    sighold
+-    sigignore
+-    siginterrupt
+     sigismember
+     siglongjmp
+     signal
+     signbit			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     signgam
+-    sigpause			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     sigpending
+     sigprocmask
+     sigqueue
+-    sigrelse
+-    sigset
+     sigsetjmp
+     sigsuspend
+     sigtimedwait
+@@ -901,10 +976,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     sigwaitinfo
+     sin
+     sinf
++    sinl
+     sinh
+     sinhf
+     sinhl
+-    sinl
+     sleep
+     snprintf
+     sockatmark
+@@ -925,6 +1000,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     stdout
+     stpcpy
+     stpncpy
++    str2sig
+     strcasecmp
+     strcasecmp_l
+     strcat
+@@ -942,6 +1018,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     strfmon_l
+     strftime
+     strftime_l
++    strlcat
++    strlcpy
+     strlen
+     strncasecmp
+     strncasecmp_l
+@@ -980,10 +1058,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     system
+     tan
+     tanf
++    tanl
+     tanh
+     tanhf
+     tanhl
+-    tanl
+     tcdrain
+     tcflow
+     tcflush
+@@ -995,11 +1073,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     tcsetpgrp
+     tdelete
+     telldir
+-    tempnam
++    textdomain			(available in external gettext "libintl" library)
+     tfind
+     tgamma
+     tgammaf
+     tgammal
++    thrd_create			(ISO C11)
++    thrd_current		(ISO C11)
++    thrd_detach			(ISO C11)
++    thrd_equal			(ISO C11)
++    thrd_exit			(ISO C11)
++    thrd_join			(ISO C11)
++    thrd_sleep			(ISO C11)
++    thrd_yield			(ISO C11)
+     time
+     timer_create		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     timer_delete
+@@ -1007,6 +1093,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     timer_gettime
+     timer_settime
+     times
++    timespec_get		(din)
+     timezone
+     tmpfile
+     tmpnam
+@@ -1025,6 +1112,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     truncf
+     truncl
+     tsearch
++    tss_create			(ISO C11)
++    tss_delete			(ISO C11)
++    tss_get			(ISO C11)
++    tss_set			(ISO C11)
+     ttyname
+     ttyname_r
+     twalk
+@@ -1039,13 +1130,13 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     unlockpt
+     unsetenv
+     uselocale
+-    utime
+     utimensat
+     utimes
+     va_arg
+     va_copy
+     va_end
+     va_start
++    vasprintf
+     vdprintf
+     vfprintf
+     vfscanf
+@@ -1076,6 +1167,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     wcscspn
+     wcsdup
+     wcsftime
++    wcslcat
++    wcslcpy
+     wcslen
+     wcsncasecmp
+     wcsncasecmp_l
+@@ -1213,10 +1306,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     madvise
+     mkstemps
+     openpty
+-    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     rcmd
+     rcmd_af
+-    reallocarray
+     reallocf
+     res_close
+     res_init
+@@ -1249,8 +1340,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     setusershell
+     statfs
+     strcasestr
+-    strlcat
+-    strlcpy
+     strsep
+     timingsafe_bcmp
+     timingsafe_memcmp
+@@ -1266,8 +1355,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     wait4
+     warn
+     warnx
+-    wcslcat
+-    wcslcpy
+ </screen>
+ 
+ </sect1>
+@@ -1276,7 +1363,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+ 
+ <screen>
+     __mempcpy
+-    accept4
+     argz_add
+     argz_add_sep
+     argz_append
+@@ -1290,7 +1376,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     argz_replace
+     argz_stringify
+     asnprintf
+-    asprintf
+     asprintf_r
+     basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     canonicalize_file_name
+@@ -1300,7 +1385,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     clog10l
+     close_range			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     crypt_r			(available in external "crypt" library)
+-    dladdr			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     dremf
+     dup3
+     envz_add
+@@ -1322,8 +1406,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     fedisableexcept
+     feenableexcept
+     fegetexcept
+-    ffsl
+-    ffsll
+     fgets_unlocked
+     fgetwc_unlocked
+     fgetws_unlocked
+@@ -1352,35 +1434,23 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     llistxattr
+     lremovexattr
+     lsetxattr
+-    memmem
+     mempcpy
+     memrchr
+-    mkostemp
+     mkostemps
+-    pipe2
+-    posix_spawn_file_actions_addchdir_np
+-    posix_spawn_file_actions_addfchdir_np
+     pow10
+     pow10f
+     pow10l
+-    ppoll
+-    pthread_cond_clockwait
+     pthread_getaffinity_np
+     pthread_getattr_np
+     pthread_getname_np
+-    pthread_mutex_clocklock
+-    pthread_rwlock_clockrdlock
+-    pthread_rwlock_clockwrlock
+     pthread_setaffinity_np
+     pthread_setname_np
+     pthread_sigqueue
+     pthread_timedjoin_np
+     pthread_tryjoin_np
+-    ptsname_r
+     putwc_unlocked
+     putwchar_unlocked
+     renameat2			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+-    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     quotactl
+     rawmemchr
+     removexattr
+@@ -1388,8 +1458,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     sched_getaffinity
+     sched_getcpu
+     sched_setaffinity
+-    secure_getenv
+-    sem_clockwait
+     setxattr
+     signalfd
+     sincos
+@@ -1416,7 +1484,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     updwtmpx
+     utmpxname
+     vasnprintf
+-    vasprintf
+     vasprintf_r
+     versionsort
+     wcsftime_l
+@@ -1461,8 +1528,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getmntent
+     memalign
+     setmntent
+-    sig2str
+-    str2sig
+     xdr_array			(available in external "libtirpc" library)
+     xdr_bool			(available in external "libtirpc" library)
+     xdr_bytes			(available in external "libtirpc" library)
+@@ -1517,49 +1582,19 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+ <sect1 id="std-iso"><title>System interfaces not in POSIX but compatible with ISO C requirements:</title>
+ 
+ <screen>
+-    aligned_alloc		(ISO C11)
+-    at_quick_exit		(ISO C11)
+-    c16rtomb			(ISO C11)
+-    c32rtomb			(ISO C11)
+     c8rtomb			(ISO C23)
+-    call_once			(ISO C11)
+-    cnd_broadcast		(ISO C11)
+-    cnd_destroy			(ISO C11)
+-    cnd_init			(ISO C11)
+-    cnd_signal			(ISO C11)
+-    cnd_timedwait		(ISO C11)
+-    cnd_wait			(ISO C11)
+-    mbrtoc16			(ISO C11)
+-    mbrtoc32			(ISO C11)
+     mbrtoc8			(ISO C23)
+-    mtx_destroy			(ISO C11)
+-    mtx_init			(ISO C11)
+-    mtx_lock			(ISO C11)
+-    mtx_timedlock		(ISO C11)
+-    mtx_trylock			(ISO C11)
+-    mtx_unlock			(ISO C11)
+-    quick_exit			(ISO C11)
+-    thrd_create			(ISO C11)
+-    thrd_current		(ISO C11)
+-    thrd_detach			(ISO C11)
+-    thrd_equal			(ISO C11)
+-    thrd_exit			(ISO C11)
+-    thrd_join			(ISO C11)
+-    thrd_sleep			(ISO C11)
+-    thrd_yield			(ISO C11)
+-    tss_create			(ISO C11)
+-    tss_delete			(ISO C11)
+-    tss_get			(ISO C11)
+-    tss_set			(ISO C11)
+ </screen>
+ 
+ </sect1>
+ 
+-</sect1>
+-
+-<sect1 id="std-deprec"><title>Other UNIX system interfaces, not in POSIX.1-2008 or deprecated:</title>
++<sect1 id="std-deprec"><title>Other UNIX® system interfaces, not in POSIX.1-2024, or deprecated:</title>
+ 
+ <screen>
++    _longjmp			(SUSv4)
++    _setjmp			(SUSv4)
++    _tolower			(SUSv4)
++    _toupper			(SUSv4)
+     bcmp			(POSIX.1-2001, SUSv3)
+     bcopy			(SUSv3)
+     bzero			(SUSv3)
+@@ -1570,12 +1605,16 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     endutent			(XPG2)
+     fcvt			(SUSv3)
+     ftime			(SUSv3)
++    ftw				(SUSv4)
+     gcvt			(SUSv3)
+     getcontext			(SUSv3)
+     gethostbyaddr		(SUSv3)
+     gethostbyname		(SUSv3)
+     gethostbyname2		(first defined in BIND 4.9.4)
++    getitimer			(SUSv4, see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     getpass			(SUSv2)
++    gets			(SUSv4)
++    gettimeofday		(SUSv4)
+     getutent			(XPG2)
+     getutid			(XPG2)
+     getutline			(XPG2)
+@@ -1583,6 +1622,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     getwd			(SUSv3)
+     h_errno			(SUSv3)
+     index			(SUSv3)
++    ioctl			(SUSv4)
++    isascii			(SUSv4)
+     makecontext			(SUSv3)
+     mallinfo			(SVID)
+     mallopt			(SVID)
+@@ -1591,56 +1632,82 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     pthread_attr_getstackaddr	(SUSv3)
+     pthread_attr_setstackaddr	(SUSv3)
+     pthread_continue		(XPG2)
++    pthread_getconcurrency	(SUSv4)
+     pthread_getsequence_np	(Tru64)
++    pthread_setconcurrency	(SUSv4)
+     pthread_suspend		(XPG2)
+     pthread_yield		(POSIX.1c drafts)
+     pututline			(XPG2)
+     putw			(SVID)
++    rand_r			(SUSv4)
+     rindex			(SUSv3)
+     scalb			(SUSv3)
+     setcontext			(SUSv3)
++    setitimer			(SUSv4, see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
++    setpgrp			(SUSv4)
+     setutent			(XPG2)
++    shm_open			(SUSv4)
++    shm_unlink			(SUSv4)
++    sighold			(SUSv4)
++    sigignore			(SUSv4)
++    siginterrupt		(SUSv4)
++    sigpause			(SUSv4, see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
++    sigrelse			(SUSv4)
++    sigset			(SUSv4)
+     stime			(SVID)
+     swapcontext			(SUSv3)
+     sys_errlist			(BSD)
+     sys_nerr			(BSD)
+     sys_siglist			(BSD)
+-    toascii			(SUSv3)
++    tempnam			(SUSv4)
++    toascii			(SUSv4)
+     ttyslot			(SUSv2)
+     ualarm			(SUSv3)
+     usleep			(SUSv3)
++    utime			(SUSv4)
+     utmpname			(XPG2)
+     vfork			(SUSv3)		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+ </screen>
+ 
+ </sect1>
+ 
+-<sect1 id="std-notimpl"><title>NOT implemented system interfaces from the Single Unix Specification, Volume 7:</title>
++<sect1 id="std-notimpl"><title>NOT implemented system interfaces from the Single UNIX® Specification Version 5:</title>
+ 
+ <screen>
++    CMPLX			(not available in external "complex.h" header)
++    CMPLXF			(not available in external "complex.h" header)
++    CMPLXL			(not available in external "complex.h" header)
++    _Fork			(not available in external "(sys/)unistd.h" header)
++    dcgettext_l			(not available in external gettext "libintl" library)
++    dcngettext_l		(not available in external gettext "libintl" library)
++    dgettext_l			(not available in external gettext "libintl" library)
++    dngettext_l			(not available in external gettext "libintl" library)
+     endnetent
+-    fattach
+     fmtmsg
+     getdate
+     getdate_err
+     gethostent
+-    getmsg
+     getnetbyaddr
+     getnetbyname
+     getnetent
+-    getpmsg
+-    isastream
++    gettext_l			(not available in external gettext "libintl" library)
++    kill_dependency		(not available in external "stdatomic.h" header)
+     mlockall
+     munlockall
++    ngettext_l			(not available in external gettext "libintl" library)
++    posix_close			(not available in external "(sys/)unistd.h" header)
++    posix_devctl		(prototyped in external cygwin-devel "devctl.h" header)
+     posix_mem_offset
+     posix_trace[...]
+     posix_typed_[...]
+     pthread_mutexattr_getrobust
+     pthread_mutexattr_setrobust
+     pthread_mutex_consistent
+-    putmsg
+     setnetent
+-    ulimit
++    setresgid			(not available in external "(sys/)unistd.h" header)
++    setresuid			(not available in external "(sys/)unistd.h" header)
++    tcgetwinsize		(not available in external "(sys/)termios.h" header)
++    tcsetwinsize		(not available in external "(sys/)termios.h" header)
+     waitid
+ </screen>
+ 
+-- 
+2.45.1
 
---------------XVN9V10ylJnKEQuhWav61Oa6--
