@@ -1,177 +1,74 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 408EF3858288; Tue,  7 Jan 2025 16:49:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 408EF3858288
+	id 8EDE13858D21; Tue,  7 Jan 2025 19:15:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8EDE13858D21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736268541;
-	bh=gR1ggt+1mf2JCM2mJaWxxXlXn/AoDCsDJqAXbs3qgpQ=;
+	s=default; t=1736277338;
+	bh=VPgCtRjZlpru7fDh0kwGJTn3KZSKS1k1uCEVsr2ankI=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=UA5FeN2vWSAL74dWBdYI9JVK/xMymNkA7qHmZpRUpyCCmhAXXLQEFQ3fPcQDhHFzO
-	 HpbDz2tGrpeWgEvY7UQyKE0O2SOA8Ze3/iGYGV5JdmD8jrVBRYkyOe5HYc3XsbDIqN
-	 DdyHbV+BSBjdEF63ui2o5fGoS+gO+NkUtn6HMGnE=
+	b=RqqW2glfmUOBELz6gncUhvnB5FM6mNqKmcET1vFvIrpH+9Y/FTgHQQ+qfiL8xIvn5
+	 pefsiPP5db79y3cvp1o7pIuKwZL55bh163phwsHVzwv2DFd+SeCPIfJkDko/6vKogs
+	 oOxToKQOuxTlnqZuuNmZkqxtLqy2+9KqNdrRDZEQ=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6ECFCA80B76; Tue,  7 Jan 2025 17:48:59 +0100 (CET)
-Date: Tue, 7 Jan 2025 17:48:59 +0100
+	id B1054A80B76; Tue,  7 Jan 2025 20:15:36 +0100 (CET)
+Date: Tue, 7 Jan 2025 20:15:36 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: access: Fix X_OK behaviour for administrator
-Message-ID: <Z31a-_lO1hs4yc5I@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: mmap: fix mmap_is_attached_or_noreserve
+Message-ID: <Z319WIrQbXPsOakT@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241226123410.126087-1-takashi.yano@nifty.ne.jp>
+References: <c1839ef1-b250-4316-8e00-a8e2d73fdcca@cornell.edu>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="pgz/B0/QSi4gFxlU"
-Content-Disposition: inline
-In-Reply-To: <20241226123410.126087-1-takashi.yano@nifty.ne.jp>
-List-Id: <cygwin-patches.cygwin.com>
-
-
---pgz/B0/QSi4gFxlU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <c1839ef1-b250-4316-8e00-a8e2d73fdcca@cornell.edu>
+List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Hi Ken,
 
 Happy New Year!
 
-On Dec 26 21:34, Takashi Yano wrote:
-> @@ -613,6 +613,22 @@ check_file_access (path_conv &pc, int flags, bool effective)
->    if (flags & X_OK)
->      desired |= FILE_EXECUTE;
+On Dec 27 11:46, Ken Brown wrote:
+> I have a question about the "Fixes" line.  Since the commit in question was
+> in the old CVS style, it doesn't have a good one-line summary.  I tried to
+> choose the next-best thing, but I'm not sure about it.
+
+Yeah, just a nice approximation of the first line in the old CVS
+commit is sufficient.
+
+Your patch looks good, only...
+
+> @@ -784,23 +788,27 @@ mmap_is_attached_or_noreserve (void *addr, size_t len)
+>  	  ret = MMAP_RAISE_SIGBUS;
+>  	  break;
+>  	}
+> -      if (!rec->noreserve ())
+> -	break;
+> +      if (nocover)
+> +	/* We need to continue in case we encounter an attached mmap
+> +	   later in the list. */
+> +	continue;
 >  
-> +  /* The Administrator has full access permission regardless of ACL,
-> +     however, access() should return -1 if 'x' permission is set
-> +     for neither user, group nor others, even though NtOpenFile()
-> +     succeeds. */
-
-The explanation isn't quite right, see below.
-
-> +  if ((flags & X_OK) && !pc.isdir ())
-> +    {
-> +      struct stat st;
-> +      if (stat (pc.get_posix (), &st))
-> +	goto out;
-> +      else if ((st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) == 0)
+> -      size_t commit_len = u_len - (start_addr - u_addr);
+> -      if (commit_len > len)
+> -	commit_len = len;
+> +      if (!rec->noreserve ())
 > +	{
-> +	  set_errno (EACCES);
-> +	  goto out;
+> +	  nocover = true;
+> +	  continue;
 > +	}
-> +    }
-> +
 
-Calling stat here is not the right thing to do.  It slows down access()
-as well as exec'ing applications a lot because it adds the overhead of a
-full system call on each invocation.
+What about merging the two conditionals into one?  E. g.
 
-When I saw your patch this morning for the first time, I was inclined to
-request that you simply revert a0933cd17d19 ("Correction for samba/SMB
-share").  The behaviour on Samba was not a regression, but this here
-is, so it would be prudent to rethink the entire approach.
+  if (nocover || !rec->noreserve ())
+    {
+      nocover = true;
+      continue;
+    }
 
-However, it occured to me that there may be a simpler way to fix this:
-
-The reason for this behaviour is the way SE_BACKUP_PRIVILEGE works.  To
-allow a user with backup privileges full access to files, you have to
-enable the SE_BACKUP_PRIVILEGE in the user's token *and* you have to
-open files with FILE_OPEN_FOR_BACKUP_INTENT.  The problem now is this:
-SE_BACKUP_PRIVILEGE + FILE_OPEN_FOR_BACKUP_INTENT allow to open the
-file, no matter what.  In particular, they allow to open the file for
-FILE_EXECUTE, even if the execute perms in the ACL deny the user
-execution of the file.
-
-So... given how this is supposed to work, we must not use the
-FILE_OPEN_FOR_BACKUP_INTENT flag when checking for execute permissions
-and the result should be the desired one.  I tested this locally, and I
-don't see a regression compared to 3.5.4.
-
-Patch attached.  Please review.
+It's a minor style issue, if you like your version better, go for it.
 
 
 Thanks,
 Corinna
-
---pgz/B0/QSi4gFxlU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-Cygwin-access-Fix-X_OK-behaviour-for-backup-operator.patch"
-
-From 351d514c8058a67085b3496d5f5648577fff8f32 Mon Sep 17 00:00:00 2001
-From: Corinna Vinschen <corinna@vinschen.de>
-Date: Tue, 7 Jan 2025 17:44:44 +0100
-Subject: [PATCH] Cygwin: access: Fix X_OK behaviour for backup operators and
- admins
-
-After commit a0933cd17d19, access(_, X_OK) returns 0 if the user
-holds SE_BACKUP_PRIVILEGE, even if the file's ACL denies execution
-to the user.  This is triggered by trying to open the file with
-FILE_OPEN_FOR_BACKUP_INTENT.
-
-Fix check_file_access() so it checks for X_OK without specifying
-the FILE_OPEN_FOR_BACKUP_INTENT flag.
-
-Rearrange function slightly and add comments for easier comprehension.
-
-Fixes: a0933cd17d19 ("Cygwin: access: Correction for samba/SMB share")
-Reported-by: Bruno Haible <bruno@clisp.org>
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/sec/base.cc | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
-
-diff --git a/winsup/cygwin/sec/base.cc b/winsup/cygwin/sec/base.cc
-index 647c27ec617e..e5c8d69edc52 100644
---- a/winsup/cygwin/sec/base.cc
-+++ b/winsup/cygwin/sec/base.cc
-@@ -604,25 +604,38 @@ check_access (security_descriptor &sd, GENERIC_MAPPING &mapping,
- int
- check_file_access (path_conv &pc, int flags, bool effective)
- {
--  int ret = -1;
-+  NTSTATUS status = STATUS_SUCCESS;
-   ACCESS_MASK desired = 0;
-+  OBJECT_ATTRIBUTES attr;
-+  IO_STATUS_BLOCK io;
-+  HANDLE h = NULL;
-+  int ret = -1;
-+
-   if (flags & R_OK)
-     desired |= FILE_READ_DATA;
-   if (flags & W_OK)
-     desired |= FILE_WRITE_DATA;
--  if (flags & X_OK)
--    desired |= FILE_EXECUTE;
- 
-   if (!effective)
-     cygheap->user.deimpersonate ();
- 
--  OBJECT_ATTRIBUTES attr;
-   pc.init_reopen_attr (attr, pc.handle ());
--  NTSTATUS status;
--  IO_STATUS_BLOCK io;
--  HANDLE h;
--  status = NtOpenFile (&h, desired, &attr, &io, FILE_SHARE_VALID_FLAGS,
--		       FILE_OPEN_FOR_BACKUP_INTENT);
-+
-+  /* For R_OK and W_OK we check with FILE_OPEN_FOR_BACKUP_INTENT since
-+     we want to enable the full power of backup/restore privileges. */
-+  if (desired)
-+    status = NtOpenFile (&h, desired, &attr, &io, FILE_SHARE_VALID_FLAGS,
-+			 FILE_OPEN_FOR_BACKUP_INTENT);
-+  /* For X_OK, drop the FILE_OPEN_FOR_BACKUP_INTENT flag.  If the caller
-+     holds SE_BACKUP_PRIVILEGE, FILE_OPEN_FOR_BACKUP_INTENT opens the file,
-+     no matter what access is requested. */
-+  if (NT_SUCCESS (status) && (flags & X_OK))
-+    {
-+      if (h)
-+	NtClose (h);
-+      status = NtOpenFile (&h, FILE_EXECUTE, &attr, &io,
-+			   FILE_SHARE_VALID_FLAGS, 0);
-+    }
-   if (NT_SUCCESS (status))
-     {
-       NtClose (h);
--- 
-2.47.1
-
-
---pgz/B0/QSi4gFxlU--
