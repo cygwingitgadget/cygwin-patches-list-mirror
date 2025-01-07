@@ -1,46 +1,46 @@
 Return-Path: <SRS0=xnp6=T7=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
 Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-	by sourceware.org (Postfix) with ESMTPS id BBDDC3858D28
-	for <cygwin-patches@cygwin.com>; Tue,  7 Jan 2025 23:49:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BBDDC3858D28
+	by sourceware.org (Postfix) with ESMTPS id CC3C83858D28
+	for <cygwin-patches@cygwin.com>; Tue,  7 Jan 2025 23:59:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CC3C83858D28
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BBDDC3858D28
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CC3C83858D28
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.14
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736293795; cv=none;
-	b=CT4GJlhm85YVreR1lBdfXm/ks8U0PRmbvm6VDg+veMpFtk1LGb02cK/OS8bsgnS+Igj3rLmpRbrIhY3j+SCXc5dQEiFnpbygQ77tPr4+K6cnysPR0/S24Nqdwru2GyinzZg9QZ9609pBZGV0eC3hZnFRS52YtciW1JVw9HZxcWQ=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736294354; cv=none;
+	b=Eyp70CCPhzOAEufFPQUAc9SzLUIn19KPHo66FjuSS4xhh7C1gqgJDvD2d2/avASoTNtyYpuBpGO5QqfQasRSi/nUw0Js4Mcyg99oaV/uQ5bP037TcAo/u8V1iHSPj0y5gQr/71859x1biqbPH/RTGcnT3FFfKe7bSixaT4/xHfA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736293795; c=relaxed/simple;
-	bh=OO3uBCRLyGZyErjp8WByTUpFB83Cr97lSgYau2Qce1M=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=g0r1ZKVdbsBF3lXq2RnOWdcilNohOopd0PULtHzjf+9wpkUfniHf8Nge29eYIwKk/OWliEwoZWcvSpRmJE3e2Gy7cHmpVM/QQRXNIP0LezPkh9XMtLJpdrZNyxifl+FZTIBv/+X7hROQV7vNeaxnz5tPIbpS2ySg5GPGr7cKL/U=
+	t=1736294354; c=relaxed/simple;
+	bh=q9nnp3uujVBz7g8hS/Msyr4eZuT8uY7NR45ODWIAmVE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=BNfqSHFrmuhIVQjZQBTBrbGOCFavOog2IGeKmLxRdYUsfmuFezg+pv0YGI6eZTR/eKgckxIJ2xeh0veEsxIwk/gGKTu0o3psY9gs13aQZnQiinJcZgQl48f2XIYUEV2sXS9Hl7CK6ix+IJqYGFZsv4XXhypZRk2q6x1uMrJxBJs=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BBDDC3858D28
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CC3C83858D28
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=cY2SQcPq
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 4BBC78050C;
-	Tue,  7 Jan 2025 23:49:55 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf05.hostedemail.com (Postfix) with ESMTPA id B050A2000D;
-	Tue,  7 Jan 2025 23:49:53 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=mucI6Kxy
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 792D7A049A;
+	Tue,  7 Jan 2025 23:59:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf08.hostedemail.com (Postfix) with ESMTPA id 042DE20025;
+	Tue,  7 Jan 2025 23:59:12 +0000 (UTC)
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v3] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
-Date: Tue,  7 Jan 2025 16:47:41 -0700
-Message-ID: <9b6df37e97977594b8b863dfaaa8b3c5f64fbe1d.1736293567.git.Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH v4] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
+Date: Tue,  7 Jan 2025 16:58:10 -0700
+Message-ID: <8ad8cb0b4bca9415835cf5391933392d61d2bcdb.1736294236.git.Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 Organization: Systematic Software
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: B050A2000D
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout08
-X-Stat-Signature: 9nhqynxps5cxnazrqgnyn9njakm6xp61
+X-Rspamd-Queue-Id: 042DE20025
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: 595773s7y7mj9nczg5fi88xh9kj1dw4h
+X-Rspamd-Server: rspamout02
 X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1/9Wv62gydNnDCi/Kq5YH/OUZ4lxw9xp8w=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=7ttPik8GHwfcOtnFnTDISQ4z9/SIbFIJuK85PU961l4=; b=cY2SQcPqWLLpJX6C/1ZSJQliMaEH8/uz9HIQru28mG4AOMhJPMzvcYAwN7nGTem7aXXYh30/NAblMWkMPBRW49O4IFGA2UEhq/MO9+K3OBPEolYnrBBgu5ldg448DDY3iCFoY/vAwFyIUkLaqt2SVIivpCnGRNDq4hB07832t6UUyBeIAxnx6XGrpY2SBgXEduo0Rea2oEjb6VSQrX7DRjb5yyuFEWJm68PWd4aTwDqbtJ5nkBG6or+opKafvOiejEz1uD6NLprsFSGGhbXuNlg7tZ+G0QjcMV7ZDMXHCVQQ7tk6ubLHU/pEb4J6SDbe2YHIf/4wnQiZBVh6uXGgSA==
-X-HE-Tag: 1736293793-430181
-X-HE-Meta: U2FsdGVkX18bvQVtm/LliOhK4Dg7xXR6v/klItvSNx/AC1ICoKCO7ogsCAQrV2QGXSdsbCAS4MNjbGwhtYq32w/j7iMFg5+5GsFz8dUoKtrnYVQgkorNlExziz7DrqRKwF2dAb/rTlGWdARhbhWkoTbQOf9Tg2vzZLflLlN5w4/Z8zFGLZ+eG4MaSz+7l3BlCI+yeEeN74mOB6y4BMQ7ZREKJkUTI1GchxtzSw7wHW9bIUc5OOnBmw8vchv/76HvJHfS1KtQ/VYJNhTtEXL6L5Ty2Z+PsjtXhOHWrGvAwwAve6uvtB4Gezbgc/jMke98xlk7pAywQn2GBljwE+P0mELh+RXOdNVCTysoyU1ADcUU20tkWj+HbUSdUT2B9GDWP/TIxv8QaSJMFvlP5gSIDo3u7Bu1E/xAei1SBauqT962YI9vA8eO56GuuEovue4XEtfON23hl/tIkNHrGFsaCMifH6AkS5mt7QeWBXt8ySjeQJUZ49h6X93Fx69cA58Nm9lB6chleXYsPWjfrPAHt5Ictaw9rvEfXnKZl5mQ2/sW0sd0oPmosg==
+X-Session-ID: U2FsdGVkX19V1p8tvxfSjfoRnhknDw7FQ5Ce2lowBMI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=fop8XSvUj6ZOsGmTk4ZhyQ9YkthPW3o0LiTU8u5KN28=; b=mucI6KxyCuc/srtDz7K/yxCkotejsAx9VgM9bYvN4WiyTtpMIcu7E0b2ZXAPp277ZpH7j+SbNCjVbYXFCS8pg6OijZAGhI47U0XnAE3A1kWyX/Vp6IIZujYV3p3DO73g6ALYszQKtBK+EHaJ6cKkGaNpUlzkpDPt1CHvQ3mC9fXpWBK3Zl857s1bgmIG2MW51GFGpC3bfUyyqNdyZIWQ3+wtbpsUOmTdeDDt3vgyUnhIe6fCo3XFvO0VMws54AJFu/jZ+r6awlIupda/eXG4eMJo0Q0ajewGerRO0cZGhAIEqdCWooe3Alao1uTOnyZeEMtQEwizhqSmbv69SMZ9cA==
+X-HE-Tag: 1736294352-897043
+X-HE-Meta: U2FsdGVkX19xMFJ4W6Y4DpIrUsD/bb1daytCeNrhC8/vh7Z3cdssc/vCmrU9zyavHRrw3lMpihQkDSi7FluhBtnCKfGwxat6XBN3pkYtQPS3vSXhaYgqr6Je+FLsjuGamZXobmL0gUzMghmXA9PLqTpTLjvT0/h6iii4orfEU8BJUThR61RCSWaxTcspTIIOBZfPEZtDwqbMxgAwg09UYnzfM2J28NNDJP+i3ew9G5j++OAqzOxXAJk+Fp0MRcJWHwTWIrfkfKfz8HRxn5gqDrWTijnBrYRBpI7pDvknOwGMm5pZDsmJD3SaVS+pnZ3cilpS+5eKDht4nl91Oz5zI3vgp/hMWSyZmJWn9V9aas8GqafJQikRR83mHx5R/DNv7GHuPEX3pdxqrzDBBnGfnnZHPrXoIVivRXVk8BGrBkb7VIy69WKDEusf/3TN8/y30gtWhxMxpFat8qc2kp5MZeEuZ0rmhTxi0BgOh9VjMCvXvh4fIET1Fyi3/C9cyGFVrZ30dVn3xWa9fV2e2pjkXDHJr/NKNiK5GO2/oMPRN4CBLpE/DMespw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -55,7 +55,8 @@ Move dropped entries out of the SUS/POSIX section to Deprecated
 Interfaces section and mark with (SUSv4).
 
 Double checking found some functions in the wrong categories which have
-been moved to the correct sections.
+been moved to the correct sections, and some functions out of order
+which have been reordered.
 
 Move circular TRIGl functions before hyperbolic TRIGh? entries to keep
 each together: should we keep them on separate lines out of order, so we
@@ -70,7 +71,7 @@ Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
  1 file changed, 201 insertions(+), 125 deletions(-)
 
 diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index 2782beb86547..14bfe8aa7684 100644
+index 2782beb86547..78ec9403d738 100644
 --- a/winsup/doc/posix.xml
 +++ b/winsup/doc/posix.xml
 @@ -5,10 +5,16 @@
@@ -1028,10 +1029,6 @@ index 2782beb86547..14bfe8aa7684 100644
 +<sect1 id="std-notimpl"><title>NOT implemented system interfaces from the Single UNIX® Specification Version 5:</title>
  
  <screen>
-+    getresgid			(not available in "(sys/)unistd.h" header)
-+    getresuid			(not available in "(sys/)unistd.h" header)
-+    posix_typed_mem_get_info	(not available in "(sys/)mman.h" header)
-+    posix_typed_mem_open	(not available in "(sys/)mman.h" header)
 +    CMPLX			(not available in "complex.h" header)
 +    CMPLXF			(not available in "complex.h" header)
 +    CMPLXL			(not available in "complex.h" header)
@@ -1052,6 +1049,8 @@ index 2782beb86547..14bfe8aa7684 100644
      getnetent
 -    getpmsg
 -    isastream
++    getresgid			(not available in "(sys/)unistd.h" header)
++    getresuid			(not available in "(sys/)unistd.h" header)
 +    gettext_l			(not available in external gettext "libintl" library)
 +    kill_dependency		(not available in "stdatomic.h" header)
      mlockall
@@ -1062,6 +1061,8 @@ index 2782beb86547..14bfe8aa7684 100644
      posix_mem_offset
 -    posix_trace[...]
 -    posix_typed_[...]
++    posix_typed_mem_get_info	(not available in "(sys/)mman.h" header)
++    posix_typed_mem_open	(not available in "(sys/)mman.h" header)
      pthread_mutexattr_getrobust
      pthread_mutexattr_setrobust
      pthread_mutex_consistent
