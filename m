@@ -1,69 +1,43 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A76CD3858D28; Wed,  8 Jan 2025 15:45:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A76CD3858D28
+	id 6FC433858D28; Wed,  8 Jan 2025 15:48:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6FC433858D28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736351110;
-	bh=4MOHYUZy/xUkTEmxRxpQ+vAbrcXK+2jTGyJFvFRbGhQ=;
+	s=default; t=1736351323;
+	bh=pfjdGm/dN3Gvim4It4zlwjSOgA+cRtfmtAzQdiC0Lss=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=EsBqfuSgj+1jr3wEGsm226tMC6aRAEQPCIqafNpjNzabyAxFpsCwLoNbx32k95byQ
-	 QB4SLdkkqaINH1LA2cAgPZOUxgaYCjgbcCdp4bmk0yIuoujlzy50Q5veuRFJLFZE+e
-	 XdBZOdv/7VmTh5atTTa9gBc5FjT8at7GqW9rNe44=
+	b=Rm8nYWc8BBGtEEDZWas4oGEdx05BEoImy1zXS53xircoNLgBhrlcTQVqk2qlyLqBA
+	 q4QXc5S3KlxVchk+IzfOxoM3zRz0ksXrxnfDiDJH5A0P1FXR8ynH2BrYkNDTqwoGAb
+	 HKnwzQC5Py+4X1iBURMZ2ZBcpGWZ70ox3ukSxCig=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 15E1CA805BC; Wed,  8 Jan 2025 16:45:09 +0100 (CET)
-Date: Wed, 8 Jan 2025 16:45:09 +0100
+	id CB6D8A805BC; Wed,  8 Jan 2025 16:48:41 +0100 (CET)
+Date: Wed, 8 Jan 2025 16:48:41 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [RFC] POSIX Issue 8 2024 SUS V5 Cygwin Doc Changes
-Message-ID: <Z36dhfYCP97fjUZx@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: signal: Do not handle signal when
+ __SIGFLUSHFAST is sent
+Message-ID: <Z36eWXU8Q__9fUhr@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <430aadfe-1bfd-41d1-8b7e-067f0b8cbbc6@SystematicSW.ab.ca>
+References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <430aadfe-1bfd-41d1-8b7e-067f0b8cbbc6@SystematicSW.ab.ca>
+In-Reply-To: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Brian,
+On Dec 23 10:33, Takashi Yano wrote:
+> After the commit d243e51ef1d3, zsh sometimes hangs at startup. This
+> occurs because SIGCHLD, which should trigger sigsuspend(), is handled
+> in cygwait() that is used to wait for a wakeup event in sig_send(),
+> even when __SIGFLUSHFAST is sent. Despite __SIGFLUSHFAST being
+> required to return before handling the signal, this does not happen.
+> With this patch, if the signal currently being sent is __SIGFLUSHFAST,
+> do not handle the received signal and keep it asserted after the
+> cygwait() for the wakeup event.  Apply the same logic to the cygwait()
+> in the retrying loop for WriteFile() as well.
 
-Hayy New Year!
-
-On Jan  5 13:43, Brian Inglis wrote:
-> - Move or copy the "new" entries to the SUS/POSIX section, update the
-> description to SUS V5 POSIX Issue 8 2024 and IEEE and ISO/IEC (almost)
-> Standards, update the id "std-susv4" and any refs.
-> Should we copy and keep original entries under their original sections or not?
-> Add any "din" entries; and decide if Notes are needed for any new entries?
-> 
-> - Move "cut" entries out of the SUS/POSIX section to deprecated interfaces
-> section and mark dropped from SUS V5 POSIX Issue 8 2024 (SUSv4)?
-> 
-> - Decide how to check if any "non" entries are available in other packages,
-> add Notes about them, and references in entries to add?
-> If not available, add to Not Implemented section?
-> 
-> What have I got wrong or missed, how should we proceed, anything else?
-
-More or less spot on.  In my own words:
-
-- There should be only one SUS section, referencing the latest issue.
-  So this should be updated to "Single Unix Specification, Version 8".
-  Whether or not we change the id from "std-susv4" to "std-susv5" is up
-  to us, given it's usually not visible ion the created docs.  If it's
-  simple as dirt, change it.
-
-- Each function showing up in one of the other sections, but has been
-  upgraded to an official SUS function should be moved to the SUS
-  section.
-
-- Deprectaed SUS functions from older SUS issues should be added to the
-  std-deprec section and its title updated accordingly.
-
-- SUS functions not implemented (yet) should be added to the std-notimpl
-  section and its title updated accordingly.
-
-Make sense?
+Does this patch fix Bruno's bash issue as well?
 
 
 Thanks,
