@@ -1,43 +1,59 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 6FC433858D28; Wed,  8 Jan 2025 15:48:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6FC433858D28
+	id 8043F3858D28; Wed,  8 Jan 2025 15:52:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8043F3858D28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736351323;
-	bh=pfjdGm/dN3Gvim4It4zlwjSOgA+cRtfmtAzQdiC0Lss=;
+	s=default; t=1736351567;
+	bh=lb78Xt4jSNE5ejwGEGrEwoY3uCLaHIIFOC2Rs7DATAc=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=Rm8nYWc8BBGtEEDZWas4oGEdx05BEoImy1zXS53xircoNLgBhrlcTQVqk2qlyLqBA
-	 q4QXc5S3KlxVchk+IzfOxoM3zRz0ksXrxnfDiDJH5A0P1FXR8ynH2BrYkNDTqwoGAb
-	 HKnwzQC5Py+4X1iBURMZ2ZBcpGWZ70ox3ukSxCig=
+	b=fdoEFa9iQujxOFfyJX9nGGP/Chqu7YycC7mRafrPeuAOf4lDur+QwNCshQn5O6iTg
+	 CkCNfa6Ymo8rktO4wd8cqu1/d956AIu6dBWTgDEuGhTBePrr8uBVDlvyElRjGcfBxe
+	 StaNIPMrDVlcapLmJuv1ptVa2fgxheMNN6VY17c8=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id CB6D8A805BC; Wed,  8 Jan 2025 16:48:41 +0100 (CET)
-Date: Wed, 8 Jan 2025 16:48:41 +0100
+	id 6A676A805BC; Wed,  8 Jan 2025 16:52:45 +0100 (CET)
+Date: Wed, 8 Jan 2025 16:52:45 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: signal: Do not handle signal when
- __SIGFLUSHFAST is sent
-Message-ID: <Z36eWXU8Q__9fUhr@calimero.vinschen.de>
+Subject: Re: [PATCH v4] Cygwin: winsup/doc/posix.xml: update to SUS V5, POSIX
+ 2024, TOG Base Specs Issue 8, ISO/IEC DIS 9945
+Message-ID: <Z36fTdoM8eFAchEH@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
+References: <8ad8cb0b4bca9415835cf5391933392d61d2bcdb.1736294236.git.Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <8ad8cb0b4bca9415835cf5391933392d61d2bcdb.1736294236.git.Brian.Inglis@SystematicSW.ab.ca>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec 23 10:33, Takashi Yano wrote:
-> After the commit d243e51ef1d3, zsh sometimes hangs at startup. This
-> occurs because SIGCHLD, which should trigger sigsuspend(), is handled
-> in cygwait() that is used to wait for a wakeup event in sig_send(),
-> even when __SIGFLUSHFAST is sent. Despite __SIGFLUSHFAST being
-> required to return before handling the signal, this does not happen.
-> With this patch, if the signal currently being sent is __SIGFLUSHFAST,
-> do not handle the received signal and keep it asserted after the
-> cygwait() for the wakeup event.  Apply the same logic to the cygwait()
-> in the retrying loop for WriteFile() as well.
+On Jan  7 16:58, Brian Inglis wrote:
+> Update anchor id and description to current version, year, issue, etc.
+> Move new POSIX entries in other sections to the SUS/POSIX section.
+> Add new POSIX entries from din entries.
+> Add new entries with interfaces available in headers and packages.
+> Add those missing to Not Implemented section, with mentions of headers,
+> packages, etc.
+> 
+> Move dropped entries out of the SUS/POSIX section to Deprecated
+> Interfaces section and mark with (SUSv4).
+> 
+> Double checking found some functions in the wrong categories which have
+> been moved to the correct sections, and some functions out of order
+> which have been reordered.
+> 
+> Move circular TRIGl functions before hyperbolic TRIGh? entries to keep
+> each together: should we keep them on separate lines out of order, so we
+> can check if they exist, concatenate onto the same lines with slashes,
+> or just add the suffixes /f/l on to the base entry?
 
-Does this patch fix Bruno's bash issue as well?
+Independently if we do this or not, I'd like to suggest one thing:
+
+Please don't try to do everything in a single patch.  Creating the SUSv5
+section and moving functions over from other sections is one thing.
+Adding not-implemented functions is another thing.  Changing the order
+of functions for whatever reason is another thing.
+
+Smaller patches are easier to understand, review and handle :)
 
 
 Thanks,
