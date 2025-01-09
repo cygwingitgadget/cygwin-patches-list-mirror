@@ -1,70 +1,48 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id D2D293858D34; Thu,  9 Jan 2025 17:17:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D2D293858D34
+	id 9F4FC3858D34; Thu,  9 Jan 2025 18:30:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9F4FC3858D34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736443075;
-	bh=fW+4VgTAF8lWc3emph1VvmC/P802CY+7bv9xO1BNpLA=;
+	s=default; t=1736447416;
+	bh=LhxjJxADKKWE5Ifb0M5XKY8cpUjRpJj3slGOx4U8Eeg=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=sRMNqcpVTEMZ2nlbONNKlr8WZ9gXjIgM27LdaHc5HGWpUIp9bFh22rwV7y7Ztk1Q0
-	 gFfLMJo/QlW0QQiQigrUX/3SnyjI418RjFk//P6FmNLVfoDmpopIUGSxwgcMAvAWrl
-	 qMZ8wiNM/KbFPyyznRoa6yqsiEf/HvERBltJdUpE=
+	b=p8o2qL5GE4rKY0Xy0LGDQ33f1lEpbLlBOlUcy9Oyuq+xnNTcSM7Zo6/Xx9/TCVw+W
+	 KamzY5XDJq7GYGoN9N+5JUeHFfSZqtFeVEqgRaqKf9Cf+G0gZPTjKsVvdwBfhYSWQ6
+	 x+eaq5U0zQi4GgmZjkPrtcc/1yZQxRhuJpXKMQvs=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id DC4D8A80C65; Thu,  9 Jan 2025 18:17:51 +0100 (CET)
-Date: Thu, 9 Jan 2025 18:17:51 +0100
+	id C8E4BA80C65; Thu,  9 Jan 2025 19:30:14 +0100 (CET)
+Date: Thu, 9 Jan 2025 19:30:14 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/5] Cygwin: mmap: refactor mmap_record::match
-Message-ID: <Z4AEv4Sen6VqT-pz@calimero.vinschen.de>
+Subject: Re: [PATCH 2/5] Cygwin: mmap: remove is_mmapped_region()
+Message-ID: <Z4AVtkCRMHwBi4Gv@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <9d64113d-0355-4df3-b477-952c4f315292@cornell.edu>
+References: <37f2bead-dd87-490b-82d1-ecb0854b50ef@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9d64113d-0355-4df3-b477-952c4f315292@cornell.edu>
+In-Reply-To: <37f2bead-dd87-490b-82d1-ecb0854b50ef@cornell.edu>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Ken,
-
 On Jan  8 18:03, Ken Brown wrote:
-> From 4387a73d5593ddad4cf7592865b5b257e6a9d6de Mon Sep 17 00:00:00 2001
+> From d3c62d48f87044d7607d81559c58ae06df5839af Mon Sep 17 00:00:00 2001
 > From: Ken Brown <kbrown@cornell.edu>
-> Date: Fri, 27 Dec 2024 15:30:12 -0500
-> Subject: [PATCH 1/5] Cygwin: mmap: refactor mmap_record::match
+> Date: Fri, 20 Dec 2024 12:17:34 -0500
+> Subject: [PATCH 2/5] Cygwin: mmap: remove is_mmapped_region()
 > 
-> Slightly simplify the code and add comments to explain what the
-> function does.  Add a new reference parameter "contains" that is set
-> to true if the chunk of this mmap_record contains the given address
-> range.
+> The last use was removed in commit 29a126322783 ("Simplify stack
+> allocation code in child after fork").
 > 
 > Signed-off-by: Ken Brown <kbrown@cornell.edu>
 > ---
->  winsup/cygwin/mm/mmap.cc | 37 ++++++++++++++++++++++++++-----------
->  1 file changed, 26 insertions(+), 11 deletions(-)
-> 
-> diff --git a/winsup/cygwin/mm/mmap.cc b/winsup/cygwin/mm/mmap.cc
-> index 0224779458ef..acab85d19cf0 100644
-> --- a/winsup/cygwin/mm/mmap.cc
-> +++ b/winsup/cygwin/mm/mmap.cc
-> @@ -338,7 +338,8 @@ class mmap_record
->      void init_page_map (mmap_record &r);
->  
->      SIZE_T find_unused_pages (SIZE_T pages) const;
-> -    bool match (caddr_t addr, SIZE_T len, caddr_t &m_addr, SIZE_T &m_len);
-> +    bool match (caddr_t addr, SIZE_T len, caddr_t &m_addr, SIZE_T &m_len,
-> +                bool &contains);
+>  winsup/cygwin/local_includes/winsup.h |  1 -
+>  winsup/cygwin/mm/mmap.cc              | 34 ---------------------------
+>  2 files changed, 35 deletions(-)
 
-What about keeping
-
-  bool match (caddr_t addr, SIZE_T len, caddr_t &m_addr, SIZE_T &m_len);
-
-available as inline method just calling the new match() method with
-a local "contains" variable?  This way, you don't have to define dummy
-"contains" where the value is unused...
-
-Other than that, LGTM.
+LGTM.
 
 
 Thanks,
 Corinna
+
