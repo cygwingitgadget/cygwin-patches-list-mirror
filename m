@@ -1,48 +1,70 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 9F4FC3858D34; Thu,  9 Jan 2025 18:30:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9F4FC3858D34
+	id EA5AB3858D34; Thu,  9 Jan 2025 18:57:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EA5AB3858D34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736447416;
-	bh=LhxjJxADKKWE5Ifb0M5XKY8cpUjRpJj3slGOx4U8Eeg=;
+	s=default; t=1736449064;
+	bh=Bwo3HlaQDyWRLltNdsQRBzLuFLxQvBvb8IyL0qlp+bk=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=p8o2qL5GE4rKY0Xy0LGDQ33f1lEpbLlBOlUcy9Oyuq+xnNTcSM7Zo6/Xx9/TCVw+W
-	 KamzY5XDJq7GYGoN9N+5JUeHFfSZqtFeVEqgRaqKf9Cf+G0gZPTjKsVvdwBfhYSWQ6
-	 x+eaq5U0zQi4GgmZjkPrtcc/1yZQxRhuJpXKMQvs=
+	b=OcX8YgfY36A7YtJrrQgdgiCrPL8XvZXMSwH5cO65zsPzQarkLCv2rxxDO/TqgdZek
+	 3LBrbS0P+sf9MMEFwGBlyNXYowaWTBxImTlChTSQa89io/qMAosp/4zXuE2/U6Q5h1
+	 mlwF9d9EPaoDi3mNnP0X6t+LkTb7HDB14RoqjkAI=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C8E4BA80C65; Thu,  9 Jan 2025 19:30:14 +0100 (CET)
-Date: Thu, 9 Jan 2025 19:30:14 +0100
+	id 4E69DA80C65; Thu,  9 Jan 2025 19:57:43 +0100 (CET)
+Date: Thu, 9 Jan 2025 19:57:43 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] Cygwin: mmap: remove is_mmapped_region()
-Message-ID: <Z4AVtkCRMHwBi4Gv@calimero.vinschen.de>
+Subject: Re: [PATCH 3/5] Cygwin: mmap: remove __PROT_FILLER and the
+ associated methods
+Message-ID: <Z4AcJx4KSdyMZ60i@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <37f2bead-dd87-490b-82d1-ecb0854b50ef@cornell.edu>
+References: <dc8fa635-bc5e-4ef4-824a-0d2a73e838bc@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <37f2bead-dd87-490b-82d1-ecb0854b50ef@cornell.edu>
+In-Reply-To: <dc8fa635-bc5e-4ef4-824a-0d2a73e838bc@cornell.edu>
 List-Id: <cygwin-patches.cygwin.com>
 
 On Jan  8 18:03, Ken Brown wrote:
-> From d3c62d48f87044d7607d81559c58ae06df5839af Mon Sep 17 00:00:00 2001
+> From 87e07edb7c53f425c86579d013d29efd3f905203 Mon Sep 17 00:00:00 2001
 > From: Ken Brown <kbrown@cornell.edu>
-> Date: Fri, 20 Dec 2024 12:17:34 -0500
-> Subject: [PATCH 2/5] Cygwin: mmap: remove is_mmapped_region()
+> Date: Fri, 20 Dec 2024 13:11:22 -0500
+> Subject: [PATCH 3/5] Cygwin: mmap: remove __PROT_FILLER and the associated
+>  methods
 > 
-> The last use was removed in commit 29a126322783 ("Simplify stack
-> allocation code in child after fork").
+> This is left over from 32 bit Cygwin and is no longer used.
 > 
 > Signed-off-by: Ken Brown <kbrown@cornell.edu>
 > ---
->  winsup/cygwin/local_includes/winsup.h |  1 -
->  winsup/cygwin/mm/mmap.cc              | 34 ---------------------------
->  2 files changed, 35 deletions(-)
+>  winsup/cygwin/mm/mmap.cc | 31 +++++++------------------------
+>  1 file changed, 7 insertions(+), 24 deletions(-)
+> 
+> diff --git a/winsup/cygwin/mm/mmap.cc b/winsup/cygwin/mm/mmap.cc
+> index 13e64c23256c..9e6415de9951 100644
+> --- a/winsup/cygwin/mm/mmap.cc
+> +++ b/winsup/cygwin/mm/mmap.cc
+> @@ -27,14 +27,8 @@ details. */
+>     is to support mappings longer than the file, without the file growing
+>     to mapping length (POSIX semantics). */
+>  #define __PROT_ATTACH   0x8000000
+> -/* Filler pages are the pages from the last file backed page to the next
+> -   64K boundary.  These pages are created as anonymous pages, but with
+> -   the same page protection as the file's pages, since POSIX applications
+> -   expect to be able to access this part the same way as the file pages. */
+> -#define __PROT_FILLER   0x4000000
+> -
+> -/* Stick with 4K pages for bookkeeping, otherwise we just get confused
+> -   when trying to do file mappings with trailing filler pages correctly. */
+> +
+> +/* Stick with 4K pages for bookkeeping. */
+>  #define PAGE_CNT(bytes) howmany((bytes), wincap.page_size())
 
 LGTM.
+
+Given we don't do filler pages because Windows doesn't let us anyway, we
+could switch to 64K allocation_granularity() bookkeeping now, too.
 
 
 Thanks,
 Corinna
-
