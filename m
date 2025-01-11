@@ -1,637 +1,190 @@
-Return-Path: <SRS0=8byy=UD=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-	by sourceware.org (Postfix) with ESMTPS id 496853857810
-	for <cygwin-patches@cygwin.com>; Sat, 11 Jan 2025 00:03:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 496853857810
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 496853857810
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736553823; cv=none;
-	b=MFJFvcyYvOw2mxYRpDU6fuZCHSo92ZmMIh4YuEslCWQn0eCZQYbw5leCAB/2i21ORo2nXDOgQqnH5LenpOag3n68WYGgbJTbUAgFLd27vAzzhYUKE8/gsPKiJvWYJ+EoIviWZDC74udT0B6wXjVMWKQW1SbXAz5O1R+iut3DRyk=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736553823; c=relaxed/simple;
-	bh=uTLlXYK3IYGTgh8/dAdpHbGXNYDLBMxj3+ecVeNowJo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=d/lAVNmtEpRM31Ld/JrNzdPUidsHoGdyGeOxRun/4BPXcgSh7WG+fRto974KaDqwklmMtHm0qHXjFH8OKv9Atb/BSD2OEtWSkRTtUpXt7f6rE1M/TdNT+famtD11wa9TMh47BDaG4eyn0008+Rtuc/ZyMdaF4sr9w3PGCbMWTrc=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 496853857810
+Return-Path: <SRS0=a31X=UD=cornell.edu=kbrown@sourceware.org>
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c110::1])
+	by sourceware.org (Postfix) with ESMTPS id 14AA6385829B
+	for <cygwin-patches@cygwin.com>; Sat, 11 Jan 2025 23:43:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 14AA6385829B
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=cornell.edu
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=cornell.edu
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 14AA6385829B
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c110::1
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1736639016; cv=pass;
+	b=MXcj2AaKTZ3w/n63L5a7J5KzAzRc8epxy3VZzaFW0nV3pUbjUYIfy8ULZFcMcgL6p1cXUkrl4PGAjk0/Nup1l+ziJjBjKpaPP/1gAr9BJAauo67tJS/FL84BUdcaqXNRm9Lb39XXXtbjYDXfkVtzo5YW15WHPAs5jjxDuHeYdmU=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1736639016; c=relaxed/simple;
+	bh=2nwp5KB+jlUKmGvJADO4aPFs3g0sO8RJhbOyk+ntT/Y=;
+	h=DKIM-Signature:Message-ID:Date:Subject:To:From:MIME-Version; b=YgZ61fG4IMDJe+CM6FYu8sX/iI388WVDrYa1JwZQKNkMt+2Opwluc4F9/KSeLrth572ySzvrLmzE2zi72AtE4YQS+ehLsY66CDvZ45Cpli0zTN5vJh91ROquMv6QtbVCpiKVdOjQI2+zb6Ca+L5Je464WbA9uQ00X6l1/Jl2Pq4=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 14AA6385829B
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=i42/5aCQ
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 272AD1C7F81;
-	Sat, 11 Jan 2025 00:03:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf09.hostedemail.com (Postfix) with ESMTPA id ADD302003B;
-	Sat, 11 Jan 2025 00:03:21 +0000 (UTC)
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+	dkim=pass (1024-bit key, unprotected) header.d=cornell.edu header.i=@cornell.edu header.a=rsa-sha256 header.s=selector2 header.b=GEuLacCM
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Nk/XVQf9iWnWsFWdHVgafxdb5RjqXM5AmYQ01sFB+00Y2VLK5Z+2FIrLwit+PAu3FtPpew88/uq1WBsdve/Ir1jF8cA5NDC9dEWJii7IwfYh0HwXK321KN/iLJZtmCJAyqhCxi7yM5SzREbh/RIb/iFVrouleEwibDPEt177w8ky2nOWa8buHTpZs1dDKaaMfk/fKCHsfpYi9vVG7kK/Dk/VbPGboZD6pvpYTA2mxluI+NQScw2OkRawGPlnfuP+BLLv5Hpfi14ctVXEYqwVqvOZWoQMX+GGTD3d0xHxy0qeCo0tAo+RLw6jUc/XPT+ReRXGZQ/e6bIRYRPrwKew8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QLnEzeGkoiqB3E193stjPCENfYxrs9RxUwTyoQhzsWM=;
+ b=dYFF9byaL9jT2bgg+g6rs3BBoARNO5PKyCTWt+UrWTqq/5fmJe6Qdowc6BvmtsCclg8+ol/9xYnymRSz9AbUwCbqBY8p1RfOtDXmg8b+f99zJzV9CWg/ROAtsSLFACiUo5/hkDt0Zv0rHO9HSstv4806i1BSbKIq5ZIvRh1ZVHqbu0EwpP5kONRGPntuTaZ0XzebTmX4EAkreJYiyiP9q9Lr5Hck1TfEt4S2r8OxpTBzx+IrUnAIAAHubWUPh4BcfafLnGs5jTi5DJ8WIyXEo87DcoI/G6DDk3R6wX1Qu8QNKEI7mEsWPFw7L8u3yNG59mWV1B13syZ2EHRiUyzbVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QLnEzeGkoiqB3E193stjPCENfYxrs9RxUwTyoQhzsWM=;
+ b=GEuLacCMvpv6Wtxv19+TpWh1AGT9urEeZUNbKqaCDUbwLGucev/uphNr1D1tTr53MmFJs28HIiBtP/lTLOty/4xy3LeL+5rT2SDDvK6nm647KXA4fBsB8E6vEJ735JqxrgY9+2whuxhkJzHkfcHKMLstMWke1p4YsS4rilTh0J4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornell.edu;
+Received: from SN6PR04MB5151.namprd04.prod.outlook.com (2603:10b6:805:90::25)
+ by CO6PR04MB7794.namprd04.prod.outlook.com (2603:10b6:303:13f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.11; Sat, 11 Jan
+ 2025 23:43:32 +0000
+Received: from SN6PR04MB5151.namprd04.prod.outlook.com
+ ([fe80::5ff0:555f:8712:42dd]) by SN6PR04MB5151.namprd04.prod.outlook.com
+ ([fe80::5ff0:555f:8712:42dd%6]) with mapi id 15.20.8335.015; Sat, 11 Jan 2025
+ 23:43:31 +0000
+Message-ID: <05430d18-35fd-4957-8277-5ae3077b3bf3@cornell.edu>
+Date: Sat, 11 Jan 2025 18:43:28 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: mmap: allow remapping part of an existing
+ anonymous, mapping
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v5 7/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 merge function variants on one line
-Date: Fri, 10 Jan 2025 17:01:08 -0700
-Message-ID: <39517f2a7fdd36a043c2029e0a24e16e8e7f3bee.1736552566.git.Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
-References: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
+References: <a9ebb720-13a9-4903-adfb-ca0ff9a4d82d@cornell.edu>
+ <9b717926-06fb-4d34-a473-a709316de429@cornell.edu>
+ <Z32MB5VR4vCszv9J@calimero.vinschen.de>
+ <de64c367-6695-4109-bbcb-591356a7470e@cornell.edu>
+ <Z36Yr7cdOFXrWt2h@calimero.vinschen.de>
+Content-Language: en-US
+From: Ken Brown <kbrown@cornell.edu>
+In-Reply-To: <Z36Yr7cdOFXrWt2h@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN7PR02CA0016.namprd02.prod.outlook.com
+ (2603:10b6:408:20::29) To SN6PR04MB5151.namprd04.prod.outlook.com
+ (2603:10b6:805:90::25)
 MIME-Version: 1.0
-Organization: Systematic Software
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: z9dmt93ae8pqpz61g5wso8bt4c943697
-X-Rspamd-Server: rspamout04
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Queue-Id: ADD302003B
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1+g8HAY52X8GsBDsVfYKTTDEttZ7ThQlmU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=he; bh=Rhn1hrADY2tXao34wMLZAIkRTU+WQ1KgwqCKNNT/5KA=; b=i42/5aCQkJaedRjPL2vo5YHdir3wDpbus/t1T/KUolgEXX+nS2+NEB7eGiiTv1Sr4wmtowQ8IY/0DftBjypQnXWFWmKPJw/cKqKZM7onaoIHpuQ+mxD3tbDShgkV+1mdwj5PMdzRUrL+xV5lOCVFx1zZ4ilXLcVVn/QVcgdrVeiUSh5x5O7w3fc7JOsEqLQ+QDGufRCxzprS0JodbI2WjDRzy5ZjS31y7lX0gRcy1BOQBHoMzJ6B2qV8y1j4omkk27qSOobi0cVwrKf462Zc5vnMR+/tRaads5HJfDubZqtC5/Fsgf3Ih+QENbnwlekPWm4eTFxOFpj8OZDkymsbCQ==
-X-HE-Tag: 1736553801-979366
-X-HE-Meta: U2FsdGVkX19CJF64vjWVBaSyF5JlsMdzQ4WUi+ZgBH3Qs/doT04hXTAIvT/5K9Rl5cVHxx6dG9ZzPxcFX7CnYStb6cVMjg75CD9F6X9rS6TJrcFZJ4akrE9BYCwwyJPUEJ63pdK3pc253DE4rO0kmCDs9kMt9p43pq7sOnnbvPZGggQOmApUaWw/7sRPRQTEl23amk3TtiNhowKSabmSQtNCDzUfCwA4RPEhPG1nwmmC+n4hJmC4pe91yQztMHJqhEx8ZBu5AmiXO0nZ+ix+9uCChvNVEDNEYAr2gYv6TwUO5SVblQswkET9JUOlUEOKd+UlCjDa4URyJa5fGM10pYbOxka4M0ViO1V+6XKFoHt/XcO7DeeFgUZ85s/ScMKVqrCpQN8CiheYSmM1nFgoXQ==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR04MB5151:EE_|CO6PR04MB7794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2783eb50-7619-4155-7365-08dd3299c16f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TXNBU3FZQko0Q0ozUVFDUGxpekJHTzhUbmJCbWVuNXFiU0M2M3FrL2kvckNE?=
+ =?utf-8?B?ZWJ5RzcwVGFoRXg4L3NjbGZveTY5clRIcWRKbjdQK1FIU1YzdEdoY01tOS9q?=
+ =?utf-8?B?V2pFMHJ1Z0N0ekY1S2dDbkt6aFEzTTVTNlBjWm8yMHdzME9tZzUzSjV2MmxN?=
+ =?utf-8?B?SERPcE1Tcy9pcHNJbjVFNjJDTmdDTGNVaURaaVFiSWswMS9WU3ZMczRsbjFK?=
+ =?utf-8?B?Vm8vcE43cjUwNGQ2QkZhS2JCVnl0QTV6aHRtYzdyZTIvQ0E4N0lPa2lGYWpt?=
+ =?utf-8?B?b3drb2FoNVFIb1dzako5QmQ0MHYrK2pOcGtWUGhlMEtVMzYxL21nWTRFS1Rs?=
+ =?utf-8?B?Si9YOWJhQzcyOHlIZWdTeFQ3Wmp5aEhGdk1nbjlZdDhKNTZwM0pwUjJYOEt5?=
+ =?utf-8?B?bHh6Sy85WE9id3VKaytlU3pPNG90bUZtaURUY1pMTW44Tk9xRFJnb1k3Q25K?=
+ =?utf-8?B?S0orUzBoOVJNc2R5bFVuOHBYemhxQW1IS0cySjgySVEwUStvNVRITUJhb2FZ?=
+ =?utf-8?B?RkxZeWxZUkowdjVuUTBEYVR3T1M0bDgwblVXWldhZjV3NnhINTd2dExydXg5?=
+ =?utf-8?B?V05haU5TQzFQQUgweDNHUXo0WDFPNExIVCtqTDExRWlYL1haeWJheHVjcjha?=
+ =?utf-8?B?TmFNelZnU3hUYStVWEFOYmJHRm40Rll0NWRnQnl2aDVvUlRESlVJQkMxZjBx?=
+ =?utf-8?B?em53ZHVUL2F0YWNmSDJpSWVNRTFqK1prUlZtd1ZLRkx4U3ZPK3AyTnZ0TjR2?=
+ =?utf-8?B?WXhYTGxyVXRHNWJuNWo4NzZxak92WnNwUFlhcE1abjlnOHg3WkFMOW5NUmxs?=
+ =?utf-8?B?bDRIYTlJR2JUQm10eUNNWmdwVFBBZURCRFhZMmlCYXl2SzlXcnZ1QWw3ckg0?=
+ =?utf-8?B?Rk5UV0I0bllkR3d4bnNjRkhWazBZdEZnQkU5RHBQbTBwaERERkpqRkRMRjd4?=
+ =?utf-8?B?ZzVFYndiaXZGRFZBK2UzZWVRaThWUmozWWdRZW5wRnRjK2dteHB4WFRENUZk?=
+ =?utf-8?B?NmNjeTgyWFA5WVZObHpSU0ZFZjRPNDZYZSszYm02OXZKZStCT0pVajErV0lw?=
+ =?utf-8?B?Z3BFdUJSd1FjSitaZ1YzcDRxQytaalRWaWliMHRPUFFsLytlbFRPUm1ZYTZp?=
+ =?utf-8?B?Z2x0R3RsWFlyMjRlN2dHS04zTlY4a0JWZ0txd29rY0ZhYmNUcDExUG1xeDN4?=
+ =?utf-8?B?TFlVMGhvK0NRWXpWMlByVGtvNFRrc2trc3FpQUhCYTlUeWJtd2VQUUlxQVMv?=
+ =?utf-8?B?am9oWnI2OXovQkk0TGtYTWlNbXJZbHJVaDZiZjFaS2kzdDZ6c2RTSVIrcE5R?=
+ =?utf-8?B?cjZwRWV4SDFYL3lZMksyWlFnK2lBL005d3MyYXY0cFkwTkJwSk9MelRSNUpp?=
+ =?utf-8?B?aUdZemphVWViR3VPbzBLVndFRjJnRVlCV0orWnpEMWtpbkx0VEhkQlJNSnVN?=
+ =?utf-8?B?MXZIdWFZN1dCdmJMMC9VVHd3TjFWcnpQVjhWVERxQWpGakMrb3VwOEhEVVZM?=
+ =?utf-8?B?di8yb25vcWErUkxqMlJZa2JvYkxlcHY4eWpFOXpTSVZPRU91K2I5dmxPM05j?=
+ =?utf-8?B?dFRNdk45NkVIQU5OUnkzdmZjZXFKMTEvMGlEZUhJS3JhLzBjUHdNSC85am80?=
+ =?utf-8?B?a24yeGdzSGlFVGdrWGJRVi9Wb001ZjJxTVE5cU5iQXpxYWtsN1FwamJ0bjdR?=
+ =?utf-8?B?T21PK2g1Z3RYR0ozV2s3MDRmYmsvMGJROS9tOWUzRlNrOUw2REJWVzFndDJU?=
+ =?utf-8?B?bmx6SFpoaHFOSGZXTmtXNGJ3M3U0V0p2R2JTb25jaDFCSjRqUXRzRWFXUjdk?=
+ =?utf-8?B?aHp3Zm0vYXZPTWVKNUdlVjIrdUtyRGh4Vmx6YUppUnFkUXRMK3h4b3dIZGxs?=
+ =?utf-8?Q?OkJS8zAG6OblA?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB5151.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QVR3T1kwdTBlc1ZjVDhIam5yeWx3eklaaHZuOGhaZFhkNnJpd3UzWDdib0Ri?=
+ =?utf-8?B?TkFEY0VrQWt0YWJzcHhjTTIweUN2K3ZRRUh3N1F1Yjl1UWFWQlhKSlVTSFp0?=
+ =?utf-8?B?VVd1NHBGVUlHWUZDWklDUkRIOW5NQVoyQTY1S0lkZEpTbzg0WGdxOHV0RW95?=
+ =?utf-8?B?Z2NmQ1ZpMEJtZnVFRTZRLzgrc2hUQjBZOTAvYko5TGRoMi9ZLzRpMGswbTBT?=
+ =?utf-8?B?OXJIRTBaN2VtQUxoZXVaVUgrZVkxdWorT2sySnJGOVo3VTNyL0xLMThQZ2o0?=
+ =?utf-8?B?L0ZhdXFBMEoyVDJzeWplWDJyQ0RJZVJXTjZhZXdtOVR2RHp6YitoY3Ayd285?=
+ =?utf-8?B?U2c3VFkvUTVLMW1lOVdtTzFUUXNnbDhyRVZrZ1hjV09JekFyZjh5eDZUNDVQ?=
+ =?utf-8?B?N0tBdU1OWWdta055d1VMVjI3K2lDeGdlUXZBK1VBZ2RoQWlhYU40bFNxT3pM?=
+ =?utf-8?B?YUphT1R0YzZ3RUtGdSsreUo0RFQycHo3Y3grUjZFUnQrMytlaEVTZFJaVjR4?=
+ =?utf-8?B?STFzWTd1OUEzVFlQZm9EMnBzMFdXaTdSR0dQR1kvRnpFNmk0bUlUZ0czNzJy?=
+ =?utf-8?B?SnNtclpiZGRmTlpLdStlQjlJVXoyQ1lWdjZ0dm14REJYTW5FdTBHOXRQYXk5?=
+ =?utf-8?B?ejl5ZXVVaTkwL0c0SzBieWVudkRaY252aTc3WUFyVHpQVEZSMUQ4S2ROUmEw?=
+ =?utf-8?B?WDZqWHkvQjg1OVQ4cnIzRkQxZGpLQmxlUE11QTFNbm90MDdmc3NBem1lQnE0?=
+ =?utf-8?B?Ni9sdm52MVl6VGxXKy93NXBEYy9kbnlXRlpIblVabG5LMU9KYis5TlhZVEtu?=
+ =?utf-8?B?VXZDMDVVTjUrQ2xQek5uOU0rRGNtcU1lMjV6dDJHMUROWVFBRFRjdHBVMTJK?=
+ =?utf-8?B?a2hGenFwbFhFRnAxMlFEdlJtYzRPQjhFZjNJZndDazlyVDltOFpUVWlTSC81?=
+ =?utf-8?B?ZEhjc1k1aHJCZ1NHWVVzcG1iT0hjOHJQOVFnc0hiOFRYWk9KVkZaL1NralJy?=
+ =?utf-8?B?cDFIQUR4VXZuZUJ1VEdlMC9FVnNHY3cyRWhzMmVZZ0xuYVZBa3lJVlZaQTh5?=
+ =?utf-8?B?dFkyTWVaZmREbzVUKzRkdGFFNXNRa1RDZUs3dDJyai8xZ0h1TEpWT0pNZDZQ?=
+ =?utf-8?B?WThqR3dmWUkvTEc3c09lRWExTGpKTXVlRUQ5VHNqaGkxVVY0WHBJTkRmYVM1?=
+ =?utf-8?B?aDVQTnVYK3lmTk00d3gxTHhuYlZrTkdRZlpJRlk4ZW1JNzNvcW0zOUNDeEg2?=
+ =?utf-8?B?azVTaGhVWE05ZC9leUxaQVRWM2RzbUQzRHRreDFSdFNwckJBcUJieDdXS2tN?=
+ =?utf-8?B?QTI5YWlEd0NNZFhrWEpJQnNrOSt5QVZ4RlBiOTR2R3Z5ZWk4NGZDb3pDTTY1?=
+ =?utf-8?B?KzU3dXpkM2NZNFhwT1dLYnpzc3oxUzlreFkxbkt3bm1Wa0VSZmlKc1cvUTNG?=
+ =?utf-8?B?MmJ2Z3U5TUROcXB2NnJ3bnEya2o5WmwwaWNaMW5PYVdXbHJsTlYxL1hHQ2ZL?=
+ =?utf-8?B?a2d2OVNxZTdKZ0c0aVBacnpCRU1lTkFCQTlRRnhvd2IxcUsvVERVQWhkQ1k2?=
+ =?utf-8?B?YlY3ZHhQcCt3SFgvQWN5bXZESUV5Mnc0ZjhMQi83RGxOVVh4WS8yRHZ5bENR?=
+ =?utf-8?B?S0NXRFV1ZmRTR2hUVmozN0RRSXJnQW5qWFBGbTFkY1JnblFhZzlSV1lWNHhx?=
+ =?utf-8?B?aFA1eHl6Ry9SVVJUNTFBSjd2ZFF1ZEtJL2RaRzBMRjROUlNYNitsMUdtaG1y?=
+ =?utf-8?B?YUpRbGpybXl5Ync2VnlOTk9hL3VtelhaU2kxVzFUdUpzd1NnNGtGQ1NaYmpj?=
+ =?utf-8?B?UTlBcVhMNTB2MDZTRWtkbXZwT0UvN3dWOVZWL1dtTVNpdnh6RGJ2WnVvNHVt?=
+ =?utf-8?B?ZS9XM211NlkzWW5KSG1RZlpwSHJBQzBwZkFqUDlyaDdTbGZVeE5mWkFKMDdI?=
+ =?utf-8?B?alpYOWVlby8wdy9BVTZPTTVTSW5HZHBwMDR1Z29oQlNVbHkrTDIvekN4K3M2?=
+ =?utf-8?B?eE4zU2UxdGdjd2p2Ymp5QS9zMWEwVVZvdkpoMEc1Sk1nVGhFRkVUQ2pwYmM4?=
+ =?utf-8?B?eFMvOHdDakc2RE05dG85MDkyWWtKQzZBWCtRamFheTF5Tkx6V2Z5aFRva1Bu?=
+ =?utf-8?Q?fPPlPC91fvQPTHmFvZBieXDN1?=
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2783eb50-7619-4155-7365-08dd3299c16f
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR04MB5151.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2025 23:43:31.5259
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U0wZFTE5Fl5ZZ7Cv63PyhMQpYHbtU5LZQNRslissdbfm1WfcDg3yHlWIKplq1wTBxSH0IN8ibYm8XUe+fVo4wQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7794
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,JMQ_SPF_NEUTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Move circular F/Ff/Fl and similar functions to put
-base entries and -f -l variants on the same line.
+On 1/8/2025 10:24 AM, Corinna Vinschen wrote:
+> On Jan  7 21:27, Ken Brown wrote:
+>> On 1/7/2025 3:18 PM, Corinna Vinschen wrote:
+>>> - mmap_record::prot flag, should be an array of protection bits per page
+>>>     (POSIX page i e., 64K, not Windows page).
+>>
+>> Question: Since it only takes 3 bits to store all possible protections, do
+>> you think it's worth the trouble to pack the protections, so that each byte
+>> stores the protection bits for 2 pages?  Or should I just use an array of
+>> unsigned char, with 1 byte for each page?  Or did you have something else in
+>> mind?
+> 
+> I hadn't thought deeply about this.  I had a vague notion of a ULONG
+> array to match windows protection bits, but, as you note above, we
+> really only need 3 bits.
+> 
+> I don't think we have to define this as a bit field array, given this
+> isn't readily available in C and you would have to add bitfield
+> arithmetic by yourself.  So, yeah, a char or maybe better uint8_t
+> might be the best matching type here.
+Another question: Adding this array to mmap_record, we have two flexible 
+arrays in the class: one for page_map and one for the protection array. 
+My understanding is that a class or struct can have only one flexible 
+array member, and it has to be at the end.  What's the best way to deal 
+with that?  The only thing I can think of is to use a pointer instead of 
+an array for the protections, and then allocate memory for it separately 
+when an mmap_record is created.  Or is there a better way?
 
-Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
----
- winsup/doc/posix.xml | 336 +++++++++++--------------------------------
- 1 file changed, 84 insertions(+), 252 deletions(-)
+Thanks.
 
-diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index 2ec7016e4308..64b25e7babb1 100644
---- a/winsup/doc/posix.xml
-+++ b/winsup/doc/posix.xml
-@@ -29,12 +29,8 @@ ISO/IEC DIS 9945 Information technology
-     accept
-     accept4
-     access
--    acos
--    acosf
--    acosl
--    acosh
--    acoshf
--    acoshl
-+    acos/acosf/acosl
-+    acosh/acoshf/acoshl
-     aio_cancel
-     aio_error
-     aio_fsync
-@@ -47,24 +43,14 @@ ISO/IEC DIS 9945 Information technology
-     alphasort
-     asctime
-     asctime_r
--    asin
--    asinf
--    asinl
--    asinh
--    asinhf
--    asinhl
-+    asin/asinf/asinl
-+    asinh/asinhf/asinhl
-     asprintf
-     assert			(SVID - available in "assert.h" header)
-     at_quick_exit		(ISO C11)
--    atan
--    atanf
--    atanl
--    atan2
--    atan2f
--    atan2l
--    atanh
--    atanhf
--    atanhl
-+    atan/atanf/atanl
-+    atan2/atan2f/atan2l
-+    atanh/atanhf/atanhl
-     atexit
-     atof
-     atoi
-@@ -109,50 +95,24 @@ ISO/IEC DIS 9945 Information technology
-     btowc
-     c16rtomb			(ISO C11)
-     c32rtomb			(ISO C11)
--    cabs
--    cabsf
--    cabsl
--    cacos
--    cacosf
--    cacosl
--    cacosh
--    cacoshf
--    cacoshl
-+    cabs/cabsf/cabsl
-+    cacos/cacosf/cacosl
-+    cacosh/cacoshf/cacoshl
-     call_once			(ISO C11)
-     calloc
--    carg
--    cargf
--    cargl
--    casin
--    casinf
--    casinl
--    casinh
--    casinhf
--    casinhl
--    catan
--    catanf
--    catanl
--    catanh
--    catanhf
--    catanhl
-+    carg/cargf/cargl
-+    casin/casinf/casinl
-+    casinh/casinhf/casinhl
-+    catan/catanf/catanl
-+    catanh/catanhf/catanhl
-     catclose
-     catgets
-     catopen
--    cbrt
--    cbrtf
--    cbrtl
--    ccos
--    ccosf
--    ccosl
--    ccosh
--    ccoshf
--    ccoshl
--    ceil
--    ceilf
--    ceill
--    cexp
--    cexpf
--    cexpl
-+    cbrt/cbrtf/cbrtl
-+    ccos/ccosf/ccosl
-+    ccosh/ccoshf/ccoshl
-+    ceil/ceilf/ceill
-+    cexp/cexpf/cexpl
-     cfgetispeed
-     cfgetospeed
-     cfsetispeed
-@@ -160,9 +120,7 @@ ISO/IEC DIS 9945 Information technology
-     chdir
-     chmod
-     chown
--    cimag
--    cimagf
--    cimagl
-+    cimag/cimagf/cimagl
-     clearerr
-     clock
-     clock_getcpuclockid
-@@ -170,9 +128,7 @@ ISO/IEC DIS 9945 Information technology
-     clock_gettime
-     clock_nanosleep		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     clock_settime		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
--    clog
--    clogf
--    clogl
-+    clog/clogf/clogl
-     close
-     closedir
-     closelog
-@@ -183,45 +139,21 @@ ISO/IEC DIS 9945 Information technology
-     cnd_timedwait		(ISO C11)
-     cnd_wait			(ISO C11)
-     confstr
--    conj
--    conjf
--    conjl
-+    conj/conjf/conjl
-     connect
--    copysign
--    copysignf
--    copysignl
--    cos
--    cosf
--    cosl
--    cosh
--    coshf
--    coshl
--    cpow
--    cpowf
--    cpowl
--    cproj
--    cprojf
--    cprojl
--    creal
--    crealf
--    creall
-+    copysign/copysignf/copysignl
-+    cos/cosf/cosl
-+    cosh/coshf/coshl
-+    cpow/cpowf/cpowl
-+    cproj/cprojf/cprojl
-+    creal/crealf/creall
-     creat
-     crypt			(available in external "crypt" library)
--    csin
--    csinf
--    csinl
--    csinh
--    csinhf
--    csinhl
--    csqrt
--    csqrtf
--    csqrtl
--    ctan
--    ctanf
--    ctanl
--    ctanh
--    ctanhf
--    ctanhl
-+    csin/csinf/csinl
-+    csinh/csinhf/csinhl
-+    csqrt/csqrtf/csqrtl
-+    ctan/ctanf/ctanl
-+    ctanh/ctanhf/ctanhl
-     ctermid
-     ctime
-     ctime_r
-@@ -263,12 +195,8 @@ ISO/IEC DIS 9945 Information technology
-     endutxent
-     environ
-     erand48
--    erf
--    erff
--    erfl
--    erfc
--    erfcf
--    erfcl
-+    erf/erff/erfl
-+    erfc/erfcf/erfcl
-     errno
-     execl
-     execle
-@@ -277,18 +205,10 @@ ISO/IEC DIS 9945 Information technology
-     execve
-     execvp
-     exit
--    exp
--    expf
--    expl
--    exp2
--    exp2f
--    exp2l
--    expm1
--    expm1f
--    expm1l
--    fabs
--    fabsf
--    fabsl
-+    exp/expf/expl
-+    exp2/exp2f/exp2l
-+    expm1/expm1f/expm1l
-+    fabs/fabsf/fabsl
-     faccessat
-     fchdir
-     fchmod
-@@ -298,9 +218,7 @@ ISO/IEC DIS 9945 Information technology
-     fclose
-     fcntl			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     fdatasync
--    fdim
--    fdimf
--    fdiml
-+    fdim/fdimf/fdiml
-     fdopen
-     fdopendir
-     feclearexcept
-@@ -328,22 +246,12 @@ ISO/IEC DIS 9945 Information technology
-     fgetws
-     fileno
-     flockfile
--    floor
--    floorf
--    floorl
--    fma
--    fmaf
--    fmal
--    fmax
--    fmaxf
--    fmaxl
-+    floor/floorf/floorl
-+    fma/fmaf/fmal
-+    fmax/fmaxf/fmaxl
-     fmemopen
--    fmin
--    fminf
--    fminl
--    fmod
--    fmodf
--    fmodl
-+    fmin/fminf/fminl
-+    fmod/fmodf/fmodl
-     fnmatch
-     fopen
-     fork
-@@ -359,9 +267,7 @@ ISO/IEC DIS 9945 Information technology
-     freeaddrinfo
-     freelocale
-     freopen
--    frexp
--    frexpf
--    frexpl
-+    frexp/frexpf/frexpl
-     fscanf
-     fseek
-     fseeko
-@@ -454,9 +360,7 @@ ISO/IEC DIS 9945 Information technology
-     htole64			(available in "endian.h" header)
-     htonl
-     htons
--    hypot
--    hypotf
--    hypotl
-+    hypot/hypotf/hypotl
-     iconv			(available in external "libiconv" library)
-     iconv_close			(available in external "libiconv" library)
-     iconv_open			(available in external "libiconv" library)
-@@ -464,9 +368,7 @@ ISO/IEC DIS 9945 Information technology
-     if_indextoname
-     if_nameindex
-     if_nametoindex
--    ilogb
--    ilogbf
--    ilogbl
-+    ilogb/ilogbf/ilogbl
-     imaxabs
-     imaxdiv
-     in6addr_any			(din)
-@@ -548,56 +450,34 @@ ISO/IEC DIS 9945 Information technology
-     labs
-     lchown
-     lcong48
--    ldexp
--    ldexpf
--    ldexpl
-+    ldexp/ldexpf/ldexpl
-     ldiv
-     le16toh			(available in "endian.h" header)
-     le32toh			(available in "endian.h" header)
-     le64toh			(available in "endian.h" header)
-     lfind
--    lgamma
--    lgammaf
--    lgammal
-+    lgamma/lgammaf/lgammal
-     link
-     linkat
-     lio_listio
-     listen
-     llabs
-     lldiv
--    llrint
--    llrintf
--    llrintl
--    llround
--    llroundf
--    llroundl
-+    llrint/llrintf/llrintl
-+    llround/llroundf/llroundl
-     localeconv
-     localtime
-     localtime_r
-     lockf			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
--    log
--    logf
--    logl
--    log10
--    log10f
--    log10l
--    log1p
--    log1pf
--    log1pl
--    log2
--    log2f
--    log2l
--    logb
--    logbf
--    logbl
-+    log/logf/logl
-+    log10/log10f/log10l
-+    log1p/log1pf/log1pl
-+    log2/log2f/log2l
-+    logb/logbf/logbl
-     longjmp
-     lrand48
--    lrint
--    lrintf
--    lrintl
--    lround
--    lroundf
--    lroundl
-+    lrint/lrintf/lrintl
-+    lround/lroundf/lroundl
-     lsearch
-     lseek
-     lstat
-@@ -631,9 +511,7 @@ ISO/IEC DIS 9945 Information technology
-     mktime
-     mlock
-     mmap
--    modf
--    modff
--    modfl
-+    modf/modff/modfl
-     mprotect
-     mq_close
-     mq_getattr
-@@ -659,20 +537,12 @@ ISO/IEC DIS 9945 Information technology
-     mtx_unlock			(ISO C11)
-     munlock
-     munmap
--    nan
--    nanf
--    nanl
-+    nan/nanf/nanl
-     nanosleep
--    nearbyint
--    nearbyintf
--    nearbyintl
-+    nearbyint/nearbyintf/nearbyintl
-     newlocale
--    nextafter
--    nextafterf
--    nextafterl
--    nexttoward
--    nexttowardf
--    nexttowardl
-+    nextafter/nextafterf/nextafterl
-+    nexttoward/nexttowardf/nexttowardl
-     nftw
-     ngettext			(available in external gettext "libintl" library)
-     nice			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-@@ -728,9 +598,7 @@ ISO/IEC DIS 9945 Information technology
-     posix_spawnattr_setsigdefault
-     posix_spawnattr_setsigmask
-     posix_spawnp
--    pow
--    powf
--    powl
-+    pow/powf/powl
-     ppoll
-     pread
-     printf
-@@ -877,26 +745,16 @@ ISO/IEC DIS 9945 Information technology
-     remainderl			(ISO C99 - available in "math.h" header)
-     remove
-     remque
--    remquo
--    remquof
--    remquol
-+    remquo/remquof/remquol
-     rename
-     renameat
-     rewind
-     rewinddir
--    rint
--    rintf
--    rintl
-+    rint/rintf/rintl
-     rmdir
--    round
--    roundf
--    roundl
--    scalbln
--    scalblnf
--    scalblnl
--    scalbn
--    scalbnf
--    scalbnl
-+    round/roundf/roundl
-+    scalbln/scalblnf/scalblnl
-+    scalbn/scalbnf/scalbnl
-     scandir
-     scanf
-     sched_get_priority_max
-@@ -980,21 +838,15 @@ ISO/IEC DIS 9945 Information technology
-     sigtimedwait
-     sigwait
-     sigwaitinfo
--    sin
--    sinf
--    sinl
--    sinh
--    sinhf
--    sinhl
-+    sin/sinf/sinl
-+    sinh/sinhf/sinhl
-     sleep
-     snprintf
-     sockatmark
-     socket
-     socketpair
-     sprintf
--    sqrt
--    sqrtf
--    sqrtl
-+    sqrt/sqrtf/sqrtl
-     srand
-     srand48
-     srandom
-@@ -1062,12 +914,8 @@ ISO/IEC DIS 9945 Information technology
-     sysconf
-     syslog
-     system
--    tan
--    tanf
--    tanl
--    tanh
--    tanhf
--    tanhl
-+    tan/tanf/tanl
-+    tanh/tanhf/tanhl
-     tcdrain
-     tcflow
-     tcflush
-@@ -1081,9 +929,7 @@ ISO/IEC DIS 9945 Information technology
-     telldir
-     textdomain			(available in external gettext "libintl" library)
-     tfind
--    tgamma
--    tgammaf
--    tgammal
-+    tgamma/tgammaf/tgammal
-     thrd_create			(ISO C11)
-     thrd_current		(ISO C11)
-     thrd_detach			(ISO C11)
-@@ -1113,9 +959,7 @@ ISO/IEC DIS 9945 Information technology
-     towlower_l
-     towupper
-     towupper_l
--    trunc
--    truncf
--    truncl
-+    trunc/truncf/truncl
-     truncate
-     tsearch
-     tss_create			(ISO C11)
-@@ -1258,9 +1102,7 @@ ISO/IEC DIS 9945 Information technology
-     fflush_unlocked
-     fileno_unlocked
-     fgetc_unlocked
--    finite
--    finitef
--    finitel
-+    finite/finitef/finitel
-     fiprintf
-     flock			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     fls
-@@ -1386,9 +1228,7 @@ ISO/IEC DIS 9945 Information technology
-     basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     canonicalize_file_name
-     clearenv
--    clog10
--    clog10f
--    clog10l
-+    clog10/clog10f/clog10l
-     close_range			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     crypt_r			(available in external "crypt" library)
-     dremf
-@@ -1402,9 +1242,7 @@ ISO/IEC DIS 9945 Information technology
-     error_at_line
-     euidaccess
-     execvpe
--    exp10
--    exp10f
--    exp10l
-+    exp10/exp10f/exp10l
-     fallocate			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     fcloseall
-     fcloseall_r
-@@ -1442,9 +1280,7 @@ ISO/IEC DIS 9945 Information technology
-     mempcpy
-     memrchr
-     mkostemps
--    pow10
--    pow10f
--    pow10l
-+    pow10/pow10f/pow10l
-     pthread_getaffinity_np
-     pthread_getattr_np
-     pthread_getname_np
-@@ -1465,9 +1301,7 @@ ISO/IEC DIS 9945 Information technology
-     sched_setaffinity
-     setxattr
-     signalfd
--    sincos
--    sincosf
--    sincosl
-+    sincos/sincosf/sincosl
-     strchrnul
-     strptime_l
-     strtod_l
-@@ -1681,9 +1515,7 @@ ISO/IEC DIS 9945 Information technology
- <sect1 id="std-notimpl"><title>NOT implemented system interfaces from the Single UNIX® Specification Version 5:</title>
- 
- <screen>
--    CMPLX			(not available in "complex.h" header)
--    CMPLXF			(not available in "complex.h" header)
--    CMPLXL			(not available in "complex.h" header)
-+    CMPLX/CMPLXF/CMPLXL		(not available in "complex.h" header)
-     _Fork			(not available in "(sys/)unistd.h" header)
-     dcgettext_l			(not available in external gettext "libintl" library)
-     dcngettext_l		(not available in external gettext "libintl" library)
--- 
-2.45.1
-
+Ken
