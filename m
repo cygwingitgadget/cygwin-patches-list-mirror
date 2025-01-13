@@ -1,79 +1,77 @@
-Return-Path: <SRS0=yEkE=UE=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-	by sourceware.org (Postfix) with ESMTPS id B6C893858C48
-	for <cygwin-patches@cygwin.com>; Sun, 12 Jan 2025 20:00:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B6C893858C48
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B6C893858C48
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.13
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736712016; cv=none;
-	b=aFHLLnQDqIRRAsGJ/wwDGup9igGRwjlGu+tu7gdk1CuKcoJo9bu1F8z37npFCTdmQyH7/ghkAttwpYj4C0EdJSSdTfDhHL+Jma4bRc95KHoDnRe+eqMew42hMr4rPjUUxZ+ogWTSGs8X5DUKyfG9nmpLNZHoo1N5fSbUxInrAgg=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736712016; c=relaxed/simple;
-	bh=lx57NnIMqSroJfyUqVzGu/36PiXrV78EdPxoM4c5YyY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=Yc2XUJXgg5zxrJc+3FDhkCAdPMCUL4ALze27bgu67ARLlerCq9Ghm4BabDjxoAXihnWmb55QwuqUz6x6LFmf79M49w/8NYs0i2h8zAk9SMfKNwLc2w7UJHD5H7IElD9n580kt49q6hMZYzOojq1HbLNT35O832xt9fUngJVM2YI=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B6C893858C48
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=sau0y94J
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 63C81140C10
-	for <cygwin-patches@cygwin.com>; Sun, 12 Jan 2025 20:00:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf19.hostedemail.com (Postfix) with ESMTPA id EAF3320027
-	for <cygwin-patches@cygwin.com>; Sun, 12 Jan 2025 20:00:14 +0000 (UTC)
-Message-ID: <f714ff40-1b35-42fa-bd26-7eb0c1ebc9fc@SystematicSW.ab.ca>
-Date: Sun, 12 Jan 2025 13:00:14 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 64E373858432; Mon, 13 Jan 2025 11:00:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 64E373858432
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1736766051;
+	bh=yllqvXiFCiJTm+FPr12dH98pIWteb3VqmGq4GYc5FXU=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=CRgapjVaYNJeeYBZqYg4J59Rc2JfcLBnnb/RNb7RoPZYeJ0ohGyqYOFaje6KJPvmk
+	 23cc/v8qjasPQppqfLrsvUJCNzyhFiwyQxNruLzXH3RwVz5R+6Gp2KEY9x594X4VBM
+	 IiSXlOVIw2khf65UT3fhA7k/J4N6o7wzqaqJXVN0=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 3A5ECA80A67; Mon, 13 Jan 2025 12:00:49 +0100 (CET)
+Date: Mon, 13 Jan 2025 12:00:49 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: mmap: allow remapping part of an existing
+ anonymous, mapping
+Message-ID: <Z4TyYc2jPepx-rCn@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v5 4/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- move or remove dropped entries
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
- <5888275d7f48a4418cded1b292b8951506240073.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
- <32ee8a55-416f-407f-8c33-655718b667bc@dronecode.org.uk>
-Organization: Systematic Software
-In-Reply-To: <32ee8a55-416f-407f-8c33-655718b667bc@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: EAF3320027
-X-Stat-Signature: ckmk4a85nsdrxba5arzzdwewctoqbrcb
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1/KHxrcl9LLSuun5ixw60Jp1Ycl7tErcIc=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=GdXLPEZVDiumXpiXpOPTOwxu52zOnp86pqbiJPG5hSA=; b=sau0y94JysIi5fE+fGlXizYpCWX5ncVuH4ee5aQy38NByvM2cKtoQk57lGwxXqHNoftLh91OxMmyxnH4IpYJd/ynh5KifUgzfahO6WzaY3kGyQT9n9F+I/IxNTGkWIFu69fje+uUtCa/X1B2FVrrGRgy6rEISAZvRrfxtXrhQMTyyJolUNvva+JAJ2OC4BNvCmTOUBnCPjtTMiigUmhyohrNKH7uuESSI09Jb98hbmWOS8EvKnyqpTuekB9uXJz/xnUsKiEHYIUkIybNQpwrhS8gWRyXQx6zRNTBZ/z3y4PQBwoLCl6pDp8TPBBDsesFOy64mAE2tunnL7G4RTvr1w==
-X-HE-Tag: 1736712014-600124
-X-HE-Meta: U2FsdGVkX19fkemgYHrJziH5jDYxWISLLJxv3XVunYiJv3L0Lx/uKRd+auFPx1sTHjQgf22wnRX26Sal1Cdgn08mEYups15hABfKVfNkjAflu43/pUpOak7jcNqFa7oH2/GS3rbuugeSkm5hNy2AqOT5feym31OxGK7b6b6mvajLbzrokjA6u/Fp/P8dH8r7vBM4PCUGohl2Px8DfePsbFoTCSTU41YLgQ5k7l2dhM98Pe1qhoxN9w8MltvQ5h5SOtloJl+s2i16vaE+R01Cf7+bYlsG+iBx5nELWJwI8c2Lk5+MMU9ZPwyT8TDr8K0COFRTeNvskFMYDGPYgii2EWlA7gzfntlW
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <a9ebb720-13a9-4903-adfb-ca0ff9a4d82d@cornell.edu>
+ <9b717926-06fb-4d34-a473-a709316de429@cornell.edu>
+ <Z32MB5VR4vCszv9J@calimero.vinschen.de>
+ <de64c367-6695-4109-bbcb-591356a7470e@cornell.edu>
+ <Z36Yr7cdOFXrWt2h@calimero.vinschen.de>
+ <05430d18-35fd-4957-8277-5ae3077b3bf3@cornell.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <05430d18-35fd-4957-8277-5ae3077b3bf3@cornell.edu>
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-01-12 11:04, Jon Turney wrote:
-> On 11/01/2025 00:01, Brian Inglis wrote:
->> Move entries no longer in POSIX from the SUS/POSIX section to
->> Deprecated Interfaces section and mark with (SUSv4).
->> Remove entries no longer in POSIX from the NOT Implemented section.
->>
-> [...]
->> -<sect1 id="std-deprec"><title>Other UNIX system interfaces, not in 
->> POSIX.1-2008 or deprecated:</title>
->> +<sect1 id="std-deprec"><title>Other UNIX® system interfaces, not in 
->> POSIX.1-2024, or deprecated:</title>
-> 
-> Maybe we've reached the point where this could be split into "System interfaces 
-> deprecated in POSIX.1-2024" and "Other UNIX system interfaces, not in 
-> POSIX.1-2024"?
+On Jan 11 18:43, Ken Brown wrote:
+> On 1/8/2025 10:24 AM, Corinna Vinschen wrote:
+> > On Jan  7 21:27, Ken Brown wrote:
+> > > On 1/7/2025 3:18 PM, Corinna Vinschen wrote:
+> > > > - mmap_record::prot flag, should be an array of protection bits per page
+> > > >     (POSIX page i e., 64K, not Windows page).
+> > > 
+> > > Question: Since it only takes 3 bits to store all possible protections, do
+> > > you think it's worth the trouble to pack the protections, so that each byte
+> > > stores the protection bits for 2 pages?  Or should I just use an array of
+> > > unsigned char, with 1 byte for each page?  Or did you have something else in
+> > > mind?
+> > 
+> > I hadn't thought deeply about this.  I had a vague notion of a ULONG
+> > array to match windows protection bits, but, as you note above, we
+> > really only need 3 bits.
+> > 
+> > I don't think we have to define this as a bit field array, given this
+> > isn't readily available in C and you would have to add bitfield
+> > arithmetic by yourself.  So, yeah, a char or maybe better uint8_t
+> > might be the best matching type here.
+> Another question: Adding this array to mmap_record, we have two flexible
+> arrays in the class: one for page_map and one for the protection array. My
+> understanding is that a class or struct can have only one flexible array
+> member, and it has to be at the end.  What's the best way to deal with that?
+> The only thing I can think of is to use a pointer instead of an array for
+> the protections, and then allocate memory for it separately when an
+> mmap_record is created.  Or is there a better way?
 
-Or just drop "deprecated" as these interfaces have been dropped from POSIX 2024, 
-which is why I moved getdomainname to Solaris/SunOS and added "(NIS)"!
+Excellent question. Right now the page map is a bitwise array, one bit
+per page.  From the top of my head I think the best way to deal with
+that is to just change the existing page_map to a uint8_t per page and
+store the mapping state in the upper bits and the protection in the
+lower bits.
 
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+Alternatively, define a bitfield, kind of like this:
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+  struct {
+    uint8_t	protection:3;
+    uint8_t	mapped:1;
+  } page_map[0];
+
+
+Corinna
