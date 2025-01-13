@@ -1,41 +1,38 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 5627C3858C98; Mon, 13 Jan 2025 13:26:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5627C3858C98
+	id E8596385782C; Mon, 13 Jan 2025 13:27:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E8596385782C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1736774819;
-	bh=8rw7vB2N7n8+JjSWGiO68+7kiMCh2AJgKqGp6xZevIw=;
+	s=default; t=1736774858;
+	bh=m6Cksjia2AiSPR/y5O/SjLXaCiBCARQEpTw20yx++LI=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=KKx6U813vL5lXv/uTNLQMoeS3mw6+cibWK0vfCy6BaEEn5Z1gVVEVt/9N3ijl5ZiG
-	 UT78C+QbLRC3b92TkX22mTvP7PVHXGSpX3bGct+nYcngP7O2swwPOvbnMpoJh7XLOO
-	 atK/3nHju5fUjsYGbsIUfZI4nrPQ46J9ySeyAnHc=
+	b=LtDSMR0SablDzhQvKjofaZ7N6UyrLVD69va42HEEPBZT0rJ5YMyVzTF9jv1ZqLQiM
+	 Q0+48+eE7SV+1eIYS74bSnkVmPZ+gN3FnLjjIWgG0DiGOuqqzUmGrz8/JjuWJpnP/m
+	 NIoaNO8MyZ/5+Xesna2K9YVqlOV08ep/NtMU3wb4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id A75C3A80A67; Mon, 13 Jan 2025 14:26:57 +0100 (CET)
-Date: Mon, 13 Jan 2025 14:26:57 +0100
+	id 5F5F5A80A67; Mon, 13 Jan 2025 14:27:37 +0100 (CET)
+Date: Mon, 13 Jan 2025 14:27:37 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v5 5/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- combine multiple notes
-Message-ID: <Z4UUoUfYosf0c4ck@calimero.vinschen.de>
+Subject: Re: [PATCH v5 6/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
+ group variants with base
+Message-ID: <Z4UUyaB1LwvQawul@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
- <01f1853b12130b21d35849f4ee8427efffe523a5.1736552566.git.Brian.Inglis@SystematicSW.ab.ca>
+ <76ec9f45a016f163efebca0ae7aa143682349a42.1736552566.git.Brian.Inglis@SystematicSW.ab.ca>
+ <d9088746-b3ad-40d5-a9b0-37a01a7cfe89@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <01f1853b12130b21d35849f4ee8427efffe523a5.1736552566.git.Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <d9088746-b3ad-40d5-a9b0-37a01a7cfe89@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 10 17:01, Brian Inglis wrote:
-> Combine multiple notes after an entry separated by hyphen ") (" -> " - "
-> 
-> Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-> ---
->  winsup/doc/posix.xml | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Jan 12 17:59, Jon Turney wrote:
+> On 11/01/2025 00:01, Brian Inglis wrote:
+> > Move circular Ff/Fl and similar functions before hyperbolic Fh? and
+> > similar entries to keep base entries together with their -f -l variants.
+> 'alphabetic ordering except not in some places as an aesthetic choice' seems
+> like a terrible idea to me.
 
-Good idea.
-
-
-Corinna
+ACK
