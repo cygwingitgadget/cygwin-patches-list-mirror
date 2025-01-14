@@ -1,152 +1,99 @@
 Return-Path: <SRS0=sRnL=UG=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id 0877C385C6C2
-	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:44:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0877C385C6C2
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	by sourceware.org (Postfix) with ESMTPS id 6D0DF385C6C6
+	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:48:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6D0DF385C6C6
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0877C385C6C2
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736898263; cv=none;
-	b=Z+NXpviTU6mmi4Ttb4G+wQZ0QUbiMTHaBMWxtm+rm1jTBgscTbmZFGR9l0fCcvWKRZHuDyRGujf02cVfKbCMKSwx+2H5OLh5AbcwSsPhpMhmrKEs57ZMnS9ZTeOVVofwq/hEpwqKepWIsAS3pG2dwZFO9tHLdpwlKzMltUorUXU=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6D0DF385C6C6
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.11
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736898502; cv=none;
+	b=FsYfdxrldihFBRFT0BVPbfOWiovG2Ez+o+6vZhyezYcthyrtWSBciF9Abjmd1MGfA1N0UvspFuwCMyzIBpSbpPvK9SUKdRwkxERVe/i6v9mfkxG280Kq9+ZmICcxGqG6EtJMOqy4r19ugLml7FcsVwz7thQeGw8E4FMdZOo3MfA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736898263; c=relaxed/simple;
-	bh=24+u6X7vZRaE9lExsV5uUk0MnMG6LMXFG7YOzhDIUfA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:DKIM-Signature; b=SpRb7h0ejECGE9cmj4kdtGUIjEsbp0izPjXwP8U8+NisqCxPiYBVuj7NUCRpDLD0ULO3ET/2/7jAiTO5EYaZ51QOjN6dxd2bUnKrp0oONYygSzbO1TR5bN9sv1CNghgi5EzcMkiz+zB96G0J0wgu5IT8lLW+o+KtvfAMftYFbtk=
+	t=1736898502; c=relaxed/simple;
+	bh=l7d3x8JFg3dRxAVEphRttJ7e1cVKoqpc5adNUJ8rfzk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:DKIM-Signature; b=Dt/dQKPZeZmqIXrERThvREaan39TvcJdJhUi8oH8gphPAmrt9pBXfJSvdUCLku28WcoKe8JEjeTE5pi6rZ0LvcOrp9jhM8tWw0fbvF1g1nQAKbK/OYlEKNEa39ewMDz/39kQOrq5ZiznQSrBAE0lG+ckBO/Psd1XAW6vsCfysAo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0877C385C6C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6D0DF385C6C6
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=dDrlQsnX
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id 7F37943C57
-	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:44:22 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf04.hostedemail.com (Postfix) with ESMTPA id 0A35320027
-	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:44:20 +0000 (UTC)
-Message-ID: <6e984ebd-7f38-4a44-bf2f-0986d5a49ef7@SystematicSW.ab.ca>
-Date: Tue, 14 Jan 2025 16:44:20 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=TkO7r5Lb
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 12775AF704
+	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:48:22 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf02.hostedemail.com (Postfix) with ESMTPA id 9CAF88000E
+	for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2025 23:48:20 +0000 (UTC)
+Message-ID: <83e51bbf-51b0-4baa-bf6b-d2ae1a0edfaa@SystematicSW.ab.ca>
+Date: Tue, 14 Jan 2025 16:48:19 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v5 3/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- not implemented new additions
+Subject: Re: [PATCH v5 7/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
+ merge function variants on one line
+Content-Language: en-CA
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
 References: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
- <b02f73ea85c1a9e6cd1a7ebc116fde12f5f6ccc4.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
- <Z4UN78IouepuUwme@calimero.vinschen.de>
- <ba870968-a3ce-4732-8276-7dabd7a167b2@SystematicSW.ab.ca>
-Content-Language: en-CA
+ <39517f2a7fdd36a043c2029e0a24e16e8e7f3bee.1736552566.git.Brian.Inglis@SystematicSW.ab.ca>
+ <Z4UXaKQmj2s22H3B@calimero.vinschen.de>
+ <e4bb6f52-d246-40aa-a7e9-a173794c1376@systematicsw.ab.ca>
 Organization: Systematic Software
-In-Reply-To: <ba870968-a3ce-4732-8276-7dabd7a167b2@SystematicSW.ab.ca>
+In-Reply-To: <e4bb6f52-d246-40aa-a7e9-a173794c1376@systematicsw.ab.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 0A35320027
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: kbxeg7bxx6m6cggbmipzu8h5am41x1cx
-X-Rspamd-Server: rspamout02
+X-Stat-Signature: p4q6uhzf9zqhidnr6qsmj3r7wst1m5mr
+X-Rspamd-Server: rspamout07
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 9CAF88000E
 X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX184NOBWUZGWpJwYfWSsEd4t5xRsTZTqyK0=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:from:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=+PtzHxr/7keub7iYrqUQNIGS+Sz4LKH9sZODJlZ7p88=; b=dDrlQsnXmwxz3D7X6GMeFG9eo0SbQljzJzrA7F44d3qPohSb9occjEzSTDbuJW4coqL8ZjLljOmdTDQT/r5GHN5i91Wbd82FLHa2QAACZ0G3bxxM2yv+evpGbCYeJPJijJTztLz0ol1ldc9xp7Sf2YfsOWwIrQskHNxSdxIYK1c4ofVjCh7g+L11va+RHF9RUWTNjZRkWQ8Bpw4AfmLJuRN28HF4cH8mdQZgewUIDQMRxYmKcANBt6V61ck3CdJ+HyspLlaoO9rAbEnEi0QkK+TibQLqKUNxdWdM3Q68daP7RDwIONZ2qgdl4Ura3/U7Yp7/8+62SuAS2gfF1FgiJQ==
-X-HE-Tag: 1736898260-231896
-X-HE-Meta: U2FsdGVkX1+CiEaQCz1Y9is2cKrEvcvRx0hibQZ0NCsvK1XWO8dK4MJVocuuuIY5TJnso+KCDvQUy3bsHuGRusQnJoGqa5Yd9WTDa/48o10bucvgViGXGPowtgQ5utTj6L0t+gDZRq7Xv9cdMOcDGuOxDMelfnzJ87wy6iIR5BZUEq0xJFKBbEil46YkVqwJ5gyrLsz/kQs40LOKlZ5dNBi3Tr3yoB7/eOWxEq6A8qs60wZbxHMOU+waIvyhpsV7H7PvlqBrR4CPmdEy381uyvs5pyAuY6SLRUmK2bk6OcnnDVOCSvmF2UeO/C9EIGJW5NDvYohBYFwSYF9dRMPoaUdl7IURe/FvONJdBqSf+9ADUM3czgng4d9HSoipZtSvGB3lxzJcMDymulwjHcLC5pPhegp88MwBIcEYq2hrOKhocDcCT73vwJ4v4RaftBwciehB5cfBJwiHAgvreNsGh/DAjy55B85FObXYJTN1y0DSXJts/BsG1ZpwpTBlcMH0U2HLySo9QePIrOSHhD5Ozg==
+X-Session-ID: U2FsdGVkX19YHDh/x4VENe7je/ZcBfIshGfsYcZ6rgg=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:from:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=u2limKfqk8ygMeI0qhH4MkBtHXrVmmkJp7BoRVbppsQ=; b=TkO7r5LbJ6LPuBWPnAzctF5HoLzPOASl/JT19ltvyWIdmeJkgRd1yRhlB2XSGy1cQOB5mpK8JZoqNTbE4B0eoNnfGPmwxEfa0ulpgx47ll82KmZCjtEaBcli/Nct5ZG19PSXlsnA9oZFH70m5XqzbWpiTDGSbDV0KhRoX0fp1ft45RnTeaTLzW42iZTTFcqqX/pgVVxFce//q2fxptfLv6sZoI9F1a192rrb0EpAv5QqdhOqNYwGcRwizaIMxzaI/VRXLFiyHys/8t3Ks33IDMkNTv9cXkpyZ0P7+i8VEwRtQa0FeUoEpkOok37m3JlBmO0KKLf5Fy+86WBEVY61Ew==
+X-HE-Tag: 1736898500-414292
+X-HE-Meta: U2FsdGVkX1/vRf8BeppkmaKwAplU8173+GBSzJE0skRb4rlCsS+FSND+8qtGvjjpD6BGOmhcgSKxLPj8XUHABuCgjKI14IqaGAdzpKcLGkNQOwRL4yIm4+SXdSBlboLJojnySvuYFVBgdAavO6qrk/mozCVOHGEthr0rxOeOZhV5V7aOrsOsLvan/Fm5mMFSknV3yxCid/yCVe2ZFLjGTbf3a1/xK/iRnE9Rd2hiMS7NJTWY1Oa7o4RHENO022H5/pDikEB9v5jl+IuomtW+gSNdTjX8yxPrDt7smivFDDwDIYBt9Mkh06l4sjA9khD4AyoDDXTgvQqimEUzAsydRpZklKN7U5ZtnFpYOlq8sbp1LumLmskwH4c1vAPIQ8BOONCQ2oPsx4iq0inI8RXBUA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-01-13 11:01, Brian Inglis wrote:
-> On 2025-01-13 05:58, Corinna Vinschen wrote:
+On 2025-01-13 12:07, brian.inglis@systematicsw.ab.ca wrote:
+> On 2025-01-13 06:38, Corinna Vinschen wrote:
 >> On Jan 10 17:01, Brian Inglis wrote:
->>> Add unavailable POSIX additions to Not Implemented section,
->>> with mentions of headers and packages where they are expected.
+>>> Move circular F/Ff/Fl and similar functions to put
+>>> base entries and -f -l variants on the same line.
 >>>
 >>> Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 >>> ---
->>>   winsup/doc/posix.xml | 24 ++++++++++++++++++++++--
->>>   1 file changed, 22 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
->>> index 17c9ebf6f73f..2e14861802bf 100644
->>> --- a/winsup/doc/posix.xml
->>> +++ b/winsup/doc/posix.xml
->>> @@ -1678,9 +1678,17 @@ ISO/IEC DIS 9945 Information technology
->>>   </sect1>
->>> -<sect1 id="std-notimpl"><title>NOT implemented system interfaces from the 
->>> Single Unix Specification, Volume 7:</title>
->>> +<sect1 id="std-notimpl"><title>NOT implemented system interfaces from the 
->>> Single UNIX® Specification Version 5:</title>
->>>   <screen>
->>> +    CMPLX            (not available in "complex.h" header)
->>> +    CMPLXF            (not available in "complex.h" header)
->>> +    CMPLXL            (not available in "complex.h" header)
+>>>   winsup/doc/posix.xml | 336 +++++++++++--------------------------------
+>>>   1 file changed, 84 insertions(+), 252 deletions(-)
 >>
->> Erm... did you have a look into newlib/libc/include/complex.h?
+>> Hmm.  This makes more sense than the previous patch.
 > 
-> I only looked at build include definition dump from Cygwin gcc 12,
-> which does not include this, only:
+> This is part 1/3 of order/combine/abbreviate, submitted separately to ignore or 
+> change.
 > 
-> . /usr/include/complex.h
-> .. /usr/include/sys/cdefs.h
-> ... /usr/include/machine/_default_types.h
-> .... /usr/include/sys/features.h
-> ..... /usr/include/_newlib_version.h
-> ... /usr/lib/gcc/x86_64-pc-cygwin/12/include/stddef.h
+>> However, it doesn't make sense if only the math functions are affected
+>> If you want to do this systematically, you'd have to group them
+>> following the Open Group Base Spec Issue 8.
+>                      or SUS V5 or POSIX 2024 or ... ;^>
 > 
-> That file was updated last July and in August cygwin-devel 3.5.4 should have 
-> included it, but that commit is not in that log, nor 3.5.5, or cygwin-3_5- 
-> branch, but is under main and in 3.6.0 tars:
-> 
-> https://cygwin.com/git?p=newlib-cygwin.git;a=commit;f=newlib/libc/include/ 
-> complex.h;h=a5ffae14
-> 
-> $ curl https://mirror.cpsc.ucalgary.ca/mirror/cygwin.com/x86_64/release/cygwin/ 
-> cygwin-devel/cygwin-devel-3.5.5-1.tar.xz | tar -xJOf - usr/include/complex.h | 
-> grep CMPLX; echo $?
-> 1
-> 
-> $ curl https://mirror.cpsc.ucalgary.ca/mirror/cygwin.com/x86_64/release/cygwin/ 
-> cygwin-devel/cygwin-devel-3.6.0-0.278.g376fe1dab177.tar.xz | tar -xJOf - usr/ 
-> include/complex.h | grep CMPLX ; echo $?
-> #define    CMPLX(x, y)    ((double complex){ x, y })
-> #define    CMPLXF(x, y)    ((float complex){ x, y })
-> #define    CMPLXL(x, y)    ((long double complex){ x, y })
-> #define    CMPLX(x, y)    __builtin_complex((double)(x), (double)(y))
-> #define    CMPLXF(x, y)    __builtin_complex((float)(x), (float)(y))
-> #define    CMPLXL(x, y)    __builtin_complex((long double)(x), (long double)(y))
-> 0
-> 
->> Also, don't add the "(not available ..." stuff if the API is supposed to
->> be implemented and exported by newlib/Cygwin.
+>> That would also imply merging stuff like
 >>
->>> +    dcgettext_l            (not available in external gettext "libintl" 
->>> library)
->>> +    dcngettext_l        (not available in external gettext "libintl" library)
->>> +    dgettext_l            (not available in external gettext "libintl" library)
->>> +    dngettext_l            (not available in external gettext "libintl" 
->>> library)
+>>    iswalnum/iswalnum_l        -- page 1280
+>>    le16toh/le32toh/le64toh    -- page 1327
+>>    localtime/localtime_r        -- page 1354
+>>    mlock/munlock            -- pages 1433, 1488
+>>    sig2str/str2sig        -- page 2040
 >>
->> ...so in case of these libintl functions, it's ok, of course.
+>> etc. etc.
 >>
->>> +    kill_dependency        (not available in "stdatomic.h" header)
->>
->> This is in /usr/lib/gcc/x86_64-pc-cygwin/12/include/c++/bits/atomic_base.h
+>> Nevertheless, while this has a certain charm and I don't see
+>> a disadvantage, I'd like to get Jon's input to this as well.
 > 
-> But not in a standard Cygwin gcc 12 build which uses:
-> 
-> $ grep -A2 kill_ /usr/lib/gcc/x86_64-pc-cygwin/12/include/stdatomic.h
-> #define kill_dependency(Y)            \
->    __extension__                    \
->    ({                        \
->      __auto_type __kill_dependency_tmp = (Y);    \
->      __kill_dependency_tmp;            \
->    })
-> 
-> and I missed checking earlier and qualifies? :^<
-> 
-> Should I change those comments to "available in" and qualify stdatomic.h with 
-> GCC or lib/gcc?
+> Okay with other _l _r _s suffixes, not sure about bits, un, or <-> flips?
 
-Looking at the end/get/set...ent groups, endhostent and sethostent are 
-implemented and gethostent is not implemented - should we keep them separate or 
-combine in one section?
+Looked at the Refer to entries in some man pages for groups, and looked at the 
+functions in the referred to man pages, and grouped by those criteria.
+
+Looking at the end/get/set...ent groups, endhostent/sethostent are implemented 
+and gethostent is not implemented - should we keep them separate or combine in 
+one section or the other?
 
 -- 
 Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
@@ -155,4 +102,3 @@ La perfection est atteinte                   Perfection is achieved
 non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
 mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
                                  -- Antoine de Saint-Exupéry
-
