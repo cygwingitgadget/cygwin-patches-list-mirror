@@ -1,545 +1,237 @@
 Return-Path: <SRS0=SYvf=UH=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-	by sourceware.org (Postfix) with ESMTPS id DE36938515E7
-	for <cygwin-patches@cygwin.com>; Wed, 15 Jan 2025 19:43:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DE36938515E7
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	by sourceware.org (Postfix) with ESMTPS id 60F3138515D0
+	for <cygwin-patches@cygwin.com>; Wed, 15 Jan 2025 19:43:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 60F3138515D0
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DE36938515E7
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736970208; cv=none;
-	b=gHWESWyjE3dh5Y6vaAn4T2BERX2QPgRHV/EQnuQAFoAPmlsMYi2FIlSYyfj/cwB+95b5zmfJosB3ugNx0v8DNou4FCFjr+ad5NGPJ7ja0wBRqTu54qvfvues5HBV+Hs/wXXj4e/dfXfURXTsBET2LqToS2l455Sy0TPuIt1cY/g=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 60F3138515D0
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.16
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736970209; cv=none;
+	b=BsW2IbzchLno2V0PYKQeq6ZGT4aQMX7D6RINS99iGB3ZGvEbQc3RhgLR/TS4zBBh/cfuV/h3aBrsdDvuDqS576bon6o278+yZQRYDJoElAbITqfpGWvD3X8c69MY+xa7qgNxW9TJ7LDXyGIiTP/ibiUkAOYKFmN0CxANHVgew4s=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736970208; c=relaxed/simple;
-	bh=LQMcAyKF57HvXtU0nwF9ZrA2BK2RHuWm+30qKywgsgE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=O/WD1jqtvvWv5RnpJoNNJRWgAEiKBib571dkSFqk33I6UswGyVJmlCP5D6AOsc28RIF18GzIWqJoDkLnYczFA6aftXSxK8vCjjq/4owzET9DVNHZdx+e7E7sbL+3qjEEH5sCYXe+vtzzpt8NhR1bPtgO6Yht6GsSemrfG0fv4uU=
+	t=1736970209; c=relaxed/simple;
+	bh=J4kkF4HdSLy4S3SH7649IjLGvdRQ1UXgcVn8j8FqWbw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=SgwQqWK/KCb6qWzPOOuUr9+IowzZQ/lgoMHRqdbgdA4H7EL+n9fmvN9BkjpK9Ahuw1AeJBwaPbVaT/ovDRfPN66JNdQJ53S37TUvfGllw+jHW+2+DufMvv6KA8aYUWL+pgtlzSMdmx2P8XRAx5FOq6I2L1QtI5rTsF8CV1d5TaA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DE36938515E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 60F3138515D0
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=cGzERERr
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=jybmFOYX
 Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 6C8CD1A01E5;
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 00603AE049;
+	Wed, 15 Jan 2025 19:43:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf07.hostedemail.com (Postfix) with ESMTPA id 8D7C92002C;
 	Wed, 15 Jan 2025 19:43:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf07.hostedemail.com (Postfix) with ESMTPA id D24642002C;
-	Wed, 15 Jan 2025 19:43:25 +0000 (UTC)
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com (Cygwin Patches)
-Subject: [PATCH v6 1/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 move new entries
-Date: Wed, 15 Jan 2025 12:39:18 -0700
-Message-ID: <0b9a9708e62ca8a77a5efbbc18543d77b73704b0.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH v6 2/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 new additions available
+Date: Wed, 15 Jan 2025 12:39:19 -0700
+Message-ID: <8351d131d2aae253f9172f723484f6f6ffa564d9.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
 References: <cover.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Organization: Systematic Software
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: D24642002C
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: uc4y9qxdaikwz6a7kiombokj7i54kenc
+X-Rspamd-Queue-Id: 8D7C92002C
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: kpws5xor7ydzukmh6389jprbyuqdy851
 X-Rspamd-Server: rspamout05
 X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX19bma+1V3f5EPsm2+Pu3JzjhK/A2KQ3N7I=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=he; bh=I+Lfj0Dn7M5Awill/tJl6GV/1gs8nPmo/uwAjnAPjh0=; b=cGzERERr5ud+CXbnNRoCK1AJDZ8wMil6RMoNPWF3+iXPqpG8B+xWML4q/MbMOYv41b9//dGTjto6mSCw/cnHV/8MNbhRMkZNKcikt8soy7TFqxtkO6By3Ym0JFq+jQawnPGkwOcbZDqnuPmzbkUuXjlZ3Y9CDK1RC6BMWc4d9YdDcg0tAKwYOu3Puhfvduf1Dvar5RGNGhwyD0gBUyY5bI9cRtNj+U1NBVUy674VmgKcYOzfLz8TGsoWGhPH5tEryw5pQTEyeuaDfUQ79V1dhHDRGXAOzYhriLWcyKg5xiM+SG0AKDcsdioP8UnqY4qE0IR5JAQGopQ//InLbiHWfQ==
-X-HE-Tag: 1736970205-508583
-X-HE-Meta: U2FsdGVkX19iAmrdc/AZTzaK0hhVDdzzsowxzrio3mgNfAf5M+6a1gpmhhtWmhUGTwfLlbcAVlkQ3ZXtHjEGaHu/Q5lAqJp65UroFRHKz6VyUVLA2qG6wFnqy4eH8eFpAW0W0LnOFEpZypIxLBysDugtCeFMM7SqNvWkkqTund7sZOrXdU5swAuUjBAfx+O76B7sBMEcaBwV540hToJZjIiBsDftq1SMRnsYeZusPZk2y5SlC9BxMaZQ9Ufag1UgYhqzdOY6m4zhhtzef0AtCKjRBLpd/+P2K4P7eamXQVQ2lFw73UVmkNqkc4HZ9dvPY6ExPNgf2rJdXGtW60UJTR3CanO5ZKN375XRVVrQ0uZU60zQaCV7lhsymwwSske5lnlHYvPVqmVIFxFgXHNUzEHbWr64RmeT2raaIDGyeaBTNp4Q946IKWxTRGn/ac5sEN88hSfXva9mZ3cYAUxI4IiG89oexnYgk0lS1tfvdiA=
+X-Session-ID: U2FsdGVkX189HAcDNwOLpq8hIcz2UgZnuX1Y/aNcjCs=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:in-reply-to:references:mime-version:content-transfer-encoding; s=he; bh=TNouSpBtOBK0oazf7NpyW0tqjFpNKspUuMppglvTTTQ=; b=jybmFOYXbqAe4THuxqRItmFtKatYhWmBKUaIdvd9XgSQ5vlAiOn/SNOjMcBIpiHMyAyMZ4pM1crG5dFKjo6PlxY7Vl5yM87Xbq4bJMHuRHNTzyGZPcQGK/uFY7Lth74wNnIDsAW+5gJ5BI1VtEng8d+wzas1ZdybQJYjLoUvoBJVIjVZpDXfG+R8iYuc2gbssF500eXtoUWk7Y0+fjfYcWjUWYh8erD4i8OGzpXPNKriUa1NUUb9zWVQj/+Syrnf/e8FELVvtjVUkFZF4+W4k30DC5JgXd0L9vM0s++b3JBWyBLL+3evDZzlvu/bYQBiAmjoCaX7WoafW5FHE/yXMw==
+X-HE-Tag: 1736970207-900868
+X-HE-Meta: U2FsdGVkX19GOie7MCY7jns/XvYTmE9NfgTs73cn1qpUR6/K9MZt7sgVGOiHxIdgll/kpYlMNNL2xIKYHQpm1oKGz70sA6mf5OrF/IlggTAUtE4UfBKor/PzdIthxo82PzFd9D7TCDoET35ga2GHixrnnpcDMVqVvGtUgp2ZFF0/ceOC8G5or5+MkG8v2iZWrm1JfUhRuKxmgW/IirzLxfK741fRwaEbxOgaOirICR0VSAauRpg8G2rWxlXCRsvON3kWw5yfO6J2QCAQs6h9+jwJreFcF0omoCk1SlzuEmKvYyT8H7DfQoKArf/xNibHAmkQaEvLC90=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Update anchor id and description to current version, year, issue, etc.
-Move new POSIX entries in other sections to the SUS/POSIX section.
+Add POSIX new additions available as header macros and inline functions,
+or exported by Cygwin distro DLL or library packages
 
 Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 ---
- winsup/doc/posix.xml | 139 ++++++++++++++++++++++---------------------
- 1 file changed, 72 insertions(+), 67 deletions(-)
+ winsup/doc/posix.xml | 61 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
 diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index 2782beb86547..949333b0c36c 100644
+index 949333b0c36c..0b23a2251028 100644
 --- a/winsup/doc/posix.xml
 +++ b/winsup/doc/posix.xml
-@@ -5,10 +5,15 @@
- <chapter id="compatibility" xmlns:xi="http://www.w3.org/2001/XInclude">
- <title>Compatibility</title>
- 
--<sect1 id="std-susv4"><title>System interfaces compatible with the Single Unix Specification, Version 7:</title>
-+<sect1 id="std-susv5"><title>System interfaces compatible with the Single UNIX® Specification Version 5:</title>
- 
--<para>Note that the core of the Single Unix Specification, Version 7 is
--also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-+<para>Note that the core of the Single UNIX® Specification Version 5 is
-+POSIX®.1-2024 also simultaneously IEEE Std 1003.1™-2024 Edition,
-+The Open Group Base Specifications Issue 8
-+(see https://pubs.opengroup.org/onlinepubs/9799919799/), and
-+ISO/IEC DIS 9945 Information technology
-+- Portable Operating System Interface (POSIX®) base specifications
-+- Issue 8.</para>
+@@ -16,6 +16,9 @@ ISO/IEC DIS 9945 Information technology
+ - Issue 8.</para>
  
  <screen>
++    CMPLX			(available in "complex.h" header)
++    CMPLXF			(available in "complex.h" header)
++    CMPLXL			(available in "complex.h" header)
      FD_CLR
-@@ -25,6 +30,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     abort
-     abs
-     accept
-+    accept4
-     access
-     acos
-     acosf
-@@ -40,6 +46,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     aio_suspend
-     aio_write
-     alarm
-+    aligned_alloc		(ISO C11)
-     alphasort
-     asctime
-     asctime_r
-@@ -49,6 +56,9 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     asinhf
-     asinhl
-     asinl
-+    asprintf
-+    assert			(SVID - available in "assert.h" header)
-+    at_quick_exit		(ISO C11)
-     atan
-     atan2
-     atan2f
-@@ -68,6 +78,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     FD_ISSET
+     FD_SET
+@@ -74,8 +77,41 @@ ISO/IEC DIS 9945 Information technology
+     atoi
+     atol
+     atoll
++    atomic_compare_exchange_strong		(available in "stdatomic.h" header)
++    atomic_compare_exchange_strong_explicit	(available in "stdatomic.h" header)
++    atomic_compare_exchange_weak		(available in "stdatomic.h" header)
++    atomic_compare_exchange_weak_explicit	(available in "stdatomic.h" header)
++    atomic_exchange		(available in "stdatomic.h" header)
++    atomic_exchange_explicit	(available in "stdatomic.h" header)
++    atomic_fetch_add		(available in "stdatomic.h" header)
++    atomic_fetch_add_explicit	(available in "stdatomic.h" header)
++    atomic_fetch_and		(available in "stdatomic.h" header)
++    atomic_fetch_and_explicit	(available in "stdatomic.h" header)
++    atomic_fetch_or		(available in "stdatomic.h" header)
++    atomic_fetch_or_explicit	(available in "stdatomic.h" header)
++    atomic_fetch_sub		(available in "stdatomic.h" header)
++    atomic_fetch_sub_explicit	(available in "stdatomic.h" header)
++    atomic_fetch_xor		(available in "stdatomic.h" header)
++    atomic_fetch_xor_explicit	(available in "stdatomic.h" header)
++    atomic_flag_clear		(available in "stdatomic.h" header)
++    atomic_flag_clear_explicit	(available in "stdatomic.h" header)
++    atomic_flag_test_and_set	(available in "stdatomic.h" header)
++    atomic_flag_test_and_set_explicit	(available in "stdatomic.h" header)
++    atomic_init			(available in "stdatomic.h" header)
++    atomic_is_lock_free		(available in "stdatomic.h" header)
++    atomic_load			(available in "stdatomic.h" header)
++    atomic_load_explicit	(available in "stdatomic.h" header)
++    atomic_signal_fence		(available in "stdatomic.h" header)
++    atomic_store		(available in "stdatomic.h" header)
++    atomic_store_explicit	(available in "stdatomic.h" header)
++    atomic_thread_fence		(available in "stdatomic.h" header)
+     basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
++    be16toh			(available in "endian.h" header)
++    be32toh			(available in "endian.h" header)
++    be64toh			(available in "endian.h" header)
      bind
++    bind_textdomain_codeset	(available in external gettext "libintl" library)
++    bindtextdomain		(available in external gettext "libintl" library)
      bsearch
      btowc
-+    c16rtomb			(ISO C11)
-+    c32rtomb			(ISO C11)
-     cabs
-     cabsf
-     cabsl
-@@ -77,6 +89,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     cacoshf
-     cacoshl
-     cacosl
-+    call_once			(ISO C11)
-     calloc
-     carg
-     cargf
-@@ -134,6 +147,12 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     close
-     closedir
-     closelog
-+    cnd_broadcast		(ISO C11)
-+    cnd_destroy			(ISO C11)
-+    cnd_init			(ISO C11)
-+    cnd_signal			(ISO C11)
-+    cnd_timedwait		(ISO C11)
-+    cnd_wait			(ISO C11)
-     confstr
-     conj
-     conjf
-@@ -191,6 +210,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     c16rtomb			(ISO C11)
+@@ -206,6 +242,9 @@ ISO/IEC DIS 9945 Information technology
+     dbm_nextkey			(available in external "libgdbm" library)
+     dbm_open			(available in external "libgdbm" library)
+     dbm_store			(available in external "libgdbm" library)
++    dcgettext			(available in external gettext "libintl" library)
++    dcngettext			(available in external gettext "libintl" library)
++    dgettext			(available in external gettext "libintl" library)
+     difftime
      dirfd
      dirname
-     div
-+    dladdr			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     dlclose
+@@ -215,6 +254,7 @@ ISO/IEC DIS 9945 Information technology
      dlerror
      dlopen
-@@ -199,6 +219,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     dlsym
++    dngettext			(available in external gettext "libintl" library)
+     dprintf
      drand48
      dup
-     dup2
-+    dup3
-     duplocale
-     encrypt			(available in external "crypt" library)
-     endgrent
-@@ -265,6 +286,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     fexecve
-     fflush
-     ffs
-+    ffsl
-+    ffsll
-     fgetc
-     fgetpos
-     fgets
-@@ -541,6 +564,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     malloc
-     mblen
-     mbrlen
-+    mbrtoc16			(ISO C23 - available in "uchar.h" header)
-+    mbrtoc32			(ISO C23 - available in "uchar.h" header)
-     mbrtowc
-     mbsinit
-     mbsnrtowcs
-@@ -551,6 +576,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     memchr
-     memcmp
-     memcpy
-+    memmem
-     memmove
-     memset
-     mkdir
-@@ -560,6 +586,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     mkfifoat
-     mknod
-     mknodat
-+    mkostemp
-     mkstemp
-     mktime
-     mlock
-@@ -584,6 +611,12 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     msgrcv			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     msgsnd			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     msync
-+    mtx_destroy			(ISO C11)
-+    mtx_init			(ISO C11)
-+    mtx_lock			(ISO C11)
-+    mtx_timedlock		(ISO C11)
-+    mtx_trylock			(ISO C11)
-+    mtx_unlock			(ISO C11)
-     munlock
-     munmap
-     nan
-@@ -622,6 +655,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     pclose
-     perror
-     pipe
-+    pipe2
-     poll
+@@ -359,6 +399,7 @@ ISO/IEC DIS 9945 Information technology
+     getdelim
+     getdomainname
+     getegid
++    getentropy			(Cygwin DLL)
+     getenv
+     geteuid
+     getgid
+@@ -372,6 +413,7 @@ ISO/IEC DIS 9945 Information technology
+     gethostname
+     getitimer			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     getline
++    getlocalename_l		(Cygwin DLL)
+     getlogin
+     getlogin_r
+     getnameinfo
+@@ -400,6 +442,7 @@ ISO/IEC DIS 9945 Information technology
+     getsockname
+     getsockopt
+     getsubopt
++    gettext			(available in external gettext "libintl" library)
+     gettimeofday
+     getuid
+     getutxent
+@@ -415,6 +458,12 @@ ISO/IEC DIS 9945 Information technology
+     hcreate
+     hdestroy
+     hsearch
++    htobe16			(available in "endian.h" header)
++    htobe32			(available in "endian.h" header)
++    htobe64			(available in "endian.h" header)
++    htole16			(available in "endian.h" header)
++    htole32			(available in "endian.h" header)
++    htole64			(available in "endian.h" header)
+     htonl
+     htons
+     hypot
+@@ -432,6 +481,8 @@ ISO/IEC DIS 9945 Information technology
+     ilogbl
+     imaxabs
+     imaxdiv
++    in6addr_any			(Cygwin DLL)
++    in6addr_loopback		(Cygwin DLL)
+     inet_addr
+     inet_ntoa
+     inet_ntop
+@@ -506,6 +557,7 @@ ISO/IEC DIS 9945 Information technology
+     jn
+     jrand48
+     kill
++    kill_dependency		(available in GCC "stdatomic.h" header)
+     killpg
+     l64a
+     labs
+@@ -515,6 +567,9 @@ ISO/IEC DIS 9945 Information technology
+     ldexpf
+     ldexpl
+     ldiv
++    le16toh			(available in "endian.h" header)
++    le32toh			(available in "endian.h" header)
++    le64toh			(available in "endian.h" header)
+     lfind
+     lgamma
+     lgammaf
+@@ -634,6 +689,7 @@ ISO/IEC DIS 9945 Information technology
+     nexttowardf
+     nexttowardl
+     nftw
++    ngettext			(available in external gettext "libintl" library)
+     nice			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+     nl_langinfo
+     nl_langinfo_l
+@@ -660,6 +716,7 @@ ISO/IEC DIS 9945 Information technology
      popen
      posix_fadvise
-@@ -630,8 +664,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+     posix_fallocate
++    posix_getdents		(Cygwin DLL)
+     posix_madvise
      posix_memalign
      posix_openpt
-     posix_spawn
-+    posix_spawn_file_actions_addchdir	(available as posix_spawn_file_actions_addchdir_np)
-     posix_spawn_file_actions_addclose
-     posix_spawn_file_actions_adddup2
-+    posix_spawn_file_actions_addfchdir	(available as posix_spawn_file_actions_addfchdir_np)
-     posix_spawn_file_actions_addopen
-     posix_spawn_file_actions_destroy
-     posix_spawn_file_actions_init
-@@ -653,6 +689,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     pow
-     powf
-     powl
-+    ppoll
-     pread
-     printf
-     pselect
-@@ -686,6 +723,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -722,6 +779,8 @@ ISO/IEC DIS 9945 Information technology
+     pthread_barrierattr_init
      pthread_barrierattr_setpshared
      pthread_cancel
++    pthread_cleanup_pop		(available in "pthread.h" header)
++    pthread_cleanup_push	(available in "pthread.h" header)
      pthread_cond_broadcast
-+    pthread_cond_clockwait
+     pthread_cond_clockwait
      pthread_cond_destroy
-     pthread_cond_init
-     pthread_cond_signal
-@@ -709,6 +747,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     pthread_key_create
-     pthread_key_delete
-     pthread_kill
-+    pthread_mutex_clocklock
-     pthread_mutex_destroy
-     pthread_mutex_getprioceiling
-     pthread_mutex_init
-@@ -728,6 +767,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     pthread_mutexattr_setpshared
-     pthread_mutexattr_settype
-     pthread_once
-+    pthread_rwlock_clockrdlock
-+    pthread_rwlock_clockwrlock
-     pthread_rwlock_destroy
-     pthread_rwlock_init
-     pthread_rwlock_rdlock
-@@ -756,6 +797,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     pthread_spin_unlock
-     pthread_testcancel
-     ptsname
-+    ptsname_r
-     putc
-     putc_unlocked
-     putchar
-@@ -767,6 +809,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     putwchar
-     pwrite
-     qsort
-+    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-+    quick_exit			(ISO C11)
-     raise
-     rand
-     rand_r
-@@ -778,6 +822,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     readlinkat
-     readv
-     realloc
-+    reallocarray
-     realpath
-     recv
-     recvfrom
-@@ -788,7 +833,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     regfree
-     remainder
-     remainderf
--    reminderl
-+    remainderl			(ISO C99 - available in "math.h" header)
-     remove
-     remque
-     remquo
-@@ -821,9 +866,11 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     sched_setparam		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     sched_setscheduler		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     sched_yield
-+    secure_getenv
-     seed48
-     seekdir
-     select
-+    sem_clockwait
-     sem_close
-     sem_destroy
-     sem_getvalue
-@@ -874,6 +921,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     shmdt			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     shmget			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     shutdown
-+    sig2str
-     sigaction
-     sigaddset
-     sigaltstack
-@@ -925,6 +973,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     stdout
-     stpcpy
-     stpncpy
-+    str2sig
-     strcasecmp
-     strcasecmp_l
-     strcat
-@@ -942,6 +991,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     strfmon_l
-     strftime
-     strftime_l
-+    strlcat
-+    strlcpy
-     strlen
-     strncasecmp
-     strncasecmp_l
-@@ -1000,6 +1051,14 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
+@@ -1047,6 +1106,7 @@ ISO/IEC DIS 9945 Information technology
+     tdelete
+     telldir
+     tempnam
++    textdomain			(available in external gettext "libintl" library)
+     tfind
      tgamma
      tgammaf
-     tgammal
-+    thrd_create			(ISO C11)
-+    thrd_current		(ISO C11)
-+    thrd_detach			(ISO C11)
-+    thrd_equal			(ISO C11)
-+    thrd_exit			(ISO C11)
-+    thrd_join			(ISO C11)
-+    thrd_sleep			(ISO C11)
-+    thrd_yield			(ISO C11)
-     time
-     timer_create		(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     timer_delete
-@@ -1025,6 +1084,10 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     truncf
-     truncl
-     tsearch
-+    tss_create			(ISO C11)
-+    tss_delete			(ISO C11)
-+    tss_get			(ISO C11)
-+    tss_set			(ISO C11)
-     ttyname
-     ttyname_r
-     twalk
-@@ -1046,6 +1109,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     va_copy
-     va_end
-     va_start
-+    vasprintf
-     vdprintf
-     vfprintf
-     vfscanf
-@@ -1076,6 +1140,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     wcscspn
-     wcsdup
-     wcsftime
-+    wcslcat
-+    wcslcpy
-     wcslen
-     wcsncasecmp
-     wcsncasecmp_l
-@@ -1213,10 +1279,8 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     madvise
-     mkstemps
-     openpty
--    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     rcmd
-     rcmd_af
--    reallocarray
-     reallocf
-     res_close
-     res_init
-@@ -1249,8 +1313,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     setusershell
-     statfs
-     strcasestr
--    strlcat
--    strlcpy
-     strsep
-     timingsafe_bcmp
-     timingsafe_memcmp
-@@ -1266,8 +1328,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     wait4
-     warn
-     warnx
--    wcslcat
--    wcslcpy
- </screen>
- 
- </sect1>
-@@ -1276,7 +1336,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
- 
- <screen>
-     __mempcpy
--    accept4
-     argz_add
-     argz_add_sep
-     argz_append
-@@ -1290,7 +1349,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     argz_replace
-     argz_stringify
-     asnprintf
--    asprintf
-     asprintf_r
-     basename			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     canonicalize_file_name
-@@ -1300,9 +1358,7 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     clog10l
-     close_range			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     crypt_r			(available in external "crypt" library)
--    dladdr			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     dremf
--    dup3
-     envz_add
-     envz_entry
-     envz_get
-@@ -1322,8 +1378,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     fedisableexcept
-     feenableexcept
-     fegetexcept
--    ffsl
--    ffsll
-     fgets_unlocked
-     fgetwc_unlocked
-     fgetws_unlocked
-@@ -1352,35 +1406,23 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     llistxattr
-     lremovexattr
-     lsetxattr
--    memmem
-     mempcpy
-     memrchr
--    mkostemp
-     mkostemps
--    pipe2
--    posix_spawn_file_actions_addchdir_np
--    posix_spawn_file_actions_addfchdir_np
-     pow10
-     pow10f
-     pow10l
--    ppoll
--    pthread_cond_clockwait
-     pthread_getaffinity_np
-     pthread_getattr_np
-     pthread_getname_np
--    pthread_mutex_clocklock
--    pthread_rwlock_clockrdlock
--    pthread_rwlock_clockwrlock
-     pthread_setaffinity_np
-     pthread_setname_np
-     pthread_sigqueue
-     pthread_timedjoin_np
-     pthread_tryjoin_np
--    ptsname_r
-     putwc_unlocked
-     putwchar_unlocked
-     renameat2			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
--    qsort_r			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
-     quotactl
-     rawmemchr
-     removexattr
-@@ -1388,8 +1430,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     sched_getaffinity
-     sched_getcpu
-     sched_setaffinity
--    secure_getenv
--    sem_clockwait
-     setxattr
-     signalfd
-     sincos
-@@ -1416,7 +1456,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     updwtmpx
-     utmpxname
-     vasnprintf
--    vasprintf
-     vasprintf_r
-     versionsort
-     wcsftime_l
-@@ -1461,8 +1500,6 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     getmntent
-     memalign
-     setmntent
--    sig2str
--    str2sig
-     xdr_array			(available in external "libtirpc" library)
-     xdr_bool			(available in external "libtirpc" library)
-     xdr_bytes			(available in external "libtirpc" library)
-@@ -1514,49 +1551,17 @@ also IEEE Std 1003.1-2017 (POSIX.1-2017).</para>
-     xdrstdio_create		(available in external "libtirpc" library)
- </screen>
- 
-+</sect1>
-+
- <sect1 id="std-iso"><title>System interfaces not in POSIX but compatible with ISO C requirements:</title>
- 
- <screen>
--    aligned_alloc		(ISO C11)
--    at_quick_exit		(ISO C11)
--    c16rtomb			(ISO C11)
--    c32rtomb			(ISO C11)
-     c8rtomb			(ISO C23)
--    call_once			(ISO C11)
--    cnd_broadcast		(ISO C11)
--    cnd_destroy			(ISO C11)
--    cnd_init			(ISO C11)
--    cnd_signal			(ISO C11)
--    cnd_timedwait		(ISO C11)
--    cnd_wait			(ISO C11)
--    mbrtoc16			(ISO C11)
--    mbrtoc32			(ISO C11)
-     mbrtoc8			(ISO C23)
--    mtx_destroy			(ISO C11)
--    mtx_init			(ISO C11)
--    mtx_lock			(ISO C11)
--    mtx_timedlock		(ISO C11)
--    mtx_trylock			(ISO C11)
--    mtx_unlock			(ISO C11)
--    quick_exit			(ISO C11)
--    thrd_create			(ISO C11)
--    thrd_current		(ISO C11)
--    thrd_detach			(ISO C11)
--    thrd_equal			(ISO C11)
--    thrd_exit			(ISO C11)
--    thrd_join			(ISO C11)
--    thrd_sleep			(ISO C11)
--    thrd_yield			(ISO C11)
--    tss_create			(ISO C11)
--    tss_delete			(ISO C11)
--    tss_get			(ISO C11)
--    tss_set			(ISO C11)
- </screen>
- 
- </sect1>
- 
--</sect1>
--
- <sect1 id="std-deprec"><title>Other UNIX system interfaces, not in POSIX.1-2008 or deprecated:</title>
- 
- <screen>
+@@ -1066,6 +1126,7 @@ ISO/IEC DIS 9945 Information technology
+     timer_gettime
+     timer_settime
+     times
++    timespec_get		(Cygwin DLL)
+     timezone
+     tmpfile
+     tmpnam
 -- 
 2.45.1
 
