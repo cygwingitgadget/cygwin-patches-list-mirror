@@ -1,87 +1,116 @@
-Return-Path: <SRS0=iXc4=UH=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 9F6323858CD1
-	for <cygwin-patches@cygwin.com>; Wed, 15 Jan 2025 11:44:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9F6323858CD1
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9F6323858CD1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1736941485; cv=none;
-	b=B+W80JyTKizmjLLL6hk35rIh2MkBWTsefd0DQcgAFgFACOCZ3umH51i8/gfV3c7yfC12nIq7j3oKDox4WMyHpv3S0Yz3L6rDBqFm8NSlDMZh25xvSdMGmpdeKPgIRuwicpR+MUx/nTo0nairIMfgeJ838mh6gumv3s/Z6XU0K6k=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1736941485; c=relaxed/simple;
-	bh=BHoaJADIIwoRl0i1LktMFMGu5B62cGcxocjvYQLgcrI=;
-	h=Date:From:To:Message-ID:Subject:MIME-Version; b=ajp3zBsntLgtmQU78+hvP4dMTep1JETbXuyS1/j3CWbygp4WIsxlseel+458VFLO1vTvys7dypIFolsQcuc69NuFfHSIipYbsJNEhPSL88QEolzN7kRchu9ENY+V5awAot3qnUc2AZwrSjSHwUYVviCtH6UcsWQVeKGfhS3ubnI=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9F6323858CD1
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 50FBosfi013588
-	for <cygwin-patches@cygwin.com>; Wed, 15 Jan 2025 03:50:54 -0800 (PST)
-	(envelope-from mark@maxrnd.com)
-Received: from mfone.maxrnd.com(127.0.0.127)
- via SMTP by m0.truegem.net, id smtpd1rdLmn; Wed Jan 15 03:50:54 2025
-Date: Wed, 15 Jan 2025 03:44:42 -0800 (PST)
-From: mark@maxrnd.com
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id CD599385E007; Wed, 15 Jan 2025 12:18:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CD599385E007
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1736943522;
+	bh=CFxghXBLb7pEXSEX8gqs8CksATbpW8o3AtNAODU6s4Y=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=oekC0XPr3mYrAAzUFS0KbUYZtI5oLuy/0rT1U+3hPdXF8def/wNPHMGPs0K08aAWD
+	 K2CTeswy2+IRd2iyZH8DaAzI5SKs5xKlg24+0aJH06mGYAnB9Ohu+4KK7RnMYQgT5p
+	 Ycc/nPBKA4k1qDBphv2GQekwMk9KC0Dhf4xqomi8=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 3F87BA80D2F; Wed, 15 Jan 2025 13:18:40 +0100 (CET)
+Date: Wed, 15 Jan 2025 13:18:40 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Message-ID: <5b57c36a-0cbe-49e3-977c-348fe8e773aa@maxrnd.com>
-In-Reply-To: <2d113b48-752b-fe90-cce7-cf826c341f49@t-online.de>
-References: <20250115105006.471-1-mark@maxrnd.com> <2d113b48-752b-fe90-cce7-cf826c341f49@t-online.de>
-Subject: Re: [PATCH] Cygwin: add fd validation to mq_* functions
+Subject: Re: [PATCH v5 2/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
+ new additions available
+Message-ID: <Z4enoJ8FefxhHtaC@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <cover.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
+ <1a354471c155501dd2d0abfbc195e8be3e9c0fa2.1736552565.git.Brian.Inglis@SystematicSW.ab.ca>
+ <5bde1928-7d96-482e-88ac-0cbb081f5a54@dronecode.org.uk>
+ <e75a46b8-3f7e-4049-83c1-89a21b00fef1@SystematicSW.ab.ca>
+ <Z4UJVxBngAvsxXwX@calimero.vinschen.de>
+ <4ad1d807-42a9-4506-9588-bc843f655df9@SystematicSW.ab.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <5b57c36a-0cbe-49e3-977c-348fe8e773aa@maxrnd.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,BODY_8BITS,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4ad1d807-42a9-4506-9588-bc843f655df9@SystematicSW.ab.ca>
 List-Id: <cygwin-patches.cygwin.com>
 
-I believe a positive but nonexistent fd passed to cygheap_getfd results in =
-a -1, so that case should be covered by this patch.
-However I botched the coding for mq_close. That fix plus anything else need=
-ed per reviews will appear as a v2.
-Thanks & Regards,
-..mark
+On Jan 13 11:57, Brian Inglis wrote:
+> On 2025-01-13 05:38, Corinna Vinschen wrote:
+> > On Jan 12 12:56, Brian Inglis wrote:
+> > > Suggestions for better phrasings of these welcome.
+> > 
+> > "Add POSIX new additions available as symbols exported from the Cygwin
+> >   DLL, as header macros and inline functions, or exported from external
+> >   Cygwin distro libs."
+> 
+> Forgot about making distinction between newlib and Cygwin functions:
+> 
+> Add POSIX new additions available as header macros and inline functions,
+> or exported by Cygwin distro DLL or library packages?
 
-Jan 15, 2025 3:35:43 AM Christian Franke <Christian.Franke@t-online.de>:
+Good enough.
 
-> Mark Geisert wrote:
->> Validate the fd returned by cygheap_getfd operating on given mqd.
->>=20
->> Reported-by: Christian Franke <Christian.Franke@t-online.de>
->> Addresses: https://cygwin.com/pipermail/cygwin/2025-January/257090.html
->> Signed-off-by: Mark Geisert <mark@maxrnd.com>
->> Fixes: 46f3b0ce85a9 (Cygwin: POSIX msg queues: move all mq_* functionali=
-ty into fhandler_mqueue)
->>=20
->> ---
->> =C2=A0 winsup/cygwin/posix_ipc.cc | 88 +++++++++++++++++++++++----------=
------
->> =C2=A0 1 file changed, 53 insertions(+), 35 deletions(-)
->>=20
->> diff --git a/winsup/cygwin/posix_ipc.cc b/winsup/cygwin/posix_ipc.cc
->> index 34fd2ba34..3ce1ecda6 100644
->> --- a/winsup/cygwin/posix_ipc.cc
->> +++ b/winsup/cygwin/posix_ipc.cc
->> @@ -225,11 +225,14 @@ mq_getattr (mqd_t mqd, struct mq_attr *mqstat)
->> =C2=A0=C2=A0=C2=A0 int ret =3D -1;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cygheap_fdget fd ((int) mqd, true);
->> -=C2=A0 fhandler_mqueue *fh =3D fd->is_mqueue ();
->> -=C2=A0 if (!fh)
->> -=C2=A0=C2=A0=C2=A0 set_errno (EBADF);
->> -=C2=A0 else
->> -=C2=A0=C2=A0=C2=A0 ret =3D fh->mq_getattr (mqstat);
->> +=C2=A0 if (fd >=3D 0)
->> +=C2=A0=C2=A0=C2=A0 {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fhandler_mqueue *fh =3D fd->is_mqueue ()=
-;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!fh)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_errno (EBADF);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 else
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D fh->mq_getattr (mqst=
-at);
->> +=C2=A0=C2=A0=C2=A0 }
->=20
-> Sorry, I forgot to mention that the testcase also "works" (segfaults) if =
-a positive but nonexistent fd is used. I'm not sure whether the (fd >=3D 0)=
- check is sufficient.
+> Mark din entries as Cygwin DLL and others as Cygwin PKG...?
+
+Sorry, I don't understand this question.  Can you make a two-line
+example what you mean?
+
+> > > in6addr_any:		nothing appropriate.
+> > > in6addr_loopback:    nothing appropriate.
+> > > posix_getdents:	nothing appropriate.
+> > > timespec_get:	nothing appropriate.
+> > > 
+> > > Also is anyone aware of a good html to man page converter to generate Cygwin
+> > > or POSIX man pages from HTML sources available, and are cpp-reference GPL-3
+> > > allowed, or should we prefix the function source with the man doc and
+> > > generate it in newlib?
+> > 
+> > What man pages are you looking for?  We have the man-pages-posix package
+> > and we only have it because we have the official permission to do so.
+> > Keep in mind that all man pages not part of the newlib-cygwin dir are
+> > potentially copyrighted.
+> 
+> Latter four above - Cygwin only: very aware of sources and permissions.
+
+They would have to be provided by the man-pages-posix package at one
+point.
+
+> Also aware that Austin Group want to keep nroff sources from being
+> distributed
+
+???
+
+I'm not even aware where I could get the original nroff sources from the
+Open Group.  Since 2015, we have an official permission from the Open
+Group to distribute the POSIX man pages with Cygwin, but for the nroff
+sources I was just relying on the Linux version of that package from
+https://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/
+
+Seems like the package has been pulled from Fedora, though.  I'm
+sure I installed it once, and the files are still under my
+/usr/share/man/man3p directory on my Fedora, but the files are not
+owned by any package.  I vaguely remember there was "something"...
+
+> and linux-man maintainer is inactive but participating.
+
+I assume (i.e. hope) he or she will update to 2024 at one point?
+
+Otherwise, yeah, would be great being able to generate man pages
+from 
+
+> Only getentropy_r is documented in:
+> 
+> 	/usr/src/newlib-cygwin/newlib/libc/reent/getentropyr.c
+> 
+> and it is in CHEW files in:
+> 
+> 	/usr/src/newlib-cygwin/newlib/libc/reent/Makefile.inc
+> 
+> but not included in list of functions in:
+> 
+> 	/usr/src/newlib-cygwin/newlib/libc/reent/reent.tex
+> 
+> and nor are any of the CHEW outputs in libc.info?
+
+I'm not deep in this documentation creation thingy.  If something's
+amiss there, feel free to provide patches.
+
+
+Corinna
