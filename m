@@ -1,68 +1,88 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id DDCF1385841C; Thu, 16 Jan 2025 17:19:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DDCF1385841C
+	id 52100384D19A; Thu, 16 Jan 2025 18:40:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 52100384D19A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1737047983;
-	bh=Fd2JlKe/v+UIb5PQI91f5Kooz40wLgUozXutPjtjMVM=;
+	s=default; t=1737052819;
+	bh=CO8414pej9HhD5rSuz4gsUizdPsq+QWm9lP5Vies0T8=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=mOY35vMNQugQJv3j3ckY0jHzhDoNPCpAmuctMmexyGRHyBAD9AM2/X+G4blvQXuo1
-	 H8R86Vva9embjWeZNLYnYvVSQOvJ+Odyun/JkJtURNQmOUvGQwm3oz6IvVx+HsE5dr
-	 EkK018aq3oqCEm94DFotkRdP0rUNrJR7lMcvYLaw=
+	b=Kp0/nr/Iuw57U4Zx/wA8AJfcXywg5zpJ/rNWF0SBnK6rytwv/WX4oJmnarOG16Agi
+	 WP2OXoK0kkDTZRY8KHOuDGmcMaZnU4tLocbNcQyL0esr2zcXxVmxmNOhx8YZqz9doz
+	 HC9UELe45q9B97yz1UjCrJ47mSGMo9Itq+0sO0hg=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 49EF0A8076D; Thu, 16 Jan 2025 18:19:42 +0100 (CET)
-Date: Thu, 16 Jan 2025 18:19:42 +0100
+	id B0592A80DAA; Thu, 16 Jan 2025 19:40:17 +0100 (CET)
+Date: Thu, 16 Jan 2025 19:40:17 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v6 1/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- move new entries
-Message-ID: <Z4k_rpmDDPjYWp6h@calimero.vinschen.de>
+Subject: Re: [PATCH v6 2/8] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
+ new additions available
+Message-ID: <Z4lSkZYfY83rpCCv@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <cover.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
- <0b9a9708e62ca8a77a5efbbc18543d77b73704b0.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
+ <8351d131d2aae253f9172f723484f6f6ffa564d9.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0b9a9708e62ca8a77a5efbbc18543d77b73704b0.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <8351d131d2aae253f9172f723484f6f6ffa564d9.1736959763.git.Brian.Inglis@SystematicSW.ab.ca>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Brian,
-
 On Jan 15 12:39, Brian Inglis wrote:
-> +    aligned_alloc		(ISO C11)
-> +    assert			(SVID - available in "assert.h" header)
-> +    at_quick_exit		(ISO C11)
-> +    c16rtomb			(ISO C11)
-> +    c32rtomb			(ISO C11)
+> diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+> index 949333b0c36c..0b23a2251028 100644
+> --- a/winsup/doc/posix.xml
+> +++ b/winsup/doc/posix.xml
+> @@ -16,6 +16,9 @@ ISO/IEC DIS 9945 Information technology
+>  - Issue 8.</para>
+>  
+>  <screen>
+> +    CMPLX			(available in "complex.h" header)
+> +    CMPLXF			(available in "complex.h" header)
+> +    CMPLXL			(available in "complex.h" header)
 
-The source hint in parens should go away.  Everything which *is* in
-POSIX *and* part of the newlib/Cygwin package, doesn't need a source
-hint.
+As I wrote before, we don't need these hints.  They only make sense
+if they are provided by another package than cygwin-devel, and then...
 
-> +    mbrtoc16			(ISO C23 - available in "uchar.h" header)
-> +    mbrtoc32			(ISO C23 - available in "uchar.h" header)
+> +    atomic_compare_exchange_strong		(available in "stdatomic.h" header)
 
-And these are wrong, btw.  mbrtoc16/mbrtoc32 are C11 just like
-c16rtomb/c32rtomb.  Only the c8 variants are C23.  But given they
-are POSIX and implemented in Cygwin itself, just scratch the hint.
+...it should be noted like this:
 
-> +    dladdr			(see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
->      encrypt			(available in external "crypt" library)
+> +    atomic_compare_exchange_strong		(available in external "gcc-g++" package)
+> [...]
+> +    kill_dependency		(available in GCC "stdatomic.h" header)
 
-These are still ok and the only type of hints which should be maintained
-in the SUS chapter.
+However... it's questionable, if the availability via the compiler
+itself, is really worth to be mentioned.  After all, you can't build
+without that package anyway.  So if you installed cygwin-devel, you
+also installed gcc-g++ compulsorily.
 
-> +    posix_spawn_file_actions_addchdir	(available as posix_spawn_file_actions_addchdir_np)
-> +    posix_spawn_file_actions_addfchdir	(available as posix_spawn_file_actions_addfchdir_np)
+So I would not add a hint to standard symbols defined by the compiler
+package itself.
 
-Oh, I missed that these two are defined in POSIX now.  Scratch the hint,
-I'll change the header and add matching exports, and...
+> +    be16toh			(available in "endian.h" header)
+> +    be32toh			(available in "endian.h" header)
+> [...]
 
-> -    posix_spawn_file_actions_addchdir_np
-> -    posix_spawn_file_actions_addfchdir_np
+Part of Cygwin, no hint here.
 
-...these two should stay where they are.
+> +    bind_textdomain_codeset	(available in external gettext "libintl" library)
+> +    bindtextdomain		(available in external gettext "libintl" library)
+> [...]
+
+Either "gettext" or "libintl", not both.
+
+> +    getentropy			(Cygwin DLL)
+> +    getlocalename_l		(Cygwin DLL)
+> +    in6addr_any			(Cygwin DLL)
+> +    in6addr_loopback		(Cygwin DLL)
+> +    posix_getdents		(Cygwin DLL)
+
+Erm?  Why do you mention that?
+
+> +    pthread_cleanup_pop		(available in "pthread.h" header)
+> +    pthread_cleanup_push	(available in "pthread.h" header)
+
+No hint here.
 
 
 Thanks,
