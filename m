@@ -1,438 +1,162 @@
 Return-Path: <SRS0=STgq=UK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e06.mail.nifty.com (mta-snd-e06.mail.nifty.com [106.153.226.38])
-	by sourceware.org (Postfix) with ESMTPS id B4D773858D20
-	for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 11:41:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B4D773858D20
+Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
+	by sourceware.org (Postfix) with ESMTPS id 7D8743858D1E
+	for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 12:13:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7D8743858D1E
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B4D773858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.38
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737200503; cv=none;
-	b=CS5NFufSqOeFvMhFI6NE7G+BaOA+dToi8/LnRO9OVIWtM4ISBGydZJfEDdcEtimVYi6qKnytm4ivawwWnylfuad3Y34j0u8KyW2/EsquDyNONaHbVgaJJNVX62a7422VT25ttuO1NPaF+9mkmhWBsOuRrGe1ncgOzbpqBgWoFSs=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7D8743858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737202383; cv=none;
+	b=kcLnvZAMUlI6ygJIkwopE0CPEEsYEIC6ZQ9eCE95ax6sS5Bf7vJaLApgarRCm8lbeN0H1rO9bggAANaCgueelbi4zCt6c6j1rNaIoZ0UC9ofQJVKFKYOWDxnwPteqGmRPrCN2Egofqb3YqivGXiFsM2bZyXzpkom7dSDb5yKi6c=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1737200503; c=relaxed/simple;
-	bh=f5lKaV3tlFzmg5m6yOwKjuJK7thJpjObCiaywgKbFa8=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=wZ/aqqMw2oNw0S7kaH5UQr1ggRSP2nrsC/WsnQzVL7oxcR7n7+gRwhDLEocFiSGv0OP3dt6QKpWsSlxejabjpFC8/hT6YeZYqCdQZD2QD2Qd8xTuqEa56i1BbY/kTWno6oB7PrD26aLhz0cmJGhwChYp0UFYwhTeHFeKcbldH68=
+	t=1737202383; c=relaxed/simple;
+	bh=SY2FvC+xmW+wsiyl+JChfVg0i74xOD10ZO9QPjU2COA=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=aIgp9SawPlfSqCJ1jVbaHd4KcTdN8Ou5srl331bfz+MG/908DHRBcbde7IhE52gkqcaBNY8ho6q0MnOwRDoM5/s+a9YePfm8em65ayi2AMFhBMALJuP1vGao2zh7cpYIoR7/K1i1IXS405yVeQw7yb+8Woenlj+wn/LYfh7w48I=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B4D773858D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7D8743858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=WkKpgp4E
-Received: from HP-Z230 by mta-snd-e06.mail.nifty.com with ESMTP
-          id <20250118114138475.EVSZ.76911.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 20:41:38 +0900
-Date: Sat, 18 Jan 2025 20:41:37 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ESNgmAtJ
+Received: from HP-Z230 by mta-snd-w03.mail.nifty.com with ESMTP
+          id <20250118121300202.PRUB.120248.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 21:13:00 +0900
+Date: Sat, 18 Jan 2025 21:12:59 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] Cygwin: signal: Do not handle signal when
  __SIGFLUSHFAST is sent
-Message-Id: <20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
-In-Reply-To: <20250117185241.34202389178435578f251727@nifty.ne.jp>
+Message-Id: <20250118211259.908773b504d2e805d10f94e0@nifty.ne.jp>
+In-Reply-To: <20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
 References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
 	<Z36eWXU8Q__9fUhr@calimero.vinschen.de>
 	<20250109105827.5cef1a8c1b27b13ab73746eb@nifty.ne.jp>
 	<7aac0c64-e504-f26e-165e-cd1c0ed24d6c@jdrake.com>
 	<20250117185241.34202389178435578f251727@nifty.ne.jp>
+	<20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737200498;
- bh=Bi7mMg3FUo/9i1ar5bbhAO6Vz9zKozpq8DCPGU4z46g=;
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737202380;
+ bh=mR9LjbmVOxTKAax5cNSbD0442V9CMDw8u1bcq31qr9M=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=WkKpgp4ElWCXrpyftGY7+CZK5s6vFeJ6GrM23iqpf/hFbK0jrcZd1v32W7oHLxGnE8B9Is6I
- oBJARsjsOXrBb0EQe4+xMCxKknIIj0LoqRDT+zJqt2X1S3ATPl5haKRSfYpRUIspi0+Y+U3QAz
- McJ9MaN62m1Sj2BWByNUNCt3Opmx8Zuu4PpGRmQ6L/pBnjj1wrDT0ruVwY5vrJ5ks+gqejtyKn
- oXYG5FppnuCKshCetyPGhhvuIQ/BphFks2BoIepeTZaIiHI6Y+uLj0whDdWlm7BfGTBrj5Czl0
- 2p5Xti9G4YhqKaTWDBBaf08tDbZhpnSYhqkdfPwVr6eMwJCg==
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_LOTSOFHASH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=ESNgmAtJJ2m1wEy5WEk3Qf31Ep9z0IEgzCxRaBK3hd3ZrjKUROvrPqcYV/1fXGb7Z2Vcdg3B
+ dhUOq7Cn7WIYy8Wy6EPd7kNkgKksJkw4qmHnslAGX6cO6nSX/E89wWfY/R802D2YjVzxox+vlG
+ mJ0SWygVIbi+JtUAssHGOz97JhfkYv4tBT6gh8NpZdJDYR9sMPU6zYTiknvdRya+z/FgQFb1fR
+ kJu3mt+HMZbZ1P/+f1nlze8w/N0lbmM13LVUUrrt9eak/2VtDqv1q8sK1GWutdceBcVl30WeW2
+ I/+A6xiB5FF5SLGJklZalXnMGIKQ/HqzkemeOzteXycaYz0A==
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Fri, 17 Jan 2025 18:52:41 +0900
+On Sat, 18 Jan 2025 20:41:37 +0900
 Takashi Yano wrote:
-> On Wed, 8 Jan 2025 18:05:53 -0800 (PST)
-> Jeremy Drake wrote:
-> > On Thu, 9 Jan 2025, Takashi Yano wrote:
+> On Fri, 17 Jan 2025 18:52:41 +0900
+> Takashi Yano wrote:
+> > On Wed, 8 Jan 2025 18:05:53 -0800 (PST)
+> > Jeremy Drake wrote:
+> > > On Thu, 9 Jan 2025, Takashi Yano wrote:
+> > > 
+> > > > On Wed, 8 Jan 2025 16:48:41 +0100
+> > > > Corinna Vinschen wrote:
+> > > > > Does this patch fix Bruno's bash issue as well?
+> > > >
+> > > > I'm not sure because it is not reproducible as he said.
+> > > > I also could not reproduce that.
+> > > >
+> > > > However, at least this fixes the issue that Jeremy encountered:
+> > > > https://cygwin.com/pipermail/cygwin/2024-December/256977.html
+> > > >
+> > > > But, even with this patch, Jeremy reported another hang issue
+> > > > that also is not reproducible:
+> > > > https://cygwin.com/pipermail/cygwin/2024-December/256987.html
+> > > 
+> > > Yes, this patch helped the hangs I was seeing on Windows on ARM64.
+> > > However, there is still some hang issue in 3.5.5 (which occurs on
+> > > native x86_64) that is not there in 3.5.4.  Git for Windows' test suite
+> > > seems to be somewhat reliable at triggering this, but it's hardly a
+> > > minimal test case ;).
+> > > 
+> > > Because of this issue, MSYS2 has been keeping 3.5.5 in its 'staging' state
+> > > (rather than deploying it to normal users), and Git for Windows rolled
+> > > back to 3.5.4 before the release of the latest Git RC.
 > > 
-> > > On Wed, 8 Jan 2025 16:48:41 +0100
-> > > Corinna Vinschen wrote:
-> > > > Does this patch fix Bruno's bash issue as well?
-> > >
-> > > I'm not sure because it is not reproducible as he said.
-> > > I also could not reproduce that.
-> > >
-> > > However, at least this fixes the issue that Jeremy encountered:
-> > > https://cygwin.com/pipermail/cygwin/2024-December/256977.html
-> > >
-> > > But, even with this patch, Jeremy reported another hang issue
-> > > that also is not reproducible:
-> > > https://cygwin.com/pipermail/cygwin/2024-December/256987.html
+> > I might have successfully reproduced this issue. I tried building
+> > cygwin1.dll repeatedly for some of my machines, and one of them
+> > hung in fhandler_pipe::raw_read() as lazka's case:
+> > https://github.com/msys2/msys2-runtime/pull/251#issuecomment-2571338429
 > > 
-> > Yes, this patch helped the hangs I was seeing on Windows on ARM64.
-> > However, there is still some hang issue in 3.5.5 (which occurs on
-> > native x86_64) that is not there in 3.5.4.  Git for Windows' test suite
-> > seems to be somewhat reliable at triggering this, but it's hardly a
-> > minimal test case ;).
+> > The call:
+> > L358:         waitret = cygwait (select_sem, select_sem_timeout);
+> > never returned even with select_sem_timeout == 1 until a signal
+> > (such as SIGTERM, SIGKILL) arrives. In this situation, attaching
+> > gdb to the process hanging and issuing 'si' command do not return.
+> > Something (stack?) seems to be completely broken.
 > > 
-> > Because of this issue, MSYS2 has been keeping 3.5.5 in its 'staging' state
-> > (rather than deploying it to normal users), and Git for Windows rolled
-> > back to 3.5.4 before the release of the latest Git RC.
+> > I'll try to bisect which commit causes this issue. Please wait
+> > a while.
 > 
-> I might have successfully reproduced this issue. I tried building
-> cygwin1.dll repeatedly for some of my machines, and one of them
-> hung in fhandler_pipe::raw_read() as lazka's case:
-> https://github.com/msys2/msys2-runtime/pull/251#issuecomment-2571338429
+> Done.
 > 
-> The call:
-> L358:         waitret = cygwait (select_sem, select_sem_timeout);
-> never returned even with select_sem_timeout == 1 until a signal
-> (such as SIGTERM, SIGKILL) arrives. In this situation, attaching
-> gdb to the process hanging and issuing 'si' command do not return.
-> Something (stack?) seems to be completely broken.
+> This issue also seems to be related to the commit:
 > 
-> I'll try to bisect which commit causes this issue. Please wait
-> a while.
+> commit d243e51ef1d30312ba1e21b4d25a1ca9a8dc1f63
+> Author: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Date:   Mon Nov 25 19:51:53 2024 +0900
+> 
+>     Cygwin: signal: Fix deadlock between main thread and sig thread
+> 
+>     Previously, a deadlock happened if many SIGSTOP/SIGCONT signals were
+>     received rapidly. If the main thread sends __SIGFLUSH at the timing
+>     when SIGSTOP is handled by the sig thread, but not is handled by the
+>     main thread yet (sig_handle_tty_stop() not called yet), and if SIGCONT
+>     is received, the sig thread waits for cygtls::current_sig (is SIGSTOP
+>     now) cleared. However, the main thread waits for the pack.wakeup using
+>     WaitForSingleObject(), so the main thread cannot handle SIGSTOP. This
+>     is the mechanism of the deadlock. This patch uses cygwait() instead of
+>     WaitForSingleObject() to be able to handle the pending SIGSTOP.
+> 
+>     Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+>     Fixes: 7759daa979c4 ("(sig_send): Fill out sigpacket structure to send to signal thread rather than racily sending separate packets.")
+>     Reported-by: Christian Franke <Christian.Franke@t-online.de>
+>     Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+>     Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> 
+> Even though the reason why this issue happens is not clear at all,
+> I perhaps found the solution for that.
+> 
+> Applying the attached patch:
+> 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> instead of previous v2 __SIGFLUSHFAST patch solves the both issues.
+> 
+> However, strangely enough, the similar patch:
+> ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> which uses cygwait() instead of WF[SM]O does not solve the issue
+> Jeremy reported.
+> 
+> The reason is also unclear. What is the difference between cygwait()
+> and WF[SM]O? I expected both patches work almost the same. The v2
+> __SIGFLUSHFAST patch also uses cygwait(), so the reason might be
+> the same (the reason why we should use WF[SM]O rather than cygwait()).
+> 
+> Corinna, any idea? I need some clue.
+> 
+> 
+> While debugging this problem, I encountered another hang issue,
+> which is fixed by:
+> 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> 
+> If we are confident in the patch 0003, I think we should apply
+> 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> 0002-Revert-Cygwin-signal-Do-not-handle-signal-when-__SIG.patch
+> 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> 0004-Revert-Cygwin-signal-Fix-high-load-when-retrying-to-.patch
+> for main branch and
 
-Done.
+No! It was a misunderstanding. The commit "Fix high load when ..."
+should not be reverted. The commit is still necessary.
 
-This issue also seems to be related to the commit:
-
-commit d243e51ef1d30312ba1e21b4d25a1ca9a8dc1f63
-Author: Takashi Yano <takashi.yano@nifty.ne.jp>
-Date:   Mon Nov 25 19:51:53 2024 +0900
-
-    Cygwin: signal: Fix deadlock between main thread and sig thread
-
-    Previously, a deadlock happened if many SIGSTOP/SIGCONT signals were
-    received rapidly. If the main thread sends __SIGFLUSH at the timing
-    when SIGSTOP is handled by the sig thread, but not is handled by the
-    main thread yet (sig_handle_tty_stop() not called yet), and if SIGCONT
-    is received, the sig thread waits for cygtls::current_sig (is SIGSTOP
-    now) cleared. However, the main thread waits for the pack.wakeup using
-    WaitForSingleObject(), so the main thread cannot handle SIGSTOP. This
-    is the mechanism of the deadlock. This patch uses cygwait() instead of
-    WaitForSingleObject() to be able to handle the pending SIGSTOP.
-
-    Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
-    Fixes: 7759daa979c4 ("(sig_send): Fill out sigpacket structure to send to signal thread rather than racily sending separate packets.")
-    Reported-by: Christian Franke <Christian.Franke@t-online.de>
-    Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-    Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-
-Even though the reason why this issue happens is not clear at all,
-I perhaps found the solution for that.
-
-Applying the attached patch:
-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-instead of previous v2 __SIGFLUSHFAST patch solves the both issues.
-
-However, strangely enough, the similar patch:
-ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-which uses cygwait() instead of WF[SM]O does not solve the issue
-Jeremy reported.
-
-The reason is also unclear. What is the difference between cygwait()
-and WF[SM]O? I expected both patches work almost the same. The v2
-__SIGFLUSHFAST patch also uses cygwait(), so the reason might be
-the same (the reason why we should use WF[SM]O rather than cygwait()).
-
-Corinna, any idea? I need some clue.
-
-
-While debugging this problem, I encountered another hang issue,
-which is fixed by:
-0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
-
-If we are confident in the patch 0003, I think we should apply
-0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
-0002-Revert-Cygwin-signal-Do-not-handle-signal-when-__SIG.patch
-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-0004-Revert-Cygwin-signal-Fix-high-load-when-retrying-to-.patch
-for main branch and
-0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-for cygwin-3_5-branch.
-
-Corinna, what do you think?
-
-Jeremy,
-could you please apply the attached patches:
-0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-against cygwin-3_5-branch and test if these fix the issue?
+Forget 0004 patch.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain;
- name="0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch"
-Content-Disposition: attachment;
- filename="0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSAwMzMwYjE4MjYyMWMwZGFjODUxYzVjNTI2OWFmMmNjZDU4MDYwZjMxIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBTYXQsIDE4IEphbiAyMDI1IDE5OjAzOjIzICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggMS80XSBDeWd3aW46IHNpZ25hbDogQXZvaWQgZnJlcXVlbnQgdGxzIGxvY2svdW5sb2NrIGZv
-cg0KIFNJR0NPTlQgcHJvY2Vzc2luZw0KDQpJdCBzZWVtcyB0aGF0IGN1cnJlbnQgX2N5Z3Rsczo6
-aGFuZGxlX1NJR0NPTlQoKSBjb2RlIHNvbWV0aW1lcyBmYWxscw0KaW50byBhIGRlYWRsb2NrIGR1
-ZSB0byBmcmVxdWVudCBUTFMgbG9jay91bmxvY2sgb3BlcmF0aW9uIGluIHRoZQ0KeWllbGQoKSBs
-b29wLiBXaXRoIHRoaXMgcGF0Y2gsIHRoZSB5aWVsZCgpIGluIHRoZSB3YWl0IGxvb3AgZm9yIGFu
-DQpleGlzdGluZyBzaWduYWwgaXMgcGxhY2VkIG91dHNpZGUgdGhlIFRMUyBsb2NrLiBDb252ZXJz
-ZWx5LCB0aGUNCnlpZWxkKCkgaW4gdGhlIHdhaXQgbG9vcCBmb3IgYSBzZWxmLWlzc3VlZCBTSUdD
-T05UIGlzIHBsYWNlZCBpbnNpZGUNCnRoZSBUTFMgbG9jayBhbmQgZG8gbm90IHVubG9jayBldmVy
-eSB0aW1lIHlpZWxkKCkgaXMgY2FsbGVkLg0KDQpGaXhlczogOWFlNTFiY2M1MWE3ICgiQ3lnd2lu
-OiBzaWduYWw6IEZpeCBhbm90aGVyIGRlYWRsb2NrIGJldHdlZW4gbWFpbiBhbmQgc2lnIHRocmVh
-ZCIpDQpSZXZpZXdlZC1ieToNClNpZ25lZC1vZmYtYnk6IFRha2FzaGkgWWFubyA8dGFrYXNoaS55
-YW5vQG5pZnR5Lm5lLmpwPg0KLS0tDQogd2luc3VwL2N5Z3dpbi9leGNlcHRpb25zLmNjICAgICAg
-ICAgICB8IDM4ICsrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLQ0KIHdpbnN1cC9jeWd3aW4vbG9j
-YWxfaW5jbHVkZXMvY3lndGxzLmggfCAgMiArLQ0KIDIgZmlsZXMgY2hhbmdlZCwgMTYgaW5zZXJ0
-aW9ucygrKSwgMjQgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2V4
-Y2VwdGlvbnMuY2MgYi93aW5zdXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MNCmluZGV4IDRkYzRiZTI3
-OC4uYTM2ZWY0OTk4IDEwMDY0NA0KLS0tIGEvd2luc3VwL2N5Z3dpbi9leGNlcHRpb25zLmNjDQor
-KysgYi93aW5zdXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MNCkBAIC0xNDIwLDcgKzE0MjAsNyBAQCBh
-cGlfZmF0YWxfZGVidWcgKCkNCiANCiAvKiBBdHRlbXB0IHRvIGNhcmVmdWxseSBoYW5kbGUgU0lH
-Q09OVCB3aGVuIHdlIGFyZSBzdG9wcGVkLiAqLw0KIHZvaWQNCi1fY3lndGxzOjpoYW5kbGVfU0lH
-Q09OVCAodGhyZWFkbGlzdF90ICogJnRsX2VudHJ5KQ0KK19jeWd0bHM6OmhhbmRsZV9TSUdDT05U
-ICgpDQogew0KICAgaWYgKE5PVFNUQVRFIChteXNlbGYsIFBJRF9TVE9QUEVEKSkNCiAgICAgcmV0
-dXJuOw0KQEAgLTE0MzEsMjggKzE0MzEsMjQgQEAgX2N5Z3Rsczo6aGFuZGxlX1NJR0NPTlQgKHRo
-cmVhZGxpc3RfdCAqICZ0bF9lbnRyeSkNCiAgICAgIE1ha2Ugc3VyZSB0aGF0IGFueSBwZW5kaW5n
-IHNpZ25hbCBpcyBoYW5kbGVkIGJlZm9yZSB0cnlpbmcgdG8NCiAgICAgIHNlbmQgYSBuZXcgb25l
-LiAgVGhlbiBtYWtlIHN1cmUgdGhhdCBTSUdDT05UIGhhcyBiZWVuIHJlY29nbml6ZWQNCiAgICAg
-IGJlZm9yZSBleGl0aW5nIHRoZSBsb29wLiAgKi8NCi0gIGJvb2wgc2lnc2VudCA9IGZhbHNlOw0K
-LSAgd2hpbGUgKDEpDQotICAgIGlmIChjdXJyZW50X3NpZykJLyogQXNzdW1lIHRoYXQgaXQncyBv
-ayB0byBqdXN0IHRlc3Qgc2lnIG91dHNpZGUgb2YgYQ0KLQkJCSAgIGxvY2sgc2luY2Ugc2V0dXBf
-aGFuZGxlciBkb2VzIGl0IHRoaXMgd2F5LiAgKi8NCi0gICAgICB7DQotCWN5Z2hlYXAtPnVubG9j
-a190bHMgKHRsX2VudHJ5KTsNCi0JeWllbGQgKCk7CS8qIEF0dGVtcHQgdG8gc2NoZWR1bGUgYW5v
-dGhlciB0aHJlYWQuICAqLw0KLQl0bF9lbnRyeSA9IGN5Z2hlYXAtPmZpbmRfdGxzIChfbWFpbl90
-bHMpOw0KLSAgICAgIH0NCi0gICAgZWxzZSBpZiAoc2lnc2VudCkNCi0gICAgICBicmVhazsJCS8q
-IFNJR0NPTlQgaGFzIGJlZW4gcmVjb2duaXplZCBieSBvdGhlciB0aHJlYWQgKi8NCi0gICAgZWxz
-ZQ0KLSAgICAgIHsNCi0JY3VycmVudF9zaWcgPSBTSUdDT05UOw0KLQlzZXRfc2lnbmFsX2Fycml2
-ZWQgKCk7IC8qIGFsZXJ0IHNpZ19oYW5kbGVfdHR5X3N0b3AgKi8NCi0Jc2lnc2VudCA9IHRydWU7
-DQotICAgICAgfQ0KKyAgd2hpbGUgKGN1cnJlbnRfc2lnKQ0KKyAgICB5aWVsZCAoKTsNCisNCisg
-IHRocmVhZGxpc3RfdCAqdGxfZW50cnkgPSBjeWdoZWFwLT5maW5kX3RscyAodGhpcyk7DQorDQor
-ICBjdXJyZW50X3NpZyA9IFNJR0NPTlQ7DQorICBzZXRfc2lnbmFsX2Fycml2ZWQgKCk7IC8qIGFs
-ZXJ0IHNpZ19oYW5kbGVfdHR5X3N0b3AgKi8NCisNCisgIHdoaWxlIChjdXJyZW50X3NpZyA9PSBT
-SUdDT05UKQ0KKyAgICB5aWVsZCAoKTsNCisNCiAgIC8qIENsZWFyIHBlbmRpbmcgc3RvcCBzaWdu
-YWxzICovDQogICBzaWdfY2xlYXIgKFNJR1NUT1AsIGZhbHNlKTsNCiAgIHNpZ19jbGVhciAoU0lH
-VFNUUCwgZmFsc2UpOw0KICAgc2lnX2NsZWFyIChTSUdUVElOLCBmYWxzZSk7DQogICBzaWdfY2xl
-YXIgKFNJR1RUT1UsIGZhbHNlKTsNCisNCisgIGN5Z2hlYXAtPnVubG9ja190bHMgKHRsX2VudHJ5
-KTsNCiB9DQogDQogaW50DQpAQCAtMTQ3OSwxMSArMTQ3NSw3IEBAIHNpZ3BhY2tldDo6cHJvY2Vz
-cyAoKQ0KICAgbXlzZWxmLT5ydXNhZ2Vfc2VsZi5ydV9uc2lnbmFscysrOw0KIA0KICAgaWYgKHNp
-LnNpX3NpZ25vID09IFNJR0NPTlQpDQotICAgIHsNCi0gICAgICB0bF9lbnRyeSA9IGN5Z2hlYXAt
-PmZpbmRfdGxzIChfbWFpbl90bHMpOw0KLSAgICAgIF9tYWluX3Rscy0+aGFuZGxlX1NJR0NPTlQg
-KHRsX2VudHJ5KTsNCi0gICAgICBjeWdoZWFwLT51bmxvY2tfdGxzICh0bF9lbnRyeSk7DQotICAg
-IH0NCisgICAgX21haW5fdGxzLT5oYW5kbGVfU0lHQ09OVCAoKTsNCiANCiAgIC8qIFNJR0tJTEwg
-aXMgc3BlY2lhbC4gIEl0IGFsd2F5cyBnb2VzIHRocm91Z2guICAqLw0KICAgaWYgKHNpLnNpX3Np
-Z25vID09IFNJR0tJTEwpDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRl
-cy9jeWd0bHMuaCBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvY3lndGxzLmgNCmluZGV4
-IDJkNDkwNjQ2YS4uZGEyMmU1ZDE0IDEwMDY0NA0KLS0tIGEvd2luc3VwL2N5Z3dpbi9sb2NhbF9p
-bmNsdWRlcy9jeWd0bHMuaA0KKysrIGIvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9jeWd0
-bHMuaA0KQEAgLTI3NCw3ICsyNzQsNyBAQCBwdWJsaWM6IC8qIERvIE5PVCByZW1vdmUgdGhpcyBw
-dWJsaWM6IGxpbmUsIGl0J3MgYSBtYXJrZXIgZm9yIGdlbnRsc19vZmZzZXRzLiAqLw0KICAgew0K
-ICAgICB3aWxsX3dhaXRfZm9yX3NpZ25hbCA9IGZhbHNlOw0KICAgfQ0KLSAgdm9pZCBoYW5kbGVf
-U0lHQ09OVCAodGhyZWFkbGlzdF90ICogJik7DQorICB2b2lkIGhhbmRsZV9TSUdDT05UICgpOw0K
-ICAgc3RhdGljIHZvaWQgY2xlYW51cF9lYXJseShzdHJ1Y3QgX3JlZW50ICopOw0KIHByaXZhdGU6
-DQogICB2b2lkIGNhbGwyIChEV09SRCAoKikgKHZvaWQgKiwgdm9pZCAqKSwgdm9pZCAqLCB2b2lk
-ICopOw0KLS0gDQoyLjQ1LjENCg0K
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain;
- name="0002-Revert-Cygwin-signal-Do-not-handle-signal-when-__SIG.patch"
-Content-Disposition: attachment;
- filename="0002-Revert-Cygwin-signal-Do-not-handle-signal-when-__SIG.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBmYWVhNmIwNWY1NTU0MWNlNjAyNzVmN2U1ZDhkYjEzNDdkNjQ4ZTBkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBTYXQsIDE4IEphbiAyMDI1IDE5OjE5OjU2ICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggMi80XSBSZXZlcnQgIkN5Z3dpbjogc2lnbmFsOiBEbyBub3QgaGFuZGxlIHNpZ25hbCB3aGVu
-DQogX19TSUdGTFVTSEZBU1QgaXMgc2VudCINCg0KVGhpcyByZXZlcnRzIGNvbW1pdCBhMjJhMGFk
-N2M0ZjAgdG8gYXBwbHkgYSBuZXcgcGF0Y2ggZm9yIHRoZSBzYW1lDQpwdXJwb3NlLg0KDQpTaWdu
-ZWQtb2ZmLWJ5OiBUYWthc2hpIFlhbm8gPHRha2FzaGkueWFub0BuaWZ0eS5uZS5qcD4NCi0tLQ0K
-IHdpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjUuNiB8ICAzIC0tLQ0KIHdpbnN1cC9jeWd3aW4vc2ln
-cHJvYy5jYyAgICB8IDIwICsrKysrLS0tLS0tLS0tLS0tLS0tDQogMiBmaWxlcyBjaGFuZ2VkLCA1
-IGluc2VydGlvbnMoKyksIDE4IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
-Z3dpbi9yZWxlYXNlLzMuNS42IGIvd2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNS42DQppbmRleCAw
-ZmZmMGRlNDAuLmQxN2E2YWY1MyAxMDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vcmVsZWFzZS8z
-LjUuNg0KKysrIGIvd2luc3VwL2N5Z3dpbi9yZWxlYXNlLzMuNS42DQpAQCAtNyw2ICs3LDMgQEAg
-Rml4ZXM6DQogDQogLSBGaXggYSByZWdyZXNzaW9uIHNpbmNlIDMuNS4wIHdoaWNoIGZhaWxzIHRv
-IHVzZSBQT1NJWCBzZW1hbnRpY3MgaW4NCiAgIHVubGluay9yZW5hbWUgb24gTlRGUy4NCi0NCi0t
-IEZpeCB6c2ggaGFuZyBhdCBzdGFydHVwLg0KLSAgQWRkcmVzc2VzOiBodHRwczovL2N5Z3dpbi5j
-b20vcGlwZXJtYWlsL2N5Z3dpbi8yMDI0LURlY2VtYmVyLzI1Njk1NC5odG1sDQpkaWZmIC0tZ2l0
-IGEvd2luc3VwL2N5Z3dpbi9zaWdwcm9jLmNjIGIvd2luc3VwL2N5Z3dpbi9zaWdwcm9jLmNjDQpp
-bmRleCAzNWVjM2U3MGUuLmJhNzgxOGE2OCAxMDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vc2ln
-cHJvYy5jYw0KKysrIGIvd2luc3VwL2N5Z3dpbi9zaWdwcm9jLmNjDQpAQCAtNzUxLDE0ICs3NTEs
-MTAgQEAgc2lnX3NlbmQgKF9waW5mbyAqcCwgc2lnaW5mb190JiBzaSwgX2N5Z3RscyAqdGxzKQ0K
-ICAgICAgIHJlcyA9IFdyaXRlRmlsZSAoc2VuZHNpZywgbGVhZGVyLCBwYWNrc2l6ZSwgJm5iLCBO
-VUxMKTsNCiAgICAgICBpZiAoIXJlcyB8fCBwYWNrc2l6ZSA9PSBuYikNCiAJYnJlYWs7DQotICAg
-ICAgaWYgKGN5Z3dhaXQgKE5VTEwsIDEwLCBjd19zaWdfZWludHIpID09IFdBSVRfU0lHTkFMRUQN
-Ci0JICAmJiBwYWNrLnNpLnNpX3NpZ25vICE9IF9fU0lHRkxVU0hGQVNUKQ0KKyAgICAgIGlmIChj
-eWd3YWl0IChOVUxMLCAxMCwgY3dfc2lnX2VpbnRyKSA9PSBXQUlUX1NJR05BTEVEKQ0KIAlfbXlf
-dGxzLmNhbGxfc2lnbmFsX2hhbmRsZXIgKCk7DQogICAgICAgcmVzID0gMDsNCiAgICAgfQ0KLSAg
-LyogUmUtYXNzZXJ0IHNpZ25hbF9hcnJpdmVkIHdoaWNoIGhhcyBiZWVuIGNsZWFyZWQgaW4gY3ln
-d2FpdCgpLiAqLw0KLSAgaWYgKF9teV90bHMuY3VycmVudF9zaWcpDQotICAgIF9teV90bHMuc2V0
-X3NpZ25hbF9hcnJpdmVkICgpOw0KIA0KICAgaWYgKCFyZXMpDQogICAgIHsNCkBAIC03ODksMTYg
-Kzc4NSw3IEBAIHNpZ19zZW5kIChfcGluZm8gKnAsIHNpZ2luZm9fdCYgc2ksIF9jeWd0bHMgKnRs
-cykNCiAgIGlmICh3YWl0X2Zvcl9jb21wbGV0aW9uKQ0KICAgICB7DQogICAgICAgc2lncHJvY19w
-cmludGYgKCJXYWl0aW5nIGZvciBwYWNrLndha2V1cCAlcCIsIHBhY2sud2FrZXVwKTsNCi0gICAg
-ICBkbw0KLQl7DQotCSAgcmMgPSBjeWd3YWl0IChwYWNrLndha2V1cCwgV1NTQywgY3dfc2lnX2Vp
-bnRyKTsNCi0JICBpZiAocmMgPT0gV0FJVF9TSUdOQUxFRCAmJiBwYWNrLnNpLnNpX3NpZ25vICE9
-IF9fU0lHRkxVU0hGQVNUKQ0KLQkgICAgX215X3Rscy5jYWxsX3NpZ25hbF9oYW5kbGVyICgpOw0K
-LQl9DQotICAgICAgd2hpbGUgKHJjICE9IFdBSVRfT0JKRUNUXzAgJiYgcmMgIT0gV0FJVF9USU1F
-T1VUKTsNCi0gICAgICAvKiBSZS1hc3NlcnQgc2lnbmFsX2Fycml2ZWQgd2hpY2ggaGFzIGJlZW4g
-Y2xlYXJlZCBpbiBjeWd3YWl0KCkuICovDQotICAgICAgaWYgKF9teV90bHMuY3VycmVudF9zaWcp
-DQotCV9teV90bHMuc2V0X3NpZ25hbF9hcnJpdmVkICgpOw0KKyAgICAgIHJjID0gY3lnd2FpdCAo
-cGFjay53YWtldXAsIFdTU0MpOw0KICAgICAgIEZvcmNlQ2xvc2VIYW5kbGUgKHBhY2sud2FrZXVw
-KTsNCiAgICAgfQ0KICAgZWxzZQ0KQEAgLTgxOSw2ICs4MDYsOSBAQCBzaWdfc2VuZCAoX3BpbmZv
-ICpwLCBzaWdpbmZvX3QmIHNpLCBfY3lndGxzICp0bHMpDQogICAgICAgcmMgPSAtMTsNCiAgICAg
-fQ0KIA0KKyAgaWYgKHdhaXRfZm9yX2NvbXBsZXRpb24gJiYgc2kuc2lfc2lnbm8gIT0gX19TSUdG
-TFVTSEZBU1QpDQorICAgIF9teV90bHMuY2FsbF9zaWduYWxfaGFuZGxlciAoKTsNCisNCiBvdXQ6
-DQogICBpZiAoY29tbXVuaW5nICYmIHJjKQ0KICAgICB7DQotLSANCjIuNDUuMQ0KDQo=
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain;
- name="0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch"
-Content-Disposition: attachment;
- filename="0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA3MjA0NGJhZTU2MmM0MGY1OWYyMGVjNjljZThlYzY5NWFhZmY3YTVkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBTYXQsIDE4IEphbiAyMDI1IDE5OjIxOjUxICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggMy80XSBDeWd3aW46IHNpZ25hbDogRG8gbm90IGhhbmRsZSBzaWduYWwgd2hlbiBfX1NJR0ZM
-VVNIRkFTVA0KIGlzIHNlbnQNCg0KVGhlIGNvbW1pdCBhMjJhMGFkN2M0ZjAgd2FzIG5vdCBleGFj
-dGx5IHRoZSBjb3JyZWN0IHRoaW5nLiBFdmVuIHdpdGgNCnRoZSBwYXRjaCwgc29tZSBoYW5ncyBz
-dGlsbCBoYXBwZW4uIFRoaXMgcGF0Y2ggb3ZlcnJpZGVzIHRoZSBwcmV2aW91cw0KY29tbWl0IHRv
-IGZpeCB0aGVzZSBoYW5ncy4NCg0KQWRkcmVzc2VzOiBodHRwczovL2N5Z3dpbi5jb20vcGlwZXJt
-YWlsL2N5Z3dpbi8yMDI0LURlY2VtYmVyLzI1Njk4Ny5odG1sDQpGaXhlczogYTIyYTBhZDdjNGYw
-ICgiQ3lnd2luOiBzaWduYWw6IERvIG5vdCBoYW5kbGUgc2lnbmFsIHdoZW4gX19TSUdGTFVTSEZB
-U1QgaXMgc2VudCIpDQpSZXBvcnRlZC1ieTogSmVyZW15IERyYWtlIDxjeWd3aW5AamRyYWtlLmNv
-bT4NClJldmlld2VkLWJ5Og0KU2lnbmVkLW9mZi1ieTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlh
-bm9AbmlmdHkubmUuanA+DQotLS0NCiB3aW5zdXAvY3lnd2luL3NpZ3Byb2MuY2MgfCAzMyArKysr
-KysrKysrKysrKysrKysrKysrKysrKystLS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgMjcgaW5zZXJ0
-aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2ln
-cHJvYy5jYyBiL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYw0KaW5kZXggYmE3ODE4YTY4Li40ZGNk
-ZDk0ZGUgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL3NpZ3Byb2MuY2MNCisrKyBiL3dpbnN1
-cC9jeWd3aW4vc2lncHJvYy5jYw0KQEAgLTc1MSw4ICs3NTEsMTkgQEAgc2lnX3NlbmQgKF9waW5m
-byAqcCwgc2lnaW5mb190JiBzaSwgX2N5Z3RscyAqdGxzKQ0KICAgICAgIHJlcyA9IFdyaXRlRmls
-ZSAoc2VuZHNpZywgbGVhZGVyLCBwYWNrc2l6ZSwgJm5iLCBOVUxMKTsNCiAgICAgICBpZiAoIXJl
-cyB8fCBwYWNrc2l6ZSA9PSBuYikNCiAJYnJlYWs7DQotICAgICAgaWYgKGN5Z3dhaXQgKE5VTEws
-IDEwLCBjd19zaWdfZWludHIpID09IFdBSVRfU0lHTkFMRUQpDQotCV9teV90bHMuY2FsbF9zaWdu
-YWxfaGFuZGxlciAoKTsNCisgICAgICBpZiAocGFjay5zaS5zaV9zaWdubyA9PSBfX1NJR0ZMVVNI
-RkFTVCkNCisJU2xlZXAgKDEwKTsNCisgICAgICBlbHNlIC8qIEhhbmRsZSBzaWduYWxzICovDQor
-CWRvDQorCSAgew0KKwkgICAgRFdPUkQgcmMgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0IChfbXlfdGxz
-LmdldF9zaWduYWxfYXJyaXZlZCAoKSwgMTApOw0KKwkgICAgaWYgKHJjID09IFdBSVRfT0JKRUNU
-XzApDQorCSAgICAgIHsNCisJCV9teV90bHMuY2FsbF9zaWduYWxfaGFuZGxlciAoKTsNCisJCWNv
-bnRpbnVlOw0KKwkgICAgICB9DQorCSAgfQ0KKwl3aGlsZSAoZmFsc2UpOw0KICAgICAgIHJlcyA9
-IDA7DQogICAgIH0NCiANCkBAIC03ODUsNyArNzk2LDIwIEBAIHNpZ19zZW5kIChfcGluZm8gKnAs
-IHNpZ2luZm9fdCYgc2ksIF9jeWd0bHMgKnRscykNCiAgIGlmICh3YWl0X2Zvcl9jb21wbGV0aW9u
-KQ0KICAgICB7DQogICAgICAgc2lncHJvY19wcmludGYgKCJXYWl0aW5nIGZvciBwYWNrLndha2V1
-cCAlcCIsIHBhY2sud2FrZXVwKTsNCi0gICAgICByYyA9IGN5Z3dhaXQgKHBhY2sud2FrZXVwLCBX
-U1NDKTsNCisgICAgICBpZiAocGFjay5zaS5zaV9zaWdubyA9PSBfX1NJR0ZMVVNIRkFTVCkNCisJ
-cmMgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0IChwYWNrLndha2V1cCwgV1NTQyk7DQorICAgICAgZWxz
-ZSAvKiBIYW5kbGUgc2lnbmFscyAqLw0KKwlkbw0KKwkgIHsNCisJICAgIEhBTkRMRSB3WzJdID0g
-e3BhY2sud2FrZXVwLCBfbXlfdGxzLmdldF9zaWduYWxfYXJyaXZlZCAoKX07DQorCSAgICByYyA9
-IFdhaXRGb3JNdWx0aXBsZU9iamVjdHMgKDIsIHcsIEZBTFNFLCBXU1NDKTsNCisJICAgIGlmIChy
-YyA9PSBXQUlUX09CSkVDVF8wICsgMSkgLyogc2lnbmFsIGFycml2ZWQgKi8NCisJICAgICAgew0K
-KwkJX215X3Rscy5jYWxsX3NpZ25hbF9oYW5kbGVyICgpOw0KKwkJY29udGludWU7DQorCSAgICAg
-IH0NCisJICB9DQorCXdoaWxlIChmYWxzZSk7DQogICAgICAgRm9yY2VDbG9zZUhhbmRsZSAocGFj
-ay53YWtldXApOw0KICAgICB9DQogICBlbHNlDQpAQCAtODA2LDkgKzgzMCw2IEBAIHNpZ19zZW5k
-IChfcGluZm8gKnAsIHNpZ2luZm9fdCYgc2ksIF9jeWd0bHMgKnRscykNCiAgICAgICByYyA9IC0x
-Ow0KICAgICB9DQogDQotICBpZiAod2FpdF9mb3JfY29tcGxldGlvbiAmJiBzaS5zaV9zaWdubyAh
-PSBfX1NJR0ZMVVNIRkFTVCkNCi0gICAgX215X3Rscy5jYWxsX3NpZ25hbF9oYW5kbGVyICgpOw0K
-LQ0KIG91dDoNCiAgIGlmIChjb21tdW5pbmcgJiYgcmMpDQogICAgIHsNCi0tIA0KMi40NS4xDQoN
-Cg==
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain;
- name="0004-Revert-Cygwin-signal-Fix-high-load-when-retrying-to-.patch"
-Content-Disposition: attachment;
- filename="0004-Revert-Cygwin-signal-Fix-high-load-when-retrying-to-.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBkOGU2YjFmMzM5NzliOWQ3ZWIwOTYwZWNhOGRiY2JmN2QyYzFmNWQxIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBTYXQsIDE4IEphbiAyMDI1IDE5OjUxOjI3ICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggNC80XSBSZXZlcnQgIkN5Z3dpbjogc2lnbmFsOiBGaXggaGlnaCBsb2FkIHdoZW4gcmV0cnlp
-bmcgdG8NCiBwcm9jZXNzIHBlbmRpbmcgc2lnbmFsIg0KDQpUaGlzIHJldmVydHMgY29tbWl0IDFk
-MTQ1MWNjZDJhNiBiZWNhdXNlIHRoaXMgZG9lcyBub3Qgc2VlbSB0bw0KbmVjZXNzYXJ5IGFueW1v
-cmUuIEFmdGVyIHRoZSBjb21taXQgIkN5Z3dpbjogc2lnbmFsOiBEbyBub3QgaGFuZGxlDQpzaWdu
-YWwgd2hlbiBfX1NJR0ZMVVNIRkFTVCBpcyBzZW50IiwgdGhlIHByb2JsZW0gZG9lcyBub3QgaGFw
-cGVuDQpldmVuIHdpdGhvdXQgdGhpcyBwYXRjaC4NCg0KU2lnbmVkLW9mZi1ieTogVGFrYXNoaSBZ
-YW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUuanA+DQotLS0NCiB3aW5zdXAvY3lnd2luL3NpZ3By
-b2MuY2MgfCAxMCArLS0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCA5
-IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9zaWdwcm9jLmNjIGIv
-d2luc3VwL2N5Z3dpbi9zaWdwcm9jLmNjDQppbmRleCA0ZGNkZDk0ZGUuLjY4Zjg0YTg0OCAxMDA2
-NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYw0KKysrIGIvd2luc3VwL2N5Z3dpbi9z
-aWdwcm9jLmNjDQpAQCAtMTM2NiwxMiArMTM2Niw2IEBAIHdhaXRfc2lnIChWT0lEICopDQogDQog
-ICBobnRkbGwgPSBHZXRNb2R1bGVIYW5kbGUgKCJudGRsbC5kbGwiKTsNCiANCi0gIC8qIEdldFRp
-Y2tDb3VudCgpIGhlcmUgaXMgZW5vdWdoIGJlY2F1c2UgR2V0VGlja0NvdW50KCkgLSB0MCBkb2Vz
-DQotICAgICBub3Qgb3ZlcmZsb3cgdW50aWwgNDkgZGF5cyBwc3NzLiBFdmVuIGlmIEdldFRpY2tD
-b3VudCgpIG92ZXJmbG93cywNCi0gICAgIEdldFRpY2tDb3VudCgpIC0gdDAgcmV0dXJucyBjb3Jy
-ZWN0IHZhbHVlLCBzaW5jZSB1bmRlcmZsb3cgaW4NCi0gICAgIHVuc2lnbmVkIHdyYXBzIGNvcnJl
-Y3RseS4gUGVuZGluZyBhIHNpZ25hbCBmb3IgbW9yZSB0aGFuIDQ5DQotICAgICBkYXlzIG1ha2Vz
-IG5vIHNlbnNlLiAqLw0KLSAgRFdPUkQgdDAgPSBHZXRUaWNrQ291bnQgKCk7DQogICBmb3IgKDs7
-KQ0KICAgICB7DQogICAgICAgRFdPUkQgbmI7DQpAQCAtMTM4MSw3ICsxMzc1LDcgQEAgd2FpdF9z
-aWcgKFZPSUQgKikNCiAgICAgICBlbHNlIGlmIChzaWdxLnN0YXJ0Lm5leHQNCiAJICAgICAgICYm
-IFBlZWtOYW1lZFBpcGUgKG15X3JlYWRzaWcsIE5VTEwsIDAsIE5VTEwsICZuYiwgTlVMTCkgJiYg
-IW5iKQ0KIAl7DQotCSAgU2xlZXAgKEdldFRpY2tDb3VudCAoKSAtIHQwID4gMTAgPyAxIDogMCk7
-DQorCSAgeWllbGQgKCk7DQogCSAgcGFjay5zaS5zaV9zaWdubyA9IF9fU0lHRkxVU0g7DQogCX0N
-CiAgICAgICBlbHNlIGlmICghUmVhZEZpbGUgKG15X3JlYWRzaWcsICZwYWNrLCBzaXplb2YgKHBh
-Y2spLCAmbmIsIE5VTEwpKQ0KQEAgLTEzOTEsOCArMTM4NSw2IEBAIHdhaXRfc2lnIChWT0lEICop
-DQogCSAgc3lzdGVtX3ByaW50ZiAoImdhcmJsZWQgc2lnbmFsIHBpcGUgZGF0YSBuYiAldSwgc2ln
-ICVkIiwgbmIsIHBhY2suc2kuc2lfc2lnbm8pOw0KIAkgIGNvbnRpbnVlOw0KIAl9DQotICAgICAg
-aWYgKHBhY2suc2kuc2lfc2lnbm8gIT0gX19TSUdGTFVTSCkNCi0JdDAgPSBHZXRUaWNrQ291bnQg
-KCk7DQogDQogICAgICAgc2lncS5yZXRyeSA9IGZhbHNlOw0KICAgICAgIC8qIERvbid0IHByb2Nl
-c3Mgc2lnbmFscyB3aGVuIHdlIHN0YXJ0IGV4aXRpbmcgKi8NCi0tIA0KMi40NS4xDQoNCg==
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV
-Content-Type: text/plain;
- name="ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch"
-Content-Disposition: attachment;
- filename="ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA3MGE2OTk1MGIyMWNiNWYxZjczZTU3NTBlMjVmNDNhYTI1YjhiZjE4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+DQpEYXRlOiBTYXQsIDE4IEphbiAyMDI1IDE5OjM5OjI2ICswOTAwDQpTdWJqZWN0OiBbUEFU
-Q0ggMy8zXSBDeWd3aW46IHNpZ25hbDogRG8gbm90IGhhbmRsZSBzaWduYWwgd2hlbiBfX1NJR0ZM
-VVNIRkFTVA0KIGlzIHNlbnQNCg0KVEhJUyBQQVRDSCBET0VTIE5PVCBGSVggVEhFIElTU1VFIFRI
-QVQgSkVSRU1ZIFJFUE9SVEVEIElOOg0KaHR0cHM6Ly9jeWd3aW4uY29tL3BpcGVybWFpbC9jeWd3
-aW4vMjAyNC1EZWNlbWJlci8yNTY5ODcuaHRtbA0KRk9SIFVOS05PV04gUkVBU09OLg0KDQpTaWdu
-ZWQtb2ZmLWJ5OiBUYWthc2hpIFlhbm8gPHRha2FzaGkueWFub0BuaWZ0eS5uZS5qcD4NCi0tLQ0K
-IHdpbnN1cC9jeWd3aW4vc2lncHJvYy5jYyB8IDE0ICsrKysrKysrLS0tLS0tDQogMSBmaWxlIGNo
-YW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL3dp
-bnN1cC9jeWd3aW4vc2lncHJvYy5jYyBiL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYw0KaW5kZXgg
-YmE3ODE4YTY4Li40MTg1NGIxMTQgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL3NpZ3Byb2Mu
-Y2MNCisrKyBiL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYw0KQEAgLTc1MSw4ICs3NTEsMTAgQEAg
-c2lnX3NlbmQgKF9waW5mbyAqcCwgc2lnaW5mb190JiBzaSwgX2N5Z3RscyAqdGxzKQ0KICAgICAg
-IHJlcyA9IFdyaXRlRmlsZSAoc2VuZHNpZywgbGVhZGVyLCBwYWNrc2l6ZSwgJm5iLCBOVUxMKTsN
-CiAgICAgICBpZiAoIXJlcyB8fCBwYWNrc2l6ZSA9PSBuYikNCiAJYnJlYWs7DQotICAgICAgaWYg
-KGN5Z3dhaXQgKE5VTEwsIDEwLCBjd19zaWdfZWludHIpID09IFdBSVRfU0lHTkFMRUQpDQotCV9t
-eV90bHMuY2FsbF9zaWduYWxfaGFuZGxlciAoKTsNCisgICAgICBpZiAocGFjay5zaS5zaV9zaWdu
-byA9PSBfX1NJR0ZMVVNIRkFTVCkNCisJU2xlZXAgKDEwKTsNCisgICAgICBlbHNlIC8qIEhhbmRs
-ZSBzaWduYWxzIGluIGN5Z3dhaXQoKSAqLw0KKwljeWd3YWl0IChOVUxMLCAxMCwgY3dfc2lnX3Jl
-c3RhcnQpOw0KICAgICAgIHJlcyA9IDA7DQogICAgIH0NCiANCkBAIC03ODUsNyArNzg3LDEwIEBA
-IHNpZ19zZW5kIChfcGluZm8gKnAsIHNpZ2luZm9fdCYgc2ksIF9jeWd0bHMgKnRscykNCiAgIGlm
-ICh3YWl0X2Zvcl9jb21wbGV0aW9uKQ0KICAgICB7DQogICAgICAgc2lncHJvY19wcmludGYgKCJX
-YWl0aW5nIGZvciBwYWNrLndha2V1cCAlcCIsIHBhY2sud2FrZXVwKTsNCi0gICAgICByYyA9IGN5
-Z3dhaXQgKHBhY2sud2FrZXVwLCBXU1NDKTsNCisgICAgICBpZiAocGFjay5zaS5zaV9zaWdubyA9
-PSBfX1NJR0ZMVVNIRkFTVCkNCisJcmMgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0IChwYWNrLndha2V1
-cCwgV1NTQyk7DQorICAgICAgZWxzZSAvKiBIYW5kbGUgc2lnbmFscyBpbiBjeWd3YWl0KCkgKi8N
-CisJcmMgPSBjeWd3YWl0IChwYWNrLndha2V1cCwgV1NTQywgY3dfc2lnX3Jlc3RhcnQpOw0KICAg
-ICAgIEZvcmNlQ2xvc2VIYW5kbGUgKHBhY2sud2FrZXVwKTsNCiAgICAgfQ0KICAgZWxzZQ0KQEAg
-LTgwNiw5ICs4MTEsNiBAQCBzaWdfc2VuZCAoX3BpbmZvICpwLCBzaWdpbmZvX3QmIHNpLCBfY3ln
-dGxzICp0bHMpDQogICAgICAgcmMgPSAtMTsNCiAgICAgfQ0KIA0KLSAgaWYgKHdhaXRfZm9yX2Nv
-bXBsZXRpb24gJiYgc2kuc2lfc2lnbm8gIT0gX19TSUdGTFVTSEZBU1QpDQotICAgIF9teV90bHMu
-Y2FsbF9zaWduYWxfaGFuZGxlciAoKTsNCi0NCiBvdXQ6DQogICBpZiAoY29tbXVuaW5nICYmIHJj
-KQ0KICAgICB7DQotLSANCjIuNDUuMQ0KDQo=
-
---Multipart=_Sat__18_Jan_2025_20_41_37_+0900_I4tVn=r.WEsNLZSV--
