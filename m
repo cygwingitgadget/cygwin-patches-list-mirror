@@ -1,72 +1,171 @@
 Return-Path: <SRS0=STgq=UK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [106.153.227.39])
-	by sourceware.org (Postfix) with ESMTPS id E415A3858D1E
-	for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 19:57:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E415A3858D1E
+Received: from mta-snd-e06.mail.nifty.com (mta-snd-e06.mail.nifty.com [106.153.226.38])
+	by sourceware.org (Postfix) with ESMTPS id B5F053858D1E
+	for <cygwin-patches@cygwin.com>; Sat, 18 Jan 2025 20:32:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B5F053858D1E
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E415A3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737230278; cv=none;
-	b=dUPNLxr2PzvPd5tiNufSoTbCbG5196HQVQj5NGL2Yc9u1cnqeEJ5y3Ww3kXXW08mNoLOwmWwzV1UM68suyfQ6XKheyzhB7ZPU8o0yfF14LaHKym5nK2W7k57PCy7KTrLio6hYJi5+K+IsWgJPvVDglekbofOMG79yY/pX45IFJE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B5F053858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.38
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737232373; cv=none;
+	b=NN9QFyIOH3L/6VU/QEV3WbwMoEdVNNbxreWBCNpBOs6sdW0+ogbOGxNzQ8DVrkBhIpHXtI7McMlDelgClvyEaHZUaVoYEoBLjfndq6BbdRaNhNanhDUUXYvN3fHdWG1o+8eh/HgTh4Vw3C5AIEM15dsNwHXZzv2q3Ty/68GwEb0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1737230278; c=relaxed/simple;
-	bh=UH389mgo99HfuH3L3HjZbP5/pZxoBhDSNoJjHqedh5w=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=xko2wYIEV/fQe/FvimR+X2UDHhxqdoqRPtZljBJn2c0ZitSzhU33/92pBhyOZyeXahLxmuEK+SP9sGgZGCIHho8DF/aAb8KTYeqw3aLw6noAahnie2NIAE0rEBV9B89PdfyoSgBIovXzM7vxFcSpE3xjQFaW7N5K8BOyeWs5KlI=
+	t=1737232373; c=relaxed/simple;
+	bh=ufJud9GVMyHQl5sNi4p1whkvlPvUnvbMWUu4GJq3PCk=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=eK/JU4Ux33b8g/sA9ezONRZFmOM563kPViVXViJnQde2l+PE2MBIf0GHSj9fbvOTdhEli++3b9arYyEpPefaI2wFCdxUQ3uLZVXDjWNnbKeOyaaxoxuGU1ntXBQtu7iVXOs1JWJQV4NDP6k19muH6jSZmigfWp6u7372hEm1wbM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E415A3858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B5F053858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=M2U66uBi
-Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
-          id <20250118195754604.QMGJ.93209.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 19 Jan 2025 04:57:54 +0900
-Date: Sun, 19 Jan 2025 04:57:53 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=U/Us3JP8
+Received: from HP-Z230 by mta-snd-e06.mail.nifty.com with ESMTP
+          id <20250118203251011.GAFX.76911.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 19 Jan 2025 05:32:51 +0900
+Date: Sun, 19 Jan 2025 05:32:49 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] Cygwin: signal: Do not handle signal when
  __SIGFLUSHFAST is sent
-Message-Id: <20250119045753.24b173f0ccadd44fc0571748@nifty.ne.jp>
-In-Reply-To: <c76fbd4d-c3c4-b5e6-0e1f-22bb43416060@jdrake.com>
+Message-Id: <20250119053249.a9a124bc821d2f70059c6324@nifty.ne.jp>
+In-Reply-To: <20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
 References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
 	<Z36eWXU8Q__9fUhr@calimero.vinschen.de>
 	<20250109105827.5cef1a8c1b27b13ab73746eb@nifty.ne.jp>
 	<7aac0c64-e504-f26e-165e-cd1c0ed24d6c@jdrake.com>
 	<20250117185241.34202389178435578f251727@nifty.ne.jp>
 	<20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
-	<c76fbd4d-c3c4-b5e6-0e1f-22bb43416060@jdrake.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737230274;
- bh=83M3zQBenFsqTh+nRXdmmMnR4jcQqxNUL2hHF+nBPZk=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737232371;
+ bh=u5EdHmT/Ntgjfi9BSajhL8BNAObRQlq7O0vGRsywi8I=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=M2U66uBiU5NIOXxF3DWGwUk5vcxL1JQx30FoF6GxETUsvv0YQz+CUfdhNqesSOTvi+dQOGB/
- ojzul1YVeM0gs4KvTTKaLNt3vwJtG7NqNg10/Iu3QXOY/uoZdn12I/afpz5a5vws252N0COJjb
- B7otP3wT2526CmR+DwNP3jdhOt9HlxDWUfq5TJaQHDK1I1+fAhKSxP47h76wwTtiS8u4IBnfJc
- 08vPHvFVv3tKXlZ+v8fFFHN5YFDvKoiDEDvpMTnQb+9PI7/5oQ0+BROiM/EPivQeEJ778DSC2w
- SGD234E7dRdQNxAW/UigY84Dq2GyR+tSc1besnmw2HiGPXCg==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=U/Us3JP8ws9cV8zPzorVnZN0kLuF8gKJgO+AdRPWuZhns6/7oDMCZRRNOIwobZGpR2OyMvMb
+ yjSJP/6gYvPgGvepFgOutDialYFCahJjxZPLrk4jY9n5XmdKl0qt3zTOLYpTxI3GlVz+BrdGwa
+ fljwQ1iedjxvrIv4kXlFqjmXi9h/eLc7Wa/VHqInuq5Myak+QNyy1FYvDP20rxgDhborQ4nGWZ
+ bxPG014fDwzL26B3MgcUuzG30LYA8RweSf7TLzSh0ZAHtBJGnIDCoUfDB1pbpR8+ATxdl+eM5t
+ nBAmmKrHU1n/bDNAjyLSNTlfQLILQXfNKH6v3GkHQSo/2W5w==
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 18 Jan 2025 10:58:34 -0800 (PST)
-Jeremy Drake wrote:
-> On Sat, 18 Jan 2025, Takashi Yano wrote:
+On Sat, 18 Jan 2025 20:41:37 +0900
+Takashi Yano wrote:
+> On Fri, 17 Jan 2025 18:52:41 +0900
+> Takashi Yano wrote:
+> > On Wed, 8 Jan 2025 18:05:53 -0800 (PST)
+> > Jeremy Drake wrote:
+> > > On Thu, 9 Jan 2025, Takashi Yano wrote:
+> > > 
+> > > > On Wed, 8 Jan 2025 16:48:41 +0100
+> > > > Corinna Vinschen wrote:
+> > > > > Does this patch fix Bruno's bash issue as well?
+> > > >
+> > > > I'm not sure because it is not reproducible as he said.
+> > > > I also could not reproduce that.
+> > > >
+> > > > However, at least this fixes the issue that Jeremy encountered:
+> > > > https://cygwin.com/pipermail/cygwin/2024-December/256977.html
+> > > >
+> > > > But, even with this patch, Jeremy reported another hang issue
+> > > > that also is not reproducible:
+> > > > https://cygwin.com/pipermail/cygwin/2024-December/256987.html
+> > > 
+> > > Yes, this patch helped the hangs I was seeing on Windows on ARM64.
+> > > However, there is still some hang issue in 3.5.5 (which occurs on
+> > > native x86_64) that is not there in 3.5.4.  Git for Windows' test suite
+> > > seems to be somewhat reliable at triggering this, but it's hardly a
+> > > minimal test case ;).
+> > > 
+> > > Because of this issue, MSYS2 has been keeping 3.5.5 in its 'staging' state
+> > > (rather than deploying it to normal users), and Git for Windows rolled
+> > > back to 3.5.4 before the release of the latest Git RC.
+> > 
+> > I might have successfully reproduced this issue. I tried building
+> > cygwin1.dll repeatedly for some of my machines, and one of them
+> > hung in fhandler_pipe::raw_read() as lazka's case:
+> > https://github.com/msys2/msys2-runtime/pull/251#issuecomment-2571338429
+> > 
+> > The call:
+> > L358:         waitret = cygwait (select_sem, select_sem_timeout);
+> > never returned even with select_sem_timeout == 1 until a signal
+> > (such as SIGTERM, SIGKILL) arrives. In this situation, attaching
+> > gdb to the process hanging and issuing 'si' command do not return.
+> > Something (stack?) seems to be completely broken.
+> > 
+> > I'll try to bisect which commit causes this issue. Please wait
+> > a while.
 > 
-> > Jeremy,
-> > could you please apply the attached patches:
-> > 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
-> > 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-> > against cygwin-3_5-branch and test if these fix the issue?
+> Done.
 > 
-> I opened a draft PR at https://github.com/msys2/msys2-runtime/pull/253,
-> but those patches didn't apply cleanly (probably because we already
-> applied your v2 patch) so I'd like your confirmation that they are what
-> you intended.
+> This issue also seems to be related to the commit:
+> 
+> commit d243e51ef1d30312ba1e21b4d25a1ca9a8dc1f63
+> Author: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Date:   Mon Nov 25 19:51:53 2024 +0900
+> 
+>     Cygwin: signal: Fix deadlock between main thread and sig thread
+> 
+>     Previously, a deadlock happened if many SIGSTOP/SIGCONT signals were
+>     received rapidly. If the main thread sends __SIGFLUSH at the timing
+>     when SIGSTOP is handled by the sig thread, but not is handled by the
+>     main thread yet (sig_handle_tty_stop() not called yet), and if SIGCONT
+>     is received, the sig thread waits for cygtls::current_sig (is SIGSTOP
+>     now) cleared. However, the main thread waits for the pack.wakeup using
+>     WaitForSingleObject(), so the main thread cannot handle SIGSTOP. This
+>     is the mechanism of the deadlock. This patch uses cygwait() instead of
+>     WaitForSingleObject() to be able to handle the pending SIGSTOP.
+> 
+>     Addresses: https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+>     Fixes: 7759daa979c4 ("(sig_send): Fill out sigpacket structure to send to signal thread rather than racily sending separate packets.")
+>     Reported-by: Christian Franke <Christian.Franke@t-online.de>
+>     Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
+>     Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> 
+> Even though the reason why this issue happens is not clear at all,
+> I perhaps found the solution for that.
+> 
+> Applying the attached patch:
+> 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> instead of previous v2 __SIGFLUSHFAST patch solves the both issues.
+> 
+> However, strangely enough, the similar patch:
+> ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> which uses cygwait() instead of WF[SM]O does not solve the issue
+> Jeremy reported.
+> 
+> The reason is also unclear. What is the difference between cygwait()
+> and WF[SM]O? I expected both patches work almost the same. The v2
+> __SIGFLUSHFAST patch also uses cygwait(), so the reason might be
+> the same (the reason why we should use WF[SM]O rather than cygwait()).
+> 
+> Corinna, any idea? I need some clue.
+> 
+> 
+> While debugging this problem, I encountered another hang issue,
+> which is fixed by:
+> 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> 
+> If we are confident in the patch 0003, I think we should apply
+> 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> 0002-Revert-Cygwin-signal-Do-not-handle-signal-when-__SIG.patch
+> 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> 0004-Revert-Cygwin-signal-Fix-high-load-when-retrying-to-.patch
+> for main branch and
+> 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+> for cygwin-3_5-branch.
 
-Yeah, please revert v2 __SIGFLUSHFAST patch before applying
-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
+I am testing with applying 0001, 0002 and 0003 patches against
+main branch for three hang issues,
+https://cygwin.com/pipermail/cygwin/2024-November/256744.html
+https://cygwin.com/pipermail/cygwin/2024-December/256954.html
+https://cygwin.com/pipermail/cygwin/2024-December/256987.html
+that could be reproduced in my environment related to the patch:
+"Cygwin: signal: Fix deadlock between main thread and sig thread"
+ 
+I haven't seen any hangs in the tree test cases repeatedly running
+for more than 12 hours so far.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
