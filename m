@@ -1,62 +1,72 @@
-Return-Path: <SRS0=26d4=UM=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id 9B1BC3858D21
-	for <cygwin-patches@cygwin.com>; Mon, 20 Jan 2025 16:07:20 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9B1BC3858D21
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9B1BC3858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737389241; cv=none;
-	b=VIeLYJMLVyffXHsMSv2fCnU9KDc/Cwz9XATjBRAAu1bagGZ5HUVssFfSvVR/bawYUwiD8vRHPQKdPO+I5F4x9vTSbCFacgTIAsbjOvc1fOaNspVEMRCnma7QtB6FBH6jMt5FDHL8XNpKKt3pcIXpz+ElcKuvhIDuxuufoKajm8Y=
+Return-Path: <SRS0=8hFg=UM=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id DD56B3858416
+	for <cygwin-patches@cygwin.com>; Mon, 20 Jan 2025 17:03:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DD56B3858416
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DD56B3858416
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737392583; cv=none;
+	b=iU4VuEbNihcOA0puj2F970Te5mP90cstwjGfbkURewbFUKBCKCRM8fPkDlRv0gLD3NZ67nnuJ82FviEMBHgY8U+b38GCsBadg6VNLdz9fhV9l/NPm+tGb75+E0vA6q4C/fno4lFvtSMFZjXW4I+64GteDjIDHsPJ8yyTtmSYcbE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1737389241; c=relaxed/simple;
-	bh=G9rS9CNuS8p9EwOy+feHy8X4UAk/FPy6uuvkmXVY63Q=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=BoHDMA8Kp8YjbBwk7afZNEcSqZo4w2KtH4a1lpLAggzm5ziTO+PeKBRt66l3bJEex4tWN+sX0L4NdyMKtert8kV0XKrswih+LlUCBk6RlRmrxWbewTxbOhALFyUAJ8/+RWF5DRlJm98UsqkZ8V1L/bEZAKzCTY2ylv2Ji/LXluo=
+	t=1737392583; c=relaxed/simple;
+	bh=7eqJgCEV0xdRt1KQMxhWUTiajy+oFU0jqIHrElQsDuQ=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=CkKp8PpBk5NqQIolbRQHODM5DbtWkybGnUgyU2qB1EI1noW29V0deb61qWYjs60mFGlCzn1UTJoq9p5GulS4A8JQVHonBKCCqjuHe0Gbj9DoL31t/jMgvhg7PVcFEkzdeXXzDZpf/xm9XUUUStgt83Gk0yCnqsI/GPMMtVfTVL0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9B1BC3858D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DD56B3858416
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Xa2orj+Q
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20250120160718856.QZQB.55939.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 21 Jan 2025 01:07:18 +0900
-Date: Tue, 21 Jan 2025 01:07:17 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 2/2] Cygwin: signal: Do not handle signal when
- __SIGFLUSHFAST is sent
-Message-Id: <20250121010717.dfe8220d8e192c78c356e86b@nifty.ne.jp>
-In-Reply-To: <Z45xfvmN1s6oGJKE@calimero.vinschen.de>
-References: <20250120085249.1242380-1-takashi.yano@nifty.ne.jp>
-	<20250120085249.1242380-3-takashi.yano@nifty.ne.jp>
-	<Z45xfvmN1s6oGJKE@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=PVsSZM5k
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id AAC2E45C66;
+	Mon, 20 Jan 2025 12:03:01 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=59CYTsOsBpo2lpP2nQdviq5A380=; b=PVsSZ
+	M5kOAxrM2A0d4LIsvNHz3mGJ9TewgJUnVFMDargEL0hDqhxRR8n8KhGCZFlJlrUM
+	Sr+BjgDy1sBDyz16UyDlOJG9aGhkBuWTUy3aI6NwQ7y5gUNxPURZePuiikND2jt/
+	igwqJDmA2/EF2qNZSlL6pth/zXbIjeiW2NrzFo=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 7234C45C5A;
+	Mon, 20 Jan 2025 12:03:01 -0500 (EST)
+Date: Mon, 20 Jan 2025 09:03:01 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com, Corinna Vinschen <corinna@vinschen.de>
+Subject: Re: [PATCH v4 2/3] Cygwin: cygwait: Make cygwait() reentrant
+In-Reply-To: <20250120154627.107642-3-takashi.yano@nifty.ne.jp>
+Message-ID: <b90010f4-cb87-4193-50db-91c8ee93ba05@jdrake.com>
+References: <20250120154627.107642-1-takashi.yano@nifty.ne.jp> <20250120154627.107642-3-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737389238;
- bh=3lC7MLnPFlYLj3mKMbf304JcHzjHpoqH3wVzaXiTAHc=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=Xa2orj+QOfGWLNe21Z2/5DkYcrORpKKweAZ4vDN54IMjdyffw0qCMRSEDr1yR8TuUYGPqZkW
- mhQPDSeHjezs7/AOZt4tYMLtykCyvYxI4doyYY07fzAXawE+jSMmjHjowpgX85nIQYEan280tf
- QTyoqLMqVVpa+J9BB1u2m6eIw7odx+fBucMr68ORXC2Llz73D1RxesLgrnUbht7S5Bvot9VP1M
- 01PimS3f2j/bMSBmC67WGkv1Hpa2myKdKwUl4kqlrv4xItDBXFMxTeEtDeN12EjZ/DNcjA0yja
- ODSj/nORpgLR2snSq3eDcugfSOg/r72CNunXk2SpLUFUgsXA==
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 20 Jan 2025 16:53:34 +0100
-Corinna Vinschen wrote:
-> Hi Takashi,
-> 
-> do you want to keep it this way, or do you rather want to change
-> cygwait to use a local timer?
+On Tue, 21 Jan 2025, Takashi Yano wrote:
 
-I prefer changing cygwait() to use a local timer because:
-1) It makes the __SIGFLUSHFAST patch much simpler.
-2) I wonder signal handler may calls APIs that use cygwait()
-   internally, where the similar will happen.
+> diff --git a/winsup/cygwin/cygwait.cc b/winsup/cygwin/cygwait.cc
+> index 80c0e971c..8613638f6 100644
+> --- a/winsup/cygwin/cygwait.cc
+> +++ b/winsup/cygwin/cygwait.cc
+> @@ -58,16 +58,22 @@ cygwait (HANDLE object, PLARGE_INTEGER timeout, unsigned mask)
+>      }
+>
+>    DWORD timeout_n;
+> +  HANDLE &wait_timer = _my_tls.locals.cw_timer;
+> +  HANDLE local_wait_timer = NULL;
+>    if (!timeout)
+>      timeout_n = WAIT_TIMEOUT + 1;
+>    else
+>      {
+> +      if (_my_tls.locals.cw_timer_inuse)
+> +	wait_timer = local_wait_timer;
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Since wait_timer is a handle reference, won't assigning it here overwrite
+_my_tls.locals.cw_timer ?  I think you might have to use a pointer here
+instead.
