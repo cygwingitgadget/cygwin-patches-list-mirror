@@ -1,22 +1,22 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 3D6083858429; Mon, 20 Jan 2025 11:38:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3D6083858429
+	id 1B6C23858429; Mon, 20 Jan 2025 11:43:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1B6C23858429
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1737373106;
-	bh=EyugVquvkJXo9Wwr3DGUDhtMwxFm7G5/ZiJdnt2hJyA=;
+	s=default; t=1737373389;
+	bh=8nNqie9wHfTN4vUr31I0X4byzzXoFk+frlhxPtaL1zE=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=RJdmgoA3I0Dd94A1ffEQzwMBrHeIhDYbsaI4irDE7K4q3yetHCLaXCGYxA7b88P7N
-	 hv0NBXYyx+HlR/UkYrPr7MPpBBUsh1mUpRdI4ucGd0IJJCeNh9OZ/vZSRaBe3FZRaq
-	 HQXstqTOHuaqzIaeSZMh5eIjEtAeMC8jEGWxz6BE=
+	b=VJEJuo74htu5O7keVj/g8ApxpW/q01cAtVCkdI86PVzTwr0eNxRizaiRCWzl9g4TG
+	 z7s0offvCDIUlbg5wmjl+ioEkR86E7iOf1KIRv+TARSIbYPVY8aZmqVL5rGtRrXtT5
+	 at81E4v/ScoAwJw9SfO3YCF6dT1G+QAGVn29TS6w=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 743CDA80D3F; Mon, 20 Jan 2025 12:38:24 +0100 (CET)
-Date: Mon, 20 Jan 2025 12:38:24 +0100
+	id 6C074A80D3F; Mon, 20 Jan 2025 12:43:07 +0100 (CET)
+Date: Mon, 20 Jan 2025 12:43:07 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] Cygwin: signal: Do not handle signal when
  __SIGFLUSHFAST is sent
-Message-ID: <Z441sDy8OrMd6NS7@calimero.vinschen.de>
+Message-ID: <Z442y6VhRE7IHVXo@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
@@ -25,104 +25,69 @@ References: <20241223013332.1269-1-takashi.yano@nifty.ne.jp>
  <7aac0c64-e504-f26e-165e-cd1c0ed24d6c@jdrake.com>
  <20250117185241.34202389178435578f251727@nifty.ne.jp>
  <20250118204137.e719acb59d777ac3303a359f@nifty.ne.jp>
- <20250119094014.feebd5b313cc71b4c9b79680@nifty.ne.jp>
- <20250120003326.65c26a184ef90a5793c374c1@nifty.ne.jp>
- <20250120180806.60f4a0b13261891d325f6c37@nifty.ne.jp>
+ <8bdee3d3-1200-b70d-5829-d0a081323562@jdrake.com>
+ <20250119114958.82129e29fae9093f38dac53c@nifty.ne.jp>
+ <20250119194206.862aecab375cb03c7143c22e@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250120180806.60f4a0b13261891d325f6c37@nifty.ne.jp>
+In-Reply-To: <20250119194206.862aecab375cb03c7143c22e@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 20 18:08, Takashi Yano wrote:
-> On Mon, 20 Jan 2025 00:33:26 +0900
+On Jan 19 19:42, Takashi Yano wrote:
+> Hi Corinna,
+> 
+> On Sun, 19 Jan 2025 11:49:58 +0900
 > Takashi Yano wrote:
-> > On Sun, 19 Jan 2025 09:40:14 +0900
-> > Takashi Yano wrote:
-> > > However, I wonder if cw_timer is re-set by NtSetTimer() in the
-> > > cygwait(), it will be set to WSSC (60 sec) (or 10msec) in the
-> > > sig_send(), so the hang should end with in at most 60 sec unlike
-> > > the the hang Jeremy reported.
+> > On Sat, 18 Jan 2025 17:06:50 -0800 (PST)
+> > Jeremy Drake wrote:
+> > > On Sat, 18 Jan 2025, Takashi Yano wrote:
 > > > 
-> > > I should still overlook something.
+> > > > While debugging this problem, I encountered another hang issue,
+> > > > which is fixed by:
+> > > > 0001-Cygwin-signal-Avoid-frequent-tls-lock-unlock-for-SIG.patch
+> > > 
+> > > I'm concerned about this patch.  There's a window where current_sig could
+> > > be changed after exiting the while, before the lock is acquired by
+> > > cygheap->find_tls (_main_tls);  Should current_sig be rechecked after the
+> > > lock is acquired to make sure that hasn't happened?  Also, does
+> > > current_sig need to be volatile, or is yield a sufficient fence for the
+> > > compiler to know other threads may have changed the value?
 > > 
-> > Yes, I did.
-> > cygwait() calls NtCancelTimer() on return. So, cw_timer will be
-> > never signalled after recursive cygwait() call. Therefore,
-> > L358:         waitret = cygwait (select_sem, select_sem_timeout);
-> > will return only when select_sem is signalled though it is expected
-> > that cygwait() at L358 spends 1msec at most. This is most likely
-> > the reason of the hang at L358 in fhandler_pipe::raw_read().
+> > Thanks for pointing out this. You are right if othre threads may
+> > set current_sig to non-zero value. Current cygwin sets current_sig
+> > to non-zero only in 
+> > _cygtls::interrupt_setup()
+> > and
+> > _cygtls::handle_SIGCONT()
+> > both are called from sigpacket::process() as follows.
 > > 
-> > The conclusion is:
-> > Do not use cygwait() in sig_send().
-> > 0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-> > is the right thing while
-> > ng-0003-Cygwin-signal-Do-not-handle-signal-when-__SIGFLUSHFA.patch
-> > and previous v2 __SIGFLUSHFAST patch
-> > are not.
+> > wait_sig()->
+> >  sigpacket::process() +-> sigpacket::setup_handler() -> _cygtls::interrupt_setup()
+> >                       \-> _cygtls::handle_SIGCONT()
+> > 
+> > wait_sig() is a thread which handle received signals, so other
+> > threads than wait_sig() thread do not set the current_sig to non-zero.
+> > That is, other threads set current_sig only to zero. Therefore,
+> > I think we don't have to guard checking current_sig value by lock.
+> > The only thing we shoud guard is the following case.
+> > 
+> > [wait_sig()]               [another thread]
+> > current_sig = SIGCONT;
+> >                            current_sig = 0;
+> > set_signal_arrived();
+> > 
+> > So, we should place current_sig = SIGCONT and set_signal_arrived()
+> > inside the lock.
 > 
-> I tried adding NtSetTimer() immediately after call_signal_handler()
-> in cygwait() to easily make it reentrant. The result is,
-> the hang in repeated cygwin1.dll build no longer happen even with
-> v2 __SIGFLUSHFAST patch.
-> 
-> It seems that making cygwait() reentrant is an alternative idea.
+> I think the lock necessary here is _cygtls::lock(), isn't it?
+> Because the _cygtls::call_signal_handler() uses _cygtls::locl().
+> I'm asking you because you introduced the find_tls() lock first
+> in the commit:
 
-The TLS cw_timer was introduced in f0968c1e7eda ("* cygtls.h (struct
-_local_storage): Add cw_timer member.") to avoid having to create and
-destroy a timer on each invocation of cygwait, which would occur pretty
-often in some scenarios.
-
-cw_timer was then recycled for select() by commit 7186b657e74b ("Improve
-timer handling in select.") for the same reason. Select may even be the
-worse problem.
-
-And the problem doesn't go away of course, so it would be nice if we
-could keep using cw_timer in most cases in cygwait() and only fall back
-to another timer in case we use it in signal handling reentrantly.
-
-It might have been a good idea to use different timers in cygwait()
-and select(), which could use it's own "sel_timer" or something,
-but that doesn't fix the signal handler reentrancy thingy.
-
-So what about redefining cygwait to take a fourth parameter and
-use that if it's != NULL?  The caller can then just create its own
-timer.  Kind of like this:
-
-diff --git a/winsup/cygwin/cygwait.cc b/winsup/cygwin/cygwait.cc
-index 80c0e971c77d..b54d6ae6f8a4 100644
---- a/winsup/cygwin/cygwait.cc
-+++ b/winsup/cygwin/cygwait.cc
-@@ -24,10 +24,11 @@
- LARGE_INTEGER cw_nowait_storage;
- 
- DWORD
--cygwait (HANDLE object, PLARGE_INTEGER timeout, unsigned mask)
-+cygwait (HANDLE object, PLARGE_INTEGER timeout, unsigned mask, HANDLE timer)
- {
-   DWORD res;
-   DWORD num = 0;
-+  HANDLE &wait_timer = timer ? timer : _my_tls.locals.cw_timer;
-   HANDLE wait_objects[4];
-   pthread_t thread = pthread::self ();
- 
-  [use wait_timer in place of _my_tls.locals.cw_timer throughout cygwait]
-diff --git a/winsup/cygwin/local_includes/cygwait.h b/winsup/cygwin/local_includes/cygwait.h
-index 6212c334e1b9..4eda290782c0 100644
---- a/winsup/cygwin/local_includes/cygwait.h
-+++ b/winsup/cygwin/local_includes/cygwait.h
-@@ -27,8 +27,8 @@ extern LARGE_INTEGER cw_nowait_storage;
- 
- const unsigned cw_std_mask = cw_cancel | cw_cancel_self | cw_sig;
- 
--DWORD cygwait (HANDLE, PLARGE_INTEGER timeout,
--		       unsigned = cw_std_mask);
-+DWORD cygwait (HANDLE, PLARGE_INTEGER,
-+		       unsigned = cw_std_mask, HANDLE = NULL);
- 
- extern inline DWORD __attribute__ ((always_inline))
- cygwait (HANDLE h, DWORD howlong, unsigned mask)
+Yeah, _cygtls::lock() of the target thread should be right.
+The mutex in find_tls was for guarding threadlist_t, not the
+thread's _cygtls.
 
 
 Corinna
