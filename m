@@ -1,98 +1,143 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 88B0C3858429; Mon, 20 Jan 2025 11:49:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 88B0C3858429
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1737373781;
-	bh=eProqst6MFc6fL6EDhvXMS+z7LwU2pKqvWbDGH3IkHY=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=IkIr0KW0tYE+/3tScnY5A9Q/1WSjrYJCS0gmfHl9Z0ST5K5B6N/F56M7S4aVaLEOx
-	 skgDhFX6Ak4qdidxzieQWRH41WWZj4czgWZMDtzwoXGvjY/DSLO+MRGK2Qs7pR15DP
-	 DlhDE8T9H2jqNe+/F8i754ttlAxoWqLORUiIIpGE=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9286FA80D3F; Mon, 20 Jan 2025 12:49:39 +0100 (CET)
-Date: Mon, 20 Jan 2025 12:49:39 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=26d4=UM=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.226.41])
+	by sourceware.org (Postfix) with ESMTPS id 236453858C52
+	for <cygwin-patches@cygwin.com>; Mon, 20 Jan 2025 14:23:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 236453858C52
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 236453858C52
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737383016; cv=none;
+	b=FUQyNYhIXV1y+TyzuLRuQjvxcIPuW6fwp3M1twhP5KUjuPjuVhmlSxOZSMpKQIijquhOBCpn7T7hZ9B9l73jJWQZy81BjyKz41fq4wnncUgN3mB0ksLYKC++zV2GJEGD9ayi/XRlBAHMm+7vNJNzXThT6Y1gl7Jk1og9BohbXPk=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1737383016; c=relaxed/simple;
+	bh=488Cg6NoeIFY6ABLtWEopFuJYdmOwMdRv6ry6CoVnk4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=hEOL4YjUTMgIJi4a0xFKd2nFmu/KfOSJXAcbEFKhcr0izhLv1Tq1NgNgWBGDheWVukXJA9081uTIbDULoL/oKgN3IWCKYpHa6ANGs2LELOYF+r9huMdgx8uukTStEWW+xU8/uIxPRfE4YBZS2gZOwzPDAuxdxLu30/t9KaNRic0=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 236453858C52
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=nanENstP
+Received: from localhost.localdomain by mta-snd-e09.mail.nifty.com
+          with ESMTP
+          id <20250120142332969.SWVM.67063.localhost.localdomain@nifty.com>;
+          Mon, 20 Jan 2025 23:23:32 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: mmap: use 64K pages for bookkeeping
-Message-ID: <Z444U3s1KgpspGd2@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <92eb753b-055a-4171-a1d0-56bc8572d174@cornell.edu>
- <Z4TzRLHGdvcxfT_y@calimero.vinschen.de>
- <20250115221730.4b1ce8becbd1060ffb0373da@nifty.ne.jp>
- <8f026ac1-d628-4723-983f-953275ea4329@cornell.edu>
- <Z4fpeXlmjOVu-u1A@calimero.vinschen.de>
- <Z4fw48L9OmD9eMr1@calimero.vinschen.de>
- <67b40edb-6719-474c-bf05-a3fffc8b782e@cornell.edu>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: signal: Avoid frequent TLS lock/unlock for SIGCONT processing
+Date: Mon, 20 Jan 2025 23:23:05 +0900
+Message-ID: <20250120142316.3606760-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <67b40edb-6719-474c-bf05-a3fffc8b782e@cornell.edu>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1737383013;
+ bh=bp63h/ZcD8WCeJ1WVl5yG77DWSHu2lqiTjkvWtoyhVA=;
+ h=From:To:Cc:Subject:Date;
+ b=nanENstP3EzfgBH56a54sXy8C1477cWQ4esW35oQZyvqck2TznDUYbzqXWqIAdbnO6vxhODo
+ eTGl+TR/Obtewo5ztJWlVZsUdUxcjqj3GCnhkMvXiQbNd3X9/pjRO0dXpAxmJzpkB5ZuGffDDl
+ Pk+yRcs1g/hmVS/w1EPTp9r47yuRD2yrXNIQkll0xZBTEWfvU3aZ4Ezuxie+W0lTsqsUFgPU1t
+ Hy1ulkeCw4KUJQtzwatfjjlq/xa0c5UsViT+VxxPns/C8a0y8cvNK7rDNnTE1wnxz3WAFGXg1A
+ be3OwrZJJrmYM6KkRrJcB0acva1qQ5n9/3s9sPcLLwSXrzZw==
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 17 18:22, Ken Brown wrote:
-> On 1/15/2025 12:31 PM, Corinna Vinschen wrote:
-> > > Ouch.  It looks like we can't go to 64K bookkeeping.  Windows files are
-> > > not length-aligned to 64K allocation granularity, but to 4K pagesize.
-> > > Thus, if we align the length to 64K in mprotect or
-> > > mmap_record::unmap_pages, it tries to access the unallocatd area from
-> > > the EOF page to the last page in the 64K area, which, obviously fails.
-> > 
-> > Alternatively it has to be faked in the affected functions, which then
-> > stealthily only access the pages up to EOF under the hood...
-> It's possible that the following simple patch (on top of the previous patch)
-> solves the problem:
-> 
-> --- a/winsup/cygwin/mm/mmap.cc
-> +++ b/winsup/cygwin/mm/mmap.cc
-> @@ -409,16 +409,28 @@ mmap_record::find_unused_pages (SIZE_T pages) const
-> 
->  /* Return true if the interval I from addr to addr + len intersects
->     the interval J of this mmap_record.  The endpoint of the latter is
-> -   first rounded up to a page boundary.  If there is an intersection,
-> -   then it is the interval from m_addr to m_addr + m_len.  The
-> -   variable 'contains' is set to true if J contains I.
-> +   first rounded up to a Windows page boundary.  If there is an
-> +   intersection, then it is the interval from m_addr to
-> +   m_addr + m_len.  The variable 'contains' is set to true if J contains I.
-> +
-> +   It is necessary to use a 4K Windows page boundary above because
-> +   Windows files are length-aligned to 4K pages, not to the 64K
-> +   allocation granularity.  If we were to align the record length to
-> +   64K, then callers of this function might try to access the
-> +   unallocated memory from the EOF page to the last page in the 64K
-> +   area.  See
-> +
-> +     https://cygwin.com/pipermail/cygwin-patches/2025q1/013240.html
-> +
-> +   for an example in which mprotect and mmap_record::unmap_pages both
-> +   fail when we align the record length to 64K.
->  */
->  bool
->  mmap_record::match (caddr_t addr, SIZE_T len, caddr_t &m_addr, SIZE_T
-> &m_len,
->                     bool &contains)
->  {
->    contains = false;
-> -  SIZE_T rec_len = PAGE_CNT (get_len ()) * wincap.allocation_granularity
-> ();
-> +  SIZE_T rec_len = roundup2 (get_len (), wincap.page_size ());
->    caddr_t low = MAX (addr, get_address ());
->    caddr_t high = MIN (addr + len, get_address () + rec_len);
->    if (low < high)
-> 
-> I've checked that gdb functions normally after this patch, but I can't claim
-> to have thought through all possible situations where an mmap-related
-> function might fail as a result of switching to 64K bookkeeping.
+It seems that current _cygtls::handle_SIGCONT() code sometimes falls
+into a deadlock due to frequent TLS lock/unlock operation in the
+yield() loop. With this patch, the yield() in the wait loop is placed
+outside the TLS lock to avoid frequent TLS lock/unlock.
 
-Nice idea, but this may not do what is expected if the mapping is an
-anonymous mapping, leaving the protection or mapping of trailing pages
-in a wrong state, isn't it?
+Fixes: 9ae51bcc51a7 ("Cygwin: signal: Fix another deadlock between main and sig thread")
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc           | 36 ++++++++++-----------------
+ winsup/cygwin/local_includes/cygtls.h |  4 +--
+ 2 files changed, 15 insertions(+), 25 deletions(-)
 
-Can we easily make sure the type of mapping (file vs anon) is known
-at the time of rounding, so the rounding is performed differently?
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 4dc4be278..f576c5ff2 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1420,7 +1420,7 @@ api_fatal_debug ()
+ 
+ /* Attempt to carefully handle SIGCONT when we are stopped. */
+ void
+-_cygtls::handle_SIGCONT (threadlist_t * &tl_entry)
++_cygtls::handle_SIGCONT ()
+ {
+   if (NOTSTATE (myself, PID_STOPPED))
+     return;
+@@ -1431,23 +1431,17 @@ _cygtls::handle_SIGCONT (threadlist_t * &tl_entry)
+      Make sure that any pending signal is handled before trying to
+      send a new one.  Then make sure that SIGCONT has been recognized
+      before exiting the loop.  */
+-  bool sigsent = false;
+-  while (1)
+-    if (current_sig)	/* Assume that it's ok to just test sig outside of a
+-			   lock since setup_handler does it this way.  */
+-      {
+-	cygheap->unlock_tls (tl_entry);
+-	yield ();	/* Attempt to schedule another thread.  */
+-	tl_entry = cygheap->find_tls (_main_tls);
+-      }
+-    else if (sigsent)
+-      break;		/* SIGCONT has been recognized by other thread */
+-    else
+-      {
+-	current_sig = SIGCONT;
+-	set_signal_arrived (); /* alert sig_handle_tty_stop */
+-	sigsent = true;
+-      }
++  while (current_sig)  /* Assume that it's ok to just test sig outside of a */
++    yield ();          /* lock since setup_handler does it this way.  */
++
++  lock ();
++  current_sig = SIGCONT;
++  set_signal_arrived (); /* alert sig_handle_tty_stop */
++  unlock ();
++
++  while (current_sig == SIGCONT)
++    yield ();
++
+   /* Clear pending stop signals */
+   sig_clear (SIGSTOP, false);
+   sig_clear (SIGTSTP, false);
+@@ -1479,11 +1473,7 @@ sigpacket::process ()
+   myself->rusage_self.ru_nsignals++;
+ 
+   if (si.si_signo == SIGCONT)
+-    {
+-      tl_entry = cygheap->find_tls (_main_tls);
+-      _main_tls->handle_SIGCONT (tl_entry);
+-      cygheap->unlock_tls (tl_entry);
+-    }
++    _main_tls->handle_SIGCONT ();
+ 
+   /* SIGKILL is special.  It always goes through.  */
+   if (si.si_signo == SIGKILL)
+diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
+index 2d490646a..e0de712f4 100644
+--- a/winsup/cygwin/local_includes/cygtls.h
++++ b/winsup/cygwin/local_includes/cygtls.h
+@@ -194,7 +194,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+   class cygthread *_ctinfo;
+   class san *andreas;
+   waitq wq;
+-  int current_sig;
++  volatile int current_sig;
+   unsigned incyg;
+   volatile unsigned stacklock;
+   __tlsstack_t *stackptr;
+@@ -274,7 +274,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+   {
+     will_wait_for_signal = false;
+   }
+-  void handle_SIGCONT (threadlist_t * &);
++  void handle_SIGCONT ();
+   static void cleanup_early(struct _reent *);
+ private:
+   void call2 (DWORD (*) (void *, void *), void *, void *);
+-- 
+2.45.1
 
-
-Thanks,
-Corinna
