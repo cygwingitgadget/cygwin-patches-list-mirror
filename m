@@ -1,51 +1,59 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id BA8CC3858C5F; Wed, 22 Jan 2025 11:23:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BA8CC3858C5F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1737545001;
-	bh=qnqPczeWCX4IA/7XBf86pvIl4j5ySYJs687fphG2/iU=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=NTtpj0eDyZeZXxsmUHjoFOLqlp9ioJfrp/KgTvAx6rl97GkCkYBTFQF5UVoH39sIP
-	 clmwxgq8oX7GGSd/5LT8XEX9QA4qUZlh7NmGMDmjGEx39a115ael84+TxYGcHqRIX2
-	 3uJnFcKN2jkCH4HM2bMNSjCOVcHt/Cz/DqZgyYmE=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 17CB0A80D1D; Wed, 22 Jan 2025 12:23:20 +0100 (CET)
-Date: Wed, 22 Jan 2025 12:23:20 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v7 4/5] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- move or remove dropped entries
-Message-ID: <Z5DVKOrVtnXunSvK@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <cover.1737132501.git.Brian.Inglis@SystematicSW.ab.ca>
- <7c1df0773801655e35abbfb28c4428df9b4854ee.1737132501.git.Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <SRS0=bps0=UO=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo009.btinternet.com (btprdrgo009.btinternet.com [65.20.50.104])
+	by sourceware.org (Postfix) with ESMTP id D2C1D3858D38
+	for <cygwin-patches@cygwin.com>; Wed, 22 Jan 2025 13:53:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D2C1D3858D38
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D2C1D3858D38
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.104
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1737554005; cv=none;
+	b=ssnM/pkjzZXQsB6VAwalIo5lMLoAiLihahsExKqWguNEnGftgPWQRmZNjTsCcGjbckDwu9AxjwU7+/v9Ozz6PYLCDJ88T/5ZlScAPZGnxL6CUH/DEsVGAun6l4hkuTyqOxiDPz5wT3rKT51zIrv8F2kz5ojjee+poBntnI7daZw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1737554005; c=relaxed/simple;
+	bh=E+D7BZHBFfM46+6CYtMusgU9UucfgTI+h7uwUeCBu1E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=H9RiS4tdqYj5qmoA/NsyRG8ZjeoTKkvFUoRzdp0pCtLArYrMaLoeTgZFbLZ7QSI4mYBY0mHlIpR1sWCfwssKr+w/tNh2M7oINlLFCsXBeTVyU9KMtgYTDvuix2e/5IRgFfXNi4q2VeIxEUVnvXU9zX3MpKCU7mN3loipwSYYd+Q=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D2C1D3858D38
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6749020105D8DE68
+X-Originating-IP: [86.140.193.34]
+X-OWM-Source-IP: 86.140.193.34
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefuddrudejfedgudekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeevvdekgfffteetueehgfdugefgkeevleejudduheevuedtveejfeevvdevvdfgvdenucfkphepkeeirddugedtrdduleefrdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugedtrdduleefrdefgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudegtddqudelfedqfeegrdhrrghnghgvkeeiqddugedtrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdelpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihg
+	fihinhdrtghomhdprhgtphhtthhopehmrghrkhesmhgrgihrnhgurdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (86.140.193.34) by btprdrgo009.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6749020105D8DE68; Wed, 22 Jan 2025 13:53:21 +0000
+Message-ID: <046616b0-e793-4057-9b4c-1bf340a9bdd1@dronecode.org.uk>
+Date: Wed, 22 Jan 2025 13:53:18 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c1df0773801655e35abbfb28c4428df9b4854ee.1737132501.git.Brian.Inglis@SystematicSW.ab.ca>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] Cygwin: Minor updates to load average calculations
+To: Mark Geisert <mark@maxrnd.com>
+References: <https://cygwin.com/pipermail/cygwin-patches/2024q4/012939.html>
+ <20250120081914.1219-1-mark@maxrnd.com>
+ <Z5DEs9hhMPmCMqqC@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <Z5DEs9hhMPmCMqqC@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 17 10:01, Brian Inglis wrote:
-> Move entries no longer in POSIX from the SUS/POSIX section to
-> Deprecated Interfaces section and mark with (SUSv4).
-> Remove entries no longer in POSIX from the NOT Implemented section.
+On 22/01/2025 10:13, Corinna Vinschen wrote:
+> Jon?  Are yuo going to review this one?
 
-This looks good, but I just realized that a bunch of functions are
-missing.
+This looks fine to me. No notes. Please apply.
 
-> -<sect1 id="std-deprec"><title>Other UNIX system interfaces, not in POSIX.1-2008 or deprecated:</title>
-> +<sect1 id="std-deprec"><title>Other UNIX® system interfaces, not in POSIX.1-2024, or deprecated:</title>
+Thanks Mark!
 
-When I introduced the ACL functions from the abandoned POSIX.1e draft,
-I missed to add them to the docs.
+(and a particular thank you for fixing the process vs. thread vagueness 
+I'd made in the comments)
 
-Well, fortunately I'm now noticing this a mere 8 years later... *facepalm*
-
-Sigh.  I'll create a patch to add them on top of your patches later on.
-
-
-Thanks,
-Corinna
