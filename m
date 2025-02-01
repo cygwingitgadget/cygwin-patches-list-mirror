@@ -1,157 +1,128 @@
-Return-Path: <SRS0=Whra=UY=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 2AD4D3858D39
-	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 18:22:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2AD4D3858D39
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2AD4D3858D39
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1738434159; cv=none;
-	b=AuE+doOF1K5gYSVV70JoH06p+Lhl5bdtV5qIwAAFlnfg/DrlpfB/hqUXg1bjrr7dWG4cJ6foenI1YST+C78G+cw5iqJ4D6P0vnB9npvF2KOPH8C7UhHYOxYpuhSPS5wl9XEOgclFjeqa4PY1lzWrnoPjf9S11I+vV0lSuHN0LZ0=
+Return-Path: <SRS0=Ktoe=UY=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	by sourceware.org (Postfix) with ESMTPS id 4B7663858D39
+	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 18:48:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4B7663858D39
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4B7663858D39
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.14
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1738435680; cv=none;
+	b=xsCoKPTyme9zVz0Gbwcwe0NsK/eyZpVwYceRsCF+Epw08vauaYnkRIkfVMTnsFlnXmTnyVnQKeRA81tMkFAULVhgpvUBmbLgqrQ0u3MILh9oBn3mTelyWAZf0R496ESzGPqTrsNJdUP6N/uJ5cpa5Ye0jtLL93ABbNlh+xOA5M0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1738434159; c=relaxed/simple;
-	bh=tLUzeMsZ8v2IkFh0XYFVmf1QHND1z4LltOJql5qUPWo=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=m8UuAAl27WU/gN+6weRJQ3KDRXTkGKDpp3iL4v/aGzRsnLiwcL2xH2TGPa+8DiEvBcjK/shQQqgVaZXuyRvNtUX4VBrVnv6ElieYDGQL4IAAUDFjRPMAw1vih06QaqFMgB5vVNHOIq9Mg7Y2KTPHHDj774LYBKoNTtkap1wm24g=
+	t=1738435680; c=relaxed/simple;
+	bh=TsSW9uQAkApIYC6tWxaAJd9ZLt49vwHack4e4sCmes4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=F6tCumuAzZK/Y1PqOAIg+FDh8IfBmd+oraqXi4D7r12GL8c+jmsBvoO9fqOvofKkqwb8WAWjmTvJseqX67zymu9beByt/0jQMH1qaHoaLebXic0hTZ35oEoQOgLELRFbMzZKE5cjDNBE6zAoqF0R6UNyHwSuTiAYFCa6CGlNfiA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2AD4D3858D39
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4B7663858D39
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=CnzuiFTL
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 3EC6445CDC
-	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 13:22:38 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=OQc1o
-	EPjVxmRHcQm4mNa2/R2JSs=; b=CnzuiFTLm+HKP8Q7Z8txk0DH+Aa/QU1JJbzE4
-	c0xLWtVny8IiAw2kMc4c4SUFm3Y2ND5BGL2mN3EYxNkQ6ufO3fkaTEtaxCEtJ+1V
-	apiDc7yplOo+RTF/xQWHUiI+he6yKf69wm6ORsIsp6aU2fl3N+yZctA0GoTg4Htv
-	Ac52DU=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id F007245CDA
-	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 13:22:37 -0500 (EST)
-Date: Sat, 1 Feb 2025 10:22:36 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: factor out code to resolve a symlink target.
-Message-ID: <00a51487-ed74-8ad6-39aa-bd6963af54c2@jdrake.com>
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=JIvjrI4V
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 0AE404A2D9
+	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 18:47:58 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf15.hostedemail.com (Postfix) with ESMTPA id 9DF9818
+	for <cygwin-patches@cygwin.com>; Sat,  1 Feb 2025 18:47:57 +0000 (UTC)
+Message-ID: <b2027548-0eb7-41bf-a29e-de970043d4a0@SystematicSW.ab.ca>
+Date: Sat, 1 Feb 2025 11:47:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] update Cygwin-X news page X.Org and Cygwin release
+ announcements to current stable releases
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <4c395f96efe5f7e7026c91125c832d431dcc145f.1738294648.git.Brian.Inglis@SystematicSW.ab.ca>
+ <17478133-a196-41bd-92f4-ac3eb7866f5c@dronecode.org.uk>
+Organization: Systematic Software
+In-Reply-To: <17478133-a196-41bd-92f4-ac3eb7866f5c@dronecode.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 9DF9818
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout04
+X-Stat-Signature: j1jt6io6wgjkcog85sf4ityajnass6an
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX19JuQU3mw9hK95DPaC/eHZz/wzJumUqoG0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=pPOde4S4um3TozFim4G6bcADJXjD41DK9GOi0aDNUss=; b=JIvjrI4V9BLSiCUP6jZ5sKN60grKKcBBOA2LsbZS4hf4tSJMZHdDIKKgygYe2R1ANHmP9nQoX1P9GIrytlnT5z9lBnmTVHc/+Z63FmcsVy+tRgA/uTvPyGoTrcZGSC8TKy3bk7oYY14wMEOBv6kprbQbt3vR5oEnbXcpZJqM4IuypsQeVkA1oAB61PuB+lxrQrQ4A/jwFWgPhVFFWk35bFDblAm+UAfDHnwlYy9eTw66vF+MLQjwxTTYyJeC97F2OUcEWxTsIy5zT1eZsmXSXs6pZMjaTBHIM+nDe3JgnvCsPVvqfZrSKDLru0epYxrHiDsivmhx+UwwwczdzNL3jQ==
+X-HE-Tag: 1738435677-90676
+X-HE-Meta: U2FsdGVkX1/SXda2+7N3hpmfX6JyrhFUTKf0MYHdEc+E5R5bUfhoEsw0686A+diy9aG/Lat1BZM2RISNj0oVPvy7PA+Q/GeYtPAzZJ7SrtQRsrnJudmlrLYKCMcjSFwhyI8ZLzjmfMeUUy4IJ69nhAizIw3WYxRToLR+o3lc4pcUKdaOJLCn9yl8cvzmJoFIlA7ieKsasJ4vFoWarHXGQA9qmHN90N63hkajty5bJVZAQP60iYgWi+OnfgkPilzt2KObBMdk7HsboqOk9bfGWiijQR3UOGyUoV/jN4c5eWyidDXuad2PthYVDU9HQKHiNIlLAVuFC1OiI9zpzE7tJx3WKGUEaEb5q64osWZdnaxaTpnWvWfJQo8Y0jb1jJb73tArtLb9KMj0TIeScoCX9Oand+4QKMaw7jBNbgm99RBrGRuM4A++r3yOzFBxMYr2vf08xPsP6V1PLVisH59L6dnJgcIaRPmlo3Ocl5jwgylbmVJBoUnuswqSg3BPViR/xLvz1tHn8zRQ0u5M8o4qaS9DlcvauZBNHDk80E3eks0xO8fUooXNeTZVdEYYvTbdJ9A97JZLFhhpxJk9vgP+JenR+6CFJPpvOM7iYo7b131a8HOVwbLeqbXMWmswThcicQ02d3A42yLDw1TLfJMvuJZiLqetPwUkT98YWqf/AX4IBgQzvYEUrQcZUMnQ3w2Zrl33/sPQ/5qJ/9Ko6I7/YDvl6/ESq2EPm3GEdI4ezpNVlCI6OLIYlQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This code was duplicated between the lnk symlink type and the native
-symlink type.
+On 2025-02-01 08:52, Jon Turney wrote:
+> On 31/01/2025 03:39, Brian Inglis wrote:
+>> might want to change the older messages to a more general Cygwin-X FAQ reference
+> 
+> I don't really understand how this statement applies to the change suggested?
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
+It is intended for the reviewer as all the entries appear old and not very 
+useful, but I have no idea what else might be better to replace the later ones!
 
-I have been working on cleaning up msys2's "deepcopy" symlink mode code
-and noticed it was doing the same thing in a different way.  I copy-pasted
-the code from the lnk path, then factored it out into a function when I
-noticed the native path doing the same thing.  Then I realized, "that's
-stupid, I'm creating a bigger diff from upstream for a code cleanup".
-So I reverted it there and figured I'd send it here first, and adopt
-using it in the deepcopy code if/when it's applied here and in a released
-version.
+>> Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+>> ---
+>>   xfree/cygx-news-new.html | 18 +++++++++---------
+>>   1 file changed, 9 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/xfree/cygx-news-new.html b/xfree/cygx-news-new.html
+>> index e326fa084c2c..a9ff136ea684 100644
+>> --- a/xfree/cygx-news-new.html
+>> +++ b/xfree/cygx-news-new.html
+>> @@ -1,14 +1,14 @@
+>>   <p>
+>> -<a href="https://lists.x.org/archives/xorg-announce/2021-October/003115.html">
+>> -X server 21.1</a> and
+> 
+> Thanks, but:
+> 
+> This is deliberately the major release number.
+> 
+>> -<a href="http://lists.x.org/archives/xorg-announce/2012-June/001977.html">
+>> -X.Org X11 Release 7.7</a>
+>> +<a href="https://lists.x.org/archives/xorg-announce/2024-December/003576.html">
+>> +X.Org X Server 21.1.15</a> and
+>> +<a href="https://lists.x.org/archives/xorg-announce/2024-July/003521.html">
+>> +X.Org X11 Release 1.8.10</a>
+> 
+> This is wrong.
+> 
+> R7.7 is the X11 rollup release number (informally called a "katamari"), 
+> inherited from the days when X11 was distributed as a monolithic source tree.
 
- winsup/cygwin/path.cc | 52 ++++++++++++++++++++-----------------------
- 1 file changed, 24 insertions(+), 28 deletions(-)
+Not very useful any more for any one for any reason - even then it was only 
+really a binary flag for current or outdated X releases, especially for 
+commercial Unixen.
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 658f3f9cf7..69675b2e23 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -1756,6 +1756,28 @@ symlink (const char *oldpath, const char *newpath)
-   return -1;
- }
+> This is not the libX11 version number.
+> 
+>>   are included in Cygwin.
+>> -Details are available in the announcements
+>> -<a href="https://cygwin.com/pipermail/cygwin-announce/2021- 
+>> November/010286.html">
+>> -here</a> and
+>> -<a href="http://cygwin.com/ml/cygwin-xfree-announce/2012-07/msg00001.html">
+>> -here</a>.
+>> +Details are available in the announcements of the respective Cygwin packages
+>> +<a href="https://cygwin.com/pipermail/cygwin-announce/2025-January/012120.html">
+>> +X.Org Server 21.1.15</a> and
+>> +<a href="https://cygwin.com/pipermail/cygwin-announce/2025-January/012082.html">
+>> +X.Org X11 refresh</a>.
+>>   </p>
+> 
+> If I was going to change this, I'd probably just remove it all, since X11 
+> development velocity is slow enough these days that it doesn't really 
+> communicate much useful information.
 
-+static bool
-+resolve_symlink_target (const char *oldpath, const path_conv &win32_newpath,
-+			path_conv &win32_oldpath)
-+{
-+  if (isabspath (oldpath))
-+    {
-+      win32_oldpath.check (oldpath, PC_SYM_NOFOLLOW, stat_suffixes);
-+      return true;
-+    }
-+  else
-+    {
-+      tmp_pathbuf tp;
-+      size_t len = strrchr (win32_newpath.get_posix (), '/')
-+		    - win32_newpath.get_posix () + 1;
-+      char *absoldpath = tp.t_get ();
-+      stpcpy (stpncpy (absoldpath, win32_newpath.get_posix (), len),
-+	      oldpath);
-+      win32_oldpath.check (absoldpath, PC_SYM_NOFOLLOW, stat_suffixes);
-+      return false;
-+    }
-+}
-+
- static int
- symlink_nfs (const char *oldpath, path_conv &win32_newpath)
- {
-@@ -1816,23 +1838,12 @@ symlink_native (const char *oldpath, path_conv &win32_newpath)
-   UNICODE_STRING final_oldpath_buf;
-   DWORD flags;
+As suggested at the top, maybe just a link to the Cygwin-X FAQ?
 
--  if (isabspath (oldpath))
-+  if (resolve_symlink_target (oldpath, win32_newpath, win32_oldpath))
-     {
--      win32_oldpath.check (oldpath, PC_SYM_NOFOLLOW, stat_suffixes);
-       final_oldpath = win32_oldpath.get_nt_native_path ();
-     }
-   else
-     {
--      /* The symlink target is relative to the directory in which
--	 the symlink gets created, not relative to the cwd.  Therefore
--	 we have to mangle the path quite a bit before calling path_conv. */
--      ssize_t len = strrchr (win32_newpath.get_posix (), '/')
--		    - win32_newpath.get_posix () + 1;
--      char *absoldpath = tp.t_get ();
--      stpcpy (stpncpy (absoldpath, win32_newpath.get_posix (), len),
--	      oldpath);
--      win32_oldpath.check (absoldpath, PC_SYM_NOFOLLOW, stat_suffixes);
--
-       /* Try hard to keep Windows symlink path relative. */
+I just notice ancient dates and think that is no longer current, informative, or 
+useful - it needs changed to something more current, informative, and useful.
+That keeps me posting patches, and ITAs if I need or use a package! ;^>
 
-       /* 1. Find common path prefix.  Skip leading \\?\, but take pre-increment
-@@ -2025,7 +2036,6 @@ int
- symlink_worker (const char *oldpath, path_conv &win32_newpath, bool isdevice)
- {
-   int res = -1;
--  size_t len;
-   char *buf, *cp;
-   tmp_pathbuf tp;
-   winsym_t wsym_type;
-@@ -2137,21 +2147,7 @@ symlink_worker (const char *oldpath, path_conv &win32_newpath, bool isdevice)
- 	      /* The symlink target is relative to the directory in which the
- 		 symlink gets created, not relative to the cwd.  Therefore we
- 		 have to mangle the path quite a bit before calling path_conv.*/
--	      if (isabspath (oldpath))
--		win32_oldpath.check (oldpath,
--				     PC_SYM_NOFOLLOW,
--				     stat_suffixes);
--	      else
--		{
--		  len = strrchr (win32_newpath.get_posix (), '/')
--			- win32_newpath.get_posix () + 1;
--		  char *absoldpath = tp.t_get ();
--		  stpcpy (stpncpy (absoldpath, win32_newpath.get_posix (),
--				   len),
--			  oldpath);
--		  win32_oldpath.check (absoldpath, PC_SYM_NOFOLLOW,
--				       stat_suffixes);
--		}
-+	      resolve_symlink_target (oldpath, win32_newpath, win32_oldpath);
- 	      if (SUCCEEDED (SHGetDesktopFolder (&psl)))
- 		{
- 		  WCHAR wc_path[win32_oldpath.get_wide_win32_path_len () + 1];
 -- 
-2.47.1.windows.2
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
