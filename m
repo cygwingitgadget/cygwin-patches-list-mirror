@@ -1,102 +1,177 @@
-Return-Path: <SRS0=dz9W=VD=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	by sourceware.org (Postfix) with ESMTPS id 14D7E3858420
-	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 17:43:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 14D7E3858420
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 14D7E3858420
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.12
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739382195; cv=none;
-	b=p//kt+tfp2Xw34jMzSEA9EUIqZMtY/pYUOqbFrTQjlTVY0EyZmCXzrCZMOv1hxBFAA8C3qDXZcyR30YsZjO0xus8X8tDoipeTFOcQwIExzfQJ6m0DP7DtP8wqAzzn3V801c24x55oQ6DkMCmym4URC+XDKoA2Gw2R9glpd4EFsY=
+Return-Path: <SRS0=/5EK=VD=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id D7A98385842A
+	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 18:55:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D7A98385842A
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D7A98385842A
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739386519; cv=none;
+	b=fHaqVwl3dD2s5AH9mujOY6aTFu3VqQLPZrhA2P+2zn7ivwME2CbTC0PZuXR5HAPWymfNU52ycwMG+SwmFiSCP5B46dvpdr0WKmvmf3qtf3qsSs2Hryqu/blGxRBZS6KKH/eITRjX2NBsjkWuxRjhtP+Mgi36rYGKUhugoaOiCb0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1739382195; c=relaxed/simple;
-	bh=Lzl3clJOvt+7g6XrZ0uQ/L3QrttFp2fYcBHhRdOvECA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=I9oSesKrDscuSIUsN04vA0bYNOzHa6ykSDLg3c7ZfK6sooPV+zj16paL8XIW62vDrQyHWkjoJK6R6y1cYMWUz+gJc30I3bZviu4B9b3RYoi2PPrW83F6h9oiC8Te2ezEWrG+FdF+NNBwoB8NA27OCHfpd8IweVcRRdO0sY62VvA=
+	t=1739386519; c=relaxed/simple;
+	bh=oHG8KTIf2bmN7vqDbS0vd/2EabzOyUTk9yXSzZRY0tc=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=rMVMqqQw2NEvfEQJpjO2jh1kWRSlbtIGm+c1XE7c+sJg0oSC5F2jHWooAvYNPZuOyNOLV49OstisJ99KyCLl4XcML76J58ZNIhfUx33ZBtudIecAINPrsn8WG3nMnQMYl7Qgkrkqj79UOwenYl5RTpe9pGdIxbQJQ0ImetjP2Gg=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 14D7E3858420
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D7A98385842A
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=Hm2VyCbC
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id C2B641C69C8
-	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 17:43:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf01.hostedemail.com (Postfix) with ESMTPA id 5409F6000F
-	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 17:43:13 +0000 (UTC)
-Message-ID: <06ffd3ff-65ec-4ff2-8279-9a6ce494b790@SystematicSW.ab.ca>
-Date: Wed, 12 Feb 2025 10:43:12 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/2] Cygwin: make list of mounts for a volume in
- dos_drive_mappings
-Content-Language: en-CA
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=cDXhZm1h
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 3850245C30
+	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 13:55:19 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:message-id:mime-version:content-type; s=csoft; bh=AvD0O
+	fmFdNxPDZiM7A1ktc/vU5A=; b=cDXhZm1hWcP+hZ1VyghQnj41ocsP8W3C/+Zg9
+	5yzYyLT8LHtk5m208t9AlNrcN91CF1muIcJBKFd4sEoIz0IX26BGRPJJLY5yD1k0
+	CSR6RfrIOFUPDxtyqSMoqTMTFr7MzYs5PtCMUDqxhsL5eh9OuVHbS8UAhPEyWm+6
+	5Y3yWE=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 0B73D45C1D
+	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 13:55:19 -0500 (EST)
+Date: Wed, 12 Feb 2025 10:55:18 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-References: <827294fb-0391-197f-6b53-52ea0f5e11e7@jdrake.com>
- <Z6soHzMvH9hcJMRY@calimero.vinschen.de>
- <b724a9a2-3882-298c-f0f0-58563cc5c863@jdrake.com>
- <Z6yU__7mYxK7htjw@calimero.vinschen.de>
-Autocrypt: addr=Brian.Inglis@SystematicSW.ab.ca; keydata=
- xjMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePbN
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT7ClgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDM44BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAfCfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-In-Reply-To: <Z6yU__7mYxK7htjw@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5409F6000F
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: szpumabi8nyroj7k1jkgr7kigqsm6k3j
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX19S9AvatBsHU9hHDfPulpGG8ay/KZeDCEo=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=01KRhIz9fJnsLIBaTE1bHd4HGV9iY6DDUBNlidDf+rw=; b=Hm2VyCbCqqTXfMQYK0iK3+QlM1s1Js6NIO2DaktqM5mMUW6iOXMmItvv9qM0WStJGapc3aWUXr0WfqRcbmov65+c69i44NWDSK3RASFEN87V17ufFQBLTNf0aQ/fglCLg6DNLyH4TO4HRgZP+dHR8xLUgEeim8QZQTQX5jb7T4R2y9Wee8QagM1tovfdjV9W3AG31V8ziNWM/YBTdd07LV7nWOyV/UMhyF0MROMnDX2ePSEArtoEZZK59C4WtB47ZuwWb83n3mFGJUNirGwaoWxty1KleULYXOHH6LpgXV7G1M114kiHzXiB4VQasCuMnjCHsPs+f95dmCw7qsj2pg==
-X-HE-Tag: 1739382193-398927
-X-HE-Meta: U2FsdGVkX1+vUqvJIk75AQ8tPUUM5KHMpbCR3Nw0bZhKXk1SiFNErYFkj6M/O13Ny394RSfrIyVQCzPO8ujrRiLm0T70+xs/zUQhCoJTJRpX6y6Do6td0M1S4Z2K7j8pzgNnlhm1tMNyIbD28vFil585jxvGJOzpCLMSx1fd8J3MsoPXEJpFsb8oo/IM3BLQqoYKvVAZtXJ/sk2fUt+SpY0tjs9tWgwMMowdyt3xT4If8rcigvtw9jdBWEoOq0AvFjG6q/EvHErjsj4aqWcej42fa3mE1SyNNtcVJZNef2MnzB24X4UPgCNHLuKSDoFSEnWGcbCORAJ0ukGobXhoBE84m9oH96r6GKfOEXqYxXg87V3gUwIxbQ==
+Subject: [PATCH v3 1/2] Cygwin: store list of mounts for volumes in
+ dos_drive_mappings.
+Message-ID: <9b3499b0-7b86-cc8a-5d2a-2f29846484aa@jdrake.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-02-12 05:33, Corinna Vinschen wrote:
-> On Feb 11 16:13, Jeremy Drake via Cygwin-patches wrote:
->> On Tue, 11 Feb 2025, Corinna Vinschen wrote:
->>> On Feb 10 17:13, Jeremy Drake via Cygwin-patches wrote:
->>>> make mappings linked list in order rather than reverse order.
->>> Why?  I'm not asking for myself, but for the commit message.
->>> It may profit a lot from explaining what the change is supposed
->>> to accomplish. :)
->> That's two good points: 1) I didn't write a proper commit message, I'll
->> do that for v3.  but 2), why does the order of the list matter?
-> It doesn't. Or rather, it shouldn't. The drive letters were in order in /
-> cygdrive just because of the algorithm evaluating available_drives. That's
-> nice, but not essential.
->> On my system, the order returned by the functions matches my "expected"
->> order (my C: comes before my D:), but I don't think there's any guarantee
->> that that will always be the case. I don't think it matters other than
->> for aesthetics though,
-> The order in /proc/self/mounts on Linux is the order in which the
-> drives got mounted. You don't get them sorted unless you pipe it
-> through sort. That's ok with me.
->> but I don't know the motivation behind returning the
->> explicit mount entries in native_sorted order. Is there any reason why I
->> might need to sort the cygdrive mount entries? I could see that getting
->> complicated.
-> No sorting necessary.  I'm actually really only talking about the commit
-> message. It should explain what you're doing and, especially, why.
+The existing code only stored the first mount for each volume, but now
+we store the complete list, and split it into a linked list.  This will
+be used in a subsequent commit to populate cygdrive mount entries.
 
-Sorting could be achieved by inserting entries into the list in any required 
-order, or by similarly populating an auxiliary array of list entry pointers in 
-any required order.
+Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+---
+ winsup/cygwin/local_includes/mount.h | 11 ++++---
+ winsup/cygwin/mount.cc               | 46 +++++++++++++++++++---------
+ 2 files changed, 39 insertions(+), 18 deletions(-)
 
+diff --git a/winsup/cygwin/local_includes/mount.h b/winsup/cygwin/local_includes/mount.h
+index b2acdf08b4..c96b34781e 100644
+--- a/winsup/cygwin/local_includes/mount.h
++++ b/winsup/cygwin/local_includes/mount.h
+@@ -223,12 +223,15 @@ class dos_drive_mappings
+   struct mapping
+   {
+     mapping *next;
+-    size_t doslen;
+     size_t ntlen;
+-    wchar_t *dospath;
+     wchar_t *ntdevpath;
+-  };
+-  mapping *mappings;
++    struct dosmount
++    {
++      dosmount *next;
++      wchar_t *path;
++      size_t len;
++    } dos;
++  } *mappings;
+
+ public:
+   dos_drive_mappings ();
+diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
+index bf26c4af3e..4be24fbe84 100644
+--- a/winsup/cygwin/mount.cc
++++ b/winsup/cygwin/mount.cc
+@@ -2002,13 +2002,13 @@ dos_drive_mappings::dos_drive_mappings ()
+   wchar_t *devpath = tp.w_get ();
+   wchar_t *mounts = tp.w_get ();
+
+-  /* Iterate over all volumes, fetch the first path from the list of
+-     DOS paths the volume is mounted to, or use the GUID volume path
+-     otherwise. */
++  /* Iterate over all volumes, fetch the list of DOS paths the volume is
++     mounted to. */
+   HANDLE sh = FindFirstVolumeW (vol, 64);
+   if (sh == INVALID_HANDLE_VALUE)
+     debug_printf ("FindFirstVolumeW, %E");
+   else {
++    mapping **nextm = &mappings;
+     do
+       {
+ 	/* Skip drives which are not mounted. */
+@@ -2047,20 +2047,32 @@ dos_drive_mappings::dos_drive_mappings ()
+ 	    mapping *m = new mapping ();
+ 	    if (m)
+ 	      {
+-		m->dospath = wcsdup (mounts);
++		/* store mount point list */
++		if ((m->dos.path = (wchar_t *) malloc (len * sizeof (WCHAR))))
++		  memcpy (m->dos.path, mounts, len * sizeof (WCHAR));
+ 		m->ntdevpath = wcsdup (devpath);
+-		if (!m->dospath || !m->ntdevpath)
++		if (!m->dos.path || !m->ntdevpath)
+ 		  {
+-		    free (m->dospath);
++		    free (m->dos.path);
+ 		    free (m->ntdevpath);
+ 		    delete m;
+ 		    continue;
+ 		  }
+-		m->doslen = wcslen (m->dospath);
+-		m->dospath[--m->doslen] = L'\0'; /* Drop trailing backslash */
++		/* split mount point list into dosmount entries */
++		mapping::dosmount *dos = &m->dos;
++		for (wchar_t *mount = m->dos.path;
++		    dos;
++		    mount += dos->len + 2,
++		      dos->next = mount[0] ? new mapping::dosmount () : NULL,
++		      dos = dos->next)
++		  {
++		    dos->path = mount;
++		    dos->len = wcslen (dos->path);
++		    dos->path[--dos->len] = L'\0'; /* Drop trailing backslash */
++		  }
+ 		m->ntlen = wcslen (m->ntdevpath);
+-		m->next = mappings;
+-		mappings = m;
++		*nextm = m;
++		nextm = &m->next;
+ 	      }
+ 	  }
+ 	else
+@@ -2088,11 +2100,11 @@ dos_drive_mappings::fixup_if_match (wchar_t *path)
+       {
+ 	wchar_t *tmppath;
+
+-	if (m->ntlen > m->doslen)
+-	  wcsncpy (path += m->ntlen - m->doslen, m->dospath, m->doslen);
++	if (m->ntlen > m->dos.len)
++	  wcsncpy (path += m->ntlen - m->dos.len, m->dos.path, m->dos.len);
+ 	else if ((tmppath = wcsdup (path + m->ntlen)) != NULL)
+ 	  {
+-	    wcpcpy (wcpcpy (path, m->dospath), tmppath);
++	    wcpcpy (wcpcpy (path, m->dos.path), tmppath);
+ 	    free (tmppath);
+ 	  }
+ 	break;
+@@ -2106,8 +2118,14 @@ dos_drive_mappings::~dos_drive_mappings ()
+   for (mapping *m = mappings; m; m = n)
+     {
+       n = m->next;
+-      free (m->dospath);
++      free (m->dos.path);
+       free (m->ntdevpath);
++      mapping::dosmount *dn;
++      for (mapping::dosmount *dm = m->dos.next; dm; dm = dn)
++	{
++	  dn = dm->next;
++	  delete dm;
++	}
+       delete m;
+     }
+ }
 -- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+2.47.1.windows.2
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
