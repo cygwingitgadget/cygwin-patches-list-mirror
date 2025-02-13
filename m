@@ -1,341 +1,125 @@
 Return-Path: <SRS0=kr8w=VE=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 741063858C42
-	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 01:40:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 741063858C42
+	by sourceware.org (Postfix) with ESMTPS id C54813858C42
+	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 01:41:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C54813858C42
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 741063858C42
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C54813858C42
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739410819; cv=none;
-	b=I+FKzAH4mlG3s56NL7nimc39aY4J41JPsBileTyRDkCCookwihpPnwJ6JhpeInHF10vu+os01oU2dzdeErixf8WAxMW6SieYZmYIFR02WyRoyURCE2N0dMDlWNYx1Gvqd4XaEN81DXhokttum1LN8woYC59xXWX+AWcNe3duZ7E=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739410889; cv=none;
+	b=dGvQYDYaxXQcevoBigu6cqX8JShMlpK1OxVWXiob4ilIlzWqOgGYmA1wcsjl1mkYRpWjE8taD2E2tkt87HMmG8lggaSxD65Ss6O0URt7L54ayGDeyj74wTH0DyzTPevzMi/fvDSENSZH9CXHSDnIxtN2rG0GqmranL43QRxJQfs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1739410819; c=relaxed/simple;
-	bh=irdgQb1CKuswPJfvHp7wBfohJrX/R1JDggmDQQSAlrM=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=V+va9pIYafQLZrSeBuV6G6UnSiG7qA5nDL0J+E0mIEOxPaPZXqMZ8jEpZSkgGoadZJFT+ps0tffqK4IPdOqcVJSkGvZxW4XQxc0IU+0XVlFv0rVYzWyNQozcDXcYj5BLvfaroznFTc2xKa1vSOC/gCg/N+x7Ba3dLSPIkhKzmnc=
+	t=1739410889; c=relaxed/simple;
+	bh=wUQpn879G4sLVFRNcH1IDnp597YSh64sfNjPVB3LXow=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=lw83ZA3a2r62NljyO2yYLr/MRgpO6Gmx4vKde41Dy+hFyF92Zp0CjQfvVRdHP4fYKZthNdBLDJtlO0TmkpbUyIHEygYfYiOM8LkSIB5+EWk1oEBA3ovCwXY9A+t1ISWzHPpo0U5hWWntXUM/wo5ANndoJsC7c1mcC1N+eefHLew=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 741063858C42
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C54813858C42
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=xHcJkI48
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=UWgKIxa2
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 4E2F245C1D
-	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 20:40:19 -0500 (EST)
+	by mail231.csoft.net (Postfix) with ESMTP id 9597F45C1D
+	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 20:41:27 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=Utjad
-	2zzDLFHPxDm3oZInvfQN84=; b=xHcJkI48S8DbSpXxbVD0xLb0vFlw+0oR5u8XM
-	izcONytcdK6Vz/rzTpGX79hGXOThoCQ4QEksXCCPto9Am1YRn9I+uZHChKuPRmbe
-	Q2uVKsNEy6Mng6lcqU8YfUHTmCEMqhCkQ0nmdPoK81w7/tJ7i/QNrSJ2lXcpZA0r
-	hy45xo=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=6XOCX
+	/uyV1KbQsTZor66GiIkjKQ=; b=UWgKIxa2pl0IWrPiCDvWzuRsHAev6IDEBEOhr
+	59NamOfwqCdCKhj4GsuFiVY5FEABoIhPBm6FAt7i/pcA9wfonHQQX1yoqjpDBqw+
+	aQNYc14FjQfQ+nz6p3IWt0okVhpdyxkGJG+A/2nzD9gHEQHPiOZEbQbfc1A184jF
+	aCVhsQ=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 4922845BF6
-	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 20:40:19 -0500 (EST)
-Date: Wed, 12 Feb 2025 17:40:19 -0800 (PST)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 8F63C45BF6
+	for <cygwin-patches@cygwin.com>; Wed, 12 Feb 2025 20:41:27 -0500 (EST)
+Date: Wed, 12 Feb 2025 17:41:27 -0800 (PST)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v4 2/3] Cygwin: expose all windows volume mount points.
-Message-ID: <fe0f9e55-46c5-1042-06d7-22f1e28a23a7@jdrake.com>
+Subject: [PATCH v4 3/3] Cygwin: always output cygdrive mntents.
+Message-ID: <cff054ea-19d6-1317-9d77-396c66c76856@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,POISEN_SPAM_PILL_3,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-They are exposed via the getmntent API and proc filesystem entries
-dealing with mounts.  This allows things like `df` to show volumes
-that are only mounted on directories, not on drive letters.
+Previously, if there was an explicit mount entry for a drive letter
+(say, C:), the output of the corresponding cygdrive mntent (like
+/cygdrive/c) would be suppressed.  Once Windows directory mounts were
+added to cygdrive mounts, the de-duplication code got more complicated.
+Instead, always output the cygdrive mounts, under the cygdrive prefix.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2025-February/257251.html
+Addresses: https://cygwin.com/pipermail/cygwin-patches/2025q1/013367.html
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
- winsup/cygwin/cygtls.cc               |   6 ++
- winsup/cygwin/fhandler/process.cc     |  19 ++---
- winsup/cygwin/local_includes/cygtls.h |   6 +-
- winsup/cygwin/local_includes/mount.h  |   5 +-
- winsup/cygwin/mount.cc                | 116 ++++++++++++++++++--------
- 5 files changed, 100 insertions(+), 52 deletions(-)
+ winsup/cygwin/mount.cc | 38 +++-----------------------------------
+ 1 file changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/winsup/cygwin/cygtls.cc b/winsup/cygwin/cygtls.cc
-index 1134adc3e2..13d133f47c 100644
---- a/winsup/cygwin/cygtls.cc
-+++ b/winsup/cygwin/cygtls.cc
-@@ -121,6 +121,12 @@ _cygtls::remove (DWORD wait)
-       CloseHandle (h);
-     }
-
-+  if (locals.drivemappings)
-+    {
-+      delete locals.drivemappings;
-+      locals.drivemappings = NULL;
-+    }
-+
-   /* Close handle and free memory used by select. */
-   if (locals.select.sockevt)
-     {
-diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
-index f779028116..550da2a820 100644
---- a/winsup/cygwin/fhandler/process.cc
-+++ b/winsup/cygwin/fhandler/process.cc
-@@ -1395,16 +1395,11 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
-     u_shared = user_shared;
-   mount_info *mtab = &u_shared->mountinfo;
-
--  /* Store old value of _my_tls.locals here. */
--  int iteration = _my_tls.locals.iteration;
--  unsigned available_drives = _my_tls.locals.available_drives;
--  /* This reinitializes the above values in _my_tls. */
--  setmntent (NULL, NULL);
--  /* Restore iteration immediately since it's not used below.  We use the
--     local iteration variable instead*/
--  _my_tls.locals.iteration = iteration;
--
--  for (iteration = 0; (mnt = mtab->getmntent (iteration)); ++iteration)
-+  /* Store old value of _my_tls.locals.drivemappings here. */
-+  class dos_drive_mappings *drivemappings = _my_tls.locals.drivemappings;
-+  _my_tls.locals.drivemappings = NULL;
-+
-+  for (int iteration = 0; (mnt = mtab->getmntent (iteration)); ++iteration)
-     {
-       /* We have no access to the drives mapped into another user session and
- 	 _my_tls.locals.available_drives contains the mappings of the current
-@@ -1470,8 +1465,8 @@ format_process_mountstuff (void *data, char *&destbuf, bool mountinfo)
- 	}
-     }
-
--  /* Restore available_drives */
--  _my_tls.locals.available_drives = available_drives;
-+  /* Restore old value of _my_tls.locals.drivemappings here. */
-+  _my_tls.locals.drivemappings = drivemappings;
-
-   if (u_hdl) /* Only not-NULL if open_shared has been called. */
-     {
-diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
-index d814814b19..dfd3198435 100644
---- a/winsup/cygwin/local_includes/cygtls.h
-+++ b/winsup/cygwin/local_includes/cygtls.h
-@@ -93,10 +93,10 @@ struct _local_storage
-   int dl_error;
-   char dl_buffer[256];
-
--  /* path.cc */
-+  /* mount.cc */
-   struct mntent mntbuf;
-   int iteration;
--  unsigned available_drives;
-+  class dos_drive_mappings *drivemappings;
-   char mnt_type[80];
-   char mnt_opts[80];
-   char mnt_fsname[CYG_MAX_PATH];
-@@ -181,7 +181,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
-   siginfo_t *sigwait_info;
-   HANDLE signal_arrived;
-   bool will_wait_for_signal;
--#if 1
-+#if 0
-   long __align;			/* Needed to align context to 16 byte. */
- #endif
-   /* context MUST be aligned to 16 byte, otherwise RtlCaptureContext fails.
-diff --git a/winsup/cygwin/local_includes/mount.h b/winsup/cygwin/local_includes/mount.h
-index c96b34781e..3049de8ba3 100644
---- a/winsup/cygwin/local_includes/mount.h
-+++ b/winsup/cygwin/local_includes/mount.h
-@@ -216,6 +216,7 @@ class mount_info
-   bool from_fstab (bool user, WCHAR [], PWCHAR);
-
-   int cygdrive_win32_path (const char *src, char *dst, int& unit);
-+  struct mntent *cygdrive_getmntent ();
- };
-
- class dos_drive_mappings
-@@ -231,11 +232,13 @@ class dos_drive_mappings
-       wchar_t *path;
-       size_t len;
-     } dos;
--  } *mappings;
-+  } *mappings, *cur_mapping;
-+  mapping::dosmount *cur_dos;
-
- public:
-   dos_drive_mappings ();
-   ~dos_drive_mappings ();
-   wchar_t *fixup_if_match (wchar_t *path);
-+  const wchar_t *next_dos_mount ();
- };
- #endif
 diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
-index 4be24fbe84..722dc2aef5 100644
+index 722dc2aef5..b8d8d4a974 100644
 --- a/winsup/cygwin/mount.cc
 +++ b/winsup/cygwin/mount.cc
-@@ -1645,14 +1645,8 @@ fillout_mntent (const char *native_path, const char *posix_path, unsigned flags)
-   struct mntent& ret=_my_tls.locals.mntbuf;
-   bool append_bs = false;
+@@ -1744,7 +1744,6 @@ mount_info::cygdrive_getmntent ()
+   tmp_pathbuf tp;
+   const wchar_t *wide_path;
+   char *win32_path, *posix_path;
+-  int err;
 
--  /* Remove drivenum from list if we see a x: style path */
-   if (strlen (native_path) == 2 && native_path[1] == ':')
--    {
--      int drivenum = cyg_tolower (native_path[0]) - 'a';
--      if (drivenum >= 0 && drivenum <= 31)
--	_my_tls.locals.available_drives &= ~(1 << drivenum);
-       append_bs = true;
--    }
-
-   /* Pass back pointers to mount_table strings reserved for use by
-      getmntent rather than pointers to strings in the internal mount
-@@ -1744,41 +1738,74 @@ mount_item::getmntent ()
-   return fillout_mntent (native_path, posix_path, flags);
- }
-
--static struct mntent *
--cygdrive_getmntent ()
-+struct mntent *
-+mount_info::cygdrive_getmntent ()
- {
--  char native_path[4];
--  char posix_path[CYG_MAX_PATH];
--  DWORD mask = 1, drive = 'a';
--  struct mntent *ret = NULL;
-+  tmp_pathbuf tp;
-+  const wchar_t *wide_path;
-+  char *win32_path, *posix_path;
-+  int err;
-
--  while (_my_tls.locals.available_drives)
-+  if (!_my_tls.locals.drivemappings)
-+    _my_tls.locals.drivemappings = new dos_drive_mappings ();
-+
-+  wide_path = _my_tls.locals.drivemappings->next_dos_mount ();
-+  if (wide_path)
-     {
--      for (/* nothing */; drive <= 'z'; mask <<= 1, drive++)
--	if (_my_tls.locals.available_drives & mask)
--	  break;
-+      win32_path = tp.c_get ();
-+      sys_wcstombs (win32_path, NT_MAX_PATH, wide_path);
-+      posix_path = tp.c_get ();
-+      if ((err = conv_to_posix_path (win32_path, posix_path, 0)))
-+      {
-+	set_errno (err);
-+	return NULL;
-+      }
-
--      __small_sprintf (native_path, "%c:\\", cyg_toupper (drive));
--      if (GetFileAttributes (native_path) == INVALID_FILE_ATTRIBUTES)
-+      return fillout_mntent (win32_path, posix_path, cygdrive_flags);
-+    }
-+  else
-+    {
-+      if (_my_tls.locals.drivemappings)
- 	{
--	  _my_tls.locals.available_drives &= ~mask;
--	  continue;
-+	  delete _my_tls.locals.drivemappings;
-+	  _my_tls.locals.drivemappings = NULL;
- 	}
--      native_path[2] = '\0';
--      __small_sprintf (posix_path, "%s%c", mount_table->cygdrive, drive);
--      ret = fillout_mntent (native_path, posix_path, mount_table->cygdrive_flags);
--      break;
-+      return NULL;
-     }
+   if (!_my_tls.locals.drivemappings)
+     _my_tls.locals.drivemappings = new dos_drive_mappings ();
+@@ -1755,12 +1754,7 @@ mount_info::cygdrive_getmntent ()
+       win32_path = tp.c_get ();
+       sys_wcstombs (win32_path, NT_MAX_PATH, wide_path);
+       posix_path = tp.c_get ();
+-      if ((err = conv_to_posix_path (win32_path, posix_path, 0)))
+-      {
+-	set_errno (err);
+-	return NULL;
+-      }
 -
--  return ret;
- }
-
- struct mntent *
++      cygdrive_posix_path (win32_path, posix_path, 0);
+       return fillout_mntent (win32_path, posix_path, cygdrive_flags);
+     }
+   else
+@@ -1778,34 +1772,8 @@ struct mntent *
  mount_info::getmntent (int x)
  {
    if (x < 0 || x >= nmounts)
--    return cygdrive_getmntent ();
--
-+    {
-+      struct mntent *ret;
-+      /* de-duplicate against explicit mount entries */
-+      while ((ret = cygdrive_getmntent ()))
-+	{
-+	  tmp_pathbuf tp;
-+	  char *backslash_fsname = NULL;
-+	  for (int i = 0; i < nmounts; ++i)
-+	    {
-+	      if (!strcmp (ret->mnt_dir, mount[i].posix_path))
-+		{
-+		  /* mount_item::native_path has backslashes, but
-+		     mntent::mnt_fsname has forward slashes.  Lazily
-+		     backslashify only if mnt_dir equals posix_path. */
-+		  if (!backslash_fsname)
-+		    {
-+		      backslash_fsname = tp.c_get ();
-+		      backslashify (ret->mnt_fsname, backslash_fsname, false);
-+		    }
-+		  if (strcasematch (backslash_fsname, mount[i].native_path))
-+		    goto cygdrive_mntent_continue;
-+		}
-+	    }
-+	  break;
-+cygdrive_mntent_continue:;
-+	}
-+      return ret;
-+    }
+-    {
+-      struct mntent *ret;
+-      /* de-duplicate against explicit mount entries */
+-      while ((ret = cygdrive_getmntent ()))
+-	{
+-	  tmp_pathbuf tp;
+-	  char *backslash_fsname = NULL;
+-	  for (int i = 0; i < nmounts; ++i)
+-	    {
+-	      if (!strcmp (ret->mnt_dir, mount[i].posix_path))
+-		{
+-		  /* mount_item::native_path has backslashes, but
+-		     mntent::mnt_fsname has forward slashes.  Lazily
+-		     backslashify only if mnt_dir equals posix_path. */
+-		  if (!backslash_fsname)
+-		    {
+-		      backslash_fsname = tp.c_get ();
+-		      backslashify (ret->mnt_fsname, backslash_fsname, false);
+-		    }
+-		  if (strcasematch (backslash_fsname, mount[i].native_path))
+-		    goto cygdrive_mntent_continue;
+-		}
+-	    }
+-	  break;
+-cygdrive_mntent_continue:;
+-	}
+-      return ret;
+-    }
++    return cygdrive_getmntent ();
++
    return mount[native_sorted[x]].getmntent ();
  }
 
-@@ -1943,14 +1970,11 @@ extern "C" FILE *
- setmntent (const char *filep, const char *)
- {
-   _my_tls.locals.iteration = 0;
--  _my_tls.locals.available_drives = GetLogicalDrives ();
--  /* Filter floppy drives on A: and B: */
--  if ((_my_tls.locals.available_drives & 1)
--      && get_disk_type (L"A:") == DT_FLOPPY)
--    _my_tls.locals.available_drives &= ~1;
--  if ((_my_tls.locals.available_drives & 2)
--      && get_disk_type (L"B:") == DT_FLOPPY)
--    _my_tls.locals.available_drives &= ~2;
-+  if (_my_tls.locals.drivemappings)
-+    {
-+      delete _my_tls.locals.drivemappings;
-+      _my_tls.locals.drivemappings = NULL;
-+    }
-   return (FILE *) filep;
- }
-
-@@ -1996,6 +2020,8 @@ endmntent (FILE *)
-
- dos_drive_mappings::dos_drive_mappings ()
- : mappings(0)
-+, cur_mapping(0)
-+, cur_dos(0)
- {
-   tmp_pathbuf tp;
-   wchar_t vol[64]; /* Long enough for Volume GUID string */
-@@ -2112,6 +2138,24 @@ dos_drive_mappings::fixup_if_match (wchar_t *path)
-   return path;
- }
-
-+const wchar_t *
-+dos_drive_mappings::next_dos_mount ()
-+{
-+  if (cur_dos)
-+    cur_dos = cur_dos->next;
-+  while (!cur_dos)
-+    {
-+      if (cur_mapping)
-+	cur_mapping = cur_mapping->next;
-+      else
-+	cur_mapping = mappings;
-+      if (!cur_mapping)
-+	return NULL;
-+      cur_dos = &cur_mapping->dos;
-+    }
-+  return cur_dos->path;
-+}
-+
- dos_drive_mappings::~dos_drive_mappings ()
- {
-   mapping *n = 0;
 -- 
 2.47.1.windows.2
 
