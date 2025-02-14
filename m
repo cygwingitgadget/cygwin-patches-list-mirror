@@ -1,90 +1,62 @@
 Return-Path: <SRS0=cBQE=VF=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id E44D33858D38
-	for <cygwin-patches@cygwin.com>; Fri, 14 Feb 2025 00:23:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E44D33858D38
+	by sourceware.org (Postfix) with ESMTPS id 58BE73858C32
+	for <cygwin-patches@cygwin.com>; Fri, 14 Feb 2025 00:27:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 58BE73858C32
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E44D33858D38
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 58BE73858C32
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739492618; cv=none;
-	b=QvBT7qKHySg3SKXJBy6fvyAcW7XtxikRcKlo5umHi16G3KABTmz5GBsCfA+Ol7T5LYz8ChGJLrvajp7oVLF1p1KZMHYOMjkXK2LBcH9kD0J9r4oXfccu2uvlx6FyjdJylR+3KL1YKXH7YD+3uUtq4QEPxwsoBotfQ6AMmEjnaGo=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739492860; cv=none;
+	b=tQ7a1TlXRFhx4nd/ooiV7K2kucsYQU0sIbBRgs4YSwWvq3wZQ0b2sM4b7Ow6IC5CVOo4YWgukicl1X1ZVLX3zfLikqJIkwKiHBMZpNblwSVL3fIroRGLxbtBbur7WKNAFx9ybnzCZXy3fOd6CAa42unYXQI5a7OPLsU4KmMqLPg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1739492618; c=relaxed/simple;
-	bh=DfJqjA5qNNZJ6AuhHtq7qTiWuE6TvD6/diLJZ41l3uo=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=MMljfIZbleZ8ZC64m36rQx7RIOioXJiHlpLfoXYtaJHEim5+Y18MtpkRP1Ixc+2LWqrGaDW6HQgBqBBrPwT23WqIYbxky5wHIBGvS9BStR6i0q0cK6pOJBGD3mGww91uf3xZjLF36wVhkMjvMBbaRaMWXdiEejvZqr88cxkQaF0=
+	t=1739492860; c=relaxed/simple;
+	bh=WbARDVB03F4pYva/CgS8ToFDtpibj07JWJisg/YGMz0=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=BGaSJCNiovNcqHAQVS0WO+yoV/Sv1MD2sxNKmDX2+BaM5QdaFPwmhHretB3Zh5Ofwr0N3iAj+y0x6SQIQ6LP9kLqWRXIB98va9anb6rrfOPMkCay9Maf0RWRGUNa2onWlhxJUSSWfQfWeNF6Tn9vb3Ss344Ggk1pMtJrJITHFf0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E44D33858D38
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 58BE73858C32
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=H+1xrTO+
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=ckeYPHvX
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 8725345B2C
-	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 19:23:37 -0500 (EST)
+	by mail231.csoft.net (Postfix) with ESMTP id 2C74D45B2C
+	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 19:27:40 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=vLglr
-	PALRwkxwjE2WluQKBSV7Fw=; b=H+1xrTO+aWCPULf2G0C5k4O0eEUnoD0amel/N
-	h5mKnNtFFAhb5rpHCDVfi/7Xqa+zWsgD7LgCXQDjjYZ9S039Lvgfl//LUwQ1azGf
-	PwFZ1oqoEN1arVUTzaDnJW7ReGwcZDL+46/QEniKYkpGGdn+BYYBEw0umzgnjB/U
-	ym/2bw=
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=kjQwWuHIfRojLE1e/cJ/ooDz+bk=; b=ckeYP
+	HvXHT/U1CSD1z/N22NTa2Xe3EtJu0AC72h+C4uU9c5auoVEy8CArQREtsTNueymz
+	+7UaJeI+p+0UUe6i4bEVD8d6bVrc0vkjPNfERpjoc5BQFsbu/Atw1dEfOFo86Xaz
+	iznEaARVZAkf572Zr13iFn2d7xb5Q7G5WNe3bw=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2CA8645AFB
-	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 19:23:37 -0500 (EST)
-Date: Thu, 13 Feb 2025 16:23:36 -0800 (PST)
+	by mail231.csoft.net (Postfix) with ESMTPSA id EF07245AFB
+	for <cygwin-patches@cygwin.com>; Thu, 13 Feb 2025 19:27:39 -0500 (EST)
+Date: Thu, 13 Feb 2025 16:27:39 -0800 (PST)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: 3.6.0: add release entries for my patches.
-Message-ID: <88cff69f-e6df-2aa7-cb00-e86ddb10796d@jdrake.com>
+Subject: Re: [PATCH v3 2/2] Cygwin: expose all windows volume mount points.
+In-Reply-To: <Z65EIr3quZyhFWRu@calimero.vinschen.de>
+Message-ID: <36cb1004-0f77-2676-c948-c5dd81bae7a6@jdrake.com>
+References: <4f314ab3-8406-0a5c-2cc5-9f2f0af9df50@jdrake.com> <Z60QiLIEAvDzSs5k@calimero.vinschen.de> <9fd9ec5e-f9a5-d510-2792-3e0ca24e3f11@jdrake.com> <522175b6-08ed-9929-3705-aaadf30283ff@jdrake.com> <ed1a01aa-8908-47a2-70e2-b955c65962c0@jdrake.com>
+ <Z63-eTxbCyo65Jlj@calimero.vinschen.de> <Z64Cm3wHdcgw__6U@calimero.vinschen.de> <1ad8846b-2a13-b0d4-f70f-e1413bc48fcb@jdrake.com> <Z65EIr3quZyhFWRu@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-These are:
-  04a5b07294 Cygwin: expose all windows volume mount points.
-  0d113da235 Cygwin: /proc/<PID>/mount*: escape strings.
-  7923059bff Cygwin: uname: add host machine tag to sysname.
-  b091b47b9e cygthread: suspend thread before terminating.
+On Thu, 13 Feb 2025, Corinna Vinschen wrote:
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
- winsup/cygwin/release/3.6.0 | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+> The new behaviour makes more sense, actually.
+>
+> Pushed!
+>
+> Would you mind to send a patch with a release message we can add
+> to release/3.6.0?
 
-diff --git a/winsup/cygwin/release/3.6.0 b/winsup/cygwin/release/3.6.0
-index e193a20c03..5869d7ffc8 100644
---- a/winsup/cygwin/release/3.6.0
-+++ b/winsup/cygwin/release/3.6.0
-@@ -91,3 +91,24 @@ What changed:
-   MAP_SHARED/MAP_PRIVATE flags agree and MAP_NORESERVE is not set for
-   either mapping.
-   Addresses: https://cygwin.com/pipermail/cygwin/2024-December/256901.html
-+
-+- Fix a long-standing hang issue when running on ARM64 under emulation.
-+  This was due to a thread being terminated while the emulation was
-+  holding an internal lock.
-+  Addresses: https://cygwin.com/pipermail/cygwin-developers/2024-May/012694.html
-+
-+- Add a host machine tag to uname(2)'s sysname field.  This echoes what
-+  used to be done with -WOW64 (when that was supported), but now with
-+  -ARM64 when running on an ARM64 host under emulation.  The Cygwin DLL's
-+  own architecture continues to be reported in the machine field.
-+
-+- Escape special characters in /proc/<PID>/mount*.  This allows the
-+  contents to be parsed consistently, and matches what is done on Linux.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-June/256082.html
-+
-+- Expose all Windows volume mount points via getmntent(3).  This also
-+  exposes them via /proc/<PID>/mount*.  A change in behavior from
-+  previous Cygwin versions is that volumes whose root is mounted
-+  explicitly in Cygwin will now also show up as mounted under the
-+  cygdrive prefix, whereas before that entry would have been suppressed.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2024-June/256081.html
--- 
-2.48.1.windows.1
 
+Sent.  I also documented my other patches that only seem to be on the
+master branch (ie, not backported to 3.5).
