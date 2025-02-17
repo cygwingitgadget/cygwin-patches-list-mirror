@@ -1,55 +1,47 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id DF3063858C50; Mon, 17 Feb 2025 10:08:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DF3063858C50
+	id 604233858D21; Mon, 17 Feb 2025 10:22:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 604233858D21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1739786898;
-	bh=ZuNcUcFMUNawiYH+cqnr6dXmEq+i8+56DsMEfLMqPAA=;
+	s=default; t=1739787722;
+	bh=o2GylwFBlJt06BsNufKyHsb9SeIPhaK9Nv6bHksWLYM=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=q2P37SJljOOjcxxJH5VyrjARvxbowXyjXwDhPH4VCNqGf+ozsfgXp7Ff7JlMougtE
-	 kPhe+3WBY/tY1F1tV4H4qgmzOWpkF/2F1dWkbF95a+eRk1SozhjiuYSFfMHc0J7nSK
-	 0kKDuJlXii4yDO4cvCUwOhm/2bd/+zapox15cJzs=
+	b=OnlP3dtpU40qMK5Myvq/EI8Ej6ywK90yLDxWU4oIzt5MZ2I4E0ntOiLA63JcqoGWL
+	 0azdJW1MzaLeyGqSkB35WMIeDU13sDItCjOAIkAM4VvDcyPCEYr+QhhmFvGotxP8ue
+	 2t+7XvfaxK2EeIaWqePUNdhflxobtOOGsGef8t3U=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id D96AEA817D5; Mon, 17 Feb 2025 11:08:16 +0100 (CET)
-Date: Mon, 17 Feb 2025 11:08:16 +0100
+	id 5B49EA817D5; Mon, 17 Feb 2025 11:22:00 +0100 (CET)
+Date: Mon, 17 Feb 2025 11:22:00 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin@cygwin.com, cygwin-patches@cygwin.com
-Subject: Re: WinAPI spawn() not used by Cygwin posix_spawn()? Re: [PATCH]
- Cygwin: Add spawn family of functions to docs
-Message-ID: <Z7MKkIbgMh0C5snl@calimero.vinschen.de>
-Reply-To: cygwin@cygwin.com
-Mail-Followup-To: cygwin@cygwin.com, cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: Add spawn family of functions to docs
+Message-ID: <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20250216214657.2303-1-mark@maxrnd.com>
- <CAPJSo4VH0MufLhpgPiD1GV1gFsbTLdtOKrP82eaA_Yv_DHPXEQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAPJSo4VH0MufLhpgPiD1GV1gFsbTLdtOKrP82eaA_Yv_DHPXEQ@mail.gmail.com>
+In-Reply-To: <20250216214657.2303-1-mark@maxrnd.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 16 23:33, Lionel Cons via Cygwin wrote:
-> On Sun, 16 Feb 2025 at 22:47, Mark Geisert <mark@maxrnd.com> wrote:
-> >
-> > In the doc tree, change the title of section "Other UNIX system
-> > interfaces..." to "Other system interfaces...".  Add the spawn family of
-> > functions noting their origin as Windows.
+On Feb 16 13:46, Mark Geisert wrote:
+> In the doc tree, change the title of section "Other UNIX system
+> interfaces..." to "Other system interfaces...".  Add the spawn family of
+> functions noting their origin as Windows.
 > 
-> re spawn() family: Cygwin posix_spawn() seems to rely on the rather
-> inefficient vfork(), while Opengroup intended it to be an API to
-> Windows spawn().
+> The title change seems warranted as neither the spawn family of
+> functions nor the listed clock_setres() function originated from UNIX
+> systems.
 > 
-> Is there a technical limitation why Cygwin posix_spawn() cannot use
-> WinAPI spawn() directly?
+> ---
+>  winsup/doc/posix.xml | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 
-The requirements of posix_spawn and their helper functions are so
-that we can't easily fulfill them without doing the fork/exec
-twist.
-
-See https://man7.org/linux/man-pages/man3/posix_spawn.3.html.
-Windows CreateProcess() is not quite the same as Linux clone().
-
-However, if you think you can come up with a version only running the
-spawnve function and thus speed up Cygwin, feel free to send patches.
+Yeah, this is probably the right thing to do.  I'm jsut waiting
+for Brian in terms of the POSIX doc update.  That's why I wait with
+the eaccess and acl functions as well.
 
 
+Thanks,
 Corinna
