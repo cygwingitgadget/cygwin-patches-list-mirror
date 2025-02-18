@@ -1,106 +1,174 @@
-Return-Path: <SRS0=ONb7=VI=gmail.com=lionelcons1972@sourceware.org>
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-	by sourceware.org (Postfix) with ESMTPS id 8C4B73858C78;
-	Mon, 17 Feb 2025 18:07:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8C4B73858C78
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8C4B73858C78
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::635
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739815641; cv=none;
-	b=Q2uyzUBdaDuvYCZuQ5i/lMyVDzUh4FAlVFaW46obgzGkpH+M5sS1zn9068MqsKwdHp6/0g3/NAviVfV/OTVisdjfgYc01Fb5EhLbUr4yc13QRazqlAb7EtiYx6R63ddTmFonGpCks1/6rUWGh7rJsj/+FFxfE1WdNMqpHkp28f8=
+Return-Path: <SRS0=Z4hW=VJ=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 5E2813858D20
+	for <cygwin-patches@cygwin.com>; Tue, 18 Feb 2025 18:38:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5E2813858D20
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5E2813858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1739903932; cv=none;
+	b=mBQF5qRqkATzHO/CYJbEx3s2QCZe7MlQZQ0znOPxNSHXB9uq1BM9PGKoEyTXJVaI2ipbeg5xEYeaYatIoriRGDocWBOlNl3E9JMGIyNs22cfH8ZDgt79jYBHYhgb2YYcUio1pdvDRljeFDvUCeXObji5xbMEgkyc6l/7vzAYoWM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1739815641; c=relaxed/simple;
-	bh=T4S7HygrCkMrwflmiT0vqqBkier8J1a1B7roEUoY1tI=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=U1bsQHHUg8t08qSx3RbAOD9LxZdIZK72E+1T1QxydIO/ZBO+SbYIZ8WgfShcpy0FYRblRPdkTSI33wJGK3cgv8RQw3xwbSBgn4JXc4P7vByKRGN5oMT3w8D4Qcx9aleOyqH/CGEBtKW6/WNcdOOQfwemU44Xo66CUz4a1b1QlnA=
+	t=1739903932; c=relaxed/simple;
+	bh=HfMMppOuVmxlZ4wks4rakyIdwG83wVCnDgxcGnO2q+A=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=koNb6og4qYc59CnrFBynqYZT5iq+1XacwC7Ascf05kk2SmpXw6fFmcZZ385nOo2EiVMA7B5FgbwuZfY2bNQnKTAioTqXU+0GI1haInhzxcMs3kr7TC3YlcDd1tNT4XK/+UttYenYSrAO7GxY6JHAHYz4BojO6FIuR3z6AfNroDQ=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8C4B73858C78
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5E2813858D20
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=OzBowoTU
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-abbac134a19so112925266b.0;
-        Mon, 17 Feb 2025 10:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739815640; x=1740420440; darn=cygwin.com;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k35Do8WCZAMLoa/h4EbievV16HfR92e6HRbOPq5LVAg=;
-        b=OzBowoTU4QjEJLvUt5rlyT1T/FTqakmXVQyvMZI4Ph0vgumJUr73JbLSSkFmr8N//B
-         8Bzo+h8q1UE6j+Eo+wF+aRKEaqZX5EG4EBbbV1gPZu4d4EqTBy02Gr2ykE1cRX0v2WxG
-         LFC4rzwzF8u3+TEDjViZGhdgMnCAgLQnyh8HlQv2Ein8OmSB+XSuM6NrKyAuCVKYjhCb
-         UF9YTNl053KSQ9VNjpHbaWZ6oNX9jgMRRenqQDMj0Q/8JlV5+TYJ5J3ZJ0AT7QMpATxS
-         prWXAuyPfDnkIQXaqmB2ndbAVn7BtsxlmisSGTMFz9DEYnNsgYnlVkO8ojl5cifuwo+V
-         2diw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739815640; x=1740420440;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k35Do8WCZAMLoa/h4EbievV16HfR92e6HRbOPq5LVAg=;
-        b=U4/8JX7NYfod+9p0ukCvY744dDXqoShriYYw9BLJXntxJK++l1etzN1kgbuhcP37rS
-         MI0OyeaznFSYzB1grLE4bWDyRL77jZjr8goubxkeKxSUuoF0MKbFkcUPk0DYymqI6SaH
-         Z6sZnj2CAqjhhc/GORnxO+t4A6TezI46x/BFpPkdlZsmfvthamTRk8GdPacJQXgMwYt+
-         fmw/zWd4IPKXXh353Ztz2hHgvNtdQDRGrAQhod4QZw1P8OUJP3TcDOMgAjdcyH0vXjYb
-         Kf/DDH3nuzmaW1iU329EDcSgcWrCDR2JYcneelWGQNdjQ7aGPs3Qwtz2luQ/MnG6D3EN
-         4ULg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVBN9eiXyJpOMOTUUhReZ9ctmDS2YGoIrj96Wv7Qaj0Yer5jaEmdSSQiQ6KN7O2GRowL0+797T0xJA1gM1mQ==@cygwin.com
-X-Gm-Message-State: AOJu0YxXsRvjVbitM36WMeE5OhUBlSlmltznac+bIAUNZem4jLvMZg6H
-	6Vi7fKK2ZxkEpfmifQhrC+qXOWcJHBDvZhjCPqNQDpN+gRzmtwlBI7wGxo2DV4YpPiEOqlv+WuQ
-	yiho0OknOtubyd6JOWtAa7fi8GUOgVw==
-X-Gm-Gg: ASbGncv24sUlSm5/Wtf9MzAPZXRexeaJVxdiB4Few3ZItfYZ4x5Pzytgc7ibVdwI1fY
-	1+FZ9TlITqLN3Oh5C4b9GV7v2j4sm7h8Jz4jf+s3ZkKst619iawlMv0BDrA3x9Ri4379Vw7VU
-X-Google-Smtp-Source: AGHT+IHZcST/iKMnz4RmN9Ne9FGTrSSD97Q+AA7/PtOEF4rcWWuPebqLwGcC5356O4fXMe4OrAvCg7/PgCtdyR8+rDc=
-X-Received: by 2002:a17:907:7f27:b0:ab6:53fb:9683 with SMTP id
- a640c23a62f3a-abb711c3735mr1038431566b.54.1739815639576; Mon, 17 Feb 2025
- 10:07:19 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=ycjXzpZy
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 07D6C45C30
+	for <cygwin-patches@cygwin.com>; Tue, 18 Feb 2025 13:38:52 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:message-id:mime-version:content-type; s=csoft; bh=5uSl1
+	WNODyS6yQTizKvlAwdj7vM=; b=ycjXzpZyLes6xyHHtIEPrGsL7GKp8ty9swHhe
+	8bSr0nEUBHwFHELnNyZyIlLoLZSA2IlG/iOe0a/akfKb2drRdiZVd1daxJywbOSb
+	VTyeFTlmID5+vp5uABEQz0dtqbpexBC1VtD9yXJF2EtnqXZazp1Y9xVDUEUUM4o4
+	NHK4+Q=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id CFB8845BF6
+	for <cygwin-patches@cygwin.com>; Tue, 18 Feb 2025 13:38:51 -0500 (EST)
+Date: Tue, 18 Feb 2025 10:38:51 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: skip floppy drives in cygdrive_getmntent.
+Message-ID: <df854454-c96e-8fe0-ead7-c70c566ec1d3@jdrake.com>
 MIME-Version: 1.0
-References: <20250216214657.2303-1-mark@maxrnd.com> <CAPJSo4VH0MufLhpgPiD1GV1gFsbTLdtOKrP82eaA_Yv_DHPXEQ@mail.gmail.com>
- <Z7MKkIbgMh0C5snl@calimero.vinschen.de>
-In-Reply-To: <Z7MKkIbgMh0C5snl@calimero.vinschen.de>
-From: Lionel Cons <lionelcons1972@gmail.com>
-Date: Mon, 17 Feb 2025 19:06:42 +0100
-X-Gm-Features: AWEUYZkkLpRHNpFHufcoeKppJWs_H_YYymAWRvb0lleodt_tJj0FCZM8udDHXsw
-Message-ID: <CAPJSo4WedM5V8uJD=j-XG6Rxueof2Wph6vUncqwa7XrX_iSkow@mail.gmail.com>
-Subject: Re: WinAPI spawn() not used by Cygwin posix_spawn()? Re: [PATCH]
- Cygwin: Add spawn family of functions to docs
-To: cygwin@cygwin.com, cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,KAM_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 17 Feb 2025 at 11:08, Corinna Vinschen via Cygwin
-<cygwin@cygwin.com> wrote:
->
-> On Feb 16 23:33, Lionel Cons via Cygwin wrote:
-> > On Sun, 16 Feb 2025 at 22:47, Mark Geisert <mark@maxrnd.com> wrote:
-> > >
-> > > In the doc tree, change the title of section "Other UNIX system
-> > > interfaces..." to "Other system interfaces...".  Add the spawn family of
-> > > functions noting their origin as Windows.
-> >
-> > re spawn() family: Cygwin posix_spawn() seems to rely on the rather
-> > inefficient vfork(), while Opengroup intended it to be an API to
-> > Windows spawn().
-> >
-> > Is there a technical limitation why Cygwin posix_spawn() cannot use
-> > WinAPI spawn() directly?
->
-> The requirements of posix_spawn and their helper functions are so
-> that we can't easily fulfill them without doing the fork/exec
-> twist.
+This was previously done, but was lost when the function was updated to
+list all Windows mount points, not just drive letters.
 
-How did UWIN do that? I did ask around - Glenn Fowler of AT&T Research
-demonstrated a prototype of UWIN posix_spawn() before posix_spawn()
-was finalised by the Austin Group as Opengroup POSIX standard. So this
-IS possible, and because non fork() or page cloning has to be done it
-should be significantly faster than the
-fork()-and-throw-copied-data-away-at-exec() approach.
+Fixes: 04a5b072940cc ("Cygwin: expose all windows volume mount points.")
+Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+---
 
-> See https://man7.org/linux/man-pages/man3/posix_spawn.3.html.> Windows CreateProcess() is not quite the same as Linux clone().
+I finally got a chance to test on a machine that still has a physical
+floppy drive, and running "mount" resulted in the annoying
+floppy-drive-spinup sound.  I changed next_dos_mount () to return both the
+device and mount point, and used the existing logic from get_disk_type
+without the extra call to QueryDosDeviceW.  This same function could be
+used by https://cygwin.com/pipermail/cygwin-patches/2023q3/012436.html if
+that ever comes up again.
 
-Here might be the misunderstanding:
-posix_spawn() is intended NOT to copy anything except the file
-descriptors and requested attributes, no memory pages and no
-whatsoever. Everything should be done on the caller's process side,
-nothing in the child process.
+ winsup/cygwin/local_includes/mount.h |  8 ++++++-
+ winsup/cygwin/mount.cc               | 31 ++++++++++++++++++----------
+ 2 files changed, 27 insertions(+), 12 deletions(-)
 
-Lionel
+diff --git a/winsup/cygwin/local_includes/mount.h b/winsup/cygwin/local_includes/mount.h
+index 3049de8ba3..2ae67a7035 100644
+--- a/winsup/cygwin/local_includes/mount.h
++++ b/winsup/cygwin/local_includes/mount.h
+@@ -23,6 +23,7 @@ enum disk_type
+   DT_SHARE_NFS
+ };
+
++disk_type get_device_type (LPCWSTR);
+ disk_type get_disk_type (LPCWSTR);
+
+ /* Don't add new fs types without adding them to fs_names in mount.cc!
+@@ -239,6 +240,11 @@ public:
+   dos_drive_mappings ();
+   ~dos_drive_mappings ();
+   wchar_t *fixup_if_match (wchar_t *path);
+-  const wchar_t *next_dos_mount ();
++  struct dos_device_mountpoint
++  {
++    const wchar_t *device;
++    const wchar_t *mountpoint;
++  };
++  dos_device_mountpoint next_dos_mount ();
+ };
+ #endif
+diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
+index b8d8d4a974..a3d9e5bd0f 100644
+--- a/winsup/cygwin/mount.cc
++++ b/winsup/cygwin/mount.cc
+@@ -1742,17 +1742,19 @@ struct mntent *
+ mount_info::cygdrive_getmntent ()
+ {
+   tmp_pathbuf tp;
+-  const wchar_t *wide_path;
++  dos_drive_mappings::dos_device_mountpoint dos_mount;
+   char *win32_path, *posix_path;
+
+   if (!_my_tls.locals.drivemappings)
+     _my_tls.locals.drivemappings = new dos_drive_mappings ();
+
+-  wide_path = _my_tls.locals.drivemappings->next_dos_mount ();
+-  if (wide_path)
++  dos_mount = _my_tls.locals.drivemappings->next_dos_mount ();
++  while (dos_mount.device && get_device_type (dos_mount.device) == DT_FLOPPY)
++    dos_mount = _my_tls.locals.drivemappings->next_dos_mount ();
++  if (dos_mount.mountpoint)
+     {
+       win32_path = tp.c_get ();
+-      sys_wcstombs (win32_path, NT_MAX_PATH, wide_path);
++      sys_wcstombs (win32_path, NT_MAX_PATH, dos_mount.mountpoint);
+       posix_path = tp.c_get ();
+       cygdrive_posix_path (win32_path, posix_path, 0);
+       return fillout_mntent (win32_path, posix_path, cygdrive_flags);
+@@ -1899,11 +1901,9 @@ cygwin_umount (const char *path, unsigned flags)
+ #define is_dev(d,s)	wcsncmp((d),(s),sizeof(s) - 1)
+
+ disk_type
+-get_disk_type (LPCWSTR dos)
++get_device_type (LPCWSTR dev)
+ {
+-  WCHAR dev[MAX_PATH], *d = dev;
+-  if (!QueryDosDeviceW (dos, dev, MAX_PATH))
+-    return DT_NODISK;
++  const WCHAR *d = dev;
+   if (is_dev (dev, L"\\Device\\"))
+     {
+       d += 8;
+@@ -1934,6 +1934,15 @@ get_disk_type (LPCWSTR dos)
+   return DT_NODISK;
+ }
+
++disk_type
++get_disk_type (LPCWSTR dos)
++{
++  WCHAR dev[MAX_PATH];
++  if (!QueryDosDeviceW (dos, dev, MAX_PATH))
++    return DT_NODISK;
++  return get_device_type (dev);
++}
++
+ extern "C" FILE *
+ setmntent (const char *filep, const char *)
+ {
+@@ -2106,7 +2115,7 @@ dos_drive_mappings::fixup_if_match (wchar_t *path)
+   return path;
+ }
+
+-const wchar_t *
++dos_drive_mappings::dos_device_mountpoint
+ dos_drive_mappings::next_dos_mount ()
+ {
+   if (cur_dos)
+@@ -2118,10 +2127,10 @@ dos_drive_mappings::next_dos_mount ()
+       else
+ 	cur_mapping = mappings;
+       if (!cur_mapping)
+-	return NULL;
++	return {NULL, NULL};
+       cur_dos = &cur_mapping->dos;
+     }
+-  return cur_dos->path;
++  return {cur_mapping->ntdevpath, cur_dos->path};
+ }
+
+ dos_drive_mappings::~dos_drive_mappings ()
+-- 
+2.48.1.windows.1
+
