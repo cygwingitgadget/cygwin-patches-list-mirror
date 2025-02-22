@@ -1,54 +1,60 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id EEDDF3858D20; Fri, 21 Feb 2025 19:51:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EEDDF3858D20
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1740167495;
-	bh=ygn0cbnophV+o6+MgjAHrYXtc34++Whwo+A0mb4ks3w=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=iiXL2kPrH465ov03GHg6RNE0a2Q67asgpdp7uxgDoa0cxMU6uV2Ayt9a/xLXxS7/f
-	 UcpLMDxt3dLuy1yf3GtXI464CZo2lL/L03Mf2cbYwtnsQCA0bgX8auLvcCE/D2iMCA
-	 9PeZtvax9lDeJxCYBLi8+facX+VEmx6CRYueawxw=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 92FBBA80C03; Fri, 21 Feb 2025 20:51:26 +0100 (CET)
-Date: Fri, 21 Feb 2025 20:51:26 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: sched_setscheduler: Fix crash if pid of other
- process is used
-Message-ID: <Z7jZPtYFgUa6uqMn@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <afe4a843-643e-1254-e1f2-795d3b52c3ac@t-online.de>
+Return-Path: <SRS0=Yd2F=VN=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+	by sourceware.org (Postfix) with ESMTPS id 100B93858D20
+	for <cygwin-patches@cygwin.com>; Sat, 22 Feb 2025 17:49:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 100B93858D20
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 100B93858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740246540; cv=none;
+	b=iuiFjObghBbKZPltwVSxDVmEimb/wksX0ShLMXR8HAB3T3sBHRWKyMQcf0IxnHmwqQY7FWPgW9JT1dgFIdEYq+ey7U6eUm6CJFVGfiHXWE31vjobdqNYeDl1BDMigO4sgeK1wdFD+DTw5GWugWJTMHJzUlArD9jo1W4eb2ly4LQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1740246540; c=relaxed/simple;
+	bh=2Yrokge3xjrXwtAzP72p72cMSzhDiHqH6dYBeZcYTOQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=SKwmzkGi21Orlykwfmz412mzvUKXHd7DGTJZ7Kc5ILFxJq6tnf+kI6n2yena4wjrkxjx0kkkdIacVZJtRONqMkT3j4MQ7LjxP3CBVUm9kPlZ/L6yygD9uVHaDeOLTqWnyQV+tXeAt3f4Rxfq9WZI795q8pkx7dfkaG10O97my6o=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 100B93858D20
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=szQNI77W
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 744D05187D;
+	Sat, 22 Feb 2025 17:48:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf16.hostedemail.com (Postfix) with ESMTPA id 28BDF20013;
+	Sat, 22 Feb 2025 17:48:58 +0000 (UTC)
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com (Cygwin Patches)
+Subject: [PATCH v8 0/5] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 TOG Issue 8 ISO 9945 updates
+Date: Sat, 22 Feb 2025 10:48:17 -0700
+Message-ID: <cover.1740246116.git.Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <afe4a843-643e-1254-e1f2-795d3b52c3ac@t-online.de>
+Organization: Systematic Software
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 28BDF20013
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: f8bp1m93gpou5m9i1enjdyzdqxyy49gq
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX18otd5OGfP863D7AKPdt4LY/xql9t/TUxc=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-transfer-encoding; s=he; bh=6A6rD0bKt8YwBc0hKqZ/VRfBpTuiw5xxXwq7AnTI0CY=; b=szQNI77WoiyJ2NmlRs10MyFrHQNigdoZZ5Gr6kinoIKYWQzg3J3TP2Ur5E7y8gKkhMHB03ZeodWNWTpXhRUEpN3eKNd5UR88rwE6UB+ZSQjyaACTAlNN9jMTOzl3IPyYoSP9R4SssScVMs7YaTpDN38Hi4qhm8yqWgcq2RMAUMkI3drrUvkRPuhLZgnVyMdaiVzVSYAlvSUxsrWsTU0qB5UEhD6gh4vP5fVWEH4pGrcUte1zTz3DsgxnT+jLbk0hW3ZSkgmoWmbcVmH6A/TSKm/5Y8ckJUp95NhwoJK0yUVwMSqF9CtN9O0llBDBemR7h0PUbVa7K+SEE35dZwWQTA==
+X-HE-Tag: 1740246538-10520
+X-HE-Meta: U2FsdGVkX191iYE+ET9C6q5FJrj2QWA4p9WLOSF5O1damouxBdZsuEvWazOrRiaDbNm0pbm2bCzfBTxkFDDXtsebsUvXR4nmBI/LEeo/vPI0OZDDDCiVPnL+8OtmJcgrQ1xoeVepkxNFJn6YpWCleeXMmjKA62ZLeFrh27fys0lrHF6wHdaQjlaUFU8xwv+lY2+6Bih/wyXqhYqHvpzDzRRk4lGj4kbBogbAgSDdKhM7D8xPJ0jUp9Nxic8ViC5/G+4WYNnCWzrEY/70+KKYuA==
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 21 17:32, Christian Franke wrote:
-> Obviously my testcases for the SCHED_* enhancement were incomplete, sorry.
-> 
-> -- 
-> Regards,
-> Christian
-> 
+Missed title update squeezed into last patch.
 
-> From a9e48b5d738c2a683826ab220155778f0f57f003 Mon Sep 17 00:00:00 2001
-> From: Christian Franke <christian.franke@t-online.de>
-> Date: Fri, 21 Feb 2025 17:25:51 +0100
-> Subject: [PATCH] Cygwin: sched_setscheduler: Fix crash if pid of other process
->  is used
-> 
-> Add missing PID_MAP_RW to allow changes of _pinfo::sched_policy.
-> 
-> Fixes: 48b189245a13 ("Cygwin: sched_setscheduler: accept SCHED_OTHER, SCHED_FIFO and SCHED_RR")
-> Signed-off-by: Christian Franke <christian.franke@t-online.de>
-> ---
->  winsup/cygwin/sched.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Brian Inglis (5):
+  Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 TOG Issue 8 ISO 9945 move new POSIX
+  Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 new additions available
+  Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 not implemented new additions
+  Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 move or remove dropped entries
+  Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 combine multiple notes
 
-Pushed.
+ winsup/doc/posix.xml | 297 +++++++++++++++++++++++++++----------------
+ 1 file changed, 186 insertions(+), 111 deletions(-)
 
-Thanks,
-Corinna
+-- 
+2.45.1
+
