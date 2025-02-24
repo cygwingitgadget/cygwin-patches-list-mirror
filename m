@@ -1,57 +1,55 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 713AA3858D26; Mon, 24 Feb 2025 11:45:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 713AA3858D26
+	id B6C533858D26; Mon, 24 Feb 2025 11:58:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B6C533858D26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1740397553;
-	bh=MDlJ4JrQcFOBNgg8DO+xkPs6SxP3To1eon46sp0HM+k=;
+	s=default; t=1740398299;
+	bh=oMD1NLQQkQX+u1zVKUoAdnsoKN5WaBokm1aMCRvAUWw=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=VnfONd8I9cKa1y9ntXFLNd6QB3fTvtuya3aAlWq2KxPeEXe+oJT52fbEFi0vRqjtx
-	 YW4V8T6QGDTQmhHIMzbW2Hvd+n2zaU6+hAmqrQusdJRVPUuRSQ3nGPDTEr9x9zM0GC
-	 SXb/nnaEvDQEduhLnqeyMQEzzjhgJPKrc4XXPLRE=
+	b=icjwZzYdRHxXEi+N3jJ96WO+2LTwOXmgkhH92LPaLYqF1yLsKDx0hPLrApmlgKz/7
+	 jgzageeAvYpKZhokNpkA5WmhqD73AD2o+7Oz1fdUhDKtkoPPZYo/u8jVg5v0vsMtGD
+	 UmIVQRyaW9AWr4HGbtN7QTzvokGxjNCO+A5moxns=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6F478A80610; Mon, 24 Feb 2025 12:45:51 +0100 (CET)
-Date: Mon, 24 Feb 2025 12:45:51 +0100
+	id B23C3A8052B; Mon, 24 Feb 2025 12:58:17 +0100 (CET)
+Date: Mon, 24 Feb 2025 12:58:17 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v7 0/5] Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024
- TOG Issue 8 ISO 9945 updates
-Message-ID: <Z7xb74lbu0tHVfoT@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Add spawn family of functions to docs
+Message-ID: <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <cover.1737132501.git.Brian.Inglis@SystematicSW.ab.ca>
- <Z7BsdyPyN1sM6SpV@calimero.vinschen.de>
+References: <20250216214657.2303-1-mark@maxrnd.com>
+ <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z7BsdyPyN1sM6SpV@calimero.vinschen.de>
+In-Reply-To: <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 15 11:29, Corinna Vinschen wrote:
-> Hi Brian,
+On Feb 17 11:22, Corinna Vinschen wrote:
+> On Feb 16 13:46, Mark Geisert wrote:
+> > In the doc tree, change the title of section "Other UNIX system
+> > interfaces..." to "Other system interfaces...".  Add the spawn family of
+> > functions noting their origin as Windows.
+> > 
+> > The title change seems warranted as neither the spawn family of
+> > functions nor the listed clock_setres() function originated from UNIX
+> > systems.
+> > 
+> > ---
+> >  winsup/doc/posix.xml | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> On Jan 17 10:01, Brian Inglis wrote:
-> > Please note some changes are displaced due to rebase conflicts.
-> > 
-> > Brian Inglis (5):
-> >   Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 TOG Issue 8 ISO 9945 move new
-> >   Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 new additions available
-> >   Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 not implemented new additions
-> >   Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 move or remove dropped entries
-> >   Cygwin: winsup/doc/posix.xml: SUS V5 POSIX 2024 combine multiple notes
-> > 
-> >  winsup/doc/posix.xml | 285 ++++++++++++++++++++++++++++---------------
-> >  1 file changed, 184 insertions(+), 101 deletions(-)
-> > 
-> > -- 
-> > 2.45.1
-> 
-> since we're going 3.6 (hopefully) in two weeks, is there a new patchset
-> forthcoming?  From what I can tell, the number of changes compared to v7
-> isn't that big and it might be nice to get this into the repo for the
-> 3.6 docs.  I'm waiting for your stuff before adding POSIX 1.e and eaccess.
+> Yeah, this is probably the right thing to do.  I'm jsut waiting
+> for Brian in terms of the POSIX doc update.  That's why I wait with
+> the eaccess and acl functions as well.
 
-Done. Funny enough eaccess was already documented as BSD.
+Actually, Jon raised some reservations against adding historical
+msvcrt functions to the set of documented POSIX functions on the
+IRC channel.
+
+We also have functions like _get_osfhandle and stuff like that.
+Do we really want them documented in the list of POSIXy functions?
 
 
 Corinna
