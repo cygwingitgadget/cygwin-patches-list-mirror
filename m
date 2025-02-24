@@ -1,140 +1,53 @@
-Return-Path: <SRS0=/mrO=VP=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
-	by sourceware.org (Postfix) with ESMTPS id 4C05B3858D26
-	for <cygwin-patches@cygwin.com>; Mon, 24 Feb 2025 13:42:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4C05B3858D26
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4C05B3858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.18
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740404546; cv=none;
-	b=C+CRfEBJt4q2q97NYNJr1tpPp3siKkOvsHaTdtrUckdG8qwuLOI15nqKde1V37mSae1XZ4kSfFnvwtk/mI9m0XZIV+Fczar4+Auxspc10rsJ2McA1VnGPRGBggI96CeKpk+1YWMgocCZpR5DD7JVdeJ7h0Z0MDVF1TzEXkQCm4I=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1740404546; c=relaxed/simple;
-	bh=koJ8oAqkNqAIFQgyt0eQKK20vhuqqUYLU0NL8g1tlks=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=Nu5ps1TkRjDl1wf0yvE+/X1pIHF2aOKxOD7E6q+eO8j3wtD5JdmSwf6D+9S7uOXkdpnXym7qp8hJwzLwqLPpZBGj7b30tGj8rfFA6zTBjl4CAolWP5yN8RX88FWM4Pfqkh9OK8CgTYxLxQRbBta59E2RHurVJ1dNrVy0l+4pWAg=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4C05B3858D26
-Received: from fwd75.aul.t-online.de (fwd75.aul.t-online.de [10.223.144.101])
-	by mailout04.t-online.de (Postfix) with SMTP id 95CC71A4
-	for <cygwin-patches@cygwin.com>; Mon, 24 Feb 2025 14:42:24 +0100 (CET)
-Received: from [192.168.2.102] ([79.230.164.148]) by fwd75.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1tmYj0-0unQJ60; Mon, 24 Feb 2025 14:42:22 +0100
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 0076A3858D29; Mon, 24 Feb 2025 17:18:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0076A3858D29
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1740417497;
+	bh=gaXUvxSfTDpcBArL4RIDFHsuRs/D9lwgAjcXHl29/H4=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=gTaFK8RlbobsOU6aTCElQBG3G5qkXm8LJOPhh7AjR2hQaBqXxpNUqZ9lkJHxFWvw7
+	 B9Yjd+GVk7RflprEazgprj+02Cn3aAp1hoFPWp/7zDh8kNan2aS+2sLX11Ft1zpBwo
+	 Ej7pY9nSlGRTfiSTifzYoHUtE/OD1/uUgkJLMcf8=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 97C37A80708; Mon, 24 Feb 2025 18:17:24 +0100 (CET)
+Date: Mon, 24 Feb 2025 18:17:24 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: FAQ: Add section about sparse files
+Message-ID: <Z7yppFXA8ZELYS_U@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: FAQ: Add section about sparse files
-Message-ID: <34c24623-845e-b765-2061-c896715000e8@t-online.de>
-Date: Mon, 24 Feb 2025 14:42:22 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <34c24623-845e-b765-2061-c896715000e8@t-online.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------2E7FC46A32ABA2C0A72D91FE"
-X-TOI-EXPURGATEID: 150726::1740404542-9F7FC5A1-D2B65EF7/0/0 CLEAN NORMAL
-X-TOI-MSGID: d79c822c-1b7f-41fb-8a70-9b63dedad6b9
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <34c24623-845e-b765-2061-c896715000e8@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------2E7FC46A32ABA2C0A72D91FE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Feb 24 14:42, Christian Franke wrote:
+> Follow up to suggestion from here:
+> https://sourceware.org/pipermail/cygwin/2025-February/257354.html
+> 
+> Possibly too verbose :-)
 
-Follow up to suggestion from here:
-https://sourceware.org/pipermail/cygwin/2025-February/257354.html
+Can't be verbose enough.
 
-Possibly too verbose :-)
+> BTW: The MS documentation says that blocks are also not allocated if zeroes
+> are written (instead of skip with seek):
+> https://learn.microsoft.com/en-us/windows/win32/fileio/sparse-files
+> "When a write operation is attempted where a large amount of the data in the
+> buffer is zeros, the zeros are not written to the file"
+> 
+> I could not reproduce this documented behavior with NTFS on Win11.
 
-BTW: The MS documentation says that blocks are also not allocated if 
-zeroes are written (instead of skip with seek):
-https://learn.microsoft.com/en-us/windows/win32/fileio/sparse-files
-"When a write operation is attempted where a large amount of the data in 
-the buffer is zeros, the zeros are not written to the file"
+I tried that too a couple of months ago and couldn't reproduce this
+either.  I wonder if that was wishful thinking on the doc writer's part.
 
-I could not reproduce this documented behavior with NTFS on Win11.
+Or maybe there's some fsutil setting, but I can't find it either...
 
--- 
-Regards,
-Christian
+Patch pushed.
 
 
---------------2E7FC46A32ABA2C0A72D91FE
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-FAQ-Add-section-about-sparse-files.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Cygwin-FAQ-Add-section-about-sparse-files.patch"
-
-RnJvbSA5ZTJlZDhkMjQ5ODZlNTc0M2U0MDc2ZGQzYzE0MWRmYTc2MmMyYzMxIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBNb24sIDI0IEZlYiAyMDI1IDE0OjIxOjUwICswMTAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBGQVE6IEFkZCBzZWN0aW9uIGFib3V0IHNwYXJz
-ZSBmaWxlcwoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFuLmZy
-YW5rZUB0LW9ubGluZS5kZT4KLS0tCiB3aW5zdXAvZG9jL2ZhcS11c2luZy54bWwgfCA2MyAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdl
-ZCwgNjMgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9kb2MvZmFxLXVzaW5n
-LnhtbCBiL3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbAppbmRleCA4YTRlZWU5OWYuLjRkYzQ2
-MmEwYSAxMDA2NDQKLS0tIGEvd2luc3VwL2RvYy9mYXEtdXNpbmcueG1sCisrKyBiL3dpbnN1
-cC9kb2MvZmFxLXVzaW5nLnhtbApAQCAtODAyLDYgKzgwMiw2OSBAQCBmb3IgYSBkZXRhaWxl
-ZCBkZXNjcmlwdGlvbiBvZiB3aGF0J3MgcG9zc2libGUgd2l0aCBmaWxlbmFtZXMgYW5kIHdo
-YXQgaXMgbm90LgogPC9wYXJhPgogPC9hbnN3ZXI+PC9xYW5kYWVudHJ5PgogCis8cWFuZGFl
-bnRyeSBpZD0iZmFxLnVzaW5nLnNwYXJzZS1maWxlcyI+Cis8cXVlc3Rpb24+PHBhcmE+RG9l
-cyBDeWd3aW4gc3VwcG9ydCBzcGFyc2UgZmlsZXM/PC9wYXJhPjwvcXVlc3Rpb24+Cis8YW5z
-d2VyPgorCis8cGFyYT5GaWxlc3lzdGVtcyBvZiBVbml4LWxpa2Ugb3BlcmF0aW5nIHN5c3Rl
-bXMgdHJhZGl0aW9uYWxseSBwcm92aWRlCithdXRvbWF0aWMgc3VwcG9ydCBmb3Igc3BhcnNl
-IGZpbGVzOiBubyBkaXNrIGJsb2NrcyBhcmUgYWxsb2NhdGVkIGZvciBmaWxlCityZWdpb25z
-IHdoaWNoIGFyZSBub3QgZXhwbGljaXRseSB3cml0dGVuLiAgVGhlIFdpbmRvd3MgTlRGUyBm
-aWxlc3lzdGVtCitzdXBwb3J0cyBzcGFyc2UgZmlsZXMsIGJ1dCByZXF1aXJlcyB0byBlbmFi
-bGUgaXQgZm9yIGluZGl2aWR1YWwgZmlsZXMgdmlhCis8bGl0ZXJhbD5GSUxFX0FUVFJJQlVU
-RV9TUEFSU0VfRklMRTwvbGl0ZXJhbD4uICBJZiB0aGUgbW91bnQgb3B0aW9uCis8bGl0ZXJh
-bD5zcGFyc2U8L2xpdGVyYWw+IGlzIHVzZWQgb3IgdGhlIG1vdW50IHBvaW50IGlzIG9uIGEg
-c29saWQgc3RhdGUKK2RldmljZSwgQ3lnd2luIGhldXJpc3RpY2FsbHkgZGV0ZWN0cyBza2lw
-cGVkIGZpbGUgcmVnaW9ucyBhbmQgc2V0cyB0aGlzCithdHRyaWJ1dGUgdGhlbi4gIEluZGVw
-ZW5kZW50IG9mIG1vdW50IG9wdGlvbiBvciBTU0QsIHNwYXJzZSBmaWxlcyBtYXkgYWxzbwor
-YmUgY3JlYXRlZCBpZiBhbiBhcHBsaWNhdGlvbiB1c2VzIHRoZSByZWxhdGVkIFBPU0lYIGZ1
-bmN0aW9uYWxpdHkKKyg8bGl0ZXJhbD5GQUxMT0NfRkxfUFVOQ0hfSE9MRTwvbGl0ZXJhbD4p
-IGFzIHRoZSA8bGl0ZXJhbD5jcDwvbGl0ZXJhbD4KK2NvbW1hbmQgZG9lcyBpZiA8bGl0ZXJh
-bD4tLXNwYXJzZT1hbHdheXM8L2xpdGVyYWw+IGlzIHNwZWNpZmllZC4gIEluIHNvbWUgdXNl
-CitjYXNlcyByZXF1aXJpbmcgb25seSBhIHNpbmdsZSBzcGFyc2UgZmlsZSwgZm9yIGV4YW1w
-bGUgY3JlYXRpbmcgZGlzayBpbWFnZXMKK3dpdGggPGxpdGVyYWw+ZGQ8L2xpdGVyYWw+IG9y
-IDxsaXRlcmFsPmRkcmVzY3VlPC9saXRlcmFsPiwgaXQgaXMgYWxzbworcG9zc2libGUgdG8g
-cHJlc2V0IHRoZSBzcGFyc2UgYXR0cmlidXRlIHdpdGggPGxpdGVyYWw+Y2hhdHRyPC9saXRl
-cmFsPi4KKzwvcGFyYT4KKzxwYXJhPkV4YW1wbGUgKDxsaXRlcmFsPnNwYXJzZTwvbGl0ZXJh
-bD4gbm90IHNldCwgbm8gU1NEKToKKzwvcGFyYT4KKzxzY3JlZW4+CisJJCBta2RpciAwCisJ
-JCA+IDAvaXNfc3BhcnNlCisJJCBjaGF0dHIgK1MgMC9pc19zcGFyc2UKKwkkIGRkIGlmPS9k
-ZXYvemVybyBicz0xTSBjb3VudD0xIG9mPTAvaXNfc3BhcnNlIGNvbnY9c3BhcnNlLG5vdHJ1
-bmMKKwkkIGVjaG8gRU9GID4+IDAvaXNfc3BhcnNlCisJJCBkZCBpZj0vZGV2L3plcm8gYnM9
-MU0gY291bnQ9MSBvZj0wL21heWJlX3NwYXJzZSBjb252PXNwYXJzZQorCSQgZWNobyBFT0Yg
-Pj4gMC9tYXliZV9zcGFyc2UKKwkkIGRkIGlmPS9kZXYvemVybyBicz0xTSBjb3VudD0xIG9m
-PTAvbm90X3NwYXJzZQorCSQgZWNobyBFT0YgPj4gMC9ub3Rfc3BhcnNlCisJJCBjcCAtYSAw
-IDEKKwkkIGNwIC1hIC0tc3BhcnNlPWFsd2F5cyAwIDIKKwkkIGxzIC1obHMgPy8qCisJIDY0
-SyAtcnctci0tci0tIDEgdXNlciBncm91cCAxLjFNIEZlYiAyMiAxMjo0MiAwL2lzX3NwYXJz
-ZQorCTEuMU0gLXJ3LXItLXItLSAxIHVzZXIgZ3JvdXAgMS4xTSBGZWIgMjIgMTI6NDIgMC9t
-YXliZV9zcGFyc2UKKwkxLjFNIC1ydy1yLS1yLS0gMSB1c2VyIGdyb3VwIDEuMU0gRmViIDIy
-IDEyOjQyIDAvbm90X3NwYXJzZQorCTEuMU0gLXJ3LXItLXItLSAxIHVzZXIgZ3JvdXAgMS4x
-TSBGZWIgMjIgMTI6NDIgMS9pc19zcGFyc2UKKwkxLjFNIC1ydy1yLS1yLS0gMSB1c2VyIGdy
-b3VwIDEuMU0gRmViIDIyIDEyOjQyIDEvbWF5YmVfc3BhcnNlCisJMS4xTSAtcnctci0tci0t
-IDEgdXNlciBncm91cCAxLjFNIEZlYiAyMiAxMjo0MiAxL25vdF9zcGFyc2UKKwkgNjRLIC1y
-dy1yLS1yLS0gMSB1c2VyIGdyb3VwIDEuMU0gRmViIDIyIDEyOjQyIDIvaXNfc3BhcnNlCisJ
-IDY0SyAtcnctci0tci0tIDEgdXNlciBncm91cCAxLjFNIEZlYiAyMiAxMjo0MiAyL21heWJl
-X3NwYXJzZQorCSA2NEsgLXJ3LXItLXItLSAxIHVzZXIgZ3JvdXAgMS4xTSBGZWIgMjIgMTI6
-NDIgMi9ub3Rfc3BhcnNlCisJJCBsc2F0dHIgPy8qCisJLS0tYS1TLS0tLS0tLS0gMC9pc19z
-cGFyc2UKKwktLS1hLS0tLS0tLS0tLSAwL21heWJlX3NwYXJzZQorCS0tLWEtLS0tLS0tLS0t
-IDAvbm90X3NwYXJzZQorCS0tLWEtLS0tLS0tLS0tIDEvaXNfc3BhcnNlCisJLS0tYS0tLS0t
-LS0tLS0gMS9tYXliZV9zcGFyc2UKKwktLS1hLS0tLS0tLS0tLSAxL25vdF9zcGFyc2UKKwkt
-LS1hLVMtLS0tLS0tLSAyL2lzX3NwYXJzZQorCS0tLWEtUy0tLS0tLS0tIDIvbWF5YmVfc3Bh
-cnNlCisJLS0tYS1TLS0tLS0tLS0gMi9ub3Rfc3BhcnNlCis8L3NjcmVlbj4KKzxwYXJhPldp
-dGggPGxpdGVyYWw+c3BhcnNlPC9saXRlcmFsPiBtb3VudCBvcHRpb24gb3IgYSBTU0QsIGFs
-bAorPGxpdGVyYWw+Py9tYXliZV9zcGFyc2U8L2xpdGVyYWw+IGZpbGVzIHdvdWxkIGJlIHNw
-YXJzZS4KKzwvcGFyYT4KKzxwYXJhPk5vdGUgdGhhdCB0aGUgZGV0ZWN0aW9uIG9mIHNvbGlk
-IHN0YXRlIGRldmljZXMgbWF5IGJlIGZhbHNlIG5lZ2F0aXZlIGluCit2YXJpb3VzIGNvbmZp
-Z3VyYXRpb25zLCBmb3IgZXhhbXBsZSBSQUlEIHZvbHVtZXMsIFVTQiBmbGFzaCBkcml2ZXMs
-IHZlcnkgb2xkCitTQVRBIFNTRHMsIG9yIFNTRHMgYmVoaW5kIFVTQiBkb2NraW5nIHN0YXRp
-b25zLgorPC9wYXJhPgorPC9hbnN3ZXI+PC9xYW5kYWVudHJ5PgorCiA8cWFuZGFlbnRyeSBp
-ZD0iZmFxLnVzaW5nLmhhbmdzIj4KIDxxdWVzdGlvbj48cGFyYT5XaGVuIGl0IGhhbmdzLCBo
-b3cgZG8gSSBnZXQgaXQgYmFjaz88L3BhcmE+PC9xdWVzdGlvbj4KIDxhbnN3ZXI+Ci0tIAoy
-LjQ1LjEKCg==
---------------2E7FC46A32ABA2C0A72D91FE--
+Thanks,
+Corinna
