@@ -1,78 +1,103 @@
-Return-Path: <SRS0=wa0U=VQ=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 0065E3858D29
-	for <cygwin-patches@cygwin.com>; Tue, 25 Feb 2025 01:51:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0065E3858D29
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0065E3858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740448309; cv=none;
-	b=Y4R025UupQP2u8t/cxvxgNvwdcYEzSIsgSQoMdnn3jRpi0vaXzU2XYMGpIbQ5dVBPmgHu+LUY0f3ol4mxbJFkkkdC/4jsJ06QjY2Ty6T1rhqMgzI5tiUQusXG+3EU+37v2xWYZ5Gvsu95QdqXXuHmfXTwfy0/1mUThxK8URgPDo=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1740448309; c=relaxed/simple;
-	bh=sy41ex6YXmT1QBz01JZADkir6qszG/AklrAaRaw/Eos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=haxzzmKdAmmlbDAoe3rw2EjVO9SxuD0/nYFqK8jZM88M2iAcu2ubx9F9wz6yf5k8JqaMOK67xthDIiVuXHkbsw3NZ//GC3jIPEPuAXjEcwFKaH8sYzqdYU7YElnNBYeToagPfIrk6gxFnePD7OBlhoVevO/xtYwYS6z+XnR6IOs=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0065E3858D29
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 51P1vOWS022357
-	for <cygwin-patches@cygwin.com>; Mon, 24 Feb 2025 17:57:24 -0800 (PST)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpd8a2yCY; Mon Feb 24 17:57:19 2025
-Message-ID: <68dc561f-5a1e-420e-a667-e97a1947dbdb@maxrnd.com>
-Date: Mon, 24 Feb 2025 17:51:48 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: Add spawn family of functions to docs
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 3274E3858D26; Tue, 25 Feb 2025 09:32:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3274E3858D26
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1740475959;
+	bh=m6j5/VxQWaSB7papJgezyn2q2R6KtUkzUfkJcu5lU0g=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=cc0oE5BY6gBiqYKzDnf4n5JtxMeDGl1bl7ivnFbFK0ZFCY0whlVxy0EDY933s2EgS
+	 V70+8Oiou27sSK37Qxx6xx2lQXncvA2+q3gRs6UTbXX39NYu8xb7ejwwg3pHN90pV2
+	 WPotp9tCZW3YjD3I52TpSFCUgTWyxUoAAX8Z/SeY=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 2C820A807B4; Tue, 25 Feb 2025 10:32:37 +0100 (CET)
+Date: Tue, 25 Feb 2025 10:32:37 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20250216214657.2303-1-mark@maxrnd.com>
- <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
- <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
+	Jeremy Drake <cygwin@jdrake.com>
+Subject: Re: Patch from git-for-windows for SSH hangs
+Message-ID: <Z72ONcWLpoYLRlel@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com,
+	Johannes Schindelin <johannes.schindelin@gmx.de>,
+	Jeremy Drake <cygwin@jdrake.com>
+References: <3604c9a5-c130-da33-076a-987b6cf3c7a7@jdrake.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3604c9a5-c130-da33-076a-987b6cf3c7a7@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna,
+Hi Jeremy, hi Johannes,
 
-On 2/24/2025 3:58 AM, Corinna Vinschen wrote:
-> On Feb 17 11:22, Corinna Vinschen wrote:
->> On Feb 16 13:46, Mark Geisert wrote:
->>> In the doc tree, change the title of section "Other UNIX system
->>> interfaces..." to "Other system interfaces...".  Add the spawn family of
->>> functions noting their origin as Windows.
-[...]
+
+
+On Feb 24 13:22, Jeremy Drake via Cygwin-patches wrote:
+> This patch exists in the git-for-windows fork of msys2-runtime (which is
+> itself a fork of cygwin).  There have been complaints and requests to
+> apply this patch to msys2-runtime (such as
+> https://github.com/msys2/MSYS2-packages/issues/4962), but it makes more
+> sense to me to try to figure this out upstream, so everyone can benefit.
+> I did not write the patch, nor do I personally encounter the bug it is
+> intended to fix, so I can't really advocate for its approach, but the
+> commit message is pretty detailed as to the investigation that led to it.
 > 
-> Actually, Jon raised some reservations against adding historical
-> msvcrt functions to the set of documented POSIX functions on the
-> IRC channel.
+> This is the original patch from
+> https://github.com/git-for-windows/msys2-runtime/pull/75, if necessary I
+> can rebase it on cygwin's master branch, it does so cleanly (or you can
+> try git am -3, that tends to work for me in cases where straight git am
+> does not).
+
+It applies cleanly.  I just wonder why Johannes hasn't sent this
+already upstream, given the patch is from October.
+
+*puzzled*
+
+> >From cbe555e054cefeccd65250bb11dc56f82196301f Mon Sep 17 00:00:00 2001
+> From: Johannes Schindelin <johannes.schindelin@gmx.de>
+> Date: Thu, 10 Oct 2024 19:52:47 +0200
+> Subject: [PATCH] Fix SSH hangs
 > 
-> We also have functions like _get_osfhandle and stuff like that.
-> Do we really want them documented in the list of POSIXy functions?
+> It was reported in https://github.com/git-for-windows/git/issues/5199
+> that as of v3.5.4, cloning or fetching via SSH is hanging indefinitely.
+> 
+> Bisecting the problem points to 555afcb2f3 (Cygwin: select: set pipe
+> writable only if PIPE_BUF bytes left, 2024-08-18). That commit's
+> intention seems to look at the write buffer, and only report the pipe as
+> writable if there are more than one page (4kB) available.
+> 
+> However, the number that is looked up is the number of bytes that are
+> already in the buffer, ready to be read, and further analysis
+> shows that in the scenario described in the report, the number of
+> available bytes is substantially below `PIPE_BUF`, but as long as they
+> are not handled, there is apparently a dead-lock.
+> 
+> Since the old logic worked, and the new logic causes a dead-lock, let's
+> essentially revert 555afcb2f3 (Cygwin: select: set pipe writable only if
+> PIPE_BUF bytes left, 2024-08-18).
+> 
+> Note: This is not a straight revert, as the code in question has been
+> modified subsequently, and trying to revert the original commit would
+> cause merge conflicts. Therefore, the diff looks very different from the
+> reverse diff of the commit whose logic is reverted.
 
-I didn't see Jon's comments unless the "1999" reference covered them ;-).
+Ok, so the patch shows that reporting writable from select only
+if PIPE_BUF bytes are free is not working as desired.  Too bad.
 
-I have no issue with the Windows-derived functions going on a separate 
-list.  I only suggested the UNIX-* list because of the small number of 
-Windows-derived functions being added.
+The patch is just kind of incomplete.  pipe_data_available() returns
+PIPE_BUF in case the actual available bytes can't be evaluated.
+However, it only does so if called from select(). If called from
+elsewhere, it returns 1.
 
-BTW The MSDN documentation of the spawn family of functions has their 
-names all starting with an underscore character.  Should we follow that 
-or not?
+If select() now always returns writability if at least 1 byte is
+available,  there's no reason left to special case being called
+from select(), because it's now sufficient to return 1 to select()
+as well.
 
-On the question of documenting these funcs at all (was that being 
-raised?), I don't feel very strongly about it.  Maybe it would save one 
-out of ten posts asking why our POSIX environment doesn't do this 
-Windows thing?  /s
+I added a second patch on top to drop the PDA_SELECT handling
+and pushed both.
 
-If the final decision is to document in a separate list for the doc 
-pages, I can submit a revised patch for that.
-Cheers & Regards,
 
-..mark
+Thanks,
+Corinna
