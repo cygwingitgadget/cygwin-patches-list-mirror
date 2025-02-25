@@ -1,90 +1,78 @@
-Return-Path: <>
-Received: from server9.maghost.ro (server9.maghost.ro [91.213.11.12])
-	by sourceware.org (Postfix) with ESMTPS id 941A03858D26
-	for <cygwin-patches@cygwin.com>; Tue, 25 Feb 2025 01:00:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 941A03858D26
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=server9.maghost.ro
-Authentication-Results: sourceware.org; spf=none smtp.helo=server9.maghost.ro
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 941A03858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=91.213.11.12
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740445258; cv=none;
-	b=dizgW8dM8caWDcjNygxngqtA1ePrz9rdE4RmdEFfJpkUf7kmN+pDJyALifdSM+x88RIlBN3wapTio3Qwhzx6WXNG1gIXrI7am75I4QkdeuVdjkCy2yRpGWQfnbheAE5daBoHWDLlFxxBwS6byx59VASg9IVrQoLHsKf08ySgwOo=
+Return-Path: <SRS0=wa0U=VQ=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 0065E3858D29
+	for <cygwin-patches@cygwin.com>; Tue, 25 Feb 2025 01:51:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0065E3858D29
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0065E3858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740448309; cv=none;
+	b=Y4R025UupQP2u8t/cxvxgNvwdcYEzSIsgSQoMdnn3jRpi0vaXzU2XYMGpIbQ5dVBPmgHu+LUY0f3ol4mxbJFkkkdC/4jsJ06QjY2Ty6T1rhqMgzI5tiUQusXG+3EU+37v2xWYZ5Gvsu95QdqXXuHmfXTwfy0/1mUThxK8URgPDo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1740445258; c=relaxed/simple;
-	bh=egZqt2eTdcr47pBppLXroTr7lDLfxkUOotylxJy2stk=;
-	h=From:To:MIME-Version:Subject:Message-Id:Date; b=Vq6P36THsOfSr3j5xaoJQ8/NdjCZWBRWrCSRUbtnzWD4Seu/JU/2kD4SmfWKp2bgjTDvmLQmW5teN6/6dpv0MsSo2OP2d/TOvQx+bvR+uN6dsxzYyOdXckTt4vISQ7C+MD+6WKz/yZdrPZfx70MYQ6a9kKYrG5jQpDds99MfbE4=
+	t=1740448309; c=relaxed/simple;
+	bh=sy41ex6YXmT1QBz01JZADkir6qszG/AklrAaRaw/Eos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=haxzzmKdAmmlbDAoe3rw2EjVO9SxuD0/nYFqK8jZM88M2iAcu2ubx9F9wz6yf5k8JqaMOK67xthDIiVuXHkbsw3NZ//GC3jIPEPuAXjEcwFKaH8sYzqdYU7YElnNBYeToagPfIrk6gxFnePD7OBlhoVevO/xtYwYS6z+XnR6IOs=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 941A03858D26
-Received: from mailnull by server9.maghost.ro with local (Exim 4.98.1)
-	id 1tmjJg-00000000X0U-02JL
-	for cygwin-patches@cygwin.com;
-	Tue, 25 Feb 2025 03:00:56 +0200
-X-Failed-Recipients: cygwin-patches@cygwin.com
-Auto-Submitted: auto-replied
-From: Mail Delivery System <Mailer-Daemon@server9.maghost.ro>
-To: cygwin-patches@cygwin.com
-References: <20250225020054.459A92F400213C94@cygwin.com>
-Content-Type: multipart/report; report-type=delivery-status; boundary=1740445256-eximdsn-1372809679
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0065E3858D29
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 51P1vOWS022357
+	for <cygwin-patches@cygwin.com>; Mon, 24 Feb 2025 17:57:24 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpd8a2yCY; Mon Feb 24 17:57:19 2025
+Message-ID: <68dc561f-5a1e-420e-a667-e97a1947dbdb@maxrnd.com>
+Date: Mon, 24 Feb 2025 17:51:48 -0800
 MIME-Version: 1.0
-Subject: Mail delivery failed: returning message to sender
-Message-Id: <E1tmjJg-00000000X0U-02JL@server9.maghost.ro>
-Date: Tue, 25 Feb 2025 03:00:56 +0200
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server9.maghost.ro
-X-AntiAbuse: Original Domain - cygwin.com
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 
-X-Get-Message-Sender-Via: server9.maghost.ro: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
-X-Authenticated-Sender: server9.maghost.ro: mailnull
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_05,KAM_DMARC_STATUS,RCVD_IN_SBL_CSS,SPF_HELO_NONE,URIBL_CSS_A autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: Add spawn family of functions to docs
+To: cygwin-patches@cygwin.com
+References: <20250216214657.2303-1-mark@maxrnd.com>
+ <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
+ <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---1740445256-eximdsn-1372809679
-Content-type: text/plain; charset=us-ascii
+Hi Corinna,
 
-This message was created automatically by mail delivery software.
+On 2/24/2025 3:58 AM, Corinna Vinschen wrote:
+> On Feb 17 11:22, Corinna Vinschen wrote:
+>> On Feb 16 13:46, Mark Geisert wrote:
+>>> In the doc tree, change the title of section "Other UNIX system
+>>> interfaces..." to "Other system interfaces...".  Add the spawn family of
+>>> functions noting their origin as Windows.
+[...]
+> 
+> Actually, Jon raised some reservations against adding historical
+> msvcrt functions to the set of documented POSIX functions on the
+> IRC channel.
+> 
+> We also have functions like _get_osfhandle and stuff like that.
+> Do we really want them documented in the list of POSIXy functions?
 
-A message that you sent could not be delivered to one or more of its
-recipients. This is a permanent error. The following address(es) failed:
+I didn't see Jon's comments unless the "1999" reference covered them ;-).
 
-  cygwin-patches@cygwin.com
-    Domain profilaxis.ro has exceeded the max emails per hour (125/100 (125%)) allowed.  Message discarded.
+I have no issue with the Windows-derived functions going on a separate 
+list.  I only suggested the UNIX-* list because of the small number of 
+Windows-derived functions being added.
 
---1740445256-eximdsn-1372809679
-Content-type: message/delivery-status
+BTW The MSDN documentation of the spawn family of functions has their 
+names all starting with an underscore character.  Should we follow that 
+or not?
 
-Reporting-MTA: dns; server9.maghost.ro
+On the question of documenting these funcs at all (was that being 
+raised?), I don't feel very strongly about it.  Maybe it would save one 
+out of ten posts asking why our POSIX environment doesn't do this 
+Windows thing?  /s
 
-Action: failed
-Final-Recipient: rfc822;cygwin-patches@cygwin.com
-Status: 5.0.0
+If the final decision is to document in a separate list for the doc 
+pages, I can submit a revised patch for that.
+Cheers & Regards,
 
---1740445256-eximdsn-1372809679
-Content-type: text/rfc822-headers
-
-Return-path: <cygwin-patches@cygwin.com>
-Received: from [134.209.241.153] (port=58265)
-	by server9.maghost.ro with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <cygwin-patches@cygwin.com>)
-	id 1tmjJf-00000000Wug-3JYb
-	for cygwin-patches@cygwin.com;
-	Tue, 25 Feb 2025 03:00:55 +0200
-Reply-To: "Maersk Line" <krakengroups@proton.me>
-From: "Maersk Line" <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Bill of Lading Arrival & Inv
-Date: 25 Feb 2025 02:00:54 +0100
-Message-ID: <20250225020054.459A92F400213C94@cygwin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0012_DD84E46D.4AD60761"
-X-Exim-DSN-Information: Due to administrative limits only headers are returned
-
-
---1740445256-eximdsn-1372809679--
+..mark
