@@ -1,76 +1,97 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 671063858D26; Tue, 25 Feb 2025 11:55:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 671063858D26
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1740484522;
-	bh=gZZx45Vj5GcDroCdh9t1ERDeZQ3l7YpiU6N7Q0AoaZA=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=M8yJFXOnKU3hv4cuV/ztjZi3pVOB6K77J+PIxLpo0IhfmUEE4Yk/JrSCtEAMC6+RC
-	 ak2w2H0+BzUEVODKSFIPRqpI3R8+WHTKlIpGDFrh+N3kI3Ylocq8ixJWVlBblgJEqY
-	 9jptP3rErw6sC9k6TsgaA6zIX8puCspTHViDvpXQ=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 5A51BA807B4; Tue, 25 Feb 2025 12:55:20 +0100 (CET)
-Date: Tue, 25 Feb 2025 12:55:20 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=acew=VR=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id D49263858D28
+	for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2025 06:38:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D49263858D28
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D49263858D28
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740551904; cv=none;
+	b=AQVtPrBWafAhYjcXUn6tTo+RLoO6PCfcS+CGs/HrYGbOMX4HnjTzbmudrf8EbW5swPE7mv0za4m5fJCm69l7dQmQq0E0hLSiAm4T4e88QlCFeaGFsK+giksdDXv2iTwh2gsq6n3SW9X6qmsI5ocnwKRcfZSwH7Sqw4Ll96khEiI=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1740551904; c=relaxed/simple;
+	bh=tMan2sNxlJOtPIFrT2UqLBiuOK2IELuZ1DEqLybRDyo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=UGLyQf569opVFDFDvuAg4TINFMCxhTVkd//yrGTZ9kUX/y7Fsyb9sBWSkGV+i5+F5AC7zPwWJ/RN6/lrYcbDpsLEm/UNqq64iGorFBxXJP1kH+PqClh77ZSnkoVQe6H5z+sxhSmu1ElbVvKB8sVXZdF2cKsitnM06McmMlJLEzI=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D49263858D28
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 51Q6i0VS031939;
+	Tue, 25 Feb 2025 22:44:00 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdN3RJ3C; Tue Feb 25 22:43:56 2025
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Add spawn family of functions to docs
-Message-ID: <Z72vqPAfwbpvLzpW@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250216214657.2303-1-mark@maxrnd.com>
- <Z7MNyLzVvY_Mm_bH@calimero.vinschen.de>
- <Z7xe2UNaIBB3UFXu@calimero.vinschen.de>
- <68dc561f-5a1e-420e-a667-e97a1947dbdb@maxrnd.com>
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH v2] Cygwin: Add spawn family of functions to docs
+Date: Tue, 25 Feb 2025 22:37:30 -0800
+Message-ID: <20250226063815.52755-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2025q1/013423.html>
+References: <https://cygwin.com/pipermail/cygwin-patches/2025q1/013423.html>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <68dc561f-5a1e-420e-a667-e97a1947dbdb@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 24 17:51, Mark Geisert wrote:
-> Hi Corinna,
-> 
-> On 2/24/2025 3:58 AM, Corinna Vinschen wrote:
-> > On Feb 17 11:22, Corinna Vinschen wrote:
-> > > On Feb 16 13:46, Mark Geisert wrote:
-> > > > In the doc tree, change the title of section "Other UNIX system
-> > > > interfaces..." to "Other system interfaces...".  Add the spawn family of
-> > > > functions noting their origin as Windows.
-> [...]
-> > 
-> > Actually, Jon raised some reservations against adding historical
-> > msvcrt functions to the set of documented POSIX functions on the
-> > IRC channel.
-> > 
-> > We also have functions like _get_osfhandle and stuff like that.
-> > Do we really want them documented in the list of POSIXy functions?
-> 
-> I didn't see Jon's comments unless the "1999" reference covered them ;-).
-> 
-> I have no issue with the Windows-derived functions going on a separate list.
-> I only suggested the UNIX-* list because of the small number of
-> Windows-derived functions being added.
-> 
-> BTW The MSDN documentation of the spawn family of functions has their names
-> all starting with an underscore character.  Should we follow that or not?
+In the doc tree, add a new section "Other system interfaces[...]" that
+lists the spawn family of functions, most of the exposed cygwin internal
+functions that a user might have use for, and some other functions
+duplicating Windows or DOS interfaces that might have some utility.
 
-We don't export them with underscore.
+---
+ winsup/doc/posix.xml | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-> On the question of documenting these funcs at all (was that being raised?),
-> I don't feel very strongly about it.  Maybe it would save one out of ten
-> posts asking why our POSIX environment doesn't do this Windows thing?  /s
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 43e860b0d..b9443eaae 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -1762,6 +1762,41 @@ ISO®/IEC DIS 9945 Information technology
+ 
+ </sect1>
+ 
++<sect1 id="std-other"><title>Other system interfaces, some from Windows:</title>
++
++<screen>
++    _alloca			(Windows)
++    _feinitialise
++    _get_osfhandle		(Windows)
++    _pipe			(Windows)
++    _setmode			(Windows)
++    cwait			(Windows)
++    cygwin_attach_handle_to_fd
++    cygwin_conv_path
++    cygwin_conv_path_list
++    cygwin_create_path
++    cygwin_detach_dll
++    cygwin_dll_init
++    cygwin_internal
++    cygwin_logon_user
++    cygwin_posix_path_list_p
++    cygwin_set_impersonation_token
++    cygwin_split_path
++    cygwin_stackdump
++    cygwin_umount
++    cygwin_winpid_to_pid
++    spawnl			(Windows)
++    spawnle			(Windows)
++    spawnlp			(Windows)
++    spawnlpe			(Windows)
++    spawnv			(Windows)
++    spawnve			(Windows)
++    spawnvp			(Windows)
++    spawnvpe			(Windows)
++</screen>
++
++</sect1>
++
+ <sect1 id="std-notes"><title>Implementation Notes</title>
+ 
+ <para><function>chroot</function> only emulates a chroot function call
+-- 
+2.45.1
 
-Yeah, good point.
-
-> If the final decision is to document in a separate list for the doc pages, I
-> can submit a revised patch for that.
-
-We could add a "Non-POSIX, non-UNIX Windowy functions added for one
-reason or another" kind of section to the end, I guess.  Even the
-section name isn't quite clear to me.  It's kind of "Cygwin-only",
-and that would then also include the stuff from sys/cygwin.h, i.e.
-cygwin_conv_path, cygwin_internal, ...
-
-
-Corinna
