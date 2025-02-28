@@ -1,61 +1,117 @@
 Return-Path: <SRS0=PYjw=VT=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e08.mail.nifty.com (mta-snd-e08.mail.nifty.com [106.153.226.40])
-	by sourceware.org (Postfix) with ESMTPS id 7659D3858C56
-	for <cygwin-patches@cygwin.com>; Fri, 28 Feb 2025 13:42:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7659D3858C56
+	by sourceware.org (Postfix) with ESMTPS id 6E32D3858C56
+	for <cygwin-patches@cygwin.com>; Fri, 28 Feb 2025 13:42:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6E32D3858C56
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7659D3858C56
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6E32D3858C56
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.40
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740750171; cv=none;
-	b=invKPwqcZXYdjut6JVb6D9rj8Clr06ngepHn7oCeFY6yjZttzW2sPi25ZZD4oQBsobkX0ZuSRanGk9XViYUV5f/f9X/D8WYm2KMDMRmBOgnbYp19lj7HAFa8GrwMqLg60wzq5Qv3n9bYMpROYkVZ+r6T3MMx9aQYGef/oHVKwz0=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1740750180; cv=none;
+	b=sAHh3z3U973np5l5qpd3/lyeOBxZeTqEmz+eo555t5YQoYDL12wIH/oH1rTbU/FwoKYUxq4d+3Zgn1Z7CKyvaeUP37qP1CfW0bGw2wWvMZRwaHw1h1UowkzmKcwAVBlvwo9rnSsYveLxwsL/CEUaZUtGChCkwjrgUCLamOQmtQM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1740750171; c=relaxed/simple;
-	bh=N35+YFCWaxhz8Pdy74/fJm7GPw1MMC6DIV2P8qWCuXg=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=GxVijzqQ5Q95DmSvwSx30whYnz01inq2Rv7lQyiP6KVzUKfHLApNnOPF8xvjI/VgDxxgV69IMjlZHy+6S6r4e0Lvvx2fnWsFCG7LyJhRbjBik2ZfylWUqW4Ptmxp4ySTaCyxM0GWNcjf4ZVGo3CGFBGx6uCVrc6FDizE7XtVzno=
+	t=1740750180; c=relaxed/simple;
+	bh=KqJoMC/9kOBLKJ2z65OJmv/KskDw3jlFoAfnAa+a2vI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=lb8+7J4NSQ3J/ARI8/TtJT0s3sDTBeo+lZ3I0vU6VUQ1KljZdBJ5WflszrNYQ0ekoeE/t0kd70WK4vV9LYnX5+d+kgqWyYt7qlOJttebid77CFmmhjKoX1bgsEsFNZJ6Gd4TVUdmM5/Hu64T6sNWv7e1uoIzeI0WoW/YUSdj6LY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7659D3858C56
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6E32D3858C56
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=j4m6ZfYb
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=AQ7ABjDN
 Received: from localhost.localdomain by mta-snd-e08.mail.nifty.com
           with ESMTP
-          id <20250228134248642.ETRM.40215.localhost.localdomain@nifty.com>;
-          Fri, 28 Feb 2025 22:42:48 +0900
+          id <20250228134257930.ETRR.40215.localhost.localdomain@nifty.com>;
+          Fri, 28 Feb 2025 22:42:57 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 0/3] A few fixes for signal handling
-Date: Fri, 28 Feb 2025 22:42:17 +0900
-Message-ID: <20250228134231.1701-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH 1/3] Cygwin: signal: Fix deadlock on SIGCONT
+Date: Fri, 28 Feb 2025 22:42:18 +0900
+Message-ID: <20250228134231.1701-2-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20250228134231.1701-1-takashi.yano@nifty.ne.jp>
+References: <20250228134231.1701-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1740750168;
- bh=pCIIirvlCyfQqGHjkguKKtUzvvOpzVqK5ggpn4nidpc=;
- h=From:To:Cc:Subject:Date;
- b=j4m6ZfYbvBPXLMbu9Tgm4G0wJvt6w6ZcKnIU+mSZAdxo4i4zGAxbZOkWH8aI8pB6oAQ/bKyS
- BKhUhH71GBSeijRLDnRvMz+4D3g+jXsWoCP+JWRPtsz2gUvfsbbD3FEVK7ta+Udh7OvEBEd7OO
- X6Bd9IaoK/vumqyX47ocCCmXS6uPO2zj3nv0d7OAzB4VzvPmZWv9UoXniEHyu/JIU33f7jSy9t
- TPnNkSHqyJOxuX8bGsY29O7Y4VAsLQQJrUpXwhjs+Ze2h/l+JPfJkwac1Qwi+2AFhDKAIA6+eX
- w8gFnJBFBXmUTKBaD4D4wol/AgUjMlNCMRldYOAm0DPI1VoQ==
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1740750177;
+ bh=Wjk8h01Cp6kb2USqtPwFeucH2jF++ywSc5H1BFtJ5gg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=AQ7ABjDNetmULk3GjgeY/waUQBbihD/hNhYOigYHFWdY5+4kUR5fuJjBzQ11mHFAzEzDOP8+
+ uZboiknlbcwh8ghh1H17hXzbHQhjidDAANSaU645iYNbFSPTIW4Wp1pLl1YcGZ7sxBhFUCL4T8
+ qKbl1/ou+J8Kp99zsfpERdmqb1Qzyv36s8vhNng74hJ/ASf3DYgROx42H7ymQ84D4Swbci5ChX
+ VCEUmlDGZOBCoQWNd75mofSSIraFGg0FhNWRitV/JamOeEuDCOXgcIjvdAkCK8O+FwPY6a/gwr
+ 8HYHD38cjG3CFZhyokdxjTKGgQMg7ptYg0EKLQN4NnoWbleQ==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Takashi Yano (3):
-  Cygwin: signal: Fix deadlock on SIGCONT
-  Cygwin: signal: Fix a race issue on modifying _pinfo::process_state
-  Cygwin: signal: Fix a problem that process hangs on exit
+If SIGCONT starts processing while __SIGFLUSHFAST is ongoing,
+_main_tls->current_sig will never be cleared because the signal
+processing is stopped while waiting for the wake-up event in the
+main thread. This leads to a deadlock in the while loop waiting for
+current_sig to be cleared. With this patch, the function returns to
+wait_sig() if current_sig is set, rather than waiting for it in the
+while loop.
 
- winsup/cygwin/exceptions.cc          | 29 ++++++++++++++++------------
- winsup/cygwin/fork.cc                |  5 +++--
- winsup/cygwin/local_includes/pinfo.h |  4 ++--
- winsup/cygwin/pinfo.cc               | 11 ++++++-----
- winsup/cygwin/signal.cc              |  6 ++++--
- winsup/cygwin/sigproc.cc             |  5 +++--
- winsup/cygwin/spawn.cc               |  6 +++---
- 7 files changed, 38 insertions(+), 28 deletions(-)
+Addresses: https://cygwin.com/pipermail/cygwin/2025-February/257473.html
+Fixes: 9d2155089e87 ("(sigpacket::process): Call handle_SIGCONT early to deal with SIGCONT.")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index f576c5ff2..c6e82b6c5 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1425,23 +1425,18 @@ _cygtls::handle_SIGCONT ()
+   if (NOTSTATE (myself, PID_STOPPED))
+     return;
+ 
+-  myself->stopsig = 0;
+-  myself->process_state &= ~PID_STOPPED;
+-  /* Carefully tell sig_handle_tty_stop to wake up.
+-     Make sure that any pending signal is handled before trying to
+-     send a new one.  Then make sure that SIGCONT has been recognized
+-     before exiting the loop.  */
+-  while (current_sig)  /* Assume that it's ok to just test sig outside of a */
+-    yield ();          /* lock since setup_handler does it this way.  */
+-
+   lock ();
+   current_sig = SIGCONT;
+   set_signal_arrived (); /* alert sig_handle_tty_stop */
+   unlock ();
+ 
++  /* Make sure that SIGCONT has been recognized before exiting the loop. */
+   while (current_sig == SIGCONT)
+     yield ();
+ 
++  myself->stopsig = 0;
++  myself->process_state &= ~PID_STOPPED;
++
+   /* Clear pending stop signals */
+   sig_clear (SIGSTOP, false);
+   sig_clear (SIGTSTP, false);
+@@ -1473,7 +1468,17 @@ sigpacket::process ()
+   myself->rusage_self.ru_nsignals++;
+ 
+   if (si.si_signo == SIGCONT)
+-    _main_tls->handle_SIGCONT ();
++    {
++      /* Carefully tell sig_handle_tty_stop to wake up.
++	 Make sure that any pending signal is handled before trying to
++	 send a new one. */
++      if (_main_tls->current_sig)
++	{
++	  rc = -1;
++	  goto done;
++	}
++      _main_tls->handle_SIGCONT ();
++    }
+ 
+   /* SIGKILL is special.  It always goes through.  */
+   if (si.si_signo == SIGKILL)
 -- 
 2.45.1
 
