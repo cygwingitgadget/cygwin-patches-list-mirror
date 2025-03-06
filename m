@@ -1,55 +1,74 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 9D4D53858C48; Wed,  5 Mar 2025 19:00:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9D4D53858C48
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1741201240;
-	bh=q1K19c7HPxPMlT85QXMn1Rn7+A72fjTy+Qe4WQOeRWI=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=o+vUzI6DQiSrJ4Z/AJFGMYL4930A6lAfpPBWu8f2Vnuz3QXnVP4Q3aFuqAndZhHLo
-	 NyLupd8ykEIDFd4WSVohWL4ZnTR4N3oMvAbOEQJGpU4jxV8B9Xfdy43ySy0qtbrlUs
-	 IAKpJIM/8xV7cXEt/yWsE4wn3ZmsxDNxGKw/MKTg=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 37395A804B1; Wed, 05 Mar 2025 20:00:33 +0100 (CET)
-Date: Wed, 5 Mar 2025 20:00:33 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=5XJv=VZ=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w04.mail.nifty.com (mta-snd-w04.mail.nifty.com [106.153.227.36])
+	by sourceware.org (Postfix) with ESMTPS id 237B13858D26
+	for <cygwin-patches@cygwin.com>; Thu,  6 Mar 2025 11:03:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 237B13858D26
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 237B13858D26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741258983; cv=none;
+	b=a2fG7ZLHMERl2pxGERalTTwmt3XBrVAL7qWx4VAK4ZuNiRXtJ/WkwsmYDl3PdPVuTB1dFjmtqTEABg2AktPt0CPrMoFri+e631P5RNIsl5pa6x8vw83kwJ8a2ibPf91ejnmrx59QC/yigBpAU7DBpmVaAFFYhIDSOJPLVtDA/DQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1741258983; c=relaxed/simple;
+	bh=tCZNti9h1V0tmyBmrKOKpcUPa7KHbNeppxZOGPh0yGU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=okUsF/3cSngl3E4jHRWjDpcy6Ylr7ZqC5tv9a3IyW1K8WDbQ5o6ZWhdoXN6EKwc0yovL5p2jf2NDDkBiOWihdH8zqKYX2my4eK4ItIYnTjtEY/qqUmDe5R7ZA9ixPYf4LILT3dFqnzr35vJt0Cb4XI8ub7KkjXAK1KWr6ohIGms=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 237B13858D26
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=DtRJ1pFv
+Received: from localhost.localdomain by mta-snd-w04.mail.nifty.com
+          with ESMTP
+          id <20250306110259457.JSYO.109987.localhost.localdomain@nifty.com>;
+          Thu, 6 Mar 2025 20:02:59 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pipe: Fix 'lost connection' issue in scp
-Message-ID: <Z8ifURy5B8kF3Qjm@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250305143420.6703-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: signal: Add one more guard to stop signal handling on exit().
+Date: Thu,  6 Mar 2025 20:02:32 +0900
+Message-ID: <20250306110243.1233681-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250305143420.6703-1-takashi.yano@nifty.ne.jp>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1741258979;
+ bh=ntJanFIdddN7PBoivJGfkC+IekdaCiiuWSQN5zsnhi0=;
+ h=From:To:Cc:Subject:Date;
+ b=DtRJ1pFvX4TdqVAxZOtFG8ZALy0uuV6tzBj5txHtFDr8UaqRRFgldOBbXopld6bTK4EkEmpj
+ Kh01TQcO1muUKur2/MXNuwvJ16q+P6Nt5tlEhBLG0kIwpegQzaWXpC6giy50c9YdzeJUFrMWbc
+ Y7LEWxntlldNDFZNOoRkgg7oBHrWO1rhjUst59244tlP21Obnw3Ux4gQJf7o56vf1HRuKQbh/d
+ 1EpNPuyJcq//9h7mpIsUqMwMA2xUqLsqzCTNECbJQwKQHdTvUU4fRzEYNXXW8lDNs5IheOSM3o
+ bQxsGMEdNMtuy2dxhsvdeRTIqpGfOlin1F3NacdsEtx6eRkw==
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar  5 23:34, Takashi Yano wrote:
-> When transferring huge file using scp, the "lost connection" error
-> sometimes happen. This is due to fhandler_pipe_fifo::raw_write()
-> accidentally sends data that is not reported in th return value when
-> interrupted by a signal. The cause of the problem is that CancelIo()
-> responds success even if NtWriteFile() already sends the data.
-> 
-> The following testcase using plain Win32 APIs reproduces the issue.
-> The output will be something like:
-> W: 8589934592
-> R: 9280061440
-> Much more data was received than the sender thought it had sent.
-> [...]
-> Addresses: https://cygwin.com/pipermail/cygwin/2025-January/257143.html
-> Fixes: 4003e3dfa1b9 ("Cygwin: pipes: always terminate async IO in blocking mode")
-> Reported-by: Jay M Martin <jaymmartin_buy@cox.net>
-> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/fhandler/pipe.cc | 28 ++++++++++++++++++++--------
->  winsup/cygwin/release/3.6.0    |  3 +++
->  2 files changed, 23 insertions(+), 8 deletions(-)
+The commit 3c1308ed890e adds a guard to stop signal handling on exit()
+in call_signal_handler(). However, the signal that is already queued
+but does not use signal handler may be going to process even with that
+patch.
+This patch add one more guard at the begining of sigpacket::process()
+to avoid that situation.
 
-Great job, go for it!
+Fixes: 3c1308ed890e ("Cygwin: signal: Fix a problem that process hangs on exit")
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 759f89dca..a67529b19 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1457,7 +1457,7 @@ sigpacket::process ()
+ 
+   /* Don't try to send signals if we're just starting up since signal masks
+      may not be available.  */
+-  if (!cygwin_finished_initializing)
++  if (!cygwin_finished_initializing || ext_state > ES_EXIT_STARTING)
+     {
+       rc = -1;
+       goto done;
+-- 
+2.45.1
 
-Thanks,
-Corinna
