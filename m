@@ -1,30 +1,30 @@
 Return-Path: <SRS0=qaRL=V3=m.gmane-mx.org=gocp-cygwin-patches@sourceware.org>
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-	by sourceware.org (Postfix) with ESMTPS id DB53D3858D1E
-	for <cygwin-patches@cygwin.com>; Sat,  8 Mar 2025 20:05:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DB53D3858D1E
+	by sourceware.org (Postfix) with ESMTPS id 98CC63858D1E
+	for <cygwin-patches@cygwin.com>; Sat,  8 Mar 2025 20:10:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 98CC63858D1E
 Authentication-Results: sourceware.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DB53D3858D1E
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 98CC63858D1E
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=116.202.254.214
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741464305; cv=none;
-	b=NpEm6bj3IujU8laNFTAAQkGJ6Z3QMFzOuANMBlWsvrVM8zicanAI112jJ0rtIzm20dGPNr1nT5rd2QL7j5XpBIxU65As7YsVeR/gGr/JDExIP76cvRWarl3sTowcN66Q7ArqF10jxxtvzknJg/APrb+Ws2wU+XL7vrlZZtu9WX4=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741464604; cv=none;
+	b=NgiHd0VQUwnA6WJ/3tXmv95gNNnIfpmoJ+cGHoQ2ZAcT/qtYqCQkurZY1qCuOg6ioSQtZru9I02Dn0SRF/7BFRIhbTxTYnYuZEPtkscsoXwiasiGSzKk8IQ4C1r2a2m8WgKL7sewXGKVhL/Rrx7tLmF0ZpfPhbXb0vxpRVuHA2c=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1741464305; c=relaxed/simple;
+	t=1741464604; c=relaxed/simple;
 	bh=DeJ4xg7n1dRRFbMgDiXqriBALoSMVnV3CngyW4Ja46o=;
-	h=To:From:Subject:Date:Message-ID:Mime-Version; b=e4DjxDH9F7Wfs/Gx1v2aJGCxlBr+kwmupD6DHOEt6sPAU/LKrCSrFOq114w2RUjXV8s+2mFSeLeJoJAoJZBdtxt/w3iDatrkjXMltAC0K8xXGWbyYs4/aZ5kk5+E2uW2Fh+J0pDrTXEsjEa8qv4N93kGo7bNmcNlN7mC81c9hsk=
+	h=To:From:Subject:Date:Message-ID:Mime-Version; b=SDNaH7COTOlETyxXVbBp7SgbBdiHMMcLq5WJAJvKc3JN1Vu3NEubP30L+kAS+B7vGnpxfz6nnbY+O3ZxsYuYKT4t5IoxqR+80aaJEvtTsFB12bKZMJhGhq57jFWmqTN2wqIoJd9mrxGGkjHWPXBU7fijoR/5KytVpg43Mk2g/18=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DB53D3858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 98CC63858D1E
 Received: from list by ciao.gmane.io with local (Exim 4.92)
 	(envelope-from <gocp-cygwin-patches@m.gmane-mx.org>)
-	id 1tr0Pu-0005Dl-FZ
-	for cygwin-patches@cygwin.com; Sat, 08 Mar 2025 21:05:02 +0100
+	id 1tr0Uk-0009RI-1A
+	for cygwin-patches@cygwin.com; Sat, 08 Mar 2025 21:10:02 +0100
 X-Injected-Via-Gmane: http://gmane.org/
 To: cygwin-patches@cygwin.com
 From: Andrew Schulman <andrex.e.schulman@gmail.com>
 Subject: Re: [GOLDSTAR][PLUSHHIPPO] Re: [PATCH v3 2/3] Cygwin: signal: Fix a race issue on modifying _pinfo::process_state
-Date: Sat, 08 Mar 2025 15:01:33 -0500
-Message-ID: <1f8psj5gm70pum7dvsiespdrua8nrjlve4@4ax.com>
+Date: Sat, 08 Mar 2025 15:08:58 -0500
+Message-ID: <mu8psj16ga7p81dvnk6kfhmg6fhvqvvddi@4ax.com>
 References: <20250228233406.950-1-takashi.yano@nifty.ne.jp> <20250228233406.950-3-takashi.yano@nifty.ne.jp> <Z8V7onhvf9I8Hcuc@calimero.vinschen.de> <20250303212453.511e306b7e0cf9ce04fad69c@nifty.ne.jp> <Z8WoFOXWxwC8AJNx@calimero.vinschen.de> <20250303233919.4f463d642c88623f9c520f74@nifty.ne.jp> <Z8X6uJJwhVA7i7lk@calimero.vinschen.de> <74c86bc5-ba6c-4ea2-b39f-d41ef538c5f9@dronecode.org.uk> <Z8nvhKqPZ6k7DgIs@calimero.vinschen.de> <79e2e9a1-f7e3-43a8-b1fd-1a1bdd477158@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
