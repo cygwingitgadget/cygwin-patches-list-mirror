@@ -1,112 +1,98 @@
-Return-Path: <SRS0=6X0C=V3=gmail.com=marco.atzeri@sourceware.org>
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-	by sourceware.org (Postfix) with ESMTPS id C89FF3858D1E
-	for <cygwin-patches@cygwin.com>; Sat,  8 Mar 2025 11:38:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C89FF3858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C89FF3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::531
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741433931; cv=none;
-	b=PNXL+wx2/bL+vRPuHewhMqO6nRuauUi3FnSsmpEM/oZiS5JWhB8KOmtAyKXSORziNBTB2QnodF9bYPKSIj0YHVgMkJnywpaJqxMjPhUWoJPl/CaTi3qaga9Lj3FzmvhFDTLXxesHSaP3GqBzB5Jacjm37Hlx79Do1O1nGJ9JtcE=
+Return-Path: <SRS0=u+O/=V3=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+	by sourceware.org (Postfix) with ESMTPS id 973083858D1E
+	for <cygwin-patches@cygwin.com>; Sat,  8 Mar 2025 13:24:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 973083858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 973083858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741440294; cv=none;
+	b=RgJ/dMmxVx5en+izU70bsrFKaO8lvAHRTH140o+QFqxQuuLJe3bIzLAn2Qzqdw5dnrJ6fEWnM8dPAxYDUmAXedFbC0+wtLKGeCdWXminDCVUHMej+Et/QZRB9ZyYl9BqSyI84xSuaoO6eVqmZ1kVbSiV/eIUTyQC0yGo1JWlfME=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1741433931; c=relaxed/simple;
-	bh=qN7Q1AW56GUBWgrn6U06aFUYZGwvLT/Xuodq9hpXPCk=;
-	h=DKIM-Signature:Message-ID:Date:MIME-Version:Subject:To:From; b=LplQF2nuCdaV0qu+QlgbSD/fZ8m0+nmvMJMsgiqABoVmJWuff8yOg1pHlDZRSLYAja/+lhaj+n6LMzZ5gq0USiAd5FGZIjW/Sc9+vw65STHAlLqn0Nn4IlxrjroftoCTQOuc6pIYh+mz2X+rgoJspvO6cjTbeBdQ44XOlzx0MrY=
+	t=1741440294; c=relaxed/simple;
+	bh=27GlhHJ8UNOdGxgqCi7LWIsn0alIxdQO+XNT/jQ5UlE=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version; b=LqD2tNLvSX6O4CJr7lxW2wQMO95XHNtWRmnTdYWEnysUwPPqLmTpsaresMWXJ2Oi7LcntApkJyvXEW5/JV+F0F3NTrotvur0k1Ge4bvu0NSs9n1QRKrSc0POlTH/6ecFOSAg3kxwNX1GL3+j9aBOY6Ue4YszS0xkvnR4EPxrEFk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C89FF3858D1E
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=LG8BzXw6
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5e5e34f4e89so3153088a12.1
-        for <cygwin-patches@cygwin.com>; Sat, 08 Mar 2025 03:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741433929; x=1742038729; darn=cygwin.com;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1+X7JpaI7lkCO8MLhn/LJwpeu1YL+Qij4L8jPANFkss=;
-        b=LG8BzXw65bBCjbbgKjZ3iBArkOXzDRrxgONXUFVzKzyhGFrkvGrt+E7zw7XheWj5TL
-         nyyKYRCSLho44TIAhryr5Pn+3lSVAsUaeF70yjCcV7G42Dn0QOXiEP3vocifcW6X+lby
-         OJoFDaqunCDtyi7QHv3GwRToW2dFodG/7U8uN6zaGfz1G/bZ4gy1ZY/SIE6IrAcKZtvs
-         /WgNVfZaGhfEkfxxlx3KQz4BYIsPlUJreIafKPxpjjM3pKwQlEzO4aqHYEZmnoPxk3Wk
-         0QU9a23UwPRH6vqc9sAHRG7lLhPuQCAmGTc0gs8bKqQsnKMr0EWjnPpXMckxCUQsepwG
-         j+2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741433929; x=1742038729;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+X7JpaI7lkCO8MLhn/LJwpeu1YL+Qij4L8jPANFkss=;
-        b=cimM18nJ9ITgzvjsbkUzDFYXQUynrlIt4o5jLcXp/NFy+8YwP3t+c03tC3092a0AWF
-         iqKmq2GdLJseqKXQU3kLQnIHaDDUhHyqod7tBYDnrcXXUo4cdAcwfTK+AiJKcC2LJrgT
-         PCLvJ4bmPWtvwTPGl3jxxB0B5aKtzE7ZegQQ3Rtvvkz82J/J+oKLOc12waHPfBn3qBZt
-         7DN/zf7obpSZC/ezUouJ2rylf0VA/yWu1brUrakX/0lTTQW2FEsk/r8NxxBOK+c8Z5Xe
-         WdmvPGeC7OCkXr5QpqTeoq5T9mEgRTRXlEQwF3VQx4PB8HnVnuhJ/ipcTpwNeJyhl9pX
-         K4Ug==
-X-Gm-Message-State: AOJu0Yy2bzO5OUryZIlmOuvp+KnHs0FED5gtfA+uBsVV6shdYOMUVqTK
-	To/BBB18iwiGHoUVNZo2NCIIRJ6KjqoxyeW9VN0tK6qr5fXf6zFSoDCz5A==
-X-Gm-Gg: ASbGncvlsgYZmQQoM0/KxXUbxi0UemLx1Jemh+D4ShuBvi39OiGglamKEQi8Z2Aopcp
-	xVWHwUTCKIZ5APTPbhF1QfRK6AJLRhruHthE6xE1PB0TVmp4+5rCJn1fzbH9UehKvY3HMKaAZvr
-	Nbb5YtWq7CbF52OqfGlKDGUMAJhy3E21cwaoOsFkiSo85PyS07TUWFiVCtDqfL/IgTjZrON1Y7w
-	PNrw1ef/9uoIJXjtw/VWixHobrgWEGRsgSfqOC1lGIRqUz7ZvO9Uh1fBiis1cofNpdVtYazQf2N
-	lhvV+KP9VypvioPu7FMBoB1BTHcYsHtxVfYFJ3YW2anYdYVoKEiB9g6GUJl+Bp7N4ezpN9KASfF
-	nkY6QnXJzw5DAP3vSRmYgR/RIOps=
-X-Google-Smtp-Source: AGHT+IFaEDstfxsjLrAvHxoKh45pEHBf1S3XvAaOxqB7Vj3UI9gB1wzon8qHCDi/j6+Rh+3GngLj7g==
-X-Received: by 2002:a05:6402:4020:b0:5e5:ea02:1230 with SMTP id 4fb4d7f45d1cf-5e5ea021550mr7751882a12.28.1741433929195;
-        Sat, 08 Mar 2025 03:38:49 -0800 (PST)
-Received: from ?IPV6:2001:a61:12ee:ed01:e090:615a:1559:326b? ([2001:a61:12ee:ed01:e090:615a:1559:326b])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c74a8608sm3823074a12.38.2025.03.08.03.38.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Mar 2025 03:38:48 -0800 (PST)
-Message-ID: <79e2e9a1-f7e3-43a8-b1fd-1a1bdd477158@gmail.com>
-Date: Sat, 8 Mar 2025 12:38:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GOLDSTAR][PLUSHHIPPO] Re: [PATCH v3 2/3] Cygwin: signal: Fix a
- race issue on modifying _pinfo::process_state
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 973083858D1E
+Received: from fwd89.aul.t-online.de (fwd89.aul.t-online.de [10.223.144.115])
+	by mailout03.t-online.de (Postfix) with SMTP id 6CF3DFB8
+	for <cygwin-patches@cygwin.com>; Sat,  8 Mar 2025 14:24:36 +0100 (CET)
+Received: from [192.168.2.102] ([91.57.253.229]) by fwd89.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tquAL-3oemeG0; Sat, 8 Mar 2025 14:24:33 +0100
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: sched_setaffinity: fix EACCES if pid of other process
+ is used
 To: cygwin-patches@cygwin.com
-References: <20250228233406.950-1-takashi.yano@nifty.ne.jp>
- <20250228233406.950-3-takashi.yano@nifty.ne.jp>
- <Z8V7onhvf9I8Hcuc@calimero.vinschen.de>
- <20250303212453.511e306b7e0cf9ce04fad69c@nifty.ne.jp>
- <Z8WoFOXWxwC8AJNx@calimero.vinschen.de>
- <20250303233919.4f463d642c88623f9c520f74@nifty.ne.jp>
- <Z8X6uJJwhVA7i7lk@calimero.vinschen.de>
- <74c86bc5-ba6c-4ea2-b39f-d41ef538c5f9@dronecode.org.uk>
- <Z8nvhKqPZ6k7DgIs@calimero.vinschen.de>
-Content-Language: en-US
-Cc: andrex.e.schulman@gmail.com
-From: Marco Atzeri <marco.atzeri@gmail.com>
-In-Reply-To: <Z8nvhKqPZ6k7DgIs@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <7a77c9b6-20e4-538f-4b8d-e91be879988f@t-online.de>
+Date: Sat, 8 Mar 2025 14:24:33 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------52FE7FC1EA58E190D14C1C97"
+X-TOI-EXPURGATEID: 150726::1741440273-837FDAEF-0B3AC539/0/0 CLEAN NORMAL
+X-TOI-MSGID: 6e0084bd-82f6-4b4e-a912-4036b20474bc
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 06/03/2025 19:55, Corinna Vinschen wrote:
-> On Mar  6 14:55, Jon Turney wrote:
->> On 03/03/2025 18:53, Corinna Vinschen wrote:
->>> On Mar  3 23:39, Takashi Yano wrote:
->>>> On Mon, 3 Mar 2025 14:01:08 +0100
->>>> Corinna Vinschen wrote:
+This is a multi-part message in MIME format.
+--------------52FE7FC1EA58E190D14C1C97
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
->>>
->>> Great.  Feel free to push the patch without sending another patch
->>> submission to cygwin-patches.
->>
->> I think Takashi-san must be about due another gold star, as he's been doing
->> some sterling work recently, fixing complex and difficult to reproduce bugs!
-> 
-> Absolutely!  Yesterday I was even mulling over a pink plush hippo, but
-> Takashi already has one over his fireplace and I wasn't sure if a second
-> one isn't taking too much space.
-> 
-> 
-> Corinna
+This fixes:
 
-An hippo is well deserved IMHO
+$ taskset -p 0x1 1234
+pid 1234's current affinity mask: fffffff
+taskset: failed to set pid 1234's affinity: Permission denied
 
-Regards
-Marco
+Perhaps older Windows versions were more relaxed if 
+PROCESS_SET_INFORMATION is granted.
 
+-- 
+Regards,
+Christian
+
+
+--------------52FE7FC1EA58E190D14C1C97
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-sched_setaffinity-fix-EACCES-if-pid-of-other-.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-sched_setaffinity-fix-EACCES-if-pid-of-other-.pa";
+ filename*1="tch"
+
+RnJvbSAwMjc1YTM2NzIzZGQ0NTUyYTI2ODgwZTRhYzhiYTliNmRjNDFiMTdmIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTYXQsIDggTWFyIDIwMjUgMTQ6MDU6MjAgKzAxMDAK
+U3ViamVjdDogW1BBVENIXSBDeWd3aW46IHNjaGVkX3NldGFmZmluaXR5OiBmaXggRUFDQ0VT
+IGlmIHBpZCBvZiBvdGhlciBwcm9jZXNzCiBpcyB1c2VkCgpHZXRQcm9jZXNzR3JvdXBBZmZp
+bml0eSgpIHJlcXVpcmVzIFBST0NFU1NfUVVFUllfTElNSVRFRF9JTkZPUk1BVElPTi4KCkZp
+eGVzOiA2NDFlY2IwNzUzM2UgKCJDeWd3aW46IEltcGxlbWVudCBzY2hlZF9bZ3NdZXRhZmZp
+bml0eSgpIikKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFuLmZy
+YW5rZUB0LW9ubGluZS5kZT4KLS0tCiB3aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAgfCAy
+ICsrCiB3aW5zdXAvY3lnd2luL3NjaGVkLmNjICAgICAgfCAzICsrLQogMiBmaWxlcyBjaGFu
+Z2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS93aW5z
+dXAvY3lnd2luL3JlbGVhc2UvMy42LjAgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAK
+aW5kZXggODIyNWYyY2NjLi40Yzk1M2E4NGQgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4v
+cmVsZWFzZS8zLjYuMAorKysgYi93aW5zdXAvY3lnd2luL3JlbGVhc2UvMy42LjAKQEAgLTEy
+NiwzICsxMjYsNSBAQCBGaXhlczoKIAogLSBGaXggJ2xvc3QgY29ubmVjdGlvbicgZXJyb3Ig
+aW4gc2NwLgogICBBZGRyZXNzZXM6IGh0dHBzOi8vY3lnd2luLmNvbS9waXBlcm1haWwvY3ln
+d2luLzIwMjUtSmFudWFyeS8yNTcxNDMuaHRtbAorCistIEZpeCBFQUNDRVMgZXJyb3Igb2Yg
+c2NoZWRfc2V0YWZmaW5pdHkoMikgaWYgcGlkIG9mIG90aGVyIHByb2Nlc3MgaXMgdXNlZC4K
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MgYi93aW5zdXAvY3lnd2luL3Nj
+aGVkLmNjCmluZGV4IDg2OTQxYjJhYy4uMmY0ZmJjMzFhIDEwMDY0NAotLS0gYS93aW5zdXAv
+Y3lnd2luL3NjaGVkLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vc2NoZWQuY2MKQEAgLTY2MSw3
+ICs2NjEsOCBAQCBzY2hlZF9zZXRhZmZpbml0eSAocGlkX3QgcGlkLCBzaXplX3Qgc2l6ZW9m
+X3NldCwgY29uc3QgY3B1X3NldF90ICpzZXQpCiAgIGlmIChwKQogICAgIHsKICAgICAgIHBy
+b2Nlc3MgPSBwaWQgJiYgcGlkICE9IG15c2VsZi0+cGlkID8KLQkJT3BlblByb2Nlc3MgKFBS
+T0NFU1NfU0VUX0lORk9STUFUSU9OLCBGQUxTRSwKKwkJT3BlblByb2Nlc3MgKFBST0NFU1Nf
+U0VUX0lORk9STUFUSU9OIHwKKwkJCSAgICAgUFJPQ0VTU19RVUVSWV9MSU1JVEVEX0lORk9S
+TUFUSU9OLCBGQUxTRSwKIAkJCSAgICAgcC0+ZHdQcm9jZXNzSWQpIDogR2V0Q3VycmVudFBy
+b2Nlc3MgKCk7CiAgICAgICBpZiAoIUdldFByb2Nlc3NHcm91cEFmZmluaXR5IChwcm9jZXNz
+LCAmZ3JvdXBjb3VudCwgZ3JvdXBhcnJheSkpCiAJewotLSAKMi40NS4xCgo=
+--------------52FE7FC1EA58E190D14C1C97--
