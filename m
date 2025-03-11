@@ -1,113 +1,103 @@
-Return-Path: <SRS0=UdKb=V6=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.227.115])
-	by sourceware.org (Postfix) with ESMTPS id C3DA93858431
-	for <cygwin-patches@cygwin.com>; Tue, 11 Mar 2025 08:56:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C3DA93858431
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C3DA93858431
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.115
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741683406; cv=none;
-	b=j37mtBPCyHGUm6QqzSOGuAzJW1YRVn66xy8qkr8gARgyTqI1prwhlul6tQ2jEYIMJOleBIZyzT6UzqmRt6A5jAd96P7l8ty0EnPy9bb42OJoOR4yRvHLDLLnr99YiOJItCZXXtdZpSq41TV+AbMEpXbb1d/aXbexsiO6BZzuWwU=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1741683406; c=relaxed/simple;
-	bh=9vcZX6QgjRA70XwtteJBWwAcMI9p0yW3rqzAEK/0Zlc=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=c/ta6y1sdssKjQVvjkSpRMcjWyo99ZnpBbOghrDrfAdRToyO7k76hYOh8G+XJIZhnxTTr5EX9RmsIxYuREYpdOmBgDfDpzTezR3nSICdG8hig/I7g/2sgf0H+tS2iH+8URUSQFITZCUnkjDewG8HNbZhnhQLN+0zhW2Csfhcuvs=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C3DA93858431
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=qLDDo67t
-Received: from HP-Z230 by mta-snd-e03.mail.nifty.com with ESMTP
-          id <20250311085643934.VDJR.110778.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 11 Mar 2025 17:56:43 +0900
-Date: Tue, 11 Mar 2025 17:56:42 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id A66173858C5F; Tue, 11 Mar 2025 10:28:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A66173858C5F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1741688939;
+	bh=wROBAj1wRqpjiL6thuDnxuhjZ15vSkIBdtC38DuExZ4=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=tSzY7RZwfKwzzbZoSCJ7ANn2+VUp1Clxd76weZK6uYYauFchUcOAbgkZWjXHfYhO1
+	 NpVvjOtl39322MRrk6pdXphcAjalbuid6y1tKG1U6aXDs1GnGqhd/pIBj8SV3DSnfT
+	 MeQHhWfFMc3rqBOEGPGZvgJNoYmqdZDoYEVa/1aU=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id A9454A8067E; Tue, 11 Mar 2025 11:28:57 +0100 (CET)
+Date: Tue, 11 Mar 2025 11:28:57 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: signa: Redesign signal queue handling
-Message-Id: <20250311175642.965ccd440c67ad956e1206b9@nifty.ne.jp>
-In-Reply-To: <Z89SULIpjgwSeQST@calimero.vinschen.de>
+Message-ID: <Z9AQaVQxMemHm4SH@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20250307121626.1365055-1-takashi.yano@nifty.ne.jp>
-	<21db86b5-d9db-734b-7fea-922b18dab292@t-online.de>
-	<Z89SULIpjgwSeQST@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1741683403;
- bh=JzKu8RZmK3bS2EFcwNpiJ2hF8eWZsbQt/n8DmKrLcHQ=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=qLDDo67tlgYU7ehr8P5Ssqic+oJJMlf4wq0XkRGnclty0TdC1c4iPRq7DeuKBl3opcDSowkE
- WUkJcVF3kFCrP0INEZ+XedXV1FROQgEXmDfF6uxtkcX2h+Eh1RwYFyxqz248ltMNi8XwkT2Gv2
- kGAO8ePkFP954DPV0CLCPhes3pNJfkJ+PKhb8ni5SIS4vdm/b35L39uEP227u4ZkzsaIH5L9Su
- A788QJ8EZvVVeIcScnkLFADMpXfYsBHdofwpMpkMHybki1Ll+qfKvJtAN7yE3bxa5ogHj2s94O
- H4gpvfpVIfSxsiFvL/3uX33wN3FfEC9n22tlD7hqFeEn4jPw==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+ <21db86b5-d9db-734b-7fea-922b18dab292@t-online.de>
+ <Z89SULIpjgwSeQST@calimero.vinschen.de>
+ <20250311175642.965ccd440c67ad956e1206b9@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250311175642.965ccd440c67ad956e1206b9@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 10 Mar 2025 21:57:52 +0100
-Corinna Vinschen wrote:
-> On Mar  9 13:28, Christian Franke wrote:
-> > Takashi Yano wrote:
-> > > ...
-> > > With this patch prevents all signals from that issues by redesigning
-> > > the signal queue, Only the exception is the case that the process is
-> > > in the PID_STOPPED state. In this case, SIGCONT/SIGKILL should be
-> > > processed prior to the other signals in the queue.
+On Mar 11 17:56, Takashi Yano wrote:
+> On Mon, 10 Mar 2025 21:57:52 +0100
+> Corinna Vinschen wrote:
+> > On Mar  9 13:28, Christian Franke wrote:
+> > > Takashi Yano wrote:
+> > > > ...
+> > > > With this patch prevents all signals from that issues by redesigning
+> > > > the signal queue, Only the exception is the case that the process is
+> > > > in the PID_STOPPED state. In this case, SIGCONT/SIGKILL should be
+> > > > processed prior to the other signals in the queue.
+> > > > 
+> > > > Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257582.html
+> > > > Fixes: 7ac6173643b1 ("(pending_signals): New class.")
+> > > > Reported by: Christian Franke <Christian.Franke@t-online.de>
+> > > > Reviewed-by:
+> > > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > > > ...
+> > > >   void
+> > > >   pending_signals::add (sigpacket& pack)
+> > > >   {
+> > > > ...
+> > > > +  if (q->si.si_signo == pack.si.si_signo)
+> > > > +    q->usecount++;
+> > > > ...
+> > > > 
 > > > 
-> > > Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257582.html
-> > > Fixes: 7ac6173643b1 ("(pending_signals): New class.")
-> > > Reported by: Christian Franke <Christian.Franke@t-online.de>
-> > > Reviewed-by:
-> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > > ...
-> > >   void
-> > >   pending_signals::add (sigpacket& pack)
-> > >   {
-> > > ...
-> > > +  if (q->si.si_signo == pack.si.si_signo)
-> > > +    q->usecount++;
-> > > ...
-> > > 
+> > > This should possibly also compare the si.si_sigval fields. Otherwise values
+> > > would be lost if the same real-time signal is issued multiple times with
+> > > different value parameters.
 > > 
-> > This should possibly also compare the si.si_sigval fields. Otherwise values
-> > would be lost if the same real-time signal is issued multiple times with
-> > different value parameters.
+> > Looks like this doesn't only affect RT signals.  I just read POSIX.1-2024
+> > on sigaction,
+> > https://pubs.opengroup.org/onlinepubs/9799919799/functions/sigaction.html
+> > and this is what it has to say in terms of queuing:
+> > 
+> >   If SA_SIGINFO is not set in sa_flags, then the disposition of
+> >   subsequent occurrences of sig when it is already pending is
+> >   implementation-defined; the signal-catching function shall be invoked
+> >   with a single argument. If SA_SIGINFO is set in sa_flags, then
+> >   subsequent occurrences of sig generated by sigqueue() or as a result
+> >   of any signal-generating function that supports the specification of
+> >   an application-defined value (when sig is already pending) shall be
+> >   queued in FIFO order until delivered or accepted;
+> > 
+> > This isn't quite what the Linux man pages describe.  Signal(7) says:
+> > 
+> >   Standard signals do not queue.  If multiple instances of a standard
+> >   signal are generated while that signal is blocked, then only one
+> >   instance of the signal is marked as pending (and the signal will be
+> >   delivered just once when it is unblocked).  In the case where a
+> >   standard signal is already pending, the siginfo_t structure (see
+> >   sigaction(2)) associated with that signal is not overwritten on
+> >   arrival of subsequent instances of the same signal.  Thus, the process
+> >   will receive the information associated with the first instance of the
+> >   signal.
+> > 
+> > Am I just confused or do these two description not match?
 > 
-> Looks like this doesn't only affect RT signals.  I just read POSIX.1-2024
-> on sigaction,
-> https://pubs.opengroup.org/onlinepubs/9799919799/functions/sigaction.html
-> and this is what it has to say in terms of queuing:
+> Yeah, I think Linux is not fully compliant with POSIX.
+> My v2 patch intends signal queue behaves like Linux when SA_SIGINFO
+> is not set. On the contrary, it behaves as POSIX states if SA_SIGINFO
+> is set.
 > 
->   If SA_SIGINFO is not set in sa_flags, then the disposition of
->   subsequent occurrences of sig when it is already pending is
->   implementation-defined; the signal-catching function shall be invoked
->   with a single argument. If SA_SIGINFO is set in sa_flags, then
->   subsequent occurrences of sig generated by sigqueue() or as a result
->   of any signal-generating function that supports the specification of
->   an application-defined value (when sig is already pending) shall be
->   queued in FIFO order until delivered or accepted;
-> 
-> This isn't quite what the Linux man pages describe.  Signal(7) says:
-> 
->   Standard signals do not queue.  If multiple instances of a standard
->   signal are generated while that signal is blocked, then only one
->   instance of the signal is marked as pending (and the signal will be
->   delivered just once when it is unblocked).  In the case where a
->   standard signal is already pending, the siginfo_t structure (see
->   sigaction(2)) associated with that signal is not overwritten on
->   arrival of subsequent instances of the same signal.  Thus, the process
->   will receive the information associated with the first instance of the
->   signal.
-> 
-> Am I just confused or do these two description not match?
+> Does this make sense?
 
-Yeah, I think Linux is not fully compliant with POSIX.
-My v2 patch intends signal queue behaves like Linux when SA_SIGINFO
-is not set. On the contrary, it behaves as POSIX states if SA_SIGINFO
-is set.
+Absolutely.
 
-Does this make sense?
+The word "implementation-defined" in the POSIX docs give you allowance
+to queue signales all the time, though.  Just something to keep in mind
+if that simplifies things.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Corinna
