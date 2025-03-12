@@ -1,80 +1,174 @@
 Return-Path: <SRS0=oSj3=V7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 9018C3858C2D
-	for <cygwin-patches@cygwin.com>; Wed, 12 Mar 2025 03:29:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9018C3858C2D
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.177])
+	by sourceware.org (Postfix) with ESMTPS id 1CEEA3858D21
+	for <cygwin-patches@cygwin.com>; Wed, 12 Mar 2025 04:36:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1CEEA3858D21
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9018C3858C2D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741750149; cv=none;
-	b=M9eiQTyoXsj0na3lwyLifg56Y/i7RSN2wbvKdjfz/zLGiMPZ7GT58ZPCaXmJZNdUGBAR20kNJfvn1iMm+tf+V5gZxMUivkPFM8kIWmSPiPzXU3ahqPtyGDxZp2ggj2O0+IyRggQiNkjlcWe9MmK0LfCbyE8kxtZmqMezpKzt7zY=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1CEEA3858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.177
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741754210; cv=none;
+	b=vwxAHtfMK6oXB+WClYSrkNdv3aolpwjlFxAYg84JqGSdj//H8pMm3x36BY+3/gjU3fZOcxA4I5i69AbZKmibQtF3jWYCVyoRf0SNd2jIBFjXRVDR1AMtKNygqxJPzKCjmFjJ7kMaYU2Zq98ZFuGp3p5ytVtHG6KIKWTn6F2IEPc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1741750149; c=relaxed/simple;
-	bh=rz5GDkHajnfebEIAPWo6UJ+hROhX7lsUzmeStsASnX0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=GoFvHUXdKctJ4ni97xNUFI7TqCCPeTGJCaNR51gJnsjR/elDwzLckIQV1BOK8yFSXoVtOx0Qh35ZMRgpS7ZKMvcT3Ak5mvtVtOLu6lmGhMczW/5wKXjDi/y//hNwGf6Tl9E43NWcTgNrabVkytrUGB6IUbrPcTEFrlSpEYH6FQM=
+	t=1741754210; c=relaxed/simple;
+	bh=O13HDO1yRkqopc2V5YsqW+wBovFqGD8JkubbaObL2BM=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uDDmuc1ZGlp+BVN3GaEpaZiGujr9UvUzlKgnTCsf7H1AHfTbeMEKg6ugMxaaPOkc1IU6rdY4Cv/AHzKsOqhi0jA3evozKbkXCm1euf6KpyYb961z03P6KBrkAAoot4yHWbLP0D0DsOaByQFCf89VL9VOgx6Tr7T7adz3u9eZQcA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9018C3858C2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1CEEA3858D21
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Cas2zFDb
-Received: from localhost.localdomain by mta-snd-w05.mail.nifty.com
-          with ESMTP
-          id <20250312032906429.XTSR.17135.localhost.localdomain@nifty.com>;
-          Wed, 12 Mar 2025 12:29:06 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=LoyKGbJn
+Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
+          id <20250312043646292.XGUD.62593.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Wed, 12 Mar 2025 13:36:46 +0900
+Date: Wed, 12 Mar 2025 13:36:44 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v3 6/6] Cygwin: signal: Remove context_copy in call_signal_handler()
-Date: Wed, 12 Mar 2025 12:27:32 +0900
-Message-ID: <20250312032748.233077-7-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20250312032748.233077-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v3 5/6] Cygwin: signal: Use context locally copied in
+ call_signal_handler()
+Message-Id: <20250312133644.83cda7bcd76962a96dba69fd@nifty.ne.jp>
+In-Reply-To: <20250312032748.233077-6-takashi.yano@nifty.ne.jp>
 References: <20250312032748.233077-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1741750146;
- bh=VI0sS3DRSMOCYOMMiMGwUU+ThkQv+3BJXmbePIbvkC4=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Cas2zFDb4JWPjZOvIiuMhCHvn0UjEeK3YVXLNy+H2SJeP1Moemoh3iVSLk3xPc1GUpX5kfWH
- QD3+7taO2tXxj7cuD2zHTjgYAKQDrsZFK7VQljO7zPsXZCWgZX6mgNZ5FmHoZD7wwkBhSThDUx
- q5K5ISde/e+R32FNys1h8O/0ZtubjAlre5twWO0M3cQcmkuK2Qk+A++AcAtAw979E9h6YExkcQ
- 3+pbe3AG2hKfHAgSinqglgb3lADKT0Mbqde+Wf3YUqXpt7nFgUax1j3NTJFwwfIsE7LqpQLicf
- /RsOlzxP94ezLJi1sIyI0DoQF3mMuoODPVRB6zKZDKPz3MHA==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+	<20250312032748.233077-6-takashi.yano@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1741754206;
+ bh=ZFIHf2aP+vENxSLyj1912+yXICorVKjeom56U4VNxZY=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=LoyKGbJnGEf9f4tbwE/N8DvouoH0YWEF22p9q+dc/vNXqXcbg7hCz8IXScsL2UCHCf4HUd9/
+ OUttubDr0DD0Q6VTfFrrKkVZbURoyri1FHXtiqc5AbNlRYj/CIC4WOBqAzJYtpTzaDXGDDhjHh
+ fuwJ6eVG/W3s8zHRtglxYRPQaFq8mN+WZDv6uWUg9YrgzxyAquCiJBTv5qLDvuyDIl9JTro3/V
+ 4zR+4RTxRwnTxEGnKtSqXbhxjTDwDKt/sk4HQgTa0QOPRLCl/tDCUAQDwAnHvlJJ9EphVl5oe0
+ 3WlHY2fnov6TLMqazlApWPIIo2Vjmp4HWHVzVBSE/11OLB1Q==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-After the commit 1d97f8aa4385, context_copy in call_signal_handle()
-is not used anymore. This patch removes it.
+On Wed, 12 Mar 2025 12:27:31 +0900
+Takashi Yano wrote:
+> If the signal handler is called from inside of another signal handler,
+> _cygtls::context may be destroyed by call_signal_handler() newly called.
+> To avoid this situation, this patch used context locally copied in
+> call_signal_handler().
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin-patches/2025q1/013461.html
 
-Fixes: 1d97f8aa4385 ("Cygwin: signals: don't evaluate SA_SIGINFO context after handler returns")
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/exceptions.cc | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Oops, this should be
+https://cygwin.com/pipermail/cygwin-patches/2025q1/013483.html
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index 1e19af68c..c9fe6a386 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -1694,7 +1694,7 @@ _cygtls::call_signal_handler ()
-       siginfo_t thissi = infodata;
-       void (*thisfunc) (int, siginfo_t *, void *) = func;
- 
--      ucontext_t *thiscontext = NULL, context_copy;
-+      ucontext_t *thiscontext = NULL;
- 
-       /* Only make a context for SA_SIGINFO handlers */
-       if (this_sa_flags & SA_SIGINFO)
-@@ -1752,7 +1752,6 @@ _cygtls::call_signal_handler ()
- 				     ? (uintptr_t) thissi.si_addr : 0;
- 
- 	  thiscontext = &context1;
--	  context_copy = context1;
- 	}
- 
-       int this_errno = saved_errno;
+> Fixes: 9043956ce859 ("Only construct ucontext for SA_SIGINFO signal handlers")
+> Reported-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/exceptions.cc | 41 ++++++++++++++++++++-----------------
+>  1 file changed, 22 insertions(+), 19 deletions(-)
+> 
+> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+> index 18a566c45..1e19af68c 100644
+> --- a/winsup/cygwin/exceptions.cc
+> +++ b/winsup/cygwin/exceptions.cc
+> @@ -1660,6 +1660,8 @@ altstack_wrapper (int sig, siginfo_t *siginfo, ucontext_t *sigctx,
+>  int
+>  _cygtls::call_signal_handler ()
+>  {
+> +  ucontext_t context1 = context;
+> +
+>    int this_sa_flags = SA_RESTART;
+>    while (1)
+>      {
+> @@ -1697,10 +1699,10 @@ _cygtls::call_signal_handler ()
+>        /* Only make a context for SA_SIGINFO handlers */
+>        if (this_sa_flags & SA_SIGINFO)
+>  	{
+> -	  context.uc_link = 0;
+> -	  context.uc_flags = 0;
+> +	  context1.uc_link = 0;
+> +	  context1.uc_flags = 0;
+>  	  if (thissi.si_cyg)
+> -	    memcpy (&context.uc_mcontext,
+> +	    memcpy (&context1.uc_mcontext,
+>  		    ((cygwin_exception *) thissi.si_cyg)->context (),
+>  		    sizeof (CONTEXT));
+>  	  else
+> @@ -1710,13 +1712,13 @@ _cygtls::call_signal_handler ()
+>  		 from sigdelayed, fix the instruction pointer accordingly. */
+>  #pragma GCC diagnostic push
+>  #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+> -	      RtlCaptureContext ((PCONTEXT) &context.uc_mcontext);
+> +	      RtlCaptureContext ((PCONTEXT) &context1.uc_mcontext);
+>  #pragma GCC diagnostic pop
+> -	      __unwind_single_frame ((PCONTEXT) &context.uc_mcontext);
+> +	      __unwind_single_frame ((PCONTEXT) &context1.uc_mcontext);
+>  	      if (stackptr > stack)
+>  		{
+>  #ifdef __x86_64__
+> -		  context.uc_mcontext.rip = retaddr ();
+> +		  context1.uc_mcontext.rip = retaddr ();
+>  #else
+>  #error unimplemented for this target
+>  #endif
+> @@ -1727,30 +1729,30 @@ _cygtls::call_signal_handler ()
+>  	      && !_my_tls.altstack.ss_flags
+>  	      && _my_tls.altstack.ss_sp)
+>  	    {
+> -	      context.uc_stack = _my_tls.altstack;
+> -	      context.uc_stack.ss_flags = SS_ONSTACK;
+> +	      context1.uc_stack = _my_tls.altstack;
+> +	      context1.uc_stack.ss_flags = SS_ONSTACK;
+>  	    }
+>  	  else
+>  	    {
+> -	      context.uc_stack.ss_sp = NtCurrentTeb ()->Tib.StackBase;
+> -	      context.uc_stack.ss_flags = 0;
+> +	      context1.uc_stack.ss_sp = NtCurrentTeb ()->Tib.StackBase;
+> +	      context1.uc_stack.ss_flags = 0;
+>  	      if (!NtCurrentTeb ()->DeallocationStack)
+> -		context.uc_stack.ss_size
+> +		context1.uc_stack.ss_size
+>  		  = (uintptr_t) NtCurrentTeb ()->Tib.StackLimit
+>  		    - (uintptr_t) NtCurrentTeb ()->Tib.StackBase;
+>  	      else
+> -		context.uc_stack.ss_size
+> +		context1.uc_stack.ss_size
+>  		  = (uintptr_t) NtCurrentTeb ()->DeallocationStack
+>  		    - (uintptr_t) NtCurrentTeb ()->Tib.StackBase;
+>  	    }
+> -	  context.uc_sigmask = context.uc_mcontext.oldmask = this_oldmask;
+> +	  context1.uc_sigmask = context1.uc_mcontext.oldmask = this_oldmask;
+>  
+> -	  context.uc_mcontext.cr2 = (thissi.si_signo == SIGSEGV
+> -				     || thissi.si_signo == SIGBUS)
+> -				    ? (uintptr_t) thissi.si_addr : 0;
+> +	  context1.uc_mcontext.cr2 = (thissi.si_signo == SIGSEGV
+> +				      || thissi.si_signo == SIGBUS)
+> +				     ? (uintptr_t) thissi.si_addr : 0;
+>  
+> -	  thiscontext = &context;
+> -	  context_copy = context;
+> +	  thiscontext = &context1;
+> +	  context_copy = context1;
+>  	}
+>  
+>        int this_errno = saved_errno;
+> @@ -1836,10 +1838,11 @@ _cygtls::call_signal_handler ()
+>        incyg = true;
+>  
+>        set_signal_mask (_my_tls.sigmask, (this_sa_flags & SA_SIGINFO)
+> -					? context.uc_sigmask : this_oldmask);
+> +					? context1.uc_sigmask : this_oldmask);
+>        if (this_errno >= 0)
+>  	set_errno (this_errno);
+>      }
+> +  context = context1;
+>  
+>    /* FIXME: Since 2011 this return statement always returned 1 (meaning
+>       SA_RESTART is effective) if the thread we're running in is not the
+> -- 
+> 2.45.1
+> 
+
+
 -- 
-2.45.1
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
