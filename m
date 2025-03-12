@@ -1,174 +1,96 @@
-Return-Path: <SRS0=oSj3=V7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.177])
-	by sourceware.org (Postfix) with ESMTPS id 1CEEA3858D21
-	for <cygwin-patches@cygwin.com>; Wed, 12 Mar 2025 04:36:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1CEEA3858D21
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1CEEA3858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.177
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1741754210; cv=none;
-	b=vwxAHtfMK6oXB+WClYSrkNdv3aolpwjlFxAYg84JqGSdj//H8pMm3x36BY+3/gjU3fZOcxA4I5i69AbZKmibQtF3jWYCVyoRf0SNd2jIBFjXRVDR1AMtKNygqxJPzKCjmFjJ7kMaYU2Zq98ZFuGp3p5ytVtHG6KIKWTn6F2IEPc=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1741754210; c=relaxed/simple;
-	bh=O13HDO1yRkqopc2V5YsqW+wBovFqGD8JkubbaObL2BM=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uDDmuc1ZGlp+BVN3GaEpaZiGujr9UvUzlKgnTCsf7H1AHfTbeMEKg6ugMxaaPOkc1IU6rdY4Cv/AHzKsOqhi0jA3evozKbkXCm1euf6KpyYb961z03P6KBrkAAoot4yHWbLP0D0DsOaByQFCf89VL9VOgx6Tr7T7adz3u9eZQcA=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1CEEA3858D21
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=LoyKGbJn
-Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
-          id <20250312043646292.XGUD.62593.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 12 Mar 2025 13:36:46 +0900
-Date: Wed, 12 Mar 2025 13:36:44 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id EB3973858408; Wed, 12 Mar 2025 11:16:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EB3973858408
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1741778174;
+	bh=TaytL3Ec/SmpwgGPcYRRzq4NCgWV3eyxzEWd+8DRdsU=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=ZREI1NLKTf9lZgSy/q1l9H7dWBxLNwmcX/bDRvpkMX0FDHXGxcRYwhMUZJfUwWZbV
+	 8cAmxuLXS7w/y5EUt8Qfm24+hAemWzUxPHFuWn/IRm4ra7OnaIupgzIhygjxM63fVa
+	 AdX65A/Iymc5wbTFt5QDoPwz9/EJMsZOeqrN8t3g=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id DFEBEA8066D; Wed, 12 Mar 2025 12:16:12 +0100 (CET)
+Date: Wed, 12 Mar 2025 12:16:12 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 5/6] Cygwin: signal: Use context locally copied in
- call_signal_handler()
-Message-Id: <20250312133644.83cda7bcd76962a96dba69fd@nifty.ne.jp>
-In-Reply-To: <20250312032748.233077-6-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v3 1/6] Cygwin: signal: Redesign signal queue handling
+Message-ID: <Z9Fs_Dyagj26Jszv@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20250312032748.233077-1-takashi.yano@nifty.ne.jp>
-	<20250312032748.233077-6-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1741754206;
- bh=ZFIHf2aP+vENxSLyj1912+yXICorVKjeom56U4VNxZY=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=LoyKGbJnGEf9f4tbwE/N8DvouoH0YWEF22p9q+dc/vNXqXcbg7hCz8IXScsL2UCHCf4HUd9/
- OUttubDr0DD0Q6VTfFrrKkVZbURoyri1FHXtiqc5AbNlRYj/CIC4WOBqAzJYtpTzaDXGDDhjHh
- fuwJ6eVG/W3s8zHRtglxYRPQaFq8mN+WZDv6uWUg9YrgzxyAquCiJBTv5qLDvuyDIl9JTro3/V
- 4zR+4RTxRwnTxEGnKtSqXbhxjTDwDKt/sk4HQgTa0QOPRLCl/tDCUAQDwAnHvlJJ9EphVl5oe0
- 3WlHY2fnov6TLMqazlApWPIIo2Vjmp4HWHVzVBSE/11OLB1Q==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+ <20250312032748.233077-2-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250312032748.233077-2-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 12 Mar 2025 12:27:31 +0900
-Takashi Yano wrote:
-> If the signal handler is called from inside of another signal handler,
-> _cygtls::context may be destroyed by call_signal_handler() newly called.
-> To avoid this situation, this patch used context locally copied in
-> call_signal_handler().
+Hi Takashi,
+
+On Mar 12 12:27, Takashi Yano wrote:
+> The previous implementation of the signal queue behaves as:
+> 1) Signals in the queue are processed in a disordered manner.
+> 2) If the same signal is already in the queue, new signal is discarded.
 > 
-> Addresses: https://cygwin.com/pipermail/cygwin-patches/2025q1/013461.html
-
-Oops, this should be
-https://cygwin.com/pipermail/cygwin-patches/2025q1/013483.html
-
-> Fixes: 9043956ce859 ("Only construct ucontext for SA_SIGINFO signal handlers")
-> Reported-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
+> Strictly speaking, these behaviours do not violate POSIX. However,
+> these could be a cause of unexpected behaviour in some software. In
+> Linux, some important signals such as SIGSTOP/SIGCONT do not seem to
+> behave like that.
+> This patch prevents SIGKILL, SIGSTOP, SIGCONT, and SIGRT* from that
+> issue. Moreover, if SA_SIGINFO is set in sa_flags, the signal is
+> treated almost as the same.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257582.html
+> Fixes: 7ac6173643b1 ("(pending_signals): New class.")
+> Reported by: Christian Franke <Christian.Franke@t-online.de>
+> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>, Christian Franke <Christian.Franke@t-online.de>
 > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 > ---
->  winsup/cygwin/exceptions.cc | 41 ++++++++++++++++++++-----------------
->  1 file changed, 22 insertions(+), 19 deletions(-)
+>  winsup/cygwin/sigproc.cc | 128 ++++++++++++++++++++++++++++++++-------
+>  1 file changed, 106 insertions(+), 22 deletions(-)
 > 
-> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-> index 18a566c45..1e19af68c 100644
-> --- a/winsup/cygwin/exceptions.cc
-> +++ b/winsup/cygwin/exceptions.cc
-> @@ -1660,6 +1660,8 @@ altstack_wrapper (int sig, siginfo_t *siginfo, ucontext_t *sigctx,
->  int
->  _cygtls::call_signal_handler ()
->  {
-> +  ucontext_t context1 = context;
-> +
->    int this_sa_flags = SA_RESTART;
->    while (1)
->      {
-> @@ -1697,10 +1699,10 @@ _cygtls::call_signal_handler ()
->        /* Only make a context for SA_SIGINFO handlers */
->        if (this_sa_flags & SA_SIGINFO)
->  	{
-> -	  context.uc_link = 0;
-> -	  context.uc_flags = 0;
-> +	  context1.uc_link = 0;
-> +	  context1.uc_flags = 0;
->  	  if (thissi.si_cyg)
-> -	    memcpy (&context.uc_mcontext,
-> +	    memcpy (&context1.uc_mcontext,
->  		    ((cygwin_exception *) thissi.si_cyg)->context (),
->  		    sizeof (CONTEXT));
->  	  else
-> @@ -1710,13 +1712,13 @@ _cygtls::call_signal_handler ()
->  		 from sigdelayed, fix the instruction pointer accordingly. */
->  #pragma GCC diagnostic push
->  #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-> -	      RtlCaptureContext ((PCONTEXT) &context.uc_mcontext);
-> +	      RtlCaptureContext ((PCONTEXT) &context1.uc_mcontext);
->  #pragma GCC diagnostic pop
-> -	      __unwind_single_frame ((PCONTEXT) &context.uc_mcontext);
-> +	      __unwind_single_frame ((PCONTEXT) &context1.uc_mcontext);
->  	      if (stackptr > stack)
->  		{
->  #ifdef __x86_64__
-> -		  context.uc_mcontext.rip = retaddr ();
-> +		  context1.uc_mcontext.rip = retaddr ();
->  #else
->  #error unimplemented for this target
->  #endif
-> @@ -1727,30 +1729,30 @@ _cygtls::call_signal_handler ()
->  	      && !_my_tls.altstack.ss_flags
->  	      && _my_tls.altstack.ss_sp)
->  	    {
-> -	      context.uc_stack = _my_tls.altstack;
-> -	      context.uc_stack.ss_flags = SS_ONSTACK;
-> +	      context1.uc_stack = _my_tls.altstack;
-> +	      context1.uc_stack.ss_flags = SS_ONSTACK;
->  	    }
->  	  else
->  	    {
-> -	      context.uc_stack.ss_sp = NtCurrentTeb ()->Tib.StackBase;
-> -	      context.uc_stack.ss_flags = 0;
-> +	      context1.uc_stack.ss_sp = NtCurrentTeb ()->Tib.StackBase;
-> +	      context1.uc_stack.ss_flags = 0;
->  	      if (!NtCurrentTeb ()->DeallocationStack)
-> -		context.uc_stack.ss_size
-> +		context1.uc_stack.ss_size
->  		  = (uintptr_t) NtCurrentTeb ()->Tib.StackLimit
->  		    - (uintptr_t) NtCurrentTeb ()->Tib.StackBase;
->  	      else
-> -		context.uc_stack.ss_size
-> +		context1.uc_stack.ss_size
->  		  = (uintptr_t) NtCurrentTeb ()->DeallocationStack
->  		    - (uintptr_t) NtCurrentTeb ()->Tib.StackBase;
->  	    }
-> -	  context.uc_sigmask = context.uc_mcontext.oldmask = this_oldmask;
-> +	  context1.uc_sigmask = context1.uc_mcontext.oldmask = this_oldmask;
+> diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+> index 8739f18f5..ab3acfd24 100644
+> --- a/winsup/cygwin/sigproc.cc
+> +++ b/winsup/cygwin/sigproc.cc
+> @@ -21,6 +21,7 @@ details. */
+>  #include "cygtls.h"
+>  #include "ntdll.h"
+>  #include "exception.h"
+> +#include <assert.h>
 >  
-> -	  context.uc_mcontext.cr2 = (thissi.si_signo == SIGSEGV
-> -				     || thissi.si_signo == SIGBUS)
-> -				    ? (uintptr_t) thissi.si_addr : 0;
-> +	  context1.uc_mcontext.cr2 = (thissi.si_signo == SIGSEGV
-> +				      || thissi.si_signo == SIGBUS)
-> +				     ? (uintptr_t) thissi.si_addr : 0;
+>  /*
+>   * Convenience defines
+> @@ -28,6 +29,10 @@ details. */
+>  #define WSSC		  60000	// Wait for signal completion
+>  #define WPSP		  40000	// Wait for proc_subproc mutex
 >  
-> -	  thiscontext = &context;
-> -	  context_copy = context;
-> +	  thiscontext = &context1;
-> +	  context_copy = context1;
->  	}
->  
->        int this_errno = saved_errno;
-> @@ -1836,10 +1838,11 @@ _cygtls::call_signal_handler ()
->        incyg = true;
->  
->        set_signal_mask (_my_tls.sigmask, (this_sa_flags & SA_SIGINFO)
-> -					? context.uc_sigmask : this_oldmask);
-> +					? context1.uc_sigmask : this_oldmask);
->        if (this_errno >= 0)
->  	set_errno (this_errno);
->      }
-> +  context = context1;
->  
->    /* FIXME: Since 2011 this return statement always returned 1 (meaning
->       SA_RESTART is effective) if the thread we're running in is not the
-> -- 
-> 2.45.1
-> 
+> +#define PIPE_DEPTH _NSIG /* Historically, the pipe size is _NSIG packet */
+> +#define SIGQ_ROOM 4
+> +#define SIGQ_DEPTH (PIPE_DEPTH + SIGQ_ROOM)
+
+I'm missing a comment here.  Why adding SIGQ_ROOM?
+
+Other than that, LGTM.
+
+In terms of the queue size, I wonder if we really have to restrict the
+queue to a small number of queued signals, 69 right now.  The pipe used
+for communication will take 64K, one allocation granularity slot, anyway.
+Linux, for instance, queues more than 60K signals.
+
+So, wouldn't it make sense to raise the queu depth to some higher
+value and the pipe size so that it it's <= 64K?
+
+While looking into your patch, it occured to me that we have a
+long-standing bug: We never changed __SIGQUEUE_MAX/SIGQUEUE_MAX in
+include/cygwin/limits.h when we started to support 64 signals (we only
+did that for 64 bit Cygwin).
+
+We can't change that for existing binaries actually referring the
+SIGQUEUE_MAX macro, but we should change this, so that
+sysconf( _SC_SIGQUEUE_MAX) returns the right value, isn't it?
 
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Thanks,
+Corinna
