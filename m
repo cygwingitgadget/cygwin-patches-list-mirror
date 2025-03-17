@@ -1,91 +1,74 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id A252E3858D34; Mon, 17 Mar 2025 09:18:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A252E3858D34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1742203101;
-	bh=jyCvmLgKNtxBQTO1zsHQd3Mdpdf9CwS/XZIKGpuD7RM=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=qk7C7YK1nROjEWj9DX9pgjMzhDGUSkPbi4P8+SC2dQo6fDqIigNcyUcLagNUnbYNR
-	 jlz/DNXFjpuRtp91yjtq/7XaL5CiwEVxfRr0iDMCDR5DPHAQlIK2kV+MDvd2lFotli
-	 UE2cVQhwvODdNC1m8EQGf6Rmuy+qxkvhgxLrSZ40=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 898D2A8077E; Mon, 17 Mar 2025 10:18:19 +0100 (CET)
-Date: Mon, 17 Mar 2025 10:18:19 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=KLwD=WE=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id BE1E9385B51A
+	for <cygwin-patches@cygwin.com>; Mon, 17 Mar 2025 18:15:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BE1E9385B51A
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BE1E9385B51A
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742235323; cv=none;
+	b=LwQSunyp1bjaSGXKkk9DtuCxOSJ4BwHlM75e+qKOjs7M1Vbeuet8ZO5RR+cUkivzYTYGWNNdukOk7GFZvkaalqIIwsh3P3vzpBq0wLzEm/Bnr1k/Y1uIrlj6SyyLNQpTfM+uYlZPPkZU2/44LOyis+Mhdo6EVdTAktW1OtYvKPE=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1742235323; c=relaxed/simple;
+	bh=+nLs2f0axcv02QtcYIHB10NWrCT+H3oCTed/5ebU1+I=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=xYD4iaalUyB/+Xo3qItU0tDU2yplhoTvJXQyHcninWFKj7daCZpY1ZcCxD189hrblIgj/HXXJQIPT5Kc6Q4PEIlnysN/wEEedOaH0WTBN++zbO25W9rpCUVGcp7udwjg0OvlHlxjsqn1EGRSYx3RmzPkePOYy4DttjuI5vXQpaY=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BE1E9385B51A
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=fGQwFpPB
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 90E8245C8D;
+	Mon, 17 Mar 2025 14:15:22 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=DmTeXQxXvBq31NUM7eUxysR8Mbo=; b=fGQwF
+	pPBOqlaF3ZAqf9GZCxPkIXSFnW1WwcvQz57zmzI4O8dt1NDGV6elD2eKRDN5t55s
+	l9WAQXo5GEyHE+PmwZDvvmnVlPcIROpG0kEA0YR8rjRef1bbC4KZCzZNQhuxLTYi
+	AVNK2Zacj8ulihDtWviNclJ3jxfeJ1K2NtZk60=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 89DC245C8C;
+	Mon, 17 Mar 2025 14:15:22 -0400 (EDT)
+Date: Mon, 17 Mar 2025 11:15:22 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Carry process affinity through to result
-Message-ID: <Z9fo27vEcb39GWHc@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <https://cygwin.com/pipermail/cygwin/2025-March/257628.html>
- <20250316092247.391-1-mark@maxrnd.com>
- <af93e922-7fb4-9479-60d6-88718925d149@t-online.de>
- <2ab6322a-6195-4144-8203-4cc1c30a181e@maxrnd.com>
+cc: Chris Denton <chris@chrisdenton.dev>
+Subject: Re: [PATCH] fix native symlink spawn passing wrong arg0
+In-Reply-To: <Z9AT-rlIU0StWEzQ@calimero.vinschen.de>
+Message-ID: <4dd8a82a-d345-5339-5a90-7d5e72b65454@jdrake.com>
+References: <19580bc11ec.e77085b5699413.240072222093655736@chrisdenton.dev> <Z886PJK2OMtcUwEC@calimero.vinschen.de> <19581e3058e.ebf97e1e733524.5029218649132507579@chrisdenton.dev> <Z9AT-rlIU0StWEzQ@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2ab6322a-6195-4144-8203-4cc1c30a181e@maxrnd.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 16 13:55, Mark Geisert wrote:
-> On 3/16/2025 7:09 AM, Christian Franke wrote:
-> > Mark Geisert wrote:
-> [...]
-> > 
-> > Could only test the single cpu group (aka single physical cpu) case
-> > which is the most common, I guess. Works as expected:
-> > 
-> > $ uname -r
-> > 3.6.0-dev-440-g5ec497dc80bc-dirty.x86_64
-> > 
-> > $ grep '^model name' /proc/cpuinfo | uniq -c
-> >       28 model name      : Intel(R) Core(TM) i7-14700K
-> > 
-> > $ stress-ng --pthread 1 -v &
-> > [1] 1323
-> > ...
-> > stress-ng: debug: [1324] pthread: [1324] started (instance 0 on CPU 10)
-> > 
-> > $ taskset -c -p 1324
-> > pid 1324's current affinity list: 0-27
-> > 
-> > $ taskset -p fff0000 1324 # All E-cores
-> > pid 1324's current affinity mask: fffffff
-> > pid 1324's new affinity mask: fff0000
-> > 
-> > $ taskset -p fff5555 1324 # All cores but no HT
-> > pid 1324's current affinity mask: fff0000
-> > pid 1324's new affinity mask: fff5555
-> > 
-> > $ taskset -c -p 8,9 1324 # P-core 4 with HT
-> > pid 1324's current affinity list: 0,2,4,6,8,10,12,14,16-27
-> > pid 1324's new affinity list: 8,9
-> > 
-> > $ taskset -p 1324
-> > pid 1324's current affinity mask: 300
-> > 
-> > The settings have the desired effect on reported core usage.
-> 
-> Thanks very much Christian for testing.  I want to make a minor change to
-> the patch:
->     if (procmask == 0)
-> will be changed to
->     if (groupcount > 1)
-> to make it clearer what's going on.  I will also add a few words to both
-> code comments and the patch description saying what will happen on systems
-> with more than one cpu group.
-> 
-> It sure would be nice to test on a system with more than 64 h/w threads but
-> I don't have that kind of budget ;-).
-> 
-> So, v2 patch incoming shortly.  Comments from other folks welcome.
+On Tue, 11 Mar 2025, Corinna Vinschen wrote:
 
-Only one: Thanks for looking into this stuff!
-
-I wonder if, after your v2 patch, it's about time to release 3.6.0.
+> Hi Chris,
+>
+> This was a bit of a puzzler for me, given we added the PC_SYM_NOFOLLOW_REP
+> only 2011 with commit be371651146c ("* path.cc (path_conv::check): Don't
+> follow reparse point symlinks if PC_SYM_NOFOLLOW_REP flag is set.")
+>
+> I think we should use this patch for the "Fixes:" info.
+>
+> > Signed-off-by: SquallATF <squallatf@gmail.com>
+>
+> Hmm, on second thought, we can't do that.
+>
+> Given you provide your own version of this patch, and given that this is
+> a trivial patch, I would prefer your personal Signed-off-by.
+>
+> If you just agree here on the list, I will do the above changes manually.
+> No reason to send another patch version.
+>
+> Ok?
 
 
-Thanks,
-Corinna
+Ping?
