@@ -1,175 +1,102 @@
-Return-Path: <SRS0=rmGi=WF=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 1595A3858CDA
-	for <cygwin-patches@cygwin.com>; Tue, 18 Mar 2025 00:39:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1595A3858CDA
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1595A3858CDA
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742258377; cv=none;
-	b=ZGEOLqkxNKT6q1GuHnsMXul3sDOwY0lGH9zVH+lBYXoUBGeoU8sz+ZkduPnRCJHDlypo6uv8TsMTUEvgsUFiQp2uZlbXs6EHaWzVl8QPo2pIzu+5dppBeY7Kp0iVxCoXGns5gPnFEICZGR87JML3/gAojllZY0dW/3rLuqfG02Q=
+Return-Path: <SRS0=VJF9=WF=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 3594B3858D29
+	for <cygwin-patches@cygwin.com>; Tue, 18 Mar 2025 07:54:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3594B3858D29
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3594B3858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742284486; cv=none;
+	b=dPOXjPsNH7aj61ccx6b4lvK9jGvWMNtqF1vQE/MULD0q0V0wZgT7jxuCWO7BREJwc4yKxGoAdsQ59e8fkgoOdyA6jBNZyTMnoE3RBd7gCxo9m4zs7UOJlN08UZ1SyjiNG/M/0F3qOrTpukUEltFBQ3Ad4cyRBi/9ujYEetzJeKI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1742258377; c=relaxed/simple;
-	bh=rHXRaq6ZGYqR2yljQFoyjbVhT9DDmG80lu1hz9H96Vk=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Tv6/SMr2IhG8Ar1wsWfsKP75kJ2f0v2nrQinY8ozh9qbdUHp7wBaxZKZb6J02o+snj6EdIPb8Fbxr62SH8rRcVrEZQMV7v9Jklk3UyOwPidk6ZUpSyPCEhoNbMfek2tcIkmgnHhDbZdDHqS2pBRb//n1jB9USyCcdKqfWNgbcRM=
+	t=1742284486; c=relaxed/simple;
+	bh=oqTe+UYZxSVK/Zs3xKGSD82rHnS/8RmDMNyce/1sDZo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=gZYlJ+osgLnv4iGC4ny5j01hYVOZqFXYC5QnTHgvd+tn25TG7Gwt2Gqrf1rB0Rpa9GdH8/PE0f44ywgeLZpBND573PgjJVQOYHqGfRTPZqg2+clkVNLWO7cm69B3Fg/N5Tu+ym5p4tu58c5fcJnGmvgpFPvHVrJqwEOvUjc8xIQ=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1595A3858CDA
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=aHyPGufA
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 4848145C8C;
-	Mon, 17 Mar 2025 20:39:36 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=nxrpw6VsuqiFlfLM+HK1/bhMLrQ=; b=aHyPG
-	ufAwKNPKYUtjcMeiy5i1ph9RUFP1shhHBYERO66N5OXmDuJe5/xwuL18ynTN5PSR
-	QJQMIfxuEkEVxVd+6IrGt1tXGk+WLY4Oo4hF3tYxRUx37WaYDnfugp1R3iCn7/Hy
-	hpoW+Ryj0bzUJmLaI7C6s7yakN4+B5LNMrc2eM=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 40FE345C7B;
-	Mon, 17 Mar 2025 20:39:36 -0400 (EDT)
-Date: Mon, 17 Mar 2025 17:39:36 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Johannes Schindelin <johannes.schindelin@gmx.de>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Adjust CWD magic to accommodate for the latest
- Windows previews
-In-Reply-To: <6449d894879e33af3e8a4791896d2026f7c3f8bd.1740865389.git.johannes.schindelin@gmx.de>
-Message-ID: <6b8f960b-9ed3-8b00-0995-7187a30e42f4@jdrake.com>
-References: <6449d894879e33af3e8a4791896d2026f7c3f8bd.1740865389.git.johannes.schindelin@gmx.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3594B3858D29
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 52I8064d047391;
+	Tue, 18 Mar 2025 01:00:06 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdPfR3ZT; Mon Mar 17 23:59:56 2025
+From: Mark Geisert <mark@maxrnd.com>
+To: cygwin-patches@cygwin.com
+Cc: Mark Geisert <mark@maxrnd.com>,
+        Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH v2] Cygwin: Carry process affinity through to result
+Date: Tue, 18 Mar 2025 00:53:57 -0700
+Message-ID: <20250318075423.565-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2025q1/013499.html>
+References: <https://cygwin.com/pipermail/cygwin-patches/2025q1/013499.html>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 1 Mar 2025, Johannes Schindelin wrote:
+Due to deficient testing, the current code doesn't return a valid result
+to users of sched_getaffinity().  The updated code carries the determined
+procmask through to the generation of result cpu mask.
 
-> Note: In the long run, we may very well want to follow the insightful
-> suggestion by a helpful Windows kernel engineer who pointed out that it
-> may be less fragile to implement kind of a disassembler that has a
-> better chance to adapt to the ever-changing code of
-> `ntdll!RtlpReferenceCurrentDirectory` by skipping uninteresting
-> instructions such as `mov %rsp,%rax`, `mov %rbx,0x20(%rax)`, `push %rsi`
-> `sub $0x70,%rsp`, etc, and focuses on finding the `lea`, `call
-> ntdll!RtlEnterCriticalSection` and `mov ..., rbx` instructions, much
-> like it was prototyped out for ARM64 at
-> https://gist.github.com/jeremyd2019/aa167df0a0ae422fa6ebaea5b60c80c9
+Recognize Windows' limitation that if the process is multi-group (i.e.,
+has threads in multiple cpu groups) there is no visibility to which
+processors in other groups are being used.  One could remedy this by
+looping through all the process' threads, but that could be expensive
+so is left for future contemplation.  In addition, we'd have to maintain
+our own copy of each thread's current group and mask in internal overhead.
+(By the way, multi-group processes are only possible on Windows systems
+with more than 64 hardware threads.)
 
-Since you kind of asked, here's a proof-of-concept that uses udis86 (I
-left a whole bunch of pointer<->integer warnings since this is a PoC).
-Tested on windows 11 and 8:
+A release note for 3.6.0 is included.
 
-LPVOID find_fast_cwd_pointer_on_x64 ()
-{
-  ud_t ud_obj;
-  ud_init (&ud_obj);
-  ud_set_mode (&ud_obj, 64);
-  LPCVOID proc = GetProcAddress(GetModuleHandle("ntdll"), "RtlGetCurrentDirectory_U");
-  LPCVOID start = proc;
-  printf("%p\n", proc);
-  /* no idea for size */
-  ud_set_input_buffer (&ud_obj, proc, 80);
-  ud_set_pc (&ud_obj, proc);
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257616.html
+Signed-off-by: Mark Geisert <mark@maxrnd.com>
+Fixes: 641ecb07533e ("Cygwin: Implement sched_[gs]etaffinity()")
 
-  /* find the call to RtlpReferenceCurrentDirectory, and get its address */
-  while (ud_disassemble (&ud_obj))
-    {
-      if (ud_insn_mnemonic (&ud_obj) == UD_Icall)
-	{
-	  const ud_operand_t * operand = ud_insn_opr (&ud_obj, 0);
-	  if (operand->type == UD_OP_JIMM && operand->size == 32)
-	    {
-	      proc = ud_insn_off (&ud_obj) + ud_insn_len (&ud_obj) +
-		      operand->lval.sdword;
-	      break;
-	    }
-	}
-    }
-  printf("%p\n", proc);
-  if (proc == start)
-    return NULL;
+---
+ winsup/cygwin/release/3.6.0 |  4 ++++
+ winsup/cygwin/sched.cc      | 11 +++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-  start = proc;
-  /* no idea for size */
-  ud_set_input_buffer (&ud_obj, proc, 160);
-  ud_set_pc (&ud_obj, proc);
+diff --git a/winsup/cygwin/release/3.6.0 b/winsup/cygwin/release/3.6.0
+index d48ee114d..ad4a6f5dc 100644
+--- a/winsup/cygwin/release/3.6.0
++++ b/winsup/cygwin/release/3.6.0
+@@ -132,3 +132,7 @@ Fixes:
+ - Fix starving of auxiliary signal return address stack in case signal
+   handlers bail out (longjmp/setcontext).
+   Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257648.html
++
++- Fix sched_getaffinity(2) to carry determined process affinity all the way
++  through to the returned result.
++  Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257616.html
+diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
+index 2f4fbc31a..e15daad26 100644
+--- a/winsup/cygwin/sched.cc
++++ b/winsup/cygwin/sched.cc
+@@ -587,9 +587,16 @@ __sched_getaffinity_sys (pid_t pid, size_t sizeof_set, cpu_set_t *set)
+ 	  goto done;
+ 	}
+ 
+-      KAFFINITY miscmask = groupmask (__get_cpus_per_group ());
++      KAFFINITY fullmask = groupmask (__get_cpus_per_group ());
++      /* if process is multi-group, we don't have processor visibility. */
++      /*TODO We could provide the missing Windows visibility by book-keeping
++        each thread's current group and mask in our thread overhead, updating
++        them on sched_set_thread_affinity() calls. We could then assemble the
++        total mask here by looping through all threads. */
++      if (groupcount > 1)
++	procmask = fullmask;
+       for (int i = 0; i < groupcount; i++)
+-	setgroup (sizeof_set, set, grouparray[i], miscmask);
++	setgroup (sizeof_set, set, grouparray[i], fullmask & procmask);
+     }
+   else
+     status = ESRCH;
+-- 
+2.45.1
 
-  LPVOID critsec = NULL;
-
-  while (ud_disassemble (&ud_obj))
-    {
-      if (ud_insn_mnemonic (&ud_obj) == UD_Ilea)
-	{
-	  /* this seems to follow intel syntax, in that operand 0 is the
-	     register and 1 is the memory refernece */
-	  const ud_operand_t * operand = ud_insn_opr (&ud_obj, 1);
-	  if (operand->type == UD_OP_MEM && operand->base == UD_R_RIP &&
-	      operand->index == UD_NONE && operand->scale == 0 &&
-	      operand->offset == 32)
-	    {
-	      critsec = ud_insn_off (&ud_obj) + ud_insn_len (&ud_obj) +
-		operand->lval.sdword;
-	      break;
-	    }
-	}
-    }
-  if (critsec != NtCurrentTeb ()->Peb->FastPebLock)
-    return NULL;
-
-  /* find the call to RtlEnterCriticalSection */
-  proc = GetProcAddress(GetModuleHandle("ntdll"), "RtlEnterCriticalSection");
-  while (ud_disassemble (&ud_obj))
-    {
-      enum ud_mnemonic_code insn = ud_insn_mnemonic (&ud_obj);
-      if (insn == UD_Icall)
-	{
-	  const ud_operand_t * operand = ud_insn_opr (&ud_obj, 0);
-	  if (operand->type == UD_OP_JIMM && operand->size == 32)
-	    {
-	      if (proc != ud_insn_off (&ud_obj) + ud_insn_len (&ud_obj) +
-			    operand->lval.sdword)
-		return NULL;
-	      break;
-	    }
-	}
-      else if (insn == UD_Ibtr && ud_obj.pfx_lock)
-	{
-	  /* for Windows 8 */
-	  const ud_operand_t * operand = ud_insn_opr (&ud_obj, 0);
-	  if (operand->type == UD_OP_MEM && operand->base == UD_R_RIP &&
-	      operand->index == UD_NONE && operand->scale == 0 &&
-	      operand->offset == 32 && critsec == ud_insn_off (&ud_obj) +
-		ud_insn_len (&ud_obj) + operand->lval.sdword -
-		offsetof (RTL_CRITICAL_SECTION, LockCount))
-	    break;
-	}
-    }
-  LPVOID RtlpCurDirRef = NULL;
-  /* probably the next instruction is the mov qword ptr */
-  while (ud_disassemble (&ud_obj))
-    {
-      if (ud_insn_mnemonic (&ud_obj) == UD_Imov)
-	{
-	  const ud_operand_t * operand = ud_insn_opr (&ud_obj, 1);
-	  if (operand->type == UD_OP_MEM && operand->base == UD_R_RIP &&
-	      operand->index == UD_NONE && operand->scale == 0 &&
-	      operand->offset == 32 && operand->size == 64)
-	    {
-	      RtlpCurDirRef = ud_insn_off (&ud_obj) + ud_insn_len (&ud_obj) +
-			      operand->lval.sdword;
-	      break;
-	    }
-	}
-    }
-
-  printf("%p -> %p\n", ud_insn_off (&ud_obj), RtlpCurDirRef);
-
-  return RtlpCurDirRef;
-}
