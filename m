@@ -1,97 +1,64 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 004AA3857C78; Fri, 21 Mar 2025 10:21:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 004AA3857C78
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1742552510;
-	bh=I+DI/x/3JlnyjxA4c3kZQrh1mQs9RdTJcp4Si2JKQtE=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=vW799qZ4Df0AJtUsGRSCcP7VvsXY3zB+DnWMhIfP5WZNudt3EGYCHCp5x9sOYwJsb
-	 e0kxKciIvUOPc7YJRdH0Ks6hYtIW8O70+A/YKyCBeeMUVIwPzdBP7f2phKKt6rGrAV
-	 GasKS/05ZnXsJEbhvb7NkZkl3misGCf3n8qoGLWs=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BE1DFA804D5; Fri, 21 Mar 2025 11:21:47 +0100 (CET)
-Date: Fri, 21 Mar 2025 11:21:47 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=RPmn=WI=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo001.btinternet.com (btprdrgo001.btinternet.com [65.20.50.6])
+	by sourceware.org (Postfix) with ESMTP id 676633857B94
+	for <cygwin-patches@cygwin.com>; Fri, 21 Mar 2025 14:05:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 676633857B94
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 676633857B94
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.6
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742565923; cv=none;
+	b=u5SvvJmFiuK5ud+ZoQVjNvB6VuxKiZynbhT93xqCeirdTOARN4is63neP28T6pfFRd4yC6I90TbspNArlGR19g7dKlyvNXId4PkdqE+vCJp6eYrHCawD7je8EwBs09Hg3aVi6NtDI4tN+hfBUDpUCOS1Xnm84K3h8/t/y+ScDvw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1742565923; c=relaxed/simple;
+	bh=29Cv+jolxeaSDWCLHfc/9Z4kAbNg0eUDwf91y92FypM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=s+0ZKnZ+Zh2LX/bC9vIyDTVkVJcJBAgeBcQLSsF2lCBCY2DXfSyzfVevHGGJ6v3HrDRRiiMSN78GpHBOcovgN4VjC2D5sjZINwA0r7rJ2a/DsH0/mWUGALIgdCDtxaaxE8djENnAtQfPCivUuA5fEKgBVJOPF+NvVZbApxlosss=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 676633857B94
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89BE20091473C
+X-Originating-IP: [81.153.98.178]
+X-OWM-Source-IP: 81.153.98.178
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduhedufedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekuddrudehfedrleekrddujeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekuddrudehfedrleekrddujeekpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduheefqdelkedqudejkedrrhgrnhhgvgekuddqudehfedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtuddpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohep
+	jhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (81.153.98.178) by btprdrgo001.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89BE20091473C; Fri, 21 Mar 2025 14:05:21 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: Use udis86 to walk x64 machine code in find_fast_cwd_pointer
-Message-ID: <Z909u65b6xoM3AUN@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <6449d894879e33af3e8a4791896d2026f7c3f8bd.1740865389.git.johannes.schindelin@gmx.de>
- <6b8f960b-9ed3-8b00-0995-7187a30e42f4@jdrake.com>
- <Z9k9OcYu5Y47VsjU@calimero.vinschen.de>
- <e63f40de-faf7-2187-9f13-7bce6f7d7238@jdrake.com>
- <Z9nIRlpIEfAbNoJ2@calimero.vinschen.de>
- <5097ccfa-83f6-c76e-6c59-28c876cc2db8@jdrake.com>
- <Z9wgTR92yo4P24Ze@calimero.vinschen.de>
- <Z9wgpVqrlTML8Mq7@calimero.vinschen.de>
- <62ec041c-a21c-2a38-4bf6-3853b504057d@jdrake.com>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/2] Fix CI testsuite run with 3.6
+Date: Fri, 21 Mar 2025 14:04:59 +0000
+Message-ID: <20250321140502.2122-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <62ec041c-a21c-2a38-4bf6-3853b504057d@jdrake.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 20 13:01, Jeremy Drake via Cygwin-patches wrote:
-> On Thu, 20 Mar 2025, Corinna Vinschen wrote:
-> 
-> > On Mar 20 15:03, Corinna Vinschen wrote:
-> > > On Mar 18 22:11, Jeremy Drake via Cygwin-patches wrote:
-> > > > On Tue, 18 Mar 2025, Corinna Vinschen wrote:
-> > > >
-> > > > > Subdir of winsup/cygwin, probably.  What I'm most curious about is the
-> > > > > size it adds to the DLL.  I wonder if, say, an extra 32K is really
-> > > > > usefully spent, given it only checks a small part of ntdll.dll, and only
-> > > > > once per process tree, too.
-> > > >
-> > > > I did this with msys-2.0.dll, but it shouldn't matter as a delta.
-> > > > all are stripped msys-2.0.dll size
-> > > > start:
-> > > > 3,246,118 bytes
-> > > > with udis86 vendored, but not called:
-> > > > 3,247,142 bytes
-> > > > with find_fast_cwd_pointer rewritten to use udis86:
-> > > > 3,328,550 bytes
-> > > >
-> > > > (I know the second one isn't realistic, the linker could exclude unused
-> > > > code, I was just kind of curious)
-> > > >
-> > > > This is with all the "translate to assembly text, intel or at&t syntax"
-> > > > and "table of strings for opcodes" stuff removed to try to save space,
-> > > > still a net increase of 82,432 bytes.
-> > >
-> > > The DLL has currently a size of 3 Megs, optimzed, stripped.  82K are
-> > > two more allocation granularity slots, 51 instead of 49, about 2%.
-> >
-> > 4!  4%.  I said 4%, right?
-> >
-> > *facepalm*
-> 
-> I'll take that as "patches welcome" :)  I'd also like to take the
-> opportunity to add ARM64 support based on my PoC, but I feel bad about
-> dropping another blob of code into path.cc.  Would it make sense to rename
-> to find_fast_cwd_pointer_x64, move it into a separate source file, and add
+I think there's been some changes in the way we compute the ACL for files we
+create, which is causing a couple of tests to fail in CI.
 
-find_fast_cwd_pointer_x86_64
+Get rid of inheritable permissions, so filemodes follow the simple behaviour
+(just controlled by umask) that tests expect.
 
-> another source file for find_fast_cwd_pointer_arm64?  Or I guess put both
+(It seems like there must be something wrong with the contortions we go 
+through to run the testsuite against the just-built DLL, as otherwise we've 
+have noticed these failures earlier?)
 
-find_fast_cwd_pointer_aarch64
+Jon Turney (2):
+  CI: Remove inheritable permissions from working directory
+  Revert "Cygwin: CI: XFAIL umask03"
 
-We should use the offical tags, not the Windows ones.  It's ok for the
-uname output, but other than that...
+ .github/workflows/cygwin.yml | 3 +++
+ winsup/testsuite/Makefile.am | 6 +-----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-> into a fastcwd.cc and #ifdef __x86_64__ the x64 variant (that will of
-> course always be true at this point)?
+-- 
+2.45.1
 
-A new fastcwd.cc would make sense.  Theoretically the aarch64 code
-should go into an aarch64 subdir, just as with the x86_64 subdir,
-but I guess this is handling the AMD64 on ARM64 emulation rather than
-the native ARM64 mode?  Will there be any difference between the two
-later on if we start supporting native ARM64?  If so, the name
-of the function should probably express this.
-
-
-Thanks,
-Corinna
