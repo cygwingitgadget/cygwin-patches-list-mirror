@@ -1,313 +1,77 @@
-Return-Path: <SRS0=oe3F=WI=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 8B0953858D20
-	for <cygwin-patches@cygwin.com>; Fri, 21 Mar 2025 23:50:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8B0953858D20
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8B0953858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742601034; cv=none;
-	b=nID1HwfBJKn+WjGCmyv5gBldzmsY6oUZkVJ9FXM5JNWDvusdGnWdt+DSz/dipSnjGnTm6nt/Hk63nRDGj2QsN02Bl7NFY4zP3xFgqnTVvXz8DvTJLTAJz/5K/vGP5LwrrbPLZ7q/eZOrpkz1pzJzXS1M01g9F5vysAMaPqtUT/Y=
+Return-Path: <SRS0=g3Q1=WL=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
+	by sourceware.org (Postfix) with ESMTPS id AADF13857039
+	for <cygwin-patches@cygwin.com>; Mon, 24 Mar 2025 01:28:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AADF13857039
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AADF13857039
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1742779732; cv=none;
+	b=yGIqFUjWgSRk1Z20oF5hmhjl2xMK2TxS+sr7Ia4bp0HmY+9lOTFmturMZ3AJofo5Ux8iEQ3FnVpgd2QhFVUJouUnEJwBlEx4ow1f6hhVGi0rtYgLEfLLbTF7+Vc+/qRQYk9LrU0MZoVRYC+p6OIvftAPXbpYbQIule5KS1rMnXY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1742601034; c=relaxed/simple;
-	bh=p78SttU00FrVpmLqeOWIrUpe9EESvwhLgu0+Hi0GCGU=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=EwdAstZHngV48RP/PwS2XYN6GTb3BigbnmH3GN5omb9Ya+NLcJsGqxS/oQN5fbrKo8KQQy27D3EMRdj10fyOX0M9mFgohTwl5Wu++BXcK//ytU7hxiOcqp3lNa/BbZt60WJZEY/FwcVoR59WIXkShX0odlYWitVV2AB6fZ13TD4=
+	t=1742779732; c=relaxed/simple;
+	bh=8V4YXsPpnyvUhAkoyWKWB7u9u6nCU/oYdbbf30Jbt+k=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Voxx66z3m5lVAh42D2SnMG8SHIa2F6my1FJysdwG53gy2mitSsm0jSg5CNcDWJpISH1yad9PTrL6mnjlA1BPmHc5B5ZSmuXfzZS8OIcDuceLl+KfWZFdleXtHV6URlTlkWd/yvZqqno2C6/0ZXnUiuqBq2jKgJ9jAf819gAEZco=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8B0953858D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AADF13857039
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=xi/8pF13
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 4314545CAB
-	for <cygwin-patches@cygwin.com>; Fri, 21 Mar 2025 19:50:34 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=N7xya
-	il1DGlYuLKlhnOEKGzQiEo=; b=xi/8pF13jwB5vUiypGpfN2kaDEKTBaIZ9ga/u
-	FsBrIwVOY3tGpNYuSwYo4qqK65CGDpgr2l7bqgrv2PD/5lD11ZqhBn4T0J4RVgBo
-	o7p5CinjesXGs/id9q18UT0AvO+HYnq8ull1vS5XOpgH1c6zMifNqtQwQbt/535u
-	nSAqcI=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 3E9D845CA9
-	for <cygwin-patches@cygwin.com>; Fri, 21 Mar 2025 19:50:34 -0400 (EDT)
-Date: Fri, 21 Mar 2025 16:50:34 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=HbefUQ72
+Received: from localhost.localdomain by mta-snd-e04.mail.nifty.com
+          with ESMTP
+          id <20250324012849852.EBR.90539.localhost.localdomain@nifty.com>;
+          Mon, 24 Mar 2025 10:28:49 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 4/4] Cygwin: add find_fast_cwd_pointer_aarch64.
-Message-ID: <ac45e62b-5abf-270e-2ae8-b387ec7dee36@jdrake.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: signal: Clear direction flag in sigdeleyed
+Date: Mon, 24 Mar 2025 10:28:25 +0900
+Message-ID: <20250324012833.518-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1742779729;
+ bh=D9ny0dvdS25m08tXN7lbEUWeyicKmPhJY/dbvapzoVs=;
+ h=From:To:Cc:Subject:Date;
+ b=HbefUQ72MMMkJnbxLRJ7g8HOo/fIVeIB9MA3tZNgqTjGNK2QMvUyZ4jiBVHHfk+GA4042smq
+ pIeb4jJKIRUXrnf4K+un5GnZIZMqr5WOayEHtlyB6lKue8bhKQ78gVg0RVjrN95mWiENC5YR8B
+ lFtzdd4tBlLwk+lG/d+rs3WflLjf9LVEEHpRtL/52GGHo+0ElRd5s4wEZiQack6t64PaEpCGVU
+ Bgk7uqshbBadXdvMLI6ShY9+/eJD1EBEVRykBoDYwy3uYEyDHGntVX/c/nwAPmspn941ZmZ9UP
+ QMGQ0KJfNboExzq9gx62aDN128atbgQ3uEH+Gi5EkK6+O/ug==
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Jeremy Drake <cygwin@jdrake.com>
+x86_64 ABI requires the direction flag in CPU flags register cleared.
+https://learn.microsoft.com/en-us/cpp/build/x64-software-conventions
+However, currently that flag is not maintained in signal handler.
+Therefore, if the signal handler is called when that flag is set, it
+destroys the data and may crash if rep instruction is used in the
+signal handler. With this patch, the direction flag is cleared in
+sigdelayed() by adding cld instruction.
 
-This works for aarch64 hosts when the target is aarch64, x86_64, or i686,
-with only a small #if block in one function that needs to care.
-
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257704.html
+Fixes: 1fd5e000ace5 ("import winsup-2000-02-17 snapshot")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/Makefile.am        |   1 +
- winsup/cygwin/fastcwd_aarch64.cc | 185 +++++++++++++++++++++++++++++++
- winsup/cygwin/path.cc            |  27 ++++-
- 3 files changed, 207 insertions(+), 6 deletions(-)
- create mode 100644 winsup/cygwin/fastcwd_aarch64.cc
+ winsup/cygwin/scripts/gendef | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index 8ecf25d343..649617ab30 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -299,6 +299,7 @@ DLL_FILES= \
- 	exceptions.cc \
- 	exec.cc \
- 	external.cc \
-+	fastcwd_aarch64.cc \
- 	fcntl.cc \
- 	fenv.c \
- 	flock.cc \
-diff --git a/winsup/cygwin/fastcwd_aarch64.cc b/winsup/cygwin/fastcwd_aarch64.cc
-new file mode 100644
-index 0000000000..c1a9c73536
---- /dev/null
-+++ b/winsup/cygwin/fastcwd_aarch64.cc
-@@ -0,0 +1,185 @@
-+/* fastcwd_aarch64.cc: find the fast cwd pointer on aarch64 hosts.
-+
-+  This file is part of Cygwin.
-+
-+  This software is a copyrighted work licensed under the terms of the
-+  Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-+  details. */
-+
-+/* You might well wonder why this file is not in an aarch64 target-specific
-+   directory, like fastcwd_x86_64.cc.  It turns out that this code works when
-+   built for i686, x86_64, or aarch64 with just the small #if/#elif block in
-+   GetArm64ProcAddress below caring which. */
-+
-+#include "winsup.h"
-+#include "assert.h"
-+
-+class fcwd_access_t;
-+
-+static LPCVOID
-+GetArm64ProcAddress (HMODULE hModule, LPCSTR procname)
-+{
-+  const BYTE * proc = (const BYTE *) GetProcAddress (hModule, procname);
-+#if defined (__aarch64__)
-+  return proc;
-+#else
-+#if defined(__i386__)
-+  static const BYTE thunk[] = "\x8b\xff\x55\x8b\xec\x5d\x90\xe9";
-+#elif defined(__x86_64__)
-+  /* see
-+     https://learn.microsoft.com/en-us/windows/arm/arm64ec-abi#fast-forward-sequences */
-+  static const BYTE thunk[] = "\x48\x8b\xc4\x48\x89\x58\x20\x55\x5d\xe9";
-+#else
-+#error "Unhandled architecture for thunk detection"
-+#endif
-+  if (memcmp (proc, thunk, sizeof (thunk) - 1) == 0)
-+    {
-+      proc += sizeof (thunk) - 1;
-+      proc += 4 + *(const int32_t *) proc;
-+    }
-+  return proc;
-+#endif
-+}
-+
-+#define IS_INSN(pc, name) ((*(pc) & name##_mask) == name##_id)
-+static const uint32_t add_id = 0x11000000;
-+static const uint32_t add_mask = 0x7fc00000;
-+static const uint32_t adrp_id = 0x90000000;
-+static const uint32_t adrp_mask = 0x9f000000;
-+static const uint32_t bl_id = 0x94000000;
-+static const uint32_t bl_mask = 0xfc000000;
-+/* matches both cbz and cbnz */
-+static const uint32_t cbz_id = 0x34000000;
-+static const uint32_t cbz_mask = 0x7e000000;
-+static const uint32_t ldr_id = 0xb9400000;
-+static const uint32_t ldr_mask = 0xbfc00000;
-+
-+static inline LPCVOID
-+extract_bl_target (const uint32_t * pc)
-+{
-+  assert (IS_INSN (pc, bl));
-+  int32_t offset = *pc & ~bl_mask;
-+  /* sign extend */
-+  if (offset & (1 << 25))
-+    offset |= bl_mask;
-+  /* Note uint32_t * artithmatic will implicitly multiply the offset by 4 */
-+  return pc + offset;
-+}
-+
-+static inline uint64_t
-+extract_adrp_address (const uint32_t * pc)
-+{
-+  assert (IS_INSN (pc, adrp));
-+  uint64_t adrp_base = (uint64_t) pc & ~0xFFF;
-+  int64_t  adrp_imm = (*pc >> (5+19+5)) & 0x3;
-+  adrp_imm |= ((*pc >> 5) & 0x7FFFF) << 2;
-+  /* sign extend */
-+  if (adrp_imm & (1 << 20))
-+    adrp_imm |= ~((1 << 21) - 1);
-+  adrp_imm <<= 12;
-+  return adrp_base + adrp_imm;
-+}
-+
-+/* This function scans the code in ntdll.dll to find the address of the
-+   global variable used to access the CWD.  While the pointer is global,
-+   it's not exported from the DLL, unfortunately.  Therefore we have to
-+   use some knowledge to figure out the address. */
-+
-+fcwd_access_t **
-+find_fast_cwd_pointer_aarch64 ()
-+{
-+  LPCVOID proc = GetArm64ProcAddress (GetModuleHandle ("ntdll"),
-+				      "RtlGetCurrentDirectory_U");
-+  const uint32_t *start = (uint32_t *) proc;
-+  const uint32_t *pc = start;
-+  /* find the call to RtlpReferenceCurrentDirectory, and get its address */
-+  for (; pc < start + 20; pc++)
-+    {
-+      if (IS_INSN (pc, bl))
-+	{
-+	  proc = extract_bl_target (pc);
-+	  break;
-+	}
-+    }
-+  if (proc == start)
-+    return NULL;
-+
-+  start = pc = (uint32_t *) proc;
-+
-+  const uint32_t *ldrpc = NULL;
-+  uint32_t ldroffset, ldrsz;
-+  uint32_t ldrrn, ldrrd;
-+
-+  /* find the ldr (immediate unsigned offset) for RtlpCurDirRef */
-+  for (; pc < start + 20; pc++)
-+    {
-+      if (IS_INSN (pc, ldr))
-+	{
-+	  ldrpc = pc;
-+	  ldrsz = (*pc & 0x40000000);
-+	  ldroffset = (*pc >> (5+5)) & 0xFFF;
-+	  ldroffset <<= ldrsz ? 3 : 2;
-+	  ldrrn = (*pc >> 5) & 0x1F;
-+	  ldrrd = *pc & 0x1F;
-+	  break;
-+	}
-+    }
-+  if (ldrpc == NULL)
-+    return NULL;
-+
-+  /* the next instruction after the ldr should be checking if it was NULL:
-+     either a compare and branch if zero or not zero (hence why cbz_mask is 7e
-+     instead of 7f) */
-+  if (!IS_INSN (pc + 1, cbz) || (*(pc + 1) & 0x1F) != ldrrd
-+      || (*(pc + 1) & 0x80000000) != (ldrsz << 1))
-+    return NULL;
-+
-+  /* work backwards, find a bl to RtlEnterCriticalSection whose argument
-+     is the fast peb lock */
-+
-+  proc = GetArm64ProcAddress (GetModuleHandle ("ntdll"),
-+			      "RtlEnterCriticalSection");
-+  for (pc = ldrpc; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, bl) && extract_bl_target (pc) == proc)
-+	break;
-+    }
-+  uint32_t addoffset;
-+  uint32_t addrn;
-+  for (; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, add) && (*pc & 0x1F) == 0)
-+	{
-+	  addoffset = (*pc >> (5+5)) & 0xFFF;
-+	  addrn = (*pc >> 5) & 0x1F;
-+	  break;
-+	}
-+    }
-+  PRTL_CRITICAL_SECTION lockaddr = NULL;
-+  for (; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == addrn)
-+	{
-+	  lockaddr = (PRTL_CRITICAL_SECTION) (extract_adrp_address (pc) +
-+					      addoffset);
-+	  break;
-+	}
-+    }
-+  if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
-+    return NULL;
-+
-+  /* work backwards from the ldr to find the corresponding adrp */
-+  fcwd_access_t **RtlpCurDirRef = NULL;
-+  for (pc = ldrpc; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == ldrrn)
-+	{
-+	  RtlpCurDirRef = (fcwd_access_t **) (extract_adrp_address (pc) +
-+					      ldroffset);
-+	  break;
-+	}
-+    }
-+
-+  return RtlpCurDirRef;
-+}
-+
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 3a5e2ee07e..7a08e978ad 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -4495,21 +4495,36 @@ fcwd_access_t **
- find_fast_cwd_pointer_x86_64 ();
- #endif
-
-+fcwd_access_t **
-+find_fast_cwd_pointer_aarch64 ();
-+
- static fcwd_access_t **
- find_fast_cwd ()
- {
-   fcwd_access_t **f_cwd_ptr;
-
--  /* First check if we're running on an ARM64 system.  Skip
--     fetching FAST_CWD pointer as long as there's no solution for finding
--     it on that system. */
--  if (wincap.host_machine () == IMAGE_FILE_MACHINE_ARM64)
--    return NULL;
-+  switch (wincap.host_machine ())
-+    {
-+    case IMAGE_FILE_MACHINE_ARM64:
-+      f_cwd_ptr = find_fast_cwd_pointer_aarch64 ();
-+      break;
-+#ifdef __x86_64__
-+    case IMAGE_FILE_MACHINE_AMD64:
-+      f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
-+      break;
-+#endif
-+    default:
-+      small_printf ("Cygwin WARNING:\n"
-+"  Couldn't compute FAST_CWD pointer for an unknown architecture (%04y)\n"
-+"  Please update to the latest available Cygwin version from\n"
-+"  https://cygwin.com/.  If the problem persists, please see\n"
-+"  https://cygwin.com/problems.html\n\n", (int) wincap.host_machine ());
-+      return NULL;
-+    }
-
-   /* Fetch the pointer but don't set the global fast_cwd_ptr yet.  First
-      we have to make sure we know the version of the FAST_CWD structure
-      used on the system. */
--  f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
-   if (!f_cwd_ptr)
-     small_printf ("Cygwin WARNING:\n"
- "  Couldn't compute FAST_CWD pointer.  This typically occurs if you're using\n"
+diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
+index a2f0392bc..861a2405b 100755
+--- a/winsup/cygwin/scripts/gendef
++++ b/winsup/cygwin/scripts/gendef
+@@ -179,6 +179,7 @@ sigdelayed:
+ 	movq	%rsp,%rbp
+ 	pushf
+ 	.seh_pushreg %rax			# fake, there's no .seh_pushreg for the flags
++	cld					# x86_64 ABI requires direction flag cleared
+ 	# stack is aligned or unaligned on entry!
+ 	# make sure it is aligned from here on
+ 	# We could be called from an interrupted thread which doesn't know
 -- 
-2.48.1.windows.1
+2.45.1
 
