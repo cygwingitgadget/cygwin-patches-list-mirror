@@ -1,299 +1,331 @@
 Return-Path: <SRS0=qRO6=WN=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 1687C385AC1D
-	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 23:52:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1687C385AC1D
+	by sourceware.org (Postfix) with ESMTPS id B3108385AC1D
+	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 23:53:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B3108385AC1D
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1687C385AC1D
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B3108385AC1D
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743033152; cv=none;
-	b=FAcUKMQMuMC417o09SoCW62jCTJu52pGR2itfU4l5VdO7gmQ7zsYBhEXc2fZovNJry8KDXGXExSb78dxUVfzNvQNB44U0pQ5BiPi1FUhX//kF7q8sZlo31dHH07FDHZWfJnO4bqiXSJbKk3fxjXwymAHd2So9sqJOGORmhFKk6k=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743033230; cv=none;
+	b=UDjz3IyFTHbifwe1YPRAkeqIPqeUQTc4K+07zWPz8HXhR7GF0mhMpB5p7tbQAgBF0r+MxArCL+xx6dakFFOyZkHdAyjWujIX+auV7jeDFUNwl/85u4e9cVsyKotUvgyUV9XoRlRiVjIMnCT6il/M4R1oDcLDgiAPiVDPq28uURo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743033152; c=relaxed/simple;
-	bh=hedzTwKA1ZnqBHaYHj6fOL1g5rwg1xisYCJ1NG+wGV8=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=sV+Ixp6qsE8jTvSqobwyDFI4EGD2x433TlhWbiqzxOQCdLOomuT00vhGioCBGOEI1Bm4pfcsnMKfeVb87XzoDQBLE6C93ry6dQxap6tx2k+O1FneAIaVmUbQUmxbVSGuQnZbFcf8XglDjR+xywpF+E7Ecj9KOR5/4hFzhnLoNLw=
+	t=1743033230; c=relaxed/simple;
+	bh=n+kQQeQjhFDnhVRSuqDzHQH4k2vtbKWPEVXFWh7TgVA=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=G+a66X+F52hKpLJvnj435z0uToGjbRNrjZ1M9vW/O7FeIvt5SHit/sFmlgLnslDSx0MJM+YbOJ2X9up8if1rjF7IOyOeWbXeZ3uZeVbBoBKskOLKoGisyh0WV9gc/RCvGLI2YV5kwbsd+C4A9ma8hpa8XaMdvPP+t2nSCqVXLaA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1687C385AC1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B3108385AC1D
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=ZCLBznvl
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=HIio71N/
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id C1EB245CB6
-	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 19:52:31 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 6A62845CB6
+	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 19:53:50 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=GEz8E
-	0iQIxtSQx7GHBkfaLF3hHY=; b=ZCLBznvlyb06UTY7OLQHEe3RsKHRmAoXXbau6
-	WJUoCvazlyQT9Bp6uiS5Gprt3VPivzP7tCUnQI+AXKKDyAXo5+QWfgSqOINJ1nhj
-	DnhGtP6B1KX337jnpsqUTsii0idtuxMfLBtYR0gfIIQaN8Tkjygdh7pKo+v0Ttfv
-	3AakLY=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=4OIX9
+	qbWVH3kLiYeo2lySoFgjxU=; b=HIio71N/IF4EWgs3mrhviauv2GY5YVYnjfEHL
+	rkR44hrW2pyNjFxWcYOyT8+7d8yt5lR5ZiFan7pFSKmT1L43QfG/XG3DYo4r+0Eg
+	8OD4N6e2i4ImMab4eBGlhUxl9/L57oQQr9FPiG/kyfrlsgU8q0AbMXHuRju3ls1g
+	Qgur+U=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id BC4B345CB2
-	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 19:52:31 -0400 (EDT)
-Date: Wed, 26 Mar 2025 16:52:31 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 6330545CB2
+	for <cygwin-patches@cygwin.com>; Wed, 26 Mar 2025 19:53:50 -0400 (EDT)
+Date: Wed, 26 Mar 2025 16:53:50 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 4/5] Cygwin: use udis86 to find fast cwd pointer on x64
-Message-ID: <7d4f8d91-0a3f-4e14-047e-64b1bd7d9447@jdrake.com>
+Subject: [PATCH v2 5/5] Cygwin: add find_fast_cwd_pointer_aarch64.
+Message-ID: <24fa8928-2133-b73a-8c1c-28459f48b2da@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: Jeremy Drake <cygwin@jdrake.com>
 
-This makes find_fast_cwd_pointer more resiliant in the face of changes
-to the generated code in ntdll.
+This works for aarch64 hosts when the target is aarch64, x86_64, or i686,
+with only a small #if block in one function that needs to care.
 
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
- winsup/cygwin/x86_64/fastcwd_x86_64.cc | 204 +++++++++++++++----------
- 1 file changed, 124 insertions(+), 80 deletions(-)
+ winsup/cygwin/Makefile.am        |   1 +
+ winsup/cygwin/fastcwd_aarch64.cc | 203 +++++++++++++++++++++++++++++++
+ winsup/cygwin/path.cc            |  27 +++-
+ 3 files changed, 225 insertions(+), 6 deletions(-)
+ create mode 100644 winsup/cygwin/fastcwd_aarch64.cc
 
-diff --git a/winsup/cygwin/x86_64/fastcwd_x86_64.cc b/winsup/cygwin/x86_64/fastcwd_x86_64.cc
-index 7765812f00..86f901b522 100644
---- a/winsup/cygwin/x86_64/fastcwd_x86_64.cc
-+++ b/winsup/cygwin/x86_64/fastcwd_x86_64.cc
-@@ -7,10 +7,17 @@
-   details. */
-
- #include "winsup.h"
-+#include "udis86/types.h"
-+#include "udis86/extern.h"
-
- class fcwd_access_t;
-
--#define peek32(x)	(*(int32_t *)(x))
-+static inline const void *
-+rip_rel_offset (const ud_t *ud_obj, const ud_operand_t *opr, int sub_off=0)
+diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
+index 8ecf25d343..649617ab30 100644
+--- a/winsup/cygwin/Makefile.am
++++ b/winsup/cygwin/Makefile.am
+@@ -299,6 +299,7 @@ DLL_FILES= \
+ 	exceptions.cc \
+ 	exec.cc \
+ 	external.cc \
++	fastcwd_aarch64.cc \
+ 	fcntl.cc \
+ 	fenv.c \
+ 	flock.cc \
+diff --git a/winsup/cygwin/fastcwd_aarch64.cc b/winsup/cygwin/fastcwd_aarch64.cc
+new file mode 100644
+index 0000000000..078dc7faf2
+--- /dev/null
++++ b/winsup/cygwin/fastcwd_aarch64.cc
+@@ -0,0 +1,203 @@
++/* fastcwd_aarch64.cc: find the fast cwd pointer on aarch64 hosts.
++
++  This file is part of Cygwin.
++
++  This software is a copyrighted work licensed under the terms of the
++  Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++  details. */
++
++/* You might well wonder why this file is not in an aarch64 target-specific
++   directory, like fastcwd_x86_64.cc.  It turns out that this code works when
++   built for i686, x86_64, or aarch64 with just the small #if/#elif block in
++   GetArm64ProcAddress below caring which. */
++
++#include "winsup.h"
++#include "assert.h"
++
++class fcwd_access_t;
++
++static LPCVOID
++GetArm64ProcAddress (HMODULE hModule, LPCSTR procname)
 +{
-+  return (const void *) (ud_insn_off (ud_obj) + ud_insn_len (ud_obj) +
-+			 opr->lval.sdword - sub_off);
-+}
-
- /* This function scans the code in ntdll.dll to find the address of the
-    global variable used to access the CWD.  While the pointer is global,
-@@ -30,99 +37,136 @@ find_fast_cwd_pointer_x86_64 ()
- 			    GetProcAddress (ntdll, "RtlEnterCriticalSection");
-   if (!get_dir || !ent_crit)
-     return NULL;
-+  ud_t ud_obj;
-+  ud_init (&ud_obj);
-+  ud_set_mode (&ud_obj, 64);
-+  ud_set_input_buffer (&ud_obj, get_dir, 80);
-+  ud_set_pc (&ud_obj, (const uint64_t) get_dir);
-+  const ud_operand_t *opr;
-+  ud_mnemonic_code_t insn;
-   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
--  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 80);
--  if (!rcall)
-+  const uint8_t *use_cwd = NULL;
-+  while (ud_disassemble (&ud_obj) &&
-+      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
-+      insn != UD_Ijmp)
++  const BYTE * proc = (const BYTE *) GetProcAddress (hModule, procname);
++#if defined (__aarch64__)
++  return proc;
++#else
++#if defined(__i386__)
++  static const BYTE thunk[] = "\x8b\xff\x55\x8b\xec\x5d\x90\xe9";
++#elif defined(__x86_64__)
++  /* see
++     https://learn.microsoft.com/en-us/windows/arm/arm64ec-abi#fast-forward-sequences */
++  static const BYTE thunk[] = "\x48\x8b\xc4\x48\x89\x58\x20\x55\x5d\xe9";
++#else
++#error "Unhandled architecture for thunk detection"
++#endif
++  if (memcmp (proc, thunk, sizeof (thunk) - 1) == 0)
 +    {
-+      if (insn == UD_Icall)
++      proc += sizeof (thunk) - 1;
++      proc += 4 + *(const int32_t *) proc;
++    }
++  return proc;
++#endif
++}
++
++/* these ids and masks, as well as the names of the various other parts of
++   instructions used in this file, came from
++   https://developer.arm.com/documentation/ddi0602/2024-09/Index-by-Encoding
++   (Arm A-profile A64 Instruction Set Architecture)
++*/
++#define IS_INSN(pc, name) ((*(pc) & name##_mask) == name##_id)
++static const uint32_t add_id = 0x11000000;
++static const uint32_t add_mask = 0x7fc00000;
++static const uint32_t adrp_id = 0x90000000;
++static const uint32_t adrp_mask = 0x9f000000;
++static const uint32_t b_id = 0x14000000;
++static const uint32_t b_mask = 0xfc000000;
++static const uint32_t bl_id = 0x94000000;
++static const uint32_t bl_mask = 0xfc000000;
++/* matches both cbz and cbnz */
++static const uint32_t cbz_id = 0x34000000;
++static const uint32_t cbz_mask = 0x7e000000;
++static const uint32_t ldr_id = 0xb9400000;
++static const uint32_t ldr_mask = 0xbfc00000;
++/* matches both ret and br (which are the same except ret is a 'hint' that
++   it's  a subroutine return */
++static const uint32_t ret_id = 0xd61f0000;
++static const uint32_t ret_mask = 0xffbffc1f;
++
++/* this would work for either bl or b, but we only use it for bl */
++static inline LPCVOID
++extract_bl_target (const uint32_t * pc)
++{
++  assert (IS_INSN (pc, bl) || IS_INSN (pc, b));
++  int32_t offset = *pc & ~bl_mask;
++  /* sign extend */
++  if (offset & (1 << 25))
++    offset |= bl_mask;
++  /* Note uint32_t * artithmatic will implicitly multiply the offset by 4 */
++  return pc + offset;
++}
++
++static inline uint64_t
++extract_adrp_address (const uint32_t * pc)
++{
++  assert (IS_INSN (pc, adrp));
++  uint64_t adrp_base = (uint64_t) pc & ~0xFFF;
++  int64_t  adrp_imm = (*pc >> (5+19+5)) & 0x3;
++  adrp_imm |= ((*pc >> 5) & 0x7FFFF) << 2;
++  /* sign extend */
++  if (adrp_imm & (1 << 20))
++    adrp_imm |= ~((1 << 21) - 1);
++  adrp_imm <<= 12;
++  return adrp_base + adrp_imm;
++}
++
++/* This function scans the code in ntdll.dll to find the address of the
++   global variable used to access the CWD.  While the pointer is global,
++   it's not exported from the DLL, unfortunately.  Therefore we have to
++   use some knowledge to figure out the address. */
++
++fcwd_access_t **
++find_fast_cwd_pointer_aarch64 ()
++{
++  /* Fetch entry points of relevant functions in ntdll.dll. */
++  HMODULE ntdll = GetModuleHandle ("ntdll.dll");
++  if (!ntdll)
++    return NULL;
++  LPCVOID get_dir = GetArm64ProcAddress (ntdll, "RtlGetCurrentDirectory_U");
++  LPCVOID ent_crit = GetArm64ProcAddress (ntdll, "RtlEnterCriticalSection");
++  if (!get_dir || !ent_crit)
++    return NULL;
++
++  LPCVOID use_cwd = NULL;
++  const uint32_t *start = (const uint32_t *) get_dir;
++  const uint32_t *pc = start;
++  /* find the call to RtlpReferenceCurrentDirectory, and get its address */
++  for (; pc < start + 20 && !IS_INSN (pc, ret) && !IS_INSN (pc, b); pc++)
++    {
++      if (IS_INSN (pc, bl))
 +	{
-+	  opr = ud_insn_opr (&ud_obj, 0);
-+	  if (opr->type == UD_OP_JIMM && opr->size == 32)
-+	    {
-+	      /* Fetch offset from instruction and compute address of called
-+		 function.  This function actually fetches the current FAST_CWD
-+		 instance and performs some other actions, not important to us.
-+	       */
-+	      use_cwd = (const uint8_t *) rip_rel_offset (&ud_obj, opr);
-+	      break;
-+	    }
++	  use_cwd = extract_bl_target (pc);
++	  break;
 +	}
 +    }
 +  if (!use_cwd)
-     return NULL;
--  /* Fetch offset from instruction and compute address of called function.
--     This function actually fetches the current FAST_CWD instance and
--     performs some other actions, not important to us. */
--  const uint8_t *use_cwd = rcall + 5 + peek32 (rcall + 1);
-+  ud_set_input_buffer (&ud_obj, use_cwd, 120);
-+  ud_set_pc (&ud_obj, (const uint64_t) use_cwd);
++    return NULL;
 +
-   /* Next we search for the locking mechanism and perform a sanity check.
--     On Pre-Windows 8 we basically look for the RtlEnterCriticalSection call.
--     Windows 8 does not call RtlEnterCriticalSection.  The code manipulates
--     the FastPebLock manually, probably because RtlEnterCriticalSection has
--     been converted to an inline function.  Either way, we test if the code
--     uses the FastPebLock. */
--  const uint8_t *movrbx;
--  const uint8_t *lock = (const uint8_t *)
--                        memmem ((const char *) use_cwd, 80,
--                                "\xf0\x0f\xba\x35", 4);
--  if (lock)
-+     On Pre- (or Post-) Windows 8 we basically look for the
-+     RtlEnterCriticalSection call.  Windows 8 does not call
-+     RtlEnterCriticalSection.  The code manipulates the FastPebLock manually,
-+     probably because RtlEnterCriticalSection has been converted to an inline
-+     function.  Either way, we test if the code uses the FastPebLock. */
-+  PRTL_CRITICAL_SECTION lockaddr = NULL;
++  start = pc = (const uint32_t *) use_cwd;
 +
-+  /* both cases have an `lea rel(%rip)` on the lock */
-+  while (ud_disassemble (&ud_obj) &&
-+      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
-+      insn != UD_Ijmp)
-     {
--      /* The lock instruction tweaks the LockCount member, which is not at
--	 the start of the PRTL_CRITICAL_SECTION structure.  So we have to
--	 subtract the offset of LockCount to get the real address. */
--      PRTL_CRITICAL_SECTION lockaddr =
--        (PRTL_CRITICAL_SECTION) (lock + 9 + peek32 (lock + 4)
--                                 - offsetof (RTL_CRITICAL_SECTION, LockCount));
--      /* Test if lock address is FastPebLock. */
--      if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
--        return NULL;
--      /* Search `mov rel(%rip),%rbx'.  This is the instruction fetching the
--         address of the current fcwd_access_t pointer, and it should be pretty
--	 near to the locking stuff. */
--      movrbx = (const uint8_t *) memmem ((const char *) lock, 40,
--                                         "\x48\x8b\x1d", 3);
-+      if (insn == UD_Ilea)
++  const uint32_t *ldrpc = NULL;
++  uint32_t ldroffset, ldrsz;
++  uint32_t ldrrn, ldrrd;
++
++  /* find the ldr (immediate unsigned offset) for RtlpCurDirRef */
++  for (; pc < start + 20 && !IS_INSN (pc, ret) && !IS_INSN (pc, b); pc++)
++    {
++      if (IS_INSN (pc, ldr))
 +	{
-+	  /* this seems to follow intel syntax, in that operand 0 is the
-+	     dest and 1 is the src */
-+	  opr = ud_insn_opr (&ud_obj, 1);
-+	  if (opr->type == UD_OP_MEM && opr->base == UD_R_RIP &&
-+	      opr->index == UD_NONE && opr->scale == 0 && opr->offset == 32)
-+	    {
-+	      lockaddr = (PRTL_CRITICAL_SECTION) rip_rel_offset (&ud_obj, opr);
-+	      break;
-+	    }
++	  ldrpc = pc;
++	  ldrsz = (*pc & 0x40000000);
++	  ldroffset = (*pc >> (5+5)) & 0xFFF;
++	  ldroffset <<= ldrsz ? 3 : 2;
++	  ldrrn = (*pc >> 5) & 0x1F;
++	  ldrrd = *pc & 0x1F;
++	  break;
 +	}
-     }
--  else
++    }
++  if (ldrpc == NULL)
++    return NULL;
 +
-+  /* Test if lock address is FastPebLock. */
++  /* the next instruction after the ldr should be checking if it was NULL:
++     either a compare and branch if zero or not zero (hence why cbz_mask is 7e
++     instead of 7f) */
++  if (!IS_INSN (pc + 1, cbz) || (*(pc + 1) & 0x1F) != ldrrd
++      || (*(pc + 1) & 0x80000000) != (ldrsz << 1))
++    return NULL;
++
++  /* work backwards, find a bl to RtlEnterCriticalSection whose argument
++     is the fast peb lock */
++
++  for (pc = ldrpc; pc >= start; pc--)
++    {
++      if (IS_INSN (pc, bl) && extract_bl_target (pc) == ent_crit)
++	break;
++    }
++  uint32_t addoffset;
++  uint32_t addrn;
++  for (; pc >= start; pc--)
++    {
++      if (IS_INSN (pc, add) && (*pc & 0x1F) == 0)
++	{
++	  addoffset = (*pc >> (5+5)) & 0xFFF;
++	  addrn = (*pc >> 5) & 0x1F;
++	  break;
++	}
++    }
++  PRTL_CRITICAL_SECTION lockaddr = NULL;
++  for (; pc >= start; pc--)
++    {
++      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == addrn)
++	{
++	  lockaddr = (PRTL_CRITICAL_SECTION) (extract_adrp_address (pc) +
++					      addoffset);
++	  break;
++	}
++    }
 +  if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
 +    return NULL;
 +
-+  /* Next is either the `callq RtlEnterCriticalSection', or on Windows 8,
-+     a `lock btr` */
-+  bool found = false;
-+  while (ud_disassemble (&ud_obj) &&
-+      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
-+      insn != UD_Ijmp)
-     {
--      /* Usually the callq RtlEnterCriticalSection follows right after
--	 fetching the lock address. */
--      int call_rtl_offset = 7;
--      /* Search `lea rel(%rip),%rcx'.  This loads the address of the lock into
--         %rcx for the subsequent RtlEnterCriticalSection call. */
--      lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
--                                       "\x48\x8d\x0d", 3);
--      if (!lock)
-+      if (insn == UD_Icall)
- 	{
--	  /* Windows 8.1 Preview calls `lea rel(rip),%r12' then some unrelated
--	     ops, then `mov %r12,%rcx', then `callq RtlEnterCriticalSection'. */
--	  lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
--					   "\x4c\x8d\x25", 3);
--	  call_rtl_offset = 14;
-+	  opr = ud_insn_opr (&ud_obj, 0);
-+	  if (opr->type == UD_OP_JIMM && opr->size == 32)
-+	    {
-+	      if (ent_crit != rip_rel_offset (&ud_obj, opr))
-+		return NULL;
-+	      found = true;
-+	      break;
-+	    }
- 	}
--
--      if (!lock)
-+      else if (insn == UD_Ibtr && ud_obj.pfx_lock)
- 	{
--	  /* A recent Windows 11 Preview calls `lea rel(rip),%r13' then
--	     some unrelated instructions, then `callq RtlEnterCriticalSection'.
--	     */
--	  lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
--					   "\x4c\x8d\x2d", 3);
--	  call_rtl_offset = 24;
-+	  /* for Windows 8 */
-+	  opr = ud_insn_opr (&ud_obj, 0);
-+	  if (opr->type == UD_OP_MEM && opr->base == UD_R_RIP &&
-+	      opr->index == UD_NONE && opr->scale == 0 && opr->offset == 32 &&
-+	      opr->size == 32)
-+	    {
-+	      if (lockaddr != rip_rel_offset (&ud_obj, opr,
-+				  offsetof (RTL_CRITICAL_SECTION, LockCount)))
-+		return NULL;
-+	      found = true;
-+	      break;
-+	    }
- 	}
-+    }
-+  if (!found)
-+    return NULL;
-
--      if (!lock)
-+  fcwd_access_t **f_cwd_ptr = NULL;
-+  ud_type_t reg = UD_NONE;
-+  /* now we're looking for a movq rel(%rip) */
-+  while (ud_disassemble (&ud_obj) &&
-+      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
-+      insn != UD_Ijmp)
++  /* work backwards from the ldr to find the corresponding adrp */
++  fcwd_access_t **RtlpCurDirRef = NULL;
++  for (pc = ldrpc; pc >= start; pc--)
 +    {
-+      if (insn == UD_Imov)
- 	{
--	  return NULL;
-+	  const ud_operand_t *opr0 = ud_insn_opr (&ud_obj, 0);
-+	  opr = ud_insn_opr (&ud_obj, 1);
-+	  if (opr->type == UD_OP_MEM && opr->base == UD_R_RIP &&
-+	      opr->index == UD_NONE && opr->scale == 0 &&
-+	      opr->offset == 32 && opr->size == 64 &&
-+	      opr0->type == UD_OP_REG)
-+	    {
-+	      f_cwd_ptr = (fcwd_access_t **) rip_rel_offset (&ud_obj, opr);
-+	      reg = opr0->base;
-+	      break;
-+	    }
- 	}
--
--      PRTL_CRITICAL_SECTION lockaddr =
--        (PRTL_CRITICAL_SECTION) (lock + 7 + peek32 (lock + 3));
--      /* Test if lock address is FastPebLock. */
--      if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
--        return NULL;
--      /* Next is the `callq RtlEnterCriticalSection'. */
--      lock += call_rtl_offset;
--      if (lock[0] != 0xe8)
--        return NULL;
--      const uint8_t *call_addr = (const uint8_t *)
--                                 (lock + 5 + peek32 (lock + 1));
--      if (call_addr != ent_crit)
--        return NULL;
--      /* In contrast to the above Windows 8 code, we don't have to search
--	 for the `mov rel(%rip),%rbx' instruction.  It follows right after
--	 the call to RtlEnterCriticalSection. */
--      movrbx = lock + 5;
-     }
--  if (!movrbx)
--    return NULL;
-   /* Check that the next instruction tests if the fetched value is NULL. */
--  const uint8_t *testrbx = (const uint8_t *)
--			   memmem (movrbx + 7, 3, "\x48\x85\xdb", 3);
--  if (!testrbx)
-+  if (!f_cwd_ptr || !ud_disassemble (&ud_obj) ||
-+      ud_insn_mnemonic (&ud_obj) != UD_Itest)
-+    return NULL;
++      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == ldrrn)
++	{
++	  RtlpCurDirRef = (fcwd_access_t **) (extract_adrp_address (pc) +
++					      ldroffset);
++	  break;
++	}
++    }
 +
-+  opr = ud_insn_opr (&ud_obj, 0);
-+  if (opr->type != UD_OP_REG || opr->base != reg ||
-+      memcmp (opr, ud_insn_opr (&ud_obj, 1), offsetof (ud_operand_t, _legacy)))
-     return NULL;
--  /* Compute address of the fcwd_access_t ** pointer. */
--  return (fcwd_access_t **) (testrbx + peek32 (movrbx + 3));
-+  return f_cwd_ptr;
- }
++  return RtlpCurDirRef;
++}
++
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index 3a5e2ee07e..7a08e978ad 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -4495,21 +4495,36 @@ fcwd_access_t **
+ find_fast_cwd_pointer_x86_64 ();
+ #endif
+
++fcwd_access_t **
++find_fast_cwd_pointer_aarch64 ();
++
+ static fcwd_access_t **
+ find_fast_cwd ()
+ {
+   fcwd_access_t **f_cwd_ptr;
+
+-  /* First check if we're running on an ARM64 system.  Skip
+-     fetching FAST_CWD pointer as long as there's no solution for finding
+-     it on that system. */
+-  if (wincap.host_machine () == IMAGE_FILE_MACHINE_ARM64)
+-    return NULL;
++  switch (wincap.host_machine ())
++    {
++    case IMAGE_FILE_MACHINE_ARM64:
++      f_cwd_ptr = find_fast_cwd_pointer_aarch64 ();
++      break;
++#ifdef __x86_64__
++    case IMAGE_FILE_MACHINE_AMD64:
++      f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
++      break;
++#endif
++    default:
++      small_printf ("Cygwin WARNING:\n"
++"  Couldn't compute FAST_CWD pointer for an unknown architecture (%04y)\n"
++"  Please update to the latest available Cygwin version from\n"
++"  https://cygwin.com/.  If the problem persists, please see\n"
++"  https://cygwin.com/problems.html\n\n", (int) wincap.host_machine ());
++      return NULL;
++    }
+
+   /* Fetch the pointer but don't set the global fast_cwd_ptr yet.  First
+      we have to make sure we know the version of the FAST_CWD structure
+      used on the system. */
+-  f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
+   if (!f_cwd_ptr)
+     small_printf ("Cygwin WARNING:\n"
+ "  Couldn't compute FAST_CWD pointer.  This typically occurs if you're using\n"
 -- 
 2.48.1.windows.1
 
