@@ -1,101 +1,65 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id DAEF23842FF7; Fri, 28 Mar 2025 10:08:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DAEF23842FF7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1743156510;
-	bh=LcxttaiHklhWtBEQRcwyPWTRLqiy1+TMj8fKwCRhEos=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=QnIhC3Pq5Ik/UJHfoWhDPlRxV7Cv/JmSZVf3pwp19kFaLMg09bvpOYv1OWMqMhIzk
-	 pT/bH2LVn/7+TR5J7WHkGbhYZr0muZU2XcLjTmQichREDaiacqiccFclcSDAqpv4UH
-	 q+eqfuB32Y2SjD+ah+wszV4sUfH+S747EnmBo85U=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id CADDAA80B96; Fri, 28 Mar 2025 11:08:28 +0100 (CET)
-Date: Fri, 28 Mar 2025 11:08:28 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 4/5] Cygwin: use udis86 to find fast cwd pointer on x64
-Message-ID: <Z-Z1HJZKiHi6YUcd@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <7d4f8d91-0a3f-4e14-047e-64b1bd7d9447@jdrake.com>
- <Z-U5WFBxoUfeVwn7@calimero.vinschen.de>
- <f7b8d776-ca5b-a0b3-63bb-02ea496e5bb6@jdrake.com>
- <Z-Wm3C1AoXLaYeMg@calimero.vinschen.de>
- <580c99c4-d0bb-ee54-3a39-43b55f5abc1f@jdrake.com>
+Return-Path: <SRS0=Bd9A=WP=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.237])
+	by sourceware.org (Postfix) with ESMTP id 699793857BA5
+	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 19:11:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 699793857BA5
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 699793857BA5
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.237
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743189093; cv=none;
+	b=hzk2iDSOhF6hLk07hcXjOcGbpYI0M1zzq4uqdxb+Zr6Bsqc/OhtiYtrmzWkG+dQjDbY0GT/Cn+hayjAgbREJiu8/KnrvJlckGvACWviboI/fwqP/S5I3FD6kw/K66M58Q2lrxHrPuEbVn5fK0giywMRXYVhX+Xn63RIKkkE96Rk=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1743189093; c=relaxed/simple;
+	bh=t+rQzYMEXiOK2qIvMFdcqWLkTB85oSH8uJtwyr9jD04=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=QKqk6j7EuTFmkVYyT+/ii3HYXrGHHGXsyRehHgCFnbxvvr1zLrBMoZT7fNFZgU8RtqIF7LGzYgJbYX7JM3oqJvb2JixEXaYIOmtc720nfXB2tcDf7AzlWpmi44kPTHgscz4KKCAACz5ZLIsUnNhvXXp/Pbawfwae7fEez+VRxl8=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 699793857BA5
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89E7C015D3344
+X-Originating-IP: [81.129.146.194]
+X-OWM-Source-IP: 81.129.146.194
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedvuddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekuddruddvledrudegiedrudelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduvdelrddugeeirdduleegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduvdelqddugeeiqdduleegrdhrrghnghgvkeduqdduvdelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddvpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghs
+	segthihgfihinhdrtghomhdprhgtphhtthhopehthhhirhhumhgrlhgrihdrnhgrghgrlhhinhhgrghmsehmuhhlthhitghorhgvfigrrhgvihhntgdrtghomh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (81.129.146.194) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89E7C015D3344; Fri, 28 Mar 2025 19:11:28 +0000
+Message-ID: <c7de95ce-0195-4d8e-a38c-1d1fe76630f3@dronecode.org.uk>
+Date: Fri, 28 Mar 2025 19:11:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <580c99c4-d0bb-ee54-3a39-43b55f5abc1f@jdrake.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: Fix compatibility with GCC 15
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+References: <MA0P287MB3082D068B740A322C4A238229FA12@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <MA0P287MB3082D068B740A322C4A238229FA12@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_BL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 27 17:52, Jeremy Drake via Cygwin-patches wrote:
-> On Thu, 27 Mar 2025, Corinna Vinschen wrote:
+On 27/03/2025 12:41, Thirumalai Nagalingam wrote:
+> Hello,
 > 
-> > On Mar 27 10:26, Jeremy Drake via Cygwin-patches wrote:
-> > > comment, it seems 8.0 is the odd-version-out here.
-> >
-> > Yeah, but we don't support 8.0 anymore, only 8.1.
-> >
-> > > BTW, something I would *like* to do but haven't figured out how to
-> > > accomplish cleanly yet is to follow the registers.  What I mean by this is
-> > > illustrated by what I did in the aarch64 version: I could find the call to
-> > > RtlEnterCrticalSection, then work backwards, find the add whose Rd was x0
-> > > (the register for the first (pointer) parameter in the calling
-> > > convention), then find the adrp whose Rd was the Rn of the add.  What I
-> > > would do on x86_64 is find the call to RtlEnterCriticalSection, find any
-> > > mov rcx, <reg> before, then find the lea <reg>, [rip+XXX] (where reg would
-> > > be rcx if there wasn't a mov rcx after the lea).  Unfortunately, the
-> > > variable length-ness doesn't lend itself to iterating backwards, so I am
-> > > not confirming that the lea actually ends up in rcx for the function call.
-> > > The only register correlation I do is that the register used in the
-> > > mov <reg>, QWORD PTR [rip+XXX] is then used in the next instruction that
-> > > must be test <reg>, <reg>.  The old code required that <reg> to be rbx,
-> > > but I don't see any reason that rbx is required...
-> >
-> > Yeah, reading x86_64 backwards will lead to confusion.  And no, rbx
-> > isn't required, any non-volatile register could do it.  It seems that
-> > rbx is used because of the way vc++ allocates register.
+> Please find my patch attached for review.
 > 
+> Summary of Changes:
 > 
-> After taking out the windows 8.0 case, I think this should be doable:
-> * when finding the lea that we're already looking for, save the
->   destination register
-> 
-> * if the destination register is not rcx, look for a 64-bit mov into rcx
->   from <reg> (where <reg> is the register from the lea) before the call to
->   RtlEnterCriticalSection
-> 
-> This won't catch cases where they shuffle it between multiple registers,
-> or otherwise obfusate the load into rcx (push/pop, xchg, using some memory
-> location, ...) but I think this covers every case I've seen (including
-> those mentioned in comments about preview builds).  It would also allow us
-> to skip the theoretical-but-legal sequence (intel)
-> 
-> lea rXX, [rip+XXXX] ; FastPebLock
-> ...
-> call UnrelatedFunction
-> mov rcx, rXX
-> call RtlEnterCriticalSection
-> mov rYY, QWORD PTR [rip+YYYY] ; RtlpCurDirRef
-> test rYY, rYY
-> ...
-> 
-> I'll try to find some time to test this latest round on as many released
-> Windows versions >= 8.1 as I can, and then send a v3 series.  It works on
-> 22631 at least.
+> - GCC 15 defaults to `-std=gnu23`, causing build failures in `testsuite`
+>    due to outdated C function declarations. This patch updates the function
+>    declarations to align with modern standards.
+> - Introduced `cpu_relax.h` to support `cancel3` and `cancel5` tests by
+>    providing architecture-specific instructions.
 
-This sounds great, but don't put too many effort into past preview
-releases.  We try hard that Cygwin runs on released versions of
-Windows.  But preview versions of the past are a thing of the past.  Not
-only that, but you're putting a lot of effort into versions sometimes
-used by a single machine.
-It might further simplify the code if you don't handle these old
-temporary versions anymore and concentrate on the past releases.
+Applied, many thanks!
 
-Btw., wouldn't you have fun to join our Libera IRC channel
-#cygwin-developers?  https://cygwin.com/irc.html
+I tweaked the whitespace a bit and split the fix ARM64 processor idling 
+during the cancellation tests into a separate patch.
 
-
-Thanks,
-Corinna
