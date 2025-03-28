@@ -1,65 +1,76 @@
-Return-Path: <SRS0=Bd9A=WP=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.237])
-	by sourceware.org (Postfix) with ESMTP id 699793857BA5
-	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 19:11:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 699793857BA5
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 699793857BA5
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.237
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743189093; cv=none;
-	b=hzk2iDSOhF6hLk07hcXjOcGbpYI0M1zzq4uqdxb+Zr6Bsqc/OhtiYtrmzWkG+dQjDbY0GT/Cn+hayjAgbREJiu8/KnrvJlckGvACWviboI/fwqP/S5I3FD6kw/K66M58Q2lrxHrPuEbVn5fK0giywMRXYVhX+Xn63RIKkkE96Rk=
+Return-Path: <SRS0=QOKQ=WP=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 9711D3857BA5
+	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 19:51:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9711D3857BA5
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9711D3857BA5
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743191500; cv=none;
+	b=oUAeZYRKwEPk484+NGabXMWDn+vVU7+edRfBKOCVGVfKOztVN/zaKF2jsEbtOxR35Te5cKwO82bCmc3DfqDNM21FqymKfBHcfsAhxZDq1p8toGYJUXvwsbk0tiacYV4Lvv+TBIy57pcQ6oCHBl9Zy8oDqTMe7WTllLkkTYYoM4s=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743189093; c=relaxed/simple;
-	bh=t+rQzYMEXiOK2qIvMFdcqWLkTB85oSH8uJtwyr9jD04=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=QKqk6j7EuTFmkVYyT+/ii3HYXrGHHGXsyRehHgCFnbxvvr1zLrBMoZT7fNFZgU8RtqIF7LGzYgJbYX7JM3oqJvb2JixEXaYIOmtc720nfXB2tcDf7AzlWpmi44kPTHgscz4KKCAACz5ZLIsUnNhvXXp/Pbawfwae7fEez+VRxl8=
+	t=1743191500; c=relaxed/simple;
+	bh=GdlewJAPcqbv4bthv1Ri4TD9+Up+OiLVruyI8igNAAE=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=UAO9fdULESsX38KoWr2WU5FOyChxdLpI0FPQUKbyIjtuCvUTnOPKynp7hhne1XO0lVISQQEMwJwFrVCqfA5v72yScQSZwrhTdzBs09rlUSjTKLL7v3cAtSubSPZ/FkL0hYOWnLLP40N+3YAIqFyykg76pIQOPgu83wJfBCSZMnM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 699793857BA5
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89E7C015D3344
-X-Originating-IP: [81.129.146.194]
-X-OWM-Source-IP: 81.129.146.194
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedvuddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekuddruddvledrudegiedrudelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduvdelrddugeeirdduleegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduvdelqddugeeiqdduleegrdhrrghnghgvkeduqdduvdelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddvpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghs
-	segthihgfihinhdrtghomhdprhgtphhtthhopehthhhirhhumhgrlhgrihdrnhgrghgrlhhinhhgrghmsehmuhhlthhitghorhgvfigrrhgvihhntgdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (81.129.146.194) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89E7C015D3344; Fri, 28 Mar 2025 19:11:28 +0000
-Message-ID: <c7de95ce-0195-4d8e-a38c-1d1fe76630f3@dronecode.org.uk>
-Date: Fri, 28 Mar 2025 19:11:27 +0000
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9711D3857BA5
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=L4T0H7Ks
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 0027E45CD1
+	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 15:51:39 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=7R7KaES0N2B09W8pq47W6cWG0KM=; b=L4T0H
+	7KsOyZ1MqgeKQBWiQEnLnxvzjA0EMVBmNVcq4+JoKE9xwdMbKxx2RhYNIUSOuXYc
+	UBGti8cEi69IPPjvtRIG5NVMOM4LPEEYPPt+2DlIqER1fR71qORVLNCPDlWtVYUr
+	/BuQdUf4+OAObf/ypU4io1S9KIjiVNXbMwW1c8=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id D782145CC4
+	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 15:51:39 -0400 (EDT)
+Date: Fri, 28 Mar 2025 12:51:39 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2 4/5] Cygwin: use udis86 to find fast cwd pointer on
+ x64
+In-Reply-To: <Z-Z1HJZKiHi6YUcd@calimero.vinschen.de>
+Message-ID: <67305d04-d1b3-da31-672d-53fc8df2d0e0@jdrake.com>
+References: <7d4f8d91-0a3f-4e14-047e-64b1bd7d9447@jdrake.com> <Z-U5WFBxoUfeVwn7@calimero.vinschen.de> <f7b8d776-ca5b-a0b3-63bb-02ea496e5bb6@jdrake.com> <Z-Wm3C1AoXLaYeMg@calimero.vinschen.de> <580c99c4-d0bb-ee54-3a39-43b55f5abc1f@jdrake.com>
+ <Z-Z1HJZKiHi6YUcd@calimero.vinschen.de>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: Fix compatibility with GCC 15
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-References: <MA0P287MB3082D068B740A322C4A238229FA12@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <MA0P287MB3082D068B740A322C4A238229FA12@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_BL,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 27/03/2025 12:41, Thirumalai Nagalingam wrote:
-> Hello,
-> 
-> Please find my patch attached for review.
-> 
-> Summary of Changes:
-> 
-> - GCC 15 defaults to `-std=gnu23`, causing build failures in `testsuite`
->    due to outdated C function declarations. This patch updates the function
->    declarations to align with modern standards.
-> - Introduced `cpu_relax.h` to support `cancel3` and `cancel5` tests by
->    providing architecture-specific instructions.
+On Fri, 28 Mar 2025, Corinna Vinschen wrote:
 
-Applied, many thanks!
+> This sounds great, but don't put too many effort into past preview
+> releases.  We try hard that Cygwin runs on released versions of
+> Windows.  But preview versions of the past are a thing of the past.  Not
+> only that, but you're putting a lot of effort into versions sometimes
+> used by a single machine.
+> It might further simplify the code if you don't handle these old
+> temporary versions anymore and concentrate on the past releases.
 
-I tweaked the whitespace a bit and split the fix ARM64 processor idling 
-during the cancellation tests into a separate patch.
+I'm not.  I'm only looking at *released* versions of Windows, but at least
+considering what comments had to say about old preview releases as ways in
+which this code might potentially be mangled by a compiler.
 
+> Btw., wouldn't you have fun to join our Libera IRC channel
+> #cygwin-developers?  https://cygwin.com/irc.html
+
+I was on MSYS2's discord for a while, but I found that between the time
+zone differences and my own feeling that I needed to keep up with all the
+messages I had to give up on that.  I try to prune my Github notifications
+down to a level where I can keep up with pieces I'm interested in without
+getting overwhelmed.
+
+I seem to remember that IRC doesn't deliver a backlog of messages from
+when you're offline, so perhaps it would be worth a try.
