@@ -1,331 +1,92 @@
 Return-Path: <SRS0=rgYs=WQ=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 96A833856260
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 18:58:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 96A833856260
+	by sourceware.org (Postfix) with ESMTPS id E92FD3858D29
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 22:55:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E92FD3858D29
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 96A833856260
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E92FD3858D29
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743274725; cv=none;
-	b=vJLNBnQr4eeali0ELNUdfjvse27jhUs7DOpvoRzHgDt4L8BK6MpgPIm/5PlG3KMX/r9Vb5pNN4TOo8dAoTVp6ihGHEsa6uk5JRzvETLcGAn8ePUXs4ydda/IY7jdd/H9bK+JyXTt05+aK8Ei5nxOgIXA9M++QfTlJzG2qE+1CYI=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743288957; cv=none;
+	b=tc8CbFdshxq4AZTkf7lTSKrjUhbzeweaERiohnp83/HuLsTQA2kqpHsY/yAxo8ZAXeZLkcXVmGKU+vCheIzMxNuO4CxcuSnHQ5UmHWJ7bmf4mIDiineevRdkivRAA0EQnpvdR2fWSgL/fifeo7NAM7YdyyXh987l5uqubCkkoS0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743274725; c=relaxed/simple;
-	bh=a7cJBzQPP3wV3ec2Y5qXScTfruARfb3fVQG5I8Lapxk=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=em0z9A96RXhfRhioRHJjzwSaU3LuN/8BoDpTfruF+v8IxxtHWK8VFV1z6q6SVgh93goLiJJffyrG4L+bURZiI+gOE3dt0vVzFSjwZGDylf25nTMH3IFQcFP5fEyDIV+rjiwdAsy9tqhPjd5vCqcskUKGcva0YB1p+xFym3wtzLo=
+	t=1743288957; c=relaxed/simple;
+	bh=iDk2WlSyhdjRVQQfux2lLiZGxqubdCPDNAOMJbgzJmA=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=svtmQu2mDtH77SocwZfJlUy1rDr3QyNwKAxS3TDmAlPpJCcn+UVGjVHqR5DEfOc6g0PPfUOgnNzezOgnzhCwW1e2yiQWQk5pSUpMa6v0n7QaFWDVvr36JT5wTi3Hiay8LKiDCw/xRZ6Gbdhy1X4TbMJfzZXHSqFdZ5dOS7LTnYI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 96A833856260
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E92FD3858D29
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=pzG4v4UZ
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=UHd8ZEIs
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 4E33445CD7
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:58:45 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 6B16845CB3
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 18:55:56 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=wpDZe
-	1fMm12cO9Qqr8+1kZiO7jA=; b=pzG4v4UZNGVGslTpHyBfHYgTbHbakGQwjZvrL
-	1+EcBo1zfyxiPmxzCO5dgk7OZOtPICvK/3v5CUc3XJ4Mfp65SJj50pIwZNZ/C4Wf
-	WrzEMuDm8AWzI09lLfKn4lmlGqqUdQEL5Qp9vi0Bbj2D5iMuITnPYubJSbKnBaIe
-	FPpoJ8=
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=5Cs8N8Mxr9r/v+VNONsyJkvLGEE=; b=UHd8Z
+	EIsRT4Sm+IOCSNAJFspK8QX2ceLhexcPCVg+VpHuh8coUVIsntm9LCaRCp4tWkEr
+	ncb+ujoPCWkUbZVy4zf9610muy6Pl6dYgGEaP4lMBYScC1vu53zGv2VqodcSl64U
+	R0+bBBZqNHlacIAbzTw+fw/E9OcTA9EvyNSCXc=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 488CA45CD6
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:58:45 -0400 (EDT)
-Date: Sat, 29 Mar 2025 11:58:45 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 52AC845CB2
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 18:55:56 -0400 (EDT)
+Date: Sat, 29 Mar 2025 15:55:56 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v3 5/5] Cygwin: add find_fast_cwd_pointer_aarch64.
-Message-ID: <56fd414a-0421-b38d-891f-d74f1329c624@jdrake.com>
+Subject: Re: [PATCH v3 0/5] find_fast_cwd_pointer rewrite
+In-Reply-To: <20da32b5-3d5d-b5ef-1b6a-9ef181285b1a@jdrake.com>
+Message-ID: <6e18afd8-3952-8a85-c235-45fbd01db70b@jdrake.com>
+References: <dd2918ee-0f21-a2e9-5427-e78be076bc5e@jdrake.com> <3e7c52d1-01ef-4843-23a4-18f69da1ecea@jdrake.com> <20da32b5-3d5d-b5ef-1b6a-9ef181285b1a@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Jeremy Drake <cygwin@jdrake.com>
+On Sat, 29 Mar 2025, Jeremy Drake via Cygwin-patches wrote:
 
-This works for aarch64 hosts when the target is aarch64, x86_64, or i686,
-with only a small #if block in one function that needs to care.
+> I tested x86_64 code on every released Windows version from 9600 to 26100.
+> Interestingly, the machine code of the "use_cwd" function
+> (RtlpReferenceCurrentDirectory) didn't seem to change until 26100.
+>
+> (I previously tested the prototype aarch64 code on 16299, 19045, 22631,
+> and 26100, but only 22000+ supports x86_64 emulation).
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
- winsup/cygwin/Makefile.am        |   1 +
- winsup/cygwin/aarch64/fastcwd.cc | 203 +++++++++++++++++++++++++++++++
- winsup/cygwin/path.cc            |  27 +++-
- 3 files changed, 225 insertions(+), 6 deletions(-)
- create mode 100644 winsup/cygwin/aarch64/fastcwd.cc
+I updated the prototype code with latest updates and tested on arm64 in
+16299, 19045, 22631, 26100, and finally 22000.  It seems the "thunk"/"fast
+forward sequence" differs on 22000, but luckily it's the same size.  Do I
+need to resend the whole series or just a v4 of the last patch?
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index fdd026a525..6438a41487 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -52,6 +52,7 @@ if TARGET_X86_64
- TARGET_FILES= \
- 	x86_64/bcopy.S \
- 	x86_64/fastcwd.cc \
-+	aarch64/fastcwd.cc \
- 	x86_64/memchr.S \
- 	x86_64/memcpy.S \
- 	x86_64/memmove.S \
 diff --git a/winsup/cygwin/aarch64/fastcwd.cc b/winsup/cygwin/aarch64/fastcwd.cc
-new file mode 100644
-index 0000000000..a0f169b61a
---- /dev/null
+index a0f169b61a..f075b8cd59 100644
+--- a/winsup/cygwin/aarch64/fastcwd.cc
 +++ b/winsup/cygwin/aarch64/fastcwd.cc
-@@ -0,0 +1,203 @@
-+/* aarch64/fastcwd.cc: find the fast cwd pointer on aarch64 hosts.
-+
-+  This file is part of Cygwin.
-+
-+  This software is a copyrighted work licensed under the terms of the
-+  Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-+  details. */
-+
-+/* You might well wonder why this file is included in x86_64 target files
-+   in Makefile.am.  It turns out that this code works when built for i686,
-+   x86_64, or aarch64 with just the small #if/#elif block in
-+   GetArm64ProcAddress below caring which. */
-+
-+#include "winsup.h"
-+#include <assert.h>
-+
-+class fcwd_access_t;
-+
-+static LPCVOID
-+GetArm64ProcAddress (HMODULE hModule, LPCSTR procname)
-+{
-+  const BYTE *proc = (const BYTE *) GetProcAddress (hModule, procname);
-+#if defined (__aarch64__)
-+  return proc;
-+#else
-+#if defined(__i386__)
-+  static const BYTE thunk[] = "\x8b\xff\x55\x8b\xec\x5d\x90\xe9";
-+#elif defined(__x86_64__)
-+  /* see
-+     https://learn.microsoft.com/en-us/windows/arm/arm64ec-abi#fast-forward-sequences */
-+  static const BYTE thunk[] = "\x48\x8b\xc4\x48\x89\x58\x20\x55\x5d\xe9";
-+#else
-+#error "Unhandled architecture for thunk detection"
-+#endif
-+  if (memcmp (proc, thunk, sizeof (thunk) - 1) == 0)
-+    {
-+      proc += sizeof (thunk) - 1;
-+      proc += 4 + *(const int32_t *) proc;
-+    }
-+  return proc;
-+#endif
-+}
-+
-+/* these ids and masks, as well as the names of the various other parts of
-+   instructions used in this file, came from
-+   https://developer.arm.com/documentation/ddi0602/2024-09/Index-by-Encoding
-+   (Arm A-profile A64 Instruction Set Architecture)
-+*/
-+#define IS_INSN(pc, name) ((*(pc) & name##_mask) == name##_id)
-+static const uint32_t add_id = 0x11000000;
-+static const uint32_t add_mask = 0x7fc00000;
-+static const uint32_t adrp_id = 0x90000000;
-+static const uint32_t adrp_mask = 0x9f000000;
-+static const uint32_t b_id = 0x14000000;
-+static const uint32_t b_mask = 0xfc000000;
-+static const uint32_t bl_id = 0x94000000;
-+static const uint32_t bl_mask = 0xfc000000;
-+/* matches both cbz and cbnz */
-+static const uint32_t cbz_id = 0x34000000;
-+static const uint32_t cbz_mask = 0x7e000000;
-+static const uint32_t ldr_id = 0xb9400000;
-+static const uint32_t ldr_mask = 0xbfc00000;
-+/* matches both ret and br (which are the same except ret is a 'hint' that
-+   it's  a subroutine return */
-+static const uint32_t ret_id = 0xd61f0000;
-+static const uint32_t ret_mask = 0xffbffc1f;
-+
-+/* this would work for either bl or b, but we only use it for bl */
-+static inline LPCVOID
-+extract_bl_target (const uint32_t *pc)
-+{
-+  assert (IS_INSN (pc, bl) || IS_INSN (pc, b));
-+  int32_t offset = *pc & ~bl_mask;
-+  /* sign extend */
-+  if (offset & (1 << 25))
-+    offset |= bl_mask;
-+  /* Note uint32_t * artithmatic will implicitly multiply the offset by 4 */
-+  return pc + offset;
-+}
-+
-+static inline uint64_t
-+extract_adrp_address (const uint32_t *pc)
-+{
-+  assert (IS_INSN (pc, adrp));
-+  uint64_t adrp_base = (uint64_t) pc & ~0xFFF;
-+  int64_t  adrp_imm = (*pc >> (5+19+5)) & 0x3;
-+  adrp_imm |= ((*pc >> 5) & 0x7FFFF) << 2;
-+  /* sign extend */
-+  if (adrp_imm & (1 << 20))
-+    adrp_imm |= ~((1 << 21) - 1);
-+  adrp_imm <<= 12;
-+  return adrp_base + adrp_imm;
-+}
-+
-+/* This function scans the code in ntdll.dll to find the address of the
-+   global variable used to access the CWD.  While the pointer is global,
-+   it's not exported from the DLL, unfortunately.  Therefore we have to
-+   use some knowledge to figure out the address. */
-+
-+fcwd_access_t **
-+find_fast_cwd_pointer_aarch64 ()
-+{
-+  /* Fetch entry points of relevant functions in ntdll.dll. */
-+  HMODULE ntdll = GetModuleHandle ("ntdll.dll");
-+  if (!ntdll)
-+    return NULL;
-+  LPCVOID get_dir = GetArm64ProcAddress (ntdll, "RtlGetCurrentDirectory_U");
-+  LPCVOID ent_crit = GetArm64ProcAddress (ntdll, "RtlEnterCriticalSection");
-+  if (!get_dir || !ent_crit)
-+    return NULL;
-+
-+  LPCVOID use_cwd = NULL;
-+  const uint32_t *start = (const uint32_t *) get_dir;
-+  const uint32_t *pc = start;
-+  /* find the call to RtlpReferenceCurrentDirectory, and get its address */
-+  for (; pc < start + 20 && !IS_INSN (pc, ret) && !IS_INSN (pc, b); pc++)
-+    {
-+      if (IS_INSN (pc, bl))
-+	{
-+	  use_cwd = extract_bl_target (pc);
-+	  break;
-+	}
-+    }
-+  if (!use_cwd)
-+    return NULL;
-+
-+  start = pc = (const uint32_t *) use_cwd;
-+
-+  const uint32_t *ldrpc = NULL;
-+  uint32_t ldroffset, ldrsz;
-+  uint32_t ldrrn, ldrrd;
-+
-+  /* find the ldr (immediate unsigned offset) for RtlpCurDirRef */
-+  for (; pc < start + 20 && !IS_INSN (pc, ret) && !IS_INSN (pc, b); pc++)
-+    {
-+      if (IS_INSN (pc, ldr))
-+	{
-+	  ldrpc = pc;
-+	  ldrsz = (*pc & 0x40000000);
-+	  ldroffset = (*pc >> (5+5)) & 0xFFF;
-+	  ldroffset <<= ldrsz ? 3 : 2;
-+	  ldrrn = (*pc >> 5) & 0x1F;
-+	  ldrrd = *pc & 0x1F;
-+	  break;
-+	}
-+    }
-+  if (ldrpc == NULL)
-+    return NULL;
-+
-+  /* the next instruction after the ldr should be checking if it was NULL:
-+     either a compare and branch if zero or not zero (hence why cbz_mask is 7e
-+     instead of 7f) */
-+  if (!IS_INSN (pc + 1, cbz) || (*(pc + 1) & 0x1F) != ldrrd
-+      || (*(pc + 1) & 0x80000000) != (ldrsz << 1))
-+    return NULL;
-+
-+  /* work backwards, find a bl to RtlEnterCriticalSection whose argument
-+     is the fast peb lock */
-+
-+  for (pc = ldrpc; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, bl) && extract_bl_target (pc) == ent_crit)
-+	break;
-+    }
-+  uint32_t addoffset;
-+  uint32_t addrn;
-+  for (; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, add) && (*pc & 0x1F) == 0)
-+	{
-+	  addoffset = (*pc >> (5+5)) & 0xFFF;
-+	  addrn = (*pc >> 5) & 0x1F;
-+	  break;
-+	}
-+    }
-+  PRTL_CRITICAL_SECTION lockaddr = NULL;
-+  for (; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == addrn)
-+	{
-+	  lockaddr = (PRTL_CRITICAL_SECTION) (extract_adrp_address (pc) +
-+					      addoffset);
-+	  break;
-+	}
-+    }
-+  if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
-+    return NULL;
-+
-+  /* work backwards from the ldr to find the corresponding adrp */
-+  fcwd_access_t **RtlpCurDirRef = NULL;
-+  for (pc = ldrpc; pc >= start; pc--)
-+    {
-+      if (IS_INSN (pc, adrp) && (*pc & 0x1F) == ldrrn)
-+	{
-+	  RtlpCurDirRef = (fcwd_access_t **) (extract_adrp_address (pc) +
-+					      ldroffset);
-+	  break;
-+	}
-+    }
-+
-+  return RtlpCurDirRef;
-+}
-+
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 3a5e2ee07e..7a08e978ad 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -4495,21 +4495,36 @@ fcwd_access_t **
- find_fast_cwd_pointer_x86_64 ();
+@@ -23,16 +23,20 @@ GetArm64ProcAddress (HMODULE hModule, LPCSTR procname)
+ #if defined (__aarch64__)
+   return proc;
+ #else
+-#if defined(__i386__)
++#if defined (__i386__)
+   static const BYTE thunk[] = "\x8b\xff\x55\x8b\xec\x5d\x90\xe9";
+-#elif defined(__x86_64__)
++  static const BYTE thunk2[0];
++#elif defined (__x86_64__)
+   /* see
+      https://learn.microsoft.com/en-us/windows/arm/arm64ec-abi#fast-forward-sequences */
+   static const BYTE thunk[] = "\x48\x8b\xc4\x48\x89\x58\x20\x55\x5d\xe9";
++  /* on windows 11 22000 the thunk is different than documented on that page */
++  static const BYTE thunk2[] = "\x48\x8b\xff\x55\x48\x8b\xec\x5d\x90\xe9";
+ #else
+ #error "Unhandled architecture for thunk detection"
  #endif
-
-+fcwd_access_t **
-+find_fast_cwd_pointer_aarch64 ();
-+
- static fcwd_access_t **
- find_fast_cwd ()
- {
-   fcwd_access_t **f_cwd_ptr;
-
--  /* First check if we're running on an ARM64 system.  Skip
--     fetching FAST_CWD pointer as long as there's no solution for finding
--     it on that system. */
--  if (wincap.host_machine () == IMAGE_FILE_MACHINE_ARM64)
--    return NULL;
-+  switch (wincap.host_machine ())
-+    {
-+    case IMAGE_FILE_MACHINE_ARM64:
-+      f_cwd_ptr = find_fast_cwd_pointer_aarch64 ();
-+      break;
-+#ifdef __x86_64__
-+    case IMAGE_FILE_MACHINE_AMD64:
-+      f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
-+      break;
-+#endif
-+    default:
-+      small_printf ("Cygwin WARNING:\n"
-+"  Couldn't compute FAST_CWD pointer for an unknown architecture (%04y)\n"
-+"  Please update to the latest available Cygwin version from\n"
-+"  https://cygwin.com/.  If the problem persists, please see\n"
-+"  https://cygwin.com/problems.html\n\n", (int) wincap.host_machine ());
-+      return NULL;
-+    }
-
-   /* Fetch the pointer but don't set the global fast_cwd_ptr yet.  First
-      we have to make sure we know the version of the FAST_CWD structure
-      used on the system. */
--  f_cwd_ptr = find_fast_cwd_pointer_x86_64 ();
-   if (!f_cwd_ptr)
-     small_printf ("Cygwin WARNING:\n"
- "  Couldn't compute FAST_CWD pointer.  This typically occurs if you're using\n"
--- 
-2.48.1.windows.1
+-  if (memcmp (proc, thunk, sizeof (thunk) - 1) == 0)
++  if (memcmp (proc, thunk, sizeof (thunk) - 1) == 0 ||
++      sizeof(thunk2) && memcmp (proc, thunk2, sizeof (thunk2) - 1) == 0)
+     {
+       proc += sizeof (thunk) - 1;
+       proc += 4 + *(const int32_t *) proc;
 
