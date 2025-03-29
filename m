@@ -1,375 +1,326 @@
 Return-Path: <SRS0=rgYs=WQ=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 3ABF83858D1E
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 18:56:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3ABF83858D1E
+	by sourceware.org (Postfix) with ESMTPS id C49AF3858D1E
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 18:57:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C49AF3858D1E
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3ABF83858D1E
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C49AF3858D1E
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743274617; cv=none;
-	b=RkAyzmMG+94coLaqRF4rtz+Buq4SldM2DNF5Ot/3/G+mDlbo2kMs8vldpPpSIM5/oEvupcwuskzMsNwCb2fQEQRnBVq8nJG05BUFwpgq0LpXeDgsQof24Yzj9H7kha+MbsXH6s8ZTyF+oMTrBicI7q4Ssp8tmXfrkBF+7GNlq8o=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743274663; cv=none;
+	b=uqzcZ1W6q2seygrpWRHXvoXwgW9VJ6K8a1Dr5PsY4xOiroL3txgGkYG+ZvImpNn/Okdte2WzJ2ONS9iFHFUA6+v+9D/crXen7QTdHj8Y/TqiJzpkUFxcJuHeiuX4Q2e0yppfaCCh4cAZslAYQUa0wLXJomDzRnGKNTW3rQviVHw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743274617; c=relaxed/simple;
-	bh=TDBNZT2jPDhlMhDINIfz3cZLIhkIn/m/fQSYOhWNCTE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=KGalt28jyXeHYaQW39x8jdrm+rxMCUPexI/7eHE7oM6n/MYprqZNyTyB6gyfwzGs4gpr9Mgk8q9+5W8Woyn/+KBL3UCf+Th0XgiQFCK11TRW286NC2lbwc69JY2vN59KBqMlSRjveHxX/sjdpwv18Ct+xMMa90JPekwcXTafyvs=
+	t=1743274663; c=relaxed/simple;
+	bh=9KN43qlIeSptf7w7BhWttbJToIe63S7GNuTYbWt8/ck=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=rimfM4uhfFXISPZuIloqYWAoWOlU9mtHtlfKaVBP8c+Y/YNMyZpz2sHMFtsKWzdp33s8twEgMG5+HKBW9R5B3zkpu6JwXcTAN96sSrIo6mHlqimZpibbMUtdXC12spVZm8n2fe6S9c9pXGftUKJGpFigIDMJsN/men9Vmg+neiA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3ABF83858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C49AF3858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=Z++zx/Fu
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=h7vuiXCj
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id E60DF45CD7
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:56:56 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 7E88145CD7
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:57:43 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=rruka
-	DLgSqGitMtyWznzjCviSHI=; b=Z++zx/FuYGhtI1C+WN0xj5aDIcnLy3sTdHDaj
-	m8YMJnaOtKnH4JY4iWdwfUCn99MAq1tEqM6sagneYS1OHakMPRfpJDlvu/QOGQOE
-	KULTBp5jOd80kLrzsEVrJyRTWsL5QPSKqRxCF56zCNX3L8S1wwPzKHmgloXEiXvy
-	F/22yQ=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=8oe02
+	SmmZBGraZu3uOmABjKsbTk=; b=h7vuiXCjaP+QZ3J4ETNDE6glaoFJcSNvx+nmB
+	vgokCQZ1oH8f7UmpQynovwHBY7V7UyzqjptQVtEGvtxDSIsgeuvf4cixmk9OdTos
+	sInxAcRkUYYibgWa5PZsbBsJm2hFu/6cpxwVFNR85KEDSwB3U6/LIikQupX8szNm
+	shtB0c=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id E0CA945CD6
-	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:56:56 -0400 (EDT)
-Date: Sat, 29 Mar 2025 11:56:56 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 7913045CD6
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 14:57:43 -0400 (EDT)
+Date: Sat, 29 Mar 2025 11:57:43 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v3 3/5] Cygwin: patch libudis86 to build as part of Cygwin
-Message-ID: <e181babf-8547-00b9-be02-9b2929b23b37@jdrake.com>
+Subject: [PATCH v3 4/5] Cygwin: use udis86 to find fast cwd pointer on x64
+Message-ID: <07bdad3b-0193-f6d3-905a-98c6c65c9046@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_ASCII_DIVIDERS,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: Jeremy Drake <cygwin@jdrake.com>
 
-This ifdefs out the large table of opcode strings (and the function that
-references it) since we're only interested in walking machine code, not
-generating disassembly, and makes a couple of other tables "const" so
-that they end up in .rdata instead of .data.
+This makes find_fast_cwd_pointer more resiliant in the face of changes
+to the generated code in ntdll.
 
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
- winsup/cygwin/Makefile.am     | 12 ++++++++++--
- winsup/cygwin/udis86/decode.c | 13 +++++++------
- winsup/cygwin/udis86/decode.h |  4 ++--
- winsup/cygwin/udis86/extern.h |  4 ++++
- winsup/cygwin/udis86/itab.c   |  7 +++++--
- winsup/cygwin/udis86/itab.h   |  2 ++
- winsup/cygwin/udis86/types.h  | 14 ++++++++++++--
- winsup/cygwin/udis86/udint.h  |  8 +++++---
- winsup/cygwin/udis86/udis86.c |  9 ++++++++-
- 9 files changed, 55 insertions(+), 18 deletions(-)
+ winsup/cygwin/x86_64/fastcwd.cc | 230 +++++++++++++++++++++-----------
+ 1 file changed, 151 insertions(+), 79 deletions(-)
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index a0e839701a..fdd026a525 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -48,7 +48,6 @@ LIB_NAME=libcygwin.a
- # sources
- #
+diff --git a/winsup/cygwin/x86_64/fastcwd.cc b/winsup/cygwin/x86_64/fastcwd.cc
+index 6bb8c2265e..f5a8755a28 100644
+--- a/winsup/cygwin/x86_64/fastcwd.cc
++++ b/winsup/cygwin/x86_64/fastcwd.cc
+@@ -7,10 +7,29 @@
+   details. */
 
--# These objects are included directly into the import library
- if TARGET_X86_64
- TARGET_FILES= \
- 	x86_64/bcopy.S \
-@@ -64,6 +63,7 @@ TARGET_FILES= \
- 	x86_64/wmempcpy.S
- endif
+ #include "winsup.h"
++#include <assert.h>
++#include "udis86/types.h"
++#include "udis86/extern.h"
 
-+# These objects are included directly into the import library
- LIB_FILES= \
- 	lib/_cygwin_crt0_common.cc \
- 	lib/atexit.c \
-@@ -267,6 +267,13 @@ SEC_FILES= \
- TZCODE_FILES= \
- 	tzcode/localtime_wrapper.c
+ class fcwd_access_t;
 
-+if TARGET_X86_64
-+UDIS86_FILES= \
-+	udis86/decode.c \
-+	udis86/itab.c \
-+	udis86/udis86.c
-+endif
+-#define peek32(x)	(*(int32_t *)(x))
++/* Helper function to get the absolute address of an rip-relative instruction
++   by summing the current instruction's pc (rip), the current instruction's
++   length, and the signed 32-bit displacement in the operand.  Optionally, an
++   additional offset is subtracted to deal with the case where a member of a
++   struct is being referenced by the instruction but the address of the struct
++   is desired.
++*/
++static inline const void *
++rip_rel_offset (const ud_t *ud_obj, const ud_operand_t *opr, int sub_off=0)
++{
++  assert ((opr->type == UD_OP_JIMM && opr->size == 32) ||
++	  (opr->type == UD_OP_MEM && opr->base == UD_R_RIP &&
++	   opr->index == UD_NONE && opr->scale == 0 && opr->offset == 32));
 +
- DLL_FILES= \
- 	advapi32.cc \
- 	aio.cc \
-@@ -389,6 +396,7 @@ libdll_a_SOURCES= \
- 	$(MM_FILES) \
- 	$(SEC_FILES) \
- 	$(TZCODE_FILES) \
-+	$(UDIS86_FILES) \
- 	$(GENERATED_FILES)
++  return (const void *) (ud_insn_off (ud_obj) + ud_insn_len (ud_obj) +
++			 opr->lval.sdword - sub_off);
++}
 
- #
-@@ -423,7 +431,7 @@ BUILT_SOURCES = \
-
- # Every time we touch a source file, the version info has to be rebuilt
- # to maintain a correct build date, especially in uname release output
--dirs = $(srcdir) $(srcdir)/fhandler $(srcdir)/lib $(srcdir)/libc $(srcdir)/math $(srcdir)/mm $(srcdir)/regex $(srcdir)/sec $(srcdir)/tzcode
-+dirs = $(srcdir) $(srcdir)/fhandler $(srcdir)/lib $(srcdir)/libc $(srcdir)/math $(srcdir)/mm $(srcdir)/regex $(srcdir)/sec $(srcdir)/tzcode $(srcdir)/udis86
- find_src_files = $(wildcard $(dir)/*.[chS]) $(wildcard $(dir)/*.cc)
- src_files := $(foreach dir,$(dirs),$(find_src_files))
-
-diff --git a/winsup/cygwin/udis86/decode.c b/winsup/cygwin/udis86/decode.c
-index b4efa778ca..1fe50e19f6 100644
---- a/winsup/cygwin/udis86/decode.c
-+++ b/winsup/cygwin/udis86/decode.c
-@@ -23,8 +23,9 @@
-  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  */
--#include "udint.h"
-+#include "winsup.h"
- #include "types.h"
-+#include "udint.h"
- #include "decode.h"
-
- #ifndef __UD_STANDALONE__
-@@ -204,7 +205,7 @@ static int
- decode_prefixes(struct ud *u)
- {
-   int done = 0;
--  uint8_t curr, last = 0;
-+  uint8_t curr = 0, last = 0;
-   UD_RETURN_ON_ERROR(u);
-
-   do {
-@@ -653,12 +654,12 @@ decode_operand(struct ud           *u,
-       break;
-     case OP_F:
-       u->br_far  = 1;
--      /* intended fall through */
-+      fallthrough;
-     case OP_M:
-       if (MODRM_MOD(modrm(u)) == 3) {
-         UDERR(u, "expected modrm.mod != 3\n");
-       }
--      /* intended fall through */
-+      fallthrough;
-     case OP_E:
-       decode_modrm_rm(u, operand, REGCLASS_GPR, size);
-       break;
-@@ -677,7 +678,7 @@ decode_operand(struct ud           *u,
-       if (MODRM_MOD(modrm(u)) != 3) {
-         UDERR(u, "expected modrm.mod == 3\n");
-       }
--      /* intended fall through */
-+      fallthrough;
-     case OP_Q:
-       decode_modrm_rm(u, operand, REGCLASS_MMX, size);
-       break;
-@@ -688,7 +689,7 @@ decode_operand(struct ud           *u,
-       if (MODRM_MOD(modrm(u)) != 3) {
-         UDERR(u, "expected modrm.mod == 3\n");
-       }
--      /* intended fall through */
-+      fallthrough;
-     case OP_W:
-       decode_modrm_rm(u, operand, REGCLASS_XMM, size);
-       break;
-diff --git a/winsup/cygwin/udis86/decode.h b/winsup/cygwin/udis86/decode.h
-index a7362c84a4..8d1af5705c 100644
---- a/winsup/cygwin/udis86/decode.h
-+++ b/winsup/cygwin/udis86/decode.h
-@@ -183,8 +183,8 @@ ud_opcode_field_sext(uint8_t primary_opcode)
-   return (primary_opcode & 0x02) != 0;
- }
-
--extern struct ud_itab_entry ud_itab[];
--extern struct ud_lookup_table_list_entry ud_lookup_table_list[];
-+extern const struct ud_itab_entry ud_itab[];
-+extern const struct ud_lookup_table_list_entry ud_lookup_table_list[];
-
- #endif /* UD_DECODE_H */
-
-diff --git a/winsup/cygwin/udis86/extern.h b/winsup/cygwin/udis86/extern.h
-index ae9f82f225..0a5e892237 100644
---- a/winsup/cygwin/udis86/extern.h
-+++ b/winsup/cygwin/udis86/extern.h
-@@ -60,9 +60,11 @@ extern unsigned int ud_decode(struct ud*);
-
- extern unsigned int ud_disassemble(struct ud*);
-
-+#ifndef __INSIDE_CYGWIN__
- extern void ud_translate_intel(struct ud*);
-
- extern void ud_translate_att(struct ud*);
-+#endif /* __INSIDE_CYGWIN__ */
-
- extern const char* ud_insn_asm(const struct ud* u);
-
-@@ -82,7 +84,9 @@ extern int ud_opr_is_gpr(const struct ud_operand *opr);
-
- extern enum ud_mnemonic_code ud_insn_mnemonic(const struct ud *u);
-
-+#ifndef __INSIDE_CYGWIN__
- extern const char* ud_lookup_mnemonic(enum ud_mnemonic_code c);
-+#endif /* __INSIDE_CYGWIN__ */
-
- extern void ud_set_user_opaque_data(struct ud*, void*);
-
-diff --git a/winsup/cygwin/udis86/itab.c b/winsup/cygwin/udis86/itab.c
-index a3d0634b86..11c350b78e 100644
---- a/winsup/cygwin/udis86/itab.c
-+++ b/winsup/cygwin/udis86/itab.c
-@@ -1,4 +1,5 @@
- /* itab.c -- generated by udis86:scripts/ud_itab.py, do no edit */
-+#include "winsup.h"
- #include "decode.h"
-
- #define GROUP(n) (0x8000 | (n))
-@@ -5028,7 +5029,7 @@ const uint16_t ud_itab__0[] = {
- };
-
-
--struct ud_lookup_table_list_entry ud_lookup_table_list[] = {
-+const struct ud_lookup_table_list_entry ud_lookup_table_list[] = {
-     /* 000 */ { ud_itab__0, UD_TAB__OPC_TABLE, "table0" },
-     /* 001 */ { ud_itab__1, UD_TAB__OPC_MODE, "/m" },
-     /* 002 */ { ud_itab__2, UD_TAB__OPC_MODE, "/m" },
-@@ -6294,7 +6295,7 @@ struct ud_lookup_table_list_entry ud_lookup_table_list[] = {
- #define O_sIv     { OP_sI,       SZ_V     }
- #define O_sIz     { OP_sI,       SZ_Z     }
-
--struct ud_itab_entry ud_itab[] = {
-+const struct ud_itab_entry ud_itab[] = {
-   /* 0000 */ { UD_Iinvalid, O_NONE, O_NONE, O_NONE, P_none },
-   /* 0001 */ { UD_Iadd, O_Eb, O_Gb, O_NONE, P_aso|P_rexr|P_rexx|P_rexb },
-   /* 0002 */ { UD_Iadd, O_Ev, O_Gv, O_NONE, P_aso|P_oso|P_rexw|P_rexr|P_rexx|P_rexb },
-@@ -7749,6 +7750,7 @@ struct ud_itab_entry ud_itab[] = {
- };
-
-
-+#ifndef __INSIDE_CYGWIN__
- const char * ud_mnemonics_str[] = {
- "invalid",
-     "3dnow",
-@@ -8399,3 +8401,4 @@ const char * ud_mnemonics_str[] = {
-     "movbe",
-     "crc32"
- };
-+#endif /* __INSIDE_CYGWIN__ */
-diff --git a/winsup/cygwin/udis86/itab.h b/winsup/cygwin/udis86/itab.h
-index 778a76d610..b6924b747a 100644
---- a/winsup/cygwin/udis86/itab.h
-+++ b/winsup/cygwin/udis86/itab.h
-@@ -673,6 +673,8 @@ enum ud_mnemonic_code {
-     UD_MAX_MNEMONIC_CODE
- } UD_ATTR_PACKED;
-
-+#ifndef __INSIDE_CYGWIN__
- extern const char * ud_mnemonics_str[];
-+#endif /* __INSIDE_CYGWIN__ */
-
- #endif /* UD_ITAB_H */
-diff --git a/winsup/cygwin/udis86/types.h b/winsup/cygwin/udis86/types.h
-index 8b012a98e6..2d2dc683c1 100644
---- a/winsup/cygwin/udis86/types.h
-+++ b/winsup/cygwin/udis86/types.h
-@@ -36,6 +36,14 @@
- #endif
- #endif /* __KERNEL__ */
-
-+#ifdef __INSIDE_CYGWIN__
-+# include <inttypes.h>
-+# ifndef __UD_STANDALONE__
-+#  define __UD_STANDALONE__ 1
-+# endif
-+#endif /* __INSIDE_CYGWIN__ */
-+
-+
- #if defined(_MSC_VER) || defined(__BORLANDC__)
- # include <stdint.h>
- # include <stdio.h>
-@@ -221,8 +229,8 @@ struct ud
-   uint8_t   modrm;
-   uint8_t   primary_opcode;
-   void *    user_opaque_data;
--  struct ud_itab_entry * itab_entry;
--  struct ud_lookup_table_list_entry *le;
-+  const struct ud_itab_entry * itab_entry;
-+  const struct ud_lookup_table_list_entry *le;
- };
-
- /* -----------------------------------------------------------------------------
-@@ -235,8 +243,10 @@ typedef enum ud_mnemonic_code ud_mnemonic_code_t;
- typedef struct ud             ud_t;
- typedef struct ud_operand     ud_operand_t;
-
-+#ifndef __INSIDE_CYGWIN__
- #define UD_SYN_INTEL          ud_translate_intel
- #define UD_SYN_ATT            ud_translate_att
-+#endif /* __INSIDE_CYGWIN__ */
- #define UD_EOI                (-1)
- #define UD_INP_CACHE_SZ       32
- #define UD_VENDOR_AMD         0
-diff --git a/winsup/cygwin/udis86/udint.h b/winsup/cygwin/udis86/udint.h
-index 2908b613b6..29695476ec 100644
---- a/winsup/cygwin/udis86/udint.h
-+++ b/winsup/cygwin/udis86/udint.h
-@@ -26,9 +26,11 @@
- #ifndef _UDINT_H_
- #define _UDINT_H_
-
--#ifdef HAVE_CONFIG_H
--# include <config.h>
--#endif /* HAVE_CONFIG_H */
-+#ifndef __INSIDE_CYGWIN__
-+# ifdef HAVE_CONFIG_H
-+#  include <config.h>
-+# endif /* HAVE_CONFIG_H */
-+#endif /* __INSIDE_CYGWIN__ */
-
- #if defined(UD_DEBUG) && HAVE_ASSERT_H
- # include <assert.h>
-diff --git a/winsup/cygwin/udis86/udis86.c b/winsup/cygwin/udis86/udis86.c
-index d62af1f3df..53db032b90 100644
---- a/winsup/cygwin/udis86/udis86.c
-+++ b/winsup/cygwin/udis86/udis86.c
-@@ -24,8 +24,9 @@
-  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  */
-
--#include "udint.h"
-+#include "winsup.h"
- #include "extern.h"
-+#include "udint.h"
- #include "decode.h"
-
- #if !defined(__UD_STANDALONE__)
-@@ -34,6 +35,10 @@
- # endif
- #endif /* !__UD_STANDALONE__ */
-
-+#ifdef __INSIDE_CYGWIN__
-+#define sprintf __small_sprintf
-+#endif /* __INSIDE_CYGWIN__ */
-+
- static void ud_inp_init(struct ud *u);
-
- /* =============================================================================
-@@ -324,6 +329,7 @@ ud_insn_mnemonic(const struct ud *u)
- }
-
-
-+#ifndef __INSIDE_CYGWIN__
- /* =============================================================================
-  * ud_lookup_mnemonic
-  *    Looks up mnemonic code in the mnemonic string table.
-@@ -339,6 +345,7 @@ ud_lookup_mnemonic(enum ud_mnemonic_code c)
+ /* This function scans the code in ntdll.dll to find the address of the
+    global variable used to access the CWD.  While the pointer is global,
+@@ -30,99 +49,152 @@ find_fast_cwd_pointer_x86_64 ()
+ 			    GetProcAddress (ntdll, "RtlEnterCriticalSection");
+   if (!get_dir || !ent_crit)
      return NULL;
-   }
++  /* Initialize udis86 */
++  ud_t ud_obj;
++  ud_init (&ud_obj);
++  /* Set 64-bit mode */
++  ud_set_mode (&ud_obj, 64);
++  ud_set_input_buffer (&ud_obj, get_dir, 80);
++  /* Set pc (rip) so that subsequent calls to ud_insn_off will return the pc of
++     the instruction, saving us the hassle of tracking it ourselves */
++  ud_set_pc (&ud_obj, (uint64_t) get_dir);
++  const ud_operand_t *opr, *opr0;
++  ud_mnemonic_code_t insn;
++  ud_type_t reg = UD_NONE;
+   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
+-  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 80);
+-  if (!rcall)
++  const uint8_t *use_cwd = NULL;
++  while (ud_disassemble (&ud_obj) &&
++      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
++      insn != UD_Ijmp)
++    {
++      if (insn == UD_Icall)
++	{
++	  opr = ud_insn_opr (&ud_obj, 0);
++	  if (opr->type == UD_OP_JIMM && opr->size == 32)
++	    {
++	      /* Fetch offset from instruction and compute address of called
++		 function.  This function actually fetches the current FAST_CWD
++		 instance and performs some other actions, not important to us.
++	       */
++	      use_cwd = (const uint8_t *) rip_rel_offset (&ud_obj, opr);
++	      break;
++	    }
++	}
++    }
++  if (!use_cwd)
+     return NULL;
+-  /* Fetch offset from instruction and compute address of called function.
+-     This function actually fetches the current FAST_CWD instance and
+-     performs some other actions, not important to us. */
+-  const uint8_t *use_cwd = rcall + 5 + peek32 (rcall + 1);
++  ud_set_input_buffer (&ud_obj, use_cwd, 120);
++  ud_set_pc (&ud_obj, (uint64_t) use_cwd);
++
+   /* Next we search for the locking mechanism and perform a sanity check.
+-     On Pre-Windows 8 we basically look for the RtlEnterCriticalSection call.
+-     Windows 8 does not call RtlEnterCriticalSection.  The code manipulates
+-     the FastPebLock manually, probably because RtlEnterCriticalSection has
+-     been converted to an inline function.  Either way, we test if the code
+-     uses the FastPebLock. */
+-  const uint8_t *movrbx;
+-  const uint8_t *lock = (const uint8_t *)
+-                        memmem ((const char *) use_cwd, 80,
+-                                "\xf0\x0f\xba\x35", 4);
+-  if (lock)
++     we basically look for the RtlEnterCriticalSection call and test if the
++     code uses the FastPebLock. */
++  PRTL_CRITICAL_SECTION lockaddr = NULL;
++
++  while (ud_disassemble (&ud_obj) &&
++      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
++      insn != UD_Ijmp)
+     {
+-      /* The lock instruction tweaks the LockCount member, which is not at
+-	 the start of the PRTL_CRITICAL_SECTION structure.  So we have to
+-	 subtract the offset of LockCount to get the real address. */
+-      PRTL_CRITICAL_SECTION lockaddr =
+-        (PRTL_CRITICAL_SECTION) (lock + 9 + peek32 (lock + 4)
+-                                 - offsetof (RTL_CRITICAL_SECTION, LockCount));
+-      /* Test if lock address is FastPebLock. */
+-      if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
+-        return NULL;
+-      /* Search `mov rel(%rip),%rbx'.  This is the instruction fetching the
+-         address of the current fcwd_access_t pointer, and it should be pretty
+-	 near to the locking stuff. */
+-      movrbx = (const uint8_t *) memmem ((const char *) lock, 40,
+-                                         "\x48\x8b\x1d", 3);
++      if (insn == UD_Ilea)
++	{
++	  /* udis86 seems to follow intel syntax, in that operand 0 is the
++	     dest and 1 is the src */
++	  opr0 = ud_insn_opr (&ud_obj, 0);
++	  opr = ud_insn_opr (&ud_obj, 1);
++	  if (opr->type == UD_OP_MEM && opr->base == UD_R_RIP &&
++	      opr->index == UD_NONE && opr->scale == 0 && opr->offset == 32 &&
++	      opr0->type == UD_OP_REG && opr0->size == 64)
++	    {
++	      lockaddr = (PRTL_CRITICAL_SECTION) rip_rel_offset (&ud_obj, opr);
++	      reg = opr0->base;
++	      break;
++	    }
++	}
+     }
+-  else
++
++  /* Test if lock address is FastPebLock. */
++  if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
++    return NULL;
++
++  /* Find where the lock address is loaded into rcx as the first parameter of
++     a function call */
++  bool found = false;
++  if (reg != UD_R_RCX)
+     {
+-      /* Usually the callq RtlEnterCriticalSection follows right after
+-	 fetching the lock address. */
+-      int call_rtl_offset = 7;
+-      /* Search `lea rel(%rip),%rcx'.  This loads the address of the lock into
+-         %rcx for the subsequent RtlEnterCriticalSection call. */
+-      lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
+-                                       "\x48\x8d\x0d", 3);
+-      if (!lock)
++      while (ud_disassemble (&ud_obj) &&
++	  (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
++	  insn != UD_Ijmp)
+ 	{
+-	  /* Windows 8.1 Preview calls `lea rel(rip),%r12' then some unrelated
+-	     ops, then `mov %r12,%rcx', then `callq RtlEnterCriticalSection'. */
+-	  lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
+-					   "\x4c\x8d\x25", 3);
+-	  call_rtl_offset = 14;
++	  if (insn == UD_Imov)
++	    {
++	      opr0 = ud_insn_opr (&ud_obj, 0);
++	      opr = ud_insn_opr (&ud_obj, 1);
++	      if (opr->type == UD_OP_REG && opr->size == 64 &&
++		  opr->base == reg && opr0->type == UD_OP_REG &&
++		  opr0->size == 64 && opr0->base == UD_R_RCX)
++		{
++		  found = true;
++		  break;
++		}
++	    }
+ 	}
++      if (!found)
++	return NULL;
++    }
+
+-      if (!lock)
++  /* Next is the `callq RtlEnterCriticalSection' */
++  found = false;
++  while (ud_disassemble (&ud_obj) &&
++      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
++      insn != UD_Ijmp)
++    {
++      if (insn == UD_Icall)
+ 	{
+-	  /* A recent Windows 11 Preview calls `lea rel(rip),%r13' then
+-	     some unrelated instructions, then `callq RtlEnterCriticalSection'.
+-	     */
+-	  lock = (const uint8_t *) memmem ((const char *) use_cwd, 80,
+-					   "\x4c\x8d\x2d", 3);
+-	  call_rtl_offset = 24;
++	  opr = ud_insn_opr (&ud_obj, 0);
++	  if (opr->type == UD_OP_JIMM && opr->size == 32)
++	    {
++	      if (ent_crit != rip_rel_offset (&ud_obj, opr))
++		return NULL;
++	      found = true;
++	      break;
++	    }
+ 	}
++    }
++  if (!found)
++    return NULL;
+
+-      if (!lock)
++  fcwd_access_t **f_cwd_ptr = NULL;
++  /* now we're looking for a mov rel(%rip), %<reg64> */
++  while (ud_disassemble (&ud_obj) &&
++      (insn = ud_insn_mnemonic (&ud_obj)) != UD_Iret &&
++      insn != UD_Ijmp)
++    {
++      if (insn == UD_Imov)
+ 	{
+-	  return NULL;
++	  opr0 = ud_insn_opr (&ud_obj, 0);
++	  opr = ud_insn_opr (&ud_obj, 1);
++	  if (opr->type == UD_OP_MEM && opr->size == 64 &&
++	      opr->base == UD_R_RIP && opr->index == UD_NONE &&
++	      opr->scale == 0 && opr->offset == 32 &&
++	      opr0->type == UD_OP_REG && opr0->size == 64)
++	    {
++	      f_cwd_ptr = (fcwd_access_t **) rip_rel_offset (&ud_obj, opr);
++	      reg = opr0->base;
++	      break;
++	    }
+ 	}
+-
+-      PRTL_CRITICAL_SECTION lockaddr =
+-        (PRTL_CRITICAL_SECTION) (lock + 7 + peek32 (lock + 3));
+-      /* Test if lock address is FastPebLock. */
+-      if (lockaddr != NtCurrentTeb ()->Peb->FastPebLock)
+-        return NULL;
+-      /* Next is the `callq RtlEnterCriticalSection'. */
+-      lock += call_rtl_offset;
+-      if (lock[0] != 0xe8)
+-        return NULL;
+-      const uint8_t *call_addr = (const uint8_t *)
+-                                 (lock + 5 + peek32 (lock + 1));
+-      if (call_addr != ent_crit)
+-        return NULL;
+-      /* In contrast to the above Windows 8 code, we don't have to search
+-	 for the `mov rel(%rip),%rbx' instruction.  It follows right after
+-	 the call to RtlEnterCriticalSection. */
+-      movrbx = lock + 5;
+     }
+-  if (!movrbx)
++  /* Check that the next instruction is a test. */
++  if (!f_cwd_ptr || !ud_disassemble (&ud_obj) ||
++      ud_insn_mnemonic (&ud_obj) != UD_Itest)
+     return NULL;
+-  /* Check that the next instruction tests if the fetched value is NULL. */
+-  const uint8_t *testrbx = (const uint8_t *)
+-			   memmem (movrbx + 7, 3, "\x48\x85\xdb", 3);
+-  if (!testrbx)
++
++  /* ... and that it's testing the same register that the mov above loaded the
++     f_cwd_ptr into against itself */
++  opr0 = ud_insn_opr (&ud_obj, 0);
++  opr = ud_insn_opr (&ud_obj, 1);
++  if (opr->type != UD_OP_REG || opr->size != 64 || opr->base != reg ||
++      opr0->type != opr->type || opr0->size != 64 || opr0->base != opr->base)
+     return NULL;
+-  /* Compute address of the fcwd_access_t ** pointer. */
+-  return (fcwd_access_t **) (testrbx + peek32 (movrbx + 3));
++  return f_cwd_ptr;
  }
-+#endif /* __INSIDE_CYGWIN__ */
-
-
- /*
 -- 
 2.48.1.windows.1
 
