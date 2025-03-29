@@ -1,76 +1,96 @@
-Return-Path: <SRS0=QOKQ=WP=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 9711D3857BA5
-	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 19:51:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9711D3857BA5
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9711D3857BA5
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743191500; cv=none;
-	b=oUAeZYRKwEPk484+NGabXMWDn+vVU7+edRfBKOCVGVfKOztVN/zaKF2jsEbtOxR35Te5cKwO82bCmc3DfqDNM21FqymKfBHcfsAhxZDq1p8toGYJUXvwsbk0tiacYV4Lvv+TBIy57pcQ6oCHBl9Zy8oDqTMe7WTllLkkTYYoM4s=
+Return-Path: <SRS0=lP0E=WQ=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+	by sourceware.org (Postfix) with ESMTPS id 6169C3858C39
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 15:46:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6169C3858C39
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6169C3858C39
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.21
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743263219; cv=none;
+	b=JI8s7O/Rb2wO2msTAcRispbVHFkRO/iIrlaZCIdMCd3E74VrHQ3XNHMioWJ0G0KSXdanqUA2QZo+KAij+k05SnXBjTCkBjFzljF9L1hLJSlpl9eus9b1W6xfw8LJbQqsIK5f/D9YoYThkLm9HGVW1QpQoFfm2yjpLpXdS2vuES4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743191500; c=relaxed/simple;
-	bh=GdlewJAPcqbv4bthv1Ri4TD9+Up+OiLVruyI8igNAAE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=UAO9fdULESsX38KoWr2WU5FOyChxdLpI0FPQUKbyIjtuCvUTnOPKynp7hhne1XO0lVISQQEMwJwFrVCqfA5v72yScQSZwrhTdzBs09rlUSjTKLL7v3cAtSubSPZ/FkL0hYOWnLLP40N+3YAIqFyykg76pIQOPgu83wJfBCSZMnM=
+	t=1743263219; c=relaxed/simple;
+	bh=iNGptVR3+m8S3ICGU848Wvr7LlGfBJQow2cfnRwGQ9Y=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version; b=fa3yVriMxTVlRQlnDhDUZdJZrY5IP68O7z40IJFg3hQE39JHRVDNXtpgTGXBEpTI5DiT8B7N5Nf22XBUpF2xhoQztA4SvBC+SQlM8tUsVFlHWixhsnjOnkoR9mdJJlqPHUbfQ4cTTdpXF46k1Ff+qMuQQPqXLy46m5Dt5eH3l98=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9711D3857BA5
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=L4T0H7Ks
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 0027E45CD1
-	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 15:51:39 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=7R7KaES0N2B09W8pq47W6cWG0KM=; b=L4T0H
-	7KsOyZ1MqgeKQBWiQEnLnxvzjA0EMVBmNVcq4+JoKE9xwdMbKxx2RhYNIUSOuXYc
-	UBGti8cEi69IPPjvtRIG5NVMOM4LPEEYPPt+2DlIqER1fR71qORVLNCPDlWtVYUr
-	/BuQdUf4+OAObf/ypU4io1S9KIjiVNXbMwW1c8=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id D782145CC4
-	for <cygwin-patches@cygwin.com>; Fri, 28 Mar 2025 15:51:39 -0400 (EDT)
-Date: Fri, 28 Mar 2025 12:51:39 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6169C3858C39
+Received: from fwd85.aul.t-online.de (fwd85.aul.t-online.de [10.223.144.111])
+	by mailout10.t-online.de (Postfix) with SMTP id 40A58190
+	for <cygwin-patches@cygwin.com>; Sat, 29 Mar 2025 16:45:47 +0100 (CET)
+Received: from [192.168.2.101] ([87.187.37.162]) by fwd85.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1tyYNU-1FS14K0; Sat, 29 Mar 2025 16:45:44 +0100
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: faq: add test of fork/exec slowdown by anti-virus
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 4/5] Cygwin: use udis86 to find fast cwd pointer on
- x64
-In-Reply-To: <Z-Z1HJZKiHi6YUcd@calimero.vinschen.de>
-Message-ID: <67305d04-d1b3-da31-672d-53fc8df2d0e0@jdrake.com>
-References: <7d4f8d91-0a3f-4e14-047e-64b1bd7d9447@jdrake.com> <Z-U5WFBxoUfeVwn7@calimero.vinschen.de> <f7b8d776-ca5b-a0b3-63bb-02ea496e5bb6@jdrake.com> <Z-Wm3C1AoXLaYeMg@calimero.vinschen.de> <580c99c4-d0bb-ee54-3a39-43b55f5abc1f@jdrake.com>
- <Z-Z1HJZKiHi6YUcd@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <03c6bc1f-8426-1c9c-aa72-29c52d58c803@t-online.de>
+Date: Sat, 29 Mar 2025 16:45:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------C0D8E3FC7F988A8929C54174"
+X-TOI-EXPURGATEID: 150726::1743263144-AA7FB974-EFDE9AF6/0/0 CLEAN NORMAL
+X-TOI-MSGID: cfa140cc-5e42-4415-8ffa-c0d08fd852e2
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Fri, 28 Mar 2025, Corinna Vinschen wrote:
+This is a multi-part message in MIME format.
+--------------C0D8E3FC7F988A8929C54174
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> This sounds great, but don't put too many effort into past preview
-> releases.  We try hard that Cygwin runs on released versions of
-> Windows.  But preview versions of the past are a thing of the past.  Not
-> only that, but you're putting a lot of effort into versions sometimes
-> used by a single machine.
-> It might further simplify the code if you don't handle these old
-> temporary versions anymore and concentrate on the past releases.
+Occasionally useful to see one significant effect of anti-virus software.
 
-I'm not.  I'm only looking at *released* versions of Windows, but at least
-considering what comments had to say about old preview releases as ways in
-which this code might potentially be mangled by a compiler.
+BTW, the documentation still uses C:\cygwin as the default install 
+directory. This is no longer the case since the retirement of the 32-bit 
+version.
 
-> Btw., wouldn't you have fun to join our Libera IRC channel
-> #cygwin-developers?  https://cygwin.com/irc.html
+-- 
+Regards,
+Christian
 
-I was on MSYS2's discord for a while, but I found that between the time
-zone differences and my own feeling that I needed to keep up with all the
-messages I had to give up on that.  I try to prune my Github notifications
-down to a level where I can keep up with pieces I'm interested in without
-getting overwhelmed.
 
-I seem to remember that IRC doesn't deliver a backlog of messages from
-when you're offline, so perhaps it would be worth a try.
+--------------C0D8E3FC7F988A8929C54174
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-faq-add-test-of-fork-exec-slowdown-by-anti-vi.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-faq-add-test-of-fork-exec-slowdown-by-anti-vi.pa";
+ filename*1="tch"
+
+RnJvbSBhOTQzOGJlOTU2ZGM4MWFjMjM3ZWY3MGY5YzA3OTM0YmE0OTA2ZGFlIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTYXQsIDI5IE1hciAyMDI1IDE2OjM0OjMzICswMTAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBmYXE6IGFkZCB0ZXN0IG9mIGZvcmsvZXhlYyBz
+bG93ZG93biBieSBhbnRpLXZpcnVzCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtl
+IDxjaHJpc3RpYW4uZnJhbmtlQHQtb25saW5lLmRlPgotLS0KIHdpbnN1cC9kb2MvZmFxLXVz
+aW5nLnhtbCB8IDIwICsrKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMjAg
+aW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbCBi
+L3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbAppbmRleCA0ZGM0NjJhMGEuLmU1ZTQ0NzlmNSAx
+MDA2NDQKLS0tIGEvd2luc3VwL2RvYy9mYXEtdXNpbmcueG1sCisrKyBiL3dpbnN1cC9kb2Mv
+ZmFxLXVzaW5nLnhtbApAQCAtOTU2LDYgKzk1NiwyNiBAQCBjb250ZW50cyBhcmUgZXhlbXB0
+IGZyb20gc2Nhbm5pbmcuICBJbiBhIGRlZmF1bHQgaW5zdGFsbGF0aW9uLCB0aGlzCiB3b3Vs
+ZCBiZSA8bGl0ZXJhbD5DOlxjeWd3aW5cYmluPC9saXRlcmFsPi4gIE9idmlvdXNseSwgdGhp
+cyBjb3VsZCBiZQogZXhwbG9pdGVkIGJ5IGEgaG9zdGlsZSBub24tQ3lnd2luIHByb2dyYW0s
+IHNvIGRvIHRoaXMgYXQgeW91ciBvd24gcmlzay4KIDwvcGFyYT4KKzxwYXJhPkFudGktdmly
+dXMgc29mdHdhcmUgdHlwaWNhbGx5IHJlZHVjZSB0aGUgc3BlZWQgb2YgV2luZG93cworPGxp
+dGVyYWw+Q3JlYXRlUHJvY2VzczwvbGl0ZXJhbD4gY2FsbHMgd2hpY2ggYXJlIHVzZWQgYnkg
+Q3lnd2luIHRvIHByb3ZpZGUKKzxsaXRlcmFsPmZvcmsoKTwvbGl0ZXJhbD4gYW5kIDxsaXRl
+cmFsPmV4ZWMoKTwvbGl0ZXJhbD4uICBUaGlzIGluIHBhcnRpY3VsYXIKK3Nsb3dzIGRvd24g
+c2hlbGwgc2NyaXB0cy4gIEluIHRoZSBzaW1wbGUgc3BlZWQgdGVzdCBzaG93biBiZWxvdywg
+dGhlIGZpcnN0Citjb2x1bW4gc2hvd3MgdGhlIG51bWJlciBvZiA8bGl0ZXJhbD5kYXRlPC9s
+aXRlcmFsPiBjb21tYW5kcyBydW4gcGVyIHNlY29uZC4KK0FudGktdmlydXMgd2FzIHR1cm5l
+ZCBvZmYgYXQgdGhlIGxpbmUgbWFya2VkIHdpdGggPGxpdGVyYWw+KioqPC9saXRlcmFsPi4K
+KzwvcGFyYT4KKzxzY3JlZW4+CisJYmFzaCQgd2hpbGUgOjsgZG8gZGF0ZSArJXM7IGRvbmUg
+fCB1bmlxIC1jCisJLi4uCisJMTIyIDE3NDE3MTI0MzAKKwkxMTggMTc0MTcxMjQzMQorCTEx
+OCAxNzQxNzEyNDMyCisJMTIxIDE3NDE3MTI0MzMKKwkxNDIgMTc0MTcxMjQzNCAgKioqCisJ
+MTQwIDE3NDE3MTI0MzUKKwkxNDEgMTc0MTcxMjQzNgorCTE0NCAxNzQxNzEyNDM3CisJLi4u
+Cis8L3NjcmVlbj4KIDxwYXJhPlNlZSBhbHNvIDx4cmVmIGxpbmtlbmQ9ImZhcS51c2luZy5i
+bG9kYSI+PC94cmVmPgogZm9yIGEgbGlzdCBvZiBhcHBsaWNhdGlvbnMgdGhhdCBoYXZlIGJl
+ZW4ga25vd24sIGF0IG9uZSB0aW1lIG9yIGFub3RoZXIsIHRvCiBpbnRlcmZlcmUgd2l0aCB0
+aGUgbm9ybWFsIGZ1bmN0aW9uaW5nIG9mIEN5Z3dpbi4KLS0gCjIuNDUuMQoK
+--------------C0D8E3FC7F988A8929C54174--
