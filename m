@@ -1,54 +1,42 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 71FED3858D33; Sun, 30 Mar 2025 21:30:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 71FED3858D33
+	id BD0073857B9E; Sun, 30 Mar 2025 21:39:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BD0073857B9E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1743370216;
-	bh=ch2Y67hHQp9jghQjInVSg+kKBi1RpDAn/pBHk+uZelk=;
+	s=default; t=1743370788;
+	bh=F0YNw3QrUMUojjWHTZNrTmkZ0UaJZSKUatHyrv+VPLU=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=P2+K3uhSazkbp/P4O563SihOX4gWXWqDQw5uUrrGsn5m2tC06L+P5eTq7ftoKO6TX
-	 /c/nUiBK4JJLZxIytwOpOYvS+csnrQXSP9mEhhbAnLahYsWm27mxGsn5Qe+ZeL7mFO
-	 V6gqz5yJVIZX5BtzX2DpyFvpymkJ4/m4k6nOAV/s=
+	b=Mg/3f4FDnnU6HpnoshYUne8g7lVXvJHzsbD7+OKio0Rkxrj+G0les6bGfJSPnu4fR
+	 hW8Acy9S4Idej35aD+pGGb0D0ikN2d4ONjwQhhZnyhoTlsILVM8TMhGt8F1Efg0Aru
+	 4uR/oESHX3Rn5uQNG1U2rYNVCit6R3YS1fl4WTtA=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 5C814A80C9C; Sun, 30 Mar 2025 23:30:14 +0200 (CEST)
-Date: Sun, 30 Mar 2025 23:30:14 +0200
+	id BFB76A80961; Sun, 30 Mar 2025 23:39:45 +0200 (CEST)
+Date: Sun, 30 Mar 2025 23:39:45 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: faq: add test of fork/exec slowdown by anti-virus
-Message-ID: <Z-m35noIjFk-_cef@calimero.vinschen.de>
+Subject: Re: [PATCH v4 0/5] find_fast_cwd_pointer rewrite
+Message-ID: <Z-m6ISyTeTULAWXf@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <03c6bc1f-8426-1c9c-aa72-29c52d58c803@t-online.de>
+References: <56da8997-5d48-dfb7-8a41-b3fa6ccfbecc@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <03c6bc1f-8426-1c9c-aa72-29c52d58c803@t-online.de>
+In-Reply-To: <56da8997-5d48-dfb7-8a41-b3fa6ccfbecc@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 29 16:45, Christian Franke wrote:
-> Occasionally useful to see one significant effect of anti-virus software.
-> 
-> BTW, the documentation still uses C:\cygwin as the default install
-> directory. This is no longer the case since the retirement of the 32-bit
-> version.
-> 
-> -- 
-> Regards,
-> Christian
-> 
+Hi Jeremy,
 
-> From a9438be956dc81ac237ef70f9c07934ba4906dae Mon Sep 17 00:00:00 2001
-> From: Christian Franke <christian.franke@t-online.de>
-> Date: Sat, 29 Mar 2025 16:34:33 +0100
-> Subject: [PATCH] Cygwin: faq: add test of fork/exec slowdown by anti-virus
-> 
-> Signed-off-by: Christian Franke <christian.franke@t-online.de>
-> ---
->  winsup/doc/faq-using.xml | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+Series looks good to me, just one question to clarify:
 
-Nice, please push.
+On Mar 29 18:54, Jeremy Drake via Cygwin-patches wrote:
+> v4:
+> fixes x86_64-on-aarch64 on Windows 11 22000.
+
+Does aarch64 use entirely different build numbers?  Just asking because
+22000 looks unusually low.  The latest release build of x86_64 Windows
+11 has build id 26100...
+
 
 Thanks,
 Corinna
-
