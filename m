@@ -1,41 +1,81 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id BD0073857B9E; Sun, 30 Mar 2025 21:39:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BD0073857B9E
+	id AD21C3846091; Sun, 30 Mar 2025 21:43:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AD21C3846091
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1743370788;
-	bh=F0YNw3QrUMUojjWHTZNrTmkZ0UaJZSKUatHyrv+VPLU=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=Mg/3f4FDnnU6HpnoshYUne8g7lVXvJHzsbD7+OKio0Rkxrj+G0les6bGfJSPnu4fR
-	 hW8Acy9S4Idej35aD+pGGb0D0ikN2d4ONjwQhhZnyhoTlsILVM8TMhGt8F1Efg0Aru
-	 4uR/oESHX3Rn5uQNG1U2rYNVCit6R3YS1fl4WTtA=
+	s=default; t=1743371039;
+	bh=QUfnifMbpc78C/gzgNnB1SVM6naQ/vIokOSn+s5rCsw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=CG29iO0X4YtuODATJh6mSq9O9z3Ni17bQKwgoJPoko2M9R6oDALxLT3FP2pdx8lKj
+	 dpVmFHQZfHVbNCtUx3X1hsnMLSrMMThNxU6p4w7fPHRTOBaX8w/jEFxrG0KjIuAy8Z
+	 Re2uTNPfNcxn6yW0hmyTFm8HhpxeRh56z5BLnW9A=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BFB76A80961; Sun, 30 Mar 2025 23:39:45 +0200 (CEST)
-Date: Sun, 30 Mar 2025 23:39:45 +0200
+	id 860F9A80961; Sun, 30 Mar 2025 23:43:52 +0200 (CEST)
+Date: Sun, 30 Mar 2025 23:43:52 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4 0/5] find_fast_cwd_pointer rewrite
-Message-ID: <Z-m6ISyTeTULAWXf@calimero.vinschen.de>
+To: Yuyi Wang <Strawberry_Str@hotmail.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: dlfcn: fix ENOENT in dlclose
+Message-ID: <Z-m7GKMd5fXqlq2S@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <56da8997-5d48-dfb7-8a41-b3fa6ccfbecc@jdrake.com>
+Mail-Followup-To: Yuyi Wang <Strawberry_Str@hotmail.com>,
+	cygwin-patches@cygwin.com
+References: <TYTPR01MB109233E1CD6728FC1CAAFB90EF8A22@TYTPR01MB10923.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <56da8997-5d48-dfb7-8a41-b3fa6ccfbecc@jdrake.com>
+In-Reply-To: <TYTPR01MB109233E1CD6728FC1CAAFB90EF8A22@TYTPR01MB10923.jpnprd01.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Jeremy,
+Hi Yuri,
 
-Series looks good to me, just one question to clarify:
+On Mar 30 23:00, Yuyi Wang wrote:
+> dlclose tries to decrease the ref count of the dll* entry, but a new dll
+> opened by dlopen doesn't create a new dll* entry.
+> ---
+>  winsup/cygwin/dlfcn.cc | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
+> index fb7052473..3093ec1be 100644
+> --- a/winsup/cygwin/dlfcn.cc
+> +++ b/winsup/cygwin/dlfcn.cc
+> @@ -350,14 +350,15 @@ dlclose (void *handle)
+>      {
+>        /* reference counting */
+>        dll *d = dlls.find (handle);
+> -      if (!d || d->count <= 0)
+> +      if (d && d->count <= 0)
+>  	{
+>  	  errno = ENOENT;
+>  	  ret = -1;
+>  	}
+>        else
+>  	{
+> -	  --d->count;
+> +	  if (d)
+> +	    --d->count;
+>  	  if (!FreeLibrary ((HMODULE) handle))
+>  	    {
+>  	      __seterrno ();
+> -- 
+> 2.48.1.windows.1-2
 
-On Mar 29 18:54, Jeremy Drake via Cygwin-patches wrote:
-> v4:
-> fixes x86_64-on-aarch64 on Windows 11 22000.
+Thanks for the patch, but that's not the right way to fix this issue,
+afaics.  I tested this scenario, and this problem only occurs with
+dlopening cygwin1.dll.
 
-Does aarch64 use entirely different build numbers?  Just asking because
-22000 looks unusually low.  The latest release build of x86_64 Windows
-11 has build id 26100...
+The reason is that the dll_list::find method returns NULL if the found
+DLL is cygwin1.dll.  This makes sense for other places where the method
+is used, but it doesn't make sense for dlopen/dlclose.  
+So dll_list::find needs a way to return the dll pointer so we can
+refcount cygwin1.dll like any other DLL so dlclose succeeds.
+
+While looking into it, I found another refcount problem in terms of
+RTLD_NODELETE.  I fixed that too.
+
+Please give the next test release cygwin-3.7.0-0.24.g98112b9f6f90
+a try.
 
 
 Thanks,
