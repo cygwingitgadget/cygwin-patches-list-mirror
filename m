@@ -1,56 +1,102 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 2742D3857359; Mon, 31 Mar 2025 13:46:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2742D3857359
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1743428820;
-	bh=5F12Jm8CxR6d8PyEzgshe8sPbqJQpaNxnTxbcGgzjrA=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=IJOmB0F68rgIH1mYs8tLkyR1lAX25ZmdcQVQw2B4l9ossbq/8zLOBryFxM3abrXUy
-	 fKVX+AQkUu3uCPCpXKO6y8Yomu++USKZHgrq4+b2nZS3OR0uuHfhIyBXg/m+/Tv66d
-	 Ol+cp5rH51jOIMCJGkrXI6IThdZwoiB/kPEmQAw0=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EB8F3A80C9C; Mon, 31 Mar 2025 15:46:53 +0200 (CEST)
-Date: Mon, 31 Mar 2025 15:46:53 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=QGr+=WS=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
+	by sourceware.org (Postfix) with ESMTPS id 93B8D385735A
+	for <cygwin-patches@cygwin.com>; Mon, 31 Mar 2025 14:15:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 93B8D385735A
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 93B8D385735A
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743430524; cv=none;
+	b=wcy9on7B0g6U75XoaTaOHLmyYLraj+6eN9Kpa9eo8+w6S+OitT8WTTfQPxnST4qlICpODVpJihb7UYAW4OARHWpxVLO9P4vuHqZDBfiQBCtwoOvGTX7onC5DTNc/6pjs7Ni3A/gNcJGTjOX3MoDVx9CVuVsGzJnRITvV9GQRaD4=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1743430524; c=relaxed/simple;
+	bh=DwnCWOBrOJCFKDjL6ahGCc55UFIxQrET1f85gNJJHxI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=dLYb7gaYqhzjvGd10AcquHbgV0k1PC+v7BIfIp/mpyEn9SbHFUxsyzTcP2dYPHwUU1F6JLGqXyHEPfWLDglPe4VeHhwk5A08ix/kvbC1q+VAFxU5a/PlLB+4EflGrExqP97GkbKYOSBztddVDTAIHsqW8pc5XGUlAJKSWRrMRQ0=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 93B8D385735A
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=b7a8u2on
+Received: from localhost.localdomain by mta-snd-w02.mail.nifty.com
+          with ESMTP
+          id <20250331141521277.ZEZJ.88147.localhost.localdomain@nifty.com>;
+          Mon, 31 Mar 2025 23:15:21 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: dlfcn: fix ENOENT in dlclose
-Message-ID: <Z-qczTuTQ85MXB7k@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Z-m7GKMd5fXqlq2S@calimero.vinschen.de>
- <TYCPR01MB109268BAA2FA4C2E56092C090F8AD2@TYCPR01MB10926.jpnprd01.prod.outlook.com>
- <Z-p3Iw_ifKuIJ_MI@calimero.vinschen.de>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <christian.franke@t-online.de>
+Subject: [PATCH] Cygwin: pty: Return EMFILE when too meny ptmx are opened
+Date: Mon, 31 Mar 2025 23:14:51 +0900
+Message-ID: <20250331141459.1340-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Z-p3Iw_ifKuIJ_MI@calimero.vinschen.de>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1743430521;
+ bh=UhwChDqcUeuGvuiuvnworoxfCwOT6OGzkdQkTH7p6OE=;
+ h=From:To:Cc:Subject:Date;
+ b=b7a8u2ona62VaixiwvFYTx5uDSrO10WW0NQBPro1AQzw8RYeNbL4be4NaW7w1/4Dx76sSvWP
+ ptnWE0XEuXTGc8jU+trwqM/RuPWbmzPptHF2KYYb0K0uEo304Uf4a9dHOcp1e3Mlx37FHPVJ0a
+ pFd/fIgB9IsHIIOOcrW0HD0TCSz2azbP0iptBgRAmdnosQo5SZ+tzJu3Whu2zkYdyMg4M4NLH6
+ HZB1LwA0IfZ1ZMLcj85uIsp7ol/Kd9/3yLYxUV9iolAHk99MGQ4SwIa6iSnIyn3eGKoVintMZg
+ w8nX+GR2euOCL5iFyYab/mxIVmg2bMnbd9E+6XfLN+/EyZ5w==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mar 31 13:06, Corinna Vinschen wrote:
-> On Mar 31 17:18, Yuyi Wang wrote:
-> > > I tested this scenario, and this problem only occurs with
-> > > dlopening cygwin1.dll.
-> > 
-> > Not only cygwin1.dll, but also native dlls, e.g., kernel32.dll or user32.dll.
-> > I haven't tested the next release, but do you think it's the same reason for
-> > win32 dlls?
-> 
-> No, it's not.  Native DLLs are not taken into account because they
-> don't call into Cygwin's dll_dllcrt0 on init, so they are not
-> added to the DLL list.
-> 
-> Hmm.
-> 
-> I'll have to check if we should add them to the dll list or not.
-> We certainly don't need them for atexit and stuff, but the dlopen
-> counting might be necessary at fork.
+Previously, opening /dev/ptmx fails without setting errno when it
+is opened too many times. With this patch, return EMFILE in that
+situation.
 
-FTR, even if we keep track of native dlopen'ed DLLs, we can't reproduce
-their state after fork.  We must not even try, because certain Windows
-DLLs choke on reproducing their data and bss segments and misbehave.
+Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257786.html
+Fixes: 09738c30627c ("Cygwin: pty: setup new pty on opening the master, not in constructor")
+Reported-by: Christian Franke <christian.franke@t-online.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+(cherry picked from commit 7fc7d8b1d4e323a531ab2e71581263a0675072d8)
+---
+ winsup/cygwin/fhandler/pty.cc | 3 +++
+ winsup/cygwin/release/3.6.1   | 3 +++
+ winsup/cygwin/tty.cc          | 2 +-
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-So we can only keep track of the number of dlopen/dlclose calls for them.
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index e61a1c89b..3128b92da 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1933,7 +1933,10 @@ int
+ fhandler_pty_master::open (int flags, mode_t)
+ {
+   if (!setup ())
++    {
++      set_errno (EMFILE);
+       return 0;
++    }
+   set_open_status ();
+   dwProcessId = GetCurrentProcessId ();
+   return 1;
+diff --git a/winsup/cygwin/release/3.6.1 b/winsup/cygwin/release/3.6.1
+index 254cfdd9c..491d7dcb9 100644
+--- a/winsup/cygwin/release/3.6.1
++++ b/winsup/cygwin/release/3.6.1
+@@ -27,3 +27,6 @@ Fixes:
+ - Accommodate a change in Windows exception handling affecting software
+   generated exceptions.
+   Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257808.html
++
++- Return EMFILE when opening /dev/ptmx too many times.
++  Addresses: https://cygwin.com/pipermail/cygwin/2025-March/257786.html
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 2cd4ae6ed..a4b716721 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -147,7 +147,7 @@ tty_list::allocate (HANDLE& r, HANDLE& w)
+     termios_printf ("pty%d allocated", freetty);
+   else
+     {
+-      system_printf ("No pty allocated");
++      termios_printf ("No pty allocated");
+       r = w = NULL;
+     }
+ 
+-- 
+2.45.1
 
-
-Corinna
