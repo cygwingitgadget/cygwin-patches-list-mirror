@@ -1,64 +1,65 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id D4CC4385702B; Mon, 31 Mar 2025 14:30:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D4CC4385702B
+	id 565DC3857032; Mon, 31 Mar 2025 15:57:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 565DC3857032
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1743431436;
-	bh=NSxhhzO6/ej8e0bIszrN+v2i35Is0xaqabNpQFQS6pc=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=Si42iVtU0KGmcfQpAJvBSwi7f+RjNYCthBAdbuoW/dzvx4eZrhqQF0SJxzJPR1OWG
-	 raRABB8VLBpam6hKvwbeEr5LMvvtPII8AQcMi3PT1OJqQdgPO+bTXcQlwzUmebDYw4
-	 aIenDVD4V+EhaW3DcmmafVEwZ9zo9VzU9u+GBKn0=
+	s=default; t=1743436672;
+	bh=M982NEyy31cajtEjnpi0nqwMo7s0qxTvI50omW+Qmj0=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=MuJyteCXp7xo95X0unQxisB3/QWAKEc+S9Vq9A8VLJUBm5XlLLLzX+ZHi+oMwnXgp
+	 iE5vBwNGpgjIYa3u5oVBzKRC23RwFtSM4+CISTmZrFg97aDQIyaVyzh+1tbzxhjJCe
+	 sa+Igreuif929gcYJLAeMLWr6jOqaha5MhhOBlvc=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id A16A3A80C9C; Mon, 31 Mar 2025 16:25:09 +0200 (CEST)
-Date: Mon, 31 Mar 2025 16:25:09 +0200
+	id 99654A80C9C; Mon, 31 Mar 2025 17:52:17 +0200 (CEST)
+Date: Mon, 31 Mar 2025 17:52:17 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pipe: Add workaround for native ninja
-Message-ID: <Z-qlxQF0C6NMeLyQ@calimero.vinschen.de>
+Cc: Yuyi Wang <Strawberry_Str@hotmail.com>
+Subject: Re: [PATCH] Cygwin: dlfcn: fix ENOENT in dlclose
+Message-ID: <Z-q6MYPqNVaJT_rN@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250331132719.278-1-takashi.yano@nifty.ne.jp>
+Mail-Followup-To: cygwin-patches@cygwin.com,
+	Yuyi Wang <Strawberry_Str@hotmail.com>
+References: <Z-m7GKMd5fXqlq2S@calimero.vinschen.de>
+ <TYCPR01MB109268BAA2FA4C2E56092C090F8AD2@TYCPR01MB10926.jpnprd01.prod.outlook.com>
+ <Z-p3Iw_ifKuIJ_MI@calimero.vinschen.de>
+ <Z-qczTuTQ85MXB7k@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250331132719.278-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <Z-qczTuTQ85MXB7k@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
-
-On Mar 31 22:27, Takashi Yano wrote:
-> Native (non-cygwin) ninja creates pipe with size == 0, and starts
-> cygwin process with that pipe. This causes infinite loop in the
-> fhandler_fifo_pipe::raw_write(). Ideally, the pipe implementation
-> in cygwin could work even with pipe size == 0, however, it seems
-> impossible due to:
+On Mar 31 15:46, Corinna Vinschen wrote:
+> On Mar 31 13:06, Corinna Vinschen wrote:
+> > On Mar 31 17:18, Yuyi Wang wrote:
+> > > > I tested this scenario, and this problem only occurs with
+> > > > dlopening cygwin1.dll.
+> > > 
+> > > Not only cygwin1.dll, but also native dlls, e.g., kernel32.dll or user32.dll.
+> > > I haven't tested the next release, but do you think it's the same reason for
+> > > win32 dlls?
+> > 
+> > No, it's not.  Native DLLs are not taken into account because they
+> > don't call into Cygwin's dll_dllcrt0 on init, so they are not
+> > added to the DLL list.
+> > 
+> > Hmm.
+> > 
+> > I'll have to check if we should add them to the dll list or not.
+> > We certainly don't need them for atexit and stuff, but the dlopen
+> > counting might be necessary at fork.
 > 
-> (1) select() does not work for that pipe because PeekNamedPipe()
->     always returns 0. Read side is ready to read only when the
->     write side is about to write, but there is no way to know that.
-> (2) The cause of the problem:
->     https://cygwin.com/pipermail/cygwin/2025-January/257143.html
->     cannot be avoidable. To avoid CancelIo() problem, the patch
->     https://cygwin.com/pipermail/cygwin-patches/2025q1/013451.html
->     restricts the data size less than the current pipe space.
->     However, if pipe size is zero this is impossible.
+> FTR, even if we keep track of native dlopen'ed DLLs, we can't reproduce
+> their state after fork.  We must not even try, because certain Windows
+> DLLs choke on reproducing their data and bss segments and misbehave.
 > 
-> This patch adds just a workaround for native ninja that avoid
-> infinite loop in raw_write().
-> [...]
-> @@ -670,7 +670,9 @@ pipe_data_available (int fd, fhandler_base *fh, HANDLE h, int mode)
->  			   fpli.WriteQuotaAvailable);
->  	  return fpli.WriteQuotaAvailable;
->  	}
-> -      /* TODO: Buffer really full or non-Cygwin reader? */
-> +      return PIPE_BUF; /* Workaround for native ninja. Native ninja creates
-> +			  pipe with size == 0, and starts cygwin process
-> +			  with that pipe. */
+> So we can only keep track of the number of dlopen/dlclose calls for them.
 
-Funny that this problem cleared up this TODO entry :)))
+I pushed a patch:
+https://sourceware.org/cgit/newlib-cygwin/commit/?id=9fb7f285d626d
 
-Please push.
+Please try the next test release cygwin-3.7.0-0.31.g0bb9d599a2b9.
 
 
 Thanks,
