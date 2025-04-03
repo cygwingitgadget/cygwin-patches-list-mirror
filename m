@@ -1,74 +1,61 @@
-Return-Path: <SRS0=wsbR=WV=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id B7262384A40A
-	for <cygwin-patches@cygwin.com>; Thu,  3 Apr 2025 17:01:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B7262384A40A
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B7262384A40A
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743699667; cv=none;
-	b=e4hb+kC8IxXgkvdxiFeG0RtjhzF8VnkyTZUeiT+Xp44PgB+CJJz7Koa/4H9rTdbo1LDxZgpbJSseqALNBhw06VvecC+YJLSCZnjJr7Lc1X270K83GVMNL+Mk2SDXb4fgILIW2VykF0Mi0aTawxwOkt350aHi8nyLwu+LBjXPFIo=
+Return-Path: <SRS0=HLih=WV=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo002.btinternet.com (btprdrgo002.btinternet.com [65.20.50.146])
+	by sourceware.org (Postfix) with ESMTP id CD02E384A890
+	for <cygwin-patches@cygwin.com>; Thu,  3 Apr 2025 19:54:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CD02E384A890
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CD02E384A890
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.146
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743710068; cv=none;
+	b=DPpTVKv/ASwkUkZHm1qur4DOhyqvZc9oB0puJrkukVakffDYqW4RMWNheyrjNNWpllDFydLYUhdmXYjTscYaX9e9FslzRvuvfyBs4zmVRQuNPHUgTAb5z2zFHxnLRrS2mdfkZhYwiSY/hS/gaYlTxx/xtkrI/fBv5Phzg7dKtA4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743699667; c=relaxed/simple;
-	bh=5dx14VxnqpLMyqWnorwKK3IJfgIqVM/SS1Y2UA8rmVU=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=nZ7PtSJ/XEUBLUAmZlJQvPJqaJm6LY1vWCHczt+JkHrCjrBavO3IxnzheLrcY/Y31wH2r5rw5fF+JUm6R5YKYTWWxFnkZfVG4KAVmmx1m7LcX0jD09eLuZ/YAdXyGe+m8FyrZnyISooBTSo3cmrWAZ2Anni6CjxGMW2dDO46xKw=
+	t=1743710068; c=relaxed/simple;
+	bh=LtGwU36TiGVsv7a8XSFY1h51IC832sfl0I10k/Mq5Ps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=OY2T2oTf1yAlRadS8kXl/fw9WbARN8D8d+K0uW0WMemibbzZ252YugjIeTu9uAvpJba7ca70NAjPWt6MMHVbeuclTu0qwHuOgLakY4Y6EpCBO+gXlbZyErej1IR08/F6CuhZLQYMVPKhybDr/1rwpOHmOrFga7JcEum7NM/SCYU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B7262384A40A
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=Avu9YFuf
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 2382545C73;
-	Thu, 03 Apr 2025 13:01:07 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=D6oMNJBkjL82xEeosjDLj1vZQD8=; b=Avu9Y
-	FufoCW7gAobmMKR1ehQ9MnkDhdVRgB//Ujzy/JTEu7oD30iMAs7DEqLZPGEHP+Lu
-	k0KK1QCebOQxoGPxVTlfljsVkIf0+ea4KYEpQ0Bi2+jDB0ZdcTFubzQuZADFrXyy
-	F/mjw+KeiegcRdS7v3mAhjXQuwPtjM0DhbuGaE=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 1F1EA45C64;
-	Thu, 03 Apr 2025 13:01:07 -0400 (EDT)
-Date: Thu, 3 Apr 2025 10:01:07 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-cc: Takashi Yano <takashi.yano@nifty.ne.jp>, cygwin-patches@cygwin.com, 
-    Christoph Reiter <reiter.christoph@gmail.com>
-Subject: Re: [PATCH] Cygwin: fork: Call pthread::atforkchild () after other
- initializations
-In-Reply-To: <969eeb56-fb62-b279-f8d0-02dc7f679859@gmx.de>
-Message-ID: <ec45497d-a248-1056-4993-da137267b7c5@jdrake.com>
-References: <20250403083756.31122-1-takashi.yano@nifty.ne.jp> <969eeb56-fb62-b279-f8d0-02dc7f679859@gmx.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CD02E384A890
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89C380219A717
+X-Originating-IP: [81.129.146.194]
+X-OWM-Source-IP: 81.129.146.194
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeelgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekuddruddvledrudegiedrudelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduvdelrddugeeirdduleegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduvdelqddugeeiqdduleegrdhrrghnghgvkeduqdduvdelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttddvpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghs
+	segthihgfihinhdrtghomhdprhgtphhtthhopehthhhirhhumhgrlhgrihdrnhgrghgrlhhinhhgrghmsehmuhhlthhitghorhgvfigrrhgvihhntgdrtghomh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (81.129.146.194) by btprdrgo002.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89C380219A717; Thu, 3 Apr 2025 20:54:23 +0100
+Message-ID: <abc8ffb4-9f97-4185-a54e-91b98a2db91f@dronecode.org.uk>
+Date: Thu, 3 Apr 2025 20:54:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: Fix compatibility with GCC 15
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+References: <MA0P287MB30822D5C378D6822F25ED7629FAF2@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <MA0P287MB30822D5C378D6822F25ED7629FAF2@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 3 Apr 2025, Johannes Schindelin wrote:
+On 02/04/2025 08:57, Thirumalai Nagalingam wrote:
+> Hello,
+> 
+> Please find my patch attached for review.
+> 
+> Summary of Changes:
+> 
+> - GCC 15 defaults to `-std=gnu23`, causing build failures in `test suite`
+>    due to outdated C function declarations.
+> - This patch updates sbrk01.c and symlink01.c for GCC 15 compatibility.
+> - These changes were not included in my previous patch.
 
-> I still have a question that I would like to be answered in the commit
-> message, too:
->
-> If `signal_arrived` is only initialized in `fixup_after_fork()` but user
-> callbacks that use this are called by `atforkchild()`, why did this not
-> trigger _all the time_ before your reordering of the calls?
+Applied, thanks.
 
-Based on my recollections, Takashi probably knows better
-
-1) there has to be a pthread_atfork child callback registered
-2) this callback has to call raw_write
-3) raw_write now calls cygwait (which is now reenterancy-safe due to other
-fallout from this)
-4) cygwait allows signals to be processed, so needs the signal-handling
-stuff to be properly initialized.
-
-I'm guessing, if raw_write doesn't need to wait (ie, there's room in the
-pipe for the write) it doesn't hit the signal stuff.
-
-But I get your request for explaining the scenario in the commit message.
