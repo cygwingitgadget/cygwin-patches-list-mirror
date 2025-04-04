@@ -1,134 +1,223 @@
-Return-Path: <SRS0=8BWJ=WW=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by sourceware.org (Postfix) with ESMTPS id 904833857C78
-	for <cygwin-patches@cygwin.com>; Fri,  4 Apr 2025 12:14:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 904833857C78
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 904833857C78
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.20
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743768847; cv=none;
-	b=Aakh/FfKvi1qIj2/BGvOS4G8FvvOl/vpZLMeWgq29TeD/KUMwvCPG8gicWTj8Ey2SH3fZDlL6J8uhDUNlVk/ZsbCO6KZAgPHnOkgLyNFj3QSok+Qv6xeHTOf/VHUs+ftdodlPf2FgDQDvxBRFjej41rCSDhCOvqPOsHcLD5Nctc=
+Return-Path: <SRS0=Ctoq=WW=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 11F76384AB77
+	for <cygwin-patches@cygwin.com>; Fri,  4 Apr 2025 12:49:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 11F76384AB77
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 11F76384AB77
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1743770986; cv=none;
+	b=JqdYXgJTEtaxLVfoHiusTsM9dPn8TosEYrrOuGIHUiJwZH+MEIcALHCgJUrjFpelzW/X1X34bq//t5NU0UWUw3JksUcaVCd+t6pMbxJZqa8hMSdeeV8SXOzE9epje5XVo5k/ZOoyYNX82y4aNRCxsqpuwd5z4Usk77j1N+VcOM0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1743768847; c=relaxed/simple;
-	bh=GOmuYfMFv9bciCRq5sXO6K0bNOOa9aiEHlj7/EfZV+0=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Cip9ci4czC2vnEefgjsbBmKbEHbkklOGa6dRx/L0VGlxBe7lMV57xlGKPyC1bpMaZ0rGBy4GGCy9OwswXAYj1YGiPvND2Pf0rV698nrtdm+vSeER+8tpWOIlHvLEkKPipH4HoMbIYMAzDNLkY4MQWw/ZqwbUTOjXp6DkGC28U3I=
+	t=1743770986; c=relaxed/simple;
+	bh=6/3h/AjbwJfNsq53Vg9dr7pYRZcf87PKFPYhd1pRwz8=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=rwF3qc7nzVnoMVl+SrHqVYF20cAd6+MXHPlodT+2XdG5JJdIqgJxv/n7DWB+2dX0ozwDyDgtKJSiI9KCsfzh0beoGBOXfRm/YkPdL0zlUJJwOn3iT3cM5veb9ZAjaXy7cSEmMMPtSQaKhoXSKzUxocHbaxA7WXltO4c13Q8v2ec=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 904833857C78
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 11F76384AB77
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=IVbKvGjv
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1743768838; x=1744373638;
-	i=johannes.schindelin@gmx.de;
-	bh=GOmuYfMFv9bciCRq5sXO6K0bNOOa9aiEHlj7/EfZV+0=;
-	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=IVbKvGjvQtRgil2T6vVPRy3KervwmFpUwkHv4V1cUuekD1tusbeaTQkDPU0lLHs9
-	 W8R7OF1nvIOpJ7yIIlr59k8liVS50OetHdGjZNncRfqb1WPuPGI0Xbuy67anvPsjX
-	 gMAqQOC/aEzCVMox7VXgWS7IsFA7dmvQ0NM1XVHh5AIwKd1kGIh0BAbGjfXbMrm+v
-	 /4/qGQ+ILEXcnn56P64oB4GNfCKg+z+4JIkpNXMeOayLMfi5R9fR1rpnDFyhfKV27
-	 OTNqlRFfRT+feRMzuljJgGWkasSW1j2ytYoeM5xnpTvv54VXwXoniXdtfkCui3Df1
-	 9UlzJhamwXMmthlkSw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([213.196.213.156]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4hzj-1syypt2Rlf-011ceF; Fri, 04
- Apr 2025 14:13:58 +0200
-Date: Fri, 4 Apr 2025 14:13:57 +0200 (CEST)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fork: Call pthread::atforkchild () after other
- initializations
-In-Reply-To: <20250404210609.b0d38a4cac7e195ad20a9ced@nifty.ne.jp>
-Message-ID: <57624128-5aa1-b47f-a192-2b342eb2072b@gmx.de>
-References: <20250403083756.31122-1-takashi.yano@nifty.ne.jp> <969eeb56-fb62-b279-f8d0-02dc7f679859@gmx.de> <ec45497d-a248-1056-4993-da137267b7c5@jdrake.com> <20250404105839.6652c8849bfb169d669f3799@nifty.ne.jp> <C262E1A5-1B14-4D38-AE47-2EC7709DB6D1@gmx.de>
- <20250404210609.b0d38a4cac7e195ad20a9ced@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:Pa6i3qUlSpF8VqsgtomAvSpwradm/MsSGd3EjS/sumLTbWbVxcJ
- mMrpeI5BPuyUBDCmwoJgeUDYW+cp418mLeZcgfkcWYitcXDoy5GzqbzfEeS2o56pS94Nl/j
- XEgqcwaMJUfTOFkPQU2/F7SOIyk2KBSP35Z5l1F0biyG9pSvj24PeBTXExN82P4AF2kQScQ
- T1OQmwt/Oh95KQOngqrIg==
-UI-OutboundReport: notjunk:1;M01:P0:msWsnOy46E0=;g1uUFN4gHcTDPfnqNUX88w9ta5A
- eUzRPQfEk1WC+f6ZDUwjdJnXbr0sZBDvcbg+SdXh1L/dAkbhQKCCMtAvdH2O3jesi4HAKRKbO
- RIRFSUmxn9zUT8E4rcJlmqH/Xe+Ep2IG/pBnyaKJ+xGSXMBx4/cnw6Cj/5sME3lWd4c7BiYm8
- gth+NcY1NkW5JPGra2x1qe5tgKGBJi9VYeZcP9Yw8jDojvHDU5ocwYQFotfhmRWg4ssTrp7v9
- RIAuuNZohg9saDQUPdGq6tRGVcL3yCLS3DdVmxNu8GdNuWxC+Ha75Y8hDlwKGZRU8JNsyqKTx
- r6tjj0tPS68yZfHYt71I4ZRKihebKikcccX94Iqaj1Hzg8X7EcfMa2Y7vu9PkACDqvOpvE3vj
- mavC7qvSqzhDRsu1YpPn9skizjEu5Be6rPO2VMf1s9dRCleal3saG8dbMIzA9cPLDN/yW0nUM
- ksTIgwPA8oJZxxjowEUM1uMTG2BwoCKQWy8JX033JTFDSCP7jJ6UderC2PFg2K3hXxUsjSe72
- ceZYaeLhU2ih3lSMPexe+dD/ywY3BIN0crFCBGGWmCpP/ZaNu19RsS8mir4rFWdX51kV1Ao7C
- 68IzEZkpQw9vk7R4lni9cs+kfaVsIRHfLsPMCZMYThKKBhHPRJvoxwb6l8gmYego3GldzDP6B
- pSPd+BjRAcMjT4vyroxC6FySMbLd2L6IRSqOMcqJmflAq4Xhlf2hI5XqfkOY/aw/y34TMlieP
- KLOe+xvqpQxXSgl6/ZwJRpl3dkOlgFrDf1NWe+3VQUTYukcNz8fSf93q2fCzZF/Jrd0YsECJ5
- YovemTJvqXqoVJjzD5yPjZGF46W3nH5niJm4Ejy0b23hPJMIfhNplo9s2d0wxV7gJARPRaH3k
- KswBVAJL7lc7gk33cUcAH0aJW1HynAXvnZWCO2K0HSSFN26C/oC7isEsWwDvw2YCHaEsgRfYd
- 1jYyiO8v+Dy2bpeooaPRAld8Q2LknuNGE8cuY5XwJDBM0fy7m/DIK7dNLGlCssLVRrCZrWYmk
- DfEH1p2zh3ioyVBYxuh9fAAdXIIeSjsyqL5VTmZE2mLcg+Klq+Iwz20waMuo5KQVpLtFj7Wwe
- YNn0QVfb51W7tsplnTw6Wy8/yUs8YAHcOOnDxdXChtlpV5MwYyA5Il+AOhzrPevncRav99E7e
- CBgAaGHIX/+Ycc0ud1hZZ3GyNT7cc+afd+AERFi1N5FfpI36P0KbXWGC2R3kMO5VTXYqLRnQw
- shze7BEUe96QETrZrmH7xvPrKs43GHTT1v4Kw+L4c+1mS3dn1m/QdLb3ZVoN9BeE/Bz9EYHYI
- +bi0dZHMilwbuXRV0QfQQmqoD/AmrWgJzFsUdHmbzPlNPcDj7bBVGIyxVm7C0+vhbT0A21kxs
- MmBQMzjIgd/ynhCLzsiSC0ukSFHPipR9x3IYvTI4sIsioN9Oj5S39YydCO03KSWmJLEgtKDnf
- fcnWInTAIN4Bw41S1Wsk84EgEC7h0Gu2/u3xy0YuEUwmDnv52
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Q+mB995e
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20250404124944012.LRQP.17135.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 4 Apr 2025 21:49:44 +0900
+Date: Fri, 4 Apr 2025 21:49:43 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: thread: Allow fast_mutex to be acquired
+ multiple times.
+Message-Id: <20250404214943.5215476f96d46cf15587dd1b@nifty.ne.jp>
+In-Reply-To: <Z-PJ_IvVeekUwYAA@calimero.vinschen.de>
+References: <20250324055340.975-1-takashi.yano@nifty.ne.jp>
+	<Z-E6groYVnQAh-kj@calimero.vinschen.de>
+	<20250324220522.fc26bee8c8cc50bae0ad742b@nifty.ne.jp>
+	<Z-F7rKIQfY2aYHSD@calimero.vinschen.de>
+	<20250326181404.847ecfadcad8977024580575@nifty.ne.jp>
+	<Z-PJ_IvVeekUwYAA@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="Multipart=_Fri__4_Apr_2025_21_49_43_+0900_x1Fn9E4QFrjsooKB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1743770984;
+ bh=oBZ8xWfsR/yI3qA7M6e5QYJhUcj2Nt84asmhU7QxIOw=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=Q+mB995eEIJcWIuQ8OEmwWGo2OxH9RYX3mC+zjK0p9FZrVNp5g2DjJZEr+GmEuKkAQeT+M8G
+ NHJqvYh/jlZKgBJR22gtgoyrkD1oPHJdLf5y6Tg3DUsbEhQM3xEUl1ds3NZA4skbSm6KuB31lB
+ n7ogUd4sypqytNjeI4vWL7yL2aXsf7VT/eaEMm6aE9YaBlkx+9LZW5ipi2TxN9ALmF+CHDBArr
+ HtiZCTmFseokmLI6GmaaGs8ZWvGy03hGNHwG1cdsQllF30VSZLuAF48+sltR99oLwYqH3zgvr8
+ 5ZYYyB5dluBA0KqLvCvYrr9JbVH0zaCqXsXqv+nWLxpZqN2A==
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+This is a multi-part message in MIME format.
 
-On Fri, 4 Apr 2025, Takashi Yano wrote:
+--Multipart=_Fri__4_Apr_2025_21_49_43_+0900_x1Fn9E4QFrjsooKB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-> On Fri, 04 Apr 2025 07:27:09 +0200 Johannes Schindelin wrote:
->
-> > Is Jeremy's guess "if raw_write doesn't need to wait (ie, there's room
-> > in the pipe for the write) it doesn't hit the signal stuff" correct?
-> > If so, it would be good to add that part to the commit message because
-> > the commit would otherwise still be incomplete.
->
-> That's not correct. Indeed, raw_write() waits for room in the pipe,
-> however, it does not matter in this case. The probelm occurs at
-> cygwait() which waits for pipe mutex as already mentioned in the commit
-> message.
+Hi Corinna,
 
-So what is the explanation, then, that this hung only occasionally and not
-all the time?
+On Wed, 26 Mar 2025 10:33:48 +0100
+Corinna Vinschen wrote:
+> On Mar 26 18:14, Takashi Yano wrote:
+> > Hi Corinna,
+> > 
+> > On Mon, 24 Mar 2025 16:35:08 +0100
+> > Corinna Vinschen wrote:
+> > > On Mar 24 22:05, Takashi Yano wrote:
+> > > > Hi Corinna,
+> > > > 
+> > > > On Mon, 24 Mar 2025 11:57:06 +0100
+> > > > Corinna Vinschen wrote:
+> > > > > I wonder if we shouldn't drop the keys list structure entirely, and
+> > > > > convert "keys" to a simple sequence number + destructor array, as in
+> > > > > GLibc.  This allows lockless key operations and drop the entire list and
+> > > > > mutex overhead.  The code would become dirt-easy, see
+> > > > > https://sourceware.org/cgit/glibc/tree/nptl/pthread_key_create.c
+> > > > > https://sourceware.org/cgit/glibc/tree/nptl/pthread_key_delete.c
+> > > > > 
+> > > > > What do you think?
+> > > > 
+> > > > It looks very simple and reasonable to me.
+> > > > 
+> > > > > However, for 3.6.1, the below patch should be ok.
+> > > > 
+> > > > What about reimplementing pthread_key_create/pthread_key_delete
+> > > > based on glibc for master branch, and appling this patch to
+> > > > cygwin-3_6-branch?
+> > > > 
+> > > > Shall I try to reimplement them?
+> > > 
+> > > That would be great!
+> > 
+> > What about the patch attached?
+> > Is this as you intended?
+> 
+> Yes!
+> 
+> >  private:
+> > -  static List<pthread_key> keys;
+> > +  int key_idx;
+> > +  static class keys_list {
+> > +    ULONG seq;
+> 
+> GLibc uses uintptr_t for the sequence number to avoid overflow.
+> So we could use ULONG64 and InterlockedCompareExchange64 here, too.
+> 
+> Looks good to me, thanks!
 
-> > Also: referring to 7ed9adb356df may be technically correct, but human
-> > readers have a much easier time when that shortened commit OID is
-> > accompanied by some human-readable information, such as the string
-> > obtained via `git show --format=3Dreference` (see
-> > <https://git-scm.com/docs/git-show#_pretty_formats>).
->
-> Do you mean "the commit 7ed9adb356df (Cygwin: pipe: Switch pipe mode to
-> blocking mode by default, 2024-09-05)"? Not just "the commit
-> 7ed9adb356df"?
+New version of the patch attached. This realizes quasi-lock-free
+access to the pthread_keys array. Please review.
 
-Yes.
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
 
-Remember, SHA-1 is considered cryptographically broken (and has actually
-been so since 2005, Git's original decision to hard-code it everywhere
-with no upgrade path whatsoever notwithstanding). Git already supports
-SHA-256 repositories, even if most of the Git repository hosters do not.
-There may very well be a time when 7ed9adb356df won't refer to the
-intended commit anymore.
+--Multipart=_Fri__4_Apr_2025_21_49_43_+0900_x1Fn9E4QFrjsooKB
+Content-Type: text/plain;
+ name="0001-Cygwin-thread-Use-simple-array-instead-of-List-pthre.patch"
+Content-Disposition: attachment;
+ filename="0001-Cygwin-thread-Use-simple-array-instead-of-List-pthre.patch"
+Content-Transfer-Encoding: base64
 
-In any case, only when you are super familiar with the commits, and only
-for a short time, can you associate "7ed9adb356df" with "Ah, that was the
-change that switched to blocking pipe mode by default" as a human. You can
-easily reduce the cognitive load even for those who associate them by
-providing the `--format=3Dreference` form.
+RnJvbSBhNWVlOTk3NTlmYWViMzNmOGQ5MjBkMjYzZjcwZTNhNTMyZTg0YjNlIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQ0KRnJvbTogVGFrYXNoaSBZYW5vIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
+anA+DQpEYXRlOiBGcmksIDQgQXByIDIwMjUgMjE6MjI6MjcgKzA5MDANClN1YmplY3Q6IFtQQVRD
+SF0gQ3lnd2luOiB0aHJlYWQ6IFVzZSBzaW1wbGUgYXJyYXkgaW5zdGVhZCBvZiBMaXN0PHB0aHJl
+YWRfa2V5Pg0KDQpQcmV2aW91c2x5LCBMaXN0PHB0aHJlYWRfa2V5Piwgd2hpY2ggdXNlZCBmYXN0
+X211dGV4LCB3YXMgdXNlZCBmb3INCmFjY2Vzc2luZyBhbGwgdGhlIHZhbGlkIHB0aHJlYWRfa2V5
+LiBUaGlzIGNhdXNlZCBhIGRlYWRsb2NrIHdoZW4NCmFub3RoZXIgcHRocmVhZF9rZXlfY3JlYXRl
+KCkgaXMgY2FsbGVkIGluIHRoZSBkZXN0cnVjdG9yIHJlZ2lzdGVyZWQNCmJ5IHRoZSBwcmV2aW91
+cyBwdGhyZWFkX2tleV9jcmVhdGUoKS4gVGhpcyBpcyBiZWNhdXNlIHRoZQ0KcnVuX2FsbF9kZXN0
+cnVjdG9ycygpIGNhbGxzIHRoZSBkZXNydWN0b3IgdmlhIGtleXMuZm9yX2VhY2goKSB3aGVyZQ0K
+Ym90aCBmb3JfZWFjaCgpIGFuZCBwdGhyZWFkX2tleV9jcmVhdGUoKSAodGhhdCBjYWxscyBMaXN0
+X2luc2VydCgpKQ0KYXR0ZW1wdCB0byBhY3F1aXJlIHRoZSBsb2NrLg0KV2l0aCB0aGlzIHBhdGNo
+LCB1c2Ugc2ltcGxlIGFycmF5IG9mIHB0aHJlYWRfa2V5IGluc3RlYWQgYW5kIHJlYWxpemUNCnF1
+YXNpLWxvY2stZnJlZSBhY2Nlc3MgdG8gdGhhdCBhcnJheSByZWZlcmluZyB0byB0aGUgZ2xpYmMg
+Y29kZS4NCg0KQWRkcmVzc2VzOiBodHRwczovL2N5Z3dpbi5jb20vcGlwZXJtYWlsL2N5Z3dpbi8y
+MDI1LU1hcmNoLzI1NzcwNS5odG1sDQpGaXhlczogMWE4MjEzOTBkMTFkICgiZml4IHJhY2UgY29u
+ZGl0aW9uIGluIExpc3RfaW5zZXJ0IikNClJlcG9ydGVkLWJ5OiBZdXlpIFdhbmcgPFN0cmF3YmVy
+cnlfU3RyQGhvdG1haWwuY29tPg0KUmV2aWV3ZWQtYnk6IENvcmlubmEgVmluc2NoZW4gPGNvcmlu
+bmFAdmluc2NoZW4uZGU+DQpTaWduZWQtb2ZmLWJ5OiBUYWthc2hpIFlhbm8gPHRha2FzaGkueWFu
+b0BuaWZ0eS5uZS5qcD4NCi0tLQ0KIHdpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvdGhyZWFk
+LmggfCA0MiArKysrKysrKysrKysrKysrKysrKysrLS0tLS0NCiB3aW5zdXAvY3lnd2luL3RocmVh
+ZC5jYyAgICAgICAgICAgICAgIHwgMzEgKysrKysrKysrKysrKysrKystLS0NCiAyIGZpbGVzIGNo
+YW5nZWQsIDYyIGluc2VydGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEv
+d2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy90aHJlYWQuaCBiL3dpbnN1cC9jeWd3aW4vbG9j
+YWxfaW5jbHVkZXMvdGhyZWFkLmgNCmluZGV4IGIzNDk2MjgxZS4uMzA1M2RlMGEyIDEwMDY0NA0K
+LS0tIGEvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy90aHJlYWQuaA0KKysrIGIvd2luc3Vw
+L2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy90aHJlYWQuaA0KQEAgLTIyMSwxMyArMjIxLDI2IEBAIHB1
+YmxpYzoNCiAgIH5wdGhyZWFkX2tleSAoKTsNCiAgIHN0YXRpYyB2b2lkIGZpeHVwX2JlZm9yZV9m
+b3JrICgpDQogICB7DQotICAgIGtleXMuZm9yX2VhY2ggKCZwdGhyZWFkX2tleTo6X2ZpeHVwX2Jl
+Zm9yZV9mb3JrKTsNCisgICAgZm9yIChzaXplX3QgY250ID0gMDsgY250IDwgUFRIUkVBRF9LRVlT
+X01BWDsgY250KyspDQorICAgICAgew0KKwlpZiAoIXB0aHJlYWRfa2V5OjprZXlzX2xpc3Q6OnJl
+YWR5IChrZXlzW2NudF0uc2VxKSkNCisJICBjb250aW51ZTsNCisJaWYgKEludGVybG9ja2VkSW5j
+cmVtZW50NjQgKCZrZXlzW2NudF0uYnVzeV9jbnQpID4gMCkNCisJICBrZXlzW2NudF0ua2V5LT5f
+Zml4dXBfYmVmb3JlX2ZvcmsgKCk7DQorCUludGVybG9ja2VkRGVjcmVtZW50NjQgKCZrZXlzW2Nu
+dF0uYnVzeV9jbnQpOw0KKyAgICAgIH0NCiAgIH0NCiANCiAgIHN0YXRpYyB2b2lkIGZpeHVwX2Fm
+dGVyX2ZvcmsgKCkNCiAgIHsNCi0gICAga2V5cy5maXh1cF9hZnRlcl9mb3JrICgpOw0KLSAgICBr
+ZXlzLmZvcl9lYWNoICgmcHRocmVhZF9rZXk6Ol9maXh1cF9hZnRlcl9mb3JrKTsNCisgICAgZm9y
+IChzaXplX3QgY250ID0gMDsgY250IDwgUFRIUkVBRF9LRVlTX01BWDsgY250KyspDQorICAgICAg
+ew0KKwlpZiAoIXB0aHJlYWRfa2V5OjprZXlzX2xpc3Q6OnJlYWR5IChrZXlzW2NudF0uc2VxKSkN
+CisJICBjb250aW51ZTsNCisJaWYgKEludGVybG9ja2VkSW5jcmVtZW50NjQgKCZrZXlzW2NudF0u
+YnVzeV9jbnQpID4gMCkNCisJICBrZXlzW2NudF0ua2V5LT5fZml4dXBfYWZ0ZXJfZm9yayAoKTsN
+CisJSW50ZXJsb2NrZWREZWNyZW1lbnQ2NCAoJmtleXNbY250XS5idXN5X2NudCk7DQorICAgICAg
+fQ0KICAgfQ0KIA0KICAgc3RhdGljIHZvaWQgcnVuX2FsbF9kZXN0cnVjdG9ycyAoKQ0KQEAgLTI0
+NiwxNiArMjU5LDMxIEBAIHB1YmxpYzoNCiAgICAgZm9yIChpbnQgaSA9IDA7IGkgPCBQVEhSRUFE
+X0RFU1RSVUNUT1JfSVRFUkFUSU9OUzsgKytpKQ0KICAgICAgIHsNCiAJaXRlcmF0ZV9kdG9yc19v
+bmNlX21vcmUgPSBmYWxzZTsNCi0Ja2V5cy5mb3JfZWFjaCAoJnB0aHJlYWRfa2V5OjpydW5fZGVz
+dHJ1Y3Rvcik7DQorCWZvciAoc2l6ZV90IGNudCA9IDA7IGNudCA8IFBUSFJFQURfS0VZU19NQVg7
+IGNudCsrKQ0KKwkgIHsNCisJICAgIGlmICghcHRocmVhZF9rZXk6OmtleXNfbGlzdDo6cmVhZHkg
+KGtleXNbY250XS5zZXEpKQ0KKwkgICAgICBjb250aW51ZTsNCisJICAgIGlmIChJbnRlcmxvY2tl
+ZEluY3JlbWVudDY0ICgma2V5c1tjbnRdLmJ1c3lfY250KSA+IDApDQorCSAgICAgIGtleXNbY250
+XS5rZXktPnJ1bl9kZXN0cnVjdG9yICgpOw0KKwkgICAgSW50ZXJsb2NrZWREZWNyZW1lbnQ2NCAo
+JmtleXNbY250XS5idXN5X2NudCk7DQorCSAgfQ0KIAlpZiAoIWl0ZXJhdGVfZHRvcnNfb25jZV9t
+b3JlKQ0KIAkgIGJyZWFrOw0KICAgICAgIH0NCiAgIH0NCiANCi0gIC8qIExpc3Qgc3VwcG9ydCBj
+YWxscyAqLw0KLSAgY2xhc3MgcHRocmVhZF9rZXkgKm5leHQ7DQogcHJpdmF0ZToNCi0gIHN0YXRp
+YyBMaXN0PHB0aHJlYWRfa2V5PiBrZXlzOw0KKyAgaW50IGtleV9pZHg7DQorICBzdGF0aWMgY2xh
+c3Mga2V5c19saXN0IHsNCisgICAgTE9ORzY0IHNlcTsNCisgICAgTE9ORzY0IGJ1c3lfY250Ow0K
+KyAgICBwdGhyZWFkX2tleSAqa2V5Ow0KKyAgICBzdGF0aWMgYm9vbCB1c2VkIChMT05HNjQgc2Vx
+MSkgeyByZXR1cm4gKHNlcTEgJiAzKSAhPSAwOyB9DQorICAgIHN0YXRpYyBib29sIHJlYWR5IChM
+T05HNjQgc2VxMSkgeyByZXR1cm4gKHNlcTEgJiAzKSA9PSAyOyB9DQorICBwdWJsaWM6DQorICAg
+IGtleXNfbGlzdCAoKSA6IHNlcSAoMCksIGJ1c3lfY250ICgwKSwga2V5IChOVUxMKSB7fQ0KKyAg
+ICBmcmllbmQgY2xhc3MgcHRocmVhZF9rZXk7DQorICB9IGtleXNbUFRIUkVBRF9LRVlTX01BWF07
+DQogICB2b2lkIF9maXh1cF9iZWZvcmVfZm9yayAoKTsNCiAgIHZvaWQgX2ZpeHVwX2FmdGVyX2Zv
+cmsgKCk7DQogICB2b2lkICgqZGVzdHJ1Y3RvcikgKHZvaWQgKik7DQpkaWZmIC0tZ2l0IGEvd2lu
+c3VwL2N5Z3dpbi90aHJlYWQuY2MgYi93aW5zdXAvY3lnd2luL3RocmVhZC5jYw0KaW5kZXggOWVl
+OTY1MDRiLi4xNzYwMGJlNzUgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL3RocmVhZC5jYw0K
+KysrIGIvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MNCkBAIC0zMiw2ICszMiw3IEBAIGRldGFpbHMu
+ICovDQogI2luY2x1ZGUgIm50ZGxsLmgiDQogI2luY2x1ZGUgImN5Z3dhaXQuaCINCiAjaW5jbHVk
+ZSAiZXhjZXB0aW9uLmgiDQorI2luY2x1ZGUgPGFzc2VydC5oPg0KIA0KIC8qIEZvciBMaW51eCBj
+b21wYXRpYmlsaXR5LCB0aGUgbGVuZ3RoIG9mIGEgdGhyZWFkIG5hbWUgaXMgMTYgY2hhcmFjdGVy
+cy4gKi8NCiAjZGVmaW5lIFRIUk5BTUVMRU4gMTYNCkBAIC0xNjY2LDE3ICsxNjY3LDMxIEBAIHB0
+aHJlYWRfcndsb2NrOjpfZml4dXBfYWZ0ZXJfZm9yayAoKQ0KIC8qIHB0aHJlYWRfa2V5ICovDQog
+Lyogc3RhdGljIG1lbWJlcnMgKi8NCiAvKiBUaGlzIHN0b3JlcyBwdGhyZWFkX2tleSBpbmZvcm1h
+dGlvbiBhY3Jvc3MgZm9yaygpIGJvdW5kYXJpZXMgKi8NCi1MaXN0PHB0aHJlYWRfa2V5PiBwdGhy
+ZWFkX2tleTo6a2V5czsNCitwdGhyZWFkX2tleTo6a2V5c19saXN0IHB0aHJlYWRfa2V5OjprZXlz
+W1BUSFJFQURfS0VZU19NQVhdOw0KIA0KIC8qIG5vbi1zdGF0aWMgbWVtYmVycyAqLw0KIA0KLXB0
+aHJlYWRfa2V5OjpwdGhyZWFkX2tleSAodm9pZCAoKmFEZXN0cnVjdG9yKSAodm9pZCAqKSk6dmVy
+aWZ5YWJsZV9vYmplY3QgKFBUSFJFQURfS0VZX01BR0lDKSwgZGVzdHJ1Y3RvciAoYURlc3RydWN0
+b3IpDQorcHRocmVhZF9rZXk6OnB0aHJlYWRfa2V5ICh2b2lkICgqYURlc3RydWN0b3IpICh2b2lk
+ICopKSA6DQorICB2ZXJpZnlhYmxlX29iamVjdCAoUFRIUkVBRF9LRVlfTUFHSUMpLCBkZXN0cnVj
+dG9yIChhRGVzdHJ1Y3RvcikNCiB7DQogICB0bHNfaW5kZXggPSBUbHNBbGxvYyAoKTsNCiAgIGlm
+ICh0bHNfaW5kZXggPT0gVExTX09VVF9PRl9JTkRFWEVTKQ0KICAgICBtYWdpYyA9IDA7DQogICBl
+bHNlDQotICAgIGtleXMuaW5zZXJ0ICh0aGlzKTsNCisgICAgZm9yIChzaXplX3QgY250ID0gMDsg
+Y250IDwgUFRIUkVBRF9LRVlTX01BWDsgY250KyspDQorICAgICAgew0KKwlMT05HNjQgc2VxID0g
+a2V5c1tjbnRdLnNlcTsNCisJaWYgKCFwdGhyZWFkX2tleTo6a2V5c19saXN0Ojp1c2VkIChzZXEp
+DQorCSAgICAmJiBJbnRlcmxvY2tlZENvbXBhcmVFeGNoYW5nZTY0ICgma2V5c1tjbnRdLnNlcSwN
+CisJCQkJCSAgICAgc2VxICsgMSwgc2VxKSA9PSBzZXEpDQorCSAgew0KKwkgICAga2V5c1tjbnRd
+LmtleSA9IHRoaXM7DQorCSAgICBrZXlzW2NudF0uYnVzeV9jbnQgPSAwOw0KKwkgICAga2V5X2lk
+eCA9IGNudDsNCisJICAgIEludGVybG9ja2VkSW5jcmVtZW50NjQgKCZrZXlzW2tleV9pZHhdLnNl
+cSk7DQorCSAgICBicmVhazsNCisJICB9DQorICAgICAgfQ0KIH0NCiANCiBwdGhyZWFkX2tleTo6
+fnB0aHJlYWRfa2V5ICgpDQpAQCAtMTY4NSw3ICsxNzAwLDE1IEBAIHB0aHJlYWRfa2V5Ojp+cHRo
+cmVhZF9rZXkgKCkNCiAgICAqLw0KICAgaWYgKG1hZ2ljICE9IDApDQogICAgIHsNCi0gICAgICBr
+ZXlzLnJlbW92ZSAodGhpcyk7DQorICAgICAgTE9ORzY0IHNlcSA9IGtleXNba2V5X2lkeF0uc2Vx
+Ow0KKyAgICAgIGFzc2VydCAocHRocmVhZF9rZXk6OmtleXNfbGlzdDo6cmVhZHkgKHNlcSkNCisJ
+ICAgICAgJiYgSW50ZXJsb2NrZWRDb21wYXJlRXhjaGFuZ2U2NCAoJmtleXNba2V5X2lkeF0uc2Vx
+LA0KKwkJCQkJICAgICAgIHNlcSArIDEsIHNlcSkgPT0gc2VxKTsNCisgICAgICB3aGlsZSAoSW50
+ZXJsb2NrZWRDb21wYXJlRXhjaGFuZ2U2NCAoJmtleXNba2V5X2lkeF0uYnVzeV9jbnQsDQorCQkJ
+CQkgICBJTlQ2NF9NSU4sIDApID4gMCkNCisJeWllbGQgKCk7DQorICAgICAga2V5c1trZXlfaWR4
+XS5rZXkgPSBOVUxMOw0KKyAgICAgIEludGVybG9ja2VkSW5jcmVtZW50NjQgKCZrZXlzW2tleV9p
+ZHhdLnNlcSk7DQogICAgICAgVGxzRnJlZSAodGxzX2luZGV4KTsNCiAgICAgfQ0KIH0NCi0tIA0K
+Mi40NS4xDQoNCg==
 
-We're still spending a lot of time on getting reviewers such as myself up
-to speed on the context, we're not even talking about the specifics of the
-patch yet. Helpful commit messages help with such issues and accelerate
-reviews, and by making it easier to review they also help ensure that the
-patches are correct (and won't introduce yet other regressions that will
-have to be fixed in the future, a pattern I seem to notice in this part of
-Cygwin's code).
-
-Ciao,
-Johannes
+--Multipart=_Fri__4_Apr_2025_21_49_43_+0900_x1Fn9E4QFrjsooKB--
