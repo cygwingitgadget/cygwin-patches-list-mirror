@@ -1,76 +1,76 @@
-Return-Path: <SRS0=7wyj=W2=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
-	by sourceware.org (Postfix) with ESMTPS id 94C823857B8C
-	for <cygwin-patches@cygwin.com>; Tue,  8 Apr 2025 10:37:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 94C823857B8C
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 94C823857B8C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744108642; cv=none;
-	b=gw7djsgg3YPSlpaF4y0q0GUCiGI6SiXvibICw6DMSNSnn6W53p7UZAvQMXkRk0i3awns8ozny/ukbyNw0eI6SjTMzYvp78JtbOpQB3VZDGV0z4U+qXINyz0sPhKl+HFD5cE4C3NM2BbPv99wGY2+uSZ+f5yht6JzP9+qCT6EPjc=
+Return-Path: <SRS0=2woS=W2=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+	by sourceware.org (Postfix) with ESMTPS id A8A113858294
+	for <cygwin-patches@cygwin.com>; Tue,  8 Apr 2025 11:51:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A8A113858294
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A8A113858294
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.84
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744113117; cv=none;
+	b=g+/IPKgUJsKGqx9otvMUkWlHIv1hFqUZXPByQuoY2iOnymPFUTc9oeXI73zpXucDpfyQ1Vo5AYnxx6dOGYZi3CdY2iuj9uUah14TtEGpo3VvPCqjj7sjNnoqZ983r+trdANubQqfaVsUKBIdcDghwqLxBIIdsqmxM3I2/cbh3y4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744108642; c=relaxed/simple;
-	bh=93dmS79VhbzwMXPZclJq1orAKm+lYN82uUvXq4ESo24=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=LiYjOnONwa7eZgwa1VxL9driPe1eLEtJUPviCRRcvgNgne8TBA3xsIyczPfSnHXXKAmuo1zcZ9Kvq+8u34aHbthht2/M/0t2JPC6gBpV5Ef/ArIdkVIdI4hzWOc8foUxd1ERtOcNuy6MT3FOkWBUAuwe7EkP+sTJwn+C44EX8sY=
+	t=1744113117; c=relaxed/simple;
+	bh=/sXgGDYwNGfDAmk8Q0diRAZ1QZMcmNoufdjiS274exw=;
+	h=To:From:Subject:Message-ID:Date:MIME-Version; b=d+D+e62Svva3KFP6MiN7IVzdl2iZpTpF46sFXWcgJPCqRVP72WNEZaXRyN+zMwfoz80dBWY2JdJBTz3sobPxQRXGtsAPyQbhHWkOvUnbFx3yxaZrA4BNUxKNjJM4LNr0Yefqk56LIqiBcf+kTOZdQyiSYbNaTPH6fGqrZlJqbYA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 94C823857B8C
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=epSh5sp/
-Received: from HP-Z230 by mta-snd-w02.mail.nifty.com with ESMTP
-          id <20250408103719480.TXND.37742.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 8 Apr 2025 19:37:19 +0900
-Date: Tue, 8 Apr 2025 19:37:19 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A8A113858294
+Received: from fwd75.aul.t-online.de (fwd75.aul.t-online.de [10.223.144.101])
+	by mailout09.t-online.de (Postfix) with SMTP id EA53C1801
+	for <cygwin-patches@cygwin.com>; Tue,  8 Apr 2025 13:51:55 +0200 (CEST)
+Received: from [192.168.2.101] ([87.187.37.162]) by fwd75.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1u27Ug-1wMCCO0; Tue, 8 Apr 2025 13:51:54 +0200
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: thread: Allow fast_mutex to be acquired
- multiple times.
-Message-Id: <20250408193719.4f284c100be21957dc29cc03@nifty.ne.jp>
-In-Reply-To: <Z_T5HMWYU6nYsyTz@calimero.vinschen.de>
-References: <20250324055340.975-1-takashi.yano@nifty.ne.jp>
-	<Z-E6groYVnQAh-kj@calimero.vinschen.de>
-	<20250324220522.fc26bee8c8cc50bae0ad742b@nifty.ne.jp>
-	<Z-F7rKIQfY2aYHSD@calimero.vinschen.de>
-	<20250326181404.847ecfadcad8977024580575@nifty.ne.jp>
-	<Z-PJ_IvVeekUwYAA@calimero.vinschen.de>
-	<20250404214943.5215476f96d46cf15587dd1b@nifty.ne.jp>
-	<20250406195754.86176712205af9b956301697@nifty.ne.jp>
-	<Z_T5HMWYU6nYsyTz@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1744108639;
- bh=k6tOxejpcTDDGXgGNMSy1otTBlk+KK96HGrW1cuYyYU=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=epSh5sp/zL8aLRrSuCvFt0N/EHwOCUFG2ZfXNQ4b3zrhZFQJ6vVo5hkPymalxM41yBfylvbA
- N3NeBCu7lbZf3lYYCLMOMG0xWhTp9y4YrPRhi4F0vCkVBQyyMZcggAC3LA6sNogMpqRAStvHmP
- qTwl9/qZHJ2DnptNx4z86wnLJsCyHKeEZm/PaOGZ1D0rjbJ5j9u6et+yhNogl4k9ZRw7sZzBqq
- TEXpw8r8vlTZSjKCr+fsCrM6ivFL2vPa5ldY7GhDzU52vr1aAGcLI/xkr0WETqrEIY9f2Gwvdf
- ludFek8e2v6IO8opw05WIeTHzmFsYcxwzad9Jwxkn7Rg59Gw==
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: cygwin-patches@cygwin.com
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: faq: add lssparse to sparse file example
+Message-ID: <245987b6-3d23-51ce-05d1-84bc0b4a12ba@t-online.de>
+Date: Tue, 8 Apr 2025 13:51:54 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------7A60D7F09019C3608CD088BE"
+X-TOI-EXPURGATEID: 150726::1744113114-A4FFF286-A3446B74/0/0 CLEAN NORMAL
+X-TOI-MSGID: 41fc969e-e2b7-4c3b-80ec-b33a44a5a2bb
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_BL,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 8 Apr 2025 12:23:24 +0200
-Corinna Vinschen wrote:
-> looks good, but...
-> 
-> On Apr  6 19:57, Takashi Yano wrote:
-> > @@ -1685,7 +1700,15 @@ pthread_key::~pthread_key ()
-> >     */
-> >    if (magic != 0)
-> >      {
-> > -      keys.remove (this);
-> > +      LONG64 seq = keys[key_idx].seq;
-> > +      assert (pthread_key::keys_list::ready (seq)
-> > +	      && InterlockedCompareExchange64 (&keys[key_idx].seq,
-> > +					       seq + 1, seq) == seq);
-> 
-> ...do we really want to assert here?  Shouldn't this better just skip
-> the rest of the function?
+This is a multi-part message in MIME format.
+--------------7A60D7F09019C3608CD088BE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Sounds reasonable. Skipping before TlsFree (tls_index), right?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+--------------7A60D7F09019C3608CD088BE
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-faq-add-lssparse-to-sparse-file-example.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-faq-add-lssparse-to-sparse-file-example.patch"
+
+RnJvbSAzOTQ0YjViMjE1MDJlNjU4MjFhNGMzMGQ1NjgyMDcyNzMzMjAzNDdhIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBUdWUsIDggQXByIDIwMjUgMTM6MzQ6MDIgKzAyMDAK
+U3ViamVjdDogW1BBVENIXSBDeWd3aW46IGZhcTogYWRkIGxzc3BhcnNlIHRvIHNwYXJzZSBm
+aWxlIGV4YW1wbGUKClNpZ25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFua2UgPGNocmlzdGlh
+bi5mcmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2luc3VwL2RvYy9mYXEtdXNpbmcueG1sIHwg
+NSArKysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBh
+L3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbCBiL3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbApp
+bmRleCBlNWU0NDc5ZjUuLjExMTcwMmM2ZiAxMDA2NDQKLS0tIGEvd2luc3VwL2RvYy9mYXEt
+dXNpbmcueG1sCisrKyBiL3dpbnN1cC9kb2MvZmFxLXVzaW5nLnhtbApAQCAtODU1LDYgKzg1
+NSwxMSBAQCBwb3NzaWJsZSB0byBwcmVzZXQgdGhlIHNwYXJzZSBhdHRyaWJ1dGUgd2l0aCA8
+bGl0ZXJhbD5jaGF0dHI8L2xpdGVyYWw+LgogCS0tLWEtUy0tLS0tLS0tIDIvaXNfc3BhcnNl
+CiAJLS0tYS1TLS0tLS0tLS0gMi9tYXliZV9zcGFyc2UKIAktLS1hLVMtLS0tLS0tLSAyL25v
+dF9zcGFyc2UKKwkkIGxzc3BhcnNlIC1IIDAvaXNfc3BhcnNlICMgZnJvbSBjeWd1dGlscy1l
+eHRyYSBwYWNrYWdlCisJSG9sZSByYW5nZVsxXTogb2Zmc2V0PTB4MCwgICAgICBsZW5ndGg9
+MHgxMDAwMDAKKwlEYXRhIHJhbmdlWzJdOiBvZmZzZXQ9MHgxMDAwMDAsIGxlbmd0aD0weDQK
+KwkkIGxzc3BhcnNlIC1IIDAvbm90X3NwYXJzZQorCURhdGEgcmFuZ2VbMV06IG9mZnNldD0w
+eDAsICAgICAgbGVuZ3RoPTB4MTAwMDA0CiA8L3NjcmVlbj4KIDxwYXJhPldpdGggPGxpdGVy
+YWw+c3BhcnNlPC9saXRlcmFsPiBtb3VudCBvcHRpb24gb3IgYSBTU0QsIGFsbAogPGxpdGVy
+YWw+Py9tYXliZV9zcGFyc2U8L2xpdGVyYWw+IGZpbGVzIHdvdWxkIGJlIHNwYXJzZS4KLS0g
+CjIuNDUuMQoK
+--------------7A60D7F09019C3608CD088BE--
