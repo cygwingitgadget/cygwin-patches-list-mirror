@@ -1,346 +1,146 @@
-Return-Path: <SRS0=mEoq=W3=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
-	by sourceware.org (Postfix) with ESMTPS id 7C8B33858C48
-	for <cygwin-patches@cygwin.com>; Wed,  9 Apr 2025 06:19:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7C8B33858C48
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7C8B33858C48
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744179555; cv=none;
-	b=lpAnvxYWEODi/By0AJQQTFu0kZ3NTDm6pclxvYLp7bWi1PdcJaoNIiOcGvhRgOsarw9CDOftqpWDrBTFnw1KdVacxqG4Imzly/9I9xfOpKmdxZ/R22/fHbd9qpqABI6HCKrUG+oP8nCwm28Mi+QGPxeNVkHNW1sBS+cVtXGMBiY=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744179555; c=relaxed/simple;
-	bh=SPaFNWhqdM2AbCQRptO7R2rRL00uXocLuRpKUznME3Q=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=rW5U4V5QkEXLP97TOIkQjVLmfirRD1MTmrcTOn+E84p/woU7Yuy8FakJtlS308NVB44UKe1vi2xp8MUc3a7UOeA9eB6ChI+bjw7nfVlrgMicoNQfc4X5P8afewZ4UPORD+d38vb1yFNwNuw+FRfz2cnQ1U+bXtkU3YaNA1R8m4w=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7C8B33858C48
+Return-Path: <SRS0=JsoB=W3=hotmail.com=Strawberry_Str@sourceware.org>
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazolkn190110001.outbound.protection.outlook.com [IPv6:2a01:111:f403:d405::1])
+	by sourceware.org (Postfix) with ESMTPS id 41E5A384978A
+	for <cygwin-patches@cygwin.com>; Wed,  9 Apr 2025 15:58:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 41E5A384978A
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=hotmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 41E5A384978A
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:d405::1
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1744214329; cv=pass;
+	b=t/7/svvOZ3FE5otX65mn0AF16DasueK6ZCl0wzMuYLVudivkDu5YPz/syqvD30CI7NGTDqbKX/xho4fyhA7lhHmrdRy14OB7pY1rzlKYEdr1AvW3SHRJR8wsiJKiNMwHevdXOIPvphzDJz+/Tjfr3pYQ2tiTGX9PxMJhPwD8dQU=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1744214329; c=relaxed/simple;
+	bh=FMWEHYs7Yy8NJoRAtJ6I5ELBtP/Vx2JbVrB7P+okMA4=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=RhSkjPcQpV2+XSPI5D6rqf0XgTJRRocs3Re5Pc2s0KnWUeB+SD5eTCsIrKffIResiUPd/ydePoJhlM14OrwAqmwN4UuaG+q5r0fLWa0uoc47ZEQl3Nssws9GnDNLCdD5wPULNzjsC/ds57HOPHa+6qSwAC+8jLaoXosah3wvfuI=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 41E5A384978A
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ZWKVDdh8
-Received: from localhost.localdomain by mta-snd-e04.mail.nifty.com
-          with ESMTP
-          id <20250409061912454.NEXJ.90539.localhost.localdomain@nifty.com>;
-          Wed, 9 Apr 2025 15:19:12 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	dkim=pass (2048-bit key, unprotected) header.d=hotmail.com header.i=@hotmail.com header.a=rsa-sha256 header.s=selector1 header.b=DYnlivKL
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ije9Cckle1EtCuf/U5FmxM/qfSfQm/TrKoUYSAGNvK40ZPj/5OEHoE7lb40oOohJpJFLSRJMkMz/fUgCtS186zFKkxLU+NvUNLAE9h6ICuMhjGR5lhYjsCneCpxvZDdE4dQcM/SNRCyCuZ1xB3i7ANB4XU/nYopDB6INk2xPi5zYVcjVW5m+RkgXXjbQCaW0Q59lu3G+eZClXh96tL5pv9GPpR6srNE1CsSm+KuwMbb4hnmkM40H61nxc8uIusEuzRyUhp4VOGBz9R+aqcDeyXc0tNTDud13TjmBwtveEwdahA2tbh2Y+b6FKUQQlj3lyBprTLNzF93Jj/MgjmDXvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZfoKRpc35NjIE6P4rtZbeqHOnCqHgc2aH/iPz2FyBH4=;
+ b=dpjwZPcQgQc6dXFC5LkDaGyTdMVH07HGtnJQuNUQj9WGvUFghvGbj3kYNDyBGpJU2Chbd3bWdRpQAS14Dg/fXJmnIHiCjXudr2Qu/jduppN6mf5YLn4CHocvSHz76fxNTN4CS9kSYvvcUDEVY/xRszUgjF7V1iKXLsuzOJkk0FDZzWRpbGfrYimrc4w8DjRz482jkog4qAVqLxmXYpKIljgnybp/v9900p6QpSsGdyXYb9N5dK8NjJ2zG1lLhCJKzF7PqjHUJWwQS+4xHbgk9NvkccdCPl1QILDmemd7gwSCgf+hcpZWWrjF+XsDhWgjVzwn6cmq91nVUGmL4f5Epg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZfoKRpc35NjIE6P4rtZbeqHOnCqHgc2aH/iPz2FyBH4=;
+ b=DYnlivKLCYxtlTQA8L7y0r3i4LliYvB95BZBbhmhQs9uI2WaBt/8w3/iRev7GDcD80ufgJnCVQRgsE/hvZjJK/A5+NeGZJJPwCYSsIhMlKUMUb3Hcu3uejiY2P9+nJ8qs1FlK/6K4CQRHhKxDjCQOyZsgVoXQHOInXvTxTBx16B66v0GomeGqAncPovjoK8cfCDc1qbFLcCsVj0QxG7xg76NsnSdhMRRUi9iIwrYNTWzz7RSN4N+l1ELy8fucKBRGBudjqT8gkO6RcLmqWGg8MQGQlce2WL0fkrAM+vA7nw4blWMjkYXKp6oAqa+1ZE3F+XNx2o0ua+9oLZtjOO+/w==
+Received: from TYCPR01MB10926.jpnprd01.prod.outlook.com (2603:1096:400:3a3::6)
+ by OS3PR01MB10325.jpnprd01.prod.outlook.com (2603:1096:604:1f8::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.36; Wed, 9 Apr
+ 2025 15:58:41 +0000
+Received: from TYCPR01MB10926.jpnprd01.prod.outlook.com
+ ([fe80::45e0:7606:a365:9209]) by TYCPR01MB10926.jpnprd01.prod.outlook.com
+ ([fe80::45e0:7606:a365:9209%5]) with mapi id 15.20.8606.029; Wed, 9 Apr 2025
+ 15:58:41 +0000
+From: Yuyi Wang <Strawberry_Str@hotmail.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: termios: Implement tcflow(), tcdrain(), TCXONC, TIOCINQ
-Date: Wed,  9 Apr 2025 15:18:51 +0900
-Message-ID: <20250409061858.1125-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
+Cc: Yuyi Wang <Strawberry_Str@hotmail.com>
+Subject: [PATCH] Cygwin: fhandler_local: Fix get_inet_addr_local to retrieve correct type
+Date: Wed,  9 Apr 2025 23:58:23 +0800
+Message-ID:
+ <TYCPR01MB10926E79742DCF95AA5CD2928F8B42@TYCPR01MB10926.jpnprd01.prod.outlook.com>
+X-Mailer: git-send-email 2.49.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1744179552;
- bh=fuQODglRbT0Si+ANtFoKOCW4+dHu5Zf8a+2nhhUbzVM=;
- h=From:To:Cc:Subject:Date;
- b=ZWKVDdh8s4sumMWuQnZrDDPFbZcpCoCtslHFPbVujGPPEU8JbZY3HPus5oLs62keUdnUOlE1
- 36dLu2wG7z8byTFkb8hnEpAEeITKzYVAT4Wh5nmXU8ecOE8/z+bo87HqCfSGyXftpY0Buw1vws
- XOMkPn5Oy0TyHcCDxrsK5vHHbk3s+eiVult+/NMUzwVqdk4KHxe3gackwcAiS037qJHKdcC9sr
- ey2X7J2+LF6i/GypUIfAtQSZHY7XnMKbk7X1Ry8Cyo2f9ZlCCaNpjGLYoDxZQgqXD+ahG2V53v
- SW7xc8CfWWBnr7OlZECe/ekliQNlZieRrgrn2wlM4j8bFGvw==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0005.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::23) To TYCPR01MB10926.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a3::6)
+X-Microsoft-Original-Message-ID:
+ <20250409155823.7845-1-Strawberry_Str@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB10926:EE_|OS3PR01MB10325:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8116bc90-a6df-4625-3e02-08dd777f65d0
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|7092599003|15080799006|8060799006|19110799003|461199028|5072599009|440099028|3412199025|41001999003|1710799026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4z8QBPgFKt01zDQ6W1IHg/Dh47varBGCWpFYuwnLchLvkXMiB/ZeQARiRXW9?=
+ =?us-ascii?Q?IZhTUK1JqjiovbRrRxu+fXXmRi859K1Q+a+tP0BU9oPN2kHMP3ery8iNjFX1?=
+ =?us-ascii?Q?zQkB2kw0erwSgm5bmufYVBcvarVYwLbBq60JnTW0ceWuikJ87tKU5alPf2Ka?=
+ =?us-ascii?Q?gIzKz6Ack5M/emDD3oLbJVHTMnl3JmBPNKDcXX7Cte0hzc048XObwBS9eTrw?=
+ =?us-ascii?Q?1Cr3HPrB5f2zaSxQ4YkOXx1xP0oBkV+QlwJJSx3KIV3h01P3hhiIlwoDX2jz?=
+ =?us-ascii?Q?tYOu3qt3wJgljVsLTlA10D8rfnIJsfSaJsOtm6laU0lDa864eWz5LDPPJ0ji?=
+ =?us-ascii?Q?EuDlicpMSt0pKKFmhGzbT3gL043OPbO6My+2jDYF5hc9opufqtBhsezDCp1X?=
+ =?us-ascii?Q?u2o7T+WshefINb2a4OSjWqHCyvUDi5t50JYEtAWxxhZaVLYnDHlcWpsw2bKa?=
+ =?us-ascii?Q?3lm13k7Xrr8z6l1Hg2YwlgUuh1pbYEn3cq+P3OXjVK7BCTnCPjYPb/eEIWSu?=
+ =?us-ascii?Q?SrAip0Eu1EXBFJ3oVVgFpKaFOqSy4L6uzZxDr+YcOOnEScUEySgKTD+7bU7w?=
+ =?us-ascii?Q?KVo7JD0Wy5zljskKXZY+3F+Mq/UFTy/tdWQW52QjcGprY1LQhkLJ47ROD+oM?=
+ =?us-ascii?Q?9LUd0DiPAKlaZgPZ326nTFms/cD7pLOi/Aahre3f3GC8+IPUNLprAfcURqfj?=
+ =?us-ascii?Q?Z63wZNj2iiPWNmixVBpFI45hFKi3p3CxNAstVPi/4tgz64GxFKhwi6wEg1FG?=
+ =?us-ascii?Q?PK0JS+0qAC/dN5CiWTuoydIWhBK2Kahv6vfXH8CsHhvZ3Z0eJlIEJYgZnrRM?=
+ =?us-ascii?Q?R+9vgVB4tJSbKszVQpofichwmnyTIDPEb/FpaduJB+hY/VrA1AWmaYgZFkeL?=
+ =?us-ascii?Q?1lE+p0emcBMP8Fs0IaPwedmSk3QOcQYzGvyV2J0rblXkTm5uhXPWAuyiTQdC?=
+ =?us-ascii?Q?Re4K8muT4UIEsDSnVLwIVA+7K9hkb//kNXNawyADqKVzfMAJclV6IUaYMlMY?=
+ =?us-ascii?Q?i8NAoc3YnTJNcKdFVOa9efY22AfnY60IymJXVkis1Zt5oN2+sdQui5TBGqfn?=
+ =?us-ascii?Q?kY9ei+G812qILvKO6TzNrtlWsDrn8VQqubm5SBw6V8p4kfaCoOsp2bywz2he?=
+ =?us-ascii?Q?yNSHcsjM8VJrIByPEAg7nG7D/MYFNDEm1sHIQmHUtJa9Ayw417WzDqs=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ePdtycTiH40AXkjs5BuYMfzW56OozERD+H4abnCMocRf3fRzfZXlzfYFwS/r?=
+ =?us-ascii?Q?LdAw3WY/n0+vDwQAnB+V8eCUY/Wxwt4yn9q7dAGdA58IufKU1BgCExqDqGR6?=
+ =?us-ascii?Q?hAywQLF5sOMJAGYO7VBw8IHMK2zStmz+t0ARHfZW+LWLT7QgQhR3Fs5M9zdL?=
+ =?us-ascii?Q?hk/PUZ6uE8QvPsEMIg061wASJdZyMHCOZ6fps05+p/4OZlwTCkbui75GOVyA?=
+ =?us-ascii?Q?SLBWWryBSrlfBYnMM6j/mWphxaW+WZqrhhEbkfShY4loDuuqw50U2TYBmSzv?=
+ =?us-ascii?Q?dJYI8nJH6NjGmC+nMgcsIi0cY8E6BANL0Kzh8mv/sDNroeEZMT+V5FTz7Vb8?=
+ =?us-ascii?Q?lrd6qUTY3mwD5/dleGW6NUEJ8p9TP6yOhqzpflEJAyBiMm7R5X6p60UjO13f?=
+ =?us-ascii?Q?ASkKAVU5CjTOjZHjQB3t0qjqWGTPbzMdoB242eVXsuA81VOUfhPaM5EhPSH7?=
+ =?us-ascii?Q?4m5yyuktWyHJp8iI00s48N5fGdxq0oGXSoD0NnWAgLD9RTWaNkuTnjT+lpH5?=
+ =?us-ascii?Q?wiSCgLwRYmEteM/Lxxej+XrRd6JdoPIP9gxvn/8mT2/yVIckJhFz8IsTExY2?=
+ =?us-ascii?Q?sXk0lMVhBmb2zg6iz2+13VQm9lJGsApLnOq3jKmQ8wMR+osVCk8b5MRo1tgt?=
+ =?us-ascii?Q?Dtep1XbYhACGQEOdHPvKcGb8LpRUgwhsr84t8nUDIOPxys5AAgFXq7Etjlzi?=
+ =?us-ascii?Q?lvxn1gJ+is1ntvXFfHLTMpanip4izI+AR83F8sm+lNzsFjTxxL/wKTwvNZ0m?=
+ =?us-ascii?Q?SPFoUoRuj4bY++qc6+sskw8tJtLijBekq+p5/bDRZr3aQd7b+bbfqkhzSCkD?=
+ =?us-ascii?Q?891ElwXLQuDDH8pAjyQcMojt2WF8wRNEfslrdRK4xaWMnKJ+F40SnKwAHCim?=
+ =?us-ascii?Q?UZCqYFVOHQB/vY8mgKlG0/WGhUcvQ+u82W6QcD3CwxoiYR8If/OFlQ4rSl6b?=
+ =?us-ascii?Q?0cioFR/saBV0fBHcTRPcGdLj9Yfu1Kg6Fd+XgGqlI5g6Au1POZfCbByA7y0J?=
+ =?us-ascii?Q?E0z7W2eJ1aHBFw+FAC+tjOZZQ96HzArt5PYnS6GrO9gYLLGkBTMmbQbJSiKP?=
+ =?us-ascii?Q?I6dySsyDKPOTpCKabT7PMT4X6sHX4TcU9Uc8ZVJEFsN4aGsC3PGJy3Tzn48R?=
+ =?us-ascii?Q?5a3gEU1bYUy1mGcvUu8fc0i3KR7YWqI8jlPjzKN9Bi2HYaz9FJUsk5wo/Dk0?=
+ =?us-ascii?Q?N5DWEW63PkmTDdzc1f6rQcaYjY2mLIUFBAfTtXWjZqZ3sBKsL1qCaEQ32cd4?=
+ =?us-ascii?Q?EI+Thtylyapdis9A7h8aEzBkp3c51O8pBgECfPcaHA=3D=3D?=
+X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-15995.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8116bc90-a6df-4625-3e02-08dd777f65d0
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10926.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 15:58:41.1126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB10325
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, tcflow() and tcdrain() were missing from console and pty.
-ioctl() command: TCXONC, TIOCINQ, and TCFLSH were also missing.
-Due to this, "stress-ng --pty 1" failed. This patch implements them.
-
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+For a datagram socket received by recvfrom, the type param is not
+assigned correctly, making fhandler_socket_local::connect() to return
+WSAEPROTOTYPE.
 ---
- winsup/cygwin/fhandler/console.cc       | 30 +++++++++++++++++++++---
- winsup/cygwin/fhandler/pty.cc           | 30 ++++++++++++++++++++++++
- winsup/cygwin/fhandler/termios.cc       | 31 +++++++++++++++++++++----
- winsup/cygwin/include/sys/termios.h     |  1 +
- winsup/cygwin/local_includes/fhandler.h |  7 ++++--
- winsup/cygwin/local_includes/tty.h      |  6 ++++-
- 6 files changed, 95 insertions(+), 10 deletions(-)
+ winsup/cygwin/fhandler/socket_local.cc | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index a38487f9b..c61364391 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -509,7 +509,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 		case not_signalled_but_done:
- 		case done_with_debugger:
- 		  processed = true;
--		  ttyp->output_stopped = false;
-+		  ttyp->output_stopped &= ~BY_VSTOP;
- 		  if (ti.c_lflag & NOFLSH)
- 		    goto remove_record;
- 		  con.num_processed = 0;
-@@ -1144,6 +1144,15 @@ fhandler_console::read (void *pv, size_t& buflen)
- 
-   push_process_state process_state (PID_TTYIN);
- 
-+  if (get_ttyp ()->input_stopped && is_nonblocking ())
-+    {
-+      set_errno (EAGAIN);
-+      buflen = (size_t) -1;
-+      return;
-+    }
-+  while (get_ttyp ()->input_stopped)
-+    cygwait (10);
-+
-   size_t copied_chars = 0;
- 
-   DWORD timeout = is_nonblocking () ? 0 :
-@@ -2131,6 +2140,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
- 	release_output_mutex ();
- 	return -1;
-       case FIONREAD:
-+      case TIOCINQ:
- 	{
- 	  DWORD n;
- 	  int ret = 0;
-@@ -2183,6 +2193,14 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
- 	  return 0;
- 	}
- 	break;
-+      case TCXONC:
-+	res = this->tcflow ((int)(intptr_t) arg);
-+	release_output_mutex ();
-+	return res;
-+      case TCFLSH:
-+	res = this->tcflush ((int)(intptr_t) arg);
-+	release_output_mutex ();
-+	return res;
+diff --git a/winsup/cygwin/fhandler/socket_local.cc b/winsup/cygwin/fhandler/socket_local.cc
+index 270a1ef31..340a2b33c 100644
+--- a/winsup/cygwin/fhandler/socket_local.cc
++++ b/winsup/cygwin/fhandler/socket_local.cc
+@@ -87,6 +87,7 @@ get_inet_addr_local (const struct sockaddr *in, int inlen,
+       addr.sin_addr.s_addr = htonl (INADDR_LOOPBACK);
+       *outlen = sizeof addr;
+       memcpy (out, &addr, *outlen);
++      *type = SOCK_DGRAM;
+       return 0;
      }
  
-   release_output_mutex ();
-@@ -4172,8 +4190,8 @@ fhandler_console::write (const void *vsrc, size_t len)
- void
- fhandler_console::doecho (const void *str, DWORD len)
- {
--  bool stopped = get_ttyp ()->output_stopped;
--  get_ttyp ()->output_stopped = false;
-+  int stopped = get_ttyp ()->output_stopped;
-+  get_ttyp ()->output_stopped = 0;
-   write (str, len);
-   get_ttyp ()->output_stopped = stopped;
- }
-@@ -4711,3 +4729,9 @@ fhandler_console::cons_mode_on_close ()
- 
-   return tty::restore; /* otherwise, restore */
- }
-+
-+int
-+fhandler_console::tcdrain ()
-+{
-+  return 0;
-+}
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 3128b92da..b882b903e 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1304,6 +1304,15 @@ fhandler_pty_slave::read (void *ptr, size_t& len)
- 
-   push_process_state process_state (PID_TTYIN);
- 
-+  if (get_ttyp ()->input_stopped && is_nonblocking ())
-+    {
-+      set_errno (EAGAIN);
-+      len = (size_t) -1;
-+      return;
-+    }
-+  while (get_ttyp ()->input_stopped)
-+    cygwait (10);
-+
-   if (ptr) /* Indicating not tcflush(). */
-     mask_switch_to_nat_pipe (true, true);
- 
-@@ -1650,6 +1659,7 @@ fhandler_pty_slave::ioctl (unsigned int cmd, void *arg)
-       retval = this->tcsetpgrp ((pid_t) (intptr_t) arg);
-       goto out;
-     case FIONREAD:
-+    case TIOCINQ:
-       {
- 	DWORD n;
- 	if (!bytes_available (n))
-@@ -1664,6 +1674,12 @@ fhandler_pty_slave::ioctl (unsigned int cmd, void *arg)
- 	  }
-       }
-       goto out;
-+    case TCXONC:
-+      retval = this->tcflow ((int)(intptr_t) arg);
-+      goto out;
-+    case TCFLSH:
-+      retval = this->tcflush ((int)(intptr_t) arg);
-+      goto out;
-     default:
-       return fhandler_base::ioctl (cmd, arg);
-     }
-@@ -2342,6 +2358,7 @@ fhandler_pty_master::ioctl (unsigned int cmd, void *arg)
-     case TIOCSPGRP:
-       return this->tcsetpgrp ((pid_t) (intptr_t) arg);
-     case FIONREAD:
-+    case TIOCINQ:
-       {
- 	DWORD n;
- 	if (!bytes_available (n))
-@@ -2352,6 +2369,10 @@ fhandler_pty_master::ioctl (unsigned int cmd, void *arg)
- 	*(int *) arg = (int) n;
-       }
-       break;
-+    case TCXONC:
-+      return this->tcflow ((int)(intptr_t) arg);
-+    case TCFLSH:
-+      return this->tcflush ((int)(intptr_t) arg);
-     default:
-       return fhandler_base::ioctl (cmd, arg);
-     }
-@@ -4194,3 +4215,12 @@ fhandler_pty_common::resume_from_temporarily_attach (DWORD resume_pid)
-     }
-   release_attach_mutex ();
- }
-+
-+int
-+fhandler_pty_common::tcdrain ()
-+{
-+  DWORD n;
-+  while (bytes_available (n) && n > 0)
-+    cygwait (10);
-+  return 0;
-+}
-diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index a3cecdb6f..19d6220bc 100644
---- a/winsup/cygwin/fhandler/termios.cc
-+++ b/winsup/cygwin/fhandler/termios.cc
-@@ -491,16 +491,16 @@ fhandler_termios::process_stop_start (char c, tty *ttyp)
-     {
-       if (CCEQ (ti.c_cc[VSTOP], c))
- 	{
--	  ttyp->output_stopped = true;
-+	  ttyp->output_stopped |= BY_VSTOP;
- 	  return true;
- 	}
-       else if (CCEQ (ti.c_cc[VSTART], c))
- 	{
- restart_output:
--	  ttyp->output_stopped = false;
-+	  ttyp->output_stopped &= ~BY_VSTOP;
- 	  return true;
- 	}
--      else if ((ti.c_iflag & IXANY) && ttyp->output_stopped)
-+      else if ((ti.c_iflag & IXANY) && (ttyp->output_stopped & BY_VSTOP))
- 	goto restart_output;
-     }
-   if ((ti.c_lflag & ICANON) && (ti.c_lflag & IEXTEN)
-@@ -540,7 +540,7 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 	  fallthrough;
- 	case not_signalled_but_done:
- 	case done_with_debugger:
--	  get_ttyp ()->output_stopped = false;
-+	  get_ttyp ()->output_stopped &= ~BY_VSTOP;
- 	  continue;
- 	case not_signalled_with_nat_reader:
- 	  disable_eof_key = true;
-@@ -915,3 +915,26 @@ fhandler_termios::get_console_process_id (DWORD pid, bool match,
-       }
-   return res_pri ?: res;
- }
-+
-+int
-+fhandler_termios::tcflow (int action)
-+{
-+  switch (action)
-+    {
-+    case TCOOFF:
-+      get_ttyp ()->output_stopped |= BY_TCFLOW;
-+      return 0;
-+    case TCOON:
-+      get_ttyp ()->output_stopped = 0;
-+      return 0;
-+    case TCIOFF:
-+      get_ttyp ()->input_stopped |= BY_TCFLOW;
-+      return 0;
-+    case TCION:
-+      get_ttyp ()->input_stopped = 0;
-+      return 0;
-+    default:
-+      set_errno (EINVAL);
-+      return -1;
-+    }
-+}
-diff --git a/winsup/cygwin/include/sys/termios.h b/winsup/cygwin/include/sys/termios.h
-index d1b4a0af5..4c030426c 100644
---- a/winsup/cygwin/include/sys/termios.h
-+++ b/winsup/cygwin/include/sys/termios.h
-@@ -18,6 +18,7 @@ details. */
- #define	TIOCMBIC	0x5417
- #define	TIOCMSET	0x5418
- #define	TIOCINQ		0x541B
-+#define TCXONC		0x540A
- #define TIOCSCTTY	0x540E
- 
- /* TIOCINQ is utilized instead of FIONREAD which has been
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 8c71d8495..2177cec87 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -1979,6 +1979,7 @@ class fhandler_termios: public fhandler_base
-   virtual off_t lseek (off_t, int);
-   pid_t tcgetsid ();
-   virtual int fstat (struct stat *buf);
-+  int tcflow (int);
- 
-   fhandler_termios (void *) {}
- 
-@@ -2143,12 +2144,12 @@ class dev_console
-   char cons_rabuf[40];  // cannot get longer than char buf[40] in char_command
-   char *cons_rapoi;
-   bool cursor_key_app_mode;
--  bool disable_master_thread;
-+  volatile bool disable_master_thread;
-   tty::cons_mode curr_input_mode;
-   tty::cons_mode curr_output_mode;
-   DWORD prev_input_mode;
-   DWORD prev_output_mode;
--  bool master_thread_suspended;
-+  volatile bool master_thread_suspended;
-   int num_processed; /* Number of input events in the current input buffer
- 			already processed by cons_master_thread(). */
- 
-@@ -2273,6 +2274,7 @@ private:
-   int tcflush (int);
-   int tcsetattr (int a, const struct termios *t);
-   int tcgetattr (struct termios *t);
-+  int tcdrain ();
- 
-   int ioctl (unsigned int cmd, void *);
-   int init (HANDLE, DWORD, mode_t, int64_t = 0);
-@@ -2391,6 +2393,7 @@ class fhandler_pty_common: public fhandler_termios
-   DWORD __acquire_output_mutex (const char *fn, int ln, DWORD ms);
-   void __release_output_mutex (const char *fn, int ln);
- 
-+  int tcdrain ();
-   int close (int flag = -1);
-   off_t lseek (off_t, int);
-   bool bytes_available (DWORD& n);
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index 2a047d73f..a418ab1f9 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -30,6 +30,9 @@ details. */
- #define MIN_CTRL_C_SLOP 50
- #endif
- 
-+#define BY_TCFLOW 2
-+#define BY_VSTOP  1
-+
- typedef void *HPCON;
- 
- #include "devices.h"
-@@ -43,7 +46,8 @@ class tty_min
- 
- public:
-   pid_t pgid;
--  bool output_stopped;		/* FIXME: Maybe do this with a mutex someday? */
-+  volatile int output_stopped;	/* FIXME: Maybe do this with a mutex someday? */
-+  volatile int input_stopped;
-   fh_devices ntty;
-   ULONGLONG last_ctrl_c;	/* tick count of last ctrl-c */
-   bool is_console;
 -- 
-2.45.1
+2.49.0.windows.1-3
 
