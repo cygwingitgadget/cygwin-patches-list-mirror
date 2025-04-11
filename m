@@ -1,98 +1,104 @@
-Return-Path: <SRS0=teM6=W5=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.128])
-	by sourceware.org (Postfix) with ESMTP id 4C5EE3857007
-	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 13:09:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4C5EE3857007
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4C5EE3857007
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.128
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744376982; cv=none;
-	b=UL9MBQOh6522p9mrOFa53LHW8LrjUCb0mmUiNYKo9BU7jQY+GtHr1Au9IhoHGIu0yFieDTtlaSJRLUr/oYSNiSXrHzk/N0BXIYLat8JBG5EScdMQev9lNerm7IB69wUvkM0jHBh7ErPMaIEdHxrDWN9lN+rKRfSHkmgl0HvNNFQ=
+Return-Path: <SRS0=4E8T=W5=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+	by sourceware.org (Postfix) with ESMTPS id C43F1385E45D
+	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 14:46:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C43F1385E45D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C43F1385E45D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.83
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744382771; cv=none;
+	b=uB1ViE+q9mXWCgd6PdBSxftu4OjNGH9TNFrh3iE5Lz9am4KQFBc+kBLKDiZeb5fMqFfwND9RFSaUX+NgYu7DdBvqq+TJvwbtPKDRoCyDxz5SdOVH2Sm8bjaP7eTZvH3bosKuPfh/0tOJsoC7EZoFAGxbk9jRdiWXpSsSQlXgZSY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744376982; c=relaxed/simple;
-	bh=x81DSmQoQ5X9NwJedi9xQXIn052z26vP1EP0iEcgZfM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=dk3LcpvkMmNz5oN6npqfNZ5Ht6KeEnUILUZgHwsIiru/S30XmgMhYOT6m0BEhgoLxWsOtApD9edRxmg7oeS5Nl0hUx8wlJS44xIJw7tCu3m9HGqKa3ITeBmNEWRa44WmFEZTK4zJcNqFK3610XOAaNTs11AXBSx+92nZSMP7TLQ=
+	t=1744382771; c=relaxed/simple;
+	bh=lcPkGksd3nNom+v8cfBW3pphG4qdEFu9Ai0IHzbFlC4=;
+	h=To:From:Subject:Message-ID:Date:MIME-Version; b=RmyeDnKS2oXGzV3S3/AgNSYaO0A81Fou5uXSiiskqzcfF/H1Vaua/AFIkpogpSkXZCJvWd0+Vft6IY2VLf3hvdhEkt1ZqUcyBgURZWpHywGeiYHIlhyiP8eYwvgnchOEEGhxSOZDY+IfRUBvfn03trv2tjJUaNph5LCrFebTCdU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4C5EE3857007
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 67D89CAE02F8E84C
-X-Originating-IP: [81.129.146.194]
-X-OWM-Source-IP: 81.129.146.194
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddukeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepleeitdejhfdtveekheeugeffgeevfedtjeejveefhfeiffefkedtvdetheehieejnecukfhppeekuddruddvledrudegiedrudelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkedurdduvdelrddugeeirdduleegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduvdelqddugeeiqdduleegrdhrrghnghgvkeduqdduvdelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdegpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgt
-	phhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (81.129.146.194) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89CAE02F8E84C; Fri, 11 Apr 2025 14:09:41 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C43F1385E45D
+Received: from fwd86.aul.t-online.de (fwd86.aul.t-online.de [10.223.144.112])
+	by mailout07.t-online.de (Postfix) with SMTP id 189B5755
+	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 16:46:09 +0200 (CEST)
+Received: from [192.168.2.101] ([87.187.37.162]) by fwd86.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1u3Fdu-07rGfA0; Fri, 11 Apr 2025 16:46:06 +0200
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 4/4] Cygwin: CI: Disable stress-ng clock test
-Date: Fri, 11 Apr 2025 14:08:45 +0100
-Message-ID: <20250411130846.3355-5-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
-References: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
+Reply-To: cygwin-patches@cygwin.com
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
+Message-ID: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
+Date: Fri, 11 Apr 2025 16:46:07 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------5C1C07D7FD736FB255D8B23F"
+X-TOI-EXPURGATEID: 150726::1744382766-C2FF39F3-A96EDB47/0/0 CLEAN NORMAL
+X-TOI-MSGID: fa7f73a8-6b35-45a7-ae0f-335c1ff8c2b5
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-> stress-ng: 23:25:43.13 debug: [1338] invoked with 'stress-ng -v -M --oomable --timestamp --verify --temp-path /cygdrive/c/Users/RUNNER~1/AppData/Local/Temp/stress-ng.1237.5.d -t 5 --log-file /cygdrive/d/a/cygwin/cygwin/logs/clock --clock 2' by user 197108 'runneradmin'
-> stress-ng: 23:25:43.14 debug: [1338] stress-ng 0.18.12
-> stress-ng: 23:25:43.15 debug: [1338] system: CYGWIN_NT-10.0-20348 fv-az2222-241 3.7.0-api-358.x86_64 2025-04-10 23:13 UTC x86_64, gcc 12.4.0, Cygwin libc, little endian
-> stress-ng: 23:25:43.15 debug: [1338] RAM total: 16.0G, RAM free: 13.8G, swap free: 2.9G
-> stress-ng: 23:25:43.15 debug: [1338] temporary file path: '/cygdrive/c/Users/runneradmin/AppData/Local/Temp/stress-ng.1237.5.d'
-> stress-ng: 23:25:43.15 debug: [1338] 4 processors online, 4 processors configured
-> stress-ng: 23:25:43.15 info:  [1338] setting to a 5 secs run per stressor
-> stress-ng: 23:25:43.15 debug: [1338] cache allocate: using defaults, cannot determine cache level details
-> stress-ng: 23:25:43.15 debug: [1338] cache allocate: shared cache buffer size: 2048K
-> stress-ng: 23:25:43.15 info:  [1338] dispatching hogs: 2 clock
-> stress-ng: 23:25:43.15 debug: [1338] starting stressors
-> stress-ng: 23:25:43.17 debug: [1338] 2 stressors started
-> stress-ng: 23:25:43.41 debug: [1340] clock: [1340] started (instance 0 on CPU 2)
-> stress-ng: 23:25:43.43 debug: [1341] clock: [1341] started (instance 1 on CPU 2)
-> stress-ng: 00:00:00.-99 fail:  [1340] clock: clock_settime was able to set an invalid negative time for timer 'CLOCK_REALTIME'
-> stress-ng: 00:00:00.-99 fail:  [1340] clock: clock_settime was able to set an invalid negative time for timer 'CLOCK_REALTIME_COARSE'
-> stress-ng: 00:00:00.-99 fail:  [1341] clock: clock_settime was able to set an invalid negative time for timer 'CLOCK_REALTIME'
-> stress-ng: 00:00:00.-99 fail:  [1341] clock: clock_settime was able to set an invalid negative time for timer 'CLOCK_REALTIME_COARSE'
-> stress-ng: 23:25:48.39 debug: [1340] clock: [1340] exited (instance 0 on CPU 2)
-> stress-ng: 23:25:48.39 error: [1338] clock: [1340] terminated with an error, exit status=2 (stressor failed)
-> stress-ng: 23:25:48.39 debug: [1338] clock: [1340] terminated (stressor failed)
-> stress-ng: 23:25:48.40 debug: [1341] clock: [1341] exited (instance 1 on CPU 2)
-> stress-ng: 23:25:48.40 error: [1338] clock: [1341] terminated with an error, exit status=2 (stressor failed)
-> stress-ng: 23:25:48.40 debug: [1338] clock: [1341] terminated (stressor failed)
-> stress-ng: 23:25:48.40 debug: [1338] metrics-check: all stressor metrics validated and sane
-> stress-ng: 23:25:48.41 metrc: [1338] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
-> stress-ng: 23:25:48.41 metrc: [1338]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
-> stress-ng: 23:25:48.41 metrc: [1338] clock            158338      4.97      1.48      7.11     31888.38       18428.54        86.52         19992
-> stress-ng: 23:25:48.41 info:  [1338] skipped: 0
-> stress-ng: 23:25:48.41 info:  [1338] passed: 0
-> stress-ng: 23:25:48.41 info:  [1338] failed: 2: clock (2)
-> stress-ng: 23:25:48.41 info:  [1338] metrics untrustworthy: 0
-> stress-ng: 23:25:48.41 info:  [1338] unsuccessful run completed in 5.25 secs
->>>> FAILURE: clock (exit status 2)
----
- winsup/testsuite/stress/cygstress | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is a multi-part message in MIME format.
+--------------5C1C07D7FD736FB255D8B23F
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-diff --git a/winsup/testsuite/stress/cygstress b/winsup/testsuite/stress/cygstress
-index df5e13881..5a9215472 100755
---- a/winsup/testsuite/stress/cygstress
-+++ b/winsup/testsuite/stress/cygstress
-@@ -73,7 +73,7 @@ stress_tests='
-   chmod         # WORKS,CI
-   chown         # FAILS     # TODO undecided: "fchown failed, errno=22 (Invalid argument)"
-   chroot        # admin
--  clock         # WORKS,CI  # (fixed in stress-ng 0.18.12: "timer_create failed for timer ...
-+  clock         # WORKS     # clock_settime was able to set an invalid negative time for timer 'CLOCK_REALTIME'
-                             #  ... ''CLOCK_THREAD_CPUTIME_ID'', errno=134")
-   clone         # -----
-   close         # FAILS     # TODO Cygwin: close(2) is not thread-safe
+In rare cases, '/bin/kill -f PID' hangs because kill(2) is always tried 
+first. With this patch, this could be prevented with '/bin/kill -f -s - 
+PID'.
+
 -- 
-2.45.1
+Regards,
+Christian
 
+
+--------------5C1C07D7FD736FB255D8B23F
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-kill-1-skip-kill-2-call-if-f-s-is-used.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Cygwin-kill-1-skip-kill-2-call-if-f-s-is-used.patch"
+
+RnJvbSBjYjA3Y2EwMmE4NTZiZTM3OGEyNDM1ZjIwOTU4MzVjMjY0YjYyYmQ5IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBGcmksIDExIEFwciAyMDI1IDE2OjM0OjQ4ICswMjAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBraWxsKDEpOiBza2lwIGtpbGwoMikgY2FsbCBp
+ZiAnLWYgLXMgLScgaXMgdXNlZAoKSWYgYSBwcm9jZXNzIGRvZXMgbm90IHByb2Nlc3Mgc2ln
+bmFscyBpbmNsdWRpbmcgU0lHS0lMTCwgYSBraWxsKDIpCmNhbGwgbWF5IGFsc28gaGFuZy4g
+IElmICctJyBpcyBzcGVjaWZpZWQgaW5zdGVhZCBvZiBhIHNpZ25hbCwgdGhlCndpbjMyIGlu
+dGVyZmFjZSBpcyB1c2VkIHdpdGhvdXQgdHJ5aW5nIGtpbGwoMikgZmlyc3QuCgpTaWduZWQt
+b2ZmLWJ5OiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJhbmtlQHQtb25saW5lLmRl
+PgotLS0KIHdpbnN1cC91dGlscy9raWxsLmNjIHwgMTYgKysrKysrKysrKysrKy0tLQogMSBm
+aWxlIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0t
+Z2l0IGEvd2luc3VwL3V0aWxzL2tpbGwuY2MgYi93aW5zdXAvdXRpbHMva2lsbC5jYwppbmRl
+eCBiY2FiY2Q0N2MuLmIyZDNjNjcwOSAxMDA2NDQKLS0tIGEvd2luc3VwL3V0aWxzL2tpbGwu
+Y2MKKysrIGIvd2luc3VwL3V0aWxzL2tpbGwuY2MKQEAgLTQ0LDYgKzQ0LDcgQEAgdXNhZ2Ug
+KEZJTEUgKndoZXJlID0gc3RkZXJyKQogCSJTZW5kIHNpZ25hbHMgdG8gcHJvY2Vzc2VzXG4i
+CiAJIlxuIgogCSIgLWYsIC0tZm9yY2UgICAgIGZvcmNlLCB1c2luZyB3aW4zMiBpbnRlcmZh
+Y2UgaWYgbmVjZXNzYXJ5XG4iCisJIiAgICAgICAgICAgICAgICAgKGFkZCAnLXMgLScgdG8g
+YWx3YXlzIHVzZSB3aW4zMiBpbnRlcmZhY2UpXG4iCiAJIiAtbCwgLS1saXN0ICAgICAgcHJp
+bnQgYSBsaXN0IG9mIHNpZ25hbCBuYW1lc1xuIgogCSIgLUwsIC0tdGFibGUgICAgIHByaW50
+IGEgZm9ybWF0dGVkIHRhYmxlIG9mIHNpZ25hbCBuYW1lc1xuIgogCSIgLXMsIC0tc2lnbmFs
+ICAgIHNlbmQgc2lnbmFsICh1c2UgJTEkcyAtLWxpc3QgZm9yIGEgbGlzdClcbiIKQEAgLTMx
+Miw2ICszMTMsNyBAQCBtYWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiB7CiAgIGludCBz
+aWcgPSBTSUdURVJNOwogICBpbnQgZm9yY2UgPSAwOworICBpbnQgZm9yY2Vfbm9fc2lnID0g
+MDsKICAgaW50IHdpbnBpZHMgPSAwOwogICBpbnQgcmV0ID0gMDsKICAgY2hhciAqZ290YXNp
+ZyA9IE5VTEw7CkBAIC0zMzUsNyArMzM3LDkgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiph
+cmd2KQogCXsKIAljYXNlICdzJzoKIAkgIGdvdGFzaWcgPSBvcHRhcmc7Ci0JICBzaWcgPSBn
+ZXRzaWcgKGdvdGFzaWcpOworCSAgZm9yY2Vfbm9fc2lnID0gIXN0cmNtcCAoZ290YXNpZywg
+Ii0iKTsKKwkgIHNpZyA9ICghZm9yY2Vfbm9fc2lnID8gZ2V0c2lnIChnb3Rhc2lnKSA6CisJ
+CVNJR0tJTEwgLyogZm9yIGV4aXQgc3RhdHVzICovKTsKIAkgIGJyZWFrOwogCWNhc2UgJ2wn
+OgogCSAgaWYgKCFvcHRhcmcpCkBAIC0zODcsNiArMzkxLDExIEBAIG1haW4gKGludCBhcmdj
+LCBjaGFyICoqYXJndikKICAgICB9CiAKIG91dDoKKyAgaWYgKGZvcmNlX25vX3NpZyAmJiAh
+Zm9yY2UpCisgICAgeworICAgICAgZnByaW50ZiAoc3RkZXJyLCAiJXM6IHNpZ25hbCAnLScg
+cmVxdWlyZXMgJy1mJ1xuIiwgcHJvZ19uYW1lKTsKKyAgICAgIHJldHVybiAxOworICAgIH0K
+ICAgdGVzdF9mb3JfdW5rbm93bl9zaWcgKHNpZywgZ290YXNpZyk7CiAKICAgYXJndiArPSBv
+cHRpbmQ7CkBAIC00MTAsOSArNDE5LDEwIEBAIG91dDoKICAgICAgIGlmICh3aW5waWRzKQog
+CXsKIAkgIGR3cGlkID0gcGlkOwotCSAgcGlkID0gKHBpZF90KSBjeWd3aW5faW50ZXJuYWwg
+KENXX1dJTlBJRF9UT19DWUdXSU5fUElELCBkd3BpZCk7CisJICBpZiAoIWZvcmNlX25vX3Np
+ZykKKwkgICAgcGlkID0gKHBpZF90KSBjeWd3aW5faW50ZXJuYWwgKENXX1dJTlBJRF9UT19D
+WUdXSU5fUElELCBkd3BpZCk7CiAJfQotICAgICAgaWYgKGtpbGwgKChwaWRfdCkgcGlkLCBz
+aWcpID09IDApCisgICAgICBpZiAoIWZvcmNlX25vX3NpZyAmJiBraWxsICgocGlkX3QpIHBp
+ZCwgc2lnKSA9PSAwKQogCXsKIAkgIGlmIChmb3JjZSkKIAkgICAgZm9yY2VraWxsICgocGlk
+X3QpIHBpZCwgZHdwaWQsIHNpZywgMSk7Ci0tIAoyLjQ1LjEKCg==
+--------------5C1C07D7FD736FB255D8B23F--
