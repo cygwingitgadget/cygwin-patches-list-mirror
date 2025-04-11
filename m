@@ -1,84 +1,88 @@
-Return-Path: <SRS0=4E8T=W5=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
-	by sourceware.org (Postfix) with ESMTPS id C92A2385840F
-	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 16:08:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C92A2385840F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C92A2385840F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744387739; cv=none;
-	b=HvBXfZKl2mYZSVZ8pHcOUuromJm9M+fNC8WM+5x7QA+hMeObD0i/nsFNZ5NHnN1pCFHbeqWhAYhrfo1+8ZofmEQWlZyjxW5XttLWPukiJ/ph804PlS6gYg1Aee4X86fNcZf1qVUMFdODS1dQMfrrgqF1HEVRhf7lfZL8dAiCF/k=
+Return-Path: <SRS0=VT+1=W5=systematicsw.ab.ca=brian.inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	by sourceware.org (Postfix) with ESMTPS id D66F73857356
+	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 16:20:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D66F73857356
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=systematicsw.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=systematicsw.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D66F73857356
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.14
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744388403; cv=none;
+	b=I7XdSJbF5nNZocjio7OqJ0wObgt/BEaD77MpLwKCxW/sRfSNslqluwSjXWOTdyegWplgpPRjnGgjbpterUfw0V/k1VdJupS0BKdm+Q5ucCvdxOPke6/oAlXMW5FBBjYv/mhBzDeN32/pYJVs0d5t2/c4OkPT+TprNHmNBS7JTy0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744387739; c=relaxed/simple;
-	bh=G1NcvYN9Fq8zwFJXvqW5hSlb4YI6Qke6wHTaELb3AO8=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version; b=mPH+h/hnmuwu3bnCsbbXs9N9g52I1ShdV/KB0iFZsJ+9opzY37bul1InMlbywsH2dibu4pHeY6WBDqn3lRntUbCyJYV+MAqVO9ewxrabY5g8gN09I05GxJGx845sR75KVpeh2zCh3oA6aViZRBR1JIH7Sd+QfQtIyg4NiDGUSOY=
+	t=1744388403; c=relaxed/simple;
+	bh=mJGZ54OKt05DhHoqHQOXYCYj7OxQuNxJSYU5YytZU4o=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=HGAHulcWO45LsfDNBSK5MXke3tTkhYHgEbmV3pdW5Ls17lCaPZUd3FYzmUK9h0ZUue8U5S/xE8dSJrOGITWIEEutUpKfW6JLNpPVQQpjaAetgzKSgpFtpNQzNK8liWmoU3DhDOS59E8thWEz1n5WllfRXeKOn8FiImfzL5HZGPE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C92A2385840F
-Received: from fwd70.aul.t-online.de (fwd70.aul.t-online.de [10.223.144.96])
-	by mailout03.t-online.de (Postfix) with SMTP id 3117C650
-	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 18:08:56 +0200 (CEST)
-Received: from [192.168.2.101] ([87.187.37.162]) by fwd70.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1u3Gw0-3D2vui0; Fri, 11 Apr 2025 18:08:53 +0200
-Subject: Re: [PATCH 3/4] Cygwin: CI: Make stress test terser
-To: cygwin-patches@cygwin.com, cygwin-patches@cygwin.com
-References: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
- <20250411130846.3355-4-jon.turney@dronecode.org.uk>
-From: Christian Franke <Christian.Franke@t-online.de>
-Message-ID: <a4ea9b93-222e-f679-48bb-c8459bd797f8@t-online.de>
-Date: Fri, 11 Apr 2025 18:08:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D66F73857356
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=systematicsw.ab.ca header.i=@systematicsw.ab.ca header.a=rsa-sha256 header.s=he header.b=ebs+Ilom
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id D624B1A055E
+	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 16:20:02 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf02.hostedemail.com (Postfix) with ESMTPA id 6CF3A8000E
+	for <cygwin-patches@cygwin.com>; Fri, 11 Apr 2025 16:20:01 +0000 (UTC)
+Message-ID: <e61081a6-b50f-488e-8ec0-f66a1e734c5b@systematicsw.ab.ca>
+Date: Fri, 11 Apr 2025 10:20:00 -0600
 MIME-Version: 1.0
-In-Reply-To: <20250411130846.3355-4-jon.turney@dronecode.org.uk>
+User-Agent: Mozilla Thunderbird
+From: brian.inglis@systematicsw.ab.ca
+Reply-To: Brian.Inglis@SystematicSW.ab.ca
+Subject: Re: compiles fail with sys/unistd.h ...inline... setproctitle_init
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <f34666fe-f8da-4364-a5e7-b2328b2f1c80@SystematicSW.ab.ca>
+ <75e51a8e-8c25-414d-905a-60b380d939d4@SystematicSW.ab.ca>
+ <20250411201319.c64e33349cad4a6798102cee@nifty.ne.jp>
+Organization: Systematic Software
+In-Reply-To: <20250411201319.c64e33349cad4a6798102cee@nifty.ne.jp>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TOI-EXPURGATEID: 150726::1744387733-C27EEE43-8584A41F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 1c57d402-4c2c-4039-8341-b08637c2cf81
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 6CF3A8000E
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: x7h8dga9j9w9t7i8jswhqg5sn7ey5bye
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX18GlVz5nXMxVwDfx/bxY5IkSqrInoh7YY8=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systematicsw.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=cQ/y5A2RjaiQ+uAWPgxiYF28EPUCjqdQSD7/rO2XUb4=; b=ebs+IlomSR3UYGhAGb1xqepMGKkC7EnKI6NWTzrlG1ir/TYKIAhWG3vMwxNNjpqhBmTJgqGWl+m+d//Pb/8+aQpcLaE9BGW8acYB9HGzeiwxfnOaaN1RpPnvCP3ZPBPdvSfea8mBapfIV6WDg2zjVuFPq4TuSkHrOHrF8kwICq7hGVBH2og9fDFIE/D7X5YafCT5KsPDNz0dbB229+3X38P9DHfMGCoQZHBnReoDZ+Zwjh6LFWrUFfF7wn6lxCvuMtDdwHCYBVTlzjkOcaXebWLbiV7Icd3KS5Tfajpw1KfVGS3D+DEmxTHfavp+94vqMmO6pDxYNrEEsm4y5wzP+g==
+X-HE-Tag: 1744388401-64940
+X-HE-Meta: U2FsdGVkX18c6zWyI1xh3Ob0Lpv7DtJc6JuwYKNhT1BlSgkSCD/C0g3DeFd+8fxH6SIhutPmnwVaNM6LfYx0/lgifpu8Ytx7rS6lv65m/pU6FHpOCDKSF/VcO340EdNOWokVJa2X8445w2CVoDiDZxnHymtwECfNKNRD9sdy6Xl6AaVhCc+uidpYbfKRTg/7JbtfcvljtlNO+VKOAbpAM0wFeQHfRjlFUL9xiaY6w2VGurRJqFldXCefMPTCpOEaxtLpyZfmaqCiPwgR9WB74TyR+cPYOgMEYCy0d9WfK9SBq9YMemJjtK4qupovPoB9IaqjHCWAcU5X4cbDT9GryZOMnOiU9wxb
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Jon Turney wrote:
-> Don't echo the command being run
+On 2025-04-11 05:13, Takashi Yano wrote:
+> On Thu, 10 Apr 2025 15:38:59 -0600
+> Brian Inglis wrote:
+>> Hi folks,
+>>
+>> Latest c-ares build failing with gcc 12.4 and Cygwin 3.6.0 header:
+>>
+>> $ uname -srvmo
+>> CYGWIN_NT-10.0-19045 3.6.0-1.x86_64 2025-03-18 17:01 UTC x86_64 Cygwin
+>> $ gcc --version
+>> gcc (GCC) 12.4.0
+>> Copyright (C) 2022 Free Software Foundation, Inc.
+>> ...
+>>
+>> /usr/include/sys/unistd.h:218:14: error: expected ';' before 'void'
+>>      218 | static inline void setproctitle_init (int _c, char *_a[], char *_e[]) {}
+>>          |              ^~~~~
+>>          |              ;
+>>
+>> Doing some more `make`-ing in that directory with permutations of specifiers,
+>> complaint comes after `inline`; seems like it does not like `inline` anywhere in
+>> that line, although `__inline__` works just fine!
+>>
+>> Perhaps a patch is warranted, possibly conditional on GCC <= 12?
+> 
+> Thanks for the report. Fixed.
 
-OK, but this breaks -n option which is occasionally useful, see below.
+Thanks for the quick offical fix - that works well!
 
-> Capture stress-ng output to file
-> Only show test output if it fails
->
-> Capture all test output in an artifact
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
-Are messages cygwin prints itself also captured? See below.
-
-
-> ---
->   .github/workflows/cygwin.yml      | 10 ++++++++++
->   winsup/testsuite/stress/cygstress | 13 ++++++++-----
->   2 files changed, 18 insertions(+), 5 deletions(-)
->
-> ...
->   
->   
-> -  echo '$' "${cmd[@]}"
->     ! $dryrun || return 0
-
-Possibly better:
-
-if $dryrun; then
-   echo '$' "${cmd[@]}"
-   return 0
-fi
-
-
->     (
-> @@ -520,7 +523,7 @@ stress()
->   
->     mkdir "$td"
->     local rc=0
-> -  "${cmd[@]}" || rc=$?
-> +  "${cmd[@]}" >/dev/null || rc=$?
-
-Redirect stderr to capture Cygwin's "panic" messages ?
-
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
