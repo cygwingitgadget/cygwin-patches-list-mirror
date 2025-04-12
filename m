@@ -1,136 +1,93 @@
 Return-Path: <SRS0=aFB7=W6=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
-	by sourceware.org (Postfix) with ESMTPS id 76D093858CD1
-	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 10:17:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 76D093858CD1
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+	by sourceware.org (Postfix) with ESMTPS id CB5BB385C424
+	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 14:03:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CB5BB385C424
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 76D093858CD1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744453057; cv=none;
-	b=Y+u32cMT3X1jps3+QpU+7SPoZudz6hAhOkI1GGzHSN4gzweUIbiZo3KpI2o5k6gnRkij3g/zrBSYh7Rb+9q5zp3phB7xZvMMPogUaV1DXmLhdB9DRiBsJSGQ38XbgKYdHPRmzhsJgzVBfa6UVpDqGY9d2tKBGVU2pZ0gfxMAuXA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CB5BB385C424
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744466635; cv=none;
+	b=wFpwBZx3C6+Po7xtd3iGQ2qp9Fp9uz3mSj9jFDnHYx4aL+28T1wLx/QCxgCINLL1+g8oYhrDga4K1aTPLFaGhehapcwBwhDqyz3bJSzgprTEwaYUrLSB7SadMjE1GD/GOC5WWo13Pbq9vw8ZCCF3RuwShDHofymcC4f5MHfa2CI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744453057; c=relaxed/simple;
-	bh=UwW0mMciyYdPPyZlSQ94C1uPzmEyRtf5FQEc6cTGU9c=;
-	h=Subject:From:To:Message-ID:Date:MIME-Version; b=LdmQ+2A6XpA1LfAhc7TojjM9JEqmNRmMKnzvpiuwSeqyDBtiMR1vONGbFxh6AZI6Cu9QZyY0fHoVu2pJVo5umOscxHvrQocZY5B1bwonA2U23sUymaK+0i/gTP2U+m+60tIDl0aZ2D+s6spuHHuLVR4EUwGO5X5Lhd3cUyKHBGY=
+	t=1744466635; c=relaxed/simple;
+	bh=RaKwInAdSDNPW7zvkfhjo7N6j+bywNMRH2HElQ9ygbY=;
+	h=To:From:Subject:Message-ID:Date:MIME-Version; b=NSaRqmsjtvBM8JxNXlpApiy3SRftAjqtRyGsazYKE1fd9ybr1Gp8XwddVv+29uhYPJIlEsSZJRqHze5WjG8r1OhvWPdViKxFL9CFpBusF30orOISOTlpmBGXzFFMszdkXFRdzkdaJy5xPQyB0yb87r1qGFoYpbGYV7sbx7sUpk0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 76D093858CD1
-Received: from fwd78.aul.t-online.de (fwd78.aul.t-online.de [10.223.144.104])
-	by mailout02.t-online.de (Postfix) with SMTP id 25045FBD
-	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 12:17:35 +0200 (CEST)
-Received: from [192.168.2.101] ([87.187.37.162]) by fwd78.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CB5BB385C424
+Received: from fwd79.aul.t-online.de (fwd79.aul.t-online.de [10.223.144.105])
+	by mailout03.t-online.de (Postfix) with SMTP id 6CC847ED
+	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 16:03:53 +0200 (CEST)
+Received: from [192.168.2.101] ([87.187.37.162]) by fwd79.t-online.de
 	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1u3XvY-2FuJma0; Sat, 12 Apr 2025 12:17:32 +0200
-Subject: Re: [PATCH 2/4] Cygwin: CI: Run stress-ng
-From: Christian Franke <Christian.Franke@t-online.de>
+	esmtp id 1u3bSa-2ccmHo0; Sat, 12 Apr 2025 16:03:52 +0200
 To: cygwin-patches@cygwin.com
 Reply-To: cygwin-patches@cygwin.com
-References: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
- <20250411130846.3355-3-jon.turney@dronecode.org.uk>
- <56c28c6c-d670-1eee-9da4-655e48cb3935@t-online.de>
-Message-ID: <68794a6d-14ab-0d06-0cd0-449fafedd6d3@t-online.de>
-Date: Sat, 12 Apr 2025 12:17:33 +0200
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: kill(1): fix parsing of negative pid
+Message-ID: <98fb7b3b-362e-4ccc-b25d-ab68e000627c@t-online.de>
+Date: Sat, 12 Apr 2025 16:03:53 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
  SeaMonkey/2.53.20
 MIME-Version: 1.0
-In-Reply-To: <56c28c6c-d670-1eee-9da4-655e48cb3935@t-online.de>
 Content-Type: multipart/mixed;
- boundary="------------A5F7DBFD07E697829C4B5B0B"
-X-TOI-EXPURGATEID: 150726::1744453052-F7FEC509-5F287113/0/0 CLEAN NORMAL
-X-TOI-MSGID: 13c56fe2-109a-4fd6-bc52-55aac0ab096b
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,BODY_8BITS,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ boundary="------------C72A8A5D6FBBFEBAF485A828"
+X-TOI-EXPURGATEID: 150726::1744466632-89FFA3F8-85A71D7C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 25c59f19-f692-4a5f-962b-f2113fbde74d
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 This is a multi-part message in MIME format.
---------------A5F7DBFD07E697829C4B5B0B
+--------------C72A8A5D6FBBFEBAF485A828
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Christian Franke wrote:
-> Jon Turney wrote:
->> ---
->>   .github/workflows/cygwin.yml      |  22 +-
->>   winsup/testsuite/stress/cygstress | 603 ++++++++++++++++++++++++++++++
->>
->
-> Attached is a minor update of my local version for current Cygwin and 
-> stress-ng HEADs. Mostly changed comments, but also adds "pty" to CI. 
-> This works (on main only) thanks to the "termios: Implement tcflow(), 
-> tcdrain(), TCXONC, TIOCINQ" patch.
->
+Found during testing of:
+https://sourceware.org/pipermail/cygwin-patches/2025q2/013651.html
 
-Another update on top of the above. It uses Windows own taskkill tool 
-instead of Sysinternals pskill as suggested by Jeremy Drake on cygwin-apps.
+Examples using nonexistent PIDs:
 
-Testcase:
+$ /bin/kill -9 -8 # OK, same as /bin/kill -9 -- -8
+kill: -8: No such process
 
-./cygstress mprotect
+$ /bin/kill -SIGKILL -11 # bogus message
+kill: illegal pid: -SIGKILL
+kill: -11: No such process
 
-This nasty test runs mprotect(ptr, size, flags) in seven child processes 
-on same mmap()ed region with random address ranges and PROT_* flags.
+$ /bin/kill -9 -11 # BAD, same as /bin/kill -9 -- -9 -11
+kill: -9: No such process
+kill: -11: No such process
+
+The above works as expected with the bash builtin and with /usr/bin/kill 
+from Debian 12.
 
 -- 
 Regards,
 Christian
 
 
-
-
-
---------------A5F7DBFD07E697829C4B5B0B
+--------------C72A8A5D6FBBFEBAF485A828
 Content-Type: text/plain; charset=UTF-8;
- name="cygstress-2.patch"
+ name="0001-Cygwin-kill-1-fix-parsing-of-negative-pid.patch"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
- filename="cygstress-2.patch"
+ filename="0001-Cygwin-kill-1-fix-parsing-of-negative-pid.patch"
 
-ZGlmZiAtLWdpdCBhL2N5Z3N0cmVzcyBiL2N5Z3N0cmVzcwppbmRleCA5ZTMxMzI1Li4yMWU0
-Y2IxIDEwMDY0NAotLS0gYS9jeWdzdHJlc3MKKysrIGIvY3lnc3RyZXNzCkBAIC0xNyw3ICsx
-Nyw2IEBAIFVzYWdlOiAkezAjIyovfSBbT1BUSU9OLi4uXSB7Q0l8V09SS3xGQUlMfHRlc3Qu
-Li59CiAgIC1uICAgICAgICBwcmludCBjb21tYW5kcyBvbmx5IChkcnktcnVuKQogICAtZiAg
-ICAgICAgZm9yY2UgZXhlY3V0aW9uIG9mIHRlc3RzIHRhZ2dlZCAnaGVhdnknIG9yICdhZG1p
-bicKICAgLWMgTElTVCAgIHNldCBDUFUgYWZmaW5pdHkgdG8gTElTVAotICAtayBQQVRIICAg
-dG9vbCB0byBzdG9wIGhhbmdpbmcgdGVzdHMgW2RlZmF1bHQ6IHBza2lsbF0KICAgLXMgUEFU
-SCAgIHN0cmVzcy1uZyBleGVjdXRhYmxlIFtkZWZhdWx0OiBzdHJlc3MtbmddCiAgIC10IE4g
-ICAgICBydW4gZWFjaCB0ZXN0IGZvciBhdCBsZWFzdCBOIHNlY29uZHMgW2RlZmF1bHQ6IDVd
-CiAgIC13IE4gICAgICBzdGFydCBOIHdvcmtlcnMgZm9yIGVhY2ggdGVzdCBbZGVmYXVsdDog
-Ml0KQEAgLTIzNyw3ICsyMzYsNyBAQCBzdHJlc3NfdGVzdHM9JwogICBtb2R1bGUgICAgICAg
-ICMgLS0tLS0KICAgbW9udGUtY2FybG8gICAjIFdPUktTCiAgIG1wZnIgICAgICAgICAgIyBX
-T1JLUyAgICAgIyB1c2VzIGxpYm1wZnIKLSAgbXByb3RlY3QgICAgICAjIEZBSUxTICAgICAj
-IFRPRE8gQ3lnd2luOiBjcmFzaGVzIG9yIGhhbmdzCisgIG1wcm90ZWN0ICAgICAgIyBGQUlM
-UyAgICAgIyBUT0RPIEN5Z3dpbjogY3Jhc2hlcyBvciBoYW5ncyBhbmQgdGhlbiBpZ25vcmVz
-IFNJR0tJTEwKICAgbXEgICAgICAgICAgICAjIEZBSUxTICAgICAjIFRPRE8gdW5kZWNpZGVk
-OiAiZmFpbDogLi4uIG1xX1t0aW1lZF1yZWNlaXZlIGZhaWxlZCwgZXJybm89MSIKICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAjIChmaXhlZCBpbiBDeWd3aW4gMy41LjY6IGNyYXNo
-IG9uIGludmFsaWQgbXEgZmQpCiAgIG1yZW1hcCAgICAgICAgIyAtLS0tLQpAQCAtNDQ0LDEw
-ICs0NDMsNiBAQCBzdHJlc3NfdGVzdHM9JwogICB6b21iaWUgICAgICAgICMgV09SS1MsQ0kK
-ICcKIAotIyBTSUdLSUxMIG1heSBub3Qgd29yayBpZiBzdHJlc3MtbmcgaGFuZ3MuCi0jIFVz
-ZSBTeXNpbnRlcm5hbHMgJ3Bza2lsbCcgYXMgbm8gJ2tpbGxhbGwgLS1mb3JjZScgaXMgYXZh
-aWxhYmxlLAota2lsbGFsbF9mb3JjZT0icHNraWxsIgotCiBzdHJlc3Nfbmc9InN0cmVzcy1u
-ZyIKIHRpbWVvdXQ9NTsgd29ya2Vycz0yCiBkcnlydW49ZmFsc2U7IGZvcmNlPWZhbHNlCkBA
-IC00NTYsNyArNDUxLDYgQEAgdGFza3NldD0KIHdoaWxlIDo7IGRvIGNhc2UgJDEgaW4KICAg
-LWMpIHNoaWZ0OyB0YXNrc2V0PSQxIDs7CiAgIC1mKSBmb3JjZT10cnVlIDs7Ci0gIC1rKSBz
-aGlmdDsga2lsbGFsbF9mb3JjZT0kMSA7OwogICAtbikgZHJ5cnVuPXRydWUgOzsKICAgLXMp
-IHNoaWZ0OyBzdHJlc3Nfbmc9JDEgOzsKICAgLXQpIHNoaWZ0OyB0aW1lb3V0PSQxIDs7CkBA
-IC00NzYsNyArNDcwLDEwIEBAIGVzYWM7IHNoaWZ0OyBkb25lCiAkcnVuX2NpIHx8ICRydW5f
-d29yayB8fCAkcnVuX2ZhaWwgfHwgWyAke3J1bl90ZXN0czordH0gXSB8fCB1c2FnZQogCiBj
-b21tYW5kIC1WICIkc3RyZXNzX25nIiA+L2Rldi9udWxsIHx8IGV4aXQgMQotY29tbWFuZCAt
-ViAiJGtpbGxhbGxfZm9yY2UiID4vZGV2L251bGwgfHwgZXhpdCAxCisKKyMgU0lHS0lMTCBt
-YXkgbm90IHdvcmsgaWYgc3RyZXNzLW5nIGhhbmdzLgorIyBVc2UgV2luZG93cyAndGFza2tp
-bGwnIGFzIG5vICdraWxsYWxsIC0tZm9yY2UnIGlzIGF2YWlsYWJsZS4KK2NvbW1hbmQgLVYg
-dGFza2tpbGwgPi9kZXYvbnVsbCB8fCBleGl0IDEKIAogc3RyZXNzX25nX25hbWU9JHtzdHJl
-c3NfbmcjIyovfQogdGVtcGRpcj0ke1RNUDotL3RtcH0KQEAgLTQ5MCw4ICs0ODcsOCBAQCBm
-aW5kX3N0cmVzcygpCiAKIHN0b3Bfc3RyZXNzKCkKIHsKLSAgZWNobyAnJCcgIiRraWxsYWxs
-X2ZvcmNlIiAiJHN0cmVzc19uZ19uYW1lIgotICAiJGtpbGxhbGxfZm9yY2UiICIkc3RyZXNz
-X25nX25hbWUiIHx8OgorICBlY2hvICckJyB0YXNra2lsbCAvRiAvVCAvSU0gIiR7c3RyZXNz
-X25nX25hbWV9LmV4ZSIKKyAgdGFza2tpbGwgL0YgL1QgL0lNICIke3N0cmVzc19uZ19uYW1l
-fS5leGUiIHx8OgogfQogCiB0b3RhbD0wCkBAIC01MjksMTIgKzUyNiwxMiBAQCBzdHJlc3Mo
-KQogCiAgIGxvY2FsIG9rPXRydWUKICAgaWYgd2FpdCAkd2F0Y2hkb2c7IHRoZW4KLSAgICBl
-Y2hvICI+Pj4gRkFJTFVSRTogJG5hbWUiICIkQCIgIihjb21tYW5kIGhhbmdzKSIKICAgICBz
-bGVlcCAyCisgICAgZWNobyAiPj4+IEZBSUxVUkU6ICRuYW1lIiAiJEAiICIoY29tbWFuZCBo
-YW5ncykiCiAgICAgb2s9ZmFsc2UKICAgZmkKIAotICBsb2NhbCBuPTAgcAorICBsb2NhbCBw
-CiAgIGlmIHA9JChmaW5kX3N0cmVzcyk7IHRoZW4KICAgICBlY2hvICI+Pj4gRkFJTFVSRTog
-JG5hbWUiICIkQCIgIihwcm9jZXNzZXMgbGVmdCwgZXhpdCBzdGF0dXMgJHJjKToiCiAgICAg
-ZWNobyAiJHAiCg==
---------------A5F7DBFD07E697829C4B5B0B--
+RnJvbSAwY2U0NjE1ZDgwY2QxYTVmNDE3NTExZDc5ODhjOTBjZDdjYzZlYmM3IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTYXQsIDEyIEFwciAyMDI1IDE1OjUxOjUzICswMjAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBraWxsKDEpOiBmaXggcGFyc2luZyBvZiBuZWdh
+dGl2ZSBwaWQKClNpZ25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFua2UgPGNocmlzdGlhbi5m
+cmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2luc3VwL3V0aWxzL2tpbGwuY2MgfCA0ICsrKy0K
+IDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYg
+LS1naXQgYS93aW5zdXAvdXRpbHMva2lsbC5jYyBiL3dpbnN1cC91dGlscy9raWxsLmNjCmlu
+ZGV4IGJjYWJjZDQ3Yy4uMWU2YWI1YzRiIDEwMDY0NAotLS0gYS93aW5zdXAvdXRpbHMva2ls
+bC5jYworKysgYi93aW5zdXAvdXRpbHMva2lsbC5jYwpAQCAtMzcyLDcgKzM3Miw5IEBAIG1h
+aW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKIAljYXNlICc/JzoKIAkgIGlmIChnb3Rhc2ln
+KSAvKiB0aGlzIGlzIGEgbmVnYXRpdmUgcGlkLCBnbyBhaGVhZCAqLwogCSAgICB7Ci0JICAg
+ICAgLS1vcHRpbmQ7CisJICAgICAgLyogUmVzZXQgb3B0aW5kIGJlY2F1c2UgaXQgcG9pbnRz
+IHRvIHRoZSBuZXh0IGFyZ3VtZW50IGlmIGFuZAorCQkgb25seSBpZiB0aGUgcGlkIGhhcyBv
+bmUgZGlnaXQuICovCisJICAgICAgb3B0aW5kID0gYXYgLSBhcmd2OwogCSAgICAgIGdvdG8g
+b3V0OwogCSAgICB9CiAJICBvcHRyZXNldCA9IDE7Ci0tIAoyLjQ1LjEKCg==
+--------------C72A8A5D6FBBFEBAF485A828--
