@@ -1,93 +1,59 @@
-Return-Path: <SRS0=aFB7=W6=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
-	by sourceware.org (Postfix) with ESMTPS id CB5BB385C424
-	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 14:03:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CB5BB385C424
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CB5BB385C424
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.81
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744466635; cv=none;
-	b=wFpwBZx3C6+Po7xtd3iGQ2qp9Fp9uz3mSj9jFDnHYx4aL+28T1wLx/QCxgCINLL1+g8oYhrDga4K1aTPLFaGhehapcwBwhDqyz3bJSzgprTEwaYUrLSB7SadMjE1GD/GOC5WWo13Pbq9vw8ZCCF3RuwShDHofymcC4f5MHfa2CI=
+Return-Path: <SRS0=/CNS=XB=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.227.178])
+	by sourceware.org (Postfix) with ESMTPS id 6C20D385841C
+	for <cygwin-patches@cygwin.com>; Tue, 15 Apr 2025 07:40:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6C20D385841C
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6C20D385841C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.178
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744702834; cv=none;
+	b=i0ceptJlTj1ZopsVvUkqxm/D8WA9U4X4kCIqoTeei/UTgsTOm6CZh+lcGgtaJf+QOmznRSyyOwlf2mjzyp2FbMNXdLQhzt07eCm7/toGU8KBT1dwaV/oKjLBIyHCjK8JF/zMUCExHk5EM+pkDXv1jDlvMjmQ5r7mrZGJzU3UeNo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744466635; c=relaxed/simple;
-	bh=RaKwInAdSDNPW7zvkfhjo7N6j+bywNMRH2HElQ9ygbY=;
-	h=To:From:Subject:Message-ID:Date:MIME-Version; b=NSaRqmsjtvBM8JxNXlpApiy3SRftAjqtRyGsazYKE1fd9ybr1Gp8XwddVv+29uhYPJIlEsSZJRqHze5WjG8r1OhvWPdViKxFL9CFpBusF30orOISOTlpmBGXzFFMszdkXFRdzkdaJy5xPQyB0yb87r1qGFoYpbGYV7sbx7sUpk0=
+	t=1744702834; c=relaxed/simple;
+	bh=U9j7iIFeJeTPTmIdu/vLqmB5z30efmyo4ru782kwmBs=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=LmhRSHcKkjGSDEKkGiIgwqx62J82Lr30vlfcU3y/6H1990TG7N/ydYuO6iTd+ZixzMK2wiCtG/ts9zRivDjp3sSMJvgHbHNOwhi/KG/3LRBTwyAD0rjh2osAjZd3oI2CPQMI3oaaz6ncrgUdVRPW6eMb9xqHyB+OQZyskMtN+ac=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CB5BB385C424
-Received: from fwd79.aul.t-online.de (fwd79.aul.t-online.de [10.223.144.105])
-	by mailout03.t-online.de (Postfix) with SMTP id 6CC847ED
-	for <cygwin-patches@cygwin.com>; Sat, 12 Apr 2025 16:03:53 +0200 (CEST)
-Received: from [192.168.2.101] ([87.187.37.162]) by fwd79.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1u3bSa-2ccmHo0; Sat, 12 Apr 2025 16:03:52 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6C20D385841C
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=mwoVMQWH
+Received: from HP-Z230 by mta-snd-e02.mail.nifty.com with ESMTP
+          id <20250415074031101.BKPY.120311.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 15 Apr 2025 16:40:31 +0900
+Date: Tue, 15 Apr 2025 16:40:29 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: kill(1): fix parsing of negative pid
-Message-ID: <98fb7b3b-362e-4ccc-b25d-ab68e000627c@t-online.de>
-Date: Sat, 12 Apr 2025 16:03:53 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------C72A8A5D6FBBFEBAF485A828"
-X-TOI-EXPURGATEID: 150726::1744466632-89FFA3F8-85A71D7C/0/0 CLEAN NORMAL
-X-TOI-MSGID: 25c59f19-f692-4a5f-962b-f2113fbde74d
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
+Message-Id: <20250415164029.c118309bc33c25f4b404b48d@nifty.ne.jp>
+In-Reply-To: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
+References: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1744702831;
+ bh=XinMSq9lGXRvo7sk5I7VXZMYbKqkRRHn9CUs+rKX468=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=mwoVMQWHmi4+hJYSjnHxh/A49RVACMSVFCpsJDSG29Q+LPQiwpZ1dv7N2PsOzqoKFXumNVKr
+ 2hwlQIJJgSjbQmCo068UJ2PW7q+j3YpZV8hdqDlcq1gXo5Yu0N16MFzDwbcLGY3a9DAfXTtoH2
+ Ih7WtuvcnUr9MHl1NeQR/MzPSL2PNhBYRlkfzzK2QFxMTeZXsxJIzAJ9OoS/gB+G01lNIqHBs7
+ goLuDbxI43YQtOXjl/8nA64pR2vGiWJDsyE1q7hlc7Cf6BG1DOyg/hhk50YHCVvAt4oL+MU7v3
+ nOXYjM6EUKfDd0kbVI0FMPEAebffGGl8VciY6LnkPn/gn9mA==
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------C72A8A5D6FBBFEBAF485A828
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Christian,
 
-Found during testing of:
-https://sourceware.org/pipermail/cygwin-patches/2025q2/013651.html
+On Fri, 11 Apr 2025 16:46:07 +0200
+Christian Franke wrote:
+> In rare cases, '/bin/kill -f PID' hangs because kill(2) is always tried 
+> first. With this patch, this could be prevented with '/bin/kill -f -s - 
+> PID'.
 
-Examples using nonexistent PIDs:
-
-$ /bin/kill -9 -8 # OK, same as /bin/kill -9 -- -8
-kill: -8: No such process
-
-$ /bin/kill -SIGKILL -11 # bogus message
-kill: illegal pid: -SIGKILL
-kill: -11: No such process
-
-$ /bin/kill -9 -11 # BAD, same as /bin/kill -9 -- -9 -11
-kill: -9: No such process
-kill: -11: No such process
-
-The above works as expected with the bash builtin and with /usr/bin/kill 
-from Debian 12.
+I wonder why kill(2) hangs. Do you have any idea?
+If kill(2) hangs in some cases, shouldn't we fix that
+rather than patching to kill(1)?
 
 -- 
-Regards,
-Christian
-
-
---------------C72A8A5D6FBBFEBAF485A828
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-kill-1-fix-parsing-of-negative-pid.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-Cygwin-kill-1-fix-parsing-of-negative-pid.patch"
-
-RnJvbSAwY2U0NjE1ZDgwY2QxYTVmNDE3NTExZDc5ODhjOTBjZDdjYzZlYmM3IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBTYXQsIDEyIEFwciAyMDI1IDE1OjUxOjUzICswMjAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBraWxsKDEpOiBmaXggcGFyc2luZyBvZiBuZWdh
-dGl2ZSBwaWQKClNpZ25lZC1vZmYtYnk6IENocmlzdGlhbiBGcmFua2UgPGNocmlzdGlhbi5m
-cmFua2VAdC1vbmxpbmUuZGU+Ci0tLQogd2luc3VwL3V0aWxzL2tpbGwuY2MgfCA0ICsrKy0K
-IDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYg
-LS1naXQgYS93aW5zdXAvdXRpbHMva2lsbC5jYyBiL3dpbnN1cC91dGlscy9raWxsLmNjCmlu
-ZGV4IGJjYWJjZDQ3Yy4uMWU2YWI1YzRiIDEwMDY0NAotLS0gYS93aW5zdXAvdXRpbHMva2ls
-bC5jYworKysgYi93aW5zdXAvdXRpbHMva2lsbC5jYwpAQCAtMzcyLDcgKzM3Miw5IEBAIG1h
-aW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKIAljYXNlICc/JzoKIAkgIGlmIChnb3Rhc2ln
-KSAvKiB0aGlzIGlzIGEgbmVnYXRpdmUgcGlkLCBnbyBhaGVhZCAqLwogCSAgICB7Ci0JICAg
-ICAgLS1vcHRpbmQ7CisJICAgICAgLyogUmVzZXQgb3B0aW5kIGJlY2F1c2UgaXQgcG9pbnRz
-IHRvIHRoZSBuZXh0IGFyZ3VtZW50IGlmIGFuZAorCQkgb25seSBpZiB0aGUgcGlkIGhhcyBv
-bmUgZGlnaXQuICovCisJICAgICAgb3B0aW5kID0gYXYgLSBhcmd2OwogCSAgICAgIGdvdG8g
-b3V0OwogCSAgICB9CiAJICBvcHRyZXNldCA9IDE7Ci0tIAoyLjQ1LjEKCg==
---------------C72A8A5D6FBBFEBAF485A828--
+Takashi Yano <takashi.yano@nifty.ne.jp>
