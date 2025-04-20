@@ -1,65 +1,57 @@
-Return-Path: <SRS0=C4lG=XB=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 405C83858D29
-	for <cygwin-patches@cygwin.com>; Tue, 15 Apr 2025 17:50:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 405C83858D29
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 405C83858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1744739409; cv=none;
-	b=JBPTpvQ3DAOKpR02u0yPNWmwDWbtj9GnUFvztNbq9+F79wFkTlCzhW8N++QKKRrQozUMQmokxQoNjVUw4ZICa/lOBLr+qxWsoiUaLJzyqdw7GppF2zJToAXGcr2APy3XuOAVSxQnEmQIRchmVFRsVAStKJk4B+yUHOS2eu/7NJI=
+Return-Path: <SRS0=ZSvf=XG=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo005.btinternet.com (btprdrgo005.btinternet.com [65.20.50.218])
+	by sourceware.org (Postfix) with ESMTP id 0BEFC3858D3C
+	for <cygwin-patches@cygwin.com>; Sun, 20 Apr 2025 19:25:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0BEFC3858D3C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0BEFC3858D3C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.218
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745177127; cv=none;
+	b=HeNWntkCvEMUzf1CgGZCyKZxSgjglECfNBVjeO8Lf0C2j2VyQA7XqS6i3xiZmoKXEdRe81czxnxIp54GLhWSSTpQmfzC0L/lpFXyFclyud+yZvd4w59TFWAlob6/QL7ETn32JLCCXTkcocL0vthImuNeQjbib2nHJVZZooJEDR8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1744739409; c=relaxed/simple;
-	bh=cxDTpiQkxHmTxZAZa9KIm4LqJNGpFMAsQr4N00lklW0=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=l1+/UmAG3ESdvPRLfeQOwrBjP/4lYkQGH6OwWw0WbcEqaMLVA/ixoEuAL6XWRR16X+L2SyeKPC+JEMkAcmnpQZdM1pZT+kmHyGlZOkc8wOQAzU+lhPmPe9NxFvj99cwRXi2j+cvbtfCLINZqyQR1i3b6jim2WS4fzkhQFcHiSqY=
+	t=1745177127; c=relaxed/simple;
+	bh=62fkmSHSvRvAGqhWB2qX/wq8fCj0jq2R0PNMnCan+Lg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ZBmC3h/6mRrDjx39UniQgSdQYsmMnjNWNBg96Z8Ji+4ssAIQX8BBbld8ciU/qH9mNUaWJ/i/aWCDv2Z4W4L0fFWCz07h/CjhHERwysBjCYK5HX4aem46QsbSBmcSUJ+ErsE5DBvh/eUnXU5sKS0jp6ePn7a9WtkGFOwCJoQw1bM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 405C83858D29
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=sYL03KGY
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id D9F8245C86;
-	Tue, 15 Apr 2025 13:50:08 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=Juf1lwsPk29t7BFuuPenUMpLYk8=; b=sYL03
-	KGYJ6hHkpHGbv4qlSMX6IGKz1Gf8Udtf0o1tYQL4+iW5cVGwCD8Ejyjv0fp2AdCz
-	gAzsH2PKqrblfbTF2LN1BpXPc/4NhRgS5ZfPb+rG/eyF8ItAHShXBaK/ks3LhRp/
-	rSOHEzkxGehm5Krk94A47iSzKranibw1mhRyLM=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id D6B8C45C82;
-	Tue, 15 Apr 2025 13:50:08 -0400 (EDT)
-Date: Tue, 15 Apr 2025 10:50:08 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Jon Turney <jon.turney@dronecode.org.uk>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Add stress-ng to CI
-In-Reply-To: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
-Message-ID: <ad15ee78-e913-de03-ea90-cddf5ecdb62d@jdrake.com>
-References: <20250411130846.3355-1-jon.turney@dronecode.org.uk>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0BEFC3858D3C
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89CDB041A57E6
+X-Originating-IP: [86.140.112.112]
+X-OWM-Source-IP: 86.140.112.112
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeekjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekiedrudegtddrudduvddrudduvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugedtrdduuddvrdduuddvpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddugedtqdduuddvqdduuddvrdhrrghnghgvkeeiqddugedtrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdehpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphht
+	thhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.140.112.112) by btprdrgo005.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89CDB041A57E6; Sun, 20 Apr 2025 20:25:25 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/4] Add stress-ng to CI (v2)
+Date: Sun, 20 Apr 2025 20:25:04 +0100
+Message-ID: <20250420192510.3483-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Fri, 11 Apr 2025, Jon Turney wrote:
+Jon Turney (4):
+  Cygwin: CI: Pass the just-built cygwin to a subsequent job
+  Cygwin: CI: Run stress-ng
+  Cygwin: CI: Make stress test terser
+  Cygwin: CI: Disable stress-ng clock test
 
->
-> Jon Turney (4):
->   Cygwin: CI: Pass the just-built cygwin to a subsequent job
->   Cygwin: CI: Run stress-ng
->   Cygwin: CI: Make stress test terser
->   Cygwin: CI: Disable stress-ng clock test
+ .github/workflows/cygwin.yml      |  87 ++++-
+ winsup/testsuite/stress/cygstress | 608 ++++++++++++++++++++++++++++++
+ 2 files changed, 690 insertions(+), 5 deletions(-)
+ create mode 100755 winsup/testsuite/stress/cygstress
 
+-- 
+2.45.1
 
-FYI, as of 4/14, GitHub has *finally* put a Windows ARM64 runner in public
-preview.  It might be nice to run some tests on that "windows-11-arm"
-runner, in addition to "windows-latest".  I could prepare a patch but it
-would likely conflict with this series, so I'd wait until this is pushed
-or else leave it to you to add to this series.
