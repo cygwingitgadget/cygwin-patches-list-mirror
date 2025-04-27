@@ -1,77 +1,113 @@
-Return-Path: <SRS0=9WkO=XN=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
-	by sourceware.org (Postfix) with ESMTPS id 98E693858D1E
-	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 20:43:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 98E693858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 98E693858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.80
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745786615; cv=none;
-	b=aDbl9TftbxfLcHQL+Xnt09gxA6Y4pDlJxNb2ZscF+5EHkd4778pxnS0sOBgWZVcgF56KMVyEF6DOvEFG6jVCJ0yHPERL8vqdTZMt/roLFCapJ/2NOv2DTmPvlGlrrvXyLjLgqChyw+mBWiLM35SjFQAVwWCFiRItrMK2VfyHdUY=
+Return-Path: <SRS0=xsK9=XN=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.237])
+	by sourceware.org (Postfix) with ESMTP id 3D6E13858D1E
+	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 21:05:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3D6E13858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3D6E13858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.237
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745787925; cv=none;
+	b=kU89fXrD6ZHfzrbbImRRTV05OrfgxVIxmRXxHSq3tXwXQ2WMPnFBk/ex3NyXz01trkjpqnmcyBSdspnIg4uPqYranpKowpfos0sZfQQ8dZ9kbFYq3wmN3xsOVOzFHpDOQQP5OseGIx+aZ4oE52wtbA42PSugZgZrDSd6+imVtXI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745786615; c=relaxed/simple;
-	bh=INDrDDy6JgDS1Pk5Xfa0YkWZDI0x5CGR0WvETy5vds8=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version; b=r0UUp5rGUo+BOwmnveIhJR2ohZjLZLGDzO3cMIsLZ+sCzfGH4JcRz7MfgBE1plJOc4N6guQ+kQliAznTgy58y926MCWMU41EtyHEs3T4u1WBy02Ls9oJAuVaEnyciqdzwM6cqaYmslKt4jQGVerTxWp7lE4Sps4bZyL/Rt+EV6E=
+	t=1745787925; c=relaxed/simple;
+	bh=d9olW2gBeMZrQlkSMShYBtYIJoC2hh8nZzi2aFSHySY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=FXgAjYKZybct6jVa7iUYRDlclW5AuokwIsI1Xmsps0QC01tCL4nx4TSbHhdThGt2WnCohUFjpGWLDWofCw6kD9bsPcQmLdFsjmd36VuqY/AcCg0XdmcUDWRyWOLzcBBES8NKfV7z/POssCV5QkqQO/87K5XzB7G/Nf/mSpNogJ0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 98E693858D1E
-Received: from fwd82.aul.t-online.de (fwd82.aul.t-online.de [10.223.144.108])
-	by mailout01.t-online.de (Postfix) with SMTP id 126E7424
-	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 22:43:34 +0200 (CEST)
-Received: from [192.168.2.101] ([91.57.247.175]) by fwd82.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1u98qZ-0IYng00; Sun, 27 Apr 2025 22:43:31 +0200
-Subject: Re: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3D6E13858D1E
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89E7C04D8A0B4
+X-Originating-IP: [86.143.43.122]
+X-OWM-Source-IP: 86.143.43.122
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheeludduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekiedrudegfedrgeefrdduvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegfedrgeefrdduvddvpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddugeefqdegfedquddvvddrrhgrnhhgvgekiedqudegfedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotdduvddpnhgspghrtghpthhtohepfedprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohep
+	tgihghifihhnsehjughrrghkvgdrtghomhdprhgtphhtthhopehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhk
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.143.43.122) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89E7C04D8A0B4; Sun, 27 Apr 2025 22:05:24 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-References: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
- <20250415164029.c118309bc33c25f4b404b48d@nifty.ne.jp>
- <4356587f-51ed-302d-03f1-7415590813f6@t-online.de>
- <ac9d481c-00f0-46fd-a28f-c6938418e5d1@dronecode.org.uk>
- <804e3202-54d4-4604-a962-0e15360e1a09@SystematicSW.ab.ca>
-Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Message-ID: <0ed53f3d-e08b-ae5f-1400-350c707f0191@t-online.de>
-Date: Sun, 27 Apr 2025 22:43:31 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+Cc: Jon Turney <jon.turney@dronecode.org.uk>,
+	Jeremy Drake <cygwin@jdrake.com>
+Subject: [PATCH] Cygwin: CI: Add running on arm64 to stress test matrix
+Date: Sun, 27 Apr 2025 22:05:03 +0100
+Message-ID: <20250427210504.1962-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-In-Reply-To: <804e3202-54d4-4604-a962-0e15360e1a09@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TOI-EXPURGATEID: 150726::1745786611-DD7F9ABE-D42CA371/0/0 CLEAN NORMAL
-X-TOI-MSGID: 136b923f-570c-4dab-b798-bc8ffa56cc59
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Brian Inglis wrote:
-> On 2025-04-27 12:22, Jon Turney wrote:
->> On 15/04/2025 10:02, Christian Franke wrote:
->>> Hi Takashi,
->>>
->>> Takashi Yano wrote:
->>>> Hi Christian,
->>>>
->>>> On Fri, 11 Apr 2025 16:46:07 +0200
->>>> Christian Franke wrote:
->>>>> In rare cases, '/bin/kill -f PID' hangs because kill(2) is always 
->>>>> tried
->>>>> first. With this patch, this could be prevented with '/bin/kill -f 
->>>>> -s -
->>>>> PID'.
->>
->> As it currently stands, the -f flag to kill seems a bit misdesigned, 
->> i.e. if the signal isn't SIGKILL, -f shouldn't be accepted?
->
-> Docs say -f uses Win32 interface so SIG... is irrelevant?
->
+Use an output variable from cygwin-install-action to inform where we
+unpack the just-built cygwin artifact, because apparently the Windows
+ARM64 runners have a different configuration (no D: drive).
 
-No, the current logic is:
-If -f is specified, Win32 TerminateProcess() is called after 'kill(pid, 
-SIG...)' failed or if the process does not terminate within 200ms after 
-kill() succeeded.
+Also, drop unused 'target' variable from that matrix
+---
+ .github/workflows/cygwin.yml | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
+diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
+index fa00834ce..54d7de1bb 100644
+--- a/.github/workflows/cygwin.yml
++++ b/.github/workflows/cygwin.yml
+@@ -204,14 +204,18 @@ jobs:
+   windows-stress-test:
+     needs: windows-build
+ 
+-    runs-on: windows-latest
+     strategy:
+       fail-fast: false
+       matrix:
+         include:
+-        - target: x86_64-pc-cygwin
+-          pkgarch: x86_64
+-    name: Windows tests ${{ matrix.pkgarch }}
++        - pkgarch: x86_64
++          runarch: x86_64
++          runner: windows-latest
++        - pkgarch: x86_64
++          runarch: arm64
++          runner: windows-11-arm
++    runs-on: ${{ matrix.runner }}
++    name: Windows tests ${{ matrix.pkgarch }} on ${{ matrix.runarch }}
+ 
+     steps:
+     - run: git config --global core.autocrlf input
+@@ -219,6 +223,7 @@ jobs:
+ 
+     # install cygwin
+     - name: Install Cygwin
++      id: cygwin-install
+       uses: cygwin/cygwin-install-action@master
+       with:
+         platform: ${{ matrix.pkgarch }}
+@@ -233,9 +238,9 @@ jobs:
+       uses: actions/download-artifact@v4
+       with:
+         name: cygwin-install-${{ matrix.pkgarch }}
+-        # the path specified here should match the install-dir of
+-        # cygwin-install-action above, so we unpack the artifact over it
+-        path: 'D:\cygwin'
++        # use the install-dir of cygwin-install-action above, so we unpack the
++        # artifact over it
++        path: ${{ steps.cygwin-install.outputs.root }}
+ 
+     # This isn't quite right, as it just overwrites existing files, it doesn't
+     # remove anything which is no longer provided. Ideally, we'd make a cygwin
+@@ -255,7 +260,7 @@ jobs:
+     - name: Capture logs artifact
+       uses: actions/upload-artifact@v4
+       with:
+-        name: stress-logs-${{ matrix.pkgarch }}
++        name: stress-logs-${{ matrix.pkgarch }}-on-${{ matrix.runarch }}
+         path: |
+           logs
+       if: ${{ !cancelled() }}
 -- 
-Regards,
-Christian
+2.45.1
 
