@@ -1,73 +1,78 @@
-Return-Path: <SRS0=xsK9=XN=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.240])
-	by sourceware.org (Postfix) with ESMTP id F1C2D3858D1E
-	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 18:32:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F1C2D3858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F1C2D3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.240
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745778776; cv=none;
-	b=Tgi/S8B+F6SgAr+mzULPKV64b+NtQ2u8YSG/koxftLFtY61Ipg3O6c56d1bokTPMPYLytnYv0a9gPfyEPc25jIxlHV9AllVPnAsmr613NgIyJOp1tVATTqKPbrXLf9+zwNN98vAlQQV2puOY800GuKF5UDYnGCPRe8XjIlVUTv0=
+Return-Path: <SRS0=ckSk=XN=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+	by sourceware.org (Postfix) with ESMTPS id 6EEF33858D1E
+	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 18:53:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6EEF33858D1E
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6EEF33858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.13
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745779990; cv=none;
+	b=iucaW3/RDGJjUKzC/e3jkEagrFXKLTvPiA4ysHvE0fJfvXuTWIJll5OcoLM0FX0qC4TgU8pOgkqPpNh4R/sF4mTeuxyxKqhgdK1cowlg6uY6jjYcA5OcHzKoR3anvDZgIOm48hFL6efmWILSzzvKOdra0Sd2fdnGg4LY+wsJQMI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745778776; c=relaxed/simple;
-	bh=JEwVJbYoVlwMh0WLyRyScPPdUzM5VXY7BGtiUNvq0x8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=c+e5p/FJZgYXq9BjwCdyddxwMG9O3pFUE1XNlyOcHFyfK/hxMUj1e6yZtwgf6hpySklLMO8DVvJmew1SwVN+CAA1VNVz1+DHa5+en21TpTMqjua39XAX0ua5eZyS7uTmJneW22EST2gN+yZqZC1nAvWncXfPMX/4+pBypm1mpFU=
+	t=1745779990; c=relaxed/simple;
+	bh=ul+hqAP6trgyApXtdFWt+k8pMFzcmtSUaJiDEzj5TGk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=xC/4J0OHfmUy733FVWFFNA6D/snAQ7Dpkuiw0Ddq6Bkl6O38wyJwC4CM2snvQM6CKdPMF60/+JpJP3fDBuNgEAtTR7TP5BZ5s3WeOUaAu4IB5dIyJ7hIr7KYjlbtfn7qo+ht6oKUdLmsmO5R2ysTcmmG2eiJtWVqyKXZoafz+mI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F1C2D3858D1E
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89C7B04D7E079
-X-Originating-IP: [86.143.43.122]
-X-OWM-Source-IP: 86.143.43.122
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheekkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeegueetieegieekgfehtefhteeuhfdtgeeiieekheetheeffedvuefftdevjeffnecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucfkphepkeeirddugeefrdegfedruddvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugeefrdegfedruddvvddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudegfedqgeefqdduvddvrdhrrghnghgvkeeiqddugeefrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdefpdhnsggprhgtphhtthhopedvpdhr
-	tghpthhtohepvehhrhhishhtihgrnhdrhfhrrghnkhgvsehtqdhonhhlihhnvgdruggvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.143.43.122) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89C7B04D7E079; Sun, 27 Apr 2025 19:32:53 +0100
-Message-ID: <88a458dc-0138-4212-9974-2bf21f07a016@dronecode.org.uk>
-Date: Sun, 27 Apr 2025 19:32:52 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6EEF33858D1E
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=gVuxF95k
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 288141A08F0
+	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 18:53:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf19.hostedemail.com (Postfix) with ESMTPA id B96AD20028
+	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 18:53:08 +0000 (UTC)
+Message-ID: <804e3202-54d4-4604-a962-0e15360e1a09@SystematicSW.ab.ca>
+Date: Sun, 27 Apr 2025 12:53:07 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: kill(1): fix parsing of negative pid
-To: Christian Franke <Christian.Franke@t-online.de>
-References: <98fb7b3b-362e-4ccc-b25d-ab68e000627c@t-online.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <98fb7b3b-362e-4ccc-b25d-ab68e000627c@t-online.de>
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
+ <20250415164029.c118309bc33c25f4b404b48d@nifty.ne.jp>
+ <4356587f-51ed-302d-03f1-7415590813f6@t-online.de>
+ <ac9d481c-00f0-46fd-a28f-c6938418e5d1@dronecode.org.uk>
+Organization: Systematic Software
+In-Reply-To: <ac9d481c-00f0-46fd-a28f-c6938418e5d1@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Stat-Signature: 4d1sp1uiywndduojf6c6er8msewzwtm1
+X-Rspamd-Server: rspamout04
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: B96AD20028
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1/thMi6jydvB20oSStNCnHKO7VLDznwJpo=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=JI8CdUZoh62heSG/fsmikJeCbM6stxJAW073zq5TgRU=; b=gVuxF95kz4HO14NmHmNQkZagz+WqlCkCn/VbEkSWFRQn7cA0Pww5QAfLSgWLoDl8WOXoQZTN7jquO4MfG8n9q+O+sOjt5daWeBRTguiW2VjELVE+ZRG2+h2UcJl8Ea+fYtgv7kvg/p5eIvyeH+p8+oDIxtkc1glrxxeCKcDHXjltJgndpUC9ii5QmX1UeucCH0F3IxzHRWwAN5if5P3n9BkaiWFEUfRYrSDGXFBif4okCPJPqzgwGljH8AncULXgoz4quQ/TNVojY6KXHzfcNgp6zu9g81lBU0LEQIqjNU5La6jaQmEuw1Yw74kTvSOgpUxKxRA4bR1aJO8kXgiPbA==
+X-HE-Tag: 1745779988-84778
+X-HE-Meta: U2FsdGVkX1+Hjh+Z/3GJQ1zd+fCpKZTmtKr99RQ1vZeowEF8z2ojn2e7Viso1mJjzow8+WFwJWTbyB6O7/cD2r28FJCEHi3czRUy/vtuwsYPQ14CFrEg+KbhOCzxErlssTbesENjkJSkMwLQJR5vKPt3UMM0TmawxTfvRQUbs3UU0+7vSqFLAUeZ9XAHCAhK/nUeG1CmZLbYHGWZFAo+9f1qhc0CWOvetmgMZ5KOVdgurwE0yt9gZ8kCc5/dkl28xWC67hRqRJ0s96EB9SUa6WfKEEHy+g5h5WeYRiFGYeKVWf0ecIdaKZUp8UbANSeJhpUhX1kLYw0OZCtaWGruh70Xv3nJfGr5
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 12/04/2025 15:03, Christian Franke wrote:
-> Found during testing of:
-> https://sourceware.org/pipermail/cygwin-patches/2025q2/013651.html
+On 2025-04-27 12:22, Jon Turney wrote:
+> On 15/04/2025 10:02, Christian Franke wrote:
+>> Hi Takashi,
+>>
+>> Takashi Yano wrote:
+>>> Hi Christian,
+>>>
+>>> On Fri, 11 Apr 2025 16:46:07 +0200
+>>> Christian Franke wrote:
+>>>> In rare cases, '/bin/kill -f PID' hangs because kill(2) is always tried
+>>>> first. With this patch, this could be prevented with '/bin/kill -f -s -
+>>>> PID'.
 > 
-> Examples using nonexistent PIDs:
-> 
-> $ /bin/kill -9 -8 # OK, same as /bin/kill -9 -- -8
-> kill: -8: No such process
-> 
-> $ /bin/kill -SIGKILL -11 # bogus message
-> kill: illegal pid: -SIGKILL
-> kill: -11: No such process
-> 
-> $ /bin/kill -9 -11 # BAD, same as /bin/kill -9 -- -9 -11
-> kill: -9: No such process
-> kill: -11: No such process
-> 
-> The above works as expected with the bash builtin and with /usr/bin/kill 
-> from Debian 12.
+> As it currently stands, the -f flag to kill seems a bit misdesigned, i.e. if the 
+> signal isn't SIGKILL, -f shouldn't be accepted?
 
-Seems like this needs a documentation change in our kill manpage as 
-well, to say something like:
+Docs say -f uses Win32 interface so SIG... is irrelevant?
 
-negative values are interpreted as per kill(3)
--f only accepts a process ID
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
