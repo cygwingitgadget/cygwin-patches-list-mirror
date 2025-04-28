@@ -1,79 +1,137 @@
-Return-Path: <SRS0=/OvC=XO=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 6E9F83858D1E
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 05:28:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6E9F83858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6E9F83858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745818123; cv=none;
-	b=xYP1bIvDYCgJra1iJlhU1dz+wTmrRiaCB2ZH1OYZKL3ptdx2+4CVqj0V8Q/2nexeTokTM6fURk9kTj8vYK+trx+yACgIuTkwqjhLQYTMjK2DSjSjcpqTgCGuzVB1GCXxYAEBjoExueUYgvu09K6gPgBK/2f9zZJZfj7Z/3q0A7Y=
+Return-Path: <SRS0=zXwX=XO=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+	by sourceware.org (Postfix) with ESMTPS id 049F63858401
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 12:37:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 049F63858401
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 049F63858401
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745843831; cv=none;
+	b=TTQu0uFkM462/W+kQ9mVhSGFeSnbvrU8Dgth2KxGpLXmNqoKhjKTSSxOKJy84Ln3BClqccaP1mgCKc5xqXMhvIH3VZYBf7ozrl/8AMXMiB+gi6UF1WeMbdzjByjEfc6JRO+XgUJp4gmgw8W5AkxtPTN+BbFvE2Q9DL9SQG/KO80=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745818123; c=relaxed/simple;
-	bh=g1Dqk0DgLXZVi8fIJd0MKsSDpucvBXPREswK+ds37FY=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=jPXqARfFLfqzSUjJQHLpIIVuhHp07QUZBXJ/2dEStB0m+s3C+LvS+5DEwUJEs+tIac1W0cgIM2Ks6dQPnEHNb8jJEfkvLleLa6xKdLtNLZyHv3DUl7Am03oR4430Yo3BiGCfC81UOU/E+WgRBxdqyOMUniZISBdNR37JUC6TEfc=
+	t=1745843831; c=relaxed/simple;
+	bh=H1ckflkmYdzajUdo1zlODxDr7NuXI/wh+7WuZ7Nz2fc=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version; b=ctX07zBKOVmzCg71irS311VALuykzeU4GcI/7Skbe1J4ftyQ/65m4HKcKcSBjsqkgH77wCCC3khbwUSZ0RFNMQcbuz7VYezN2JNRmSC3xvLt/EF0hozPvWWxCIL5gKfFLTfm50Z+vbHuIfUKFAvTbTW5wsfOm29ALtZXQ3FZq68=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6E9F83858D1E
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=c4VwuSkT
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 125C645C32
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 01:28:43 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=nv+Ag
-	UQLGnRHAeAlKwjuLothsoM=; b=c4VwuSkTzvTV3X7jIUbAyoT1zRu1R4JNqXb+4
-	JxDZD/p0iZgaoLNCfJ0NZmNKNfJy1mFS9wYie9Q/UcjT1JDSQvtjKHl912bC0rgk
-	ivBVRMl2RGhVT26Vp4Kjk7G/4G36KGchJc8lfa12zBvMtTTErb+eTYSQyBj8b09Z
-	8bMg1A=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id EF5A245C29
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 01:28:42 -0400 (EDT)
-Date: Sun, 27 Apr 2025 22:28:42 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 049F63858401
+Received: from fwd89.aul.t-online.de (fwd89.aul.t-online.de [10.223.144.115])
+	by mailout02.t-online.de (Postfix) with SMTP id C31497C7
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 14:37:08 +0200 (CEST)
+Received: from [192.168.2.101] ([91.57.247.175]) by fwd89.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1u9NjQ-1j9IYK0; Mon, 28 Apr 2025 14:37:08 +0200
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: CI: cygstress: improve error handling and add verbose
+ mode
+Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: dladdr: use proper max size of dli_fname.
-Message-ID: <3c6343b3-2bee-46bd-7446-879ad3110062@jdrake.com>
+Message-ID: <e739cc90-e0cb-672b-8cd2-2ad77b09be32@t-online.de>
+Date: Mon, 28 Apr 2025 14:37:08 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------AD9B67FEDE1CA2B7E0BA4BDF"
+X-TOI-EXPURGATEID: 150726::1745843828-E97F99D9-C058C7CB/0/0 CLEAN NORMAL
+X-TOI-MSGID: 6d8494a9-dd73-4222-8375-342011881fb7
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Due to being converted to a mbcs, the output of converting a wide string
-of MAX_PATH characters is potentially larger than MAX_PATH bytes.  The
-DL_info::dli_fname member is actually PATH_MAX bytes, so specify that
-(larger) size to cygwin_conv_path rather than PATH_MAX.
+This is a multi-part message in MIME format.
+--------------AD9B67FEDE1CA2B7E0BA4BDF
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Fixes: c8432a01c840 ("Implement dladdr() (partially)")
-Addresses: https://github.com/rust-lang/backtrace-rs/pull/704#issuecomment-2833782574
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
-Would it be better to use tmp_pathbuf in place of the fname WCHAR array,
-to allow longer paths to come out of GetModuleFileNameW?
-
-
- winsup/cygwin/dlfcn.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
-index 10bd0ac1f4..a3523b6153 100644
---- a/winsup/cygwin/dlfcn.cc
-+++ b/winsup/cygwin/dlfcn.cc
-@@ -428,7 +428,7 @@ dladdr (const void *addr, Dl_info *info)
-
-   /* Convert to a cygwin pathname */
-   ssize_t conv = cygwin_conv_path (CCP_WIN_W_TO_POSIX | CCP_ABSOLUTE, fname,
--				   info->dli_fname, MAX_PATH);
-+				   info->dli_fname, PATH_MAX);
-   if (conv)
-     return 0;
+  A followup to:
+https://sourceware.org/pipermail/cygwin-patches/2025q2/013674.html
 
 -- 
-2.49.0.windows.1
+Regards,
+Christian
 
+
+--------------AD9B67FEDE1CA2B7E0BA4BDF
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-CI-cygstress-improve-error-handling-and-add-v.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-CI-cygstress-improve-error-handling-and-add-v.pa";
+ filename*1="tch"
+
+RnJvbSBiMGE1YmE1NDhjYzkwNDEyNDZiMWQ2Mzk2ZDE2MjkyYzc3Mzk5NjA1IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
+bmtlQHQtb25saW5lLmRlPgpEYXRlOiBNb24sIDI4IEFwciAyMDI1IDE0OjMyOjM0ICswMjAw
+ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBDSTogY3lnc3RyZXNzOiBpbXByb3ZlIGVycm9y
+IGhhbmRsaW5nIGFuZCBhZGQgdmVyYm9zZQogbW9kZQoKQ2hlY2sgZm9yIHVuZXhwZWN0ZWQg
+b3V0cHV0IChDeWd3aW4gZXJyb3IgbWVzc2FnZXMpLiAgQ29tYmluZSBtdWx0aXBsZQplcnJv
+ciBmaW5kaW5ncyBpbnRvIG9uZSBGQUlMVVJFIGxpbmUgcGVyIHRlc3QuICBBdm9pZCBhIHJh
+Y2UgaW4gdGhlCndhdGNoZG9nIHByb2Nlc3MuICBQcmludCBhbGwgb3V0cHV0cyBpZiB0aGUg
+bmV3IC12IG9wdGlvbiBpcyB1c2VkLgoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5r
+ZSA8Y2hyaXN0aWFuLmZyYW5rZUB0LW9ubGluZS5kZT4KLS0tCiB3aW5zdXAvdGVzdHN1aXRl
+L3N0cmVzcy9jeWdzdHJlc3MgfCA1MyArKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0t
+CiAxIGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKSwgMjQgZGVsZXRpb25zKC0pCgpk
+aWZmIC0tZ2l0IGEvd2luc3VwL3Rlc3RzdWl0ZS9zdHJlc3MvY3lnc3RyZXNzIGIvd2luc3Vw
+L3Rlc3RzdWl0ZS9zdHJlc3MvY3lnc3RyZXNzCmluZGV4IDY3MGY1ZDY2MC4uOWMyNzRlYTMy
+IDEwMDc1NQotLS0gYS93aW5zdXAvdGVzdHN1aXRlL3N0cmVzcy9jeWdzdHJlc3MKKysrIGIv
+d2luc3VwL3Rlc3RzdWl0ZS9zdHJlc3MvY3lnc3RyZXNzCkBAIC03LDcgKzcsNyBAQAogIyBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogQlNELTMtQ2xhdXNlCiAjCiAKLXNldCAtZSAtbyBw
+aXBlZmFpbAorc2V0IC1lIC1vIHBpcGVmYWlsICMgcGlwZWZhaWwgaXMgcmVxdWlyZWQKIAog
+dXNhZ2UoKQogewpAQCAtMTksNiArMTksNyBAQCBVc2FnZTogJHswIyMqL30gW09QVElPTi4u
+Ll0ge0NJfFdPUkt8RkFJTHx0ZXN0Li4ufQogICAtYyBMSVNUICAgc2V0IENQVSBhZmZpbml0
+eSB0byBMSVNUCiAgIC1zIFBBVEggICBzdHJlc3MtbmcgZXhlY3V0YWJsZSBbZGVmYXVsdDog
+c3RyZXNzLW5nXQogICAtdCBOICAgICAgcnVuIGVhY2ggdGVzdCBmb3IgYXQgbGVhc3QgTiBz
+ZWNvbmRzIFtkZWZhdWx0OiA1XQorICAtdiAgICAgICAgcHJpbnQgc3RyZXNzLW5nIG91dHB1
+dCBhbHdheXMgW2RlZmF1bHQ6IG9uIGVycm9yIG9ubHldCiAgIC13IE4gICAgICBzdGFydCBO
+IHdvcmtlcnMgZm9yIGVhY2ggdGVzdCBbZGVmYXVsdDogMl0KIAogICBDSSAgICAgICAgcnVu
+IGFsbCB0ZXN0cyB0YWdnZWQgQ0kKQEAgLTQ0NSw3ICs0NDYsNyBAQCBzdHJlc3NfdGVzdHM9
+JwogCiBzdHJlc3Nfbmc9InN0cmVzcy1uZyIKIHRpbWVvdXQ9NTsgd29ya2Vycz0yCi1kcnly
+dW49ZmFsc2U7IGZvcmNlPWZhbHNlCitkcnlydW49ZmFsc2U7IGZvcmNlPWZhbHNlOyB2ZXJi
+b3NlPWZhbHNlCiB0YXNrc2V0PQogCiB3aGlsZSA6OyBkbyBjYXNlICQxIGluCkBAIC00NTQs
+NiArNDU1LDcgQEAgd2hpbGUgOjsgZG8gY2FzZSAkMSBpbgogICAtbikgZHJ5cnVuPXRydWUg
+OzsKICAgLXMpIHNoaWZ0OyBzdHJlc3Nfbmc9JDEgOzsKICAgLXQpIHNoaWZ0OyB0aW1lb3V0
+PSQxIDs7CisgIC12KSB2ZXJib3NlPXRydWUgOzsKICAgLXcpIHNoaWZ0OyB3b3JrZXJzPSQx
+IDs7CiAgIC0qKSB1c2FnZSA7OwogICAqKSBicmVhayA7OwpAQCAtNDc5LDcgKzQ4MSw3IEBA
+IHN0cmVzc19uZ19uYW1lPSR7c3RyZXNzX25nIyMqL30KIHRlbXBkaXI9JHtUTVA6LS90bXB9
+CiBsb2dkaXI9JHtMT0dESVI6LS90bXAvbG9nZGlyfQogCi1ta2RpciAtcCAke2xvZ2Rpcn0K
+K21rZGlyIC1wICIkbG9nZGlyIgogCiBmaW5kX3N0cmVzcygpCiB7CkBAIC01MDksMTUgKzUx
+MSwxNiBAQCBzdHJlc3MoKQogICB0ZXN0IC16ICIkdGFza3NldCIgfHwgY21kKz0oLS10YXNr
+c2V0ICIkdGFza3NldCIpCiAgIGNtZCs9KC0tIiRuYW1lIiAiJHdvcmtlcnMiICIkQCIpCiAK
+LSAgaWYgJGRyeXJ1bjsgdGhlbgorICBpZiAkZHJ5cnVuIHx8ICR2ZXJib3NlOyB0aGVuCiAg
+ICAgZWNobyAnJCcgIiR7Y21kW0BdfSIKLSAgICByZXR1cm4gMAorICAgICEgJGRyeXJ1biB8
+fCByZXR1cm4gMAogICBmaQogCiAgICgKICAgICB0PSQoZGF0ZSArJXMpOyA6ICQoKHQgKz0g
+dGltZW91dCArIDMwKSk7IHNsZWVwIDEKICAgICB3aGlsZSBbICIkKGRhdGUgKyVzKSIgLWx0
+ICIkdCIgXTsgZG8gc2xlZXAgMTsgZG9uZQotICAgIHN0b3Bfc3RyZXNzICYgIyBUT0RPOiB3
+aXRob3V0ICcmJywgJ2V4aXQgMCcgYmVsb3cgaXMgbm90IHJlYWNoZWQgKEhtbS4uLikKKyAg
+ICAjIEFub3RoZXIgZGVsYXkgdG8gbGV0ICdleGl0IDAnIG9jY3VyIGJlZm9yZSAna2lsbCAk
+d2F0Y2hkb2cnCisgICAgKCBzbGVlcCAxOyBzdG9wX3N0cmVzcyApICYKICAgICBleGl0IDAK
+ICAgKSAmCiAgIGxvY2FsIHdhdGNoZG9nPSQhCkBAIC01MjUsNDEgKzUyOCw0MyBAQCBzdHJl
+c3MoKQogCiAgIG1rZGlyICIkdGQiCiAgIGxvY2FsIHJjPTAKLSAgIiR7Y21kW0BdfSIgPiRs
+b2dmaWxlIDI+JjEgfHwgcmM9JD8KKyAgaWYgJHZlcmJvc2U7IHRoZW4KKyAgICAjIFRoaXMg
+cmVxdWlyZXMgJy1vIHBpcGVmYWlsJworICAgICIke2NtZFtAXX0iIDI+JjEgfCB0ZWUgIiRs
+b2dmaWxlIiB8fCByYz0kPworICBlbHNlCisgICAgIiR7Y21kW0BdfSIgPiIkbG9nZmlsZSIg
+Mj4mMSB8fCByYz0kPworICBmaQogCiAgIGtpbGwgJHdhdGNoZG9nIDI+L2Rldi9udWxsIHx8
+OgogICB0cmFwIC0gU0lHSU5UIFNJR1RFUk0KIAotICBsb2NhbCBvaz10cnVlCisgIGxvY2Fs
+IGVycnM9CiAgIGlmIHdhaXQgJHdhdGNoZG9nOyB0aGVuCiAgICAgc2xlZXAgMgotICAgIGVj
+aG8gIj4+PiBGQUlMVVJFOiAkbmFtZSIgIiRAIiAiKGNvbW1hbmQgaGFuZ3MpIgotICAgIG9r
+PWZhbHNlCisgICAgZXJycz0iLCBjb21tYW5kIGhhbmdzIgogICBmaQogCiAgIGxvY2FsIHAK
+ICAgaWYgcD0kKGZpbmRfc3RyZXNzKTsgdGhlbgotICAgIGVjaG8gIj4+PiBGQUlMVVJFOiAk
+bmFtZSIgIiRAIiAiKHByb2Nlc3NlcyBsZWZ0LCBleGl0IHN0YXR1cyAkcmMpOiIKLSAgICBl
+Y2hvICIkcCIKKyAgICBlcnJzKz0iLCBwcm9jZXNzZXMgbGVmdCIKICAgICBzdG9wX3N0cmVz
+cwogICAgIHNsZWVwIDIKLSAgICBvaz1mYWxzZQogICBmaQogCi0gIGlmICEgcm1kaXIgIiR0
+ZCIgMj4vZGV2L251bGw7IHRoZW4KLSAgICBlY2hvICI+Pj4gRkFJTFVSRTogJG5hbWUiICIk
+QCIgIihmaWxlcyBsZWZ0IGluICckdGQnLCBleGl0IHN0YXR1cyAkcmMpIgotICAgIG9rPWZh
+bHNlCi0gIGZpCisgIHJtZGlyICIkdGQiIDI+L2Rldi9udWxsIHx8IGVycnMrPSIsIGZpbGVz
+IGxlZnQgaW4gJyR0ZCciCiAKLSAgaWYgISAkb2s7IHRoZW4KLSAgICByZXR1cm4gMQotICBm
+aQotICBpZiBbICRyYyAhPSAwIF07IHRoZW4KLSAgICBjYXQgJHtsb2dmaWxlfQotICAgIGVj
+aG8gIj4+PiBGQUlMVVJFOiAkbmFtZSIgIiRAIiAiKGV4aXQgc3RhdHVzICRyYykiOyBlY2hv
+CisgICEgZ3JlcCAtRXF2ICdeKHN0cmVzcy1uZ3xpbmZvKTonICIkbG9nZmlsZSIgfHwgZXJy
+cys9IiwgdW5leHBlY3RlZCBvdXRwdXQiCisKKyAgaWYgWyAiJHtyY30ke2VycnM6K3R9IiAh
+PSAiMCIgXTsgdGhlbgorICAgICR2ZXJib3NlIHx8IGNhdCAiJGxvZ2ZpbGUiCisgICAgZWNo
+byAiPj4+IEZBSUxVUkU6ICRuYW1lIiAiJEAiICIoZXhpdCBzdGF0dXMgJHtyY30ke2VycnN9
+KSIKKyAgICAhIFsgJHtwOit0fSBdIHx8IGVjaG8gIiRwIgorICAgIGVjaG8KICAgICByZXR1
+cm4gMQogICBmaQotICBlY2hvICI+Pj4gU1VDQ0VTUzogJG5hbWUiICIkQCIgIiIKKyAgZWNo
+byAiPj4+IFNVQ0NFU1M6ICRuYW1lIiAiJEAiCisgICEgJHZlcmJvc2UgfHwgZWNobworICBy
+ZXR1cm4gMAogfQogCiBpZiBwPSQoZmluZF9zdHJlc3MpOyB0aGVuCi0tIAoyLjQ1LjEKCg==
+--------------AD9B67FEDE1CA2B7E0BA4BDF--
