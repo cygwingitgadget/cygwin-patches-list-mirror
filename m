@@ -1,127 +1,79 @@
-Return-Path: <SRS0=Z5Ax=XN=jdrake.com=cygwin@sourceware.org>
+Return-Path: <SRS0=/OvC=XO=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 259473858D1E
-	for <cygwin-patches@cygwin.com>; Sun, 27 Apr 2025 21:20:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 259473858D1E
+	by sourceware.org (Postfix) with ESMTPS id 6E9F83858D1E
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 05:28:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6E9F83858D1E
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 259473858D1E
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6E9F83858D1E
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745788825; cv=none;
-	b=tA0Yj9I/9HxP2LltYrzdS/6iDBUnxzJg49lXgSD96fF/XLs3V6zfxubt3IfBf2rpzc+aoaOaX2tKlU14qKMxMB3Nl4Jz1fggh361KBgsirEA4dEbbqRIV6lLZ4kkofn6rb6ENZeADbW3fVhKBnOEoRmdu+wOCckorsvGKpkys9U=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745818123; cv=none;
+	b=xYP1bIvDYCgJra1iJlhU1dz+wTmrRiaCB2ZH1OYZKL3ptdx2+4CVqj0V8Q/2nexeTokTM6fURk9kTj8vYK+trx+yACgIuTkwqjhLQYTMjK2DSjSjcpqTgCGuzVB1GCXxYAEBjoExueUYgvu09K6gPgBK/2f9zZJZfj7Z/3q0A7Y=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745788825; c=relaxed/simple;
-	bh=u9ruAfHr1IvPhbMGL5+zovPTWZ42UXl3T1igFxTFShg=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=r4MdEXPLKr8FI3MS9QkEz50avA8Ldl6EHfooqdF6u3eZdxwKzZ4Ckv6LV+iRmSZRT/XbwqWA//IufvaOS6/N4/8XuV1F0tsmE8nGwp4CFXdfjBXIJQo7zvKrx2mqyq1WgDAv0bgBGvJZqTIXIreNchi4XYg/dkgVCx7DLC3wYp0=
+	t=1745818123; c=relaxed/simple;
+	bh=g1Dqk0DgLXZVi8fIJd0MKsSDpucvBXPREswK+ds37FY=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=jPXqARfFLfqzSUjJQHLpIIVuhHp07QUZBXJ/2dEStB0m+s3C+LvS+5DEwUJEs+tIac1W0cgIM2Ks6dQPnEHNb8jJEfkvLleLa6xKdLtNLZyHv3DUl7Am03oR4430Yo3BiGCfC81UOU/E+WgRBxdqyOMUniZISBdNR37JUC6TEfc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 259473858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6E9F83858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=qBdJf7gW
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=c4VwuSkT
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id CFFD945C68;
-	Sun, 27 Apr 2025 17:20:24 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 125C645C32
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 01:28:43 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=wB+DKiEzvD0orL/bl+hZp+ajEeg=; b=qBdJf
-	7gW57hVQZsVm3H0/6ubpJH4eoNK6BiRYmZPu6YPk1s7G3up9/4XSe3UJIY33kW7S
-	njdz8DLLuTznP1uiJZZ2r2BJy+fETiTPax/7vhZZz+rXgo/nBMcLQI8okBIl4Jo3
-	ki5V7ZjUrRoMYQOwIBQFk7eP6JVo4q7RgVZYHo=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=nv+Ag
+	UQLGnRHAeAlKwjuLothsoM=; b=c4VwuSkTzvTV3X7jIUbAyoT1zRu1R4JNqXb+4
+	JxDZD/p0iZgaoLNCfJ0NZmNKNfJy1mFS9wYie9Q/UcjT1JDSQvtjKHl912bC0rgk
+	ivBVRMl2RGhVT26Vp4Kjk7G/4G36KGchJc8lfa12zBvMtTTErb+eTYSQyBj8b09Z
+	8bMg1A=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id C8A8145C64;
-	Sun, 27 Apr 2025 17:20:24 -0400 (EDT)
-Date: Sun, 27 Apr 2025 14:20:24 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id EF5A245C29
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 01:28:42 -0400 (EDT)
+Date: Sun, 27 Apr 2025 22:28:42 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
-To: Jon Turney <jon.turney@dronecode.org.uk>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: CI: Add running on arm64 to stress test matrix
-In-Reply-To: <20250427210504.1962-1-jon.turney@dronecode.org.uk>
-Message-ID: <2fd01fbc-e56a-e01d-a93e-6872bbe4a9ea@jdrake.com>
-References: <20250427210504.1962-1-jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: dladdr: use proper max size of dli_fname.
+Message-ID: <3c6343b3-2bee-46bd-7446-879ad3110062@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sun, 27 Apr 2025, Jon Turney wrote:
+Due to being converted to a mbcs, the output of converting a wide string
+of MAX_PATH characters is potentially larger than MAX_PATH bytes.  The
+DL_info::dli_fname member is actually PATH_MAX bytes, so specify that
+(larger) size to cygwin_conv_path rather than PATH_MAX.
 
-> Use an output variable from cygwin-install-action to inform where we
-> unpack the just-built cygwin artifact, because apparently the Windows
-> ARM64 runners have a different configuration (no D: drive).
+Fixes: c8432a01c840 ("Implement dladdr() (partially)")
+Addresses: https://github.com/rust-lang/backtrace-rs/pull/704#issuecomment-2833782574
+Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+---
+Would it be better to use tmp_pathbuf in place of the fname WCHAR array,
+to allow longer paths to come out of GetModuleFileNameW?
 
-There's actually an issue open about that - apparently the VMs do have the
-faster drive virtual hardware used as D: on the other Windows runners, but
-it's not formatted or mounted on these new runners.
 
-LGTM
+ winsup/cygwin/dlfcn.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Also, drop unused 'target' variable from that matrix
-> ---
->  .github/workflows/cygwin.yml | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
->
-> diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
-> index fa00834ce..54d7de1bb 100644
-> --- a/.github/workflows/cygwin.yml
-> +++ b/.github/workflows/cygwin.yml
-> @@ -204,14 +204,18 @@ jobs:
->    windows-stress-test:
->      needs: windows-build
->
-> -    runs-on: windows-latest
->      strategy:
->        fail-fast: false
->        matrix:
->          include:
-> -        - target: x86_64-pc-cygwin
-> -          pkgarch: x86_64
-> -    name: Windows tests ${{ matrix.pkgarch }}
-> +        - pkgarch: x86_64
-> +          runarch: x86_64
-> +          runner: windows-latest
-> +        - pkgarch: x86_64
-> +          runarch: arm64
-> +          runner: windows-11-arm
-> +    runs-on: ${{ matrix.runner }}
-> +    name: Windows tests ${{ matrix.pkgarch }} on ${{ matrix.runarch }}
->
->      steps:
->      - run: git config --global core.autocrlf input
-> @@ -219,6 +223,7 @@ jobs:
->
->      # install cygwin
->      - name: Install Cygwin
-> +      id: cygwin-install
->        uses: cygwin/cygwin-install-action@master
->        with:
->          platform: ${{ matrix.pkgarch }}
-> @@ -233,9 +238,9 @@ jobs:
->        uses: actions/download-artifact@v4
->        with:
->          name: cygwin-install-${{ matrix.pkgarch }}
-> -        # the path specified here should match the install-dir of
-> -        # cygwin-install-action above, so we unpack the artifact over it
-> -        path: 'D:\cygwin'
-> +        # use the install-dir of cygwin-install-action above, so we unpack the
-> +        # artifact over it
-> +        path: ${{ steps.cygwin-install.outputs.root }}
->
->      # This isn't quite right, as it just overwrites existing files, it doesn't
->      # remove anything which is no longer provided. Ideally, we'd make a cygwin
-> @@ -255,7 +260,7 @@ jobs:
->      - name: Capture logs artifact
->        uses: actions/upload-artifact@v4
->        with:
-> -        name: stress-logs-${{ matrix.pkgarch }}
-> +        name: stress-logs-${{ matrix.pkgarch }}-on-${{ matrix.runarch }}
->          path: |
->            logs
->        if: ${{ !cancelled() }}
->
+diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
+index 10bd0ac1f4..a3523b6153 100644
+--- a/winsup/cygwin/dlfcn.cc
++++ b/winsup/cygwin/dlfcn.cc
+@@ -428,7 +428,7 @@ dladdr (const void *addr, Dl_info *info)
+
+   /* Convert to a cygwin pathname */
+   ssize_t conv = cygwin_conv_path (CCP_WIN_W_TO_POSIX | CCP_ABSOLUTE, fname,
+-				   info->dli_fname, MAX_PATH);
++				   info->dli_fname, PATH_MAX);
+   if (conv)
+     return 0;
+
+-- 
+2.49.0.windows.1
 
