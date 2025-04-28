@@ -1,82 +1,61 @@
-Return-Path: <SRS0=zXwX=XO=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
-	by sourceware.org (Postfix) with ESMTPS id 2171D3858C60
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 15:43:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2171D3858C60
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2171D3858C60
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.18
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745855016; cv=none;
-	b=dbqIo6lbzI65jWI2zzFx3FXKokxtLk6d4F8nOhranoKgqYYfPKRJF49WJNbEu9daf+UIodIWM2ts6r2csUfa80UihKcEdDd8UMO00HBy9mEyhLfGZc63Z+l1D7wJdHgaks9btM5+4wMLWTrZML53RlsQ+Z1k/KFwDGm5jdmGDv4=
+Return-Path: <SRS0=9CMs=XO=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.62])
+	by sourceware.org (Postfix) with ESMTP id 7FC4F3858D3C
+	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 21:22:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7FC4F3858D3C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7FC4F3858D3C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.62
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745875358; cv=none;
+	b=kqrTS16xXHjnNQliEBAqMogxMss95EdCeJ0lxvm/zEnbZmDNnrOof7Hf5Wrh6nYI2VD+AsFDAv+MQN5twDTZnmtMJ+G5RJOQnyCD0Kx04ZZLCzXIwrdFEZSO9IUBqKcnzfEyjQbT8HREi7kisuOU4s+CFNkhYWGTaIjdA4v2elg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745855016; c=relaxed/simple;
-	bh=tvloIUm52hL6fPJ34AlKCYkwvSwWSKJW+vxzBLLXqKs=;
-	h=From:Subject:To:Message-ID:Date:MIME-Version; b=OxdKyExg36Af/10hvkp3Uw+0zRExQSLaa+clklO+XyXtoc6B85exZJInabM+H3XcNuamC6DaxhTorATM7V8ZFrjNYlGFLZOKNpLdUiDg1kyM1jM+0EG5PhGfPCEte8AzYPo/duUc5bv0CE1wHIGdXP2JeUsCTMal3QOlSyMrjt0=
+	t=1745875358; c=relaxed/simple;
+	bh=4Nc4PS7cmJihbMtBr74mTMCoAcSZ9RlTcXZucF5LW8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=elIX0fJaDuLqeFeqdrOv+68yI7ccx9+0qVXQ/09z5Kx9T4zuiBZJVdikJJY6F30m41XIpyVWYPuIguAp3l2vyYrRSccZmN47I135RDt/vueDA6FyXyKpJ5sppvJse3UazcI9Pyd1ha3fMSCQ9s3mw5NEnq7NHCIdnewNIapiGYw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from fwd76.aul.t-online.de (fwd76.aul.t-online.de [10.223.144.102])
-	by mailout04.t-online.de (Postfix) with SMTP id 7438329E
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 17:43:09 +0200 (CEST)
-Received: from [192.168.2.101] ([91.57.247.175]) by fwd76.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1u9QdM-11iObQ0; Mon, 28 Apr 2025 17:43:04 +0200
-From: Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH] Cygwin: clock_settime: fail with EINVAL if tv_nsec is
- negative
-Reply-To: cygwin-patches@cygwin.com
-To: cygwin-patches@cygwin.com
-Message-ID: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
-Date: Mon, 28 Apr 2025 17:43:03 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7FC4F3858D3C
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89E4E04F81E96
+X-Originating-IP: [86.143.43.122]
+X-OWM-Source-IP: 86.143.43.122
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedvtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeegueetieegieekgfehtefhteeuhfdtgeeiieekheetheeffedvuefftdevjeffnecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucfkphepkeeirddugeefrdegfedruddvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugeefrdegfedruddvvddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudegfedqgeefqdduvddvrdhrrghnghgvkeeiqddugeefrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddupdhnsggprhgtphhtthhopedvpdhr
+	tghpthhtohepvehhrhhishhtihgrnhdrhfhrrghnkhgvsehtqdhonhhlihhnvgdruggvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (86.143.43.122) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89E4E04F81E96; Mon, 28 Apr 2025 22:22:36 +0100
+Message-ID: <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
+Date: Mon, 28 Apr 2025 22:22:35 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------C2F5FC1FE92F65691D35EAD2"
-X-TOI-EXPURGATEID: 150726::1745854984-C7FFC94A-18C46564/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0aef5388-c690-47e7-8ed0-f66e82bba9f9
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: clock_settime: fail with EINVAL if tv_nsec is
+ negative
+To: Christian Franke <Christian.Franke@t-online.de>
+References: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
---------------C2F5FC1FE92F65691D35EAD2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 28/04/2025 16:43, Christian Franke wrote:
+> A followup to:
+> https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
 
-A followup to:
-https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
+Thanks!
 
---
-Regards,
-Christian
+The SUS page for clock_settime() contains the following text:
 
+> [EINVAL]
+>     The tp argument specified a nanosecond value less than zero or greater than or equal to 1000 million. 
 
---------------C2F5FC1FE92F65691D35EAD2
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-clock_settime-fail-with-EINVAL-if-tv_nsec-is-.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-clock_settime-fail-with-EINVAL-if-tv_nsec-is-.pa";
- filename*1="tch"
+... so if we're going to validate tv_nsec, it seems that's the range to use
 
-RnJvbSBiYmRhZjRjZmI0ODdiN2QxMzRiNWZkYTAwNDQ3Zjc3YjZkMGNmZDI3IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gRnJhbmtlIDxjaHJpc3RpYW4uZnJh
-bmtlQHQtb25saW5lLmRlPgpEYXRlOiBNb24sIDI4IEFwciAyMDI1IDE3OjI3OjI4ICswMjAw
-ClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2luOiBjbG9ja19zZXR0aW1lOiBmYWlsIHdpdGggRUlO
-VkFMIGlmIHR2X25zZWMgaXMKIG5lZ2F0aXZlCgpBZGRyZXNzZXM6IGh0dHBzOi8vc291cmNl
-d2FyZS5vcmcvcGlwZXJtYWlsL2N5Z3dpbi1wYXRjaGVzLzIwMjVxMi8wMTM2NjUuaHRtbApG
-aXhlczogNjc1OGQyYTNhYWU2ICgiKGNsb2NrX3NldHRpbWUpOiBOZXcgZnVuY3Rpb24uIikK
-U2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8Y2hyaXN0aWFuLmZyYW5rZUB0LW9u
-bGluZS5kZT4KLS0tCiB3aW5zdXAvY3lnd2luL3RpbWVzLmNjIHwgMyArKy0KIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS93
-aW5zdXAvY3lnd2luL3RpbWVzLmNjIGIvd2luc3VwL2N5Z3dpbi90aW1lcy5jYwppbmRleCBh
-ODk5ODBkMDguLjNjM2JhOTIzNiAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi90aW1lcy5j
-YworKysgYi93aW5zdXAvY3lnd2luL3RpbWVzLmNjCkBAIC00OTAsNyArNDkwLDggQEAgY2xv
-Y2tfc2V0dGltZSAoY2xvY2tpZF90IGNsa19pZCwgY29uc3Qgc3RydWN0IHRpbWVzcGVjICp0
-cCkKICAgICAgIHJldHVybiAtMTsKICAgICB9CiAKLSAgaWYgKGNsa19pZCAhPSBDTE9DS19S
-RUFMVElNRV9DT0FSU0UgJiYgY2xrX2lkICE9IENMT0NLX1JFQUxUSU1FKQorICBpZiAoKGNs
-a19pZCAhPSBDTE9DS19SRUFMVElNRV9DT0FSU0UgJiYgY2xrX2lkICE9IENMT0NLX1JFQUxU
-SU1FKQorICAgICAgfHwgdHAtPnR2X25zZWMgPCAwKSAvKiBPdGhlcndpc2UgLTk5OS4uLi0x
-IHdvdWxkIGJlIGFjY2VwdGVkICovCiAgICAgewogICAgICAgc2V0X2Vycm5vIChFSU5WQUwp
-OwogICAgICAgcmV0dXJuIC0xOwotLSAKMi40NS4xCgo=
---------------C2F5FC1FE92F65691D35EAD2--
