@@ -1,93 +1,108 @@
-Return-Path: <SRS0=Wv0b=XP=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	by sourceware.org (Postfix) with ESMTPS id 40FE33858431
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 16:49:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 40FE33858431
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 40FE33858431
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.11
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745945395; cv=none;
-	b=FUxzuE/m7c2EpjXmqUbd9Xew2lfwPqQCAjZzZxmON6kYtKz6ssj9DmOULznZRKEflQoBKE3jlkR5CWHXbnUIC878fsmaHyoMQ6FK76CYEeeAg+PKLBQMJE/n487rM36AInOzXyWqTeq67WEH69L2864ecUrCRgHcW/DIzhu2Bb0=
+Return-Path: <SRS0=bvCe=XP=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 0D3AF3858D26
+	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 17:42:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0D3AF3858D26
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0D3AF3858D26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745948579; cv=none;
+	b=g6OrUXnCUh0/uXxLJShJyvAJNtJrAx6ygpaHbB9yA2Qad7Tt8DTtr+B67swrOztO7q1OYg6T7yP/dKN9YVQy7x5jNjA7k+W1dpYHI04q4yxMmiuSa0gaFhVn3D3X3m8/dgHw8pt7ymeZBeT2P//ZEdybEy5SCIfIKaSQhEx8nVg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745945395; c=relaxed/simple;
-	bh=TWb8Cqg/5qbuQgbR79dTB91hQf8ROsnxPS6ypRL/MFA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=I4AgahxVbRejOmX53PsABKgTMZWVoGxtUtgaqbK9eLI3n4Gej2guVi2EjOtt2Mc2KK5liQZZmjgUDCiA1U/lKk3WAUej+uqAPNEnKK04qEa4Nv1SHcZCK+Phs8YlQLuRqzqHEJHIXx7ngVOfwVmZ7VYIC9p9eVbxIj8tOWobsPI=
+	t=1745948579; c=relaxed/simple;
+	bh=BIUliMyNj32jU1gxjgPe7rBgfXcifpAB1tj4q83LbgI=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=oPlvBkqr6r07Vv0O9tDFu8tDsIoAKv3hPlot+GNWJNRqr3SSoSzYduQm2tDj3vrUCo8JQU/RFa8fFUU1ifKZhXO9lmmGZrRH1S1h4kl4jjuIBOgIISmhzeAuf7F2CtEo5NKcqzfP7NX1NY0GJ95eR2WX3Iz9nixCksbBkm3+0Vk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 40FE33858431
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0D3AF3858D26
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=m31c/T2H
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id DCB0D120B7C
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 16:49:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf19.hostedemail.com (Postfix) with ESMTPA id 6EB112002C
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 16:49:53 +0000 (UTC)
-Message-ID: <aeb1c1ab-befe-4e3f-a11e-fa4e5eb9840d@SystematicSW.ab.ca>
-Date: Tue, 29 Apr 2025 10:49:52 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
-Content-Language: en-CA
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=s6RcCqrL
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id B3E4F45C42
+	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 13:42:58 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:message-id:mime-version:content-type; s=csoft; bh=UcP39
+	ZRfSPsCvTkcVqUdloYDJK0=; b=s6RcCqrLSmQFArxHxkPJH/i+fLeITp0bnOK8v
+	TRyc7wZ6DiczL+hqsWjz7RA21A0LvPqhkMW7Hz5ATkh5WbqxE2qshj4zlke1nnv2
+	22iFSNQEYlLt/Ii8AcX03Fv7WHBesv33vQ1QYEewWA7r+p5BzDTvNIDG61V/Umlx
+	LYB0ig=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id AD91145C1D
+	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 13:42:58 -0400 (EDT)
+Date: Tue, 29 Apr 2025 10:42:58 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-References: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
- <20250415164029.c118309bc33c25f4b404b48d@nifty.ne.jp>
- <4356587f-51ed-302d-03f1-7415590813f6@t-online.de>
- <ac9d481c-00f0-46fd-a28f-c6938418e5d1@dronecode.org.uk>
- <804e3202-54d4-4604-a962-0e15360e1a09@SystematicSW.ab.ca>
- <0ed53f3d-e08b-ae5f-1400-350c707f0191@t-online.de>
-Organization: Systematic Software
-In-Reply-To: <0ed53f3d-e08b-ae5f-1400-350c707f0191@t-online.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 6EB112002C
-X-Stat-Signature: wimqjdcffaeth3jjbabhbgnzrj86u3wn
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1/h+x+6fZDIvV5GMPYHa/n9NJBs1cxdLh8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=Ooej50MvBj0Bujbe3SklVFRmeBJfqe87ybRwzz0cwdY=; b=m31c/T2H+Wbz8as7w5tm8bziFIYHeWFDrPC/91S+4UHYRqNw8BDHsg0KK4Nzn77b+l3WewQnA9OTG/TdXbi6VAe5CL1PFMfWfH6OuH6k5dHM4ULYcX6GGP61vlhv01zwXXdBVcWpeLTKaXVMiMV1OQjEDxZ7fCek1PFb2VZYqWR1kez4bmrXIvSAQoroVjBloMiqzn6yZU2l6Y3vaDeCOYzEt0yYErzz6vgRPSDE/3Wu6gnZ/2TDSM44HMX52taRgax+K9mL1vAIXuyvNOEf7wjSHoAcvWADPTJc87+YNbTk/jUubryOVHgmmq16FAaKwDL8r/sAKgzsaB5C7roEuQ==
-X-HE-Tag: 1745945393-207930
-X-HE-Meta: U2FsdGVkX19HSFPdRtDefqZAXilx4/j9sFt2OmyqKyQTSooXUqawaArx0++CqZ9SWduX9PsEOlxDizF+YvIO7Sdmq8KUP/N+9rrM8qdWMhbkg0FpZzsBc15N6u/3OhBpHdxtEQkLKxrOGb9KQxbLC0HDHr9LL2iEsFUKHcyDwD+Ii8pGK3F71UT2a0cCgIsDtEnffenu6mi6VBNlwMOWWve897bireCRYSPOAZNdcloGqxIdNkRkMcBR3IlpLpOI+3FO8vgLkTMB16IBPc4MB3V80TddA4zQz9HhNlSwpoIxTRmFeQPmGP/mwawNp67u1SKqGWdzhYHZpWm98jf3G7Qnm08Ifk+z
+Subject: [PATCH] Cygwin: cygwin_conv_path: don't write to `to` before size
+ is validated.
+Message-ID: <bd0e9cdd-ba1f-423b-089c-7f84e5e8bb3f@jdrake.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-04-27 14:43, Christian Franke wrote:
-> Brian Inglis wrote:
->> On 2025-04-27 12:22, Jon Turney wrote:
->>> On 15/04/2025 10:02, Christian Franke wrote:
->>>> Hi Takashi,
->>>>
->>>> Takashi Yano wrote:
->>>>> Hi Christian,
->>>>>
->>>>> On Fri, 11 Apr 2025 16:46:07 +0200
->>>>> Christian Franke wrote:
->>>>>> In rare cases, '/bin/kill -f PID' hangs because kill(2) is always tried
->>>>>> first. With this patch, this could be prevented with '/bin/kill -f -s -
->>>>>> PID'.
->>>
->>> As it currently stands, the -f flag to kill seems a bit misdesigned, i.e. if 
->>> the signal isn't SIGKILL, -f shouldn't be accepted?
->>
->> Docs say -f uses Win32 interface so SIG... is irrelevant?
->>
-> 
-> No, the current logic is:
-> If -f is specified, Win32 TerminateProcess() is called after 'kill(pid, SIG...)' 
-> failed or if the process does not terminate within 200ms after kill() succeeded.
+In the CCP_POSIX_TO_WIN_W path, when `from` is a device,
+cygwin_conv_path would attempt to write to the `to` buffer before the
+validation of the `size`.  This resulted in an EFAULT error in the
+common use-case of passing `to` as NULL and `size` as 0 to get the
+required size of `to` for the conversion (as used in
+cygwin_create_path).  Instead, set a boolean and write to `to`
+after validation.
 
-That's okay, but the suggestion was to require some specific SIG... for -f to 
-work: that changes the command spec: please don't do that; -f should be enough, 
-same as now.
-I shouldn't have to know to specify some specific SIG..., default to (or 
-*force*) the required SIG... with -f!
+Fixes: 43f65cdd7dae ("* Makefile.in (DLL_OFILES): Add fhandler_procsys.o.")
+Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
+Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+---
+ winsup/cygwin/path.cc       | 5 ++++-
+ winsup/cygwin/release/3.6.2 | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index 7a08e978ad..d26f99ee7f 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -3911,6 +3911,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
+   int how = what & CCP_CONVFLAGS_MASK;
+   what &= CCP_CONVTYPE_MASK;
+   int ret = -1;
++  bool prependglobalroot = false;
+
+   __try
+     {
+@@ -4019,7 +4020,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
+ 	    {
+ 	      /* Device name points to somewhere else in the NT namespace.
+ 		 Use GLOBALROOT prefix to convert to Win32 path. */
+-	      to = (void *) wcpcpy ((wchar_t *) to, ro_u_globalroot.Buffer);
++	      prependglobalroot = true;
+ 	      lsiz += ro_u_globalroot.Length / sizeof (WCHAR);
+ 	    }
+ 	  /* TODO: Same ".\\" band-aid as in CCP_POSIX_TO_WIN_A case. */
+@@ -4075,6 +4076,8 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
+ 	  stpcpy ((char *) to, buf);
+ 	  break;
+ 	case CCP_POSIX_TO_WIN_W:
++	  if (prependglobalroot)
++	    to = (void *) wcpcpy ((PWCHAR) to, ro_u_globalroot.Buffer);
+ 	  wcpcpy ((PWCHAR) to, path);
+ 	  break;
+ 	}
+diff --git a/winsup/cygwin/release/3.6.2 b/winsup/cygwin/release/3.6.2
+index bceabcab34..de6eae13fc 100644
+--- a/winsup/cygwin/release/3.6.2
++++ b/winsup/cygwin/release/3.6.2
+@@ -13,3 +13,6 @@ Fixes:
+
+ - Fix setting DOS attributes on devices.
+   Addresse: https://cygwin.com/pipermail/cygwin/2025-April/257940.html
++
++- Fix cygwin_conv_path writing to 'to' pointer before size is checked.
++  Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
 -- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+2.49.0.windows.1
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
