@@ -1,61 +1,69 @@
-Return-Path: <SRS0=9CMs=XO=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.62])
-	by sourceware.org (Postfix) with ESMTP id 7FC4F3858D3C
-	for <cygwin-patches@cygwin.com>; Mon, 28 Apr 2025 21:22:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7FC4F3858D3C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7FC4F3858D3C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.62
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745875358; cv=none;
-	b=kqrTS16xXHjnNQliEBAqMogxMss95EdCeJ0lxvm/zEnbZmDNnrOof7Hf5Wrh6nYI2VD+AsFDAv+MQN5twDTZnmtMJ+G5RJOQnyCD0Kx04ZZLCzXIwrdFEZSO9IUBqKcnzfEyjQbT8HREi7kisuOU4s+CFNkhYWGTaIjdA4v2elg=
+Return-Path: <SRS0=5EGA=XP=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+	by sourceware.org (Postfix) with ESMTPS id CA9CE3858C60
+	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 08:31:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CA9CE3858C60
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CA9CE3858C60
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.85
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745915506; cv=none;
+	b=wYouEs8QkYW/d0C1OxrHKWmdrGleVHNVgOoPFKwAYOaiQtf6dHAFUa0v0BWvYuOiTqaIywyFjd27EpvQPtQImcvr0JQVtHwuBv5dsjJsV2oQmU0OI+n/RsVbc+PVlRviR+UmSwYxpiTqWTJs4ktW/Mz3625nvQKBbKWwwQp/ZZQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745875358; c=relaxed/simple;
-	bh=4Nc4PS7cmJihbMtBr74mTMCoAcSZ9RlTcXZucF5LW8w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=elIX0fJaDuLqeFeqdrOv+68yI7ccx9+0qVXQ/09z5Kx9T4zuiBZJVdikJJY6F30m41XIpyVWYPuIguAp3l2vyYrRSccZmN47I135RDt/vueDA6FyXyKpJ5sppvJse3UazcI9Pyd1ha3fMSCQ9s3mw5NEnq7NHCIdnewNIapiGYw=
+	t=1745915506; c=relaxed/simple;
+	bh=m/Ty9GxhC4yKK60LjJh/DZZ/JZbzew57Yb1jATW5eY0=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version; b=Zl681BBKXuKjGV+LnnQkpwadq11/yN5uX1kN5g/DeG/vD07kRiwZf4Z/+YHYM8a3agzPkiPVXGQaZ1on7jDqy7Ig82BZ6pKeSqB1SY9Irgw6lYxjelqJEWN0SHSq2kIsYFBpOVwxIkcYiW6YhCFtrzPmKxYElhljQnKB9O2S8T8=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7FC4F3858D3C
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89E4E04F81E96
-X-Originating-IP: [86.143.43.122]
-X-OWM-Source-IP: 86.143.43.122
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedvtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeegueetieegieekgfehtefhteeuhfdtgeeiieekheetheeffedvuefftdevjeffnecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucfkphepkeeirddugeefrdegfedruddvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugeefrdegfedruddvvddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudegfedqgeefqdduvddvrdhrrghnghgvkeeiqddugeefrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddupdhnsggprhgtphhtthhopedvpdhr
-	tghpthhtohepvehhrhhishhtihgrnhdrhfhrrghnkhgvsehtqdhonhhlihhnvgdruggvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.143.43.122) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89E4E04F81E96; Mon, 28 Apr 2025 22:22:36 +0100
-Message-ID: <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
-Date: Mon, 28 Apr 2025 22:22:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CA9CE3858C60
+Received: from fwd88.aul.t-online.de (fwd88.aul.t-online.de [10.223.144.114])
+	by mailout11.t-online.de (Postfix) with SMTP id 55A181040
+	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 10:31:43 +0200 (CEST)
+Received: from [192.168.2.101] ([91.57.247.175]) by fwd88.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1u9gNS-02SL5s0; Tue, 29 Apr 2025 10:31:42 +0200
 Subject: Re: [PATCH] Cygwin: clock_settime: fail with EINVAL if tv_nsec is
  negative
-To: Christian Franke <Christian.Franke@t-online.de>
+To: cygwin-patches@cygwin.com
 References: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
+ <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
+Reply-To: cygwin-patches@cygwin.com
+From: Christian Franke <Christian.Franke@t-online.de>
+Message-ID: <09edeb3e-6c0c-74bb-75df-a7dd2bde2e5e@t-online.de>
+Date: Tue, 29 Apr 2025 10:31:41 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
+MIME-Version: 1.0
+In-Reply-To: <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1745915502-FA7FB92D-84DC4CB8/0/0 CLEAN NORMAL
+X-TOI-MSGID: c7067301-8c3a-47a9-b98a-f02571eeff46
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 28/04/2025 16:43, Christian Franke wrote:
-> A followup to:
-> https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
+Jon Turney wrote:
+> On 28/04/2025 16:43, Christian Franke wrote:
+>> A followup to:
+>> https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
+>
+> Thanks!
+>
+> The SUS page for clock_settime() contains the following text:
+>
+>> [EINVAL]
+>>     The tp argument specified a nanosecond value less than zero or 
+>> greater than or equal to 1000 million. 
+>
+> ... so if we're going to validate tv_nsec, it seems that's the range 
+> to use
+>
+>
 
-Thanks!
+Yes. The patch only checks the lower bound because the upper bound is 
+already correctly checked later in settimeofday().
 
-The SUS page for clock_settime() contains the following text:
-
-> [EINVAL]
->     The tp argument specified a nanosecond value less than zero or greater than or equal to 1000 million. 
-
-... so if we're going to validate tv_nsec, it seems that's the range to use
+-- 
+Regards,
+Christian
 
