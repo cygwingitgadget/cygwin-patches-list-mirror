@@ -1,108 +1,74 @@
-Return-Path: <SRS0=bvCe=XP=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 0D3AF3858D26
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 17:42:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0D3AF3858D26
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0D3AF3858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1745948579; cv=none;
-	b=g6OrUXnCUh0/uXxLJShJyvAJNtJrAx6ygpaHbB9yA2Qad7Tt8DTtr+B67swrOztO7q1OYg6T7yP/dKN9YVQy7x5jNjA7k+W1dpYHI04q4yxMmiuSa0gaFhVn3D3X3m8/dgHw8pt7ymeZBeT2P//ZEdybEy5SCIfIKaSQhEx8nVg=
+Return-Path: <SRS0=XeBt=XQ=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+	by sourceware.org (Postfix) with ESMTPS id A8CEC3858D21
+	for <cygwin-patches@cygwin.com>; Wed, 30 Apr 2025 11:33:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A8CEC3858D21
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A8CEC3858D21
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.82
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746012834; cv=none;
+	b=pK+jUYVpZjiY0R1LpRZ5Ii/trutCksKFnJinkJ14ET3kATCvb5I98Y045qnKRQnTgTQTPiI45OISN+TICn0X550+kKnznT94/8M/3CyflagpsHIUE3d38IvQd41rF0gBL9N2hhSWUxxqZykB/XQgi+GfWemdJjEAD8d57w50J/g=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1745948579; c=relaxed/simple;
-	bh=BIUliMyNj32jU1gxjgPe7rBgfXcifpAB1tj4q83LbgI=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=oPlvBkqr6r07Vv0O9tDFu8tDsIoAKv3hPlot+GNWJNRqr3SSoSzYduQm2tDj3vrUCo8JQU/RFa8fFUU1ifKZhXO9lmmGZrRH1S1h4kl4jjuIBOgIISmhzeAuf7F2CtEo5NKcqzfP7NX1NY0GJ95eR2WX3Iz9nixCksbBkm3+0Vk=
+	t=1746012834; c=relaxed/simple;
+	bh=l8xMhqXBT24sHCy3yi/ypcG6AFjj5eYJn2YHSmZ7fQ4=;
+	h=Subject:From:To:Message-ID:Date:MIME-Version; b=Y0kDNxBjEBOXf1fkIDvtGrmlcPgzb/SVdOUxxngjkFLBuGalz1HPt88059OCp6cluWWrDT/k9ol6jCMsA/QoSoxPokhTnup142yk0Kd8OstDgHmNyXIMvZ1N7rwpGYIgr2ETXM3ml1OfRu5RCJerIdOhn05oh41eRKGGqJSVHhA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0D3AF3858D26
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=s6RcCqrL
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id B3E4F45C42
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 13:42:58 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=UcP39
-	ZRfSPsCvTkcVqUdloYDJK0=; b=s6RcCqrLSmQFArxHxkPJH/i+fLeITp0bnOK8v
-	TRyc7wZ6DiczL+hqsWjz7RA21A0LvPqhkMW7Hz5ATkh5WbqxE2qshj4zlke1nnv2
-	22iFSNQEYlLt/Ii8AcX03Fv7WHBesv33vQ1QYEewWA7r+p5BzDTvNIDG61V/Umlx
-	LYB0ig=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id AD91145C1D
-	for <cygwin-patches@cygwin.com>; Tue, 29 Apr 2025 13:42:58 -0400 (EDT)
-Date: Tue, 29 Apr 2025 10:42:58 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A8CEC3858D21
+Received: from fwd88.aul.t-online.de (fwd88.aul.t-online.de [10.223.144.114])
+	by mailout05.t-online.de (Postfix) with SMTP id F20B88D8
+	for <cygwin-patches@cygwin.com>; Wed, 30 Apr 2025 13:33:52 +0200 (CEST)
+Received: from [192.168.2.101] ([91.57.247.175]) by fwd88.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1uA5hE-3bA0p60; Wed, 30 Apr 2025 13:33:48 +0200
+Subject: Re: [PATCH] Cygwin: clock_settime: fail with EINVAL if tv_nsec is
+ negative
+From: Christian Franke <Christian.Franke@t-online.de>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: cygwin_conv_path: don't write to `to` before size
- is validated.
-Message-ID: <bd0e9cdd-ba1f-423b-089c-7f84e5e8bb3f@jdrake.com>
+Reply-To: cygwin-patches@cygwin.com
+References: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
+ <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
+ <09edeb3e-6c0c-74bb-75df-a7dd2bde2e5e@t-online.de>
+Message-ID: <9e95644c-c152-00ed-14d1-725252066fa6@t-online.de>
+Date: Wed, 30 Apr 2025 13:33:47 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <09edeb3e-6c0c-74bb-75df-a7dd2bde2e5e@t-online.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1746012828-4B7FD92D-924946D8/0/0 CLEAN NORMAL
+X-TOI-MSGID: 69273fd2-4b3f-469a-88a4-d0449bd4f989
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-In the CCP_POSIX_TO_WIN_W path, when `from` is a device,
-cygwin_conv_path would attempt to write to the `to` buffer before the
-validation of the `size`.  This resulted in an EFAULT error in the
-common use-case of passing `to` as NULL and `size` as 0 to get the
-required size of `to` for the conversion (as used in
-cygwin_create_path).  Instead, set a boolean and write to `to`
-after validation.
+Christian Franke wrote:
+> Jon Turney wrote:
+>> On 28/04/2025 16:43, Christian Franke wrote:
+>>> A followup to:
+>>> https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
+>>
+>> Thanks!
+>>
+>> The SUS page for clock_settime() contains the following text:
+>>
+>>> [EINVAL]
+>>>     The tp argument specified a nanosecond value less than zero or 
+>>> greater than or equal to 1000 million. 
+>>
+>> ... so if we're going to validate tv_nsec, it seems that's the range 
+>> to use
+>>
+>>
+>
+> Yes. The patch only checks the lower bound because the upper bound is 
+> already correctly checked later in settimeofday().
+>
 
-Fixes: 43f65cdd7dae ("* Makefile.in (DLL_OFILES): Add fhandler_procsys.o.")
-Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
- winsup/cygwin/path.cc       | 5 ++++-
- winsup/cygwin/release/3.6.2 | 3 +++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+... and pushed.
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 7a08e978ad..d26f99ee7f 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -3911,6 +3911,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
-   int how = what & CCP_CONVFLAGS_MASK;
-   what &= CCP_CONVTYPE_MASK;
-   int ret = -1;
-+  bool prependglobalroot = false;
-
-   __try
-     {
-@@ -4019,7 +4020,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
- 	    {
- 	      /* Device name points to somewhere else in the NT namespace.
- 		 Use GLOBALROOT prefix to convert to Win32 path. */
--	      to = (void *) wcpcpy ((wchar_t *) to, ro_u_globalroot.Buffer);
-+	      prependglobalroot = true;
- 	      lsiz += ro_u_globalroot.Length / sizeof (WCHAR);
- 	    }
- 	  /* TODO: Same ".\\" band-aid as in CCP_POSIX_TO_WIN_A case. */
-@@ -4075,6 +4076,8 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
- 	  stpcpy ((char *) to, buf);
- 	  break;
- 	case CCP_POSIX_TO_WIN_W:
-+	  if (prependglobalroot)
-+	    to = (void *) wcpcpy ((PWCHAR) to, ro_u_globalroot.Buffer);
- 	  wcpcpy ((PWCHAR) to, path);
- 	  break;
- 	}
-diff --git a/winsup/cygwin/release/3.6.2 b/winsup/cygwin/release/3.6.2
-index bceabcab34..de6eae13fc 100644
---- a/winsup/cygwin/release/3.6.2
-+++ b/winsup/cygwin/release/3.6.2
-@@ -13,3 +13,6 @@ Fixes:
-
- - Fix setting DOS attributes on devices.
-   Addresse: https://cygwin.com/pipermail/cygwin/2025-April/257940.html
-+
-+- Fix cygwin_conv_path writing to 'to' pointer before size is checked.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
 -- 
-2.49.0.windows.1
+Regards,
+Christian
 
