@@ -1,128 +1,90 @@
-Return-Path: <SRS0=TXtc=XR=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
-	by sourceware.org (Postfix) with ESMTP id 69DEB3858406
-	for <cygwin-patches@cygwin.com>; Thu,  1 May 2025 11:55:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 69DEB3858406
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 69DEB3858406
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.197
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746100544; cv=none;
-	b=eUlZP6j7aG3xcOItcVCJKJCetgUAYzH+jU785gJ8VBh1FhtFQluB6eHeWZqdwnGqe2ljrUwI0Rza8pJpKJdiiT+/N2OwzzyrguuM/G0QTAh1Z/ZZL+q7Z/WO48mSMDUsnc7FyRaX3Pplrq0teSR6PUx6YMP1UdBt+6Cs/0JpWGQ=
+Return-Path: <SRS0=x21U=XR=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+	by sourceware.org (Postfix) with ESMTPS id 3E4E13857C7B
+	for <cygwin-patches@cygwin.com>; Thu,  1 May 2025 12:30:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3E4E13857C7B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3E4E13857C7B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.21
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746102640; cv=none;
+	b=BPaFlZOjbwPbhtMJulQFcNMugQJ5uamvaK8SKTR1BrCpy8sYsZASO1ah6V5JG5nvVWBOU56Axis8mFmn/qCWxwSjjuZGgfUZG+oxKX3ylB3XwUgG4VNCjdiQgMMrjWvFK+XujpK5a17MgmeKkoQ0D1yb0jiaistNKt9FrFhp3s0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1746100544; c=relaxed/simple;
-	bh=m3HBWLET+8dIn7gp180s/W21QVoT4coE+Xfkf565cL4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=j/5QpX7xCyuCn6epsXEbkA7Yf6IGf4IgPwTWoshGSVCCwmoVP0JAJAArng/kFTXeJFh51IOan+3OZTGwC/hNyUy8wmeQsShCyfHgDbGVjfC0Eq1G4N8GtVz4tfAUfjZ+UBt/8hB9bk4UNdHeYVQh4dliZ916gaXtYh91JJyJHZg=
+	t=1746102640; c=relaxed/simple;
+	bh=xP+qb+EiJI9a09r9qAt8oqx0hWsuJDCgybOIaCxdgl0=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version; b=a3vzabocMrvx8FLZ6E8jfLQzRToBj47VdSrhcFrDusPPJBN7iMJ/r+QUDZOpKR9omWDQ5ZYjCiamAhI0+5dL6JMehzMVuKV98UfKhBcHs5TWwWGZHHTati1GbCjvm8/ovwhW8L3xrQaUk9bezgR0ufOsfI7wkF5pAQcEZLkfisE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 69DEB3858406
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89D9E0533C2C1
-X-Originating-IP: [86.140.194.111]
-X-OWM-Source-IP: 86.140.194.111
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieelhedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefggefhvddvieejtedtgfelteffteeftdeugfefveehtdehgfffleeftefhvdelffenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudegtddrudelgedrudduudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugedtrdduleegrdduuddupdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddugedtqdduleegqdduuddurdhrrghnghgvkeeiqddugedtrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdekpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghs
-	segthihgfihinhdrtghomhdprhgtphhtthhopegthihgfihinhesjhgurhgrkhgvrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.140.194.111) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89D9E0533C2C1; Thu, 1 May 2025 12:55:42 +0100
-Message-ID: <69d84bb5-fdfd-47a2-aea7-dccdf5ac2414@dronecode.org.uk>
-Date: Thu, 1 May 2025 12:55:40 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3E4E13857C7B
+Received: from fwd73.aul.t-online.de (fwd73.aul.t-online.de [10.223.144.99])
+	by mailout10.t-online.de (Postfix) with SMTP id EC051331
+	for <cygwin-patches@cygwin.com>; Thu,  1 May 2025 14:29:59 +0200 (CEST)
+Received: from [192.168.2.101] ([91.57.247.175]) by fwd73.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1uAT36-35uUDo0; Thu, 1 May 2025 14:29:56 +0200
+Subject: Re: [PATCH] Cygwin: clock_settime: fail with EINVAL if tv_nsec is
+ negative
+To: cygwin-patches@cygwin.com
+References: <f21927b5-defe-529d-3095-0c1f51e23eb7@t-online.de>
+ <274da5b5-b94c-4ccc-8b58-713965a62e93@dronecode.org.uk>
+ <09edeb3e-6c0c-74bb-75df-a7dd2bde2e5e@t-online.de>
+ <9e95644c-c152-00ed-14d1-725252066fa6@t-online.de>
+ <916eb947-c497-4485-b230-50a67c4e8b91@dronecode.org.uk>
+From: Christian Franke <Christian.Franke@t-online.de>
+Reply-To: cygwin-patches@cygwin.com
+Message-ID: <77d581c2-88ee-3ae1-a6f0-69c2d6bd641b@t-online.de>
+Date: Thu, 1 May 2025 14:29:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: cygwin_conv_path: don't write to `to` before size
- is validated.
-To: Jeremy Drake <cygwin@jdrake.com>
-References: <bd0e9cdd-ba1f-423b-089c-7f84e5e8bb3f@jdrake.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <bd0e9cdd-ba1f-423b-089c-7f84e5e8bb3f@jdrake.com>
+In-Reply-To: <916eb947-c497-4485-b230-50a67c4e8b91@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1746102596-5FB27936-1F7FAEE8/0/0 CLEAN NORMAL
+X-TOI-MSGID: 94dd8211-40df-4bd9-b37b-84ae07317830
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 29/04/2025 18:42, Jeremy Drake via Cygwin-patches wrote:
-> In the CCP_POSIX_TO_WIN_W path, when `from` is a device,
-> cygwin_conv_path would attempt to write to the `to` buffer before the
-> validation of the `size`.  This resulted in an EFAULT error in the
-> common use-case of passing `to` as NULL and `size` as 0 to get the
-> required size of `to` for the conversion (as used in
+Jon Turney wrote:
+> On 30/04/2025 12:33, Christian Franke wrote:
+>> Christian Franke wrote:
+>>> Jon Turney wrote:
+>>>> On 28/04/2025 16:43, Christian Franke wrote:
+>>>>> A followup to:
+>>>>> https://sourceware.org/pipermail/cygwin-patches/2025q2/013678.html
+>>>>
+>>>> Thanks!
+>>>>
+>>>> The SUS page for clock_settime() contains the following text:
+>>>>
+>>>>> [EINVAL]
+>>>>>     The tp argument specified a nanosecond value less than zero or 
+>>>>> greater than or equal to 1000 million. 
+>>>>
+>>>> ... so if we're going to validate tv_nsec, it seems that's the 
+>>>> range to use
+>>>>
+>>>>
+>>>
+>>> Yes. The patch only checks the lower bound because the upper bound 
+>>> is already correctly checked later in settimeofday().
+>
+> This is just prompts me to further questions: Is settimeofday() 
+> specified to permit some kinds of non-normalized values?
 
-This is clearly not what's wanted! Thanks for fixing this!
+settimeofday() is not part of POSIX, Linux settimeofday(2) only says:
 
-> cygwin_create_path).  Instead, set a boolean and write to `to`
-> after validation.
-> 
-> Fixes: 43f65cdd7dae ("* Makefile.in (DLL_OFILES): Add fhandler_procsys.o.")
-> Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
->   winsup/cygwin/path.cc       | 5 ++++-
->   winsup/cygwin/release/3.6.2 | 3 +++
->   2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-> index 7a08e978ad..d26f99ee7f 100644
-> --- a/winsup/cygwin/path.cc
-> +++ b/winsup/cygwin/path.cc
-> @@ -3911,6 +3911,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
->     int how = what & CCP_CONVFLAGS_MASK;
->     what &= CCP_CONVTYPE_MASK;
->     int ret = -1;
-> +  bool prependglobalroot = false;
-> 
->     __try
->       {
-> @@ -4019,7 +4020,7 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
->   	    {
->   	      /* Device name points to somewhere else in the NT namespace.
->   		 Use GLOBALROOT prefix to convert to Win32 path. */
-> -	      to = (void *) wcpcpy ((wchar_t *) to, ro_u_globalroot.Buffer);
-> +	      prependglobalroot = true;
+"
+EINVAL
+Timezone (or something else) is invalid.
+"
 
-It seems like this could all be done in-place in .Buffer here, but I'm 
-going to defer to Corinna on if that's at all clearer...
+It is also usually missing in the docs that negative time_t values are 
+accepted by gmtime() etc. This works on Cygwin and Debian:
 
->   	      lsiz += ro_u_globalroot.Length / sizeof (WCHAR);
->   	    }
->   	  /* TODO: Same ".\\" band-aid as in CCP_POSIX_TO_WIN_A case. */
-> @@ -4075,6 +4076,8 @@ cygwin_conv_path (cygwin_conv_path_t what, const void *from, void *to,
->   	  stpcpy ((char *) to, buf);
->   	  break;
->   	case CCP_POSIX_TO_WIN_W:
-> +	  if (prependglobalroot)
-> +	    to = (void *) wcpcpy ((PWCHAR) to, ro_u_globalroot.Buffer);
->   	  wcpcpy ((PWCHAR) to, path);
->   	  break;
->   	}
-> diff --git a/winsup/cygwin/release/3.6.2 b/winsup/cygwin/release/3.6.2
-> index bceabcab34..de6eae13fc 100644
-> --- a/winsup/cygwin/release/3.6.2
-> +++ b/winsup/cygwin/release/3.6.2
-> @@ -13,3 +13,6 @@ Fixes:
-> 
->   - Fix setting DOS attributes on devices.
->     Addresse: https://cygwin.com/pipermail/cygwin/2025-April/257940.html
-> +
-> +- Fix cygwin_conv_path writing to 'to' pointer before size is checked.
-> +  Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258068.html
+$ date -u -d '0000-01-01' +%s
+-62167219200
 
-
-Seems like this should also touch:
-
-https://cygwin.com/cygwin-api/func-cygwin-conv-path.html
-
-(source in winsup/doc/path.xml)
-
-
-I'm not sure what the conventional language to use for this common 
-behaviour:
-
-"If size is 0, (to is ignored|to can be NULL) and cygwin_conv_path just 
-returns the required buffer size in bytes" ?
+$ date -u -d @-62167219200 -Is
+0000-01-01T00:00:00+00:00
 
