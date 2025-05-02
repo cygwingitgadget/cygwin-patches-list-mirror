@@ -1,106 +1,85 @@
-Return-Path: <SRS0=nMGZ=XR=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 12CF23858D34
-	for <cygwin-patches@cygwin.com>; Thu,  1 May 2025 19:28:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 12CF23858D34
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 12CF23858D34
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746127723; cv=none;
-	b=UGH0TQXPpr3T2Z6wAXf4eYSHiD4QNRNDSr9EslsxwUgchcHu4U3ijN/zNkPl/SYMhLsXU3pk67lpAJ+pPytTVEFO1jVyWaC2epTytOjq5KAgmKvJlxeqNqFOLZILerIHBqB1M2OldD1/s1Ae/CSwqmMH/NJmJpKRD+YsPAy+1qs=
+Return-Path: <SRS0=vR1J=XS=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 5028A3858D20
+	for <cygwin-patches@cygwin.com>; Fri,  2 May 2025 04:57:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5028A3858D20
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5028A3858D20
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746161827; cv=none;
+	b=kiGy/wHk4O50BtiLdyYV/ZZAr1fvhaj9/f7S7Gu7E9ht6Ut6nV+ZI8Pa2i4Li8XtWdDjJ5Ej/k8mP8ZxRsPM9RSZ7mXy2j1t9YP3gh3l7Ekd0I4EqmNpH5pNaoWtHFeo+tHwe3ZkDJdeOYu2pOa2TcEl30ryT8/AWWfOTmV5Ah4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1746127723; c=relaxed/simple;
-	bh=H7QqJutvtjpwWXHXP2LisurnjbYtBUzu5aG3fUAdnP8=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=XTV5qCQu2D8wvIWXm2zHeofOBoTssH2+vXjv8Ccx+fP26kEQNb/vWdRF5WqczdWU72U9rW0qpnXCNYeUG94wDWlLXOnHFDUuY/CQbh4abLdVwIt/+QfroUn1Mq/GA4EHYjulji345J+uUz+PyT4I94ZF0AfspmIfyasEsLxh9Dc=
+	t=1746161827; c=relaxed/simple;
+	bh=YKF82X1BC8CiP7EnfblfnxcbKUdoZ28zf+7KDM7NDTE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Kev9Z426mSb5cD3q1nFk5EMKw9vYta6llSzHNdIapQ8R0ovzGs3Vcu9oPcyOSq2oCB9M27wZ/K9+atVhUpRT106gmLWensRFEmb6z+0MQxxpgLdhhFoYBPDJ8nf+vaowDTg8uosFB3JyirIzpojONs57Wo7RXPznKZqTwnVkLRk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 12CF23858D34
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=SSblYUo2
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id C48C845C56
-	for <cygwin-patches@cygwin.com>; Thu, 01 May 2025 15:28:42 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=g/Tua
-	uRDCy4xy8n+vJy21IDJZ/4=; b=SSblYUo2mh49cFyEQ653VbwHSTqIcutlLtEcK
-	0lDiSwzUamFRTM9taYrHWGTnxmnHQTpnp/nQ88GWuPfVxoUn1UntAv1QsjmL8yYI
-	axic6P9y9AimOgldx+pq0/yOcSNMlYsMsm8QFQicvjZivVMNUCWCp80AVEfRP1rr
-	du9YH0=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id AD6A145B8A
-	for <cygwin-patches@cygwin.com>; Thu, 01 May 2025 15:28:42 -0400 (EDT)
-Date: Thu, 1 May 2025 12:28:42 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5028A3858D20
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 54251r9f097820;
+	Thu, 1 May 2025 22:01:53 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-245-188.fiber.dynamic.sonic.net(50.1.245.188), claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdAKsqqt; Thu May  1 22:01:46 2025
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: docs: flesh out docs for cygwin_conv_path.
-Message-ID: <cb20f137-46cb-eab9-27e9-ca098d1364e5@jdrake.com>
+Cc: Mark Geisert <mark@maxrnd.com>, Collin Funk <collin.funk1@gmail.com>
+Subject: [PATCH] Cygwin: Update search.h functions for POSIX.1-2024
+Date: Thu,  1 May 2025 21:56:48 -0700
+Message-ID: <20250502045656.833-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Explicitly specify that `from` and `to` are NUL-terminated strings, that
-NULL is permitted in `to` when `size` is 0, and that `to` is not
-written to in the event of an error (unless it was a fault while writing
-to `to`).
+Add type posix_tnode.  Change certain uses of "void" to "posix_tnode" in
+both the prototypes and definitions of functions associated with <search.h>.
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+(Necessary changes to Newlib's /libc/include/search.h have already been
+submitted in a patch sent to newlib@sourceware.org.)
+
+Reported-by: Collin Funk <collin.funk1@gmail.com>
+Addresses: https://cygwin.com/pipermail/cygwin/2025-April/258032.html
+Signed-off-by: Mark Geisert <mark@maxrnd.com>
+Fixes: ec98d19a08c2 "* wininfo.h (wininfo::timer_active): Delete."
+
 ---
- winsup/doc/path.xml | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ winsup/cygwin/include/search.h | 10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/doc/path.xml b/winsup/doc/path.xml
-index f56614bb68..de1b95a37b 100644
---- a/winsup/doc/path.xml
-+++ b/winsup/doc/path.xml
-@@ -33,12 +33,12 @@
-
-   <refsect1 id="func-cygwin-conv-path-desc">
-     <title>Description</title>
--<para>Use this function to convert POSIX paths in
--<parameter>from</parameter> to Win32 paths in <parameter>to</parameter>
--or, vice versa, Win32 paths in <parameter>from</parameter> to POSIX paths
--in <parameter>to</parameter>.  <parameter>what</parameter>
--defines the direction of this conversion and can be any of the below
--values.</para>
-+<para>Use this function to convert NUL-terminated POSIX paths in
-+<parameter>from</parameter> to NUL-terminated Win32 paths in
-+<parameter>to</parameter> or, vice versa, NUL-terminated Win32 paths in
-+<parameter>from</parameter> to NUL-terminated POSIX paths in
-+<parameter>to</parameter>.  <parameter>what</parameter> defines the
-+direction of this conversion and can be any of the below values.</para>
-
- <programlisting>
-   CCP_POSIX_TO_WIN_A      /* from is char *posix, to is char *win32       */
-@@ -62,7 +62,8 @@ default.</para>
-
- <para><parameter>size</parameter> is the size of the buffer pointed to
- by <parameter>to</parameter> in bytes.  If <parameter>size</parameter>
--is 0, <function>cygwin_conv_path</function> just returns the required
-+is 0, <parameter>to</parameter> may be NULL and
-+<function>cygwin_conv_path</function> just returns the required
- buffer size in bytes.  Otherwise, it returns 0 on success, or -1 on
- error and errno is set to one of the below values.</para>
-
-@@ -73,6 +74,12 @@ error and errno is set to one of the below values.</para>
-                   of what == CCP_POSIX_TO_WIN_A, longer than MAX_PATH.
-     ENOSPC        size is less than required for the conversion.
- </programlisting>
+diff --git a/winsup/cygwin/include/search.h b/winsup/cygwin/include/search.h
+index f532eae55..7c6d7b4cf 100644
+--- a/winsup/cygwin/include/search.h
++++ b/winsup/cygwin/include/search.h
+@@ -39,6 +39,8 @@ typedef	struct node
+ } node_t;
+ #endif
+ 
++typedef void posix_tnode;
 +
-+<para>In the event of an error, the memory at <parameter>to</parameter> is
-+not modified unless the error is <constant>EFAULT</constant> writing to
-+the memory at <parameter>to</parameter>, which may happen if
-+<parameter>size</parameter> is incorrectly specified.
-+
-   </refsect1>
-
-   <refsect1 id="func-cygwin-conv-path-example">
+ struct hsearch_data
+ {
+   struct internal_head *htable;
+@@ -58,13 +60,13 @@ ENTRY *hsearch (ENTRY, ACTION);
+ int hcreate_r (size_t, struct hsearch_data *);
+ void hdestroy_r (struct hsearch_data *);
+ int hsearch_r (ENTRY, ACTION, ENTRY **, struct hsearch_data *);
+-void *tdelete (const void * __restrict, void ** __restrict,
++void *tdelete (const void * __restrict, posix_tnode ** __restrict,
+ 	       int (*) (const void *, const void *));
+ void tdestroy (void *, void (*)(void *));
+-void *tfind (const void *, void **,
++posix_tnode *tfind (const void *, posix_tnode *const *,
+ 	     int (*) (const void *, const void *));
+-void *tsearch (const void *, void **, int (*) (const void *, const void *));
+-void  twalk (const void *, void (*) (const void *, VISIT, int));
++posix_tnode *tsearch (const void *, posix_tnode **, int (*) (const void *, const void *));
++void  twalk (const posix_tnode *, void (*) (const posix_tnode *, VISIT, int));
+ void *lfind (const void *, const void *, size_t *, size_t,
+ 	     int (*) (const void *, const void *));
+ void *lsearch (const void *, void *, size_t *, size_t,
 -- 
-2.49.0.windows.1
+2.45.1
 
