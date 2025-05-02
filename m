@@ -1,86 +1,162 @@
-Return-Path: <SRS0=czsM=XS=gmail.com=collin.funk1@sourceware.org>
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-	by sourceware.org (Postfix) with ESMTPS id BFB443858D34
-	for <cygwin-patches@cygwin.com>; Fri,  2 May 2025 05:33:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BFB443858D34
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BFB443858D34
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::62b
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746164022; cv=none;
-	b=MaEMPfCh/8uarUkA+jNb8GxTftd9IEu8b4IElFsP3UaDEuOtwJ+KOLnTbsW/p8CjHAeebZGN7DEMF/K9QgrG6HP4vfu0jkav5jfVc6YA+ysWCUkPz4xxbbe6YnWsKPM9mGUnK6svuEfw3JflqM07a9RRBRjwjCHOXM7iuAclZww=
+Return-Path: <SRS0=mLRr=XS=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.226.35])
+	by sourceware.org (Postfix) with ESMTPS id EDB333858D35
+	for <cygwin-patches@cygwin.com>; Fri,  2 May 2025 11:01:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EDB333858D35
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EDB333858D35
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.35
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746183697; cv=none;
+	b=QTxBMKkDibxqsXmjADWDWksKyJrQGl1XThRu0Y1OP+bzOdLHmZVdXw6sK7UMu0CqaP8ERoqh56evsxEnuYWquZ4xn80dkQ/j7dMhzUnujn6/RGBnEoJeYUmB4FODtZ63+/UnMOZU2q97t4Reb1TkEAUgIjuA4cQNVpY3AkpMgaw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1746164022; c=relaxed/simple;
-	bh=R2TVmDuhyk4Gn3N8M1RKTEWOfF5xb/EXRqV8IAwNW+Y=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=I55u68y9nqIR4jBENtkP5pyp+GKlLGJlPMwbOq9h6SPA59W+kRCc+5rJByZzkuqF8m5qGm8LrRzk02ZtXqQmEvYK3z9hMcPIgNU7z3dEuO5U4vXITZM3232H1kDxr+UKKM0QUOhR/aRcAzBIdVHxx4oZIPsRf1LN3KrDbnKUgdQ=
+	t=1746183697; c=relaxed/simple;
+	bh=aiGPRUpxzho1/w2w1oTG/+AX3kyabE11630nMd643p0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=kVv7e9Es28IbFgr/Cl1uJ3OeCIfEsJJ79FXIL+9R4ey2v4G3SX6IyIoJEbPFOUU63g98Z9aSDxakm8SZJJsvRRdj9pE2B1Nx4U2DfHm8OzGX8elgCBWLqJ9NvTe2n0MW73K215v9bZfYqaQZcN2fn/YhtD3dT0PZDUwy7KRcmBw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BFB443858D34
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EDB333858D35
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=EFb/J5Wh
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-227b828de00so16900025ad.1
-        for <cygwin-patches@cygwin.com>; Thu, 01 May 2025 22:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746164021; x=1746768821; darn=cygwin.com;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/UkQPYDdLIeeXHsOA3m66J83dJmNMXMO93BSLyZl4uU=;
-        b=EFb/J5WhKV3nNIp6uYG8WQ0tZj9XkWNbXfd5MTUnQc7UXT/eru436Tza2PqVlG8O0d
-         QnPS6vEFbJ+NiPOEdHtenS4v1xpV4QkRibqgypSU6Ypvb+Ehk2z17aGmnBqWyIkKjQP7
-         ZPpQ4AtvdgbMIw1yx7PhZyG1n4/MBW7uDphboyaJhH1PeUJFNXmmfT5JBuh6MuZDy0EO
-         tCl7bCAjtobaI3djM50F23HBvn4ztJdSa79iRzWigZBeYIU0xau/8MWTlpe7s1zGIXMi
-         e9UJ4D3GL4EdjdNwFyoc8Q8Zp773kCjSi3qEuCUDDU4lKh7fTKbr7uoXOMZreKiTAhtx
-         +NCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746164021; x=1746768821;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/UkQPYDdLIeeXHsOA3m66J83dJmNMXMO93BSLyZl4uU=;
-        b=ARURhLZ5xmg+ddk8Lt62YUqVfbSsmJ0okm5ZUuoVfy0ToeL4OOPAIFYYRh4tcZHtv5
-         VQPVeAxtJasMr7Lgv+gn6NGueoyyvOQo0StUg5Flhd5JWBEYctFqe0kmw8d07htcPred
-         +N/3dd7lS4bI8LXIlbeztv2qncetBKvP6NUOIzu1RGvNjfXdnnePHEe44XpWBhRoX0/4
-         RaHKrN6S59toMuBriXVhUduKlqokTUXZLK9xpDOgpothQ7mbe95Vw14GGspgsgtHwjE2
-         ipxRM80M8Oize5RUZGSxLp1bz8/y3mB8SKIWQiNadrfSRe/mkQSaKy1RnTUtNbgoSaJc
-         Ab3g==
-X-Gm-Message-State: AOJu0YxdRRf9nlQzJsrOOrGl/yQHhVKfPRTuwEfTAj7M7PCKEWdlT0+G
-	U94Vbd2AiZrka5qCuCzNPqHYgskhz8N0tbiwWBoD8NuUsTTqDJILkxTeWXba
-X-Gm-Gg: ASbGncuvPnKOVQGDarEL/Hj2eafebY57YEKvKQo24P4N3saLy3LJbkqkfP+pfo1kasB
-	E/y5uab7ZTXTUt6TWeRCTG6oGq8krfec+zNZ59bKlDArIa3dC20G39tzmf6c+wCWZITS5xv7ewv
-	isV96vvn6Q9xgBYFOSBdNI+MrDRgDA5Ml1wmp5j004D4vetBjdh3c5yJGbJUTm7U8K6MMlGviRp
-	4c6hRCdbhDx0qguFyMyw2m/eRZ9hN7BJJ570orNkze3Rf/9NyyqqhMlsTuvcOzdIE2FSj/HSFQ3
-	CKLSpa3xSw3HLU+xCJ4BqRc7YyV2TsxxuoXa0mUe6FResbymp0kYDqCUXE9Ydexu1G+1FpGCP/X
-	uew==
-X-Google-Smtp-Source: AGHT+IHtY4m9P8O72FqJnuXo9nlDAl0IV1GuLqJErAVfW9WnH/DNPu6FIIrPtltiIduPE+9ZjUDQ8A==
-X-Received: by 2002:a17:903:4404:b0:223:fb3a:8647 with SMTP id d9443c01a7336-22e1033c81fmr23829475ad.41.1746164021580;
-        Thu, 01 May 2025 22:33:41 -0700 (PDT)
-Received: from fedora (static-198-54-134-143.cust.tzulo.com. [198.54.134.143])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e1091505bsm5739385ad.189.2025.05.01.22.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 22:33:41 -0700 (PDT)
-From: Collin Funk <collin.funk1@gmail.com>
-To: Mark Geisert <mark@maxrnd.com>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Update search.h functions for POSIX.1-2024
-In-Reply-To: <20250502045656.833-1-mark@maxrnd.com>
-References: <20250502045656.833-1-mark@maxrnd.com>
-Date: Thu, 01 May 2025 22:33:40 -0700
-Message-ID: <87a57vy3t7.fsf@gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PGhjCQmw
+Received: from localhost.localdomain by mta-snd-e03.mail.nifty.com
+          with ESMTP
+          id <20250502110132805.PFJY.47114.localhost.localdomain@nifty.com>;
+          Fri, 2 May 2025 20:01:32 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH v3] Cygwin: signal: Do not handle signals while waiting for wakeup evt
+Date: Fri,  2 May 2025 20:00:51 +0900
+Message-ID: <20250502110105.1416-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1746183692;
+ bh=8QlQXpD/nT+rBtji39NAwIqmFb5CMMEVShGjRUUYVcs=;
+ h=From:To:Cc:Subject:Date;
+ b=PGhjCQmwiKl3LNfXyPE2M1NQxh7AYAqgYC7RQ7QqyOThnZyzzd36eShh5eukPgrZ4r3io1ph
+ +C9yanSKjRA8H6V3+G6aZe59wZgawmt7+OjVMapFQhIW31ibm3SHMVvf3OxwPEBc3Hz6IaLi/X
+ LyqwGV0iWGP1t2yH+25SnU12LnkqHdTAzHKvE1kEalXnS49bbVlL5/pmT/hGgkEno4U4v/aJEr
+ s9vSliKDiHXwMwnrHDN2lSBTXWeROti2j5zOHHdCGja5QQy22rEYwIXOVdmKnem+Hu00m66E9H
+ rHy20c426HZuRxrJObV+14FVL5ioASBFNf0ghDP43NPuyCTA==
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Mark Geisert <mark@maxrnd.com> writes:
+... Otherwise, the opportunity for cleanup the wakeup event handle etc.
+may be lost because the user signal handler never returns if it calls
+longjmp(). This results in handle leak because the wakeup event handle
+will not be closed. This issue happens when the commnad e.g. "stress-ng
+--mprotect 1 -t 5" is executed. Instead, call call_signal_handler()
+after cleaning up if some signals are armed during waiting wakeup event.
+This essentially reverts the commit d243e51ef1d3, however, the deadlock
+fixed by that commit no longer occurs even reverting it for some reason.
+This is probably due to the redesign of the signal queue.
 
-> Add type posix_tnode.  Change certain uses of "void" to "posix_tnode" in
-> both the prototypes and definitions of functions associated with <search.h>.
->
-> (Necessary changes to Newlib's /libc/include/search.h have already been
-> submitted in a patch sent to newlib@sourceware.org.)
+In addition, do not touch "incyg" flag in _cygtls::call_signal_handler()
+because the process is still in the cygwin function when a user signal
+handler is called from the cygwin functions such as cygwait().
 
-Thanks for the patch and forwarding everything to the right places for
-me!
+Addresses: https://sourceware.org/pipermail/cygwin/2025-March/257726.html
+Fixes: d243e51ef1d3 ("Cygwin: signal: Fix deadlock between main thread and sig thread")
+Fixes: 3a1ccfc8c7e6 ("* exceptions.cc (setup_handler): Remove locked flag.  Use 'incyg' flag and in_exception function to determine when we're in a cygwin function.")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc |  3 ---
+ winsup/cygwin/sigproc.cc    | 20 +++++++++++---------
+ 2 files changed, 11 insertions(+), 12 deletions(-)
 
-Collin
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 49fc166ff..d1c98e46f 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1756,7 +1756,6 @@ _cygtls::call_signal_handler ()
+ 
+       int this_errno = saved_errno;
+       reset_signal_arrived ();
+-      incyg = false;
+       current_sig = 0;	/* Flag that we can accept another signal */
+ 
+       /* We have to fetch the original return address from the signal stack
+@@ -1869,8 +1868,6 @@ _cygtls::call_signal_handler ()
+ 	}
+       unlock ();
+ 
+-      incyg = true;
+-
+       set_signal_mask (_my_tls.sigmask, (this_sa_flags & SA_SIGINFO)
+ 					? context1.uc_sigmask : this_oldmask);
+       if (this_errno >= 0)
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index fc28be956..361887981 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -611,7 +611,7 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+   bool communing = si.si_signo == __SIGCOMMUNE;
+ 
+   pack.wakeup = NULL;
+-  bool wait_for_completion;
++  bool wait_for_completion = false;
+   if (!(its_me = p == NULL || p == myself || p == myself_nowait))
+     {
+       /* It is possible that the process is not yet ready to receive messages
+@@ -762,13 +762,10 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+       memcpy (p, si._si_commune._si_str, n); p += n;
+     }
+ 
+-  unsigned cw_mask;
+-  cw_mask = pack.si.si_signo == __SIGFLUSHFAST ? 0 : cw_sig_restart;
+-
+   char mtx_name[MAX_PATH];
+   shared_name (mtx_name, "sig_send", p->pid);
+   mtx = CreateMutex (&sec_none_nih, FALSE, mtx_name);
+-  cygwait (mtx, INFINITE, cw_mask);
++  WaitForSingleObject (mtx, INFINITE);
+ 
+   if (its_me && (si.si_signo == __SIGFLUSHFAST || si.si_signo == __SIGFLUSH))
+     {
+@@ -791,7 +788,7 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+ 	  CloseHandle (mtx);
+ 	  ResetEvent (sigflush_done_evt);
+ 	  SetEvent (sigflush_evt);
+-	  cygwait (sigflush_done_evt, INFINITE, cw_mask);
++	  WaitForSingleObject (sigflush_done_evt, INFINITE);
+ 	  rc = 0;
+ 	  goto out;
+ 	}
+@@ -807,8 +804,8 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+       if (!res || packsize == nb)
+ 	break;
+       ReleaseMutex (mtx);
+-      cygwait (NULL, 10, cw_mask);
+-      cygwait (mtx, INFINITE, cw_mask);
++      Sleep (10);
++      WaitForSingleObject (mtx, INFINITE);
+       res = 0;
+     }
+   ReleaseMutex (mtx);
+@@ -843,7 +840,7 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+   if (wait_for_completion)
+     {
+       sigproc_printf ("Waiting for pack.wakeup %p", pack.wakeup);
+-      rc = cygwait (pack.wakeup, WSSC, cw_mask);
++      rc = WaitForSingleObject (pack.wakeup, WSSC);
+       ForceCloseHandle (pack.wakeup);
+     }
+   else
+@@ -874,6 +871,11 @@ out:
+     }
+   if (pack.wakeup)
+     ForceCloseHandle (pack.wakeup);
++
++  /* Handle signals here if it was not handled yet */
++  if (wait_for_completion && pack.si.si_signo != __SIGFLUSHFAST)
++    _my_tls.call_signal_handler ();
++
+   if (si.si_signo != __SIGPENDING && si.si_signo != __SIGPENDINGALL)
+     /* nothing */;
+   else if (!rc)
+-- 
+2.45.1
+
