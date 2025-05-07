@@ -1,115 +1,148 @@
-Return-Path: <SRS0=NWjx=XV=gmail.com=pavlov.pavel@sourceware.org>
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-	by sourceware.org (Postfix) with ESMTPS id E76EA3857BB6
-	for <cygwin-patches@cygwin.com>; Mon,  5 May 2025 20:28:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E76EA3857BB6
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E76EA3857BB6
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746476903; cv=none;
-	b=qw3CgbtaJug0ONkzkHpPqHv9874h37RtWR/S3lD25kXKNrxoEZb3fRJ/XC7T55vUPzYE5tVcwZUiP0xh5gXwclXblWR+fvtYg3gollztg3+5cQ1qGMmjbxaB0mDyfxgPDiHvv5eUf9L7bl8Bl074mcKGcBYWNMNphcy8xpRoE8I=
+Return-Path: <SRS0=YwmS=XX=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.227.113])
+	by sourceware.org (Postfix) with ESMTPS id 5E3123858C98
+	for <cygwin-patches@cygwin.com>; Wed,  7 May 2025 07:31:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5E3123858C98
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5E3123858C98
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.113
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1746603096; cv=none;
+	b=qeRxilwr3lwBmYetTRW/JJvw1xgRvCILnDCj8KF98ZqHnu3pfs810BVuhHsOjZftYm1/8QeXZFEYMNxFECt+KPHOi9qJxqrzbPlzW8z6+KtufEeVt8JLks85I3mWbu2ungCvh9DmzYE/98bmAfnRijjabofLGx3X1sajDSyu5o4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1746476903; c=relaxed/simple;
-	bh=yqKvkw9BhjPpHLDl20LknvFeV9/+25ch8kF9BOUpJNw=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=Jq8ZOCLcQ/d68PC+9pxD78EWpKWfccfX0ubUhr379W1N+Cq/iphIV0wNuiGUsqjxUrrrJwmmtP/1Dh8DAhjve6bnJlCLmO+z8pyrTlS9ZWx88XWTTFPXj7UjfxclCTg3HDAwLxnkUCegtipKuPa6QXEHj4G8j1d1pSwciWhVrq0=
+	t=1746603096; c=relaxed/simple;
+	bh=Xp0W/1JYK712dT9DzA9DQluJ/xE2873wKhKDd4E3HAI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=LJDjXnwUSSecsnFZqsX1bZun5k9Kfyz7o/jkrb3f63FdCmo0yM/5kkLXp17jChhNJrW7+1q6jzH6unQXslZ7BVCGMXIbMv3hweBG1WJ3oj0HYAOjUclpecAAhC6FDYWTk2iENtX2/CC0FfH8SiJcxrECp/hse2NQX0ltGTmyi2w=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E76EA3857BB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5E3123858C98
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=iM96Hlve
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-5493b5bc6e8so6119901e87.2
-        for <cygwin-patches@cygwin.com>; Mon, 05 May 2025 13:28:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746476899; x=1747081699; darn=cygwin.com;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bgmXdbjXf2RQD7EMsEpcxxjylD8bkUnoiaO8prPi8zs=;
-        b=iM96HlveBXfgNLDLilwdvd9T7i5EgEh5XRKtEnEbACp2QRITpKvBlD1V0AVMYf5qdy
-         FXkatSAaZaboyxFssthHPHhIN+9K3BNnbRjvElkz3RGGBByMOQ8pSKHc0Wj4RZeSCnX0
-         b5E38rXDf4zxkKZOqna1x6u6MN528j956ahZfpntjDONY2KPKS+8AInkafMt7hskq/2c
-         UYTnHEEilK8SmeK4yZWZn+XH7uJxwZecyBuoUgVX2Eqrd3+oSdg+Sr0/+VBsI8HrLNEp
-         1C7xzOwnPyosJHqsnZmeLnJ0wqxPZynIQigvcWP2t6K7AR/hw4icA+NQwlivnQI7BVxC
-         puHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746476899; x=1747081699;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bgmXdbjXf2RQD7EMsEpcxxjylD8bkUnoiaO8prPi8zs=;
-        b=i5ASl6LTGXvfyoGSFK+tZAFTZ5Hatvu1ocDXMVE2KjAZc+Mw5VjZWeCw8G99fT0nAp
-         CYAqTBT927xhg1R+pvkiqNg51ryEVoVC5XEVmS/10L1v3+pML27BpkoJHgKsCYiWMr/m
-         0EEEmkZigHXhbqKvfd7gQR17w3uP/lsjA9pft18tfvvh1tHzga9WSF1btaT456mJaPY8
-         OR9/ayoB34gFkYf3a4GnNET8LdrXEeD0aODsSXIELXRUJAbH+c1rI4lK9pRjuSNr1cHK
-         z5NOKE07XbwIog45AMxGJwNqedI1bGv+1bNkYR7JvMocGdTBwHgcaMbqtOc0kF4OSoOW
-         4vNA==
-X-Gm-Message-State: AOJu0Yy2uE68NDrKK3jvbAQ7Nd8HJGfmp++7Ntcx7P/GBOorlqohq4a2
-	GO1gQjoswOL7yz4+8Nvt5pefdqzF34/MQ37IzScBv1LrU8SyNID6b4gHiRC1cFCLiCjZbmLRv0N
-	5Eri0dug+pjrpvYBFIZJT5GEHJ1RV7EUh6qk=
-X-Gm-Gg: ASbGncshxulbmnz4AmPnRRaqTUXMXynwA3PtkeAHfKbrYOxzLgbsbihv+S8pe3++Aqk
-	UEkXBvXfOOTd1z7JhYMStSiVkv4HFM7NY3GnXIK8MzcqrS7q78H8jjrppHwAFUELsHgt3nuBZP7
-	HxheP1Ia8bx6KMNj7fVg==
-X-Google-Smtp-Source: AGHT+IEM1eAt1ckUXPRTbK7Jg5Ec8uj+DQec2ASht/i1tHd8VHP/zlJ2R8smdcLhDjW5szJp136q0o0y13QWO5Z+jJU=
-X-Received: by 2002:ac2:5687:0:b0:548:de7f:b3be with SMTP id
- 2adb3069b0e04-54f9efc616emr2569106e87.21.1746476899172; Mon, 05 May 2025
- 13:28:19 -0700 (PDT)
-MIME-Version: 1.0
-From: Pavel Pavlov <pavlov.pavel@gmail.com>
-Date: Mon, 5 May 2025 22:28:04 +0200
-X-Gm-Features: ATxdqUFowVUNjf_3u8cSfHL9WzqsIo344Plcjfaqb8lXETEPZFvdgyOeqjxgh2o
-Message-ID: <CAG_s-qrP8XqJpuX4sEWOAS1xKHKBF=51325wTFE4-AmgKb-khQ@mail.gmail.com>
-Subject: netdb.h: remove const from hostent.h_name
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=hWcjmw8V
+Received: from localhost.localdomain by mta-snd-e01.mail.nifty.com
+          with ESMTP
+          id <20250507073131617.CEVV.48098.localhost.localdomain@nifty.com>;
+          Wed, 7 May 2025 16:31:31 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary="0000000000002f4a0b06346957a9"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH] Cygwin: console: Store console mode only when console is opened
+Date: Wed,  7 May 2025 16:31:03 +0900
+Message-ID: <20250507073114.12640-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1746603091;
+ bh=exDNXaOwYpsQ/HFCDB04A/4Th84axUkqVVNEvyqlqQ0=;
+ h=From:To:Cc:Subject:Date;
+ b=hWcjmw8ViM2K470ctAe5GUmZaRZDIP7TN5qr7/XKP8gEUN23OHnDbMA0uqsNyzurW8g+odWj
+ JOdA80UjQeO+P8KCezLlNbkBoSyjacBbsmf5pRPMnSJ8vqa57qlKu06tNWSKFrobvaHVyeA/EN
+ eW8jdfbkN/rIb81ObBh4xS/S517M/0wGWuCrr3fcTv0uTQu5BM/pZzR6G+7hZfZmZjE6cEvMcQ
+ FYoCD9qGWOfPTXnkT6/962o3Xr/41ybJoEBdoxvTHwxObyvL3hpNHBO2KtmFvhpCDCpgQ905Sd
+ WsNlm4ug7t8r4jDng4B+qr2LPPcRWKAb1gJGbBGGTz6ripdg==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---0000000000002f4a0b06346957a9
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+... and restore it when app exits. The commit 0bfd91d57863 has a bug
+that the console mode is stored into the shared memory when both:
+  (1) cygwin process is started from non-cygwin process.
+  (2) cygwin process started from non-cygwin process exits.
+(1) is intended, but (2) is not. Due to (2), the stored console mode
+is unexpectedly broken when the cygwin process exits. Then the mode
+restored will be not as expected. This causes undesired console mode
+in the use case that cygwin and non-cygwin apps are mixed.
 
-Hi,
+With this patch, the console mode will stored only in the case (1).
+This is done by putting the code, which stores the console mode, into
+fhandler_console::open() rather than fhandler_console::set_input_mode()
+and fhandler_console::set_output_mode().
 
-The patch is self explanatory. This fixes errors/waring from hostent::h_nam=
-e:
+Fixes: 0bfd91d57863 ("Cygwin: console: tty::restore really restores the previous mode")
+Reported-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/console.cc | 33 ++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
-```
-[6/14] Building C object CMakeFiles/http.dir/ext/c-ares/libcares.c.o
-In file included from /d/work-pps/ext/c-ares/libcares.c:26:
-/d/work-pps/ext/c-ares/src/lib/ares_free_hostent.c: In
-function =E2=80=98ares_free_hostent=E2=80=99:
-/d/work-pps/backtest-engine/ext/c-ares/src/lib/ares_free_hostent.c:41:17:
-warning: passing argument 1 of =E2=80=98ares_free=E2=80=99 discards =E2=80=
-=98const=E2=80=99 qualifier
-from pointer target type [-Wdiscarded-qualifiers]
-   41 |   ares_free(host->h_name);
-      |             ~~~~^~~~~~~~
-```
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 2e19e0dd7..16352d04d 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -771,6 +771,8 @@ fhandler_console::setup ()
+       con.disable_master_thread = true;
+       con.master_thread_suspended = false;
+       con.num_processed = 0;
++      con.curr_input_mode = tty::restore;
++      con.curr_output_mode = tty::restore;
+     }
+ }
+ 
+@@ -849,11 +851,6 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+ 	flags |= ENABLE_PROCESSED_INPUT;
+       break;
+     }
+-  if (con.curr_input_mode != tty::cygwin && m == tty::cygwin)
+-    {
+-      prev_input_mode_backup = con.prev_input_mode;
+-      con.prev_input_mode = oflags;
+-    }
+   con.curr_input_mode = m;
+   SetConsoleMode (p->input_handle, flags);
+   if (!(oflags & ENABLE_VIRTUAL_TERMINAL_INPUT)
+@@ -893,11 +890,6 @@ fhandler_console::set_output_mode (tty::cons_mode m, const termios *t,
+ 	flags |= DISABLE_NEWLINE_AUTO_RETURN;
+       break;
+     }
+-  if (con.curr_output_mode != tty::cygwin && m == tty::cygwin)
+-    {
+-      prev_output_mode_backup = con.prev_output_mode;
+-      GetConsoleMode (p->output_handle, &con.prev_output_mode);
+-    }
+   con.curr_output_mode = m;
+   acquire_attach_mutex (mutex_timeout);
+   DWORD resume_pid = attach_console (con.owner);
+@@ -1845,6 +1837,12 @@ fhandler_console::open (int flags, mode_t)
+   handle_set.output_handle = h;
+   release_output_mutex ();
+ 
++  if (con.owner == GetCurrentProcessId ())
++    {
++      GetConsoleMode (get_handle (), &con.prev_input_mode);
++      GetConsoleMode (get_output_handle (), &con.prev_output_mode);
++    }
++
+   wpbuf.init ();
+ 
+   handle_set.input_mutex = input_mutex;
+@@ -1890,6 +1888,19 @@ fhandler_console::open (int flags, mode_t)
+ 	setenv ("TERM", "cygwin", 1);
+     }
+ 
++  if (con.curr_input_mode != tty::cygwin)
++    {
++      prev_input_mode_backup = con.prev_input_mode;
++      GetConsoleMode (get_handle (), &con.prev_input_mode);
++      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
++  if (con.curr_output_mode != tty::cygwin)
++    {
++      prev_output_mode_backup = con.prev_output_mode;
++      GetConsoleMode (get_output_handle (), &con.prev_output_mode);
++      set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
++
+   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
+ 		get_output_handle ());
+ 
+@@ -4738,7 +4749,7 @@ fhandler_console::cons_mode_on_close (handle_set_t *p)
+   NTSTATUS status =
+     NtQueryInformationProcess (GetCurrentProcess (), ProcessBasicInformation,
+ 			       &pbi, sizeof (pbi), NULL);
+-  if (NT_SUCCESS (status)
++  if (NT_SUCCESS (status) && cygwin_pid (con.owner)
+       && !process_alive ((DWORD) pbi.InheritedFromUniqueProcessId))
+     /* Execed from normal cygwin process and the parent has been exited. */
+     return tty::cygwin;
+-- 
+2.45.1
 
-The patches to the Cygwin sources are under the 2-clause BSD license.
-
---0000000000002f4a0b06346957a9
-Content-Type: application/octet-stream; 
-	name="0001-Cygwin-netdb.h-remove-const-from-hostent.h_name.patch"
-Content-Disposition: attachment; 
-	filename="0001-Cygwin-netdb.h-remove-const-from-hostent.h_name.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mabj81c80>
-X-Attachment-Id: f_mabj81c80
-
-RnJvbSAzZDZmZTkwNmMyZjZiZjk2YTdkZjU5ODdhNzg3NTRjNGE3ODFjYjlmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQYXZlbCBQIDxwYXZsb3YucGF2ZWxAZ21haWwuY29tPgpEYXRl
-OiBNb24sIDUgTWF5IDIwMjUgMjA6MTk6MTggKzAyMDAKU3ViamVjdDogW1BBVENIXSBDeWd3aW46
-IG5ldGRiLmg6IHJlbW92ZSBjb25zdCBmcm9tIGhvc3RlbnQuaF9uYW1lCgpob3N0ZW50OjpoX25h
-bWUgaXMgZGVmaW5lZCBhcyBub24tY29uc3QgY2hhciogYnkgdGhlIHNwZWMuCi0tLQogd2luc3Vw
-L2N5Z3dpbi9pbmNsdWRlL25ldGRiLmggfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
-b24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2luY2x1ZGUv
-bmV0ZGIuaCBiL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9uZXRkYi5oCmluZGV4IDE1MGZhNGU0Mi4u
-NWNlZTk2N2I1IDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2luY2x1ZGUvbmV0ZGIuaAorKysg
-Yi93aW5zdXAvY3lnd2luL2luY2x1ZGUvbmV0ZGIuaApAQCAtNzMsNyArNzMsNyBAQCBleHRlcm4g
-IkMiIHsKIAogICAvKiBEaWZmZXJlbnQgZnJvbSB0aGUgbGludXggdmVyc2lvbnMgLSBub3RlIHRo
-ZSBzaG9ydHMuLiAqLwogc3RydWN0CWhvc3RlbnQgewotCWNvbnN0IGNoYXIJKmhfbmFtZTsJLyog
-b2ZmaWNpYWwgbmFtZSBvZiBob3N0ICovCisJY2hhcgkqaF9uYW1lOwkvKiBvZmZpY2lhbCBuYW1l
-IG9mIGhvc3QgKi8KIAljaGFyCSoqaF9hbGlhc2VzOwkvKiBhbGlhcyBsaXN0ICovCiAJc2hvcnQJ
-aF9hZGRydHlwZTsJLyogaG9zdCBhZGRyZXNzIHR5cGUgKi8KIAlzaG9ydAloX2xlbmd0aDsJLyog
-bGVuZ3RoIG9mIGFkZHJlc3MgKi8KLS0gCjIuNDkuMC53aW5kb3dzLjEKCg==
---0000000000002f4a0b06346957a9--
