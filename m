@@ -1,102 +1,131 @@
-Return-Path: <SRS0=SYip=X7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w02.mail.nifty.com (mta-snd-w02.mail.nifty.com [106.153.227.34])
-	by sourceware.org (Postfix) with ESMTPS id DB254385840E
-	for <cygwin-patches@cygwin.com>; Thu, 15 May 2025 05:50:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DB254385840E
+Return-Path: <SRS0=RxEm=YA=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e06.mail.nifty.com (mta-snd-e06.mail.nifty.com [106.153.226.38])
+	by sourceware.org (Postfix) with ESMTPS id F086B3858415
+	for <cygwin-patches@cygwin.com>; Fri, 16 May 2025 21:26:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F086B3858415
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DB254385840E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.34
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1747288213; cv=none;
-	b=ngdLnOB6LfhKdQVjqztSxb/qaLCcmhw7btIn3P0M0UrEwnmxV24oqSwhpIJEOjEG//7LFVXlf0vx+hpwBrMSoo3QUclZIt1E6k0IjLbBZ3fDd1b68925OpV3NslI5skDd6bkjg8vHDqYVudMn4j+agzOo7/Fx6HTSYMErMC0N3M=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F086B3858415
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.38
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1747430807; cv=none;
+	b=Q9z6oEl9WHsE9Tax1V1bTzYvU+Gq+iuSEvDvDJpmftBDBErlxdJGL94EO8j0o/DlRBhDiyL0PEXsE2WjKFjUAV0nvXokhzEOHKM/JuxsltYPedmPGjVaQ9kxalYcbtYROcG8ivOVNve6pDb5+MYeU8NquDQD1J8bcZXnUwOQjM8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1747288213; c=relaxed/simple;
-	bh=OV7SD3LkdikNm/drBVM86/aGzZv6eB4/d5GGnOPFns8=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=qOPhz+ZfcnXOf/+m/bE4QT331sD5nNbnTpMxsetZZmIVf1s2rfr+fjN2aBvvmUacv4TAM9mBABHPyyu/ikdLjs2zmEiLqYGGJcfv7kJZ7SG+OJvvxdFWXr09xosSjRhiGrjEhGXXqMyipmwXb1/ufRoMGhbJokXjZlJJHKa6D2o=
+	t=1747430807; c=relaxed/simple;
+	bh=dELowB8cvU8QTfG3P/Wa5ZdA0aguroGpnYfpu+Ot/uo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=U/8Ea6lnZljuX1mW3hvF+0lATwI4phDw1l0l4cuZ/uwhDKl0D9mgK5x0XS2FAJLJvlQKnp13B/vpTaiOWK+FcSgi9ftOzLy0irqOrGM6QK7EJa4VAsFLHC+VsSa6MMh7Mxig0D7SLZVWEgGPX3RqWP8V9WCgIXIZgcDL6S1iVJk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DB254385840E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F086B3858415
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=MRf2gD0j
-Received: from HP-Z230 by mta-snd-w02.mail.nifty.com with ESMTP
-          id <20250515055010665.NHSI.88147.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 15 May 2025 14:50:10 +0900
-Date: Thu, 15 May 2025 14:50:11 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FZC5LGxy
+Received: from localhost.localdomain by mta-snd-e06.mail.nifty.com
+          with ESMTP
+          id <20250516212645378.FMGP.111119.localhost.localdomain@nifty.com>;
+          Sat, 17 May 2025 06:26:45 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: kill(1): skip kill(2) call if '-f -s -' is used
-Message-Id: <20250515145011.fe613a78fbf18f4c910cf5b3@nifty.ne.jp>
-In-Reply-To: <51fef89a-15d0-7494-1906-4a8b3b05d391@t-online.de>
-References: <16c95bad-2310-e66c-d538-403321033d2c@t-online.de>
-	<20250415164029.c118309bc33c25f4b404b48d@nifty.ne.jp>
-	<4356587f-51ed-302d-03f1-7415590813f6@t-online.de>
-	<20250502203144.ca3ba0953ce5bb9f97267920@nifty.ne.jp>
-	<1c5aa56e-63e0-c989-4f67-cd77f0c769d1@t-online.de>
-	<20250503155357.178e47383611df1a76f784f9@nifty.ne.jp>
-	<51fef89a-15d0-7494-1906-4a8b3b05d391@t-online.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1747288210;
- bh=2jF7r7v1bMmRJ7zM7h8ITm30CxM+V200jJY8Iml+NU8=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=MRf2gD0jsCQF4xdKdQCHxE1GdcoNyRpqfNaLrHOPmgxCLDM0K7zgcjd0JR7K0xSzE7g27Xtx
- YIt0eEXhfII6GFeFQcJpju9Mgo3L5O42x38szg9qLVFl4d4y7MIliSd4KGcRuBP1Z1kKTt1+cC
- 8nmGimwCqwssZosGN9Cog5wvhWeYfZh8uugVTOIFQqjVCF8Eext7wSUctKLlI8IqpPSXlOAOoD
- LwD/FOzhNSpdfL308NMa2kQotBSjk+Od1zA3dNnTxoOxCs4it6FFJ3q2SBtiyyQuEYR7i0Aukg
- jHW5epLN9nxDT4JLTPWkIm/umLcYYN042vawJ46Yos2nQvOA==
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Ken Brown <kbrown@cornell.edu>
+Subject: [PATCH] Cygwin: open: Fix deadlock for opening fifo both side in a process
+Date: Sat, 17 May 2025 06:26:18 +0900
+Message-ID: <20250516212628.1825-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1747430805;
+ bh=yUn0qOyh1SGyK9Dgl2v1fDNpQXK9T3vHfGf+78zp+VU=;
+ h=From:To:Cc:Subject:Date;
+ b=FZC5LGxySt473vxalITS6z8xrYa+rI6VkiOFtcH9XQMWVNgJIdL+jAUgVPCU5odu2bwjpU6u
+ gJkXA56LCo3lcbjc5iC5dxvUfb9GBchBR7Q/EfoxY3iy0EJ5sXC02Dyj9JhYzl6lBS9edffF0N
+ JQJAQCduOoBpIA4IW7F3coksGgabLleFKhsEW4o0osvRXUwkuMuOO/IWYEzz7iAth3K5ozevEY
+ //MxExHKeKMbYBs+j4enkmCb+sfTTpuvGQbT9o8V0fr/fa5y1HWtE0Tx72xOXQH0MdGlOQp2ca
+ R4xXnmAiTkzBmyvT7upQ8WS4Mpc/B8JUxru/FKTO2JI8qC6A==
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 14 May 2025 15:23:09 +0200
-Christian Franke wrote:
-> Hi Takashi,
-> 
-> sorry for the delay.
+Currently, opening both side of fifo in a process hangs if the
+read side is opened first. The following test case exhibit the
+hang while it works in linux.
 
-np
+  #include <unistd.h>
+  #include <pthread.h>
+  #include <sys/stat.h>
+  #include <fcntl.h>
 
-> On Sat, 3 May 2025 15:53:57 +0900, Takashi Yano wrote:
-> > Hi Christian,
-> >
-> > On Fri, 2 May 2025 16:09:48 +0200
-> > Christian Franke wrote:
-> >> ...
-> > I have a problem with
-> > stress-ng --mprotect 1 -t 5 -v
-> >
-> > It sometimes hang due to a cause which does not seem to be a
-> > cygwin bug.
-> >
-> > stress-ng seems to use SIGALRM to stop processes. In mprotect
-> > case, SIGARLM is armed before stopping SIGSEGV. What I observed
-> > is:
-> >
-> > 1. SIGARLM is armed.
-> > 2. stress_handle_stop_stressing() is called.
-> > 3. Just after stress_handle_stop_stressing() is called, SIGSEGV
-> >     occurs inside the stress_handle_stop_stressing().
-> > 4. SIGSEGV handler is called and longjmp() is executed.
-> > 5. stress_handle_stop_stressing() can not continue because
-> >     longjmp() does not return.
-> >
-> > Therefore, timeout (SIGARLM) processing in stress-ng fails.
-> >
-> > Please try
-> > while true; do stress-ng --mprotect 1 -t 1 -v; done
-> > with cygwin-3.7.0-0.88.gb7097ab39ed0 (Test). In my environment,
-> > stress-ng hangs in dozens of minutes.
-> >
-> > Could you please have a look?
-> 
-> With many iterations, I could reproduce the hang. Your explanation is 
-> likely correct.
-> 
-> SIGSEGV should be set in the sa_mask of SIGALRM (and other) handlers. I 
-> could file an upstream issue if desired.
+  #define fifo1 "/tmp/fifo-test"
 
-Thanks for checking!
+  void *thr1(void *)
+  {
+    int fd;
+    usleep(100000);
+    fd = open(fifo1, O_WRONLY);
+    write(fd, "A", 1);
+    usleep(100000);
+    close(fd);
+    return NULL;
+  }
 
+  int main()
+  {
+    int fd;
+    pthread_t th;
+    char c;
+    mkfifo(fifo1, 0600);
+    pthread_create(&th, NULL, thr1, NULL);
+    fd = open(fifo1, O_RDONLY);
+    pthread_join(th, NULL);
+    read(fd, &c, 1);
+    write(1, &c, 1);
+    close(fd);
+    unlink(fifo1);
+    return 0;
+  }
+
+The mechanism of hang is as follows. The main thread tries to open
+the fifo for reading, but fhandler_fifo::open blocks until it detects
+that someone is opening the fifo for writing. The other thread wants
+to do that, but it never gets to the point of calling fhandler_fifo::
+open because it is stuck waiting for the lock on cygheap->fdtab.
+
+To fix this, this patch delays the construction of the cygheap_fdnew
+object fd until after fhandler_fifo::open has been called.
+
+Fixes: df63bd490a52 ("* cygheap.h (cygheap_fdmanip): New class: simplifies locking and retrieval of fds from cygheap->fdtab.")
+Reviewd-by: Ken Brown <kbrown@cornell.edu>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/syscalls.cc | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index c93bf4c95..d6a2c2d3b 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -1472,11 +1472,6 @@ open (const char *unix_path, int flags, ...)
+       mode = va_arg (ap, mode_t);
+       va_end (ap);
+ 
+-      cygheap_fdnew fd;
+-
+-      if (fd < 0)
+-	__leave;		/* errno already set */
+-
+       /* When O_PATH is specified in flags, flag bits other than O_CLOEXEC,
+ 	 O_DIRECTORY, and O_NOFOLLOW are ignored. */
+       if (flags & O_PATH)
+@@ -1577,6 +1572,12 @@ open (const char *unix_path, int flags, ...)
+       if ((flags & O_TMPFILE) && !fh->pc.isremote ())
+ 	try_to_bin (fh->pc, fh->get_handle (), DELETE,
+ 		    FILE_OPEN_FOR_BACKUP_INTENT);
++
++      cygheap_fdnew fd;
++
++      if (fd < 0)
++	__leave;		/* errno already set */
++
+       fd = fh;
+       if (fd <= 2)
+ 	set_std_handle (fd);
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.45.1
+
