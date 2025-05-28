@@ -1,292 +1,152 @@
 Return-Path: <SRS0=7NHZ=YM=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 3A8993858D32
-	for <cygwin-patches@cygwin.com>; Wed, 28 May 2025 05:58:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3A8993858D32
+Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [106.153.227.38])
+	by sourceware.org (Postfix) with ESMTPS id DCF003857432
+	for <cygwin-patches@cygwin.com>; Wed, 28 May 2025 12:52:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DCF003857432
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3A8993858D32
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1748411902; cv=none;
-	b=d+TmFqz6spYVVgUKw8aa3Ti4yIpU846Vy9HD1SOYJBJ1aO1PDfBvKsQRQG3tZODwa09lAJWNb8Fs5RpyevPr/uedQdTBv5SOWaxBYBxZ2am0ablxj9pyROmbyH7+XZ1EWG63oKGHIfDMS8X5MyxgtnBrQG4a5OW+ejS1RD4fYUw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DCF003857432
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.38
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1748436764; cv=none;
+	b=SMLILspJrEN/AR+a8IJKpXuEzqtNy4I7A4xzaFLkSlzOUt53NYQurNpHaerGA8J3W63H0pzoItfsczcwIIqgLCgARCBCwUVHMxlq1uT/euR7ZMtrgyr3X2eG9qIUKUIxedWQ4JT9rIClABG4+DwNRSjCqQlamJzlYhQhnal3ubU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1748411902; c=relaxed/simple;
-	bh=58jWnOBA59qHGngznkWRNwa7TJJksr/DQKadYWE/0HE=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=n5Ml8gBPU0tji3h5I7lZqktngUSaQzyy0FmwCU3oiT0AFh4DbXFuge8NK6a6elqbo/Pn0KoHtWNryZyOlD7/YyFsy2dKYFi581vEqsgRxPMiqXssvsjL1pBLynyqd/4dk0GrqbYJUFSY+MzgG3/wN6hARaJq5RP8T0vcUyAU198=
+	t=1748436764; c=relaxed/simple;
+	bh=rxeIKxRl0VXIBIzjK+aLSCsCTeYtnSWMKwPlVeir9to=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=cxcdCgAy3XKTdTPCkOMjUm6y0T/RjqLIHFS7/Kza4oflDZB7mgB/6FRwTETufdf8Vn56caPNT4dtJC6gmCoGp8QOf8nUz481JawspQbYTgzYvYbXUNymKm9l3mKlErfibKqYllg2eyhzB0gI1ol1OUKDcCXV1bKPDIbqbX9Tr+M=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3A8993858D32
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DCF003857432
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pwAoSMaN
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20250528055818970.PZEL.61558.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 28 May 2025 14:58:18 +0900
-Date: Wed, 28 May 2025 14:58:16 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=VtvTuJJo
+Received: from localhost.localdomain by mta-snd-w06.mail.nifty.com
+          with ESMTP
+          id <20250528125240469.GYW.116286.localhost.localdomain@nifty.com>;
+          Wed, 28 May 2025 21:52:40 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: doc: Update "building DLL"
-Message-Id: <20250528145816.1ece99b05f0deb1bd7440aff@nifty.ne.jp>
-In-Reply-To: <20250523164102.16035-1-jon.turney@dronecode.org.uk>
-References: <20250523164102.16035-1-jon.turney@dronecode.org.uk>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1748411899;
- bh=jxWUVdJ/xTFpTfhiZegE2PNxJmU2zRkIXO4rQBhI5Hk=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=pwAoSMaNenSYuG+O+zh2wcsUNEkWkr0DiSbi15+rdnk5A4EMzaIAGgoWp8kXn2HTUG/bz5UK
- gz7axOGsBCG5fW+/Ev4LG/jbpXocyZdVtHeoaWodQRFgxsey1P3tTN9WVXRmr5AX1cqnpTszZJ
- CQN9UNF29Th12diCOq/MRsEHr+qlopu7hsxADxnr3jexx+s50Qe/eODt4F64VRs4c0hVzNF71T
- IhVqE7dZvp0wV3Z1YwGUZY6+v8+l4qA09qotgap53YZWwMqanG7qBK97RBfPeSf5IDPRqrvK0M
- 30jw3vtoDUNSM+psM0qLbpSGc8Jser2hgN0/thIuYuN/eIZw==
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_SHORT,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: signal: Prevent unexpected crash on frequent SIGSEGV
+Date: Wed, 28 May 2025 21:52:11 +0900
+Message-ID: <20250528125222.2347-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1748436760;
+ bh=5z9ryS1v/W/wNhnDtYmmLWBvg37AvzwiL8x9raNlaR8=;
+ h=From:To:Cc:Subject:Date;
+ b=VtvTuJJom/gjjMnAKhgErAMmkjGkqaSHuNEtdH7oyClE93xqsVcTtwHvv0ybenrP5dIjUQ94
+ YptmpW1yxSSil6S8esQSZ9CpDlaIBT4G70mnpmeDd67sUs4BUoCmv8vUCQtLquFE8MC5DhNTxY
+ vf5Z8DL1czuz0WWjvqfzvaL5wTmrV7217WNmgmRnFWB00FPmped4AwK6ObRItUVRGnPHuk53AA
+ pMkwFCfCL7IcEkkLPg66anvQH1siyCAtoqToCgN96+lI+LSft8++zX3mvzO2GeHAEkElHf8YXN
+ IG5md143bVkVuO8xuOqEdfzjxOHZx/ApLc5TrDfGl6oZYzKg==
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Fri, 23 May 2025 17:41:02 +0100
-Jon Turney wrote:
-> This hasn't substantially been revised since (at least) 2004, and
-> doesn't really represent normal usage of modern gcc and binutils.
-> ---
->  winsup/doc/dll.xml | 168 ++++++++++++++++++++++++++++++++++-----------
->  1 file changed, 127 insertions(+), 41 deletions(-)
-> 
-> diff --git a/winsup/doc/dll.xml b/winsup/doc/dll.xml
-> index f0369760f..7117b65bd 100644
-> --- a/winsup/doc/dll.xml
-> +++ b/winsup/doc/dll.xml
-> @@ -19,26 +19,47 @@ variables, etc.  All these are merged together, like if you were
->  building one big object files, and put into the dll.  They are not
->  put into your .exe at all.</para>
->  
-> -<para>The exports contains a list of functions and variables that the
-> +<para>The exports is a list of functions and variables that the
->  dll makes available to other programs.  Think of this as the list of
-> -"global" symbols, the rest being hidden.  Normally, you'd create this
-> -list by hand with a text editor, but it's possible to do it
-> -automatically from the list of functions in your code.  The
-> -<filename>dlltool</filename> program creates the exports section of
-> -the dll from your text file of exported symbols.</para>
-> -
-> -<para>The import library is a regular UNIX-like
-> -<filename>.a</filename> library, but it only contains the tiny bit of
-> -information needed to tell the OS how your program interacts with
-> -("imports") the dll.  This information is linked into your
-> -<filename>.exe</filename>.  This is also generated by
-> -<filename>dlltool</filename>.</para>
-> +"public" symbols, the rest being hidden.
-> +
-> +<footnote>
-> +  <para>
-> +    Note that <filename>ld</filename>'s default behaviour is to export all
-> +    global symbols, if there otherwise wouldn't be any exported symbols
-> +    (i.e. because you haven't specified a def file or made any export
-> +    annotations). (See <code>--export-all-symbols</code> in the
-> +    <filename>ld</filename> man page for more details.)
-> +  </para>
-> +</footnote>
-> +
-> +This list can be in a module definition (.def) file, which you can write by hand
-> +with a text editor, but it's also possible to have it generated automatically
-> +from the functions and variables in your code, by annotating the declarations
-> +with <code>__attribute__ ((dllexport))</code>.
-> +
-> +<footnote>
-> +  <para>
-> +    If you're making these annotations on the declarations in a header which is
-> +    also installed to be included by users of your library, you probably want to
-> +    use macros to do the right thing and increase portability.  See <ulink
-> +    url="https://gcc.gnu.org/wiki/Visibility">this example</ulink> for details.
-> +  </para>
-> +</footnote>
-> +
-> +</para>
-> +
-> +<para>The import library is a regular UNIX-like <filename>.a</filename> library,
-> +but it only contains the tiny bit of information ("a stub") needed to tell the
-> +OS how your program interacts with ("imports") the dll.  This information is
-> +linked into your <filename>.exe</filename>.
-> +</para>
->  
->  <sect2 id="dll-build"><title>Building DLLs</title>
->  
-> -<para>This page gives only a few simple examples of gcc's DLL-building 
-> +<para>This page gives only a few simple examples of gcc's DLL-building
->  capabilities. To begin an exploration of the many additional options,
-> -see the gcc documentation and website, currently at 
-> +see the gcc documentation and website, currently at
->  <ulink url="http://gcc.gnu.org/">http://gcc.gnu.org/</ulink>
->  </para>
->  
-> @@ -49,8 +70,8 @@ For this example, we'll use a single file
->  <filename>mydll.c</filename> for the contents of the dll
->  (<filename>mydll.dll</filename>).</para>
->  
-> -<para>Fortunately, with the latest gcc and binutils the process for building a dll
-> -is now pretty simple. Say you want to build this minimal function in mydll.c:</para>
-> +<para>Say you want to build this minimal function in
-> +<filename>mydll.c</filename>:</para>
->  
->  <screen>
->  #include &lt;stdio.h&gt;
-> @@ -59,28 +80,44 @@ int
->  hello()
->  {
->    printf ("Hello World!\n");
-> -}  
-> +}
->  </screen>
->  
-> -<para>First compile mydll.c to object code:</para>
-> +<para>First compile <filename>mydll.c</filename> to the object
-> +<filename>mydll.o</filename>:</para>
->  
->  <screen>gcc -c mydll.c</screen>
->  
->  <para>Then, tell gcc that it is building a shared library:</para>
->  
-> -<screen>gcc -shared -o mydll.dll mydll.o</screen>
-> +<screen>gcc -shared -o mydll.dll mydll.o -Wl,--out-implib libmydll.a</screen>
->  
->  <para>
-> -That's it! To finish up the example, you can now link to the
-> -dll with a simple program:
-> +  That's it! You now have the dll (<filename>mydll.dll</filename>) and the
-> +  import library (<filename>libmydll.a</filename>).
-> +
-> +<footnote>
-> +  <para>
-> +    In fact, <code>--out-implib</code> is optional in this simple example,
-> +    because <filename>ld</filename> can automatically generate import stubs when
-> +    told to link directly to a .dll.  (See <code>--enable-auto-import</code> in
-> +    the <filename>ld</filename> man page for more details.)
-> +  </para>
-> +</footnote>
-> +
-> +</para>
-> +
-> +<para>
-> +To finish up the example, you can now link to the dll with a simple program,
-> +<filename>myprog.c</filename>:
->  </para>
->  
->  <screen>
-> -int 
-> +int
->  main ()
->  {
->    hello ();
-> -}  
-> +}
->  </screen>
->  
->  <para>
-> @@ -89,35 +126,84 @@ Then link to your dll with a command like:
->  
->  <screen>gcc -o myprog myprog.c -L./ -lmydll</screen>
->  
-> -<para>However, if you are building a dll as an export library,
-> -you will probably want to use the complete syntax:</para>
-> +<para>
-> +  Try it out:
-> +</para>
-> +
-> +<screen>
-> +$ ./myprog
-> +Hello World!
-> +</screen>
-> +
-> +<para>However, if you are building a dll for installation,
-> +you will probably want to use a more complex syntax:</para>
->  
->  <screen>gcc -shared -o cyg${module}.dll \
->      -Wl,--out-implib=lib${module}.dll.a \
-> -    -Wl,--export-all-symbols \
-> -    -Wl,--enable-auto-import \
-> -    -Wl,--whole-archive ${old_libs} \
-> -    -Wl,--no-whole-archive ${dependency_libs}</screen>
-> +    -Wl,--whole-archive ${objs_libs} -Wl,--no-whole-archive \
-> +    ${dependency_libs}</screen>
->  
-> -<para>
-> +<itemizedlist spacing="compact">
-> +<listitem>
->  The name of your library is <literal>${module}</literal>, prefixed with
->  <literal>cyg</literal> for the DLL and <literal>lib</literal> for the
-> -import library. Cygwin DLLs use the <literal>cyg</literal> prefix to 
-> -differentiate them from native-Windows MinGW DLLs, see 
-> -<ulink url="http://mingw.org">the MinGW website</ulink> for more details.
-> -<literal>${old_libs}</literal> are all
-> -your object files, bundled together in static libs or single object
-> -files and the <literal>${dependency_libs}</literal> are import libs you 
-> -need to link against, e.g 
-> -<userinput>'-lpng -lz -L/usr/local/special -lmyspeciallib'</userinput>.
-> +import library. Cygwin DLLs use the <literal>cyg</literal> prefix to
-> +differentiate them from native-Windows MinGW DLLs.
-> +</listitem>
-> +<listitem>
-> +<literal>${objs_libs}</literal> are all your object files, bundled together in
-> +static libs or single object files
-> +</listitem>
-> +<listitem>
-> +<literal>${dependency_libs}</literal> are static or import libs you need to link
-> +against, e.g <userinput>'-lpng -lz -L/usr/local/special -lmyspeciallib'
-> +</userinput>.
-> +</listitem>
-> +</itemizedlist>
-> +
-> +<para>
-> +  When the import library is installed into <filename>/usr/lib</filename>, it
-> +  can be linked to with just <code>-l${module}</code>. The dll itself is
-> +  installed into <filename>/usr/bin</filename> so it can be found on
-> +  <code>PATH</code> by the loader when a linked .exe is run.
-> +</para>
-> +
-> +</sect2>
-> +
-> +<sect2 id="dll-tool"><title>dlltool</title>
-> +
-> +<para>
-> +Historically, the process for building a dll with <filename>gcc</filename> and
-> +<filename>binutils</filename> wasn't so simple, and the
-> +<filename>dlltool</filename> tool was used:
-> +</para>
-> +
-> +<itemizedlist spacing="compact">
-> +  <listitem>
-> +    <para>
-> +      To create the exports section of the dll, from the module definition file
-> +      or by scanning object files.
-> +    </para>
-> +  </listitem>
-> +
-> +  <listitem>
-> +    <para>
-> +      To generate the import library.
-> +    </para>
-> +  </listitem>
-> +</itemizedlist>
-> +
-> +<para>
-> +  (See the <filename>dlltool</filename> man page for more details.)
->  </para>
-> +
->  </sect2>
->  
-> -<sect2 id="dll-link"><title>Linking Against DLLs</title>
-> +<sect2 id="dll-link"><title>Linking Against Foreign DLLs</title>
->  
->  <para>If you have an existing DLL already, you need to build a
->  Cygwin-compatible import library.  If you have the source to compile
-> -the DLL, see <xref linkend="dll-build"></xref> for details on having 
-> +the DLL, see <xref linkend="dll-build"></xref> for details on having
->  <filename>gcc</filename> build one for you.  If you do not have the
->  source or a supplied working import library, you can get most of
->  the way by creating a .def file with these commands (you might need to
-> -- 
-> 2.45.1
+When the thread is suspended and Rip (instruction pointer) points to
+an instruction that causes an exception, modifying Rip and calling
+ResumeThread() may sometimes result in a crash. To prevent this,
+advance execution by a single instruction by setting the trap flag
+(TF) before calling ResumeThread() as a workaround. This will trigger
+either STATUS_SINGLE_STEP or the exception caused by the instruction
+that Rip originally pointed to. By suspending the targeted thread
+within exception::handle(), Rip no longer points to the problematic
+instruction, allowing safe handling of the interrupt. As a result,
+Rip can be adjusted appropriately, and the thread can resume
+execution without unexpected crashes.
 
-Thanks! LGTM. Please push.
+Addresses: https://cygwin.com/pipermail/cygwin/2025-May/258153.html
+Fixes: 1fd5e000ace5 ("import winsup-2000-02-17 snapshot")
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/exceptions.cc           | 37 +++++++++++++++++++++++++++
+ winsup/cygwin/local_includes/cygtls.h |  1 +
+ winsup/cygwin/local_includes/ntdll.h  |  3 ++-
+ 3 files changed, 40 insertions(+), 1 deletion(-)
 
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 876b79e36..804adc92b 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -653,6 +653,13 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
+   static int NO_COPY debugging = 0;
+   _cygtls& me = _my_tls;
+ 
++  if (me.suspend_on_exception)
++    {
++      SuspendThread (GetCurrentThread ());
++      if (e->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
++	return ExceptionContinueExecution;
++    }
++
+   if (debugging && ++debugging < 500000)
+     {
+       SetThreadPriority (hMainThread, THREAD_PRIORITY_NORMAL);
+@@ -929,6 +936,36 @@ _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
+     interrupted = false;
+   else
+     {
++#ifdef __x86_64__
++      /* When the Rip points to an instruction that causes an exception,
++	 modifying Rip and calling ResumeThread() may sometimes result in
++	 a crash. To prevent this, advance execution by a single instruction
++	 by setting the trap flag (TF) before calling ResumeThread(). This
++	 will trigger either STATUS_SINGLE_STEP or the exception caused by
++	 the instruction that Rip originally pointed to.  By suspending the
++	 targeted thread within exception::handle(), Rip no longer points
++	 to the problematic instruction, allowing safe handling of the
++	 interrupt. As a result, Rip can be adjusted appropriately, and the
++	 thread can resume execution without unexpected crashes.  */
++      if (!inside_kernel (cx, true))
++	{
++	  cx->EFlags |= 0x100; /* Set TF (setup single step execution) */
++	  SetThreadContext (*this, cx);
++	  suspend_on_exception = true;
++	  ResumeThread (*this);
++	  ULONG cnt = 0;
++	  NTSTATUS status;
++	  do
++	    {
++	      yield ();
++	      status = NtQueryInformationThread (*this, ThreadSuspendCount,
++						 &cnt, sizeof (cnt), NULL);
++	    }
++	  while (NT_SUCCESS (status) && cnt == 0);
++	  GetThreadContext (*this, cx);
++	  suspend_on_exception = false;
++	}
++#endif
+       DWORD64 &ip = cx->_CX_instPtr;
+       push (ip);
+       interrupt_setup (si, handler, siga);
+diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
+index 4698352ae..1b3bf65f1 100644
+--- a/winsup/cygwin/local_includes/cygtls.h
++++ b/winsup/cygwin/local_includes/cygtls.h
+@@ -203,6 +203,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+   __tlsstack_t *stackptr;
+   __tlsstack_t stack[TLS_STACK_SIZE];
+   unsigned initialized;
++  volatile bool suspend_on_exception;
+ 
+ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
+   void init_thread (void *, DWORD (*) (void *, void *));
+diff --git a/winsup/cygwin/local_includes/ntdll.h b/winsup/cygwin/local_includes/ntdll.h
+index 97a83d1e3..f32e850f4 100644
+--- a/winsup/cygwin/local_includes/ntdll.h
++++ b/winsup/cygwin/local_includes/ntdll.h
+@@ -1362,7 +1362,8 @@ typedef enum _THREADINFOCLASS
+   ThreadBasicInformation = 0,
+   ThreadTimes = 1,
+   ThreadImpersonationToken = 5,
+-  ThreadQuerySetWin32StartAddress = 9
++  ThreadQuerySetWin32StartAddress = 9,
++  ThreadSuspendCount = 35
+ } THREADINFOCLASS, *PTHREADINFOCLASS;
+ 
+ typedef struct _THREAD_BASIC_INFORMATION
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.45.1
+
