@@ -1,86 +1,115 @@
-Return-Path: <SRS0=6Xew=YY=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-	by sourceware.org (Postfix) with ESMTPS id 005FD3858D38;
-	Mon,  9 Jun 2025 21:46:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 005FD3858D38
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 005FD3858D38
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1749505563; cv=none;
-	b=DzF6YZkHlOR1SiQtqDmBEcJ7wVk10FzKUefFM9iEtTlzyP6PX5Pw1rFturtNoUc5o9mP6lCpt8atux1y8q9th1IjGy62wLX3b+MEAkJLlNwaCssWMGEfIXyvUywlzZX9uJM8P0JKJ8uj9KVXfbfe8QZT5msSzNINmvII2ri20Xs=
+Return-Path: <SRS0=KdRA=YY=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 2686C3858D38
+	for <cygwin-patches@cygwin.com>; Mon,  9 Jun 2025 21:56:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2686C3858D38
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2686C3858D38
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1749506179; cv=none;
+	b=cbsylboKuflx2w7lgiSY/9aJxvt1q//ODWSC5Yg77DUTQLD/zzzkd5o4V+RbHd+C+P58oYjYbfc2iLFLvT3po7vlVMplZFi0qTIPTJFtEXAYD6EMaju8p9NjCm+J1L+sml5mTf4jl6uBLUs3YuY2PttQDwEU0RWGyHOdRjWg740=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1749505563; c=relaxed/simple;
-	bh=/TwhiDsosg3KrCFfEgWlrNiPP2fzY1L20XD0elrImUM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=Lr3LuwQujCMmXI9cYGcTxKARmoRD7di9LrBQgsvg1ZWPfJE06pKeH6cIS5NqTxfqgUKTTcRDuxXmR+zulpvoKjWEHaft29SU+7PEU1oENd0muZJUM2boDq+1JM9kq3J4lJfGypEkqVuPyG5NunX1eXhjgysB/xi1yJynC+Zu+7U=
+	t=1749506179; c=relaxed/simple;
+	bh=Llilq9xKeBeRMfD71y48D8rFjlG8bLYdj3P4DHqgiR8=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=pUhpha0eSdRobizbzUcFAUQ6nZ7JSC1arDmxRkG1oDupa0Jby1cY9Z0JTzWZ/kUyhLcP5E6zHLzAlq8CzsjGe0XFROc3SSdgGhmRNunXc+J/IX1GlhSsETsWY24rWKGmkWcLAv1xJMTxdY7TGypZIeGmftTSmomGvlonvQnYkQw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 005FD3858D38
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2686C3858D38
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=TdtujExr
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 87BED14037B;
-	Mon,  9 Jun 2025 21:46:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf20.hostedemail.com (Postfix) with ESMTPA id CCE2B20027;
-	Mon,  9 Jun 2025 21:46:00 +0000 (UTC)
-Message-ID: <4f39b6ee-c8de-47f9-a48b-1bd0524eb987@SystematicSW.ab.ca>
-Date: Mon, 9 Jun 2025 15:45:59 -0600
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=h3XGdcwk
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id D8C5F45CC9
+	for <cygwin-patches@cygwin.com>; Mon, 09 Jun 2025 17:56:18 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=WrhTpsIAjU2FwrM3lyFgi6PIK4g=; b=h3XGd
+	cwkU+Rx7c4ifcp7hNvl7l5X7qUF+vFbDkN3BXbsriDaaFM3qs4sW7QekGH+6aefP
+	OayKGH7GjtNM96Q1+9Et8ZGxdFIQp+NZ1a+JYLKU49GZ6vMqmcLlJWdu/+B/9n3p
+	PV+BB7+gpd+l5UwCQtp8JHbWM0J4pQMWYs958c=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id D317045CC5
+	for <cygwin-patches@cygwin.com>; Mon, 09 Jun 2025 17:56:18 -0400 (EDT)
+Date: Mon, 9 Jun 2025 14:56:18 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Fix compatibility with MinGW v13 headers
+In-Reply-To: <1ef68eee-d80a-4dde-af43-c4fdea1e4c40@SystematicSW.ab.ca>
+Message-ID: <2aa8fb0c-9a96-b260-2f28-aea8dab08bcc@jdrake.com>
+References: <DB9PR83MB09238924363B70583AA08BA5926BA@DB9PR83MB0923.EURPRD83.prod.outlook.com> <7178d417-9d6b-14b2-95cb-b5c4fb53b463@jdrake.com> <1ef68eee-d80a-4dde-af43-c4fdea1e4c40@SystematicSW.ab.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Reply-To: cygwin-apps@cygwin.com
-Subject: Re: Updated: w32api-{headers,runtime}
- mingw64-{headers,runtime,winpthreads} gendef 13.0.0-1
-Content-Language: en-CA
-To: cygwin-apps@cygwin.com
-Cc: cygwin-patches@cygwin.com
-References: <971dee8b-9df9-4aed-83b5-0d04afcb031c@gmail.com>
-Organization: Systematic Software
-In-Reply-To: <971dee8b-9df9-4aed-83b5-0d04afcb031c@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: yntjt3jwgg4r3gdjjaytidiyk6zqtxiu
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: CCE2B20027
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1+GF3VUswvANMbp+q0s+QwZArXvOztDPqQ=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:cc:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=itTUFq0+A/3P7HSSA7RhKi6iyNKofwX4sZlhufR/Ev0=; b=TdtujExrugPnoeSXGgrnfBK6asTAU23J8dJB1IhPL5JoKV7bfh0yp9Vo4NQQJHzcYARiovSgWnWmEYhZ+5HuEI6xQgBZ5nmEw8gA5MVn2xd2C17c3MBlKKjdC0eB43VBuePSz6pbxnsneeOyFUmepEoRx6IcTWNmYvFArhdp/jwv6F2rTGZ8TtEqNZ9uPTmh/ukxrVi5ONiS6CY5uJkEDwYtCMiBMnMx3AqGwzmTUuXTDo+x3ibiZb4Vx7Aj5KKYs4tpbNHMwKWw3Kxn23+ET+991PAAStuZ4MFlf+bgzHHotTTS5G/rVIlVbX8FGhqHX5LZEgfFSP/eTzG0sQoGHQ==
-X-HE-Tag: 1749505560-467685
-X-HE-Meta: U2FsdGVkX19alrAyOOiLzkoPP81Re8Y+g+yirYM0G0GqWUcteVe0xskBM/lkBNH2/wV/U6clNqv6Ja0uegoPxn59oAtnMHXWBoVYT85Zp5xWvfw5UolX8GXhgdxIblu+D0mzQodAiaOv2k54YPNwJnZrDQGKokfs4PUV7loSR2M8CKtnSzzWfREdJ3YQG9rOTkABCJe7isqnCsACI2prgS/EmNO/Rsz0+ynktLn0etH8/9cGXxD6T1vHoKATHxVXmNmm7I0ALS9zIi3a7LZHL3vkCLZz//U1OzId37ec8fetzbTVbpB0V8n/9pnVgK7lBhzR7bbbo4WF2XOrkcNxARNczC5x4M8ry0rbYgl1Gd8J1i5K85EiLYJe4DRjG532cbXBwl+1YIh+xW1phy7+iXUotXyG0BCClEuZmDbJ+zR+K1sXZr/oyUVftOGJkvid/J1CuudGLbc=
+Content-Type: multipart/mixed; boundary="15599321219072-1101118906-1749506178=:11368"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-06-08 06:04, Jonathan Yong via Cygwin-announce wrote:
-> Now released for both 32bit and 64bit Cygwin:
-> 
-> Notable changes:
-> * Added import libraries for msvcr40d.dll, msvcrtd.dll, msvcr70d.dll, 
-> msvcr71d.dll, msvcr80d.dll, msvcr100d.dll, msvcr110d.dll.
-> * Better CRT API consistency between UCRT and MSVCRT, making many APIs available 
-> to earlier versions of the MSVCR* runtime as well.
-> * CRTDLL stat API fixes.
-> * Updated Hyper-V headers.
-> * Synchronized with Wine headers (from Wine 10.9).
-> * Many other new win32 APIs.
-> * Fix _atexit call differing between DLLs and EXEs.
-> * Basic support for ARM64EC targets (arm64ec-w64-mingw32).
-> * Make it possible to build winpthreads with MSVC and clang-cl.
-> * Many small fixes for gendef, genidl and genpeimg.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-We have reports of failing Cygwin builds after this update:
+--15599321219072-1101118906-1749506178=:11368
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-	https://cygwin.com/pipermail/cygwin-patches/2025q2/013754.html
+On Mon, 9 Jun 2025, Brian Inglis wrote:
 
-https://github.com/cygwin/cygwin/actions/runs/15537033468%C2%A0workflow%C2%A0started
+> On 2025-06-09 12:54, Jeremy Drake via Cygwin-patches wrote:
+> > On Mon, 9 Jun 2025, Radek Barton via Cygwin-patches wrote:
+> > > Since today,
+> > > https://github.com/cygwin/cygwin/actions/runs/15537033468=C2=A0work=
+flow=C2=A0started
+> > > to fail as it seems that `cygwin/cygwin-install-action@master` acti=
+on
+> > > started to use newer MinGW headers.
+> > >
+> > > The attached patch fixes compatibility with v13 MinGW headers while
+> > > preserving compatibility with v12.
+>
+> Perhaps in the case of this build, but not necessarily anywhere else in=
+ Cygwin
+> using BSD sockets.
+>
+> > The change to cygwin/socket.h concerns me, that is a public header, a=
+nd
+> > you can't assume they are including MinGW headers, and if they are ho=
+w
+> > they are configuring them (ie, _WIN32_WINNT define) or which ones the=
+y
+> > are including.  It looks like the mingw-w64 header #defines cmsghdr, =
+maybe
+> > an #ifndef cmsghdr with a comment about this situation?  Or how do ot=
+her
+> > Cygwin headers handle potential conflicts with Windows headers?
+> I appear to be missing where Mingw headers other than ntstatus.h are in=
+cluded
+> in these Cygwin headers so how would Mingw version be defined here?
 
-https://github.com/cygwin/cygwin/actions/runs/15537033468/job/43738461428
+Inside Cygwin, additional Windows headers are included, including winsock
+headers to implement sockets within Cygwin.
 
-Was this upgrade tested with a current Cygwin build before deployment?
+> It looks like the changes need to be made elsewhere across the code hie=
+rarchy.
+>
+> What are the actual Mingw header definition changes causing conflicts, =
+and do
+> any Cygwin headers, setup or other network apps code need to be adjuste=
+d to
+> take the Mingw header changes into account?
 
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+https://github.com/mingw-w64/mingw-w64/commit/c3b5e71d54aa596bba9fb8ec7c1=
+f9f712e7c616a
 
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+> Such details would be required to explain why the patch would be needed=
+ and
+> how it fixes the issue while taking compatibility with and any impacts =
+on
+> Cygwin network apps into account.
+
+> This should perhaps be referred back to the w32api-headers maintainer t=
+o see
+> if he did any testing before deployment?
+
+--15599321219072-1101118906-1749506178=:11368--
