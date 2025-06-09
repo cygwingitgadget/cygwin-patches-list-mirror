@@ -1,85 +1,86 @@
-Return-Path: <SRS0=tlHB=YY=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo006.btinternet.com (btprdrgo006.btinternet.com [65.20.50.0])
-	by sourceware.org (Postfix) with ESMTP id 223933858D38
-	for <cygwin-patches@cygwin.com>; Mon,  9 Jun 2025 21:44:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 223933858D38
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 223933858D38
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.0
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1749505478; cv=none;
-	b=xmYXzexB2DSmIYnNxBF09HKqLc3FNcTOKlAcle/ogJ9jcqEgBEYoJ5PDuJGtI0cwahEXgl2fYvPZ0peIpnzf63yG1YoOhTlPuySa1pgJmA5D8rCRGySW9mYt7e8dVmnY3orLw2WJqSqXWjtlvJEv6pRWEIZX4spiCk5SJc4z4ss=
+Return-Path: <SRS0=6Xew=YY=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+	by sourceware.org (Postfix) with ESMTPS id 005FD3858D38;
+	Mon,  9 Jun 2025 21:46:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 005FD3858D38
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 005FD3858D38
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1749505563; cv=none;
+	b=DzF6YZkHlOR1SiQtqDmBEcJ7wVk10FzKUefFM9iEtTlzyP6PX5Pw1rFturtNoUc5o9mP6lCpt8atux1y8q9th1IjGy62wLX3b+MEAkJLlNwaCssWMGEfIXyvUywlzZX9uJM8P0JKJ8uj9KVXfbfe8QZT5msSzNINmvII2ri20Xs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1749505478; c=relaxed/simple;
-	bh=bdnzf9aWiR/dwYVs//xEYbpbharf8O6UI/rN+yBJhKw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=GfA/TNDFkK6IdHB1Jtw/6/Y2uKt1xtJwTe4zlawwqFcCv3R0kUDyUzzJQM0LTd2DWoneJYsUBMzpfhAWJ8RPhx27Kgum7qh4PIIMttUBISdt+vHuN0X1FHDS8Yw822+/7HiulEfdmFNjPvXKFXshfnCU0F3Shy1KJqgOVXJyTsI=
+	t=1749505563; c=relaxed/simple;
+	bh=/TwhiDsosg3KrCFfEgWlrNiPP2fzY1L20XD0elrImUM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=Lr3LuwQujCMmXI9cYGcTxKARmoRD7di9LrBQgsvg1ZWPfJE06pKeH6cIS5NqTxfqgUKTTcRDuxXmR+zulpvoKjWEHaft29SU+7PEU1oENd0muZJUM2boDq+1JM9kq3J4lJfGypEkqVuPyG5NunX1eXhjgysB/xi1yJynC+Zu+7U=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 223933858D38
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89D1C093FA76E
-X-Originating-IP: [86.144.161.4]
-X-OWM-Source-IP: 86.144.161.4
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdelkeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeevvdekgfffteetueehgfdugefgkeevleejudduheevuedtveejfeevvdevvdfgvdenucfkphepkeeirddugeegrdduiedurdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudeggedrudeiuddrgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudeggedqudeiuddqgedrrhgrnhhgvgekiedqudeggedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtiedpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtoheptgihghifihhnsehj
-	ughrrghkvgdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.144.161.4) by btprdrgo006.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89D1C093FA76E; Mon, 9 Jun 2025 22:44:34 +0100
-Message-ID: <4fdd22a1-29c3-41a4-8d50-b3d83782a44c@dronecode.org.uk>
-Date: Mon, 9 Jun 2025 22:44:34 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 005FD3858D38
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=TdtujExr
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 87BED14037B;
+	Mon,  9 Jun 2025 21:46:02 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf20.hostedemail.com (Postfix) with ESMTPA id CCE2B20027;
+	Mon,  9 Jun 2025 21:46:00 +0000 (UTC)
+Message-ID: <4f39b6ee-c8de-47f9-a48b-1bd0524eb987@SystematicSW.ab.ca>
+Date: Mon, 9 Jun 2025 15:45:59 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: CI: grant full control to Administrators on
- github workspace
-To: Jeremy Drake <cygwin@jdrake.com>
-References: <733a91af-f510-f2f8-4577-5354eed64941@jdrake.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-apps@cygwin.com
+Subject: Re: Updated: w32api-{headers,runtime}
+ mingw64-{headers,runtime,winpthreads} gendef 13.0.0-1
+Content-Language: en-CA
+To: cygwin-apps@cygwin.com
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <733a91af-f510-f2f8-4577-5354eed64941@jdrake.com>
+References: <971dee8b-9df9-4aed-83b5-0d04afcb031c@gmail.com>
+Organization: Systematic Software
+In-Reply-To: <971dee8b-9df9-4aed-83b5-0d04afcb031c@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Stat-Signature: yntjt3jwgg4r3gdjjaytidiyk6zqtxiu
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: CCE2B20027
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1+GF3VUswvANMbp+q0s+QwZArXvOztDPqQ=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:cc:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=itTUFq0+A/3P7HSSA7RhKi6iyNKofwX4sZlhufR/Ev0=; b=TdtujExrugPnoeSXGgrnfBK6asTAU23J8dJB1IhPL5JoKV7bfh0yp9Vo4NQQJHzcYARiovSgWnWmEYhZ+5HuEI6xQgBZ5nmEw8gA5MVn2xd2C17c3MBlKKjdC0eB43VBuePSz6pbxnsneeOyFUmepEoRx6IcTWNmYvFArhdp/jwv6F2rTGZ8TtEqNZ9uPTmh/ukxrVi5ONiS6CY5uJkEDwYtCMiBMnMx3AqGwzmTUuXTDo+x3ibiZb4Vx7Aj5KKYs4tpbNHMwKWw3Kxn23+ET+991PAAStuZ4MFlf+bgzHHotTTS5G/rVIlVbX8FGhqHX5LZEgfFSP/eTzG0sQoGHQ==
+X-HE-Tag: 1749505560-467685
+X-HE-Meta: U2FsdGVkX19alrAyOOiLzkoPP81Re8Y+g+yirYM0G0GqWUcteVe0xskBM/lkBNH2/wV/U6clNqv6Ja0uegoPxn59oAtnMHXWBoVYT85Zp5xWvfw5UolX8GXhgdxIblu+D0mzQodAiaOv2k54YPNwJnZrDQGKokfs4PUV7loSR2M8CKtnSzzWfREdJ3YQG9rOTkABCJe7isqnCsACI2prgS/EmNO/Rsz0+ynktLn0etH8/9cGXxD6T1vHoKATHxVXmNmm7I0ALS9zIi3a7LZHL3vkCLZz//U1OzId37ec8fetzbTVbpB0V8n/9pnVgK7lBhzR7bbbo4WF2XOrkcNxARNczC5x4M8ry0rbYgl1Gd8J1i5K85EiLYJe4DRjG532cbXBwl+1YIh+xW1phy7+iXUotXyG0BCClEuZmDbJ+zR+K1sXZr/oyUVftOGJkvid/J1CuudGLbc=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 09/06/2025 21:28, Jeremy Drake via Cygwin-patches wrote:
-> From: Jeremy Drake <cygwin@jdrake.com>
+On 2025-06-08 06:04, Jonathan Yong via Cygwin-announce wrote:
+> Now released for both 32bit and 64bit Cygwin:
 > 
-> After inherited permissons were removed, apparently there were no
-> permissions left allowing access, and GHA recently started failing on
-> actions/checkout with EPERM.
+> Notable changes:
+> * Added import libraries for msvcr40d.dll, msvcrtd.dll, msvcr70d.dll, 
+> msvcr71d.dll, msvcr80d.dll, msvcr100d.dll, msvcr110d.dll.
+> * Better CRT API consistency between UCRT and MSVCRT, making many APIs available 
+> to earlier versions of the MSVCR* runtime as well.
+> * CRTDLL stat API fixes.
+> * Updated Hyper-V headers.
+> * Synchronized with Wine headers (from Wine 10.9).
+> * Many other new win32 APIs.
+> * Fix _atexit call differing between DLLs and EXEs.
+> * Basic support for ARM64EC targets (arm64ec-w64-mingw32).
+> * Make it possible to build winpthreads with MSVC and clang-cl.
+> * Many small fixes for gendef, genidl and genpeimg.
 
-I'm going to assume there's been a change in the VM image which has 
-triggered this failure, since it was working before...
+We have reports of failing Cygwin builds after this update:
 
-But thanks very much for digging into the root cause of this.
+	https://cygwin.com/pipermail/cygwin-patches/2025q2/013754.html
 
-Please apply.
+https://github.com/cygwin/cygwin/actions/runs/15537033468%C2%A0workflow%C2%A0started
 
-> 
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
->   .github/workflows/cygwin.yml | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
-> index 087a68a999..3c3cd93219 100644
-> --- a/.github/workflows/cygwin.yml
-> +++ b/.github/workflows/cygwin.yml
-> @@ -107,7 +107,10 @@ jobs:
->       - run: git config --global core.autocrlf input
->       # remove inheritable permissions since they break assumptions testsuite
->       # makes about file modes
-> -    - run: icacls . /inheritance:r
-> +    - name: adjust permissions
-> +      run: |
-> +        icacls . /inheritance:r
-> +        icacls . /grant Administrators:F
->       - uses: actions/checkout@v3
-> 
->       # install cygwin and build tools
+https://github.com/cygwin/cygwin/actions/runs/15537033468/job/43738461428
 
+Was this upgrade tested with a current Cygwin build before deployment?
+
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
