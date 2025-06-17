@@ -1,182 +1,108 @@
-Return-Path: <SRS0=8XWn=ZA=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 4BDF838907AF
-	for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 05:12:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4BDF838907AF
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4BDF838907AF
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750137124; cv=none;
-	b=q74fW6o+7FXFWDLn9w48Vh2Ccwqlh3X8neHL6HslQ+E4+jEwtXJYA5v6EgsrnKFsaTR4putvQHse335rHbiQpn9XrXtnv3vRLWrqVkafjzsX3rTWHNm9sMTsSXxW6rLnPbx+jjvBmyFv79npQ/35j/H/Q1jSlsbuq0phElkB/64=
+Return-Path: <SRS0=TcID=ZA=gmail.com=sebastian.n.feld@sourceware.org>
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by sourceware.org (Postfix) with ESMTPS id 900C63851C2B;
+	Tue, 17 Jun 2025 07:48:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 900C63851C2B
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 900C63851C2B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::530
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750146529; cv=none;
+	b=EJPZjO4+9m1uNd0eyN0n+pAGaKZJZ/LXdqfyfG7BPCwQQnKRWGf9in1xgzjQWpxsHtDXjGEopWBzgHHX8qDIVOmwkV2mlkGeB24PoMJESXFs0Krr6qrl5KOYduuBKIPUvJThhCyStYK5vDgKpZeXVxPcjQLiL1VfDgRHGK2xq6I=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750137124; c=relaxed/simple;
-	bh=+QmQct0u9X+g22BdBNaOzB25ihi9i3WVFDBppY8JnRo=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Rqka6IOxNp/EqTmgzLxngj6Z2PJ6QF7bfX2GHaRl6TfTkXokQdgdOrXH0tkYV/MQB6C79eyBmwp2jG7cNeHYslvGcaVsMaq2b844/7dhVPlL0fNk55WyJWp0elFXjxWRlIHfODMOIwLncndzK37xYcYTSEShBdUqXuLZt5wQl08=
+	t=1750146529; c=relaxed/simple;
+	bh=h4lxc5+I62xaphiXQwpRR2qTmHjEipKDrkoN4GE1TZ0=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=wlaR6goDES52mAEYI13pqkIgaAw1QIoCk3d01+K7VzJgGk+EJReBEYADcO0WsKXb1PXlBF8YGMRa0Lw8DJyED59WmaDFLyH2aWkzDTBZAzeaO4oKY91S3bdxLO8UNMSuLIRa6fcSsCvaA0W02zFfc3ZdTMJNZOUxg9PQfqLzt40=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4BDF838907AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 900C63851C2B
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=hIi9FCuo
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id D735E45D52
-	for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 01:12:03 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=Bm9PgutA/kt7XhFPzVjzWxA36Vw=; b=hIi9F
-	CuonYTeJvTL+LnMgWc9w7iy+GEZcVXxrJZdBh4n8zM0UuVIorEvyBYa9J6p6O6tH
-	bXDlyALkooQQUGKSkxSqtQTFeQGAXb+Ksxut6vTQEmf0iI7+YVjSMxnYbHSMlaMZ
-	RqlbxdQioHWncB8C7Z0MrzBWWKkVDkzEXIBOzA=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id B886245D51
-	for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 01:12:03 -0400 (EDT)
-Date: Mon, 16 Jun 2025 22:12:03 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: make pthread initializer macros constinit
- compliant
-In-Reply-To: <1277a22d-9beb-52b3-c9ea-7980f54fb84b@jdrake.com>
-Message-ID: <9f2971ca-114a-cfec-646a-a32eabfc3ac3@jdrake.com>
-References: <1277a22d-9beb-52b3-c9ea-7980f54fb84b@jdrake.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=GJauWkfp
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-607c2b96b29so10635693a12.1;
+        Tue, 17 Jun 2025 00:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750146527; x=1750751327; darn=cygwin.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FoocuGs52eWcomBeKTxtrP1bWIIjuaXtPtDjQtbFkE8=;
+        b=GJauWkfp/Q3wdwVv0EHpAPzuo2CVtYukT20of/i8s9odf+fnpZ7VtmYgC1zcrcMKan
+         3WoVYfgysOXNjm2eDHHj4ZdiV3JB4R/9mCaZAyfT+DPwz+twlK94j8J3YdIONbPMleKG
+         arbXyVMvJyloBMmgOWe4mfO5G7fLBSDx+n0G9XIaCUlM36dufYuD0fttv+RNIhm1XkIF
+         DfnixIFu2QiDs0yhNZ/2zhh5WvOnHnr7VJcl9KutqkcnIOYEKcFXjRXYwGkLcWTABtr6
+         VKGu2RZ4RouWEiZbHk4ijP9O9CLf8qxx49fCeW77fEJHTkq0hY9y1aubH4lWKsKoH2gD
+         fTVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750146527; x=1750751327;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FoocuGs52eWcomBeKTxtrP1bWIIjuaXtPtDjQtbFkE8=;
+        b=CKumIdmrS6quBDw5u1T1rpY9GHccE1m1Td1ksAdjNY3iwrsH/qI/h+0KxE84rbO0Rv
+         pe4uydyViOLNGaXNF04TBjzB05/8HkQi2VX9VFLG/HZs0J1aBtgjkPX8dI+RdB+pOGLJ
+         TVRd9soQTryGPoMYJWeOvxWPG5snYYB2g2ltFe+vecEXTHuCoqgCOBu+Q2/ZKj/WU0yV
+         NPdPfWewWEtfmI0Nf2J7LIy/9iKyHsa1dAgMGJ1DJlObBWQBcGjs2CDUqqyVqn350iIJ
+         C4NzQcfU22EqmDqUxq6ZFnu3o3iaZPmV/Lap2OrRIMKbtFH9Kt+64aDSSls/mGpaf89m
+         9OiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVyorUyxcmLPEHITEJxnZLBN1VThQRhtQA8PvcBgtcuXkRBVA6O6l8btWzxzfJXW2D3PxutRl8=@cygwin.com
+X-Gm-Message-State: AOJu0YwXVhPn1zj7xozaWeZfXikOLjWysQGDkfQg6icr5OJZ0LbTSUjt
+	ofsC/6NM+L6BfP6l38yuGpUSjcsnBTkNvGjH1HQhttrrI4FyIo8LDDZYa61FEtohaH0XEYqTDUZ
+	ibOb6drvncgPaO5vFS6FAzVEZ3aZ3Sl3sZNCc
+X-Gm-Gg: ASbGncuaCymo6bZJSJYRje6iAWAsmIVXe7j1KYtccb9iO/gODMPKfi7zKt9VEqZn/vx
+	tfnAs2twTOw164OGskJAhMqPAH1+phkVj120/i0yte9s3Ci4sp1S6CPjGyYMynflG4pDo+vfJEd
+	o5hhit1ZYdpKA8Ld8WHNxt6ututbN+tN3iKWDo7r8i2+o=
+X-Google-Smtp-Source: AGHT+IF9R7WmfyjSCGTXdIarm1tbe1/DEEgI2bP6Xz9SSPyfvl4KWhXY0B1RdG+nZ2vvJagwdIaOqdjhOMpSv46PKsQ=
+X-Received: by 2002:a05:6402:5193:b0:608:176f:9b5c with SMTP id
+ 4fb4d7f45d1cf-608d09482efmr10787514a12.20.1750146527299; Tue, 17 Jun 2025
+ 00:48:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+From: Sebastian Feld <sebastian.n.feld@gmail.com>
+Date: Tue, 17 Jun 2025 09:48:10 +0200
+X-Gm-Features: AX0GCFsKcYjONhOohmn8djFYbesNuZli2fzf2rQ44xcWVEQkyoGO7586rO4_Ufg
+Message-ID: <CAHnbEG+-vkWb3F9HJFNdtMt1wAtm90kz81p8H=0Y7QrGHn50ag@mail.gmail.com>
+Subject: [PATCH][API-CONFORMAANCE] Increase SYMLOOP_MAX to 63
+To: cygwin-patches@cygwin.com, cygwin@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 16 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
+The following patch increases from 10 to 63, per Windows spec
+https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points
 
-> In order to avoid a restriction on any reinterpret_cast-like behavior in
-> constinit expressions, use assembly and the linker to define symbols
-> with the not-valid-address addresses.
->
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
-> This is gross, but I couldn't come up with a way to make this both source
-> and ABI (including C++ name mangling) compatible.  I'd be happy to be
-> shown a cleaner way.  I built libc++ without a patch to remove constinit,
-> and I'm working on building gcc/libstdc++ to confirm it didn't break
-> anything there.
+Security impact is minor, SYMLOOP_MAX is just an artificial limiter to
+prevent endless loops.
+But with a value of 10 it is a real world problem, because production
+scripts ported from other platforms hit this on a regular basis.
+Neither Powershell nor JAVA have such a limit, they all rely on the
+Windows object manager to report back if more than 63 reparse points
+are traversed.
 
-gcc 13.4.0 rebuilt successfully too.  The thing to watch out for with this
-is "relocation truncated to fit" link errors.  Oddly enough, I saw this
-when using the absolute symbols from the C++ inside the Cygwin DLL build,
-but have not seen it building either DLLs or EXEs using clang or gcc, even
-when trying to recreate the scenario (comparing a pthread_mutex_t to
-PTHREAD_MUTEX_INITIALIZER).
+Thus, the limit should be increased to 63, which is the maximum
+supported by the Windows object manager.
 
->
->  winsup/cygwin/Makefile.am        |  4 +++-
->  winsup/cygwin/include/pthread.h  | 27 ++++++++++++++++++++-------
->  winsup/cygwin/lib/pthreadconst.S | 17 +++++++++++++++++
->  3 files changed, 40 insertions(+), 8 deletions(-)
->  create mode 100644 winsup/cygwin/lib/pthreadconst.S
->
-> diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-> index 6438a41487..31747ac98c 100644
-> --- a/winsup/cygwin/Makefile.am
-> +++ b/winsup/cygwin/Makefile.am
-> @@ -78,7 +78,8 @@ LIB_FILES= \
->  	lib/premain1.c \
->  	lib/premain2.c \
->  	lib/premain3.c \
-> -	lib/pseudo-reloc-dummy.c
-> +	lib/pseudo-reloc-dummy.c \
-> +	lib/pthreadconst.S
->
->  FHANDLER_FILES= \
->  	fhandler/base.cc \
-> @@ -315,6 +316,7 @@ DLL_FILES= \
->  	ipc.cc \
->  	kernel32.cc \
->  	ldap.cc \
-> +	lib/pthreadconst.S \
->  	libstdcxx_wrapper.cc \
->  	loadavg.cc \
->  	lsearch.cc \
-> diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
-> index 8e296303d7..6910a5a886 100644
-> --- a/winsup/cygwin/include/pthread.h
-> +++ b/winsup/cygwin/include/pthread.h
-> @@ -31,8 +31,6 @@ extern "C"
->  #define PTHREAD_CANCEL_DEFERRED 0
->  #define PTHREAD_CANCEL_DISABLE 1
->  #define PTHREAD_CANCELED ((void *)-1)
-> -/* this should be a value that can never be a valid address */
-> -#define PTHREAD_COND_INITIALIZER (pthread_cond_t)21
->  #define PTHREAD_CREATE_DETACHED 1
->  /* the default : joinable */
->  #define PTHREAD_CREATE_JOINABLE 0
-> @@ -42,10 +40,6 @@ extern "C"
->  #define PTHREAD_MUTEX_ERRORCHECK 1
->  #define PTHREAD_MUTEX_NORMAL 2
->  #define PTHREAD_MUTEX_DEFAULT PTHREAD_MUTEX_NORMAL
-> -/* this should be too low to ever be a valid address */
-> -#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP (pthread_mutex_t)18
-> -#define PTHREAD_NORMAL_MUTEX_INITIALIZER_NP (pthread_mutex_t)19
-> -#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP (pthread_mutex_t)20
->  #define PTHREAD_MUTEX_INITIALIZER PTHREAD_NORMAL_MUTEX_INITIALIZER_NP
->  #define PTHREAD_ONCE_INIT { PTHREAD_MUTEX_INITIALIZER, 0 }
->  #if defined(_POSIX_THREAD_PRIO_INHERIT) && _POSIX_THREAD_PRIO_INHERIT >= 0
-> @@ -55,12 +49,31 @@ extern "C"
->  #endif
->  #define PTHREAD_PROCESS_SHARED 1
->  #define PTHREAD_PROCESS_PRIVATE 0
-> -#define PTHREAD_RWLOCK_INITIALIZER (pthread_rwlock_t)22
->  /* process is the default */
->  #define PTHREAD_SCOPE_PROCESS 0
->  #define PTHREAD_SCOPE_SYSTEM 1
->  #define PTHREAD_BARRIER_SERIAL_THREAD (-1)
->
-> +#if !defined(__INSIDE_CYGWIN__) || !defined(__cplusplus)
-> +/* Constants for initializer macros */
-> +extern struct __pthread_mutex_t __pthread_recursive_mutex_initializer_np;
-> +extern struct __pthread_mutex_t __pthread_normal_mutex_initializer_np;
-> +extern struct __pthread_mutex_t __pthread_errorcheck_mutex_initializer_np;
-> +extern struct __pthread_cond_t __pthread_cond_initializer;
-> +extern struct __pthread_rwlock_t __pthread_rwlock_initializer;
-> +#define PTHREAD_COND_INITIALIZER (&__pthread_cond_initializer)
-> +#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP (&__pthread_recursive_mutex_initializer_np)
-> +#define PTHREAD_NORMAL_MUTEX_INITIALIZER_NP (&__pthread_normal_mutex_initializer_np)
-> +#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP (&__pthread_errorcheck_mutex_initializer_np)
-> +#define PTHREAD_RWLOCK_INITIALIZER (&__pthread_rwlock_initializer)
-> +#else
-> +#define PTHREAD_COND_INITIALIZER (pthread_cond_t)21
-> +#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP (pthread_mutex_t)18
-> +#define PTHREAD_NORMAL_MUTEX_INITIALIZER_NP (pthread_mutex_t)19
-> +#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP (pthread_mutex_t)20
-> +#define PTHREAD_RWLOCK_INITIALIZER (pthread_rwlock_t)22
-> +#endif
-> +
->  /* Register Fork Handlers */
->  int pthread_atfork (void (*)(void), void (*)(void), void (*)(void));
->
-> diff --git a/winsup/cygwin/lib/pthreadconst.S b/winsup/cygwin/lib/pthreadconst.S
-> new file mode 100644
-> index 0000000000..6e55a832a4
-> --- /dev/null
-> +++ b/winsup/cygwin/lib/pthreadconst.S
-> @@ -0,0 +1,17 @@
-> +#if defined(__i386__)
-> +#  define SYM(x) _##x
-> +#else
-> +#  define SYM(x) x
-> +#endif
-> +
-> +/* these should all be too low to ever be valid addresses */
-> +.globl SYM(__pthread_recursive_mutex_initializer_np)
-> +.set __pthread_recursive_mutex_initializer_np, 18
-> +.globl SYM(__pthread_normal_mutex_initializer_np)
-> +.set __pthread_normal_mutex_initializer_np, 19
-> +.globl SYM(__pthread_errorcheck_mutex_initializer_np)
-> +.set __pthread_errorcheck_mutex_initializer_np, 20
-> +.globl SYM(__pthread_cond_initializer)
-> +.set __pthread_cond_initializer, 21
-> +.globl SYM(__pthread_rwlock_initializer)
-> +.set __pthread_rwlock_initializer, 22
->
+---cut---cut---cut---
+diff --git a/winsup/cygwin/include/cygwin/limits.h
+b/winsup/cygwin/include/cygwin/limits.h
+index 204154da9..c61466368 100644
+--- a/winsup/cygwin/include/cygwin/limits.h
++++ b/winsup/cygwin/include/cygwin/limits.h
+@@ -43,7 +43,13 @@ details. */
+#define __SEM_VALUE_MAX 1147483648
+#define __SIGQUEUE_MAX 1024
+#define __STREAM_MAX 20
+-#define __SYMLOOP_MAX 10
++/* __SYMLOOP_MAX
++   https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points
++   ... There is a limit of 63 reparse points on any given path.
++   NOTE: The limit can be reduced depending on the length of the
++   reparse point. For example, if your reparse point targets a fully
++   qualified path, the limit becomes 31. */
++#define __SYMLOOP_MAX 63
+#define __TIMER_MAX 32
+#define __TTY_NAME_MAX 32
+#define __FILESIZEBITS 64
+---cut---cut---cut---
 
+What is the next step to get this patch committed and pushed?
+
+Sebi
+-- 
+Sebastian Feld - IT security consultant
