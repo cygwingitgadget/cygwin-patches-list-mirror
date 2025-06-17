@@ -1,90 +1,273 @@
-Return-Path: <SRS0=yf1H=ZA=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.227.115])
-	by sourceware.org (Postfix) with ESMTPS id 8D26F3843B76
-	for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 12:07:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8D26F3843B76
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8D26F3843B76
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.115
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750162023; cv=none;
-	b=hEHHf57QtK/4eLeU8mQO27hiLwgAW45+P9iEm4E29zW23N2lBpaaQfSquS0CsK/ykZkew6niebiBZsY1sAXpJyZVbx1B8VBVAIQb715COHDwHjk+kdEy+zqRU98yfedUMMkfth5ER235T4b1WdX0sSkntfrJzn0eYhullqwtVnQ=
+Return-Path: <SRS0=P0RP=ZA=redhat.com=vinschen@sourceware.org>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by sourceware.org (Postfix) with ESMTP id 849B63889FB2
+	for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 15:00:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 849B63889FB2
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=redhat.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 849B63889FB2
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=170.10.133.124
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750172455; cv=none;
+	b=FHJnHn+FEkOR3+TUMqihiDIgWVzcYArd+sIkJOnf/BH45+6abSpDvB2Tg2Dspf1oH+S/c2yECiXmdfslpmEq6oaDpHCiNY8g+4X6cLfZtV01YQ23VVCnAfqJyJwxl3cDsfCAglJ3OwSFTBZq/Ll6+iqIzUUXSvZnsr55FhCppDU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750162023; c=relaxed/simple;
-	bh=D57M8WZnGecQf1EPNRQDgBT8PS1leEFri5S8uXcxhOQ=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=HJJ6Dp1MmUhjoYa67bl3Z5ZslKvmug4jzYVvYperJQ8TIaKnRIOHEfi9vEyccYbxOTlHS7eZePL+Z+wUGW3XFByTnQbCnQ+KGLiIywziwFumNDq7gUQmFCXMxXxwvSIGkBQ/V5wMTAM6qIPBHtu7j13eEPNNf4KvLK/4UWHCqjQ=
+	t=1750172455; c=relaxed/simple;
+	bh=C075WHfGUhuQ/1PVE2+uh25+OG7oqcJej5uWksxsPz0=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tjd9FqxkA2HFE51vigS7jLczGiPMWuH+uE5NrvzMaPwXBDCTOvatiMbh0WIKr8wjYzTsDptpcXAmpxImYZUVMwkW0BTuKCLfmF4Eo/PJBjSH+lEd/XK8ao1q0kWbLuILvq/VQP5f6yN2Q3TKTrwJVFQsm8r4HwFt05mDVmy7s84=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8D26F3843B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 849B63889FB2
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=rBgoa6LW
-Received: from HP-Z230 by mta-snd-e03.mail.nifty.com with ESMTP
-          id <20250617120700287.CAUQ.110778.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 17 Jun 2025 21:07:00 +0900
-Date: Tue, 17 Jun 2025 21:06:59 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: signal: Prevent unexpected crash on frequent
- SIGSEGV
-Message-Id: <20250617210659.68de6c2de5ba4a3a76e395be@nifty.ne.jp>
-In-Reply-To: <aFEwKctHcO9qtp61@calimero.vinschen.de>
-References: <20250528125222.2347-1-takashi.yano@nifty.ne.jp>
-	<aFEwKctHcO9qtp61@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1750162020;
- bh=zYgB76a3AfgAycdn0a/sk3ymx7GWNZZLaxLXvX2c8TQ=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=rBgoa6LWh/RzvxTGj4ee/79uGtRZdPnKrL9jq3TM/rCKsjtdxStz4LC26/nRuVHcG6fr/Cf2
- 9kVS8PANCY7bjNMJnq7GS2qSyyTwUGcpP4xEsDyJu6w5zTXV+ziVBL8j0n8z3QLdVTK4otdYc9
- 88V5nzDN3EC/qN8mngm/BMAs5LyCcYi0KVnEkF6pr7rJOxcSSr1xWQMqTBiKGEOp4sPolq/6Nb
- XYzr+FPuELvRTeLaVTe5K5NwdVd5bersJ0uoisAoCc2PDAqLVSMjBPyUMjYI5xlBVkg9ykIIPn
- v4rHlhL8+xr/tyPQQBGf4HeKm3X0x95UcNiAtZJCnpA+SVzw==
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IgxBud3A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750172455;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F/oK7SMMksWBmMu3LTMJOA+Z1hvT6Rf7sL2DrjMz9VI=;
+	b=IgxBud3Aa8M3PrlS6PvffNYfdQCCt3N5l11u7TvnSrS8AkPGMFxQaHrB8B3qZPFabK2W92
+	s7c52+8ZrEuqQi/U2+rmoL7/UdLdGHNsvyXtQcS19cJmx615tbgMnGd9rsH6oKwlaRDB+v
+	+z7j2ct5j4UR+AGMlizD/djYCmsYTVA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-614-Nox41-QSO2qHLTYMB3BZOw-1; Tue,
+ 17 Jun 2025 11:00:50 -0400
+X-MC-Unique: Nox41-QSO2qHLTYMB3BZOw-1
+X-Mimecast-MFC-AGG-ID: Nox41-QSO2qHLTYMB3BZOw_1750172449
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D670E19540FC;
+	Tue, 17 Jun 2025 15:00:48 +0000 (UTC)
+Received: from calimero.vinschen.de (unknown [10.45.226.189])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25F9B19560A3;
+	Tue, 17 Jun 2025 15:00:48 +0000 (UTC)
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 8A9B3A80961; Tue, 17 Jun 2025 17:00:45 +0200 (CEST)
+Date: Tue, 17 Jun 2025 17:00:45 +0200
+From: Corinna Vinschen <vinschen@redhat.com>
+To: Radek Barton <radek.barton@microsoft.com>,
+	Richard Earnshaw <rearnsha@arm.com>
+Cc: Newlib <newlib@sourceware.org>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH/QUESTION] newlib: fenv: AArch64 Cygwin linking fixes
+Message-ID: <aFGDHW9PxpZCJBt_@calimero.vinschen.de>
+Reply-To: newlib@sourceware.org
+Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
+	Richard Earnshaw <rearnsha@arm.com>, Newlib <newlib@sourceware.org>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <GV4PR83MB0941761524523870C31AC5BD9270A@GV4PR83MB0941.EURPRD83.prod.outlook.com>
+MIME-Version: 1.0
+In-Reply-To: <GV4PR83MB0941761524523870C31AC5BD9270A@GV4PR83MB0941.EURPRD83.prod.outlook.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: t6tqmq71qDFsNoMhILIrXl_Km3ZjWPMeXICWJBxKrAY_1750172449
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 17 Jun 2025 11:06:49 +0200
-Corinna Vinschen wrote:
-> Hi Takashi,
+On Jun 16 11:31, Radek Barton wrote:
+> Hello.
 > 
-> On May 28 21:52, Takashi Yano wrote:
-> > +#ifdef __x86_64__
-> > +      /* When the Rip points to an instruction that causes an exception,
-> > +	 modifying Rip and calling ResumeThread() may sometimes result in
-> > +	 a crash. To prevent this, advance execution by a single instruction
-> > +	 by setting the trap flag (TF) before calling ResumeThread(). This
-> > +	 will trigger either STATUS_SINGLE_STEP or the exception caused by
-> > +	 the instruction that Rip originally pointed to.  By suspending the
-> > +	 targeted thread within exception::handle(), Rip no longer points
-> > +	 to the problematic instruction, allowing safe handling of the
-> > +	 interrupt. As a result, Rip can be adjusted appropriately, and the
-> > +	 thread can resume execution without unexpected crashes.  */
-> > +      if (!inside_kernel (cx, true))
-> > +	{
-> > +	  cx->EFlags |= 0x100; /* Set TF (setup single step execution) */
-> > +	  SetThreadContext (*this, cx);
-> > +	  suspend_on_exception = true;
-> > +	  ResumeThread (*this);
-> > +	  ULONG cnt = 0;
-> > +	  NTSTATUS status;
-> > +	  do
-> > +	    {
-> > +	      yield ();
-> > +	      status = NtQueryInformationThread (*this, ThreadSuspendCount,
-> > +						 &cnt, sizeof (cnt), NULL);
-> > +	    }
-> > +	  while (NT_SUCCESS (status) && cnt == 0);
-> > +	  GetThreadContext (*this, cx);
+> This is more a question than patch submission: Without the attached changes, the Cygwin cannot be linked for AArch64 failing on:
+> ```
+> ld: cannot export _fe_nomask_env: symbol not defined
+> ld: cannot export fedisableexcept: symbol not defined
+> ld: cannot export fegetexcept: symbol not defined
+> ld: cannot export fegetprec: symbol not defined
+> ld: cannot export fesetprec: symbol not defined
+> ```
+> Can anybody share some insights why are those changes needed and whether there is a better way how to overcome this issue?
 > 
-> Doesn't this return cx->EFlags with the single step flag set?  Otherwise
-> this looks ok.
+> Note that the `feenableexcept`, `fedisableexcept`, `fegetexcept` implementations are similarly defined in `newlib/libc/machine/mips/machine/fenv-fp.h` for MIPS architecture as well.
 
-Thanks for reviewing.
-IIUC, TF flag is automatically cleard when single step inturrupt is triggered.
-I also checked the cx->EFlags at above GetThreadContext(), and the TF flag was
-not set at that point.
+This would be a question for our ARM guys.  Richard?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Thanks,
+Corinna
+
+
+> 
+> Thank you,
+> 
+> Radek
+> 
+> ---
+> >From 17fd8e16061ab199d111b303a44c042ea43c4018 Mon Sep 17 00:00:00 2001
+> From: Radek Barton <radek.barton@microsoft.com>
+> Date: Mon, 9 Jun 2025 08:55:18 +0200
+> Subject: [PATCH/QUESTION] newlib: fenv: AArch64 Cygwin linking fixes
+> 
+> ---
+>  newlib/libc/machine/aarch64/machine/fenv-fp.h | 64 +++++++++++++++++++
+>  newlib/libc/machine/aarch64/sys/fenv.h        | 40 ------------
+>  newlib/libm/machine/aarch64/fenv.c            |  7 ++
+>  winsup/cygwin/fenv.c                          | 10 +++
+>  4 files changed, 81 insertions(+), 40 deletions(-)
+> 
+> diff --git a/newlib/libc/machine/aarch64/machine/fenv-fp.h b/newlib/libc/machine/aarch64/machine/fenv-fp.h
+> index d8ec3fc76..e42e2d873 100644
+> --- a/newlib/libc/machine/aarch64/machine/fenv-fp.h
+> +++ b/newlib/libc/machine/aarch64/machine/fenv-fp.h
+> @@ -154,3 +154,67 @@ feupdateenv(const fenv_t *__envp)
+>  	return (0);
+>  }
+>  
+> +#if __BSD_VISIBLE
+> +
+> +/* We currently provide no external definitions of the functions below. */
+> +
+> +__fenv_static inline int
+> +feenableexcept(int __mask)
+> +{
+> +	fenv_t __old_r, __new_r;
+> +
+> +	__mrs_fpcr(__old_r);
+> +	__new_r = __old_r | ((__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT);
+> +	__msr_fpcr(__new_r);
+> +	return ((__old_r >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
+> +}
+> +
+> +__fenv_static inline int
+> +fedisableexcept(int __mask)
+> +{
+> +	fenv_t __old_r, __new_r;
+> +
+> +	__mrs_fpcr(__old_r);
+> +	__new_r = __old_r & ~((__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT);
+> +	__msr_fpcr(__new_r);
+> +	return ((__old_r >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
+> +}
+> +
+> +__fenv_static inline int
+> +fegetexcept(void)
+> +{
+> +	fenv_t __r;
+> +
+> +	__mrs_fpcr(__r);
+> +	return ((__r & _ENABLE_MASK) >> _FPUSW_SHIFT);
+> +}
+> +
+> +#endif /* __BSD_VISIBLE */
+> +
+> +#if defined(__CYGWIN__)
+> +
+> +/*  Returns the currently selected precision, represented by one of the
+> +   values of the defined precision macros.  */
+> +__fenv_static inline int
+> +fegetprec (void)
+> +{
+> +  return 0;
+> +}
+> +
+> +/* http://www.open-std.org/jtc1/sc22//WG14/www/docs/n752.htm:
+> +
+> +   The fesetprec function establishes the precision represented by its
+> +   argument prec.  If the argument does not match a precision macro, the
+> +   precision is not changed.
+> +
+> +   The fesetprec function returns a nonzero value if and only if the
+> +   argument matches a precision macro (that is, if and only if the requested
+> +   precision can be established). */
+> +__fenv_static inline int
+> +fesetprec (int prec)
+> +{
+> +  /* Indicate success.  */
+> +  return 1;
+> +}
+> +
+> +#endif /* __CYGWIN__ */
+> diff --git a/newlib/libc/machine/aarch64/sys/fenv.h b/newlib/libc/machine/aarch64/sys/fenv.h
+> index 6b0879269..1cfbeaaf4 100644
+> --- a/newlib/libc/machine/aarch64/sys/fenv.h
+> +++ b/newlib/libc/machine/aarch64/sys/fenv.h
+> @@ -77,44 +77,4 @@ extern const fenv_t	*_fe_dfl_env;
+>  #define	__mrs_fpsr(__r)	__asm __volatile("mrs %0, fpsr" : "=r" (__r))
+>  #define	__msr_fpsr(__r)	__asm __volatile("msr fpsr, %0" : : "r" (__r))
+>  
+> -
+> -#if __BSD_VISIBLE
+> -
+> -/* We currently provide no external definitions of the functions below. */
+> -
+> -static inline int
+> -feenableexcept(int __mask)
+> -{
+> -	fenv_t __old_r, __new_r;
+> -
+> -	__mrs_fpcr(__old_r);
+> -	__new_r = __old_r | ((__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT);
+> -	__msr_fpcr(__new_r);
+> -	return ((__old_r >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
+> -}
+> -
+> -static inline int
+> -fedisableexcept(int __mask)
+> -{
+> -	fenv_t __old_r, __new_r;
+> -
+> -	__mrs_fpcr(__old_r);
+> -	__new_r = __old_r & ~((__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT);
+> -	__msr_fpcr(__new_r);
+> -	return ((__old_r >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
+> -}
+> -
+> -static inline int
+> -fegetexcept(void)
+> -{
+> -	fenv_t __r;
+> -
+> -	__mrs_fpcr(__r);
+> -	return ((__r & _ENABLE_MASK) >> _FPUSW_SHIFT);
+> -}
+> -
+> -#endif /* __BSD_VISIBLE */
+> -
+> -
+> -
+>  #endif	/* !_FENV_H_ */
+> diff --git a/newlib/libm/machine/aarch64/fenv.c b/newlib/libm/machine/aarch64/fenv.c
+> index 3ffe23441..86f8cd5aa 100644
+> --- a/newlib/libm/machine/aarch64/fenv.c
+> +++ b/newlib/libm/machine/aarch64/fenv.c
+> @@ -55,3 +55,10 @@ extern inline int feupdateenv(const fenv_t *__envp);
+>  extern inline int feenableexcept(int __mask);
+>  extern inline int fedisableexcept(int __mask);
+>  extern inline int fegetexcept(void);
+> +
+> +#if defined(__CYGWIN__)
+> +
+> +extern inline int fegetprec(void);
+> +extern inline int fesetprec(int prec);
+> +
+> +#endif /* CYGWIN */
+> diff --git a/winsup/cygwin/fenv.c b/winsup/cygwin/fenv.c
+> index 80f7cc52c..1558f76c2 100644
+> --- a/winsup/cygwin/fenv.c
+> +++ b/winsup/cygwin/fenv.c
+> @@ -3,3 +3,13 @@
+>     being called from mainCRTStartup in crt0.o. */
+>  void _feinitialise (void)
+>  {}
+> +
+> +#if defined(__aarch64__)
+> +
+> +#include <fenv.h>
+> +#include <stddef.h>
+> +
+> +/* _fe_nomask_env is exported by cygwin.din but not used at all for AArch64. */
+> +const fenv_t *_fe_nomask_env = NULL;
+> +
+> +#endif /* __aarch64__ */
+> -- 
+> 2.49.0.vfs.0.3
+> 
+
+
