@@ -1,125 +1,134 @@
 Return-Path: <SRS0=e9kc=ZB=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 54229392B3EE
-	for <cygwin-patches@cygwin.com>; Wed, 18 Jun 2025 17:36:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 54229392B3EE
+	by sourceware.org (Postfix) with ESMTPS id 277E2392409E
+	for <cygwin-patches@cygwin.com>; Wed, 18 Jun 2025 17:52:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 277E2392409E
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 54229392B3EE
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 277E2392409E
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750268206; cv=none;
-	b=T+jISBFG3g6FnSoX4lMCgHBxe2jHXKfGiIqwR/zTvdsvB+u/vmv1+hsSDFdrPPPDPsEdsb2nnJ1ARKsG9oNU3qRZlVC37SeWXa88cBjYD0tBq0cF/3qMQI8XlzYA41Tf6gP62jEIldQ4dGK6QMh3fNfHA20jeQprVBkzANFnnLE=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750269133; cv=none;
+	b=mfyhpivjTOfnwRK355TrW15+OTjeygzbhcwMG+2en6STvD5d1s5fnO6Ru4T7Ni8rWpe8ApyMdmoMhEBKG2GO6lewhNRo+KBlJ5k6ShmNwLVPCZQ0UP/G4InxOn0VpN4Q6GqozDkj1cA1kQAzqESMfED3b7lrCAwojEK/gpBW5CI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750268206; c=relaxed/simple;
-	bh=mxmDbTRcs4NNWi9VCK9WU6S9187Sm0qI037TORLTxC0=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=nS9LSTKU3oMgs7szmfqEGZDOcX3Oo36KaNudNvfPD/4aq3rz4/Z4ov7pEI7JLjiL9ox4/EJcLeOhPw4hElbew/FhR2boq+chua3UY/ldmpWgTRuSdpXOWFWKZzVUog69mA/Zukn5VJEl2afbLZyDAbPBNv3ihh8DdqQcAIx4sbM=
+	t=1750269133; c=relaxed/simple;
+	bh=ddWzUj/9luKXawt2Ki8nzy4bGAnnBYcuUzAJhP6DbsA=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=h6G+WKER3Z7Bk7nzeSGsZ7TOOl9n8kzIsBrwLMR1TgfrgDjHc8scHCXLN796o/qlM29LzyzDhvEg59zpBKi40LBuH9s4/lKUAQBSbZHRJvsE4w5HnuZISqH/OXONGqpYSzL38rkCnQ7nujReDXooWLGGoPwheelcNBh0uZg53Ww=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 54229392B3EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 277E2392409E
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=YeuxpkLt
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=bNIrWIZa
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 318BC45D3F;
-	Wed, 18 Jun 2025 13:36:46 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id ECF7D45D3F;
+	Wed, 18 Jun 2025 13:52:12 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
 	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=DIhXizLmzmKtxhRHhxrQ13hfAD0=; b=Yeuxp
-	kLtQmbvBbeuWfys+I4SaC78X2mcFOQYN08PxX0AOt+0+bQEGD0AWC5V8AjAfibC7
-	ofP4B518luMqRabcXHqChzKv1qBsdM2DPoBR0yKH2LjtbSN8sj2PhDi5QZs+vghQ
-	wm0fhFWdxocX6vy/UEQqLrMTpUMxItlMJHFLeg=
+	:content-type; s=csoft; bh=aDme6I0YTg5xs7+C4IbMIfr6YZg=; b=bNIrW
+	IZaDsSCPvrpqX0O6GXWjg5ELquxB6bpp8at1PgeMjgGckmvng3HGoR9p1LlTE++t
+	KpmRD0EurZ9xZ8zbWu10mebYOng2iTSj/4hvHtrF5H/T5gvvbE0v9NFv6Thso9XE
+	yXiq0S8Kkw7m+8s2sRi3sG5fgfnNHHblIK/qyA=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2C98145D37;
-	Wed, 18 Jun 2025 13:36:46 -0400 (EDT)
-Date: Wed, 18 Jun 2025 10:36:46 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id CD7AF45D37;
+	Wed, 18 Jun 2025 13:52:12 -0400 (EDT)
+Date: Wed, 18 Jun 2025 10:52:12 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
-To: Radek Barton <radek.barton@microsoft.com>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
 cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: obtain stack pointer on AArch64
-In-Reply-To: <DB9PR83MB09238701426EDE79BDAAFA2F9272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
-Message-ID: <03f0cd43-0adc-fee7-911c-2a553669b095@jdrake.com>
-References: <DB9PR83MB09238701426EDE79BDAAFA2F9272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Subject: Re: [PATCH] Cygwin: Aarch64: Add inline assembly pthread wrapper
+In-Reply-To: <PN2P287MB308587EBC924A773A4F2182E9F6FA@PN2P287MB3085.INDP287.PROD.OUTLOOK.COM>
+Message-ID: <afdbcb68-30a0-84a5-693c-7a6390e60c6f@jdrake.com>
+References: <PN2P287MB308587EBC924A773A4F2182E9F6FA@PN2P287MB3085.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="15599321219072-1726041840-1750268206=:11368"
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Thu, 5 Jun 2025, Thirumalai Nagalingam wrote:
 
---15599321219072-1726041840-1750268206=:11368
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+> Hello,
+>
+> Please find my patch attached for review.
 
-On Wed, 18 Jun 2025, Radek Barton via Cygwin-patches wrote:
+Please either send patches via something like git send-email that puts the
+patch in the body, or if you can't send patches in that way without some
+mail software mangling them, please include the patch in the body of the
+email in addition to attaching it, for easier review.
 
-> Hello.
 >
-> This patch ports stack pointer reading to AArch64 at fork.cc and cygtls=
-.h.
+> This patch adds AArch64-specific inline assembly block for the pthread
+> wrapper used to bootstrap new threads. It sets up the thread stack,
+> adjusts for __CYGTLS_PADSIZE__ and shadow space, releases the original
+> stack via VirtualFree, and invokes the target thread function.
 >
-> Radek
+> Thanks & regards
+> Thirumalai Nagalingam
 >
+
+
+> From c897d7361356c73b5837afa466f78a58520c1e9e Mon Sep 17 00:00:00 2001
+> From: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+> Date: Thu, 5 Jun 2025 00:30:48 -0700
+> Subject: [PATCH] Aarch64: Add inline assembly pthread wrapper
+>
+> This patch adds AArch64-specific inline assembly block for the pthread
+> wrapper used to bootstrap new threads. It sets up the thread stack,
+> adjusts for __CYGTLS_PADSIZE__ and shadow space, releases the original
+> stack via VirtualFree, and invokes the target thread function.
 > ---
-> From cc920233d50fe38f22610cb51f219e3c9b566109 Mon Sep 17 00:00:00 2001
-> From: =3D?UTF-8?q?Radek=3D20Barto=3DC5=3D88?=3D <radek.barton@microsoft=
-.com>
-> Date: Fri, 6 Jun 2025 10:21:10 +0200
-> Subject: [PATCH] Cygwin: obtain stack pointer on AArch64
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
+>  winsup/cygwin/create_posix_thread.cc | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 >
-> Signed-off-by: Radek Barto=C5=88 <radek.barton@microsoft.com>
-> ---
->  winsup/cygwin/fork.cc                 | 4 +++-
->  winsup/cygwin/local_includes/cygtls.h | 6 ++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
-> index f88acdbbf..4abc52598 100644
-> --- a/winsup/cygwin/fork.cc
-> +++ b/winsup/cygwin/fork.cc
-> @@ -660,8 +660,10 @@ dofork (void **proc, bool *with_forkables)
->      ischild =3D !!setjmp (grouped.ch.jmp);
->
->      volatile char * volatile stackp;
+> diff --git a/winsup/cygwin/create_posix_thread.cc b/winsup/cygwin/create_posix_thread.cc
+> index 8e06099e4..b1d0cbb43 100644
+> --- a/winsup/cygwin/create_posix_thread.cc
+> +++ b/winsup/cygwin/create_posix_thread.cc
+> @@ -75,7 +75,7 @@ pthread_wrapper (PVOID arg)
+>    /* Initialize new _cygtls. */
+>    _my_tls.init_thread (wrapper_arg.stackbase - __CYGTLS_PADSIZE__,
+>  		       (DWORD (*)(void*, void*)) wrapper_arg.func);
 > -#ifdef __x86_64__
 > +#if defined(__x86_64__)
->      __asm__ volatile ("movq %%rsp,%0": "=3Dr" (stackp));
+>    __asm__ ("\n\
+>  	   leaq  %[WRAPPER_ARG], %%rbx	# Load &wrapper_arg into rbx	\n\
+>  	   movq  (%%rbx), %%r12		# Load thread func into r12	\n\
+> @@ -99,6 +99,23 @@ pthread_wrapper (PVOID arg)
+>  	   call  *%%r12			# Call thread func		\n"
+>  	   : : [WRAPPER_ARG] "o" (wrapper_arg),
+>  	       [CYGTLS] "i" (__CYGTLS_PADSIZE__));
 > +#elif defined(__aarch64__)
-> +    __asm__ volatile ("mov %0, sp" : "=3Dr" (stackp));
+> +  /* Sets up a new thread stack, frees the original OS stack,
+> +   * and calls the thread function with its arg using AArch64 ABI. */
+> +  __asm__ __volatile__ ("\n\
+> +	   mov     x19, %[WRAPPER_ARG]           // x19 = &wrapper_arg            \n\
+> +	   ldr     x10, [x19, #24]               // x10 = wrapper_arg.stackbase   \n\
+> +	   sub     sp, x10, %[CYGTLS]            // sp = stackbase - (CYGTLS + 32)\n\
+> +	   mov     fp, xzr                       // clear frame pointer (x29)     \n\
+> +	   mov     x0, sp                        // x0 = new stack pointer        \n\
+
+This seems wrong.  Shouldn't it be
+           mov     x0, [x19, #16]                // x0 = wrapper_arg.stackaddr
+
+> +	   mov     x1, xzr                       // x1 = 0 (dwSize)               \n\
+> +	   mov     x2, #0x8000                   // x2 = MEM_RELEASE              \n\
+> +	   bl      VirtualFree                   // free original stack           \n\
+> +	   ldp     x19, x0, [x19]                // x19 = func, x0 = arg          \n\
+> +	   blr     x19                           // call thread function          \n"
+> +	   : : [WRAPPER_ARG] "r" (&wrapper_arg),
+> +	       [CYGTLS] "r" (__CYGTLS_PADSIZE__ + 32) // add 32 bytes shadow space
+
+I asked this on another patch, but is the 32-byte shadow area actually
+part of the aarch64 calling convention, or is this just following what x64
+was doing (where it is part of the calling convention)
+
+> +	   : "x0", "x1", "x2", "x10", "x19", "x29", "memory");
 >  #else
 >  #error unimplemented for this target
 >  #endif
-> diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/loca=
-l_includes/cygtls.h
-> index 31cadd51a..44bd44e72 100644
-> --- a/winsup/cygwin/local_includes/cygtls.h
-> +++ b/winsup/cygwin/local_includes/cygtls.h
-> @@ -325,7 +325,13 @@ public:
->         address of the _except block to restore the context correctly.
->         See comment preceeding myfault_altstack_handler in exception.cc=
-. */
->      ret =3D (DWORD64) _ret;
-> +#if defined(__x86_64__)
->      __asm__ volatile ("movq %%rsp,%0": "=3Do" (frame));
-> +#elif defined(__aarch64__)
-> +    __asm__ volatile ("mov %0, sp" : "=3Dr" (frame));
-> +#else
-> +#error unimplemented for this target
-> +#endif
->    }
->    ~san () __attribute__ ((always_inline))
->    {
 > --
-> 2.49.0.vfs.0.4
+> 2.34.1
 >
->
-
-LGTM
---15599321219072-1726041840-1750268206=:11368--
