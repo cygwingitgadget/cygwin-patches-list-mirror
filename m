@@ -1,74 +1,98 @@
-Return-Path: <SRS0=e9kc=ZB=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 669E838453A1
-	for <cygwin-patches@cygwin.com>; Wed, 18 Jun 2025 06:20:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 669E838453A1
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 669E838453A1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750227643; cv=none;
-	b=ldrvilpkh7L8+JrG0k6T2TKBCISpRaShX2UZn0RVV5/+bMhvppsFpwalUC4TRi+IOhTLD7OLp4zmS+7RhC0V/OjvUVFx3iZXJY6qyIyjuTSCKCmbB3aa823ixmen8z9QgESGTIt2O7Kw5gGgsI0k+hVO4ZO9qvcpb3YqbWeKESs=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750227643; c=relaxed/simple;
-	bh=TxX3oVbk1oLBdap4Vh5O81BFtP+9AytdR7LlP/WUI7U=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=XjX8+N1eLbytdRx2srOerELG4nJK88ekNF6gqkBNXojqz7PbP7Z9V3Ci1CoVqtAO1a+HIwQ/EvdXRGdxqx9iZxWY0/Nz/XFuJx9M4XWb0Evl/GOMZIR40JPzqRjnzyJ5pNS/OMOV5sz9TrgsS2nC2x12dU1wJSBcE4h9+wwcTMw=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 669E838453A1
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=qntXjKil
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 3A02545D50
-	for <cygwin-patches@cygwin.com>; Wed, 18 Jun 2025 02:20:43 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=SFv50mIdyGF8tZnb2EKCAEhEcBA=; b=qntXj
-	KilcHzvDSjRftJ+1vtW8e+QTyd8v3SW2xkX7qMDraDbpvdpcOhbYCb0hH/948kP1
-	JNio3w6CCVFJSdZHq7NtJQRpJgqTMThatjYh7C4YBYTZaAdY5BhwycEZFqLmsxpS
-	t0m+su9XRoJTZ+fLp9ouJx2aCM8bqjvjZXzyzk=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 1945845CE8
-	for <cygwin-patches@cygwin.com>; Wed, 18 Jun 2025 02:20:43 -0400 (EDT)
-Date: Tue, 17 Jun 2025 23:20:42 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 6F51E3841B91; Wed, 18 Jun 2025 08:17:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6F51E3841B91
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1750234655;
+	bh=4n+c/qAnuhILa3YenK8w74qsLQD2Z9gbkpRgXOKPG1o=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=acaN2JPtGCfy53kkvf7Wk/Qgy/soWUhmR78tIhcEpqkxXilI7A2ApGq2aGlyHf8IR
+	 x12UxcF3JSJO2vQ5Qs0WLEOPvD9IrhMIingYAIa6TAAJa5724o2OJcAsHwRghOvUv0
+	 9UutBnNLk84Z1EdOt+wYcfb52CUOmdVofqi2AxAw=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 4D613A80D4E; Wed, 18 Jun 2025 10:17:33 +0200 (CEST)
+Date: Wed, 18 Jun 2025 10:17:33 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: testsuite: add posix_spawn tests
-In-Reply-To: <9ac1505a-3e36-7a3d-97cf-3dd6567cbcf4@jdrake.com>
-Message-ID: <d4b58846-594b-064c-8c17-f22caea45d29@jdrake.com>
-References: <555fc9f8-0ab9-6902-f59f-e57d6a74b7e2@jdrake.com> <9ac1505a-3e36-7a3d-97cf-3dd6567cbcf4@jdrake.com>
+Subject: Re: [PATCH] Cygwin: make pthread initializer macros constinit
+ compliant
+Message-ID: <aFJ2Ha72ezNQrCR4@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1277a22d-9beb-52b3-c9ea-7980f54fb84b@jdrake.com>
+ <9f2971ca-114a-cfec-646a-a32eabfc3ac3@jdrake.com>
+ <aFFNnpI5eBgSl805@calimero.vinschen.de>
+ <413d1875-ed41-9ad0-3954-4df6bae666e7@jdrake.com>
+ <aFGyoVdstMJOjEBD@calimero.vinschen.de>
+ <b668190b-65c4-6c0a-4188-39733ce2ab49@jdrake.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b668190b-65c4-6c0a-4188-39733ce2ab49@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 17 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
+On Jun 17 11:35, Jeremy Drake via Cygwin-patches wrote:
+> On Tue, 17 Jun 2025, Corinna Vinschen wrote:
+> 
+> > On Jun 17 10:21, Jeremy Drake via Cygwin-patches wrote:
+> > > The pthread macros were previously casts of integers to pointers, which
+> > > would always be full absolute pointers.  This change is making them actual
+> > > symbols which the linker fills in with absolute addresses.  This would be
+> > > out of range of a 32-bit rip-relative relocation in cases where the image
+> > > base is >4GB.
+> > >
+> > > This is really gross, as I said, but was the only way I came up with to
+> > > make them satisfy constinit's restrictions in clang (and the standard, it
+> > > seems GCC allows things that are explicitly disallowed by the standard).
+> >
+> > Ok, but then I'm still puzzled about the code.
+> >
+> > First of all, shouldn't the new symbols get exported explicitly via
+> > cygwin.din?
+> 
+> No, as i said they can't be used from the DLL anyway.  I included them in
+> libcygwin.a (LIB_FILES) for external users, and in the dll (DLL_FILES) for
+> internal uses.
+> 
+> > Second, I'm puzzeling over the #if expression (cut for a simple example):
+> >
+> >   #if !defined(__INSIDE_CYGWIN__) || !defined(__cplusplus)
+> >   /* use symbols */
+> >   #else
+> >   /* use const int cast to pointer */
+> >   #endif
+> >
+> > So this is a problem in terms of constinit.  Constinit is a C++20
+> > expression.  But the condition will only define PTHREAD_...  using the
+> > symbols if this is either outside Cygwin, or if the Cygwin code is NOT
+> > C++.
+> >
+> > The usage inside Cygwin seems upside down to me.  Shouldn't it use the
+> > symbols in C++ code but not in plain C?  Or am I misunderstanding the
+> > condition entirely?
+> 
+> The reason I kept the old cast-to-pointer path inside Cygwin C++ code is
+> that that case triggered the "relocation truncated to fit" error.  Also,
+> that matches the condition inside sys/_pthreadtypes.h to cast to a class
+> pointer instead of a struct pointer.
+> >
+> > > Somewhat surprising to me is that clang also disallows using the address
+> > > of a dllimported extern variable in constinit, so we couldn't even
+> > > dllexport "magic" objects from the DLL whose addresses could be compared
+> > > against instead of (pthread_mutex_t)19 and such.
+> >
+> > We also have the choice to export the symbols from libcygwin.a, see the
+> > files in LIB_FILES in Makefile.am.  Would that allow clang to use them
+> > in constinit?  Theoretically we could also define them in crt0.o, but
+> > this looks too much like just another hack...
+> 
+> Yes, that's what I did...
 
-> Currently just a couple of tests of error conditions, but I have more
-> tests to add.
->
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
->
-> v2: wrap some lines, and add a test for ENOEXEC error (it does NOT fall
-> back to invoking the shell).
->
-> diff --git a/winsup/testsuite/winsup.api/posix_spawn/errors.c b/winsup/testsuite/winsup.api/posix_spawn/errors.c
-> new file mode 100644
-> index 0000000000..38563441f3
-> --- /dev/null
-> +++ b/winsup/testsuite/winsup.api/posix_spawn/errors.c
-> @@ -0,0 +1,57 @@
-> +#include "test.h"
-> +#include <spawn.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
+So it all boils down to me not reading your patch correctly. D'oh.
 
-D'oh, Linux needs <sys/stat.h> for chmod.
+And no, I don't see a better way to avoid the original constinit problem,
+so your patch is GTG.  3.6 branch, too, I guess.
 
+
+Thanks,
+Corinna
