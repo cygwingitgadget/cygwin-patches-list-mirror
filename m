@@ -1,77 +1,72 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 856F73851A9C; Wed, 18 Jun 2025 14:28:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 856F73851A9C
+	id E03BE38734BB; Wed, 18 Jun 2025 14:28:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E03BE38734BB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1750256899;
-	bh=ASHGY56xrS3gG0T3NCyQwK8oRi5Mf0ek4oYPRbRy5m0=;
+	s=default; t=1750256915;
+	bh=oz9orYcfU6TGcPkTyIs9JrmBHirZG21WsfXde7Va3/4=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=UMGb0OJNnuW9CFI9uKERXE604dfF1KASetceLIwTRYBS/bU13RASp0LcA4KeJ8856
-	 C7oNagxaMSHEf7l1Nq/tf+4cGT9R5cEQRKxiLiNiPlFLCIACWRDFouN276foVMXa8M
-	 CnNGmTHeGQMtv5JV1RwwabCXRxsc0DqziKvNHMtg=
+	b=DlOq8cdMNVHl4AaV1tscS69Ify65NhTqt4pAteDUoIYoyMHofyAbX513lqMX0PXfY
+	 z4RZWxLfCIJkuZIun8Ie2BzjYYN4PM2IijRiAki+/mz8kgyyUsml87Wy1mfd9qLeHs
+	 6IjhGHqSdg1b4jXEfWo+1j9ZZCJdHklnPg7YV+iM=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 312A4A80D4E; Wed, 18 Jun 2025 16:28:14 +0200 (CEST)
-Date: Wed, 18 Jun 2025 16:28:14 +0200
+	id 612F1A80D4E; Wed, 18 Jun 2025 16:28:29 +0200 (CEST)
+Date: Wed, 18 Jun 2025 16:28:29 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: Radek Barton <radek.barton@microsoft.com>
 Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: configure: allow configuring
- winsup for AArch64
-Message-ID: <aFLM_gRWFwKNDiAn@calimero.vinschen.de>
+Subject: Re: [EXTERNAL] [PATCH] Cygwin: fix MALLOC_ALIGNMENT already defined
+ in newlib for AArch64
+Message-ID: <aFLNDXv3D_my__4Q@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
 	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <DB9PR83MB0923C4B40A6602F4A39784CC9274A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aFFLDAWNXM2O5D5P@calimero.vinschen.de>
- <DB9PR83MB0923C93F18F0A940A66A21269272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+References: <DB9PR83MB092385493BAC19ED728089929270A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <DB9PR83MB092321E4E33CF50011F35A809272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB9PR83MB0923C93F18F0A940A66A21269272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+In-Reply-To: <DB9PR83MB092321E4E33CF50011F35A809272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 18 12:11, Radek Barton via Cygwin-patches wrote:
+On Jun 18 12:15, Radek Barton via Cygwin-patches wrote:
 > Hello
 > 
-> Sending the second version with Signed-off-by header.
+> Sending second version with Signed-off-by header.
 > 
 > Radek
 > 
 > ---
-> >From 96f305fb51e02ac4430640457b4c3e2f0c0dee10 Mon Sep 17 00:00:00 2001
+> >From e479be6a67118e70898145d478d0e0b88565f0d1 Mon Sep 17 00:00:00 2001
 > From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
-> Date: Thu, 5 Jun 2025 11:44:23 +0200
-> Subject: [PATCH v2] Cygwin: configure: allow configuring winsup for
->  AArch64
+> Date: Thu, 5 Jun 2025 13:16:20 +0200
+> Subject: [PATCH v2] Cygwin: fix MALLOC_ALIGNMENT already defined in
+>  newlib for AArch64
 > MIME-Version: 1.0
 > Content-Type: text/plain; charset=UTF-8
 > Content-Transfer-Encoding: 8bit
 > 
 > Signed-off-by: Radek Bartoň <radek.barton@microsoft.com>
 > ---
->  winsup/configure.ac | 2 ++
->  1 file changed, 2 insertions(+)
+>  winsup/cygwin/local_includes/cygmalloc.h | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/winsup/configure.ac b/winsup/configure.ac
-> index 9b9b59dbc..18adf3d97 100644
-> --- a/winsup/configure.ac
-> +++ b/winsup/configure.ac
-> @@ -69,12 +69,14 @@ DLL_ENTRY="dll_entry"
+> diff --git a/winsup/cygwin/local_includes/cygmalloc.h b/winsup/cygwin/local_includes/cygmalloc.h
+> index 5e1fe8154..898ea56a5 100644
+> --- a/winsup/cygwin/local_includes/cygmalloc.h
+> +++ b/winsup/cygwin/local_includes/cygmalloc.h
+> @@ -21,7 +21,10 @@ int dlmalloc_trim (size_t);
+>  int dlmallopt (int p, int v);
+>  void dlmalloc_stats ();
 >  
->  case "$target_cpu" in
->     x86_64)	;;
-> +   aarch64)	;;
->     *)		AC_MSG_ERROR([Invalid target processor "$target_cpu"]) ;;
->  esac
+> +// Already defined for AArch64 in newlib/libc/include/sys/config.h
+> +#ifndef MALLOC_ALIGNMENT
+>  #define MALLOC_ALIGNMENT ((size_t)16U)
+> +#endif
 >  
->  AC_SUBST(DLL_ENTRY)
+>  #if defined (DLMALLOC_VERSION)	/* Building malloc.cc */
 >  
->  AM_CONDITIONAL(TARGET_X86_64, [test $target_cpu = "x86_64"])
-> +AM_CONDITIONAL(TARGET_AARCH64, [test $target_cpu = "aarch64"])
->  
->  AC_ARG_ENABLE(doc,
->  	      [AS_HELP_STRING([--disable-doc], [do not build documentation])],,
 > -- 
 > 2.49.0.vfs.0.4
 
