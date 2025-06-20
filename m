@@ -1,201 +1,123 @@
 Return-Path: <SRS0=4oHy=ZD=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 5CB2C38757CC
-	for <cygwin-patches@cygwin.com>; Fri, 20 Jun 2025 18:04:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5CB2C38757CC
+	by sourceware.org (Postfix) with ESMTPS id 5F5CE388C2C5
+	for <cygwin-patches@cygwin.com>; Fri, 20 Jun 2025 22:23:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5F5CE388C2C5
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5CB2C38757CC
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5F5CE388C2C5
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750442653; cv=none;
-	b=bGES+VX5cG7+kkAF2cBPuHlTsJWI5tU+nfHyzVyqg3XjdrguVJ9YigS3omfo/Ks5QyMhZpS+h7l5kBt70LC+B2rgk2JGgp1wdQ+ezwtKA3tWgYf+WmCKYUyvDrlmt7z3O2jp/qOLSYtw+8358iOCmSY68Ldh4ZrBKVXQ0LSDohw=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750458190; cv=none;
+	b=VRWztklKE2/Yr5VS8lGwUJc6/3TqEqI/26Rh4CNlKx1hA2RKWj6DLn5f19f3wBoNB2E1a5elyiah7MlvuKQXzAk7kGrmYq+2IRmT5m0qiWVP40rZkvH8+LjQ709NBKQ2JNUIwwe5uj9HHWABCm0/Q6CLE5zAXMWQnFPpPwueJlU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750442653; c=relaxed/simple;
-	bh=EkzBRkZRjOTSVoyFiejbgfmpuew9UA+44K7shKhZu6Q=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=q34f6oBUUCwcZvWrPilxIbtYVdM98wvfKWeO1KSbVSW4HLVJp71UopRC1GTZGxAAqmfDC6a+69CDEhXL/dcJkxGf0APChgyk7bilJqucEkPN83fYhDtfxFd8W9xzO1VyIIdolYv5IW5mBqLnEG7Sa+alRaYqUnxOkI4ulnUwJFc=
+	t=1750458190; c=relaxed/simple;
+	bh=21BtHWK2xyk3OXWI8XwNzT5MhgB0SrEM3D61qU3CLzI=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=aycxUDJ6fBvPqsqdNx/iqyFPnoVsFAlkUfK+O7zpkGDFmKHlOZ+hB/jn3XuizMTjCCvjupGXCy9dWuBW/0DidFtYJqyoYzY5oku0A5GVUZr6TAwVmbrh20IoZr7SBWFHCYMkQXw9bzU5kFIeATntrijiLXm0ilTC+cAQeZjLKbs=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5CB2C38757CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5F5CE388C2C5
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=pISgR/3n
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=DWf5sHtn
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 3608645D03
-	for <cygwin-patches@cygwin.com>; Fri, 20 Jun 2025 14:04:13 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id E1C8F45D09;
+	Fri, 20 Jun 2025 18:23:09 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=thbNO
-	Eo2pukMkOnu3U9nxHOsf2c=; b=pISgR/3nWjo1jQKHbTdhgE+e6iQlFYwRCtpEQ
-	lnWsHWiUM8h/+9VDWH72o1qNq0KLk3MXdH474ukncPm6fs1dUCRG+qd/6QaywFTx
-	J3jJoEmry0kP4TLsWcUlesdPe0nPcbhzrZzxg/xou/pj7YRUYOPpswHdjxj6mYME
-	iYKdyI=
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=sSNR6SO4pKCTcwE4sztyW71jmno=; b=DWf5s
+	Htn6BCM4Qpse57Rc1qaITkMuv1vEGdo+831cHiHReRMDm0zZ9jBT6rH34n6V8b/a
+	7SwRSmYlSIBJ56GmAnbji4F9g8hIvf2D6m1QSYbtXRKiNneh6ZBmTNVzYX5aHzoB
+	Bl3BhfSqOkO4XpL8v5V5Wm9/h4k0iJv8+6yVjI=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 305FB45CFE
-	for <cygwin-patches@cygwin.com>; Fri, 20 Jun 2025 14:04:13 -0400 (EDT)
-Date: Fri, 20 Jun 2025 11:04:13 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id DCFD845D08;
+	Fri, 20 Jun 2025 18:23:09 -0400 (EDT)
+Date: Fri, 20 Jun 2025 15:23:09 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 4/4] Cygwin: testsuite: test posix_spawn_file_actions.
-Message-ID: <00106f8b-c027-1886-b71b-70ac78161c94@jdrake.com>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH V4] Cygwin: Aarch64: Add inline assembly pthread
+ wrapper
+In-Reply-To: <dfd54268-c6f0-bd3e-b0b2-20e542bae4fc@jdrake.com>
+Message-ID: <e08b593f-ad2a-a0ef-6ea7-2571b28cc443@jdrake.com>
+References: <PN2P287MB308587EBC924A773A4F2182E9F6FA@PN2P287MB3085.INDP287.PROD.OUTLOOK.COM> <afdbcb68-30a0-84a5-693c-7a6390e60c6f@jdrake.com> <MA0P287MB30826BECED54F4DFB50996C89F7DA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM> <e898c913-6728-8c0a-3f06-4481c1551853@jdrake.com>
+ <MA0P287MB30828CF024D946D3F575279B9F7DA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM> <dfd54268-c6f0-bd3e-b0b2-20e542bae4fc@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-There are still more that could be tested, such as (f)chdir.
+On Thu, 19 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
 
-Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
----
- winsup/testsuite/Makefile.am                  |   1 +
- winsup/testsuite/winsup.api/posix_spawn/fds.c | 124 ++++++++++++++++++
- 2 files changed, 125 insertions(+)
- create mode 100644 winsup/testsuite/winsup.api/posix_spawn/fds.c
+> On Thu, 19 Jun 2025, Thirumalai Nagalingam wrote:
+>
+> > Hi Jeremy,
+> >
+> > Thanks again for the quick follow-up. `ldr` is the correct choice here, it's a nice idea for reducing loads.
+> > I've updated the patch to use it for loading stackaddr and stackbase.
+> > Also added the Signed-off-by line to the commit message as requested.
+> >
+> > Patch is In-lined below and attached.
+> >
+> > In-lined patch:
+> >
+> > From 609cc27fa50700ab135dff421f08473c29dcb533 Mon Sep 17 00:00:00 2001
+> > From: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+> > Date: Fri, 20 Jun 2025 02:12:51 +0530
+> > Subject: [PATCH] Aarch64: Add inline assembly pthread wrapper
+> >
+> > This patch adds AArch64-specific inline assembly block for the pthread
+> > wrapper used to bootstrap new threads. It sets up the thread stack,
+> > adjusts for __CYGTLS_PADSIZE__, releases the original stack via
+> > VirtualFree, and invokes the target thread function.
+> >
+> > Signed-off-by: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+> > ---
+> >  winsup/cygwin/create_posix_thread.cc | 18 +++++++++++++++++-
+> >  1 file changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/winsup/cygwin/create_posix_thread.cc b/winsup/cygwin/create_posix_thread.cc
+> > index 3fcd61707..592aaf1a5 100644
+> > --- a/winsup/cygwin/create_posix_thread.cc
+> > +++ b/winsup/cygwin/create_posix_thread.cc
+> > @@ -75,7 +75,7 @@ pthread_wrapper (PVOID arg)
+> >    /* Initialize new _cygtls. */
+> >    _my_tls.init_thread (wrapper_arg.stackbase - __CYGTLS_PADSIZE__,
+> >  		       (DWORD (*)(void*, void*)) wrapper_arg.func);
+> > -#ifdef __x86_64__
+> > +#if defined(__x86_64__)
+> >    __asm__ ("\n\
+> >  	   leaq  %[WRAPPER_ARG], %%rbx	# Load &wrapper_arg into rbx	\n\
+> >  	   movq  (%%rbx), %%r12		# Load thread func into r12	\n\
+> > @@ -99,6 +99,22 @@ pthread_wrapper (PVOID arg)
+> >  	   call  *%%r12			# Call thread func		\n"
+> >  	   : : [WRAPPER_ARG] "o" (wrapper_arg),
+> >  	       [CYGTLS] "i" (__CYGTLS_PADSIZE__));
+> > +#elif defined(__aarch64__)
+> > +  /* Sets up a new thread stack, frees the original OS stack,
+> > +   * and calls the thread function with its arg using AArch64 ABI. */
+> > +  __asm__ __volatile__ ("\n\
+> > +	   mov     x19, %[WRAPPER_ARG]  // x19 = &wrapper_arg              \n\
+> > +	   ldp     x0, x10, [x19, #16]  // x0 = stackaddr, x10 = stackbase \n\
+> > +	   sub     sp, x10, %[CYGTLS]   // sp = stackbase - (CYGTLS)       \n\
+> > +	   mov     fp, xzr              // clear frame pointer (x29)       \n\
+> > +	   mov     x1, xzr              // x1 = 0 (dwSize)                 \n\
+> > +	   mov     x2, #0x8000          // x2 = MEM_RELEASE                \n\
+> > +	   bl      VirtualFree          // free original stack             \n\
+> > +	   ldp     x19, x0, [x19]       // x19 = func, x0 = arg            \n\
+> > +	   blr     x19                  // call thread function            \n"
+> > +	   : : [WRAPPER_ARG] "r" (&wrapper_arg),
+> > +	       [CYGTLS] "r" (__CYGTLS_PADSIZE__)
+> > +	   : "x0", "x1", "x2", "x10", "x19", "x29", "memory");
+> >  #else
+> >  #error unimplemented for this target
+> >  #endif
+> >
+>
+> LGTM.  I'll wait at least a day before pushing in case somebody else has
+> any objections.
 
-diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
-index b92532e4fe..4b056bd5bf 100644
---- a/winsup/testsuite/Makefile.am
-+++ b/winsup/testsuite/Makefile.am
-@@ -312,6 +312,7 @@ check_PROGRAMS = \
- 	winsup.api/pthread/threadidafterfork \
- 	winsup.api/pthread/tsd1 \
- 	winsup.api/posix_spawn/errors \
-+	winsup.api/posix_spawn/fds \
- 	winsup.api/posix_spawn/signals \
- 	winsup.api/posix_spawn/spawnp \
- 	winsup.api/samples/sample-fail \
-diff --git a/winsup/testsuite/winsup.api/posix_spawn/fds.c b/winsup/testsuite/winsup.api/posix_spawn/fds.c
-new file mode 100644
-index 0000000000..6e6e8c6357
---- /dev/null
-+++ b/winsup/testsuite/winsup.api/posix_spawn/fds.c
-@@ -0,0 +1,124 @@
-+#include "test.h"
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <spawn.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+int handle_child (char *devfd, char *target)
-+{
-+  char buf[PATH_MAX];
-+  ssize_t ret;
-+
-+  ret = readlink (devfd, buf, PATH_MAX);
-+  if (ret < 0)
-+    {
-+      int err = errno;
-+      if (err == ENOENT && !strcmp (target, "<ENOENT>"))
-+	return 0;
-+      error_at_line (1, err, __FILE__, __LINE__ - 6,
-+		     "ret = readlink (devfd, buf, PATH_MAX)");
-+    }
-+  testAssertMsg (ret < PATH_MAX, "Path too long for PATH_MAX buffer");
-+  buf[ret] = '\0';
-+  if (strcmp (target, buf))
-+      error_at_line (1, 0, __FILE__, __LINE__ - 12,
-+		     "Target '%s' != expected '%s'", buf, target);
-+
-+  return 0;
-+}
-+
-+int main (int argc, char **argv)
-+{
-+  posix_spawn_file_actions_t fa;
-+  pid_t pid;
-+  int status;
-+  int fd, fdcloexec;
-+  char buf[16];
-+  char *childargv[] = {"fds", "--child", buf, "", NULL};
-+
-+  /* unbuffer stdout */
-+  setvbuf(stdout, NULL, _IONBF, 0);
-+
-+  if (argc == 4 && !strcmp (argv[1], "--child"))
-+    return handle_child (argv[2], argv[3]);
-+
-+  /* open file descriptors to test inheritance */
-+  negError (fd = open ("/dev/null", O_RDONLY, 0644));
-+  negError (fdcloexec = open ("/dev/full", O_RDONLY|O_CLOEXEC, 0644));
-+
-+  /* ensure fd is inherited by default */
-+  sprintf (buf, "/dev/fd/%d", fd);
-+  childargv[3] = "/dev/null";
-+  errCode (posix_spawn (&pid, MYSELF, NULL, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+
-+  /* ensure CLOEXEC fd is closed */
-+  sprintf (buf, "/dev/fd/%d", fdcloexec);
-+  childargv[3] = "<ENOENT>";
-+  errCode (posix_spawn (&pid, MYSELF, NULL, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+
-+  /* test posix_spawn_file_actions_addopen */
-+  errCode (posix_spawn_file_actions_init (&fa));
-+  errCode (posix_spawn_file_actions_addopen (&fa, 0, "/dev/zero", O_RDONLY,
-+					     0644));
-+  strcpy (buf, "/dev/fd/0");
-+  childargv[3] = "/dev/zero";
-+  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+  errCode (posix_spawn_file_actions_destroy (&fa));
-+
-+  /* test posix_spawn_file_actions_adddup2 */
-+  errCode (posix_spawn_file_actions_init (&fa));
-+  errCode (posix_spawn_file_actions_adddup2 (&fa, fd, 0));
-+  childargv[3] = "/dev/null";
-+  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+  errCode (posix_spawn_file_actions_destroy (&fa));
-+
-+  /* test posix_spawn_file_actions_adddup2 with CLOEXEC fd */
-+  errCode (posix_spawn_file_actions_init (&fa));
-+  errCode (posix_spawn_file_actions_adddup2 (&fa, fdcloexec, 0));
-+  childargv[3] = "/dev/full";
-+  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+  errCode (posix_spawn_file_actions_destroy (&fa));
-+
-+  /* test posix_spawn_file_actions_adddup2 with out to err */
-+  errCode (posix_spawn_file_actions_init (&fa));
-+  errCode (posix_spawn_file_actions_addopen (&fa, 1, "/dev/zero", O_WRONLY,
-+					     0644));
-+  errCode (posix_spawn_file_actions_adddup2 (&fa, 1, 2));
-+  strcpy (buf, "/dev/fd/2");
-+  childargv[3] = "/dev/zero";
-+  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+  errCode (posix_spawn_file_actions_destroy (&fa));
-+
-+  /* test posix_spawn_file_actions_addclose */
-+  errCode (posix_spawn_file_actions_init (&fa));
-+  errCode (posix_spawn_file_actions_addclose (&fa, fd));
-+  sprintf (buf, "/dev/fd/%d", fd);
-+  childargv[3] = "<ENOENT>";
-+  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
-+  negError (waitpid (pid, &status, 0));
-+  exitStatus (status, 0);
-+  errCode (posix_spawn_file_actions_destroy (&fa));
-+
-+  /* TODO: test new fds (open or dup2) not 0 through 2 */
-+  /* TODO: test posix_spawn_file_actions_add(f)chdir */
-+
-+  negError (close (fd));
-+  negError (close (fdcloexec));
-+
-+  return 0;
-+}
--- 
-2.49.0.windows.1
-
+Pushed now, thanks
