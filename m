@@ -1,55 +1,94 @@
-Return-Path: <SRS0=+eGr=ZE=mkt.vic-inforeport.com=nelson@sourceware.org>
-Received: from out0-64.static.mail.aliyun.com (out0-64.static.mail.aliyun.com [59.82.0.64])
-	by sourceware.org (Postfix) with ESMTPS id 870B2384E68C
-	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 03:36:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 870B2384E68C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=mkt.vic-inforeport.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=mkt.vic-inforeport.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 870B2384E68C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=59.82.0.64
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750477018; cv=none;
-	b=TLmFez/3ZrbFqcqp18YcQ8G4+xKMmtXyYH7Ry97ei9Vn6+7Gq4uWB9y3aHY49Ogeal/IwFa4U/hejGtGEpObSm5A2ahFF7Q/RmcxFsocjvw8nLB3Mlr+UKmxUqc2UFHQCxaXJ007zk3Qu9tx4OibSG5E9KFjUq2Tutr+jkDprQM=
+Return-Path: <SRS0=Mu3T=ZE=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 69C173AEAEC1
+	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 17:38:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 69C173AEAEC1
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 69C173AEAEC1
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750527519; cv=none;
+	b=nByLfz2feQ9DOJdnsfVh+SRqj+RqOM4XhzvZYez+u/Khi0YvDkg+2BKjx/NqSKv04DHjE3vXRUQR8UHPvDx4h4ELiwoFt8HxMW/p+Cz5y05tWX/pH8XGrNFJ/3+cWtgBpmwqRKeGFlclQ5Kkcmsw6hKImM6h5i1Gl1p/Y2IJask=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750477018; c=relaxed/simple;
-	bh=cCC/z250Swg4LHpPCBwP9zRGZlYpR89CcI4BWKrIIq0=;
-	h=Date:From:Message-ID:Subject:MIME-Version; b=qqjPydOvECtLrGqyLS+9BWZIjmXqxIahsxLj5AQqyfkqAa6MG1d5Ik5tvg4P77lNH1FM6oU2i42uXML67FT6f3G3vhaFYdiNkGxfbn0ma6DS7yLjpvBg72FYh2e9/z7l95J83qdD/+EmZTT4fDWcOJ91jd0X1743oGvEICQuu28=
+	t=1750527519; c=relaxed/simple;
+	bh=5vYr88PNNl2ShG243yimo8mZE0DlGwIw1DWFkXjE/vw=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=nFiILRV49DGwzTNfBnKeNfqrOQ0kBFpwY8tXo9PWknwoFFz2M+V6+/Q9rzt+UuFd84j8qJ8lFVqZtBCyYswLUCtyBSU1szJ7SUnwNh1TPyopB5QtVTrBRTPet7SRnohhNuui/FoLM6MQIQq2tQDg5NgzMkE2Mh0Kk3W/LRsaWYY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 870B2384E68C
-X-Alimail-AntiSpam:AC=CONTINUE;BC=-1|-1;BR=01201311R151S93rulernew9999_292140_250212;CH=yellow;DM=||false|;DS=||;FP=12243583164280373392|5|1|600|0|-1|-1|-1;HT=maildocker-contentspam033068162005;MF=nelson@mkt.vic-inforeport.com;NM=1;PH=DW;RN=251;RT=1;SR=0;TI=W4_0.2.3_v5ForWebDing_21250EEA_1750477012581_o7001c27o;
-Received: from WS-web (nelson@mkt.vic-inforeport.com[W4_0.2.3_v5ForWebDing_21250EEA_1750477012581_o7001c27o] cluster:ay29) at Sat, 21 Jun 2025 11:36:52 +0800
-Date: Sat, 21 Jun 2025 11:36:52 +0800
-From: "Nelson" <nelson@mkt.vic-inforeport.com>
-Cc: "13542868304" <13542868304@163.com>
-Reply-To: "Nelson" <nelson@mkt.vic-inforeport.com>
-Message-ID: <b9e7da36-c383-40ae-b523-a7b04b3867cb.nelson@mkt.vic-inforeport.com>
-Subject: =?UTF-8?B?SW5kdXN0cmlhbCAzRCBTZW5zb3I=?=
-X-Mailer: [Alimail-Mailagent][W4_0.2.3][v5ForWebDing][Chrome]
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 69C173AEAEC1
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=K5vuCh5W
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 17FDF45CEB
+	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 13:38:38 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=WTy56gZQ0A/ExeBZ6W+/ggcYOtY=; b=K5vuC
+	h5WCO4rDQrlsP/kQ2qd8VgG2Sv10JS5yb4orCeyB0TnB+ZbQ92JMCrtZbr0ZxJ0X
+	S8ACGhXH9LyIZWHcGeYaI+HPrPGtS3n0uBEHT+9B0r7HmPiNC5nHQVwT2gXhpeeY
+	vhaRS8qDltmaBvR18H0Hk7l9l8ZVluEQrMa6uw=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 1499145CBB
+	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 13:38:38 -0400 (EDT)
+Date: Sat, 21 Jun 2025 10:38:37 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: Re: [RFC PATCH 1/3] Cygwin: allow redirecting stderr in ch_spawn
+In-Reply-To: <aFE0VoED9dQ4QppT@calimero.vinschen.de>
+Message-ID: <cf09e022-0033-e620-0af9-bda1d3c752a9@jdrake.com>
+References: <4b5c620c-4fd9-470f-6e94-965e73f3b6ff@jdrake.com> <aFE0VoED9dQ4QppT@calimero.vinschen.de>
 MIME-Version: 1.0
-x-aliyun-im-through: {"version":"v1.0"}
-x-aliyun-mail-creator: W4_0.2.3_v5ForWebDing_M3LTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMy4wLjAuMCBTYWZhcmkvNTM3LjM2vN
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_60,BODY_8BITS,HTML_MESSAGE,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-------=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+On Tue, 17 Jun 2025, Corinna Vinschen wrote:
 
-RGVhci4KV2UgaGF2ZSByZWxlYXNlZCBhIHJlcG9ydCBvbiB0aGUgbGF0ZXN0
-IEluZHVzdHJpYWwgM0QgU2Vuc29yIG1hcmtldCByZXNlYXJjaC4KUGxzIGZl
-ZWwgZnJlZSB0byBjb250YWN0IHNldmVuQHZpY21hcmtldHJlc2VhcmNoLmNv
-bSBpZiB5b3UgYXJlIGludGVyZXN0ZWQgaW4gaXQuIEEgc2FtcGxlIHJlcG9y
-dCB3aWxsIGJlIHNlbnQgdG8geW91LiAKVGhlIGZvbGxvd2luZyBtYW51ZmFj
-dHVyZXJzIGFyZSBjb3ZlcmVkIGluIHRoaXMgcmVwb3J0OgpTaWNrCkNvZ25l
-eApLZXllbmNlCk9tcm9uCkJhbm5lcgpQZXBwZXJsK0Z1Y2hzCk9yYmJlYwpI
-aWtyb2JvdApTaW5jZVZpc2lvbgpUZWxlZHluZSBUZWNobm9sb2dpZXMKQmFz
-bGVyIEFHCklzcmEgVmlzaW9uCkFsbGllZCBWaXNpb24gVGVjaG5vbG9naWVz
-CkJBTExVRkYKQXV0b21hdGlvbiBUZWNobm9sb2d5CuKApuKApgpCZXN0IHJl
-Z2FyZHMgLyBNaXQgZnJldW5kbGljaGVuIEdyw7zDn2VuIC8g5q2k6Ie05pWs
-5oSPLApzZXZlbgo=
+> On May 29 10:57, Jeremy Drake via Cygwin-patches wrote:
+> > stdin and stdout were alreadly allowed for popen, but implementing
+> > posix_spawn in terms of spawn would require stderr as well.
+> > ---
+> >  winsup/cygwin/dcrt0.cc                    | 2 ++
+> >  winsup/cygwin/local_includes/child_info.h | 6 +++---
+> >  winsup/cygwin/spawn.cc                    | 5 +++--
+> >  3 files changed, 8 insertions(+), 5 deletions(-)
+>
+> LGTM
+>
+> Thanks,
+> Corinna
 
-------=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f--
 
+OK, I could push this one, since it stands alone and I'm sure that it
+works because I have used it in the subsequent patch.  The reason I
+haven't is that I am still trying to figure out if an additional change to
+child_info.h might be needed for (f)chdir, and I am trying to avoid making
+multiple changes to the CHILD_INFO_MAGIC.  Let me know if this is not
+really a concern.
+
+My current thinking is that yes, something would need to be in
+child_info_spawn or cygheap_exec_info.  I'm leaning towards an int dirfd,
+because I would need that anyway to deal with open actions after a chdir
+(using openat).  My sticking point is considering how to deal with
+spawning a non-Cygwin process.
+
+a) I would need a wide Windows path for CreateProcessW, but fhandler
+doesn't expose its path_conv or get_nt_native_path, only get_name
+(get_posix) and get_win32_name (get_win32) which is narrow.  Adding
+another accessor to fhandler_base probably wouldn't be too controversial.
+
+b) I would need the same logic as in cwdstuff::set to determine whether
+the dir is "legal" to use for a non-Cygwin app's cwd, and the error to
+report if it's not (cwdstuff::get_error_desc).  I'm not a fan of
+copy-pasting code, so it will take some consideration of how to refactor
+that in a way that the code could be called by both.  Suggestions
+appreciated.
+
+Maybe next week I can get back to these patches and button up more and get
+it to a point where it can be merged (especially if it's OK to leave
+adding (f)chdir changes for later).
