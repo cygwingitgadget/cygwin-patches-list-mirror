@@ -1,123 +1,55 @@
-Return-Path: <SRS0=4oHy=ZD=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 5F5CE388C2C5
-	for <cygwin-patches@cygwin.com>; Fri, 20 Jun 2025 22:23:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5F5CE388C2C5
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5F5CE388C2C5
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750458190; cv=none;
-	b=VRWztklKE2/Yr5VS8lGwUJc6/3TqEqI/26Rh4CNlKx1hA2RKWj6DLn5f19f3wBoNB2E1a5elyiah7MlvuKQXzAk7kGrmYq+2IRmT5m0qiWVP40rZkvH8+LjQ709NBKQ2JNUIwwe5uj9HHWABCm0/Q6CLE5zAXMWQnFPpPwueJlU=
+Return-Path: <SRS0=+eGr=ZE=mkt.vic-inforeport.com=nelson@sourceware.org>
+Received: from out0-64.static.mail.aliyun.com (out0-64.static.mail.aliyun.com [59.82.0.64])
+	by sourceware.org (Postfix) with ESMTPS id 870B2384E68C
+	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 03:36:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 870B2384E68C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=mkt.vic-inforeport.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=mkt.vic-inforeport.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 870B2384E68C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=59.82.0.64
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750477018; cv=none;
+	b=TLmFez/3ZrbFqcqp18YcQ8G4+xKMmtXyYH7Ry97ei9Vn6+7Gq4uWB9y3aHY49Ogeal/IwFa4U/hejGtGEpObSm5A2ahFF7Q/RmcxFsocjvw8nLB3Mlr+UKmxUqc2UFHQCxaXJ007zk3Qu9tx4OibSG5E9KFjUq2Tutr+jkDprQM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750458190; c=relaxed/simple;
-	bh=21BtHWK2xyk3OXWI8XwNzT5MhgB0SrEM3D61qU3CLzI=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=aycxUDJ6fBvPqsqdNx/iqyFPnoVsFAlkUfK+O7zpkGDFmKHlOZ+hB/jn3XuizMTjCCvjupGXCy9dWuBW/0DidFtYJqyoYzY5oku0A5GVUZr6TAwVmbrh20IoZr7SBWFHCYMkQXw9bzU5kFIeATntrijiLXm0ilTC+cAQeZjLKbs=
+	t=1750477018; c=relaxed/simple;
+	bh=cCC/z250Swg4LHpPCBwP9zRGZlYpR89CcI4BWKrIIq0=;
+	h=Date:From:Message-ID:Subject:MIME-Version; b=qqjPydOvECtLrGqyLS+9BWZIjmXqxIahsxLj5AQqyfkqAa6MG1d5Ik5tvg4P77lNH1FM6oU2i42uXML67FT6f3G3vhaFYdiNkGxfbn0ma6DS7yLjpvBg72FYh2e9/z7l95J83qdD/+EmZTT4fDWcOJ91jd0X1743oGvEICQuu28=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5F5CE388C2C5
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=DWf5sHtn
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id E1C8F45D09;
-	Fri, 20 Jun 2025 18:23:09 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=sSNR6SO4pKCTcwE4sztyW71jmno=; b=DWf5s
-	Htn6BCM4Qpse57Rc1qaITkMuv1vEGdo+831cHiHReRMDm0zZ9jBT6rH34n6V8b/a
-	7SwRSmYlSIBJ56GmAnbji4F9g8hIvf2D6m1QSYbtXRKiNneh6ZBmTNVzYX5aHzoB
-	Bl3BhfSqOkO4XpL8v5V5Wm9/h4k0iJv8+6yVjI=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id DCFD845D08;
-	Fri, 20 Jun 2025 18:23:09 -0400 (EDT)
-Date: Fri, 20 Jun 2025 15:23:09 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH V4] Cygwin: Aarch64: Add inline assembly pthread
- wrapper
-In-Reply-To: <dfd54268-c6f0-bd3e-b0b2-20e542bae4fc@jdrake.com>
-Message-ID: <e08b593f-ad2a-a0ef-6ea7-2571b28cc443@jdrake.com>
-References: <PN2P287MB308587EBC924A773A4F2182E9F6FA@PN2P287MB3085.INDP287.PROD.OUTLOOK.COM> <afdbcb68-30a0-84a5-693c-7a6390e60c6f@jdrake.com> <MA0P287MB30826BECED54F4DFB50996C89F7DA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM> <e898c913-6728-8c0a-3f06-4481c1551853@jdrake.com>
- <MA0P287MB30828CF024D946D3F575279B9F7DA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM> <dfd54268-c6f0-bd3e-b0b2-20e542bae4fc@jdrake.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 870B2384E68C
+X-Alimail-AntiSpam:AC=CONTINUE;BC=-1|-1;BR=01201311R151S93rulernew9999_292140_250212;CH=yellow;DM=||false|;DS=||;FP=12243583164280373392|5|1|600|0|-1|-1|-1;HT=maildocker-contentspam033068162005;MF=nelson@mkt.vic-inforeport.com;NM=1;PH=DW;RN=251;RT=1;SR=0;TI=W4_0.2.3_v5ForWebDing_21250EEA_1750477012581_o7001c27o;
+Received: from WS-web (nelson@mkt.vic-inforeport.com[W4_0.2.3_v5ForWebDing_21250EEA_1750477012581_o7001c27o] cluster:ay29) at Sat, 21 Jun 2025 11:36:52 +0800
+Date: Sat, 21 Jun 2025 11:36:52 +0800
+From: "Nelson" <nelson@mkt.vic-inforeport.com>
+Cc: "13542868304" <13542868304@163.com>
+Reply-To: "Nelson" <nelson@mkt.vic-inforeport.com>
+Message-ID: <b9e7da36-c383-40ae-b523-a7b04b3867cb.nelson@mkt.vic-inforeport.com>
+Subject: =?UTF-8?B?SW5kdXN0cmlhbCAzRCBTZW5zb3I=?=
+X-Mailer: [Alimail-Mailagent][W4_0.2.3][v5ForWebDing][Chrome]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+x-aliyun-im-through: {"version":"v1.0"}
+x-aliyun-mail-creator: W4_0.2.3_v5ForWebDing_M3LTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMy4wLjAuMCBTYWZhcmkvNTM3LjM2vN
+Content-Type: multipart/alternative;
+  boundary="----=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_60,BODY_8BITS,HTML_MESSAGE,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 19 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
+------=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-> On Thu, 19 Jun 2025, Thirumalai Nagalingam wrote:
->
-> > Hi Jeremy,
-> >
-> > Thanks again for the quick follow-up. `ldr` is the correct choice here, it's a nice idea for reducing loads.
-> > I've updated the patch to use it for loading stackaddr and stackbase.
-> > Also added the Signed-off-by line to the commit message as requested.
-> >
-> > Patch is In-lined below and attached.
-> >
-> > In-lined patch:
-> >
-> > From 609cc27fa50700ab135dff421f08473c29dcb533 Mon Sep 17 00:00:00 2001
-> > From: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-> > Date: Fri, 20 Jun 2025 02:12:51 +0530
-> > Subject: [PATCH] Aarch64: Add inline assembly pthread wrapper
-> >
-> > This patch adds AArch64-specific inline assembly block for the pthread
-> > wrapper used to bootstrap new threads. It sets up the thread stack,
-> > adjusts for __CYGTLS_PADSIZE__, releases the original stack via
-> > VirtualFree, and invokes the target thread function.
-> >
-> > Signed-off-by: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-> > ---
-> >  winsup/cygwin/create_posix_thread.cc | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/winsup/cygwin/create_posix_thread.cc b/winsup/cygwin/create_posix_thread.cc
-> > index 3fcd61707..592aaf1a5 100644
-> > --- a/winsup/cygwin/create_posix_thread.cc
-> > +++ b/winsup/cygwin/create_posix_thread.cc
-> > @@ -75,7 +75,7 @@ pthread_wrapper (PVOID arg)
-> >    /* Initialize new _cygtls. */
-> >    _my_tls.init_thread (wrapper_arg.stackbase - __CYGTLS_PADSIZE__,
-> >  		       (DWORD (*)(void*, void*)) wrapper_arg.func);
-> > -#ifdef __x86_64__
-> > +#if defined(__x86_64__)
-> >    __asm__ ("\n\
-> >  	   leaq  %[WRAPPER_ARG], %%rbx	# Load &wrapper_arg into rbx	\n\
-> >  	   movq  (%%rbx), %%r12		# Load thread func into r12	\n\
-> > @@ -99,6 +99,22 @@ pthread_wrapper (PVOID arg)
-> >  	   call  *%%r12			# Call thread func		\n"
-> >  	   : : [WRAPPER_ARG] "o" (wrapper_arg),
-> >  	       [CYGTLS] "i" (__CYGTLS_PADSIZE__));
-> > +#elif defined(__aarch64__)
-> > +  /* Sets up a new thread stack, frees the original OS stack,
-> > +   * and calls the thread function with its arg using AArch64 ABI. */
-> > +  __asm__ __volatile__ ("\n\
-> > +	   mov     x19, %[WRAPPER_ARG]  // x19 = &wrapper_arg              \n\
-> > +	   ldp     x0, x10, [x19, #16]  // x0 = stackaddr, x10 = stackbase \n\
-> > +	   sub     sp, x10, %[CYGTLS]   // sp = stackbase - (CYGTLS)       \n\
-> > +	   mov     fp, xzr              // clear frame pointer (x29)       \n\
-> > +	   mov     x1, xzr              // x1 = 0 (dwSize)                 \n\
-> > +	   mov     x2, #0x8000          // x2 = MEM_RELEASE                \n\
-> > +	   bl      VirtualFree          // free original stack             \n\
-> > +	   ldp     x19, x0, [x19]       // x19 = func, x0 = arg            \n\
-> > +	   blr     x19                  // call thread function            \n"
-> > +	   : : [WRAPPER_ARG] "r" (&wrapper_arg),
-> > +	       [CYGTLS] "r" (__CYGTLS_PADSIZE__)
-> > +	   : "x0", "x1", "x2", "x10", "x19", "x29", "memory");
-> >  #else
-> >  #error unimplemented for this target
-> >  #endif
-> >
->
-> LGTM.  I'll wait at least a day before pushing in case somebody else has
-> any objections.
+RGVhci4KV2UgaGF2ZSByZWxlYXNlZCBhIHJlcG9ydCBvbiB0aGUgbGF0ZXN0
+IEluZHVzdHJpYWwgM0QgU2Vuc29yIG1hcmtldCByZXNlYXJjaC4KUGxzIGZl
+ZWwgZnJlZSB0byBjb250YWN0IHNldmVuQHZpY21hcmtldHJlc2VhcmNoLmNv
+bSBpZiB5b3UgYXJlIGludGVyZXN0ZWQgaW4gaXQuIEEgc2FtcGxlIHJlcG9y
+dCB3aWxsIGJlIHNlbnQgdG8geW91LiAKVGhlIGZvbGxvd2luZyBtYW51ZmFj
+dHVyZXJzIGFyZSBjb3ZlcmVkIGluIHRoaXMgcmVwb3J0OgpTaWNrCkNvZ25l
+eApLZXllbmNlCk9tcm9uCkJhbm5lcgpQZXBwZXJsK0Z1Y2hzCk9yYmJlYwpI
+aWtyb2JvdApTaW5jZVZpc2lvbgpUZWxlZHluZSBUZWNobm9sb2dpZXMKQmFz
+bGVyIEFHCklzcmEgVmlzaW9uCkFsbGllZCBWaXNpb24gVGVjaG5vbG9naWVz
+CkJBTExVRkYKQXV0b21hdGlvbiBUZWNobm9sb2d5CuKApuKApgpCZXN0IHJl
+Z2FyZHMgLyBNaXQgZnJldW5kbGljaGVuIEdyw7zDn2VuIC8g5q2k6Ie05pWs
+5oSPLApzZXZlbgo=
 
-Pushed now, thanks
+------=ALIBOUNDARY_524_7f4261726700_685628d4_bd08f--
+
