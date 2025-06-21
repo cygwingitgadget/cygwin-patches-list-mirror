@@ -1,71 +1,74 @@
-Return-Path: <SRS0=szJs=ZE=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id 6AE65393B059
-	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 17:06:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6AE65393B059
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6AE65393B059
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750525570; cv=none;
-	b=pfz/tTBi7ppas0BCPo13maw5+7vbB5mmnsBtNfK+6ORvjKRsv63QwwC6n2wH2YtGZ2ot+5Ra7PCm53fpRYhEnDB5wnFdtE4xev6GIQ3IjFA1kojdQGMp+FPf7u7jZSH/qvRnNPPUl6H5ykQMIWdOfXqOyuz+BplRgnBAraT3acM=
+Return-Path: <SRS0=Mu3T=ZE=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 839F039BB07B
+	for <cygwin-patches@cygwin.com>; Sat, 21 Jun 2025 18:47:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 839F039BB07B
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 839F039BB07B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750531649; cv=none;
+	b=oK9s13zT2TUZzAgs6+wfZH4p/0vNUAvoXUaLDj9m8tFYSNRf6ZkA8eNbdSwmUe6Vucs7f611wZJAoaI3WKobk99dY4LVJsw5AcOoTBsCH5X3rCbdS+B9paT939CcbOw1RYohXFFx8zVGo/hI5G7Nl83hAXjN4Livsb/1V2tweto=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750525570; c=relaxed/simple;
-	bh=E4FLqSl6f62bgP8SGACOYiwkqmI+ILl5nXxXju7sSS8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=TQrcghwAjN36ZC3/sa+rpCIVhihoUNhv5dB9PG+YgWg36rCWgY1kJOfaTV33zJPb1aFhhdqUi1KjGpPdzwJRkWaZADdDtQa1FgysqmYOQ9AU+WIVwxcLawAA6oqSnwzLJkpfehirb56focjk5WfSLDGsXTQHzAKBWnzEU/xUkqg=
+	t=1750531649; c=relaxed/simple;
+	bh=CsIioS79rXZifeBc3jov52A3KQX5kfBbqeCzMGVRW34=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=q9ixJpuytIqcDc7Nv/nnujCqNtZsyxkrHKNH7ayfG5SD8Zqx5CY2MgkKsv11W2QWsqgzeIjpsXE3DyfQTv2xLM7/dn2kSxNLPhCIcJO//ZvIsqKKFJGBGBRRzBBhI086+E4BQfPZLVayDd8OZi9rvkVLGXkOZackX65jQBmZwOA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6AE65393B059
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 839F039BB07B
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=nZYKKp7J
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id DEF2B1D7599;
-	Sat, 21 Jun 2025 17:06:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf03.hostedemail.com (Postfix) with ESMTPA id 7A8456000D;
-	Sat, 21 Jun 2025 17:06:08 +0000 (UTC)
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: winsup/cygwin/include/asm/socket.h: add SO_REUSEPORT
-Date: Sat, 21 Jun 2025 11:02:15 -0600
-Message-ID: <6f703b770ddd29e5c174622ae1570761a8a52a92.1750525279.git.Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.45.1
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=Kil01jXL
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 2A3BC45CE4;
+	Sat, 21 Jun 2025 14:47:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=axHPu4EJhC9uGSgxe8UkeOnijhE=; b=Kil01
+	jXLg30idnxAoW5V08xfzDVtx+Qto9svRVvrCm1lAc/y/nfoBJLwqCu0Bj/Vl4yJJ
+	AtoIqtHfPLgo3w9O51dv7aPwdnYm66xr0h5zH8BtdC3WmJHQp9L3QfGy13yzacN4
+	VQiF49LpdrBc+0eVyZ/9KEShb7UoBZcGWYD9wY=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 22EA045CDE;
+	Sat, 21 Jun 2025 14:47:28 -0400 (EDT)
+Date: Sat, 21 Jun 2025 11:47:28 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: Radek Barton <radek.barton@microsoft.com>
+cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: stack base initialization for AArch64
+In-Reply-To: <f93437b4-a88d-9cc6-b156-a37b1e629810@jdrake.com>
+Message-ID: <5a0ee0d2-6fac-1886-45c0-c75dba8d0bd7@jdrake.com>
+References: <DB9PR83MB0923A2E70C6E9F5931020E409272A@DB9PR83MB0923.EURPRD83.prod.outlook.com> <f93437b4-a88d-9cc6-b156-a37b1e629810@jdrake.com>
 MIME-Version: 1.0
-Organization: Systematic Software
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7A8456000D
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: uem4peawgxyeu3yj3hur5eeuc9zrr15p
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX18Xn4BU9BUMqIp4RnNQuehfsTm0bnkhcEM=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-transfer-encoding; s=he; bh=qRBZVFEXIn9hURtOFis0u4KbOfIYdcGrflK4Pkh7VII=; b=nZYKKp7Joz4j1FVrIpu/d4ZunQRgTJC4BlPIkIFtwgDfqijnaz9tKH/W+3v9udFhCHvecJK1cnh+O/0u4chXUzFdzuuc0cm+JZ0VV3R5tcQ+gN4IyvekZ/JtmHweYcX9VZi53+q5f2v6LoC18kt4LKUo8PlcFBnqgO5YnisZXqjzIvu5Y0blXJKIg36noTHwjQ4S+Q+ymLUDRsrPn6hIM/VOWTJ6bILOknsz8mRSPLu9oqzqRTPV8QymN4yjhaUT8oUtjJnS+9B9WZNewEkitevAHVkiHOJdJL3AdnceprsMUn+4VMVbyoPf6r2M7azfEhnhw9aPCS95EQha+hSRTw==
-X-HE-Tag: 1750525568-838511
-X-HE-Meta: U2FsdGVkX19+9wf2e4NXh7bWhYw4n4BySqJwzZVIeP6h7PRW6QQWVPdw4pUyb7JlMJp9CLTxEjgSWSvL9PnZjFDweQALYyAX/9KWpIEvduyDxoVzSLPOdv3IrYSUoSVJsrwmTTOdZLnLG9T+/ykbgq14B9DNjcOlcAG2syQHA+ziWt5CkwZqODSlgLyAXQWxn3hCBROuC+iJAjFu8pAa9hmEvnTBvNaG1f4knumhvoC5dJjRsQatr0EFifkRtkA3EEdgqgVoTkA9+Oa4t0giKDDpBe4X+lMV9MBxJ3CMIHp9gdROgWnp4QaorLzOOmIbwjjvcuy5EFo=
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-SO_REUSEPORT is defined in BSDs, Solaris, and Linux (since 3.9).
-It is not available in Windows but S.O. articles suggest
-SO_REUSEADDR|SO_BROADCAST works similarly on Windows, so define as such.
-Required to build nghttp2 1.66.
+On Wed, 18 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
 
-Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
----
- winsup/cygwin/include/asm/socket.h | 3 +++
- 1 file changed, 3 insertions(+)
+> On Wed, 18 Jun 2025, Radek Barton via Cygwin-patches wrote:
+>
+> > -#ifdef __x86_64__
+> >  	      /* Set stack pointer to new address.  Set frame pointer to
+> >  	         stack pointer and subtract 32 bytes for shadow space. */
+> > +#if defined(__x86_64__)
+> >  	      __asm__ ("\n\
+> >  		       movq %[ADDR], %%rsp \n\
+> >  		       movq  %%rsp, %%rbp  \n\
+> >  		       subq  $32,%%rsp     \n"
+> >  		       : : [ADDR] "r" (stackaddr));
+> > +#elif defined(__aarch64__)
+> > +	      __asm__ ("\n\
+> > +		       mov fp, %[ADDR] \n\
+> > +		       sub sp, fp, #32 \n"
+>
+> Is the 32-byte shadow space part of the aarch64 calling convention spec,
+> or is this just copying what x86_64 was doing?  My impression is that this
+> space was part of the x86_64 calling convention.
 
-diff --git a/winsup/cygwin/include/asm/socket.h b/winsup/cygwin/include/asm/socket.h
-index 276df3a0b5fd..d65dc41a0d5d 100644
---- a/winsup/cygwin/include/asm/socket.h
-+++ b/winsup/cygwin/include/asm/socket.h
-@@ -72,5 +72,8 @@ details. */
- #define SO_ERROR        0x1007          /* get error status and clear */
- #define SO_TYPE         0x1008          /* get socket type */
- 
-+#define SO_REUSEPORT  (SO_REUSEADDR | SO_BROADCAST)
-+				/* allow local port reuse - synth on Windows */
-+
- #endif /* _ASM_SOCKET_H */
- 
--- 
-2.45.1
-
+The patch for pthread stack initialization dropped the 32-byte shadow
+space, and I believe this patch should as well.
