@@ -1,118 +1,111 @@
 Return-Path: <SRS0=eX1P=ZF=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-	by sourceware.org (Postfix) with ESMTPS id 1CC723A46E55
-	for <cygwin-patches@cygwin.com>; Sun, 22 Jun 2025 08:32:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1CC723A46E55
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+	by sourceware.org (Postfix) with ESMTPS id 63840391A0D3
+	for <cygwin-patches@cygwin.com>; Sun, 22 Jun 2025 08:20:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 63840391A0D3
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1CC723A46E55
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b2e
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750581157; cv=none;
-	b=F4GnJkRjkZdgLzCil5VhOrqEo8TI5zdkBg5lfcOAsDS6guExSQUXIdZtWio/wXDWsLbyy8Y9JR7vM1K5J30MTY7EFAY3VRcMgIvnbH7H6vk4aV6eCOhIk91tRQw/7vNLT1jXcseu+gh6y6k2ppDtIZDHgN/g7r1Xhnf3af/C5mo=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 63840391A0D3
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b31
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750580427; cv=none;
+	b=IfsBPHjXz+CBdHC6CRL+7s6STZ0GmE4V4LjmqNR2y51NfyMhHguPdA9OolSNKwkGmmMk5wxXOYbPfs7xmdPLvosZy8DVXxWfKwQU4ZQ/u0vW65GsqqYyDhlBeBLJhO+xgVcbJMAWRhOMFOJWfjIxXxJUpgHYdEQFCT6ROFrv4mw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750581157; c=relaxed/simple;
-	bh=PWjHaihCX8jdBswts+nDptBtaOwFSqbIvrkmR8rcVkE=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=DMWq4pJsQVZWu+LwyOp6UgfF5INNR3ik55A604DJGbN9jI+2kTrbJZDlkaE1gtvOW6nIrHXUQSshB9hYboqB80QLm6BCZORFSEEs03r8Ptk6+z6LA5q3Nw8wuyPCNA0vN73e/8OtoPZvYAzVbSbx9VVX7MiHwq7NbLYyPa+GbCs=
+	t=1750580427; c=relaxed/simple;
+	bh=YqSVObryq/IMwDgaGfr2iujG5rWWydLN86gsEk/XLHM=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Gg54E0kXLpAyQxtjIg7n8IKBk/imsxPGjyNJ9z+Dc0g2oBk9PTqE1hnzbuBzXeX4iU8jPrIH/vhXkLhEebXDUw7OJYpVbulCrigXhCgduhm/PAZXVyNnXt0U2P+bwm2g5IZltF5LWL7sbHIqkaY8CO9wZOkpdyr50MMU9bjpat4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1CC723A46E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 63840391A0D3
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=dGZLEVkx
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-e733cd55f9eso2659406276.1
-        for <cygwin-patches@cygwin.com>; Sun, 22 Jun 2025 01:32:36 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=c0V1sx2b
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-e81f8679957so2591936276.2
+        for <cygwin-patches@cygwin.com>; Sun, 22 Jun 2025 01:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750581155; x=1751185955; darn=cygwin.com;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TmHRnPE/bP16I6tI/XplBldvC1EuNZZeeoLwxQSLGyE=;
-        b=dGZLEVkxmVOPmQjvA8zFQAVa395chEHHLfrDoioEICbb46u5zpBlIM5qxDet/4t3Vr
-         NVqrs6q3RcHAJKkuT898UvfR5oNoeYU1y/kpHX54MGQDnLTDxZwKiJGzLdTXTZfOHU6C
-         DIluzghjWVBDDiCRUcS+oYy0dzXU46mD/kPMgmJ7Inanxo5KTnYhdCQerZYv/w87QVxA
-         Xot8q1M6Punj8Ku1I0LJFM1EsiHto8a4V3ez4ESUy9x/tywlaW0RJxO1GjyudqMj5QiX
-         y/vuPiXYO1Z5uqamTIaiMPYQfv8d8C6IKrFNu8wH7BrU3NRsUetjqe59MIqu978V8O1U
-         NglA==
+        d=gmail.com; s=20230601; t=1750580426; x=1751185226; darn=cygwin.com;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=liipMd0pZTvdNlBPmlUOa69gJvD0i/XYDFBSL9vfgZk=;
+        b=c0V1sx2boLnBumsLt1f/PQZEj4FI7F0/88EqUs72Ka6VdPnhU2yFif3V/7rRuKfqAA
+         sAsZyT3PlzvgI8XbT7GCWuSPOgLdZC3rxsGD11Wr5ge2vexrx/HhLJEByKtIisgudaJQ
+         IrwpGzurK8Gbpj+mnRWE4IYStmli8A4Ln8awcCZOeCcsXQwdnFkTslVcOesA8ylLh7zo
+         q+t+4FB635DVpTOBONTZJQKgPxJ0deiJDgRaO13KgXr/RFzZQN2/V9lxNVwmj9b6JC29
+         KtST5dZuQALhUfFNufxqrdGOGgOEoE59bz/O4saQ1SrgJygr2Y8tvtlLg6U0G58IEL91
+         sbKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750581155; x=1751185955;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TmHRnPE/bP16I6tI/XplBldvC1EuNZZeeoLwxQSLGyE=;
-        b=UT1mW19l4QVWQO+amlJgflUZhckVC61FmoiqUPd61WfiigtIO+go/L9ntL8cmdBPwJ
-         1Uvd9mO1ed0uqtlrAk7YoKcZEitbiEI+p7rKSpyGQQO9/pqTec5j/REov6U3u3G+m8lN
-         7qVE5z1clA/HyrqQfUG387LXnQLqnP5IIQXvvlkBt8lF8Z+SpXKj9xzBWfHs5ErW7d7c
-         HtH/EiHAUd7hfGyaWQ2zVQzrntlj/4q4/C0ar5avCSrxT/bnIWLYZuvtUgbOMNP9lWJ+
-         r6ROO/qCSPvyz9TTbf/3QkY+iIS7YRpweOpKdI5AGXUj2EilBsF6HFrTmGY78+hztsK3
-         3ybQ==
-X-Gm-Message-State: AOJu0Yz6wtnShclDJ3jU302cSgsfxCfN2Za5qhAr2IGOcRJPe00D0pco
-	2xYcYuLYJzAKAPIp0mQnUgiQKC8KDks8X3VIFFVWYENGDU5HZ6P2ou/2FZGoWA==
-X-Gm-Gg: ASbGncunRZDH6noISZ+sZNn01axF4PEPhAiPERzvKN5dhwAaam248xG4NMfl3ZffzQj
-	2h+OqevTVneZBXdFzCXNAIT1qin3MTuE2lo2WnlqJ+qcHTuTvAIsfNqXQ5AieHEgnLG5e2tohVr
-	d8SeFe07WtL5WOapF888hZA/CK8ztlCKv4FvpF7QhGvvSrycICUZk313rCVtvrdcRL5bJa5oxxg
-	HZvt7SBKQXvtwnpeICAsyFbghdQsvmneOpEPqKqfp0VuqLtdY3wFinH6T16mNdT5X/k+wU8yxOO
-	945ezukk0cxioKIAMjrgk1oqM1K5zPhQ0rRDtt8eavdgZ76gI8IflEi3QmU8UOj9VlMnNLhpKw/
-	nAs7EVreORiF+HewOfKCvV3KJRD3gXskTnmiGFLwhZqQiyiDJNE31XkDANuw=
-X-Google-Smtp-Source: AGHT+IHXBE50BlZBJoE5zC8IYWdDUMXnDjBrmGyP2qkicc7JdzuG2/1CJi0C75kYr8dRIyZGlZg6Rg==
-X-Received: by 2002:a05:6902:1708:b0:e84:36f8:aece with SMTP id 3f1490d57ef6-e8436f8af8cmr9089858276.10.1750581154860;
-        Sun, 22 Jun 2025 01:32:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750580426; x=1751185226;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=liipMd0pZTvdNlBPmlUOa69gJvD0i/XYDFBSL9vfgZk=;
+        b=an4Ba05A2hRoXkCOLqxNMVEoDSvQaktmKuIsypsHuGWOqQgGW1RKqS6Uuh1hS1vxL2
+         OyY7GVjgy+TQdOZ/JhZNZJxPQ2o2U3C8qpur+PuFUKetv26kqrlP7y/T7wuQJoyx0QUu
+         0jm78PK1Ctf9lPYOc59BenkCqY+ElFlMYfBkGxECIvRtXeSKFUjwgtoKJFUq9FyHnX33
+         WUUsl7acNc2oZOer6of+iXS/ITdY/4zoV8M3NCbDMWauQr3vLcRc+9IQSz8mdzY+M6RD
+         ev+FCdWWQwdwB6Ed8Dnb9UcPtoDXQ7302NN4cxVtGl0ijLtBBlNUsvSk8SO0dj2pInMj
+         3A+w==
+X-Gm-Message-State: AOJu0YxaZqPoMM8A6m6W5W6UoKn1Kt2FoCbt3BC7R7M2cRYGJSx2i8Ow
+	KbZno9zUapwlbqVc7WtMSWB1+mMNVUbNlE1k+rLPb29grdoV6MJ02o6NJQFRMQ==
+X-Gm-Gg: ASbGnctDM8DzkSuHljsIdXy9ro711hJ+ZzbD/M7y+zyv8xHNoCsIlFpy3lE/AbtFhEx
+	+cNHAkeXvYbZ1ujr1rLewrjKGHxOaZRqa6B2DlWpfT+aZPFslzqlbyzlbBRN67ZaYuZojvUM5B1
+	IJSnG0jtuHGqtvigW3i/bhLzdNBcTfAThyTyDL51LA/Eq+ONUH1IBOzex1oN3O1KLnSgkZHP0sQ
+	wLL2fumsv2h3G4yX7yaH73qv8/3MnjB6g9c5qwberin+ok9SuEjdAY2CEArF9AhsOiVqXPl4TTG
+	+uz7MXDGewdj+ze4hRUHLxQNEtT+b4v7pf1AfouOHckpJsKOhG/7NoUy/PGh5eDuySkKqRDxTNg
+	sfviUMzkcNbw0CYm0FYxY1kDzJt7l/Xdr47Upa0bpOtB74almepWT/vwoFWM=
+X-Google-Smtp-Source: AGHT+IGgkKTW9+vh7cACVbatZLQ3Rbg6utKgV2H8TfufarirwyqIXLtGqgJ+ZpOOsOvNfyXOsfLAuA==
+X-Received: by 2002:a05:6902:144c:b0:e7b:793:3d1 with SMTP id 3f1490d57ef6-e842bd1b5fbmr10658993276.47.1750580426253;
+        Sun, 22 Jun 2025 01:20:26 -0700 (PDT)
 Received: from localhost.localdomain (h209.207.88.75.dynamic.ip.windstream.net. [75.88.207.209])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e842aab9809sm1774586276.1.2025.06.22.01.32.32
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e842acb932fsm1746692276.55.2025.06.22.01.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jun 2025 01:32:33 -0700 (PDT)
+        Sun, 22 Jun 2025 01:20:24 -0700 (PDT)
 From: johnhaugabook@gmail.com
 To: cygwin-patches@cygwin.com
 Cc: jhauga <johnhaugabook@gmail.com>
-Subject: [PATCH 4/4] install.html: bold Tip: in q and a
-Date: Sun, 22 Jun 2025 04:32:13 -0400
-Message-ID: <20250622083213.1871-5-johnhaugabook@gmail.com>
+Subject: [PATCH 0/4] cygwin-htdocs: faq.html edits
+Date: Sun, 22 Jun 2025 04:19:58 -0400
+Message-ID: <20250622082003.1685-1-johnhaugabook@gmail.com>
 X-Mailer: git-send-email 2.46.0.windows.1
-In-Reply-To: <20250622083213.1871-1-johnhaugabook@gmail.com>
-References: <20250622083213.1871-1-johnhaugabook@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: jhauga <johnhaugabook@gmail.com>
+From: jhauga <johnhaugabook@gmail.com>=0D
 
----
- install.html | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/install.html b/install.html
-index c5c797f3..4069df2d 100755
---- a/install.html
-+++ b/install.html
-@@ -57,12 +57,12 @@ A: Run the setup program and select the package you want to add.
- </p>
- 
- <p>
--Tip: if you don't want to also upgrade existing packages, select 'Keep' at the
-+<b>Tip:</b> if you don't want to also upgrade existing packages, select 'Keep' at the
- top-right of the package chooser page.
- </p>
- 
- <p>
--Tip: use the <code>-P</code> option to perform a preliminary package search i.e.
-+<b>Tip:</b> use the <code>-P</code> option to perform a preliminary package search i.e.
- <code>setup-x86_64.exe -P <i>packageName</i></code>.
- </p>
- 
-@@ -81,12 +81,12 @@ Performing an automated installation can be done using the <code>-q</code> and
- </p>
- 
- <p>
--Tip: if you have trouble with the <code>-P</code> option, try altering the syntax
-+<b>Tip:</b> if you have trouble with the <code>-P</code> option, try altering the syntax
- i.e. <code>-P <i>package1</i> -P <i>package2</i> -P <i>etc</i></code>.
- </p>
- 
- <p>
--Tip: you can download <code>setup-x86_64.exe</code> in the <code>/bin</code> directory,
-+<b>Tip:</b> you can download <code>setup-x86_64.exe</code> in the <code>/bin</code> directory,
- and use it from the command line to install packages (<i>ensure C:\cygwin64\bin is
- in path</i>). Additionally, you can also change the name of <code>setup-x86_64.exe</code>
- i.e. <code>pkg.exe</code>, and use that to install packages e.g. 
--- 
-2.46.0.windows.1
-
+This patch series contains several focused documentation edits to faq.html=
+=0D
+=0D
+Changes include:=0D
+- In section 6.21 - added additional required packages for installation of =
+newlib-cygwin. The packages added are build: libtool; dumper utility: libic=
+onv, libiconv2; documentation: perl-XML-SAX-Expat, docbook-utils. Also orde=
+red packages alphabetically as this makes it easier when using GUI of setup=
+-x86_64.exe when selecting packages.=0D
+- In section 6.21 - added example of calling setup-x86_64.exe to do a preli=
+minary search when installing packages, as there are nearly a dozen package=
+s, and because it can take over 30 minutes for the installation to complete=
+; and if all the required packages are not downloaded, the install will fai=
+l at like minute 29.=0D
+- In section 6.21 - added an additional paragraph and tips regarding the in=
+stall process.=0D
+- Added section 3.4 - instructions on how to build local version of site fr=
+om "https://cygwin.com/git.html". Instructions mainly specify how to config=
+ure local server's httpd.conf file, and downloading a command line tool. In=
+ example used httpd install with "winget install ApacheLounge.httpd".=0D
+=0D
+These patches were created against the latest upstream `master` branch.=0D
+=0D
+Thanks for your review and feedback.=0D
+=0D
+jhauga (4):=0D
+  faq.html: add 5 required packages and sort packages=0D
+  faq.html: add ready-made -P download commands=0D
+  faq.html: section 6.21 tips and additions=0D
+  faq.html: add 3.4 run cloned site locally=0D
+=0D
+ faq/faq.html | 93 +++++++++++++++++++++++++++++++++++++++-------------=0D
+ 1 file changed, 71 insertions(+), 22 deletions(-)=0D
+=0D
+-- =0D
+2.46.0.windows.1=0D
+=0D
