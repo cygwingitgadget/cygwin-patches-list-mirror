@@ -1,140 +1,131 @@
-Return-Path: <SRS0=WMQF=ZG=gmail.com=sebastian.n.feld@sourceware.org>
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-	by sourceware.org (Postfix) with ESMTPS id 635CC383E52A;
-	Mon, 23 Jun 2025 18:22:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 635CC383E52A
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 635CC383E52A
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::534
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750702978; cv=none;
-	b=JOeSuorPMzVBSUpuAmw0tG0OLGZHv4dQMG7aQhuGp8Urqyy88TOj3oXR0L5vNflWhDXQAZ8yayA9ibKVoHuwNwAlBgavJA+SyaQfYyuuyhAMoZP/lPUiW68fEZlMlHNnIpisxWK8TZdOJg2vES8FfV9SkprjJ5aj0FiWVjPESx8=
+Return-Path: <SRS0=7pAn=ZG=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	by sourceware.org (Postfix) with ESMTPS id 5C8B83874537
+	for <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 18:39:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5C8B83874537
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5C8B83874537
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750703987; cv=none;
+	b=mWqsofwEeoKjbOe8BJvEq/vZOvi/yaMRfiN2Pcg93c9vMHYE/Dk6KWIDst/mIh2zx0f79ZWYqCiabrk2XU4qBUCfVxJzM1zXpAYhrs/b2Tg9wlV0fmUC8v7Dt2X0iAC7H4cqbuFZpENWKgGfL0ucpoPgApaaeuG5VfoAvQ9+FfI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750702978; c=relaxed/simple;
-	bh=eAKrWu+KhbILe6aCgRoyBPrt654vJMKxrYLcT/ISCqM=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=UfpXbDyr3pqngzTJU7LZz+c6aNn9TyRZZh18ckw09A1bBoA8fcEESkSfIX6Bc56+CAfx//g3JatFn/liRQSnQnrZQzkP/r5LXVCshCLq9VT33s8mIQMWeixE6zUmcVRg5U7+gp685bBqnRbJf3+ruZf90M1rC7DCt8NB+0UhW3g=
+	t=1750703987; c=relaxed/simple;
+	bh=5bg9yy6nU89xp7mElWp1t+VJdWcpkS4DQhYuZ12GtEI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=gTL6oU3KH6WRfrf5htPoiEVEN9YWQgIHtef9Ff+6u3yRlluA//clB0NrTZOEk4vfAsh6/qO45qKQxw49PMsQWl62RsVDZrk6aT8PDuUmR5FDGZII1bys7cknTzF4VFKAneyDVJTQsBo9QcCKSzlnlo91I3PE0hwLNsc1D+ATaUs=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 635CC383E52A
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5C8B83874537
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=DnYoxmOl
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-607434e1821so6680053a12.0;
-        Mon, 23 Jun 2025 11:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750702977; x=1751307777; darn=cygwin.com;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7D/50benrJZh9vt6Wwouq9sVxHZEYxNHE1delJWbRSM=;
-        b=DnYoxmOlj9NR6PFRZVznv+zxqCQoM8ZJBdCKaEmhbiVgk7Usit50PD+ltNLXcEBb1A
-         sYDn6/nCho5a9NjElrLLPx937Ojj9jdtgU9tzj+Mu4vHvBQyUI9P99lVTqm6cUCYj6pY
-         d8ha9xrufWIpz+i7hAl5YpvlZXiAXE6oKtC0e9xLit9NPgCoAxTTKDgVLFvlZXsGXUW2
-         lSzWpiUDga00TwvYUOv0dnlqcfCK5yCQAA6TztDNikvi4bgpMjOSkQUV1FySbmbjoh3u
-         MiEG1cpq44j9+BembzdD0hXAwVq57gPCTeXDR40Faxa/nS7aO47UsnSt2cj+cW/O/kqE
-         sYtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750702977; x=1751307777;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7D/50benrJZh9vt6Wwouq9sVxHZEYxNHE1delJWbRSM=;
-        b=kcNFWWAzkE4nJFrksS3US+NrT9E8++p2nODeYcqebfjVVO7HN9KIQFmU1s7GWeqqqX
-         j9lE50hxW4C5bFl5AysW4wHbpodZfWXOKIdYCX86FbU7oBeAB7mphu6ibq3ssqUctjg3
-         MsT9W8cX+syETvAMk0mLBNOUTybf6zdITeWT/Tr2jEVcAuUHwB+AGl3poVVjOFP+mtwm
-         T5rfIxqwV8PwG/uX5m0KXCmoTNj1+z5ZNhFbkSartbcvW7PI4JeeBBCGg775E8cL53V0
-         ifDb9rMIlWVYu5Pk2p8SFdP0t28jMXP9uvPTNn0XkM4xavv7RV353R//31JowZH2yBgQ
-         cFXw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/OtMKL5Pju7RSASVWbITHdfgf4HbYF5t2ugcDBYvEbW2Fapj/Qs2O+klILCAs2m6PoZupkO4=@cygwin.com
-X-Gm-Message-State: AOJu0YxAEg0VZsUfYvyY8o4vXvAh0SpOwYrES0iYXOogDxJOkzuXerwZ
-	PKOLH7HHalm7p1611HK1er873tE+pqaed/64UWg3EYg1lnhTDArNGGd3+jCTL4MfzpU42b/sPVg
-	hkL4QSUOmK82thBP0kTV3xOj8EiYkVO6OnU7N+4Q=
-X-Gm-Gg: ASbGncvYsXtjSjScBqHaAd1YCFYsxbj+Vwn1lhuk5YgnemWF39NGB7rkaOO2Td+5IUE
-	buBCWuIZMPOwdDoLG2O2n90hPxJbwq8MMFqnhsLLXZzmy0m+dRavaRUhmszUq7NoYQRahw5uMZk
-	hDrH+cEHG6I7JJp3tX+RW3K88puY7sPq2SOEk62+h8a0Y=
-X-Google-Smtp-Source: AGHT+IGSt27Qi9XJszL9xXgTlNBA5t/p71hjx0vPRtOWJHUplX0Y56rfLdayOA3aMq06NXVsPBrPkRxCVCBOyPNCdEI=
-X-Received: by 2002:a05:6402:34c3:b0:605:2da5:8483 with SMTP id
- 4fb4d7f45d1cf-60a1cd30f0emr12964252a12.13.1750702976362; Mon, 23 Jun 2025
- 11:22:56 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=lCbvIePX
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id DE00E1A081B
+	for <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 18:39:41 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf14.hostedemail.com (Postfix) with ESMTPA id 6800E2F
+	for <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 18:39:40 +0000 (UTC)
+Content-Type: multipart/mixed; boundary="------------DDQmVrFDZq2vohLmoqLzRLyl"
+Message-ID: <b34eac53-be01-4822-9e83-0939c1009af8@SystematicSW.ab.ca>
+Date: Mon, 23 Jun 2025 12:39:39 -0600
 MIME-Version: 1.0
-References: <6058889e2ae8c9c827a8d6678f09b3b1741e2fcf.1750413578.git.johannes.schindelin@gmx.de>
- <CAHnbEGLjsy4MZD+oqjGbd=JrX+q8an3mhT38xndEgjmTpWyOnw@mail.gmail.com> <aFkPUI22HlYnYhZh@calimero.vinschen.de>
-In-Reply-To: <aFkPUI22HlYnYhZh@calimero.vinschen.de>
-From: Sebastian Feld <sebastian.n.feld@gmail.com>
-Date: Mon, 23 Jun 2025 20:22:19 +0200
-X-Gm-Features: AX0GCFvbZInMsiV9SiQH_S6hTGZjQLwuq4YxVYfwDkkKZkchfdO3PhUfx8gjUR8
-Message-ID: <CAHnbEG+7T8K50WkDN4=xBA_ir8N3M32=ZGJnYvCFSpH7UquZ=Q@mail.gmail.com>
-Subject: Re: symlink_native() bug with case-sensitive file-systems Re: [PATCH]
- symlink_native: allow linking to `..`
-To: cygwin-patches@cygwin.com, cygwin@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] Cygwin: winsup/cygwin/include/asm/socket.h: add
+ SO_REUSEPORT
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <6f703b770ddd29e5c174622ae1570761a8a52a92.1750525279.git.Brian.Inglis@SystematicSW.ab.ca>
+ <aFkTbV61qw06knEv@calimero.vinschen.de>
+Organization: Systematic Software
+In-Reply-To: <aFkTbV61qw06knEv@calimero.vinschen.de>
+X-Rspamd-Queue-Id: 6800E2F
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: p5as1rxdax8oxqfzs9ji4aospgxgiejt
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX184jKJDtNVsXzXiIgUHWVB2i8FVRgfj57c=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=content-type:message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to; s=he; bh=/C055Wtmqv6WKniAADcW09CfQNWlko9WZUp2zNW4No0=; b=lCbvIePXv8oe+ySezQee++3ei9bwJPTD5ezTpnM14vh/lfPsnQARTtTSrVVPkncSS+40Zb3XcA1IUCutx8cqQ/RcwIy3Q9hntDT6Fg8AGy0Y/E2+snu2Ai7fG96aZ0SZLKFmHVwE8Mz9x+SyKBk8Z8ysHTAyPRlg3eL3j6LGQIFC+/ABWsdTv2Z580ADO6IdK1rDughI1uLNPNywKArKUWtx+quoQ2MrYpNU4AzCxUTihxTKDUnlbRjpE5hfzZHd4+JN1xRo+Cn+OGenPGds7veLmUrYyKaK64o+KthaD5DSV5jytKypTEcA9NlGsWXCVZtOLc2GCnohAJcDcqRXZQ==
+X-HE-Tag: 1750703980-567484
+X-HE-Meta: U2FsdGVkX19EAHl7Kf5o45ehQxXE3cDKXVuRHfQRdT3LT028fWgFEFCcB3p5axqdD6Mw7UDia+LGJHYW3pkl+5lw9xyUEN5oAFk4h4dvCXnFvIhTZSbGeUKjHrNU4s5vbNZv56r5QbZwbkW7Bkwm2on3i6TcZmJg8PoruS9zYaFXf+y61G/2w9KAITPS2+jiu0pu2+y5fTA4/76lf8CmYnEIBURVKSsYlp/2g6jqEC2/ffdFAyGdnJ/f78tinvkY9v4d/YtHbTovuSP8pl5YHlxewxFrec/AumDZkLchXyUliL1q0CCAq8xfYThfq2gMGAo0tbmprT8I7cbNxVeNGfGc3WnifX0zGjt60vOc7/7M8exhh7R3ww8iXbhI30ZK+x87ORqQ+f0iVPX/telPFfMcT/XIsRJQ0ehO4O1jENQgNrdF1w/kRxsWayKqj+gA4agbmN7v+hTsuDo2hHcL+M2oa/7AK/JC/fzTjpMs38AvqRr2yH3d0GLTweUSdMU9dOHNZR8/Kf2giJNXjyievXAbFzUZ8hqSVzKzm1EFA5imLcZssRE9rWoSwp+sBqrTc5Fe/lb6KHE=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, Jun 23, 2025 at 10:52=E2=80=AFAM Corinna Vinschen
-<corinna-cygwin@cygwin.com> wrote:
->
-> On Jun 20 13:33, Sebastian Feld wrote:
-> > On Fri, Jun 20, 2025 at 12:03=E2=80=AFPM Johannes Schindelin
-> > <johannes.schindelin@gmx.de> wrote:
-> > >  winsup/cygwin/path.cc | 21 ++++++++++++++++-----
-> > >  1 file changed, 16 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-> > > index 42919a7cf5..ed08398930 100644
-> > > --- a/winsup/cygwin/path.cc
-> > > +++ b/winsup/cygwin/path.cc
-> > > @@ -1855,9 +1855,18 @@ symlink_native (const char *oldpath, path_conv=
- &win32_newpath)
-> > >        while (towupper (*++c_old) =3D=3D towupper (*++c_new))
-> >
-> > 1 unrelated issue:
-> > I think this towupper() code is WRONG if the filesystem (e.g. WSL) is
-> > case-sensitive!
->
-> The preceding comment tries to explain why we always compare case
-> insensitive.  There's a high probability that the symlink will be used
-> by native (non-Cygwin) processes which are insensitive.
+This is a multi-part message in MIME format.
+--------------DDQmVrFDZq2vohLmoqLzRLyl
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-OK, but this is at least bad for performance.
+On 2025-06-23 02:42, Corinna Vinschen wrote:
+> Hi Brian,
+> 
+> On Jun 21 11:02, Brian Inglis wrote:
+>> SO_REUSEPORT is defined in BSDs, Solaris, and Linux (since 3.9).
+>> It is not available in Windows but S.O. articles suggest
+> 
+> S.O.?
+> 
+> -v, please?
 
-Some stats from a profiling tool I am working on:
-German language, multibyte locale, codepage 65001:
-Each towupper() traverses 11 functions, covering between 8002 and
-11722 instructions, and between 260 and 469 branches, on 64bit.
-If the code could just use the per-volume case sensitive flag, then
-this could be reduced to 20-30 instructions just to do the indirect
-load (2 times) and compare.
+Hi Corinna,
 
-> > How can code in cygwin.dll test whether the current path is on a
-> > case-sensitive volume, or not?
->
-> There's a twist here.  NTFS or ReFS or other filesystems (but not FAT)
-> are usually case sensitive.  It's the OS which makes them case insensitve
-> by using a specific flag at open time, combined with a kernel registry
-> key.  So apart from FAT, the creator of a file decides if it's created
-> sensitive or insensitive, and the one searching for and opening a file
-> is deciding if the search/open is sensitive or insensitive.
->
-> Also, we're creating the symlink via CreateSymbolicLinkW, which is
-> probably acting case insensitive anyway...
->
-> What if the perr-dir case-sensitive
-> > feature is ON, should that be probed and handled too?
->
-> ...unless the symlink is created in a case sensitive dir, I assume.
->
-> Right now we don't handle case sensitive dirs in the path_conv code.  We
-> only check for the kernel registry key and the FILE_CASE_SENSITIVE_SEARCH
-> filesystem flag.
->
-> To add the sensitive dirs to the picture, path_conv() would have to
-> check every directory on NTFS for
-> NtQueryInformationFile(FileCaseSensitiveInformation). It would then
-> set the path_conv::caseinsensitive flag accordingly.
+Stack Overflow (added dots to distinguish that abbrev from SockOpt).
 
-Yikes. Does Windows cache this per-dir info somewhere?
+> If there's this articel, it might be a good idea to add a link to it
+> in the commit message.
 
-Sebi
---=20
-Sebastian Feld - IT security consultant
+Might have made the above abbrev more obvious:
+
+https://stackoverflow.com/questions/13637121/so-reuseport-is-not-defined-on-windows-7#comment18710480_13638757
+
+Other articles spend a lot of time discussing their opinions of whether there 
+are subtle or drastic differences between SO_REUSEADDR and SO_REUSEPORT 
+implmentations across available platforms, so don't add much to that.
+
+[One generated answer suggested SO_EXCLUSIVEADDRUSE rather than SO_REUSEPORT, 
+but gave the definition of both identically, except for the words "do not" in 
+the former, suggesting that the so-called "language model" excluded semantics!]
+
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
+--------------DDQmVrFDZq2vohLmoqLzRLyl
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Cygwin-winsup-cygwin-include-asm-socket.h-add-SO_REUSEPORT.patch"
+Content-Disposition: attachment;
+ filename*0="0001-Cygwin-winsup-cygwin-include-asm-socket.h-add-SO_REUSEP";
+ filename*1="ORT.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA2ZjcwM2I3NzBkZGQyOWU1YzE3NDYyMmFlMTU3MDc2MWE4YTUyYTkyIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlEOiA8NmY3MDNiNzcwZGRkMjllNWMxNzQ2MjJh
+ZTE1NzA3NjFhOGE1MmE5Mi4xNzUwNTI1Mjc5LmdpdC5Ccmlhbi5JbmdsaXNAU3lzdGVtYXRp
+Y1NXLmFiLmNhPgpGcm9tOiBCcmlhbiBJbmdsaXMgPEJyaWFuLkluZ2xpc0BTeXN0ZW1hdGlj
+U1cuYWIuY2E+CkJjYzogQnJpYW4gSW5nbGlzIDxCcmlhbi5JbmdsaXNAU2hhdy5jYT4KVG86
+IEN5Z3dpbiBQYXRjaGVzIDxjeWd3aW4tcGF0Y2hlc0BjeWd3aW4uY29tPgpEYXRlOiBTYXQs
+IDIxIEp1biAyMDI1IDEwOjU2OjI5IC0wNjAwClN1YmplY3Q6IFtQQVRDSCB2Ml0gQ3lnd2lu
+OiB3aW5zdXAvY3lnd2luL2luY2x1ZGUvYXNtL3NvY2tldC5oOiBhZGQgU09fUkVVU0VQT1JU
+Ck9yZ2FuaXphdGlvbjogU3lzdGVtYXRpYyBTb2Z0d2FyZQoKU09fUkVVU0VQT1JUIGlzIGRl
+ZmluZWQgaW4gQlNEcywgU29sYXJpcywgYW5kIExpbnV4IChzaW5jZSAzLjkpLgpJdCBpcyBu
+b3QgYXZhaWxhYmxlIGluIFdpbmRvd3MgYnV0IFN0YWNrIE92ZXJmbG93IGFydGljbGVzIHN1
+Z2dlc3QKU09fUkVVU0VBRERSfFNPX0JST0FEQ0FTVCB3b3JrcyBzaW1pbGFybHkgb24gV2lu
+ZG93cywgc28gZGVmaW5lIGFzIHN1Y2g6Cmh0dHBzOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVl
+c3Rpb25zLzEzNjM3MTIxL3NvLXJldXNlcG9ydC1pcy1ub3QtZGVmaW5lZC1vbi13aW5kb3dz
+LTcjY29tbWVudDE4NzEwNDgwXzEzNjM4NzU3ClJlcXVpcmVkIHRvIGJ1aWxkIG5naHR0cDIg
+MS42Ni4KClNpZ25lZC1vZmYtYnk6IEJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3Rl
+bWF0aWNTVy5hYi5jYT4KLS0tCiB3aW5zdXAvY3lnd2luL2luY2x1ZGUvYXNtL3NvY2tldC5o
+IHwgMyArKysKIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQg
+YS93aW5zdXAvY3lnd2luL2luY2x1ZGUvYXNtL3NvY2tldC5oIGIvd2luc3VwL2N5Z3dpbi9p
+bmNsdWRlL2FzbS9zb2NrZXQuaAppbmRleCAyNzZkZjNhMGI1ZmQuLmQ2NWRjNDFhMGQ1ZCAx
+MDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2FzbS9zb2NrZXQuaAorKysgYi93
+aW5zdXAvY3lnd2luL2luY2x1ZGUvYXNtL3NvY2tldC5oCkBAIC03Miw1ICs3Miw4IEBAIGRl
+dGFpbHMuICovCiAjZGVmaW5lIFNPX0VSUk9SICAgICAgICAweDEwMDcgICAgICAgICAgLyog
+Z2V0IGVycm9yIHN0YXR1cyBhbmQgY2xlYXIgKi8KICNkZWZpbmUgU09fVFlQRSAgICAgICAg
+IDB4MTAwOCAgICAgICAgICAvKiBnZXQgc29ja2V0IHR5cGUgKi8KIAorI2RlZmluZSBTT19S
+RVVTRVBPUlQgIChTT19SRVVTRUFERFIgfCBTT19CUk9BRENBU1QpCisJCQkJLyogYWxsb3cg
+bG9jYWwgcG9ydCByZXVzZSAtIHN5bnRoIG9uIFdpbmRvd3MgKi8KKwogI2VuZGlmIC8qIF9B
+U01fU09DS0VUX0ggKi8KIAotLSAKMi40NS4xCgo=
+
+--------------DDQmVrFDZq2vohLmoqLzRLyl--
