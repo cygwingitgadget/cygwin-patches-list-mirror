@@ -1,113 +1,114 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 5A0043889F93; Mon, 23 Jun 2025 19:40:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5A0043889F93
+	id 2CAE43865466; Mon, 23 Jun 2025 19:46:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2CAE43865466
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1750707623;
-	bh=nvVjOKXf9jJ1srFFo8bVfKNSbReHc0ydf0Rg2pINSqI=;
+	s=default; t=1750707993;
+	bh=4O708Ko2OC6DxoJL6sUZDVohMx4N2OqwJvU9CmYYWH4=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=shhXC+Qu+zWlwbA+JebPwCA3L2/ifAV57ThT8dQouVOZ/LCQJ72leGAKlFIHV10pr
-	 UGrSQFL/e1AmQuOAndSLtsS96vSoorTIJVcMrIE8JpQWMsgsKibMi9LF27bbthv1LT
-	 ewMmLRAxZ9nnsp47SqIJkAaqnR68jU8eAEXcFL9I=
+	b=RgBd3751LI/bkBTNiOruAlySfPHoQNlKe0Zh5UfxQHFuzRMMBA34l1X+eM2O6HHyZ
+	 bGsAt/JnO5Igns3WMR1t016r6Fcb6z+w7q4mNc0P1bkC7DjvwpstOV8TCQBDo6O+BV
+	 C620sc0JOZjwMC8dlEs5w71bGwE46UuhBPdjfA64=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 0FB42A80D72; Mon, 23 Jun 2025 21:40:21 +0200 (CEST)
-Date: Mon, 23 Jun 2025 21:40:21 +0200
+	id 16E9DA80D72; Mon, 23 Jun 2025 21:46:31 +0200 (CEST)
+Date: Mon, 23 Jun 2025 21:46:31 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: winsup/cygwin/include/asm/socket.h: add
- SO_REUSEPORT
-Message-ID: <aFmtpZfUf76EjvUM@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com, cygwin@cygwin.com
+Subject: Re: symlink_native() bug with case-sensitive file-systems Re:
+ [PATCH] symlink_native: allow linking to `..`
+Message-ID: <aFmvF9cWsr8UCqQ6@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <6f703b770ddd29e5c174622ae1570761a8a52a92.1750525279.git.Brian.Inglis@SystematicSW.ab.ca>
- <aFkTbV61qw06knEv@calimero.vinschen.de>
- <b34eac53-be01-4822-9e83-0939c1009af8@SystematicSW.ab.ca>
+Mail-Followup-To: cygwin-patches@cygwin.com, cygwin@cygwin.com
+References: <6058889e2ae8c9c827a8d6678f09b3b1741e2fcf.1750413578.git.johannes.schindelin@gmx.de>
+ <CAHnbEGLjsy4MZD+oqjGbd=JrX+q8an3mhT38xndEgjmTpWyOnw@mail.gmail.com>
+ <aFkPUI22HlYnYhZh@calimero.vinschen.de>
+ <CAHnbEG+7T8K50WkDN4=xBA_ir8N3M32=ZGJnYvCFSpH7UquZ=Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b34eac53-be01-4822-9e83-0939c1009af8@SystematicSW.ab.ca>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHnbEG+7T8K50WkDN4=xBA_ir8N3M32=ZGJnYvCFSpH7UquZ=Q@mail.gmail.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 23 12:39, Brian Inglis wrote:
-> On 2025-06-23 02:42, Corinna Vinschen wrote:
-> > Hi Brian,
-> > 
-> > On Jun 21 11:02, Brian Inglis wrote:
-> > > SO_REUSEPORT is defined in BSDs, Solaris, and Linux (since 3.9).
-> > > It is not available in Windows but S.O. articles suggest
-> > 
-> > S.O.?
-> > 
-> > -v, please?
+On Jun 23 20:22, Sebastian Feld wrote:
+> On Mon, Jun 23, 2025 at 10:52 AM Corinna Vinschen
+> <corinna-cygwin@cygwin.com> wrote:
+> >
+> > On Jun 20 13:33, Sebastian Feld wrote:
+> > > On Fri, Jun 20, 2025 at 12:03 PM Johannes Schindelin
+> > > <johannes.schindelin@gmx.de> wrote:
+> > > >  winsup/cygwin/path.cc | 21 ++++++++++++++++-----
+> > > >  1 file changed, 16 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> > > > index 42919a7cf5..ed08398930 100644
+> > > > --- a/winsup/cygwin/path.cc
+> > > > +++ b/winsup/cygwin/path.cc
+> > > > @@ -1855,9 +1855,18 @@ symlink_native (const char *oldpath, path_conv &win32_newpath)
+> > > >        while (towupper (*++c_old) == towupper (*++c_new))
+> > >
+> > > 1 unrelated issue:
+> > > I think this towupper() code is WRONG if the filesystem (e.g. WSL) is
+> > > case-sensitive!
+> >
+> > The preceding comment tries to explain why we always compare case
+> > insensitive.  There's a high probability that the symlink will be used
+> > by native (non-Cygwin) processes which are insensitive.
 > 
-> Hi Corinna,
+> OK, but this is at least bad for performance.
 > 
-> Stack Overflow (added dots to distinguish that abbrev from SockOpt).
+> Some stats from a profiling tool I am working on:
+> German language, multibyte locale, codepage 65001:
+> Each towupper() traverses 11 functions, covering between 8002 and
+> 11722 instructions, and between 260 and 469 branches, on 64bit.
+> If the code could just use the per-volume case sensitive flag, then
+> this could be reduced to 20-30 instructions just to do the indirect
+> load (2 times) and compare.
+
+Yes, but real life is working against you.  I would bet that most
+users never touch case sensitivity settings and most scenarios
+are touching case insensitive paths.
+
+Worse, consider a case-sensitive dir:
+
+  C:\foo\bar\baz\i_am_a_case_sensitive_dir
+
+All path components preceeding the i_am_a_case_sensitive_dir have
+to be compared case insensitive!  *Only* the i_am_a_case_sensitive_dir
+and path components below that have to be compared case sensitive.
+
+No fun.  No fun at all.
+
+> > > How can code in cygwin.dll test whether the current path is on a
+> > > case-sensitive volume, or not?
+> >
+> > There's a twist here.  NTFS or ReFS or other filesystems (but not FAT)
+> > are usually case sensitive.  It's the OS which makes them case insensitve
+> > by using a specific flag at open time, combined with a kernel registry
+> > key.  So apart from FAT, the creator of a file decides if it's created
+> > sensitive or insensitive, and the one searching for and opening a file
+> > is deciding if the search/open is sensitive or insensitive.
+> >
+> > Also, we're creating the symlink via CreateSymbolicLinkW, which is
+> > probably acting case insensitive anyway...
+> >
+> > What if the perr-dir case-sensitive
+> > > feature is ON, should that be probed and handled too?
+> >
+> > ...unless the symlink is created in a case sensitive dir, I assume.
+> >
+> > Right now we don't handle case sensitive dirs in the path_conv code.  We
+> > only check for the kernel registry key and the FILE_CASE_SENSITIVE_SEARCH
+> > filesystem flag.
+> >
+> > To add the sensitive dirs to the picture, path_conv() would have to
+> > check every directory on NTFS for
+> > NtQueryInformationFile(FileCaseSensitiveInformation). It would then
+> > set the path_conv::caseinsensitive flag accordingly.
 > 
-> > If there's this articel, it might be a good idea to add a link to it
-> > in the commit message.
-> 
-> Might have made the above abbrev more obvious:
-> 
-> https://stackoverflow.com/questions/13637121/so-reuseport-is-not-defined-on-windows-7#comment18710480_13638757
-> 
-> Other articles spend a lot of time discussing their opinions of whether
-> there are subtle or drastic differences between SO_REUSEADDR and
-> SO_REUSEPORT implmentations across available platforms, so don't add much to
-> that.
-> 
-> [One generated answer suggested SO_EXCLUSIVEADDRUSE rather than
-> SO_REUSEPORT, but gave the definition of both identically, except for the
-> words "do not" in the former, suggesting that the so-called "language model"
-> excluded semantics!]
+> Yikes. Does Windows cache this per-dir info somewhere?
 
-I read it now as well, and I think the resulting patch is not correct.
-
-> +#define SO_REUSEPORT  (SO_REUSEADDR | SO_BROADCAST)
-
-Did you actually *test* that this works as desired?  And I don't mean
-your application could be compiled, but did you test that
-
-a) setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, ...) returned success and
-b) the behaviour is actually as desired?
-
-I didn't try this myself, but I bet that a) already fails to work.
-setsockopt handles one flag at a time.  To set two flags as in
-SO_REUSEADDR *and* SO_BROADCAST, you have to call setsockopt twice,
-once per flag.
-
-And here comes the surprising fact that Cygwin's setsockopt/getsockopt
-functions are not just wrappers for the underlying Windows functions,
-but there's s quite a bit of checking, tweaking and faking involved.
-
-To implement this in Cygwin, defining a flag value for SO_REUSEPORT as
-you did (the value SO_REUSEADDR | SO_BROADCAST is actually ok-ish, it
-doesn't clash with the other SOL_SOCKET values, but see below) is just
-the first step.
-
-The second step involves calling Windows' setsockopt correctly (twice) in
-fhandler_socket_inet::setsockopt and an equivalent implementation in
-fhandler_socket_inet::getsockopt for reading the value.
-
-However, I have some doubts in terms of b) as well. The SO_BROADCAST
-option only makes sense on datagram sockets.  Read the question on
-stackoverflow again: It asks for a solution to reuse *and* receive
-broadcast packages.  That's not what SO_REUSEPORT implies.
-
-To emulate SO_REUSEPORT, you could probably simply set the SO_REUSEADDR
-flag.  https://stackoverflow.com/questions/14388706/how-do-so-reuseaddr-and-so-reuseport-differ hints at that and the documented behaviour of Winsock's
-bind(2) supports this.
-
-This is actually different from the case of a Cygwin app requesting
-SO_REUSEADDR.  We *never* set the SO_REUSEADDR flag because the Windows
-default behaviour without SO_REUSEADDR is equivalent to the BSD
-behaviour with SO_REUSEADDR.  What we do is only noting that the
-app set the SO_REUSEADDR flag, because if it didn't, we set the
-SO_EXCLUSIVEADDRUSE option at bind(2) time.
-
-tl;dr: to implement SO_REUSEPORT, make Cygwin actually setting the
-SO_REUSEADDR flag and make sure to handle this scenario in
-fhandler_socket_inet::bind, too.  This will probably do what you want.
+I honestly don't know.
 
 
 Corinna
