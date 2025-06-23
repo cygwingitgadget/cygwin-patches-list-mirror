@@ -1,86 +1,69 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A919C38693C9; Mon, 23 Jun 2025 07:12:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A919C38693C9
+	id 170E1384059D; Mon, 23 Jun 2025 07:44:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 170E1384059D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1750662767;
-	bh=CX6g2th6sNygDlSnn3xG2yhkieYt6YEfNOcpF15QfMI=;
+	s=default; t=1750664661;
+	bh=w415UQpbk4f1WfpT/wqzemmfInBfEUFsX7AAPKjpVlc=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=KBZkyklXiHCCyau6VqLFrrCAwbLqUQ0y606Fhvs4R3P0sjRegxBhAmZnGwzzRrNDt
-	 B5SDvtJdT0zSFujxLSR/3ceV+2XH5A4xUvunPiN2azSstoDyMO/X3Gr2kX8ET+IUt4
-	 0wexCWH2mWNTpnrFLhHVc1E1U6BkNw//kncruSs0=
+	b=uTHzjFlnOal5rVf8KmF19RDdZqVHeAandNQxdrteNzU0Cjoz5T7g2zzeyDwwbIrJl
+	 oIOb+WtTytwow5sZ/vO7vWJZHCw/x0zq/EudTtJjuQ0q6j6OwDjgOavPSvXcCG8fMp
+	 UFP7TMCfEOBb7ZYN+dutrcPbx5V0yiDlfXZq7BWM=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6F1E2A80846; Mon, 23 Jun 2025 09:12:45 +0200 (CEST)
-Date: Mon, 23 Jun 2025 09:12:45 +0200
+	id D5EA4A80846; Mon, 23 Jun 2025 09:44:18 +0200 (CEST)
+Date: Mon, 23 Jun 2025 09:44:18 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: stack base initialization for
- AArch64
-Message-ID: <aFj-bZ28sTEOvVqj@calimero.vinschen.de>
+Subject: Re: [PATCH][API-CONFORMAANCE] Increase SYMLOOP_MAX to 63
+Message-ID: <aFkF0sdBek5cTNBH@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <DB9PR83MB0923A2E70C6E9F5931020E409272A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <f93437b4-a88d-9cc6-b156-a37b1e629810@jdrake.com>
- <5a0ee0d2-6fac-1886-45c0-c75dba8d0bd7@jdrake.com>
- <DB9PR83MB0923E495EA001D0887EC80469279A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+References: <CAHnbEG+-vkWb3F9HJFNdtMt1wAtm90kz81p8H=0Y7QrGHn50ag@mail.gmail.com>
+ <aFFOZ0-JHbJKs1Fc@calimero.vinschen.de>
+ <CAHnbEGJCqd3cdB-Ky4-PbWzw=PSO7u7WKoL_t0boQotCGK5SfQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB9PR83MB0923E495EA001D0887EC80469279A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+In-Reply-To: <CAHnbEGJCqd3cdB-Ky4-PbWzw=PSO7u7WKoL_t0boQotCGK5SfQ@mail.gmail.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 23 06:29, Radek Barton via Cygwin-patches wrote:
-> Hello.
+On Jun 20 13:24, Sebastian Feld wrote:
+> On Tue, Jun 17, 2025 at 1:16 PM Corinna Vinschen
+> <corinna-cygwin@cygwin.com> wrote:
+> >
+> > Hi Sebastian,
+> >
+> > On Jun 17 09:48, Sebastian Feld wrote:
+> > > The following patch increases from 10 to 63, per Windows spec
+> > > https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points
+> > >
+> > > Security impact is minor, SYMLOOP_MAX is just an artificial limiter to
+> > > prevent endless loops.
+> >
+> > In case of Cygwin (Cygwin is slow, we all know that), the rather low
+> > SYMLOOP_MAX was chosen so the path handling didn't get even slower in
+> > some circumstances I don't remember anymore.  Maybe the times when this
+> > was relevant are over, so we can try this.
 > 
-> Thank you for pointing this out. I didn't know this was related to ABI
-> calling conventions in this particular case. Simple removal of the
-> `sub` instruction is causing tests regressions in our development
-> branch [...]
+> 1. Cygwin is NOT slow. Who says that?
 
-Just removing the sub expression seems wrong anyway because the code
-would neglect to set the sp register, isn't it?
+It's an old meme.
+
+> 2. If there is a performance impact, then this should be documented in
+> the source code.
+> 
+> > However, please send a real git patch created with `git format-patch'
+> > and don't forget your Signed-off-by:".
+> 
+> Patch attached.
+
+Pushed.
+
+> Are there CI or regression test scripts where I could add a test module?
+
+You can add something to winsup/testsuite I guess.
 
 
 Thanks,
 Corinna
-
-
-> current upstream master branch (induced by recent changes to pthread).
-> It will take some time to investigate and validate this change.
-> 
-> Thank you for your patience,
-> 
-> Radek
-> 
-> ________________________________________
-> From: Jeremy Drake <cygwin@jdrake.com>
-> Sent: Saturday, June 21, 2025 8:47 PM
-> To: Radek Barton <radek.barton@microsoft.com>
-> Cc: cygwin-patches@cygwin.com <cygwin-patches@cygwin.com>
-> Subject: [EXTERNAL] Re: [PATCH] Cygwin: stack base initialization for AArch64
->  
-> On Wed, 18 Jun 2025, Jeremy Drake via Cygwin-patches wrote:
-> 
-> > On Wed, 18 Jun 2025, Radek Barton via Cygwin-patches wrote:
-> >
-> > > -#ifdef __x86_64__
-> > >            /* Set stack pointer to new address.  Set frame pointer to
-> > >               stack pointer and subtract 32 bytes for shadow space. */
-> > > +#if defined(__x86_64__)
-> > >            __asm__ ("\n\
-> > >                     movq %[ADDR], %%rsp \n\
-> > >                     movq  %%rsp, %%rbp  \n\
-> > >                     subq  $32,%%rsp     \n"
-> > >                     : : [ADDR] "r" (stackaddr));
-> > > +#elif defined(__aarch64__)
-> > > +         __asm__ ("\n\
-> > > +                  mov fp, %[ADDR] \n\
-> > > +                  sub sp, fp, #32 \n"
-> >
-> > Is the 32-byte shadow space part of the aarch64 calling convention spec,
-> > or is this just copying what x86_64 was doing?  My impression is that this
-> > space was part of the x86_64 calling convention.
-> 
-> The patch for pthread stack initialization dropped the 32-byte shadow
-> space, and I believe this patch should as well.
