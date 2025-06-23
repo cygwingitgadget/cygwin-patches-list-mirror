@@ -1,156 +1,182 @@
-Return-Path: <SRS0=2kyc=ZG=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.227.185])
-	by sourceware.org (Postfix) with ESMTPS id A96E13851158
-	for <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 11:52:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A96E13851158
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A96E13851158
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.185
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750679532; cv=none;
-	b=hr3OsioiGoHRCTFcY4TidZL1CIiOWXx178GMq1P9PlgU82QHkBrQfrhlI7sSDmz+vRYiva/D6XZL8DzbjIPXUqvTlmP4UzbUDxDZaD5cGqclRY586HaG3c/k4MjC5hSYFLnhFTzLMTWYIRnYce5hx3hUuC1I/ThbeDSNXMZ2g70=
+Return-Path: <SRS0=VaCb=ZG=gmx.de=johannes.schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by sourceware.org (Postfix) with ESMTPS id 9D3FE3851165
+	for <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 12:09:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9D3FE3851165
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9D3FE3851165
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.20
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750680593; cv=none;
+	b=JrDlPtOfHDLdDiWx4KSw5Sg0Ns9AQemfBasEHwAhqsHL917PgY/LofcGF1CGV/4Ujpwob+HvzAtqe8F2fN4GzdSrl9S2evyQvBOfCW2mAihdVYtdJgl7DCIUwi08UGKqjxu7+X14+mXxFnoddYE8/yf6mWpBxI4rJLIXf/mJ9+4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750679532; c=relaxed/simple;
-	bh=kwyrqyERxpZggELrtvBeed/ibbd/lMhfOZDibe8fAsE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Fkkp8+W2naf7jgxJobZIR1uHkTClTSwLKDREEnyiYCFayYohpCjpWjYn8Oaii4eSMFcfAlZ9HpERSR8FTnG9PT8BFub7FkWVTQvM4j8Yyx9rzTL8ConzE/sSIu1Y4DxXfQzR4R23C6sx8G7BQe1bHA1+rp29ylrRrAC2z7Q6/ZQ=
+	t=1750680593; c=relaxed/simple;
+	bh=r+STsJB4pOmTgWv7PYus25RLD26xB6p+mTlEyPTm3Vk=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tz1pdps7a/gH5NOsSjU3i/TqqZXn1A3KlUSbEENIyN+IJ2OyP3UZ6Ey7KNWXZmpANAY5k5mIk6ayl0kxv/AAj2nAQYCDAnUvSEkv8IrApma/a3aXnweBeGL1v72ZvRw0Y0uzzi5kXRl726+9aLaxR6g2gI+nqESDqKi+HE0SzBc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A96E13851158
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9D3FE3851165
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=KMbKoFAt
-Received: from localhost.localdomain by mta-snd-e09.mail.nifty.com
-          with ESMTP
-          id <20250623115208405.DLLV.58584.localhost.localdomain@nifty.com>;
-          Mon, 23 Jun 2025 20:52:08 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=JBLdxDr+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1750680591; x=1751285391;
+	i=johannes.schindelin@gmx.de;
+	bh=e9Rddm5FIfgHD+PT5VlBlOvNojrpaozylJbnE+fxq8c=;
+	h=X-UI-Sender-Class:Date:From:To:Subject:Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=JBLdxDr+1LBybUOLo/LL1gyiVmhA5ZCzKBR0shegQXmNWfzdaTQdepMt5zyxSboY
+	 HK2Vpv1zGZJdtPueN/lKrYJ2aWXka4ES8YntaDgtCvivu5CnON+rfETR7NHDCus3V
+	 T2MUObwv5cPW4WV14In4dmFAzY4DiVPkLgFpiMwAutCZZr1c/4Z6B/CpYnaHjfUvs
+	 hO0GY5rTK6H6zBXFFzRNe6RhpHVBBcCT2N7Ze8hYVukmcpxMntsCwF4ir5AHl9CzP
+	 JukjcHQ6DvzkAJZ7277lrm1/ldLUR6yceqtYI3an+zukz/rDbcnnWa6T/JHrtr3PS
+	 YvUnmaYaKpyytWhA8Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.23.242.68] ([89.1.215.6]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ81-1uHHYY0bn3-00MUwM for
+ <cygwin-patches@cygwin.com>; Mon, 23 Jun 2025 14:09:51 +0200
+Date: Mon, 23 Jun 2025 14:09:49 +0200 (CEST)
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Jeremy Drake <cygwin@jdrake.com>
-Subject: [PATCH] Cygwin: signal: Do not suspend myself and use VEH
-Date: Mon, 23 Jun 2025 20:51:44 +0900
-Message-ID: <20250623115152.1844-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
+Subject: [PATCH] pipe: fix SSH hang (again)
+Message-ID: <c9b1313d5d8a690aae9788402ec5190a1f18ce75.1750679728.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1750679528;
- bh=6DdYj/8QfzHx5JbnIXU4p6fPUV6nuP9qFt2NqiJ009Y=;
- h=From:To:Cc:Subject:Date;
- b=KMbKoFAtVOoziPGLe4lk1p6eO+6Dj5dXvnXRvMCYrHtiI3kZVLkifDwKnt8ugyQpVqIgxEaP
- Lpl5aQ+WUTUnsT87d+lsKaR+a0rELgQGGFfpEyA6w3Mrl486+xYvkkj58OC2dX2XoMjdz2Wuir
- E7DByjFuBX4Q56Glwl4cfje0iCDzssYEkyRC66V5Sjpks4ejt+k73Jlti9iYjRlOeDrJUw2F9L
- xdsGgB1FkpvMScxUaOXocQHtAYoDGSTB1oSNBuqySFN3jtYkk4+SDqt44U6KmBQOEu2ojaZmhf
- sLvuqw7yJVnU54Fio3RHyLiXoTN1HtjCpQJQrBJw6DNN/4Ww==
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_PSBL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:t3oRQnPu8ZAnI9RWgvPWYwyV1R+XATGx5K47KVCgw+hgdIBSjpn
+ oTcq046yT9an544t70X9f4xCL7MFaDnFXHiixqXoj7z7PlAe4MRxsshL6ahlsi0Grn/sEox
+ T4IRdz/ECEI3sSxq0Q6xSGG8556K8UoefDDZ2CInyrKCwnachmHOMohE/P0yIPLSlNJCpZr
+ BR2PE7r6ClIVZFwM9LA6Q==
+UI-OutboundReport: notjunk:1;M01:P0:5FscQeWYcPw=;+5/e4bAmExyDsDfFAnPrff5jG3a
+ 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
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_ABUSEAT,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_SBL_CSS,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-After the commit f305ca916ad2, some stress-ng tests fail in arm64
-windows. There seems to be two causes for this issue. One is that
-calling SuspendThread(GetCurrentThread()) may suspend myself in
-the kernel. Branching to sigdelayed in the kernel code does not
-work as expected as the original _cygtls::interrup_now() intended.
-The other cause is, single step exception sometimes does not trigger
-exception::handle() for some reason. Therefore, register vectored
-exception handler (VEH) and use it for single step exception instead.
+The recent changes in Cygwin's pipe logic are a gift that keeps on
+giving.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258332.html
-Fixes: f305ca916ad2 ("Cygwin: signal: Prevent unexpected crash on frequent SIGSEGV")
-Reported-by: Jeremy Drake <cygwin@jdrake.com>
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/exceptions.cc           | 46 +++++++++++++++------------
- winsup/cygwin/local_includes/cygtls.h |  1 +
- 2 files changed, 27 insertions(+), 20 deletions(-)
+The recurring pattern is that bugs are fixed, but with many of these bug
+fixes, new bugs are produced, and we are stuck in this seemingly endless
+tunnel of fixing bugs caused by bug fixes.
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index a4699b172..e5193551b 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -653,13 +653,6 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
-   static int NO_COPY debugging = 0;
-   _cygtls& me = _my_tls;
- 
--  if (me.suspend_on_exception)
--    {
--      SuspendThread (GetCurrentThread ());
--      if (e->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
--	return ExceptionContinueExecution;
--    }
--
-   if (debugging && ++debugging < 500000)
-     {
-       SetThreadPriority (hMainThread, THREAD_PRIORITY_NORMAL);
-@@ -923,6 +916,22 @@ sig_handle_tty_stop (int sig, siginfo_t *, void *)
- }
- } /* end extern "C" */
- 
-+static HANDLE h_veh = NULL;
-+static LONG CALLBACK
-+veh (EXCEPTION_POINTERS *ep)
-+{
-+  if (_my_tls.suspend_on_exception)
-+    {
-+      _my_tls.in_exception_handler = true;
-+      while (_my_tls.suspend_on_exception) ; /* Don't call yield() to privent
-+						the thread form being suspended
-+						in the kernel. */
-+      if (ep->ExceptionRecord->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
-+	return EXCEPTION_CONTINUE_EXECUTION;
-+    }
-+  return EXCEPTION_CONTINUE_SEARCH;
-+}
-+
- bool
- _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
- 			struct sigaction& siga)
-@@ -943,25 +952,22 @@ _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
- 	 by setting the trap flag (TF) before calling ResumeThread(). This
- 	 will trigger either STATUS_SINGLE_STEP or the exception caused by
- 	 the instruction that Rip originally pointed to.  By suspending the
--	 targeted thread within exception::handle(), Rip no longer points
--	 to the problematic instruction, allowing safe handling of the
--	 interrupt. As a result, Rip can be adjusted appropriately, and the
--	 thread can resume execution without unexpected crashes.  */
-+	 targeted thread within the vectored exception handler veh(), Rip no
-+	 longer points to the problematic instruction, allowing safe handling
-+	 of the interrupt.  As a result, Rip can be adjusted appropriately,
-+	 and the thread can resume execution without unexpected crashes. */
-       if (!inside_kernel (cx, true))
- 	{
-+	  if (h_veh == NULL)
-+	    h_veh = AddVectoredExceptionHandler (1, veh);
- 	  cx->EFlags |= 0x100; /* Set TF (setup single step execution) */
- 	  SetThreadContext (*this, cx);
- 	  suspend_on_exception = true;
-+	  in_exception_handler = false;
- 	  ResumeThread (*this);
--	  ULONG cnt = 0;
--	  NTSTATUS status;
--	  do
--	    {
--	      yield ();
--	      status = NtQueryInformationThread (*this, ThreadSuspendCount,
--						 &cnt, sizeof (cnt), NULL);
--	    }
--	  while (NT_SUCCESS (status) && cnt == 0);
-+	  while (!in_exception_handler)
-+	    yield ();
-+	  SuspendThread (*this);
- 	  GetThreadContext (*this, cx);
- 	  suspend_on_exception = false;
- 	}
-diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
-index 44bd44e72..05ac5627d 100644
---- a/winsup/cygwin/local_includes/cygtls.h
-+++ b/winsup/cygwin/local_includes/cygtls.h
-@@ -204,6 +204,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
-   __tlsstack_t stack[TLS_STACK_SIZE];
-   unsigned initialized;
-   volatile bool suspend_on_exception;
-+  volatile bool in_exception_handler;
- 
- public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
-   void init_thread (void *, DWORD (*) (void *, void *));
--- 
-2.45.1
+In cbfaeba4f7 (Cygwin: pipe: Fix incorrect write length in raw_write(),
+2024-11-06), for example, a segmentation fault was fixed. Which is good!
+However, a bug was introduced, where e.g. Git for Windows' `git clone`
+via SSH frequently hangs indefinitely for large-ish repositories, see
+https://github.com/git-for-windows/git/issues/5688.
 
+That commit removed logic whereby in non-blocking mode, not only the
+chunk size, but also the overall count of bytes to write (`len`) was
+clamped to whatever is indicated as the `WriteQuotaAvailable`. Now only
+`chunk` is clamped to that, but `len` is left at its original number.
+However, the following `while` loop expects `len - chunk` (which is
+assigned to `len1`) not to be positive in non-blocking mode.
+
+Let's reinstate that clamping logic and implicitly fix this SSH hang.
+
+Fixes: cbfaeba4f7 (Cygwin: pipe: Fix incorrect write length in raw_write()=
+, 2024-11-06)
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+=2D--
+Published-As: https://github.com/dscho/msys2-runtime/releases/tag/fix-ssh-=
+hangs-reloaded-v1
+Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime fix-ssh-han=
+gs-reloaded-v1
+
+	This commit message will like any love you can give it. For
+	example, I do not _quite_ understand why the `while` loop skips
+	large chunks of code unless `len1 > 0`, and what the exact idea
+	was behind having that `while` loop even for non-blocking mode.
+	Could anyone help me understand that `raw_write()` method? Is
+	there any good reason why the non-blocking mode runs into a
+	`while` loop? Is it supposed to be run only once in non-blocking
+	mode, is _that_ the big secret that allows the code to be shared
+	between blocking and non-blocking mode? If so, wouldn't it be much
+	better to refactor out that logic and then have non-blocking mode
+	take a short-cut, for clarity's sake and peace of readers' mind?
+
+	What I am quite confident is that this works around the problems.
+
+	I would have put more work into the commit message, if it weren't
+	for two counter-acting points:
+
+	1. This seems to be a pretty bad regression by which many Git for
+	   Windows users are affected. So I do feel quite the pressure to
+	   get a fix out to those users.
+
+	2. Despite my pleas, the commit messages in the pipe-related
+	   changes keep having too many gaps, still leave way too much
+	   unclear for me to make any sense of them, and I have to admit
+	   that I do not want to be the only person in that space to put
+	   in a large effort to write stellar commit messages. Therefore I
+	   left this here commit message in a state I consider "good
+	   enough", even if I am more than willing to improve it should
+	   someone enlighten me as to the questions I raised above.
+
+ winsup/cygwin/fhandler/pipe.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.=
+cc
+index e35d523bbc..13af7f2ae1 100644
+=2D-- a/winsup/cygwin/fhandler/pipe.cc
++++ b/winsup/cygwin/fhandler/pipe.cc
+@@ -542,6 +542,8 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t=
+ len)
+=20
+   if (len <=3D (size_t) avail)
+     chunk =3D len;
++  else if (is_nonblocking ())
++    chunk =3D len =3D avail;
+   else
+     chunk =3D avail;
+=20
+
+base-commit: 1186791e9f404644832023b8fa801227c2995ab7
+=2D-=20
+2.50.0.windows.1
