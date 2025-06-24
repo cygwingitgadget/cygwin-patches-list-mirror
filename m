@@ -1,191 +1,126 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 58CE6385843B; Tue, 24 Jun 2025 08:02:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 58CE6385843B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1750752130;
-	bh=eJdGAU+wOLnWmheNCOPUaOqYgj43jOU7cyt4PiNN+sE=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=bKwTDp50cqcjQhfUnqTIR3oq/ZWk3sPPCtQRl9C2qAMA4vDe5SFIy+yzGxBKpmwvs
-	 vWZducEwJSo759tVpiZXrjEuADpHMwC82Ayip1vUb3UrSz06TmTFqJeRDu07GmOG5q
-	 wQa91znErE1DzB72Fqq7n1sn+icIqxVsJAMmc14k=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 326A5A80CF9; Tue, 24 Jun 2025 10:02:08 +0200 (CEST)
-Date: Tue, 24 Jun 2025 10:02:08 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=Y/LP=ZH=gmx.de=johannes.schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by sourceware.org (Postfix) with ESMTPS id 997853858C24
+	for <cygwin-patches@cygwin.com>; Tue, 24 Jun 2025 08:08:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 997853858C24
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 997853858C24
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750752494; cv=none;
+	b=oOUbhBufCyr8xTmrqq+tMzdN7Qh2m7TBfBHc1dIYMm8UUcz4S+0wBTKQ69mjInE0ffKXbhlC6NBnf778B8d7T7cbmQzBhlf3KMyuMLWXrj62jEP/HHdJ1Xfu2ZjWVPTNcQvp5zQqCcS5D0raMe3v9c896rjLHxP562sAET1Qa+Y=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1750752494; c=relaxed/simple;
+	bh=UsqblyQZWXRmzCv+TGlReII/EWCEl1ke8TWkzEOlbxk=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=nIv1opkhlTPaW204f8sEv3pI1imI5eLyuHFJpPuyUdmGjVaT7rVaqBnJTwlrcP5fQjB9o2mfn7k4R8hrGKoP7DSrOrFfoSPyRN8AW0X50jkRkBOcQMQGE2unGtVwH4shLrDK/iDkdsEcRggkni0PaDISu53gtSr1mqpzYyfACGI=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 997853858C24
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=jDFu1f/H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1750752492; x=1751357292;
+	i=johannes.schindelin@gmx.de;
+	bh=37bA631k/w68mLnK19Fi3uDvofKVrTqiu6yonRAdixw=;
+	h=X-UI-Sender-Class:Date:From:To:Subject:Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=jDFu1f/Ha9wi123cKFkIQ+bnOztqjzJ7BdAHvwjLHsTDrDxbS5IPLpnwxJPRoKZD
+	 S6WRmkyW39C0aeil/aU79i8hmBPb3mi/flYGusYDjqxjk3HpRnSJqBx7amP0my8Y6
+	 Vmx08kJVCZSQugz0Zmk5+yMo9WPQ/7vrnBXJO0JoIyCtMQOtDGB713DulF4wfYrPD
+	 N7V1ulIWpDbc/mRqstipwOswKB84JRH5xR+mXtrdhqzD98fNBHUSFgAmYDkFVRzuy
+	 iJGQsBrWP06aHrG+I1+8pFKj39xlOKzjHwvhVa8sHObuApmYBssw5a0yGXCEyUTbK
+	 S+94ZrV3aU3ONU9wYw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.23.242.68] ([89.1.215.6]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1uCaPF0Rv7-00S0vr for
+ <cygwin-patches@cygwin.com>; Tue, 24 Jun 2025 10:08:12 +0200
+Date: Tue, 24 Jun 2025 10:08:10 +0200 (CEST)
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Cygwin: signal: Do not suspend myself and use VEH
-Message-ID: <aFpbgHpjSYkgPGGI@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250623205707.1387-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: add release note about `..` symlinks
+Message-ID: <bcca7e8ef4ffea3405629285d3c79d9acaaeae0e.1750752451.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250623205707.1387-1-takashi.yano@nifty.ne.jp>
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:PdWKi++CKqSreHINLjMfoUaghaHSSQFFcXZeUb3FkZcLIh9ywy+
+ HIHKekHstjBtQhHxZTrf8+Alp7Qv7F9RxPYNxVKS6HwH2UTxwemSN+aWoYkvdRcLut0llx/
+ 5AIVqAwf7/ifoMONL6MADhkUtCrgLKJSaKUdhrY4nh0YNnv+0rpvDWxtycxEjPe9dc888tW
+ HXCEjYMT8gBLEbpj6XqaQ==
+UI-OutboundReport: notjunk:1;M01:P0:uMv95WY0a7c=;XgwByH8ZwwuTqtB+azGPfmNRBVV
+ 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
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_ABUSEAT,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_W,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+=2D--
+Published-As: https://github.com/dscho/msys2-runtime/releases/tag/fix-dotd=
+ot-native_symlink-relnote-v1
+Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime fix-dotdot-=
+native_symlink-relnote-v1
 
-On Jun 24 05:56, Takashi Yano wrote:
-> After the commit f305ca916ad2, some stress-ng tests fail in arm64
-> windows. There seems to be two causes for this issue. One is that
-> calling SuspendThread(GetCurrentThread()) may suspend myself in
-> the kernel. Branching to sigdelayed in the kernel code does not
-> work as expected as the original _cygtls::interrup_now() intended.
-> The other cause is, single step exception sometimes does not trigger
-> exception::handle() for some reason. Therefore, register vectored
-> exception handler (VEH) and use it for single step exception instead.
+	Here you go, sorry for missing that.
 
-Patch LGTM, except that we have to link against another DLL now.
-I searched for another way and it turns out there are equivalent
-Rtl functions RtlWaitOnAddress/RtlWakeAddressSingle in ntdll.dll.
+ winsup/cygwin/release/3.6.4 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I pasted my tweak to your patch below, hope that's ok with you.
-
-Can you check that it still works as expected?
-
-Thanks,
-Corinna
-
-P.S.: There is also a function RtlWakeAddressSingleNoFence.
-      Can anybody imagine what the difference is?  I'm not familiar with
-      this fence / no fence stuff...
-
-
-From 735c8d2cd6b27e810024a53e467bc5a2fc9d94d4 Mon Sep 17 00:00:00 2001
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-Date: Tue, 24 Jun 2025 05:56:57 +0900
-Subject: [PATCH] Cygwin: signal: Do not suspend myself and use VEH
-
-After the commit f305ca916ad2, some stress-ng tests fail in arm64
-windows. There seems to be two causes for this issue. One is that
-calling SuspendThread(GetCurrentThread()) may suspend myself in
-the kernel. Branching to sigdelayed in the kernel code does not
-work as expected as the original _cygtls::interrup_now() intended.
-The other cause is, single step exception sometimes does not trigger
-exception::handle() for some reason. Therefore, register vectored
-exception handler (VEH) and use it for single step exception instead.
-
-Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258332.html
-Fixes: f305ca916ad2 ("Cygwin: signal: Prevent unexpected crash on frequent SIGSEGV")
-Reported-by: Jeremy Drake <cygwin@jdrake.com>
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/exceptions.cc           | 50 ++++++++++++++++-----------
- winsup/cygwin/local_includes/cygtls.h |  1 +
- winsup/cygwin/local_includes/ntdll.h  |  2 ++
- 3 files changed, 33 insertions(+), 20 deletions(-)
-
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index a4699b17271a..4105a4bc560f 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -653,13 +653,6 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
-   static int NO_COPY debugging = 0;
-   _cygtls& me = _my_tls;
- 
--  if (me.suspend_on_exception)
--    {
--      SuspendThread (GetCurrentThread ());
--      if (e->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
--	return ExceptionContinueExecution;
--    }
--
-   if (debugging && ++debugging < 500000)
-     {
-       SetThreadPriority (hMainThread, THREAD_PRIORITY_NORMAL);
-@@ -923,6 +916,24 @@ sig_handle_tty_stop (int sig, siginfo_t *, void *)
- }
- } /* end extern "C" */
- 
-+#ifdef __x86_64__
-+static LONG CALLBACK
-+singlestep_handler (EXCEPTION_POINTERS *ep)
-+{
-+  if (_my_tls.suspend_on_exception)
-+    {
-+      _my_tls.in_singlestep_handler = true;
-+      RtlWakeAddressSingle ((void *) &_my_tls.in_singlestep_handler);
-+      while (_my_tls.suspend_on_exception)
-+	; /* Don't call yield() to prevent the thread
-+	     from being suspended in the kernel. */
-+      if (ep->ExceptionRecord->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
-+	return EXCEPTION_CONTINUE_EXECUTION;
-+    }
-+  return EXCEPTION_CONTINUE_SEARCH;
-+}
-+#endif
+diff --git a/winsup/cygwin/release/3.6.4 b/winsup/cygwin/release/3.6.4
+index 8eb693c40c..c80a29ea4f 100644
+=2D-- a/winsup/cygwin/release/3.6.4
++++ b/winsup/cygwin/release/3.6.4
+@@ -6,3 +6,6 @@ Fixes:
+=20
+ - Make pthread initializer macros compatible with C++ constinit.
+   Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258305.html
 +
- bool
- _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
- 			struct sigaction& siga)
-@@ -942,27 +953,26 @@ _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
- 	 a crash. To prevent this, advance execution by a single instruction
- 	 by setting the trap flag (TF) before calling ResumeThread(). This
- 	 will trigger either STATUS_SINGLE_STEP or the exception caused by
--	 the instruction that Rip originally pointed to.  By suspending the
--	 targeted thread within exception::handle(), Rip no longer points
-+	 the instruction that Rip originally pointed to. By suspending the
-+	 targeted thread within singlestep_handler(), Rip no longer points
- 	 to the problematic instruction, allowing safe handling of the
--	 interrupt. As a result, Rip can be adjusted appropriately, and the
--	 thread can resume execution without unexpected crashes.  */
-+	 interrupt.  As a result, Rip can be adjusted appropriately,
-+	 and the thread can resume execution without unexpected crashes. */
-       if (!inside_kernel (cx, true))
- 	{
-+	  HANDLE h_veh = AddVectoredExceptionHandler (0, singlestep_handler);
- 	  cx->EFlags |= 0x100; /* Set TF (setup single step execution) */
- 	  SetThreadContext (*this, cx);
- 	  suspend_on_exception = true;
-+	  in_singlestep_handler = false;
-+	  bool bool_false = false;
- 	  ResumeThread (*this);
--	  ULONG cnt = 0;
--	  NTSTATUS status;
--	  do
--	    {
--	      yield ();
--	      status = NtQueryInformationThread (*this, ThreadSuspendCount,
--						 &cnt, sizeof (cnt), NULL);
--	    }
--	  while (NT_SUCCESS (status) && cnt == 0);
-+	  while (!in_singlestep_handler)
-+	    RtlWaitOnAddress (&in_singlestep_handler, &bool_false,
-+			      sizeof (bool), NULL);
-+	  SuspendThread (*this);
- 	  GetThreadContext (*this, cx);
-+	  RemoveVectoredExceptionHandler (h_veh);
- 	  suspend_on_exception = false;
- 	}
- #endif
-diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
-index 44bd44e72946..9f83c134c88c 100644
---- a/winsup/cygwin/local_includes/cygtls.h
-+++ b/winsup/cygwin/local_includes/cygtls.h
-@@ -204,6 +204,7 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
-   __tlsstack_t stack[TLS_STACK_SIZE];
-   unsigned initialized;
-   volatile bool suspend_on_exception;
-+  volatile bool in_singlestep_handler;
- 
- public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
-   void init_thread (void *, DWORD (*) (void *, void *));
-diff --git a/winsup/cygwin/local_includes/ntdll.h b/winsup/cygwin/local_includes/ntdll.h
-index a2c5b27db843..19908935fc59 100644
---- a/winsup/cygwin/local_includes/ntdll.h
-+++ b/winsup/cygwin/local_includes/ntdll.h
-@@ -1660,6 +1660,8 @@ extern "C"
- 					 BOOLEAN);
-   WCHAR RtlUpcaseUnicodeChar (WCHAR);
-   NTSTATUS RtlUpcaseUnicodeString (PUNICODE_STRING, PUNICODE_STRING, BOOLEAN);
-+  VOID RtlWakeAddressSingle (PVOID);
-+  NTSTATUS RtlWaitOnAddress (volatile void *, PVOID, SIZE_T, PLARGE_INTEGER);
-   NTSTATUS RtlWriteRegistryValue (ULONG, PCWSTR, PCWSTR, ULONG, PVOID, ULONG);
- 
- #ifdef __cplusplus
--- 
-2.49.0
++- Fix creating native symlinks to `..` (it used to target `../../<dir>`
++  instead).
 
+base-commit: 5979f22b9094a22d07cc2382e129f3f858008c88
+=2D-=20
+2.50.0.windows.1
