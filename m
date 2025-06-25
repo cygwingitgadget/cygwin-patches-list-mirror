@@ -1,106 +1,106 @@
 Return-Path: <SRS0=0tR4=ZI=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id AE7BE3857B90
-	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:07:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AE7BE3857B90
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	by sourceware.org (Postfix) with ESMTPS id 562463857B8F
+	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:10:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 562463857B8F
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AE7BE3857B90
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750853244; cv=none;
-	b=Ga6rdTmjQxxblmc6X4WYbudE9rdbhQk++KLzPANIQJsJ4KDLa1NOD/HqQ/hePzGffv+PpmU0cScNcMT4UOopJFRBHaOkHQpP5s1kcL8sSoq70+bWxYYGia0JIAC7Vu00Cpc6908/SA6f/wAlnuLREmWeKrAKD1NmajTrLo7l7ak=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 562463857B8F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.22
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750853442; cv=none;
+	b=B5g0F1Xq7nT37U7E8NI5x+/zBUxB1jw7BFjSZcM3tMJoCErdEld6ByVOCnDmn/h7pM9iYLbA3Koou8XFU+aWpk0ywRgR3/EBtsbWzyW5Q2sdbYu1tfE4U10oZ9P6Jnkn5GNQveWB0RQCiPEZrgoSqNr+HU66P/xStUXvSiu5njg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750853244; c=relaxed/simple;
-	bh=H8uHHo8/qbhwu2qETYozSoDuiUrda2RX9ZdVeXz3x2M=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=aTWerEQx1ZnH4+QhFRW5qRD+YORI6D/dOghL1ed6fYQUXs5uKGewY+t+kJT1avH9rsx1PnfD6FnDTa4DltdBzxtkCLNclVmzv9oTKScVhtVdUzKa6Z88FPB+zX9XawwybHiortCdsjQ5++HewkB8sDzQnoPE66zBAKz/yG6AXzc=
+	t=1750853442; c=relaxed/simple;
+	bh=1aPL/wNIGN8Uck4i9cq20vZw0RIqYDyUxo4lNRBfcL8=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=JDXjxhYwxjof5GxhrDeYGlUE3ouXYPwbmnmww4opbR+c510Ip+sT8O9+c2xH9uR3kBrj1MsQNFGya/jqEaFGFpMGL0cVf+LJbd9M7oowJQi1Oaispl/ONvrCcHrWrlivaj7cIa8QmOQVK6fKMZeVYvRl2o2/7SaqNHpdGAtplKA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE7BE3857B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 562463857B8F
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=bywN6bdo
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=nQp9PpL+
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1750853237; x=1751458037;
+	s=s31663417; t=1750853441; x=1751458241;
 	i=johannes.schindelin@gmx.de;
-	bh=H8uHHo8/qbhwu2qETYozSoDuiUrda2RX9ZdVeXz3x2M=;
+	bh=RLE0HHx3d3buF/hxh9IoDWRFFqOJmhDze8VcTi56KoI=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=bywN6bdo4wAtXOtInD0K7Gn91jlsN9aVuX1w6ljcCIbVVEX9F8iC9dDrwaVBYGPZ
-	 dbq8n6xhAa60SrBqm4HoONlnrM4cCljdN8QnXhs31W5NjXxVW2tY/6l4S+bpxIHdT
-	 JYZQAtW3Say3W9N2ihJTB6Sq/B6dfgl1Z/a0ENo3Fa74sZ9GeSpMWRPvy4il3+xrR
-	 NJoZb5+2uq2b9DfL7oFEH1mRHQ3Jjv1ZnL/I2MZj8qW2mfCv3t1MZ1MVGsOr9D49V
-	 x4Zb8p2GYuRpLKjd/N9mMz2QqqZog6h9TyU1BCCSmW5t9b1/WiVHa0OkOMfOVTwIk
-	 GLBJbXvVNA4SjqJi2A==
+	b=nQp9PpL+QUVIx/qRUsV3VebKcGDcxoz1wl33mCwXRwv46F7/8ZwCW1rSQ/vx5HNI
+	 9dxSRhPTMhCQzjCU65yZSi5JtGTR/5n9Zt8mObmQJkLo07ikSaWy9wTNFtyCC2GGH
+	 lIEIzGdFLR4GB1v/8Pkvjne9sqGCk2fssPHTIz1UFKdH1T6TPAPTuWpkggSofXR6/
+	 oFS70ziO49wozlyHVs7UZb/g2fZh4QaRqMN9bF1/dl+eYZKSH8n1BhsoJbZJ6+/TC
+	 Khu9DaAZdcMpjNnQOwtlgSKzr0a5zTnZOdgC+AJHraDDFe/QeTcSn09c9bsT9Dy6K
+	 XkZatda0sCRpZKAPdQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [172.23.242.68] ([89.1.215.172]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MyKDU-1ugJcP087A-016KdC; Wed, 25
- Jun 2025 14:07:17 +0200
-Date: Wed, 25 Jun 2025 14:07:15 +0200 (CEST)
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxlzC-1uflS23pk6-016sMW; Wed, 25
+ Jun 2025 14:10:40 +0200
+Date: Wed, 25 Jun 2025 14:10:39 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] pipe: fix SSH hang (again)
-In-Reply-To: <20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp>
-Message-ID: <a379f48a-e0db-7769-2968-9c4df5293a0d@gmx.de>
+In-Reply-To: <20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp>
+Message-ID: <f0406c3d-3695-7743-b7a6-45bc11e75711@gmx.de>
 References: <c9b1313d5d8a690aae9788402ec5190a1f18ce75.1750679728.git.johann> <62e79c50daf4e3ae28db3ae1a3cf52460f0d8968.1750775114.git.johannes.schindelin@gmx.de> <20250625085316.35e6dda457b6dce9792c824a@nifty.ne.jp> <701dca10-214a-aa25-a58d-913dbcd258a3@gmx.de>
- <4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de> <20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp> <20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp>
+ <4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de> <20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:/ILv3naTHDw3qBgLTq884UEjizlk80atjvSfZRsC1Vc7o2fUcCV
- HsdOV4gfnn9KNxx+2MHDf7d7POcJnkOF7kPMyxzT6UBVTNzIuLFOkWH5ft7gB6SJ0mnE8qE
- R9jvEH9C7/F5Rcy6BfmWb/bG9Pkz5HfL1DSTxdA7EEBkDODIqhR7+Z56lYpAuwVC6zBasrz
- R0DH+9C6n4CArJLaZPF1g==
-UI-OutboundReport: notjunk:1;M01:P0:9ptDLVATfMk=;uo24ErbBP8ShOO1gT0yDfKC4Q5c
- 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
+X-Provags-ID: V03:K1:MVU5APKKDYVSZVaUUQWpYqsTloDPj4N5caiWHDb8gyB9wOel4Mj
+ XpaaKHCZs1mMU21I7lnBU9S5LPcB+cRPxeBgrFUWah3slXjfz59BV52Jv8A/UA+IQmxSl+V
+ /hwSsYsnIJ0V2PI2jAU2x5j84T292PI5wYu0/+YduNGc8j+zlKL6XBUYRlwmwvtkW07CUpv
+ YiAzVypFtbNZyzPU4SWGA==
+UI-OutboundReport: notjunk:1;M01:P0:b9GreQhYAY4=;YWxg8jRYXKk4kWaY3nZ1t/z4LEv
+ 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
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -108,34 +108,47 @@ Hi Takashi,
 
 On Wed, 25 Jun 2025, Takashi Yano wrote:
 
-> On Wed, 25 Jun 2025 19:55:34 +0900
-> Takashi Yano wrote:
-> >=20
-> > On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
-> > Johannes Schindelin wrote:
-> > >=20
-> > > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
-> > >=20
-> > > > On Wed, 25 Jun 2025, Takashi Yano wrote:
-> > > >=20
-> > > > > I'd revise the patch as follows. Could you please test if the
-> > > > > following patch also solves the issue?
-> > > >=20
-> > > > Will do.
-> > >=20
-> > > For the record, in my tests, this fixed the hangs, too.
-> >=20
-> > Thanks for testing.
-> > However, I noticed that this patch changes the behavior Corinna was
-> > concerned about.
+> On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
+> Johannes Schindelin wrote:
 >=20
-> The behaviour change can be checked using attached test case.
+> > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
+> >=20
+> > > On Wed, 25 Jun 2025, Takashi Yano wrote:
+> > >=20
+> > > > I'd revise the patch as follows. Could you please test if the
+> > > > following patch also solves the issue?
+> > >=20
+> > > Will do.
+> >=20
+> > For the record, in my tests, this fixed the hangs, too.
+>=20
+> Thanks for testing.
+> However, I noticed that this patch changes the behavior Corinna was
+> concerned about.
+>=20
+> After trying various things, I found yet another solution for the issue.
+>=20
+> diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pip=
+e.cc
+> index e35d523bb..e36aa57fc 100644
+> --- a/winsup/cygwin/fhandler/pipe.cc
+> +++ b/winsup/cygwin/fhandler/pipe.cc
+> @@ -647,7 +647,7 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size=
+_t len)
+>  	    }
+>  	  if (!NT_SUCCESS (status))
+>  	    break;
+> -	  if (io.Information > 0 || len <=3D PIPE_BUF || short_write_once)
+> +	  if (io.Information > 0 || len <=3D PIPE_BUF)
+>  	    break;
+>  	  /* Independent of being blocking or non-blocking, if we're here,
+>  	     the pipe has less space than requested.  If the pipe is a
+>=20
+> Johannes, could you please test this patch as well?
 
-I do not understand what this undocumented code is trying to demonstrate,
-not without any explanation.
-
-Could you rework it so that it becomes a proper test in the test suite
-that verifies that Cygwin behaves as desired, please?
+Do you mean on top of v2? Or without its changes? And what is the
+explanation that the commit message should carry? Sorry, this is too
+terse.
 
 Ciao,
 Johannes
