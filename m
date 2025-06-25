@@ -1,104 +1,104 @@
 Return-Path: <SRS0=0tR4=ZI=gmx.de=Johannes.Schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id CAAA63857C67
-	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 15:56:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CAAA63857C67
+	by sourceware.org (Postfix) with ESMTPS id 930A43857C67
+	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 15:58:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 930A43857C67
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CAAA63857C67
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 930A43857C67
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750866999; cv=none;
-	b=YsS1E67GDD2OV3udteL8bbq01ICGcrPFNXL/qoJG4BoqIhviK9mdnrAiHhCIONHzftypUZoT8XDPWSfE0soX3uw5NcYgv9OyMT86sSTT0lMPgWIM5cdP7n8WA/CLHn49xIrTiVsJ8TvGtpTV5jrAnnKkol12m+xQjfOvuieFkaE=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750867084; cv=none;
+	b=bBLKufbMlO0fIMJSgguZJKfgIVyAsKbyd1ddHHIrfnywcOqE2kXrJIr3asmqjYNg7v50WRG41YpPWjxmsq7q0lkBF/GNJlNVrLZb8Xrh4ytITSi216dmN7jecRvgKLXiL5Ma1D7kvo7oIQkpN/CKWeQUJHY+JRMJrT0J8FPxU0c=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750866999; c=relaxed/simple;
-	bh=AGS8gPylcM9Emlnke45YB+N20jMVJTSSMD0v428ly6Q=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=mKgEq6Jn0RewtcnBItxAZYd+wVUMMKbfvqjDxtUY9NOQguxBPV5U1z04ESbPyjyjm+RZ4KcUQanaSbrOdhOS29RvZ9NN02OFCYq11N86QOEWYyNqELSTD/kH5RYoxUIgrtO0S6WLbS40XLivAbeOFNrNQzP22Egrok2tDz8aKS0=
+	t=1750867084; c=relaxed/simple;
+	bh=thikU1sv3f0c3Z7mJSV0rHwVhG4X57GFwDsJiL0n6lw=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Ema7yOasMuS2HBaV6mU1aU3u7MIFBfR2fpcZ8xu80pdHhZVzNd9I6FyCGvQNrTOqYFXpPRlSAve7wLGeqtTAzh4MKYa8Y17G+rhkWt6WGpD4P6ViHMl1dV4DVNRMqwZk/1HZiJU/5dxOxC4DwUXEl9TID6Ky7DRCCxCj2hZqia0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CAAA63857C67
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 930A43857C67
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=USlDiXmy
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=hNDdKHhB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1750866997; x=1751471797;
+	s=s31663417; t=1750867078; x=1751471878;
 	i=johannes.schindelin@gmx.de;
-	bh=Lety4OXX0wro+tEigWZ4OmOSXFNSDV3lQmMBJTkEOwU=;
+	bh=thikU1sv3f0c3Z7mJSV0rHwVhG4X57GFwDsJiL0n6lw=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=USlDiXmyywXjAnLBXEHq8CPLyE5fYoFwCaHOQSqzsm8JckvhUaFZcucL4xEe/eJ3
-	 mj/hwnX27hjRjRND7gPMHsFaqe5z+JCLNyhk83pRFJPhEoz3TVJgWCqpYPPKN+TBl
-	 c4z7BPLbHcNmR93jjllIo4QHPg/E01wR4kE0uMY3R4O/uydvbal5ykFpuVdUxGuor
-	 NzYGwuqeS5NjNuhGb5S5anqh1KngnjBl5iw2zJ4+O0KhgbAJiF9taNp3VCDHMNpbR
-	 ystAGiIdV10lI8OpE8qky3WG5nOkaTMJftiaZjHbhQuYaiRiDZLaHgXHyCm/l9aSC
-	 Uhga3PKjkqW46FRflA==
+	b=hNDdKHhBn5wrdgE5dz3op990FNyPW7yv/g54q3czBd+AXGc1j4KTUGSpUTtBlcCT
+	 +uPly4+gbevlYH8yEuGy3MszyZG6dwJcmjNQe5RtHV9evsq8MfEpAEdwAw6J7YfVh
+	 eauSS/5EmdwpoaTH+DCJftpFbVn4sMZHy1PcwSLXVSLUWSIdz7FHk4oVrSuTcW7g7
+	 0kagNNOLJ7FXuOjtfqK1LNAm8ImR2AkR4LC6dXQjh5oNSByOrBMzQQClUBcJ5zOmo
+	 Arm1Z4RN7BJ5chZ4pVcV1chvA4d54IdyHvHCVw6kg1GGzLiGZQsEKsXj+pJBFAR0M
+	 V1XneT23vFWUqou2rA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [172.23.242.68] ([89.1.215.172]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV67y-1uLD5n1r6c-00KuYO; Wed, 25
- Jun 2025 17:56:37 +0200
-Date: Wed, 25 Jun 2025 17:56:35 +0200 (CEST)
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUXtY-1uLlMU0Y7c-00KMMF; Wed, 25
+ Jun 2025 17:57:58 +0200
+Date: Wed, 25 Jun 2025 17:57:56 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] pipe: fix SSH hang (again)
-In-Reply-To: <20250625212658.2f607120a5e7fd709cf8022e@nifty.ne.jp>
-Message-ID: <35fb9069-817b-7416-d810-be0187fc96a8@gmx.de>
+In-Reply-To: <20250625211754.c9b38091a64362f2d28da1f8@nifty.ne.jp>
+Message-ID: <934bc894-d2c4-2a7a-e236-abec9e1717fb@gmx.de>
 References: <c9b1313d5d8a690aae9788402ec5190a1f18ce75.1750679728.git.johann> <62e79c50daf4e3ae28db3ae1a3cf52460f0d8968.1750775114.git.johannes.schindelin@gmx.de> <20250625085316.35e6dda457b6dce9792c824a@nifty.ne.jp> <701dca10-214a-aa25-a58d-913dbcd258a3@gmx.de>
- <4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de> <20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp> <20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp> <a379f48a-e0db-7769-2968-9c4df5293a0d@gmx.de> <20250625212658.2f607120a5e7fd709cf8022e@nifty.ne.jp>
+ <4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de> <20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp> <20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp> <20250625211754.c9b38091a64362f2d28da1f8@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:C8B1Sq7+gdSTezS2itFKZb5vyPLcSfbEnQbeOMs2Zl0ceTh0Ylw
- NCmvNja/JbY+bQhflGBO0xwn2BOuPuhqsDvmSIGp1DIG2MrknkHJ72BIInoO5CFPoOtuoX/
- MHOIWs3oQp3In80aRbeHsRiUmyLX2MUPnSS3WbZt/IcIvCOehwQx+jzpq63o9K+1p0nQgwb
- RN+CNl+2t4Hq+UwUTXhpg==
-UI-OutboundReport: notjunk:1;M01:P0:jO0wLZWpYnM=;O+lGd0oBnsv7mTBiE9WaVdCQ+Dy
- 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
+X-Provags-ID: V03:K1:pEXdYfTwE02dMeSU0/yblWBvxzPUy/n3FBEnio26QgLtiU/BOI7
+ 6Q6EboUJ4JV35paSy53fKyMXHOMZ+611xFoNpRgoASdpDLN7zTm3FtI9cYQXZWYBi66QxpK
+ +iAgdpPEg+QOIMiD2H+QES0wZLeHYzkx3l8KGEurZHKYQhUJstC2CjKN8Z6YkKQIBN/oVv3
+ cY32ahjaY7BDk2nLDeHnQ==
+UI-OutboundReport: notjunk:1;M01:P0:kM+DBxGoUW8=;0PsdSYIc8CTXfArtNoDxErdv+G6
+ 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
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
@@ -108,94 +108,45 @@ Hi Takashi,
 
 On Wed, 25 Jun 2025, Takashi Yano wrote:
 
-> On Wed, 25 Jun 2025 14:07:15 +0200 (CEST)
-> Johannes Schindelin wrote:
-> > Hi Takashi,
-> >=20
-> > On Wed, 25 Jun 2025, Takashi Yano wrote:
-> >=20
-> > > On Wed, 25 Jun 2025 19:55:34 +0900
-> > > Takashi Yano wrote:
-> > > >=20
-> > > > On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
-> > > > Johannes Schindelin wrote:
-> > > > >=20
-> > > > > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
-> > > > >=20
-> > > > > > On Wed, 25 Jun 2025, Takashi Yano wrote:
-> > > > > >=20
-> > > > > > > I'd revise the patch as follows. Could you please test if th=
-e
-> > > > > > > following patch also solves the issue?
-> > > > > >=20
-> > > > > > Will do.
-> > > > >=20
-> > > > > For the record, in my tests, this fixed the hangs, too.
-> > > >=20
-> > > > Thanks for testing.
-> > > > However, I noticed that this patch changes the behavior Corinna wa=
-s
-> > > > concerned about.
+> On Wed, 25 Jun 2025 20:51:02 +0900
+> Takashi Yano wrote:
+> > On Wed, 25 Jun 2025 19:55:34 +0900
+> > Takashi Yano wrote:
+> > > Hi Johannes,
 > > >=20
-> > > The behaviour change can be checked using attached test case.
+> > > On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
+> > > Johannes Schindelin wrote:
+> > > > Hi Takashi,
+> > > >=20
+> > > > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
+> > > >=20
+> > > > > On Wed, 25 Jun 2025, Takashi Yano wrote:
+> > > > >=20
+> > > > > > I'd revise the patch as follows. Could you please test if the
+> > > > > > following patch also solves the issue?
+> > > > >=20
+> > > > > Will do.
+> > > >=20
+> > > > For the record, in my tests, this fixed the hangs, too.
+> > >=20
+> > > Thanks for testing.
+> > > However, I noticed that this patch changes the behavior Corinna was
+> > > concerned about.
 > >=20
-> > I do not understand what this undocumented code is trying to demonstra=
-te,
-> > not without any explanation.
-> >=20
-> > Could you rework it so that it becomes a proper test in the test suite
-> > that verifies that Cygwin behaves as desired, please?
+> > The behaviour change can be checked using attached test case.
 >=20
-> What the comment in the source code says:
->=20
->       /* NtWriteFile returns success with # of bytes written =3D=3D 0 if=
- writing
->          on a non-blocking pipe fails because the pipe buffer doesn't ha=
-ve
->      sufficient space.
->=20
->      POSIX requires
->      - A write request for {PIPE_BUF} or fewer bytes shall have the
->        following effect: if there is sufficient space available in the
->        pipe, write() shall transfer all the data and return the number
->        of bytes requested. Otherwise, write() shall transfer no data and
->        return -1 with errno set to [EAGAIN].
->=20
->      - A write request for more than {PIPE_BUF} bytes shall cause one
->        of the following:
->=20
->       - When at least one byte can be written, transfer what it can and
->         return the number of bytes written. When all data previously
->         written to the pipe is read, it shall transfer at least {PIPE_BU=
-F}
->         bytes.
->=20
->       - When no data can be written, transfer no data, and return -1 wit=
-h
->         errno set to [EAGAIN]. */
->=20
->       /* Independent of being blocking or non-blocking, if we're here,
->          the pipe has less space than requested.  If the pipe is a
->          non-Cygwin pipe, just try the old strategy of trying a half
->          write.  If the pipe has at
->          least PIPE_BUF bytes available, try to write all matching
->          PIPE_BUF sized blocks.  If it's less than PIPE_BUF,  try
->          the next less power of 2 bytes.  This is not really the Linux
->          strategy because Linux is filling the pages of a pipe buffer
->          in a very implementation-defined way we can't emulate, but it
->          resembles it closely enough to get useful results. */
+> Hmm, then, nga888(Andrew Ng @github)'s solution seems to be
+> the best one.
+> https://github.com/git-for-windows/git/issues/5688#issuecomment-29959528=
+82
 
-I do not understand what part of that code comment refers to either
-documented behavior or to a thorough test you performed. To the contrary,
-the code comment merely states "NtWriteFile returns success with # of
-bytes written =3D=3D 0 if writing on a non-blocking pipe fails because the
-pipe buffer doesn't have sufficient space." without backing up that claim
-with a reference.
-
-That's not good. I cannot give my blessing to your code change because you
-haven't yet given me any reason to be confident in it. I must therefore
-suspect that there are faults in it, based on the story the commit history
-of `winsup/cygwin/fhandler/pipe.cc` tells.
+"Best" by what rationale? That it passes the attached test case (which is
+not a test case, by the way, as there are no assertions that can fail, and
+it is not integrated into the test case, please fix both aspects before
+you call it a test case).
 
 Ciao,
 Johannes
+
+>=20
+> The test result of the attached STC is the same as that of cygwin 3.6.3.
