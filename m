@@ -1,48 +1,48 @@
 Return-Path: <SRS0=a7JR=ZI=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.48])
-	by sourceware.org (Postfix) with ESMTP id 379EE3857732
-	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:00:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 379EE3857732
+Received: from btprdrgo010.btinternet.com (btprdrgo010.btinternet.com [65.20.50.133])
+	by sourceware.org (Postfix) with ESMTP id 964B93858039
+	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:03:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 964B93858039
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 379EE3857732
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.48
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750852821; cv=none;
-	b=dbITWDYsE7zyGO5UYCuAOLa8rOG06N+m3ros13AVxY7oMjODjXQq1s79Q+qvJv1r6jfRu1qIp++/vgEahJLT/LC2jhDTVqtNjDS+kQyBNwvcl/PGIY0mF8faVcdIiz10QEWKDJl9O00gN+gOce+7xpZlxBwZgNzObevqdmNKaTo=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 964B93858039
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.133
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750852988; cv=none;
+	b=We24n28vBcKbsecbgJ1uPF8/fyQXLlt6I4t4CvZmD2XCUeP2bzqTcbKTjiQ9Epqq2ihrZtDpZbwZx2ErgNzrcGT3S13EsxmXuXxF/MM+uglv0q8wByw8o2r+oDigsw45EaEnJsFUBEu3NU6labSt1nzG4vL5no7f6CH9nMGqqXw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750852821; c=relaxed/simple;
-	bh=hn8K7B0DTKN/yCY6HSF7trje5My0N91qlPO0HgjW4I8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=mymLSqWNXvAIleX4hzBDBrm1Ox+hLex5xNnDBpLuUmJN9zr7Mc49WgNHaQfPtk3Az4ysVdj/iFeImE6mj9U+LZI0HdtbF+qpb++zRz1MsnGSlfSExkgPnMgceQBFZ1+Tadx26Aajh6stueJMrMlt8iCe9fXhsobETJpUfVpoDPc=
+	t=1750852988; c=relaxed/simple;
+	bh=bNiVLsuKuwKBa4G6ShZjrVeRNDH0ue4RdICyZkK22lc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=xYboVMv6TlMPgn6eBeAUL1n/NfBut/zadpPr/4sGGOiNHDlngXLjVmBv6CquXTMAYiPL7JN27J2KMoSMAN2p/CH+XZ3nyfIGYAwrRQwNGLr9YaOV+VMOxb/ilkNfVkM2MbY59pFg5Npo2D2ZmFj8nFJ5A+BqyI2VAxqeyFer32Y=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 379EE3857732
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 964B93858039
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89C7B0ABE93AC
+X-SNCR-Rigid: 67D89E080AB3D4C1
 X-Originating-IP: [86.139.167.63]
 X-OWM-Source-IP: 86.139.167.63
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdejvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekiedrudefledrudeijedrieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudefledrudeijedrieefpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqdeifedrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtfedpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhohhhn
-	hhgruhhgrggsohhokhesghhmrghilhdrtghomh
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdejvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfeghfdvvdeijeettdfgleetffetfedtuefgfeevhedthefgffelfeethfdvleffnecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepkeeirddufeelrdduieejrdeifeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddufeelrdduieejrdeifedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudefledqudeijedqieefrdhrrghnghgvkeeiqddufeelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddtpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihg
+	fihinhdrtghomhdprhgtphhtthhopehjohhhnhhhrghughgrsghoohhksehgmhgrihhlrdgtohhm
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.139.167.63) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89C7B0ABE93AC; Wed, 25 Jun 2025 13:00:19 +0100
-Message-ID: <7b04ae6a-836a-4c77-85de-7dd288331b3b@dronecode.org.uk>
-Date: Wed, 25 Jun 2025 13:00:17 +0100
+Received: from [192.168.1.109] (86.139.167.63) by btprdrgo010.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89E080AB3D4C1; Wed, 25 Jun 2025 13:03:06 +0100
+Message-ID: <90d4d80b-bdcb-4fc8-81da-7b4e49fbd4b3@dronecode.org.uk>
+Date: Wed, 25 Jun 2025 13:03:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] install.html: add -P option tip
+Subject: Re: [PATCH 2/4] install.html: add tip for -P as preliminary search
 To: johnhaugabook@gmail.com
 References: <20250622083213.1871-1-johnhaugabook@gmail.com>
- <20250622083213.1871-2-johnhaugabook@gmail.com>
+ <20250622083213.1871-3-johnhaugabook@gmail.com>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-US
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <20250622083213.1871-2-johnhaugabook@gmail.com>
+In-Reply-To: <20250622083213.1871-3-johnhaugabook@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -50,39 +50,35 @@ On 22/06/2025 09:32, johnhaugabook@gmail.com wrote:
 > From: jhauga <johnhaugabook@gmail.com>
 > 
 > ---
->   install.html | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+>   install.html | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
 > diff --git a/install.html b/install.html
-> index 16206a06..4a9e54ff 100755
+> index 4a9e54ff..13acf430 100755
 > --- a/install.html
 > +++ b/install.html
-> @@ -72,7 +72,12 @@ full-featured as those package managers.</p>
+> @@ -61,6 +61,11 @@ Tip: if you don't want to also upgrade existing packages, select 'Keep' at the
+>   top-right of the package chooser page.
+>   </p>
 >   
->   <p>
->   Performing an automated installation can be done using the <code>-q</code> and
-> -<code>-P package1,package2,...</code> options.
-> +<code>-P <i>package1</i>,<i>package2</i>,<i>etc.</i></code> options.
+> +<p>
+> +Tip: use the <code>-P</code> option to perform a preliminary package search i.e.
+> +<code>setup-x86_64.exe -P <i>packageName</i></code>.
 > +</p>
 > +
-> +<p>
-> +Tip: if you have trouble with the <code>-P</code> option, try altering the syntax
-> +i.e. <code>-P <i>package1</i> -P <i>package2</i> -P <i>etc</i></code>.
->   </p>
 
-I'm not sure about this.
+I mean, yes it can, but... I don't think that's a good way of doing it.
 
-Firstly: This seems kind of like a bug report.
+(For a start, for historical reasons, we only warn, not error, on 
+unavailable package names, so you have to pay close attention to the 
+output to see if setup did anything or not with the packagename you gave it)
 
-I know that the option parsing in setup can be picky and janky, but if 
-there are some situations where it doesn't work as expected, I need to 
-know about them before they can be fixed.
+And I mean, typing guesses here, like is it foo-devel, or libfoo-devel 
+or foo-dev or... is not ideal.
 
-Secondly: We should document for setup generally that repeated options 
-are aggregated, but I'm not sure this is the place to do it.
+Maybe what's needed here is another Q&A: "What packages are available? 
+How can I find out what package contains X?" which links to 
+https://cygwin.com/packages/?
 
-Since this is a "question and answer"-style page, going into every 
-variation and detail needs to be balanced against providing the 
-information needed with the minimum cognitive load to the reader?
-
+(and maybe mentions various appropriate cygcheck options like -e/-p)?
 
