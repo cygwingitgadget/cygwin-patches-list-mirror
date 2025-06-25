@@ -1,145 +1,69 @@
-Return-Path: <SRS0=5fL3=ZI=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
-	by sourceware.org (Postfix) with ESMTPS id 026263858039
-	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:17:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 026263858039
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 026263858039
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750853878; cv=none;
-	b=v0t2q1NwUMuyJO6cx0ARdf5ORrsNwCwPVRCCq5pyGoubnV9TuMHR4vOSZ2c05OPF7J3wamn4LXMf8zCGC4feWPZ5ygI2A1XKYkIUbX0SeaKnysZGZaf5mzWkfbVCEDeKbm7GYrFcOAMNSn7Rg10T/1EBsLryWtnWl3lVcWe1IF4=
+Return-Path: <SRS0=a7JR=ZI=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.62])
+	by sourceware.org (Postfix) with ESMTP id 5B0C03857BA0
+	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 12:24:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5B0C03857BA0
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5B0C03857BA0
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.62
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750854250; cv=none;
+	b=MquDCFmR2GCUYWpL8/QuFEmO/xWPX81u0PErVRGu35HrRx80nXeZRPHvY0besmqGb55cBac9CHLftCGuzelIsdfbENu5M4DWtwe146AF5DYrNdwZgJyhz9cTuv73qmsF9L0FOAmVloYaSbQPiV7KFYADlEN0XH7lgnS8OPlPIl4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750853878; c=relaxed/simple;
-	bh=E+PkcyoAGvs6yay7iKGswU+/WSs5zv6bVCE93f45eHI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=EKhcTWHpaZ5tcEHnt1rlLRwFhfS6ZDUTAi2BGVTttmVIXVCs3ytjsxqkGYN8IHjsF/T57+d3xxChhhqSM6943eX7Yx9EvPkTJClANh3PCzkxlR862QLBc0WxikLTUNzwRHZpvRf8W2lDZKIPRdavQmVijdbLrvQmUHSemOPhj7g=
+	t=1750854250; c=relaxed/simple;
+	bh=R+/aJnW8hoxwjuktwAUWg7g7c0BJRNeDmj+dEcAJepY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=LpE1Q4vA7Wpjxm2tOT52up6aL20KJNTNvdWltZdzq2liF8+WPePWG1XGI1WauBNFG4rbdHWMrDKfX2Jnc/hWK6vJR4KrK3hVn2xioNwncKBYqmQ2sIVZE6wNvn2z1KiQKsrqpCTIj2DdlMmS1rXj1tV8kV+X8p6uu8KnfCjUUdA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 026263858039
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=nxN1M+7y
-Received: from HP-Z230 by mta-snd-w03.mail.nifty.com with ESMTP
-          id <20250625121755366.LRLE.47226.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 21:17:55 +0900
-Date: Wed, 25 Jun 2025 21:17:54 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] pipe: fix SSH hang (again)
-Message-Id: <20250625211754.c9b38091a64362f2d28da1f8@nifty.ne.jp>
-In-Reply-To: <20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp>
-References: <c9b1313d5d8a690aae9788402ec5190a1f18ce75.1750679728.git.johann>
-	<62e79c50daf4e3ae28db3ae1a3cf52460f0d8968.1750775114.git.johannes.schindelin@gmx.de>
-	<20250625085316.35e6dda457b6dce9792c824a@nifty.ne.jp>
-	<701dca10-214a-aa25-a58d-913dbcd258a3@gmx.de>
-	<4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de>
-	<20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp>
-	<20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="Multipart=_Wed__25_Jun_2025_21_17_54_+0900_pPfoBTLlpB0EZZDR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1750853875;
- bh=BPvkdWvxFmvlHBap1ET4/6rIgocxntk5rJWBJ14lKBA=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=nxN1M+7yBxGf2eMBGXM9FCRnpW7Ln9S/pkskM6qUZ6CToUegtZPuuWX4C1GHJtq8VJKhheQe
- JXXALYXdAwNSZQJlRJJVLvXaDi+EwVJEWW82EQaPlmxhJ46XIzd/2ddkIyuD8xMvOGLAT5cunq
- 2D76fKExvErUR4YDhXBmkyGm+AzCsQrRxzHq9uWptFfkBcNcJ6yixnQC6K8sCFr/4EUTZ8+eX9
- yr9kq6xW/nU2pNeMIJf3zcZ4YrOkiAyIbBMBO6qm39AEAJ7DK951NByDBbkcg/clniWFmDGxfA
- /oavzuWna3axY1tJomUz1iaNi5Y/EOnC3hyx671zz0iDMsdQ==
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5B0C03857BA0
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6840B66701F9F544
+X-Originating-IP: [86.139.167.63]
+X-OWM-Source-IP: 86.139.167.63
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekiedrudefledrudeijedrieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudefledrudeijedrieefpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqdeifedrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotdduuddpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhohhhn
+	hhgruhhgrggsohhokhesghhmrghilhdrtghomh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (86.139.167.63) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6840B66701F9F544; Wed, 25 Jun 2025 13:24:09 +0100
+Message-ID: <6c283373-0457-4049-8246-19c81c5bf4a4@dronecode.org.uk>
+Date: Wed, 25 Jun 2025 13:24:07 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] install.html: bold Tip: in q and a
+To: johnhaugabook@gmail.com
+References: <20250622083213.1871-1-johnhaugabook@gmail.com>
+ <20250622083213.1871-5-johnhaugabook@gmail.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <20250622083213.1871-5-johnhaugabook@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
-
---Multipart=_Wed__25_Jun_2025_21_17_54_+0900_pPfoBTLlpB0EZZDR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Wed, 25 Jun 2025 20:51:02 +0900
-Takashi Yano wrote:
-> On Wed, 25 Jun 2025 19:55:34 +0900
-> Takashi Yano wrote:
-> > Hi Johannes,
-> > 
-> > On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
-> > Johannes Schindelin wrote:
-> > > Hi Takashi,
-> > > 
-> > > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
-> > > 
-> > > > On Wed, 25 Jun 2025, Takashi Yano wrote:
-> > > > 
-> > > > > I'd revise the patch as follows. Could you please test if the
-> > > > > following patch also solves the issue?
-> > > > 
-> > > > Will do.
-> > > 
-> > > For the record, in my tests, this fixed the hangs, too.
-> > 
-> > Thanks for testing.
-> > However, I noticed that this patch changes the behavior Corinna was
-> > concerned about.
+On 22/06/2025 09:32, johnhaugabook@gmail.com wrote:
+> From: jhauga <johnhaugabook@gmail.com>
 > 
-> The behaviour change can be checked using attached test case.
+> ---
+>   install.html | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/install.html b/install.html
+> index c5c797f3..4069df2d 100755
+> --- a/install.html
+> +++ b/install.html
+> @@ -57,12 +57,12 @@ A: Run the setup program and select the package you want to add.
+>   </p>
+>   
+>   <p>
+> -Tip: if you don't want to also upgrade existing packages, select 'Keep' at the
+> +<b>Tip:</b> if you don't want to also upgrade existing packages, select 'Keep' at the
+>   top-right of the package chooser page.
+>   </p>
+Applied. Thanks!
 
-Hmm, then, nga888(Andrew Ng @github)'s solution seems to be
-the best one.
-https://github.com/git-for-windows/git/issues/5688#issuecomment-2995952882
-
-The test result of the attached STC is the same as that of cygwin 3.6.3.
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
-
---Multipart=_Wed__25_Jun_2025_21_17_54_+0900_pPfoBTLlpB0EZZDR
-Content-Type: text/x-csrc;
- name="check-non-blocking-write.c"
-Content-Disposition: attachment;
- filename="check-non-blocking-write.c"
-Content-Transfer-Encoding: 7bit
-
-#include <unistd.h>
-#include <stdio.h>
-#include <limits.h>
-#include <fcntl.h>
-
-#define PIPE_SIZE 65536
-
-int main()
-{
-	int fd[2];
-	char buf[PIPE_SIZE];
-	int flags;
-
-	pipe(fd);
-
-	/* Set non-blocking */
-	flags = fcntl(fd[1], F_GETFL);
-	flags |= O_NONBLOCK;
-	fcntl(fd[1], F_SETFL, flags);
-
-	/* Fill pipe */
-	printf("w:%d\n", write(fd[1], buf, PIPE_SIZE));
-	/* Free PIPE_BUF/2 bytes */
-	printf("r:%d\n", read(fd[0], buf, PIPE_BUF/2));
-
-	/* Write PIPE_BUF bytes */
-	printf("w:%d\n", write(fd[1], buf, 1));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF-1));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF+1));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-	printf("w:%d\n", write(fd[1], buf, PIPE_BUF*2));
-
-	return 0;
-}
-
---Multipart=_Wed__25_Jun_2025_21_17_54_+0900_pPfoBTLlpB0EZZDR--
