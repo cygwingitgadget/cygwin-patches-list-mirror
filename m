@@ -1,85 +1,96 @@
-Return-Path: <SRS0=a7JR=ZI=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.128])
-	by sourceware.org (Postfix) with ESMTP id 502D63858039
-	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 11:15:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 502D63858039
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 502D63858039
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.128
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750850130; cv=none;
-	b=vssxusCHNEgkUXKA+qIzZP5VoM/DBHMfpMUFx/7MEnokp9/jSFWQKJIwax3h2pxjTROB8QJ8l7hRMnCy7JW9+o/sBfpVyjyUS44Et2VXpXCV4HzDHh4fFr66Ij2A9dI/Xs0QbgzkSdPETt1wtQs3tlr4m3RnU+X4daFHd3uOpHs=
+Return-Path: <SRS0=5fL3=ZI=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
+	by sourceware.org (Postfix) with ESMTPS id A567A3858039
+	for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 11:34:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A567A3858039
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A567A3858039
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750851263; cv=none;
+	b=uQY4MdZzXzmlRU4kDCRhBBIICx6WkYY959+2/WPzYbIp5qWsrX6xxOZwIhEF8c7dYkilFn9ytFYyKHTyLpq2JbV0XmNLOSb257rONFLsEbx3hmI5VqEv0nV3xU1BO5PqmOopo3ntP/GCW/Lk9ynWshQ+EAB5jH3sYJijL87cLLQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750850130; c=relaxed/simple;
-	bh=9wwkQK8TCWTa4dphEDi+jmnECckLxPpNncqs8benirY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=XVCk530MNXiuB4lPHZuMnmAy4iHkk96yPeKsPbrgJFV+BrOBOfCzs0yFPRnigJwWedu/uhReYuIoS1SNd9WKNZw6YbPxwG0BNsfjqY2UCe4/FmiYDDnRdFUU5ZZG/XpYJhF7T9OMyUm6jDqLjTu4BcklGOFl0EKhCagBp7Y4iUs=
+	t=1750851263; c=relaxed/simple;
+	bh=9rhCn0RAMC1taOFc3jKbWtWv5M4k5MDoBA0uodrdiIs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=bsa2LY8uaVTi/cIfOdZTg+69q8lDwmQsTN1D9w3gP0c09RdeVpLtMQameCeFWLab29kCUNYMW811DWJ5TpTpvhGpbUL9zY/LYlDvaTxwg9ULFmmfCQmnZhcYZGkh1U32yaySv+13S2fdf1JAaYt3Lv+ZsKabcNaQPPMz2Kc1/7w=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 502D63858039
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 67D89CAE0AB22C7E
-X-Originating-IP: [86.139.167.63]
-X-OWM-Source-IP: 86.139.167.63
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpedvvdeuheffuedvtdfhveekieefvdfhfeetffdvudehkeeigeetvdetjeetieeileenucfkphepkeeirddufeelrdduieejrdeifeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddufeelrdduieejrdeifedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudefledqudeijedqieefrdhrrghnghgvkeeiqddufeelrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdegpdhnsggprhgtphhtthhopedupdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (86.139.167.63) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 67D89CAE0AB22C7E for cygwin-patches@cygwin.com; Wed, 25 Jun 2025 12:15:29 +0100
-Message-ID: <575e8838-b292-4f3c-9d47-76507703b747@dronecode.org.uk>
-Date: Wed, 25 Jun 2025 12:15:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: define OUTPUT_FORMAT and SEARCH_DIR for AArch64
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A567A3858039
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=kpk4AlrY
+Received: from localhost.localdomain by mta-snd-e04.mail.nifty.com
+          with ESMTP
+          id <20250625113420613.RXFC.90539.localhost.localdomain@nifty.com>;
+          Wed, 25 Jun 2025 20:34:20 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <DB9PR83MB0923BA573EA5101074C2F0B79278A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aFupr2xZJQY28zEQ@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-In-Reply-To: <aFupr2xZJQY28zEQ@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_W,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pipe: Simplify raw_write() a bit (stop to use chunk)
+Date: Wed, 25 Jun 2025 20:33:57 +0900
+Message-ID: <20250625113405.814-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1750851260;
+ bh=JWDxo2xAYrKCL9UNoCHi7jI/V0USfpfWueOORMw+oVQ=;
+ h=From:To:Cc:Subject:Date;
+ b=kpk4AlrYnl6JBhT+vWK55Af1RRJ3824juuNMwm77v8vCRS+PJKOobNT561OwuLtuZe7swW+a
+ pxQQibyaBHuH0//WrOb3aZGZcDQcmRlEftNXAPSrs7OxKIpOJQzlJ6rGe811eexSzz5pLNmFmA
+ jEa/xgeIkiP1f4GwoOfBb0JdqHZdWvh1BpA+wXvCLIsIWt9mWkpt8wtPTURe7EpewNYA+SuMSv
+ fqnG8gWQ4J2q6R9p3GuC/pTob0RjvgzM/sjTsm2W5nSmFe8st4z1ygeN6BrGC2mdM0K/Z6B/m2
+ 5hYMZHJ2G+zUJv4DX+w6eKUzE0UnJ7B29dnv/GAL88mPHaXA==
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 25/06/2025 08:47, Corinna Vinschen wrote:
-[...]
->> diff --git a/winsup/cygwin/cygwin.sc.in b/winsup/cygwin/cygwin.sc.in
->> index 5007a3694..3322810cc 100644
->> --- a/winsup/cygwin/cygwin.sc.in
->> +++ b/winsup/cygwin/cygwin.sc.in
->> @@ -1,6 +1,9 @@
->>   #ifdef __x86_64__
->>   OUTPUT_FORMAT(pei-x86-64)
->>   SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
->> +#elif __aarch64__
->> +OUTPUT_FORMAT(pei-aarch64-little)
->> +SEARCH_DIR("/usr/aarch64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
-> 
-> Given that /usr/lib/w32api is arch independent, maybe we should
-> take out that SEARCH_DIR from the arch dependent code, i.e.
-> 
-> if x86_64
-> SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api");
-> elif aarch
-> SEARCH_DIR("/usr/aarch64-pc-cygwin/lib/w32api");
-> else
-> error
-> endif
-> SEARCH_DIR("=/usr/lib/w32api");
-> 
-> What do you think?
-> 
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/pipe.cc | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-Maybe even a pair of comments, to identify that the first search path in 
-the sys-root when cross-compiling, the second is for when building natively?
-
-(I'm guessing that's what's going on?)
-
-(Hmm... in which case, couldn't the first one be written as just 
-"=/lib/w32api"? (since the '=' stands for $SYSROOT?). But maybe there's 
-some wrinkle which prevents that from working?)
-
+diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pipe.cc
+index e35d523bb..a80a837f9 100644
+--- a/winsup/cygwin/fhandler/pipe.cc
++++ b/winsup/cygwin/fhandler/pipe.cc
+@@ -443,7 +443,6 @@ ssize_t
+ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+ {
+   size_t nbytes = 0;
+-  ULONG chunk;
+   NTSTATUS status = STATUS_SUCCESS;
+   IO_STATUS_BLOCK io;
+   HANDLE evt;
+@@ -540,11 +539,6 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+ 	}
+     }
+ 
+-  if (len <= (size_t) avail)
+-    chunk = len;
+-  else
+-    chunk = avail;
+-
+   if (!(evt = CreateEvent (NULL, false, false, NULL)))
+     {
+       __seterrno ();
+@@ -557,14 +551,14 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
+   while (nbytes < len)
+     {
+       ULONG_PTR nbytes_now = 0;
+-      size_t left = len - nbytes;
+       ULONG len1;
++      size_t left = len - nbytes;
+       DWORD waitret = WAIT_OBJECT_0;
+ 
+-      if (left > chunk && !is_nonblocking ())
+-	len1 = chunk;
+-      else
++      if (left < (size_t) avail || is_nonblocking ())
+ 	len1 = (ULONG) left;
++      else
++	len1 = (ULONG) avail;
+ 
+       /* NtWriteFile returns success with # of bytes written == 0 if writing
+          on a non-blocking pipe fails because the pipe buffer doesn't have
+-- 
+2.45.1
 
