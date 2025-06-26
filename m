@@ -1,56 +1,71 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 36B52385703B; Thu, 26 Jun 2025 07:55:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 36B52385703B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1750924536;
-	bh=ASrImUQaBmaSk8EnO7UX09yqIcWMJSIp4cCMEGAoZlk=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=GPGXKqraPBKASJ1rza+ADdN9+MUO49UDoWD8q6wYsoH5LY7HlrWWJvJWArDOsCzTK
-	 ocwL4J9L+GUxcy1l9yAExM7uscnsg1CXh3csRphKbd8DwzoJ5iNEiRs2p4yEiBq5OB
-	 Adr84bgY+fHP4Sj+0z7TfHjNhlpWGAqKMGWhPx/Y=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 0A8FBA80C93; Thu, 26 Jun 2025 09:55:34 +0200 (CEST)
-Date: Thu, 26 Jun 2025 09:55:33 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=NNDi=ZJ=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
+	by sourceware.org (Postfix) with ESMTP id 2531C385B514
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 10:59:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2531C385B514
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2531C385B514
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.197
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750935586; cv=none;
+	b=UKECyJRSGIUWzo+rjwJF2WQ+lXiLofqS32ZOaZgRgZv78CRCUza7MXSxB6TTZ3In/uY4yBqC7knfnUp+jk51sovb+7U9Q07r+M1osMIAiFUyapcZxUZgHp6iJ/2vemFXfaA7ky/b21Q9Y5LB9BLJNZSZaeGOfD3F3ZsrT4zMiAo=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1750935586; c=relaxed/simple;
+	bh=BUidvCIEU4O8TDlHXeC5LzBsrXHnMXG3JPWlDQsO+5I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=fLux0K3EAkxKaaRdig8dYP3TEqMPORx1EcYZkFaTjA4hyq4n98YU9LmQiSr7nLyW7zn5h4ASos5r32Ai0W0cA973nwRS426wty8UzrNeK+/3Y97bcG7VmOqk/SYtgyRBNMzpVmuWovva0wzpizWoVjHxQTRlFIRSETMnfr1lGbQ=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2531C385B514
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 67D89D9E0ACA9E70
+X-Originating-IP: [86.139.167.63]
+X-OWM-Source-IP: 86.139.167.63
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekiedrudefledrudeijedrieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudeijedrieefpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduieejqdeifedrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtkedpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhu
+	rhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.139.167.63) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 67D89D9E0ACA9E70; Thu, 26 Jun 2025 11:59:45 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4] Cygwin: signal: Do not suspend myself and use VEH
-Message-ID: <aFz89XJDU--ESV-x@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250626062031.1093-1-takashi.yano@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/2] Install all the built documentation files
+Date: Thu, 26 Jun 2025 11:59:22 +0100
+Message-ID: <20250626105925.29521-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250626062031.1093-1-takashi.yano@nifty.ne.jp>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Currently, we only install the subset of documentation files which are going
+to be included in the cygwin-doc package.
 
-On Jun 26 15:20, Takashi Yano wrote:
-> After the commit f305ca916ad2, some stress-ng tests fail in arm64
-> windows. There seems to be two causes for this issue. One is that
-> calling SuspendThread(GetCurrentThread()) may suspend myself in
-> the kernel. Branching to sigdelayed in the kernel code does not
-> work as expected as the original _cygtls::interrup_now() intended.
-> The other cause is, single step exception sometimes does not trigger
-> exception::handle() for some reason. Therefore, register vectored
-> exception handler (VEH) and use it for single step exception instead.
-> 
-> Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258332.html
-> Fixes: f305ca916ad2 ("Cygwin: signal: Prevent unexpected crash on frequent SIGSEGV")
-> Reported-by: Jeremy Drake <cygwin@jdrake.com>
-> Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/exceptions.cc           | 55 ++++++++++++++++++---------
->  winsup/cygwin/local_includes/cygtls.h |  1 +
->  winsup/cygwin/local_includes/ntdll.h  |  2 +
->  3 files changed, 40 insertions(+), 18 deletions(-)
+This makes the website deploy unnecessarily complex and wrong, as it
+currently deploys from the build directory.
 
-Great, thanks, let's try this.  10 ms might be a bit short under load,
-but we can always raise the value if push comes to shove.
+(Wrong, because:
 
+(i) the CSS file currently isn't deployed at all, because it's installed
+directly from the source directory. (We just happen to have a similar file
+lying around on the webserver).
 
-Thanks,
-Corinna
+(ii) all the bodysnatcher nonsense to make the FAQ page conformant HTML
+isn't being used at all.)
+
+Instead, install everything, then we can filter out what's not wanted when
+we package it.
+
+Jon Turney (2):
+  Cygwin: doc: Install FAQ as well
+  Cygwin: doc: Install miscellaneous website files
+
+ winsup/doc/Makefile.am | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+-- 
+2.45.1
+
