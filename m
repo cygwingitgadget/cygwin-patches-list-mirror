@@ -1,117 +1,198 @@
-Return-Path: <SRS0=x/14=ZJ=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-	by sourceware.org (Postfix) with ESMTPS id 136C0385703B
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 02:12:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 136C0385703B
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 136C0385703B
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::531
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750903949; cv=none;
-	b=h3tIwKy7wTyxLR5r4W1V3nXJHECPLCtJa6HENizQdnaCKSOIMhQ9fOJ1Ga7069os6wJtO6rrAmrUYeXpMIQMblWBKEzotVkDmXJeObxflH0k9Rd5sCP0cthA7cDO2Rd6Q/aRXLsShkfv80iuHD2vWGH+Ozn2KESHmKV/2MKiFLg=
+Return-Path: <SRS0=1xMm=ZJ=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
+	by sourceware.org (Postfix) with ESMTPS id 54103385703B
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 04:54:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 54103385703B
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 54103385703B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750913685; cv=none;
+	b=TgvW9gKppbDRyBVZaKf8uY1tN3EtC+cHMpuKl6KqzoA3osOQ6PLRFRkFyxtQ/2gfDGN4o5YsE3QDVueNiB/FePthK5FSTBdRCtyUyT9SpQXTO1R7MGSvSU0I4AAzufZIOKY7r0EzOTNzls62gqV11xzIIvC4Im1Hp9FYusuH1aU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750903949; c=relaxed/simple;
-	bh=YRbUsxDGBDNaz5mWFe6AB+36kVCwcB35aL5Edy48qbw=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=pUwDoiJ8FfMp1SsHf41VOCGi/FPEKy6RBiFfnAk2uZND06h+mR8MwAdalIQUDfjCPzAYBx16tpGvaYOad/ml82QqNOB+BqrRfb6mQdhxKSVo2fyHWWgCaD0GwvX07+271JkTPg9pV6JW3IfrNyGvT+s9DWuCcWIZmbjgC+V2HVo=
+	t=1750913685; c=relaxed/simple;
+	bh=O9P0b3QRhTCktB9fGe8vGQj+U7zlXFvo64Y042F8Q2s=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=u0Hd1pxs49C8bRd3Xm0e5de5OxypTYUVv9JmNIjFqkBK27OUqGkPg9MK3HJ0IPfWP/PCrj7k1LeYKa91DJFavj2Vxhgf/ytFeKNCJalNQe6yQAqOuYY59JXy75osbLBhypjU/+MR56+qMtFOVJS1s9H+tW09zUoyLUJK3sY6G4s=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 136C0385703B
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 54103385703B
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=ON5RuGwn
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-607ec30df2bso918023a12.1
-        for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 19:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750903947; x=1751508747; darn=cygwin.com;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TaX4MeFWY7Zaa8jQTPYawH4RIIBl3U36yqOZ8fLQ8Vw=;
-        b=ON5RuGwnAQ88MMpTg5rzrhgEc2LAZGW6rckFS9ugi2O9wsTVbMaclHpn0fN9+pVwAq
-         Far0L86UoP0VJJXQtcnlGpMHLAY6MAw9K3x9W0lfZpzTOmv0FYMwk/ddwG+dfwFporlT
-         SmE5th9BeyG/VuFF2DUePCTN2XUs2XLB6zErDzTnjeHUp2dMPxvRENKUuzRbpMlTLezq
-         deLyJF5Ama617S6oEo919Rqvg0uY1/y7tHfoSgP0Rv2f/a77uvLSpQ0Gv1OTN6yJeKh0
-         cM71/XyMgeGIeFH72oHUPT7M/ruSzehKfy8R9JDk6b6siZvQVZS8tPTLNKXzSZenMh5T
-         FFRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750903947; x=1751508747;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TaX4MeFWY7Zaa8jQTPYawH4RIIBl3U36yqOZ8fLQ8Vw=;
-        b=U9+rocEEW14P3Emebsqfwo6hppr1mmUqjDh/OUBGDA+wmwox+d3kcIhkuiSFqCtQi4
-         YZYarP/GAjqNHeeiVkvpjuSG4Sduy5cPOi5imEx8xApMk0kiH7tFVLgahQI88IZx5ebo
-         SxdnEfCisRkpyN0UQl/suGwi+tewY0Pn+1ra65cFdecl2rwTZIqKW5XPjtEm0Ct+/nxQ
-         9dYYoboLcIIOujfviuq1WTNcNqzhFf63NwqvywdJohP3ceBBfkRGRABI4mA5zgSzwVD0
-         NKYnEWPl2BfS3RvWtQ/yYE41Y9i4NgcXuDVi6VQ64f2A7ufVGfT9+vw8WiBqI2Z7IWwK
-         YvmA==
-X-Gm-Message-State: AOJu0Yz/0oszJSPv8NKK7SAPnFag79Ci+i5t1LlclALlKFeZYgTDryxz
-	Aswj74yEkJTWKm1B4l+TbZ5JqsLS5edn3fS3hO5oqEfxqyshErtM+uluQCZDkiLMmLiCqvl6jk1
-	LgocRILAkQEJUdDHaphhQQ2mwrfu63iCbrcJX
-X-Gm-Gg: ASbGncvTHXipS0GIMBhwq1E9KFxwda0ri70T/0dgO9W13ThZmChFU37IoG6As0D7fEB
-	hYmViQ2QFI9X3HE/ZzbyTIYSIGZ1ApMtUBeKgfiWDb8oQwOtgwCrVhN2W9w750PIDOAxLGqgkqg
-	7HVI1ebRXVogMIQqcSw/6kdxGEDYn25BkUI9IVqQ6pRbgf8Q==
-X-Google-Smtp-Source: AGHT+IEQtq5e7aJb/B+/8+QvxuVqo1DX5aI2cOE6jcXxLfFdB6Vz2CxvVZFxwB8ctM0uMbpNC5vma+2g9AfcqtcfHlc=
-X-Received: by 2002:a05:6402:3507:b0:607:5af9:19b6 with SMTP id
- 4fb4d7f45d1cf-60c4d3d6179mr4702012a12.15.1750903947148; Wed, 25 Jun 2025
- 19:12:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20250625013908.628-1-johnhaugabook@gmail.com> <20250625013908.628-5-johnhaugabook@gmail.com>
- <aFuoBviRzyYIHLbU@calimero.vinschen.de>
-In-Reply-To: <aFuoBviRzyYIHLbU@calimero.vinschen.de>
-From: John Haugabook <johnhaugabook@gmail.com>
-Date: Wed, 25 Jun 2025 22:11:50 -0400
-X-Gm-Features: Ac12FXx2oFBM6THW_2E9jtsGsQtVoIbVulxzf3EDqTUeYVYq7Rts7c16LrwUHG0
-Message-ID: <CAKrZaUu6EvGiCwD3-RrfVrFrZ39r5_5c-JSmaa3TCWsEWeHwzw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] cygwin: faq-programming-6.21 install tips
-To: cygwin-patches@cygwin.com, Achim Gratz <Stromeko@nexgo.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,WEIRD_QUOTING autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ccygbAZf
+Received: from HP-Z230 by mta-snd-e04.mail.nifty.com with ESMTP
+          id <20250626045442532.VSRS.38814.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 13:54:42 +0900
+Date: Thu, 26 Jun 2025 13:54:40 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] pipe: fix SSH hang (again)
+Message-Id: <20250626135440.e030b756a7168ce4844f2683@nifty.ne.jp>
+In-Reply-To: <35fb9069-817b-7416-d810-be0187fc96a8@gmx.de>
+References: <c9b1313d5d8a690aae9788402ec5190a1f18ce75.1750679728.git.johann>
+	<62e79c50daf4e3ae28db3ae1a3cf52460f0d8968.1750775114.git.johannes.schindelin@gmx.de>
+	<20250625085316.35e6dda457b6dce9792c824a@nifty.ne.jp>
+	<701dca10-214a-aa25-a58d-913dbcd258a3@gmx.de>
+	<4ad377e7-a75b-d7c4-ccbf-904c18bf3713@gmx.de>
+	<20250625195534.dc322b8f310c7b1c0d3abd03@nifty.ne.jp>
+	<20250625205102.6b2bcc4f5e7f1ae0606197c5@nifty.ne.jp>
+	<a379f48a-e0db-7769-2968-9c4df5293a0d@gmx.de>
+	<20250625212658.2f607120a5e7fd709cf8022e@nifty.ne.jp>
+	<35fb9069-817b-7416-d810-be0187fc96a8@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1750913682;
+ bh=V04NNVKPm8tkN8E480QC6bO7lSskMAjG1JnBUpxfrgM=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=ccygbAZfPFCZCf0cqjpa42HKOloPc1GzIsPWRng4qCSKSVsIsIvnfQOGYrqGzIxnqKvzb/KN
+ k8d7QmUM5eJYAfSeDcrSGeTbtvLV8Xn2r1O5Wtoi/i6Bv3nLJ6qzrQuAot0IettNEpLsnQEK9o
+ lWV++Da4weQrao1h5qIWayyXScesSZx75znaWGuPi0Meri2Mat9+UGv0ra8lRH3OT/lLPxJevH
+ mou8oF0dA0mL27TX1huOdK/6koVnvEZwHkWOhb6PWHx6+2PZ6oYptoumfEDOPtxWu499LPjXeH
+ I1mYzg/IJ645eNRmFSMqYVE/0IrpQ4I9eMt6+ppH6MghrWVQ==
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Corinna and Achim,
+On Wed, 25 Jun 2025 17:56:35 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> On Wed, 25 Jun 2025, Takashi Yano wrote:
+> 
+> > On Wed, 25 Jun 2025 14:07:15 +0200 (CEST)
+> > Johannes Schindelin wrote:
+> > > Hi Takashi,
+> > > 
+> > > On Wed, 25 Jun 2025, Takashi Yano wrote:
+> > > 
+> > > > On Wed, 25 Jun 2025 19:55:34 +0900
+> > > > Takashi Yano wrote:
+> > > > > 
+> > > > > On Wed, 25 Jun 2025 09:38:17 +0200 (CEST)
+> > > > > Johannes Schindelin wrote:
+> > > > > > 
+> > > > > > On Wed, 25 Jun 2025, Johannes Schindelin wrote:
+> > > > > > 
+> > > > > > > On Wed, 25 Jun 2025, Takashi Yano wrote:
+> > > > > > > 
+> > > > > > > > I'd revise the patch as follows. Could you please test if the
+> > > > > > > > following patch also solves the issue?
+> > > > > > > 
+> > > > > > > Will do.
+> > > > > > 
+> > > > > > For the record, in my tests, this fixed the hangs, too.
+> > > > > 
+> > > > > Thanks for testing.
+> > > > > However, I noticed that this patch changes the behavior Corinna was
+> > > > > concerned about.
+> > > > 
+> > > > The behaviour change can be checked using attached test case.
+> > > 
+> > > I do not understand what this undocumented code is trying to demonstrate,
+> > > not without any explanation.
+> > > 
+> > > Could you rework it so that it becomes a proper test in the test suite
+> > > that verifies that Cygwin behaves as desired, please?
+> > 
+> > What the comment in the source code says:
+> > 
+> >       /* NtWriteFile returns success with # of bytes written == 0 if writing
+> >          on a non-blocking pipe fails because the pipe buffer doesn't have
+> >      sufficient space.
+> > 
+> >      POSIX requires
+> >      - A write request for {PIPE_BUF} or fewer bytes shall have the
+> >        following effect: if there is sufficient space available in the
+> >        pipe, write() shall transfer all the data and return the number
+> >        of bytes requested. Otherwise, write() shall transfer no data and
+> >        return -1 with errno set to [EAGAIN].
+> > 
+> >      - A write request for more than {PIPE_BUF} bytes shall cause one
+> >        of the following:
+> > 
+> >       - When at least one byte can be written, transfer what it can and
+> >         return the number of bytes written. When all data previously
+> >         written to the pipe is read, it shall transfer at least {PIPE_BUF}
+> >         bytes.
+> > 
+> >       - When no data can be written, transfer no data, and return -1 with
+> >         errno set to [EAGAIN]. */
+> > 
+> >       /* Independent of being blocking or non-blocking, if we're here,
+> >          the pipe has less space than requested.  If the pipe is a
+> >          non-Cygwin pipe, just try the old strategy of trying a half
+> >          write.  If the pipe has at
+> >          least PIPE_BUF bytes available, try to write all matching
+> >          PIPE_BUF sized blocks.  If it's less than PIPE_BUF,  try
+> >          the next less power of 2 bytes.  This is not really the Linux
+> >          strategy because Linux is filling the pages of a pipe buffer
+> >          in a very implementation-defined way we can't emulate, but it
+> >          resembles it closely enough to get useful results. */
+> 
+> I do not understand what part of that code comment refers to either
+> documented behavior or to a thorough test you performed. To the contrary,
 
-> This shouldn't be necessary.  On Fedora the ParserDetails.ini file is
-> part of the perl-XML-SAX package but apparently it isn't in the
-> Cygwin package.  Is there a reason for that?  The user shouldn't
-> have to create the file manually...
+The point is that when avail < PIPE_BUF, wirte() doesn't fill all the
+available space. This behaviour is a mimic of Linux.
+With the patchs
+https://github.com/git-for-windows/git/issues/5688#issuecomment-2996103559
+https://cygwin.com/pipermail/cygwin-patches/2025q2/013897.html
+write() fills all available pipe space. That breaks the code intent,
+regardless of whether the behaviour is correct thing.
 
-Two things:
-1. The error appears on both builds, but is slightly different in the
-cygwin install
-2. Sorry, but out of ignorance I didn't mention that the error was
-from the "src" install
-(hoping this makes for good new user feedback regarding build section).
+With cygwin 3.6.3, the result of check-non-blocking-write.c is
+w:65536
+r:2048
+w:1
+w:-1
+w:-1
+w:1024
+w:512
+w:256
+w:128
+w:64
+w:32
+w:16
+w:8
+w:4
+w:2
+w:-1
 
-The error output (with context before and after) from the cygwin install was:
-"""""""""""""""
-make[3]: Entering directory
-'/oss/src/newlib-cygwin/build/x86_64-pc-cygwin/winsup/doc'
-  GEN      Makefile.dep
-  GEN      cygwin-ug-net/cygwin-ug-net.pdf
-  GEN      cygwin-api/cygwin-api.pdf
-  GEN      cygwin-api/cygwin-api.html
-  GEN      cygwin-ug-net/cygwin-ug-net.html
-  GEN      faq/faq.html
-Element listitem in namespace '' encountered in answer, but no template matches.
-  GEN      faq/faq.body
-  GEN      cygwin-ug-net/cygwin-ug-net-nochunks.html.gz
-  GEN      api2man.stamp
-  GEN      intro2man.stamp
-  GEN      utils2man.stamp
-  GEN      charmap
-  GEN      cygwin-api.info
-#HERE
-could not find ParserDetails.ini in /usr/share/perl5/vendor_perl/5.40/XML/SAX
-warning : xmlAddEntity: invalid redeclaration of predefined entity 'lt'
-  GEN      cygwin-ug-net.info
-# HERE
-could not find ParserDetails.ini in /usr/share/perl5/vendor_perl/5.40/XML/SAX
-warning : xmlAddEntity: invalid redeclaration of predefined entity 'lt'
-docbook2texi://refentry[@id='proc']/refnamediv: section is too deep
-docbook2texi://refsect1[@id='proc-desc']: section is too deep
-# ect....
-"""""""""""""""
-The remaining install did not end with an error code (2 usually)
-though, and completed successfully.
+while the result with above patches is
+w:65536
+r:2048
+w:1
+w:2047
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
+w:-1
 
-Take Care,
+And with nga888's patch, the result is
+w:65536
+r:2048
+w:1
+w:-1
+w:-1
+w:1024
+w:512
+w:256
+w:128
+w:64
+w:32
+w:16
+w:8
+w:4
+w:2
+w:-1
+where the intent of the code is kept.
 
-John Haugabook
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
