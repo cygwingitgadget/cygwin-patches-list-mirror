@@ -1,255 +1,246 @@
 Return-Path: <SRS0=8F9w=ZJ=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id C4071385C6DE
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 20:31:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C4071385C6DE
+	by sourceware.org (Postfix) with ESMTPS id 22698385C6DE
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 20:33:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 22698385C6DE
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C4071385C6DE
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 22698385C6DE
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750969904; cv=none;
-	b=mGq6aIWqVqqwCVR+Tv0HntLSIuGPAqwExHGS90aBI+x+qo/S6Yq5UeQ4LJtxqNzUYbvpObiUOxr8NB5hQ8++t7svFNl2LnLZPdcM46QLeqknqddPiGotcGmAlTD23C4rx9BejAUnakGi6D3QFuXesRUg+mrZiLsgBr9vTvdbdbw=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750970032; cv=none;
+	b=EQ9PXRkwjngjskrLs5So5eNu6reC3/h16Zb9sFTLqk7P6U4uWuMRnbLmgSInB3mRprpvgNsG7X5QrnfEML+GbiVY4PU83m2OL2j8yJJkn5MS8b75QGe5R1tJb44MI/DNEzzFKAxcveoQezeJ24jzYQPkl17nDGjdyC5Gwgtlze8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750969904; c=relaxed/simple;
-	bh=ChIQOUAsgJVzY/zDmM6Cne+1Wuwjh1Ia/VhKdxR7n0g=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=mdab8tRZOkf7njkZS9wPCxwp7jkYL2RkfO3m3XOka9b52igxxY/euDPYi3eT5rgWyablxM0GbzoYwBRbvYIZuXqI2NEaBd6nD7WCLism/MLEb9EKGF72ho8S5pv3EJ+lELY/dJ12FyRTfVNGIdArILMZDl+zqYG4cy4edSAXlrs=
+	t=1750970032; c=relaxed/simple;
+	bh=Hki1lknvzhrAFMQrP5/wbYpe1cen1E7aJ735NRs9Wpo=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=N+R2JSp887gd+hfDd1X46GpZ19duZfJEut83m0+uY7yui1XlXGFGTNwGMILUkeA+UFKkZpuNS1izZSceg2J9wb21xsqAqZulnedAHyVCpLhRWNP1pGbb3tW3zxL3onu34qF0sNIHxPMYXSP93RBuYdZ6pLBRX0UxKSyVxI98AWw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C4071385C6DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 22698385C6DE
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=HpJ5aa93
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=LJRud6rA
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id A07F245D3B
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 16:31:44 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id ECEC545D3B
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 16:33:51 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=1kohR
-	QAzaXeD+1iTRoaVAw2ySks=; b=HpJ5aa93ge3983YL810wB1DyQPDJoUCbc3PRv
-	O9EAs2RNAtfLVwTNc8iP97JDxYEETj548n4eenfXgUnw+MCT1xByf3lXQnKeLiJ8
-	8r1r8QGLFz3QR7pDC+PijR/E8qWST7OwCa29AhefY0F677xVXl/fLY+uyxDvCKK9
-	ll22Wc=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=sjGZr
+	ArPE+mkOvGb/FRWgggI3vo=; b=LJRud6rA+/2jdJDOVhUA0U1HM3JOw5bSkUgqi
+	+UTDHjD1Jiho0WXCAfGA1f44mlUW7P8UJ32mwO9xdjc2jPKw7/rSZ91ErEUZBxNj
+	+tu0u24UwrvolgjsFOO+qerXeLo13N8IRuY0S72Zw7Go6DfK10ws3Dg0YduN3HJ1
+	X8YTQY=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 9ACF445D37
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 16:31:44 -0400 (EDT)
-Date: Thu, 26 Jun 2025 13:31:44 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id D223245D37
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 16:33:51 -0400 (EDT)
+Date: Thu, 26 Jun 2025 13:33:51 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to spawn
-Message-ID: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com>
+Subject: [PATCH 2/3] Cygwin: testsuite: test posix_spawn of a non-Cygwin
+ executable.
+Message-ID: <21125701-8385-d5ca-9dcb-702f862f90ee@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This program is currently meant to test standard file handles and
-current working directory (since these are settable via posix_spawn),
-but could be extended to add additional checks if other cygwin-to-win32
-process properties need to be tested.
-
-Change cygrun environment variable to mingwtestdir, and use that instead
-in cygrun.sh, so that other tests can find mingw test executables using
-the environment variable.
+Test CWD and redirection of standard handles.
 
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
-
-BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
--Wl,--disable-high-entropy-va in LDFLAGS?
-
- winsup/testsuite/Makefile.am                  |   2 +-
- winsup/testsuite/cygrun.sh                    |   4 +-
- winsup/testsuite/mingw/Makefile.am            |   7 +-
- .../winsup.api/posix_spawn/winchild.c         | 130 ++++++++++++++++++
- 4 files changed, 139 insertions(+), 4 deletions(-)
- create mode 100644 winsup/testsuite/winsup.api/posix_spawn/winchild.c
+ winsup/testsuite/Makefile.am                  |   1 +
+ .../testsuite/winsup.api/posix_spawn/win32.c  | 170 ++++++++++++++++++
+ 2 files changed, 171 insertions(+)
+ create mode 100644 winsup/testsuite/winsup.api/posix_spawn/win32.c
 
 diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
-index 957554a828..03f65d8184 100644
+index 03f65d8184..20e06b9c51 100644
 --- a/winsup/testsuite/Makefile.am
 +++ b/winsup/testsuite/Makefile.am
-@@ -349,7 +349,7 @@ XFAIL_TESTS = \
- LOG_COMPILER = $(srcdir)/cygrun.sh
-
- export runtime_root=$(abs_builddir)/testinst/bin
--export cygrun=$(builddir)/mingw/cygrun
-+export mingwtestdir=$(builddir)/mingw
-
- # Set up things in the Cygwin 'installation' at testsuite/testinst/ to provide
- # things which tests need to work
-diff --git a/winsup/testsuite/cygrun.sh b/winsup/testsuite/cygrun.sh
-index bf1d5cc6b5..f1673e4dbd 100755
---- a/winsup/testsuite/cygrun.sh
-+++ b/winsup/testsuite/cygrun.sh
-@@ -11,7 +11,7 @@ export PATH="$runtime_root:${PATH}"
- if [ "$1" = "./mingw/cygload" ]
- then
-     windows_runtime_root=$(cygpath -m $runtime_root)
--    $cygrun "$exe -v -cygwin $windows_runtime_root/cygwin1.dll"
-+    $mingwtestdir/cygrun "$exe -v -cygwin $windows_runtime_root/cygwin1.dll"
- else
--    cygdrop $cygrun $exe
-+    cygdrop $mingwtestdir/cygrun $exe
- fi
-diff --git a/winsup/testsuite/mingw/Makefile.am b/winsup/testsuite/mingw/Makefile.am
-index 772e73405f..25300a15d9 100644
---- a/winsup/testsuite/mingw/Makefile.am
-+++ b/winsup/testsuite/mingw/Makefile.am
-@@ -16,7 +16,7 @@ override CC = @MINGW_CC@
- override CXX = @MINGW_CXX@
- AM_CPPFLAGS =
-
--noinst_PROGRAMS = cygrun cygload
-+noinst_PROGRAMS = cygrun cygload winchild
-
- cygrun_SOURCES = \
- 	../cygrun.c
-@@ -24,3 +24,8 @@ cygrun_SOURCES = \
- cygload_SOURCES = \
- 	../winsup.api/cygload.cc
- cygload_LDFLAGS=-static -Wl,-e,cygloadCRTStartup
-+
-+winchild_SOURCES = \
-+	../winsup.api/posix_spawn/winchild.c
-+winchild_LDFLAGS=-municode
-+winchild_LDADD=-lntdll
-diff --git a/winsup/testsuite/winsup.api/posix_spawn/winchild.c b/winsup/testsuite/winsup.api/posix_spawn/winchild.c
+@@ -316,6 +316,7 @@ check_PROGRAMS = \
+ 	winsup.api/posix_spawn/fds \
+ 	winsup.api/posix_spawn/signals \
+ 	winsup.api/posix_spawn/spawnp \
++	winsup.api/posix_spawn/win32 \
+ 	winsup.api/samples/sample-fail \
+ 	winsup.api/samples/sample-pass
+ # winsup.api/ltp/ulimit01 is omitted as we don't have <ulimit.h>
+diff --git a/winsup/testsuite/winsup.api/posix_spawn/win32.c b/winsup/testsuite/winsup.api/posix_spawn/win32.c
 new file mode 100644
-index 0000000000..6fdfa002c0
+index 0000000000..cd2bedcd95
 --- /dev/null
-+++ b/winsup/testsuite/winsup.api/posix_spawn/winchild.c
-@@ -0,0 +1,130 @@
-+#define WIN32_LEAN_AND_MEAN
-+#include <windows.h>
-+#include <winternl.h>
-+#include <ctype.h>
++++ b/winsup/testsuite/winsup.api/posix_spawn/win32.c
+@@ -0,0 +1,170 @@
++#include "test.h"
++#include <dlfcn.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <spawn.h>
 +#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/cygwin.h>
++#include <unistd.h>
 +
-+
-+int wmain (int argc, wchar_t **argv)
++char * find_winchild (void)
 +{
-+  if (argc != 3)
++  static const char winchild[] = "/winchild";
++  char *mingwtestdir = getenv ("mingwtestdir");
++  if (!mingwtestdir)
 +    {
-+      fwprintf (stderr, L"Usage: %ls handle expected\n", argv[0]);
-+      return 1;
-+    }
-+
-+  if (!wcscmp (argv[1], L"CWD"))
-+    {
-+      LPWSTR buffer;
-+      DWORD len = GetCurrentDirectoryW (0, NULL);
-+      if (len == 0)
++      Dl_info dli;
++      if (dladdr (&find_winchild, &dli))
 +        {
-+	  fwprintf (stderr, L"%ls: GetCurrentDirectory failed with error %lu\n",
-+		    argv[0], GetLastError ());
-+	  return 2;
-+	}
-+      buffer = malloc (len * sizeof (WCHAR));
-+      if (GetCurrentDirectoryW (len, buffer) != len - 1)
-+        {
-+	  fwprintf (stderr, L"%ls: GetCurrentDirectory failed with error %lu\n",
-+		    argv[0], GetLastError ());
-+	  return 2;
-+	}
-+      if (wcscmp (argv[2], buffer))
-+        {
-+	  fwprintf (stderr, L"%ls: CWD '%ls' != expected '%ls'\n",
-+		    argv[0], buffer, argv[2]);
-+	  free (buffer);
-+	  return 4;
-+	}
-+      free (buffer);
-+    }
-+  else if (iswdigit (argv[1][0]) && !argv[1][1])
-+    {
-+      HANDLE stdhandle;
-+      DWORD nStdHandle;
-+      switch (argv[1][0])
-+      {
-+	case L'0':
-+	  nStdHandle = STD_INPUT_HANDLE;
-+	  break;
-+	case L'1':
-+	  nStdHandle = STD_OUTPUT_HANDLE;
-+	  break;
-+	case L'2':
-+	  nStdHandle = STD_ERROR_HANDLE;
-+	  break;
-+	default:
-+	  fwprintf (stderr, L"%ls: Unknown handle '%ls'\n", argv[0], argv[1]);
-+	  return 1;
-+      }
-+
-+      stdhandle = GetStdHandle (nStdHandle);
-+      if (stdhandle == INVALID_HANDLE_VALUE)
-+        {
-+	  fwprintf (stderr, L"%ls: Failed getting standard handle %ls: %lu\n",
-+	      argv[0], argv[1], GetLastError ());
-+	  return 2;
-+	}
-+      else if (stdhandle == NULL)
-+	{
-+	  if (wcscmp (argv[2], L"<CLOSED>"))
-+	    {
-+	      fwprintf (stderr,
-+			L"%ls: Handle %ls name '%ls' != expected '%ls'\n",
-+			argv[0], argv[1], L"<CLOSED>", argv[2]);
-+	      return 4;
-+	    }
++	  ssize_t i = strlen (dli.dli_fname) - 1;
++	  for (int slashes = 0; i >= 0 && slashes < 3; --i)
++	    if (dli.dli_fname[i] == '/')
++	      slashes++;
++	  stpcpy (stpcpy (dli.dli_fname + i + 1, "/mingw"), winchild);
++	  return realpath (dli.dli_fname, NULL);
 +	}
 +      else
 +        {
-+	  LPWSTR buf, win32path;
-+	  buf = malloc (65536);
-+	  if (!GetFinalPathNameByHandleW (stdhandle, buf,
-+					  65536 / sizeof (WCHAR),
-+					  FILE_NAME_OPENED|VOLUME_NAME_DOS))
-+	    {
-+	      POBJECT_NAME_INFORMATION pinfo = (POBJECT_NAME_INFORMATION) buf;
-+	      DWORD err = GetLastError ();
-+	      ULONG len;
-+	      NTSTATUS status = NtQueryObject (stdhandle, ObjectNameInformation,
-+					       pinfo, 65536, &len);
-+	      if (!NT_SUCCESS (status))
-+		{
-+		  fwprintf (stderr,
-+		      L"%ls: NtQueryObject for handle %ls failed: 0x%08x\n",
-+		      argv[0], argv[1], status);
-+		  free (buf);
-+		  return 3;
-+		}
-+
-+	      pinfo->Name.Buffer[pinfo->Name.Length / sizeof (WCHAR)] = L'\0';
-+	      win32path = pinfo->Name.Buffer;
-+	    }
-+	  else
-+	    {
-+	      static const WCHAR prefix[] = L"\\\\?\\";
-+	      win32path = buf;
-+	      if (!wcsncmp (win32path, prefix,
-+			    sizeof (prefix) / sizeof (WCHAR) - 1))
-+		win32path += sizeof (prefix) / sizeof (WCHAR) - 1;
-+	    }
-+
-+	  if (wcscmp (win32path, argv[2]))
-+	    {
-+	      fwprintf (stderr,
-+			L"%ls: Handle %ls name '%ls' != expected '%ls'\n",
-+			argv[0], argv[1], win32path, argv[2]);
-+	      free (buf);
-+	      return 4;
-+	    }
-+	  free (buf);
++	  return realpath ("../../mingw/winchild", NULL);
 +	}
 +    }
 +  else
 +    {
-+      fwprintf (stderr, L"%ls: Unknown handle '%ls'\n", argv[0], argv[1]);
-+      return 1;
++      char *ret, *tmp = malloc (strlen (mingwtestdir) + sizeof (winchild));
++      stpcpy (stpcpy (tmp, mingwtestdir), winchild);
++      ret = realpath (tmp, NULL);
++      free (tmp);
++      return ret;
 +    }
++}
++
++static char tmppath[] = "pspawn.XXXXXX";
++static char tmpcwd[] = "tmpcwd.XXXXXX";
++static char tmppath2[sizeof (tmpcwd) + 9] = {0};
++
++static void cleanup_tmpfiles (void)
++{
++  if (tmppath2[0])
++    unlink (tmppath2);
++  rmdir (tmpcwd);
++  unlink (tmppath);
++}
++
++int main (void)
++{
++  posix_spawn_file_actions_t fa;
++  pid_t pid;
++  int status;
++  int fd, fdcloexec, cwdfd;
++  char *childargv[] = {"winchild", NULL, NULL, NULL};
++  char *winchild = find_winchild ();
++
++  /* unbuffer stdout */
++  setvbuf(stdout, NULL, _IONBF, 0);
++
++  /* temp regular file */
++  negError (fd = mkstemp (tmppath));
++  atexit (cleanup_tmpfiles);
++  negError (close (fd));
++
++  /* temp directory */
++  nullError (mkdtemp (tmpcwd));
++
++  /* temp file within temp directory */
++  stpcpy (stpcpy (stpcpy (tmppath2, tmpcwd), "/"), "tmpfile2");
++  negError (fd = open (tmppath2, O_RDWR|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR));
++  negError (close (fd));
++
++  /* open file descriptors to test inheritance */
++  negError (fd = open ("/dev/null", O_RDONLY, 0644));
++  negError (fdcloexec = open ("/dev/full", O_RDONLY|O_CLOEXEC, 0644));
++
++  /* test posix_spawn_file_actions_addopen */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addopen (&fa, 0, "/dev/zero", O_RDONLY,
++					     0644));
++  childargv[1] = "0";
++  childargv[2] = "\\Device\\Null";
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
++  /* test posix_spawn_file_actions_adddup2 */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_adddup2 (&fa, fd, 0));
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
++  /* test posix_spawn_file_actions_adddup2 with CLOEXEC fd */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_adddup2 (&fa, fdcloexec, 0));
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
++  /* test posix_spawn_file_actions_adddup2 with out to err */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addopen (&fa, 1, "/dev/zero", O_WRONLY,
++					     0644));
++  errCode (posix_spawn_file_actions_adddup2 (&fa, 1, 2));
++  childargv[1] = "2";
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
++  /* test posix_spawn_file_actions_addopen with real file */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addopen (&fa, 1, tmppath, O_WRONLY, 0644));
++  childargv[1] = "1";
++  childargv[2] = cygwin_create_path (CCP_POSIX_TO_WIN_A|CCP_ABSOLUTE, tmppath);
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++  free (childargv[2]);
++
++  /* test posix_spawn_file_actions_addchdir */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addchdir (&fa, tmpcwd));
++  childargv[1] = "CWD";
++  childargv[2] = cygwin_create_path (CCP_POSIX_TO_WIN_A|CCP_ABSOLUTE, tmpcwd);
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
++  /* test posix_spawn_file_actions_addfchdir */
++  negError (cwdfd = open (tmpcwd, O_SEARCH|O_DIRECTORY|O_CLOEXEC, 0755));
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addfchdir (&fa, cwdfd));
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++  free (childargv[2]);
++
++  /* test posix_spawn_file_actions_addfchdir followed by addopen */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addfchdir (&fa, cwdfd));
++  errCode (posix_spawn_file_actions_addopen (&fa, 1, "tmpfile2", O_WRONLY, 0644));
++  childargv[1] = "1";
++  childargv[2] = cygwin_create_path (CCP_POSIX_TO_WIN_A|CCP_ABSOLUTE, tmppath2);
++  errCode (posix_spawn (&pid, winchild, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++  free (childargv[2]);
++
++  negError (close (cwdfd));
++  negError (close (fd));
++  negError (close (fdcloexec));
++
 +  return 0;
 +}
 -- 
