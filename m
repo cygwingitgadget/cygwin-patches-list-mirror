@@ -1,134 +1,248 @@
 Return-Path: <SRS0=8F9w=ZJ=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 197E1385C6F5
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 23:55:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 197E1385C6F5
+	by sourceware.org (Postfix) with ESMTPS id 93762385C6F5
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 23:56:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 93762385C6F5
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 197E1385C6F5
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 93762385C6F5
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750982125; cv=none;
-	b=XOYOdbVf7K3fLMz54v5aWMNBV4eBReaxVGTbVBfLRWyLPbQQD7AIT5VGHy+lgox7XDJtClnv0UtYVWpXqIhPCwsL+4ViBvLwHpnDqYMjI4rAwroC4DstLR0OprsJfuO3li4WjrOSLPYMKicYROhi3CN7Q4wI39rGkSK4QoD/6Ik=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750982201; cv=none;
+	b=nO3aYSu8JlKgOPpmgLJ/FhKt3KvCwc5JskczZU5A6CxDe4vWv4hKN5emyGsROOEQqWENgmgoNK7kdHSkk1Z5cQPUS+dzOJn6VE6LO4MYBqI/oazO4tNDo7q4TG8aGvBr/fwYEoU1Fh+w3EIDjP8NX8M50tMGNH+TjZMnE8nMV48=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750982125; c=relaxed/simple;
-	bh=sHtcTaNZNlEvnWF4NOWGArnYTJ/931hMtVT/KlmvVes=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=H9KYPBWb1gcItZNqpUJqFym3zWtKF3T2tEVI26Owm3MU6lhBO/szSIpsR88eYd7tBdqIfwMTTPvl3lHzUOfeEkU5iKpG1GONOI7w6Ps2TecHWSunARMf0fm3c8cZGJP7rX8+pnYTXxlch8o1b2njQukvdtsh4PqSitKYOJT+oe4=
+	t=1750982201; c=relaxed/simple;
+	bh=YL80wdbSX/ZkfpNR+rdClReKfvAfKWBLlgl5xYPdDLg=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=LDPQOv2TIie+Pyr88gRI1Ks1FZL4R3iEEdp5cXj0eTZuKp22W+95F/TE+BpmMZXrFa7m8g5Fvkd2pVm8paxBj5ROFETAOPoLp+SJavuHWq5f0tpw25pnh/CN7YI7zR3HeY71VjX7E4cJshCTDQeL2yeiT+QoZETtTdvd0TgMzGI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 197E1385C6F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 93762385C6F5
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=C4m3rox6
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=GANV799m
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id EAB5A45D31
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 19:55:24 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 6FB8A45D31
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 19:56:41 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=yV86W
-	fGWYNJTH3VlteXAeapv4zw=; b=C4m3rox6vp3oxfOB75aE+lV8lNCIpyNqlk+10
-	is98ooKCCqGYfPNK8iSfkrH8UL5QaAco1cAJ/xzknyoLQfV6isxP9bxWFkHwlGpy
-	48wYHViHunnoPABmbfmNGTB0EGb03Nw54Y6jxfRbKfVfvSKZSFKCaLWARzTNTVge
-	Cvn+N8=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=9RTnI
+	dF5gpH4Eg2ObhcHe1RDAGA=; b=GANV799mObfv4JdtLwbc6Y4ZqohTeyMJajNLR
+	8zz/8/uUW9VArotKzxAiml5Uc92qcOt3Dqji/bT7ln8YxY2TTBpp4+/FDE4Rg2Pv
+	miabwpPk3RR4JKoYrQPLBbXqlDfETnxXkoj7iBSwlDFsAhIth7EgO6e8VE0BKuwh
+	wIFmSs=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id E584045D30
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 19:55:24 -0400 (EDT)
-Date: Thu, 26 Jun 2025 16:55:24 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 68DF645D30
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 19:56:41 -0400 (EDT)
+Date: Thu, 26 Jun 2025 16:56:41 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/5] Cygwin: allow redirecting stderr in ch_spawn
-Message-ID: <cb938c47-80dd-78c6-876f-7a36112960af@jdrake.com>
+Subject: [PATCH 2/5] Cygwin: add ability to pass cwd to child process
+Message-ID: <24e81c12-102f-9afe-206f-ec65577e9a3b@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-stdin and stdout were alreadly allowed for popen, but implementing
-posix_spawn in terms of spawn would require stderr as well.
+This will be used by posix_spawn_fileaction_add_(f)chdir.
+
+This implementation is not quite complete enough for posix_spawn, as it
+also needs to treat relative paths to the program as relative to the
+specified CWD.
 
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
- winsup/cygwin/dcrt0.cc                    | 2 ++
- winsup/cygwin/local_includes/child_info.h | 6 +++---
- winsup/cygwin/spawn.cc                    | 5 +++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ winsup/cygwin/dcrt0.cc                    | 19 +++++-
+ winsup/cygwin/local_includes/child_info.h |  5 +-
+ winsup/cygwin/spawn.cc                    | 72 ++++++++++++++++++++---
+ 3 files changed, 84 insertions(+), 12 deletions(-)
 
 diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-index 69c233c247..b0fb5c9c1e 100644
+index b0fb5c9c1e..6adc31495a 100644
 --- a/winsup/cygwin/dcrt0.cc
 +++ b/winsup/cygwin/dcrt0.cc
-@@ -662,6 +662,8 @@ child_info_spawn::handle_spawn ()
-     cygheap->fdtab.move_fd (__stdin, 0);
-   if (__stdout >= 0)
-     cygheap->fdtab.move_fd (__stdout, 1);
-+  if (__stderr >= 0)
-+    cygheap->fdtab.move_fd (__stderr, 2);
-   cygheap->user.groups.clear_supp ();
+@@ -46,6 +46,7 @@ extern "C" void __sinit (_reent *);
 
-   /* If we're execing we may have "inherited" a list of children forked by the
+ static int NO_COPY envc;
+ static char NO_COPY **envp;
++static int NO_COPY cwdfd = AT_FDCWD;
+
+ bool NO_COPY jit_debug;
+
+@@ -656,6 +657,7 @@ child_info_spawn::handle_spawn ()
+   __argv = moreinfo->argv;
+   envp = moreinfo->envp;
+   envc = moreinfo->envc;
++  cwdfd = moreinfo->cwdfd;
+   if (!dynamically_loaded)
+     cygheap->fdtab.fixup_after_exec ();
+   if (__stdin >= 0)
+@@ -842,7 +844,22 @@ dll_crt0_1 (void *)
+
+   ProtectHandle (hMainThread);
+
+-  cygheap->cwd.init ();
++  if (cwdfd >= 0)
++    {
++      int res = fchdir (cwdfd);
++      if (res < 0)
++	{
++	  /* if the error occurs after the calling process successfully
++	     returns, the child process shall exit with exit status 127. */
++	  /* why is this byteswapped? */
++	  set_api_fatal_return (0x7f00);
++	  api_fatal ("can't fchdir, %R", res);
++	}
++      close (cwdfd);
++      cwdfd = AT_FDCWD;
++    }
++  else
++    cygheap->cwd.init ();
+
+   /* Initialize pthread mainthread when not forked and it is safe to call new,
+      otherwise it is reinitalized in fixup_after_fork */
 diff --git a/winsup/cygwin/local_includes/child_info.h b/winsup/cygwin/local_includes/child_info.h
-index 2da62ffaa3..902be8727b 100644
+index 902be8727b..95bdd5cd1c 100644
 --- a/winsup/cygwin/local_includes/child_info.h
 +++ b/winsup/cygwin/local_includes/child_info.h
 @@ -33,7 +33,7 @@ enum child_status
  #define EXEC_MAGIC_SIZE sizeof(child_info)
 
  /* Change this value if you get a message indicating that it is out-of-sync. */
--#define CURR_CHILD_INFO_MAGIC 0xacbf4682U
-+#define CURR_CHILD_INFO_MAGIC 0x6ccb18aeU
+-#define CURR_CHILD_INFO_MAGIC 0x6ccb18aeU
++#define CURR_CHILD_INFO_MAGIC 0xeb5dce32U
 
  #include "pinfo.h"
  struct cchildren
-@@ -145,7 +145,7 @@ public:
-   cygheap_exec_info *moreinfo;
-   int __stdin;
-   int __stdout;
--  char filler[4];
-+  int __stderr;
-
-   void cleanup ();
-   child_info_spawn () {};
-@@ -190,7 +190,7 @@ public:
+@@ -128,6 +128,7 @@ public:
+   int envc;
+   char **envp;
+   HANDLE myself_pinfo;
++  int cwdfd;
+   int nchildren;
+   cchildren children[0];
+   static cygheap_exec_info *alloc ();
+@@ -190,7 +191,7 @@ public:
    bool has_execed_cygwin () const { return iscygwin () && has_execed (); }
    operator HANDLE& () {return hExeced;}
    int worker (const char *, const char *const *, const char *const [],
--		     int, int = -1, int = -1);
-+		     int, int = -1, int = -1, int = -1);
+-		     int, int = -1, int = -1, int = -1);
++		     int, int = -1, int = -1, int = -1, int = AT_FDCWD);
  };
 
  extern child_info_spawn ch_spawn;
 diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index ef175e7082..9a7f0bbf73 100644
+index 9a7f0bbf73..8625725d49 100644
 --- a/winsup/cygwin/spawn.cc
 +++ b/winsup/cygwin/spawn.cc
-@@ -281,7 +281,7 @@ extern DWORD mutex_timeout; /* defined in fhandler_termios.cc */
+@@ -281,7 +281,8 @@ extern DWORD mutex_timeout; /* defined in fhandler_termios.cc */
  int
  child_info_spawn::worker (const char *prog_arg, const char *const *argv,
  			  const char *const envp[], int mode,
--			  int in__stdin, int in__stdout)
-+			  int in__stdin, int in__stdout, int in__stderr)
+-			  int in__stdin, int in__stdout, int in__stderr)
++			  int in__stdin, int in__stdout, int in__stderr,
++			  int cwdfd)
  {
    bool rc;
    int res = -1;
-@@ -517,6 +517,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       set (chtype, real_path.iscygexec ());
-       __stdin = in__stdin;
-       __stdout = in__stdout;
-+      __stderr = in__stderr;
-       record_children ();
+@@ -362,7 +363,65 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       if (res)
+ 	__leave;
 
-       si.lpReserved2 = (LPBYTE) this;
-@@ -579,7 +580,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+-      if (!real_path.iscygexec () && ::cygheap->cwd.get_error ())
++      LPWSTR cwd = NULL;
++      if (real_path.iscygexec ())
++	{
++	  moreinfo->argc = newargv.argc;
++	  moreinfo->argv = newargv;
++	  moreinfo->cwdfd = cwdfd;
++	}
++
++      if (cwdfd > 0)
++        {
++	  cygheap_fdget cfd (cwdfd);
++	  if (cfd < 0)
++	    {
++	      set_errno (EBADF);
++	      res = -1;
++	      __leave;
++	    }
++	  cfd->set_close_on_exec (!real_path.iscygexec ());
++	  if (!real_path.iscygexec ())
++	    {
++	      PUNICODE_STRING natcwd = cfd->pc.get_nt_native_path ();
++	      cwd = tp.w_get ();
++	      USHORT len = natcwd->Length / sizeof (WCHAR);
++	      if (RtlEqualUnicodePathPrefix (natcwd, &ro_u_natp, FALSE))
++		{
++		  cwd = cfd->pc.get_wide_win32_path (cwd);
++		  if (len < MAX_PATH + 2)
++		    {
++		      if (cwd[5] == L':')
++			cwd += 4;
++		      else
++			*(cwd += 6) = L'\\';
++		    }
++		  else
++		    {
++		      set_errno (ENAMETOOLONG);
++		      res = -1;
++		      __leave;
++		    }
++		}
++	      else if (len <
++			NT_MAX_PATH - ro_u_globalroot.Length / sizeof (WCHAR))
++		{
++		  UNICODE_STRING ucwd;
++
++		  RtlInitEmptyUnicodeString (&ucwd, cwd,
++					    (NT_MAX_PATH - 1) * sizeof (WCHAR));
++		  RtlCopyUnicodeString (&ucwd, &ro_u_globalroot);
++		  RtlAppendUnicodeStringToString (&ucwd, natcwd);
++		}
++	      else
++		{
++		  set_errno (ENAMETOOLONG);
++		  res = -1;
++		  __leave;
++		}
++	    }
++	}
++      else if (!real_path.iscygexec () && ::cygheap->cwd.get_error ())
+ 	{
+ 	  small_printf ("Error: Current working directory %s.\n"
+ 			"Can't start native Windows application from here.\n\n",
+@@ -372,11 +431,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	  __leave;
+ 	}
 
-       int fileno_stdin = in__stdin < 0 ? 0 : in__stdin;
-       int fileno_stdout = in__stdout < 0 ? 1 : in__stdout;
--      int fileno_stderr = 2;
-+      int fileno_stderr = in__stderr < 0 ? 2 : in__stderr;
-
-       bool no_pcon = mode != _P_OVERLAY && mode != _P_WAIT;
-       term_spawn_worker.setup (iscygwin (), handle (fileno_stdin, false),
+-      if (real_path.iscygexec ())
+-	{
+-	  moreinfo->argc = newargv.argc;
+-	  moreinfo->argv = newargv;
+-	}
+       if ((wincmdln || !real_path.iscygexec ())
+ 	   && !cmd.fromargv (newargv, real_path.get_win32 (),
+ 			     real_path.iscygexec ()))
+@@ -624,7 +678,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 			       TRUE,		/* inherit handles */
+ 			       c_flags,
+ 			       envblock,	/* environment */
+-			       NULL,
++			       cwd,
+ 			       &si,
+ 			       &pi);
+ 	}
+@@ -676,7 +730,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 			       TRUE,		/* inherit handles */
+ 			       c_flags,
+ 			       envblock,	/* environment */
+-			       NULL,
++			       cwd,
+ 			       &si,
+ 			       &pi);
+ 	  if (hwst)
 -- 
 2.49.0.windows.1
 
