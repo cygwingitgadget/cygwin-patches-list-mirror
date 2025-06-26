@@ -1,77 +1,116 @@
 Return-Path: <SRS0=x/14=ZJ=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-	by sourceware.org (Postfix) with ESMTPS id 8FEE4385703B
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 00:00:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8FEE4385703B
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+	by sourceware.org (Postfix) with ESMTPS id 136C0385703B
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 02:12:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 136C0385703B
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8FEE4385703B
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::534
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750896049; cv=none;
-	b=Zeosbzk2GOm3j3OnNOAPy9BS6MbzIYQffKdRPZ6jVQehpx77t+ZEoDokS1JhGPvKWAbdplpzKnGdgpFYJkUIswiGt3XGWiPCLhwf+3r1fghE1ikClcnbOKaecvbClhk27zgEUrtuobaIBsZjwzT5BOpKIfH7hBAJstTWxpklmXY=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 136C0385703B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::531
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750903949; cv=none;
+	b=h3tIwKy7wTyxLR5r4W1V3nXJHECPLCtJa6HENizQdnaCKSOIMhQ9fOJ1Ga7069os6wJtO6rrAmrUYeXpMIQMblWBKEzotVkDmXJeObxflH0k9Rd5sCP0cthA7cDO2Rd6Q/aRXLsShkfv80iuHD2vWGH+Ozn2KESHmKV/2MKiFLg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750896049; c=relaxed/simple;
-	bh=KxiZnnUcpzeY229Ks0fkCMk6bO9g7Tg6UME6LCfz3TY=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=KAj5Z8MKnlnkrWcnLhdFJAZi34W4pNpqR5fp+bdbSzpn4V1i2XA+tVMIr1e0wKGra3cM3IKv56q+J1ZZTgcGmP4aIbQSNyIzhqdc5OHvfluhPdcD98rKTmZZEqHb4LHlJy63FCuzCuygpwAL+uNxOVV57T6QC/JNIx/77adWVI0=
+	t=1750903949; c=relaxed/simple;
+	bh=YRbUsxDGBDNaz5mWFe6AB+36kVCwcB35aL5Edy48qbw=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=pUwDoiJ8FfMp1SsHf41VOCGi/FPEKy6RBiFfnAk2uZND06h+mR8MwAdalIQUDfjCPzAYBx16tpGvaYOad/ml82QqNOB+BqrRfb6mQdhxKSVo2fyHWWgCaD0GwvX07+271JkTPg9pV6JW3IfrNyGvT+s9DWuCcWIZmbjgC+V2HVo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8FEE4385703B
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 136C0385703B
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=OKn4sCd1
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-60c01f70092so619656a12.3
-        for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 17:00:49 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=ON5RuGwn
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-607ec30df2bso918023a12.1
+        for <cygwin-patches@cygwin.com>; Wed, 25 Jun 2025 19:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750896048; x=1751500848; darn=cygwin.com;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KxiZnnUcpzeY229Ks0fkCMk6bO9g7Tg6UME6LCfz3TY=;
-        b=OKn4sCd16es/Gy21rqh3IiL2PuJZQ9LtpbrgYlryjTG6KilySSZ+/Wr3j1llojIKVB
-         QZblLXDTy+ocONgEaKqvl89RwQUsJKPea360r9DNsz2BfgEsJFjRJU+oOWh24vVdAQqQ
-         V2p/t1l7A9Lx+E7O/VgODhn/+2OpnlSh91qvFr1sG3q3wZ2ufaUyAtRFWBnigC3LiZz1
-         mzja0DrYsh9Z5TEUeodG1SlEmgvfwTjmTAcabqnW7+D4BEw3woLGzwJ4KNU4aDeSZ9Rj
-         7RTT7LLUVb3HCHYGJr/Nbok7mzzS8yPZ+NcOlP8lpDp9zhE3w8FyC49yPqZzT0rFpLZ9
-         hSoQ==
+        d=gmail.com; s=20230601; t=1750903947; x=1751508747; darn=cygwin.com;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TaX4MeFWY7Zaa8jQTPYawH4RIIBl3U36yqOZ8fLQ8Vw=;
+        b=ON5RuGwnAQ88MMpTg5rzrhgEc2LAZGW6rckFS9ugi2O9wsTVbMaclHpn0fN9+pVwAq
+         Far0L86UoP0VJJXQtcnlGpMHLAY6MAw9K3x9W0lfZpzTOmv0FYMwk/ddwG+dfwFporlT
+         SmE5th9BeyG/VuFF2DUePCTN2XUs2XLB6zErDzTnjeHUp2dMPxvRENKUuzRbpMlTLezq
+         deLyJF5Ama617S6oEo919Rqvg0uY1/y7tHfoSgP0Rv2f/a77uvLSpQ0Gv1OTN6yJeKh0
+         cM71/XyMgeGIeFH72oHUPT7M/ruSzehKfy8R9JDk6b6siZvQVZS8tPTLNKXzSZenMh5T
+         FFRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750896048; x=1751500848;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KxiZnnUcpzeY229Ks0fkCMk6bO9g7Tg6UME6LCfz3TY=;
-        b=rpPz3Tl4gCeldVd7xQga9dhtq4NAYHZO4PjDsVA+ic0vaBuBoy+2BqtTPZcEplv8x+
-         6YHfxYWwfZbtQ6KbiOaRtsaZmG+i2tS8+UEyk2zJo+Gg96qhoWEm9q7Nx9XxTttnc/W7
-         QJVYPrGupGpqkyiu4Ra0U2+4XIa6v8/igg3IBViFAqeQjE7uW0VGtecJuAF0BDSEc5QJ
-         +pjxjdJ6ZxPb2KDaFfHVGeGXePi+QmyTaFiPguxHRN38dcbkoLJ1JIYBrZ5p3fxNBFt/
-         QrxijLDTytwxOHsVet4zWumpnSe85s64OK8fPO6vUrv36GRb+Ya7PQzUc+40Cc+mqL7C
-         jXxg==
-X-Gm-Message-State: AOJu0YyDwX0Y5vHUmaKwNSGqEty6Qx84Ah0q2b1mb/SpWtJTrqedr7SR
-	3gZwELo6N1OtWzTqUY0ITKMQP6oZyPehZar4WkqkpKbsgLJbZ6dYuvXq3vapkrOV5xAB0dtht9X
-	jlHJoVZtqxrfVj1TOeJY7GqJPWxWzxxA=
-X-Gm-Gg: ASbGncvaD2Rwi6z2YyOurVHvsid1FBtCw+zGv3yFMTbVBWt7zlj+KHrGEGP6qa45pcA
-	Fm9Wae4lOipvZSUZj/q9Vn42zcsfyA+n8J/sS2xPWkjrKYOzfIDQh7X189OHSRhC4CKzncU9hso
-	bF8ba+E6AiJ5oaf2rzNpQvJ2IByva0adhKGIs24uoXlssX8A==
-X-Google-Smtp-Source: AGHT+IHaEmhVkoNYeUgX8AgAwIh1c0L1elASuckxk8PrbsJI6BdulYrdqGe9cHxj8SC4GzTUI4bELMr3wWJ9GVHYcrk=
-X-Received: by 2002:a05:6402:3487:b0:602:201:b46e with SMTP id
- 4fb4d7f45d1cf-60c4de22870mr3718531a12.31.1750896048095; Wed, 25 Jun 2025
- 17:00:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750903947; x=1751508747;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TaX4MeFWY7Zaa8jQTPYawH4RIIBl3U36yqOZ8fLQ8Vw=;
+        b=U9+rocEEW14P3Emebsqfwo6hppr1mmUqjDh/OUBGDA+wmwox+d3kcIhkuiSFqCtQi4
+         YZYarP/GAjqNHeeiVkvpjuSG4Sduy5cPOi5imEx8xApMk0kiH7tFVLgahQI88IZx5ebo
+         SxdnEfCisRkpyN0UQl/suGwi+tewY0Pn+1ra65cFdecl2rwTZIqKW5XPjtEm0Ct+/nxQ
+         9dYYoboLcIIOujfviuq1WTNcNqzhFf63NwqvywdJohP3ceBBfkRGRABI4mA5zgSzwVD0
+         NKYnEWPl2BfS3RvWtQ/yYE41Y9i4NgcXuDVi6VQ64f2A7ufVGfT9+vw8WiBqI2Z7IWwK
+         YvmA==
+X-Gm-Message-State: AOJu0Yz/0oszJSPv8NKK7SAPnFag79Ci+i5t1LlclALlKFeZYgTDryxz
+	Aswj74yEkJTWKm1B4l+TbZ5JqsLS5edn3fS3hO5oqEfxqyshErtM+uluQCZDkiLMmLiCqvl6jk1
+	LgocRILAkQEJUdDHaphhQQ2mwrfu63iCbrcJX
+X-Gm-Gg: ASbGncvTHXipS0GIMBhwq1E9KFxwda0ri70T/0dgO9W13ThZmChFU37IoG6As0D7fEB
+	hYmViQ2QFI9X3HE/ZzbyTIYSIGZ1ApMtUBeKgfiWDb8oQwOtgwCrVhN2W9w750PIDOAxLGqgkqg
+	7HVI1ebRXVogMIQqcSw/6kdxGEDYn25BkUI9IVqQ6pRbgf8Q==
+X-Google-Smtp-Source: AGHT+IEQtq5e7aJb/B+/8+QvxuVqo1DX5aI2cOE6jcXxLfFdB6Vz2CxvVZFxwB8ctM0uMbpNC5vma+2g9AfcqtcfHlc=
+X-Received: by 2002:a05:6402:3507:b0:607:5af9:19b6 with SMTP id
+ 4fb4d7f45d1cf-60c4d3d6179mr4702012a12.15.1750903947148; Wed, 25 Jun 2025
+ 19:12:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20250622083213.1871-1-johnhaugabook@gmail.com>
- <20250622083213.1871-4-johnhaugabook@gmail.com> <77b5d5ea-5cea-4a7b-951f-17278f9411f6@dronecode.org.uk>
-In-Reply-To: <77b5d5ea-5cea-4a7b-951f-17278f9411f6@dronecode.org.uk>
+References: <20250625013908.628-1-johnhaugabook@gmail.com> <20250625013908.628-5-johnhaugabook@gmail.com>
+ <aFuoBviRzyYIHLbU@calimero.vinschen.de>
+In-Reply-To: <aFuoBviRzyYIHLbU@calimero.vinschen.de>
 From: John Haugabook <johnhaugabook@gmail.com>
-Date: Wed, 25 Jun 2025 20:00:11 -0400
-X-Gm-Features: Ac12FXyvN9CA8SnoCK8rnjmp_uHYrNb5GzZ-iEO4WWIeVe9d-JZzsn3FfL-K92c
-Message-ID: <CAKrZaUsSvgcvMXkU1ur6LekJDe5yKRu8wCtWF+bGDj9rtFOeZw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] install.html: add tip on using setup-x86_64.exe from bin
-To: Jon Turney <jon.turney@dronecode.org.uk>
-Cc: cygwin-patches@cygwin.com
+Date: Wed, 25 Jun 2025 22:11:50 -0400
+X-Gm-Features: Ac12FXx2oFBM6THW_2E9jtsGsQtVoIbVulxzf3EDqTUeYVYq7Rts7c16LrwUHG0
+Message-ID: <CAKrZaUu6EvGiCwD3-RrfVrFrZ39r5_5c-JSmaa3TCWsEWeHwzw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] cygwin: faq-programming-6.21 install tips
+To: cygwin-patches@cygwin.com, Achim Gratz <Stromeko@nexgo.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,WEIRD_QUOTING autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Ok, I=E2=80=99ll drop this one and consider the patch set finalized. Thanks
-again for the review and feedback.
+Hi Corinna and Achim,
+
+> This shouldn't be necessary.  On Fedora the ParserDetails.ini file is
+> part of the perl-XML-SAX package but apparently it isn't in the
+> Cygwin package.  Is there a reason for that?  The user shouldn't
+> have to create the file manually...
+
+Two things:
+1. The error appears on both builds, but is slightly different in the
+cygwin install
+2. Sorry, but out of ignorance I didn't mention that the error was
+from the "src" install
+(hoping this makes for good new user feedback regarding build section).
+
+The error output (with context before and after) from the cygwin install was:
+"""""""""""""""
+make[3]: Entering directory
+'/oss/src/newlib-cygwin/build/x86_64-pc-cygwin/winsup/doc'
+  GEN      Makefile.dep
+  GEN      cygwin-ug-net/cygwin-ug-net.pdf
+  GEN      cygwin-api/cygwin-api.pdf
+  GEN      cygwin-api/cygwin-api.html
+  GEN      cygwin-ug-net/cygwin-ug-net.html
+  GEN      faq/faq.html
+Element listitem in namespace '' encountered in answer, but no template matches.
+  GEN      faq/faq.body
+  GEN      cygwin-ug-net/cygwin-ug-net-nochunks.html.gz
+  GEN      api2man.stamp
+  GEN      intro2man.stamp
+  GEN      utils2man.stamp
+  GEN      charmap
+  GEN      cygwin-api.info
+#HERE
+could not find ParserDetails.ini in /usr/share/perl5/vendor_perl/5.40/XML/SAX
+warning : xmlAddEntity: invalid redeclaration of predefined entity 'lt'
+  GEN      cygwin-ug-net.info
+# HERE
+could not find ParserDetails.ini in /usr/share/perl5/vendor_perl/5.40/XML/SAX
+warning : xmlAddEntity: invalid redeclaration of predefined entity 'lt'
+docbook2texi://refentry[@id='proc']/refnamediv: section is too deep
+docbook2texi://refsect1[@id='proc-desc']: section is too deep
+# ect....
+"""""""""""""""
+The remaining install did not end with an error code (2 usually)
+though, and completed successfully.
 
 Take Care,
 
