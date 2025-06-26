@@ -1,107 +1,109 @@
 Return-Path: <SRS0=iCjl=ZJ=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by sourceware.org (Postfix) with ESMTPS id 6EDDA385626D
-	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 15:22:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6EDDA385626D
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id 436BD385626D
+	for <cygwin-patches@cygwin.com>; Thu, 26 Jun 2025 15:27:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 436BD385626D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6EDDA385626D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.18
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750951334; cv=none;
-	b=j6/PZZAc905S/YfS2VfHFPz/X2ZGamc8ei3+8E+WY5xk2nXEph0wsQeqHwx0ckGxMZ17PuvIHBadpu9THSn5Pk1IG9lAUfV8Yii4S9pr3x/Qzfk4syivEQ8H/QTyXANJrGfG2XSq1giZm0RQbDIWKbVkSOKV4eu7L/cvc3KdJIM=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 436BD385626D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1750951630; cv=none;
+	b=R01hMk1+It33QHhuUQaSxVpuG7LCqtF1/4AA8ayvm5EN52D097+jMJtcLYJWvk98pRWGqLO+9nF5ISha942u7iYMNkzcQdF6dgtCe/gFUd7v7OL1COL1UVVe0YsWITzpyN/C1V40lp2MW71f1eIHOxR//4pzFyMDhpKRpzJXWao=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1750951334; c=relaxed/simple;
-	bh=Q+jQn4mXGqhkhst+Awvbsjg80/2+mj+dcoy9dd/w5Kw=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=G2GBPtSB+hnglouDs50QOux3XJlGSoXKFC9GmtXFp9TRgeqfqhcbQL1lM6a5qDDfKg915+k6atM1kVhXKCK9E9wC6Lu8CeWiCcjGH2VdhbZQvpeICCp+4hXUqjoRxur4RagNLhbE0YdRaA8mbel9zbV28yHKqmXCrxHx2aVFhQU=
+	t=1750951630; c=relaxed/simple;
+	bh=4tYU0XfRf2JLZVSXR+fhIsfxIFEj7ferRd5n4450Jj4=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=opRifVJqdnpX1A3FKJc602RTfj/kDggehGZX/FBsRlt8a2j+0gk9z1QJEN3BTo5WSFw+SSjQWLav8Tg4sbzZyhXLpkxxDCiIWkYGKdm8HfkNlkWDHpX630YJ7zarTBDcWra1YD8P8jqxZyei7I/2DkwsU737WDADrj94LlJDqTU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6EDDA385626D
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 436BD385626D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=ssq8LuwB
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=gxnNplae
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1750951327; x=1751556127;
+	s=s31663417; t=1750951629; x=1751556429;
 	i=johannes.schindelin@gmx.de;
-	bh=pYNILdkdpXgfP8CH72qMvDuLR660T36QN1bXP3/Gw0I=;
+	bh=LuXbVjqPeXnXYnrag6R9bAAFEoIKxoYveIGgngnKiYA=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=ssq8LuwBoA1oG4TnJ2SNeDKQHjEvUt/BjexhPvMUF266cFLGC/FYl1DUerMnNGt7
-	 C5Wf0mLOfVFCyjkzGzD7OWagOKUp4P6LnQ7GUmBgP6w09cu0FcPTpNnmRjOnhmF/9
-	 CKY1/dMgY49qVx5mx+BE4GDELGgFtB++/P9HGBYOOJyqvq3+0tS9t/Ksj271Cl+gg
-	 rF9oze4MsyTLvFxVkk1HnxRv02nbqu1sVGF8RuBjJBbDEGi1euHNTmqQn6u8ez8ty
-	 gpsYQw8P3i6LwDJAhseLwDKz1Zi0zrdqqaijvc8V/Fn1CciO9EE2QZNCRdkXyFbwV
-	 0uWZQ8z92YBoGfWP9A==
+	b=gxnNplae3awQ0UuF7CLnrlxx4YBrWD/DA1yQ91lxPEOIpfRGL2H349SHwdpc7g1K
+	 qrtnlbki+PvicKkrxYvBSc5mgWYvgDJeVuqFl3nVcy2UJmhWzW8iUd1bPBj/aUJYL
+	 7L1x7O4f7lVrRCOsFG/3tmA0VbmC1/FRdVtnkkoqR9MJ+lMT5y1DgzzXHzdirSC2L
+	 7+41g4wiVYXtywE2UFZFw++fsgw6DM+6GJ5yAbbz1MRCXCPdSLvtbqVNuZLzvB2N6
+	 Qvv506THkv06SmXMgvott55v7ITrv9eML6/iG4Sp0ThrV25A4KA/enqVHYYfjEJfi
+	 9DRLxL4GZL0KW9WG4Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [172.23.242.68] ([89.1.215.172]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1wq3-1usmGc21nN-010HrP; Thu, 26
- Jun 2025 17:22:07 +0200
-Date: Thu, 26 Jun 2025 17:22:05 +0200 (CEST)
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1uGyKI41Ac-00YOtO; Thu, 26
+ Jun 2025 17:27:09 +0200
+Date: Thu, 26 Jun 2025 17:27:07 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pipe: Simplify raw_write() a bit (stop to
- use chunk)
-In-Reply-To: <20250626143723.760e7bfdea7ca71e7f53faaf@nifty.ne.jp>
-Message-ID: <1c824617-b7df-83ba-0616-d1430d3388be@gmx.de>
-References: <20250625114202.927-1-takashi.yano@nifty.ne.jp> <db956baa-e4e1-68cb-e5b2-349a113c7654@gmx.de> <20250626143723.760e7bfdea7ca71e7f53faaf@nifty.ne.jp>
+Subject: Re: [PATCH v2] Cygwin: pipe: Fix unexpected blocking mode change by
+ pipe_data_available()
+In-Reply-To: <20250626073945.1134-1-takashi.yano@nifty.ne.jp>
+Message-ID: <85d26293-05ea-5192-dc3c-02a7a955c3e2@gmx.de>
+References: <20250626073945.1134-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:8PW5ezeI6MblAzBfPxNm1/lbrwQ8YW9UgrqWmedHblGdeLjM2C0
- BfQsFZ4G52xVImoitG6U2BoZ2NrHOglzSQAk++pA3TNJJXEjYkjFmTcYn7TqKoROnSQFdCA
- 8CVjBhJJVJ4+Eko1HTSWhe1mon7OD1doRkWhrak9F/l+7Cqa+nikvjcTGzWLHQgiC2h1/zl
- c69EE4pNogWDsKWysLT7Q==
-UI-OutboundReport: notjunk:1;M01:P0:paoWQApyJiw=;s7z/okINvS9urBgO0SHEffXPgT5
- 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
+X-Provags-ID: V03:K1:hXE+0/kT1il43lQXqW7bderMrfaQaCTL1E9bMKqrohzQIJLyArx
+ 8NLpfe35LETK9ZLztJ6/FIqwEQZVEK96CnKrCAwwA7yNdmNuz7z5P6EBhtN5RmLSh7R4mCS
+ Dt1ClwOxD+8eTrTHSnbTupd2jpSDc4h5M5K1hHaSRPHA5GX6n26N2wznF7pSrOPBwp/BhXe
+ 82UCqdtsQld/s2sKIJH4g==
+UI-OutboundReport: notjunk:1;M01:P0:jmK0xdiBMuw=;cfuPuNs8nhq5RuX6A9rVNUnYu76
+ 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
+ vcf9CimVyb/ysM=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -109,89 +111,138 @@ Hi Takashi,
 
 On Thu, 26 Jun 2025, Takashi Yano wrote:
 
-> On Wed, 25 Jun 2025 14:55:35 +0200 (CEST)
-> Johannes Schindelin wrote:
-> >=20
-> > On Wed, 25 Jun 2025, Takashi Yano wrote:
-> >=20
-> > > Reviewed-by:
-> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> >=20
-> > This is way too terse. There is a difference between being succinct an=
-d
-> > leaving things unsaid.
-> >=20
-> > Also, please make sure that v2 is a reply to v1 of the patch. I almost
-> > commented on v1 by mistake.
-> >=20
-> > > ---
-> > >  winsup/cygwin/fhandler/pipe.cc | 10 ++--------
-> > >  1 file changed, 2 insertions(+), 8 deletions(-)
-> > >=20
-> > > diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler=
-/pipe.cc
-> > > index e35d523bb..c35411abf 100644
-> > > --- a/winsup/cygwin/fhandler/pipe.cc
-> > > +++ b/winsup/cygwin/fhandler/pipe.cc
-> > > @@ -443,7 +443,6 @@ ssize_t
-> > >  fhandler_pipe_fifo::raw_write (const void *ptr, size_t len)
-> > >  {
-> > >    size_t nbytes =3D 0;
-> > > -  ULONG chunk;
-> >=20
-> > Okay, removing this local variable is a good indicator that this diff
-> > shows all the related logic, without having to resort to looking at th=
-e
-> > entire `pipe.cc` file that is not reproduced in this email.
-> >=20
-> > >    NTSTATUS status =3D STATUS_SUCCESS;
-> > >    IO_STATUS_BLOCK io;
-> > >    HANDLE evt;
-> > > @@ -540,11 +539,6 @@ fhandler_pipe_fifo::raw_write (const void *ptr,=
- size_t len)
-> > >  	}
-> > >      }
-> > > =20
-> > > -  if (len <=3D (size_t) avail)
-> > > -    chunk =3D len;
-> > > -  else
-> > > -    chunk =3D avail;
-> > > -
-> > >    if (!(evt =3D CreateEvent (NULL, false, false, NULL)))
-> > >      {
-> > >        __seterrno ();
-> > > @@ -561,8 +555,8 @@ fhandler_pipe_fifo::raw_write (const void *ptr, =
-size_t len)
-> > >        ULONG len1;
-> > >        DWORD waitret =3D WAIT_OBJECT_0;
-> > > =20
-> > > -      if (left > chunk && !is_nonblocking ())
-> > > -	len1 =3D chunk;
-> > > +      if (left > (size_t) avail && !is_nonblocking ())
-> > > +	len1 =3D (ULONG) avail;
-> > >        else
-> > >  	len1 =3D (ULONG) left;
-> >=20
-> > So there is a subtle change here, which _should_ result in the same
-> > behavior, but it is far from obvious.
+> pipe_data_available() is called from raw_write(). If the pipe is in
+> real_non_blocking_mode at that time, calling pipe_data_available()
+> can, in some cases, inadvertently revert the pipe to blocking mode.
+> Here is the background: pipe_data_available() checks the amount of
+> writable space in the pipe by calling NtQueryInformationFile() with
+> the FilePipeLocalInformation parameter. However, if the read side of
+> the pipe is simultaneously consuming data with a large buffer,
+> NtQueryInformationFile() may return 0 for WriteQuotaAvailable.
+> As a workaround for this behavior, pipe_data_available() temporarily
+> attempts to change the pipe-mode to blocking. If the pipe contains
+> data, this operation fails-indicating that the pipe is full. If it
+> succeeds, the pipe is considered empty. The problem arises from the
+> assumption that the pipe is always in real blocking mode before
+> attempting to flip the mode. However, if raw_write() has already set
+> the pipe to non-blocking mode due to its failure to determine available
+> space, two issues occur:
+> 1) Changing to non-blocking mode in pipe_data_available() always
+>    succeeds, since the pipe is already in non-blocking mode.
+> 2) After this, pipe_data_available() sets the pipe back to blocking
+>    mode, unintentionally overriding the non-blocking state required
+>    by raw_write().
 >=20
-> Is that so? It seems abvious to me. Because...
->=20
-> chunk has len (< avail) or avail.
-> When left (=3D len - nbytes) > chunk, len > chunk.
-> If len > chunk, chunk =3D=3D avail.
->=20
-> Isn't this obvious?
+> This patch addresses the issue by having pipe_data_available() check
+> the current real blocking mode, temporarily flip the pipe-mode and
+> then restore the pipe-mode to its original state.
 
-Yes, after spending a lot of time to reason about the code. That's a
-really wasteful way to spend readers' time when a clear and informative
-commit message could have saved them the time.
+Thank you for writing this commit message. It describes the problem and
+the solution well.
 
-That's why I keep harping on improving your commit message writing skills,
-it is essential.
+> Addresses: https://github.com/git-for-windows/git/issues/5682#issuecomme=
+nt-2997428207
+> Fixes: 7ed9adb356df ("Cygwin: pipe: Switch pipe mode to blocking mode by=
+ default")
+> Reported-by: Andrew Ng (nga888 @github)
 
-> Anyway, I'll add commit message and submit v3 patch
-> after "SSH hang fix" is settled.
+You may want to use Andrew Ng <andrew.ng@sony.com> instead.
 
-Thanks,
+Other than that, this patch looks good to me.
+
+Ciao,
 Johannes
+
+> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
+>  winsup/cygwin/fhandler/pipe.cc          |  2 --
+>  winsup/cygwin/local_includes/fhandler.h |  3 +++
+>  winsup/cygwin/select.cc                 | 11 ++++++-----
+>  3 files changed, 9 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/pipe.cc b/winsup/cygwin/fhandler/pip=
+e.cc
+> index e35d523bb..e7dc8850f 100644
+> --- a/winsup/cygwin/fhandler/pipe.cc
+> +++ b/winsup/cygwin/fhandler/pipe.cc
+> @@ -326,7 +326,6 @@ fhandler_pipe::raw_read (void *ptr, size_t& len)
+>        ULONG_PTR nbytes_now =3D 0;
+>        ULONG len1 =3D (ULONG) (len - nbytes);
+>        DWORD select_sem_timeout =3D 0;
+> -      bool real_non_blocking_mode =3D false;
+> =20
+>        FILE_PIPE_LOCAL_INFORMATION fpli;
+>        status =3D NtQueryInformationFile (get_handle (), &io,
+> @@ -453,7 +452,6 @@ fhandler_pipe_fifo::raw_write (const void *ptr, size=
+_t len)
+>      return 0;
+> =20
+>    ssize_t avail =3D pipe_buf_size;
+> -  bool real_non_blocking_mode =3D false;
+> =20
+>    /* Workaround for native ninja. Native ninja creates pipe with size =
+=3D=3D 0,
+>       and starts cygwin process with that pipe. */
+> diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/loc=
+al_includes/fhandler.h
+> index 3d9bc9fa5..04e2ca4c3 100644
+> --- a/winsup/cygwin/local_includes/fhandler.h
+> +++ b/winsup/cygwin/local_includes/fhandler.h
+> @@ -1203,6 +1203,7 @@ class fhandler_pipe_fifo: public fhandler_base
+>   protected:
+>    size_t pipe_buf_size;
+>    HANDLE pipe_mtx; /* Used only in the pipe case */
+> +  bool real_non_blocking_mode; /* Used only in the pipe case */
+>    virtual void release_select_sem (const char *) {};
+> =20
+>    IMPLEMENT_STATUS_FLAG (bool, isclosed)
+> @@ -1212,6 +1213,8 @@ class fhandler_pipe_fifo: public fhandler_base
+> =20
+>    virtual bool reader_closed () { return false; };
+>    ssize_t raw_write (const void *ptr, size_t len);
+> +
+> +  friend ssize_t pipe_data_available (int, fhandler_base *, HANDLE, int=
+);
+>  };
+> =20
+>  class fhandler_pipe: public fhandler_pipe_fifo
+> diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+> index bb141b065..32c73fd0c 100644
+> --- a/winsup/cygwin/select.cc
+> +++ b/winsup/cygwin/select.cc
+> @@ -644,22 +644,23 @@ pipe_data_available (int fd, fhandler_base *fh, HA=
+NDLE h, int mode)
+>  	reader is currently trying to read the pipe and it is pending.
+>  	In the latter case, the fact that the reader cannot read the data
+>  	immediately means that the pipe is empty. In the former case,
+> -	NtSetInformationFile() in set_pipe_non_blocking(true) will fail
+> -	with STATUS_PIPE_BUSY, while it succeeds in the latter case.
+> +	NtSetInformationFile() in set_pipe_non_blocking(!orig_mode) will
+> +	fail with STATUS_PIPE_BUSY, while it succeeds in the latter case.
+>  	Therefore, we can distinguish these cases by calling set_pipe_non_
+>  	blocking(true). If it returns success, the pipe is empty, so we
+>  	return the pipe buffer size. Otherwise, we return 0. */
+>        if (fh->get_device () =3D=3D FH_PIPEW && fpli.WriteQuotaAvailable=
+ =3D=3D 0)
+>  	{
+> +	  bool orig_mode =3D ((fhandler_pipe *) fh)->real_non_blocking_mode;
+>  	  NTSTATUS status =3D
+> -	    ((fhandler_pipe *) fh)->set_pipe_non_blocking (true);
+> +	    ((fhandler_pipe *) fh)->set_pipe_non_blocking (!orig_mode);
+>  	  if (status =3D=3D STATUS_PIPE_BUSY)
+>  	    return 0; /* Full */
+>  	  else if (!NT_SUCCESS (status))
+>  	    /* We cannot know actual write pipe space. */
+>  	    return 1;
+> -	  /* Restore pipe mode to blocking mode */
+> -	  ((fhandler_pipe *) fh)->set_pipe_non_blocking (false);
+> +	  /* Restore pipe mode to original blocking mode */
+> +	  ((fhandler_pipe *) fh)->set_pipe_non_blocking (orig_mode);
+>  	  /* Empty */
+>  	  fpli.WriteQuotaAvailable =3D fpli.InboundQuota;
+>  	}
+> --=20
+> 2.45.1
+>=20
+>=20
