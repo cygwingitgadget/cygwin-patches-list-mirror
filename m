@@ -1,63 +1,55 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 175983858C50; Fri, 27 Jun 2025 12:26:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 175983858C50
+	id D17983858408; Fri, 27 Jun 2025 12:26:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D17983858408
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751027175;
-	bh=M8DjD39weu6+O8wUaa67S0kiHVUsPkmjl+R9dN7XzqE=;
+	s=default; t=1751027198;
+	bh=OxNmA7Wwk2Mxu0cjwce0jNAI8pKyiHvEBIpKimr4XLE=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=JOV6Hz5rXHNkg/83F1BZ6YPQndXufxG6OggYZNuQs+s1YxtC796DxlMs1yCr7bS/q
-	 MbKpHrJ4DVj7HxJziSUtJP1/5qhJZYxKWIdpi0NsZ8EgwJsTfzqAzIlnLs8kiv1UN9
-	 +jw7RyPzIxxYGSoNa04/Ys6BA8Uoz13IETiPR2CE=
+	b=fM1cc/peo/DgWYTLxDFRddtSXxE6INo97c7xNJ/24QmiYjGMlAQlQOYoRryQ2toz9
+	 aOO4Y/brEQFM2EoG1QdaheYbZ74Sx+WquiNru1LIC6EQiSd+owaTiT8lf/huXY1rsY
+	 PP5M+qO2RhO2IoaNw9BuqpC0aVxprPmMiQr8n4QQ=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C2B49A806FF; Fri, 27 Jun 2025 14:26:12 +0200 (CEST)
-Date: Fri, 27 Jun 2025 14:26:12 +0200
+	id B9C01A806FF; Fri, 27 Jun 2025 14:26:36 +0200 (CEST)
+Date: Fri, 27 Jun 2025 14:26:36 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-Message-ID: <aF6N5Ds7jmadgewV@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: testsuite: include sys/stat.h for chmod in
+ posix_spawn/errors.c
+Message-ID: <aF6N_KjYX_dL5pg6@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <15b3cf9b-62f1-1273-0df8-427db6962e87@jdrake.com>
+References: <dd7c309e-69a6-b15b-ecaa-8c2faea74f58@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <15b3cf9b-62f1-1273-0df8-427db6962e87@jdrake.com>
+In-Reply-To: <dd7c309e-69a6-b15b-ecaa-8c2faea74f58@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 26 16:59, Jeremy Drake via Cygwin-patches wrote:
-> Currently just file actions open/close/dup2 are supported in the fast
-> path.
+On Jun 26 13:27, Jeremy Drake via Cygwin-patches wrote:
+> This is required on Linux.
+> 
+> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+> ---
+>  winsup/testsuite/winsup.api/posix_spawn/errors.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/winsup/testsuite/winsup.api/posix_spawn/errors.c b/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> index 2fc3217bc0..3fbc2cbf99 100644
+> --- a/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> +++ b/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> @@ -3,6 +3,7 @@
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> +#include <sys/stat.h>
+>  #include <unistd.h>
+> 
+>  static char tmppath[] = "pspawn.XXXXXX";
+> -- 
+> 2.49.0.windows.1
 
-I'm wondering about that a bit, see below.
-
-Also, ETOOSHORTCOMMITMESSAGE
-
-> +	      case __posix_spawn_file_actions_entry::FAE_DUP2:
-> +		if (fae->fae_newfildes < 0 || fae->fae_newfildes > 2)
-> +		  goto closes;
-
-Hmmmm.  So we only may dup2/open/close stdin/out/err?  That's not
-exactly what POSIX requires.
-
-I understand that this is because CreateProcess or better, Windows, only
-defines three handles which can be unambiguously connected to descriptor
-numbers, but theoretically, this restriction should only apply to
-non-Cygwin executables.
-
-Actually, I think this code path should really only be used with
-non-native executables.  With Cygwin executables, all the actions should
-be performed in the child process.  This is basically a job for
-child_info_spawn::handle_spawn() in dcrt0.cc.
-
-With only one exception: if the executable path is relative, create an
-absolute path by emulating (but not actually executing) the chdir/fchdir
-calls inside the file_action object.
-
-As for this code, it wouldn't hurt to add more comments explicitely
-describing what it's doing and why.  I would add the first comment
-already when defining the fds array ;)
-
+Obvious
 
 Thanks,
 Corinna
