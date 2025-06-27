@@ -1,118 +1,88 @@
-Return-Path: <SRS0=dcB5=ZK=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-	by sourceware.org (Postfix) with ESMTPS id 626C1385C6C2
-	for <cygwin-patches@cygwin.com>; Fri, 27 Jun 2025 21:45:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 626C1385C6C2
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 626C1385C6C2
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b31
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751060759; cv=none;
-	b=cRdbJGIZb+QK7P3smwHuaXxMjAt9uSuldzz7Tpi9cJ1BA5e7VPMA6mjnlfnKIUvmsHqbqUkmVyomkiSQjBQNt7muKcOhpDsqy4/erWGZ8eJY3veJ5JahWTtR5YG1Zy+2oZ6hah8Ykb/+sKE4/up4ZskBrxUiUPUdHkx9Ynwjx58=
+Return-Path: <SRS0=jaUm=ZK=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id C44FD385C40E
+	for <cygwin-patches@cygwin.com>; Fri, 27 Jun 2025 23:32:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C44FD385C40E
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C44FD385C40E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751067120; cv=none;
+	b=vXMevI1THc/l2XFu81S74xSDPwyWLVkTM8wpPoxWSubpg6Xh3Uyd6HbNvBggzwqVgUnkyUI5kZgSp9+ayNt7sJTBUQvXCJxfeT/FmAOxBLYH1uNFIoi3943YKeIHBzQwC+sh5wA60dhYZ1jejxK81BA+katstJuyFrjYvbH8ZI4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751060759; c=relaxed/simple;
-	bh=pwo1Y4LfK5MhUSB++kkTJn+x2kjTNKTBk8d750jgQqw=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=QIuq8lhsVn0uz2EKM3U30hV4jJctFn0wWAud72Ik8zGL4gx7ywhJ0siI+stQBweUmB9KboFRuKNCN9WHojJALKnLL5w/bSsfzu1DHxmwmOET3veYlTpV+LohsbFDNePSVP93MzphE1a2Mz+EWO/t02tPabBjJmKOmnNynz5wo/Y=
+	t=1751067120; c=relaxed/simple;
+	bh=HOuRL44MZkwuaoFSWJBCPFLhjs/9PCYpkKENZdp/baA=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=TTRJoyuAogqeaqkER1bKfbTX31dU3t0v5bLS41s3PyFDR0hjwPg7oraRRIuoBccBcsQaYZrxTxvpdmCzBW1pAALyhKuMBnFthN+x7EykSjR5GcBpVdKCBvcfmS57EK9U4Y+xlck6oNWdWgnWCCX6aLd2vs2y1HgSijiJF0KSpog=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 626C1385C6C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C44FD385C40E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=evAV5z9+
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-e8259b783f6so284244276.3
-        for <cygwin-patches@cygwin.com>; Fri, 27 Jun 2025 14:45:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751060758; x=1751665558; darn=cygwin.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/sURzasJQSC++AWxK8CqLlYGtHox9LwWvb4yGB355Q=;
-        b=evAV5z9+Thu66lLoGB/A8B4oc9Com/2AZEOavQ4lSbm4BR41mTX8etNFWUqaCbhM3M
-         vGjMEzTWowVZw7wPFv4khYEgzTEwKZB8VVkAYSRIsjx0nOYy/lwFK1wss0KWrm54LZl8
-         yhpS9qRMab04FtH3fW2Xmnbkm+iWxwsFOAMvObmb0S+LjyoeqHHngim6+jPtK6fs5NuD
-         8HcrjY8xJN+QpIom274pMQdJQG46tkXqwb5chrrtEL5viMEz7OlPkubDvd77H2FZJc4k
-         RU4SzOLo5wK9CH+rFDyBHin8HlOPhE0o2aXD9yvhJejXXRKAUBWss1Mi6ORUydDrLV4Q
-         Krsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751060758; x=1751665558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k/sURzasJQSC++AWxK8CqLlYGtHox9LwWvb4yGB355Q=;
-        b=J/hw2wNyBWz3MSqbb0SLPZUqVzpY3QfG/7AuD8TkxEn7wl0CMCyg6ifq0M88G/Eh2R
-         081/1cNeO7sNp+SCSh+z1Ncs/UASiyhfhE0fPcDSA2PRm+3mv0V8wwKBrrbr3nKR/SJd
-         1/Ulfi2YairQZvbr4TbnuO/uEsoW7aWIQ6CYkBiElRNLTWLm2EL9hA7XNf4AHmxKllLC
-         kBJFLVajP3UKlM0AFDqaD6B+gov2ABixhymDhvMj+Bs/lM7Be9rWN4BaNn4VEVTu1ZHD
-         S6YMXZWRAek70GhC/u1hgsCSLzqeNHj0WcoLe88PM5zyBpZzMblAYcTLC2rEuB0LMIUl
-         HFYQ==
-X-Gm-Message-State: AOJu0Ywn1iKfvlue6/OjrtoKmIZPAg0vHO85aq7H7PLD0zYM44oRB5YC
-	AQi2gS1Fuo1ogw43w3ycHveJvoj4+y0flZIPVusQ2h0r66KzLnsVqBpy4iJPoQ==
-X-Gm-Gg: ASbGncvpn/AHmetMw1yphGbrqOJOgQeuTEDsE0Jcji9lkf9n5RJekOHSOvPhktmkAH0
-	6L1wfQ6k2yoqJ3ZHXuySg4JqqZt7npcITqqRi7Ih7mDsW0jpUOmSb3ynrb9ZgAXMwZzYP1mUfta
-	5MlDe6LYFjpOot3T8Vq+NxiUWIPTqxwilnHYSJTC9qIk4XK0soDw8ugnEBN3dQjcDozUfm5l3ke
-	bgn9MZJKRhZbaYMo2ZipbPp/MlUK4SiIGbNgZ+7EwC0Z0m6vONXA4tvqfNIZsMsVXfXyGONdMb7
-	F0RtiCgRmc10Rau8DUZFW1R+61x9/fJlCXNwclUP6yBdyOkr0fooVfKrJf68BcMcfURd3gdzNQn
-	ByHtbg0ZyqaF3Tu+DV8x6E6WMezwRX1Yrm+lvp/phHdFnfjII68JnMhYRsgLVoLxpHHkR
-X-Google-Smtp-Source: AGHT+IGeaAmdZtUbHAqiaChSAYynm6nm859WIPyQoh1tBWaE/4UngW/QwFRMPnjRlirZZBvzlIttQA==
-X-Received: by 2002:a05:6902:1541:b0:e84:1b38:7ff0 with SMTP id 3f1490d57ef6-e87a7af55a7mr6432258276.3.1751060758145;
-        Fri, 27 Jun 2025 14:45:58 -0700 (PDT)
-Received: from localhost.localdomain (h218.203.184.173.dynamic.ip.windstream.net. [173.184.203.218])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e87a6b4c35bsm806340276.1.2025.06.27.14.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 14:45:57 -0700 (PDT)
-From: johnhaugabook@gmail.com
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=lqpQ+oGr
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 7D0F245D21
+	for <cygwin-patches@cygwin.com>; Fri, 27 Jun 2025 19:32:00 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=cGYx6ybBmraCsIU7XMmpGzWMkaM=; b=lqpQ+
+	oGrvpyAh9zESd68vWn1enRF7vzdmGPXhAzByw8diSuM60L7bHZeqo7X8V1mCOGK+
+	8TfZxuyup1cXPdLwrvaZv/Tupag1GryMJUnAPWFcOmSOSWjnt8imyLTTsfU8jmp+
+	LNGTz4Y7dBJhqJBQTqUWH2f07P0yD9zKqp9G0A=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 630A045D18
+	for <cygwin-patches@cygwin.com>; Fri, 27 Jun 2025 19:32:00 -0400 (EDT)
+Date: Fri, 27 Jun 2025 16:32:00 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Cc: John Haugabook <johnhaugabook@gmail.com>
-Subject: [PATCH] install: add Q&A: What packages are available
-Date: Fri, 27 Jun 2025 17:45:45 -0400
-Message-ID: <20250627214545.221-1-johnhaugabook@gmail.com>
-X-Mailer: git-send-email 2.49.0.windows.1
+Subject: Re: [PATCH 1/5] Cygwin: allow redirecting stderr in ch_spawn
+In-Reply-To: <aF6Qoq0yXMg4z3Jo@calimero.vinschen.de>
+Message-ID: <e3b78bde-3b2e-cdc8-0319-fda17c47579e@jdrake.com>
+References: <cb938c47-80dd-78c6-876f-7a36112960af@jdrake.com> <aF59GwzNozRYeAp4@calimero.vinschen.de> <aF6Qoq0yXMg4z3Jo@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: John Haugabook <johnhaugabook@gmail.com>=0D
+On Fri, 27 Jun 2025, Corinna Vinschen wrote:
 
-This patch adds a Q&A regarding finding available packages, linking to the=
-=0D
-package search and cygcheck page, and includes a tip on performing a=0D
-command-line search with cygcheck so that existing tools are more accessibl=
-e=0D
-and visible to users.=0D
-=0D
----=0D
- install.html | 13 +++++++++++++=0D
- 1 file changed, 13 insertions(+)=0D
-=0D
-diff --git a/install.html b/install.html=0D
-index 85c1cb49..ff07fc81 100755=0D
---- a/install.html=0D
-+++ b/install.html=0D
-@@ -100,6 +100,19 @@ installation.  Be advised that this will download and =
-install tens of gigabytes=0D
- of files to your computer.=0D
- </p>=0D
- =0D
-+<h2 class=3D"cartouche" id=3D"packages">Q: What packages are available?</h=
-2>=0D
-+=0D
-+<p>=0D
-+A: To find available packages, and view what package contains <i>X</i> see=
- the=0D
-+<a href=3D" https://cygwin.com/packages/">package search</a> page.=0D
-+</p>=0D
-+=0D
-+<p>=0D
-+<b>Tip:</b> Perform a search from the command-line using=0D
-+<a href=3D"https://cygwin.com/cygwin-ug-net/cygcheck.html"><code>cygcheck<=
-/code></a>=0D
-+using <code>-p package</code> or <code>-e package1 package2 ...</code> opt=
-ions.=0D
-+</p>=0D
-+=0D
- <h2 class=3D"cartouche" id=3D"verify-sig">Q: How do I verify the signature=
- of setup?</h2>=0D
- =0D
- <p>A: e.g.</p>=0D
--- =0D
-2.49.0.windows.1=0D
-=0D
+> On Jun 27 13:14, Corinna Vinschen wrote:
+> > On Jun 26 16:55, Jeremy Drake via Cygwin-patches wrote:
+> > > stdin and stdout were alreadly allowed for popen, but implementing
+> > > posix_spawn in terms of spawn would require stderr as well.
+> > >
+> > > Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+> > > ---
+> > >  winsup/cygwin/dcrt0.cc                    | 2 ++
+> > >  winsup/cygwin/local_includes/child_info.h | 6 +++---
+> > >  winsup/cygwin/spawn.cc                    | 5 +++--
+> > >  3 files changed, 8 insertions(+), 5 deletions(-)
+> >
+> > LGTM.  A sentence on why we can actually use the filler bytes now
+> > wouldn't hurt in the commit message.
+>
+> ....or rather...
+>
+> > int worker (const char *, const char *const *, const char *const [],
+> > -                    int, int = -1, int = -1);
+> > +                    int, int = -1, int = -1, int = -1);
+>
+> ....maybe this should actually get an array of three descriptors,
+> rather than getting one additional argument per descriptor, i.e.
+>
+>   int worker (const char *, const char *const *, const char *const [],
+>   -                    int, int = -1, int = -1);
+>   +                    int, int[3]);
+>
+> There's no good reason for these default args anyway.
+
+It's getting kind of silly how many args this function has.  The
+construction of this function (using placement new to reconstruct "this"
+inside worker) is kind of awkward for using members and setters (though
+this was done for the posix_spawn semaphore).  Might it make sense to pass
+a (pointer to a) struct/class instead?
+
+
