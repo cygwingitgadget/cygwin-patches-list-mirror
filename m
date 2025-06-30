@@ -1,74 +1,48 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 25BE23852134; Mon, 30 Jun 2025 09:50:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 25BE23852134
+	id C179A3852134; Mon, 30 Jun 2025 09:51:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C179A3852134
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751277003;
-	bh=y8hWMMl1ZuQFeGXJPkALGX1R1Wo3DriMSRo3A0HTNnk=;
+	s=default; t=1751277094;
+	bh=zRXcDnj98atVxyVQx4HOcTQg68eqF5vh70683N1kDck=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=S6636Fp85DUi2vnA8WaK0NFIdhQCShRwpcVlmpgQHRWB8jE63DCBaxyiHypyixcir
-	 od6CBHNa7nMp+8jIUS/j3pGjQJhBx96bybnu/zEhSNuNLbeKSCI3Laj9L+6CbmpUrj
-	 PBW3+JpF09D85a1z9U7Pqqc6TNac1gZbO78OZZl4=
+	b=ciUZwApgw6hRyPJX58lATYk91jDTBS6oA8yQIAu6UgmXWzinlFtKjYCyvNGlwTig3
+	 VFCfWkFOeQofWyGg4mEcawXsvpBOFEDrtYq5oy0/PH0r28igW9ZrYo86zApdX8myaF
+	 +CLlTeOjcHYESLn2bcFcH7Q5AuYMGUD/QXvlrKBo=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 77DC7A80B7A; Mon, 30 Jun 2025 11:50:00 +0200 (CEST)
-Date: Mon, 30 Jun 2025 11:50:00 +0200
+	id 96840A80897; Mon, 30 Jun 2025 11:51:32 +0200 (CEST)
+Date: Mon, 30 Jun 2025 11:51:32 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: testsuite: test relative path to exe after
- addchdir.
-Message-ID: <aGJdyP8SeAOwNqYD@calimero.vinschen.de>
+Subject: Re: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to spawn
+Message-ID: <aGJeJH1rLCeitrqo@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <798a4efc-cd12-42be-c155-88284d16c721@jdrake.com>
- <aF5cls2rh-njQ-PF@calimero.vinschen.de>
- <6e4d8f37-ff04-87a4-4003-d5bf23700d3d@jdrake.com>
+References: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com>
+ <aF6OibgUJ3IUvmLN@calimero.vinschen.de>
+ <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6e4d8f37-ff04-87a4-4003-d5bf23700d3d@jdrake.com>
+In-Reply-To: <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 27 10:00, Jeremy Drake via Cygwin-patches wrote:
+On Jun 27 10:34, Jeremy Drake via Cygwin-patches wrote:
 > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
 > 
-> > On Jun 26 13:29, Jeremy Drake via Cygwin-patches wrote:
-> > > This is apparently relative to the new cwd, but my implementation is
-> > > currently treating it as relative to the parent's cwd, so it's worth
-> > > testing.
-> > >
-> > > Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> > > ---
-> > >  winsup/testsuite/winsup.api/posix_spawn/errors.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/winsup/testsuite/winsup.api/posix_spawn/errors.c b/winsup/testsuite/winsup.api/posix_spawn/errors.c
-> > > index 38563441f3..2fc3217bc0 100644
-> > > --- a/winsup/testsuite/winsup.api/posix_spawn/errors.c
-> > > +++ b/winsup/testsuite/winsup.api/posix_spawn/errors.c
-> > > @@ -15,6 +15,7 @@ void cleanup_tmpfile (void)
-> > >
-> > >  int main (void)
-> > >  {
-> > > +  posix_spawn_file_actions_t fa;
-> > >    pid_t pid;
-> > >    int fd;
-> > >    char *childargv[] = {"ls", NULL};
-> > > @@ -53,5 +54,12 @@ int main (void)
-> > >        posix_spawn (&pid, tmpsub, NULL, NULL, childargv, environ));
-> > >  #endif
-> > >
-> > > +  /* expected ENOENT: relative path after chdir */
-> > > +  errCode (posix_spawn_file_actions_init (&fa));
-> > > +  errCode (posix_spawn_file_actions_addchdir_np (&fa, "/tmp"));
+> > On Jun 26 13:31, Jeremy Drake via Cygwin-patches wrote:
+> > > BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
+> > > -Wl,--disable-high-entropy-va in LDFLAGS?
 > >
-> > _np?  This is POSIX issue 8 now without the trailing _np.
-> > Cygwin supports that already.
+> > Why?
 > 
-> I am also making sure these tests work on Linux (except the new win32
-> one), and that doesn't seem to have the functions without the _np suffix.
+> With high-entropy-va, it has been observed that the PEB, TEB and stack can
+> happen to overlap with the cygheap
+> https://cygwin.com/pipermail/cygwin/2024-May/256000.html
 
-Ok.  Then GTG
+Yeah, but HEVA simply breaks fork.  We don't have to test this, because
+it won't work and we don't do it.  You can set the PE flag, but than
+you're on your own.
 
 
-Thanks,
 Corinna
