@@ -1,71 +1,107 @@
-Return-Path: <SRS0=HGQb=ZN=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 322F1385C6DC
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 17:24:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 322F1385C6DC
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 322F1385C6DC
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751304297; cv=none;
-	b=RswMhgJBgIi0IC29s5dzvxRxww8chF8PcnjTxB+QFaXvPpyyNDVj7zaF1yxnbBZ2Q7oGGLljm4LExwBE+yrK/+4LwHgucHObdm+9WnM9lJcIVHCjjPoC9Xr3VcMB/MfAzzugyzdHTwr56/0OXSezaqUxSEyThsS5qYmoTyMCMa0=
+Return-Path: <SRS0=ezLI=ZN=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 00CA3385DDD6
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 18:57:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 00CA3385DDD6
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 00CA3385DDD6
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751309839; cv=none;
+	b=E9RYKRcjqRmBJyHrC5r6E8UAygI1gEWI9B7gfU4npJVQL6ZX4RYZwi0WbrXQsjpRfL+YDsHBGvcamRDfX+pH8jvjKMRpbA1npPI28Sx0A/OpToLnTjt+fE6w0yhATtikyIhI7hO5h4FqK95L9Pp0RtIYCOPJZKGYxeZtCIjLgLg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751304297; c=relaxed/simple;
-	bh=gwg+R47VymZ7vhHa4mZNuwir6NMAcsgKmpnS3+BMeyI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=EF5r1eA3Eg9n/loS/z0RGoLVM3yEp1FJ7KW92aqzCGVxLF/jTEixMbilhbiTHv2/fqhavEWf/HYnxkQhZr1C3Tc/yCMcCl0zOe+JoQ5FlY/E2q7QyLinvkKomnP7gpgJ+xf5bylFfjjtN/O4DHk24ppdC3gc9uFWV/acy7Yx93k=
+	t=1751309839; c=relaxed/simple;
+	bh=TrG3MD//5GV4INVW0Q2Ox/AYWinZt0znFIJVmseUnLM=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=J20pV4q+lf6UBocq6KkjsgS4xMeiv1zQhe2D1r2Yvqj7UMnz/O94h8r/020bUmUDOPPud64H+Mykdxvw9l7VWA3Oe/w+mTpjxIHr7srtk4TFBDRz+FXpiLH/nd/YYhezsvzkehxhdxJXH2GagyFPBt3xpYa7+Oxw57HuCRQ4LHU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 322F1385C6DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 00CA3385DDD6
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=EUkhisMF
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20250630172452992.ZXSZ.61558.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 1 Jul 2025 02:24:52 +0900
-Date: Tue, 1 Jul 2025 02:24:52 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=aNCBwnF/
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id B799045CC6
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 14:57:18 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=KFRqobDVUC+JJzzZugF14Tu0cxM=; b=aNCBw
+	nF/0isZ9iqmv4u4YOQj2+U8mrRrDxXsmNDWilH+pIwNiXzmV11KWsFhY7slyYNYs
+	c0PNgaQFdqd922qwtkZ1ItzsUpDqK7UbnceHCv7b1C9qoxQ4Ekxg2R2sk0V57tB0
+	rDzOg/P5zjR5pBiz5yJPlW7NfFiLV5x8lhLl1g=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id B308A45CC4
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 14:57:18 -0400 (EDT)
+Date: Mon, 30 Jun 2025 11:57:18 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pipe: Simplify raw_write() a bit (Drop using
- chunk)
-Message-Id: <20250701022452.daecc600a7e992b8fadd1a50@nifty.ne.jp>
-In-Reply-To: <59dc1841-3dc1-2e16-e794-908eb594de87@gmx.de>
-References: <20250627100835.442-1-takashi.yano@nifty.ne.jp>
-	<59dc1841-3dc1-2e16-e794-908eb594de87@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
+Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
+In-Reply-To: <aGJl0crH02tjTIZs@calimero.vinschen.de>
+Message-ID: <5f60e191-e50e-32d3-53cc-903e03cc7a5e@jdrake.com>
+References: <15b3cf9b-62f1-1273-0df8-427db6962e87@jdrake.com> <aF6N5Ds7jmadgewV@calimero.vinschen.de> <7b118296-1d56-0b42-3557-992338335189@jdrake.com> <aGJl0crH02tjTIZs@calimero.vinschen.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751304293;
- bh=bZWduhlS2lWph9ORa4tJiWARYaruCjsLz7YhSulgR+g=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=EUkhisMFLmeEGcWyMMzDzXoHhwfh2Yd/rxgdXDbIrrltlutHLkyQWB7nFw/OPbBcGp0mn+w+
- kNnzT1xLh7JHC6+5NEcwe7o4BVIxIrowpjKidR8Du/bzoZXdKUpKlUOoqqLyHgJtG7CjnIpAIm
- u6QTT9ShZ3ez97G1XjDiDIhWzrUUMh7sRLqIAgsdtfG+JM3PUOSnxgdCFilc3f3W6eAAkxtO+F
- j5FGFEVxxDpHFWQZZNsgV5u431bwxsmyHrAqI+8e8e5/tbiXm1CX76wzKB806RMNfuRUUJ3PbG
- lZTNBdXcJ73GaAtMjYGxNwLMdzROnRdXVZxu8UmIO2G4JDnw==
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 30 Jun 2025 12:18:27 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Fri, 27 Jun 2025, Takashi Yano wrote:
-> 
-> > There are tree variables for similar purpose in raw_write(), avail,
-> > chunk, and len1. avail is the amount of writable space in the pipe.
-> > len1 is the data length to attempt to NtWriteFile(). And chunk is
-> > intermediate value to calculate len1 from avail which holds
-> > min(avail, len). Here, chunk has no clear role among them. In fact,
-> > it appears to obscure the intent of the code for the reader.
-> > 
-> > This patch removes the use of chunk and obtains len1 directly from
-> > avail.
-> 
-> Now that this diff no longer conflicts with the SSH hang fix (because you
-> dug deeper and identified a different part of the code as needing to be
-> fixed), I'd be very happy if you fast-tracked this patch.
+(I kind of cut up bits of quoting to try to address my
+thoughts/motivations better)
 
-Thansk for reviewing all the pipe fix patches. I'll push them.
+On Mon, 30 Jun 2025, Corinna Vinschen wrote:
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+> On Jun 27 11:44, Jeremy Drake via Cygwin-patches wrote:
+> > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
+> >
+> > > Hmmmm.  So we only may dup2/open/close stdin/out/err?  That's not
+> > > exactly what POSIX requires.
+> >
+> > In this fast-path.  Otherwise, it will use the existing fork/exec
+> > implementation in newlib.  Also, close can work for other fds (by setting
+> > them to cloexec for the duration).  Note this is done holding
+> > lock_process, which seems to be the same lock around dtable, so it should
+> > be safe to temporarily muck about with file descriptors in this way.
+> > Probably something else that needs a comment ;)
+>
+> Indeed.  Still, I'm not that happy with this code.  It seems to cater
+> for native child processes in the first place, but Cygwin children are
+> more important and the code should not go out of its way to handle
+> native processes while neglecting cygwin processes.  It should *at
+> least* already point into the direction the code is going to support
+> Cygwin children in the first place.  Does that make sense?
+
+> Yeah.  I don't have problems to use the fork/exec fallback for stuff
+> which just isn't implemented yet.  I'm just reluctant if the code
+> implements only the border case for native children.
+
+> What exactly were you trying to accomplish with this patch?
+
+My original idea was to implement the "least common denominator"
+functionality that would apply to all child processes (cygwin and
+non-cygwin).  This also seems to be what most users of posix_spawn use.
+That's mostly redirecting stdin/out/err.  I wasn't particularly interested
+in getting into the startup code for Cygwin processes, but it turned out I
+had to hook up stderr, and then fchdir (because Cygwin processes will
+ignore the Win32 cwd if the cwdstuff is already populated in the cygheap).
+
+Looking at what llvm, rust, make, ninja do they don't seem to have file
+actions for non-stdin/out/err, and only use some pretty easily implemented
+parent-side flags (sigmask, sigdef, pgroup).  I imagine the
+scheduler/schedparam are relatively easy too, but I don't think I've seen
+any of those build tools try to use them so I haven't looked into them.
+
+I was looking at hooking up (f)chdir because I knew there was a parameter
+to CreateProcess for it, but now looking back it may not be all that
+important.  Perhaps I should drop it for this first cut and come back to
+it in a future patch.
+
+It kind of sounds like what you are envisioning is pushing this to a lower
+level, potentially even re-architecting child_info_spawn and related
+startup code (I don't know if handle_spawn would necessarily encapsulate
+everything) in terms of posix_spawn's parameters.  I was not looking to
+get that deep into things.
+
+I probably won't be able to get back to really working on this for at
+least a week, but I'm hoping to at least get some comments written today.
