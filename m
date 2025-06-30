@@ -1,48 +1,55 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id C179A3852134; Mon, 30 Jun 2025 09:51:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C179A3852134
+	id 8B4D03852129; Mon, 30 Jun 2025 09:51:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8B4D03852129
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751277094;
-	bh=zRXcDnj98atVxyVQx4HOcTQg68eqF5vh70683N1kDck=;
+	s=default; t=1751277117;
+	bh=VtjwzZaDBXHBav7oPsjynQfLWGZtKtCwaPlD9INHhto=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=ciUZwApgw6hRyPJX58lATYk91jDTBS6oA8yQIAu6UgmXWzinlFtKjYCyvNGlwTig3
-	 VFCfWkFOeQofWyGg4mEcawXsvpBOFEDrtYq5oy0/PH0r28igW9ZrYo86zApdX8myaF
-	 +CLlTeOjcHYESLn2bcFcH7Q5AuYMGUD/QXvlrKBo=
+	b=tSQhe1CwfCBO+XrvA8EtO7A1+fcpO42jBka+6BDb9lSxdDg3hecL7YPJyBMLyYbmU
+	 pas7TyxpQfcDN6N4L32qSeJSloWkLeZAVlv3U4Gpmr7swHllG0WqbJ5wgFIgR67TMd
+	 xxPlH6WF3+UBX6ix6O1jC5mZGA2gqWhPrwOiD8V4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 96840A80897; Mon, 30 Jun 2025 11:51:32 +0200 (CEST)
-Date: Mon, 30 Jun 2025 11:51:32 +0200
+	id BC657A80897; Mon, 30 Jun 2025 11:51:54 +0200 (CEST)
+Date: Mon, 30 Jun 2025 11:51:54 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to spawn
-Message-ID: <aGJeJH1rLCeitrqo@calimero.vinschen.de>
+Subject: Re: [PATCH 3/3] Cygwin: testsuite: test passing directory fd to child
+Message-ID: <aGJeOk-3UQvFOwtL@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com>
- <aF6OibgUJ3IUvmLN@calimero.vinschen.de>
- <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com>
+References: <1b4da216-51cb-cbc5-7a2d-db997429eed3@jdrake.com>
+ <aF6POTp2VGPfPE6m@calimero.vinschen.de>
+ <4288efc0-5e49-84cc-0f96-2a0d07f4b121@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com>
+In-Reply-To: <4288efc0-5e49-84cc-0f96-2a0d07f4b121@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 27 10:34, Jeremy Drake via Cygwin-patches wrote:
+On Jun 27 12:13, Jeremy Drake via Cygwin-patches wrote:
 > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
 > 
-> > On Jun 26 13:31, Jeremy Drake via Cygwin-patches wrote:
-> > > BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
-> > > -Wl,--disable-high-entropy-va in LDFLAGS?
+> > On Jun 26 13:34, Jeremy Drake via Cygwin-patches wrote:
+> > > It doesn't make a whole lot of sense to redirect stdin/out/err to/from a
+> > > directory handle, but test it anyway.
 > >
-> > Why?
+> > I disagree.  There's nothing wrong if a program expects a directory
+> > handle on a file descriptor if the task is, for instance, to perform
+> > readdir on the incoming descriptor.
+> >
+> > Therefore, the code is ok, the commit message isn't.
 > 
-> With high-entropy-va, it has been observed that the PEB, TEB and stack can
-> happen to overlap with the cygheap
-> https://cygwin.com/pipermail/cygwin/2024-May/256000.html
+> Revised commit message
+>     Cygwin: testsuite: test passing directory fd to child
+> 
+>     This is a legal (if non-obvious) thing to do, so test it.
+> 
+>     Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+> 
+> OK to push this series?
 
-Yeah, but HEVA simply breaks fork.  We don't have to test this, because
-it won't work and we don't do it.  You can set the PE flag, but than
-you're on your own.
+Yup, go ahead.
 
-
+Thanks,
 Corinna
