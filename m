@@ -1,106 +1,71 @@
-Return-Path: <SRS0=g/f5=ZN=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
-	by sourceware.org (Postfix) with ESMTPS id 7132538505DB
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 14:46:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7132538505DB
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7132538505DB
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.83
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751294786; cv=none;
-	b=w3NGbXeboP3eOCRUqE8+LYaqbzmCuVn3ZyX0q4fiWdKuYycE0GWWgoHizQkpj2GMoXfGM/AsBBga900lqcHeaoWW7R91exkHlNXKOc+CVvDgz/zmXFkj56I01sCaEYeCvL8+u1nHN6TRE8ED/PR89HwCYX2y4ddkzgkESnwLRtM=
+Return-Path: <SRS0=ezLI=ZN=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 1DC6A3854A8E
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 17:11:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1DC6A3854A8E
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1DC6A3854A8E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751303491; cv=none;
+	b=PK8PImdOZHJa5fwpKQiGg0Ke1LGdLw3tb3XEozcgNyK57dlChoj9OhmK1oM8dE/3d/+OXnL7ZFofBjClYSbpemQ2oMVOfTr7QJWdFm6zLFzz9eQmltf4vdD4dKtrWKtmU09TeWzp6gd2kV3xhTQ9G7btdKu21Pn+SZWyuKuu7zc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751294786; c=relaxed/simple;
-	bh=jKsjvZBRwqsXvk8T/To7GRYgPwThki7y+IFlXFFfYD4=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version; b=M9Qif/X+Bw6qwoqXhPG4SlQGgWKIepUvLJYHt8Ewb1AOWwNPQoSS3sVDO8MliWOqZwcfzY24pgNoDH7y6LWGX7yHXZ7PQcl2pdEnwC6FdMlgbsIfnqdiUzFNQk/GuUGoovcITsfOzGKMagGxbLJw5QKnKq2S8bvdeIp7Czt4ufQ=
+	t=1751303491; c=relaxed/simple;
+	bh=M2hNnaiMi7duW5Czdsa0diVj6ro2xKsrD+gnjEh4fYo=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=AK2NnbTOmioWR7TSVq97ZhNLdv3+SfDH2051SiGytjYmjdXp1/mZoAGUYVoUM4IGSmK1P2bTF0ki1i7y9uGuENO5BrjVxAKhZ5hRsKjm6fuVTG612RiHjUJF17DsjPiD8QmV2PoJgOs0Xz3xmKjDbX7p31IDpmc6B6Ynzp0vw44=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7132538505DB
-Received: from fwd88.aul.t-online.de (fwd88.aul.t-online.de [10.223.144.114])
-	by mailout07.t-online.de (Postfix) with SMTP id F2458E05F
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 16:46:24 +0200 (CEST)
-Received: from [192.168.2.101] ([79.230.172.57]) by fwd88.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1uWFm4-0HPa0e0; Mon, 30 Jun 2025 16:46:24 +0200
-Subject: Re: [PATCH] wcrtomb: fix CESU-8 value of leftover lone high surrogate
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1DC6A3854A8E
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=OzJn8MBO
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 8A41645CCC
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 13:11:30 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=ccHmIJ4O0VEMbdIQ6/an7RhIEfE=; b=OzJn8
+	MBOiTapn5jMHQ4O6ghi7vzQ/JBpCukV58uMdRV2s7UayDzaRSjomXR04mpNMu+HZ
+	kibSmERvV6EtXQfTpA0ytyG8/E0X9okbwmuv/8eTc8tuxu6Z/HJCBAR0xNlZ39Xn
+	cPelm1FhUm0Y8R7ef007iJVXZm467VL0i32cv0=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 852E645CC6
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 13:11:30 -0400 (EDT)
+Date: Mon, 30 Jun 2025 10:11:29 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-References: <6bdab1bf-192e-d1b0-22dc-c678e94e35d9@t-online.de>
- <aGJmkh_2yM4Y416a@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Message-ID: <3ab5bc76-a73e-9279-3230-9be1b678efea@t-online.de>
-Date: Mon, 30 Jun 2025 16:46:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+Subject: Re: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to
+ spawn
+In-Reply-To: <aGJeJH1rLCeitrqo@calimero.vinschen.de>
+Message-ID: <8d3b0ebf-4766-cf94-13c0-8176a8ac3da7@jdrake.com>
+References: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com> <aF6OibgUJ3IUvmLN@calimero.vinschen.de> <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com> <aGJeJH1rLCeitrqo@calimero.vinschen.de>
 MIME-Version: 1.0
-In-Reply-To: <aGJmkh_2yM4Y416a@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TOI-EXPURGATEID: 150726::1751294784-2CFF75CB-2A10206D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0fa87e62-7fed-4d41-b20e-f0e4e2c3b6be
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,BODY_8BITS,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Corinna Vinschen wrote:
-> On Jun 29 19:13, Christian Franke wrote:
->> Fixes the CESU-8 value, but not the missing encoding if the high surrogate
->> is at the very end of the string.
-> Are you going to provide a patch for that issue?
+On Mon, 30 Jun 2025, Corinna Vinschen wrote:
 
-Not very soon as this possibly requires non-trivial rework including 
-comprehensive testing.
+> On Jun 27 10:34, Jeremy Drake via Cygwin-patches wrote:
+> > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
+> >
+> > > On Jun 26 13:31, Jeremy Drake via Cygwin-patches wrote:
+> > > > BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
+> > > > -Wl,--disable-high-entropy-va in LDFLAGS?
+> > >
+> > > Why?
+> >
+> > With high-entropy-va, it has been observed that the PEB, TEB and stack can
+> > happen to overlap with the cygheap
+> > https://cygwin.com/pipermail/cygwin/2024-May/256000.html
+>
+> Yeah, but HEVA simply breaks fork.  We don't have to test this, because
+> it won't work and we don't do it.  You can set the PE flag, but than
+> you're on your own.
 
-The function behind __WCTOMB() must also be called with the final L'\0' 
-as input. This is not the case. For example in _wcstombs_r() only the 
-second __WCTOMB() is called with L'\0'. The (s == NULL) part implicitly 
-assumes that it would only append '\0' and return 1.
-
-newlib/libc/stdlib/wctomb_r.c:
-
-size_t
-_wcstombs_r (...)
-{
-   ...
-   if (s == NULL)
-     {
-       ...
-       while (*pwcs != 0)
-         {
-           bytes = __WCTOMB (r, buff, *pwcs++, state);
-           ...
-           num_bytes += bytes;
-         }
-         return num_bytes;
-     }
-   else
-     {
-       while (n > 0)
-         {
-           bytes = __WCTOMB (r, buff, *pwcs, state);
-           ...
-           if (*pwcs == 0x00)
-             return ptr - s - (n >= bytes);
-           ...
-         }
-         ...
-     }
-}
-
-
-> ...
->> +      tmp = (((state->__value.__wchb[0] << 16 | state->__value.__wchb[1] << 8)
->> +	    - 0x10000) >> 10) | 0xd800;
->>         *s++ = 0xe0 | ((tmp & 0xf000) >> 12);
->>         *s++ = 0x80 | ((tmp &  0xfc0) >> 6);
->>         *s++ = 0x80 |  (tmp &   0x3f);
->> -- 
->> 2.45.1
->>
-> LGTM, please push.
-
-Done.
-
--- 
-Thanks,
-Christian
-
+Outside of fork, is cygheap able to "relocate" in case the memory it would
+like to occupy is already used?
