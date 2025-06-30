@@ -1,55 +1,74 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id E4BFE385213A; Mon, 30 Jun 2025 09:49:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E4BFE385213A
+	id 25BE23852134; Mon, 30 Jun 2025 09:50:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 25BE23852134
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751276965;
-	bh=oIxySh79IcpveqaRAKyIFA/znnJQoEuZF9fV2i30Qz4=;
+	s=default; t=1751277003;
+	bh=y8hWMMl1ZuQFeGXJPkALGX1R1Wo3DriMSRo3A0HTNnk=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=RqabX7iWP2JfKbVDYVBbCITs3NxxO5OO0aTBhJ9lEzO2HarWuWeIZbPmi0wccKEc2
-	 gtcX3H9cwSnnN/w1mvmpTWlpO4zaL9nC8ZKzr0Ovs+MFxWFqH+wfqcTUlF4Mk/toQJ
-	 Ie+NFKZFl4RW5CRTp+9wvZu1OAhWSw6TeWpj2yAk=
+	b=S6636Fp85DUi2vnA8WaK0NFIdhQCShRwpcVlmpgQHRWB8jE63DCBaxyiHypyixcir
+	 od6CBHNa7nMp+8jIUS/j3pGjQJhBx96bybnu/zEhSNuNLbeKSCI3Laj9L+6CbmpUrj
+	 PBW3+JpF09D85a1z9U7Pqqc6TNac1gZbO78OZZl4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 079C3A80B7A; Mon, 30 Jun 2025 11:49:23 +0200 (CEST)
-Date: Mon, 30 Jun 2025 11:49:22 +0200
+	id 77DC7A80B7A; Mon, 30 Jun 2025 11:50:00 +0200 (CEST)
+Date: Mon, 30 Jun 2025 11:50:00 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] cygwin: faq-programming-6.21 install tips
-Message-ID: <aGJdop567kV46sBG@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: testsuite: test relative path to exe after
+ addchdir.
+Message-ID: <aGJdyP8SeAOwNqYD@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20250625013908.628-1-johnhaugabook@gmail.com>
- <20250625013908.628-5-johnhaugabook@gmail.com>
- <aFuoBviRzyYIHLbU@calimero.vinschen.de>
- <CAKrZaUu6EvGiCwD3-RrfVrFrZ39r5_5c-JSmaa3TCWsEWeHwzw@mail.gmail.com>
- <aF5ZDMBwxl6NWUWv@calimero.vinschen.de>
- <CAKrZaUvLoZ+Tr7JtaVTpssXF90JWTsonraKuz0wp9YJNsXRBZA@mail.gmail.com>
+References: <798a4efc-cd12-42be-c155-88284d16c721@jdrake.com>
+ <aF5cls2rh-njQ-PF@calimero.vinschen.de>
+ <6e4d8f37-ff04-87a4-4003-d5bf23700d3d@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKrZaUvLoZ+Tr7JtaVTpssXF90JWTsonraKuz0wp9YJNsXRBZA@mail.gmail.com>
+In-Reply-To: <6e4d8f37-ff04-87a4-4003-d5bf23700d3d@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jun 27 14:41, John Haugabook wrote:
-> Take Care,
+On Jun 27 10:00, Jeremy Drake via Cygwin-patches wrote:
+> On Fri, 27 Jun 2025, Corinna Vinschen wrote:
 > 
-> John Haugabook
+> > On Jun 26 13:29, Jeremy Drake via Cygwin-patches wrote:
+> > > This is apparently relative to the new cwd, but my implementation is
+> > > currently treating it as relative to the parent's cwd, so it's worth
+> > > testing.
+> > >
+> > > Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+> > > ---
+> > >  winsup/testsuite/winsup.api/posix_spawn/errors.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/winsup/testsuite/winsup.api/posix_spawn/errors.c b/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> > > index 38563441f3..2fc3217bc0 100644
+> > > --- a/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> > > +++ b/winsup/testsuite/winsup.api/posix_spawn/errors.c
+> > > @@ -15,6 +15,7 @@ void cleanup_tmpfile (void)
+> > >
+> > >  int main (void)
+> > >  {
+> > > +  posix_spawn_file_actions_t fa;
+> > >    pid_t pid;
+> > >    int fd;
+> > >    char *childargv[] = {"ls", NULL};
+> > > @@ -53,5 +54,12 @@ int main (void)
+> > >        posix_spawn (&pid, tmpsub, NULL, NULL, childargv, environ));
+> > >  #endif
+> > >
+> > > +  /* expected ENOENT: relative path after chdir */
+> > > +  errCode (posix_spawn_file_actions_init (&fa));
+> > > +  errCode (posix_spawn_file_actions_addchdir_np (&fa, "/tmp"));
+> >
+> > _np?  This is POSIX issue 8 now without the trailing _np.
+> > Cygwin supports that already.
 > 
-> 
-> > So do I understand you right that the manual ParserDetails.ini
-> > generation isn't really required for the doc build to run through?
-> 
-> I wasn't sure about this one, so thought it could be put in as a tip. I ran
-> another sandbox, installing perl-XML-SAX-Expat from src. The terminal
-> threw the "missing ParserDetails.ini message", but it did not end the
-> install with an error code. All files built, and make install - good.
-> 
-> > If so, we shouldn't really care to document it as a requirement.
-> 
-> Getting no error code now with both cygwin and src install, then yes -
-> leave out.
+> I am also making sure these tests work on Linux (except the new win32
+> one), and that doesn't seem to have the functions without the _np suffix.
 
-Can you please tweak your patchset accordingly?
+Ok.  Then GTG
+
 
 Thanks,
 Corinna
