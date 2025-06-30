@@ -1,71 +1,71 @@
-Return-Path: <SRS0=ezLI=ZN=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 1DC6A3854A8E
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 17:11:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1DC6A3854A8E
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1DC6A3854A8E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751303491; cv=none;
-	b=PK8PImdOZHJa5fwpKQiGg0Ke1LGdLw3tb3XEozcgNyK57dlChoj9OhmK1oM8dE/3d/+OXnL7ZFofBjClYSbpemQ2oMVOfTr7QJWdFm6zLFzz9eQmltf4vdD4dKtrWKtmU09TeWzp6gd2kV3xhTQ9G7btdKu21Pn+SZWyuKuu7zc=
+Return-Path: <SRS0=HGQb=ZN=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id 322F1385C6DC
+	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 17:24:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 322F1385C6DC
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 322F1385C6DC
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751304297; cv=none;
+	b=RswMhgJBgIi0IC29s5dzvxRxww8chF8PcnjTxB+QFaXvPpyyNDVj7zaF1yxnbBZ2Q7oGGLljm4LExwBE+yrK/+4LwHgucHObdm+9WnM9lJcIVHCjjPoC9Xr3VcMB/MfAzzugyzdHTwr56/0OXSezaqUxSEyThsS5qYmoTyMCMa0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751303491; c=relaxed/simple;
-	bh=M2hNnaiMi7duW5Czdsa0diVj6ro2xKsrD+gnjEh4fYo=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=AK2NnbTOmioWR7TSVq97ZhNLdv3+SfDH2051SiGytjYmjdXp1/mZoAGUYVoUM4IGSmK1P2bTF0ki1i7y9uGuENO5BrjVxAKhZ5hRsKjm6fuVTG612RiHjUJF17DsjPiD8QmV2PoJgOs0Xz3xmKjDbX7p31IDpmc6B6Ynzp0vw44=
+	t=1751304297; c=relaxed/simple;
+	bh=gwg+R47VymZ7vhHa4mZNuwir6NMAcsgKmpnS3+BMeyI=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=EF5r1eA3Eg9n/loS/z0RGoLVM3yEp1FJ7KW92aqzCGVxLF/jTEixMbilhbiTHv2/fqhavEWf/HYnxkQhZr1C3Tc/yCMcCl0zOe+JoQ5FlY/E2q7QyLinvkKomnP7gpgJ+xf5bylFfjjtN/O4DHk24ppdC3gc9uFWV/acy7Yx93k=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1DC6A3854A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 322F1385C6DC
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=OzJn8MBO
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 8A41645CCC
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 13:11:30 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=ccHmIJ4O0VEMbdIQ6/an7RhIEfE=; b=OzJn8
-	MBOiTapn5jMHQ4O6ghi7vzQ/JBpCukV58uMdRV2s7UayDzaRSjomXR04mpNMu+HZ
-	kibSmERvV6EtXQfTpA0ytyG8/E0X9okbwmuv/8eTc8tuxu6Z/HJCBAR0xNlZ39Xn
-	cPelm1FhUm0Y8R7ef007iJVXZm467VL0i32cv0=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 852E645CC6
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 13:11:30 -0400 (EDT)
-Date: Mon, 30 Jun 2025 10:11:29 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=EUkhisMF
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20250630172452992.ZXSZ.61558.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 1 Jul 2025 02:24:52 +0900
+Date: Tue, 1 Jul 2025 02:24:52 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to
- spawn
-In-Reply-To: <aGJeJH1rLCeitrqo@calimero.vinschen.de>
-Message-ID: <8d3b0ebf-4766-cf94-13c0-8176a8ac3da7@jdrake.com>
-References: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com> <aF6OibgUJ3IUvmLN@calimero.vinschen.de> <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com> <aGJeJH1rLCeitrqo@calimero.vinschen.de>
-MIME-Version: 1.0
+Subject: Re: [PATCH v2] Cygwin: pipe: Simplify raw_write() a bit (Drop using
+ chunk)
+Message-Id: <20250701022452.daecc600a7e992b8fadd1a50@nifty.ne.jp>
+In-Reply-To: <59dc1841-3dc1-2e16-e794-908eb594de87@gmx.de>
+References: <20250627100835.442-1-takashi.yano@nifty.ne.jp>
+	<59dc1841-3dc1-2e16-e794-908eb594de87@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751304293;
+ bh=bZWduhlS2lWph9ORa4tJiWARYaruCjsLz7YhSulgR+g=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=EUkhisMFLmeEGcWyMMzDzXoHhwfh2Yd/rxgdXDbIrrltlutHLkyQWB7nFw/OPbBcGp0mn+w+
+ kNnzT1xLh7JHC6+5NEcwe7o4BVIxIrowpjKidR8Du/bzoZXdKUpKlUOoqqLyHgJtG7CjnIpAIm
+ u6QTT9ShZ3ez97G1XjDiDIhWzrUUMh7sRLqIAgsdtfG+JM3PUOSnxgdCFilc3f3W6eAAkxtO+F
+ j5FGFEVxxDpHFWQZZNsgV5u431bwxsmyHrAqI+8e8e5/tbiXm1CX76wzKB806RMNfuRUUJ3PbG
+ lZTNBdXcJ73GaAtMjYGxNwLMdzROnRdXVZxu8UmIO2G4JDnw==
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 30 Jun 2025, Corinna Vinschen wrote:
+On Mon, 30 Jun 2025 12:18:27 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> On Fri, 27 Jun 2025, Takashi Yano wrote:
+> 
+> > There are tree variables for similar purpose in raw_write(), avail,
+> > chunk, and len1. avail is the amount of writable space in the pipe.
+> > len1 is the data length to attempt to NtWriteFile(). And chunk is
+> > intermediate value to calculate len1 from avail which holds
+> > min(avail, len). Here, chunk has no clear role among them. In fact,
+> > it appears to obscure the intent of the code for the reader.
+> > 
+> > This patch removes the use of chunk and obtains len1 directly from
+> > avail.
+> 
+> Now that this diff no longer conflicts with the SSH hang fix (because you
+> dug deeper and identified a different part of the code as needing to be
+> fixed), I'd be very happy if you fast-tracked this patch.
 
-> On Jun 27 10:34, Jeremy Drake via Cygwin-patches wrote:
-> > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
-> >
-> > > On Jun 26 13:31, Jeremy Drake via Cygwin-patches wrote:
-> > > > BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
-> > > > -Wl,--disable-high-entropy-va in LDFLAGS?
-> > >
-> > > Why?
-> >
-> > With high-entropy-va, it has been observed that the PEB, TEB and stack can
-> > happen to overlap with the cygheap
-> > https://cygwin.com/pipermail/cygwin/2024-May/256000.html
->
-> Yeah, but HEVA simply breaks fork.  We don't have to test this, because
-> it won't work and we don't do it.  You can set the PE flag, but than
-> you're on your own.
+Thansk for reviewing all the pipe fix patches. I'll push them.
 
-Outside of fork, is cygheap able to "relocate" in case the memory it would
-like to occupy is already used?
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
