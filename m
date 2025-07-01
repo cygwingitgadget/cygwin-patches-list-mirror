@@ -1,185 +1,160 @@
 Return-Path: <SRS0=8TyM=ZO=jdrake.com=cygwin@sourceware.org>
 Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 51A043854A95
-	for <cygwin-patches@cygwin.com>; Tue,  1 Jul 2025 23:47:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 51A043854A95
+	by sourceware.org (Postfix) with ESMTPS id A6B393854A95
+	for <cygwin-patches@cygwin.com>; Tue,  1 Jul 2025 23:48:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A6B393854A95
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 51A043854A95
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A6B393854A95
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751413625; cv=none;
-	b=r6XBGySaD61ObTlNw9Z7037A19HaLznhm60yRzpalWJ1nA/nnNrlV+7KHUNvfly8Yuqfya4ujkDNUZIYZaOc63qCLnOeGNXidr5VnunssZk2N7oKbGs4a7QvOlE/vt7Fs+T+E4wg5EagVR+X9V42KN7uzi55YI8AUT0XNpXss8g=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751413737; cv=none;
+	b=JPlPngY7ptrw3xIWtYvqCALr1UakjxWj9de0fd+uE/caaOTZlpelm4MECt1vIjO1xj7O68iPWujkOJeJx/h9lKjHR/yETW1meoBPshQw2BZb8pWQMgUEBCh18ZieLuPQAz3iQCL9o1z9u2oy8QVUMX45vcqJozbgcburqjUx70Y=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751413625; c=relaxed/simple;
-	bh=nZa7KkCnJkPuv9TFqbDDS5XlURD3VuSnjXyBYfErZGk=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=trxO0AVK4G/7o2fckRhzkd/MhvesD6UOFYwmQUALeP26A3QANsyGNYsy0DDqHL6AEo0MVmRinqHpueLnnPZS6zgSlWjZJkruZaTCej/q64JwkXstBD/yoWzRZTylhblGwAZrAUE6iFKD0Vf6Zfsr/Qwa/xs/VMPPvfLvhL+7Vkw=
+	t=1751413737; c=relaxed/simple;
+	bh=BS7U29gDxqFdSECwN7wYCVz0h7f5r5ySSTLZhl0eXDY=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=vmaUUWi7XgppQVxXucpl2GhG2Vcjm8vv6gmHs13tzel61gh+hit0UEQ75D79V1EiKiC/T1wHgf90GLhMb+kgDUna17ukshkPIU9geFxY0YaWnlt6c8ZiY05cYoG8zpgj1dZ543SwRPFRyZPCQ/CHPgPF568i+vAOt9N96Lq1RkM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 51A043854A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A6B393854A95
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=cTIVqjcM
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=oGjAHGO+
 Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 2E9A845CA9
-	for <cygwin-patches@cygwin.com>; Tue, 01 Jul 2025 19:47:05 -0400 (EDT)
+	by mail231.csoft.net (Postfix) with ESMTP id 7E71A45CA9
+	for <cygwin-patches@cygwin.com>; Tue, 01 Jul 2025 19:48:57 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:message-id:mime-version:content-type; s=csoft; bh=Cp+bT
-	iJSTKOI608hgliODQoV5SU=; b=cTIVqjcM0Q51GJWTRK8zksKxCYM/p3L3WJZBy
-	QOXraego1c09faFwfnoHt+JIYd5Q/hcs72F5r8xcNr547erjF+tUAhyFRNvr7u6D
-	AeUm/ZKr2pZRHJvwQth1Vc5TISFnDYbWPiU9pG4wKKezIsXzuzY8yG5Bsd/H6Pl+
-	sVQWks=
+	:subject:message-id:mime-version:content-type; s=csoft; bh=Yt6ks
+	WHOC9Ovz9vIwrs9rEbQHV4=; b=oGjAHGO+xra3idEA9wkhzWw2JMem4Tj79uiEz
+	EOUEiisqxGq65xemB5cgEhoX/KPdiFPsWeTESz6EoG/sEKPa+UG2YjWlI2n38PFn
+	m9ZevIneRGs847b5HMtyTLKYCLpwePhYWn9rPTGBsgmns6NJLAXJJ8NBrBat+Dlq
+	rz+uho=
 Received: from mail231 (mail231 [66.216.5.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2B6EE45CA7
-	for <cygwin-patches@cygwin.com>; Tue, 01 Jul 2025 19:47:05 -0400 (EDT)
-Date: Tue, 1 Jul 2025 16:47:05 -0700 (PDT)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 64F7345CA7
+	for <cygwin-patches@cygwin.com>; Tue, 01 Jul 2025 19:48:57 -0400 (EDT)
+Date: Tue, 1 Jul 2025 16:48:57 -0700 (PDT)
 From: Jeremy Drake <cygwin@jdrake.com>
 X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 5/6] Cygwin: posix_spawn: add fastpath support for SETSIGMASK
- and SETSIGDEF.
-Message-ID: <d981ba56-0ed0-2a1f-3c11-f95fdf5bbead@jdrake.com>
+Subject: [PATCH v2 6/6] Cygwin: add pgroup support to posix_spawn fast path
+Message-ID: <88a9f7c9-4a53-294c-c529-e84b9d682c44@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-the sigmask was already a member of the child_info, so this just needed
-an arg to allow overriding the value copied from cygheap.  The signal
-handlers are referenced by two pointers, global_sigs which is used by
-the signal routines, and cygheap->sigs which is only used during process
-launch and startup.  Temporarily replace cygheap->sigs with a copy that
-has the requested signals reset to default while spawning the child.
+Tweak proc_subproc PROC_ADD_CHILD to only initialize vchild->pgid if
+it's not already set.
+
+The error checking of setpgid is lacking with respect to the POSIX
+standard, but this code replicates what setpgid does.
+
+This attribute is used by ninja, so is worth adding to the fast path.
 
 Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 ---
- winsup/cygwin/local_includes/child_info.h |  3 +-
- winsup/cygwin/spawn.cc                    | 57 ++++++++++++++++++++---
- 2 files changed, 53 insertions(+), 7 deletions(-)
+ winsup/cygwin/local_includes/child_info.h |  4 +++-
+ winsup/cygwin/sigproc.cc                  |  2 +-
+ winsup/cygwin/spawn.cc                    | 23 +++++++++++++++++++----
+ 3 files changed, 23 insertions(+), 6 deletions(-)
 
 diff --git a/winsup/cygwin/local_includes/child_info.h b/winsup/cygwin/local_includes/child_info.h
-index ad7c8fc29a..63f398fa1d 100644
+index 63f398fa1d..9d98b2620e 100644
 --- a/winsup/cygwin/local_includes/child_info.h
 +++ b/winsup/cygwin/local_includes/child_info.h
-@@ -141,9 +141,10 @@ struct spawn_worker_args
+@@ -141,10 +141,12 @@ struct spawn_worker_args
    int mode;
    int stdfds[3];
    int cwdfd;
-+  sigset_t *sigmask;
++  pid_t pgid;
+   sigset_t *sigmask;
 
    spawn_worker_args (int mode)
--    : mode (mode), stdfds {-1, -1, -1}, cwdfd (AT_FDCWD)
-+    : mode (mode), stdfds {-1, -1, -1}, cwdfd (AT_FDCWD), sigmask (NULL)
+-    : mode (mode), stdfds {-1, -1, -1}, cwdfd (AT_FDCWD), sigmask (NULL)
++    : mode (mode), stdfds {-1, -1, -1}, cwdfd (AT_FDCWD), pgid (-1),
++      sigmask (NULL)
    { }
  };
 
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index 361887981b..7020071bc5 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -257,7 +257,7 @@ proc_subproc (DWORD what, uintptr_t val)
+ 	{
+ 	  vchild->uid = myself->uid;
+ 	  vchild->gid = myself->gid;
+-	  vchild->pgid = myself->pgid;
++	  InterlockedCompareExchange ((LONG*) &vchild->pgid, myself->pgid, 0);
+ 	  vchild->sid = myself->sid;
+ 	  vchild->ctty = myself->ctty;
+ 	  vchild->cygstarted = true;
 diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index b8b623af7f..cd99644d60 100644
+index cd99644d60..52aac91c45 100644
 --- a/winsup/cygwin/spawn.cc
 +++ b/winsup/cygwin/spawn.cc
-@@ -589,6 +589,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       __stdin = args.stdfds[0];
-       __stdout = args.stdfds[1];
-       __stderr = args.stdfds[2];
-+      if (args.sigmask)
-+	sigmask = *args.sigmask;
-       record_children ();
+@@ -614,7 +614,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	 they ignore it explicitely.  CREATE_NEW_PROCESS_GROUP does that for us. */
+       pid_t ctty_pgid =
+ 	::cygheap->ctty ? ::cygheap->ctty->tc_getpgid () : 0;
+-      if (!iscygwin () && ctty_pgid && ctty_pgid != myself->pgid)
++      if (!iscygwin () && ctty_pgid &&
++	  ctty_pgid != (args.pgid == -1 ? myself->pgid : args.pgid))
+ 	c_flags |= CREATE_NEW_PROCESS_GROUP;
+       refresh_cygheap ();
 
-       si.lpReserved2 = (LPBYTE) this;
-@@ -1454,6 +1456,8 @@ do_posix_spawn (pid_t *pid, const char *path,
- 		const posix_spawnattr_t *sa, char * const argv[],
- 		char * const envp[], int use_env_path)
- {
-+  spawn_worker_args args (_P_NOWAIT);
-+  struct sigaction *sigs = NULL;
-   syscall_printf ("posix_spawn%s (%p, %s, %p, %p, %p, %p)",
-       use_env_path ? "p" : "", pid, path, fa, sa, argv, envp);
+@@ -843,7 +844,9 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	  myself->set_has_pgid_children ();
+ 	  ProtectHandle (pi.hThread);
+ 	  pinfo child (cygpid,
+-		       PID_IN_USE | (real_path.iscygexec () ? 0 : PID_NOTCYGWIN));
++		       PID_IN_USE |
++		       (real_path.iscygexec () ? 0 : PID_NOTCYGWIN) |
++		       ((c_flags & CREATE_NEW_PROCESS_GROUP) ? PID_NEW_PG : 0));
+ 	  if (!child)
+ 	    {
+ 	      syscall_printf ("pinfo failed");
+@@ -854,6 +857,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	    }
+ 	  child->dwProcessId = pi.dwProcessId;
+ 	  child.hProcess = pi.hProcess;
++	  if (args.pgid != -1)
++	    child->pgid = args.pgid ?: cygpid;
 
-@@ -1461,15 +1465,26 @@ do_posix_spawn (pid_t *pid, const char *path,
+ 	  real_path.get_wide_win32_path (child->progname);
+ 	  /* This introduces an unreferenced, open handle into the child.
+@@ -1463,17 +1468,27 @@ do_posix_spawn (pid_t *pid, const char *path,
+
+   /* TODO: possibly implement spawnattr flags:
       POSIX_SPAWN_RESETIDS
-      POSIX_SPAWN_SETPGROUP
+-     POSIX_SPAWN_SETPGROUP
       POSIX_SPAWN_SETSCHEDPARAM
--     POSIX_SPAWN_SETSCHEDULER
--     POSIX_SPAWN_SETSIGDEF
--     POSIX_SPAWN_SETSIGMASK */
--  if (sa && (*sa)->sa_flags)
--    goto fallback;
-+     POSIX_SPAWN_SETSCHEDULER */
-+  if (sa)
-+    {
-+      if ((*sa)->sa_flags & ~(POSIX_SPAWN_SETSIGMASK|POSIX_SPAWN_SETSIGDEF))
-+	goto fallback;
-+
-+      if ((*sa)->sa_flags & POSIX_SPAWN_SETSIGMASK)
-+	args.sigmask = &(*sa)->sa_sigmask;
-+
-+      if ((*sa)->sa_flags & POSIX_SPAWN_SETSIGDEF)
+      POSIX_SPAWN_SETSCHEDULER */
+   if (sa)
+     {
+-      if ((*sa)->sa_flags & ~(POSIX_SPAWN_SETSIGMASK|POSIX_SPAWN_SETSIGDEF))
++      static const short FASTPATH_FLAGS =
++	POSIX_SPAWN_SETSIGMASK|POSIX_SPAWN_SETSIGDEF|POSIX_SPAWN_SETPGROUP;
++      if ((*sa)->sa_flags & ~FASTPATH_FLAGS)
+ 	goto fallback;
+
+       if ((*sa)->sa_flags & POSIX_SPAWN_SETSIGMASK)
+ 	args.sigmask = &(*sa)->sa_sigmask;
+
++      if ((*sa)->sa_flags & POSIX_SPAWN_SETPGROUP)
 +	{
-+	  sigs = (struct sigaction *) cmalloc (HEAP_SIGS,
-+					     _NSIG * sizeof (struct sigaction));
-+	  if (!sigs)
-+	    return ENOMEM;
++	  args.pgid = (*sa)->sa_pgroup;
++	  if (args.pgid < 0)
++	    return EINVAL;
++	  /* According to POSIX there should be more error cases, but setpgid
++	     does not implement them, so replicate its behavior. */
 +	}
-+    }
-
-   {
-     path_conv buf;
--    spawn_worker_args args (_P_NOWAIT);
-     /* lock the process to temporarily manipulate file descriptors for the
-        spawn operation */
-     lock_process now;
-@@ -1623,12 +1638,40 @@ do_posix_spawn (pid_t *pid, const char *path,
- 	  }
-       }
-
-+    if (sigs)
-+      {
-+	memcpy (sigs, cygheap->sigs, _NSIG * sizeof (struct sigaction));
-+	for (int i = 1; i < _NSIG; i++)
-+	  {
-+	    if ((*sa)->sa_sigdefault & SIGTOMASK (i))
-+	      {
-+		sigs[i].sa_mask = 0;
-+		sigs[i].sa_handler = SIG_DFL;
-+		sigs[i].sa_flags &= ~SA_SIGINFO;
-+	      }
-+	  }
 +
-+	/* the active signal handler info is kept in global_sigs and
-+	   cygheap->sigs is only used for inheritance to child processes, so we
-+	   can swap out cygheap->sigs without worrying about messing up the
-+	   current process's state.  Use an InterlockedExchange just to be
-+	   safe. */
-+	sigs = (struct sigaction *) InterlockedExchangePointer (
-+						(PVOID *) &cygheap->sigs, sigs);
-+      }
-+
-     chpid = ch_spawn.worker (
- 	use_env_path ?
- 		(find_exec (path, buf, "PATH", FE_NNF, NULL, args.cwdfd) ?: "")
- 		     : path,
- 	argv, envp ?: environ, args);
-
-+    /* put cygheap->sigs back how we found it (should be the same as
-+       global_sigs */
-+    if (sigs)
-+      sigs = (struct sigaction *) InterlockedExchangePointer (
-+						(PVOID *) &cygheap->sigs, sigs);
-+
-     if (chpid < 0)
-       {
- 	ret = get_errno ();
-@@ -1641,6 +1684,8 @@ do_posix_spawn (pid_t *pid, const char *path,
-
- closes:
-     int save_errno = get_errno ();
-+    if (sigs)
-+      cfree (sigs);
-     if (args.cwdfd >= 0)
-       close (args.cwdfd);
-     for (size_t i = 0; i < 3; i++)
+       if ((*sa)->sa_flags & POSIX_SPAWN_SETSIGDEF)
+ 	{
+ 	  sigs = (struct sigaction *) cmalloc (HEAP_SIGS,
 -- 
 2.49.0.windows.1
 
