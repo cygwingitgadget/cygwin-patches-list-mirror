@@ -1,107 +1,86 @@
-Return-Path: <SRS0=55nn=ZN=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-	by sourceware.org (Postfix) with ESMTPS id 2C3EE3854A88
-	for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 21:32:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2C3EE3854A88
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2C3EE3854A88
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b30
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751319145; cv=none;
-	b=hSaR9Fgrr9MHXOTDs6c7Fa1aBNo9FVSXAB/WwOfH3O1nNpUyh7Dm0od6fC9/dkv4An7j89ytmocT85+w9+6i/eh+MKYv4bAJPrDGKGmRhnhc1zhzb7RENW5tlw9oeArT8YHZ7FCh0GEO6RbPTrO8ZRoLh/3QCnoJ2qNw/ZWq6P8=
+Return-Path: <SRS0=Mojb=ZO=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 3A0C0385772F
+	for <cygwin-patches@cygwin.com>; Tue,  1 Jul 2025 08:37:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3A0C0385772F
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3A0C0385772F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751359080; cv=none;
+	b=LoeDRokK5SoBElJ7I6pqfRiL9za9dG32LpAxXYP8J8VRp9xAVjkclZNwMfTlr5lS+nPpMXQQGJ5zsX7uD61WMZ0ZQbX6R4T5qz61XEMg2zYgl79RhlSclHLxIc4N4099ojWMPKyR+BHdq/rPmn3dCYRL6Hr/pWW67Tatp8lVJf0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751319145; c=relaxed/simple;
-	bh=dF0vLFSLHAXONzOfOHHyhmlt9EETT4E2il1ipJMpm98=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=tmK8rMFSmLXOn4KnVKe4sUCU9RQG9aDOhNRhrS2kQmwewuZ3y5fBm/5Sbxx6tWKchVveteLM4/7VHVyQTwVImlffkbQmcS0bVpLfZVeJjY1pxKgDecMVPZsBBio1D3XG4CfxdH7l/R6q9jd9TsTpD/WhabmNWEuLkzCIHZRubAs=
+	t=1751359080; c=relaxed/simple;
+	bh=FVihvUXZwz8saR4/qPc/ZIQ8P42JFbbIzeF6Nqfpg+s=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=JFBh7xPGR6yhxTV7xTzTLO3Mq+TmrWLXKl20LhLQoICyMvYLKmoJVRpx199iWL0MPIKYv3yrFk92CuIr3SvAYKY81ksq99tpDmvCVVtUikxiEliePAB72FPRaudHLIJLQVsG3WeuB225zWa6OrX1FFrrMV9arT5vxQ4IMW6+z84=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2C3EE3854A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3A0C0385772F
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=ggtjvMXn
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-e731a56e111so2128369276.1
-        for <cygwin-patches@cygwin.com>; Mon, 30 Jun 2025 14:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751319144; x=1751923944; darn=cygwin.com;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dF0vLFSLHAXONzOfOHHyhmlt9EETT4E2il1ipJMpm98=;
-        b=ggtjvMXn1Nk7CsbigypQUf4IljJRZfvxvvUPHinTEq6lXfAPRY8YbdZYUVObCf266N
-         g7aznzGPLNB7ZOp3ZUOqKZ+jz3cdgYfs9tBvNKFnDDuG/HzqWNyUfaTRCJOln1dv9Jsb
-         iv/bkvfpLCCiMZFqPoDHOsUKaIAopbOmrBYg24DEVId335JYc3wN9ZlV12x+Xoe+2CFd
-         sz91DFRe4C0PHOJemH1vobCnCerpd+3F9f3hkhAuOz+hNGt7QNzeizwAfb3Qu+RaFAUJ
-         55Ql4JfkLhdldcgbuR8q+g5StZHRbcqfATjDqlHgQDt00b2CbWmR0QixBJlFIK2EjR0H
-         hkcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751319144; x=1751923944;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dF0vLFSLHAXONzOfOHHyhmlt9EETT4E2il1ipJMpm98=;
-        b=JFR72dHfP9hHVHUoXKJairm7H3/y1hugRcQpKWhT5yPAGepnSn2/LSOKdifDHucAZ1
-         PBJoOl96mxqIb2pA7lmFthU2AwkOr6DagqC7d0KzABTynkq89uqTPoFrZiirNjfcN6Q/
-         TmmnEyFkYTWyTNZzYGapc1g/2/k+53NgFfzg05JtSB6AQXYp90XY6v9JV3Niikxz8Cn+
-         hYoyTSw5kP/RSdBSQ6waAchE6YFzyhydczFhXQZaBtsoacI2Oq3K8KnqTK2AUrAqE86b
-         4oIja56zZFEl6rjgwJoPYvc3vI1OCs+nmzQFdaXAJaefZPPvnLQBJmiyLlqflOwQSjSC
-         I+ig==
-X-Gm-Message-State: AOJu0YyGZxR5GWAISHkV2WROZjWkPvQr4CyzSqQtnS70W19hWqSK33kV
-	aKvYFwfXTDWMgV6QCbNP1a571FZpl5F3ywOCn+p4DlRBjOGvF4M6veX6ZznouA==
-X-Gm-Gg: ASbGnctwve1bMihyebOi8IhH9nDQxlbb2VUoQjHVDVcjOJ1vZMNraZApb2yNnBQ0cOv
-	0hGDONdsyFU1014BKrHwp2CrBrb4gKsp0/LwX79JdhGo9GNXQSW1h6FGJ1VnRRmpfVPUysg1pXO
-	y5qhkwSbQZoVRckR4CN+wC+HJWRqA1ZWuFIV3I79Ov5GURrI0Xa4LFi/3E6LuERruCw/9XPK7/d
-	i/bGCmDs3PgLZglrGKY7JQLX9nH8BDYNJYkMy6r2cyq8wepMlENVM2iko8D3emO5t43JSvXSw4U
-	9bmZUWhZ6k28AwWksLoNMnd+tLOm2skghX9+sPzVhmU8e2YCg+D5QOVlvCF9kjXQiwfEvlURMya
-	zAuiNu6aKhX5hdpe24xKcz77BbkkE1dYPIUJzrj0u5bzQCkOeGt1Dgq3k+ntu0pYOcAMEnhZxxV
-	1RUZo=
-X-Google-Smtp-Source: AGHT+IGh5Np2dwmuDFArawX6ZYS4UcGz6+PsUd8yaideLO1jeYNwg2zsGnpZroDT15JHpTAJW/1dXw==
-X-Received: by 2002:a05:690c:318:b0:712:cc11:aed with SMTP id 00721157ae682-715171383e0mr237476977b3.2.1751319144076;
-        Mon, 30 Jun 2025 14:32:24 -0700 (PDT)
-Received: from localhost.localdomain (h218.203.184.173.dynamic.ip.windstream.net. [173.184.203.218])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71515bee26csm17046267b3.17.2025.06.30.14.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 14:32:23 -0700 (PDT)
-From: johnhaugabook@gmail.com
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PdD7zyr5
+Received: from localhost.localdomain by mta-snd-e07.mail.nifty.com
+          with ESMTP
+          id <20250701083757016.DQGT.14880.localhost.localdomain@nifty.com>;
+          Tue, 1 Jul 2025 17:37:57 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: John Haugabook <johnhaugabook@gmail.com>
-Subject: [PATCH v2 4/4] cygwin: faq-programming-6.21 unmatched parenthesis
-Date: Mon, 30 Jun 2025 17:32:05 -0400
-Message-ID: <20250630213205.988-5-johnhaugabook@gmail.com>
-X-Mailer: git-send-email 2.49.0.windows.1
-In-Reply-To: <20250630213205.988-1-johnhaugabook@gmail.com>
-References: <20250630213205.988-1-johnhaugabook@gmail.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <johannes.schindelin@gmx.de>
+Subject: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when disable_master_thread
+Date: Tue,  1 Jul 2025 17:37:35 +0900
+Message-ID: <20250701083742.1963-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751359077;
+ bh=WPADFU7dZydUGm/uOhP6om6+1pQ3dBBcdOyZ5Yd4j/w=;
+ h=From:To:Cc:Subject:Date;
+ b=PdD7zyr5fX+b+LcHYo5I0sA1RZnym0wGvlPuvC4OFjVqZ6YoP7/31xyAWliqNKffKmt6p8NS
+ 8mci/daH3QzbJawvvv8dwiIb/6197wT9RAPaJXHwc7Geqi08BilPzfcUG/sOiWLvR7isOwm6vY
+ fEHUruv77/bklLQuILWp5+16XCNg/7awNU4OBFztsQy7RZH5afWDZbJL52pwSvOwdTrPJTM48h
+ +p6mwyKh0hCVB8mvVWmdu/ha/ZcRnv33vUfj1RYdgvhS0ELIxHsELeF1XEmF8nrNianftjkPac
+ 5ePWFjGfBu3Ca/+E6Lh6q6VRRIALCkDIsFAiNpRi68qHZpEw==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: John Haugabook <johnhaugabook@gmail.com>=0D
+Currently, ENABLE_PROCESSED_INPUT is set in set_input_mode() if
+master_thread_suspended is true. This enables Ctrl-C handling when
+cons_master_thread is suspended, since Ctrl-C is normally handled
+by cons_master_thread.
+However, when disable_master_thread is true, ENABLE_PROCESSED_INPUT
+is not set, even though this also disables Ctrl-C handling in
+cons_master_thread. Due to this bug, the command
+  C:\cygwin64\bin\sleep 10 < NUL
+in the Command Prompt cannot be terminated with Ctrl-C.
 
-Fix typo - parenthesis without an opening parenthesis.=0D
-=0D
-Signed-off-by: John Haugabook <johnhaugabook@gmail.com>=0D
----=0D
- winsup/doc/faq-programming.xml | 2 +-=0D
- 1 file changed, 1 insertion(+), 1 deletion(-)=0D
-=0D
-diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xm=
-l=0D
-index fa3f097a9..3bc7ac6c9 100644=0D
---- a/winsup/doc/faq-programming.xml=0D
-+++ b/winsup/doc/faq-programming.xml=0D
-@@ -730,7 +730,7 @@ $ setup-x86_64.exe -P dblatex,docbook-utils,docbook-xml=
-45,docbook-xsl,docbook2X,=0D
- </screen>=0D
- =0D
- <para>Next, check out the Cygwin sources from the=0D
--<ulink url=3D"https://cygwin.com/git.html">Cygwin GIT source repository</u=
-link>).=0D
-+<ulink url=3D"https://cygwin.com/git.html">Cygwin GIT source repository</u=
-link>.=0D
- This is the <emphasis>preferred method</emphasis> for acquiring the source=
-s.=0D
- Otherwise, if you are trying to duplicate a cygwin release then you should=
-=0D
- download the corresponding source package=0D
--- =0D
-2.49.0.windows.1=0D
-=0D
+This patch addresses the issue by setting ENABLE_PROCESSED_INPUT
+when either disable_master_thread or master_thread_suspended is true.
+
+This bug also affects cases where non-Cygwin Git (Git for Windows)
+launches Cygwin SSH. In such cases, SSH also cannot be terminated
+with Ctrl-C.
+
+Addresses: https://github.com/git-for-windows/git/issues/5682#issuecomment-2995983695
+Fixes: 746c8116dd4f ("Cygwin: console: Allow pasting very long text input.")
+Reported-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/console.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 5a55d122e..1ae4c639a 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -831,7 +831,7 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+       break;
+     case tty::cygwin:
+       flags |= ENABLE_WINDOW_INPUT;
+-      if (con.master_thread_suspended)
++      if (con.master_thread_suspended || con.disable_master_thread)
+ 	flags |= ENABLE_PROCESSED_INPUT;
+       if (wincap.has_con_24bit_colors () && !con_is_legacy)
+ 	flags |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+-- 
+2.45.1
+
