@@ -1,114 +1,62 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 415B23852FCD; Wed,  2 Jul 2025 12:22:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 415B23852FCD
+	id BBD3A385DDE3; Wed,  2 Jul 2025 13:31:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BBD3A385DDE3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751458940;
-	bh=xUkXER+aY40PAFVktOe3uXzEoh0JGHTPDrJaIN+nY8c=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=aT3z1FAlucPdXOTHlHuC2k+KSd9bkIUhaBtWVYAMX97Hi+vSv3/Q/n+TyVC5NBodq
-	 BvY25GGcA/UxwqWVpNunetPUPh7ZI3tkK1ATFsrxXrVDLLJiURYIBZHYWXVEQVZHdr
-	 QNpyLxxNtxXwA9FXP5rnuIj/W/QwkgUo7xnSccQI=
+	s=default; t=1751463106;
+	bh=8EHqLxrGxRb/hXiRg4mL03+skO29l0NsoPPFqifkEkw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=OxcLcidAmtFwBwMcZwzzF47MZ/ydMKGu+JTyDE0QphppCeFQ8VHtT+EvEIwctHIs7
+	 kp0LfKL0nhVMoKZwwdZOHEyCGeN/NaLF2QnFhers+5pRFPucoWhBKU1Qw6+G6XnBtr
+	 SkxM6jFUbsgOw3xNjHMBcNsBQ5KGMmmih1vZiUTk=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 1AC8AA80CFD; Wed, 02 Jul 2025 14:22:18 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:22:18 +0200
+	id 8227DA80CFD; Wed, 02 Jul 2025 15:31:44 +0200 (CEST)
+Date: Wed, 2 Jul 2025 15:31:44 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 2/6] Cygwin: add ability to pass cwd to child process
-Message-ID: <aGUketWC7RES61Nx@calimero.vinschen.de>
+To: johnhaugabook@gmail.com
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2 0/4] cygwin: 6.21 faq-programming.xml edits
+Message-ID: <aGU0wPpBMULD3N6p@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <66a1dec3-77a2-6c9f-0388-da2f85489e89@jdrake.com>
+Mail-Followup-To: johnhaugabook@gmail.com, cygwin-patches@cygwin.com
+References: <20250630213205.988-1-johnhaugabook@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <66a1dec3-77a2-6c9f-0388-da2f85489e89@jdrake.com>
+In-Reply-To: <20250630213205.988-1-johnhaugabook@gmail.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  1 16:43, Jeremy Drake via Cygwin-patches wrote:
-> This will be used by posix_spawn_fileaction_add_(f)chdir.
-> 
-> The int cwdfd is placed such that it fits into space previously unused
-> due to alignment in the cygheap_exec_info class.
-> 
-> This uses a file descriptor rather than a path both because it is easier
-> to marshal to the child and because this should protect against races
-> where the directory might be renamed or removed between addfchdir and
-> the actual setting of the cwd in the child.
-> 
-> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> ---
->  winsup/cygwin/dcrt0.cc                    |  19 +++-
->  winsup/cygwin/local_includes/child_info.h |   4 +-
->  winsup/cygwin/local_includes/path.h       |   6 +-
->  winsup/cygwin/local_includes/winf.h       |   2 +-
->  winsup/cygwin/spawn.cc                    | 100 ++++++++++++++++++----
->  winsup/cygwin/syscalls.cc                 |   4 +-
->  6 files changed, 113 insertions(+), 22 deletions(-)
-> 
-> diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-> index b0fb5c9c1e..6adc31495a 100644
-> --- a/winsup/cygwin/dcrt0.cc
-> +++ b/winsup/cygwin/dcrt0.cc
-> @@ -46,6 +46,7 @@ extern "C" void __sinit (_reent *);
-> 
->  static int NO_COPY envc;
->  static char NO_COPY **envp;
-> +static int NO_COPY cwdfd = AT_FDCWD;
-> 
->  bool NO_COPY jit_debug;
-> 
-> @@ -656,6 +657,7 @@ child_info_spawn::handle_spawn ()
->    __argv = moreinfo->argv;
->    envp = moreinfo->envp;
->    envc = moreinfo->envc;
-> +  cwdfd = moreinfo->cwdfd;
->    if (!dynamically_loaded)
->      cygheap->fdtab.fixup_after_exec ();
->    if (__stdin >= 0)
-> @@ -842,7 +844,22 @@ dll_crt0_1 (void *)
-> 
->    ProtectHandle (hMainThread);
-> 
-> -  cygheap->cwd.init ();
-> +  if (cwdfd >= 0)
-> +    {
-> +      int res = fchdir (cwdfd);
-> +      if (res < 0)
-> +	{
-> +	  /* if the error occurs after the calling process successfully
-> +	     returns, the child process shall exit with exit status 127. */
-> +	  /* why is this byteswapped? */
-> +	  set_api_fatal_return (0x7f00);
-> +	  api_fatal ("can't fchdir, %R", res);
-> +	}
-> +      close (cwdfd);
-> +      cwdfd = AT_FDCWD;
-> +    }
-> +  else
-> +    cygheap->cwd.init ();
+Hi John,
 
-Weeeeell, as discussed in the other thread, and on second thought, maybe
-this is the right spot to handle all the posix_spawn stuff.
+On Jun 30 17:32, johnhaugabook@gmail.com wrote:
+> From: John Haugabook <johnhaugabook@gmail.com>
+> 
+> Removed "[PATCH 4/5] cygwin: faq-programming-6.21 install tips" from prior patchset, 
+> which included unecessary tip for the install process.
+> 
+> This set of patches applies changes to faq-programming.xml at section 6.21 
+> "How do I build Cygwin on my own?". The changes include:
+>   1. Adding 5 additional required packages
+>   2. Add ready-made commands to run setup-x86_64.exe to install required packages relevant to the use case
+>   3. Additional paragraph about the build process and an estimate of install time
+>   4. And a typo fix.
+>   
+> The details for each patch are expanded further in the commit message included in 
+> the patch. Also, you can visit the support repo that illustrates the rendered html
+> and doc build changes:
+> -  https://github.com/jhauga/patch-newlib-cygwin-faq
+> 
+> John Haugabook (4):
+>   cygwin: faq-programming-6.21 add 5 required packages
+>   cygwin: faq-programming-6.21 ready-made download commands
+>   cygwin: faq-programming-6.21 para about process and time
+>   cygwin: faq-programming-6.21 unmatched parenthesis
 
-But then, it should be in it's own function.  And you don't need
-moreinfo->cwdfd, because the entire set of actions requested by the
-posix_spawn caller should run one at a time in that function, so
-multiple chdir and fchdir actions may be required.
-
-I would also suggest to pimp cwdstuff::init() by adding an argument
-which allows to say 
-
-Eventually, this code snippet in dll_crt0_1 should probably look like
-this:
-
-  cygheap->cwd.init ();
-  if (posix_spawn_actions_present)
-    posix_spawn_run_child_actions (...);
-    
-Regardless if posix_spawn chdir/fchdir file actions are present or not,
-in the first place the cwd of the child is the parent's cwd.  The
-posix_spawn chdir/fchdir file actions run afterwards.
+I pushed patches 1, 2, and 4.  I'm not sure about patch 3.  I don't
+think it's necessary for people who are willing to build Cygwin itself.
+To the contrary, I think it's rather puzzeling in a FAQ about building
+Cygwin to talk about a two-step installation, which is only preliminary
+for the actual Cygwin build process.
 
 
 Thanks,
