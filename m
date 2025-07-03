@@ -1,68 +1,72 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 7C57B3852123; Thu,  3 Jul 2025 15:22:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7C57B3852123
+	id 1D3E4385E825; Thu,  3 Jul 2025 15:22:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1D3E4385E825
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751556124;
-	bh=swKpe5uxqTfCTy8KTkGYKDYBN1kUmnbAaSxDsTFqGrU=;
+	s=default; t=1751556139;
+	bh=G+54J/vpquBRs59btBVNHA0lBeE5MOllnu/vFDRDdrQ=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=cbFN1sonuYWnF0lI4iJNgpnxt0yd1Xv4p9kssRZGIvJElRv63CRII0bMaMDvE+H95
-	 rX+FJcluZJBqNfZhV6hL5PTrIk+jhBvldk/LoBhMSzgRTk5Xgse/Nklv3OLQ0eaYR4
-	 PWrtKZ0/0TT1+vRc5RO9wLuCW3CilYZpcB0KHzoE=
+	b=rp/UsdX9PtdSdjlMtDoWkm1gfPf/7qBOWcsvxGfpo6gERHkYp+q02UPIfVbVhJQCg
+	 EjBtlbpdd+mQJDZbgsaxvdUnqz4hv4kZpkzy662EBF4Dtzcx9dsUk+SpYogCVj9QkR
+	 TluL2A/6xM1kqqydhFr1iG876Ivu5fcxj7L/Ds8w=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 793D8A80CC8; Thu, 03 Jul 2025 17:22:02 +0200 (CEST)
-Date: Thu, 3 Jul 2025 17:22:02 +0200
+	id 0F648A80CC8; Thu, 03 Jul 2025 17:22:17 +0200 (CEST)
+Date: Thu, 3 Jul 2025 17:22:17 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: add fastcwd to AArch64 build
-Message-ID: <aGagGvaF1C50nQ1Z@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: gentls_offsets: port to support AArch64
+Message-ID: <aGagKdyoX2z3xB02@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <DB9PR83MB09239DC5AA360EC8472C8F749243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+References: <DB9PR83MB0923C787C8B326444EC5E2969243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB9PR83MB09239DC5AA360EC8472C8F749243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+In-Reply-To: <DB9PR83MB0923C787C8B326444EC5E2969243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  3 14:26, Radek Barton via Cygwin-patches wrote:
-> Hello
+On Jul  3 14:39, Radek Barton via Cygwin-patches wrote:
+> Hello.
 > 
-> This patch adds `aarch64/fastcwd.cc` implementations to AArch64 build fixing undefined reference to `find_fast_cwd_pointer_aarch64`.
-> 
-> Radek
+> This patch ports `winsup/cygwin/scripts/gentls_offsets` script to AArch64 where `.word` instead of `.long` is used.
 > 
 > ---
-> >From ff438392ffbd0c91a918b383a3e9947f1eb18212 Mon Sep 17 00:00:00 2001
+> >From b53e7dfcc0f31bdc5d8ad1fcff14753e0bd3399c Mon Sep 17 00:00:00 2001
 > From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
-> Date: Mon, 9 Jun 2025 13:07:01 +0200
-> Subject: [PATCH] Cygwin: add fastcwd to AArch64 build
+> Date: Fri, 6 Jun 2025 11:21:11 +0200
+> Subject: [PATCH] Cygwin: gentls_offsets: port to support AArch64
 > MIME-Version: 1.0
 > Content-Type: text/plain; charset=UTF-8
 > Content-Transfer-Encoding: 8bit
 > 
 > Signed-off-by: Radek Bartoň <radek.barton@microsoft.com>
 > ---
->  winsup/cygwin/Makefile.am | 5 +++++
->  1 file changed, 5 insertions(+)
+>  winsup/cygwin/scripts/gentls_offsets | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-> index 31747ac98..90a7332a8 100644
-> --- a/winsup/cygwin/Makefile.am
-> +++ b/winsup/cygwin/Makefile.am
-> @@ -64,6 +64,11 @@ TARGET_FILES= \
->  	x86_64/wmempcpy.S
->  endif
->  
-> +if TARGET_AARCH64
-> +TARGET_FILES= \
-> +	aarch64/fastcwd.cc
-> +endif
-> +
->  # These objects are included directly into the import library
->  LIB_FILES= \
->  	lib/_cygwin_crt0_common.cc \
+> diff --git a/winsup/cygwin/scripts/gentls_offsets b/winsup/cygwin/scripts/gentls_offsets
+> index 040b5de6b..c375a6106 100755
+> --- a/winsup/cygwin/scripts/gentls_offsets
+> +++ b/winsup/cygwin/scripts/gentls_offsets
+> @@ -62,7 +62,7 @@ start_offset=$(gawk '\
+>    /^__CYGTLS__/ {
+>      varname = gensub (/__CYGTLS__(\w+):/, "\\1", "g");
+>    }
+> -  /\s*\.long\s+/ {
+> +  /\s*\.(word|long)\s+/ {
+>      if (length (varname) > 0) {
+>        if (varname == "start_offset") {
+>  	print $2;
+> @@ -85,7 +85,7 @@ gawk -v start_offset="$start_offset" '\
+>        varname = "";
+>      }
+>    }
+> -  /\s*\.long\s+/ {
+> +  /\s*\.(word|long)\s+/ {
+>      if (length (varname) > 0) {
+>        if (varname == "start_offset") {
+>  	printf (".equ _cygtls.%s, -%u\n", varname, start_offset);
 > -- 
 > 2.49.0.vfs.0.4
 > 
