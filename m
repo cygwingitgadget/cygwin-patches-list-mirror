@@ -1,154 +1,117 @@
-Return-Path: <SRS0=Hj8f=ZP=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 021CC385E825
-	for <cygwin-patches@cygwin.com>; Wed,  2 Jul 2025 17:55:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 021CC385E825
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 021CC385E825
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751478906; cv=none;
-	b=akcEt46bZxpgBgew+KdigOFX+gySJPzcFNo4eZ00p6APCpy4XTy1WfKRzyad3JoSXZ6WOtjdzWvYYmVRTua1frSYdeaHTU8dl2xatxD63CoTjyAPZqO5Dx1AgW/aDjfq2o8qwLCWz7eHKO6X/Dv1oOy6+i1/GG3QWpfJYaUS5o4=
+Return-Path: <SRS0=8NMK=ZQ=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-sp-w05.mail.nifty.com (mta-sp-w05.mail.nifty.com [106.153.228.37])
+	by sourceware.org (Postfix) with ESMTPS id 399D6385695B
+	for <cygwin-patches@cygwin.com>; Thu,  3 Jul 2025 02:02:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 399D6385695B
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 399D6385695B
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.228.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751508134; cv=none;
+	b=k3vLQIaoQDbxlb+7lXmXUt9yKmMmG8mFSicipNu2z23A3dt9dpE8cuGQQLUTOs6xrme7DuhKiylIZLC/nPhZefL5JDsUMYoRH9dwu8+i5hOwMcCHtcVpH8xgoW9djuBOTQKEPyny/HGyAfzTHjdex2wL5rQdEuNXFYj+to+6RMo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751478906; c=relaxed/simple;
-	bh=+bY3bgmTgzpclozgfNv6ud09FEawCFjjjM5JZvBIMzM=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tHTx7bXbHOkTRqPMb5MkK8tmJbryeN4A/+GlDMCuzGMJ4+ulFEpbY77yFiLa/mMYU+yQ2VfuhXCCCtMZ9s8O0TmKUR0bED5uOt478+Ry2rDf/vQYMIJJ0lw+eZKhae1QbaGQkB/0OQvSsCso38vcUkeuyjeIo8EMptbzRrqjHGQ=
+	t=1751508134; c=relaxed/simple;
+	bh=7Rm+LXjFa1zPPKEtTrpzzL0cz8Wc65ZRmzWblgFd8XQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=KU7k1YU0w+DRQuelrHE+mbkpVPYK4nuOEQ9zF5p3ab3Q6hzzVzjpHlOP8hWHn2+vN8SB517DXM0T9e2RguO+IoZLwnPK0sFwo6W8l2vVe60iVPQnytsHNtmP1xuxbveTRmwPZ4mi+UdOur0aGQ9gQ19aBRxBjPtc0IuOuEFIs4g=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id C4ABB45CA9
-	for <cygwin-patches@cygwin.com>; Wed, 02 Jul 2025 13:55:05 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=o0lUjYMl3E7pjBGmlqJVDm0G0qI=; b=qKr81
-	ys3rBhziLhB/qSdXFPUxeqKxYLKuGS/H8/grPZdzwkSlmoWOAcaRDugrcwdMK4Dd
-	0cPiNVPCLB544epT/SIcaFEeSFdQL3UAiXNq6pKbYbAdKHz35PwvzKddB3C/WVIS
-	vcZeuHxkF6Sf1ecloAmNXBfPoJ+X+aXoQ+csHQ=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id ACF2945CA8
-	for <cygwin-patches@cygwin.com>; Wed, 02 Jul 2025 13:55:05 -0400 (EDT)
-Date: Wed, 2 Jul 2025 10:55:05 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 399D6385695B
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PZD3EXWh
+Received: from mta-snd-w05.mail.nifty.com by mta-sp-w05.mail.nifty.com
+          with ESMTP
+          id <20250703020211077.HEEJ.3803.mta-snd-w05.mail.nifty.com@nifty.com>;
+          Thu, 3 Jul 2025 11:02:11 +0900
+Received: from localhost.localdomain by mta-snd-w05.mail.nifty.com
+          with ESMTP
+          id <20250703020211005.HRCO.127398.localhost.localdomain@nifty.com>;
+          Thu, 3 Jul 2025 11:02:11 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 2/6] Cygwin: add ability to pass cwd to child
- process
-In-Reply-To: <aGUketWC7RES61Nx@calimero.vinschen.de>
-Message-ID: <fb1daa1c-9201-c245-8caf-a1d2d8d93643@jdrake.com>
-References: <66a1dec3-77a2-6c9f-0388-da2f85489e89@jdrake.com> <aGUketWC7RES61Nx@calimero.vinschen.de>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Call set_input_mode() after changing disable_master_thread
+Date: Thu,  3 Jul 2025 11:01:44 +0900
+Message-ID: <20250703020153.2068-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751508131;
+ bh=q7Y4RBMxREt89ecblSdV/UirHORpQynrVsC66hxIMRc=;
+ h=From:To:Cc:Subject:Date;
+ b=PZD3EXWhbn6LQlbiEJYeHlXHY2/QfE2di0TDbUWzyDRCfh1w1o+1drFrQ/jS22Ic3L/2mbc7
+ F9n/ScrEuNX1IeA3FWlW/PQzpbNdb2mLJTvRNB+C477r8OuhFCr4LlQuQ+Pf+Ue1kKQrcOXDo4
+ aqsayRWUbYRjKrHPien/mnBL5YskrzYGSJO1+hOyIJS172NQxhJQYQuCQ7LCXkItIutOhSqTHL
+ YGowffvycgGUfFB7BZA0RAklDPYguQCfFa2+KgYErC/WCk4u6YX7kdIozUd9Eadx11W9BfxMh5
+ QC4xqee1PEN+yr5VA38IKxiX/lWJLxVtIOyeruUGIYB5Qw/w==
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 2 Jul 2025, Corinna Vinschen wrote:
+With the commit 476135a24506, set_input_mode() reffers to the flag
+disable_master_thread in tty::cygwin mode. So it is necessary to call
+set_input_mode() after changing disable_master_thread flag. However,
+the commit 476135a24506 was missing that.
 
-> On Jul  1 16:43, Jeremy Drake via Cygwin-patches wrote:
-> > This will be used by posix_spawn_fileaction_add_(f)chdir.
-> >
-> > The int cwdfd is placed such that it fits into space previously unused
-> > due to alignment in the cygheap_exec_info class.
-> >
-> > This uses a file descriptor rather than a path both because it is easier
-> > to marshal to the child and because this should protect against races
-> > where the directory might be renamed or removed between addfchdir and
-> > the actual setting of the cwd in the child.
-> >
-> > Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
-> > ---
-> >  winsup/cygwin/dcrt0.cc                    |  19 +++-
-> >  winsup/cygwin/local_includes/child_info.h |   4 +-
-> >  winsup/cygwin/local_includes/path.h       |   6 +-
-> >  winsup/cygwin/local_includes/winf.h       |   2 +-
-> >  winsup/cygwin/spawn.cc                    | 100 ++++++++++++++++++----
-> >  winsup/cygwin/syscalls.cc                 |   4 +-
-> >  6 files changed, 113 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-> > index b0fb5c9c1e..6adc31495a 100644
-> > --- a/winsup/cygwin/dcrt0.cc
-> > +++ b/winsup/cygwin/dcrt0.cc
-> > @@ -46,6 +46,7 @@ extern "C" void __sinit (_reent *);
-> >
-> >  static int NO_COPY envc;
-> >  static char NO_COPY **envp;
-> > +static int NO_COPY cwdfd = AT_FDCWD;
-> >
-> >  bool NO_COPY jit_debug;
-> >
-> > @@ -656,6 +657,7 @@ child_info_spawn::handle_spawn ()
-> >    __argv = moreinfo->argv;
-> >    envp = moreinfo->envp;
-> >    envc = moreinfo->envc;
-> > +  cwdfd = moreinfo->cwdfd;
-> >    if (!dynamically_loaded)
-> >      cygheap->fdtab.fixup_after_exec ();
-> >    if (__stdin >= 0)
-> > @@ -842,7 +844,22 @@ dll_crt0_1 (void *)
-> >
-> >    ProtectHandle (hMainThread);
-> >
-> > -  cygheap->cwd.init ();
-> > +  if (cwdfd >= 0)
-> > +    {
-> > +      int res = fchdir (cwdfd);
-> > +      if (res < 0)
-> > +	{
-> > +	  /* if the error occurs after the calling process successfully
-> > +	     returns, the child process shall exit with exit status 127. */
-> > +	  /* why is this byteswapped? */
-> > +	  set_api_fatal_return (0x7f00);
-> > +	  api_fatal ("can't fchdir, %R", res);
-> > +	}
-> > +      close (cwdfd);
-> > +      cwdfd = AT_FDCWD;
-> > +    }
-> > +  else
-> > +    cygheap->cwd.init ();
->
-> Weeeeell, as discussed in the other thread, and on second thought, maybe
-> this is the right spot to handle all the posix_spawn stuff.
->
-> But then, it should be in it's own function.  And you don't need
-> moreinfo->cwdfd, because the entire set of actions requested by the
-> posix_spawn caller should run one at a time in that function, so
-> multiple chdir and fchdir actions may be required.
->
-> I would also suggest to pimp cwdstuff::init() by adding an argument
-> which allows to say
+With this patch, set_input_mode() is called after changing the flag
+disable_master_thread, if the console input mode is tty::cygwin.
 
-... ?
+Fixes: 476135a24506 ("Cygwin: console: Set ENABLE_PROCESSED_INPUT when disable_master_thread");
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/console.cc | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> Eventually, this code snippet in dll_crt0_1 should probably look like
-> this:
->
->   cygheap->cwd.init ();
->   if (posix_spawn_actions_present)
->     posix_spawn_run_child_actions (...);
->
-> Regardless if posix_spawn chdir/fchdir file actions are present or not,
-> in the first place the cwd of the child is the parent's cwd.  The
-> posix_spawn chdir/fchdir file actions run afterwards.
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 1ae4c639a..c572951b7 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -923,12 +923,12 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+   termios *ti = shared_console_info[unit] ?
+     &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
+   /* Cleaning-up console mode for non-cygwin app. */
++  set_disable_master_thread (con.owner == GetCurrentProcessId ());
+   /* conmode can be tty::restore when non-cygwin app is
+      exec'ed from login shell. */
+   tty::cons_mode conmode = cons_mode_on_close (p);
+   set_output_mode (conmode, ti, p);
+   set_input_mode (conmode, ti, p);
+-  set_disable_master_thread (con.owner == GetCurrentProcessId ());
+ }
+ 
+ /* Return the tty structure associated with a given tty number.  If the
+@@ -1121,8 +1121,8 @@ fhandler_console::bg_check (int sig, bool dontsignal)
+      in the same process group. */
+   if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
+     {
+-      set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+       set_disable_master_thread (false, this);
++      set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+     }
+   if (sig == SIGTTOU && con.curr_output_mode != tty::cygwin)
+     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+@@ -1996,8 +1996,8 @@ fhandler_console::post_open_setup (int fd)
+   /* Setting-up console mode for cygwin app started from non-cygwin app. */
+   if (fd == 0)
+     {
+-      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+       set_disable_master_thread (false, this);
++      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+     }
+   else if (fd == 1 || fd == 2)
+     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+@@ -3013,7 +3013,12 @@ fhandler_console::char_command (char c)
+ 		  if (con.args[i] == 1) /* DECCKM */
+ 		    con.cursor_key_app_mode = (c == 'h');
+ 		  if (con.args[i] == 9001) /* win32-input-mode (https://github.com/microsoft/terminal/blob/main/doc/specs/%234999%20-%20Improved%20keyboard%20handling%20in%20Conpty.md) */
+-		    set_disable_master_thread (c == 'h', this);
++		    {
++		      set_disable_master_thread (c == 'h', this);
++		      if (con.curr_input_mode == tty::cygwin)
++			set_input_mode (tty::cygwin,
++					&tc ()->ti, get_handle_set ());
++		    }
+ 		}
+ 	      /* Call fix_tab_position() if screen has been alternated. */
+ 	      if (need_fix_tab_position)
+-- 
+2.45.1
 
-
-In https://cygwin.com/pipermail/cygwin-developers/2025-March/012733.html,
-you said
-> For posix_spawn without forking, this complicates matters.  For
-> instance, we don't want having to close FD_CLOEXEC handles in the
-> spawned child because that's a security problem.
-
-FD_CLOEXEC sets handles as non-inherited at the Windows level, but for
-posix_spawn_file_actions_addclose is that still a security problem?
-
-
-Also, it is allowed to posix_spawn_file_actions_adddup2 from a FD_CLOEXEC
-file descriptor, so the parent would have to go through all the file
-actions, work the (f)chdirs to know where to look for relative prog_arg,
-and check adddup2s for FD_CLOEXEC descriptors, set them to not-FD_CLOEXEC
-and record that they were for the child to know to close them (and put
-them back to FL_CLOEXEC after the spawn).  This is already a good part of
-the work being done in the parent in my patch.
