@@ -1,142 +1,87 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 1735A3852747; Thu,  3 Jul 2025 14:54:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1735A3852747
+	id 5D2263852103; Thu,  3 Jul 2025 15:11:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5D2263852103
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751554478;
-	bh=ZMmV8P+KxXNQ4nO1iVLqewkYkeCwQ/+TnOWFWNuDx8s=;
+	s=default; t=1751555497;
+	bh=eD1sMC4Wq0dkaV/rrAFNsHCq/uEhDjJVIUaGBZtmKzQ=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=C7R+HSsZW+NEwlOYNxexUeWnrEiSMYfHfhKwNFq4Wc849cmwJ1svFrKz2bbgpeZQ9
-	 sFMQulRtPUlXQxfKO5oyVFqpSbptC2ffcPSeXUw15IAKqREnMdd3e3FRy0BS9eEgok
-	 meLxDwejG1+RtJi5lLCzX/efRuJomiHND/4dSXNE=
+	b=rpDXgH3TdXHjcBRAoR3mZSMVCEvr6K9fEeQg1PNrgV2Jgcc5ZN7r2G9WE1cdGYBoZ
+	 WP6XtCVSAbsQ9236Xjxut0Tlv2y0hau8sCbpzuwUDT8bk9AKWbnA1gFA69ZKKrgUA0
+	 imkhOGpAzOzTuC0VifCg4uOkPNb3wm5LPfYcRvYI=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id CCDE3A80CC8; Thu, 03 Jul 2025 16:54:35 +0200 (CEST)
-Date: Thu, 3 Jul 2025 16:54:35 +0200
+	id 0B8BDA80961; Thu, 03 Jul 2025 17:11:35 +0200 (CEST)
+Date: Thu, 3 Jul 2025 17:11:35 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-Message-ID: <aGaZq6sSSuNCKX59@calimero.vinschen.de>
+Subject: Re: [PATCH v2 2/6] Cygwin: add ability to pass cwd to child process
+Message-ID: <aGadp0iVfBrEKG9G@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <15b3cf9b-62f1-1273-0df8-427db6962e87@jdrake.com>
- <aF6N5Ds7jmadgewV@calimero.vinschen.de>
- <7b118296-1d56-0b42-3557-992338335189@jdrake.com>
- <aGJl0crH02tjTIZs@calimero.vinschen.de>
- <5f60e191-e50e-32d3-53cc-903e03cc7a5e@jdrake.com>
- <aGUfpy6cTysuyaId@calimero.vinschen.de>
- <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
+References: <66a1dec3-77a2-6c9f-0388-da2f85489e89@jdrake.com>
+ <aGUketWC7RES61Nx@calimero.vinschen.de>
+ <fb1daa1c-9201-c245-8caf-a1d2d8d93643@jdrake.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
+In-Reply-To: <fb1daa1c-9201-c245-8caf-a1d2d8d93643@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  2 22:51, Jeremy Drake via Cygwin-patches wrote:
+On Jul  2 10:55, Jeremy Drake via Cygwin-patches wrote:
 > On Wed, 2 Jul 2025, Corinna Vinschen wrote:
-> 
-> > One problem is that you dup and open files in the parent, which are
-> > supposed to be dup'ed and opened in the child.  That's ok for a native
-> > child, because we can't just hook into the native child process as Linux'
-> > clone3 call does.
+> > Weeeeell, as discussed in the other thread, and on second thought, maybe
+> > this is the right spot to handle all the posix_spawn stuff.
 > >
-> > But generally it's not ok for Cygwin parent and child.  We have methods
-> > in place to communicate to the child what its supposed to do at startup,
-> > so we can do this right with a bit of tweaking, no?
+> > But then, it should be in it's own function.  And you don't need
+> > moreinfo->cwdfd, because the entire set of actions requested by the
+> > posix_spawn caller should run one at a time in that function, so
+> > multiple chdir and fchdir actions may be required.
 > >
-> > > It kind of sounds like what you are envisioning is pushing this to a lower
-> > > level, potentially even re-architecting child_info_spawn and related
-> > > startup code (I don't know if handle_spawn would necessarily encapsulate
-> > > everything) in terms of posix_spawn's parameters.  I was not looking to
-> > > get that deep into things.
+> > I would also suggest to pimp cwdstuff::init() by adding an argument
+> > which allows to say
+> 
+> ... ?
+
+Nothing to worry about.  This one was a thought I had before inspecting
+the code in dll_crt0_1 and cwdstuff::init().  I just forgot to remove
+it, sorry.
+
+> > Eventually, this code snippet in dll_crt0_1 should probably look like
+> > this:
 > >
-> > I don't see this as a deeper level.  It's just the child side of the same
-> > mechanism.  You're adding lots of code to make this work, but for Cygwin
-> > processes it's just in the wrong spot.
+> >   cygheap->cwd.init ();
+> >   if (posix_spawn_actions_present)
+> >     posix_spawn_run_child_actions (...);
+> >
+> > Regardless if posix_spawn chdir/fchdir file actions are present or not,
+> > in the first place the cwd of the child is the parent's cwd.  The
+> > posix_spawn chdir/fchdir file actions run afterwards.
 > 
 > 
-> I was thinking about this further this evening, and I think I found a flaw
-> that couldn't be readily solved *without* processing the file actions in
-> the parent.  We already know and agree that the parent must process the
-> chdir and fchdir actions, in order to properly resolve relative path_args
-> (and relative #!s for that matter).  However, fchdir takes a file
-> descriptor, and the state of the file descriptors depends on the file
-> actions before the fchdir.  Therefore, all file actions prior to an fchdir
-> must be processed (or at least considered, probably through multiple
-> passes of the singly-linked actions queue) in the parent.
-> 
-> addopen (42, "dir", O_SEARCH|O_DIRECTORY)
-> addfchdir (42)
-> addclose (42)
-> (therefore addopen needs to be considered)
-> 
-> fd = open ("dir", O_SEARCH|O_DIRECTORY)
-> addclose (fd)
-> addfchdir (fd)
-> needs to fail with EBADF (therefore addclose needs to be considered.)
-> 
-> fd = open ("dir", O_SEARCH|O_DIRECTORY)
-> fd2 = open ("dir2", O_SEARCH|O_DIRECTORY)
-> adddup2 (fd2, fd)
-> addfchdir (fd)
-> needs to chdir to dir2, not dir (therefore dup2 needs to be considered)
-> 
-> addchdir ("dir")
-> addopen (42, "subdir", O_SEARCH|O_DIRECTORY)
-> addfchdir (42)
-> addclose (42)
-> needs to chdir to dir/subdir (so chdir needs to be considered before open).
+> In https://cygwin.com/pipermail/cygwin-developers/2025-March/012733.html,
+> you said
+> > For posix_spawn without forking, this complicates matters.  For
+> > instance, we don't want having to close FD_CLOEXEC handles in the
+> > spawned child because that's a security problem.
 
-I see where you are coming from, but there's a twist.  The file actions
-are *supposed* to run in the child.
+I shouldn't blabber so much.
 
-From the POSIX man page of posix_spawn_file_actions_addchdir:
+> FD_CLOEXEC sets handles as non-inherited at the Windows level, but for
+> posix_spawn_file_actions_addclose is that still a security problem?
 
-APPLICATION USAGE
+Probably not, as far as Cygwin children are concerned.
 
-  [...] all file actions are processed in sequence in the context of the
-  child at a point where the child process is still single-threaded
+> Also, it is allowed to posix_spawn_file_actions_adddup2 from a FD_CLOEXEC
+> file descriptor, so the parent would have to go through all the file
+> actions, work the (f)chdirs to know where to look for relative prog_arg,
+> and check adddup2s for FD_CLOEXEC descriptors, set them to not-FD_CLOEXEC
+> and record that they were for the child to know to close them (and put
+> them back to FL_CLOEXEC after the spawn).  This is already a good part of
+> the work being done in the parent in my patch.
 
-  [...]
-
-  File actions are performed in a new process created by posix_spawn()
-  or posix_spawnp() in the same order that they were added to the file
-  actions object.
-
-On Linux it's dead easy.  Posix_spawn uses clone3 with a function
-argument.  It first clones the parent, so we're already in the (shallow)
-child and then calls the function given to clone3 in the child before
-calling execve.  This function performs all the pre-exec actions.
-Naturally we have a problem doing it this way...
-
-But, either way, performing these actions in the parent is a problem,
-too.
-
-> What scenario would not work properly if the file actions were not done in
-> the child?  The main thing I can think of is opening things under
-
-How do you run, say,
-
-  addopen (42, "dir", O_SEARCH|O_DIRECTORY)
-
-without potentially disrupting the actions of another parallel thread,
-just reading data from a file attached to fd 42?
-
-How do you run
-
-  addfchdir (42)
-
-without disrupting another thread trying to open a file with relative
-path?
-
-> The main thing I can think of is opening things under
-> /proc/self, but that would do the wrong thing anyway even if done in the
-> child startup (vs the "proper" behavior in a real fork/exec), if you open
-> /proc/self/exe.  There is the RESETIDS flag that could implicate that the
-> operations need to happen as a different user, but I was definitely not
-> planning to handle that flag and letting fork/exec take care of it.
-
-They already handle setuid() stuff.  RESETIDS is probably not very
-tricky, but the simplest way is to call seteuid/setegid in the child.
+I see the problem, but I have no idea how to workaround this problem.
+That's what you get for free when doing the fork/exec twist.  I have
+to (have time to) think about it.
 
 
 Corinna
