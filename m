@@ -1,117 +1,65 @@
-Return-Path: <SRS0=6WXN=ZQ=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 6DD9D385E02F
-	for <cygwin-patches@cygwin.com>; Thu,  3 Jul 2025 05:51:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6DD9D385E02F
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6DD9D385E02F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751521893; cv=none;
-	b=rEqR44tZurHyeC2NkbYyEHmOyx+sWbuezVrG+PVRvaz5dXZz+a1Y8FaR/iLgBruV+xWuVOclU6OUKBLJZzdjGJDJgbQz0LgLTrqYAtOUR0kQ+YNA5dGYQmxtd8A4GgnkhZHPaNvYZ3zEu7P5FPvoG3gRG0I5iWZpRWt0o/p6G00=
+Return-Path: <SRS0=8NMK=ZQ=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w08.mail.nifty.com (mta-snd-w08.mail.nifty.com [106.153.227.40])
+	by sourceware.org (Postfix) with ESMTPS id 040E63852FD4
+	for <cygwin-patches@cygwin.com>; Thu,  3 Jul 2025 06:47:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 040E63852FD4
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 040E63852FD4
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751525235; cv=none;
+	b=pQIsqne5P++FPqCKxr4XucGAZRAho2RyIr8nzWF6mqZF/jVjAK02hqWJzTEt9ofd9sCyMO8WL9yn2fudf8uQSS5f5mDQGeOcq9giskHj4kSGMcofYfxhBfh7zSv5KPfL7ECOFD3Umm0mOUwGcfunVWqps9MJT3GNX7+fDjKoENI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751521893; c=relaxed/simple;
-	bh=YPz940W7CoRDneHipSWKNyM8yNeSmAMhIIeWBI0ANig=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=epBspJud3T2zBgMtW6TjPPku67BNG9xI1hxh052UolRM2zZr+wtc/agrSAiLuT0rEUZamVy1Q4Y+BrDKjhK/84XHY9UBKhukNd0mWIA3M5c6lTD96BBuamnr8SXJvTTIXRA1ZHWTH0U1wgOwhcxmvm4RWy6rucB3yJzUkNcgS7Y=
+	t=1751525235; c=relaxed/simple;
+	bh=i9GO3ANL5cmBkj9yyQeoHzJ/j2S1Qqu2ThBy4kveUWk=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=egorckOidpPovoHUNU6yvwo9yGA/cuFjOAJ9nLhw970Y6IFtpULQni8lLT9wZTVhQ4I557s4XD4xgQXRmxAa/4vZOUd8rn8bSD05JY/CsUt4u/tcKipLMJi8Z6q0XkONgGrOg5+uww/CR2R413o4oToytbMPyD3Of3GtlmCrf80=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6DD9D385E02F
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 040E63852FD4
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=TFFt4IXo
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 1935A45CA9
-	for <cygwin-patches@cygwin.com>; Thu, 03 Jul 2025 01:51:33 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=8PbqWgN2JCn6t+A7DYH104DhT64=; b=TFFt4
-	IXoX9NzQd00rDPc9QsPIuSVaMGo03NzGndUK7G3cUOuuIxTyYvU1tDsKfWg5h28B
-	wziu3vmDvmDLLVGz7zC4A1vuplorokfqpBwr+MrfDk5iNlk2tIvm2DwmVihbZE1N
-	wOM50X0GoUbkgQcTRC+sFJzpzSSVDrYKiJNMcE=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id F216D45CB2
-	for <cygwin-patches@cygwin.com>; Thu, 03 Jul 2025 01:51:32 -0400 (EDT)
-Date: Wed, 2 Jul 2025 22:51:32 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=mbUl1JXj
+Received: from HP-Z230 by mta-snd-w08.mail.nifty.com with ESMTP
+          id <20250703064712924.VIOB.78984.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Thu, 3 Jul 2025 15:47:12 +0900
+Date: Thu, 3 Jul 2025 15:47:10 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-In-Reply-To: <aGUfpy6cTysuyaId@calimero.vinschen.de>
-Message-ID: <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
-References: <15b3cf9b-62f1-1273-0df8-427db6962e87@jdrake.com> <aF6N5Ds7jmadgewV@calimero.vinschen.de> <7b118296-1d56-0b42-3557-992338335189@jdrake.com> <aGJl0crH02tjTIZs@calimero.vinschen.de> <5f60e191-e50e-32d3-53cc-903e03cc7a5e@jdrake.com>
- <aGUfpy6cTysuyaId@calimero.vinschen.de>
-MIME-Version: 1.0
+Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
+ disable_master_thread
+Message-Id: <20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp>
+In-Reply-To: <9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de>
+References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp>
+	<9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751525232;
+ bh=50uXjKgiJdZILigraGM+Pzy4UtP1cEgcaQ3AeMzplQ4=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=mbUl1JXj3BlBvk8DrnOIvbh06EYDgrCj8pp5cAa9NnQtJPgVypGgU05qSxAJp2tD/dskr+Bx
+ AYkMxN7/CXEVv2qou9sT1d0kdZriwUNWMoKmRCp2r9h2zLw0P5hkF9d/Hw24+TchCX3w6KZo3m
+ UznkZMmu7ze3EGs0+00VaAVKrS1hOh5Jj9TlSjrtAL3uqcG7Lc0aCJEoE0n6ir0Ac2ahTFqZwq
+ 9O+PoD++YgHYVt02tGkC9N1d4zHYeM/sW/+NfysqnU/ydtQCG+5cAySlY6kRk4D2IYtBS9UUKP
+ WjeS8QViSvZ4Fm4tA6VhbMVWQEv1B5UfC5HBcaI9X3CgCYXQ==
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Wed, 2 Jul 2025, Corinna Vinschen wrote:
+Hi Johannes,
 
-> One problem is that you dup and open files in the parent, which are
-> supposed to be dup'ed and opened in the child.  That's ok for a native
-> child, because we can't just hook into the native child process as Linux'
-> clone3 call does.
->
-> But generally it's not ok for Cygwin parent and child.  We have methods
-> in place to communicate to the child what its supposed to do at startup,
-> so we can do this right with a bit of tweaking, no?
->
-> > It kind of sounds like what you are envisioning is pushing this to a lower
-> > level, potentially even re-architecting child_info_spawn and related
-> > startup code (I don't know if handle_spawn would necessarily encapsulate
-> > everything) in terms of posix_spawn's parameters.  I was not looking to
-> > get that deep into things.
->
-> I don't see this as a deeper level.  It's just the child side of the same
-> mechanism.  You're adding lots of code to make this work, but for Cygwin
-> processes it's just in the wrong spot.
+On Tue, 1 Jul 2025 14:01:45 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> thank you so much for this patch! I released a new Git for Windows version
+> including it:
+> https://github.com/git-for-windows/git/releases/tag/v2.50.0.windows.2
 
+I noticed this patch needs additional fix.
+Please apply also
+https://cygwin.com/pipermail/cygwin-patches/2025q3/014053.html
 
-I was thinking about this further this evening, and I think I found a flaw
-that couldn't be readily solved *without* processing the file actions in
-the parent.  We already know and agree that the parent must process the
-chdir and fchdir actions, in order to properly resolve relative path_args
-(and relative #!s for that matter).  However, fchdir takes a file
-descriptor, and the state of the file descriptors depends on the file
-actions before the fchdir.  Therefore, all file actions prior to an fchdir
-must be processed (or at least considered, probably through multiple
-passes of the singly-linked actions queue) in the parent.
+Sorry for missing that.
 
-addopen (42, "dir", O_SEARCH|O_DIRECTORY)
-addfchdir (42)
-addclose (42)
-(therefore addopen needs to be considered)
-
-fd = open ("dir", O_SEARCH|O_DIRECTORY)
-addclose (fd)
-addfchdir (fd)
-needs to fail with EBADF (therefore addclose needs to be considered.)
-
-fd = open ("dir", O_SEARCH|O_DIRECTORY)
-fd2 = open ("dir2", O_SEARCH|O_DIRECTORY)
-adddup2 (fd2, fd)
-addfchdir (fd)
-needs to chdir to dir2, not dir (therefore dup2 needs to be considered)
-
-addchdir ("dir")
-addopen (42, "subdir", O_SEARCH|O_DIRECTORY)
-addfchdir (42)
-addclose (42)
-needs to chdir to dir/subdir (so chdir needs to be considered before open).
-
-What scenario would not work properly if the file actions were not done in
-the child?  The main thing I can think of is opening things under
-/proc/self, but that would do the wrong thing anyway even if done in the
-child startup (vs the "proper" behavior in a real fork/exec), if you open
-/proc/self/exe.  There is the RESETIDS flag that could implicate that the
-operations need to happen as a different user, but I was definitely not
-planning to handle that flag and letting fork/exec take care of it.
-setuid binary (if those are even supported in Cygwin) would mean the child
-would be running as the new id, while a fork running the actions would
-still be running as the old id before execing the suid binary, so point
-for processing in the parent for that I guess.
-
-
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
