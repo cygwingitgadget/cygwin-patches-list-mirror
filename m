@@ -1,79 +1,75 @@
-Return-Path: <SRS0=8NMK=ZQ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
-	by sourceware.org (Postfix) with ESMTPS id D62D23857810
-	for <cygwin-patches@cygwin.com>; Thu,  3 Jul 2025 10:53:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D62D23857810
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D62D23857810
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751540021; cv=none;
-	b=WeTAd5/yxNeliD0ifjhnAKFUtLbjXKgA4I0oYulE9bHEt+zRL8vTZr0XuudD4pxiokCse5EkJfqWGTNCG10ngnd5N6thvFnXyiGKxk33L4EEHqIcEqbZTHTpt4lEbwZXsc3Q0A8u+Bs67fw74r24X71j4tlFcB3aUUWAntSRO+I=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751540021; c=relaxed/simple;
-	bh=h8Qz7NRF0lIOUpT1VhGfbuto23ovYKDb1b0y+Umzol8=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=qkmQPpQ8q8fwPW2kusrBjFulqvwYUOdPWC1S0lw+WMVowsamHkRCy4j/axVHDD9A3/WR9zQEo7KO+cd4HSMJrnij61I/KkB6rOBzwA/Zr2qMaCI5Ig2r/P46HSPTbrj6mszcmNGEyVRjl4swdfz5ee9xRgMrwGtALwFCiNhj7MY=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D62D23857810
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ZUg/IFd1
-Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
-          id <20250703105337794.QVRX.116672.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 3 Jul 2025 19:53:37 +0900
-Date: Thu, 3 Jul 2025 19:53:36 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 3C5543857810; Thu,  3 Jul 2025 13:41:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3C5543857810
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1751550064;
+	bh=ELip8F7aClRVvtWxMmz885AJeLFdUcBkrHotkHZGwZE=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=lqx+GBnl4iCEwTKtucUsm4D+ixIH+oogZcVNsQwSn27XBrZKQN1kaaLOS/R2Clj/M
+	 TkTu3848JJCO5nP3LzYAv8JutnteI3ZhYk/t2ZKPgaD4zbslAFuFKzr2ik8x4GuUGZ
+	 K0+ZE+k6XZ+PFpHWK2iFhXGrT/Mvuf48ndrsIVGo=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 1ED44A80CC8; Thu, 03 Jul 2025 15:41:02 +0200 (CEST)
+Date: Thu, 3 Jul 2025 15:41:02 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
- disable_master_thread
-Message-Id: <20250703195336.2d5900b4988a6918ad397582@nifty.ne.jp>
-In-Reply-To: <259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de>
-References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp>
-	<9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de>
-	<20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp>
-	<259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1751540017;
- bh=F220vOH2f8DEeSU//9V1y5FrpCvI+tcsDvhigj2LiRU=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=ZUg/IFd15RSP5/cH0H88I/2eYmYsGO63ZVyf8wkAMrnEvpvsvaDVVg4i2Dwb/R/dvOMzp9xg
- Km9GzQs0QAJZBTPmYBAIR6YWxtUnhLkv1PLqjFtR+SZnuf/epfUvoegU2/Q2YZnKQWlZbXntVD
- BFs8VsuwW1GIIolqUKSRcPY5JLeTI9BlqzpUMYCB/u+p0HMxmSewMA8nUDm6egxka2kTc0CTvZ
- cEYcmDB4/KNO7L6jAeMcZwQvMh6POZ/X0kXazhIsPEtn90DHAzqKmkfLetQ28FaUKzLouFYITr
- St4JRpAbh/Fz1v2sBdsMGZz3Vpwj9TWKy2S8G3zEIR3BRX/Q==
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Subject: Re: [PATCH 1/3] Cygwin: testsuite: add a mingw test program to spawn
+Message-ID: <aGaIblK4MDa0AHPq@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <a2f0eb68-cc70-c6c3-0d45-5c50f90494d0@jdrake.com>
+ <aF6OibgUJ3IUvmLN@calimero.vinschen.de>
+ <9555bc63-d6ae-e1ad-6b94-82712e1e9f2b@jdrake.com>
+ <aGJeJH1rLCeitrqo@calimero.vinschen.de>
+ <8d3b0ebf-4766-cf94-13c0-8176a8ac3da7@jdrake.com>
+ <aGUMafwtImU7wGrZ@calimero.vinschen.de>
+ <1fd4e2b5-bbcc-4f5f-0085-c3138bdc914c@jdrake.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1fd4e2b5-bbcc-4f5f-0085-c3138bdc914c@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 3 Jul 2025 11:15:44 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
+On Jul  2 10:37, Jeremy Drake via Cygwin-patches wrote:
+> On Wed, 2 Jul 2025, Corinna Vinschen wrote:
 > 
-> On Thu, 3 Jul 2025, Takashi Yano wrote:
+> > On Jun 30 10:11, Jeremy Drake via Cygwin-patches wrote:
+> > > On Mon, 30 Jun 2025, Corinna Vinschen wrote:
+> > >
+> > > > On Jun 27 10:34, Jeremy Drake via Cygwin-patches wrote:
+> > > > > On Fri, 27 Jun 2025, Corinna Vinschen wrote:
+> > > > >
+> > > > > > On Jun 26 13:31, Jeremy Drake via Cygwin-patches wrote:
+> > > > > > > BTW, I noticed while editing mingw/Makefile.am, shouldn't cygload have
+> > > > > > > -Wl,--disable-high-entropy-va in LDFLAGS?
+> > > > > >
+> > > > > > Why?
+> > > > >
+> > > > > With high-entropy-va, it has been observed that the PEB, TEB and stack can
+> > > > > happen to overlap with the cygheap
+> > > > > https://cygwin.com/pipermail/cygwin/2024-May/256000.html
+> > > >
+> > > > Yeah, but HEVA simply breaks fork.  We don't have to test this, because
+> > > > it won't work and we don't do it.  You can set the PE flag, but than
+> > > > you're on your own.
+> > >
+> > > Outside of fork, is cygheap able to "relocate" in case the memory it would
+> > > like to occupy is already used?
+> >
+> > I don't think so, without checking and, well, fixing every pointer usage
+> > potentially pointing into the cygheap.  Even fhandlers have pointers to
+> > fhandlers...
+> >
 > 
-> > On Tue, 1 Jul 2025 14:01:45 +0200 (CEST)
-> > Johannes Schindelin wrote:
-> > > 
-> > > thank you so much for this patch! I released a new Git for Windows
-> > > version including it:
-> > > https://github.com/git-for-windows/git/releases/tag/v2.50.0.windows.2
-> > 
-> > I noticed this patch needs additional fix.
-> > Please apply also
-> > https://cygwin.com/pipermail/cygwin-patches/2025q3/014053.html
-> 
-> Thank you for the update!
-> 
-> I am curious, though: Under what circumstances does this patch make a
-> difference? I tried to deduce this from the diff and the commit message
-> but was unable to figure it out.
+> So shouldn't any user of the cygwin dll then need
+> -Wl,--disable-high-entropy-va to avoid the chance that Windows places its
+> structures where cygheap wants to be?
 
-In my environment, the command
-cat | /cygdrive/c/windows/system32/ping -t localhost
-in Command Prompt cannt stop with single Ctrl-C.
-ping is stopped, but cat remains without the sencond patch, IIRC.
+-Wl,--disable-high-entropy-va isn't required because gcc doesn't enable
+it by default on Cygwin.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+If newer versions do, it's a bug in these gcc versions.
+
+
+Corinna
