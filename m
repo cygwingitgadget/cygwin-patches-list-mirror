@@ -1,79 +1,122 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 04DBA38515EC; Fri,  4 Jul 2025 08:39:45 +0000 (GMT)
+	id 01D8F38515D2; Fri,  4 Jul 2025 08:50:52 +0000 (GMT)
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EB529A80961; Fri, 04 Jul 2025 10:39:42 +0200 (CEST)
-Date: Fri, 4 Jul 2025 10:39:42 +0200
+	id E3B25A80961; Fri, 04 Jul 2025 10:50:50 +0200 (CEST)
+Date: Fri, 4 Jul 2025 10:50:50 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-Message-ID: <aGeTTq8wuRumZ3aI@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: define OUTPUT_FORMAT and SEARCH_DIR for AArch64
+Message-ID: <aGeV6nKWU4LOlFtI@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <aF6N5Ds7jmadgewV@calimero.vinschen.de>
- <7b118296-1d56-0b42-3557-992338335189@jdrake.com>
- <aGJl0crH02tjTIZs@calimero.vinschen.de>
- <5f60e191-e50e-32d3-53cc-903e03cc7a5e@jdrake.com>
- <aGUfpy6cTysuyaId@calimero.vinschen.de>
- <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
- <aGaZq6sSSuNCKX59@calimero.vinschen.de>
- <fcda3f51-7737-5e21-30a9-443f5f4f8c97@jdrake.com>
- <5e4ebc57-cedc-577f-264d-6cc68be6ee99@jdrake.com>
- <aGeQMtwhTueOa4MT@calimero.vinschen.de>
+References: <DB9PR83MB0923BA573EA5101074C2F0B79278A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aFupr2xZJQY28zEQ@calimero.vinschen.de>
+ <575e8838-b292-4f3c-9d47-76507703b747@dronecode.org.uk>
+ <aFvgAEwrdLH-A5Ai@calimero.vinschen.de>
+ <81096ca9-9542-4818-b363-f3856915050f@dronecode.org.uk>
+ <aFwaB47HM8UDH9CK@calimero.vinschen.de>
+ <DB9PR83MB09239C78F66E20045E2F4A269243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aGeQMtwhTueOa4MT@calimero.vinschen.de>
+In-Reply-To: <DB9PR83MB09239C78F66E20045E2F4A269243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  4 10:26, Corinna Vinschen wrote:
-> On Jul  3 12:03, Jeremy Drake via Cygwin-patches wrote:
-> > On Thu, 3 Jul 2025, Jeremy Drake via Cygwin-patches wrote:
-> > > On Thu, 3 Jul 2025, Corinna Vinschen wrote:
-> > > > From the POSIX man page of posix_spawn_file_actions_addchdir:
-> > > >
-> > > > APPLICATION USAGE
-> > > >
-> > > >   [...] all file actions are processed in sequence in the context of the
-> > > >   child at a point where the child process is still single-threaded
-> > > >
-> > > >   [...]
-> > > >
-> > > >   File actions are performed in a new process created by posix_spawn()
-> > > >   or posix_spawnp() in the same order that they were added to the file
-> > > >   actions object.
-> > >
-> > > The docs I was reading use "as if", to allow implementations where the
-> > > actions are not actually processed in the child.
+Hi Radek,
 
-Oh, btw., I kind of doubt that.  The implementation details required
-by posix_spawn are strictly on the POSIX side of things.  POSIX.1
-has this to say in the RATIONAL section of posix_spawn:
+your patches basically look good, as far as the code is concerned.
+However, all your patches are lacking helpful commit messages.
 
-     The posix_spawn() function and its close relation posix_spawnp()
-     have been introduced to overcome the following perceived
-     difficulties with fork(): the fork() function is difficult or
-     impossible to implement without swapping or dynamic address
-     translation.
-     * Swapping is generally too slow for a realtime environment.
-     * Dynamic address translation is not available everywhere that POSIX
-       might be useful.
-     * Processes are too useful to simply option out of POSIX whenever it
-       must run without address translation or other MMU services.
+Please make sure that your commit message explains what you're doing and
+why.  For instance, this patch here should actually describe a bit how
+we reached this result and how the additional target-specific path is
+unnecessary.  Even the build failures on Fedora are of interest, why
+not?
 
-     Thus, POSIX needs process creation and file execution primitives
-     that can be efficiently implemented without address translation or
-     other MMU services.
+In other patch mails you add a short explanation to the cover mail, while
+this explanation should in fact be part of the commit message.
 
-There is no requirement that these functions should be able to be
-implemented on non-POSIXy or only marginal POSIXy systems.  The only
-time non-POSIXy systems are mentioned are in a comparison:
+In terms of this patch here I'm a bit puzzled.  It's nice that the
+"=/lib/w32api" is sufficent.  I tested this locally on my fedora ->
+x86_64-pc-cygwin cross and it builds fine, too.
 
-     [...] posix_spawn() and posix_spawnp() are process creation
-     primitives like the Start_Process and Start_Process_Search Ada
-     language bindings package POSIX_Process_Primitives and also like
-     those in many operating systems that are not UNIX systems, but with
-     some POSIX-specific additions.
+But why on earth is adding an unneeded dir to the search path
+breaking the build, if the correct "=/lib/w32api" path is part of the
+search path as well?  Why does this not break the x86_64 build, even
+if that path neither exists for x86_64?
 
 
+Thanks,
 Corinna
+
+
+On Jul  3 18:49, Radek Barton via Cygwin-patches wrote:
+> Hello.
+> 
+> The following:
+> 
+> diff --git a/winsup/cygwin/cygwin.sc.in b/winsup/cygwin/cygwin.sc.in
+> index 5007a3694..e71e0189c 100644
+> --- a/winsup/cygwin/cygwin.sc.in
+> +++ b/winsup/cygwin/cygwin.sc.in
+> @@ -1,6 +1,8 @@
+> +SEARCH_DIR("=/lib/w32api");
+>  #ifdef __x86_64__
+>  OUTPUT_FORMAT(pei-x86-64)
+> -SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
+> +#elif __aarch64__
+> +OUTPUT_FORMAT(pei-aarch64-little)
+>  #else
+>  #error unimplemented for this target
+>  #endif 
+> 
+> breaks Fedora build (https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/actions/runs/16051682177).
+> 
+> Also this:
+> 
+> diff --git a/winsup/cygwin/cygwin.sc.in b/winsup/cygwin/cygwin.sc.in
+> index 5007a3694..dda28692e 100644
+> --- a/winsup/cygwin/cygwin.sc.in
+> +++ b/winsup/cygwin/cygwin.sc.in
+> @@ -1,9 +1,13 @@
+>  #ifdef __x86_64__
+>  OUTPUT_FORMAT(pei-x86-64)
+> -SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
+> +SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api");
+> +#elif __aarch64__
+> +OUTPUT_FORMAT(pei-aarch64-little)
+> +SEARCH_DIR("/usr/aarch64-pc-cygwin/lib/w32api");
+>  #else
+>  #error unimplemented for this target
+>  #endif
+> +SEARCH_DIR("=/lib/w32api");
+>  #define __CONCAT1(a,b)	a##b
+>  #define __CONCAT(a,b) __CONCAT1(a,b)
+>  #define _SYM(x)	__CONCAT(__USER_LABEL_PREFIX__, x)     
+> 
+> breaks the Fedora build (https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/actions/runs/16051815462).
+> 
+> While this:
+> 
+> diff --git a/winsup/cygwin/cygwin.sc.in b/winsup/cygwin/cygwin.sc.in
+> index 5007a3694..2a734a5b1 100644
+> --- a/winsup/cygwin/cygwin.sc.in
+> +++ b/winsup/cygwin/cygwin.sc.in
+> @@ -1,9 +1,11 @@
+>  #ifdef __x86_64__
+>  OUTPUT_FORMAT(pei-x86-64)
+> -SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
+> +#elif __aarch64__
+> +OUTPUT_FORMAT(pei-aarch64-little)
+>  #else
+>  #error unimplemented for this target
+>  #endif
+> +SEARCH_DIR("=/usr/lib/w32api");
+>  #define __CONCAT1(a,b)	a##b
+>  #define __CONCAT(a,b) __CONCAT1(a,b)
+>  #define _SYM(x)	__CONCAT(__USER_LABEL_PREFIX__, x)
+> 
+> seems to work (https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/actions/runs/16057401863).
+
+
