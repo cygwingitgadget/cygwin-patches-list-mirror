@@ -1,98 +1,70 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id 17B233858D32; Mon,  7 Jul 2025 12:56:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 17B233858D32
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751892999;
-	bh=+k9zPKBpZF+9nKSUgOhlZ/WUdAVIwYmEgAvgeOppJsE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=v8Z+93HeCrgek74PmvN7ZlNzEAJcS78tSZndpsnMESn41btPjpg8EmVY5SDF3Ehfw
-	 krOHCX7Ghmx2MbYCJLmdww6FskEZtWbdpOXprivzeGU0I26luvHR1S0ciR/MIwh4cW
-	 yGPwXjhzgbP/MOEOTYkhEpc5/Fowvur8Ogzr8c70=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 8ED20A80D01; Mon, 07 Jul 2025 14:56:36 +0200 (CEST)
-Date: Mon, 7 Jul 2025 14:56:36 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Radek Barton <radek.barton@microsoft.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH v4] Cygwin: define OUTPUT_FORMAT and SEARCH_DIR for
- AArch64
-Message-ID: <aGvEBMnjh02UCqNw@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <DB9PR83MB0923BA573EA5101074C2F0B79278A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aFupr2xZJQY28zEQ@calimero.vinschen.de>
- <575e8838-b292-4f3c-9d47-76507703b747@dronecode.org.uk>
- <aFvgAEwrdLH-A5Ai@calimero.vinschen.de>
- <81096ca9-9542-4818-b363-f3856915050f@dronecode.org.uk>
- <aFwaB47HM8UDH9CK@calimero.vinschen.de>
- <DB9PR83MB09239C78F66E20045E2F4A269243A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <DB9PR83MB0923B144F86ADC301E17B3399242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aGe1pC9zNUhWzARd@calimero.vinschen.de>
- <DB9PR83MB09231472E10A14139FF803A89242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Return-Path: <SRS0=hEVR=ZU=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id CD844385AC09
+	for <cygwin-patches@cygwin.com>; Mon,  7 Jul 2025 17:04:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CD844385AC09
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CD844385AC09
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751907891; cv=none;
+	b=jUZJiTsLcDAghrarcgzprn5uTxdeYNKegKF27KBTpfD0Pk7z6/5sHP0g2Hjor/Vw7TAhb0rWmnjrnUERB6c3VcvYTgsS8psn3V0jtvB1UnBxGcqlayiRmEWkx+M6FeKbARF0NKmPBIxyyAjWGDKwFn9OEaQjMaS8aM7gcbuZYNQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1751907891; c=relaxed/simple;
+	bh=63ER6ezW6nG9pF1Iu8R7nNyE0EOiA00osQwc3IDnha8=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Ggoi99gAXLlyWcJRFfAYpqSHw5CjsiEPmi6zEkCD8OeH0iQon4NNWT+vtzaczCN4buHvocmWYg1XZaTKcUbvr/ciU2NmWMVA3vNRq5T+PL0paVhPqjM0EHSgcHbFZn5j8ibzCweXAATPfeEIlYkF0XFuZUuBlW0Hmn6+njmqP6Q=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CD844385AC09
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=RuXvC+Ki
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 605DC45C0C;
+	Mon, 07 Jul 2025 13:04:51 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=zsnarTorC/jQz55kvR1kQ19k7uQ=; b=RuXvC
+	+KipDBw2yuEj4moEQH7dN0C3YqpMYHazKOv4q8czzUPGVIYiAEEhJB1rzJIehz7v
+	FF+Fy5hhxjpvLmcjuxOa60fUDx/b3C2EzHp1fpIsB8YhuOceYJCZ+dbUYqRYxEHp
+	tsWJoMGQ/2Y2fOo/k3F+Sa5boEadjsHJ70gA/Y=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 4280E45A5F;
+	Mon, 07 Jul 2025 13:04:51 -0400 (EDT)
+Date: Mon, 7 Jul 2025 10:04:51 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+cc: Takashi Yano <takashi.yano@nifty.ne.jp>, cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
+ disable_master_thread
+In-Reply-To: <5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de>
+Message-ID: <cef0e1d0-8736-57ca-6d8c-6e6ee8fb8696@jdrake.com>
+References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp> <9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de> <20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp> <259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de> <20250703195336.2d5900b4988a6918ad397582@nifty.ne.jp>
+ <5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB9PR83MB09231472E10A14139FF803A89242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  4 14:18, Radek Barton via Cygwin-patches wrote:
-> Hello.
-> 
-> Sending the version with `SEARCH_DIR("=/usr/lib/w32api")` only, with detailed commit message added. I've also removed semicolon for `SEARCH_DIR` as it's not needed and other directives do not use it.
-> 
-> Radek
+On Mon, 7 Jul 2025, Johannes Schindelin wrote:
 
+> fix by a regression test in `winsup/testsuite/`?
+>
+> For several days, I tried to find a way to reproduce a way to reproduce
+> the SSH hang using combinations of Cygwin programs and MINGW
+> programs/Node.JS scripts and did not find any. FWIW I don't think that
+> MINGW programs or Node.JS scripts would be allowed in the test suite,
+> anyway, but I wanted to see whether I could replicate the conditions
+> necessary for the hang without resorting to SSH and `git.exe` _at all_.
 
-Pushed.
+Technically, there is a mingw directory of the testsuite that builds
+executables with the cross mingw compiler.  I recently added a test that
+spawns a mingw program built from that directory.
 
-
-Thanks,
-Corinna
-
-
-> 
-> ---
-> >From 44f33bdb2e564c9dd6207b951f3074a2b98b9bb3 Mon Sep 17 00:00:00 2001
-> From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
-> Date: Fri, 6 Jun 2025 14:13:16 +0200
-> Subject: [PATCH v4] Cygwin: define OUTPUT_FORMAT and SEARCH_DIR for AArch64
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
-> 
-> This patch defines binutils output binary format for AArch64 which is pei-aarch64-little.
-> 
-> Since =/usr/lib/w32api resolves to $SYSROOT/usr/lib/w32api and Fedora cross-build takes libraries from
-> /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api, the SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); is
-> redundant and can be removed.
-> 
-> Signed-off-by: Radek Bartoň <radek.barton@microsoft.com>
-> ---
->  winsup/cygwin/cygwin.sc.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/cygwin.sc.in b/winsup/cygwin/cygwin.sc.in
-> index 5007a3694..25739a198 100644
-> --- a/winsup/cygwin/cygwin.sc.in
-> +++ b/winsup/cygwin/cygwin.sc.in
-> @@ -1,9 +1,11 @@
->  #ifdef __x86_64__
->  OUTPUT_FORMAT(pei-x86-64)
-> -SEARCH_DIR("/usr/x86_64-pc-cygwin/lib/w32api"); SEARCH_DIR("=/usr/lib/w32api");
-> +#elif __aarch64__
-> +OUTPUT_FORMAT(pei-aarch64-little)
->  #else
->  #error unimplemented for this target
->  #endif
-> +SEARCH_DIR("=/usr/lib/w32api")
->  #define __CONCAT1(a,b)	a##b
->  #define __CONCAT(a,b) __CONCAT1(a,b)
->  #define _SYM(x)	__CONCAT(__USER_LABEL_PREFIX__, x)
-> -- 
-> 2.49.0.vfs.0.4
-> 
-
-
+There's also the new "STC" repository that also runs in CI, that seems
+to be more intended for regression tests, but that doesn't have any mingw
+builds yet.
