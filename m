@@ -1,89 +1,83 @@
-Return-Path: <SRS0=LSO3=ZV=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.92])
-	by sourceware.org (Postfix) with ESMTP id DCC2B3850B21
-	for <cygwin-patches@cygwin.com>; Tue,  8 Jul 2025 11:56:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DCC2B3850B21
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DCC2B3850B21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.92
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751975769; cv=none;
-	b=Sb15JBA71pcvBM/jhC9A+f5whMpeOnElk9h5V5WFbTaUzDIPBo6QcTn4neIToAdYoWOTsQ5RZVggwHgDcR3cclfpz1LX2jpPV6Zu1DzOMDZVt3J/nfTp58bKJvIlL5TQu9YINEl3Jnn+CltXX/0eNB0uWN7Nz3h1qeDcpZGXGbg=
+Return-Path: <SRS0=7BB9=ZV=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id 4F0243857C78
+	for <cygwin-patches@cygwin.com>; Tue,  8 Jul 2025 22:56:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4F0243857C78
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4F0243857C78
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752015405; cv=none;
+	b=Lu/H4GpCsiaknXdoFMcnydipXQ/SLCNWNhI7e+CeRby14t6ETK4dloao5s/Cq+SjNiy3vkN68QLgWB4pA4omiXs0HbhyWc92dgnV+23MtFw25fYkpkow+55IE++P2LDgCGdXiAdok/nK63UqySeoVPu90ecMsar3HcU9XYswgKc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1751975769; c=relaxed/simple;
-	bh=GXwlQZzOyiFJOCpgo09m9JNd9pwTlxiUFfMYG0tkbIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=oe8QIiU9eWF0h1nKFsZAlMakoXribd5xKPa9HnuVogQraCO3BvOQW9J3cbNEgtlxFp+lPWNg0Fw5X/lD1mYfo/1x7jV9NCZ7brG6TX4IH1zcVx36TnQwCulMyBC7Gq0vpJ7gkZACD4zxUpWm7EEYjwZSkE1Nlj/kUpL6Axc48Po=
+	t=1752015405; c=relaxed/simple;
+	bh=pV+Rkr00h+8Nw130UEABH0DE5LXkMwqpMGenmtXOzDA=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=JlPsM5NcAHLPcxH0SoNu8g1lxzWA/9DiNNkLQOumNIYX+slZqdHieAkntT1PpK1guWIgNvGeYm6jcIJ/UzZ5CIThh/JJU14YVl1ShORcpXFW4U7uCbu8XIYPh1W6BZbwXW6+hlHWDLOCHZbXpnaGG55fJDnR2iLJKED3FdHmVD4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DCC2B3850B21
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6864C026009EB0F0
-X-Originating-IP: [86.140.193.33]
-X-OWM-Source-IP: 86.140.193.33
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefgeeivdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtkeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeetgeetgfehiedukeejleekgeffjedvgedvudffvdeftddvkeehtdffveefgeekheenucfkphepkeeirddugedtrdduleefrdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkeeirddugedtrdduleefrdeffedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudegtddqudelfedqfeefrdhrrghnghgvkeeiqddugedtrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdtuddupdhnsggprhgtphhtthhopedvpdhrtghpthhtohepvehhrhhishhtihgrnhdrhfhrrghnkhgvseht
-	qdhonhhlihhnvgdruggvpdhrtghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.140.193.33) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6864C026009EB0F0; Tue, 8 Jul 2025 12:56:06 +0100
-Message-ID: <9518cf44-897c-4c08-8eba-e775b8921324@dronecode.org.uk>
-Date: Tue, 8 Jul 2025 12:56:04 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4F0243857C78
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=KIPKP4JW
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 1FD9745C1D
+	for <cygwin-patches@cygwin.com>; Tue, 08 Jul 2025 18:56:45 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:subject:message-id:mime-version:content-type; s=csoft; bh=tbNIR
+	ks/ES/DqKATQT0SIHG/lLA=; b=KIPKP4JWfjV83jxVuqSEMKQK18p+J8Z2JtxXD
+	Ss15z9NS6gbvd54kgYcFH2u3dN0nkEz8a3Y5QYjQOz3XwaxII69xHydt5NzhlB1Q
+	SEBZmbnQ5ArAC7Fs6QCJEoGFCWW8UyxyjSeT7D7vCoExroUwV2kRXVPsMepmQo2d
+	HVrnD8=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 0780745A5F
+	for <cygwin-patches@cygwin.com>; Tue, 08 Jul 2025 18:56:45 -0400 (EDT)
+Date: Tue, 8 Jul 2025 15:56:44 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: testsuite: test posix_spawn_file_actions_addopen
+ with O_CLOEXEC
+Message-ID: <ff952d6d-fb58-3d97-fc95-67aa64749157@jdrake.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: CI: cygstress: update for stress-ng 0.19.02 and
- current Cygwin
-To: Christian Franke <Christian.Franke@t-online.de>
-References: <b5fae801-1732-99ac-1fe1-6c2552407055@t-online.de>
- <8941f3e9-16ae-7130-0215-3c65dc3f9aaf@jdrake.com>
- <8e61bc54-b80f-cc69-6a54-4640cceff5cc@t-online.de>
- <0f17f3d0-94c9-febe-ac77-0c9e28ba1c2c@t-online.de>
- <77c8f91a-c51c-4d3f-9faf-e5d9d1430542@dronecode.org.uk>
- <d03eaccd-c618-2f19-156c-61e12af4f132@t-online.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <d03eaccd-c618-2f19-156c-61e12af4f132@t-online.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 08/07/2025 12:06, Christian Franke wrote:
-> Jon Turney wrote:
-[...]
->>
->> It seems that the 'filerace' test (new?) doesn't work reliably in the 
->> CI environment.
-> 
-> This (new!) test never failed during many runs I did locally before 
-> tagging it as WORKS. There are also occasional failures of 'flock' and 
-> 'fork' at GH.
-> 
-> Today I could reproduce one hang of filerace when the number of cores is 
-> closer to the VM behind GH actions.
-> 
-> $ cygstress -r 100 -c 16,18,20,22 filerace flock fork
-> ...
->   >>> FAILURE: 11:58:32.68: filerace (exit status 0, command hangs, 
-> processes left, files left in '/tmp/stress-ng.410.141.d')
-> ...
->   >>> SUMMARY:
->   >>> FAILURE: filerace: 1 of 100 test(s) failed
->   >>> SUCCESS: flock: all 100 test(s) succeeded
->   >>> SUCCESS: fork: all 100 test(s) succeeded
-> 
->>
->> Would it be possible for you to take a look?
-> 
-> Yes.
+This was previously not handled correctly by newlib.
 
-Thank you.
+Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
+---
+This requires a newlib fix
+(https://sourceware.org/pipermail/newlib/2025/021971.html) to pass on
+Cygwin.  It passes on Linux.
 
-> Should I push a new script version which excludes this test for now?
+ winsup/testsuite/winsup.api/posix_spawn/fds.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-I think that would be a good idea - keeping it green so we stand a 
-chance to notice any other problems
+diff --git a/winsup/testsuite/winsup.api/posix_spawn/fds.c b/winsup/testsuite/winsup.api/posix_spawn/fds.c
+index 98ce36ff36..dab96ab33c 100644
+--- a/winsup/testsuite/winsup.api/posix_spawn/fds.c
++++ b/winsup/testsuite/winsup.api/posix_spawn/fds.c
+@@ -74,6 +74,16 @@ int main (int argc, char **argv)
+   exitStatus (status, 0);
+   errCode (posix_spawn_file_actions_destroy (&fa));
+
++  /* test posix_spawn_file_actions_addopen with O_CLOEXEC */
++  errCode (posix_spawn_file_actions_init (&fa));
++  errCode (posix_spawn_file_actions_addopen (&fa, 0, "/dev/zero",
++					     O_RDONLY|O_CLOEXEC, 0644));
++  childargv[3] = "<ENOENT>";
++  errCode (posix_spawn (&pid, MYSELF, &fa, NULL, childargv, environ));
++  negError (waitpid (pid, &status, 0));
++  exitStatus (status, 0);
++  errCode (posix_spawn_file_actions_destroy (&fa));
++
+   /* test posix_spawn_file_actions_adddup2 */
+   errCode (posix_spawn_file_actions_init (&fa));
+   errCode (posix_spawn_file_actions_adddup2 (&fa, fd, 0));
+-- 
+2.50.1.windows.1
 
