@@ -1,112 +1,121 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id BED76385DC0A; Tue,  8 Jul 2025 07:46:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BED76385DC0A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1751960763;
-	bh=ie3BxZ2danfx5YmeneADOvXXYGPvc8WaOXsnhfPX1QU=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=pdXIWsKbbcSv82SH81B9UBH+6TjIK5Nv1eLTN9fv4z1badVTm/oYdH2DcS3eM4HqZ
-	 +76RCZDQt1rgv8t0GBJG7lf5o7gnS604oiPeO4EqEN7URVVufpq8KMg8Vu/tU6v6Ar
-	 vcy6ocSeadvjZVYXSSKEObKBaPFmLWJC3IELd5rg=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 888FCA809E4; Tue, 08 Jul 2025 09:46:01 +0200 (CEST)
-Date: Tue, 8 Jul 2025 09:46:01 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-Message-ID: <aGzMuWoj4Jk6bDxQ@calimero.vinschen.de>
+Return-Path: <SRS0=0V9l=ZV=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+	by sourceware.org (Postfix) with ESMTPS id EC9EB3851144
+	for <cygwin-patches@cygwin.com>; Tue,  8 Jul 2025 11:06:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EC9EB3851144
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EC9EB3851144
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.82
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1751972800; cv=none;
+	b=a0sFgFR2O/OucMnsOczPE4sREcjnrqvL2x9XVwNeLbfMN22B3fQ6L5Zw3qRem5t0Q0bX5cywBMJxO6Ge4oxvoG9Bczb4XvVoFFLsaL8pRgBlnNxWzPUg5FWfGih18yYab/mG3qNvoryBii3/PoW/Tf0XQLfO4hGelEfPA32ZhHw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1751972800; c=relaxed/simple;
+	bh=2Oue3D39Bb9Xwa7QVA+SPy5jnw3yPFJOcnDTP4p6JDQ=;
+	h=Subject:From:Message-ID:Date:MIME-Version; b=k5aei6dDieanUrngbDNHQf1D1usPCJlhVLMQKbt7rZNSbFAAU6JXWV+VdTErCoNktsg/ZOzUqcz0EtYnDrQYVVraTfoPNplyx/e0/LxcRs3xRZAmGesn+GfiM3+IzRonq61mZuLi4aF1mSGgzGlt618o8hlO9IOUj7B5gqdYjh4=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EC9EB3851144
+Received: from fwd87.aul.t-online.de (fwd87.aul.t-online.de [10.223.144.113])
+	by mailout05.t-online.de (Postfix) with SMTP id 8312FA5E
+	for <cygwin-patches@cygwin.com>; Tue,  8 Jul 2025 13:06:38 +0200 (CEST)
+Received: from [192.168.2.101] ([79.230.172.57]) by fwd87.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1uZ69l-0smr9U0; Tue, 8 Jul 2025 13:06:37 +0200
+Subject: Re: [PATCH] Cygwin: CI: cygstress: update for stress-ng 0.19.02 and
+ current Cygwin
+Cc: cygwin-patches@cygwin.com
+References: <b5fae801-1732-99ac-1fe1-6c2552407055@t-online.de>
+ <8941f3e9-16ae-7130-0215-3c65dc3f9aaf@jdrake.com>
+ <8e61bc54-b80f-cc69-6a54-4640cceff5cc@t-online.de>
+ <0f17f3d0-94c9-febe-ac77-0c9e28ba1c2c@t-online.de>
+ <77c8f91a-c51c-4d3f-9faf-e5d9d1430542@dronecode.org.uk>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <aGUfpy6cTysuyaId@calimero.vinschen.de>
- <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
- <aGaZq6sSSuNCKX59@calimero.vinschen.de>
- <fcda3f51-7737-5e21-30a9-443f5f4f8c97@jdrake.com>
- <5e4ebc57-cedc-577f-264d-6cc68be6ee99@jdrake.com>
- <aGeQMtwhTueOa4MT@calimero.vinschen.de>
- <206e78ac-9417-605d-14c1-d9ae2e93782d@jdrake.com>
- <832b300d-9eb9-bef8-46ff-36cce4520f4d@jdrake.com>
- <aGulX_0Azb6GI-_C@calimero.vinschen.de>
- <104e960f-852b-cf0b-76c8-ec950e4cf564@jdrake.com>
+From: Christian Franke <Christian.Franke@t-online.de>
+Message-ID: <d03eaccd-c618-2f19-156c-61e12af4f132@t-online.de>
+Date: Tue, 8 Jul 2025 13:06:35 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.20
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <104e960f-852b-cf0b-76c8-ec950e4cf564@jdrake.com>
+In-Reply-To: <77c8f91a-c51c-4d3f-9faf-e5d9d1430542@dronecode.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1751972797-F67FA4BB-4EEB33ED/0/0 CLEAN NORMAL
+X-TOI-MSGID: 18810289-394c-4561-b9c7-2de5b56a40ed
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,BODY_8BITS,FREEMAIL_FROM,KAM_DMARC_STATUS,MALFORMED_FREEMAIL,MISSING_HEADERS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul  7 14:43, Jeremy Drake via Cygwin-patches wrote:
-> On Mon, 7 Jul 2025, Corinna Vinschen wrote:
-> 
-> > On Jul  4 15:59, Jeremy Drake via Cygwin-patches wrote:
-> > > On Fri, 4 Jul 2025, Jeremy Drake via Cygwin-patches wrote:
-> > > > On Fri, 4 Jul 2025, Corinna Vinschen wrote:
-> > > > > I see what you mean.  The question of questions is if "as if" only
-> > > > > covers the "performed exactly once" requirement, or if the "as if"
-> > > > > really encompasses all three requirements, i.e.
-> > > > >
-> > > > > - as if the specified sequence of actions was performed exactly once
-> > > > >
-> > > > > - exactly in the context of the spawned process (prior to execution of the new
-> > > > >   process image)
-> > > > >
-> > > > > - exactly in the order in which the actions were added to the object
-> > > > >
-> > > > > in contrast to
-> > > > >
-> > > > > - as if the specified sequence of actions was performed exactly once
-> > > > >
-> > > > > - as if in the context of the spawned process (prior to execution of the new
-> > > > >   process image)
-> > > > >
-> > > > > - as if in the order in which the actions were added to the object
-> > > > >
-> > > > > My understanding (as a non-native speaker) is that "as if" only
-> > > > > covers the "performed exactly once" requirement.  Applying "as if"
-> > > > > to the order requirement doesn't make much sense to me.  And applying "as if"
-> > > > > implicitely to the second requirement, but not to the third, doesn't
-> > > > > make much sense to me either.
-> > > >
-> > > > The "as if" performed exactly once doesn't make a whole lot of sense to me
-> > > > either... To me, the only case where "as if" adds flexibility is the
-> > > > context of the child process.
-> > > >
-> > > > > On top of that you'd have the problem that the man pages of
-> > > > > osix_spawn_file_actions_addclose and posix_spawn_file_actions_addchdir
-> > > > > contradict each other.  This, of course, is always possible.  Only an
-> > > > > RFC to the Austin Group could clarify this.  Maybe we should really do
-> > > > > that.
-> >
-> > https://austingroupbugs.net/view.php?id=1935
-> 
-> I noticed a bit that you quoted that I hadn't noticed before
-> additionally, when the new process image is executed, any
->   file descriptor (from this new set) which has its FD_CLOEXEC flag set
->   shall be closed (see posix_spawn()).
-> 
-> The "from this new set" is not handled properly in my implementation, and
-> I'm pretty sure not from the existing newlib implementation: I copied what
-> it was doing, which was to clear the FD_SETFD flag after open.  That
-> would be wrong, if faced with an addopen with the O_CLOEXEC flag set.
-> This is obviously a stupid thing for a caller to do...
+Jon Turney wrote:
+> On 05/07/2025 18:37, Christian Franke wrote:
+>> Christian Franke wrote:
+>>> Jeremy Drake via Cygwin-patches wrote:
+>>>> On Tue, 1 Jul 2025, Christian Franke wrote:
+>>>> -  fp            # WORKS,CI
+>>>> +  fp            # FAILS     # TODO Cygwin: "terminated on signal: 
+>>>> 11" (x86_64 on arm64 only), please see:
+>>>> +                            # https://sourceware.org/pipermail/ 
+>>>> cygwin/2025-June/258332.html
+>>>>
+>>>> -  memcpy        # WORKS,CI  # (fixed in Cygwin 3.6.1: crash due to 
+>>>> set DF
+>>>> in signal handler)
+>>>> +  memcpy        # FAILS     # TODO Cygwin: "terminated on signal: 
+>>>> 11" (x86_64 on arm64 only), please see:
+>>>> +                            # https://sourceware.org/pipermail/ 
+>>>> cygwin/2025-June/258332.html
+>>>> +                            # (fixed in Cygwin 3.6.1: crash due to 
+>>>> set DF in signal handler)
+>>>>
+>>>> These should be fixed now, by
+>>>> b0a9b628aad8dd35892b9da3511c434d9a61d37f (or
+>>>> cygwin-3.7.0-dev-161-gb0a9b628aad8)
+>>>>
+>>>
+>>> Thanks for the positive feedback. Revised patch attached.
+>>>
+>>
+>> Pushed with another modification because procfs test works now.
+>
+> Thanks for updating this.
+>
+> It seems that the 'filerace' test (new?) doesn't work reliably in the 
+> CI environment.
 
-the POSIX posix_spawn man page has a 4 steps list how to process
-the file actions with step 4: close all FD_CLOEXEC descriptors.
+This (new!) test never failed during many runs I did locally before 
+tagging it as WORKS. There are also occasional failures of 'flock' and 
+'fork' at GH.
 
-I wonder if that doesn't make some sense, e.g.
+Today I could reproduce one hang of filerace when the number of cores is 
+closer to the VM behind GH actions.
 
-  addopen (&fact, 42, "somedir", O_CLOEXEC);
-  addfchdir (42);
-
-but then again, you could just add an addclose(42) and you would have the
-same effect.
-
-Well, *shrug*, as long as we can do it right.
-
-But yeah, I don't see anywhere in the POSIX docs that the addopen
-descriptors have the FD_CLOEXEC flag removed automatically.  They
-are supposed to be closed instead, FWIW.
-
-A fix to newlib's posix_spawn might make sense.
+$ cygstress -r 100 -c 16,18,20,22 filerace flock fork
+...
+  >>> FAILURE: 11:58:32.68: filerace (exit status 0, command hangs, 
+processes left, files left in '/tmp/stress-ng.410.141.d')
+...
+  >>> SUMMARY:
+  >>> FAILURE: filerace: 1 of 100 test(s) failed
+  >>> SUCCESS: flock: all 100 test(s) succeeded
+  >>> SUCCESS: fork: all 100 test(s) succeeded
 
 
-Corinna
+>
+> Would it be possible for you to take a look?
+
+Yes.
+
+Should I push a new script version which excludes this test for now?
+
+
+>
+> (As a aside, these CI failures are bridged to the #cygwin-developers 
+> IRC. If there's somewhere else you'd like to see them reported that's 
+> more convenient for you, let me know and I'll see what's possible...)
+
+A frequent look at GH actions would be sufficient. I simply forgot it in 
+this case.
+
+-- 
+Regards,
+Christian
+
