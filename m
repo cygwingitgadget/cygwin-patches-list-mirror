@@ -1,104 +1,118 @@
 Return-Path: <SRS0=CAkv=Z2=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-	by sourceware.org (Postfix) with ESMTPS id 4D8043858C42
-	for <cygwin-patches@cygwin.com>; Sun, 13 Jul 2025 05:29:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4D8043858C42
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+	by sourceware.org (Postfix) with ESMTPS id ECDD53858C51
+	for <cygwin-patches@cygwin.com>; Sun, 13 Jul 2025 05:29:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org ECDD53858C51
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4D8043858C42
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b36
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752384572; cv=none;
-	b=ja2x7hbuosQ109KyEobIbwsWLj+wL7jWm1QB6rbsNvMWz/SDVR5AQzwes2FBed4su4QpjMCbuZFfN4oODvT9M29A2hdsn2dJdm4ADuVbg4mSHLxZyOxDf3Uj67pRuJdCHv6IjU9wEMKvBpeH5DLA5adtqeqx+Q38imMpiPknQs0=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org ECDD53858C51
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b29
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752384574; cv=none;
+	b=gIA7Bud8zbAx/sTKhAr4KtLd2cthE5IGrCUbmiaRcf1D5/h3CW8pRMtbyrzXyHQI2Ii9ZR39d28CkgBXQd8yJwKS5gm3skKejcQXyvs1JdPMpaCDXtX71YvVswmpgPiCBFwD5uYV6fxd1BOlYuquMG2hP8Bx+gebZILlXqs+BzY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752384572; c=relaxed/simple;
-	bh=jjzEZ4iIkM1p1E5X33Z0r7voQrGlPReE1OzkX8Pkw/Y=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=qpQvngs6y6tpO0fOBoz92cwVIzR98mzusesRk8Me01QIdTnPhtSG4e/b89ORdTvGsTd4eCoLarphv2qS1oWe3lBZ7dr8o3mi20IHxtfGvFpSxgJ5v5XkGAK0wpqDoiZqcRjisHL41hNrIsVI6fqoG0aXjDeunQH84dQRiQ5qCY0=
+	t=1752384574; c=relaxed/simple;
+	bh=5Lq6IJJIyzFp5n1tfdWzgr8051uSw0ibQ5INuchEG8o=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Q7khK3iZXiS6LcLGAsr1qPwYW5MvjvowJuqwJttYi9bWPQwA/Tiy3vXXeMI5/ayAMAxdOOSuHcdlnhi8kfnmZ5IEuoRbsxBV88Q/e02h9InxKdV4Y4tG2MKqoE1CZvsZELCTX17hvBsFB5tIXWbEJUCDP8dr27GShY8ZwKMaY+0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4D8043858C42
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org ECDD53858C51
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=j+uflx+T
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-e75668006b9so3285123276.3
-        for <cygwin-patches@cygwin.com>; Sat, 12 Jul 2025 22:29:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=R+7982gh
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-e898de36cfbso2697864276.1
+        for <cygwin-patches@cygwin.com>; Sat, 12 Jul 2025 22:29:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752384570; x=1752989370; darn=cygwin.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZvSFHulyDrRkndr1xxzVdBR4Lwu9gjhmYszEOrCWo8=;
-        b=j+uflx+Tm7KCiIhz3L9Olxvfcs/Uia41aAAx/psw1E4XlCuiJ9qSn824Pn2hdWSjmQ
-         DquPChejtOolhFBnZqpels7FGDuNDOS1CaYTmcaDSJkt2sdTl1uz6J/azcFBC43AzuvZ
-         S1qDzM3uhzY+v3gFFz37Jr+ryesC37l+j561Ix3oQQeNXL7yqK7tKREN1Skzbh9J+nCJ
-         ko4aemyDj6tiHILyz0FyGFESRKwGUJEaLs712e0h8L/nXMokTkl7qk1u5zo3IRdvE/IV
-         DhLiLbho5fZ8xi7XJ3sT4QClJJDE3kqOjDAZO/s74wPzAebKu4wsOPSwb49QJn0+OCFs
-         GU9g==
+        d=gmail.com; s=20230601; t=1752384573; x=1752989373; darn=cygwin.com;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jAHc9y+vTeDbsM2WL4P+wJxkj0Qp9UclEoV/sLGrO6w=;
+        b=R+7982gh3/wNKN+cM9rfwng1YRpIGWJYTBMe7N0fCC8TO/7F8QoVjHnyhx7/bZ/SIx
+         6sk9qLzlWQd+gCN/GKFKm2j6TUUy2PaXROfxeWU+PtWy7rzOgxmDBPf6nt+CfPl2mFgN
+         GKHQho2z0V6TdLQQSnbq9Ofp2EdUH6qBwv+pePQM66+lIfiEEWF0yaM9DFy/CWZi/K86
+         yQsJoHUBr32yxG3Xxx8M8c9Xhu6pZ5zhQWRtb0cku2v+SFnQtM1tGcEFpFX/vPVacJvj
+         j0hvhvaHFyfV8oa1meVK130/K3uu3PxexT08VBKyybFoiYLKhV/ZcMDYp9x6+cvUf+O7
+         wgtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752384570; x=1752989370;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eZvSFHulyDrRkndr1xxzVdBR4Lwu9gjhmYszEOrCWo8=;
-        b=fDI+6MtlZbipzzLQlMmORojx5N0FUMVey8GJ6WLEq7hliDYr+JjabZs0MW94rz7qE+
-         95Z7IfYhucfFCZz0ecnijvNPFd+XEzJzAmh/83RxE/lksLki6z81L3xOzIMfN2c2kKgM
-         f7SrX07ZnVzWJD/AnfbLSQz29oMdwHOfG5mbtUy9RwmfIhyRu3PeyswN4IcgR1kT/Jct
-         TQ/Hsen9sd4w9qjghCeiV9JM4gpqYnrcap/pkWqLao+WyKB6JMquRvGbJ7A09zaC361Y
-         JHp0yoBifm2xYTQxFGkR4PdlUBupyIh0txxhqQCFDa/AGpkQeJdM0RO3bkhvAl4mbH/o
-         9FXw==
-X-Gm-Message-State: AOJu0YyQrfn0xVqM+smLpWTSFh9x2ekGJXYBwaMZnYr0DY3wj8wKCLYm
-	k1RKUV+uuFQXpKAqAMbwqEX/JLfJYo0oxLQ/ZARMFqbrzSNRTFxhPGfRvYNAYg==
-X-Gm-Gg: ASbGncvVwl6+n25TwpMOpGAL/a2+TrQTEehlcMLGiwG3ZLEZUmaipZHrSiy7/IXBDoq
-	0VhchCzna0TcM+JIoAVi2s9U0P+s2Gln1RZtcmg7dmPQ3ZFsqyE0tyP0niRSx5A7qW6dqkPteCI
-	05uhSBRxPV/FSuY3PsWHl2VAfffU+v++a6TO7Rijd0lFCEMVMvGKJr5W9kn5mZT+mh8TNpnHEap
-	myUrCzYHcesKE1y5ygcBZcKrSwr2uhC9ULFEZvPNHRvNpBPve+XZz23Y2VQ0nJbqoHXnTmzRfHM
-	j8/BMF4v4i3ZSstc2QLDslVuC3W33GmARP5Xii5nflK4x2r1mrqbSHPuNmi3XKGg4RA7uhTZMcv
-	d+FK2B3nY+R03olsLYhHj3qQ8jBPn7IR6GMqY0HEmp0Mst1oF6/0lCVOt06jLTlrPEBrqvTvtGM
-	l1QJDl7cCTEMowZ3opVtceF7T49+Gy
-X-Google-Smtp-Source: AGHT+IGzFCm1eOZb1HIcQJIsHQrSrs4I/Ce/ky9SYo5SiKodsQOm8bznaBnDEcXbaUxZMzzNklaspg==
-X-Received: by 2002:a05:6902:703:b0:e89:76dc:4417 with SMTP id 3f1490d57ef6-e8b85a4f268mr12944930276.14.1752384570272;
-        Sat, 12 Jul 2025 22:29:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752384573; x=1752989373;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jAHc9y+vTeDbsM2WL4P+wJxkj0Qp9UclEoV/sLGrO6w=;
+        b=gvgudwqV7NPiYGS7VYDB3zxpO9jUxzhL9PijXQwkq2JE7HCEcUR4l45R0y+5jeF9nR
+         qTcob29n+PDvPQgsHThVJIdhWzhf6eF9aep+qCbjUiqc2GMKF02kX4MrBzF133PlWMG7
+         89Gyjatv46zzzIJLN/39lGU/d2S98fkZl30Yp37Mkj4x6rahup6UO8fN7f/ZSRuPPyVy
+         PsWIfx1xDuEXJDT5yWhS/CVkXhVC9x3CxFd8FwJO+vi3n56z1UhfKtHxlJRw3OhXMFyn
+         4mQj71YcXiThhQ5h3WVIS1N3854D3S4U8K4bGwaTFPGzQdcdrGemWEaA2Ko8D42e/ZcX
+         QxgQ==
+X-Gm-Message-State: AOJu0YyUmrPrZbPEUNY3juu3zUD/BvhQqCvWzBr8DxOngHs4MX4BEwBi
+	XT5JlkuxAXPnR5TW3esr6EkEs7hVmFlupbeO3CVjJdTEHooTQ5jZYNq0kMvM4g==
+X-Gm-Gg: ASbGncsjlIY7sir1aknFQWvdK1dZLXm6o0XDxlJonyWyHrWT8w2BX3/KT3Tr8K7nqCu
+	hl91VxBh0WhZO+zJkLtEJbJFnlCUJUqWWFf4FZMNXWP7+SEjtT3e2hglIS++Irz2W1BVyeXVHQP
+	Uxm+ykx+psi3TKcy41QcGCLKuiTJlNrLpR+bytCEOxaeFsLcazBFX6lzRY6LUsaSyUHxrsWTGu5
+	deTu+iJwt3YZ5wkoUL0Fxc+PWFslOC7vAsW8vVLD+imE0ph96UnQRN1Ml3duo0fPSLL3RnFYgZT
+	Gk0iKncVJrTi5xJ7P5dGuJ4xpsHZVw1FjmSyMrzsNL6ua3/gNU6dOQvqpYeySvCGGtaxI18fyg0
+	hK024E0iqKeAoy0g/ldvuCdAW9kFTqCHQvDBt2B5b3YT4sb+ULiQJOjVQrwaFDyGfoVbbQ2mKDF
+	X7SVY2D3gNQ1tJgq83yHw8VaRpYqS9
+X-Google-Smtp-Source: AGHT+IG0vAcO1UZbZQgNqvbgZUHjD5XQKWCwNmcEy+pBpVxlSRX2iDRZJtme5tI5IIPn/5PNk016Wg==
+X-Received: by 2002:a05:6902:6b1a:b0:e7d:c9f4:ed81 with SMTP id 3f1490d57ef6-e8b85b1fa55mr8123147276.34.1752384572799;
+        Sat, 12 Jul 2025 22:29:32 -0700 (PDT)
 Received: from localhost.localdomain (h218.203.184.173.dynamic.ip.windstream.net. [173.184.203.218])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e8b7aff2a4bsm2169924276.57.2025.07.12.22.29.27
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e8b7aff2a4bsm2169924276.57.2025.07.12.22.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jul 2025 22:29:28 -0700 (PDT)
+        Sat, 12 Jul 2025 22:29:31 -0700 (PDT)
 From: johnhaugabook@gmail.com
 To: cygwin-patches@cygwin.com
 Cc: John Haugabook <johnhaugabook@gmail.com>
-Subject: [PATCH 0/4] cygwin: faq-resources.xml add 3.4 reproduce local site
-Date: Sun, 13 Jul 2025 01:29:09 -0400
-Message-ID: <20250713052913.2011-1-johnhaugabook@gmail.com>
+Subject: [PATCH 1/4] cygwin: faq-resources add 3.4 reproduce local site
+Date: Sun, 13 Jul 2025 01:29:10 -0400
+Message-ID: <20250713052913.2011-2-johnhaugabook@gmail.com>
 X-Mailer: git-send-email 2.49.0.windows.1
+In-Reply-To: <20250713052913.2011-1-johnhaugabook@gmail.com>
+References: <20250713052913.2011-1-johnhaugabook@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: John Haugabook <johnhaugabook@gmail.com>
 
-This patchset adds a section for reproducing a clone of the website locally. 
-It allows people who want to contribute to the website to be able to run the 
-site locally, allowing for rendering of the virtual includes e.g. 
-"<!--#include virtual="navbar.html" -->". The patches are:
+This patch adds the section about reproducing the site locally in section 3 as 
+this seems most relevant to the resource section of the faq. The question is 
+"What if I want to contribute to the website; how do I reproduce the site locally?", 
+and the answer is a brief outline of the essentials on running the site locally, 
+but with no expansion on the details, or how to get the doc/preview html files.
 
- 1. General steps and overview of how to build local site.
- 2. An example httpd.conf file, which allows the virtual include elements to be rendered.
- 3. Instructions on building and extracting the html docs from newlib-cygwin.
- 4. The command to run to start the localhost, or note on using server software.
+Signed-off-by: John Haugabook <johnhaugabook@gmail.com>
+---
+ winsup/doc/faq-resources.xml | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Also, I made a support repo that illustrates:
- - The built faq.html.
- - The process of reproducing a local site that uses a Windows Sandbox environment.
- - And a working example of a locally built site that was built from the sandbox tool.
- 
-Visit https://github.com/jhauga/patch-newlib-cygwin-faq/tree/reproduce-local-site and see the README.md in the root, sandbox, and cygwin-htdocs folders for more details.
-
-John Haugabook (4):
-  cygwin: faq-resources add 3.4 reproduce local site
-  cygwin: faq-resources-3.4 example httpd.conf
-  cygwin: faq-resources-3.4 reproduce site docs
-  cygwin: faq-resources-3.4 start local server
-
- winsup/doc/faq-resources.xml | 66 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
-
+diff --git a/winsup/doc/faq-resources.xml b/winsup/doc/faq-resources.xml
+index 35cb68976..9b8439b4c 100644
+--- a/winsup/doc/faq-resources.xml
++++ b/winsup/doc/faq-resources.xml
+@@ -52,4 +52,21 @@ and an API Reference at
+ <para>Comprehensive information about reporting problems with Cygwin can be found at <ulink url="https://cygwin.com/problems.html"/>.
+ </para>
+ </answer></qandaentry>
++
++<qandaentry id="faq.reproduce.local.site">
++<question><para>What if I want to contribute to the website; how do I reproduce the site locally?</para></question>
++<answer>
++<para>First, clone the <literal>cygwin-htdocs</literal> website repository.
++</para>
++
++<para>Next, ensure you have a server program capable of creating a local
++host using a <filename>httpd.conf</filename> file e.g.
++<literal>httpd</literal>. If you're on Windows, you can install
++<literal>httpd</literal> using <command>winget install ApacheLounge.httpd</command>,
++which works well for this purpose, then create and configure the
++<filename>httpd.conf</filename> file in the site root. You can also
++use software like <literal>XAMPP</literal> or <literal>AMPPS</literal>,
++and configure the default <filename>httpd.conf</filename> accordingly.
++</para>
++</answer></qandaentry>
+ </qandadiv>
 -- 
 2.49.0.windows.1
 
