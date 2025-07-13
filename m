@@ -1,70 +1,70 @@
 Return-Path: <SRS0=CAkv=Z2=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-	by sourceware.org (Postfix) with ESMTPS id 54FA73858C54
-	for <cygwin-patches@cygwin.com>; Sun, 13 Jul 2025 05:29:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 54FA73858C54
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+	by sourceware.org (Postfix) with ESMTPS id 150C03858408
+	for <cygwin-patches@cygwin.com>; Sun, 13 Jul 2025 05:29:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 150C03858408
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 54FA73858C54
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::b29
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752384575; cv=none;
-	b=sMJaxFAlSVmXE0VNZTu9qSnUsVOxcoLtNL+1CB9U+AozpLbMzNi7bWmdVh+HJEl0KNAkFmGqwR+aJ6d3WzPIwUtioFiq+SQTkxA6R3GbTGsrWZ5UZdhz+zOVFZ6DUClkxukHVIgeGwF9/hcHiltlk/x6VY70EV6CqVBvkk79oGg=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 150C03858408
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::112e
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752384577; cv=none;
+	b=M7dTGpCeqVjm7I9SofHBZhegpvrwaEW/4P5ImFKXHNgxRIxDvXllTnlrqLxAPyipFvOPSOxTY8z5sAIIAnrn6mI1TmKejeY4I3xaRHObPZ3kD2IewzUnG5UKpnur6pK16SAfpn8PCabn1hoBXoJiDTaVjrB3HcoHrqsRvnCLjcY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752384575; c=relaxed/simple;
-	bh=64gjhINRfszOafs3avYSoxea1+zkmpPGGjdswUa0R80=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=bMLIGbEwmsgtfTiDIi8b4hO7qlO26hm2biLhxUOMZWalOuHp0sa0DrEhBVXYFgU7aa2EZ3nL1EFK5iw3Q/n6I3AbT6SToYbySMkQhKNKAIn8nO1YpMY4IoErfwFcsulV5gHm0N6mXazXnyfGX4J6eOk+THlzZNeM4Eg6swnCwxI=
+	t=1752384577; c=relaxed/simple;
+	bh=OZTwEMfR2BkJQHfuQ3bRAwmijV2LiiG4jdeQLBreyas=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=s6oz4DWCYycUHm24SpchuiMu933iZw9aPd2dbIbExiOBaGuqBtwqHtxSxkIHcUuL44vLzSs6S596UUpF4ePOjngW9n6FNl1dnaoredgotDmEWNvWu896IYbYXT9dwTuTQ1ea8X0MCrgMF5wOGNb5tCRd/LhR3z1wYi3XxrzzQdA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 54FA73858C54
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 150C03858408
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=RUe3c0Ci
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-e8187601f85so2842809276.2
-        for <cygwin-patches@cygwin.com>; Sat, 12 Jul 2025 22:29:35 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=CTpfeBgl
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-70e1d8c2dc2so30523047b3.3
+        for <cygwin-patches@cygwin.com>; Sat, 12 Jul 2025 22:29:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752384574; x=1752989374; darn=cygwin.com;
+        d=gmail.com; s=20230601; t=1752384576; x=1752989376; darn=cygwin.com;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BfUjtphyrd9s0xkcaqPzWG+WAg5nSW5pyl0VIsx7oW4=;
-        b=RUe3c0CiLmvzIW/ed1c5We7p6R6wAABaTnJsL23lFrsColJLYUYDu1WJwhI5UWnQBp
-         5FU9GABTo4SaW+GiITV8XBewM+SbxARXNURMXzTXlkv4CvoklZesUStG1Nmk+DV2HM6x
-         dEpn3INRj2siFbESaprkEajD4Md0ERyhXKwMRY5DbDW2G4TekaCmBy41qXBkm890lx16
-         wy8yFZzdnIr5WG8NR9MkLvlSBGfz0STHtVX1UKqQUadirRAAkBfA8gbA/Ar/Xr03VTv/
-         99urcKOVs/w88ibbxliQLGDisKpxeUzmYvhPFE7KEB7W2Jbfs+Pkdnc65jK7byOGJ2DJ
-         sE+A==
+        bh=ePI7CToP62o2d2qhvaOTgQND6zCcbby/Jwk0IZYs0rE=;
+        b=CTpfeBgl0uRrAe1xQJvzOX0BXaPw4fhqEezpoQFTO9ElNKlUI/nPN8F851HFy7DqYu
+         P1SaP71yPwiY9vhYRLiZouxno80V4W2Qb4mtFe1baxlfSnelujtOGVd18j+Qi3M07mLD
+         OEh53Y/opytNOrkTi6G0OzakfJls6TVIPBXE/1WobO6ddfdAopkeQEefVQc9NUQ/4mzd
+         PpBpqV9C7gnc+w6ABEdaW8FGPVhDYfUtRde0OGFuIZoB9xa8iXiItfzq79KkBWsFjWu0
+         aAnS0kwxmsH959JxoFC/mVVUAy9alqiW9YWt6SoXD4T7uL/Nu5hkWYMdR7yx7X7dTDmB
+         LreA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752384574; x=1752989374;
+        d=1e100.net; s=20230601; t=1752384576; x=1752989376;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BfUjtphyrd9s0xkcaqPzWG+WAg5nSW5pyl0VIsx7oW4=;
-        b=W+jFwPsvRYTrexwUZUCDiiOOrM0siBolrW9lNNCYtYAFbHThzTCb+kVjQJHRtZfLqZ
-         pQPgG+pZBMVIpldet+MWPDpPc4ltXTyAf4ACSuKSEn6RTE67Ut3B3MZAbpLl2WHfe5Ym
-         SWjysqherfyeDiBPEeI6sJIj1Ioxe2EFe5EpMhEj/iN/2+bMFFu/YI3c3iXju6LNNvd3
-         uWlWekU90VNUKGdes63WsnWDVBk5uc5XDZGdoMQ8KuDvETBnF5AACfwtm6CpY0AWeoGR
-         D8mU6y5e7JGrHa1/xju1X6IIfmsu0o0Gf/+we35d/u7GTOXuWRqhQ7wIOJSNmVrTHxV/
-         N14w==
-X-Gm-Message-State: AOJu0Yyt436LKN5kJPV7Qiy6kInJFFuSQitEySE1ZGwUieRmLNO8F6c1
-	J9E5+L/RpDk4gHH+T744yYHAPxrt0XjPSAGAAY95n8QV6NVyEQuE9VEQ/3v1mQ==
-X-Gm-Gg: ASbGnctOAYg6F4PA/c2tVAa0bhH/wn6BVkKm8I22kB9BJtEiiihSw69V4EPk2bnR3MU
-	O6D4J8/MInlewZfS/CGRiXThlmkM2xMPpYpbMWKxXnBk+xm9gkM32P45Rlzi4c43s+7gVfKQkVu
-	cbxz7pMflJdj0UVV5F0f8ZokxBTERjx66DMkAPWqzByY+1rBlM54fXNIGiGMLCR3hsNe0CXHrxo
-	x0D0AOZ8bDap9FqEHZjxwM8FoLOWTSDPpOBDz6vXPNY0m4TV5ReVhsEPP8TjRS9kAdJqvC5+VdQ
-	ZKA+PPp1yA0DfcfcCeL9+nse1748EvtcAAMMbh+yAfFlY+0sWrR86Zu6wfsMOQQsUClEWLAz3Am
-	ctf47bGndIqpA0hLLwn9PhY3+a75RRswoOBiy36tWO40HL9gKY22bmEGf+AKzQpc1VL/eYF8EZE
-	LRbdQsDjrqEuZzuKpVZAVgGIOvW+Dd
-X-Google-Smtp-Source: AGHT+IG4KfHO7ayB1O3oPdyC4sdo+rmiJtdDTW+5h0UWTQUiXCoSsMB0/zBcDEAGKS1pEI3h/pDr1Q==
-X-Received: by 2002:a05:6902:2289:b0:e8b:9440:77ce with SMTP id 3f1490d57ef6-e8b94407a2amr5017157276.20.1752384574228;
-        Sat, 12 Jul 2025 22:29:34 -0700 (PDT)
+        bh=ePI7CToP62o2d2qhvaOTgQND6zCcbby/Jwk0IZYs0rE=;
+        b=cs32bZ4xVJ4CZvY9Pu5A0vmlSomCwEWA4XS8QOQw8Plm7AoE/ycXHxOU9F5ewJTBdM
+         61qMonnAqs0fYAuhhD//+rcC0tX3eSJ4eygfkzDkW0NWhekB0lY9FJqrDmVzLV8epsxq
+         l00VOUIQKz1j86FOWyvwP0CSxAfC2ZoZXTUD3eKFole+46Lvdu4DzdLZysQDtq2QC5tn
+         z1S6TryHis3GKbKFA8uTemq1TWLmaq2RRUS9rlBF3UkOE+nA1OTZjdLn7Wyo981ZNLfi
+         3gvrGNwaypjZ87lXERJHxLN1hogS2+/Li1L5Uk0QsLVdl3TI9sznG6qnrBQZbQUZ9oSn
+         uB6g==
+X-Gm-Message-State: AOJu0YwM+FeeKRC50sDexbikPz8ydV5PQzA22xb1OIBCPJ2Lx6l6j1h9
+	i+Q4/bPGsbG4KJMBDPEpSg3K0D+29qRrr/Y3R/m3g9hMwm6x2QXc1iwQaGxaDg==
+X-Gm-Gg: ASbGncuZVQdypy+NEK1GxqhKItK+VdWFig24zoXVRQCTzkUYaHAfVjp5+MGcf2rsKHA
+	WDZY/UPmVIno5nMBUsusYMfGE4a/4N+QaQ01Q10rpt+ydTBY6ECGnYI4kTmSdr/eUwqEY+mtzHi
+	x6aZXMSzLwYKVHlI5dX7bFlAatuMT7Az62GzC8Wiy0hmyliDPV1A5gDY9T3qwwxb65z2zBsj1oK
+	0zFn4ClNuJVkFPB8rjMUa3yrQd3SYqLeBK3q768XCiKCeSKd7i/+AjqFLXEKuROlv9LUQ/PdzSZ
+	9IwXEZ6AXS5h2QRJFswhuSMnPi4ZZN/eVupCm/iFTldlgnLkTUSipZZGg5kwvM/1yWNT6GFe2YV
+	SkgOYq8Ue60f5lpBmGq5u1VvqHF2tHJatwF7QfanSnq26M2q7FD86LrDfxcHaSQUljnej3ywSXB
+	kO06nMdzJRVaDxsYAFrpOSxvqe9EIv
+X-Google-Smtp-Source: AGHT+IHQ/pxnSPHfMiceYRBE+vFenouav/qRoWVGQsd8+kDPoPTEwKYBjEaIKncVuB3xQ7fXZ05uQQ==
+X-Received: by 2002:a05:690c:6707:b0:715:2081:f2f8 with SMTP id 00721157ae682-717d7a6183cmr126913947b3.27.1752384575658;
+        Sat, 12 Jul 2025 22:29:35 -0700 (PDT)
 Received: from localhost.localdomain (h218.203.184.173.dynamic.ip.windstream.net. [173.184.203.218])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e8b7aff2a4bsm2169924276.57.2025.07.12.22.29.32
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e8b7aff2a4bsm2169924276.57.2025.07.12.22.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jul 2025 22:29:33 -0700 (PDT)
+        Sat, 12 Jul 2025 22:29:34 -0700 (PDT)
 From: johnhaugabook@gmail.com
 To: cygwin-patches@cygwin.com
 Cc: John Haugabook <johnhaugabook@gmail.com>
-Subject: [PATCH 2/4] cygwin: faq-resources-3.4 example httpd.conf
-Date: Sun, 13 Jul 2025 01:29:11 -0400
-Message-ID: <20250713052913.2011-3-johnhaugabook@gmail.com>
+Subject: [PATCH 3/4] cygwin: faq-resources-3.4 reproduce site docs
+Date: Sun, 13 Jul 2025 01:29:12 -0400
+Message-ID: <20250713052913.2011-4-johnhaugabook@gmail.com>
 X-Mailer: git-send-email 2.49.0.windows.1
 In-Reply-To: <20250713052913.2011-1-johnhaugabook@gmail.com>
 References: <20250713052913.2011-1-johnhaugabook@gmail.com>
@@ -76,56 +76,38 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: John Haugabook <johnhaugabook@gmail.com>
 
-This patch provides an example httpd.conf file, which allows for the virtual 
-includes to be rendered. It also overrides the .htacess files, but for the 
-purpose of making local edits seems appropriate. I wasn't sure about making 
-a note on adding httpd.conf to .gitignore as that may be something that goes 
-without saying. 
-
-I made s support repo that illustrates a variation of the 
-httpd.conf file, accounting for a Linux Environment. Visit 
-https://github.com/jhauga/patch-newlib-cygwin-faq/tree/reproduce-local-site/cygwin-htdocs#readme 
-on how to see a working example.
+This patch covers the steps to build the html files that are excluded from 
+htdocs. It points to the instructions on building newlib-cygwin, and steps 
+to extract copies of the built html files to the cloned htdocs repo. The 
+sandbox tool in the support repo includes these steps on extracting the 
+newlib html docs to the htdocs cloned repo. Visit 
+https://github.com/jhauga/patch-newlib-cygwin-faq/tree/reproduce-local-site/sandbox#readme 
+for more details on the process.
 
 Signed-off-by: John Haugabook <johnhaugabook@gmail.com>
 ---
- winsup/doc/faq-resources.xml | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ winsup/doc/faq-resources.xml | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/winsup/doc/faq-resources.xml b/winsup/doc/faq-resources.xml
-index 9b8439b4c..4ef6f70bd 100644
+index 4ef6f70bd..abe3f50f3 100644
 --- a/winsup/doc/faq-resources.xml
 +++ b/winsup/doc/faq-resources.xml
-@@ -68,5 +68,33 @@ which works well for this purpose, then create and configure the
- use software like <literal>XAMPP</literal> or <literal>AMPPS</literal>,
- and configure the default <filename>httpd.conf</filename> accordingly.
+@@ -96,5 +96,18 @@ and configure the default <filename>httpd.conf</filename> accordingly.
+ 	CustomLog "[path_for]/cygwin-htdocs/access.log" common
+ </screen>
  </para>
 +
-+<para>Below is an example <filename>httpd.conf</filename>.
++<para>To edit the documentation pages for the site clone <literal>newlib-cygwin</literal>,
++and edit the relevant file(s) in <filename>winsup\doc</filename>. After
++editing see <ulink url="https://cygwin.com/faq.html#faq.programming.building-cygwin">newlib-cygwin install</ulink>,
++and follow the instructions there. After building the docs, return to the
++root of the cloned site and run:
 +<screen>
-+	# httpd.conf (in current folder)
-+	ServerRoot "[path_for]/Apache24/bin"
-+	Listen 8000
-+	ServerName localhost
-+	DocumentRoot "[path_for]/cygwin-htdocs"
-+	LoadModule rewrite_module "[path_for]/Apache24/modules/mod_rewrite.so"
-+	LoadModule alias_module "[path_for]/Apache24/modules/mod_alias.so"
-+	LoadModule mime_module "[path_for]/Apache24/modules/mod_mime.so"
-+	LoadModule dir_module "[path_for]/Apache24/modules/mod_dir.so"
-+	LoadModule include_module "[path_for]/Apache24/modules/mod_include.so"
-+	LoadModule authz_core_module "[path_for]/Apache24/modules/mod_authz_core.so"
-+	LoadModule log_config_module "[path_for]/Apache24/modules/mod_log_config.so"
-+	&lt;Directory "/"&gt;
-+		AllowOverride None
-+	&lt;/Directory&gt;
-+	AddType text/html .html
-+	AddOutputFilter INCLUDES .html
-+	Options +Includes
-+	DirectoryIndex index.html
-+	TypesConfig "[path_for]/Apache24/conf/mime.types"
-+	PidFile "[path_for]/cygwin-htdocs/httpd.pid"
-+	ErrorLog "[path_for]/cygwin-htdocs/error.log"
-+	CustomLog "[path_for]/cygwin-htdocs/access.log" common
++	$ mkdir -p "doc/preview/cygwin-api" "doc/preview/cygwin-ug-net" "doc/preview/faq"
++	$ cp -r [path_for]/newlib-cygwin/build/x86_64-pc-cygwin/winsup/doc/cygwin-api/*html doc/preview/cygwin-api
++	$ cp -r [path_for]/newlib-cygwin/build/x86_64-pc-cygwin/winsup/doc/cygwin-ug-net/*html doc/preview/cygwin-ug-net
++	$ cp -r [path_for]/newlib-cygwin/build/x86_64-pc-cygwin/winsup/doc/faq/*html doc/preview/faq
 +</screen>
 +</para>
  </answer></qandaentry>
