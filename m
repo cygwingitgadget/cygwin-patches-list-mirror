@@ -1,190 +1,71 @@
-Return-Path: <SRS0=YxEH=Z3=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.227.178])
-	by sourceware.org (Postfix) with ESMTPS id CED963858D37
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 02:15:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CED963858D37
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CED963858D37
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.178
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752459305; cv=none;
-	b=s+Eryk203vpe/9QU//Sc3vLo4WL6rhoUMO3T7sK6nY5bk6jpRIVGPg4fuAKdX48LfCSR0tGoiudSHEDbgpswQZ16KGJ5m8qA8+k+BpYAQY14MU0HZi8k+z/8KRRUip3tvgpGsa2/QeKTVcZraQZ/uWrVKRSlH8yOV0v/UoWt478=
+Return-Path: <SRS0=V7dz=Z3=gmail.com=reiter.christoph@sourceware.org>
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+	by sourceware.org (Postfix) with ESMTPS id 2854D3858D37
+	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 06:25:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2854D3858D37
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2854D3858D37
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::102c
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752474310; cv=none;
+	b=axVDofGXPibEO/Uv7F+QyQ6ffmiTIcL6dJ0QexTGcdGoYa8mH2eEAmW6tPcuweS93h/rVdZ9LiZWL4SNbYmPhJFiUwcO9D2IJeaZrX7pME/YY7k3szzE11Q6bIoXJqoPXB7wTsh3BdHDSFT+QCdacbZf2p+eFNOfyyBmBPqJWeI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752459305; c=relaxed/simple;
-	bh=nhY5rEeklKv5jZkMPnsRqn8V9q4XtvYnuZ1f5U6Yeu0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=G/gvQFjmPoysMVKTrXnavnAKT1Aj0Az6Yj3tEBdBh1IHM3v13RUgQ9LKbhE6v8sKpZwbCIDNmin+7OL57nBtjonyuYeiLjGtEuqXQUCwXhnMyoj72Ujw8oyB5hN7zy+hgXtWQjuSXvPWWC5kcq7ifBLhrmhNZYCgSY1kOuGx9c4=
+	t=1752474310; c=relaxed/simple;
+	bh=1yiK2SoTGCQLGGOX65C+kYP2yd+ck68u98KkE9xolNE=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=bBAhByfuK8RRRX70hOjbRVuesGxHUs0B80RPrnWtJ3k00u/+IKsNGtIgdaY5rrWxSUO+nmqzmaB6NEoRjz9yY+VKP9QV8xB/3fp/yegY5G1YE4qb889caSSYJXxpX7EoA84GkI1/KbCZpTTdzC9UkM2lrYp/7BwSVkiuCt3BurI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CED963858D37
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2854D3858D37
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=irD/65+0
-Received: from localhost.localdomain by mta-snd-e02.mail.nifty.com
-          with ESMTP
-          id <20250714021502096.GSYD.45927.localhost.localdomain@nifty.com>;
-          Mon, 14 Jul 2025 11:15:02 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Christoph Reiter <reiter.christoph@gmail.com>
-Subject: [PATCH] Cygwin: pty: TCIFLUSH also clears readahead buffer in the master
-Date: Mon, 14 Jul 2025 11:14:34 +0900
-Message-ID: <20250714021442.1828-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=X9K5UP7R
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-3122368d7cfso3188097a91.1
+        for <cygwin-patches@cygwin.com>; Sun, 13 Jul 2025 23:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752474309; x=1753079109; darn=cygwin.com;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1yiK2SoTGCQLGGOX65C+kYP2yd+ck68u98KkE9xolNE=;
+        b=X9K5UP7RX0GTt34ZspCeDgKYGmU+xRwSp0mA/OjEaAZYYUP7fBc3lfUB8RNfefTp2C
+         nf/romzoP7sFTRQ/jbZXFRKf0bPTSDHUhPtaHmKV4ksoIujmrmXxOYnxonTifFFZy9Op
+         j0DK6PNiLWKj+TO0nujal6lSyiqyg5KlxVmAY4fXDQ5xRVTymQvVRSt4+qPgebIav6K4
+         f0eiGpNYK7PlD1wEcfOwzgUYcZ4NpV3pvWj/bBIXRra/Z6ZpoVLbUMm4q7lk9dS060Ri
+         BkFY7B1NIPgIK7TAqxZrI97tdT4lLo3v2Yv1I3FHvpWrQkZDI++YKT1OgtKMY3jNT3lf
+         FbFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752474309; x=1753079109;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1yiK2SoTGCQLGGOX65C+kYP2yd+ck68u98KkE9xolNE=;
+        b=Pij7O1rvO20yn0XiCHTmQ79IW6Zh9oKXj7bSmw0A8r4DMxil4D9MzG9IA4dUY/X62a
+         Xp94NWRecRb64zQfveK+9CHpVBx3XwPaTfkVvunJOMyiaMiLa3bUoEodc3U9KGrpBZXo
+         +rKwMqsg/MAH+qurLdw0yhjaSllfxPo/VtVlpaaaRBWQJXjxDQFu0MbGuL3ra0qV742Y
+         yArtvrLqAmiPEZjzxgIM61tNUMrICAitHfY6qpAFN5eWdmMUlprQ0a9wxcnALXXP8E/7
+         MbIs6PvtWBvTONu5DqU8IHcXJtTWgbym4k/ae1IuqD8UrfD6Hd2OkAE0Bu3GULaC4u/l
+         FBzA==
+X-Gm-Message-State: AOJu0Yy9+xXEJKb/cZgUEU23Ocfd0YSJkc7RBhQ2842CoIuJcY2Swcip
+	IKsa8lUFplfYOr4/D9u0eeWi3fiUT61Z8lPo5YwSW9aUd5kZDR4k4Wwl4OdCXVm9aw67INYiL+7
+	qY7QEBZewns7OaKso2cp1AKwEr+CBY+QhGA==
+X-Gm-Gg: ASbGncvy6UfSbTFcxy1l7tVWqml0GVCJUrC5lrGmsX05MMUkWckkDQebUvF2I3jz9xw
+	RCeOsAOg1po1AHiw6CtQKouScBuUCjwuVtZU37Hy4vaUw8cySrjrvsOa3CEB3GeSQUA7ttT4URw
+	6NSVhatHpM9mqg8yPJNrSKzoXjBoTHa5/1hju7xCzvH2d0XS+SMsVMg5XKLbPRkPkMhYWDWFO8i
+	CFUu2kfZUfCKGMEMQ==
+X-Google-Smtp-Source: AGHT+IEIcNc163wVCU8OEIgTTJgNmLc5VINHEMd0PoIIXqvRvZvvFb5J5Xk+s+G9PG56v2i7iZ2puHydffwnk3Mqv00=
+X-Received: by 2002:a17:90b:580b:b0:312:26d9:d5a7 with SMTP id
+ 98e67ed59e1d1-31c4cd62fa1mr18487930a91.20.1752474309075; Sun, 13 Jul 2025
+ 23:25:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1752459302;
- bh=v2SK6iM4LrIzzuXG3sov9RKuK5LoyC5BdMxkx3Qyet0=;
- h=From:To:Cc:Subject:Date;
- b=irD/65+0KpMlnOHqEP4WN1mbuT63w6cJw7sXe26zgcS1EYjBsxd4SNqQFTTC7H+mBUsFgA8B
- mg2IEL7tLg9NDTluY2a+6ytNiVOs7GR4OYrbPZSvQPEXyksflnsKx8nUC6N/jEDxC2WKLuiUB0
- D2hPE4KDt78TaFfmcSXDztQP5FzIW6TUJK3lGRBPUkw5tLOC/7rJER9ApRRCIC/TkfpJ6DxkPn
- SSPuv9lkoXp49oijzEnZlEGjuAdPX4DeFtYABD2iAbRR4gjJyqjO4QST6GYLh7lKErjzjTEKao
- bHjoOVLqJovh0DXj5CupLc0BbWUKkJDLotaRoFByk1GEwvig==
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+References: <20250714021442.1828-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20250714021442.1828-1-takashi.yano@nifty.ne.jp>
+From: Christoph Reiter <reiter.christoph@gmail.com>
+Date: Mon, 14 Jul 2025 08:24:57 +0200
+X-Gm-Features: Ac12FXwmiME2y4h8dzbzMxduDRjfqw44pWFof-V52pmgh0uIYyw2vbPcCRk9hTo
+Message-ID: <CAE6_+UddWgKvsqRzGMz6i5nFxeCzw7m+D5CPyqc9uo=4UHYP4Q@mail.gmail.com>
+Subject: Re: [PATCH] Cygwin: pty: TCIFLUSH also clears readahead buffer in the master
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+Cc: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previously, TCIFLUSH flushed the pipe to_slave which transfers
-input from master to slave. However, this was not sufficiant.
-The master side holds input data before accept_input() in the
-read-ahead buffer. So, if input data before 'enter' key can be
-leaked into slave input after TCIFLUSH.
-
-With this patch, TCIFLUSH requests master to flush read-ahead
-buffer via master control pipe. To realize this, add cmd filed
-to pipe_request structure so that the flush request can be
-distinguished from existing pipe handle request.
-
-Addresses: https://cygwin.com/pipermail/cygwin/2025-July/258442.html
-Fixes: 41946df6111b (" (fhandler_tty_slave::tcflush): Implement input queue flushing by calling read with NULL buffer.")
-Reported-by: Christoph Reiter <reiter.christoph@gmail.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/pty.cc           | 31 +++++++++++++++++++++----
- winsup/cygwin/local_includes/fhandler.h |  1 +
- winsup/cygwin/release/3.6.4             |  3 +++
- 3 files changed, 30 insertions(+), 5 deletions(-)
-
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index b882b903e..77a363eb0 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -42,7 +42,14 @@ extern "C" int sscanf (const char *, const char *, ...);
-   } while (0)
- 
- /* pty master control pipe messages */
-+enum pipe_request_cmd {
-+  GET_HANDLES,
-+  FLUSH_INPUT,
-+  QUIT
-+};
-+
- struct pipe_request {
-+  pipe_request_cmd cmd;
-   DWORD pid;
- };
- 
-@@ -871,7 +878,7 @@ fhandler_pty_slave::open (int flags, mode_t)
-     }
-   else
-     {
--      pipe_request req = { GetCurrentProcessId () };
-+      pipe_request req = { GET_HANDLES, GetCurrentProcessId () };
-       pipe_reply repl;
-       DWORD len;
- 
-@@ -1139,7 +1146,7 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
- 		      __small_sprintf (pipe,
- 			       "\\\\.\\pipe\\cygwin-%S-pty%d-master-ctl",
- 			       &cygheap->installation_key, get_minor ());
--		      pipe_request req = { GetCurrentProcessId () };
-+		      pipe_request req = { GET_HANDLES, GetCurrentProcessId () };
- 		      pipe_reply repl;
- 		      DWORD len;
- 		      if (!CallNamedPipe (pipe, &req, sizeof req,
-@@ -1606,6 +1613,14 @@ fhandler_pty_slave::tcflush (int queue)
- 
-   if (queue == TCIFLUSH || queue == TCIOFLUSH)
-     {
-+      char pipe[MAX_PATH];
-+      __small_sprintf (pipe,
-+		       "\\\\.\\pipe\\cygwin-%S-pty%d-master-ctl",
-+		       &cygheap->installation_key, get_minor ());
-+      pipe_request req = { FLUSH_INPUT, GetCurrentProcessId () };
-+      pipe_reply repl;
-+      DWORD n;
-+      CallNamedPipe (pipe, &req, sizeof req, &repl, sizeof repl, &n, 500);
-       size_t len = UINT_MAX;
-       read (NULL, len);
-       ret = ((int) len) >= 0 ? 0 : -1;
-@@ -2036,7 +2051,7 @@ fhandler_pty_master::close (int flag)
-       if (master_ctl && get_ttyp ()->master_pid == myself->pid)
- 	{
- 	  char buf[MAX_PATH];
--	  pipe_request req = { (DWORD) -1 };
-+	  pipe_request req = { QUIT, GetCurrentProcessId () };
- 	  pipe_reply repl;
- 	  DWORD len;
- 
-@@ -2542,13 +2557,18 @@ fhandler_pty_master::pty_master_thread (const master_thread_param_t *p)
- 	  termios_printf ("RevertToSelf, %E");
- 	  goto reply;
- 	}
--      if (req.pid == (DWORD) -1)	/* Request to finish thread. */
-+      if (req.cmd == QUIT) /* Request to finish thread. */
- 	{
- 	  /* Check if the requesting process is the master process itself. */
- 	  if (pid == GetCurrentProcessId ())
- 	    exit = true;
- 	  goto reply;
- 	}
-+      if (req.cmd == FLUSH_INPUT)
-+	{
-+	  p->master->eat_readahead (-1);
-+	  goto reply;
-+	}
-       if (NT_SUCCESS (allow))
- 	{
- 	  client = OpenProcess (PROCESS_DUP_HANDLE, FALSE, pid);
-@@ -3801,6 +3821,7 @@ fhandler_pty_master::get_master_thread_param (master_thread_param_t *p)
-   p->to_slave = get_output_handle ();
-   p->master_ctl = master_ctl;
-   p->input_available_event = input_available_event;
-+  p->master = this;
-   SetEvent (thread_param_copied_event);
- }
- 
-@@ -3842,7 +3863,7 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
-       __small_sprintf (pipe,
- 		       "\\\\.\\pipe\\cygwin-%S-pty%d-master-ctl",
- 		       &cygheap->installation_key, ttyp->get_minor ());
--      pipe_request req = { GetCurrentProcessId () };
-+      pipe_request req = { GET_HANDLES, GetCurrentProcessId () };
-       pipe_reply repl;
-       DWORD len;
-       if (!CallNamedPipe (pipe, &req, sizeof req,
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 04e2ca4c3..4db2964fe 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2542,6 +2542,7 @@ public:
-     HANDLE to_slave;
-     HANDLE master_ctl;
-     HANDLE input_available_event;
-+    fhandler_pty_master *master;
-   };
-   /* Parameter set for the static function pty_master_fwd_thread() */
-   struct master_fwd_thread_param_t {
-diff --git a/winsup/cygwin/release/3.6.4 b/winsup/cygwin/release/3.6.4
-index 4338214a6..fbc61c811 100644
---- a/winsup/cygwin/release/3.6.4
-+++ b/winsup/cygwin/release/3.6.4
-@@ -28,3 +28,6 @@ Fixes:
- 
- - Fix ACL operations on directories.
-   Addresses: https://cygwin.com/pipermail/cygwin/2025-July/258433.html
-+
-+- Make TCIFLUSH also flush read-ahead data in the master.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2025-July/258442.html
--- 
-2.45.1
-
+Thanks! I can confirm that this fixes things.
