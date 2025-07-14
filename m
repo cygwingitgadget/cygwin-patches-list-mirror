@@ -1,103 +1,97 @@
-Return-Path: <SRS0=c0Hf=Z3=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	by sourceware.org (Postfix) with ESMTPS id B84FE3858C42
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 06:34:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B84FE3858C42
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B84FE3858C42
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.15
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752474866; cv=none;
-	b=dM8fUiK1LONTqI1gogYC5MP0eS+jOCG4jggswVgODTXE+LI1NKsHqbBV/yUAZZT8GJV0haReCGOIsBr4rYEn7rm+iOb2tntUo5XExl131zLrhUQDZHRatKki4zH8GdHP8HPpruz/4M7PnnbXrafAl7OIl01h/DB2eshWlJhN9VI=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752474866; c=relaxed/simple;
-	bh=GqYOjALlJaB817zX7vQ0ctMl/4qx/37h0BkFNGnRqTI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=tugBWffpqVJv3cW5s3cu9hiGeyTeJyOdqwb3pGRUZkuO7+uw9fQfDtTwRrJOEPVGUB7WUd3CtOt0PTdM9HQn6uK+DHIUorxeV6EkLYulqfKTHVNjjIffuhea5/EgYND3lMWfxOE9flk/Y/IR9r/i3qBzpTdvSFPCIZFS7MAn3Zk=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B84FE3858C42
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=hBgwaqjl
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 5DDD31604EB
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 06:34:25 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf14.hostedemail.com (Postfix) with ESMTPA id DFA7A30
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 06:34:23 +0000 (UTC)
-Message-ID: <c2f6f66e-beb8-4a98-8365-ba19480d6a2a@SystematicSW.ab.ca>
-Date: Mon, 14 Jul 2025 00:34:22 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id A43183858D37; Mon, 14 Jul 2025 11:41:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A43183858D37
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1752493312;
+	bh=kTPqwV9JYERKxL3y5R38MCUE015HoAyOgk7fzcFhqXg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=ygRloiOF2H6mwKuERCf5XQxIShCc7sztpsWv6joNtf6hWu+uNgckUV+2YSLasXeub
+	 1PDE2ZXWY8TcU9YDGZyETzKZXWN0sbAEWzQulF/AQ3XuXCmFjj/OHtoO/1ZWUu38ng
+	 ozUDA14eyw0ub9gBwTS7jq2mIfDVHyAniC8oB01A=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id DBB92A806FF; Mon, 14 Jul 2025 13:41:50 +0200 (CEST)
+Date: Mon, 14 Jul 2025 13:41:50 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Radek Barton <radek.barton@microsoft.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH v2] Cygwin: cygcheck: port to AArch64
+Message-ID: <aHTs_sKuNZ1OkBvc@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] cygwin: faq-programming-6.21 ready-made download
- commands
-Content-Language: en-CA
-To: cygwin-patches@cygwin.com
-References: <20250625013908.628-1-johnhaugabook@gmail.com>
- <20250625013908.628-3-johnhaugabook@gmail.com>
- <c8836ea2-2a1f-4225-8b79-bbe43bcc186b@dronecode.org.uk>
- <CAKrZaUssLPAzDPBmFQ_iC2WN=o1uEnoGsfKitC045S4H6unDZA@mail.gmail.com>
-Organization: Systematic Software
-In-Reply-To: <CAKrZaUssLPAzDPBmFQ_iC2WN=o1uEnoGsfKitC045S4H6unDZA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <DB9PR83MB09236B2289D6307E787D64FC9242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <DB9PR83MB09232BEB586BCF0576FD69CD9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Stat-Signature: axxye13t455ef7a4qrkox8omz688egg7
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: DFA7A30
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_W,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX19AcAJY8ZFM1Gyp9drSUScpZnE1srxxcOQ=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=SNeR9EcuYxmLaJURnCpcis8NsPDg+nBul3IMeEDPP1E=; b=hBgwaqjlZ3F4cI+W1p2EjLs0jj+6jiQGKMsRr4Q0bYc/0ntNhsRPpt205occM30NM8+wCFL7SRgIhC68/KlAIQJAd2wJhB4jvAktQEggpUpgT2uGtcfa2jIrcSTDJwjDgJPDYx0Y1/a77CXrmUQHLq8bO9sB2l5RdR4lDCVgsBwLQmr4YgCQuF6vnGbFr/drOlR0t10BYO0MC1f90T9/ZrfncuWO2ubc2H4HmCf0bWnVeBgRyHaIb0MjWqlSfHyYSg4X9etlmizTFna126Z0SGWIkK8KlOVyrV54WLs/riVtPdgigo1t0nNG3gsS85HYrIAOEwABYF6IaKekRRWZmA==
-X-HE-Tag: 1752474863-482442
-X-HE-Meta: U2FsdGVkX19bbV0KeuVk8hghIOKU2c03lnFfynNcUwIGh0rh+EVHpSOTTfzwfGRZfQ3R2mtfQ4dPHFxU+QaITJ1Am/yJZcJrZoxcuGHP9bVrJ0Tp3qXz9lBRenwE7rUCcR55fX9dMuwVU77Pa7ryBHhI+COVXIeesHzunsdKyNP+ZDPntRCXTDJ40ycJLNVG/kCDgoW5YxaSi59FiMRN8aXyKFad3VF5Tnv8D+WkKl1FvHLORpL2zqzXnNhqgOEKLaUMs1AjT5A9pi7hlnrFGIdPxIHv9jsASWIOPIx5LTwiACksTkV+7sGt+wBACcQuyL/cdHpsxMbZPnF0B7B0mscgQY+dFzQv60bIwqrogOcYZtojwC+zG5Vksbf+9XUD2YZ7T/rK6ntN3MnGTlUh7tB2XsgnxbmtVLfJV0MEiIS9Cl2uuyKlEw==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+In-Reply-To: <DB9PR83MB09232BEB586BCF0576FD69CD9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-07-13 18:04, John Haugabook wrote:
-> Yeah, but this seems like something I might be able to do. Like I'd
-> have to study setup for a day or two before even knowing where to
-> start, but as of now my guess is: if setup -q --some-option cygwin,
-> then cygwin installs packages.
+Hi Radek,
+
+I'm not sure about one change here:
+
+On Jul 10 10:10, Radek Barton via Cygwin-patches wrote:
+> Hello.
 > 
-> So something like --build-tools, --dumper-utilities,
-> --cygwin-utilities, --documentation?
-> For example:
-> setup --build-tools cygwin
-> then setup would rerun, and make a call using:
-> `setup -q -P autoconf,automake,cocom,gcc-g++,git,libtool,make,patch,perl`
-> If so, then can I get a clue as to where to begin?
+> Sending the same patch with more detailed commit message added.
+> 
+> Radek
+> ---
+> >From ebec7171c9fdf162e0d193f7ba3468766191cc8d Mon Sep 17 00:00:00 2001
+> From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
+> Date: Mon, 9 Jun 2025 13:08:35 +0200
+> Subject: [PATCH v2] Cygwin: cygcheck: port to AArch64
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
+> 
+> This patch ports `winsup/utils/mingw/cygcheck.cc` to AArch64:
+>  - Adds arch=aarch64 to packages API URL.
+>  - Ports dll_info function.
+> 
+> Signed-off-by: Radek Bartoň <radek.barton@microsoft.com>
+> ---
+>  winsup/utils/mingw/cygcheck.cc | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/winsup/utils/mingw/cygcheck.cc b/winsup/utils/mingw/cygcheck.cc
+> index 89a08e560..6ec7bcf03 100644
+> --- a/winsup/utils/mingw/cygcheck.cc
+> +++ b/winsup/utils/mingw/cygcheck.cc
+> @@ -654,13 +654,20 @@ dll_info (const char *path, HANDLE fh, int lvl, int recurse)
+>    WORD arch = get_word (fh, pe_header_offset + 4);
+>    if (GetLastError () != NO_ERROR)
+>      display_error ("get_word");
+> -#ifdef __x86_64__
+> +#if defined(__x86_64__)
+>    if (arch != IMAGE_FILE_MACHINE_AMD64)
+>      {
+>        puts (verbose ? " (not x86_64 dll)" : "\n");
+>        return;
+>      }
+>    int base_off = 108;
+> +#elif defined (__aarch64__)
+> +  if (arch != IMAGE_FILE_MACHINE_ARM64)
+> +    {
+> +      puts (verbose ? " (not aarch64 dll)" : "\n");
+> +      return;
+> +    }
+> +  int base_off = 112;
 
-Source package summary build-depends, for example:
+base_off is the offset of the NumberOfRvaAndSizes field in the extended
+COFF header.  This is documented(*) as being at offset 108 in the PE32+
+format, independent of the targeted CPU.  112 is the offset of the
+.edata section address and size info in the PE32+ data directory entries.
 
-$ lynx -dump -nolist https://cygwin.com/packages/summary/cygwin-src.html | \
-	awk '/build-depends:/,/\):$/'
-    build-depends:
+So I have a problem with changing the offest here.  Can you please check
+again if that's really correct?  If so, the documentation(*) needs an
+update.
 
-    autoconf, automake, cocom, cygport, dblatex, dejagnu, docbook-xml45,
-    docbook-xsl, docbook2X, gcc-g++, gettext-devel, libiconv,
-    libiconv-devel, libzstd-devel, make, mingw64-x86_64-gcc-g++,
-    mingw64-x86_64-zlib, patch, perl, python39-lxml, python39-ply,
-    texlive-collection-fontsrecommended,
-    texlive-collection-latexrecommended, texlive-collection-pictures,
-    xmlto, zlib-devel
+(*) https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
 
-    install package(s):
 
-or setup.ini cygwin build-depends, for example:
-
-$ apt-cyg show cygwin | grep '^build-depends:\s' | sort -u
-build-depends: autoconf, automake, cocom, cygport, dblatex, dejagnu, 
-docbook-xml45, docbook-xsl, docbook2X, gcc-g++, gettext-devel, libiconv, 
-libiconv-devel, libzstd-devel, make, mingw64-x86_64-gcc-g++, 
-mingw64-x86_64-zlib, patch, perl, python39-lxml, python39-ply, 
-texlive-collection-fontsrecommended, texlive-collection-latexrecommended, 
-texlive-collection-pictures, xmlto, zlib-devel
-
-or awk setup.ini equivalent.
-
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+Thanks,
+Corinna
