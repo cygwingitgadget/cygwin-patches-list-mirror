@@ -1,61 +1,61 @@
-Return-Path: <SRS0=tYd+=Z3=t-online.de=Christian.Franke@sourceware.org>
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
-	by sourceware.org (Postfix) with ESMTPS id EBDF23858D37
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 15:14:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EBDF23858D37
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=t-online.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EBDF23858D37
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=194.25.134.83
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752506074; cv=none;
-	b=fJhNX9FjS7kVZ+Y69s58kVOOowiZcRW4Gu4tFXo5a1G+4idgBI8E3/GQ8/a2g+Ih6iPUXC1uWfkTxkvBAbS4qPZzw31vXc+MhEUJPSXHjNSQ8FU/Sn9ftOAPKG0sOXGT2pHWA7WnUjohUTW+UnV/IuUyncQjSimmFZYk8YlzGjk=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752506074; c=relaxed/simple;
-	bh=VEMIDIL75iMAx71P/HfKrofZ6giNl5OE3UWMnKmd2uE=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version; b=odz8YjYvKvQjnlgBdpZRLkJ5mHS0ppi/ny0IqY6Njp3pku1/hb5mgi2SDtgcmtr2XmlJGgXidYJu8rak77wP6A3NeewAiz//BQaUE5jFXI+e+Njv1zGCX9xUSHjqO99IThUZXgi5/fGqReySS4Nhvy4cP2P8HXdtBULvo8SH7/Q=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EBDF23858D37
-Received: from fwd86.aul.t-online.de (fwd86.aul.t-online.de [10.223.144.112])
-	by mailout07.t-online.de (Postfix) with SMTP id 96669E833
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 17:14:32 +0200 (CEST)
-Received: from [192.168.2.101] ([79.230.172.57]) by fwd86.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1ubKsx-1Dk9Eu0; Mon, 14 Jul 2025 17:14:31 +0200
-Subject: Re: [PATCH] Cygwin: doc: warn about unprivileged access to raw
- devices
-To: cygwin-patches@cygwin.com
-References: <7d18c6c8-3d74-0f97-cf45-05a7a263c386@t-online.de>
- <aHUIJb8zEUePlkut@calimero.vinschen.de>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 1870E3858428; Mon, 14 Jul 2025 16:06:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1870E3858428
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1752509196;
+	bh=TB/8ogq0tIq0roccjRl5uyPWMf8YqCRddcuVAnRMd1c=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=ArGIR9eUI5sSqRegDASYJaA01zv20B6yII5PnSoa+NEQ2L4tY/xo4Cau6BOUTQEwR
+	 +KGCD33TuK39+fmAS6r7JlORjcUR929NVbbuApDseF9iSdPR/K9PVghdpLHpa0QgQJ
+	 aGUelv4FrBnDsDE/s8kNusuRyhdhANMW+/v3lTK4=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 29145A809E4; Mon, 14 Jul 2025 18:06:34 +0200 (CEST)
+Date: Mon, 14 Jul 2025 18:06:34 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Radek Barton <radek.barton@microsoft.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH v2] Cygwin: gendef: stub implementations of routines for
+ AArch64
+Message-ID: <aHUrCtb7YnU5OvAX@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-From: Christian Franke <Christian.Franke@t-online.de>
-Message-ID: <ebbd9820-e2dd-cce5-a8af-1e70c87fb2f2@t-online.de>
-Date: Mon, 14 Jul 2025 17:14:32 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
- SeaMonkey/2.53.20
+Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <DB9PR83MB0923C9E8CCEA2C6CF37A60739242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <DB9PR83MB09233DE9CBD5304BB8D2D69E9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aHTwZ-lCwbHtuIKp@calimero.vinschen.de>
+ <DB9PR83MB09239FE0F8762D882392064A9254A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <aHUIJb8zEUePlkut@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TOI-EXPURGATEID: 150726::1752506071-9B7EFF9F-7F75A297/0/0 CLEAN NORMAL
-X-TOI-MSGID: dbe16a60-dca9-47f5-8d1c-6eedeaf8a71d
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,FREEMAIL_FROM,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB9PR83MB09239FE0F8762D882392064A9254A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Corinna Vinschen wrote:
-> On Jul 14 14:58, Christian Franke wrote:
->>  From 344a329a5706de125b3ef11dc7324101b08b3c67 Mon Sep 17 00:00:00 2001
->> From: Christian Franke <christian.franke@t-online.de>
->> Date: Mon, 14 Jul 2025 14:44:01 +0200
->> Subject: [PATCH] Cygwin: doc: warn about unprivileged access to raw devices
->>
->> Raw devices of partitions may be accessible from unprivileged
->> processes, for example if connected via USB.
->>
->> Signed-off-by: Christian Franke <christian.franke@t-online.de>
->> ...
->>
-> Pushed.... oh, right, you have push perms, sigh :}
+On Jul 14 14:26, Radek Barton via Cygwin-patches wrote:
+> Hello.
+> 
+> > Can you please explain how you're planning to go forward from here, so
+> we can all understand if and why this patch makes sense during bootstrap?
+> 
+> My intention is to upstream a minimum set of changes that would allow to build `cygwin1.dll` and `crt0.o`, respectively bootstrap either a Linux-based or Windows x64 Cygwin `aarch64-pc-cygwin` cross-compilation GNU toolchain. With the toolchain available and Cygwin build passing and tests running, the community can further contribute to the project while having CI checks to compare with.
+> 
+> One can check out what does this actually include in https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/compare/woarm64...aarch64-patch-series1-v1 branch where the commit messages have `SENT` prefix if the change has been already submitted to the mailing list, `TODO` prefix if some rework is needed and `SKIP` prefix if that change is there only to allow validation on our CI https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/blob/woarm64/.github/workflows/cygwin.yml.
+> 
+> As you can see here https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/actions/runs/16268410995/job/45929514517, with changes from that branch, the tests pass rate is already 216/287 that could serve as the baseline.
+> 
+> Nitpick: Currently, our CI is using an `aarch64-pc-cygwin` Ubuntu and Windows x64 Cygwin host cross-compilation GNU toolchains, pre-built from our development branch that contains everything we've done so far but once the above branch will be upstreamed there will be only minimum changes left on top of that.
+> 
+> In context of this patch, the only changes left to add to `gendef` to achieve such baseline results are in https://github.com/Windows-on-ARM-Experiments/newlib-cygwin/commit/c7e082d457e0b2a356d1fce169c2224b46e3a0af commit. They are surely incorrect in a sense of the full signals handling implementations as they are just relocating to the target symbol. I was going to submit them as a separate patches to open discussion whether such temporary implementations could be accepted. Nevertheless, IMO it's better to keep them as separate commits in the history. The full-features signals implementation is in progress but it will take some time to finish and it's actually not needed to bootstrap the cross-compilers and get some baseline test results.
+> 
+> Please, let me know if something deserves more explanation.
+> 
+> Radek
 
-no problem :)
+Thanks for the explanation.  I pushed your patch.
 
+Looking forward to more :)
+
+
+Thanks,
+Corinna
