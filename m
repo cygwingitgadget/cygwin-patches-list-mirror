@@ -1,78 +1,75 @@
-Return-Path: <SRS0=dar+=Z3=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 63ED43858D32
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 18:10:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 63ED43858D32
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 63ED43858D32
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752516621; cv=none;
-	b=v4II6apoYP3fhoYRZqRgjbWqVwsc38IsZxZ4K7ByvHyI1JGJClWpszyNZIX7VhPtXetkQUxVh1cBv1piA6H7GLOuVarlBZ6OpPX7O6doJsMVJgOlRzpqRiVwMQHtkBlLpf4U6wy4YQGF4jBSM7Oajx/uNOCkDOcv//hyQUWnAAQ=
+Return-Path: <SRS0=cjZq=Z3=gmail.com=johnhaugabook@sourceware.org>
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+	by sourceware.org (Postfix) with ESMTPS id D442A385840F
+	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 19:59:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D442A385840F
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D442A385840F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::536
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752523187; cv=none;
+	b=R5DuFZ0T6ZfPKNdonNy3Qbdv3A7tGynWswkHTWoAtQ63TE87jIYa9MbSpVG60vLx3abzgCmmvY/UZqlLgpsz8Ax/7PXLwil9SGlnnkVWQtaPF1Rktr5LVYIU8JLMS8aH5r3BzFJgcwaVQRLdzp4Wz9U4eoMSv9S3OC+OuvjQNhA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752516621; c=relaxed/simple;
-	bh=JB3r9ZMVaSH6XsHatlLmuPRTfjUN/CHvK5OpRzbxgGI=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=Ay7q1EG8haUfNfQBEQPQgYVjCr4T5zraAqaDok1jx8zH0LiAHIrUkf1OQnmzB/nQT+ERpPHEkSUVNdIWa9DDBjOpxLji054qnD+qLjSfkTPsNq/pGRx/foXMt524kRMPdNm2hBXnIwbBEajDGy5fdGBEsibytgxipQXIfxlonSY=
+	t=1752523187; c=relaxed/simple;
+	bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=YRPcsrNZjIA9cbCEZmU1hWKZ8KGyZ5PiJli5YZVw/L9mnb2mBSdlSbXdaaD8CGB1uFEZZyek2e5Olchnx73Md9nKfj0TByEFcvrvf4mWs+zkHTKPpZEGl14i7DHoqam3FHT5ysHpTTwRkq1+B0tgjckj8JejGOxAEsI6R7b61J4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 63ED43858D32
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D442A385840F
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=nkEWqdRU
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 39D6D45CBA;
-	Mon, 14 Jul 2025 14:10:21 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=jlrfcQmBpxIpA9wjviqUN3xHjwk=; b=nkEWq
-	dRU2HCzvXXaMOKekyUgg8XtMFrAYfj6kvm9reXtqejCGoTfoaefN5ejBV2BjW9M2
-	Czq4V5OXDPoDc7MIJ6DjuAYOhEEIbQ9Mp/K/JCF0xZ7onA6hr0uFGWtGnln0SaTl
-	fLzlJzcHJE7ptuopaX9VWC9h8n3zw3DPjTErvA=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 3545745C1D;
-	Mon, 14 Jul 2025 14:10:21 -0400 (EDT)
-Date: Mon, 14 Jul 2025 11:10:21 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Radek Barton <radek.barton@microsoft.com>
-cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-In-Reply-To: <52e4e7cf-22d4-f8f7-0c1a-abbd9ca8f2a8@jdrake.com>
-Message-ID: <3df9677e-9113-e7f0-3550-ac9f866d406d@jdrake.com>
-References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com> <52e4e7cf-22d4-f8f7-0c1a-abbd9ca8f2a8@jdrake.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=Z0Hd6ypm
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-60c93c23b08so9302407a12.3
+        for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 12:59:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752523185; x=1753127985; darn=cygwin.com;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
+        b=Z0Hd6ypmhFdKsCCOItJeRZ2hMCFAeHJg6aGO2H1+HT+7rQisUz/7GfJFKHh/zscA9E
+         5/XOBXvK9FA/dcVsmM2ZOd0caVeA/PbNaY5ANF63K1FOuy82+xTD+zt6jXub2jrpYoqE
+         jmjrgdztrQfNLTk0DEuWXQPNgT+ASfwxby9nk1p757CXU8kb78NziwOZqB7DDIM9ddlH
+         MEmkJ/o3yg7DctLr3OGigS9ruLVXpoAPugKqY8y+qxL0lBHV/te/LKKkVTAuRYs6m2Vj
+         QIK1VRZIKDq0qh7Ynjrdtx/rQ2jRMrTwtK5wqapY/oDE5aTcc49mhYjaYg8pVUOGXMax
+         NcjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752523185; x=1753127985;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
+        b=hJW4PLJNHiaQBFQyaxVUgYvBjSE6PnqaKT7aE2XJxziwERprdwmrR+w+1+NXE7SrH5
+         NMvw04JuSfbN5wma6jFVpQV/ZWmUDR9Ea3XqsBwTEiPnKE47g0hv+LUXR4c7wZZ1eMP2
+         c3iNy7Da/gkkb1wjopIpNl44VVpcMUSNjlM5dtehr5/tMsoSHiBWOSRy9nRtjBNHZByf
+         r97kKztwWLUzrO//ij6FPGrBrXhJ8Jbu7IdW0No95/pPCtF0bx47BpZMQA8nKrTUc1lz
+         kX67Nzn/j9dB/3hIzSrRpWYh9uWWaQOnrKPMMVZ2KLF4L00n+RK2EF7Q3KJ1FJ0RKE6d
+         bfnw==
+X-Gm-Message-State: AOJu0Yyyg68BMffrGobG5HIQ8ARXhsOAU3ZDEsilbA8LinQNci7iPawW
+	TaWfgy+pzeNGbi30j4sfsQmRPIbHldGDVdqPGtntzJO7cmph+ZqxfQ1HFjcE2SdjowdjBaZpEEF
+	MSUZcRbw0UUTDniBPYZAJqsFOgYa20eH1hvPS
+X-Gm-Gg: ASbGncuZH8SdZTWBG50AqSIBBaAUxEoQFe+EVDd8RbIJ08I9QFz7srNp+BgN4kNVdw1
+	UI7sSP7KETeMuK2XM6mbUaBMNM8bF5iFWqNXdnDQ6vhvAk57brHSO9MVaV8oykSS1DoqrYKxMJw
+	9ZQgZTzrwx7ugC9tVWs1h6pGFm0Q5hSGTBWZnDjp3/Bkt/1YwnWzZ0NcECZ+wmGazh5djMXUMZh
+	ERNyQz1mBDjp3o6ZaTM
+X-Google-Smtp-Source: AGHT+IGWJF2aDtLlZw/UU9FPXsowF3NG+SEZjXobKAO6h4zWmHbMWDfu34XlL9G123aIPfxkgkX4eS54w/y9B6/kA4M=
+X-Received: by 2002:a05:6402:2794:b0:60c:3c23:2950 with SMTP id
+ 4fb4d7f45d1cf-611e76507d9mr13042003a12.8.1752523184928; Mon, 14 Jul 2025
+ 12:59:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="12021613461504-531883711-1752516621=:74162"
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+References: <20250625013908.628-1-johnhaugabook@gmail.com> <20250625013908.628-3-johnhaugabook@gmail.com>
+ <c8836ea2-2a1f-4225-8b79-bbe43bcc186b@dronecode.org.uk> <CAKrZaUssLPAzDPBmFQ_iC2WN=o1uEnoGsfKitC045S4H6unDZA@mail.gmail.com>
+ <c2f6f66e-beb8-4a98-8365-ba19480d6a2a@SystematicSW.ab.ca>
+In-Reply-To: <c2f6f66e-beb8-4a98-8365-ba19480d6a2a@SystematicSW.ab.ca>
+From: John Haugabook <johnhaugabook@gmail.com>
+Date: Mon, 14 Jul 2025 15:59:07 -0400
+X-Gm-Features: Ac12FXy8OEgdh2NE0QId2UCtCWBG6zSqxrSsAJPJ_JE3UmhKTA3DAjy3gDQ0yPc
+Message-ID: <CAKrZaUtCXVRiW9Ski7LSZrZfPkLAF+cz1U6qJ6fXXi5z1VSiGA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] cygwin: faq-programming-6.21 ready-made download commands
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Thank you. I'll see what I can do.
 
---12021613461504-531883711-1752516621=:74162
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Take Care,
 
-On Mon, 14 Jul 2025, Jeremy Drake wrote:
-
-> On Thu, 10 Jul 2025, Radek Barton via Cygwin-patches wrote:
->
-> > Hello.
-> >
-> > This patch implements `import_address` function by decoding `adr`=C2=A0=
-AArch64 instructions to get
-> > target address.
->
-> Out of curiosity, can you elaborate on when `adr` is used rather than
-> `adrp`/`add` pair?  I know adr has much less range, but it seems like t=
-he
-> compiler can't know how far away many symbols will be (perhaps it can f=
-or
-> things like local labels).  When I was looking at ntdll in the fastcwd
-> stuff (and ucrt in ruby) adrp/add (or adrp/ldr) were used, never saw ad=
-r.
-
-adr has a +/- 1MB range from PC, while adrp/add has a +/- 4GB range.
---12021613461504-531883711-1752516621=:74162--
+John Haugabook
