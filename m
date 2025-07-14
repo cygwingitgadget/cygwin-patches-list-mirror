@@ -1,75 +1,76 @@
-Return-Path: <SRS0=cjZq=Z3=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by sourceware.org (Postfix) with ESMTPS id D442A385840F
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 19:59:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D442A385840F
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D442A385840F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::536
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752523187; cv=none;
-	b=R5DuFZ0T6ZfPKNdonNy3Qbdv3A7tGynWswkHTWoAtQ63TE87jIYa9MbSpVG60vLx3abzgCmmvY/UZqlLgpsz8Ax/7PXLwil9SGlnnkVWQtaPF1Rktr5LVYIU8JLMS8aH5r3BzFJgcwaVQRLdzp4Wz9U4eoMSv9S3OC+OuvjQNhA=
+Return-Path: <SRS0=c0Hf=Z3=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	by sourceware.org (Postfix) with ESMTPS id AFE843858D32
+	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 20:53:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AFE843858D32
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AFE843858D32
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.16
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752526385; cv=none;
+	b=WyKECTKqMCa9k98zqr7Q4gFzug9It7YIo/kSfjvryqLVEapqgkETdYcvSm7ZDfJ1hrXHAr2IEBOnB8KvYLfdEzzu3NzKcIHmOzQJNpuy3SpS4CGnd3ePXziJwFH1H2h1YO5ewhNNb9iKDfHZ1PQIdS41HlLo51awVjG+lYrevR0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752523187; c=relaxed/simple;
-	bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=YRPcsrNZjIA9cbCEZmU1hWKZ8KGyZ5PiJli5YZVw/L9mnb2mBSdlSbXdaaD8CGB1uFEZZyek2e5Olchnx73Md9nKfj0TByEFcvrvf4mWs+zkHTKPpZEGl14i7DHoqam3FHT5ysHpTTwRkq1+B0tgjckj8JejGOxAEsI6R7b61J4=
+	t=1752526385; c=relaxed/simple;
+	bh=rx+0m6EO5ZBATh3J8XQPMMDWCvABmFNWbJu+/J/JGnA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=b9GEB8gtspsfKKTcFJm212b5O1qGEp+66ScAGOcYb2Hs4+rPLBn82lR4qqSeO3Z1hdP2ohOocWN6Z5XiIKxOM6tgQVS4uWPaxBQFAfntMiGtwJ+k0HetZBYvGDO0jx0XGttKcCEV6T/WxXB4mVFUd10pCHW/8ifFqP1ivh1c4sc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D442A385840F
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AFE843858D32
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=Z0Hd6ypm
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-60c93c23b08so9302407a12.3
-        for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 12:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752523185; x=1753127985; darn=cygwin.com;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
-        b=Z0Hd6ypmhFdKsCCOItJeRZ2hMCFAeHJg6aGO2H1+HT+7rQisUz/7GfJFKHh/zscA9E
-         5/XOBXvK9FA/dcVsmM2ZOd0caVeA/PbNaY5ANF63K1FOuy82+xTD+zt6jXub2jrpYoqE
-         jmjrgdztrQfNLTk0DEuWXQPNgT+ASfwxby9nk1p757CXU8kb78NziwOZqB7DDIM9ddlH
-         MEmkJ/o3yg7DctLr3OGigS9ruLVXpoAPugKqY8y+qxL0lBHV/te/LKKkVTAuRYs6m2Vj
-         QIK1VRZIKDq0qh7Ynjrdtx/rQ2jRMrTwtK5wqapY/oDE5aTcc49mhYjaYg8pVUOGXMax
-         NcjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752523185; x=1753127985;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=smK3oGafeu/OFINPcLzFMPIObBGaYX11jsw1NdVB+4A=;
-        b=hJW4PLJNHiaQBFQyaxVUgYvBjSE6PnqaKT7aE2XJxziwERprdwmrR+w+1+NXE7SrH5
-         NMvw04JuSfbN5wma6jFVpQV/ZWmUDR9Ea3XqsBwTEiPnKE47g0hv+LUXR4c7wZZ1eMP2
-         c3iNy7Da/gkkb1wjopIpNl44VVpcMUSNjlM5dtehr5/tMsoSHiBWOSRy9nRtjBNHZByf
-         r97kKztwWLUzrO//ij6FPGrBrXhJ8Jbu7IdW0No95/pPCtF0bx47BpZMQA8nKrTUc1lz
-         kX67Nzn/j9dB/3hIzSrRpWYh9uWWaQOnrKPMMVZ2KLF4L00n+RK2EF7Q3KJ1FJ0RKE6d
-         bfnw==
-X-Gm-Message-State: AOJu0Yyyg68BMffrGobG5HIQ8ARXhsOAU3ZDEsilbA8LinQNci7iPawW
-	TaWfgy+pzeNGbi30j4sfsQmRPIbHldGDVdqPGtntzJO7cmph+ZqxfQ1HFjcE2SdjowdjBaZpEEF
-	MSUZcRbw0UUTDniBPYZAJqsFOgYa20eH1hvPS
-X-Gm-Gg: ASbGncuZH8SdZTWBG50AqSIBBaAUxEoQFe+EVDd8RbIJ08I9QFz7srNp+BgN4kNVdw1
-	UI7sSP7KETeMuK2XM6mbUaBMNM8bF5iFWqNXdnDQ6vhvAk57brHSO9MVaV8oykSS1DoqrYKxMJw
-	9ZQgZTzrwx7ugC9tVWs1h6pGFm0Q5hSGTBWZnDjp3/Bkt/1YwnWzZ0NcECZ+wmGazh5djMXUMZh
-	ERNyQz1mBDjp3o6ZaTM
-X-Google-Smtp-Source: AGHT+IGWJF2aDtLlZw/UU9FPXsowF3NG+SEZjXobKAO6h4zWmHbMWDfu34XlL9G123aIPfxkgkX4eS54w/y9B6/kA4M=
-X-Received: by 2002:a05:6402:2794:b0:60c:3c23:2950 with SMTP id
- 4fb4d7f45d1cf-611e76507d9mr13042003a12.8.1752523184928; Mon, 14 Jul 2025
- 12:59:44 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=VeJ0oti4
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 4FBA180326
+	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 20:53:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf03.hostedemail.com (Postfix) with ESMTPA id D7E236000E
+	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 20:53:03 +0000 (UTC)
+Message-ID: <d6061dcf-2964-41e4-aba4-24d6f50a3999@SystematicSW.ab.ca>
+Date: Mon, 14 Jul 2025 14:53:02 -0600
 MIME-Version: 1.0
-References: <20250625013908.628-1-johnhaugabook@gmail.com> <20250625013908.628-3-johnhaugabook@gmail.com>
- <c8836ea2-2a1f-4225-8b79-bbe43bcc186b@dronecode.org.uk> <CAKrZaUssLPAzDPBmFQ_iC2WN=o1uEnoGsfKitC045S4H6unDZA@mail.gmail.com>
- <c2f6f66e-beb8-4a98-8365-ba19480d6a2a@SystematicSW.ab.ca>
-In-Reply-To: <c2f6f66e-beb8-4a98-8365-ba19480d6a2a@SystematicSW.ab.ca>
-From: John Haugabook <johnhaugabook@gmail.com>
-Date: Mon, 14 Jul 2025 15:59:07 -0400
-X-Gm-Features: Ac12FXy8OEgdh2NE0QId2UCtCWBG6zSqxrSsAJPJ_JE3UmhKTA3DAjy3gDQ0yPc
-Message-ID: <CAKrZaUtCXVRiW9Ski7LSZrZfPkLAF+cz1U6qJ6fXXi5z1VSiGA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] cygwin: faq-programming-6.21 ready-made download commands
+User-Agent: Mozilla Thunderbird
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
+Content-Language: en-CA
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
+ <aHUFzEEGq448gvZ0@calimero.vinschen.de>
+ <DB9PR83MB09231FD87FE92056367C0D829254A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Organization: Systematic Software
+In-Reply-To: <DB9PR83MB09231FD87FE92056367C0D829254A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Stat-Signature: nsfh8usigx9mapy336y3nkb9y7anj8c1
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: D7E236000E
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX19CSWijKpCU9xRGP6sTh5a5AxblRYTbNfU=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=Jzp6wnaXCaCSHmmgOLBQv/pVD7TVc2DBcfTQ7QxcEB8=; b=VeJ0oti4J7PlbdGgCbUIOSVSjdzRwiVOumNwQMD/JQYM6hshFkvGP45+LXWIdWSl2S82RkmtyYEl2tYYZeO6gJ7DjXhEvA8s1B1NXubzGecVsZjhzPT6kv9uJNnz7EYjv/1B+OPASbe4v6x82tsnzOhqELeqeqJYr/AOTnaO0MKFPOsrKOKvMLnZVsXauoGPqM0cN9SecSf2iWE9n6ZgDN63pQzMCOrL8r3MlWwqmmKjPvuCxDI3UH6Umo6AEX9iXFpKe7C8KP353LxMVH9UByNZI1nPIJ9Qic7XdXnjfjluNIp2TOaL9ohAI1KfK3KL+Gu8gOkHxGab+Fu/Xp8Iqw==
+X-HE-Tag: 1752526383-35568
+X-HE-Meta: U2FsdGVkX1+nbxd0CY2UuOVZBZ8dev0Wp3t6OW3RJh5c4rN2N+SdDvw+tmdSnsHOotVq4tq/pX/dCgojIhNtFIf10lXu3SF/EeZnePxlbFcZWQZSwT3GcGWQKId+edZLrJbeRl/US7+Bvh0BWE0lNkcL5slXRUURgR3Km3Yhnk2Gez/fMOe/jQh5Jb3Ex7zpsq6uRuCNqx57AKHrdgKU3I0ydflaQ5ifxKii8gJnITLdFMPzTBf3qs8jkgjgcylE9narQ8g2i81nevi1/rbib0NmDbRd5gJed4bM0X8KGf/8+KWF8gFQE4MoH9vTzhFhfcoYncKE5YDlJM2TVSeD4rS6M2MhPo38W8GMwMydN/hsh7GfkjpSUQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Thank you. I'll see what I can do.
+On Jul 14 15:22, Corinna Vinschen wrote:
+> On 2025-07-14 07:59, Radek Barton via Cygwin-patches wrote:
+>> Uh, my bad. As I need to manually edit the `Signed-off` headed in the `git format-patch` output file, I have done the edit, copy&pasted the text to the message body but forgot to save the file before adding the file as an attachment.
 
-Take Care,
+You can avoid editing by adding relevant trailers at commit time e.g.
 
-John Haugabook
+$ git commit --trailer "Signed-off-by:C O Mitter <committer@example.com>" \
+		--trailer "Helped-by:H E Lper <helper@example.com>"
+
+[adapted from git-commit(1)].
+
+>> Sorry for that, especially to Evgeny.
+>>> Sigh.  Actually I shouldn't have done that.  While Evgeny is the patch
+>>> author, the *attached* patch has you, Radek, in the Signed-off-by, and
+>>> that's what I now pushed.
+
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
