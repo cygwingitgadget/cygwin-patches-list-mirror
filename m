@@ -1,61 +1,71 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 888A13858408; Mon, 14 Jul 2025 13:27:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 888A13858408
+	id B30A43858D37; Mon, 14 Jul 2025 13:37:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B30A43858D37
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1752499662;
-	bh=yL6vfJmCWaKyb4H52vZ4UpcZFqBUYBlnIAuimTyCosE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=MO0UVcLuKn9/hq14gkJ8OTZW5w+2vxSwC+X5+aQJ08dQZpfnwDed6nMA5Z0qZAqyO
-	 6F38qqnMeL6AOf9/gtnEWgC7ctgBkQnjRjPDKM3In1bN6dvTqy2igRvank1EZ9/ag2
-	 psgOD1+4rl1b9u/7ddev581xbR2dk/xrd4qlq13E=
+	s=default; t=1752500262;
+	bh=jUcOkVOz1+OaLwMvMjWeOvx/8K60Bq4wAzCuibFVu/Y=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=DMAh+EOltmg5WXP7Ep59+xVnDZJhUzSYZIBf31oehyc/sR9iP/WyaiogNZCte7HD3
+	 R2sHGKQtASIjU1xGoGGjIqBnJKHay3Nj375M7WX60arxhlaMSe7EQqLTHtyebsY/mx
+	 RLNn8aIm2nEj0FDRV+FgRcgpYBOyq3wX2y8k9fEY=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id D5EFEA80864; Mon, 14 Jul 2025 15:27:40 +0200 (CEST)
-Date: Mon, 14 Jul 2025 15:27:40 +0200
+	id 17475A806FF; Mon, 14 Jul 2025 15:37:41 +0200 (CEST)
+Date: Mon, 14 Jul 2025 15:37:41 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Radek Barton <radek.barton@microsoft.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-Message-ID: <aHUFzEEGq448gvZ0@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: doc: warn about unprivileged access to raw
+ devices
+Message-ID: <aHUIJb8zEUePlkut@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <7d18c6c8-3d74-0f97-cf45-05a7a263c386@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
+In-Reply-To: <7d18c6c8-3d74-0f97-cf45-05a7a263c386@t-online.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 14 15:22, Corinna Vinschen wrote:
-> On Jul 10 19:21, Radek Barton via Cygwin-patches wrote:
-> > From 8bfc01898261e341bbc8abb437e159b6b33a9312 Mon Sep 17 00:00:00 2001
-> > From: Evgeny Karpov <evgeny.karpov@microsoft.com>
-> > Date: Fri, 4 Jul 2025 20:20:37 +0200
-> > Subject: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=UTF-8
-> > Content-Transfer-Encoding: 8bit
-> > 
-> > Implements import_address function by decoding adr AArch64 instructions to get
-> > target address.
-> > 
-> > Signed-off-by: Evgeny Karpov <evgeny.karpov@microsoft.com>
-> > [...]
+On Jul 14 14:58, Christian Franke wrote:
+> From 344a329a5706de125b3ef11dc7324101b08b3c67 Mon Sep 17 00:00:00 2001
+> From: Christian Franke <christian.franke@t-online.de>
+> Date: Mon, 14 Jul 2025 14:44:01 +0200
+> Subject: [PATCH] Cygwin: doc: warn about unprivileged access to raw devices
 > 
-> Pushed.
+> Raw devices of partitions may be accessible from unprivileged
+> processes, for example if connected via USB.
 > 
+> Signed-off-by: Christian Franke <christian.franke@t-online.de>
+> ---
+>  winsup/doc/specialnames.xml | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> Thanks,
-> Corinna
+> diff --git a/winsup/doc/specialnames.xml b/winsup/doc/specialnames.xml
+> index a1f9d3f5e..02375e737 100644
+> --- a/winsup/doc/specialnames.xml
+> +++ b/winsup/doc/specialnames.xml
+> @@ -368,7 +368,15 @@ handle the information.  <emphasis role='bold'>Writing</emphasis> to a raw
+>  mass storage device you should only do if you
+>  <emphasis role='bold'>really</emphasis> know what you're doing and are aware
+>  of the fact that any mistake can destroy important information, for the
+> -device, and for you.  So, please, handle this ability with care.
+> +device, and for you.  So, please, handle this ability with care.</para>
+> +
+> +<para><emphasis role='bold'>Important:</emphasis> Windows may allow raw read
+> +<emphasis role='bold'>and write</emphasis> access to partitions (for example
+> +<filename>/dev/sda2</filename>) even from unprivileged processes.  This is
+> +usually the case for partitions on "removable" drives like USB flash drives
+> +or regular SATA/NVMe drives behind USB docking stations.  If
+> +<command>chkdsk X:</command> works, raw access to the same partition is
+> +possible from the same user account.
+>  <emphasis role='bold'>You have been warned.</emphasis></para></note>
+>  
+>  <para>
+> -- 
+> 2.45.1
+> 
 
-Sigh.  Actually I shouldn't have done that.  While Evgeny is the patch
-author, the *attached* patch has you, Radek, in the Signed-off-by, and
-that's what I now pushed.
-
-Please make sure that Signed-off-by sticks to the author in the attached
-patch as well, not to the person sending the patches to the list, please.  
+Pushed.... oh, right, you have push perms, sigh :}
 
 
 Thanks,
