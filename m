@@ -1,77 +1,61 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 118DA3858C42; Mon, 14 Jul 2025 13:24:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 118DA3858C42
+	id 888A13858408; Mon, 14 Jul 2025 13:27:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 888A13858408
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1752499454;
-	bh=XWH+n0ZmNDa8nc7sJlvi17b6yrBYMMs4jXr3hZbcJfo=;
+	s=default; t=1752499662;
+	bh=yL6vfJmCWaKyb4H52vZ4UpcZFqBUYBlnIAuimTyCosE=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=aId0hlAh00cgRRnTHnezzurqQbJ72AQiPrvUTHOnTufL+1GkQhJxNcOXVjdaNnEUB
-	 EoLXtqInSnLfBDgSXgIjqGxxvmV5jFn1dPDfUVoZa62B1P5s/yEgZpOIS1Uoustpcu
-	 UMg0PJynrDRCG9lWonaswG/ZOhFRWIgkZJlupIOQ=
+	b=MO0UVcLuKn9/hq14gkJ8OTZW5w+2vxSwC+X5+aQJ08dQZpfnwDed6nMA5Z0qZAqyO
+	 6F38qqnMeL6AOf9/gtnEWgC7ctgBkQnjRjPDKM3In1bN6dvTqy2igRvank1EZ9/ag2
+	 psgOD1+4rl1b9u/7ddev581xbR2dk/xrd4qlq13E=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 571BCA80864; Mon, 14 Jul 2025 15:24:12 +0200 (CEST)
-Date: Mon, 14 Jul 2025 15:24:12 +0200
+	id D5EFEA80864; Mon, 14 Jul 2025 15:27:40 +0200 (CEST)
+Date: Mon, 14 Jul 2025 15:27:40 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: Radek Barton <radek.barton@microsoft.com>
 Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: signal: make context structures registers
- handling portable
-Message-ID: <aHUE_EOVwKAW33rC@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
+Message-ID: <aHUFzEEGq448gvZ0@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Radek Barton <radek.barton@microsoft.com>,
 	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <DB9PR83MB09236018A992CBC8F322F009924BA@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB9PR83MB09236018A992CBC8F322F009924BA@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+In-Reply-To: <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 11 13:18, Radek Barton via Cygwin-patches wrote:
-> >From 434df1dc447ecb7a8cfd08af5219ce0697877fd5 Mon Sep 17 00:00:00 2001
-> From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
-> Date: Wed, 4 Jun 2025 14:55:34 +0200
-> Subject: [PATCH] Cygwin: signal: make context structures registers handling
->  portable
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
+On Jul 14 15:22, Corinna Vinschen wrote:
+> On Jul 10 19:21, Radek Barton via Cygwin-patches wrote:
+> > From 8bfc01898261e341bbc8abb437e159b6b33a9312 Mon Sep 17 00:00:00 2001
+> > From: Evgeny Karpov <evgeny.karpov@microsoft.com>
+> > Date: Fri, 4 Jul 2025 20:20:37 +0200
+> > Subject: [PATCH] Cygwin: malloc_wrapper: port to AArch64
+> > MIME-Version: 1.0
+> > Content-Type: text/plain; charset=UTF-8
+> > Content-Transfer-Encoding: 8bit
+> > 
+> > Implements import_address function by decoding adr AArch64 instructions to get
+> > target address.
+> > 
+> > Signed-off-by: Evgeny Karpov <evgeny.karpov@microsoft.com>
+> > [...]
 > 
-> This patch extracts macros from winsup/cygwin/exceptions.cc serving for portable
-> register access to context structures into a separate local header
-> winsup/cygwin/local_includes/register.h and implements their AArch64
-> counterparts.
+> Pushed.
 > 
-> Then, it adds AArch64 declaration of __mcontext structure based on
-> mingw-w64-headers/include/winnt.h header to
-> winsup/cygwin/include/cygwin/singal.h header.
 > 
-> Then, it includes the registers.h header and uses the macros where applicable,
-> namely at:
->  - winsup/cygwin/exceptions.cc
->  - winsup/cygwin/profil.c
->  - winsup/cygwin/tread.cc
-> 
-> The motivation is to make usage of the context structures portable without
-> unnecessary #if defined(__x86_64__) while implementations of signal handling
-> code will be developed later, e.g. implementation of makecontext.
-> 
-> Signed-off-by: Radek Bartoň <radek.barton@microsoft.com>
-> ---
->  winsup/cygwin/exceptions.cc             | 51 ++++++++--------
->  winsup/cygwin/include/cygwin/signal.h   | 77 ++++++++++++++++++++++++-
->  winsup/cygwin/local_includes/register.h | 25 ++++++++
->  winsup/cygwin/profil.c                  |  7 +--
->  winsup/cygwin/thread.cc                 |  3 +-
->  winsup/utils/profiler.cc                |  7 +--
->  6 files changed, 135 insertions(+), 35 deletions(-)
->  create mode 100644 winsup/cygwin/local_includes/register.h
+> Thanks,
+> Corinna
 
-Pushed.
+Sigh.  Actually I shouldn't have done that.  While Evgeny is the patch
+author, the *attached* patch has you, Radek, in the Signed-off-by, and
+that's what I now pushed.
 
-I like this patch a lot.  Good idea to create job-related register macros!
+Please make sure that Signed-off-by sticks to the author in the attached
+patch as well, not to the person sending the patches to the list, please.  
 
 
 Thanks,
