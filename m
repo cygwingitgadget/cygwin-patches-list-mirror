@@ -1,117 +1,99 @@
-Return-Path: <SRS0=dar+=Z3=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id 8B9F33858D32
-	for <cygwin-patches@cygwin.com>; Mon, 14 Jul 2025 23:46:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8B9F33858D32
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8B9F33858D32
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752536801; cv=none;
-	b=JxB3UjzSZENHKg7LS/Z3GSJID/EHQvIXeQVD8X52ZHbZC4miAg1FT77ps3B4/rHeDSMjRsBcpd1FqWFU7vf6dxjIuwixtq5YZu+zTkWY2V3WmtnVZ30hWhxGijU1nNGpcw5lki4eguKOI9+8CXAUc9UakVODue96KLiaNQ13ofg=
+Return-Path: <SRS0=lWTj=Z4=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e04.mail.nifty.com (mta-snd-e04.mail.nifty.com [106.153.226.36])
+	by sourceware.org (Postfix) with ESMTPS id 5FFEF3857C67
+	for <cygwin-patches@cygwin.com>; Tue, 15 Jul 2025 07:27:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5FFEF3857C67
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5FFEF3857C67
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.36
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752564467; cv=none;
+	b=nb1PAchRyFxPgXbyYGiEtcGOssu6t95hOqDWE3zYTKargvoyNddN7ImnaM5fOaYDdqSUmn0d/hwcBu6Uz69IzdFpqigS7T1E4Maef5CXuO2PDu84rYDg1zWINLVso52rVxtDsAHI7tQLZcBcxndQNIR1KyqTJByilaGOD14wscA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752536801; c=relaxed/simple;
-	bh=d3GQw9CJinH3enNs1F61siAm5vlLHpGvJ/wcXjgSbdI=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=HVrpGRMDkqEPhySH6EM3ehjf23cd4dUuLVy97A9Sb8YpzRohU9hVdhxnVtqJWYVgpAdVYAJ7GckVaYS1v5OpCB8gtUpG5xMBF1w6YnPBXB/k4RgqRnEx+PsSpQy1WDb99iT/FiTMaKNJNdjhbXuZaPjl+KCTMWGoLdKeipr3UhU=
+	t=1752564467; c=relaxed/simple;
+	bh=HoJLCBXWD99ZHAYLrX2oTMfjObyHefClF/IA+xmXSpc=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=h3ty89YeWXkG5PQg9UgwgwdyAGEWPBBeBCUqYav+RFEdFOvMoskW4WF604i/iKFBNUNdL4CFJOz7zAolDz2N/DnmOJnAHLlWAgFZBWOWYEXlugy+G6HAVEKXFPoXKU013YMEV8NMuZYxRQ9X188Z9VXez98p8CeRYIEsn24QIpE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8B9F33858D32
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5FFEF3857C67
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=h3Qpj1fe
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id 3038D45CBA;
-	Mon, 14 Jul 2025 19:46:41 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type:content-id; s=csoft; bh=vW6Nc9ofpoXefaQSaPZCsDpCiR
-	8=; b=h3Qpj1febYMYlV45p4rZav21yh9yyWM4yVDJQ77jtLO96RVcmumFY/aDSs
-	zW9/52Nd552ifyIPQUf/la/skzYFeCxibnphsTNPoQQmkaIWpli6ZA8kCdKHhCYk
-	TGpCRMFDegIwfMTd+d9Zba3hIPpQaTg2gbNIvP7PYcTf0bII4=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 2ACA345C1D;
-	Mon, 14 Jul 2025 19:46:41 -0400 (EDT)
-Date: Mon, 14 Jul 2025 16:46:41 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=tzP17Jzs
+Received: from HP-Z230 by mta-snd-e04.mail.nifty.com with ESMTP
+          id <20250715072743589.ZKDS.38814.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 15 Jul 2025 16:27:43 +0900
+Date: Tue, 15 Jul 2025 16:27:41 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-cc: Radek Barton <radek.barton@microsoft.com>
-Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-In-Reply-To: <392fde36-436d-4b6e-9218-48084fec19be@SystematicSW.ab.ca>
-Message-ID: <e3ba06a3-357e-246c-8dbd-18be57bdc4c3@jdrake.com>
-References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com> <52e4e7cf-22d4-f8f7-0c1a-abbd9ca8f2a8@jdrake.com> <3df9677e-9113-e7f0-3550-ac9f866d406d@jdrake.com> <392fde36-436d-4b6e-9218-48084fec19be@SystematicSW.ab.ca>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-1769378504-1752536399=:74162"
-Content-ID: <b58dc924-c230-1709-3067-6a4a5cd33557@jdrake.com>
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
+ disable_master_thread
+Message-Id: <20250715162741.bd33f1249f088ba6947fbd32@nifty.ne.jp>
+In-Reply-To: <5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de>
+References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp>
+	<9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de>
+	<20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp>
+	<259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de>
+	<20250703195336.2d5900b4988a6918ad397582@nifty.ne.jp>
+	<5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1752564463;
+ bh=VzXlAcMy3AWnIuTHqyyd8WV94/VPYIMWRGAfHAXQTQo=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=tzP17Jzskf+AGFQIhfGg7IhIpy7yGmmrvtJkHka9t+IBe3bdI6A7E60ZbJiAoHH7DlTJcNyx
+ T6YYF8g39if3fjdJfJfTgUoiL0Ouz0+Maus5Ll0xfnhAFLlFIIS7k+CVeXoepWarJ5f/IPKQhz
+ aqKT6WRCzV728AhTyKi/wY4TWWwFSrACBXuX3NjV2ISb6e8UvXbwodJRXK6o34EvAUjzu6WfeZ
+ +UmJHl48UgZrBj9hMQ/Sxv6FB/J721FKZTDVOQIFpP6ZxF638lgZklRHiEWI/Z4IkwPH1kQCxO
+ zY9x7cHg4wBS0QUmtRLUoukiGO3yVrnSdnPFgQhPxb/JZ/ig==
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, 7 Jul 2025 12:50:24 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> On Thu, 3 Jul 2025, Takashi Yano wrote:
+> 
+> > On Thu, 3 Jul 2025 11:15:44 +0200 (CEST)
+> > Johannes Schindelin wrote:
+> > > 
+> > > On Thu, 3 Jul 2025, Takashi Yano wrote:
+> > > 
+> > > > I noticed this patch needs additional fix. Please apply also
+> > > > https://cygwin.com/pipermail/cygwin-patches/2025q3/014053.html
+> > > 
+> > > Thank you for the update!
+> > > 
+> > > I am curious, though: Under what circumstances does this patch make a
+> > > difference? I tried to deduce this from the diff and the commit
+> > > message but was unable to figure it out.
+> > 
+> > In my environment, the command cat | /cygdrive/c/windows/system32/ping
+> > -t localhost in Command Prompt cannt stop with single Ctrl-C. ping is
+> > stopped, but cat remains without the sencond patch, IIRC.
+> 
+> I have added this as an (AutoHotKey-based) integration test to
+> https://github.com/git-for-windows/msys2-runtime/pull/105 and was able to
+> verify that your fix is necessary to let that test pass.
+> 
+> Speaking of tests: Have you had any time to consider how to accompany your
+> fix by a regression test in `winsup/testsuite/`?
+> 
+> For several days, I tried to find a way to reproduce a way to reproduce
+> the SSH hang using combinations of Cygwin programs and MINGW
+> programs/Node.JS scripts and did not find any. FWIW I don't think that
+> MINGW programs or Node.JS scripts would be allowed in the test suite,
+> anyway, but I wanted to see whether I could replicate the conditions
+> necessary for the hang without resorting to SSH and `git.exe` _at all_.
+> 
+> I deem it crucial to start including tests with your fixes that can be run
+> automatically, and that catch regressions in the CI builds.
 
---0-1769378504-1752536399=:74162
-Content-Type: text/plain; charset=UTF-8
-Content-ID: <06e2a554-2721-2b5c-bbc6-c631be235e5b@jdrake.com>
-Content-Transfer-Encoding: quoted-printable
+To be honest, I already have local test suites that check the behavior
+of special keys for both pty and console. However, I currently have no
+clear idea how to integrate them into winsup/testsuite...
 
-On Mon, 14 Jul 2025, Brian Inglis wrote:
 
-> On 2025-07-14 12:10, Jeremy Drake via Cygwin-patches wrote:
-> > On Mon, 14 Jul 2025, Jeremy Drake wrote:
-> > > On Thu, 10 Jul 2025, Radek Barton via Cygwin-patches wrote:
-> > > > This patch implements `import_address` function by decoding
-> > > > `adr`=C2=A0AArch64 instructions to get
-> > > > target address.
-> > >
-> > > Out of curiosity, can you elaborate on when `adr` is used rather th=
-an
-> > > `adrp`/`add` pair?  I know adr has much less range, but it seems li=
-ke the
-> > > compiler can't know how far away many symbols will be (perhaps it c=
-an for
-> > > things like local labels).  When I was looking at ntdll in the fast=
-cwd
-> > > stuff (and ucrt in ruby) adrp/add (or adrp/ldr) were used, never sa=
-w adr.
-> >
-> > adr has a +/- 1MB range from PC, while adrp/add has a +/- 4GB range.
->
-> Details:
->
-> https://devblogs.microsoft.com/oldnewthing/20220809-00/?p=3D106955
-
-Both this and the mkimport script use/assume adr in the import thunk, but
-I checked LLD and it has:
-
-static const uint8_t importThunkARM64[] =3D {
-    0x10, 0x00, 0x00, 0x90, // adrp x16, #0
-    0x10, 0x02, 0x40, 0xf9, // ldr  x16, [x16]
-    0x00, 0x02, 0x1f, 0xd6, // br   x16
-};
-
-(the actual offset is filled in later:
-  int64_t off =3D impSymbol->getRVA() & 0xfff;
-  memcpy(buf, importThunkARM64, sizeof(importThunkARM64));
-  applyArm64Addr(buf, impSymbol->getRVA(), rva, 12);
-  applyArm64Ldr(buf + 4, off);
-)
-
-I imagine both places need to use/handle the adrp/ldr pair.  Binutils
-seems to use an extra instruction:
-static const unsigned char aarch64_jtab[] =3D
-{
-  0x10, 0x00, 0x00, 0x90, /* adrp x16, 0        */
-  0x10, 0x02, 0x00, 0x91, /* add x16, x16, #0x0 */
-  0x10, 0x02, 0x40, 0xf9, /* ldr x16, [x16]     */
-  0x00, 0x02, 0x1f, 0xd6  /* br x16             */
-};
-
-(the LLD code has an implicit 12-bit offset that is filled in, rather tha=
-n
-the 12-bit immediate that's filled in the add in binutils).  So that's
-another wrinkle this malloc wrapper dereferencing thing needs to deal
-with.
---0-1769378504-1752536399=:74162--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
