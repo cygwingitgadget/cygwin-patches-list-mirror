@@ -1,73 +1,108 @@
-Return-Path: <SRS0=S5Go=Z6=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by sourceware.org (Postfix) with ESMTPS id 1D44D3858D26
-	for <cygwin-patches@cygwin.com>; Thu, 17 Jul 2025 18:23:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1D44D3858D26
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1D44D3858D26
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2a00:1450:4864:20::536
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752776629; cv=none;
-	b=eO/CFodttZ2U9bo7CzcvQ4NtDNDeWN/tQ0tFZmQuntN8lxibpbhzmcoeOW+dCu6btrfHf9ZpD+TbRw/dZDet/l2VrNeMA/GEBL8ebdhhbqDFEaMQHHwRhFFMy8UbRy8KDnD+QJ8uXzXQob8xCLxs2yAPaiM0gTigzq5pzzt9z5Y=
+Return-Path: <SRS0=pLV8=Z7=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo010.btinternet.com (btprdrgo010.btinternet.com [65.20.50.133])
+	by sourceware.org (Postfix) with ESMTP id E5397385840D
+	for <cygwin-patches@cygwin.com>; Fri, 18 Jul 2025 10:17:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E5397385840D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E5397385840D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.133
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752833838; cv=none;
+	b=VpOKendSL+8iBorJauFgDHdrlwRrQbYjVYjELFkq3TTMHc0qUXycW759icjUTAlVkqrxNvZQYhgnBFUN+uibiOE483SDSdfjRLwEoj8/Pl+ElPBp96rij6bz7+fc8eH37D/cRP0c+DjrQzgz7a53nf09Iag6QmaTgjPGmxUHaks=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752776629; c=relaxed/simple;
-	bh=kBL2s8vcdXOxrai6vOHnuKiDXBtB5VfNvXFSN6mv20w=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=Leqh8A9JuRCgQ0b6jamGsCLPr/IlzlMMj7Zz7u6/R5AGpEUzM6gEI7+M2StvK9iA6fiQUFulaVx9/ijm1lh9R8ubXnujJW4lB5qERsCryO74z0Z4akTvzY1+j2EpUiGTz63XCJeeHWTYGEtTZzQ7Y8Ren/WYR9j5uRpNHtY8mOg=
+	t=1752833838; c=relaxed/simple;
+	bh=FX7SqIIvDhYZoojmPBWktNX9wgJqJ1uGRmNLsQ+KVZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=j6bIorNvfL4nK2ZwvtF9zWzy1a7qKWAb5bHmUWayEIV0MCxpRD4dMB28Ll2WVU1kYrA48tqmuEFNwiBNGoQLpRFFh3wZdsGuxqXz2xfcoVwDxQ4Br/bTGEr2UaXAV58VWn8ziH8FtVCoqay9sYSxfjBJ0sVWyPUJUKrB1/6SmRA=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1D44D3858D26
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=j/T/+URm
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-60bf5a08729so2485846a12.0
-        for <cygwin-patches@cygwin.com>; Thu, 17 Jul 2025 11:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752776626; x=1753381426; darn=cygwin.com;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kBL2s8vcdXOxrai6vOHnuKiDXBtB5VfNvXFSN6mv20w=;
-        b=j/T/+URmeJxpxrYWAenSL53wyAeEOjsgPW96qwTSgIaNGPqwzTibxWsgo6i82vY610
-         tuTnxRnXdLDCRV7/KDDxJUTFs16kH08FHZA0Op5TvQJpPRp6ZdnNueB5lxg3RPCMz/Lw
-         lyOqA91HCufY0xG5iMJ8pdpv1fsfXFr/Iv3aQiEn7tTQLtvv7/6LklRI2oOoNJ+BzdZM
-         xDbTsycUTLLR2SQLELSSBVWFsIjgr5GQsxmvLjaQ7LCBMWj0p7hqEmsZeXjvgQPiCn2+
-         5YG8stcMoR+NobOYMeYADDvQSELUn52uvA16LTy2Pjq6fbCL6qyqaPZbbHImCYvRRjIL
-         MKwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752776626; x=1753381426;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBL2s8vcdXOxrai6vOHnuKiDXBtB5VfNvXFSN6mv20w=;
-        b=c9BX4ha4gfpk87Am+3SkSYNL5fo6ywFY8Mfc540/vijTl5JjElbmUigzqZ4TA7M2db
-         8kdSivpQaUAHN5DshNJOSesZuM/bLzNYj2MX63z4Vp/AaiJgS8uOyAxbtTVpZwTBICpQ
-         aGHDxOIf6px8JJe7joEVXygTH3/XVLAz9OHbZN7I0jecWM4smAllcyfIBVb/DGb2xVIf
-         +Xzpbu0ThdSHt7k0+LpZDiZ8VvX2BMVcdSolIWkT+obpKH+YD+b1F7KUNWgNFvHQ/oGe
-         lCPS7XYSloim0EYOn4rSXkKHyEKajmbxT961IKtFTdmd3ZOPa00eZr8IFhSByRSpkEID
-         A09w==
-X-Gm-Message-State: AOJu0YyT9QuhKchfu9E+5j2k8mdVtBERnQiSnO8Gyd+njZwKlIlESBvp
-	n6debJP5XFNQsWlCJovRH8ncfp5mg1YE0HPfS7QhJx9cF++gY0Y0AqSDg7HFdvbrqQHJ1g9csuq
-	UV07OjUc3vFD1JqkDDlZAmueuXP042fApbA==
-X-Gm-Gg: ASbGncsd9xOUl/zFu/ottQVm76rcGnKF/p99BzTJ02T22Q1ResxftmwJRRA1Y/+5nCL
-	OH9Gvshj/7UUJ0Q8SWeSfKdMOyMG1pMWx3WgRA2uSfF7OpkdDrIhRZVhvvZyvaTLtOjVr2A/2cY
-	mSYE3v4e2hNFzXyYycjzEZaSd8JYfGkD6y0lBn4uVlYiqBxGX16S/icQ5pj4Ndx/5kroV4rVM35
-	EhWPyXScg==
-X-Google-Smtp-Source: AGHT+IGthQ7wOEca50Yds3ujY6dLRegseoE8yrMk7adk6M2OuU4dVA3gEYqX8+Ci0m/k55ImfmX/fygwD/qeiRy5TUg=
-X-Received: by 2002:a05:6402:430f:b0:60c:44d6:281f with SMTP id
- 4fb4d7f45d1cf-6128590b4c6mr7308365a12.7.1752776625903; Thu, 17 Jul 2025
- 11:23:45 -0700 (PDT)
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6864BE8A01B86446
+X-Originating-IP: [86.139.156.85]
+X-OWM-Source-IP: 86.139.156.85
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeifedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefggefhvddvieejtedtgfelteffteeftdeugfefveehtdehgfffleeftefhvdelffenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudefledrudehiedrkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudefledrudehiedrkeehpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeeiqddufeelqdduheeiqdekhedrrhgrnhhgvgekiedqudefledrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddutddpnhgspghrtghpthhtohepvddprhgtphhtthho
+	pegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtoheprhgruggvkhdrsggrrhhtohhnsehmihgtrhhoshhofhhtrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (86.139.156.85) by btprdrgo010.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6864BE8A01B86446; Fri, 18 Jul 2025 11:17:13 +0100
+Message-ID: <6c146f2e-9479-409c-a538-e35c49a20a45@dronecode.org.uk>
+Date: Fri, 18 Jul 2025 11:17:10 +0100
 MIME-Version: 1.0
-References: <20250713052913.2011-1-johnhaugabook@gmail.com> <aHivhiWyAm-a6NhG@calimero.vinschen.de>
-In-Reply-To: <aHivhiWyAm-a6NhG@calimero.vinschen.de>
-From: John Haugabook <johnhaugabook@gmail.com>
-Date: Thu, 17 Jul 2025 14:23:08 -0400
-X-Gm-Features: Ac12FXxmoIq8Q7u_e_cneiswMWH5UwCEHvm3i7FrizEtxw2EV83eM_Dnm-h4J9o
-Message-ID: <CAKrZaUv2AMJ4bJZ5HTt9VCqcDBd+TLh_L+4A5z3XKw2kQqCRkw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] cygwin: faq-resources.xml add 3.4 reproduce local site
-To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] Cygwin: configure: add possibility to skip build of
+ cygserver and utils
+To: Radek Barton <radek.barton@microsoft.com>
+References: <DB9PR83MB09232A0A1E4EC3D43BBAFA089242A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <DB9PR83MB0923C35FB2253C8C2A21927C9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <52fd7877-6abc-4e01-8f3c-405cf075b1ff@dronecode.org.uk>
+ <DB9PR83MB09237AD6BA4BFE16B03AEBD99256A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <DB9PR83MB09237AD6BA4BFE16B03AEBD99256A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_W,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-No worries. I'll scratch this patchset then.
+On 16/07/2025 20:37, Radek Barton via Cygwin-patches wrote:
+> Hello.
+> 
+> I was going to submit `--disable-utils` as a separate patch but in the context adding the FAQ, it makes sense to include it to a single patch together.
 
-Take Care,
+Ah, I see.
 
-John Haugabook
+This all seems good to me.
+
+> ---
+>  From f0240097f681335c6b2373f4a04685ee687bdeef Mon Sep 17 00:00:00 2001
+> From: =?UTF-8?q?Radek=20Barto=C5=88?= <radek.barton@microsoft.com>
+> Date: Sat, 21 Jun 2025 22:56:58 +0200
+> Subject: [PATCH v3] Cygwin: configure: add possibility to skip build of
+>   cygserver and utils
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
+> 
+> This patch adds configure options allowing to disable build of cygserver
+> and Cygwin utilities. This is useful when one needs to build only
+> cygwin1.dll and crt0.o with stage1 compiler that is not yet capable of
+> linking executables as it is missing cygwin1.dll and crt0.o.
+> 
+[...]
+>   
+> +<para>
+> +Build of <literal>cygserver</literal> can be skipped with
+> +<literal>--disable-cygserver</literal> and build of other Cygwin utilities with
+> +<literal>--disable-utils</literal>. This is particularly useful (together
+> +with <literal>--without-cross-bootstrap</literal> and
+> +<literal>--disable-dumper</literal> options) when only
+> +<literal>cygwin1.dll</literal> and <literal>crt0.o</literal> are needed for
+> +stage2 compiler when being built with stage1 compiler which does not support
+> +linking executables yet (because of missing <literal>cygwin1.dll</literal> and
+> +<literal>crt0.o</literal>).
+> +</para>
+> +
+So, if it was me, I'd make the last sentence here a separate paragraph, 
+which describes the result, not the change, e.g.
+
+<para>
+In combination, <literal>--disable-cygserver</literal>, 
+<literal>--disable-dumper</literal>, <literal>--disable-utils</literal> 
+and  <literal>--without-cross-bootstrap</literal> allow building of
+just <literal>cygwin1.dll</literal> and <literal>crt0.o</literal> for
+a stage2 compiler, when being built with stage1 compiler which does not 
+support linking executables yet (because those files are missing).
+</para>
+
+
+Unrelated, but maybe the name of "--without-cross-bootstrap" should be 
+changed? It's difficult to parse what it's saying "boostrapping, so 
+without cross tools"?  And then there was that report that the logic was 
+upside down or something?
+
+[1] https://cygwin.com/pipermail/cygwin/2024-November/256763.html
+
