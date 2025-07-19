@@ -1,169 +1,103 @@
 Return-Path: <SRS0=jPCG=2A=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [106.153.227.38])
-	by sourceware.org (Postfix) with ESMTPS id 661A93858430
-	for <cygwin-patches@cygwin.com>; Sat, 19 Jul 2025 21:48:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 661A93858430
+	by sourceware.org (Postfix) with ESMTPS id 3BEC9385802C
+	for <cygwin-patches@cygwin.com>; Sat, 19 Jul 2025 21:48:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3BEC9385802C
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 661A93858430
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3BEC9385802C
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.38
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752961729; cv=none;
-	b=knBNqZVIG9y6Xsuzc3NwGs/LzNEvnIv9eskKcZbQob8fIw6eKVYqmJdcBKyavhEf68bg2jDXloMBOx4LxdcunTMuoUCrlcNv/XiBsUDEMb7kZb0Az7NdJRHagQRfk1yOnpuagQVSDTya5reNsRycSTvu+GX3YuR/Kd1YV85pOI4=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1752961735; cv=none;
+	b=dfUajewikr1iZH9M5a0ifpyVeG+MmeE7mcm/E2QLOGdf0tk2eAT9mFDwiMq2G5qFmB6TuYiLT8AGHtm59PkpnU6c8BoJYhFxWEafgsTdpi5Gz29VQBGx0L71nNCEUCuk/9b8U0m66om9bPTWSnsLEMFVTymoMyqVe9EfOB2H3yc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1752961729; c=relaxed/simple;
-	bh=y7OysSjafBHKufzzjILgTG9FB0+Ul84hC5FhkyF9QE4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ZkzWb8qtYxtPA6qcqOYjfWWyrkvMuRWIK4PeUdVmDLoNd6baQAGFK3NOJR4FmgImYmkOb8kaN1mDz6f4dUVcljlmyy48EvhCUZF7xHbAbYgVME342phuloFuj7o03yPSgJUguxZf217zOEmefkyKDQyc5mL6IvoJ7g5fVUy8uG4=
+	t=1752961735; c=relaxed/simple;
+	bh=lLtx+rD0KxX7jXfUmBjJMM3uhg4NFIZrdi1La9JPk+4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=O+qCn0hyXr7yzWYg0pALbXY7piFCekCKAQI0wRg0Q3OLBGOeCn6bsrd38T6yLkkUjDV9Wh0e4IkVqoP4hrl7gPWpG1tR2eaSq5KyvIs3NzWezLDgaBvtGzHt/rl79lFfrHR8rXUqHQWXJDCRZrrQYf5WQYi9k4Gh1OwKDcOTdN0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 661A93858430
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3BEC9385802C
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=kRJmoam4
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=c6BR21hR
 Received: from localhost.localdomain by mta-snd-w06.mail.nifty.com
           with ESMTP
-          id <20250719214847814.XWZR.116286.localhost.localdomain@nifty.com>;
-          Sun, 20 Jul 2025 06:48:47 +0900
+          id <20250719214853618.XWZZ.116286.localhost.localdomain@nifty.com>;
+          Sun, 20 Jul 2025 06:48:53 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2 1/2] Cygwin: spawn: Lock cygheap from refresh_cygheap() until child_copy()
-Date: Sun, 20 Jul 2025 06:48:12 +0900
-Message-ID: <20250719214823.1556-2-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Corinna Vinschen <corinna@vinschen.de>
+Subject: [PATCH v2 2/2] Cygwin: spawn: Make system() thread-safe
+Date: Sun, 20 Jul 2025 06:48:13 +0900
+Message-ID: <20250719214823.1556-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20250719214823.1556-1-takashi.yano@nifty.ne.jp>
 References: <20250719214823.1556-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1752961727;
- bh=IbPLE4D9g75CQcOpChtIm6IrPx7dcch4EpSJlYQGlgc=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1752961733;
+ bh=KtcACfOntRjAa+Lcy0HpESZ881WKpL1M2Bk6dYKNaeI=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=kRJmoam4FQOckSqBR61P5GW0WQwdCIkB+oHdffN2Etxbu9Ehotl0l+0yn0nIsf/7gtKMz99D
- P2BPmdXv/UeJHy0AoR4GTzAP7QpN/bLTWEnA9TnNNNQnKPSBVQglj8tf8jDQOGbfVslxIidPz6
- /eQDU5Bi0bViD8ncxnrbHXp7za2L/6TsjPE1urE3ztKUVuFYYu5bnilyQ4Gb1JVNyz1HvhNg42
- v+0RryYTrs0+MxvPoafQ4gfYD2lwJbsiG35qlAedtf2BGqBEc6ExV9jINQM4Fp2pWvEA0HWlm6
- tgIcIwjz+4fpcCwguuTw21/iRJYVOeSzYurGNvbETtJzG69Q==
+ b=c6BR21hRAdCkbcoyHnR6g59QtTS4ZwCZZGpxjjKgGHPhE5jRR+pP/d8rZi4iKzdSRkNJurpp
+ nAX0HJWxuu5bgso4wSifNg+tzOtzUsPnQWI/4QmO4GqXY9W7fgoNv0H1+y/6kkpTpTQiDYE9Sj
+ lJb8s0yuP+PwoM2pgsG1qDzh7FJJf31BLiphPgQb52O604dF5PdECC37bq6rqvFGPrwxFwJC/u
+ XCYXgRhB7KLVjfvKfk3xtcRVFPl/U/LTzxWoohXeTUEmkoVzJ5CYtGKEMX/L3UcZXtNOV7F8Ux
+ 3oGSnFMUjKqS8MGTqARyXEPEuBqYkPD+tkE0D9HjFHi4rJaQ==
 X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-...completion in child process because the cygheap should not be
-changed to avoid mismatch between child_info::cygheap_max and
-::cygheap_max. Otherwise, child_copy() might copy cygheap being
-modified by other process.
+POSIX states system() shall be thread-safe, however, it is not in
+current cygwin. This is because ch_spawn is a global and is shared
+between threads. With this patch, system() uses ch_spawn_local
+instead which is local variable. popen() has the same problem, so
+it has been fixed in the same way.
 
-Fixes: 977ad5434cc0 ("* spawn.cc (spawn_guts): Call refresh_cygheap before creating a new process to ensure that cygheap_max is up-to-date.")
-Reviewed-by:
+Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258324.html
+Fixes: 1fd5e000ace5 ("import winsup-2000-02-17 snapshot")
+Reported-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/local_includes/cygheap.h |  2 ++
- winsup/cygwin/mm/cygheap.cc            | 22 +++++++++++++++++-----
- winsup/cygwin/spawn.cc                 |  4 +++-
- 3 files changed, 22 insertions(+), 6 deletions(-)
+ winsup/cygwin/spawn.cc    | 3 ++-
+ winsup/cygwin/syscalls.cc | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/local_includes/cygheap.h b/winsup/cygwin/local_includes/cygheap.h
-index fed87ec2b..aa928bc55 100644
---- a/winsup/cygwin/local_includes/cygheap.h
-+++ b/winsup/cygwin/local_includes/cygheap.h
-@@ -541,6 +541,8 @@ struct init_cygheap: public mini_cygheap
-   threadlist_t *find_tls (int, bool&);
-   sigset_t compute_sigblkmask ();
-   void unlock_tls (threadlist_t *t) { if (t) ReleaseMutex (t->mutex); }
-+  void lock ();
-+  void unlock ();
- };
- 
- 
-diff --git a/winsup/cygwin/mm/cygheap.cc b/winsup/cygwin/mm/cygheap.cc
-index 338886468..2ed21e6ce 100644
---- a/winsup/cygwin/mm/cygheap.cc
-+++ b/winsup/cygwin/mm/cygheap.cc
-@@ -262,6 +262,18 @@ init_cygheap::init_installation_root ()
-     }
- }
- 
-+void
-+init_cygheap::lock ()
-+{
-+  AcquireSRWLockExclusive (&cygheap_protect);
-+}
-+
-+void
-+init_cygheap::unlock ()
-+{
-+  ReleaseSRWLockExclusive (&cygheap_protect);
-+}
-+
- /* Initialize bucket_val.  The value is the max size of a block
-    fitting into the bucket.  The values are powers of two and their
-    medians: 32, 48, 64, 96, ...
-@@ -367,7 +379,7 @@ _cmalloc (unsigned size)
-   if (b >= NBUCKETS)
-     return NULL;
- 
--  AcquireSRWLockExclusive (&cygheap_protect);
-+  cygheap->lock ();
-   if (cygheap->buckets[b])
-     {
-       rvc = (_cmalloc_entry *) cygheap->buckets[b];
-@@ -379,7 +391,7 @@ _cmalloc (unsigned size)
-       rvc = (_cmalloc_entry *) _csbrk (bucket_val[b] + sizeof (_cmalloc_entry));
-       if (!rvc)
- 	{
--	  ReleaseSRWLockExclusive (&cygheap_protect);
-+	  cygheap->unlock ();
- 	  return NULL;
- 	}
- 
-@@ -387,19 +399,19 @@ _cmalloc (unsigned size)
-       rvc->prev = cygheap->chain;
-       cygheap->chain = rvc;
-     }
--  ReleaseSRWLockExclusive (&cygheap_protect);
-+  cygheap->unlock ();
-   return rvc->data;
- }
- 
- static void
- _cfree (void *ptr)
- {
--  AcquireSRWLockExclusive (&cygheap_protect);
-+  cygheap->lock ();
-   _cmalloc_entry *rvc = to_cmalloc (ptr);
-   unsigned b = rvc->b;
-   rvc->ptr = cygheap->buckets[b];
-   cygheap->buckets[b] = (char *) rvc;
--  ReleaseSRWLockExclusive (&cygheap_protect);
-+  cygheap->unlock ();
- }
- 
- static void *
 diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index cb58b6eed..fd623f4c5 100644
+index fd623f4c5..c057f7ebd 100644
 --- a/winsup/cygwin/spawn.cc
 +++ b/winsup/cygwin/spawn.cc
-@@ -542,7 +542,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	::cygheap->ctty ? ::cygheap->ctty->tc_getpgid () : 0;
-       if (!iscygwin () && ctty_pgid && ctty_pgid != myself->pgid)
- 	c_flags |= CREATE_NEW_PROCESS_GROUP;
--      refresh_cygheap ();
+@@ -950,6 +950,7 @@ spawnve (int mode, const char *path, const char *const *argv,
+   if (!envp)
+     envp = empty_env;
  
-       if (mode == _P_DETACH)
- 	/* all set */;
-@@ -611,6 +610,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
++  child_info_spawn ch_spawn_local;
+   switch (_P_MODE (mode))
+     {
+     case _P_OVERLAY:
+@@ -963,7 +964,7 @@ spawnve (int mode, const char *path, const char *const *argv,
+     case _P_WAIT:
+     case _P_DETACH:
+     case _P_SYSTEM:
+-      ret = ch_spawn.worker (path, argv, envp, mode);
++      ret = ch_spawn_local.worker (path, argv, envp, mode);
+       break;
+     default:
+       set_errno (EINVAL);
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index d6a2c2d3b..83a54ca05 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -4535,8 +4535,9 @@ popen (const char *command, const char *in_type)
+       fcntl (stdchild, F_SETFD, stdchild_state | FD_CLOEXEC);
  
-       cygpid = (mode != _P_OVERLAY) ? create_cygwin_pid () : myself->pid;
+       /* Start a shell process to run the given command without forking. */
+-      pid_t pid = ch_spawn.worker ("/bin/sh", argv, environ, _P_NOWAIT,
+-				   __std[0], __std[1]);
++      child_info_spawn ch_spawn_local;
++      pid_t pid = ch_spawn_local.worker ("/bin/sh", argv, environ, _P_NOWAIT,
++					 __std[0], __std[1]);
  
-+      cygheap->lock ();
-+      refresh_cygheap ();
-       wchar_t wcmd[(size_t) cmd];
-       if (!::cygheap->user.issetuid ()
- 	  || (::cygheap->user.saved_uid == ::cygheap->user.real_uid
-@@ -844,6 +845,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	/* Just mark a non-cygwin process as 'synced'.  We will still eventually
- 	   wait for it to exit in maybe_set_exit_code_from_windows(). */
- 	synced = iscygwin () ? sync (pi.dwProcessId, pi.hProcess, INFINITE) : true;
-+      cygheap->unlock ();
- 
-       switch (mode)
- 	{
+       /* Reinstate the close-on-exec state */
+       fcntl (stdchild, F_SETFD, stdchild_state);
 -- 
 2.45.1
 
