@@ -1,123 +1,155 @@
-Return-Path: <SRS0=2rSg=2C=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	by sourceware.org (Postfix) with ESMTPS id 4E1573858D32
-	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 15:41:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4E1573858D32
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4E1573858D32
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.15
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1753112465; cv=none;
-	b=BnqW5Ig4bMynDlnYrHjrcE1PYCymcB6PX+ZIXxatzu6GL0AKghh36eeIwqJcTKlTwUdoGfVBT0K090cpSka4+pJzqpR3fz2DFjSWLniPrL8+HHrnTurzsCV6XoxiTifuTHBCecC6RYEyahrJL8CFtcgd+C5iLH6h3H9bI7u0DSQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1753112465; c=relaxed/simple;
-	bh=3F+tGS7n6sAwIwj7URB1delJf5dCHkUQfokLfEHYMno=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=Pj0j1wdtanSmIip1ZgbodpvVkfCENuboZi70obHnOBNkEgv6QufzqVegtDWpUQqOjMo+yoNVKCZaK8Na2sHslWOcp0uMsUiHPO2peXsmwpCEcN4/oHKmwfES7k9zGepHKvkW/O2ce9CuT6q+t82d4DUuRzwOh41uw39EGydxP8g=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4E1573858D32
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=aOYU6jmj
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id DA4CE1DB20D
-	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 15:41:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf20.hostedemail.com (Postfix) with ESMTPA id 69B6320027
-	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 15:41:03 +0000 (UTC)
-Message-ID: <b434de5f-9984-4113-bd0c-cb71b43e816a@SystematicSW.ab.ca>
-Date: Mon, 21 Jul 2025 09:41:02 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Reply-To: cygwin-patches@cygwin.com
+Return-Path: <SRS0=RHLI=2C=microsoft.com=radek.barton@sourceware.org>
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2072e.outbound.protection.outlook.com [IPv6:2a01:111:f403:2613::72e])
+	by sourceware.org (Postfix) with ESMTPS id 1DAEA3858D1E
+	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 15:53:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1DAEA3858D1E
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=microsoft.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1DAEA3858D1E
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:2613::72e
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1753113192; cv=pass;
+	b=fo6Hs877NBqjSvsIT72i2mYPCvsmroQuOSOMF48R7u/owUl7A2i3Cuov5m/srfoJkGh+sw1Rh0Prbnm++ya+DIk/TaYst1RIZslvrQ4c2DDQQ7oSqZVPFbYE7KhYm9O37+Fl2mQUo5YsBTso81A97nrWa+0XkcaemtmIrleuZEo=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1753113192; c=relaxed/simple;
+	bh=5BiKjJ8g+saK6ny/cqMPMxHisIWlEOnL/yYa0t0Un0o=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=rWGP9kWox9C0uH4VfQaLFeMuDI40UGb+LZtLLuaR1WwVk0l0bxrOIFlAhAxCLdtBrs0TBcop2cDV5WmBK0Gw+rkoADLph35biOCyq+TzILp4Kzb+KeimsmUPxkZStfEJ7eZZAshTWy3PTjWmqpoLX0lEEG8WRiw7FoFvZZ8Mve4=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b/3Yhq0ygh/qlVJUsS0uuYfq/8zGbAtnbEAT8fLkszk12sAYFSWHhv7WkcvWeK4StX+kAOg34V77KAr7WPEpNouqArJbw0U9lTir/pLeLBawoX9Yga6WBWXGiqoCg/V39beqrheH5fYhEEW75Z89IGbQaxICFQf4RFortTy4SH4xEsTQRz4VUn4lDG7uEKvg5ra1n/HtKWvia6cposLbXohrZnHUsiF+xeCdE1kWPpaUl+SI508uF3NQv8fEvyoojnLhbxjZmOz5N+HZ5bcWjfcK4lt3Zgq71sBGBvuYZIAslSuCFh1W7IRdWUKWCrxjtfzpp0T5akSOD7j9NWEAZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5BiKjJ8g+saK6ny/cqMPMxHisIWlEOnL/yYa0t0Un0o=;
+ b=D/6joZuAm6SQyGryp5pf320A72GGR5pvg6Un9I1fAuppD0XYSjnRSPiO44peRE/3BRvAtbBwrZ2gN/bEW2CQAZzSeAk9Ib52a+B5WdTcniu2ezeHPXoSa+8RRY4c92hrFzXQ900TizKiSy24Rtoi/hX8xm10KOnymGdop7p8yrNQGwA2XFFf+BNpBHjJoQ6trh3VNwYjm0CXlufXrDsEj8Dj8CMZ6lGMei4DuMh7hX32MySqMtftKG5Yy78vyfrZvb5SstPdB+SpMomh4ikQ2oCUAT9TwjYsI0kCzkN6NtyDbdNJjbLtPfBlq3ewcZTXrASg4eNLU5huwEaRfJ9pTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5BiKjJ8g+saK6ny/cqMPMxHisIWlEOnL/yYa0t0Un0o=;
+ b=VN3+32E3InFYVLDKZQuPFH2z++FIVy0OpsnC1bz9J1yTj1vztoNoksBf1O32rj0aTwWCHJ1Y1YgnGOSgog8YnW4QpuDCXHFYb+xzxgTnDbphA/Ren5FBUwB/GDvH6kG3KGtznF2JJ0CLMxYmWSEGqgvajLBOSBWsbqh1WWnOmL8=
+Received: from GV4PR83MB0941.EURPRD83.prod.outlook.com (2603:10a6:150:27e::22)
+ by GVXPR83MB0784.EURPRD83.prod.outlook.com (2603:10a6:150:21b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.39; Mon, 21 Jul
+ 2025 15:53:01 +0000
+Received: from GV4PR83MB0941.EURPRD83.prod.outlook.com
+ ([fe80::db38:300c:f561:a48a]) by GV4PR83MB0941.EURPRD83.prod.outlook.com
+ ([fe80::db38:300c:f561:a48a%3]) with mapi id 15.20.8964.019; Mon, 21 Jul 2025
+ 15:53:01 +0000
+From: Radek Barton <radek.barton@microsoft.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
 Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-Content-Language: en-CA
-To: cygwin-patches@cygwin.com
-References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Thread-Topic: [PATCH] Cygwin: malloc_wrapper: port to AArch64
+Thread-Index: AQHb+leJWYkHtPC/6kWAlAvdD8Kvlg==
+Date: Mon, 21 Jul 2025 15:53:01 +0000
+Message-ID:
+ <GV4PR83MB09410EFD509ABD23BDA49B18925DA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
+References:
+ <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
  <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
  <aHUFzEEGq448gvZ0@calimero.vinschen.de>
  <bd64e817-ffa8-4299-a3bc-6d1ff691ca9b@dronecode.org.uk>
  <aH5CvWENvjsmKbjJ@calimero.vinschen.de>
  <aH5EsVT1Hhe_7yHV@calimero.vinschen.de>
-Organization: Systematic Software
 In-Reply-To: <aH5EsVT1Hhe_7yHV@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: tb5qrr39izz5nwmznin8owdyemhir7kb
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 69B6320027
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX18DVtHSdir9gDH/kgObDbIi0W7zLeOx7vE=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=3ug9AtOuOHK71vh103Qj+NWI/f/sl6X78oi03h0gPBA=; b=aOYU6jmjtDGBZ7wKECYGBNvZET6Qu5q/967teP2WfKR9U8mNpCCKUBAwhSL0ap8bhc4n4vF6Ffppr6cwwMLV7z7uwfBEjxaMDy5I0bWErcFQhu8j+JNbH3BMJMxg0mdL2dWrwNJ7ZNUUnUJnJjHDhvepsNRraD2Zr5fw4swde7L+3shKQuxlM0wbDXltjrFezMuBmq7t1d6GdD5mUh9gkZgP8WPnrHNxsH6uvfcM6vRJp/xEmdlpmIk2MfOrDlP/b6ssf3JEb0Ew5eupUtRW223tOwa9UfkKuRyjIbCoboSCXQxLxa9MloFb0Kqe8PprzwR29Ss9YkLHwsbKPH+16A==
-X-HE-Tag: 1753112463-19017
-X-HE-Meta: U2FsdGVkX19KZmmexZtivKavQAwkOo/qQxLrsBtncCmm0ZlNgkxMcQgMVCXgvCZCxFE12aNgmIg2MBVTDrD3AbizE4xQPnzoB/BUVd9zywesQfK4bY2qEt7IMkc6F4azLhfmz10aXlLSCBlrzBgNmxnLMWacA7WTmuMk1/dkQTJRR4Z2Kez21E9znx+3Ax1LQTlqYkZSCrzgPH4FfgYk4Tc75U+5FPwhA4FR9p1sbgiTD5X+Nudvt2/hmnnagV1AisdSsvrvgy48JEjiawsOHhyIEZxZv4V7S/rX0LZbCBNp+/xE+LSx5wSAhzJmgmk64cuHH0V9JfcLSrVa0MzCgr5EhBrh1GW4vNvuNE7o9Cvtyw2wc5VzS45Y4HSuleFAz4Lo3EOXm5Xq+fyMmcGChf9Dw722XbiNhdKQ4YdSMj8kDCDpvF5Liv1efbYTTGMOb2XicSe5Di7Z7Aep6WvK6jWu14iFb5khZCQsYm01itQ=
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2025-07-21T15:52:59.965Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GV4PR83MB0941:EE_|GVXPR83MB0784:EE_
+x-ms-office365-filtering-correlation-id: eb184d5b-9700-4473-ba9c-08ddc86eac19
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?s4vlv8a0AV3c2IMwtk16sDe/Fomi5fVN4Z5ULvvfWu/fpAb+LvOfPmmF7b?=
+ =?iso-8859-1?Q?wnRAogrlAzj5QA3J1q4tjOy3s9F++hWp2q9ZJLvC6YoSPqsQkJc9hX9nTg?=
+ =?iso-8859-1?Q?T2tmIJFhG/gEzAC7I1FmKRH+u3T9Euwe/2RYuYzfNbRlXpKacWn5RLKVfW?=
+ =?iso-8859-1?Q?ukPOnFcTVECh8G4rpD2FQsTzTkP7hxEGHfdQEGBxP7L5Ci82gXHxpMrouZ?=
+ =?iso-8859-1?Q?YkEhcswafA46PIBrmKBwvCfNg7TpSQyTjR5xoiTLCCwmOIUK3euS46ptt5?=
+ =?iso-8859-1?Q?HznqHvwnPt+W3Z3H59qHVFxg0v1N6LEdSgJapi7qrmGW+kHR18CRc4MpIA?=
+ =?iso-8859-1?Q?1k6pjAi55T1GWJtpXQ5OaHuYvD/sE+hvYDbvVYoxmc2aHPVuVxYN4xcutp?=
+ =?iso-8859-1?Q?DGvinOYnMA7/hgUTSW8Pe0hIdXlbkYT/gixj0ia+E3+oazLY9agRzPpeU5?=
+ =?iso-8859-1?Q?1VmS5LDij5KVqHaEUvufKN8KPEhGbrtCV4VM801h+K/q21SCvqksp7rVkk?=
+ =?iso-8859-1?Q?bx/31fT9IDYu7I1xFwf3nIRzH7kFT+lKX7Z4+L0TMcQkWGdfsYO4d5i8RU?=
+ =?iso-8859-1?Q?Q6HwAG/I8zm7XGUWCq4Vg8yvsYLeTvSDwOfxrWhpc4feVX1jCdShFfNOAX?=
+ =?iso-8859-1?Q?jIkhgV7+knUGFU3IUnuhO8+TGGAchLdO33Sr1YGtTC2K88obKQXgn7oU7i?=
+ =?iso-8859-1?Q?/FsPZGxuE8r6VpfZe4PCdNWMu+I/RawyT4aaLtidPoskZFIVJfbGSG3XEm?=
+ =?iso-8859-1?Q?+6GAmUaXXCkuIbNclemcdiTrXh2e2lx11duTh5tutV0NFlJ99w4zM2gCoT?=
+ =?iso-8859-1?Q?uRlw/3nDaXPaNdnGXEVLpPKrSwOlQ69x5uLVdgi4ONd5rMvrW2r0MubPqp?=
+ =?iso-8859-1?Q?BAFdzTk8vy0RKZxiVq6XnZ815ShtTgB77j0uTTRjdW9QbHGRoKQN7xXlbK?=
+ =?iso-8859-1?Q?RFxQC5nEUGV733625A4xY5xT0wYhNRmjbj5UF0r7nhQ8gb+q5Vhsa6Q402?=
+ =?iso-8859-1?Q?DeSXaVBhVKE5ATG32uMadc4iukpsM5o9hPTIYX1BUpVpSDd9XKd31poUy/?=
+ =?iso-8859-1?Q?pNcgtLpLKZ9t4XieLxjQk+5wseTX71rutVFDSA7Sd1i3IA8fN1Z160xMyv?=
+ =?iso-8859-1?Q?xuaULyNjVaw2YCC+2pSBnpvScwaryeo3M3fs9SJf47tmHdLPj9AaO0tRiM?=
+ =?iso-8859-1?Q?LrCRKy3nUvMXuAKjayvE9wQA6+I7ne+IuynmLxB5sxMvsQa0LIQ1i4Zqr+?=
+ =?iso-8859-1?Q?I6O7xSJnyd3IzE+ktj447VHvevzvCLDGQ62n8gVNvcu2G0hQhzw0xGn+fH?=
+ =?iso-8859-1?Q?Y7KZfozW0SSM9ZRimIJocA6vIhFPI/jqVTwyLyZKPzD5/3W0twsTZPpDpm?=
+ =?iso-8859-1?Q?tr7GSHoQj9HkHlZy54NQWFj0PdZPWkHxKptIfXTrw53+FEkJFJn8w47T4o?=
+ =?iso-8859-1?Q?CNZ5Lqcxh0qhWCDDke9vvyegzjwaVTjuDjEMU7atuMcxg/nr4n6ZElkCa0?=
+ =?iso-8859-1?Q?jpjQOpcgCAzzFzOxEXnDZ01ROcUhedPWVhaAWNi3Ka1w=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV4PR83MB0941.EURPRD83.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?qEN/2JIBgqbNujS3zQT4BmQNf4t8hZ0c9pyhXE/9XcCH5ob79xd/KZwGdz?=
+ =?iso-8859-1?Q?XdX9e1bFMWsGHzgUyiDofOA22w72uKXCiloWMuZztuhPSYpccpo/EIwgjP?=
+ =?iso-8859-1?Q?2dnEE8qvY2YI1lOTqEAgphm/QnBwSmifhLhPHOpL9aN3O4iG4ZpJvKvqI/?=
+ =?iso-8859-1?Q?Us6PWeBSUkgfnHzfUnV4eT8CUC3TLd1yLac8ikqS4fKTf2Emzf/2EU6xO0?=
+ =?iso-8859-1?Q?YMm+B7n5S33P4sbIQF9PmV8JL7LRwSvH+upP6DetMZtdQjAdcwicCwk6/C?=
+ =?iso-8859-1?Q?NYmJAZ1kZNHq6BJvGsuMB7TCni7eeRVwUOTPpjZ5aeyJXKTcbND1le5XLj?=
+ =?iso-8859-1?Q?FEndWhbYbj4pdVBG33RjpFPHqfocxlI0tNwUYZKIlVRjLAkCgr57ZWSZ8n?=
+ =?iso-8859-1?Q?PSNi9PL/GbVZ+FyEeaY+dWkQ1pDG/CX+N76EVSTIo/JJsreJ9EdowjNeYo?=
+ =?iso-8859-1?Q?pt5gOVC+e25vl7L6N7S/BNKX7HQiQOt3P9YJGcTSSJTbn1B05rx99FkAEt?=
+ =?iso-8859-1?Q?p1Xn8q5TVtLf51zXhahK22VvQTug/h150vAPSMDDHkxMUh5Vfj8/ojtbCm?=
+ =?iso-8859-1?Q?P/BIP03eamajA/fSV62sezomeOY+huTKvB0gYHx9wYQgzlP+5uK+GeYrky?=
+ =?iso-8859-1?Q?eato2pFzGkdp04P0iDcxDb5A92ELJpIr5kqMTYjBougNZwpJeyHh9Er0VX?=
+ =?iso-8859-1?Q?JnXSPPnn2n1yV7D0oyTadcH9vG+GLEF/LinviJNHmoW9a6tJEmOOEsW7Fr?=
+ =?iso-8859-1?Q?NwZ4z+Rg8vur7k6eDLziQPzd/MgbJaEVs60s8bxxHY4EEQRDj05JA+31A7?=
+ =?iso-8859-1?Q?5s1GsEHmFCfimJWyjkxeVuJbFwnYmdGgu77oY5ZMd0RaPx2sh8lq5hPxfH?=
+ =?iso-8859-1?Q?+sgkVaIQbl0FomB3Xrr5RYDwnbmNAidUC7BVX71SrABupNI8DrbXp2v2Z4?=
+ =?iso-8859-1?Q?YokTq1yG2xH1rhYGIk85Flj5hQ6KfDBC5VhyoJrvnhB/6ZmltDghstfkVx?=
+ =?iso-8859-1?Q?7QNd+PswEgNGeLnAz79bJTJQSSmoQ6KyTHFBRPrE1g7cMfYiQsqu+y2FqS?=
+ =?iso-8859-1?Q?FGRCnKUTB6nY+C3gTf0uodO2pZXegF73wtXcD2gtl4M4OFZpVm0v3XfrjP?=
+ =?iso-8859-1?Q?+/8Jv8OP9ZkE+NvwP/rasdP1XssJ6WR4YbpQTvgaARUWlNk04pQCRNSlIs?=
+ =?iso-8859-1?Q?m1relsut929vK1xcVpGOHfTn44yOtgyQ1Av7/IqGl2oLMqxFgEoVWzYVzP?=
+ =?iso-8859-1?Q?14UgAoo0e8Lxky1F2aT+OyhJ8qeN1Mh5+Zhxldp6CgsmZBCrvLYkjTZnlR?=
+ =?iso-8859-1?Q?jPnbmiUH8UdoR0E66LNVvNdo3OQxshI8yBrX2KTM8698iv7sv/uZNV+dlq?=
+ =?iso-8859-1?Q?MSBzptvQ+iyRvXzKdAEVLzY3rxXmwEg9QR9ly5KF3qnrnjfsfy9WN0zQj7?=
+ =?iso-8859-1?Q?sjhQkc9aK8f6+DO4EEsepsSMezn7nrl+GXgEHlMlxDYi6q4imc5wEFSo7O?=
+ =?iso-8859-1?Q?GGcZYMM73dQLwHGkMAbv2kb2ERjtBpF3seCH/Tta13KYT0vz8dJuXn+l9i?=
+ =?iso-8859-1?Q?ZuGJMrleIHWiZHKa5nhFPcfVDDJC?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GV4PR83MB0941.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb184d5b-9700-4473-ba9c-08ddc86eac19
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2025 15:53:01.5755
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Dz+trK5uu+izs38E6AGukAphSb8ZmER9I7OFxI7e3rVDLReZbfJ098yE4X5osfpZVpQlh4yH7gA+M+nWEX6HmUSxmua7RvtQ3Y704NKF+bA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR83MB0784
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-07-21 07:46, Corinna Vinschen wrote:
-> On Jul 21 15:38, Corinna Vinschen wrote:
->> On Jul 21 14:15, Jon Turney wrote:
->>> If Radek is going to be adding Signed-off: lines of behalf of his
->>> colleagues, maybe this is an appropriate place to ask what he thinks he's
->>> attesting to with it?
->>>
->>>
->>> Corinna,
->>>
->>> Maybe the "Before you get started" section in [1] should mention Signed-off:
->>> and what we think it means?
->>
->> That's a good point.
->>
->> dll.html is outdated.  We don't use the CONTRIBUTORS file anymore.  It
->> was a remnant of the past, when we switched our license and we still
->> needed to keep track of the developers and the 2-clause BSD rule while
->> long-living contracts with the old buyout license were still active.
-> 
-> On second thought, I think we should rename the file to
-> PAST_CONTRIBUTORS and prepend some lines that we switched to the
-> Developer Certificate of Origin, pointing to dll.html...
-> 
->> These days, I would like to enforce the Signed-off-by: line and it
->> should have the same place and same significance as in the Linux kernel,
->> that is...
->>
->>    https://developercertificate.org/
->>
->> Briefly, the sign-off means, that the contributor has, both, the right
->> and the willingness, to contribute code to this project under the
->> project's open source license, i.e., GPL v3+ in case of Cygwin.
-
-Add that to CONTRIBUTORS.
-
->>> If we really want it to be mandatory, I guess I could explore the
->>> possibility of a push hook to enforce that?
->>>
->>> [1] https://cygwin.com/contrib/dll.html
-> 
-> ...and dll.html should be written anew from the pararaph starting
-> with "If your change is going to be a significant one"... by just
-> stating that we expect a Developer Certificate of Origin per
-> https://developercertificate.org/, i.e., a "Signed-off-by:" line
-> per patch.
-
-That site is about Linux Foundation contributors, so I think we may credit it, 
-but add the relevant or modified paragraphs (especially licensing) to our 
-CONTRIBUTORS and/or dll.html, with any conditions and limitations for newlib 
-contributions and tree, and cygwin-patches contributions and winsup tree.
-> Does that sound about right?
->> Yeah, but there's one twist: We don't and can't enforce Signed-off-by:
->> lines in case of contributions to newlib.  Newlib is not under GPL.
->> Rather it's a collection of multiple open source licenses.  So in case
->> of newlib the meaning of a signed-off is rather fuzzy.
->>
->> Therefore we only can enforce contributions to Cygwin code and docs.
-Document what licence statements (or give source prefix example files) need to 
-be at the top of new files added under each tree?
-
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+Hello.=0A=
+=0A=
+JFYI, my original thought was that the Signed-off-by header is serving for =
+some sort of automation that will let maintainers create commit with that p=
+erson as a committer. Other than that, I am not aware of the cases where it=
+ could be handy to have different person being a committer and different pe=
+rson being the one who is granting the authorship rights.=0A=
+=0A=
+Radek=
