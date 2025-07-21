@@ -1,100 +1,176 @@
-Return-Path: <SRS0=Jqgh=2C=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w01.mail.nifty.com (mta-snd-w01.mail.nifty.com [106.153.227.33])
-	by sourceware.org (Postfix) with ESMTPS id 1FF503858D1E
-	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 16:12:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1FF503858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1FF503858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.33
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1753114357; cv=none;
-	b=e5JE5TUwh5v+CBehuP5GyAFCl677c5Tb3XqX4+l+3Jo5zV7QCLmIaPCUkff+IHzUCHBRFynUFVb1/rtY/kUoxlA2y6B8+wc+BgjuhC5zOJKNVFu1k1z//tIJu+gtIaq7ih56E0bSG+bHCOrDmbU51dtbQBPMgohR6HnQGHOJXuc=
+Return-Path: <SRS0=M7IS=2C=jdrake.com=cygwin@sourceware.org>
+Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
+	by sourceware.org (Postfix) with ESMTPS id C89EC385C41F
+	for <cygwin-patches@cygwin.com>; Mon, 21 Jul 2025 23:27:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C89EC385C41F
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C89EC385C41F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1753140422; cv=none;
+	b=ekNuGtWsQr7S1fZnaqagNf7+RtqCpOR8/vx5c4UpCvj2/k357e2a7rSH+7uUiPIIjiBCQP6GwTtblHfXbqoZs3fFGG05mj3v5Ttz0O3U1NFp/6vHdDrTziBhyHPLQf371Tsu2eHMYK68nzdbcx7BX6ueLFAy3I9M6SGr2ntiUIo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1753114357; c=relaxed/simple;
-	bh=lLtx+rD0KxX7jXfUmBjJMM3uhg4NFIZrdi1La9JPk+4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=d2f5YL9GYOk4GBqba+0whkqV/2/orRd4bAfdXwNnvfq20dOFCD9rh7f4Fs3bnGUiijQMNIXdzw+hGKjL2L4c1oPEP4mbLhayBqnnhyJkYPu3IPXl+tehbrXB5ZHSqaWdYrGK7SJT+IOJRRzu7+HZw7HKq+yB1RdZ/wKV3kjfsDY=
+	t=1753140422; c=relaxed/simple;
+	bh=5IsH+q+PQzCyMxgvrYrVaZ1md6WcZtzT23YVzTRWAZY=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=eaTKock6dMxHcEi5LOaDQ2HvFy0SFSEA25/EsNLx/IU23HetBrPRvJ4xmCN/RL4Pw1NScQSAGNgPwMim7ERLq9zVPtIMwvtMV1frqVwhNT1ZQ0p+gJrpqQ6Es55/KkqdNsiO3IYUafgrCzldcgd/A/nKUnQ4589tayldYzegNBk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-Received: from localhost.localdomain by mta-snd-w01.mail.nifty.com
-          with ESMTP
-          id <20250721161235550.TETV.91923.localhost.localdomain@nifty.com>;
-          Tue, 22 Jul 2025 01:12:35 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C89EC385C41F
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=Zftae4HG
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+	by mail231.csoft.net (Postfix) with ESMTP id 25C7645C0C;
+	Mon, 21 Jul 2025 19:27:02 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
+	:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=csoft; bh=PVra12CgRPe8XmtKlI4m9RsFiPI=; b=Zftae
+	4HGHsipYamxrvzQabGdt+8nISQ42ohZDwsUbogzAQwaw6JMsC1xcwkMW/FLf2j2R
+	0p+cmegFanL/x+tYNpiTSL/W23Pb/51QT4Tqw7FDmscmD6ZukryrexK83mQb7w9t
+	8t4vcHPOM0Pm0OeaaHeZY3VIgVSsqUZSqiK9+g=
+Received: from mail231 (mail231 [66.216.5.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jeremyd)
+	by mail231.csoft.net (Postfix) with ESMTPSA id 204CA45A5F;
+	Mon, 21 Jul 2025 19:27:02 -0400 (EDT)
+Date: Mon, 21 Jul 2025 16:27:01 -0700 (PDT)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Corinna Vinschen <corinna@vinschen.de>
-Subject: [PATCH v4 3/3] Cygwin: spawn: Make system() thread-safe
-Date: Tue, 22 Jul 2025 01:11:42 +0900
-Message-ID: <20250721161151.1053-4-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20250721161151.1053-1-takashi.yano@nifty.ne.jp>
-References: <20250721161151.1053-1-takashi.yano@nifty.ne.jp>
+cc: Radek Barton <radek.barton@microsoft.com>
+Subject: Re: [PATCH] Cygwin: mkimport: implement AArch64 +/-4GB relocations
+In-Reply-To: <aH4NM_WJNC2KHpHT@calimero.vinschen.de>
+Message-ID: <23af2767-7e76-74fd-198f-2abdee7cc73e@jdrake.com>
+References: <DB9PR83MB0923E3D187978CF43940B188925DA@DB9PR83MB0923.EURPRD83.prod.outlook.com> <aH4NM_WJNC2KHpHT@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1753114355;
- bh=KtcACfOntRjAa+Lcy0HpESZ881WKpL1M2Bk6dYKNaeI=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=bJ+KbxGRab+QUrJlpxPPuq6P2+yQ2RDwQ2v3927/MiKath91V89boD6wakkwmynduryJLzqv
- ZbvI2lm6lGsHeWvjvxYou9P5+3QGeGMvwP5Q5iTMBPR5muhUtebxtaE0/U/rXaJNYdZXHjEdLS
- 4wWL047vjXMZd3MjqTvB/LpWrjhb6KCwRZFzrVEcq+oODwwaou6a0ykLgJedyALoSQGoZFgkAF
- QxmbfC7rdwOfME/1um/QpFLC+YkRzL8wOK/KPAPml+N3CF068G57ORAaYKSo1eSb6NQlBYv2ph
- Ww0cFgkLBsFjSSEXYerKKqp7jY1AfyA6hwzSP6E+zUeQD0bA==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="12017318494208-334679229-1753140422=:74162"
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,PROLO_LEO1,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URI_DOTEDU autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-POSIX states system() shall be thread-safe, however, it is not in
-current cygwin. This is because ch_spawn is a global and is shared
-between threads. With this patch, system() uses ch_spawn_local
-instead which is local variable. popen() has the same problem, so
-it has been fixed in the same way.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2025-June/258324.html
-Fixes: 1fd5e000ace5 ("import winsup-2000-02-17 snapshot")
-Reported-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by: Corinna Vinschen <corinna@vinschen.de>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/spawn.cc    | 3 ++-
- winsup/cygwin/syscalls.cc | 5 +++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+--12017318494208-334679229-1753140422=:74162
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index fd623f4c5..c057f7ebd 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -950,6 +950,7 @@ spawnve (int mode, const char *path, const char *const *argv,
-   if (!envp)
-     envp = empty_env;
- 
-+  child_info_spawn ch_spawn_local;
-   switch (_P_MODE (mode))
-     {
-     case _P_OVERLAY:
-@@ -963,7 +964,7 @@ spawnve (int mode, const char *path, const char *const *argv,
-     case _P_WAIT:
-     case _P_DETACH:
-     case _P_SYSTEM:
--      ret = ch_spawn.worker (path, argv, envp, mode);
-+      ret = ch_spawn_local.worker (path, argv, envp, mode);
-       break;
-     default:
-       set_errno (EINVAL);
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index d6a2c2d3b..83a54ca05 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -4535,8 +4535,9 @@ popen (const char *command, const char *in_type)
-       fcntl (stdchild, F_SETFD, stdchild_state | FD_CLOEXEC);
- 
-       /* Start a shell process to run the given command without forking. */
--      pid_t pid = ch_spawn.worker ("/bin/sh", argv, environ, _P_NOWAIT,
--				   __std[0], __std[1]);
-+      child_info_spawn ch_spawn_local;
-+      pid_t pid = ch_spawn_local.worker ("/bin/sh", argv, environ, _P_NOWAIT,
-+					 __std[0], __std[1]);
- 
-       /* Reinstate the close-on-exec state */
-       fcntl (stdchild, F_SETFD, stdchild_state);
--- 
-2.45.1
+On Mon, 21 Jul 2025, Corinna Vinschen wrote:
 
+> Jeremy?
+>
+> On Jul 21 07:56, Radek Barton via Cygwin-patches wrote:
+> > Hello.
+> >
+> > Sending a patch with AArch64 +/-4GB relocations in mkimport as promis=
+ed at=C2=A0https://sourceware.org/pipermail/cygwin-patches/2025q3/014155.=
+html
+> >
+> > Radek
+> >
+> > ---
+> > >From 3ec4e2136942ade5856310ee1f4d9d89359c3c79 Mon Sep 17 00:00:00 20=
+01
+> > From: =3D?UTF-8?q?Radek=3D20Barto=3DC5=3D88?=3D <radek.barton@microso=
+ft.com>
+> > Date: Sat, 19 Jul 2025 19:17:12 +0200
+> > Subject: [PATCH] Cygwin: mkimport: implement AArch64 +/-4GB relocatio=
+ns
+> > MIME-Version: 1.0
+> > Content-Type: text/plain; charset=3DUTF-8
+> > Content-Transfer-Encoding: 8bit
+> >
+> > Based on https://sourceware.org/pipermail/cygwin-patches/2025q3/01415=
+4.html
+> > suggestion, this patch implements +/-4GB relocations for AArch64 in t=
+he mkimport
+> > script by using adrp and ldr instructions. This change required updat=
+e
+> > in winsup\cygwin\mm\malloc_wrapper.cc where those instructions are
+> > decoded to get target import address.
+
+How is malloc_wrapper used?  Is it expected to only look at the imports
+generated by mkimport, or does it need to work in the face of arbitrary
+binaries?  MSVC and LLD seem to both use the adrp/ldr-with-offset form
+which mkimport generates with this patch, but looking at the source of
+binutils it looks like it does adrp/add/ldr-0-offset so if it is expected
+to deal with an import stub from an import library generated by dlltool
+this code would probably have to also account for getting the lower 12
+bits from an add instruction as well as from an ldr offset.
+
+I went through a lot of this in aarch64/fastcwd I don't know if there's
+some sane way to refactor to share that (or if it's even worth it for
+these 3 instructions).
+
+
+
+
+> >
+> > Signed-off-by: Radek Barto=C5=88 <radek.barton@microsoft.com>
+> > ---
+> >  winsup/cygwin/mm/malloc_wrapper.cc | 23 ++++++++++++++---------
+> >  winsup/cygwin/scripts/mkimport     |  4 ++--
+> >  2 files changed, 16 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/winsup/cygwin/mm/malloc_wrapper.cc b/winsup/cygwin/mm/ma=
+lloc_wrapper.cc
+> > index 863d3089c..5ca4da587 100644
+> > --- a/winsup/cygwin/mm/malloc_wrapper.cc
+> > +++ b/winsup/cygwin/mm/malloc_wrapper.cc
+> > @@ -51,16 +51,21 @@ import_address (void *imp)
+> >    __try
+> >      {
+> >  #if defined(__aarch64__)
+> > -      // If opcode is an adr instruction.
+> > -      uint32_t opcode =3D *(uint32_t *) imp;
+> > -      if ((opcode & 0x9f000000) =3D=3D 0x10000000)
+> > +      // If opcode1 is an adrp and opcode2 is ldr instruction:
+> > +      //   - https://www.scs.stanford.edu/~zyedidia/arm64/adrp.html
+> > +      //   - https://www.scs.stanford.edu/~zyedidia/arm64/ldr_imm_ge=
+n.html
+> > +      uint32_t opcode1 =3D *((uint32_t *) imp);
+> > +      uint32_t opcode2 =3D *(((uint32_t *) imp) + 1);
+> > +      if (((opcode1 & 0x9f000000) =3D=3D 0x90000000) && ((opcode2 & =
+0xbfc00000) =3D=3D 0xb9400000))
+> >  	{
+> > -	  uint32_t immhi =3D (opcode >> 5) & 0x7ffff;
+> > -	  uint32_t immlo =3D (opcode >> 29) & 0x3;
+> > -	  int64_t sign_extend =3D (0l - (immhi >> 18)) << 21;
+> > -	  int64_t imm =3D sign_extend | (immhi << 2) | immlo;
+> > -	  uintptr_t jmpto =3D *(uintptr_t *) ((uint8_t *) imp + imm);
+> > -	  return (void *) jmpto;
+> > +	  uint32_t immhi =3D (opcode1 >> 5) & 0x7ffff;
+> > +	  uint32_t immlo =3D (opcode1 >> 29) & 0x3;
+> > +	  uint32_t imm12 =3D ((opcode2 >> 10) & 0xfff) * 8; // 64 bit scale
+> > +	  int64_t sign_extend =3D (0l - ((int64_t) immhi >> 32)) << 33; // =
+sign extend from 33 to 64 bits
+> > +	  int64_t imm =3D sign_extend | (((immhi << 2) | immlo) << 12);
+> > +	  int64_t base =3D (int64_t) imp & ~0xfff;
+> > +	  uintptr_t* jmpto =3D (uintptr_t *) (base + imm + imm12);
+> > +	  return (void *) *jmpto;
+> >  	}
+> >  #else
+> >        if (*((uint16_t *) imp) =3D=3D 0x25ff)
+> > diff --git a/winsup/cygwin/scripts/mkimport b/winsup/cygwin/scripts/m=
+kimport
+> > index 0c1bcafbf..80594296a 100755
+> > --- a/winsup/cygwin/scripts/mkimport
+> > +++ b/winsup/cygwin/scripts/mkimport
+> > @@ -73,8 +73,8 @@ EOF
+> >  	.extern	$imp_sym
+> >  	.global	$glob_sym
+> >  $glob_sym:
+> > -	adr x16, $imp_sym
+> > -	ldr x16, [x16]
+> > +	adrp x16, $imp_sym
+> > +	ldr x16, [x16, #:lo12:$imp_sym]
+> >  	br x16
+> >  EOF
+> >  	} else {
+> > --
+> > 2.50.1.vfs.0.0
+> >
+>
+>
+
+--12017318494208-334679229-1753140422=:74162--
