@@ -1,111 +1,54 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A56CD3858D3C; Wed, 23 Jul 2025 08:13:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A56CD3858D3C
+	id ECE393858433; Wed, 23 Jul 2025 08:38:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org ECE393858433
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1753258426;
-	bh=c02vxjWzVY46uzivn7+ygQsLKxnbsdMzN2juefy/Oys=;
+	s=default; t=1753259881;
+	bh=n2fIUJW+A1vxGHFRA9LH1tuyPz4f0rustue3IJ2q8zk=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=SAwQfHO7nUydtgbC4Da2QFGj+SvyOTqpqOzqFDWmzBAsRCQEkfypR5k9zwNFC9W+G
-	 3dru1T3gmj1XhjXz8AeYjJFWAIRJ7fB4w3bzkWUIn5HDjz6BIDQEsFyxbAQ4FxcJ3d
-	 E87K5ifX0HJ/ggtflM+imYke9nt4g4zgqY5JBCys=
+	b=Zzkrfdd6g+fMU+DxQhWMAyoKyLbiSr3JyojnBqdnP8En6XIL2BXmGJMfynhLCRSqO
+	 g0jOry8pwPKS6Qc7VyQAaLEhb5KNmnKhejDCLjk9e38IQAA0wMBkznw9n/SjbxycSC
+	 JdMw1V2K5siMRw9muexTd8hzdo8CfeBHQjUkPPC4=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id F2690A806F0; Wed, 23 Jul 2025 10:13:44 +0200 (CEST)
-Date: Wed, 23 Jul 2025 10:13:44 +0200
+	id 2DFF8A80CF9; Wed, 23 Jul 2025 10:38:00 +0200 (CEST)
+Date: Wed, 23 Jul 2025 10:38:00 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: mkimport: implement AArch64
- +/-4GB relocations
-Message-ID: <aICZuCg3tKXOj_mR@calimero.vinschen.de>
+Subject: Re: [PATCH v7 0/3] Make system() thread-safe
+Message-ID: <aICfaJhv1HO5iMjv@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <DB9PR83MB0923E3D187978CF43940B188925DA@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aH4NM_WJNC2KHpHT@calimero.vinschen.de>
- <23af2767-7e76-74fd-198f-2abdee7cc73e@jdrake.com>
- <GV4PR83MB0941B168699D42E77A73814F925CA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
- <aH9Pi6bJNDa_Q7V1@calimero.vinschen.de>
- <GV4PR83MB09417042234459A19594C15C925CA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
- <aH9jZCS92AGUaP-o@calimero.vinschen.de>
- <b76de53a-24a7-0983-c756-2fd7213950f2@jdrake.com>
+References: <20250722121032.4755-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b76de53a-24a7-0983-c756-2fd7213950f2@jdrake.com>
+In-Reply-To: <20250722121032.4755-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jul 22 10:20, Jeremy Drake via Cygwin-patches wrote:
-> On Tue, 22 Jul 2025, Corinna Vinschen wrote:
+On Jul 22 21:10, Takashi Yano wrote:
+> v2: Introduce init_cygheap::lock/unlock
+> v3: Separate init_cygheap::lock/unlock patch and spawn patch
+> v4: Inline init_cygheap::lock/unlock
+> v5: Lock cygheap only when iscygwin() case
+> v6: Introduce spawn_cygheap_lock/unlock
+>     Call another child_info_spawn constructor for local ch_spawn
+> v7: Instead of v5, move close_all_files() to outside of locked region
 > 
-> > On Jul 22 09:12, Radek Barton via Cygwin-patches wrote:
-> > > Hello.
-> > >
-> > > Thank you for this insight. So, if I build tcsh using AArch64 Cygwin
-> > > GNU toolchain, I should see if this behaves correctly with debugger?
-> >
-> > Yes, that would probably be helpful.  tcsh overwrites the malloc/free
-> > entries of __cygwin_user_data in _cygwin_crt0_common(), which is linked
-> > into the executable.  This occurs after dll_crt0_0, but before dll_crt0_1.
-> >
-> > So what you should see is somthing like this:
-> >
-> > (gdb) br dll_crt0_0
-> > (gdb) br dll_crt0_1
-> > (gdb) r
-> > Starting program: /bin/tcsh
-> > [New Thread 1832.0x4ac]
-> > [New Thread 1832.0x22d0]
-> >
-> > Thread 1 hit Breakpoint 1, dll_crt0_0 ()
-> > [...]
-> > (gdb) p __cygwin_user_data.malloc
-> > $6 = (void *(*)(size_t)) 0x7ffc8504cee9 <malloc>   <== pointing into cygwin1.dll
-> > (gdb) c
-> > Thread 1 hit Breakpoint 2, dll_crt0_1 ()
-> > [...]
-> > (gdb) p __cygwin_user_data.malloc
-> > $6 = (void *(*)(size_t)) 0x100448940 <malloc>      <== pointing into tcsh
+> Takashi Yano (3):
+>   Cygwin: cygheap: Add lock()/unlock() method
+>   Cygwin: spawn: Lock cygheap from refresh_cygheap() until child_copy()
+>   Cygwin: spawn: Make system() thread-safe
 > 
-> This wouldn't be an import though.  I guess malloc would need to be
-> imported from a different dll for that case...
-
-Yeah, you're right.  But even dmalloc is just a static lib, not a DLL,
-so the executable would be linked against the actual function, not against
-a jump stub.
-
-> > Theoretically import_address() is only required to be able to resolve
-> > pointers into the Cygwin DLL itself correctly.  If it can resolve all
-> > variations of import table entries created by gcc for the Cygwin DLL,
-> > it's sufficient.  If other variations exist, but are never emitted by
-> > gcc(*), it would be entirely sufficent if import_address() returns NULL.
-> >
-> > tl;dr: As long as it always recognizes
-> >
-> >   import_address ((void *) user_data->malloc) == &_sigfe_malloc
-> >
-> > we're good.
+>  winsup/cygwin/local_includes/cygheap.h |  5 +++++
+>  winsup/cygwin/mm/cygheap.cc            | 12 ++++++------
+>  winsup/cygwin/spawn.cc                 | 15 +++++++++------
+>  winsup/cygwin/syscalls.cc              |  5 +++--
+>  4 files changed, 23 insertions(+), 14 deletions(-)
 > 
-> ... But apparently it doesn't matter if it gets the jump stub or the
-> imported function for that case.
-> 
-> Just for the record, these import jump stubs are generated by the linker
-> (or dlltool as part of the import library).  Apparently for the Cygwin
-> dll, the import library (or at least these parts of it) are generated by
-> mkimport rather that via the normal dlltool process.  So it's probably OK
-> if this code only recognizes the form of import stub generated by mkimport
-> which with this patch now matches what MS and LLD generate).  It's strange
-> to me that binutils' dlltool uses an additional instruction that doesn't
-> seem to be necessary.  It may not be a bad idea to either support that or
-> at least add a comment documenting that that's the case, in case
-> something later wants to use this function for some other import case.
-> 
+> -- 
+> 2.45.1
 
-As long as we recognize the jump stub as created by mkimport, we're good.
+LGTM
 
-But yeah, adding a comment to import_address *and* the mkimport script,
-that the jump expressions need to be kept in sync, might not be the
-worst idea.  Even if we never change that again, it would help the reader.
-
-Anybody volunteering?
-
-
+Thanks,
 Corinna
