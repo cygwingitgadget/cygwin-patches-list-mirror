@@ -1,171 +1,67 @@
-Return-Path: <SRS0=bRWV=2G=jdrake.com=cygwin@sourceware.org>
-Received: from mail231.csoft.net (mail231.csoft.net [66.216.5.135])
-	by sourceware.org (Postfix) with ESMTPS id D8A393858D33
-	for <cygwin-patches@cygwin.com>; Fri, 25 Jul 2025 23:24:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D8A393858D33
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=jdrake.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=jdrake.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D8A393858D33
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=66.216.5.135
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1753485850; cv=none;
-	b=mYGGu2szA/1e6F7EEc+Gy11nEQb7N1dTvwnJtMMg2KqkQLfHxe2t9RSHz0mRQI4GgcfhkOIfmpS7/6m3BsZGr6aCxPNIvRbqHTZnL6wxaAzmCylo5ENBpDzYjvILf1cmM/ywL6fbGmIiqGgBrUs07HK83utRnoivkVmCYbdplWc=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1753485850; c=relaxed/simple;
-	bh=umCPieYiDQR4FL5DE2Y1G4cqSeVSXZiE5K6GmhKit7A=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=f5PDDSS5JOjTbWIUr5w0SqyGL1CG1j9j/UzIFmG8hn+xnLGNH6QR2OA6Onbm10OR6j3rWt2vTbZIvTHJyLz+avvRJMB3fW2iVJKd2eqI2ih3T+RIxkNe/1twZCoevKeIkJ3fV/wMPpedH9BeGvH5+YfrVGh/ZS2R/CbP16LRhdw=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D8A393858D33
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=jdrake.com header.i=@jdrake.com header.a=rsa-sha1 header.s=csoft header.b=UNj/vSpF
-Received: from mail231.csoft.net (localhost [127.0.0.1])
-	by mail231.csoft.net (Postfix) with ESMTP id AC4D545CD2;
-	Fri, 25 Jul 2025 19:24:10 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=jdrake.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=csoft; bh=3xe0ZvRPNjm/Z+TDFVjjQwkQ4uo=; b=UNj/v
-	SpF0O5uLwVAJhjX3d6CF6yKAGKGSk4qO7Zh1RHdTV1qlWVl49vbDGhHZXO0sFDPC
-	Ils13FFZTDhs5+l8RlJDGHTYo0bItrFDHsWPqXmJEudrApXlbEu5wA9egk5ly3/5
-	RaeYOL5uuA14BGfISm8kQRzwbFnpcEiloHFRVs=
-Received: from mail231 (mail231 [66.216.5.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jeremyd)
-	by mail231.csoft.net (Postfix) with ESMTPSA id 90B8D45CC6;
-	Fri, 25 Jul 2025 19:24:10 -0400 (EDT)
-Date: Fri, 25 Jul 2025 16:24:10 -0700 (PDT)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
-To: Radek Barton <radek.barton@microsoft.com>
-cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH v5] Cygwin: mkimport: implement AArch64 +/-4GB
- relocations
-In-Reply-To:  <DB9PR83MB09238A32DBD70B395AE2EDEB9259A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
-Message-ID: <e0a2baed-90e3-aec3-691b-ae50455c540b@jdrake.com>
-References: <DB9PR83MB0923E3D187978CF43940B188925DA@DB9PR83MB0923.EURPRD83.prod.outlook.com> <aH4NM_WJNC2KHpHT@calimero.vinschen.de> <23af2767-7e76-74fd-198f-2abdee7cc73e@jdrake.com> <GV4PR83MB0941B168699D42E77A73814F925CA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
- <aH9Pi6bJNDa_Q7V1@calimero.vinschen.de> <GV4PR83MB09417042234459A19594C15C925CA@GV4PR83MB0941.EURPRD83.prod.outlook.com> <aH9jZCS92AGUaP-o@calimero.vinschen.de> <b76de53a-24a7-0983-c756-2fd7213950f2@jdrake.com> <aICZuCg3tKXOj_mR@calimero.vinschen.de>
- <GV4PR83MB0941AA5AD0E67B89787B1FE0925EA@GV4PR83MB0941.EURPRD83.prod.outlook.com> <aIIM-ZOEUZDsq-og@calimero.vinschen.de>  <GV4PR83MB0941BC79A50B76470922FE38925EA@GV4PR83MB0941.EURPRD83.prod.outlook.com> <039ff598-6a8d-3a16-c544-be7dae5b2a78@jdrake.com> 
- <DB9PR83MB092391AD95379EB112A8EC339259A@DB9PR83MB0923.EURPRD83.prod.outlook.com> <62741773-3864-2deb-c26c-4ae3dcea9344@jdrake.com>  <DB9PR83MB09238A32DBD70B395AE2EDEB9259A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 7E58A3858C50; Wed, 30 Jul 2025 12:21:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7E58A3858C50
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1753878060;
+	bh=8W+gX/3mDjwbWvDnnanWkUr+XshTKgpiqKRDM+skl4o=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=OGT/T0jnOiQVo5t42X5wzqFbkhTxxGnQZpga0GUh3J3zQia2K1ZFQPZPt6Ul32lJ1
+	 Z1GU1RKIeCJm+Tz85t8eskOU7c1Etn2+olQfIQUA+cAXDCH+rwNkG6FDeaO0WovexZ
+	 xXYEJp81ksr8nE8Can00rmWgli3aPkklS+z0ph4U=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id AAF09A80BCC; Wed, 30 Jul 2025 14:20:58 +0200 (CEST)
+Date: Wed, 30 Jul 2025 14:20:58 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: add wrappers for newer new/delete overloads
+Message-ID: <aIoOKpzb557bX0cE@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <778f2295-5ae5-b0b3-08f7-8623ed05e5b0@jdrake.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="12021613461504-1326283086-1753485850=:74162"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URI_DOTEDU autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <778f2295-5ae5-b0b3-08f7-8623ed05e5b0@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---12021613461504-1326283086-1753485850=:74162
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, 25 Jul 2025, Radek Barton wrote:
-
-> Hello
->
-> Sending version with the comment updated and indentation fixed.
->
-> Radek
->
+On Jul 25 16:10, Jeremy Drake via Cygwin-patches wrote:
+> A sized delete (with a std::size_t parameter) was added in C++14 (but
+> doesn't combine with nothrow_t)
+> 
+> An aligned new/delete (with a std::align_val_t parameter) was added in
+> C++17, and combinations with the sized delete and nothrow_t variants.
+> 
+> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
 > ---
-> From 494dfb736813385179e083864e1610284ca43ec8 Mon Sep 17 00:00:00 2001
-> From: =3D?UTF-8?q?Radek=3D20Barto=3DC5=3D88?=3D <radek.barton@microsoft=
-.com>
-> Date: Sat, 19 Jul 2025 19:17:12 +0200
-> Subject: [PATCH v5] Cygwin: mkimport: implement AArch64 +/-4GB relocati=
-ons
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
->
-> Based on https://sourceware.org/pipermail/cygwin-patches/2025q3/014154.=
-html
-> suggestion, this patch implements +/-4GB relocations for AArch64 in the=
- mkimport
-> script by using adrp and ldr instructions. This change required update
-> in winsup/cygwin/mm/malloc_wrapper.cc where those instructions are
-> decoded to get target import address.
->
-> Signed-off-by: Radek Barto=C5=88 <radek.barton@microsoft.com>
-> ---
->  winsup/cygwin/mm/malloc_wrapper.cc | 34 ++++++++++++++++++++++--------
->  winsup/cygwin/scripts/mkimport     |  7 ++++--
->  2 files changed, 30 insertions(+), 11 deletions(-)
->
-> diff --git a/winsup/cygwin/mm/malloc_wrapper.cc b/winsup/cygwin/mm/mall=
-oc_wrapper.cc
-> index 863d3089c..9444cb4c8 100644
-> --- a/winsup/cygwin/mm/malloc_wrapper.cc
-> +++ b/winsup/cygwin/mm/malloc_wrapper.cc
-> @@ -51,16 +51,32 @@ import_address (void *imp)
->    __try
->      {
->  #if defined(__aarch64__)
-> -      // If opcode is an adr instruction.
-> -      uint32_t opcode =3D *(uint32_t *) imp;
-> -      if ((opcode & 0x9f000000) =3D=3D 0x10000000)
-> +      /* If first three instructions of the imp are:
-> +	   adrp x16, X
-> +	   ldr x16, [x16, #:lo12:X]
-> +	   br x16
-> +	 References:
-> +	   - https://www.scs.stanford.edu/~zyedidia/arm64/adrp.html
-> +	   - https://www.scs.stanford.edu/~zyedidia/arm64/ldr_imm_gen.html
-> +	   - https://www.scs.stanford.edu/~zyedidia/arm64/br.html
-> +	 NOTE: This implementation assumes that the relocation table is made =
-of
-> +	 those specific AArch64 instructions as generated by the
-> +	 winsup/cygwin/scripts/mkimport script. Please, keep it in sync. */
-> +      uint32_t opcode1 =3D *((uint32_t *) imp);
-> +      uint32_t opcode2 =3D *(((uint32_t *) imp) + 1);
-> +      uint32_t opcode3 =3D *(((uint32_t *) imp) + 2);
-> +      if (((opcode1 & 0x9f00001f) =3D=3D 0x90000010) &&
-> +	  ((opcode2 & 0xffc003ff) =3D=3D 0xf9400210) &&
-> +	  (opcode3 =3D=3D 0xd61f0200))
->  	{
-> -	  uint32_t immhi =3D (opcode >> 5) & 0x7ffff;
-> -	  uint32_t immlo =3D (opcode >> 29) & 0x3;
-> -	  int64_t sign_extend =3D (0l - (immhi >> 18)) << 21;
-> -	  int64_t imm =3D sign_extend | (immhi << 2) | immlo;
-> -	  uintptr_t jmpto =3D *(uintptr_t *) ((uint8_t *) imp + imm);
-> -	  return (void *) jmpto;
-> +	  uint32_t immhi =3D (opcode1 >> 5) & 0x7ffff;
-> +	  uint32_t immlo =3D (opcode1 >> 29) & 0x3;
-> +	  uint32_t imm12 =3D ((opcode2 >> 10) & 0xfff) * 8; // 64 bit scale
-> +	  int64_t sign_extend =3D (0l - ((int64_t) immhi >> 32)) << 33; // si=
-gn extend from 33 to 64 bits
-> +	  int64_t imm =3D sign_extend | (((immhi << 2) | immlo) << 12);
-> +	  int64_t base =3D (int64_t) imp & ~0xfff;
-> +	  uintptr_t* jmpto =3D (uintptr_t *) (base + imm + imm12);
-> +	  return (void *) *jmpto;
->  	}
->  #else
->        if (*((uint16_t *) imp) =3D=3D 0x25ff)
-> diff --git a/winsup/cygwin/scripts/mkimport b/winsup/cygwin/scripts/mki=
-mport
-> index 0c1bcafbf..5583099bb 100755
-> --- a/winsup/cygwin/scripts/mkimport
-> +++ b/winsup/cygwin/scripts/mkimport
-> @@ -73,8 +73,11 @@ EOF
->  	.extern	$imp_sym
->  	.global	$glob_sym
->  $glob_sym:
-> -	adr x16, $imp_sym
-> -	ldr x16, [x16]
-> +	# NOTE: Using instructions that are used by MSVC and LLVM. Binutils a=
-re
-> +	# using adrp/add/ldr-0-offset though. Please, keep it in sync with
-> +	# import_address implementation in winsup/cygwin/mm/malloc_wrapper.cc=
-.
-> +	adrp x16, $imp_sym
-> +	ldr x16, [x16, #:lo12:$imp_sym]
->  	br x16
->  EOF
->  	} else {
-> --
-> 2.50.1.vfs.0.0
->
->
+> I added #pragma GCC diagnostic ignored "-Wc++17-compat" preemptively to
+> cxx.cc to match what was done with c++14-compat with the one sized delete
+> that was already present (presumably because it broke things when GCC
+> started to emit that instead of the non-sized delete).
+> 
+> The default new implementation uses calloc, so I'm not sure if it's
+> expected that the aligned new call memset to zero the returned memory.
+> It'd be easy enough to add if necessary.
+> 
+> GCC will need to be updated circa
+> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/cygwin-w64.h;h=160a290a03d00f6408252f5d8751fea7cd44e1be;hb=HEAD#l27
+> but only after this change is stable because it will cause linker errors
+> if the new __wrap symbols are not exported.
+> 
+> Does there need to be a version bump somewhere to make sure a module
+> linked against a new libcygwin.a doesn't run against an old cygwin1.dll,
+> resulting in _cygwin_crt0_common.cc writing too much data to
+> default_cygwin_cxx_malloc?
+> 
+>  winsup/cygwin/cxx.cc                      | 120 +++++++++++++++++++++-
+>  winsup/cygwin/cygwin.din                  |  12 +++
+>  winsup/cygwin/lib/_cygwin_crt0_common.cc  |  59 +++++++++++
+>  winsup/cygwin/libstdcxx_wrapper.cc        |  99 ++++++++++++++++++
+>  winsup/cygwin/local_includes/cygwin-cxx.h |  14 +++
+>  5 files changed, 299 insertions(+), 5 deletions(-)
 
-LGTM, thanks.  Pushed.
---12021613461504-1326283086-1753485850=:74162--
+LGTM.  Please push (to main only, at least for now)
+
+
+Thanks,
+Corinna
