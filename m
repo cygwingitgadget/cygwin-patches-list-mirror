@@ -1,16 +1,26 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 879EA385780C; Mon,  4 Aug 2025 18:49:35 +0000 (GMT)
+	id AF8B93858436; Tue,  5 Aug 2025 15:12:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AF8B93858436
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1754406759;
+	bh=sM4xBQ9MuixUMBwiYhZvIQ07FLxv0A/PP4iY7FqORxY=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=G3PK/TCU0dQAXEG56JKDS/C0UoW1vQ7SkBBUWpjAV4gcoqEsRJB5aJLaU2EaJ1RaQ
+	 qc88+xn/JWikrtiL5aA+xEpnoQg0I7IgFNNiszRZ9VAryRxhnU/TSY5928kkhDtkAO
+	 va2jR4NC9eirM2j/gkXC9fDGf8nZL965Lx9w1zXA=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 06BACA809F3; Mon, 04 Aug 2025 20:49:33 +0200 (CEST)
-Date: Mon, 4 Aug 2025 20:49:32 +0200
+	id E75D3A80CB7; Tue, 05 Aug 2025 17:12:37 +0200 (CEST)
+Date: Tue, 5 Aug 2025 17:12:37 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+To: Jeremy Drake <cygwin@jdrake.com>
+Cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] Cygwin: add api version check to c++ malloc struct
  override.
-Message-ID: <aJEAvIpViSmK0-65@calimero.vinschen.de>
+Message-ID: <aJIfZbdwYbMAxy4c@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Jeremy Drake <cygwin@jdrake.com>,
+	cygwin-patches@cygwin.com
 References: <ff5e8cb0-205b-4d08-7eba-51f112e9619c@jdrake.com>
  <aI42aRxXOsYFOzpq@calimero.vinschen.de>
  <4f3bd8e1-b32c-9e9e-bc94-5dc0d0bd52a9@jdrake.com>
@@ -23,6 +33,8 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <e2c92437-eec7-c7f7-5eae-3500e574bd78@jdrake.com>
 List-Id: <cygwin-patches.cygwin.com>
+
+Hi Jeremy,
 
 On Aug  4 11:07, Jeremy Drake via Cygwin-patches wrote:
 > On Mon, 4 Aug 2025, Corinna Vinschen wrote:
@@ -44,30 +56,8 @@ On Aug  4 11:07, Jeremy Drake via Cygwin-patches wrote:
 > > LGTM, please push.
 > 
 > Pushed.
-> 
-> > Now for the question if we should keep this with 3.7, or if it makes
-> > sense to backport to the 3.6 branch.
-> >
-> > I'm not sure.
-> >
-> > Theoretically this change doesn't change anything as long as libstdc++
-> > and gcc didn't catch up.  So it's no functional change for existing
-> > apps, but it would prepare newly build apps to the new compiler and
-> > libstdc++ lib builds.
-> >
-> > OTOH, as long as it's only in the non-released build, we have still time
-> > to fix things.  The fixes necessary due to introducing this right with a
-> > bug in 1.7.0-49 were not much fun.  It would be great if we already had
-> > a gcc/libstdc++ build to test against before a release...
-> >
-> > What do you think?
-> 
-> My gut feeling is that this is a "major version"-type change.  The missing
-> export failures on downgrade and the api version bump (which iirc would
-> conflict if backported to 3.6, I think there was another api version
-> before this on 3.7 that is not in 3.6).
 
-Good point.
+Can you add a oneliner to release/3.7.0, please?
 
 
 Thanks,
