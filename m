@@ -1,186 +1,123 @@
-Return-Path: <SRS0=RYfm=3K=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w08.mail.nifty.com (mta-snd-w08.mail.nifty.com [106.153.227.40])
-	by sourceware.org (Postfix) with ESMTPS id 795983858CD1
-	for <cygwin-patches@cygwin.com>; Sat, 30 Aug 2025 03:04:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 795983858CD1
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 795983858CD1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.40
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1756523043; cv=none;
-	b=UfXLb9J7JLjEjOcNhM0z9AETvzsaO9D+pC4liTT+21Tr4paxkJccRFST0hBe7l7k0rq9bEf/ct60eQuDlZ4Xf+VkIz1Cr175RFbyEYp5CCpx9YnAPuFOml+3Flmx86HfcES5SkOQ36QtCBuci5pPce6po6IOqGN7RR4w9EyZc9c=
+Return-Path: <SRS0=71sz=3N=gmail.com=gitgitgadget@sourceware.org>
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+	by sourceware.org (Postfix) with ESMTPS id F017A3857BA0
+	for <cygwin-patches@cygwin.com>; Tue,  2 Sep 2025 11:40:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F017A3857BA0
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F017A3857BA0
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d2c
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1756813242; cv=none;
+	b=HTHaMAP+XgfgepvvcGU9nFdbUnlAyGSVa2YA+shGkHy4O60Usn/tLgcP+H/AJPfpLFcONR+AB0x8GUh1e27ISXKwCJujzkvvPhVLB5C9vbVQdNxdumjrsuIzpBjp9BGULlT/sY7rQGsW5FLeWWjoDcGQRmIvJ2F5yMzA/iVw8wY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1756523043; c=relaxed/simple;
-	bh=rnk8M0SSOP7wTT0CqMNmbzAfrePlGW5Bx8Dt625glek=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ILxgoT90+HeoC0X357ZbbQhtNUSZvykleDxYSzm2WMiL58XjqANzw+7n8AEqMyccUZDJZklGGc1/mSTBEoTd0lrMkIYf1ryzAeUZFBqEkh5kzmHGkY7iIYu56sUSSl2gFB68jYvkmDyG80P6UeMymzzQILehwFPudMgXEQnvC8E=
+	t=1756813242; c=relaxed/simple;
+	bh=fDWdQVZk7hpBnxMYapeZ6bokidn1IMoxYdpUt9TbFlk=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=xKcr4SfQeRIlgdKPa/4A9coYY8fG/cu0+Y0HN5bWjHSSNYsmURjXyvQKhIQPjWr/UgIQ8HmVqdpgPH6Rvl7L66D2NuSshksOeN2XQFaBeOCKzjCLeXsc9uAfom1nMBsSY2/7/1e75664RM+n7XjRoVQoCAAjwbN4m+duc5agdY8=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 795983858CD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F017A3857BA0
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ka3spUG4
-Received: from localhost.localdomain by mta-snd-w08.mail.nifty.com
-          with ESMTP
-          id <20250830030400249.WZOJ.78984.localhost.localdomain@nifty.com>;
-          Sat, 30 Aug 2025 12:04:00 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	"Reported-by : Thomas Wolff" <towo@towo.net>
-Subject: [PATCH] Cygwin: pty: Fix FLUSHO handling
-Date: Sat, 30 Aug 2025 12:03:34 +0900
-Message-ID: <20250830030342.918-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.45.1
-MIME-Version: 1.0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=QsJNVaSF
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-884328c9473so62049339f.0
+        for <cygwin-patches@cygwin.com>; Tue, 02 Sep 2025 04:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756813241; x=1757418041; darn=cygwin.com;
+        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzx2V5xOwVVm7XurbsD3n13z2XhG2ZxED0MzPfxACEI=;
+        b=QsJNVaSFfh3fVnZRrCxJsGt+Hoa2meMoNXvjI6uRwemKVCr2DPGOY32QgqrsMjY33w
+         9mvl2A7n6JQdNCrsjbbRFgDP0gQethPd9lveOsEuKsY+M2cFf8NfMKAwHy6wu5OiG4AQ
+         myq5UfMdFZ14/P8Iwm4h2i/PiM9MDTLQY+YqaanJGxdOF4WoNEKS1x60TmGNFW7fs8jg
+         tQggAX0c1/5SWX6zOACfFWpmIuG2CO3/cCM9AWdaiBJpI+LWumKAL3v2IOeChNw9REPV
+         66k0A8yLzYdBtrPAstSW+1Y1z3eBOVnydNcyGMYUTGG53B7vjotVgmrpV897QLoDl/Vi
+         kWFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756813241; x=1757418041;
+        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzx2V5xOwVVm7XurbsD3n13z2XhG2ZxED0MzPfxACEI=;
+        b=owhIQvJnneOWHFUxKicR8tCPQKhcNpWFtoYPIGX3cb919mmB6gzqYYLZSPlIMxMTbC
+         De/o3VWMYnDws1MlXc/o9jn39EUYWaUTB5QZYMUVOrLZrFzKse7I4EhXMfwEhJJxChGT
+         RepJc4UT/NN7/90xnT1jPh7B89x1eWZIMm+X2xi2klfrIp04W6ageKu0V/lw0/tz7EF4
+         pI3dYpJPWWDuEHEDYg3p1CPamBZA7Vj3tolekK6kutiJvgwJ58lEP4JcehJOQCYTfgiV
+         HDEGH4BIdcr821VFv16SFsezAmfCHDcLp6XrM0UZfaeAPBxuIgsuW7pP8LJaoVIqAxfK
+         eH3w==
+X-Gm-Message-State: AOJu0YzRcAoeHDCbVcT7ZB5d9v344WTzzJTsDBwqhkSTwTCAbv2b0ZBA
+	9t+MLQLVg28EOQ6H0Z5ceNyrn95W5jjEydQOxaKIXpn/hiRM53bTjkn0EiJ/CA==
+X-Gm-Gg: ASbGncvjOzm6xJ/Idu7s32y59QsOscUdLJ4U9NYNelIkEdpjLdKTi1v/k7YOP6yNVpN
+	+85qWx3obARTCdQgZdLK0Hv6+B38PnBep4fw4MBhB0kwSuyIWVUQZQZ82Js5BSqEv0MXAA+J1mG
+	zbpm3PxmSMV9Ux6hYXpST7TV7Shk2Pu0/9W6uKPIOqC1UM7yX7ryrV2gRsxEfSAoifAYtVZVBk/
+	oWf15MlPhptcIPq4W2lxtrwkJot7ViIWKzPaFhCofUIF+LARuuPF60kCZHctKQemRFbuxVRckac
+	Ku64gu/Nr/7mat0EPPO+2QZzgXDJ3nhCZDdwFMEr3vv3lOV5bbLwAMURCUD27fW+A/HnyK9AKak
+	HVQaC1qopVy1JPsiWaaXCZSytaA==
+X-Google-Smtp-Source: AGHT+IGrvCuyAodjoHhTdYrvSAkwig9Vvy/a/PVOn9yQpvz15ME0HmpBxdEwAuH2ovEpQMRLgWePyQ==
+X-Received: by 2002:a05:6602:140d:b0:883:fc4a:ea55 with SMTP id ca18e2360f4ac-8871f421e06mr2223312239f.3.1756813240628;
+        Tue, 02 Sep 2025 04:40:40 -0700 (PDT)
+Received: from [127.0.0.1] ([135.232.201.88])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8871e3d714csm306464939f.18.2025.09.02.04.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Sep 2025 04:40:39 -0700 (PDT)
+Message-Id: <pull.1.cygwin.1756813237801.gitgitgadget@gmail.com>
+From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
+Date: Tue, 02 Sep 2025 11:40:37 +0000
+Subject: [PATCH] ci: bump actions/checkout from v3 to v5
+Fcc: Sent
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1756523040;
- bh=MlYNLWq205/ZiLlKoUveosIUHxp7zX8nUlwt7ordImI=;
- h=From:To:Cc:Subject:Date;
- b=ka3spUG4lU19Q4lhgBKXOZAMzzUWTiHvR2U6KivWkgGStNWgvkE5a1aTrrOjD+IkDw9PA+Nn
- JLH3jpHswG3f8hzEZVQUzm+JMUMAfViPwRO32H9Xvn0s/rweymidIx5YEEUVxnrq3z9cDdpFpC
- r0Z6JKgbn+Kfrik9RxRiY26hahd3OacdSBjqP1vfmsAAVAifXC7mpMYfhQ7kLbXu+6DQfKGlkZ
- Kf9MTWygzFVqQ4/ouLIEPYvBRO72FTRDb8cixZ3GOjWfc8gP5Rr0JUNawzBvK516jzSCPIs4OX
- lMKWpUrboi4aLuQ3RG/tm3mD3uTD1zVzHj/9qLz7LRPPmqXw==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+To: cygwin-patches@cygwin.com
+Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
+    Johannes Schindelin <johannes.schindelin@gmx.de>
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Previsouly, FLUSHO did not work correctly.
- 1) Even when FLUSHO is set, read() returns with undesired data in
-    the pipe if select() is called in advance.
- 2) FLUSHO is toggled even in the case pseudo console enabled.
-Due to these problems, read data in the pty master was partially
-lost when Ctrl-O is pressed.
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-With this patch, the mask_flusho flag, that was introduced by the
-commit 9677efcf005a and caused the issue 1), has been dropped and
-select() and read() for pty master discards the pipe data instead
-if FLUSHO flag is set.  In addition, FLUSHO handling in the case
-pseudo console activated is disabled.
+There were two major version bumps:
 
-Addresses: https://cygwin.com/pipermail/cygwin/2025-August/258717.html
-Fixes: 2cab4d0bb4af ("Cygwin: pty, console: Refactor the code processing special keys.")
-Fixes: 9677efcf005a ("Cygwin: pty: Make FLUSHO and Ctrl-O work.")
-Reported-by: Reported-by: Thomas Wolff <towo@towo.net>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+- v3 -> v4: new runs using Node.JS v20 instead of v16
+- v4 -> v5: now runs using Node.JS v24 instead of v20
+
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/cygwin/fhandler/pty.cc           |  6 +-----
- winsup/cygwin/local_includes/fhandler.h |  1 -
- winsup/cygwin/local_includes/tty.h      |  1 -
- winsup/cygwin/select.cc                 | 16 +++++++++++-----
- winsup/cygwin/tty.cc                    |  1 -
- 5 files changed, 12 insertions(+), 13 deletions(-)
+    ci: bump actions/checkout from v3 to v5
+    
+    I have carried the v3->v4 patch in Git for Windows for quite a while
+    already; The main reason for contributing this now, though, is to verify
+    that GitGitGadget [https://gitgitgadget.github.io/] can be used to
+    submit Cygwin patches, too, not only Git patches.
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 77a363eb0..679068ea2 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -693,8 +693,7 @@ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on
+Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-1%2Fdscho%2Fgithub-actions-updates-v1
+Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-1/dscho/github-actions-updates-v1
+Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/1
+
+ .github/workflows/cygwin.yml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
+index 877f54cde..40670cce8 100644
+--- a/.github/workflows/cygwin.yml
++++ b/.github/workflows/cygwin.yml
+@@ -24,7 +24,7 @@ jobs:
+       HAS_SSH_KEY: ${{ secrets.SSH_KEY != '' }}
  
-       termios_printf ("bytes read %u", n);
+     steps:
+-    - uses: actions/checkout@v3
++    - uses: actions/checkout@v5
  
--      if (!buf || ((get_ttyp ()->ti.c_lflag & FLUSHO)
--		   && !get_ttyp ()->mask_flusho))
-+      if (!buf || (get_ttyp ()->ti.c_lflag & FLUSHO))
- 	continue; /* Discard read data */
+     # install build tools
+     - name: Install build tools
+@@ -111,7 +111,7 @@ jobs:
+       run: |
+         icacls . /inheritance:r
+         icacls . /grant Administrators:F
+-    - uses: actions/checkout@v3
++    - uses: actions/checkout@v5
  
-       memcpy (optr, outbuf, n);
-@@ -714,8 +713,6 @@ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on
-     }
- 
- out:
--  if (buf)
--    set_mask_flusho (false);
-   termios_printf ("returning %d", rc);
-   return rc;
- }
-@@ -2256,7 +2253,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	      nlen--;
- 	      i--;
- 	    }
--	  process_stop_start (buf[i], get_ttyp ());
- 	}
- 
-       DWORD n;
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 4db2964fe..bdd87ebb7 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2625,7 +2625,6 @@ public:
-   }
-   void get_master_thread_param (master_thread_param_t *p);
-   void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
--  void set_mask_flusho (bool m) { get_ttyp ()->mask_flusho = m; }
-   bool need_send_ctrl_c_event ();
- };
- 
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index a418ab1f9..9485e24c5 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -139,7 +139,6 @@ private:
-   bool master_is_running_as_service;
-   bool req_xfer_input;
-   xfer_dir pty_input_state;
--  bool mask_flusho;
-   bool discard_input;
-   bool stop_fwd_thread;
- 
-diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-index a7e82a024..8a94ac076 100644
---- a/winsup/cygwin/select.cc
-+++ b/winsup/cygwin/select.cc
-@@ -689,6 +689,8 @@ pipe_data_available (int fd, fhandler_base *fh, HANDLE h, int mode)
-   return 0;
- }
- 
-+SRWLOCK ptym_peek_lock = SRWLOCK_INIT;
-+
- static int
- peek_pipe (select_record *s, bool from_select)
- {
-@@ -730,10 +732,19 @@ peek_pipe (select_record *s, bool from_select)
- 	  gotone = s->read_ready = true;
- 	  goto out;
- 	}
-+      if (fh->get_major () == DEV_PTYM_MAJOR)
-+	AcquireSRWLockExclusive (&ptym_peek_lock);
-       ssize_t n = pipe_data_available (s->fd, fh, h, PDA_READ);
-       /* On PTY masters, check if input from the echo pipe is available. */
-       if (n == 0 && fh->get_echo_handle ())
- 	n = pipe_data_available (s->fd, fh, fh->get_echo_handle (), PDA_READ);
-+      if (fh->get_major () == DEV_PTYM_MAJOR)
-+	{
-+	  fhandler_pty_master *fhm = (fhandler_pty_master *) fh;
-+	  while (n > 0 && (fhm->tc ()->ti.c_lflag & FLUSHO))
-+	    n = fhm->process_slave_output (NULL, n, 0); /* Discard pipe data */
-+	  ReleaseSRWLockExclusive (&ptym_peek_lock);
-+	}
- 
-       if (n == PDA_ERROR)
- 	{
-@@ -759,11 +770,6 @@ peek_pipe (select_record *s, bool from_select)
-     }
- 
- out:
--  if (fh->get_major () == DEV_PTYM_MAJOR)
--    {
--      fhandler_pty_master *fhm = (fhandler_pty_master *) fh;
--      fhm->set_mask_flusho (s->read_ready);
--    }
-   h = fh->get_output_handle ();
-   if (s->write_selected && dev != FH_PIPER)
-     {
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index a4b716721..0c49dc2bd 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -253,7 +253,6 @@ tty::init ()
-   req_xfer_input = false;
-   pty_input_state = to_cyg;
-   last_sig = 0;
--  mask_flusho = false;
-   discard_input = false;
-   stop_fwd_thread = false;
- }
+     # install cygwin and build tools
+     - name: Install Cygwin
+
+base-commit: 822b49e97af9c6551911c0ff5297d31b61150e03
 -- 
-2.45.1
-
+cygwingitgadget
