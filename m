@@ -1,123 +1,90 @@
-Return-Path: <SRS0=71sz=3N=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-	by sourceware.org (Postfix) with ESMTPS id F017A3857BA0
-	for <cygwin-patches@cygwin.com>; Tue,  2 Sep 2025 11:40:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F017A3857BA0
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F017A3857BA0
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d2c
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1756813242; cv=none;
-	b=HTHaMAP+XgfgepvvcGU9nFdbUnlAyGSVa2YA+shGkHy4O60Usn/tLgcP+H/AJPfpLFcONR+AB0x8GUh1e27ISXKwCJujzkvvPhVLB5C9vbVQdNxdumjrsuIzpBjp9BGULlT/sY7rQGsW5FLeWWjoDcGQRmIvJ2F5yMzA/iVw8wY=
+Return-Path: <SRS0=dZKr=3O=kmaps.co=evgeny@sourceware.org>
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+	by sourceware.org (Postfix) with ESMTPS id 5F0D53858D1E
+	for <cygwin-patches@cygwin.com>; Wed,  3 Sep 2025 17:05:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5F0D53858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5F0D53858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::12a
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1756919116; cv=none;
+	b=ESxFkUmVyjLmCepuWrFYqAkqF2ygGEvdIkSkJFvsQT/iva/9Z+cPpeE1Qwi9FP1y4EAj1vY4SRraq8jlP794KHIwFBDvZe/Iju+G6H/uGxkPUpbuvJnYnie5WUFJSvsbXNB3hy//OEsTTKdWCQoS+sNzHS3uVl9EfRhYiKDnGKA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1756813242; c=relaxed/simple;
-	bh=fDWdQVZk7hpBnxMYapeZ6bokidn1IMoxYdpUt9TbFlk=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=xKcr4SfQeRIlgdKPa/4A9coYY8fG/cu0+Y0HN5bWjHSSNYsmURjXyvQKhIQPjWr/UgIQ8HmVqdpgPH6Rvl7L66D2NuSshksOeN2XQFaBeOCKzjCLeXsc9uAfom1nMBsSY2/7/1e75664RM+n7XjRoVQoCAAjwbN4m+duc5agdY8=
+	t=1756919116; c=relaxed/simple;
+	bh=pFkKczSG/4CSUKumGWoRBtAA12oiBNGf5F+In955VgM=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=UNAS78MMxQwobvJuQJPzV3a95ME8+/NAzwNTYvnLVxUd0iMv/Fl8+6YbnISbW1E0RrWhVGg5bq5h4XZ5nFl3EDvr9yLLIQpsnPBHpy9HYBUoIAuAiBFomLw7Nha6lySPQPqPy/EO5Em055RtH8cPiO9OAZABNoFsasb4Z943d/U=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F017A3857BA0
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=QsJNVaSF
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-884328c9473so62049339f.0
-        for <cygwin-patches@cygwin.com>; Tue, 02 Sep 2025 04:40:41 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3ecbe06f849so324395ab.2
+        for <cygwin-patches@cygwin.com>; Wed, 03 Sep 2025 10:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756813241; x=1757418041; darn=cygwin.com;
-        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzx2V5xOwVVm7XurbsD3n13z2XhG2ZxED0MzPfxACEI=;
-        b=QsJNVaSFfh3fVnZRrCxJsGt+Hoa2meMoNXvjI6uRwemKVCr2DPGOY32QgqrsMjY33w
-         9mvl2A7n6JQdNCrsjbbRFgDP0gQethPd9lveOsEuKsY+M2cFf8NfMKAwHy6wu5OiG4AQ
-         myq5UfMdFZ14/P8Iwm4h2i/PiM9MDTLQY+YqaanJGxdOF4WoNEKS1x60TmGNFW7fs8jg
-         tQggAX0c1/5SWX6zOACfFWpmIuG2CO3/cCM9AWdaiBJpI+LWumKAL3v2IOeChNw9REPV
-         66k0A8yLzYdBtrPAstSW+1Y1z3eBOVnydNcyGMYUTGG53B7vjotVgmrpV897QLoDl/Vi
-         kWFg==
+        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1756919085; x=1757523885; darn=cygwin.com;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pFkKczSG/4CSUKumGWoRBtAA12oiBNGf5F+In955VgM=;
+        b=Fg2PUNW/z/S+WrmR5eUqhQE4sGfB/7dUIX3pxwtKFsPG+YVF/4rYGaxtg5xmCDeQdL
+         M2u4fhoNcjRYYFKrHgL3aIue3kq7+3MbXgMs1/lP1d8xrxyFWcMA67lGEPeZ7JoQF5VF
+         qecTmETbbDOvRB+84+eqganTKfcbJHHgJ+YxUTCnb5K6vDR7Upv0GT1f8Z9W2Sz4GDQv
+         B0j3XBSzBqn9GPBDOPUcQ/Eo6SGXsP7IAF3ZvC0S0YAX5aXsu5eV+wUE+Jy+UMp9hNTE
+         wBPBJhCABPCkXZI0e5OD1eLmoMTvWZaChHjOYe9afIONSNt25sGZXmgBRY6Rz6wDfjkx
+         M7cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756813241; x=1757418041;
-        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mzx2V5xOwVVm7XurbsD3n13z2XhG2ZxED0MzPfxACEI=;
-        b=owhIQvJnneOWHFUxKicR8tCPQKhcNpWFtoYPIGX3cb919mmB6gzqYYLZSPlIMxMTbC
-         De/o3VWMYnDws1MlXc/o9jn39EUYWaUTB5QZYMUVOrLZrFzKse7I4EhXMfwEhJJxChGT
-         RepJc4UT/NN7/90xnT1jPh7B89x1eWZIMm+X2xi2klfrIp04W6ageKu0V/lw0/tz7EF4
-         pI3dYpJPWWDuEHEDYg3p1CPamBZA7Vj3tolekK6kutiJvgwJ58lEP4JcehJOQCYTfgiV
-         HDEGH4BIdcr821VFv16SFsezAmfCHDcLp6XrM0UZfaeAPBxuIgsuW7pP8LJaoVIqAxfK
-         eH3w==
-X-Gm-Message-State: AOJu0YzRcAoeHDCbVcT7ZB5d9v344WTzzJTsDBwqhkSTwTCAbv2b0ZBA
-	9t+MLQLVg28EOQ6H0Z5ceNyrn95W5jjEydQOxaKIXpn/hiRM53bTjkn0EiJ/CA==
-X-Gm-Gg: ASbGncvjOzm6xJ/Idu7s32y59QsOscUdLJ4U9NYNelIkEdpjLdKTi1v/k7YOP6yNVpN
-	+85qWx3obARTCdQgZdLK0Hv6+B38PnBep4fw4MBhB0kwSuyIWVUQZQZ82Js5BSqEv0MXAA+J1mG
-	zbpm3PxmSMV9Ux6hYXpST7TV7Shk2Pu0/9W6uKPIOqC1UM7yX7ryrV2gRsxEfSAoifAYtVZVBk/
-	oWf15MlPhptcIPq4W2lxtrwkJot7ViIWKzPaFhCofUIF+LARuuPF60kCZHctKQemRFbuxVRckac
-	Ku64gu/Nr/7mat0EPPO+2QZzgXDJ3nhCZDdwFMEr3vv3lOV5bbLwAMURCUD27fW+A/HnyK9AKak
-	HVQaC1qopVy1JPsiWaaXCZSytaA==
-X-Google-Smtp-Source: AGHT+IGrvCuyAodjoHhTdYrvSAkwig9Vvy/a/PVOn9yQpvz15ME0HmpBxdEwAuH2ovEpQMRLgWePyQ==
-X-Received: by 2002:a05:6602:140d:b0:883:fc4a:ea55 with SMTP id ca18e2360f4ac-8871f421e06mr2223312239f.3.1756813240628;
-        Tue, 02 Sep 2025 04:40:40 -0700 (PDT)
-Received: from [127.0.0.1] ([135.232.201.88])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8871e3d714csm306464939f.18.2025.09.02.04.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 04:40:39 -0700 (PDT)
-Message-Id: <pull.1.cygwin.1756813237801.gitgitgadget@gmail.com>
-From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Tue, 02 Sep 2025 11:40:37 +0000
-Subject: [PATCH] ci: bump actions/checkout from v3 to v5
-Fcc: Sent
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20230601; t=1756919085; x=1757523885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :from:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pFkKczSG/4CSUKumGWoRBtAA12oiBNGf5F+In955VgM=;
+        b=aKKMPLHTOMpuKqlQ3Dqt2g+rvkTf9zuf4Oj8cz9Tr+387EC6aUA3lPBf/wYM6QqMb9
+         u8cGC0N6UIrBtS8TfJ1zgpWHQzf9jPxSH1SZjQmTWYcJYXW8B8qO/jvnjGiiTtG/WmTd
+         ItRUhICFXJrMn53joKvaypzBQC3k1oMPk99NGVqC7C/8FksstHmTIbRMEajXwWb0AwFQ
+         CGIOQ10m0Uj8d5SMd/BZYtmzVsNi/MXrWmFCJ1NqcLY2nYs+u1teHCTf07yI6p8FUd7O
+         dNOFUJAkeXcaJDVe+HkI3++zj6aF7uqAi6r/kHg8Pvze5duSEQUEkzXA4nPzP3iJuMZn
+         sMoA==
+X-Gm-Message-State: AOJu0Yx6A9W+0wJZYcaKXce7o8Mgk5UMKcRj9ur2ZbqIElJaUAsFhjbH
+	SZPw37jDVeMRa5QSahxoxQQ1SDPPvhxZY+wpbFsP4vpQ2BeQINivkCcTXo0d5zmO0iYBM9tnRiX
+	AK2vHKUqqDKwrVZebZyEquNgYGeJSOnrBXSOy9UUw03qqFhdPhcwxQoY=
+X-Gm-Gg: ASbGncvJMv6waj7iJxK1F2ERCKA97RIF25zFV3zZT+EZfLx+yZK0H4psIhiwmRvnyuG
+	1gQ9TQnJRSdHUmp0gvGszVUwj2/srQW42YWdrNZ8lSI59tYE97epjOGF219J7qrKv+ySxalPM+6
+	eiNZJma4an7WMJFC8Dp8Dx3CjA8a+0FYF3JXY13+8KYoMDVAql36zx2ZoQYF2myXz6FVVPwVgYx
+	QXo
+X-Google-Smtp-Source: AGHT+IGaNT/z3SSAYjVrGUb9SJfQGNqJT9bEomXg5k9nB0a5Sc2vhnDW8sk7xWcNuCgX9vJd6KefskzzPShwr87miRs=
 MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:3c06:b0:3f1:dd7:24a7 with SMTP id
+ e9e14a558f8ab-3f4026bd93cmr310216595ab.29.1756919085166; Wed, 03 Sep 2025
+ 10:04:45 -0700 (PDT)
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 3 Sep 2025 10:04:44 -0700
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 3 Sep 2025 10:04:44 -0700
+From: Evgeny Karpov <evgeny@kmaps.co>
+In-Reply-To: <MA0P287MB308276F1ACA00942D9BEAE6D9F22A%40MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Date: Wed, 3 Sep 2025 10:04:44 -0700
+X-Gm-Features: Ac12FXx_dQzM9TqOw5P0FSNqaUtcJfr-r1r4POQ_8RnmSn8kS-UBclbjEzL1eKs
+Message-ID: <CABd5JDAtDMmYZZ-GKnnkaRtem1wJN3P=m9c4CKw0RQE2agDn5A@mail.gmail.com>
+Subject: [PATCH] Cygwin: math: Add AArch64 support for sqrt()
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
-    Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: thirumalai.nagalingam@multicorewareinc.com, cygwin@jdrake.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+Tue Aug 26 2025
+Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com> wrote:
+> -sqrtl NOSIGFE
+> +# On AArch64, long double =3D=3D double, so aliasing sqrtl =E2=86=92 sqr=
+t
+> +[aarch64] sqrtl =3D sqrt NOSIGFE
+> +[!aarch64] sqrtl NOSIGFE
 
-There were two major version bumps:
+Support for overwrites can provide better flexibility for more advanced
+conditions when needed and improve readability.
 
-- v3 -> v4: new runs using Node.JS v20 instead of v16
-- v4 -> v5: now runs using Node.JS v24 instead of v20
+Changing to ...
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
----
-    ci: bump actions/checkout from v3 to v5
-    
-    I have carried the v3->v4 patch in Git for Windows for quite a while
-    already; The main reason for contributing this now, though, is to verify
-    that GitGitGadget [https://gitgitgadget.github.io/] can be used to
-    submit Cygwin patches, too, not only Git patches.
+sqrtl NOSIGFE
++# On AArch64, long double =3D=3D double, so aliasing sqrtl =E2=86=92 sqrt
++[aarch64] sqrtl =3D sqrt NOSIGFE
 
-Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-1%2Fdscho%2Fgithub-actions-updates-v1
-Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-1/dscho/github-actions-updates-v1
-Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/1
-
- .github/workflows/cygwin.yml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/.github/workflows/cygwin.yml b/.github/workflows/cygwin.yml
-index 877f54cde..40670cce8 100644
---- a/.github/workflows/cygwin.yml
-+++ b/.github/workflows/cygwin.yml
-@@ -24,7 +24,7 @@ jobs:
-       HAS_SSH_KEY: ${{ secrets.SSH_KEY != '' }}
- 
-     steps:
--    - uses: actions/checkout@v3
-+    - uses: actions/checkout@v5
- 
-     # install build tools
-     - name: Install build tools
-@@ -111,7 +111,7 @@ jobs:
-       run: |
-         icacls . /inheritance:r
-         icacls . /grant Administrators:F
--    - uses: actions/checkout@v3
-+    - uses: actions/checkout@v5
- 
-     # install cygwin and build tools
-     - name: Install Cygwin
-
-base-commit: 822b49e97af9c6551911c0ff5297d31b61150e03
--- 
-cygwingitgadget
+Regards,
+Evgeny
