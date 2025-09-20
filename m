@@ -1,68 +1,81 @@
 Return-Path: <SRS0=+GwH=37=m.gmane-mx.org=gocp-cygwin-patches@sourceware.org>
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-	by sourceware.org (Postfix) with ESMTPS id 98A843858C51
-	for <cygwin-patches@cygwin.com>; Sat, 20 Sep 2025 17:20:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 98A843858C51
+	by sourceware.org (Postfix) with ESMTPS id F26283858C51
+	for <cygwin-patches@cygwin.com>; Sat, 20 Sep 2025 17:25:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F26283858C51
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 98A843858C51
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F26283858C51
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=116.202.254.214
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1758388803; cv=none;
-	b=KfRY8QUYhD6qqYosrp8ZRzWOXuAfsk4PC6GZu1voDYSghTADa5xw9dSRowQxMeWhiCWQwWMqL/SHOtx/Nd3xUXSMcUelwWmMG441544389xWBbybjKrSNrDFL0Pw3OHTE1akbWNyvSJe2wMmb5mHQ9osl8aYZz5AvELSZMSrlds=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1758389103; cv=none;
+	b=Q0cDQpUDT//y9JaoPCYeKUFrmE0NJp1cniumcIgZdh0igCUH8JqTtLy1GoAOFqrkTm2jVN56H7qG3qil6UB4dQGMvsRoZpq0SvTLCG5r3XujTXdvA3y1vCmag70ZxSI/p6/Lkz9wvdlRYxLc8P+7c0vOmZruIQK5wbwPCyY8KRI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1758388803; c=relaxed/simple;
-	bh=ysDlUq485eQYzuValAG0Gj5olNtpqsjYBDiNkDzlhMg=;
-	h=To:From:Subject:Date:Message-ID:Mime-Version; b=lr7YzgYcLN9OrEXvq4Zev1wWwBX0doBhNQ38BJdMg1qWbomNapBlsH5ArYhDswiQWRpt7dlxycZh/EUkWCkxLiHkUiUSyJkPWNL8HjQAi8mU0cv2nn3iqAMoBbscocVJsRY6lFZfJ4aiMLScYOaiTDbiH6bkQKBGP5qPdzkdKLU=
+	t=1758389103; c=relaxed/simple;
+	bh=cMMuySG73TdoIDe4TPl/92StqrACdK97Hu/8JtSTJ2E=;
+	h=To:From:Subject:Date:Message-ID:Mime-Version; b=X4qbHstTQFTpFs43JQwl+jHY8KlR9+RKGbse3P+zIlUXE63ggRY8OOzWzxCeepGBoxlYTrcdFaUCSEr5UgsPf7OKfnHTmmlWZDtDvHewBgwXzyT0u74jwWDp5rS+o5Ky2J9+34wdAdfcxmZdYmqlpc2Ji/+JdCdapTwvwrQJTvg=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 98A843858C51
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F26283858C51
 Received: from list by ciao.gmane.io with local (Exim 4.92)
 	(envelope-from <gocp-cygwin-patches@m.gmane-mx.org>)
-	id 1v01Fi-0002C2-9g
-	for cygwin-patches@cygwin.com; Sat, 20 Sep 2025 19:20:02 +0200
+	id 1v01KY-0006ZN-1V
+	for cygwin-patches@cygwin.com; Sat, 20 Sep 2025 19:25:02 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: cygwin-patches@cygwin.com
 From: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: Re: [PATCH] fhandler/proc.cc(format_proc_cpuinfo): Add Linux 6.3
- cpuinfo
-Date: Fri, 12 May 2023 16:36:52 +0100
-Message-ID: <0a50e9ad-59c8-65e9-95f5-f53843fbf918@dronecode.org.uk>
-References: <68bbf3607bdf37fcd32613aa962abe50846d968a.1682994011.git.Brian.Inglis@Shaw.ca>
+Subject: Re: [PATCH] Cygwin: math: Add AArch64 support for sqrt()
+Date: Sat, 20 Sep 2025 17:19:49 +0100
+Message-ID: <040f4e8d-3fd8-4c61-b0bc-8a8d3683785f@dronecode.org.uk>
+References: <MA0P287MB308276F1ACA00942D9BEAE6D9F22A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+ <4335043f-7b4c-4147-65e6-de0199da413f@jdrake.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Content-Language: en-GB
-In-Reply-To: <68bbf3607bdf37fcd32613aa962abe50846d968a.1682994011.git.Brian.Inglis@Shaw.ca>
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,HEADER_FROM_DIFFERENT_DOMAINS,KAM_DMARC_STATUS,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Content-Language: en-US
+In-Reply-To: <4335043f-7b4c-4147-65e6-de0199da413f@jdrake.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HEADER_FROM_DIFFERENT_DOMAINS,KAM_DMARC_STATUS,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
-Message-ID: <20230512153652.giivpQTiixCl1SPbzV9CyX9dqjF2f0jHIH0g_gt-wFk@z>
+Message-ID: <20250920161949.85T7nfcRfwRjm0tV1XwIhFWn31PfYy3uQEqVRtJS2qY@z>
 
-On 08/05/2023 04:12, Brian Inglis wrote:
-> cpuid    0x00000007:0 ecx:7 shstk Shadow Stack support & Windows [20]20H1/[20]2004+
-> 		    => user_shstk User mode program Shadow Stack support
-> AMD SVM  0x8000000a:0 edx:25 vnmi virtual Non-Maskable Interrrupts
-> Sync AMD 0x80000008:0 ebx flags across two output locations
+On 13/08/2025 18:33, Jeremy Drake via Cygwin-patches wrote:
+> On Tue, 5 Aug 2025, Thirumalai Nagalingam wrote:
+> 
+>> Hi all,
+>>
+>> This patch adds support for the `fsqrt` instruction on AArch64 platforms
+>> in the `__FLT_ABI(sqrt)` implementation.
+> 
+> This looks OK as far as it goes, but I have a few thoughts.
+> 
+> From the comments, it appears this code originally came from mingw-w64.
+> Their current version of this code has aarch64 implementations.  The
+> difference with this one is they have a version for float as well as
+> double.  The versions here seem to only be used for long double (which on
+> aarch64 is the same as double).
+> 
+> Given that long double is the same as double on aarch64, might it make
+> sense to redirect/alias the long double names to the double
+> implementations in the def file (cygwin.din) on aarch64, rather than
+> providing two different implementations (one in newlib for double and one
+> in this cygwin/math directory for long double)?  It seems like that's
+> asking for subtle discrepancies between the implementations.  I'm not
+> seeing any obvious preprocesor-like operations in gendef (mingw-w64 uses
+> cpp to preprocess .def.in => .def files for arch-specific #ifdefs) so
+> maybe this would be more complicated.
 
-Thanks.  I applied this.
+Sorry about the long delay looking into this.
 
-Does this need applying to the 3.4 branch as well?
+So, I was about to apply Thiru's v2 patch, since that all seems 
+reasonable to me. But now I'm not so sure...
 
-> ---
->   winsup/cygwin/fhandler/proc.cc | 29 ++++++++++++++++++++++-------
+I think that a good goal is to keep this file aligned with the mingw-w64 
+version, if possible.
 
->   
-> +      /* cpuid 0x00000007 ecx & Windows [20]20H1/[20]2004+ */
-> +      if (maxf >= 0x00000007 && wincap.osname () >= "10.0"
-> +					 && wincap.build_number () >= 19041)
-> +        {
-> +	  cpuid (&unused, &unused, &features1, &unused, 0x00000007, 0);
-> +	  ftcprint (features1,  7, "user_shstk");	/* "user shadow stack" */
-> +	}
-> +
-
-This seems a little odd and maybe worthy of a comment, as surely the CPU 
-has the capability irrespective of the OS?
+If I'm understanding correctly, if we do that, this problem goes away, 
+but at the cost that fsqrtd and fsqrtl are potentially different 
+(although surely since it all boils down to a single instruction, that's 
+never going to happen :) )?
 
 
