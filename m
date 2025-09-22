@@ -1,87 +1,94 @@
-Return-Path: <SRS0=1s5g=4A=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo002.btinternet.com (btprdrgo002.btinternet.com [65.20.50.146])
-	by sourceware.org (Postfix) with ESMTP id E75763858D38
-	for <cygwin-patches@cygwin.com>; Sun, 21 Sep 2025 18:44:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E75763858D38
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E75763858D38
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.146
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1758480275; cv=none;
-	b=KsRpm8wlj6mjSNm70fPv3kCEp6Gi42tyOFJ40xAlwj+r8WL2CsB4RyGdagl5RQUTEie9GyixgZ3HRZjFcbXqzRFrrI7AH6inZkHCoxLeuuJTrYAg38c8IvxxszxNEkQI+plncFRT7USxnLb7hHnBgvVpEU+skJsNOQqKpkTZpKk=
+Return-Path: <SRS0=VCUW=4B=kmaps.co=evgeny@sourceware.org>
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+	by sourceware.org (Postfix) with ESMTPS id 985143858D1E
+	for <cygwin-patches@cygwin.com>; Mon, 22 Sep 2025 17:08:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 985143858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 985143858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d31
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1758560921; cv=none;
+	b=DJT9czAsqHu2LDg5nsK9JVF6A//k5RK3iC7oxxbs+D76tNdGK7l4DCXYOoLbit7RAmUlNKTxjX0YY/NusciL4DENVrzm/gYRwtsrXTZ3HCu6YYrC9H3PFN65tVqpbixNLc6S0kUH0O7kdafN4Qku/4n0yi1qqgOYC/hiLRPxDE8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1758480275; c=relaxed/simple;
-	bh=CkuTxfB6+cDBkEWSZCFXqvGvz1Xkm9YIUljy9RK/Asw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=LsOyXRw6fvkomHlPJKxKtvWnhljkLbk9J81Z+rbW9sjAnetfkXp/UrH6rfcMAOnCD/Cdg/p6fHaruSZZ6imMecB9FKtZYJTIPkp5izn0ynFNd9ydJCFFolavERtxJcQpvPYJdoKIpFNFTAgJhnJeMZPShT2IuJrGwaKYaHU6J98=
+	t=1758560921; c=relaxed/simple;
+	bh=5lOPUL5yk1nmh0pg00jrb/XmCUUyDI7VNCOSFIzejz4=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=ccjv0/3V6XivXqWUL4dsCdvcsYJQMDZkc1ZLnPgpjU3rbRu/C0IEn0XJauzsEuq30b0D4qeY9zg353m9Sbrad2jdHTwTfGi1kKD4yk7pHpFNhgIn0gaQspWHl8AeauovmNDLgR92II7aPTtlLlJDt2Vuft2IepZf3xETH8vO8hk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E75763858D38
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 68CA1AB80076BF07
-X-Originating-IP: [86.144.41.51]
-X-OWM-Source-IP: 86.144.41.51
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdehheejvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgfeghfdvvdeijeettdfgleetffetfedtuefgfeevhedthefgffelfeethfdvleffnecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepkeeirddugeegrdeguddrhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekiedrudeggedrgedurdehuddpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekiedqudeggedqgeduqdehuddrrhgrnhhgvgekiedqudeggedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtvddpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhn
-	rdgtohhmpdhrtghpthhtoheptgihghifihhnsehjughrrghkvgdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (86.144.41.51) by btprdrgo002.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 68CA1AB80076BF07; Sun, 21 Sep 2025 19:44:32 +0100
-Message-ID: <38ff84d9-6924-4a7d-bdee-0266810a7d5d@dronecode.org.uk>
-Date: Sun, 21 Sep 2025 19:44:31 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 985143858D1E
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kmaps-co.20230601.gappssmtp.com header.i=@kmaps-co.20230601.gappssmtp.com header.a=rsa-sha256 header.s=20230601 header.b=xBdl4Iri
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-88c347db574so147683439f.0
+        for <cygwin-patches@cygwin.com>; Mon, 22 Sep 2025 10:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1758560919; x=1759165719; darn=cygwin.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sQXdAxbjPRFRwYvKggpL4hvGQLsaZgb51DPfT8Loti8=;
+        b=xBdl4IriwBF1l4mKesUJT/niMOVpKf+FbaYk2dzgiUdl6ururdfIGjEJTUUuakFtcC
+         2OGvV0aH04MzC+gR9rh6CRfvBBLRsnLZR68oabtj+Z2vTm9OTpPhCDYpaTh7m8Owb8Ht
+         JXjDKVsoKkNUenOaVhb+SjZewoal7znPyZWxUi+/eJnzPV/xTCHT67x+NrAaeZ8QkqWs
+         q7pjRN00l96Gn1qAp0RSI/hgfy6oPW8m776lLIEjpk+GuyQ/L8Ey3oWTTsYjSgThCYn3
+         ZjF/d/vSlEKGH480iQ3KjlM+FRdaQpjfhrB2toqILiF5bZqCsI45o2A22Fin6EC/d7bY
+         v1eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758560919; x=1759165719;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sQXdAxbjPRFRwYvKggpL4hvGQLsaZgb51DPfT8Loti8=;
+        b=mEKkJ2AU/oulkvRNnAL1S7i4Jh7TKpQLU8DeQ52fOq/OzuoQcr8JZrUXDpXBXoJAqN
+         GOr1lNrR2a12hUj0QuVKxddhxMLzX5Q7t485E5tpyla1dYJMAT0tOZ14Z/1N+M9E8Q0T
+         tF+5V7bw2BzwBqJiwJIuV9ugHcdJtOH4EXN6JGnwM7TntHVLi1f+QOiFKGkP6fQJE9dW
+         wv8D6yWn8jZvQSFQpO+PF/hOMVZbCEeyHcJzAS7IJWICC3U4PIVgTa2E7BtGy4u4+saS
+         6Mk+15MKnCD+alUj8apQ+gF21xe4llp+A6dbYN51p5TqU8KWvmXHlG1u9n/AF50Gy+07
+         hJUQ==
+X-Gm-Message-State: AOJu0Yxdb10qtshWBmoxOBy7wvA9sIsYHlmUPsObvo16M3p/fqu1Jeuh
+	FYHfiJuHlmd92c2dGqoKJSihNWy3buDqSHHaymXjDBp8n3twcoS5UsLcvQCTTkVM4IibI4XzX/b
+	+z+S3pmUkS0ssPUpp5K5LUi+OZxWYm5bhQPcVq0wRvwaImTW366qM5HA=
+X-Gm-Gg: ASbGncson1Ir+WTrjZImZZA//rwouUqqSp7DJX3TOFeh/+asnORjNYe3anOuwoocNJJ
+	mWBIkycVcUhSL7wGCE7EoFfc9CkR5xKw7QNshbTJHEzmULevUNrasJZ95V3aCxABScPartdVzEO
+	f+jdN3/4XVHgWCx1tTbOrWIvG9Dj2wpXqZQoj/ulHNqTuG5JCU3TOVY91nSzJVmS6NDMAyoGmc3
+	dXWnQ5SNsd/ikAWS/o=
+X-Google-Smtp-Source: AGHT+IGewU5/YcFhn9ldWRCxWEg08VEVvTI0RzZ1LNF2mCuxlXflSlsG4HeEWTiZ3rPb2lvMmBefiFrCkB7cONcGDC0=
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: lock cygheap during fork
-To: Jeremy Drake <cygwin@jdrake.com>
-References: <e3dfa011-3ddd-6f69-439e-87746ae3a2b2@jdrake.com>
- <d4551d29-1128-4ff1-b8e8-8238f192de3f@dronecode.org.uk>
- <397323a1-e83c-ef1f-3dd3-a019adf2ab69@jdrake.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <397323a1-e83c-ef1f-3dd3-a019adf2ab69@jdrake.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:106a:b0:424:824a:79e2 with SMTP id
+ e9e14a558f8ab-424824a7b70mr141314765ab.32.1758560919420; Mon, 22 Sep 2025
+ 10:08:39 -0700 (PDT)
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 22 Sep 2025 12:08:39 -0500
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 22 Sep 2025 12:08:39 -0500
+From: Evgeny Karpov <evgeny@kmaps.co>
+Date: Mon, 22 Sep 2025 12:08:39 -0500
+X-Gm-Features: AS18NWCwYzk3g1u6f5sStGlhnZT2i0D85aagto5lNaJIw3uGE6AsQH5kS1G8Xlg
+Message-ID: <CABd5JDA8ftx5958KRzqGJH8yhO7bPU23RB5a10XqdJX4VWBgpg@mail.gmail.com>
+Subject: [PATCH] Check if gawk is available in gentls_offsets script
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 20/09/2025 20:52, Jeremy Drake via Cygwin-patches wrote:
-> On Sat, 20 Sep 2025, Jon Turney wrote:
-> 
->> On 19/09/2025 22:43, Jeremy Drake via Cygwin-patches wrote:
->>> another thread may simultaneously be doing a cmalloc/cfree while the
->>> cygheap is being copied to the child.
->>
->> Makes sense. Please apply.
-> 
-> Done (and cygwin-3_6-branch)
-> 
->>
->>> Addresses: https://cygwin.com/pipermail/cygwin/2025-September/258801.html
->>> Signed-off-by: Jeremy Drake <cygwin@jdrake.com>
->>> ---
->>> I'm seeing a timeout failure of pthread/cancel2.exe test in GitHub CI.
->>> This seems to be happening even without this change, so perhaps it is more
->>> to do with the update to windows-2025 runners?  In any event, this
->>> prevents the 'stress' jobs from running against this change.
->>
->> Thank you *so much* for keeping an eye on that!
-> 
-> I did a test run downgrading the windows-build job to windows-2022, and
-> all the tests succeed there.  I still have no idea why the pthread/cancel2
-> test times out on windows-2025 though.
+The patch extends the gentls_offsets script with a validation that
+gawk is available. Otherwise, the script does not generate
+tlsoffsets and does not fail. The issue appears later during
+sigfe.s compilation and it takes longer to understand the RC(root cause).
 
-Hmm... odd.
 
-Please feel free to push that change to the yml, if you think that's 
-appropriate.
+diff --git a/winsup/cygwin/scripts/gentls_offsets
+b/winsup/cygwin/scripts/gentls_offsets
+index c375a6106..6a362751d 100755
+--- a/winsup/cygwin/scripts/gentls_offsets
++++ b/winsup/cygwin/scripts/gentls_offsets
+@@ -6,6 +6,12 @@ tmp_file=/tmp/${output_file}.$$
 
-I did have some struggles with the cancel tests when I was getting the 
-testsuite working again, because there's a bit of funkiness in cygwin 
-where async cancellation sometimes silently turns into a deferred 
-cancellation because we can't stop a thread while it's inside the NT 
-kernel... but I can't see how that could cause a test like this to 
-timeout rather than simply fail?
+ trap "rm -f ${tmp_file}" 0 1 2 15
 
++# Check if gawk is available
++if ! command -v gawk &> /dev/null; then
++    echo "Error: gawk has not been found. Please install gawk." >&2
++    exit 1
++fi
++
+ # Preprocess cygtls.h and filter out only the member lines from
+ # class _cygtls to generate an input file for the cross compiler
+ # to generate the member offsets for tlsoffsets-$(target_cpu).h.
