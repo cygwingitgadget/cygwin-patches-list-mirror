@@ -1,131 +1,85 @@
-Return-Path: <SRS0=FWTa=4P=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-	by sourceware.org (Postfix) with ESMTPS id 9945E3858D29
-	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 21:15:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9945E3858D29
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9945E3858D29
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d2b
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1759785323; cv=none;
-	b=gGJyB3OEX0LIbWBIBtUV0o+RUSzOQ961HV8BdJFaNOi6WEBe6gAVpg4jqQuBGpxUdOscddNaizLCmO+1OWgT4j5KovmaQ/mtU/U8BSjBuYyjUNdV2AAtbVAgsKy5lKHpo05vv9hZZvNTgNX8hnbE4vewz1EQTqsh5vrrWjiuMPc=
+Return-Path: <SRS0=hQTB=4P=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+	by sourceware.org (Postfix) with ESMTPS id E8C4B3858CD1
+	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 21:27:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E8C4B3858CD1
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E8C4B3858CD1
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.12
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1759786028; cv=none;
+	b=Sj+RmHm9oboPR0JNg2+lCFWxPAz9vBZUtcGjUVScmtpMcKMm1S3llOjodEq+dA333XDUxLL4IHC98V8pu+TUtzQk7ys2GaJ1ovaWA2eL5dunSWRTC5sp6u94z/2nnqaYbxIqAtZdoqrFqLZUwC3O7PHzrHlGtK2qMgEPQr+4eV8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1759785323; c=relaxed/simple;
-	bh=7qfRSdKIIP7c5SZSKuxH4fyeOTMkQYKtLSFiQwOCAik=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=aUgR1z19JN8U2A4BiNpbubywl59eTYKkAl4gjXVXLSft3NQ4rrb36irsRMOVNzGM1WzbsJIcMnMLX812VGFCddPWMgHr61pnOc4S2Eboog8fxPueopeIFDXIreGmGiW1bL95jf5irGEqo5uR62jA9Ud+vxVu/L6YDODRj1n9kMU=
+	t=1759786028; c=relaxed/simple;
+	bh=K4A+GMzB7mdYqmP/YVfSMXCfHnDz5o86d9vCV1oY3Jc=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=c1MbSdchcwqKYL4XCqPWG+ARSgGkhIpaYVXRcYu4xr3ARnIrhTy5AKtYL9vxe7QnCjzAfNucytvcqylYsCFFSmsnxL8UYkbHw172WeTS6ZDance9W/zUYTVlS/7kJt+TbUcIqzXYat9o51abd2ZSo+od48X7KpWS/NbIOSK1cNU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9945E3858D29
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E8C4B3858CD1
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=AyHXSt/x
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-88703c873d5so190494039f.3
-        for <cygwin-patches@cygwin.com>; Mon, 06 Oct 2025 14:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759785322; x=1760390122; darn=cygwin.com;
-        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGR3OFC/Bb+nWqiAOW03kNQyuf363t3EtjeQtfIllNs=;
-        b=AyHXSt/xdx5JkWxZ5mGuzatsKRIq2b2eKNI287X63ty1JtsY6gCbuVKMXxN1Po6+0Y
-         RbZbGo2KH15zs/Nlp2qzIcqUOtufUQ4IxfVaidlivvNjg5yXOh00tryeyLKmsJkGIl8D
-         qqSYXM9msiqZNjaJdneigjFUfnnzjdGx9JJhIppFubU5aHXKaRlBFnlwUNX7GxR8fhCF
-         VClJ9p40PV8d9cXkhJb86h9a8AJ6Cj2AHSQRympU6HCnD1eSJ3UgDKzxueL24TClfWFv
-         UINCL3xUxSPpWkh9Viqkdy+T7ZEjlQ1HoG5TxkjX16T477LMSGtauRGn5ulpA8NTj05q
-         PoDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759785322; x=1760390122;
-        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sGR3OFC/Bb+nWqiAOW03kNQyuf363t3EtjeQtfIllNs=;
-        b=TKS1dSi+C8LYNRgqt1OXtlccNGcBhup3HIPKPtK5SWd0qBr521pp2syODNAht3mdlg
-         B2z/MYm/qMji0IR9dfpee7qNPnvP7gv9FRjExYVM0GTQw4v36FU44rVWLO/61cTEL/P6
-         75cKHMHF4d9P+sifat3m1BlzAUTALBNY974lQlq5CGTCh31S++l9lS/cI8cxg2OkX0FZ
-         4R3tf0dYDS9TQGE2yiWJ4Hk+9WByk2bdDaIchIWfLHeX4eYbPWdw+nLXWMWG2ZbQYszr
-         QbxU9axwhBPLAs15HIGERVRcVNDRf+usvg7Dchrujxq5D8rQvkGdLtTU+bYYkjjv4nCI
-         hHPQ==
-X-Gm-Message-State: AOJu0Yzry/ejJrCJE7A/sXTryCZr/Wv+FyfqCssO6ecPK5DCQ+BXlpTp
-	Ak9LANZoLIpyFTUaAGlgqVZRiAvY+V8t+Tjg+kbCCUDziObjHDD5OuZ4JbYid6MC
-X-Gm-Gg: ASbGncure3MKPmt4SZR66DyYlblBDRUwpx3RuPWBhz9bX7VPESyh/qf5XHYrGGC2gj8
-	mJjb5JWdG5e7ynlTlxcTI96sdpB9lHKjWJj/ghgcbSYo80s01VL3oc4Z7FaP1kPhgINdFn0HcSE
-	gOCxqPBkrURCp/XeB1cFJ3sGkrrpJUxujUdNUnQDZklNWwWCZfftYJ+0XmW6ppF7BoTgqOl/lkD
-	msBLQnhHAW2ZIXuHdURl3lhggiMGnu/6LEKIY7Y2Gzj2g0RqkUdopoAHE8sc51TRs31Em8gsClg
-	26PladxSkd4iRPDJW1udM3LKloTLzIbDj6uzGl9dpfpavQBryVeZ5ArTReKnLwSnKNEhVcE838+
-	pWD5dPa5r5BOceL6Oa6NL+OcnlLwpABE/tOI7hM7UpIgeCreisx73PViHdGiT
-X-Google-Smtp-Source: AGHT+IFLto9rg3bU6aFDi1b+HF4HWmX6oawIS6jztBtNE6p593plpGCdCyStXuMctLrnkuFReMcDIQ==
-X-Received: by 2002:a05:6602:2c10:b0:935:4720:6452 with SMTP id ca18e2360f4ac-93b9697bab3mr1870510839f.8.1759785322248;
-        Mon, 06 Oct 2025 14:15:22 -0700 (PDT)
-Received: from [127.0.0.1] ([64.236.177.114])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-93a88961d74sm522843839f.22.2025.10.06.14.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Oct 2025 14:15:21 -0700 (PDT)
-Message-Id: <pull.3.cygwin.1759785320084.gitgitgadget@gmail.com>
-From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Mon, 06 Oct 2025 21:15:20 +0000
-Subject: [PATCH] Cygwin: symlink_native: allow linking to `.` again
-Fcc: Sent
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=JIVvuU0X
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 818811A06B8
+	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 21:27:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf09.hostedemail.com (Postfix) with ESMTPA id 06D3620024
+	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 21:27:05 +0000 (UTC)
+Message-ID: <760f8b52-6d4f-48dc-85e1-85c50fec1a96@SystematicSW.ab.ca>
+Date: Mon, 6 Oct 2025 15:27:05 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PING][PATCH] Check if gawk is available in gentls_offsets script
+Content-Language: en-CA
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
-    Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+References: <CABd5JDD5zgqLG7yD6_gomaKKNABWEnh8pRjobPd43X4b=cz6bw@mail.gmail.com>
+Organization: Systematic Software
+In-Reply-To: <CABd5JDD5zgqLG7yD6_gomaKKNABWEnh8pRjobPd43X4b=cz6bw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 06D3620024
+X-Stat-Signature: yra3jbun7hoatg9wiegryqgtn4kujf4j
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout06
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1+TA+xAAR7jJ1WLbQ0EHRPJcmnCDQAc0QE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=QCu4/XpvlVM0bCnoajIZbe8ckpQuE8Ru8+vUQ00VU18=; b=JIVvuU0XDp1ptRRKpvAey3qy7fpbyIh+qvGtu/qgJvYDUlEPGjNECMNR3Uapkg+zhOX6Q29MGl3g9Tce4Nwp2SdGcz27PWxd6ioFUs93ba4QAg9oQJcTJanELF/KJyc2Yd3GRX8fQ0It54nfKFuRdIM4ji1rSZKnh+k0mJ4LmmCnqYdMk1nbmHNLnqGoVZ1RFLvhSHU0byX4tPz+nrrOZycxlu2Y3pgKuegeuR2OHzQfLdRiyXi8la2N5hmfZG8SSGolE87xv04j/7Ut/Ut7emYXoItYRnuGYqt0HKTsloXjyNVttAFqffhIm+TWgxsUS0q5cvAxA18mQhON3iYRSA==
+X-HE-Tag: 1759786025-853498
+X-HE-Meta: U2FsdGVkX1+9JS6Q1I7S5bgmE9NXxvWxYldywrioLmaZ5bVNYbbcEPAYp+1YXZV98f4ylgO00k4Byyec5eUB18iuRhRKzMbKSyjKNjC0rTBVmls6BJaQZeZ754srQBOI1PzMoNrBt7LeWaZtznYnpI/nNk79bqdAMUQ4WfB/FersPBqY66scJfthVoUt0v/XaHy+SZVhjjopAqgseBeI8OJG00tDMoQYidTX0RjKOkOQ1qIUD2hMu7xc55u9Ub+xXaLLJwwjT1WV1lBeX07is/ACyLPayFa3J7pRtL2+30Ca3wn9yMcDuCqh5EIhFguuK+/Klg2cId6ItS8IJBWEBgblCAQ9ckBUmbeCPR/0UU6H1YBh8WMTdv2u7bIY1Ujm266RUCCW8N28bAZs2ne0aPSHAXEcWiZWwpaMrcQvx7ZXhvGDG14rIQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+On 2025-10-06 11:50, Evgeny Karpov wrote:
+> A gentle reminder to review the patch.
+> https://cygwin.com/pipermail/cygwin-patches/2025q3/014306.html
+As gawk is a Cygwin Base category package, it should be one of the first 
+packages installed on all Cygwin systems, so the test should not be necessary, 
+unless /usr/bin is not in the PATH: a message to that effect might be more 
+useful; for example:
 
-In 827743ab76 (Cygwin: symlink_native: allow linking to `..`,
-2025-06-20), I fixed linking to `..` (which had inadvertently
-targeted an incorrect location prior to that fix), but inadvertently
-broke linking to `.` (which would now try to pass the empty string as
-`lpTargetFileName` to `CreateSymbolicLinkW()`, failing with an
-`ERROR_INVALID_REPARSE_DATA` which would be surfaced as "Permission
-denied").
+if ! command -v gawk &> /dev/null; then
+   echo "${0##*/}: gawk: command not found in PATH=$PATH." >&2
+   exit 127	# command not found
+fi
 
-Let's fix this by special-casing an empty string as path as referring to
-the current directory.
+It might also be useful to:
+- check for $CXXCOMPILE available;
+- near the bottom, change `awk` to `gawk` for consistency as it has been checked;
+- if context is not aligned, return the original value if context % 16 -ne 0;
+- and maybe leave the output file around as evidence of an issue;
+for example:
 
-Note: It is unclear to me why the `winsymlinks:nativestrict` code path
-even tries to simplify the symbolic link's target path (e.g. turn an
-absolute path into a relative one). As long as it refers to a regular
-Win32 file or directory, I would think that even something like
-`././c` should have only the slashes converted, not the path
-simplified (i.e. `.\.\c` instead of `c`). But that's a larger
-discussion, and I would like to have the bug worked around swiftly.
+MOD=$(gawk '/_cygtls.context_p/{ print $3 % 16 ? $3 : 0; }' "${output_file}")
+if [ $MOD -ne 0 ]
+then
+   echo "${0##*/}: $output_file: _cygtls.context: $MOD: not 16 byte aligned"
+# /bin/rm -f "${output_file}"	# should we remove the evidence?
+   exit 1
+fi
 
-Fixes: 827743ab76 (Cygwin: symlink_native: allow linking to `..`, 2025-06-20)
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
----
-    Cygwin: symlink_native: allow linking to . again
-    
-    This fixes a regression I introduced in 827743ab76 (Cygwin:
-    symlink_native: allow linking to .., 2025-06-20). It is not necessarily
-    a complete fix per se, but more a band-aid for the time being.
-
-Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-3%2Fdscho%2Ffix-symlink-dot-cygwin-v1
-Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-3/dscho/fix-symlink-dot-cygwin-v1
-Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/3
-
- winsup/cygwin/path.cc | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index ed0839893..8aff97acb 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -1895,7 +1895,10 @@ symlink_native (const char *oldpath, path_conv &win32_newpath)
- 	    e_old = wcpcpy (e_old, L"..\\"), num--;
- 	  if (num > 0)
- 	    e_old = wcpcpy (e_old, L"..");
--	  wcpcpy (e_old, c_old);
-+	  if (e_old == final_oldpath->Buffer && c_old[0] == L'\0')
-+	    wcpcpy (e_old, L".");
-+	  else
-+	    wcpcpy (e_old, c_old);
- 	}
-     }
-   /* If the symlink target doesn't exist, don't create native symlink.
-
-base-commit: de2dccc8ecd00e6244ac10f28d7fd50123e8fc4b
 -- 
-cygwingitgadget
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
+
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
