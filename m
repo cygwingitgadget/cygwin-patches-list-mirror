@@ -1,76 +1,131 @@
-Return-Path: <SRS0=tPou=4P=kmaps.co=evgeny@sourceware.org>
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-	by sourceware.org (Postfix) with ESMTPS id B6A7D3858D1E
-	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 17:50:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B6A7D3858D1E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B6A7D3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::12d
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1759773033; cv=none;
-	b=wv/EfCRs76D07NjFShHRf/GgaR2QZl05EAX2wAN/rJZLpkpqxd7TXjf9ZKGRIuGEGm/LLydyKGEtKtOy4glqhxhyoe4ZpK1QxmnAxynJFoNAT41osropuI1kyLHmAGh0nsI6DhLLjztJ5xzz162ID5lLpkrtrjysgijadYufLIU=
+Return-Path: <SRS0=FWTa=4P=gmail.com=gitgitgadget@sourceware.org>
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+	by sourceware.org (Postfix) with ESMTPS id 9945E3858D29
+	for <cygwin-patches@cygwin.com>; Mon,  6 Oct 2025 21:15:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9945E3858D29
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9945E3858D29
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d2b
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1759785323; cv=none;
+	b=gGJyB3OEX0LIbWBIBtUV0o+RUSzOQ961HV8BdJFaNOi6WEBe6gAVpg4jqQuBGpxUdOscddNaizLCmO+1OWgT4j5KovmaQ/mtU/U8BSjBuYyjUNdV2AAtbVAgsKy5lKHpo05vv9hZZvNTgNX8hnbE4vewz1EQTqsh5vrrWjiuMPc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1759773033; c=relaxed/simple;
-	bh=ExkjfhAkhRit3vzFd+8s7lwPtp+O/xnRtowFVJPgpTI=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=aHmLj3CYLuB7egAoL+M5cCP7EWw4V2D3dVB6W50HBoN7CgKsmDjtSQClV2EGeTun1KJL4jmJHYY3R0SeW1QGANoWWM1bjqBiHIzHN6R81/P2lpS3mNDlLRa7Acl3TJvt/Xxymt0CPerh1Na+rpfV1Y88edYLZgfvXOaWeJe77fg=
+	t=1759785323; c=relaxed/simple;
+	bh=7qfRSdKIIP7c5SZSKuxH4fyeOTMkQYKtLSFiQwOCAik=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=aUgR1z19JN8U2A4BiNpbubywl59eTYKkAl4gjXVXLSft3NQ4rrb36irsRMOVNzGM1WzbsJIcMnMLX812VGFCddPWMgHr61pnOc4S2Eboog8fxPueopeIFDXIreGmGiW1bL95jf5irGEqo5uR62jA9Ud+vxVu/L6YDODRj1n9kMU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B6A7D3858D1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9945E3858D29
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kmaps-co.20230601.gappssmtp.com header.i=@kmaps-co.20230601.gappssmtp.com header.a=rsa-sha256 header.s=20230601 header.b=O0dtET30
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-42f5f2d238fso12846425ab.0
-        for <cygwin-patches@cygwin.com>; Mon, 06 Oct 2025 10:50:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=AyHXSt/x
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-88703c873d5so190494039f.3
+        for <cygwin-patches@cygwin.com>; Mon, 06 Oct 2025 14:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1759773032; x=1760377832; darn=cygwin.com;
-        h=to:subject:message-id:date:in-reply-to:from:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ExkjfhAkhRit3vzFd+8s7lwPtp+O/xnRtowFVJPgpTI=;
-        b=O0dtET30zOh0ou/jF016DQnazUDo3fuR/+sBcWsSD2xOp0Q6Zm5qL4I6d7AaHptK5/
-         gOWJlLlw6DHlHRPvJhPAuIhyQL/Kewhml9XjcGLhu91vaYcgWgDDw14c2sG481V2bksz
-         4+6L6ruBScUloebMlYrRw9pnGMB9DWlwwiWTR8Jy/zTjUv05uGLyVLwLWOdsFCktS/Qs
-         48QFUyFrfRmucRKKzeMRPwRYBMBVzHatUaQykOe6ayqIHWyxMJ+kQ6R6Ay1t8zjETcyh
-         HgI1NhvAOoRzxVls0Nrm2Iiug+xAws/y/ErUKlOrQK7u0IT82sZ3XpAshEHwBgxVPFoB
-         c4Ww==
+        d=gmail.com; s=20230601; t=1759785322; x=1760390122; darn=cygwin.com;
+        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=sGR3OFC/Bb+nWqiAOW03kNQyuf363t3EtjeQtfIllNs=;
+        b=AyHXSt/xdx5JkWxZ5mGuzatsKRIq2b2eKNI287X63ty1JtsY6gCbuVKMXxN1Po6+0Y
+         RbZbGo2KH15zs/Nlp2qzIcqUOtufUQ4IxfVaidlivvNjg5yXOh00tryeyLKmsJkGIl8D
+         qqSYXM9msiqZNjaJdneigjFUfnnzjdGx9JJhIppFubU5aHXKaRlBFnlwUNX7GxR8fhCF
+         VClJ9p40PV8d9cXkhJb86h9a8AJ6Cj2AHSQRympU6HCnD1eSJ3UgDKzxueL24TClfWFv
+         UINCL3xUxSPpWkh9Viqkdy+T7ZEjlQ1HoG5TxkjX16T477LMSGtauRGn5ulpA8NTj05q
+         PoDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759773032; x=1760377832;
-        h=to:subject:message-id:date:in-reply-to:from:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ExkjfhAkhRit3vzFd+8s7lwPtp+O/xnRtowFVJPgpTI=;
-        b=Vtuxhq/eacpv/Q/C7Xr3uOyrBd4kCmMRzNO7Cq9Xg7rCs82ZRj1kVjTRgVssjh/wje
-         QlkGpfO+JMNxpmo5/CXUrONvAarFDnGp6dV8XkXQipmek6FQ+uvZilvOVs9NAzXrrPTb
-         1RSYd76+Lhs3tH/lCK+Y0VWs528WCkRAlDyOqzpGKqUZNFGG0PeanU4j/7It9sVwtkJx
-         9ruo+1g+E2HM+ViW2LzKLKf3O8uNHlvrDos8KmSyYSJwPtM6sb3rbDqJOp4t5akK+sG1
-         6FcjKFMWvMR8CJV0bXElhytIo2NtvkwGdIC1Xp8kU1PmN7ZhnLHb5mK5Zv/dJ6b+aH5I
-         ooRQ==
-X-Gm-Message-State: AOJu0YxRmm1pOYm/jtp8z45CX6tlOyHS9VY4m4y8GlrFD8Xs28Qj7ZPC
-	T5xedEQE4w5smV6+5I48C3OdwzwTUvrZ6MU4gV4F7kHVetE2JToKLmlNre64vGGP7XFaAPXMsy0
-	Wfx501F4LdNElEkrIC805tdDEvFq5WG/y9dqKMdCQGiPsvHfQBKoheS4=
-X-Gm-Gg: ASbGncuZ6xWDcohy+XFisxdOJL+xZwcCicJu7kzIGZzFWUU9VusjKTsTv/9hL4+rC1j
-	vP39ArZVTw6zYNFni4/daH3X5Fyx+NE/1Fx6dRlpkxGAj8isNn9HTkD/HX3fEW4L3XN8v9oykuf
-	BogA8MbpOkCYckoN+tmeMDYpt9EMEC4MKkkAMQCiyWbs0/QdoxjP6MCTyqvErb5dCy+9YiAm7Tu
-	ihG5/NXhNq5ALY0ijUqc5DTl091R6dbdEv07C4o
-X-Google-Smtp-Source: AGHT+IFSDJM5PPtFLkxTp81Vn8OUox5YU2GJxrHBdZJxkm+63uv5sxyQEQ0X2WedcPEBMu+66mI7Vw3jLiEcbkYiGzI=
+        d=1e100.net; s=20230601; t=1759785322; x=1760390122;
+        h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sGR3OFC/Bb+nWqiAOW03kNQyuf363t3EtjeQtfIllNs=;
+        b=TKS1dSi+C8LYNRgqt1OXtlccNGcBhup3HIPKPtK5SWd0qBr521pp2syODNAht3mdlg
+         B2z/MYm/qMji0IR9dfpee7qNPnvP7gv9FRjExYVM0GTQw4v36FU44rVWLO/61cTEL/P6
+         75cKHMHF4d9P+sifat3m1BlzAUTALBNY974lQlq5CGTCh31S++l9lS/cI8cxg2OkX0FZ
+         4R3tf0dYDS9TQGE2yiWJ4Hk+9WByk2bdDaIchIWfLHeX4eYbPWdw+nLXWMWG2ZbQYszr
+         QbxU9axwhBPLAs15HIGERVRcVNDRf+usvg7Dchrujxq5D8rQvkGdLtTU+bYYkjjv4nCI
+         hHPQ==
+X-Gm-Message-State: AOJu0Yzry/ejJrCJE7A/sXTryCZr/Wv+FyfqCssO6ecPK5DCQ+BXlpTp
+	Ak9LANZoLIpyFTUaAGlgqVZRiAvY+V8t+Tjg+kbCCUDziObjHDD5OuZ4JbYid6MC
+X-Gm-Gg: ASbGncure3MKPmt4SZR66DyYlblBDRUwpx3RuPWBhz9bX7VPESyh/qf5XHYrGGC2gj8
+	mJjb5JWdG5e7ynlTlxcTI96sdpB9lHKjWJj/ghgcbSYo80s01VL3oc4Z7FaP1kPhgINdFn0HcSE
+	gOCxqPBkrURCp/XeB1cFJ3sGkrrpJUxujUdNUnQDZklNWwWCZfftYJ+0XmW6ppF7BoTgqOl/lkD
+	msBLQnhHAW2ZIXuHdURl3lhggiMGnu/6LEKIY7Y2Gzj2g0RqkUdopoAHE8sc51TRs31Em8gsClg
+	26PladxSkd4iRPDJW1udM3LKloTLzIbDj6uzGl9dpfpavQBryVeZ5ArTReKnLwSnKNEhVcE838+
+	pWD5dPa5r5BOceL6Oa6NL+OcnlLwpABE/tOI7hM7UpIgeCreisx73PViHdGiT
+X-Google-Smtp-Source: AGHT+IFLto9rg3bU6aFDi1b+HF4HWmX6oawIS6jztBtNE6p593plpGCdCyStXuMctLrnkuFReMcDIQ==
+X-Received: by 2002:a05:6602:2c10:b0:935:4720:6452 with SMTP id ca18e2360f4ac-93b9697bab3mr1870510839f.8.1759785322248;
+        Mon, 06 Oct 2025 14:15:22 -0700 (PDT)
+Received: from [127.0.0.1] ([64.236.177.114])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-93a88961d74sm522843839f.22.2025.10.06.14.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 14:15:21 -0700 (PDT)
+Message-Id: <pull.3.cygwin.1759785320084.gitgitgadget@gmail.com>
+From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
+Date: Mon, 06 Oct 2025 21:15:20 +0000
+Subject: [PATCH] Cygwin: symlink_native: allow linking to `.` again
+Fcc: Sent
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-Received: by 2002:a92:cdaa:0:b0:42d:8a3f:eca4 with SMTP id
- e9e14a558f8ab-42e7ad2e15fmr192406935ab.14.1759773031503; Mon, 06 Oct 2025
- 10:50:31 -0700 (PDT)
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 6 Oct 2025 13:50:30 -0400
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 6 Oct 2025 13:50:30 -0400
-From: Evgeny Karpov <evgeny@kmaps.co>
-In-Reply-To: <CABd5JDA8ftx5958KRzqGJH8yhO7bPU23RB5a10XqdJX4VWBgpg@mail.gmail.com>
-Date: Mon, 6 Oct 2025 13:50:30 -0400
-X-Gm-Features: AS18NWB74FZyAwQk6DH1xoTHNnEk3PfprnHD2DWIxQ8M1k5yZgJVHO96_9kE1yU
-Message-ID: <CABd5JDD5zgqLG7yD6_gomaKKNABWEnh8pRjobPd43X4b=cz6bw@mail.gmail.com>
-Subject: [PING][PATCH] Check if gawk is available in gentls_offsets script
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
+    Johannes Schindelin <johannes.schindelin@gmx.de>
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-A gentle reminder to review the patch.
-https://cygwin.com/pipermail/cygwin-patches/2025q3/014306.html
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-Regards,
-Evgeny
+In 827743ab76 (Cygwin: symlink_native: allow linking to `..`,
+2025-06-20), I fixed linking to `..` (which had inadvertently
+targeted an incorrect location prior to that fix), but inadvertently
+broke linking to `.` (which would now try to pass the empty string as
+`lpTargetFileName` to `CreateSymbolicLinkW()`, failing with an
+`ERROR_INVALID_REPARSE_DATA` which would be surfaced as "Permission
+denied").
+
+Let's fix this by special-casing an empty string as path as referring to
+the current directory.
+
+Note: It is unclear to me why the `winsymlinks:nativestrict` code path
+even tries to simplify the symbolic link's target path (e.g. turn an
+absolute path into a relative one). As long as it refers to a regular
+Win32 file or directory, I would think that even something like
+`././c` should have only the slashes converted, not the path
+simplified (i.e. `.\.\c` instead of `c`). But that's a larger
+discussion, and I would like to have the bug worked around swiftly.
+
+Fixes: 827743ab76 (Cygwin: symlink_native: allow linking to `..`, 2025-06-20)
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+---
+    Cygwin: symlink_native: allow linking to . again
+    
+    This fixes a regression I introduced in 827743ab76 (Cygwin:
+    symlink_native: allow linking to .., 2025-06-20). It is not necessarily
+    a complete fix per se, but more a band-aid for the time being.
+
+Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-3%2Fdscho%2Ffix-symlink-dot-cygwin-v1
+Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-3/dscho/fix-symlink-dot-cygwin-v1
+Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/3
+
+ winsup/cygwin/path.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index ed0839893..8aff97acb 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -1895,7 +1895,10 @@ symlink_native (const char *oldpath, path_conv &win32_newpath)
+ 	    e_old = wcpcpy (e_old, L"..\\"), num--;
+ 	  if (num > 0)
+ 	    e_old = wcpcpy (e_old, L"..");
+-	  wcpcpy (e_old, c_old);
++	  if (e_old == final_oldpath->Buffer && c_old[0] == L'\0')
++	    wcpcpy (e_old, L".");
++	  else
++	    wcpcpy (e_old, c_old);
+ 	}
+     }
+   /* If the symlink target doesn't exist, don't create native symlink.
+
+base-commit: de2dccc8ecd00e6244ac10f28d7fd50123e8fc4b
+-- 
+cygwingitgadget
