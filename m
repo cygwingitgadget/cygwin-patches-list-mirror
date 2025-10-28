@@ -1,80 +1,121 @@
-Return-Path: <SRS0=Ftjg=5F=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 0EFDE3858CD1
-	for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 11:49:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0EFDE3858CD1
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0EFDE3858CD1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761652178; cv=none;
-	b=KWaNbXHrxFhez+ZHkHSi4eTEouXf7CN+JL4i8sOlPhunMRId1DqcnhxV9da7iOBjUTARqJPFTx/sYGi8uq/H4xZwvLgahkAO2sHb5hchP/HaiZ5ca+jQrJr4m25V8O0LsaQyGvWK13RUiHioUXgG4pinSLKtr5Sr6nlrt60ZMRg=
+Return-Path: <SRS0=DBc0=5F=kmaps.co=evgeny@sourceware.org>
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+	by sourceware.org (Postfix) with ESMTPS id 42CD03858D1E
+	for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 13:17:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 42CD03858D1E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 42CD03858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d34
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761657426; cv=none;
+	b=AAOdjcWfJ/a1CFhKt7//aPWjNHzDHLL18putzdVb72bnBFNFhsIleC/vjrSowM2nKREevTkESYwUEMf4lVu4B2oKPdTEkz2XB5VgBIkVI2nqwmcMOUSaaeR14TkZJ3DF2p30/gdyhzd6OXkYZ0/TpPLDpUyeJ9nI/NfNmkT83WQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1761652178; c=relaxed/simple;
-	bh=Sn2ZBFX1tNzKjYLbPFDogugARH2JPYbcFWH6RJH/6/E=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=IBn/4ELwE2fLSM9hbOBY0a4ZeCWu8nzwP07jbp4+FVBLks5/S+MNt4K9Iu7FVa3FbsNBevXCS5W4pTBEuUpLPefSkSYJES7vJ6S06yL/9YIytsdiFuItiXqzsNh4lFlHysWd4dHE1dOJ24biBfktiAkUhdbBdjmtc3RL3NX9Nkw=
+	t=1761657426; c=relaxed/simple;
+	bh=hcN+5zJd+Hxlpo/lbj0doKi/MO4xJGMb91PFPW0OYgs=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=fz6dMrRzkWz5w5KN2eNwMCYH909wKQQ9E1ImlG/RD9/n5MPkGkQIPBO1hmGID2uS+O1UsmgG4g0uCCOqE4jpLc4dwg3icq3f0uF0x2cpcwp9Y78AQj3jix0T/Tl2I+8hfmW3+7vJdPg91YBcaLVMbHX4rtEjqygAA99Zk18aUC4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0EFDE3858CD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 42CD03858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=M/zL77n9
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20251028114936355.WYSH.17135.HP-Z230@nifty.com>;
-          Tue, 28 Oct 2025 20:49:36 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 2/2] Cygwin: dll_init: Don't call dll::init() twice for DLL_LOAD.
-Date: Tue, 28 Oct 2025 20:48:42 +0900
-Message-ID: <20251028114853.11052-3-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251028114853.11052-1-takashi.yano@nifty.ne.jp>
-References: <20251028114853.11052-1-takashi.yano@nifty.ne.jp>
+	dkim=pass (2048-bit key, unprotected) header.d=kmaps-co.20230601.gappssmtp.com header.i=@kmaps-co.20230601.gappssmtp.com header.a=rsa-sha256 header.s=20230601 header.b=N8QcGi/0
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-945a4bfd8c6so258259439f.0
+        for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 06:17:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1761657425; x=1762262225; darn=cygwin.com;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vrcy8kiYqKZk9qrBF/UlXEvvT3HDhK5KXrm9Loc8me0=;
+        b=N8QcGi/0ezLEIbTDv5m7OmKFzbkgN1EQga/zlWZoBnWG48uGvXbFZVH7orosQhdrw4
+         PesaV4agh8pe3BOiIgColqJxOIsT/Wb27Iu0B7YvV4FIFiaskVyIQPR4J2EW9KxqdK0D
+         kX6OyedVk7ua9dzZpOWrv2jrO2XjA8KJRH6JsEKqi4gXG45zIcETjasoTjkB+aOijHKE
+         bRr3/Ucz8Y4Nn/LVcGlcrmNte2uEzOUg+jRhus6B6zStzfWgcWGjQY9FJ1keqDVfPZEm
+         GIk8TnHrt5tGWB6mmMFagtelseN/E1k8L+G6lHwM+Nda9YXU5QIJZE7TX/kFyV+e5/X1
+         xduw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761657425; x=1762262225;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vrcy8kiYqKZk9qrBF/UlXEvvT3HDhK5KXrm9Loc8me0=;
+        b=NRnEWapgjjtBWZ4O0a9WIFDhjcPXPSLWk1I6D3fswJe3BbuXKQD2aio1p01xdfu6Gw
+         2PlLmgsOetjrbolsSHwIpuQnLcTdkFItFHvzL5qK3nx8QiTyauqnCj8k147jAWYIe8fD
+         YQ3sQTqDVrPXTEwF9u0L1TCRhK+hYtAsdch1MhBoh71hzx2MciJCGk8D7eOKH7nPUjTc
+         aRdAe2GhlybF863BA/8fiy3gOVCNspgIYkP4bvQpBcsLLcGXEOp64KfzCyUzEQPGeBYM
+         71twYzNV9cIpsvJcJtm6PzvCZ/z49RlCSsMSI6tlh264krCCu7eIHIcP6pdpSnWRiQuB
+         dNhw==
+X-Gm-Message-State: AOJu0YwqvGbTow6YYPpjD8auN0O4p1xddbg8sRP2iyf120DREnBdelVK
+	RpRvb4bKYe2028L3dA2zulUC0aRJ/ro9EMK+GGUwGZL3Ul85wq8Mvz0MGM0O+0iShoRKYb4lqh+
+	dzB+v/CwDq+lSvcoXdvWcBELoIUqd+JQF4/It7Tmgp9YO4Iao0Epdm4Q=
+X-Gm-Gg: ASbGncs2rX9ruu9q/TPrAmZnc5xML/p2bBHtK4673xyJuXPQfCl5pf35w/JZ8OsGsxW
+	gNhJwvY1OverT/xUCLzCqwNSNMKFJLh9kLE1fLJQnFLE4JYGiIo+wJfMPFOP3qDYN2Cdetw2SDf
+	tfUxjkVpNGQrWaEC7coEEtT0fm2wSz0Lss5sJPc2s3lLzLW8NBmiFV6GUaKWWE2dNTJ8m3953KC
+	qzHJ3HjTV5nOoZKNS3LxLlfwWNlS1XP2inGIVCrj60UH+gveNg+Hj7QMVdhcA==
+X-Google-Smtp-Source: AGHT+IHqqIOJa9vs+Rl+p7CdmBqVBq1aEk0o1+zJSC/D0xlK31n0H2/jRdsNV8U9hKiRFpXWulmShSxT5SKJeCNSTl4=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1761652176;
- bh=U3yYkB6uf3zH3pZy8srmJ5B8mXwjGyHOfh1XxzG6Dto=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=M/zL77n9hN5mmw3HvKYQ/iYBIDTEw2x144vhKPPJBQRZL9eNPozHDeq09lsB7MGWNpKQVK0z
- nIfCH5IbcoRC+8dUHuiG862vJqi4o+GkgS11MTbhAcxqpMnEyU47dvw0wJ0VtzYzj24X7uHS3b
- gnFetQEBT9O8aLX5rnmFQt/H6/u60z/nIThnpuz8GnWrcDutzmDJsL/Wmn3DXsAHjMAF0EvhV8
- icgnBWZwrnm5iYxFJh6MWDWyoFSjj9GjvaESlbxRIsWDiC3wXemNvW84d+VKQxehxG7Y6e7xF9
- z2YPTcRP/TLMH6aktDOCD5sKyhBpw5eCMcx52sKKj3oTlt2A==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c0a:b0:430:d67c:46b8 with SMTP id
+ e9e14a558f8ab-4320f844f57mr43700605ab.26.1761657425179; Tue, 28 Oct 2025
+ 06:17:05 -0700 (PDT)
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 28 Oct 2025 06:17:04 -0700
+Received: from 1062605505694 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 28 Oct 2025 06:17:04 -0700
+From: Evgeny Karpov <evgeny@kmaps.co>
+Date: Tue, 28 Oct 2025 06:17:04 -0700
+X-Gm-Features: AWmQ_bnQU_rxbBNdtv32qRUy9wU6_1MLjWfQE6yKTdlFubE8DvsEUUv9jbgnjDo
+Message-ID: <CABd5JDBzuSB2BN0qs4pkHCrCQw3cqLs_OOS7MkzdTBZqph1miQ@mail.gmail.com>
+Subject: [PATCH] Cygwin: Generalize error handling in gentls_offsets
+To: cygwin-patches@cygwin.com
+Cc: jon.turney@dronecode.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-If dlopen() for the first DLL is called in the constructor of another
-(second) DLL, the constructor for the first DLL is called twice, once
-called via cygwin_attach_dll() called from LoadLibrary(), and again
-from dll_list::init(). That is, the DLL with DLL_LOAD does not need
-dll::init() in dll_list::init(). This issue was found when debugging
-the issue: https://cygwin.com/pipermail/cygwin/2025-October/258877.html
-This patch remove dll::init() call in dll_list::init() for DLL_LOAD.
+The patch introduces general error handling in gentls_offsets. Explicit
+validation for the presence of gawk is no longer required. gawk has been
+utilizing 'exit', which might lead to broken pipes in the current
+implementation. When 'exit' is triggered, gawk finishes the process,
+however the upstream command might still be active. This has been resolved
+by avoiding the use of 'exit' in gawk.
 
-Fixes: 2eb392bd77de ("dll_init.cc: Revamp.  Use new classes.")
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 ---
- winsup/cygwin/dll_init.cc | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ winsup/cygwin/scripts/gentls_offsets | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/winsup/cygwin/dll_init.cc b/winsup/cygwin/dll_init.cc
-index b6ab4ed11..996f00a44 100644
---- a/winsup/cygwin/dll_init.cc
-+++ b/winsup/cygwin/dll_init.cc
-@@ -610,9 +610,10 @@ dll_list::init ()
-   /* Walk the dll chain, initializing each dll */
-   dll *d = &start;
-   dll_global_dtors_recorded = d->next != NULL;
--  /* Init linked and early loaded Cygwin DLLs. */
-+  /* Init linked Cygwin DLLs. As for loaded DLLs, dll::init() is already
-+     called via _cygwin_dll_entry called from LoadLibrary(). */
-   while ((d = d->next))
--    if (d->type == DLL_LINK || d->type == DLL_LOAD)
-+    if (d->type == DLL_LINK)
-       d->init ();
- }
- 
+diff --git a/winsup/cygwin/scripts/gentls_offsets
+b/winsup/cygwin/scripts/gentls_offsets
+index bf84dd0cb..a364ea57a 100755
+--- a/winsup/cygwin/scripts/gentls_offsets
++++ b/winsup/cygwin/scripts/gentls_offsets
+@@ -4,14 +4,9 @@ input_file=$1
+ output_file=$2
+ tmp_file=/tmp/${output_file}.$$
+
++set -eo pipefail # fail if any command or pipeline fails
+ trap "rm -f ${tmp_file}" 0 1 2 15
+
+-# Check if gawk is available
+-if ! command -v gawk &> /dev/null; then
+-    echo "$0: gawk not found." >&2
+-    exit 1
+-fi
+-
+ # Preprocess cygtls.h and filter out only the member lines from
+ # class _cygtls to generate an input file for the cross compiler
+ # to generate the member offsets for tlsoffsets-$(target_cpu).h.
+@@ -29,14 +24,13 @@ gawk '
+   }
+   /^class _cygtls$/ {
+     # Ok, bump marker, next we are expecting a "public:" line
+-    marker=1;
++    if (marker == 0) marker=1;
+   }
+   /^public:/ {
+     # We are only interested in the lines between the first (marker == 2)
+     # and the second (marker == 3) "public:" line in class _cygtls.  These
+     # are where the members are defined.
+     if (marker > 0) ++marker;
+-    if (marker > 2) exit;
+   }
+   {
+     if (marker == 2 && $1 != "public:") {
 -- 
-2.51.0
-
+2.39.5
