@@ -1,116 +1,54 @@
-Return-Path: <SRS0=EjXX=5E=kmaps.co=evgeny@sourceware.org>
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-	by sourceware.org (Postfix) with ESMTPS id A89AE3858D20
-	for <cygwin-patches@cygwin.com>; Mon, 27 Oct 2025 19:22:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A89AE3858D20
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A89AE3858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::136
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761592952; cv=none;
-	b=WOXvASb2v8IBVAD2qPWaXWJrZtLGkfcRnCJYVFMedVZSwtKPr226Lj8+zxkSpyADrgXJuoyS3yt4E1T+s9OFvflqAfJsgDXwjNqLuHJMcSpSMMOXZJbFKtSVwap2PuyRTmj9hHRx2SQVkSHkZngHg+vnncM637QcAVpHRXTXinc=
+Return-Path: <SRS0=Ftjg=5F=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
+	by sourceware.org (Postfix) with ESMTPS id 374A93858D1E
+	for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 11:49:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 374A93858D1E
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 374A93858D1E
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761652145; cv=none;
+	b=vvuVto1x3QqG/Oxete2Gi4xfojyvEy2xO5jGDByO2XTdS+rEMbnBfAUyr+pdi7sG+04rNitsfsAvc0d5SdB5SLIX2S8ENGAWFp6WAnrXRVv1JB2hOg6lYtlX8bt3ngJPzjtH37suAEkQjpKEC229CLdH28l9b8ixv9celqKZ3Po=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1761592952; c=relaxed/simple;
-	bh=tgFhh+pWG5rnNbY1N/MBS+NhiWCA3PhXxuVET8qpFCQ=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=SNzKkytdDzMyjEiRnSBJftzp33AnlFrIlUoZNXzIG8JfjkKQeH8L+oTvnSmc28X5SBwhhwwagci8lPkJ3kOD4pToSIMHQ2OsAGVWWn7bn9Z37742jtVyyC4s4U4Gav0knJUxcU+UDlA6dmyBoGJ80+he8C6D8jOZY8Xf1u7WpxU=
+	t=1761652145; c=relaxed/simple;
+	bh=8+yoAIEqt9AuoaBNqse0Fhn5pFX4hcPVRYda/C9ymKw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ErbWw2UFUnzY18mFiu51ayCw9Y8cRQRdpjbmMEnGYz+ip13H6jw4WJxXFwcjwSplxoNZRqBJh29+hgPW7JCcThOruTjqbvUD0Cpu8C31PMbajkhAS5EkyBC1EuKdR7TSVN1mN1JrWbj55V9I6aXxsHAAn539GAIjzeypOs4ko7o=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A89AE3858D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 374A93858D1E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kmaps-co.20230601.gappssmtp.com header.i=@kmaps-co.20230601.gappssmtp.com header.a=rsa-sha256 header.s=20230601 header.b=gyGi6hTa
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-430c151ca28so22510865ab.2
-        for <cygwin-patches@cygwin.com>; Mon, 27 Oct 2025 12:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1761592952; x=1762197752; darn=cygwin.com;
-        h=cc:to:subject:message-id:date:in-reply-to:from:mime-version:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LU+Wl/Hg6eICoMuOpHU2hSsWEYQERAds7cieLzinKvI=;
-        b=gyGi6hTaLN7qJRJLXDiQA09rEIkAjTfClMXJGNAi97ecwUuEzLsgk/J/OCw5xd/XIX
-         C7LqmtP6TdhvntS8Up7m6Ur0MW6MkPNZeQnnMHVyVDaYEnGWTzMHgYS6yLmSz86L35BD
-         FxJFgdBuVAgzvOnxIpFja+znw6UlaMRNLLjwFf7ZQNEKjNk5Dz+l5WEv6Mh4dYRHCg7U
-         A2AQm11B7N5Odzdz6oiSWnC7L+ssuZRHtPEwfXieB/1knPRnqB6td5LNpHAwDlEdmUtZ
-         etRAymofsttmCDDeh6njIUeuaDvU5cLEIrELBgva8CZbYMcxasPASBc7LjuL80tqwNf/
-         /BvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761592952; x=1762197752;
-        h=cc:to:subject:message-id:date:in-reply-to:from:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LU+Wl/Hg6eICoMuOpHU2hSsWEYQERAds7cieLzinKvI=;
-        b=kVkvzOOP5yyXokaV6f2ItVUOlMOwvkOcqJ8n+5e2FF5tT6HyvASAWtcX2ItqS8APC/
-         hFnO6tGnxMY2DunoxRo6rPe9WxT+MxidtWdqGUgotOkQDGE47q+rt80iu1qGpUCqx4xQ
-         D7AGDh9pNYFsxSCmThkjwBtpm3sf1lUBp0wNEzzFe3bkFStbYiorBS1u00B1aiPU/OPj
-         c9K+XvnGszyH+5WdlAordQ1QOaeIbM7Kt6nnRDa+CKQq1PxLII4zdkTPzIqmGrZYFPQc
-         Q3nhxrq3oPHjLafdweuFuyLaB9OOj08KmtXk46raQQTQhuf86AcJTZbhY6YHPe5o/4LC
-         ll+Q==
-X-Gm-Message-State: AOJu0YyIDYazAzce5AqIxM/6hKw46T4A4n23bk1aX4qFLZKeS1zjJRKO
-	RJ98FQPC7kjM/aW74EwWqwmui9+nkOoz4GCcIoZJG8Krn1DRg/0vxjm1hAzp4w7scWKvcelIYOR
-	9NHmT2rsV4PZVByvAGr3xM2b9bgO45SlOGo/O694mW9Ym7Fx61qjJ
-X-Gm-Gg: ASbGnctLQxkUNcImkXFCO1sinDL0NlLqbHOm1MLQLOqa2/aysIBxcm6BmBrYkOTxL/s
-	6yipTBHfuR7iujrtF+lACvBHSEGkKZPZ7jKPfFK5WTFgK9EZpXVhjOX9dSuO6zdez+QaqCQXPd4
-	S3QUadkuwMjT8QdB5WwrcLHeAyI0nNOOE3NcpUiQ4uIgRG03dwRpfM5MTm89hFUFHqook0QLEPG
-	OLz9BZlteUeyYnyG+KTQsvejfWln4ijInmrAwBay1eISLQX14ONPgl6mu5VUD4QFOBrrA==
-X-Google-Smtp-Source: AGHT+IGSwtkwjyxgUaELBoPSLb1vCHS4N0hlzIztg4QUSSQ8dGJlO8txESXTc2tvI7dJ5MBm4ga30k6IX3kESBXbH9o=
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3303:b0:430:adcb:b38d with SMTP id
- e9e14a558f8ab-4320f842c59mr16938975ab.24.1761592951626; Mon, 27 Oct 2025
- 12:22:31 -0700 (PDT)
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 27 Oct 2025 12:22:31 -0700
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 27 Oct 2025 12:22:31 -0700
-From: Evgeny Karpov <evgeny@kmaps.co>
-In-Reply-To: <CABd5JDD5zgqLG7yD6_gomaKKNABWEnh8pRjobPd43X4b="cz6bw@mail.gmail.com">
-Date: Mon, 27 Oct 2025 12:22:31 -0700
-X-Gm-Features: AWmQ_bne4S0uUvG-vpYtP9ijz6EZwIH6yED0Vo9WVVUWg1nwWiCsq7NCEclKTLA
-Message-ID: <CABd5JDA0LFcVDezz5cqRbMpLcDA1_AX+o0k2LacyjpKYqrob5Q@mail.gmail.com>
-Subject: [PING][PATCH] Check if gawk is available in gentls_offsets script
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=X4Zorgvl
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20251028114901876.WYRP.17135.HP-Z230@nifty.com>;
+          Tue, 28 Oct 2025 20:49:01 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Brian.Inglis@systematicsw.ab.ca, jon.turney@dronecode.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/2] Fixes for dll_init.cc
+Date: Tue, 28 Oct 2025 20:48:40 +0900
+Message-ID: <20251028114853.11052-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1761652141;
+ bh=cs9xtb5Qwbcv/W6HiEENt+xFxEUXhC9Y/Wppe0WEKcA=;
+ h=From:To:Cc:Subject:Date;
+ b=X4ZorgvlN314qgIwGq4SM6LPRKvTjnyvRPNNu5zda5x2YDwy1xNEwJNwXYWNI10SOOUmQH62
+ kgMSqtblG6Wa9wIg5qU1zM/I6HM+b/n9CXwLIRJ1zCwLvKPq9AagCs9RKJBl9IyzZW8/PubaPD
+ U02+Ua0sh5mxE61CqcifJQSkFahMIvuA60JfEHNhY+u/oAW2zYZO2obk16I6HD8xarTDDDchnU
+ ev8EZYUenHBYpgKDPClT3Ctw/ileTbrl6/c2jFSDCAiNfjon0msmImBb0/yZCdf70SKJqOAo8N
+ CDsCVuQFrHQaOXsPB3iPipdU1YUDhSRYGPma+FPSUheKVdfQ==
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Mon Oct 6 2025
-Brian Inglis <Brian.Inglis@SystematicSW.ab.ca> wrote:
-> As gawk is a Cygwin Base category package, it should be one of the first
-> packages installed on all Cygwin systems, so the test should not be necessary,
-> unless /usr/bin is not in the PATH: a message to that effect might be more
-> useful; for example:
+Takashi Yano (2):
+  Cygwin: dll_init: Call __cxa_finalize() for DLL_LOAD even in
+    exit_state
+  Cygwin: dll_init: Don't call dll::init() twice for DLL_LOAD.
 
-The issue appeared while cross-compiling on Debian.
+ winsup/cygwin/dll_init.cc | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Tue Oct 7 2025
-Jon Turney <jon.turney@dronecode.org.uk> wrote:
-> I wonder if it makes sense instead to check for this and other
-> prerequisite tools (e.g. perl) up front in the configure script?
+-- 
+2.51.0
 
-Generalizing error handling might be more useful. However, there is an issue
-with broken pipes on aarch64. This error handling might be applied
-once that issue is fixed.
-
-Thank you for the review.
-
-Regards,
-Evgeny
-
-diff --git a/winsup/cygwin/scripts/gentls_offsets
-b/winsup/cygwin/scripts/gentls_offsets
-index bf84dd0cb..67d0c02bd 100755
---- a/winsup/cygwin/scripts/gentls_offsets
-+++ b/winsup/cygwin/scripts/gentls_offsets
-@@ -4,14 +4,9 @@ input_file=$1
- output_file=$2
- tmp_file=/tmp/${output_file}.$$
-
-+set -eo pipefail # fail if any command or pipeline fails
- trap "rm -f ${tmp_file}" 0 1 2 15
-
--# Check if gawk is available
--if ! command -v gawk &> /dev/null; then
--    echo "$0: gawk not found." >&2
--    exit 1
--fi
--
- # Preprocess cygtls.h and filter out only the member lines from
- # class _cygtls to generate an input file for the cross compiler
- # to generate the member offsets for tlsoffsets-$(target_cpu).h.
