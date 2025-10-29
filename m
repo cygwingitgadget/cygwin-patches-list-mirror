@@ -1,141 +1,161 @@
-Return-Path: <SRS0=DBc0=5F=kmaps.co=evgeny@sourceware.org>
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-	by sourceware.org (Postfix) with ESMTPS id F392F3858D20
-	for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 13:46:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F392F3858D20
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=kmaps.co
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=kmaps.co
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F392F3858D20
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::d2c
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761659191; cv=none;
-	b=m4Jo8HBS/sMi9jWmH2sc83RpUoF1K0X4cSYnSJwHoYvK2BDOieS2CzDcoPHM2T09N9wuZ/d2VEFyyrnTm2daEPfLFbyzdCucHm9cMaTO8vWE+cnSayYJ1010+WNp4dPeu688qwu5N0/GGXp0xX/Mb/wJFcCz99VK/D7GMUgDGgM=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1761659191; c=relaxed/simple;
-	bh=zrawf6JREI6saaltO8LkUWkFW26TOpx8vI0a8ZjO1dk=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=L+SyM0+INbBmZnC7fwbIQBr1rqbyF7udEylzPslJiLqns89lvuiPMq0CDvqfx6NYu181T9OK1CjjChlbVcfWhMp+GjJCFVFtEKUozTFlnJLQgKXuO4V7ZHVJxim3xAa6SA6SFv/OkV/Br7QDWHo6KbbQRbb7fNnzZz3v2LmeNYs=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F392F3858D20
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kmaps-co.20230601.gappssmtp.com header.i=@kmaps-co.20230601.gappssmtp.com header.a=rsa-sha256 header.s=20230601 header.b=rgsIDLmx
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-88703c873d5so214868139f.3
-        for <cygwin-patches@cygwin.com>; Tue, 28 Oct 2025 06:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kmaps-co.20230601.gappssmtp.com; s=20230601; t=1761659190; x=1762263990; darn=cygwin.com;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aeabgaZ2DZuhrRIol+dG63Lmz5z/amkwWluLFzFoKrA=;
-        b=rgsIDLmxDTv2cRwTJuYOZzcJOAS1kEaVDzK4zv+fClhMl+LchnP6SKy4oFp5/2PdQx
-         Y4d6a+ufHr4Nfa0DXC3UQbOH4FBwnOvBkoWnlHWTsskNvmxgReMz6jJrrRB73jpZsg8/
-         gBCIZslK+ZycbTQxuOAIfkhOw/d8RJaXiv1iE7F1OsYNkXD7InjYaZVA/BJ231W8rwQL
-         h/CPYp+nf7md5yL4+N4Upl9d/NcJqCAgbd7Yo2K1XWSuYL7Xh/EOPNz0pbPmnRJIUhIc
-         fbCQ4tavcwJwelXZGiu2hOPhATbbZlv2sfkC8xo0sGvxgRvwLE0TnjtM87BaXrl7gzbh
-         /99Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761659190; x=1762263990;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aeabgaZ2DZuhrRIol+dG63Lmz5z/amkwWluLFzFoKrA=;
-        b=LakO/nwLphkHNIo8NfaWOgDDqkeqldvd47VpOQvplONBpTIlW89ps60jehWjagAiFa
-         oNF7ODRHqGQu4KXaohX6sWhFqeF2Pgx91FSy3pq4W5RtuyKgiK3HIDWy8C57xTubEIpE
-         qwQ2QwG4MnroF7QZ9CcwGsyGGcxdY4+mRYl7vaFvHcRpuOA4vZi1V32Yh0MT7d06KQ2x
-         45BeIEHp1NS76fvBlcXrnOA2aeBRc23h155OEaMl0QPSeGWGji8PH3ZpgCu78OA7Wkpl
-         zjNX4wQ7KTyG2leLqS8FrcA5MA2TpHv8JOo/p3lh93DwPeBztSrLG1j6/oPAB9XH0wAE
-         5LVg==
-X-Gm-Message-State: AOJu0Yxa0mjQMQjNmSXEtfr6ELLGgZZurIAF40i4BS1OrejmGSLxkGU9
-	BPBkVrB0uGwC6W/d1GQHg4wrZkv8hY72nvOzx4mLiKMvS0t4WXquXIUu4EvkvZA7VhlJb+C4IZV
-	4EyZ1AhjIyG1Ytvm1KDK06Ie88ELMZr2Uq0Vqo4kTSsHotxGlR0e39VY=
-X-Gm-Gg: ASbGncsQWdihX0fS3G2Gel2Mox3P0+7pKd99t4pZambgg3ukD1f/YQBdoF/tzKtOxHu
-	mDAVtbiltwtCwfAqwFMw9wDyFGx/QCeasCfNJomqDlxGwOIkF/LlAQW2liLM3xL7HGScLCHHt/h
-	uYlSLjcd2lp0HvM54FlQYMTNz3r6pQydeZGDLCw3aIfPZckVuNTdK4LJhuphP+g5GnvwmaYI3GC
-	Yk+GzwF7kmJMLnv+LcJtL3oBQovXKs13HNWua/JgOE5tMt7/5c2XoIdXxIKUQ==
-X-Google-Smtp-Source: AGHT+IETiZBf4GbDWlfjJ9mcJzyo3+oE0fXCMprpkCH4RreCCmu889jndWlOfTJCCggvcH9QfhXbEl761EhXqQe7nDU=
+Return-Path: <SRS0=VOg+=5G=teachmailconnect.com=madison.morris@sourceware.org>
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c408::1])
+	by sourceware.org (Postfix) with ESMTPS id 467773858D20;
+	Wed, 29 Oct 2025 12:11:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 467773858D20
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=teachmailconnect.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=teachmailconnect.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 467773858D20
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c408::1
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1761739897; cv=pass;
+	b=moFmmpBCzA0soKRxx4JBh6wrG4awdV9hdLsBDNWqqsYSq5G6wezq3dCFkXx5RVpFNa2M7uMbNbm66xP9pEy5t1wfKWUcEeLXpYoNeAqA0Bs62mhzaJN8pEV/Glai2VKiP2RLvXPWBg4A/5wnl3pBjIq0ov674r9m5+XnEpUazrY=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1761739897; c=relaxed/simple;
+	bh=GRlhBdXNUehiRJLVu9LdvSZ4iUt1tti8Bl28jZDIHVg=;
+	h=From:Subject:Date:Message-ID:MIME-Version; b=TiNkBbylL1SBHzvVRl1mDqYOGrVsnvL38hyWtQHpxM+rOoCpRQfUmFm/+rFkuD45efQoCOMcJO8DxyXIfH+p6KRa1DMcjGJUlEcdVGW9FFpyCa7FfIKX38N4Tpavhp8d+YZ0ntwUQ4qHdbFW40Ief1rh6AcxjLoNHDrMhRdPowo=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 467773858D20
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VLLnZe00aU4mcbRk6ocQ/TkK9cWpQ1EbZcR8X2J8IkaTA/rAkfnv7KFB9gihveNeGEDD5830/c8J5ZXOs8a5Vum0wYU/rMh5YpqM58PuLJ1UafBltG1hw+/Ip6Y0iBp+OZfG8j7fBq7sBUFc2geR93gC+AW+4OXW5dcG6KJGTaloZZj3zQvd0Y1RvxkZ2c4RhTLF5Q2hNa2GuvmudJ93erQqlmyorGrAJmwqBT3am7gFKWct0G7k3vUH2S2hvIXgstK8JmPsvqr+114jNHrPw7DPTHk7rgng10Tzd16LSrPxGZLm8pti0vhox5wfSMRpSCykXJOQTq94xnOFHqnzZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3+lR0ePyb7Fjcq3XTZruk2sHZfs1IGjTPvHxND+/bVE=;
+ b=rFijJQNoBNR7WKkyE/rhbK+t4lKUH9hjvakgn466HoiHEk2JDPBExXoEj9/cznxRGdamsxb5+rZek5K9btOeq9zxEisb+Nyq3wq9wVDLIHOVG/vvlpxIPpAA50b76TR7DsknkEB2PRQIFcLHJSNFVUCGGZMcoODump59Gicxon8HsSDAdQ4U4PRBj78KqJRA7WMjZF87SHp7eZmkdkGzSyslaEu8+EXXKt19zXv0xTVsdrR2Gu3v+pN7GEzRi0DUdjZ48+F8StRiVpnG2Z+QgAY1vmNYJC1lJ024nLITKsf9jP8I5Mh7CkPl91Az2dTPmHerd4zIWiZrwHrtjM1LMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=teachmailconnect.com; dmarc=pass action=none
+ header.from=teachmailconnect.com; dkim=pass header.d=teachmailconnect.com;
+ arc=none
+Received: from PN1P287MB2631.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:213::10)
+ by PN3P287MB0825.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:175::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.12; Wed, 29 Oct
+ 2025 12:11:30 +0000
+Received: from PN1P287MB2631.INDP287.PROD.OUTLOOK.COM
+ ([fe80::1499:310e:a27f:3337]) by PN1P287MB2631.INDP287.PROD.OUTLOOK.COM
+ ([fe80::1499:310e:a27f:3337%6]) with mapi id 15.20.9275.011; Wed, 29 Oct 2025
+ 12:11:30 +0000
+From: Madison Morris <madison.morris@teachmailconnect.com>
+Subject: =?Windows-1252?Q?K=9612_Decision_Makers_Contacts?=
+Thread-Topic: =?Windows-1252?Q?K=9612_Decision_Makers_Contacts?=
+Thread-Index: AdxIy5YSzEbirvm0RrKdgjLXDQUnyQ==
+Date: Wed, 29 Oct 2025 12:11:30 +0000
+Message-ID:
+ <PN1P287MB2631D29F0835724250A6DCECFCFAA@PN1P287MB2631.INDP287.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=teachmailconnect.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PN1P287MB2631:EE_|PN3P287MB0825:EE_
+x-ms-office365-filtering-correlation-id: cea88292-89fa-4cce-6276-08de16e44b3f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|8096899003|10085299006|7055299006|27013499003;
+x-microsoft-antispam-message-info:
+ =?Windows-1252?Q?YjjzcM+xu6Gh0Kl0gT7rY8dExX3eRLLVUdVHH4v9ZsNRDS0OYGvzIutT?=
+ =?Windows-1252?Q?pVtnQqmOEjjRwNBSkXZK0EztHpL4u2ympWlnbyGOUBFmVzcpIQpGxmAF?=
+ =?Windows-1252?Q?5w4LXlE8jBSBkgoszctOWePRvPRaFYSlN48m2kZBhOEIj3RXiAI3dvJd?=
+ =?Windows-1252?Q?wdYtw87xgi++Wu/z7wT9dFTE11+7bk7//29dAEL12ZZn7ZdsavWPzoAV?=
+ =?Windows-1252?Q?BF6A93Id0fikJQc9f/adMGcpCIQgAFMWYct3b78lkBxl70Bv5VPKmNVx?=
+ =?Windows-1252?Q?2nYRQEmgl6L0GqhY5NDdjW0IvPKpyiRLDrW1P9nO0NUvtWOCxBTEnOMb?=
+ =?Windows-1252?Q?+EkyaP94N/rZRUratFgoFYcNvSbIZMqvkxzFyEwmfJ603zzywqr4iQ59?=
+ =?Windows-1252?Q?BlI5VcdP0KVl6r293jKADH1w7hvfGXRbzEmUe/7KMcRwmOSPvYNSWYhv?=
+ =?Windows-1252?Q?RNhNz/A19Z9wdCeGpV/nxStrBogtEjBRwJVSGhmpw6bUhKYuP+WNH/Xu?=
+ =?Windows-1252?Q?eus3TuWBTrvVF7jXIhqgKPK04k7vVXJefpAj2ErHbxoIncdYSowGmeiU?=
+ =?Windows-1252?Q?aur2fnWkWaOrRExpspNKWSU/8nVvk5/pH5QXt+XpjFu3j56Dk+4mcaCC?=
+ =?Windows-1252?Q?y5k7ytX1EPDvllBoB2h9WSmiKNhLg2Gnk/8OQbb6MZE5bczAtdrk82j1?=
+ =?Windows-1252?Q?e8UfN6rnneVsDU1S3VtNWJ7CdSGRikpAG23LiGkf1how9etzx3Lp1rhY?=
+ =?Windows-1252?Q?zyVk9YUlCZzPK6yEwjvlinmgsCcIDMG+cwKpeTRSjnQM8M+E23UuHjxz?=
+ =?Windows-1252?Q?YeQlfVkM0YBOAGz/SfGVZKBfu67XEUGggsC7awXyo/iFzbq6M/jOZv+U?=
+ =?Windows-1252?Q?ZkvkDrDpSljI1eVzGMRoe0TXOxOV+aqXAjIuQiStNm4QZqij4XuTI/7z?=
+ =?Windows-1252?Q?cF3UmO/pIIive9Q0NEl7tHtwfILMRxfa6cNwTZ3vrOw8WT3hI58xwawL?=
+ =?Windows-1252?Q?RACl0C56qDZ+H4VW5HqolmsM0DuH01CYqli+qqAVmuT64k0YbIt005I5?=
+ =?Windows-1252?Q?A69HdI3JxXvuEo2Yf/Ohqr5Wmo22D95jKBiwstJ6UKyKCQNF2hJDBLBV?=
+ =?Windows-1252?Q?6PkvB2+QIZwHDpLxkCOfeuIsm9oMWTyXBNfLh+ASYp+1wJRtiVZPH9aE?=
+ =?Windows-1252?Q?DkI1c2Ps3bnsIdBZK3KxsTczeGH08mxRuqwL/rgTxFoW2jwAwbJbLdAA?=
+ =?Windows-1252?Q?vhSWnLWNjjaU5OS3qDfD9xeihLtJlcktMhNXvU07i3LjaggtWv9GjFX1?=
+ =?Windows-1252?Q?X/yFjRW5IwEKfsd10/IB6bGQW4YtHqE4tM/Ve3lqWZ/P7LwcgqS6w5yq?=
+ =?Windows-1252?Q?q+sayi53r1MfcwTuya7mEk2hfh3nDyTffc9zJJnC+kspI8lP6pbNrjoD?=
+ =?Windows-1252?Q?mTsaatwz+WZGOdtsabMCcS+cRAGUG9yvxok0HM4tMu+WPHyw/VFLCVPz?=
+ =?Windows-1252?Q?qr/84biXVuKz8+dUGdMEL3KCPBi6y5gBybPvqzxkXdRGGRqo5gIQdvRZ?=
+ =?Windows-1252?Q?DsbOCx5v9OaJgFBoyC9w0L5G2gLXc1YqXYqkYt/MvufUBhbNlhB7SfsV?=
+ =?Windows-1252?Q?jYVzt5VQPTvGGDoZr81akuCyAs8tJZkvI2XZIsAKE4oQIphYxx5AZWru?=
+ =?Windows-1252?Q?SoaghL7GS/P3uPGY6wXQV/zWlLD2fPh9?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN1P287MB2631.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(8096899003)(10085299006)(7055299006)(27013499003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?Windows-1252?Q?V4DT+TJNS0nS1xhzY+KtcsHuni+sDJGszbDOSp7guO5veHVBhPM7V3tv?=
+ =?Windows-1252?Q?49aZJcoiwtxijh3adKNfUJ3pY6+I0TkzZPAs1EyBbKkAaoKgvQ7ycrP4?=
+ =?Windows-1252?Q?3DCr1aZOlXzm0ku0ppRz1jroWDrIn2Ttj+cS+nOzuA1sboeg6lIfjBty?=
+ =?Windows-1252?Q?yqosvZ1j+0BjzyfRfTS/ySi2wTlA1PEklvWN94Pia1QGsCBBpi6zNP8g?=
+ =?Windows-1252?Q?TtRVrkhKe3YYPsObbDHYnJWIPsrSo9wH4QAspRc1tnIR9dNk+1GdVNEs?=
+ =?Windows-1252?Q?GPZYU/0a8UMhXeToKuOj0oKA04iON5i+qIRDj5AsQ4O1yJITz1D6KoOM?=
+ =?Windows-1252?Q?o2oijQh6Wrq9T4GiROGRim2YQus2GCW5vWXeiejWUggbhrBEZsh8dZ6X?=
+ =?Windows-1252?Q?Oa13DnqbbatE4TLIhsQZaJDJOmOqC9ruY2VdrkQP+k08AxI+jtJgL2hf?=
+ =?Windows-1252?Q?17oZmebF/xYt3CIX24jjw1zsP9Hv7mhf894LTOqE76smHoUaExiYYW2F?=
+ =?Windows-1252?Q?P5dM2eCTLPFgpMngufhZtCoKWDCCyTuNkj1iDCJfGAFzF3E15PUM5Sqn?=
+ =?Windows-1252?Q?YxdksDtBndQ05f77oWpI2Z870jhVwm8gEenSPCrmOhlfyP7dlDQNcc3o?=
+ =?Windows-1252?Q?k6hmyQX8HGZNWfcne6bR3uSORu/XQPnK6r3yccvB670TniiWqKKyfhvS?=
+ =?Windows-1252?Q?XURhYQT4S3W69XKEMx/zBci6ohsdq2KPPtDng7PqLW7Diu1100GOtqjv?=
+ =?Windows-1252?Q?maMCTa147qn/WS+r/rgXZBAL0hi4wTWxMJgzU+0vCJdbIQpsv+feeqxU?=
+ =?Windows-1252?Q?VVAzVJyEb0XTG8EENsT4AB+rQWfB3SjgDqxWmgBHYiLHd/uRMbUcGLBu?=
+ =?Windows-1252?Q?dayXeEA1ttSGjm6UjdqY62sFp2ZppfbQICAd5y59S8cIbyJzKoxFcoEL?=
+ =?Windows-1252?Q?5LN7EIsO5ZojnBSW8qV99zAA37yMHK5XuypZ1hSQqB5JB78M4BbzMmlt?=
+ =?Windows-1252?Q?o+UGv9QLdRcHRnqbpCd735w8rQ0VwlfEUjTEc60B+SKh+VxCjsXeU4ki?=
+ =?Windows-1252?Q?VaUDy+90idC4oTfb/fYm4QICKD5oqg8yZB40/F4agqgp6kSyqyK4iQcX?=
+ =?Windows-1252?Q?FGj0Z8UsOGma7x7U0Ut25svh5i55v5ec3XiIZx1dv5i6FSHiQpDf+rMF?=
+ =?Windows-1252?Q?IUsXB5r2MDVY7HAXQRw4Z+ONkqpAAEUIJp2uyvZPdFWY/3R+/dT5WFAD?=
+ =?Windows-1252?Q?jSEOocx46QQxgqUODWYIJZZEQKssYmJ7VOPajAjfQJdP1hwUgnJs5DQ7?=
+ =?Windows-1252?Q?y9DVpXoOwgX3evJKPD+WY01oXpM3cCkAzbCjuStHUwK2EsOEmu8+TuXw?=
+ =?Windows-1252?Q?4xvZY1am3JYsZWIyZ08LkSDXUqH/Bjf2JZPmARD8j1VRcNVuLDz6+dol?=
+ =?Windows-1252?Q?y6EdExNLIhpVluqe/4JAryj269HhTMAV4dt7HEonX4OUzJr5eQzH86b7?=
+ =?Windows-1252?Q?tEkzx3UulmhAXn8PuCKuobTxPt0kGVUVAtRFnPH7VEMXwyrrgAneDQgx?=
+ =?Windows-1252?Q?HM+SU2ZGBo3tmqfnhk+x7AvHzyQoBOJo4Ilm/R91LfuaigMR95xLKZ/9?=
+ =?Windows-1252?Q?N3MdXNgZNwfjX+df8cpw/QQzvEI69eJSUye6Bz+2jkIh0JRD0YHTjzhs?=
+ =?Windows-1252?Q?o+JJ6olVdC7L3P1cqdPy8bR3155sU1PrHEynzA5T/f6c2quJhpXHFvVx?=
+ =?Windows-1252?Q?epj5c5iKdZk593lpI6s/az8GZwX+LHAWUMjhEFB3?=
+Content-Type: multipart/alternative;
+	boundary="_000_PN1P287MB2631D29F0835724250A6DCECFCFAAPN1P287MB2631INDP_"
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3f11:b0:430:c38f:fb82 with SMTP id
- e9e14a558f8ab-4320f7b75dfmr42902315ab.8.1761659190033; Tue, 28 Oct 2025
- 06:46:30 -0700 (PDT)
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 28 Oct 2025 09:46:29 -0400
-Received: from 1062605505694 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 28 Oct 2025 09:46:29 -0400
-From: Evgeny Karpov <evgeny@kmaps.co>
-Date: Tue, 28 Oct 2025 09:46:29 -0400
-X-Gm-Features: AWmQ_bmJBwPWlw7IHaRvKuLpz1fLcBs_A5IA-t8Tp9FRZ-ceKVtVYutTB11MFtQ
-Message-ID: <CABd5JDC_=LLjR8_nRHxBzLCxMgEqMwJP+jf-E_CPvFxOYWR2nw@mail.gmail.com>
-Subject: [PATCH] Cygwin: aarch64: Add runtime pseudo relocation
-To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: teachmailconnect.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PN1P287MB2631.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: cea88292-89fa-4cce-6276-08de16e44b3f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2025 12:11:30.3871
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a17c0155-44a1-47ec-850a-ebedd0d6b02d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BOIVn4kWwIGw1ijzbyiNFo2dXgRszxZrsk4LWQZwA9WuQQgJzsonP3FLxAukirHgxcRr8x9HjcEIuxDOoeJ9qpO2/A5wyccmmkodI6H5t2+MWreiJ+jyYJhnGM/iXJmLqCU0IaZdd82stF+jSMtYtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB0825
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,HTML_MESSAGE,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The patch adds runtime pseudo relocation handling for 12-bit and 21-bit
-relocations. The 26-bit relocation is handled using a jump stub generated by
-the linker.
+--_000_PN1P287MB2631D29F0835724250A6DCECFCFAAPN1P287MB2631INDP_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 
----
- winsup/cygwin/pseudo-reloc.cc | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Hi there,
 
-diff --git a/winsup/cygwin/pseudo-reloc.cc b/winsup/cygwin/pseudo-reloc.cc
-index 5a0eab936..fdc2a5d1b 100644
---- a/winsup/cygwin/pseudo-reloc.cc
-+++ b/winsup/cygwin/pseudo-reloc.cc
-@@ -199,6 +199,9 @@ do_pseudo_reloc (void * start, void * end, void * base)
-   ptrdiff_t reloc_target = (ptrdiff_t) ((char *)end - (char*)start);
-   runtime_pseudo_reloc_v2 *v2_hdr = (runtime_pseudo_reloc_v2 *) start;
-   runtime_pseudo_reloc_item_v2 *r;
-+#ifdef __aarch64__
-+  uint32_t opcode;
-+#endif
+Would you be interested in an email list of U.S. school districts?
 
-   /* A valid relocation list will contain at least one entry, and
-    * one v1 data structure (the smallest one) requires two DWORDs.
-@@ -307,6 +310,13 @@ do_pseudo_reloc (void * start, void * end, void * base)
- 	  if ((reldata & 0x8000) != 0)
- 	    reldata |= ~((ptrdiff_t) 0xffff);
- 	  break;
-+#ifdef __aarch64__
-+	case 12:
-+	case 21:
-+	  opcode = (*((unsigned int *) reloc_target));
-+	  reldata = 0;
-+	  break;
-+#endif
- 	case 32:
- 	  reldata = (ptrdiff_t) (*((unsigned int *)reloc_target));
- #if defined (__x86_64__) || defined (_WIN64)
-@@ -339,6 +349,31 @@ do_pseudo_reloc (void * start, void * end, void * base)
- 	case 16:
- 	  __write_memory ((void *) reloc_target, &reldata, 2);
- 	  break;
-+#ifdef __aarch64__
-+	case 12:
-+	  /* Replace add Xn, Xn, :lo12:label with ldr Xn, [Xn, :lo12:__imp__func].
-+	     That loads the address of _func into Xn.  */
-+	  opcode = 0xf9400000 | (opcode & 0x3ff); // ldr
-+	  reldata = ((ptrdiff_t) base + r->sym) & ((1 &lt;&lt; 12) - 1);
-+	  reldata >>= 3;
-+	  opcode |= reldata &lt;&lt; 10;
-+	  __write_memory ((void *) reloc_target, &opcode, 4);
-+	  break;
-+	case 21:
-+	  /* Replace adrp Xn, label with adrp Xn, __imp__func.  */
-+	  opcode &= 0x9f00001f;
-+	  reldata = (((ptrdiff_t) base + r->sym) >> 12)
-+		    - (((ptrdiff_t) base + r->target) >> 12);
-+	  reldata &= (1 &lt;&lt; 21) - 1;
-+	  opcode |= (reldata & 3) &lt;&lt; 29;
-+	  reldata >>= 2;
-+	  opcode |= reldata &lt;&lt; 5;
-+	  __write_memory ((void *) reloc_target, &opcode, 4);
-+	  break;
-+	/* A note regarding 26 bits relocation.
-+	   A single opcode is not sufficient for 26 bits relocation in
-dynamic linking.
-+	   The linker generates a jump stub instead.  */
-+#endif
- 	case 32:
- #if defined (__CYGWIN__) && defined (__x86_64__)
- 	  if (reldata > (ptrdiff_t) __INT32_MAX__
--- 
-2.39.5
+We have verified contacts for Superintendents, IT Directors, K=9612 schools=
+, dance & music schools, and athletic directors.
+
+If yes, reply with your target geography and role and I=92ll send sample co=
+unts and a short preview.
+
+Thanks,
+Madison Morris
+
+(If this isn=92t relevant, just reply =93No=94 and I=92ll remove you.)
+
+
+--_000_PN1P287MB2631D29F0835724250A6DCECFCFAAPN1P287MB2631INDP_--
