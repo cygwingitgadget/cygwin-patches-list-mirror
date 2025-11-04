@@ -1,153 +1,205 @@
-Return-Path: <SRS0=5Fpr=5I=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	by sourceware.org (Postfix) with ESMTPS id 3874B3860C36
-	for <cygwin-patches@cygwin.com>; Fri, 31 Oct 2025 19:30:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3874B3860C36
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3874B3860C36
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.11
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1761939025; cv=none;
-	b=iy+ap6xQRu9npT+RKgPxLZyMeLy5xLur0xgj1G6oxvK2KGkTAQvXiAuP4H7lbSdwJ4N98fsY5DcnVDkzX6CwiCHQkosvBHcFvy7gjmHlC9D3lgGwN7os5MfxL0Tz7nEvEDMv3+m70mBtNr+lKDlkng9LNUR1fCSfItTIZa9gWPE=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1761939025; c=relaxed/simple;
-	bh=5ajEqkZ7hbaxA2C4uW9v1vgPSm9IX2YL4kpYMu3y37k=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=R+z/Se9a8/tmweGdLJnIf5CCU202hjuyelAFAjL9tR9uPdnvInH+Nv1hDnIkQ8JCf4Q9fALsSfeEy8wH++PYzw7E2mwiHG59DrGwqNOyQ2C1h369ZewETBQrj9/e3YHOAjTs4nIbQ037bjaNl9J3tYsECGD/Xg4bgU6KUrNyLtE=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3874B3860C36
+Return-Path: <SRS0=uupc=5M=relianceinfosystems.com=josephine.samuel@sourceware.org>
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazlp170130007.outbound.protection.outlook.com [IPv6:2a01:111:f403:c20f::7])
+	by sourceware.org (Postfix) with ESMTPS id 7D9693857356
+	for <cygwin-patches@cygwin.com>; Tue,  4 Nov 2025 12:02:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7D9693857356
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=relianceinfosystems.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=relianceinfosystems.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7D9693857356
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c20f::7
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1762257762; cv=pass;
+	b=GVhYKKRBvXatbE2ABTVc/xyh7XA/tr5Vl7p7g+zCanM5Wsh6d/eI0Tnzkr8gqjREqbMwrmS8dSZ5y19okvGtxRlUBoUV9yoV0d3Srda1ecYxw8ijydFm2tEcoSJv3n9t7sK13I4z3jtKSGb8iCTj3swFSJXAUPXe639WHbmmnqQ=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1762257762; c=relaxed/simple;
+	bh=1siIbOiHLXP0I/8OnFno5k1UORGEdgPfiFbLGUgpndk=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=ZlwRGVv33f4EWMoAyeBmtwcv2oCvoAxD6yfkA8Z4gU5SKNbaTMEtO0FlblpB45KcrMGWLlP5B3hF5GJwVbhkuCA90fvGQyBOqJgjGPNhWkTPRt5mXEqA7eCXP7xv700fMapJ1dE6vIfnflIwsESkLVoYCk5PoBtshflrDzbXjcc=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7D9693857356
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=aB1gJNN8
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 9D9C788C52
-	for <cygwin-patches@cygwin.com>; Fri, 31 Oct 2025 19:30:24 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf18.hostedemail.com (Postfix) with ESMTPA id 34BF52E
-	for <cygwin-patches@cygwin.com>; Fri, 31 Oct 2025 19:30:23 +0000 (UTC)
-Message-ID: <9f69ae8d-4f17-49dd-9b64-0083eba62a1d@SystematicSW.ab.ca>
-Date: Fri, 31 Oct 2025 13:30:22 -0600
+	dkim=pass (2048-bit key, unprotected) header.d=relianceinfosystems.com header.i=@relianceinfosystems.com header.a=rsa-sha256 header.s=selector2 header.b=JYXq0JgB
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZMWYK7Oy0xa+iZJnpxRYoA4UTFRV3cpxl2cnYaw4v7xTp9zvohog144Vmd8VvNK/Kt35F4f55wACFHvjdTEtm8wcMtkT7HKC12F59oWlvI5qrsRG1Dpfuziog/NZHvikbJRjdDiar0Z1IWRGj9aGP7OTt2FODxuFusqgjjN38q0LMaqQRgL+pjkUMGQXlSeJxfjpWRQxTX0cMvaYxX8KDD8wNsW1T3y5ViaHXEgiRboQI6vCeWzJxNrPnz5dhOJemyJH+pf4th41v00cpZajf8nSe0CJOXlfU7ACHkiTLxNIJWQOdvvLMUmOl3QIOj3TcxIDL8FGFIFqFk9XrnsL+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1siIbOiHLXP0I/8OnFno5k1UORGEdgPfiFbLGUgpndk=;
+ b=exkX4fQNdOFjchdhQeaTxPonVZGAmzB7/OpvRr4ElbjCx+S/ecrjWzgN5ZS+l4TeJRSp5giEKHucbezlen1gwkfAdplpMLP6rFhawkUaHPLY4yPheGoUNFGAYP1BOUO1FYlZ+Nyyh6+jvDr2Ht5vMC3kRn1PtzncKEI5otTXbq2yA/GezwLfg9M7C6/QJOJ/iQO3lXKzIQFRvcHxvc7pbC3cjJ7kOOOSAdbKDh8GvnRullx1yqYHCxtI9Rx8d9zAkokjNT858RfiIO1NebkxZgDQYvx9NAiFlI4Jr78m8RvEXKT3d1uXgIv9csplUuqUiwpVcxbw+dmMWJBZKjILCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=relianceinfosystems.com; dmarc=pass action=none
+ header.from=relianceinfosystems.com; dkim=pass
+ header.d=relianceinfosystems.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=relianceinfosystems.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1siIbOiHLXP0I/8OnFno5k1UORGEdgPfiFbLGUgpndk=;
+ b=JYXq0JgB/z0OaYsk8XTIViFlF0BLYt+hSiOPAf9QlGbCczDxHwZg8KIRHGemo0WqJNszw6HtluiXXBB31xZIIQEH8IlRu3QNgAfBCYhOpThK4+I3DLFygo94CbcGT9ScZuPO66dykliRP4NDWR3LLwqEmzY3o3gMkOw97ly5Exm1LwwnREC3mFnAgzHOp9hWVIGCUl38/EGa1axGxvbEvlqA1npXi1k1X2JwKoFX6CknvY2enoXVZLhIZrpBEP96ctpWmAZmKF311wW5bRqvr3T8Q4dySY/+hfMMWpgk4IeVn16R5JmhqCCEchZPWHdQusKf6eLK3iP2PoVVOas9rQ==
+Received: from AS2P195MB2134.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:546::14)
+ by DU0P195MB1956.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:3e1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Tue, 4 Nov
+ 2025 12:02:35 +0000
+Received: from AS2P195MB2134.EURP195.PROD.OUTLOOK.COM
+ ([fe80::9601:fea8:1fa9:9c2d]) by AS2P195MB2134.EURP195.PROD.OUTLOOK.COM
+ ([fe80::9601:fea8:1fa9:9c2d%4]) with mapi id 15.20.9275.013; Tue, 4 Nov 2025
+ 12:02:35 +0000
+From: josephine samuel <josephine.samuel@relianceinfosystems.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Partnership Opportunity: Valuable Resource for Your Audience
+Thread-Topic: Partnership Opportunity: Valuable Resource for Your Audience
+Thread-Index: AQHcTYLnk0DcI5bgV0KEj7XWZ9bwtQ==
+Date: Tue, 4 Nov 2025 12:02:34 +0000
+Message-ID:
+ <AS2P195MB213455B9ED9751179EEAEF2592C4A@AS2P195MB2134.EURP195.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=relianceinfosystems.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS2P195MB2134:EE_|DU0P195MB1956:EE_
+x-ms-office365-filtering-correlation-id: 2f5415d7-ecf0-4c50-2675-08de1b9a0a98
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|376014|69100299015|1800799024|38070700021|13003099007|8096899003;
+x-microsoft-antispam-message-info:
+ =?Windows-1252?Q?R2rxCxtWtPOlTrLC83M4sQ1UniJqSUh7m11GhP5UPKbYgpvzWz+Ul462?=
+ =?Windows-1252?Q?OJBAb1RFM589f8MjudTWvXhzdnoUNBpdOmFp8S+tT+FNgy5ee7sIRs28?=
+ =?Windows-1252?Q?vIoQvWBDbx9FXsFWHt5/Q5HZDpeQZXihW6QsvXXiqK6txGs1fVtoeH+B?=
+ =?Windows-1252?Q?ilq2pP1H/yyu+pePuR8eQKjoyosc380nQwNebW0qQSvdI51UM7l5DktW?=
+ =?Windows-1252?Q?T0wQDZd5e2AdEoB+najuP9tun0zg8jEpXPe7ZBZ7UWPZFp+18oXtMVi8?=
+ =?Windows-1252?Q?nuZ1uHXBpzACSsYUUqyIvf2XvUhMuBF4+/kK9vzrz5fqmy5q79OpLYPS?=
+ =?Windows-1252?Q?nlpgIWCxfeDLtmSiyp8OnbVWlM4BiI/2+Fi215ahaj0c51rJh6myrjJs?=
+ =?Windows-1252?Q?GADujRVmM7pNN0344gy4QKSgwFwytpxZLomlW35WIlJSwatceqvaj63l?=
+ =?Windows-1252?Q?MHn9/bCI4gAxl1rHYeL7zYWQDWzip3+yFfgxjEBhXkYHhsjnnjIsJimJ?=
+ =?Windows-1252?Q?urnIDllU0K5x4D9LLZUZWVv5cDlXCdKaGn9tHAnWKQbneZjXXK8oUX/M?=
+ =?Windows-1252?Q?U/TZJXBv0S8A/y/35P5hIX5YN0OyyZPIaWQNX7iJaiVHtRxvVrrMNj66?=
+ =?Windows-1252?Q?KI52CDFA7e7nLpR0GnU5s87BuVVHcC+up/GEviH8F00KD+Mpz7qSXlgY?=
+ =?Windows-1252?Q?LH9oYPvJ7rH2gieJMR4/2quVagLbW50mmVCfoL9+YnQZQOtteBY42SXX?=
+ =?Windows-1252?Q?xBKL0k+/DikC7dl2mRMp6cD0aEVYZ0aSvUs8apwDsnXdfYRiupJqPNiu?=
+ =?Windows-1252?Q?p7IwoSVlsl5O35y8BO9giV/q0CI7iGAqIxMfYO3+Pf4J5ZLybzWdUb1G?=
+ =?Windows-1252?Q?EGZywhI5U9HBZDYCs5bMWSkvInvixi99lE9lQmg6Rvxoi9O+sOO9nSuG?=
+ =?Windows-1252?Q?b2om/fgOcS8hgB7sXhApfIbRK7AXtkbpo9TzNRL9Pk5gVXzzdFyx6Hun?=
+ =?Windows-1252?Q?ut2NpFf6kEXw5Goj7yOaLcKHO3RhsWj0C3/CAvh1kpv2fzYYbATl5VyN?=
+ =?Windows-1252?Q?tKcLMS1ztpKoSKKOYq23PDcJ2M7SpJLX544YrjJv6TXTkKxOmh9Sj3WN?=
+ =?Windows-1252?Q?8xjydo98/Tzzm7lcJ1tgIeI9RE0HRC1+NFu6ObNyRM1F0xKZI7BMMidf?=
+ =?Windows-1252?Q?ujPdaKVvk1CaOW0EKpDn0KeeHvovAIyLfFScOciNTAm0feB/z+0O6QQz?=
+ =?Windows-1252?Q?4zAS6mn8xDesBpiuaYbizAch2WFi/H6yagl1lzcrgy1P7FE1ltJp13Wg?=
+ =?Windows-1252?Q?qKgxdjnJgUeGI6q1nkRctk7KeSYhDUGYKrGgn4DR/WBu679mJjmiR3Y8?=
+ =?Windows-1252?Q?vFVICEDxpwnjrHwt49iJ7WJbnGFz0u19xUqGppBO5UJcqjylz3zXYCNE?=
+ =?Windows-1252?Q?ysj7Fh/KHw27rLFmHKztzi91Rd1zNyAOprUlGDuRErJyNmpIiUAFJd+G?=
+ =?Windows-1252?Q?uwWFAYAKiBQ1mWqipgxYoPXuRhToBRxTSlcMFtk/R6egfQrGAaSHIf5J?=
+ =?Windows-1252?Q?modV8oDyc9Z2wT3n?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2P195MB2134.EURP195.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(69100299015)(1800799024)(38070700021)(13003099007)(8096899003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?Windows-1252?Q?2bao1lXG+LtCn0p1/CbWyOOUCmZH4mOnD4GqghCE0eh+uCCom2OyuKe7?=
+ =?Windows-1252?Q?oEIvZh8MwwUZc1z/ieVbqwG9kBUrPrHXDkIWSynBgeA6yUp/VZ44cVId?=
+ =?Windows-1252?Q?0GVQ+6ldFDmNmJKqFSA3XFTPyoFDb8IyRZYIOWRL98fFBgcY3uY1aaFy?=
+ =?Windows-1252?Q?CIXW9lXLwautOJehLhmPbPxga3VsWYSD42HUoRf8sar84rHJSHyruWVD?=
+ =?Windows-1252?Q?B/ryy5GWRhsAxhLlUHN2mP7ws/WG6HquBt8bPl6p9M9zhSqYU5NrIEwO?=
+ =?Windows-1252?Q?XLT2bG9xCbzvPdDRDQNH3UvEUHwpdYQy2/MOJPyV15tpc4E2L2WpnANY?=
+ =?Windows-1252?Q?u5jwtaarEIw0jXjdhIP2HcdbGK12kRoBySq1j5dF8MiHrGIKR+sPQ+7Z?=
+ =?Windows-1252?Q?fOuNwJKS7r7EC4c3Ogu9562j1Vxno4izEkgN9B15iEJp4jGHd83eeJ4S?=
+ =?Windows-1252?Q?CQhHo1qRKJuTeT3CESdslIzwiaUg+LwxoAiKMQJr4aGyH4pjwZm1Mwa+?=
+ =?Windows-1252?Q?qaf64BVoki9GwHPy5FcP5ImmH5fa1GMl4l7owVPzfDDbu0YbR0wIMorB?=
+ =?Windows-1252?Q?kOafwIOs4VtDP+/goE2Yc3jXfBW8NdKkLhhiDX+582TFBld4GkE9bJuv?=
+ =?Windows-1252?Q?WhzGFovXuQowUs7GU8IxxOgwrNCD2UdmLQGjAZ2O6i2kv3Guv9FY4Dgw?=
+ =?Windows-1252?Q?PwHyrfyb9MS32ruyzKiTNwaK6RrYlo4ftIixetnTDlfgvPl/haGCIbfa?=
+ =?Windows-1252?Q?gW5qPFfnUTDu23eBa5OeOWcF1MkKYqMiSGq1vbEndviV2FWHmqfTGout?=
+ =?Windows-1252?Q?xqipyjfDKXvHGLoK1lM9wmRqcwNyk8zWNkgQPhAWz3vzv/9B2m9PsxZJ?=
+ =?Windows-1252?Q?YUVLBfu2qnoczxRzQFhKd1s++qn+scpgjLBx5TpFi5u3ACN4xpYeofqg?=
+ =?Windows-1252?Q?fG1dm9jbNRRckDauM01Z/Peh2ZslId+KjKrC7PV8wS9TI1KASz7tPCaX?=
+ =?Windows-1252?Q?rMvDWMgCeDLtPiAUBw/hYLTG+et7s+/Y+wcIMply9lBbcRpJgUg6bmxv?=
+ =?Windows-1252?Q?94CRQPLIHChNDqPpiKdBk8/6UhEeE3OqYykF8rE6cyYD8la0JmrjfILG?=
+ =?Windows-1252?Q?nTbIRaAXTwyzlcZetLePDqunP8EVWPcs1XFzEh098QkMbKPW85F3Ma5I?=
+ =?Windows-1252?Q?7BsiLbPAV6h+KfgTspVj0FIBPdkoIpBwT+CzT4yYrzP7V1aT5n42pNJW?=
+ =?Windows-1252?Q?DcJ5RFuNo+mhW36mwS4FxEkfBrWZfPUOCbPI30e+6WhzYwVtCjv+ikbv?=
+ =?Windows-1252?Q?FFaQG4JK4dgDf8euGjO4jzx2RL1G3f03Ay2sjaaDUCm0SLfHicYUckAg?=
+ =?Windows-1252?Q?NMuFmZMQqP5q0buQ9Iwu3rciyqu4W9S38WmVxWmL2+usdoR2HntNBy3n?=
+ =?Windows-1252?Q?MrUbp4nwsXu911x12hexxM5FrpyejjPKFK7fUj6VAFxAS8peS5KBblzB?=
+ =?Windows-1252?Q?aT0LxzR86s8X/P9wrXHyP/OaNq7LGV19Rhor4BJfrfTTB1oGGuMEwrcQ?=
+ =?Windows-1252?Q?Iq0pOJXGxTXkZU5HCetBLGfV0uOvGSEof1kp4jtZdNqeW2ZBy37X+wFn?=
+ =?Windows-1252?Q?RwIp1Sl+ZuoJvf635bUD++XwofFe3qN9RnkXuVSuBM/sG5BBBJikWzRt?=
+ =?Windows-1252?Q?3zgBqS6Njef5V5v+ysnTySX40L++6D9+0UcDKI2z8Q2E9LW0axyziOIn?=
+ =?Windows-1252?Q?sDbUaflWsj5UEbuk6yI=3D?=
+Content-Type: multipart/alternative;
+	boundary="_000_AS2P195MB213455B9ED9751179EEAEF2592C4AAS2P195MB2134EURP_"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Subject: Re: [PATCH] Cygwin: Testsuite: fixes for compatibility with GCC 15
-Reply-To: cygwin-patches@cygwin.com
-To: cygwin-patches@cygwin.com
-References: <MA0P287MB3082B86D9A27A995509C8EAC9FFCA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <39e50846-f6d2-4dec-9d9e-ce4c4e963ace@maxrnd.com>
-Content-Language: en-CA
-Organization: Systematic Software
-In-Reply-To: <39e50846-f6d2-4dec-9d9e-ce4c4e963ace@maxrnd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 34BF52E
-X-Stat-Signature: bc9irfreetdqyts4dh9n4qbrbczehmpc
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_NUMSUBJECT,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1/t9Xq9JSMd3hVfKKTpYsuSdFLMI7pNuek=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:subject:reply-to:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=mPFhv46S+RX/gufRcWaF8mhJIYW0Ubjc6hdXakyB+JI=; b=aB1gJNN8Sgs7ay64Uk699y/ByuSAACeQmpYOALCM5JSaQJSRSKsLwFqdjWQHWaj1Tl+SaOPXP1Qzznm2TMBUx68Tn9HaPepweQ1eZfDl5GRgR7hEo4GcsuNxXOJSgsTp2vqQo2r6zXQT5otLbkn8ZYNgTQ1EdjJXPzRBYIaidmmKvI6oKeEnjXtEI696DJYXU9i5lwYe1wUuid/6M9q6axXwv03nG4B5Sp/+zPAspLrAyntgpe2FgBLt3n2TN+et0MIGHlc24dZTLwnlpRC2Ok5369iroj6YbOuCeAneh/P5uYHtQCEuoKkGom/qQs7OUpx6ISc7Vjh91ShmL8M4gA==
-X-HE-Tag: 1761939023-940267
-X-HE-Meta: U2FsdGVkX18bf5odr1A0qipI1yYxL/fh7CBEhDx3XfLM4S+KsPxPPgVc39jLt3qv8OrUHpSQ2onDapSzuPlkCBs125iFDKJ20yk0aT/iUm/oXr/jJscoEgSErF30x31V3MfcM44w38JGmHn599JYBfg9gyCDlYUSgn9WFcdVZ2IgdDxwJ7BuSSuIJ2fvUzlKbRjdXB0CuwAlmudoCQEUrqBfmmqdSATqzHgLVIAjAifGVz8UFzAzzlyGlV0AIjnrcTUUStaaaRkmt0ucPXa240eVWt4/4tlnwBrizCQvlN1JGFWCrtxoS+FJzTp7p0QytPAdgbBExftScZ/0BcZbqsJs8AS2nOMKTh1sk3dORXHQ5K6dhFdqcEBxWY3ILgdzyKvpZ6U5L1iWYMbJhPVJ94VjMeg8lJoo+klK3gFA6LxAjcJ+ydqLMxTcNilbHNIhlq2Iyn5QIwoHo4sGMDTxiLs+/19JuGNSTSrfTCRB6Y0I/ctwmJAxa23fHV7bPSG4
+X-OriginatorOrg: relianceinfosystems.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS2P195MB2134.EURP195.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f5415d7-ecf0-4c50-2675-08de1b9a0a98
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2025 12:02:34.9335
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0b60fed4-5fc9-409d-95f2-271114f4c86f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tS3RJ2dcEOkLz7Ggbt8PMtWf6U2V8h6LY3RTOGro2HXx4F35yathrqOL+PtxK3PQh23WF2qChVgei7RssI7HMnehlzuSs/YJH2hGTR59GJobMJ6Q8MXjGKUIKdPjcBJAfGCAQnO8dcSLHoSOYwOVDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P195MB1956
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTML_IMAGE_ONLY_32,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,URIBL_ABUSE_SURBL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-10-30 21:49, Mark Geisert wrote:
-> Hi Thirumalai,
-> 
-> On 10/27/2025 1:23 AM, Thirumalai Nagalingam wrote:
->> Hi Everyone,
->>
->> Please find the below attached patch for review.
->>
->>    *   This patch fixes function declarations in shmtest.c by converting 
->> definitions to
->>
->> standard ANSI C prototypes to ensure compatibility with GCC 15.
->>
->> Thanks & regards
->> Thirumalai Nagalingam
->>
->> ============
->> In-lined patch:
->>
->> diff --git a/winsup/testsuite/winsup.api/shmtest.c b/winsup/testsuite/ 
->> winsup.api/shmtest.c
->> index e0b7acf7d..2c6c74e7a 100644
->> --- a/winsup/testsuite/winsup.api/shmtest.c
->> +++ b/winsup/testsuite/winsup.api/shmtest.c
->> @@ -74,10 +74,7 @@ key_t    shmkey;
->>
->>   size_t pgsize;
->>
->> -int
->> -main(argc, argv)
->> -   int argc;
->> -   char *argv[];
->> +int main(int argc, char **argv)
->>   {
->>      struct sigaction sa;
->>      struct shmid_ds s_ds;
->> @@ -177,18 +174,14 @@ main(argc, argv)
->>      exit (1);
->>   }
-> 
-> Thanks for looking into this issue.  Our Cygwin coding conventions specify that 
-> function names should be at the left margin.  So...
-> 
-> int
-> main(int argc, char **argv)
-> {
->      ...
-> }
+--_000_AS2P195MB213455B9ED9751179EEAEF2592C4AAS2P195MB2134EURP_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 
-Follow the GNU Coding Standards:
+Hello
 
-	https://www.gnu.org/prep/standards/
+I hope this message finds you well.
 
-distributed as part of the autoconf2.7 package:
+I recently came across your website and was impressed by the quality and re=
+levance of the content you provide to your audience. At Reliance Datatech, =
+we are part of a global ICT organization=97Reliance Infosystems=97that spec=
+ializes in delivering effective digital transformation models, enterprise s=
+olutions, and success assurance services to commercial, government, and not=
+-for-profit organizations worldwide.
 
-	$ info standards
+Our approach is rooted in empathy-inspired, consultative engagement. We hel=
+p organizations reimagine their business journeys to achieve unmatched succ=
+ess through innovative technology solutions.
 
-although that is a few years out of date compared to the upstream
+We believe our content and services could serve as a valuable resource for =
+your audience. If you're open to collaboration, we would greatly appreciate=
+ the opportunity to be featured on your site through a backlink to our page=
+: https://reliancedata.tech/
 
-	https://savannah.gnu.org/projects/gnustandards/
+This partnership could enhance your users=92 experience by providing them w=
+ith access to relevant and transformative digital insights.
 
-It may be useful to include "Information for Maintainers of GNU Software" with 
-cygport (and include the PDF in doc/ as well as info - ditto Standards)?
+Thank you for considering our request. We look forward to the possibility o=
+f working together.
 
-	https://www.gnu.org/prep/maintain/
+Best regards,
 
-> I've not patched the testsuite before so I'm unsure if the same submission 
-> format applies here as applies to Cygwin DLL patches.
-> 
-> Namely, make the change in your git repo and commit it, use 'git format-patch 
-> -1' to create a patch file, and then 'git send-email <filename>' to mail it to 
-> cygwin-patches@cygwin.com.  Between the last two steps, use an editor to add a 
-> patch description between the email headers and your patch.
-> 
-> I am doubly unsure if all the tracking info added to DLL patches needs to be 
-> added to testsuite patches.  Here I mean Reported-by:, Addresses:, Signed-off- 
-> by:, and Fixes:.  Maybe someone else can chime in on this?
+Reliance Datatech
 
-We need to provide:
+https://reliancedata.tech/
 
-	git format-patch -s|--signoff
-	git config format.signOff=true
+[https://www.semrush.com/link_building/tracksrv/?id=3Dcab8e4c5-4508-4e56-a7=
+35-e145170134e0]
+josephine samuel
+Digital Marketer
+RELIANCE INFOSYSTEMS
+North America | Europe | Middle East & Africa
+Mobile:
+Email: josephine.samuel@relianceinfosystems.com
+Website: www.reliance.systems <http://www.reliance.systems>
 
-to follow secure software development guidelines:
+To raise a support ticket,send an email to care@reliance.systems
 
-	https://sourceware.org/cyber-security-faq.html
+[reliance]
 
-• Encourage signed git commits and store public keys in gitsigur.
+DISCLAIMER:
+This Electronic Mail and any attached information are confidential and may =
+also be privileged. It is intended only for the use of authorized persons. =
+If you are not an addressee, or have received the message in error, you are=
+ not authorized to read, copy, disseminate, distribute or use the Electroni=
+c Mail or any attachment in any way. Please notify the sender by return E-M=
+ail or over the telephone and delete this e-mail.
 
-• Record all review actions in the final commit using tags like Co-Authored-By, 
-Approved-By, Reviewed-By, Tested-By, Acked-by and add links to bugzilla and 
-review threads on inbox.sourceware.org
-[or cygwin.com/pipermail/cygwin{,-apps,-developers,-patches}/
-or sourceware.org/newlib/]
-
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+--_000_AS2P195MB213455B9ED9751179EEAEF2592C4AAS2P195MB2134EURP_--
