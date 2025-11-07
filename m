@@ -1,63 +1,77 @@
 Return-Path: <SRS0=ruzz=5P=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.180])
-	by sourceware.org (Postfix) with ESMTP id DDBFB3858D21
-	for <cygwin-patches@cygwin.com>; Fri,  7 Nov 2025 20:23:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DDBFB3858D21
+Received: from btprdrgo009.btinternet.com (btprdrgo009.btinternet.com [65.20.50.46])
+	by sourceware.org (Postfix) with ESMTP id 294473858D35
+	for <cygwin-patches@cygwin.com>; Fri,  7 Nov 2025 20:23:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 294473858D35
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DDBFB3858D21
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.180
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1762546998; cv=none;
-	b=N6/jvIpPcSc9QmQSiHpqnGMxXL5uOT3GHfUxKBaLvxmPw8k5VC0b3j4nuUNZY0e/rYiHS5y9hTsvganKDhPdQNOX1jrFInU460YJe0NYNLBcxMsoRwQqh930KzG8SGLtuS+mKgrt0OZ31AaaJELJsXy5ocoOhKuuyjEoqofLeeE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 294473858D35
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.46
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1762547037; cv=none;
+	b=dmBNGQLcE6f8xjSK7ALm8plK0unqgeFSVz7z9ddAPVOGyNiLuFGQgj8p+R3nKNarAkktHl03Nj847rceO4sfGC954FYKsZwoAQ9jX50Ixj6NDyImLoaSnY13IfXGoygcCIMZBQ7x7gnzwcIfuA6Pl/foD3mrsLG7oOgqHXZeSzs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1762546998; c=relaxed/simple;
-	bh=IwLBSKd8iO+AbIu61DKmnbcPIqEzkL2SrnvrOWf1NPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=cYiEQLb8Uo5v5MNnq3W4/3YVQLz2g/+9v7oFVQWzOxSsnfdTMiihwoKfU2pZYg/o72hRuKvdoxJ5Jr2to7W+5oulDlqRpf4Xry3cehGI5W1zZSMMYtcdCRYqxD2oL/hcm3Si/R5qyd5900Sv8XcDXhU8UeKtEtezTj3iIfrBB3g=
+	t=1762547037; c=relaxed/simple;
+	bh=Nm6IPwiXQlRj9p/koItmLIEqgmNBD/Z6qBJSsa6knaU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=wcqU6+vOozrzNQDOE4xPPyZ29gunApHGTsmOklsnpzzrE9tppLID48PlLSHpOlvh7yaxDejDDAtlGGbX0MRFkvhHqGiuUODmq68kyovsgmU8/v66CDC0SaSKcle9KrDd+i2d/NlOy7C1vAyJlMn5TfmIhZqdREECaY9fyorZi3U=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DDBFB3858D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 294473858D35
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 68CA1BDC0517FC72
+X-SNCR-Rigid: 68CA1DFC051863CC
 X-Originating-IP: [81.158.20.254]
 X-OWM-Source-IP: 81.158.20.254
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduledtieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvedvkefgffetteeuhefgudeggfekveeljeduudehveeutdevjeefvedvvedvgfdvnecukfhppeekuddrudehkedrvddtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekuddrudehkedrvddtrddvheegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduheekqddvtddqvdehgedrrhgrnhhgvgekuddqudehkedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtgedpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgih
-	ghifihhnrdgtohhmpdhrtghpthhtohepthhhihhruhhmrghlrghirdhnrghgrghlihhnghgrmhesmhhulhhtihgtohhrvgifrghrvghinhgtrdgtohhm
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduledtieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeegueetieegieekgfehtefhteeuhfdtgeeiieekheetheeffedvuefftdevjeffnecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucfkphepkedurdduheekrddvtddrvdehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduheekrddvtddrvdehgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddqudehkedqvddtqddvheegrdhrrghnghgvkeduqdduheekrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdelpdhnsggprhgtphhtthhopedvpdhr
+	tghpthhtoheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopegvvhhgvghnhieskhhmrghpshdrtgho
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (81.158.20.254) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 68CA1BDC0517FC72; Fri, 7 Nov 2025 20:23:11 +0000
-Message-ID: <b559bcfe-7067-409c-aac9-2334a5979807@dronecode.org.uk>
-Date: Fri, 7 Nov 2025 20:23:06 +0000
+Received: from [192.168.1.109] (81.158.20.254) by btprdrgo009.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 68CA1DFC051863CC; Fri, 7 Nov 2025 20:23:53 +0000
+Message-ID: <7583cecf-016b-4551-af55-63de58e670d9@dronecode.org.uk>
+Date: Fri, 7 Nov 2025 20:23:49 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] Cygwin: Testsuite: fixes for compatibility with GCC 15
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-References: <MA0P287MB3082B86D9A27A995509C8EAC9FFCA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <PN3P287MB307716E6892DFD994EE173249FF8A@PN3P287MB3077.INDP287.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] Cygwin: aarch64: Add runtime pseudo relocation
+To: Evgeny Karpov <evgeny@kmaps.co>
+References: <CABd5JDC_=LLjR8_nRHxBzLCxMgEqMwJP+jf-E_CPvFxOYWR2nw@mail.gmail.com>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-US
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <PN3P287MB307716E6892DFD994EE173249FF8A@PN3P287MB3077.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <CABd5JDC_=LLjR8_nRHxBzLCxMgEqMwJP+jf-E_CPvFxOYWR2nw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 31/10/2025 07:59, Thirumalai Nagalingam wrote:
-> Hi,
-> 
-> Thanks for the suggestion, Mark (mark@maxrnd.com<mailto:mark@maxrnd.com>).
-> Thank you for your feedback on the coding conventions. I have incorporated your comments and prepared the V2 patch accordingly. Kindly disregard the earlier patch submission.
-> 
-> For ease of review, I have included the patch inline below. Additionally, the patch file generated using git format-patch -1 is attached as file.
-> Due to internal constraints, we are not currently using git send-email. However, this submission method has worked successfully for previous patches sent to the mailing list.
+On 28/10/2025 13:46, Evgeny Karpov wrote:
+> The patch adds runtime pseudo relocation handling for 12-bit and 21-bit
+> relocations. The 26-bit relocation is handled using a jump stub generated by
+> the linker.
 
-Thanks! Applied.
+Thanks! I applied this.
 
-(A suggestion I hope you might consider for the future: it's perhaps 
-sometimes useful to include the text of the warning which a patch fixes 
-in the commentary for that patch )
+I believe this file is also present in the MinGW-w64 runtime, so you 
+should submit this change to that project as well.
+
+
+Additionally relevant to this area, there's also some stuff related to 
+v1 pseudo-relocations which should have been tidied-up for x86_64 (which 
+post-dates v2) when x86 was removed (see [1]), but never was.
+
+According to the notes I have from a few years ago (which amusingly say 
+"maybe we'll fix this for arm64" :)):
+
+* Remove dummy _pei386_runtime_relocator (conditionally on arm64)
+
+* In binutils, modify the pe_create_runtime_relocator_reference function 
+in ld/pe-dll.c so it no longer references that (for targets which have 
+always supported v2 mode, e.g x86_64 and arm64).
+
+* Make 'ld --enable-runtime-pseudo-reloc-v1' an error (for targets which 
+don't support v1 mode e.g. arm64)
+
+[1] 
+https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;a=commitdiff;h=83f8e24f0b4a8cd4e03e86320c2647f4bb6939f5
 
