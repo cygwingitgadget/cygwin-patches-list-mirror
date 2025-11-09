@@ -1,78 +1,69 @@
-Return-Path: <SRS0=HM4H=5R=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e02.mail.nifty.com (mta-snd-e02.mail.nifty.com [106.153.227.178])
-	by sourceware.org (Postfix) with ESMTPS id 4CD2A3858C52
-	for <cygwin-patches@cygwin.com>; Sun,  9 Nov 2025 09:02:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4CD2A3858C52
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4CD2A3858C52
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.178
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1762678938; cv=none;
-	b=KIcqtantU9UFGTpTR8wK/dNY/0eWHXojIhmiI0JQ5i5SrJwK0NvT80bJY8KkY78rM23Y1y9AoXGiVyenV3nG0RzMyPKsGxTy8KZqt4XGoUQTtYrcY/luf92IF04njT9jSCwAUBHd2+444qDRQMEmlDXsV2bSNd/J0nl9Kn0aHps=
+Return-Path: <SRS0=n1w5=5R=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo006.btinternet.com (btprdrgo006.btinternet.com [65.20.50.80])
+	by sourceware.org (Postfix) with ESMTP id 4BE203858D33
+	for <cygwin-patches@cygwin.com>; Sun,  9 Nov 2025 15:52:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4BE203858D33
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4BE203858D33
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.80
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1762703535; cv=none;
+	b=X8KG937+xPGGOFfyhNch4ZkV51KAuHOWOz2C5grG/y6Jbu3Bqzl57WCkAZmD3iaCow7234dIYCMXw/nhGol/p6rvomkO+valsZBh+UOxi1lajsgSSIUvqvUWhLjI1N0jDetgpN3J2xe+fsMWax1mu71tdwAFxS7OM5Sa8c0d4hY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1762678938; c=relaxed/simple;
-	bh=CBqBJzpSGVRYuppzdHRDSn4RNHl+hBJmk7mNnVUUdr0=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=Si/DYgMuHuSrgLVawUqX/x5a3B4j4CWpIxZcGXQWWjWrF0KSlBYAR4VCnNXDxuqnrzvvMCP9TFik1EPchCnl+vErZiEjBqPgFa+Yk4t4dI86/nrs7jf+n5AvqT36MqG0df76KW60Y/WJCtKHhsnYS0SknghYBLy2LJ6GtjGoxC8=
+	t=1762703535; c=relaxed/simple;
+	bh=iBmJgeJ4Yl3hRTzzfvk+R8yYK9mgbupgzL4o2McEDyI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=dx0zqTQrGcdbfDfBc/dQrFx/MhbKE88MX0gdEcyZiSUBUeipFzLqVTcEz269E5kL8JmGZZldV+WV/k1NKBhhcDPZ6ybGh65YL0u4DeRbRyZgvcxaIME3LszTKEzpvsWQ8ARRgDA/R0VU8Uj8DWi5TCv/s8kGGIq0wlU74wImlLE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4CD2A3858C52
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PLp7lo1+
-Received: from HP-Z230 by mta-snd-e02.mail.nifty.com with ESMTP
-          id <20251109090215110.GXUA.45927.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 9 Nov 2025 18:02:15 +0900
-Date: Sun, 9 Nov 2025 18:02:14 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/2] Fixes for dll_init.cc
-Message-Id: <20251109180214.06d195f84ddb678ca1a0ca27@nifty.ne.jp>
-In-Reply-To: <1034b8d0-4de7-407c-a9f1-6c2ba7744380@maxrnd.com>
-References: <20251028114853.11052-1-takashi.yano@nifty.ne.jp>
-	<20251105135842.e9c501e7cce6ec6603acc124@nifty.ne.jp>
-	<1034b8d0-4de7-407c-a9f1-6c2ba7744380@maxrnd.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4BE203858D33
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 68CA1CA0053F35B5
+X-Originating-IP: [81.158.20.254]
+X-OWM-Source-IP: 81.158.20.254
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduleehkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnheplefhjedvjeeltdekfeeiueefgeeviedtkeehgeefveeuhefhfeekjeellefgleeknecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepkedurdduheekrddvtddrvdehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduheekrddvtddrvdehgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddqudehkedqvddtqddvheegrdhrrghnghgvkeduqdduheekrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdeipdhnsggprhgtphhtthhopedvpdhrtghpthht
+	oheptgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomhdprhgtphhtthhopegvvhhgvghnhieskhhmrghpshdrtgho
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (81.158.20.254) by btprdrgo006.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 68CA1CA0053F35B5; Sun, 9 Nov 2025 15:52:13 +0000
+Message-ID: <a1c26e42-7417-4175-b81c-b0fdf6c92d3d@dronecode.org.uk>
+Date: Sun, 9 Nov 2025 15:52:10 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: aarch64: Add runtime pseudo relocation
+To: Evgeny Karpov <evgeny@kmaps.co>
+References: <CABd5JDC_=LLjR8_nRHxBzLCxMgEqMwJP+jf-E_CPvFxOYWR2nw@mail.gmail.com>
+ <CABd5JDDKBrF8teHM3OPvp733-okLrbakjTMurAvprhN5_iSq8g@mail.gmail.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <CABd5JDDKBrF8teHM3OPvp733-okLrbakjTMurAvprhN5_iSq8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1762678935;
- bh=+C1ctx03212u/ZxL4UiWOI1Q+pemXOjVzJBCz1OLMcw=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=PLp7lo1+uMKHJQXh9ITLiuYQqDlFIbiABgf7h4j4O0RCF9DsMTv5SjiYRI+g+go8Bbjmie+L
- rBl0Ijw9j9pOemNsUlDZ3KuKGlKmrVWbBBeA1k10jC2rhH8LkvvAbrnHogYSpGrhx510z6cGRA
- kiLQss6mPSQaex/ta6WprGx+shkw6uYxeuYymaMEUXnGiK2HMgYQaDvzRooVLcfYqMk/qOzUG5
- meK9+XGzdOKa+WeiVicaUXrkGSE6rw7xDZC6WuV8mqYzdksmhORJW+lhN/ssuHqmKLYacqvS4z
- uG0UgV56TnUCDyzeDqWR7/1V25WXFsTJic4kUjvpOOvHFp0w==
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Mark,
-
-On Sun, 9 Nov 2025 00:09:07 -0800
-Mark Geisert wrote:
-> Hi Takashi,
+On 07/11/2025 21:29, Evgeny Karpov wrote:
+> Jon Turney <jon.turney@dronecode.org.uk> wrote:
+>> Thanks! I applied this.
+>>
+>> I believe this file is also present in the MinGW-w64 runtime, so you
+>> should submit this change to that project as well.
 > 
-> On 11/4/2025 8:58 PM, Takashi Yano wrote:
-> > On Tue, 28 Oct 2025 20:48:40 +0900
-> > Takashi Yano wrote:
-> >> Takashi Yano (2):
-> >>    Cygwin: dll_init: Call __cxa_finalize() for DLL_LOAD even in
-> >>      exit_state
-> >>    Cygwin: dll_init: Don't call dll::init() twice for DLL_LOAD.
-> >>
-> >>   winsup/cygwin/dll_init.cc | 8 +++++---
-> >>   1 file changed, 5 insertions(+), 3 deletions(-)
-> >>
-> >> -- 
-> >> 2.51.0
-> >>
-> > 
-> > Could anyone please review if these patches make sense?
+> Thanks. Yes, there is a similar implementation in MinGW (not upstreamed
+> yet).
+> https://github.com/eukarpov/mingw-windows-arm64/commit/a7b86e4867d47434c00b1542a4219e8864acd71c
 > 
-> The patches look fine to me.  Do you happen to have an STC that 
-> demonstrates to you the issue is fixed with your patch?
+> Unfortunately the previous patch was incorrectly encoded.
+> Here is the correct version.
 
-Thanks for reviewing. The STC is the attachment files in
-https://cygwin.com/pipermail/cygwin/2025-October/258919.html
+Oh wow! I haven't seen a patch mangled in that particular way before :)
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+I was kind of baffled how that ever managed to compile, but of course, 
+all the damage is to __aarch64__-conditional code.
+
+I have applied your correction.
+
