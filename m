@@ -1,108 +1,54 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id E8FB7385770B; Tue, 18 Nov 2025 12:40:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E8FB7385770B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1763469637;
-	bh=xNDgHHTtaoOGCWb6Onk2LJkvBIvWGs/FoziHoKNns6c=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=a/kKvaleyX7jFVfcdVcRN2gSWwmClyg5xYlbaRTror4Z/7qlJgQTddQCNdDpkkNMx
-	 DYr9ph2WxojaY5VwEcIHh+Ynp009EhdcaAmuCAbKEb8AUBmVtw8YJ84ecEHUvAKaNu
-	 BFIXWoRDTvJk70jgkmgOIcIDpqtrQmcpu4QwOQyw=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id B2C8AA80DC2; Tue, 18 Nov 2025 13:40:34 +0100 (CET)
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=vCDf=52=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w03.mail.nifty.com (mta-snd-w03.mail.nifty.com [106.153.227.35])
+	by sourceware.org (Postfix) with ESMTPS id 7777B3857830
+	for <cygwin-patches@cygwin.com>; Tue, 18 Nov 2025 14:09:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7777B3857830
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7777B3857830
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.35
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763474993; cv=none;
+	b=g0S5JY+GK+pfx8fYLc5K3O9+0/qDw9SwloIw2giT3nSLyOsyTHbGYt2UDRodVziApzfUwKJOT79yL8H+qUpKIhEajPraqxeAanI+7nA1AHJL5gRasj29Uj9FKLmQmcBcZXf9xchxFxjdqTTMLsqQizzst3LWKxp6t7X//bFBjUc=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1763474993; c=relaxed/simple;
+	bh=wWOh8j23kS+6/2eJ7V00enovqjtNNQA0IJ8ig3MP74M=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=uti6GLlG87p8WkrkKACftErj9ZmtFa2XS4ATwvyFmhPxxShkiEUwTRMko8UUeYrQ3K1hO812EDDegVjzyaXsWVm7X8LaCnW3g9diGYHC3I+rgAfXxad99BfC1C/mLq+ajC2BxBYm4OL0LQdDpNF6D5siEGCZbFeXxPdVfDmMyxE=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7777B3857830
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=LP+N4WQt
+Received: from HP-Z230 by mta-snd-w03.mail.nifty.com with ESMTP
+          id <20251118140950267.WNYH.47226.HP-Z230@nifty.com>;
+          Tue, 18 Nov 2025 23:09:50 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] Cygwin: console: (re-)introduce simple creation of invisible console
-Date: Tue, 18 Nov 2025 13:40:34 +0100
-Message-ID: <20251118124034.1097179-3-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251118124034.1097179-1-corinna-cygwin@cygwin.com>
-References: <20251118124034.1097179-1-corinna-cygwin@cygwin.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 0/2] Fixes for dll_init.cc
+Date: Tue, 18 Nov 2025 23:09:33 +0900
+Message-ID: <20251118140943.7357-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1763474990;
+ bh=yCdNqNLBuYaVmvqEEPRCX9olFsFL9uHFCHz/uSQPooQ=;
+ h=From:To:Cc:Subject:Date;
+ b=LP+N4WQtbg/6FKmSKAIRy84eCBmPtCNymjNdah8bn8ZkCKN5DBRSQyHXKm0jWU0DlvHS4uwj
+ gQok8jqRD8yPvW2DAsUOI67DNQzCALb3wMhTDUPcnIV8u1DjEWmX/QTmK0ngLxLnkyK8HsHvWX
+ xBZrrL1EqwL6lEYtyBQ/56CejQD6+r/Mk+2VpKwgB+or9cJ0AcpjnNdZYqEOfP9v/IKDt04iaH
+ GpuURO6m+Wt3mHiOFe4X0+SHGq7Be0NtBrJBxHZLlmrKPxW7niIZ7nhxpGCLqW7Zlp+526OHaK
+ TX9AgwZa90ndG0XN78W4KGRqDQmLqUh1o3j0sM5biLNJ1LiA==
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
+Takashi Yano (2):
+  Cygwin: dll_init: Call __cxa_finalize() for DLL_LOAD even in
+    exit_state
+  Cygwin: dll_init: Don't call dll::init() twice for DLL_LOAD.
 
-Reintroduce the once existing fhandler_console::create_invisible_console()
-method originally used until Windows Vista.  Now call AllocConsoleWithOptions()
-from here, creating an invisible console on systems supporting it.
+ winsup/cygwin/dll_init.cc | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/autoload.cc               |  1 +
- winsup/cygwin/fhandler/console.cc       | 21 ++++++++++++++++++---
- winsup/cygwin/local_includes/fhandler.h |  1 +
- 3 files changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
-index d5d344d21dd4..a038997b3999 100644
---- a/winsup/cygwin/autoload.cc
-+++ b/winsup/cygwin/autoload.cc
-@@ -463,6 +463,7 @@ LoadDLLfunc (GetTcpTable, iphlpapi)
- LoadDLLfunc (GetTcp6Table, iphlpapi)
- LoadDLLfunc (GetUdpTable, iphlpapi)
- 
-+LoadDLLfunc (AllocConsoleWithOptions, kernel32)
- LoadDLLfuncEx2 (DiscardVirtualMemory, kernel32, 1, 127)
- LoadDLLfuncEx (ClosePseudoConsole, kernel32, 1)
- LoadDLLfuncEx (CreatePseudoConsole, kernel32, 1)
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 887e2ef722bf..9fd3ff5060be 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -4466,7 +4466,20 @@ hook_conemu_cygwin_connector()
-   DO_HOOK (NULL, GetProcAddress);
- }
- 
--/* Ugly workaround to create invisible console required since Windows 7.
-+bool
-+fhandler_console::create_invisible_console ()
-+{
-+  ALLOC_CONSOLE_OPTIONS options = { ALLOC_CONSOLE_MODE_NO_WINDOW, FALSE, 0 };
-+  ALLOC_CONSOLE_RESULT res;
-+
-+  HRESULT ret = AllocConsoleWithOptions (&options, &res);
-+  SetParent (GetConsoleWindow (), HWND_MESSAGE);
-+  termios_printf ("%X = AllocConsoleWithOptions (), %u", ret, res);
-+  invisible_console = (ret == S_OK);
-+  return invisible_console;
-+}
-+
-+/* Ugly workaround to create invisible console required prior to W11 24H2.
- 
-    First try to just attach to any console which may have started this
-    app.  If that works use this as our "invisible console".
-@@ -4611,12 +4624,14 @@ fhandler_console::need_invisible (bool force)
- 	  || !GetUserObjectInformationW (h, UOI_FLAGS, &oi, sizeof (oi), &len)
- 	  || !(oi.dwFlags & WSF_VISIBLE))
- 	{
--	  b = true;
- 	  debug_printf ("window station is not visible");
- 	  AllocConsole ();
- 	  invisible_console = true;
- 	}
--      b = create_invisible_console_workaround (force);
-+      if (wincap.has_alloc_console_with_options ())
-+	b = create_invisible_console ();
-+      else
-+	b = create_invisible_console_workaround (force);
-     }
- 
-   debug_printf ("invisible_console %d", invisible_console);
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index bdd87ebb7787..0de82163ef74 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2227,6 +2227,7 @@ private:
- /* Input calls */
-   int igncr_enabled ();
-   void set_cursor_maybe ();
-+  static bool create_invisible_console ();
-   static bool create_invisible_console_workaround (bool force);
-   static console_state *open_shared_console (HWND, HANDLE&, bool&);
-   static void fix_tab_position (HANDLE h, DWORD owner);
 -- 
-2.51.1
+2.51.0
 
