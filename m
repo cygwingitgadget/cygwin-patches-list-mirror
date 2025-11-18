@@ -1,81 +1,108 @@
 Return-Path: <SRS0=vCDf=52=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id 7091D385B534
-	for <cygwin-patches@cygwin.com>; Tue, 18 Nov 2025 23:46:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7091D385B534
+Received: from mta-snd-w06.mail.nifty.com (mta-snd-w06.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:26])
+	by sourceware.org (Postfix) with ESMTPS id 50CFD3858D35
+	for <cygwin-patches@cygwin.com>; Tue, 18 Nov 2025 23:49:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 50CFD3858D35
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7091D385B534
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763509589; cv=none;
-	b=NG055TCctuYTFWZPuKkdlxuSlebmAYf64m6KHznrNnIUZf+7BrsJZiicWwurY6R55jOszDU2NxyXQhv22vnBJ8geZ09RJd8NYHxcmXMTGzGTYFln4CnAAubm7Lu8tqm55aJ8IBmElOIOksG2Pe9hto0crP1q8ncXvQkvg36spu4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 50CFD3858D35
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:26
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763509785; cv=none;
+	b=PAvkB4CnuHoPIGXYylr2uj1hG0TRez5quE4y6Z/SSS5yTTVBu+Q/sFgarOKD4VoJeuVhkSsDpaSittg+Y+cTPsVmNUQFrFC1DXBT0T9PD/5uMHIF1TFkC+EhzJAChfhImKYF8eHzKf61teb/duduB5hCZSFg8UBSmKjZaSDUvF4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1763509589; c=relaxed/simple;
-	bh=hvJCFm2WQ11K7ZQTGCJ4WaV5uYwJCwIC9nODa6Z30yo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=TWC/sqxfBaxs8pNs2LhHyMNxIWmrc3qRLfLSnC+sRdPwW2c+x2GOaCBLfYACOE6/6l/f5SqhGeHyxRbK1VWM/LUi6FZeaV/yIcx6Evp1fy5wNUVqSHh+W42V0tYjkUsWaf94puSETYLJqvXEduNh8iEgGJK53w8siSihYKAxxN4=
+	t=1763509785; c=relaxed/simple;
+	bh=xOEU0DSXpj/MlbJ+gq+sglQdnfQUMBYgSOk9E2WJlDU=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=vlyQo3a903kB+IU78mhJyyD1JYGlMctbdnZyAkaH88z1657qhjShFk2U4Minuqbqzfnxg3/Wq4vtBKQKdNzVtWr7NvmdPObUl8aqCs9VOVzl8/u8eWkWMfiZEZwEE22iKWPmL7wcC8JFVas+Ik2P2L/c/A0b9B4Y9vnO6YHW7KM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7091D385B534
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 50CFD3858D35
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=tB+lLVPa
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20251118234626796.MGOT.50988.HP-Z230@nifty.com>;
-          Wed, 19 Nov 2025 08:46:26 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=PJXE2zRh
+Received: from HP-Z230 by mta-snd-w06.mail.nifty.com with ESMTP
+          id <20251118234943324.IJED.116286.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Wed, 19 Nov 2025 08:49:43 +0900
+Date: Wed, 19 Nov 2025 08:49:41 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH v3 2/2] Cygwin: dll_init: Don't call dll::init() twice for DLL_LOAD.
-Date: Wed, 19 Nov 2025 08:45:18 +0900
-Message-ID: <20251118234535.194356-3-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251118234535.194356-1-takashi.yano@nifty.ne.jp>
-References: <20251118234535.194356-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1763509586;
- bh=gxlzu822v404FfcLqDMcyBJDGZTB4CsFW/Bsq9DLkXU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=tB+lLVPaHbrjUnowM2A5iitoXqrHqsaU8NvFHB16fQ+kjr0LrnMpmEZ+/3bFVUTstwpRbu9O
- T8mIHARwg5QBT43IngkbTK/eHiaitvnCgqDW9fwXddR5B5I1G5WPTAK5kvNwqmaM7zW4vQSlsR
- inZyaYbcb5CVCIzbCRTxrNTWxWds+mpd/UfsI6S3AYnYS7C7MAcyvn4SiPU4UNTtRAXZP4Zm+K
- j2W/2N9FZcRrTFSVufHT2j0N1JsTFMILPC6IxQK7OOXYjncAoSkWVnbd0njkwBOYtMu3B8i5Xd
- feATzSCbymnEZpZh7+Hc9ulCAsnY6su7cEX4GVGdUYgnIoBg==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/2] Cygwin: dll_init: Call __cxa_finalize() for
+ DLL_LOAD even in exit_state
+Message-Id: <20251119084941.e614d027df0605b9f17e7647@nifty.ne.jp>
+In-Reply-To: <aRydS7KaXPK99ppW@calimero.vinschen.de>
+References: <20251118140943.7357-1-takashi.yano@nifty.ne.jp>
+	<20251118140943.7357-2-takashi.yano@nifty.ne.jp>
+	<aRydS7KaXPK99ppW@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1763509783;
+ bh=CzVehcWSK312NxvLNoCOq6Qv18oZKA5yHvnHTIFAwn8=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=PJXE2zRh2IlUObpOyAuPvCWEmU9qTv+ZWBKL90OZFZVivDuEx6Z+IukOojWkVMGKbZBSLp/y
+ u9wrkHBSz5P9HqgHWLKQN31S9sMnBHb04UWcvv2zVbiCYYkpqWpQli2/Vthg7mGI8bsw9W8Xgb
+ v/zms/zlMY063TGSZzVfYgUD03vPuRFOQyqXUX+BX0+gLrwFRadpKZwmaCWG0d3g/kHiU1GHgu
+ a4p2gDHatsLCfwFaS9ovcTULZIyny4kj3+TeUozWGEBpR3yRgYwm+ItYp2z8SegYofolPvaQGF
+ ptU9cdsLjYLxNTdw5aocB0+zpSI2qUO+a3s/ypeQ8NM7Kjnw==
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-If dlopen() for DLL A is called in constructor DLL B, the constructor
-for DLL A is called twice, once called via cygwin_attach_dll() called
-from LoadLibrary(), and again from dll_list::init(). That is, the DLL
-with DLL_LOAD does not need dll::init() in dll_list::init(). This issue
-was found when debugging the issue:
-https://cygwin.com/pipermail/cygwin/2025-October/258877.html
-This patch remove dll::init() call in dll_list::init() for DLL_LOAD.
+On Tue, 18 Nov 2025 17:22:35 +0100
+Corinna Vinschen wrote:
+> On Nov 18 23:09, Takashi Yano wrote:
+> > If dlclose() for DLL A is called in the destructor of DLL B which
+> > linked with the main program, __cxa_finalize() should be called even
+> > in exit_state. This is because if the destructor of DLL B is called
+> > in exit_state, DLL A will be unloaded by dlclose().
+> 
+> Sorry if I'm dense, but aren't these two sentences kind of circular?
+> Shouldn't the first sentence rather explain that DLL B loaded DLL A?
+> 
+> Kind of like this:
+> 
+>   If the loadtime linked DLL B dlopen's DLL A, __cxa_finalize() should
+>   always be called at dll detach time.  This is because ...
+> 
+> > Thereofre, if __cxa_finalize()is not called here, the destructor of
+>   Therefore                   space?
+> 
+> > DLL A will be called in exit() even though DLL A is already unloaded.
+> > This causes crash at exit(). In the case above, __cxa_finalize()
+> > should be called before unloading DLL A even in exit_state.
+> 
+> > 
+> > Addresses: https://cygwin.com/pipermail/cygwin/2025-October/258877.html
+> > Fixes: c019a66c32f8 ("* dll_init.cc (dll_list::detach) ... Don't call __cxa_finalize in exiting case.")
+> > Reported-by: Thomas Huth <th.huth@posteo.eu>
+> > Reviewed-by: Mark Geisert <mark@maxrnd.com>, Jon Turney <jon.turney@dronecode.org.uk>
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > ---
+> >  winsup/cygwin/dll_init.cc | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/winsup/cygwin/dll_init.cc b/winsup/cygwin/dll_init.cc
+> > index 1369165c9..5ef0fa875 100644
+> > --- a/winsup/cygwin/dll_init.cc
+> > +++ b/winsup/cygwin/dll_init.cc
+> > @@ -584,7 +584,10 @@ dll_list::detach (void *retaddr)
+> >  	  /* Ensure our exception handler is enabled for destructors */
+> >  	  exception protect;
+> >  	  /* Call finalize function if we are not already exiting */
+> > -	  if (!exit_state)
+> > +	  /* We always call the finalize function for a dlopen()'ed DLL
+> > +        because its destructor may crash if invoked during exit()
+> > +        after dlclose(). */
+> 
+> I think this comment is puzzeling for the code reader.  "exit() after
+> dlclose()" *seems* to imply that it crashes at exit() time even if
+> dlclose() has been called explicitely.  The problem is that the
+> context here is tricky, so it's quite hard to explain why a crash may
+> occur if __cxa_finalize isn't called here in only a few words.  It may
+> be helpful to extend the comment and explain this more thoroughly...
+> 
+> Code-wise, the patch LGTM.
 
-Fixes: 2eb392bd77de ("dll_init.cc: Revamp.  Use new classes.")
-Reviewed-by: Mark Geisert <mark@maxrnd.com>, Jon Turney <jon.turney@dronecode.org.uk>, Corinna Vinschen <corinna-cygwin@cygwin.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/dll_init.cc | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks for reviewing!
+I revised patch commend and commit message. Please see v3.
 
-diff --git a/winsup/cygwin/dll_init.cc b/winsup/cygwin/dll_init.cc
-index d2ed74bed..6fae8f145 100644
---- a/winsup/cygwin/dll_init.cc
-+++ b/winsup/cygwin/dll_init.cc
-@@ -618,9 +618,10 @@ dll_list::init ()
-   /* Walk the dll chain, initializing each dll */
-   dll *d = &start;
-   dll_global_dtors_recorded = d->next != NULL;
--  /* Init linked and early loaded Cygwin DLLs. */
-+  /* Init linked Cygwin DLLs. As for loaded DLLs, dll::init() is already
-+     called via _cygwin_dll_entry called from LoadLibrary(). */
-   while ((d = d->next))
--    if (d->type == DLL_LINK || d->type == DLL_LOAD)
-+    if (d->type == DLL_LINK)
-       d->init ();
- }
- 
 -- 
-2.51.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
