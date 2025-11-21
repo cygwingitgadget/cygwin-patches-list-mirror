@@ -1,138 +1,88 @@
-Return-Path: <SRS0=D03U=55=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-	by sourceware.org (Postfix) with ESMTPS id 22F1F3858D1E
-	for <cygwin-patches@cygwin.com>; Fri, 21 Nov 2025 06:24:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 22F1F3858D1E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 22F1F3858D1E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.10
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763706268; cv=none;
-	b=IPORIz4bg3Nbie5GYrHh6wkcvZiYUjuhnNkSo7GDLNXTdFWTFRTdbKpivtJ+b/YtkXH/pjK/as20LV1ldnudJ3RvKzXbigPMIrYdJfqHJOq8YdqzqfCF3LioNWmElfWEs65X9ZV5/2ztsEY86d3VblNk0qGF8deN5R1gYKQM43g=
+Return-Path: <SRS0=K2UI=55=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo002.btinternet.com (btprdrgo002.btinternet.com [65.20.50.146])
+	by sourceware.org (Postfix) with ESMTP id 0C8E8385DC05
+	for <cygwin-patches@cygwin.com>; Fri, 21 Nov 2025 13:25:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C8E8385DC05
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C8E8385DC05
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.146
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763731509; cv=none;
+	b=rtlP6YcZGgNGAfPOBsWBddsJ2CU+9RQTAJ3o5zuchKNuxRJ9icY9PqMCL47Wnw3dh2IGSXVeICZl0pvTzihAkSAHUKtK0ogBlQCL31+d6akS7rbL/1kR2bSngqCHkik3XMV/FzLDNiAag8pifntP86ubSJI7ysslCI9n9zA3H5E=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1763706268; c=relaxed/simple;
-	bh=fwnstfJ4Y43P/rvN4HdW40qq+sOv8oIL9d2QNQ5eaPw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:DKIM-Signature; b=LXR/dbn9OmFPQMSyCMYOUvvEWS80yZICNPeb809TGtIE+UXoVfsOmZgF6GwO1YuJ+/aK8hWvMYV5873tbbz9IoW/eZrk32rrpfvclbt/oy5DKowGtSj7ph0fgf4qnirhWXCXQQAk3ljUNdQudqNOQBGEDI54bod+NLlWNbyeORc=
+	t=1763731509; c=relaxed/simple;
+	bh=cGMuTnZ5WJr1iqAQ3bo1iLFooX9ff6c0bFEA0orfr00=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=jVG1Cb6O+X9gPxG5JECIfMEdOVkiTX/MOJJpqbDhKXXZRkt5BJSzZZtkG/Y7bBwIIEugkPDxQn6QqQjq2jtXUrNDWxktIWs0QwUhflc4AweQ5yV+7GC66aSHMhMeZ4CanJA9owkHQwlCl5iUqq38l9hjUyC2TUB+nAkH2w74m14=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 22F1F3858D1E
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=qXGUGSKP
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id B12A089661
-	for <cygwin-patches@cygwin.com>; Fri, 21 Nov 2025 06:24:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf19.hostedemail.com (Postfix) with ESMTPA id 4B6F420025
-	for <cygwin-patches@cygwin.com>; Fri, 21 Nov 2025 06:24:26 +0000 (UTC)
-Message-ID: <94bf51fa-5eb8-40a1-b688-89769ee4eef3@SystematicSW.ab.ca>
-Date: Thu, 20 Nov 2025 23:24:22 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Add a configure-time check for minimum w32api
- headers version
-Content-Language: en-CA
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C8E8385DC05
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 68CA1AB8067A3550
+X-Originating-IP: [81.158.20.254]
+X-OWM-Source-IP: 81.158.20.254
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfedttdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepheeuuddthefhueetgfeifefgleeitedtiefgtdffhfdvveeggeetjeeffedthefgnecukfhppeekuddrudehkedrvddtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepthgrmhgsohhrrgdpihhnvghtpeekuddrudehkedrvddtrddvheegpdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduheekqddvtddqvdehgedrrhgrnhhgvgekuddqudehkedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddtvddpnhgspghrtghpthhtohepvddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmpdhrtghpthhtohepjhhonhdrthhurhhnvgihsegurhho
+	nhgvtghouggvrdhorhhgrdhukh
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from tambora (81.158.20.254) by btprdrgo002.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 68CA1AB8067A3550; Fri, 21 Nov 2025 13:25:04 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-References: <20251120144715.4015-1-jon.turney@dronecode.org.uk>
- <aR8xbdiYGjTtY_e7@calimero.vinschen.de>
- <4b87cf9c-b9ad-428c-824f-425716a8a4ad@SystematicSW.ab.ca>
-Organization: Systematic Software
-In-Reply-To: <4b87cf9c-b9ad-428c-824f-425716a8a4ad@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH v2] Cygwin: Add a configure-time check for minimum w32api headers version
+Date: Fri, 21 Nov 2025 13:24:55 +0000
+Message-ID: <20251121132455.8864-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 4B6F420025
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: 154mw7f5a1hq6un8ntemnepuez6cu9z5
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX190JALDK33JM9qrE67FkKZjhYrMRcWWQg8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:from:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=wmQ8rgU/Xl1ysQ9VJPn7PLJdtiGEUspYufmOK4VSsoc=; b=qXGUGSKPB75CqtfwH9sXUmZIvlUHhcdilkXdDbabifIi6lGW/GJEG+wJCeAi/BiavyVFnuI6kMdZadEIt/6RifhvniqNUrmgSceTgo2vekWVIUuql+oZh4p/nbN/ar6lcOyrGhnNvjLwhA9rUza0VYFojSwH/fvoWxRhxCHZZfO+CGTnGMUFCP7Xaif8VI7QotntrkfSMmNDLmg57531nkK42puDm0OWevR7/rYH4ti5c4yCmqUg8xg1ZQvDOqw69Cl6D3pDnxwDxn1cbTE2yqkqiipT4h58AOZi0eNifAvbhPCZilsmd1AZmhG+Y3uWmct6G7KKWlmiE3Ew8iMQkg==
-X-HE-Tag: 1763706266-862760
-X-HE-Meta: U2FsdGVkX18+vq4niX5cVHYBXIPTcUuHt/Ta055hp0XrIt5k5MH9/uxAOqTkMOeoB+OA4TAdXEhav0Z7i2STsuG3t1S1LYIpqQGtVZQwyY+fjEoqcivIIAPIYdCCtRJ3Kze0v/CTBLwtMUDVHLECau3Xg2JeZ5VvhT9npxyPrJViA+Ub0Zc2/9qTkIA+bR/kOy0jqEN5bgqj/QIwlOGFKz1H9xWllt3zEjfMHHxIyZhmyZ3qjcSEmFZYAg7FOXKXQF7UxpMaGYR3Hgk/NFOtq58QxY5E8EjIcj9DIs3lUA+hbtsYrEXuhw/AQbdB5/b3Qvfe1lh/o2QflEGQoDieg5iQkptlHLGK
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2025-11-20 16:29, Brian Inglis wrote:
-> On 2025-11-20 08:19, Corinna Vinschen wrote:
->> Hi Jon,
->>
->> On Nov 20 14:47, Jon Turney wrote:
->>> Since we now require w32api-headers >= 13 for the
->>> AllocConsoleWithOptions() prototype, add a configure-time check for
->>> that, as I've mused about a couple of times before.
->>>
->>> This maybe gives a more obvious diagnosis of the problem than 'not
->>> declared' errors, and is perhaps more self-documenting about our
->>> expectations here.
->>
->> Good idea.
->>
->>> After this, most of the other conditionals on __MINGW64_VERSION_MAJOR
->>> can probably be removed.
->>
->> Yup.
->>
->>> ---
->>>   winsup/configure.ac | 15 +++++++++++++++
->>>   1 file changed, 15 insertions(+)
->>>
->>> diff --git a/winsup/configure.ac b/winsup/configure.ac
->>> index e7ac814b1..4137f93eb 100644
->>> --- a/winsup/configure.ac
->>> +++ b/winsup/configure.ac
->>> @@ -57,6 +57,21 @@ AC_CHECK_TOOL(RANLIB, ranlib, ranlib)
->>>   AC_CHECK_TOOL(STRIP, strip, strip)
->>>   AC_CHECK_TOOL(WINDRES, windres, windres)
->>> +AC_MSG_CHECKING([for required w32api-headers version])
->>> +AC_COMPILE_IFELSE([
->>> +  AC_LANG_SOURCE([[
->>> +    #include <_mingw.h>
->>> +
->>> +    #if __MINGW64_VERSION_MAJOR < 13
->>> +    #error "insufficient w32api-headers version"
->>> +    #endif
->>> + ]])
->>> +],[
->>> +  AC_MSG_RESULT([yes])
->>> +],[
->>> +  AC_MSG_ERROR([no])
->>> +])
->>> +
->>>   AC_ARG_ENABLE(debugging,
->>>   [AS_HELP_STRING([--enable-debugging],[Build a cygwin DLL which has more 
->>> consistency checking for debugging])],
->>>   [case "${enableval}" in
->>
->> One problem here: The error message "no" isn't overly helpful to the
->> unaware developer because it neglects to mention the version requirement.
->> If you just run configure, what you get is this:
->>
->>    checking for required w32api-headers version... configure: error: no
->>
->> Given that this code is checking for the actual version number, to be
->> bumped as we go along, it would be helpful to tell the dev which version
->> is supposed to be installed, isn't it?
-> 
-> ...in both messages:
-> 
->  >> +    #error "w32api-headers version < 13"
-> ...
->  >> +  AC_MSG_ERROR([w32api-headers version < 13])
-> 
+Since we now require w32api-headers >= 13 for the
+AllocConsoleWithOptions() prototype and flags, add a configure-time
+check for that, as I've mused about a couple of times before.
 
-sorry...better in all messages:
+This maybe gives a more obvious diagnosis of the problem than 'not
+declared' errors, and is perhaps more self-documenting about our
+expectations here.
 
- >>> +AC_MSG_CHECKING([for w32api-headers version >= 13])
-...
- >>> +    #error "require w32api-headers version >= 13"
-...
- >>> +  AC_MSG_ERROR([require w32api-headers version >= 13])
-...
+After this, most of the other conditionals on __MINGW64_VERSION_MAJOR
+can probably be removed.
+---
+ winsup/configure.ac | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index e7ac814b1..05b5a9897 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -57,6 +57,23 @@ AC_CHECK_TOOL(RANLIB, ranlib, ranlib)
+ AC_CHECK_TOOL(STRIP, strip, strip)
+ AC_CHECK_TOOL(WINDRES, windres, windres)
+ 
++required_w32api_version=13
++AC_MSG_CHECKING([w32api-headers version])
++AC_COMPILE_IFELSE([
++  AC_LANG_SOURCE([[
++    #include <_mingw.h>
++
++    #if __MINGW64_VERSION_MAJOR < $required_w32api_version
++    #error "w32api-headers version >= $required_w32api_version required"
++    #endif
++ ]])
++],[
++  AC_MSG_RESULT([yes])
++],[
++  AC_MSG_RESULT([no, >= $required_w32api_version required])
++  AC_MSG_ERROR([required w32api-headers version not met])
++])
++
+ AC_ARG_ENABLE(debugging,
+ [AS_HELP_STRING([--enable-debugging],[Build a cygwin DLL which has more consistency checking for debugging])],
+ [case "${enableval}" in
 -- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+2.51.0
 
