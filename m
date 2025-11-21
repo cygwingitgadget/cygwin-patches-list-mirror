@@ -1,66 +1,82 @@
-Return-Path: <SRS0=K2UI=55=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo005.btinternet.com (btprdrgo005.btinternet.com [65.20.50.127])
-	by sourceware.org (Postfix) with ESMTP id 6D47A385DC05;
-	Fri, 21 Nov 2025 13:26:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6D47A385DC05
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6D47A385DC05
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.127
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1763731571; cv=none;
-	b=CPAm6652CbZ+kTtAK/QJWytBuuD0O4AIF+jNBsC4uiDJph4nBG71Z57NnbNioRHKOGnJxnyHpVwY1iEQnTS8xf1DZnDBOAp0aA2M/cmcHXXRTnMDNPVa7b0z0q8QDv1rQis++8u/iWOx1e6F09ZcQNRBBsRO4a+G8DXxshycl8g=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1763731571; c=relaxed/simple;
-	bh=XtQDRE4rMCT5hr80nNeLhATYoidnPjznJ8uQ9U4nSkw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Sg3zJkUy1TVsdxr7oWFu4v/FrR0ltjtvP3ev2HKtbcNHl454YvgYvEPGfibbmGaSOiTiWl6XnXo2KzbNtYy7UvW5XGP4TPam/8h1MQ0wpIcHiGHrMzihspIfWUK9xJnI7tMVtX1LAK/DTUFy3e7U38iotIkQGw3nql/aDrTwCo0=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6D47A385DC05
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 68CA1C9506745DB6
-X-Originating-IP: [81.158.20.254]
-X-OWM-Source-IP: 81.158.20.254
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfedttdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhepkfffgggfuffvfhfhvegjtgfgsehtjeertddtvdejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeevvdekgfffteetueehgfdugefgkeevleejudduheevuedtveejfeevvdevvdfgvdenucfkphepkedurdduheekrddvtddrvdehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddruddtlegnpdhinhgvthepkedurdduheekrddvtddrvdehgedpmhgrihhlfhhrohhmpehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkpdhrvghvkffrpehhohhsthekuddqudehkedqvddtqddvheegrdhrrghnghgvkeduqdduheekrdgsthgtvghnthhrrghlphhluhhsrdgtohhmpdgruhhthhgpuhhsvghrpehjohhnthhurhhnvgihsegsthhinhhtvghrnhgvthdrtghomhdpghgvohfkrfepifeupdfovfetjfhoshhtpegsthhprhgurhhgohdttdehpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheptghorhhinhhnrgdqtgihghifihhnsegthihgfihinhdrtghomhdprhgtphhtthhopegthihg
-	fihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (81.158.20.254) by btprdrgo005.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 68CA1C9506745DB6; Fri, 21 Nov 2025 13:26:10 +0000
-Message-ID: <50f03441-b847-41cd-b35c-e5b5d224eb3e@dronecode.org.uk>
-Date: Fri, 21 Nov 2025 13:26:07 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: Add a configure-time check for minimum w32api
+Return-Path: <corinna@sourceware.org>
+Received: by sourceware.org (Postfix, from userid 2155)
+	id 5080A384D173; Fri, 21 Nov 2025 19:04:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5080A384D173
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1763751890;
+	bh=97gAPsiMQ3VcqdqR70VIjxM4SFqFN+M3B/mR33Atcj4=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=SdWoDA0zcpCiRU3AM9NpTdFrnc1ZyFawAlCfhYuvXHYZI1wlvKte1acx43iwmJZIo
+	 0drN4pvpy/S0SQWOwyZKrX6DdNQZIwgpIcooeX4jPlobutsom4N80KkMPlKFYe+gcV
+	 veXT52xbESuHXQo30qv8mfz+NNCAJ8EXT9jRW7HQ=
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 75617A80D1D; Fri, 21 Nov 2025 20:04:48 +0100 (CET)
+Date: Fri, 21 Nov 2025 20:04:48 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] Cygwin: Add a configure-time check for minimum w32api
  headers version
-To: Corinna Vinschen <corinna-cygwin@cygwin.com>
-References: <20251120144715.4015-1-jon.turney@dronecode.org.uk>
- <aR8xbdiYGjTtY_e7@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-US
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <aR8xbdiYGjTtY_e7@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_W,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on server2.sourceware.org
+Message-ID: <aSC30HAFpdjJ0tFj@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20251121132455.8864-1-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251121132455.8864-1-jon.turney@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-On 20/11/2025 15:19, Corinna Vinschen wrote:
-[...]
-> One problem here: The error message "no" isn't overly helpful to the
-> unaware developer because it neglects to mention the version requirement.
-> If you just run configure, what you get is this:
+On Nov 21 13:24, Jon Turney wrote:
+> Since we now require w32api-headers >= 13 for the
+> AllocConsoleWithOptions() prototype and flags, add a configure-time
+> check for that, as I've mused about a couple of times before.
 > 
->    checking for required w32api-headers version... configure: error: no
+> This maybe gives a more obvious diagnosis of the problem than 'not
+> declared' errors, and is perhaps more self-documenting about our
+> expectations here.
+> 
+> After this, most of the other conditionals on __MINGW64_VERSION_MAJOR
+> can probably be removed.
+> ---
+>  winsup/configure.ac | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/winsup/configure.ac b/winsup/configure.ac
+> index e7ac814b1..05b5a9897 100644
+> --- a/winsup/configure.ac
+> +++ b/winsup/configure.ac
+> @@ -57,6 +57,23 @@ AC_CHECK_TOOL(RANLIB, ranlib, ranlib)
+>  AC_CHECK_TOOL(STRIP, strip, strip)
+>  AC_CHECK_TOOL(WINDRES, windres, windres)
+>  
+> +required_w32api_version=13
+> +AC_MSG_CHECKING([w32api-headers version])
+> +AC_COMPILE_IFELSE([
+> +  AC_LANG_SOURCE([[
+> +    #include <_mingw.h>
+> +
+> +    #if __MINGW64_VERSION_MAJOR < $required_w32api_version
+> +    #error "w32api-headers version >= $required_w32api_version required"
+> +    #endif
+> + ]])
+> +],[
+> +  AC_MSG_RESULT([yes])
+> +],[
+> +  AC_MSG_RESULT([no, >= $required_w32api_version required])
+> +  AC_MSG_ERROR([required w32api-headers version not met])
+> +])
+> +
+>  AC_ARG_ENABLE(debugging,
+>  [AS_HELP_STRING([--enable-debugging],[Build a cygwin DLL which has more consistency checking for debugging])],
+>  [case "${enableval}" in
+> -- 
+> 2.51.0
+
+:+1:
+
+Do you have removing the __MINGW64_VERSION_MAJOR conditionals in the loop
+as well?
 
 
-Excellent point.  This should definitely be better than "computer says 
-no". :)
-
-> Given that this code is checking for the actual version number, to be
-> bumped as we go along, it would be helpful to tell the dev which version
-> is supposed to be installed, isn't it?
-
-
+Thanks,
+Corinna
