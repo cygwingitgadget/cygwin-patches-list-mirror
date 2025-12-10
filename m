@@ -1,78 +1,56 @@
-Return-Path: <SRS0=1nHs=6Q=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e08.mail.nifty.com (mta-snd-e08.mail.nifty.com [106.153.226.40])
-	by sourceware.org (Postfix) with ESMTPS id CA0324BA540C
-	for <cygwin-patches@cygwin.com>; Wed, 10 Dec 2025 05:39:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CA0324BA540C
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CA0324BA540C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.40
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765345156; cv=none;
-	b=rj/YzDCeEZaUgIl3fyD15Y+JevY4kBA09lNgb962wKyQbXDmysQ2sZIlnZCadiyA5vBbDWl+8ottsix+m4iOYKG3i70pu2fEfS160JrvhdE3IMWhp0X1RjhlH2/r3N9Y/7GFiIIKWVhz3N6wO7vr9QxOux+t60jvw/mpEKbI5gs=
+Return-Path: <SRS0=tdPk=6Q=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo005.btinternet.com (btprdrgo005.btinternet.com [65.20.50.218])
+	by sourceware.org (Postfix) with ESMTP id 6067B4BA2E1C
+	for <cygwin-patches@cygwin.com>; Wed, 10 Dec 2025 10:51:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6067B4BA2E1C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6067B4BA2E1C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.218
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765363864; cv=none;
+	b=FLyFrez6EimMUR7WWbty2Mqj4hqlVdbKv+aWJ/qmBEUBRYsYOpfobKRcuu/mUA8kWybysmP9KntosYFClng/XxSdZzIt31+M295Mid5yqzt98X2FjE3XdIJvM9bW+bWbXkc1hMzWVN6ZSczCW4xEhNvBFE0rqu57iUjWq0xJHpc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1765345156; c=relaxed/simple;
-	bh=UqvVn1P3+X52CPKE2BuTLqyNTl04Mlylyj4pTsoGWRI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=n6w7x3DX7locObBDCjq8tBFxB/0ADnSamUI/iQphdW4k1reHbEN02/4LGcreFVbGVEJWgo+eWwF+zlNu9jGc5uhgew5uAyMWLrO1Qovra61C9ak5pU2oB1K7nn2WtE6ZO3JexpOyKhTJ4DCYd/FYvEUPXuwMvRUGRp3NfSuC7A8=
+	t=1765363864; c=relaxed/simple;
+	bh=EW1r+ff56aG3BAgGzYA5HX8xIDnC7OLeOzmw5FloXec=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=FkvnWvtFdT5tZJMzrbIfbr4e9YQbDGkCzVawjF2VKk4Iu4fh0rm1E17foTLGRQ9BvMYNJmIcRk1L+LQ0c4wQa58YI64TMiUcfuP9I1yy3Z+0uqXrl6TEzc+X1wlcWIF7ZpdGsE+Ck5Bavw6ZBu+/burBAwwsUm0/1kpCqg2Xdc0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CA0324BA540C
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Dsbx9mSM
-Received: from HP-Z230 by mta-snd-e08.mail.nifty.com with ESMTP
-          id <20251210053913820.SRCK.106098.HP-Z230@nifty.com>;
-          Wed, 10 Dec 2025 14:39:13 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: termios: Follow symlink in is_console_app()
-Date: Wed, 10 Dec 2025 14:38:47 +0900
-Message-ID: <20251210053907.857-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.51.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6067B4BA2E1C
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 68CA1C950861BA01
+X-Originating-IP: [81.158.20.216]
+X-OWM-Source-IP: 81.158.20.216
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=30/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvddvgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenuchmihhsshhinhhgucfvqfcufhhivghlugculdeftddmnecujfgurhepkfffgggfufhfhfevjggtgfesthejredttddvjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepvddtgfduudeuheevffdvjefgieeluefgieevvdfgheeuleffffegjeduudfhgedtnecukfhppeekuddrudehkedrvddtrddvudeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddutdelngdpihhnvghtpeekuddrudehkedrvddtrddvudeipdhmrghilhhfrhhomhepjhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhdprhgvvhfkrfephhhoshhtkeduqdduheekqddvtddqvdduiedrrhgrnhhgvgekuddqudehkedrsghttggvnhhtrhgrlhhplhhushdrtghomhdprghuthhhpghushgvrhepjhhonhhtuhhrnhgvhiessghtihhnthgvrhhnvghtrdgtohhmpdhgvghokffrpefiuedpoffvtefjohhsthepsghtphhrughrghhotddthedpnhgspghrtghpthhtohepuddprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgih
+	ghifihhnrdgtohhm
+X-RazorGate-Vade-Verdict: clean 30
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (81.158.20.216) by btprdrgo005.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 68CA1C950861BA01 for cygwin-patches@cygwin.com; Wed, 10 Dec 2025 10:51:02 +0000
+Message-ID: <5a5dbe69-a66f-443f-b4ac-23c55ae20151@dronecode.org.uk>
+Date: Wed, 10 Dec 2025 10:51:01 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1765345153;
- bh=7a4gqylvV+eGgBCwb5VrLzlC5W+QVOvtw9JDYzPycF8=;
- h=From:To:Cc:Subject:Date;
- b=Dsbx9mSMgjRGkN2Uf2EWLsr2WXOVECQRCywf3m/SQrfyXytXFdkmkvEnYkpiZO6hdOQNLXmX
- t9nDMsJv9faBrGeo4H9mSFqjocFHJ224/gD1TrPNNy7X8epT92dV67tYb/DRrHeqxEG46xkwSj
- efILsnX08qJvauUvTao78HmJskuYYm6sTUO1J+4w1C9JihQ9e8xvkAo2oIdD421zqw/jrqSnhl
- IpxLOar3zI7XqjF+LIqB5nSzVzTTHUc3QTJfKN3XWGDn/gV7uUS4+19vd7sfv6VOw6i7oH4sl5
- 7OrSlBoVA8C+KbOZ09DSOeQ/J/O5HPCgP6nZ17O262uhY5kA==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Cygwin: Add a configure-time check for minimum w32api
+ headers version
+References: <20251121132455.8864-1-jon.turney@dronecode.org.uk>
+ <aSC30HAFpdjJ0tFj@calimero.vinschen.de>
+ <aThGo3gjqLPW7AD2@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-US
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <aThGo3gjqLPW7AD2@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From cygwin 3.6.0, WSL cannot start by distribution name such as
-debian.exe, which has '.exe' extention but actually is a symlink.
-This is because is_console_app () returns false for that symlink.
-This patch fixes the issue using PC_SYM_FOLLOW option in path_conv.
+On 09/12/2025 15:56, Corinna Vinschen wrote:
+> Jon? Ping?
 
-Fixes: a commit between cygwin 3.5.7 and 3.6.0
-Reviewed-by:
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
----
- winsup/cygwin/fhandler/termios.cc | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Oops! Forgot about this, sorry. Now pushed.
 
-diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index 19d6220bc..1026b6969 100644
---- a/winsup/cygwin/fhandler/termios.cc
-+++ b/winsup/cygwin/fhandler/termios.cc
-@@ -704,8 +704,14 @@ fhandler_termios::fstat (struct stat *buf)
- static bool
- is_console_app (const WCHAR *filename)
- {
-+  UNICODE_STRING upath;
-+  RtlInitCountedUnicodeString (&upath, filename,
-+			       wcslen (filename) * sizeof (WCHAR));
-+  path_conv pc (&upath);
-+  WCHAR *native_path = pc.get_nt_native_path ()->Buffer;
-+
-   HANDLE h;
--  h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
-+  h = CreateFileW (native_path, GENERIC_READ, FILE_SHARE_READ,
- 		   NULL, OPEN_EXISTING, 0, NULL);
-   char buf[1024];
-   DWORD n;
--- 
-2.51.0
+I'll finish off my patch to remove now-unneeded conditionals from the code.
 
