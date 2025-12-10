@@ -1,46 +1,91 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id E53B14BA2E22; Wed, 10 Dec 2025 17:32:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E53B14BA2E22
+	id 429D74BA540C; Wed, 10 Dec 2025 17:37:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 429D74BA540C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1765387923;
-	bh=3pCP8AhhWviTyULy+agfGzEEIaIMl3tdlDDnhQIcuas=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=DH+hcIgwrtvPuSD25GqXRafHgH55uqJ68dskO817pAmGUaLiueP8U30+O+JBnDEDj
-	 4cug2wiDnjvVTPe37+ovz8a4QwHgV5sgRswzsQDXtR9o28qgkOiej5NWeiWSuZxWcb
-	 FpG09J2UOXsMoL+LhrrzhUTtDsIyLIkrep81Cu4E=
+	s=default; t=1765388225;
+	bh=ydlaIDyiDvYxPL+X4cCESQ4u70b5g79jKiBNOBpaqGM=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=dj9Y//7Muyg4kQdZLeLWwEb04QOnkhDVpi6zUjmWT5WRXvwUGBoCMjK4H04wNwJVr
+	 Uho/GfqNr+x8rKd1IPQMXPLB3TkIkSK7hWlH41C3+aNoh9qArQxHPh16T93EJoGglk
+	 Ko8I6+ALdZEo6SUT2w9T1hytbJALmFnI3RkNjPmg=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C8FBAA80D34; Wed, 10 Dec 2025 18:32:01 +0100 (CET)
+	id 60B19A80D1A; Wed, 10 Dec 2025 18:37:03 +0100 (CET)
+Date: Wed, 10 Dec 2025 18:37:03 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 3/3] Cygwin: add release note for newgrp(1) fixes
-Date: Wed, 10 Dec 2025 18:32:01 +0100
-Message-ID: <20251210173201.193740-4-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251210173201.193740-1-corinna-cygwin@cygwin.com>
-References: <20251210173201.193740-1-corinna-cygwin@cygwin.com>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [WIP::PATCHES] [RFC] Preliminary ARM64 compilation support for
+ Cygwin
+Message-ID: <aTmvvwfClr2suB2R@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <MA0P287MB3082C051C4E43AB64AD4B9959FA2A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <MA0P287MB3082C051C4E43AB64AD4B9959FA2A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
+Hi Thirumalai,
 
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/release/3.6.6 | 3 +++
- 1 file changed, 3 insertions(+)
+thanks for letting us know, this is pretty exciting!
 
-diff --git a/winsup/cygwin/release/3.6.6 b/winsup/cygwin/release/3.6.6
-index 09b6a3913df4..194ff15d0b84 100644
---- a/winsup/cygwin/release/3.6.6
-+++ b/winsup/cygwin/release/3.6.6
-@@ -14,3 +14,6 @@ Fixes:
- 
- - Fix the problem that tmp_pathbuf area is destroyed regarding flock().
-   Addresses: https://cygwin.com/pipermail/cygwin/2025-October/258914.html
-+
-+- Improve newgrp(1) POSIX compatibility and its documentation.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2025-December/259055.html
--- 
-2.52.0
+Just one nit for now.  The first patch contains newlib/Makefile.in but
+not newlib/Makefile.am.  Please make sure to change Makefile.am instead.
+
+
+Thanks,
+Corinna
+
+
+On Dec  8 10:09, Thirumalai Nagalingam wrote:
+> Hi Everyone,
+> 
+> I'm sharing a set of ~28 patches that enable preliminary compilation of the Cygwin on ARM64.
+> [27 patch files (001-026 patches + one consolidated '[MAIN]-Cygwin-Workarounds-to-compile-for-aarch64.patch' containing all changes].
+> 
+> 
+>   *   These patches are work-in-progress and not yet ready for upstream review.
+>   *   They are being posted here primarily to make the work public and efforts visible to the community.
+>   *   In the near future, we plan to improve them and re-submit them in separate threads for proper review and eventual merging into upstream/master.
+>   *   A [V2] of many of these patches will be prepared and submitted.
+> 
+> Although this series is not ready for detailed review, anyone interested is welcome to look through the changes. Feedback, suggestions, or enhancements are appreciated.
+> I would also like to acknowledge and thank Radek Bartoň <radek.barton@microsoft.com> and Evgeny Karpov <Evgeny.Karpov@microsoft.com> for their contributions to this effort.
+> 
+> Thanks to everyone for maintaining Cygwin.
+> 
+> Best regards,
+> Thirumalai Nagalingam
+> <Thirumalai.nagalingam@multicorewareinc.com>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
