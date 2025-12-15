@@ -1,70 +1,71 @@
 Return-Path: <SRS0=C3e4=6V=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	by sourceware.org (Postfix) with ESMTPS id 1B2F14BA2E1D
-	for <cygwin-patches@cygwin.com>; Mon, 15 Dec 2025 14:37:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1B2F14BA2E1D
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	by sourceware.org (Postfix) with ESMTPS id 1E5BA4BA2E1F
+	for <cygwin-patches@cygwin.com>; Mon, 15 Dec 2025 14:37:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1E5BA4BA2E1F
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1B2F14BA2E1D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=209.85.160.180
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765809444; cv=none;
-	b=fQLlbODOObG0Xe+qaPpNDWMAPSe/Xzj1AFczc0OJG3mU+Echyr/K4ZGtdUkWs7ESr7MQYH9jq3Iw8OZNIgTl5o5HyHuJ241l3Qyf+rgzQNWXxRtwNZKS09XHroY1axnC7QxX7Ny0BB9fljl/G0X85dPRuDapwpzlPspx8juBnTA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1E5BA4BA2E1F
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=209.85.219.54
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765809445; cv=none;
+	b=SUgs5mlJYZhxw+ezQDrzYi6RurLu1CuV4aK8S47KijZzTekTVlg4C3uN9P8MPU54YZziiLUs7imYY9Sw+F1XGNRGo1fW9Bt6J+vm7/LNt++5u2HqqbM+L15aX+x/tnbbwNq9Ee5ku5slb228LPmFiGTzwVdy0ib6K4dYhy7zDvc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1765809444; c=relaxed/simple;
-	bh=ZiX5MTYx6ruQWyE/vWsuGJLoKumscqmyNEfliTzsEfE=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=Ab9G3TiMvfq0kYaSQa/cq4EPGnQYoPppJpofnQkBWoQo/L1YFsUh5tuQESXoY4Jvn+CtwHyWctHmiGgAe7IYQVF9mqii4nv7y/QGQEoBteC4wHq50XmRxAg1JcUF3lhpew6pmo7DBUQnB/Ij5wT5z97GZ6QDx0T8SAXr6ucMHhE=
+	t=1765809445; c=relaxed/simple;
+	bh=mjq+GRVveKBRTfHvclUKtRtk2eOsUvhPbkj8jFmmZtg=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=MIigcMNfaAqbOHwZlEjdc9mUD0gdS0WbMUHyI+qSNiibact+HJNePv1X2GeDP8ymoencI1ClGGwKeRKY1llds87/NDISI55naRWyMxsnk1LmlRJpRUFC4XWfop1CieMfMH3IHmWdK1WB9Myg57hNrLHZIBBnEiahgkTs0pvSOKo=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1B2F14BA2E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1E5BA4BA2E1F
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=dVILj9xH
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4eda057f3c0so32773771cf.2
-        for <cygwin-patches@cygwin.com>; Mon, 15 Dec 2025 06:37:24 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=KVaVCLgA
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8887f43b224so44665416d6.1
+        for <cygwin-patches@cygwin.com>; Mon, 15 Dec 2025 06:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765809443; x=1766414243; darn=cygwin.com;
+        d=gmail.com; s=20230601; t=1765809444; x=1766414244; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
          :references:in-reply-to:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cpant/JE5EO9csFwygp1p24d0Ph1LfJfr8xkgqTuGnU=;
-        b=dVILj9xHkadB+USGK4QQXzWQcKuX2a86alEy58zLRUhOpUM2lh5iZJmoUM0mxCxWsd
-         EFYBw7w2rtiJC4uwr7YLEfMHoIevoqJI0FthnpPepotCeEYXQkdhiNGUwmsRI1A/Y06Y
-         6t+Hd0RtLBaI+OcsR86kAnIRU5TTcLi7sQnAs5ZcKDiqkxQxnHaValEGRiQ1oNwYNcJk
-         MMlzEmCi1t98dLfRJvryLmRx1b8YMAyp7j7L+GvOy+ZIilQ3ZTgr8RNQL9BTnQi0xAVe
-         WrKF7tK6V8lz740HjEyiNuabeHiuwfbzggUEUrV5ByBJd2e8YRDLMwLjQrU3hbjAyf9B
-         Yj3Q==
+        bh=hnzSDkDJbiCSunJ0bnPNJCRfChHaqtwH4ey8PGWaPCw=;
+        b=KVaVCLgAd2Nr2uMKLo61eFK+fSwCgCykE85iLiA7v6TnU9B+voC9VHqH8jq9coOfwm
+         0WJRQoYd+QMicy9OdudYFTxuwnHxzMFVKx1D9XQGSP1db6y5HULXsXXtxu/UqFn8w0Jf
+         vblbStVGf8DdYzLW+KTmwDl07Dx7z8G8Oysu/f71YR5RlSSGkG0ByVX8E8aXvE1OfAhI
+         S49cY+qxcmfl3twppMuu5Es8MYmMV31SEo5d3u1rPDa2lB5pDWF3WvAHenQFLbxf84eI
+         n43sKy6g9aFOkioH2ew7NwoF9wc10wORbjB5Tp0KJ8HgqnVMSTqDnB0q1sxOeAmLgkue
+         i+5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765809443; x=1766414243;
+        d=1e100.net; s=20230601; t=1765809444; x=1766414244;
         h=cc:to:mime-version:content-transfer-encoding:fcc:subject:date:from
          :references:in-reply-to:message-id:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=cpant/JE5EO9csFwygp1p24d0Ph1LfJfr8xkgqTuGnU=;
-        b=c/aK/9lZi/YMA6DKtXFjoo3jwgEUTNOWKy9+Nlpfw7DFsfT21OPspBdKlWXXGPfYVe
-         FouMDyJbvz7Cts76+YKL2UdRuerr6b2ZG2eM5EfeF0rXidB0+Egiw15xOpE2fNaHj13K
-         ANPAW/UYivDaVk7UXVFLFN7YJ39d6Rt3kQ/3xK7K2hyAPrvcq+kwm8A8qgEHDcmKbC8Y
-         d/qdXkZ/KpHb1TF6Gu/otZphV0AZLnC2fm+uHMFnyyy69RQtWQWeQTMrs/ipOJ2F+loI
-         bgS63qQBhKDd2+U9SPVQB0Jb6A1q9PARIZrpNrYfekdfQDCAO2F5SYoOGt6D2itD8ViO
-         70/g==
-X-Gm-Message-State: AOJu0YzVDGv/qhRO3QJIZH2XjbT2TA5XtJGomF6/O1MrDkfOO9MD+P17
-	hmiaxrpmr1k0yJqelfU4/LXYzLPx2twDHYpdwQoWQpR8B8iPj+38Z3Ygz33dQRIt
-X-Gm-Gg: AY/fxX5HUzWCr/xiKSwkmMCHneFwT9pFVAeiw0p9ukRaHMh2WJgpGg1HbSaJA3ZVHjm
-	dtUWmnlinlk2Y/gzb+z+/b+AxFX1grZAFzhDdunQZiby2P3w5SalB1qk7NZmaPnaR9o3vMuvP+z
-	kFv90WCp+WqfXjjw+WU0uRaDzfL97hmvEvQP5G5YAHpqCRr7omYsSXuT9udUi9OCQkSpkKl9Ops
-	/WVT2F1Kgsd6ju/jkKhCmwnByzSbjKxTSczyiSVeQnxKcNR+GQR0FBco7ldoSxY75wQxhMrvDGO
-	JiUNq1AMOkDdNZbrWy6vARKDIgVQp19KXIlk1q3YLOl030urvmrnGl/Bg+QXxTGCED+r8xr5kHn
-	pl7fK5pcaHdR6COqdc0/knL1vFhDRhV5hW+0bs0/ZzydK20fsMe3Iw1g40x7B2BC5rVh1fpRwRi
-	ICx/Z4RCzFVT7gw5A=
-X-Google-Smtp-Source: AGHT+IFstLFVl5NJjmcCU/SYafKhN4+5djKWD7DK7AMproCWBjTK8NJS4R798s83L8DC40CuhGkqOQ==
-X-Received: by 2002:a05:622a:244a:b0:4ee:49b8:fb4c with SMTP id d75a77b69052e-4f1d05f5a48mr153289201cf.70.1765809443003;
-        Mon, 15 Dec 2025 06:37:23 -0800 (PST)
+        bh=hnzSDkDJbiCSunJ0bnPNJCRfChHaqtwH4ey8PGWaPCw=;
+        b=RiaW/7rYVEszJ7VBnZehasyEcDhtplK2ePWoY27G+Ij42xj2Ngh6loLuwa/rlp+xbu
+         jVFB83uHujbP/7DXO2qN5UrvmMK+7Y/hc6pPAXeipBDepf1eQqAt2tpkgFuLTH/5BBEo
+         g9jj/Q9xx6Xrj18XVkdpJmtNOZcyZcQrt1CAE5xVKR5bLbqF6GB9VCCbMhz7tDRyXxZQ
+         L8XExQZEFlIfUHlsRpau9GZq5UT0S9DtefhEm0+u6uEu1Ma11/+BpAlMxRJix6fy2dMY
+         gfiFUx1An6dFu5U7lv7dxZBZqjVKU+0zwGH6NojqGLxbIuTqb9/1+hNs+u+dnNDLnN+S
+         Pd6Q==
+X-Gm-Message-State: AOJu0YwsBXUbWaOaqGBauulBWalNE5jQc3hAMqG/JwGrmizohSAPTwhy
+	KOKvqsYc0m92mWzCq06za/ckPH/LuCuNBZBf/2nWqzXHhh9FA+3nEJyKCQWy6RR3
+X-Gm-Gg: AY/fxX6YoQEU6saNOMHESl76QYVJi2zCX1/mSQLcRvFDzUqLoYIz3Cuy51u0VOjRald
+	uRwxAF4PAgjcfUz+sNz48dYhKYrH6djfLTWYk6MxvixjDaXX5TdjcPXIE4roO+o5M7m8JwoIBNs
+	sKjXodxFLFzGVowVUVGMDoFM7W1QJFo+zsPCt15qtIXSVU4t7GQXbvq+/Ir/E9pTakGZ9015KXL
+	RzZFxPQWLqHgr7XivTqGrfUt4W7qSlR4ELXT1LadKel4BhcUUhxBuP2C8nGMqEVyo6njLZmJjAT
+	5//WOTDQRPYKBX16KhqYomD1R9I5RFIJ7jJvINAtSBfhsjkzBo1q5N2kHzVOd9w3/LMfx5sNscP
+	E2oXkLitvlovNSpxKv9bXQN06BZA6oBngiSak1YX7jGu2iZYySNINiC/5ophVH80BLitfTr3Uh7
+	aUZiFtYMKQXkkgDoddjYAI2yd33Q==
+X-Google-Smtp-Source: AGHT+IEBA5UNAH5aX2fl3RsrU/NRnpRknvYK0XfgG7t8gtCZexPggg/4co0QY6iAn67Xf9H7o1oIBw==
+X-Received: by 2002:a05:6214:f6b:b0:7d4:e416:ac05 with SMTP id 6a1803df08f44-8887dff21b0mr151833656d6.0.1765809444148;
+        Mon, 15 Dec 2025 06:37:24 -0800 (PST)
 Received: from [127.0.0.1] ([172.208.126.104])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f1bd70a020sm97431561cf.30.2025.12.15.06.37.22
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8bc36fcc7e2sm251109785a.7.2025.12.15.06.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 06:37:22 -0800 (PST)
-Message-Id: <7edad15ac37571d0ddb2bd4716625feb03875e5a.1765809440.git.gitgitgadget@gmail.com>
+        Mon, 15 Dec 2025 06:37:23 -0800 (PST)
+Message-Id: <535cc52d4d93a8dd80e35e1a7da30599810298c2.1765809440.git.gitgitgadget@gmail.com>
 In-Reply-To: <pull.5.cygwin.1765809440.gitgitgadget@gmail.com>
 References: <pull.5.cygwin.1765809440.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Mon, 15 Dec 2025 14:37:18 +0000
-Subject: [PATCH 1/3] Cygwin: is_console_app(): do handle errors
+Date: Mon, 15 Dec 2025 14:37:19 +0000
+Subject: [PATCH 2/3] Cygwin: is_console_app(): deal with the `.bat`/`.cmd`
+ file extensions first
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,51 +74,52 @@ To: cygwin-patches@cygwin.com
 Cc: Cody Tapscott <cody@tapscott.me>,
     Johannes Schindelin <johannes.schindelin@gmx.de>,
     Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-When that function was introduced in bb42852062 (Cygwin: pty: Implement
-new pseudo console support., 2020-08-19) (back then, it was added to
-`spawn.cc`, later it was moved to `fhandler/termios.cc` in 32d6a6cb5f
-(Cygwin: pty, console: Encapsulate spawn.cc code related to
-pty/console., 2022-11-19)), it was implemented with strong assumptions
-that neither creating the file handle nor reading 1024 bytes from said
-handle could fail.
+This function contains special handling of these file extensions,
+treating them as console applications always, even if the first 1024
+bytes do not contain a PE header with the console bits set.
 
-This assumption, however, is incorrect. Concretely, I encountered the
-case where `is_console_app()` needed to open an app execution alias,
-failed to do so, and still tried to read from the invalid handle.
+However, Batch and Command files are never expected to have such a
+header, therefore opening them and reading their first bytes is a waste
+of time.
 
-Let's add some error handling to that function.
+Let's honor the best practice to deal with easy conditions that allow
+early returns first.
 
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/cygwin/fhandler/termios.cc | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ winsup/cygwin/fhandler/termios.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index a3cecdb6f..808d0d435 100644
+index 808d0d435..5505bf416 100644
 --- a/winsup/cygwin/fhandler/termios.cc
 +++ b/winsup/cygwin/fhandler/termios.cc
-@@ -707,10 +707,14 @@ is_console_app (const WCHAR *filename)
+@@ -704,6 +704,9 @@ fhandler_termios::fstat (struct stat *buf)
+ static bool
+ is_console_app (const WCHAR *filename)
+ {
++  wchar_t *e = wcsrchr (filename, L'.');
++  if (e && (wcscasecmp (e, L".bat") == 0 || wcscasecmp (e, L".cmd") == 0))
++    return true;
    HANDLE h;
    h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
  		   NULL, OPEN_EXISTING, 0, NULL);
-+  if (h == INVALID_HANDLE_VALUE)
-+    return false;
-   char buf[1024];
-   DWORD n;
--  ReadFile (h, buf, sizeof (buf), &n, 0);
-+  BOOL res = ReadFile (h, buf, sizeof (buf), &n, 0);
-   CloseHandle (h);
-+  if (!res)
-+    return false;
-   /* The offset of Subsystem is the same for both IMAGE_NT_HEADERS32 and
-      IMAGE_NT_HEADERS64, so only IMAGE_NT_HEADERS32 is used here. */
+@@ -720,9 +723,6 @@ is_console_app (const WCHAR *filename)
    IMAGE_NT_HEADERS32 *p = (IMAGE_NT_HEADERS32 *) memmem (buf, n, "PE\0\0", 4);
+   if (p && (char *) &p->OptionalHeader.DllCharacteristics <= buf + n)
+     return p->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_CUI;
+-  wchar_t *e = wcsrchr (filename, L'.');
+-  if (e && (wcscasecmp (e, L".bat") == 0 || wcscasecmp (e, L".cmd") == 0))
+-    return true;
+   return false;
+ }
+ 
 -- 
 cygwingitgadget
 
