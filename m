@@ -1,75 +1,62 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A11914BA2E04; Mon, 15 Dec 2025 15:20:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A11914BA2E04
+	id E8D594BA2E04; Mon, 15 Dec 2025 15:22:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E8D594BA2E04
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1765812035;
-	bh=aoc9WpORp/mY8kOkqc7Ctd6+7cn/SzXGff4yhSb80KQ=;
+	s=default; t=1765812161;
+	bh=l5eAR+0Wu3KojFi/FCFNeE44Q5p52q/9sJkw+YQ5Hhs=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=tab0YzdkUdNojywO8+k2Tw0eIQWrTg/JR7aRyBWnBJTOuAOQgaHtNAPXNfpUcy+BN
-	 Pa2Gs7lU/okd0FGCd/Lyye1kgvcwEF+kJ0oshaYXS0Smd/xl+rIJNetcJ27IMnuGsm
-	 s8gXYwniRhafKfg+rrIo4mbD86L7J0Bs727T3rRY=
+	b=iOfd9x9IHiTsErwkU5v/AOw1D4iswMsK1yri7O3IHBBbT/jKwepzgNljbXFmPC54c
+	 1YdShRRExVO/BbPOGFe1sPqiguxw7eYHwV5jWaEqW5S9Z57lJzq07tRmtWngVzYXnU
+	 2ec/6l9nizzuWtTui2Ly4Ww8oWyPjq97lCYYRB8U=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 980DDA80CA4; Mon, 15 Dec 2025 16:20:33 +0100 (CET)
-Date: Mon, 15 Dec 2025 16:20:33 +0100
+	id 2A780A80CA4; Mon, 15 Dec 2025 16:22:40 +0100 (CET)
+Date: Mon, 15 Dec 2025 16:22:40 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3] Cygwin: is_console_app(): do handle errors
-Message-ID: <aUAnQaqWJdcbR0fo@calimero.vinschen.de>
+Subject: Re: [PATCH 3/3] Cygwin: is_console_app(): handle app execution
+ aliases
+Message-ID: <aUAnwAavInn39Gm2@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <pull.5.cygwin.1765809440.gitgitgadget@gmail.com>
- <7edad15ac37571d0ddb2bd4716625feb03875e5a.1765809440.git.gitgitgadget@gmail.com>
+ <6ae42c5d17102a7805ed6539b9548df437df88a1.1765809440.git.gitgitgadget@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7edad15ac37571d0ddb2bd4716625feb03875e5a.1765809440.git.gitgitgadget@gmail.com>
+In-Reply-To: <6ae42c5d17102a7805ed6539b9548df437df88a1.1765809440.git.gitgitgadget@gmail.com>
 List-Id: <cygwin-patches.cygwin.com>
 
 On Dec 15 14:37, Johannes Schindelin via GitGitGadget wrote:
 > From: Johannes Schindelin <johannes.schindelin@gmx.de>
 > 
-> When that function was introduced in bb42852062 (Cygwin: pty: Implement
-> new pseudo console support., 2020-08-19) (back then, it was added to
-> `spawn.cc`, later it was moved to `fhandler/termios.cc` in 32d6a6cb5f
-> (Cygwin: pty, console: Encapsulate spawn.cc code related to
-> pty/console., 2022-11-19)), it was implemented with strong assumptions
-> that neither creating the file handle nor reading 1024 bytes from said
-> handle could fail.
+> In 0a9ee3ea23 (Allow executing Windows Store's "app execution aliases",
+> 2021-03-12), I introduced support for calling Microsoft Store
+> applications.
 > 
-> This assumption, however, is incorrect. Concretely, I encountered the
-> case where `is_console_app()` needed to open an app execution alias,
-> failed to do so, and still tried to read from the invalid handle.
+> However, it was reported several times (first in
+> https://inbox.sourceware.org/cygwin/CAAM_cieBo_M76sqZMGgF+tXxswvT=jUHL_pShff+aRv9P1Eiug@mail.gmail.com
+> and then also in
+> https://github.com/msys2/MSYS2-packages/issues/1943#issuecomment-3467583078)
+> that there is something amiss: The standard handles are not working as
+> expected, as they are not connected to the terminal at all (and hence
+> the application seems to "hang").
 > 
-> Let's add some error handling to that function.
+> The culprit is the `is_console_app()` function which assumes that it can
+> simply open the first few bytes of the `.exe` file to read the PE header
+> in order to determine whether it is a console application or not.
+> 
+> For app execution aliases, already creating a regular file handle for
+> reading will fail. Let's introduce some special handling for the exact
+> error code returned in those instances, and try to read the symlink
+> target instead (taking advantage of the code I introduced in 0631c6644e
+> (Cygwin: Treat Windows Store's "app execution aliases" as symbolic
+> links, 2021-03-22) to treat app execution aliases like symbolic links).
 > 
 > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-  Fixes: <12-digit-SHA1> ("commit messaage headline")
+  Fixes: <12-digit-SHA1> ("commit message headline")
 
-> ---
->  winsup/cygwin/fhandler/termios.cc | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-> index a3cecdb6f..808d0d435 100644
-> --- a/winsup/cygwin/fhandler/termios.cc
-> +++ b/winsup/cygwin/fhandler/termios.cc
-> @@ -707,10 +707,14 @@ is_console_app (const WCHAR *filename)
->    HANDLE h;
->    h = CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
->  		   NULL, OPEN_EXISTING, 0, NULL);
-> +  if (h == INVALID_HANDLE_VALUE)
-> +    return false;
->    char buf[1024];
->    DWORD n;
-> -  ReadFile (h, buf, sizeof (buf), &n, 0);
-> +  BOOL res = ReadFile (h, buf, sizeof (buf), &n, 0);
->    CloseHandle (h);
-> +  if (!res)
-> +    return false;
->    /* The offset of Subsystem is the same for both IMAGE_NT_HEADERS32 and
->       IMAGE_NT_HEADERS64, so only IMAGE_NT_HEADERS32 is used here. */
->    IMAGE_NT_HEADERS32 *p = (IMAGE_NT_HEADERS32 *) memmem (buf, n, "PE\0\0", 4);
-> -- 
-> cygwingitgadget
+
+Thanks,
+Corinna
