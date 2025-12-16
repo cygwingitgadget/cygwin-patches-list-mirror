@@ -1,36 +1,39 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A30C04BA2E20; Tue, 16 Dec 2025 12:01:10 +0000 (GMT)
+	id 01D844BA2E26; Tue, 16 Dec 2025 12:05:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 01D844BA2E26
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
+	s=default; t=1765886810;
+	bh=cX1Me2vVmxhDj3V+YGAT7euHUy2SLhdx6u9+IUC90m4=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=qJJUeLubrUTjEI3C0jV4ZH254yjofG1DGyPyVAbRKpR4odqTrLt3L132PQecTOYCI
+	 qIxfDNbgQeEKOYcgLCScjkR070jXk/gYkQnrcz//ta5FDS+TYdiFQtELPoC6qJJ4r8
+	 fRY97vc9UVP4fUUiDdLe/n7pv+etxb5pUYcCBQ7E=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 95B30A804CD; Tue, 16 Dec 2025 13:01:08 +0100 (CET)
-Date: Tue, 16 Dec 2025 13:01:08 +0100
+	id CC1FBA804CD; Tue, 16 Dec 2025 13:05:46 +0100 (CET)
+Date: Tue, 16 Dec 2025 13:05:46 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] Cygwin: is_console_app(): handle app execution
- aliases
-Message-ID: <aUFKBBdIN5rqztD7@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: termios: Follow symlink in is_console_app()
+Message-ID: <aUFLGvjfv_PtqWe9@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <pull.5.cygwin.1765809440.gitgitgadget@gmail.com>
- <6ae42c5d17102a7805ed6539b9548df437df88a1.1765809440.git.gitgitgadget@gmail.com>
- <aUAoxVEKMpj6xNjM@calimero.vinschen.de>
- <18909F97-1145-4F61-9E23-4E4B9C97CF2E@gmx.de>
- <aUAxwTZcfZ9qecW2@calimero.vinschen.de>
- <f8d06570-7208-755b-e747-e8d7d174b32d@gmx.de>
- <20251216173957.fa9571466a8bced55924884f@nifty.ne.jp>
- <4ac88404-a8c3-3d21-6460-6941fb8dff4a@gmx.de>
+References: <20251216083945.235-1-takashi.yano@nifty.ne.jp>
+ <ebc2c64d-55c4-98f5-573f-bebadf3e3979@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4ac88404-a8c3-3d21-6460-6941fb8dff4a@gmx.de>
+In-Reply-To: <ebc2c64d-55c4-98f5-573f-bebadf3e3979@gmx.de>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec 16 10:31, Johannes Schindelin wrote:
-> 2. What purpose is the name `perhaps_suffix()` possibly trying to convey?
->    I know naming is hard, but... `perhaps_suffix()`? Really?
+On Dec 16 10:17, Johannes Schindelin wrote:
+> It would probably make more sense to collaborate and try to combine the
+> best of your patch with the best of my patch series.
 
-The function is named thus since before 2000, when Cygwin was imported
-into the public CVS repo ;)
+Collaboration is great!
 
 
 Corinna
+
+
+(if only somebody would review my patches as well... ;))
