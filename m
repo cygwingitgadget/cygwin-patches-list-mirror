@@ -1,131 +1,132 @@
 Return-Path: <SRS0=APpz=6X=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by sourceware.org (Postfix) with ESMTPS id 897F74BA2E05
-	for <cygwin-patches@cygwin.com>; Wed, 17 Dec 2025 14:56:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 897F74BA2E05
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	by sourceware.org (Postfix) with ESMTPS id C76C74BA2E2D
+	for <cygwin-patches@cygwin.com>; Wed, 17 Dec 2025 15:50:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C76C74BA2E2D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 897F74BA2E05
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.20
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765983366; cv=none;
-	b=fetuhodjOzFWVORVHGqSWlRWNxL3OP7TlGFuOd7WW+tYX96j3v0sv+7xUDf5bZ2+38E3fALljm76owV5n9Evz2fwYa2DtietAcWD7s25eT3fq7cEjMxcT8QzGvNNUO0vSRTx6BGG/OQ/Ne6xX1cp2WTdnioik8ciy8DNsQS8ais=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C76C74BA2E2D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.18
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1765986632; cv=none;
+	b=A8cq8MMCVRXGowGfFiFrV4zpwgpPS3TvCoXecwmpxIJf84LlvgCJ/0iEXXGzPXFDu+J0Rma/+ZSXkgcqbWX+oKChwMoLJTdClueduzZicUwU+ckuR4kR+gqsWtqy9JeQLGnmiFuisDVYZD+eGpLhyTejTomKs9jC0femwRTmjcI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1765983366; c=relaxed/simple;
-	bh=ptbKdxfEbrLHzkvVx/hshkXKe90JFuwy+qPO2ws5W2o=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=MIcQ6P0vOMjLd6Oxfdrn41y9C5fvvmfs6VhOj3u3q3kWdeJvK5zHEVg7M55M0cGT9w8vyKDR+HMFMvZIf1623bWYwSgWiia/HC15g5xmgbCm7OA/7aus8hfBymk6pNRD0FGDXGKdqQWrEYLqWMSHR8V/MeaaSfwnunuoq0TpvGk=
+	t=1765986632; c=relaxed/simple;
+	bh=LFDv5SFc08o2BBQsI6zoWfAeLr6eiTlXYjRluwg+718=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=wcmLYZzNSpcAVkT91FitmJqQx5x+pStYbBudJUXZGT5L+EuV6DaK23oT485cfTw5T7cNaLbvYsdbmingH2NibxQBdlCKdBkk8sqeYkWnKYQRH7OrhBUYoX3sm7VYA4ksk/9vyQKzEERUonEaLSA1OefQXCLw7EZjosQhQvkQdzY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 897F74BA2E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C76C74BA2E2D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=TVqfbCFa
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=t4Xd29ML
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1765983359; x=1766588159;
+	s=s31663417; t=1765986630; x=1766591430;
 	i=johannes.schindelin@gmx.de;
-	bh=yBSrpVTjtJM5/947mCswVsBYztZ7998kuIfU2rv9J7k=;
+	bh=YI+JIKlQlePRpPPNzvLisLX4PN0YSGq8JbJdlbgVtAw=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=TVqfbCFao6/GR2hCimTOoqiGIpzE5d6K57upgHecPgh+joyqsqL8iZfvsvKvPsLj
-	 HZp1ecqC2tIQ6fg/7I0pNby0OpH3F6EO3Pd7m6HwbZwxQWhkzX8O9DFNuK3mhcXo8
-	 m4eWSzDA5GS2XrCCtG//jfHHbIAJumK9Ry8EnHXWPCWYauLbFt2t3UAK/WGA3jSJi
-	 Dh4jHt98z313Xq+cCPkJYHQ2As550pHIBIUHrY7xiZeVyt3TgghuziL1WxSC/btQ3
-	 D0QYHSF1Vz/6GdaDs8KKy8aO67PCKNFTzj7k2uGTNLV4M65m0gRUUG2VZg8QP5goK
-	 H6YR+A3PovCsPXewMw==
+	b=t4Xd29MLW7Vv/C2a3yQjJSwzWbY24nuhdP4G76igbePJUy8spKd0Y0+at7LsGh6t
+	 UUPWQyvjXhIShjdHrZxDA2tVBHe133qkhjKMnma6J7TGzLysOtOV/TLGEzmLD4QrV
+	 fUYZbp70QwHahFwaFcgh1cMkAjtQEzLk10nMxErtXB045lEKyWVKPBxhA8b2h7nOd
+	 7FgQCK1Poz2Fb/0wqriFLUcpy8e/RmtzUy1s+t2oBmqr1ReKIq3HiM6hx6QplJ6AV
+	 c4xMX3fgBdo5tcG0/RHlcclHWt7FY6OWkjnTtm+7LB439lL6aQcl+FMIO6sjL+9qM
+	 yo0eHI9w1gZKjrc2fw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.23.242.68] ([89.1.212.212]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1vEUeM3HTF-00Lj0J; Wed, 17
- Dec 2025 15:55:59 +0100
-Date: Wed, 17 Dec 2025 15:55:58 +0100 (CET)
+Received: from [172.23.242.68] ([89.1.212.212]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGQnP-1vmhad294n-00BhLh; Wed, 17
+ Dec 2025 16:50:30 +0100
+Date: Wed, 17 Dec 2025 16:50:28 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3 2/2] Cygwin: termios: Handle app execution alias in
- is_console_app()
-In-Reply-To: <20251217093003.375-3-takashi.yano@nifty.ne.jp>
-Message-ID: <a4777af3-0f55-1b29-9fa7-cc38c47a3291@gmx.de>
-References: <20251217093003.375-1-takashi.yano@nifty.ne.jp> <20251217093003.375-3-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 3/3] Cygwin: is_console_app(): handle app execution
+ aliases
+In-Reply-To: <20251217182931.c4dd8a2ea1569fc11b9a675e@nifty.ne.jp>
+Message-ID: <7c03a948-c8fb-079c-a2e1-99e8626366a7@gmx.de>
+References: <pull.5.cygwin.1765809440.gitgitgadget@gmail.com> <6ae42c5d17102a7805ed6539b9548df437df88a1.1765809440.git.gitgitgadget@gmail.com> <aUAoxVEKMpj6xNjM@calimero.vinschen.de> <18909F97-1145-4F61-9E23-4E4B9C97CF2E@gmx.de> <aUAxwTZcfZ9qecW2@calimero.vinschen.de>
+ <f8d06570-7208-755b-e747-e8d7d174b32d@gmx.de> <20251216173957.fa9571466a8bced55924884f@nifty.ne.jp> <4ac88404-a8c3-3d21-6460-6941fb8dff4a@gmx.de> <20251217182931.c4dd8a2ea1569fc11b9a675e@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:5aG/8qssvMfG3m4cYGFAjHNQ6nd3FEqil4MxC1WjJEF6v/TWqw1
- kXhJPalCx21xEuwF+HNJSekfueVnjeCkHtSoOhmA2LQZbMVkC+v2UBT1g049iVYwmETIUGp
- D7CW0USBG7fykApj18sVf9SNkeBRrbt+yyOZQecEAtx8l+t1XGMNHMh7+6PKJps+T2J7VsZ
- I90FXg2noHF6Q5Op7ApRQ==
-UI-OutboundReport: notjunk:1;M01:P0:pIVlJ+vVQ9g=;DxOpZ2pWI7T140/GeF9WlmbRR80
- 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
- OsMrQsrE=
+X-Provags-ID: V03:K1:wlQtSGLZ6ePhNm1xV+kCqwgjnijBo9vqhe4fdYdNwzT4rIFOQjH
+ SXLedKbPoXM6Sj1YAoSycWa+3zntpuHkRMZMvmvLNSu3kNx29SsEhcc2E/miaZUCRkGYBp+
+ tadAxgdqamTIKRlLJbkjoEVEA2ivq48Qcn4urUVDOCG9+UTlsGPrEA57m+45sAZcS578NuS
+ 1pm5wiT+6yROv0ql+Ow7A==
+UI-OutboundReport: notjunk:1;M01:P0:0D/qi7XzgIM=;oOAcJRmf8AjtRVii+pbrONjSY1X
+ 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
+ bytSQ5lQ=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -133,141 +134,185 @@ Hi Takashi,
 
 On Wed, 17 Dec 2025, Takashi Yano wrote:
 
-> After the commit f74dc93c6359, WSL cannot start by distribution name
-> such as debian.exe, which has '.exe' extention but actually is an app
-> execution alias. The commit f74dc93c6359 disables to follow windows
-> reparse point by adding PC_SYM_NOFOLLOW_REP flag in spawn.cc. As a
-> result, is_console_app () returns false for the app execution alias
-> due to open-failure because CreateFileW() cannot open an app execution
-> alias. This patch fixes the issue by converting the path again using
-> PC_SYM_FOLLOW (without PC_SYM_NOFOLLOW_REP) option in path_conv if
-> the path is an app execution alias.
-
-Since you repeat this commit as the culprit, I guess that this is your way
-to explain to me that before this commit, the standard handles were
-correctly set even after 2533912fc76c (Allow executing Windows Store's
-"app execution aliases", 2021-03-12) allowed executing Microsoft Store
-Apps via their app execution aliases?
-
-> Fixes: f74dc93c6359 ("fix native symlink spawn passing wrong arg0")
-> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/fhandler/termios.cc       | 21 ++++++++++++++++-----
->  winsup/cygwin/local_includes/fhandler.h |  2 +-
->  winsup/cygwin/spawn.cc                  |  2 +-
->  3 files changed, 18 insertions(+), 7 deletions(-)
+> On Tue, 16 Dec 2025 10:31:17 +0100 (CET)
+> Johannes Schindelin wrote:
 >=20
-> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/=
-termios.cc
-> index 19d6220bc..7fdbf6a97 100644
-> --- a/winsup/cygwin/fhandler/termios.cc
-> +++ b/winsup/cygwin/fhandler/termios.cc
-> @@ -702,10 +702,21 @@ fhandler_termios::fstat (struct stat *buf)
->  }
-> =20
->  static bool
-> -is_console_app (const WCHAR *filename)
-> +is_console_app (path_conv &pc)
+> > On Tue, 16 Dec 2025, Takashi Yano wrote:
+> >=20
+> > > On Mon, 15 Dec 2025 18:15:10 +0100 (CET)
+> > > Johannes Schindelin wrote:
+> > > >=20
+> > > > On Mon, 15 Dec 2025, Corinna Vinschen wrote:
+> > > >=20
+> > > > > On Dec 15 16:40, Johannes Schindelin wrote:
+> > > > >
+> > > > > > Also, it looks as if that other proposed patch will always add
+> > > > > > overhead, not only when the reparse point needs to be handled =
+in a
+> > > > > > special way. Given that this code path imposes already quite a=
+ bit of
+> > > > > > overhead, overhead that delays execution noticeably and makes
+> > > > > > debugging less delightful than I'd like, I would much prefer t=
+o do it
+> > > > > > in the way that I proposed, where the extra time penalty is im=
+posed
+> > > > > > _only_ in case the special handling is actually needed.
+> > > > >=20
+> > > > > You may want to discuss this with Takashi.  Simplicity vs. Speed=
+ ;)
+> > > >=20
+> > > > With that little rationale, the patch to always follow symlinks do=
+es not
+> > > > exactly look simple to me, but complex and requiring some
+> > > > head-scratching...
+> > >=20
+> > > The overhead of path_conv with PC_SYM_FOLLOW is small, however,
+> > > it may be a waste of process time to call it always indeed.
+> >=20
+> > When I debugged this problem, I introduced debug statements that show =
+how
+> > often that code path is hit. In a simple rebuild of the Cygwin runtime=
+, it
+> > is hit _very often_, and it is vexing how slow the rebuild is.
+> >=20
+> > I don't want to pile onto the damage by adding overhead that is totall=
+y
+> > unnecessary in the common case (most times processes are _not_ spawned=
+ via
+> > app execution aliases), even if it is small. If nothing else, it
+> > encourages more of that undesirable code pattern to add more and more
+> > stuff that is not even needed in the vast majority of calls.
+>=20
+> I believe path_conv::is_app_execution_alias() can minimize the overhead.
 
-I see you insist of mixing the refactor where `path_conv &` is passed
-instead of `WCHAR *` with the actual fix.
+I see that you dislike the idea of working with me, and want to go with
+your approach instead. I also see that you're not necessarily interested
+in conversing with me, otherwise you would spend many more words on
+talking to me rather than less so.
 
-Not a fan. I regularly hit your commits when bisecting Cygwin runtime
-regressions, and I have not yet learned to be okay with finding patches
-that do too many things at the same time.
+That's something I can accept, although I would have preferred it to be
+spelled out clearly.
 
-I'm weven less a fan of the non-descriptive variable name `pc` which
-unnecessarily increases cognitive load.
+> > > However, IMHO, calling CreateFileW() twice is not what we want to do=
+.
+> > > I've just submitted v2 patch. In v2 patch, use extra path_conv only
+> > > when the path is a symlink. Usually, simple symlink is already follo=
+wed
+> > > in spawn.cc:
+> > > https://cygwin.com/git/?p=3Dnewlib-cygwin.git;a=3Dblob;f=3Dwinsup/cy=
+gwin/spawn.cc;h=3D71add8755cabf4cc0113bf9f00924fddb8ddc5b7;hb=3DHEAD#l46
+> >=20
+> > Okay. However, then I don't understand how:
+> >=20
+> > 1. The patch in question is even necessary, as it would appear that it
+> >    introduces a _second time_ where the symlink is followed?
+>=20
+> App execution alias can be executed by CreateProcess() while it cannot
+> be opened by CreateFile(). However, other windows reparse points can be
+> opened by CreateFile(). So, as your patch title saids, extra path_conv
+> is necessary only for app execution aliases.
+>=20
+> Therefore, I proposed path_conv::is_app_execution_alias() in v3 patch.
 
-But hey, rather than shouting my objections to the form in the void, I'll
-just accept that my recommendations are not welcome, and this is the shape
-of the patch that you want to have. It does fix the bug, so that's good.
+So let me translate that into a form that would have actually not required
+several minutes of looking through code paths to reconstruct the thinking:
+
+While the "symlink" target of app execution aliases _was_ resolved when
+2533912fc76c (Allow executing Windows Store's "app execution aliases",
+2021-03-12) started allowing Microsoft Store apps to be executed, as of
+f74dc93c63 (fix native symlink spawn passing wrong arg0, 2025-03-10) they
+were _no longer_ resolved. Hence they are now only resolved _once_, namely
+in `is_console_app()`.
+
+> > 2. What purpose is the name `perhaps_suffix()` possibly trying to conv=
+ey?
+> >    I know naming is hard, but... `perhaps_suffix()`? Really?
+> >=20
+> > > The code is simpler than your patch 3/3 and my previous patch
+> > > and intent of the code is clearer.
+> >=20
+> > The intent of that previous patch is a far cry from clear without a
+> > much-improved commit message, I'd think. It talks about symlinks in
+> > general, but then uses the app execution alias `debian.exe` as example
+> > (when a simple test shows that regular symlinks do not need that fix a=
+t
+> > all), and the patch treats it as an "all symlinks" problem, too. Hones=
+tly,
+> > I am quite surprised to read this claim.
+>=20
+> Thanks.
+> Please recheck the commit message in v3 patch.
+
+I did. It still leaves a lot to be desired from my side:
+
+- It does not start with a clear statement of what is broken.
+
+- It leaves a huge gap between mentioning the added `PC_SYM_NOFOLLOW_REP`
+  flag and the `is_console_app()` function, leaving it as a lengthy
+  homework assignment to each and every reader to figure out what possible
+  connection there is between those two: At first sight they seem rather
+  unrelated.
+
+- Saying "This patch fixes the issue by converting the path again" cannot
+  do anything but cause utter confusion because the path "conversion"
+  happens at a totally different place than it used to happen before, and
+  there is not the slightest assistance in that commit message to help
+  anybody understand
+
+    - how the code path is getting from that `perhaps_suffix()` function
+      (which is not even mentioned _once_ in that commit message), where
+      the `PC_SYM_NOFOLLOW_REP` flag is newly set, to the
+      `is_console_app()` function, which is in a totally different file.
+
+    - what guarantee this patch makes that the touched code doesn't miss
+      anything else that was broken by the "fix native symlink spawn"
+      commit (or for that matter, whether there even has been given _any_
+      thought to unintended side effects or unwanted gaps in the fix).
+
+- The commit message freely admits that the `is_console_app()` code
+  blatantly ignores errors  when calling `CreateFileW()`, and leaves
+  things at that. The missing error checks (also for `ReadFile()`) are
+  still as missing as before.
+
+- The commit message says that the fix is to use `PC_SYM_FOLLOW` again,
+  instead of `PC_SYM_NOFOLLOW_REP`. But the diff mentions neither of those
+  constants. I don't know which reader would find this helpful, as I
+  don't.
+
+- One particularly irritating gap is the question why app execution
+  aliases aren't simply special-cased such that their `argv[0]` is set to
+  the symlink _target_, as it used to be when app execution alias support
+  was introduced to `spawn()`. That would be quite an interesting
+  discussion, in particular when the somewhat surprising fact is conveyed
+  that app execution aliases are tied to a package identity, and executing
+  them instead of the reparse point target path quite potentially equips
+  the spawned process with permissions it would not otherwise have.
+
+This is not the first time I have pointed out this class of problem in
+commit messages. When a bug fix is quite involved, it pays a disservice to
+any reader when the commit message just rushes through the words without
+even trying to do a good job of explaining the problem, the context, the
+approach taken to address the problem, and considerations what
+(potantially unintended) consequences the patch might lead to.
+
+I don't actually know how I can impress on you how crucial the skill of
+commit message writing is, how essential it is to practice it well until
+you do a better job. I have tried several times, and I am approaching my
+wits' end.
+
+If the author of a commit message would have trouble, after reading it as
+little as half a year in the future, to understand the reasoning behind
+their own patch (and there is not the slightest doubt in my mind that v3's
+commit message would fall into that exact category), then that commit
+message is in need of some work.
+
+Writing commit messages is a craft as much as writing code, and if you
+love your craft, you devote passion to honing that craft. It shows in the
+results whether you do that.
+
+You have push permission, so you can just push it as-is, of course.
+Obviously, I'd rather you improve the commit message (and the patch), but
+there is nothing I could do to enforce that.
 
 Ciao,
 Johannes
-
->  {
-> +  tmp_pathbuf tp;
-> +  WCHAR *native_path =3D tp.w_get ();
-> +  pc.get_wide_win32_path (native_path);
-> +  if (pc.is_app_execution_alias ())
-> +    {
-> +      UNICODE_STRING upath;
-> +      RtlInitUnicodeString (&upath, native_path);
-> +      path_conv target (&upath, PC_SYM_FOLLOW);
-> +      target.get_wide_win32_path (native_path);
-> +    }
-> +
->    HANDLE h;
-> -  h =3D CreateFileW (filename, GENERIC_READ, FILE_SHARE_READ,
-> +  h =3D CreateFileW (native_path, GENERIC_READ, FILE_SHARE_READ,
->  		   NULL, OPEN_EXISTING, 0, NULL);
->    char buf[1024];
->    DWORD n;
-> @@ -716,7 +727,7 @@ is_console_app (const WCHAR *filename)
->    IMAGE_NT_HEADERS32 *p =3D (IMAGE_NT_HEADERS32 *) memmem (buf, n, "PE\=
-0\0", 4);
->    if (p && (char *) &p->OptionalHeader.DllCharacteristics <=3D buf + n)
->      return p->OptionalHeader.Subsystem =3D=3D IMAGE_SUBSYSTEM_WINDOWS_C=
-UI;
-> -  wchar_t *e =3D wcsrchr (filename, L'.');
-> +  wchar_t *e =3D wcsrchr (native_path, L'.');
->    if (e && (wcscasecmp (e, L".bat") =3D=3D 0 || wcscasecmp (e, L".cmd")=
- =3D=3D 0))
->      return true;
->    return false;
-> @@ -755,7 +766,7 @@ fhandler_termios::ioctl (unsigned int cmd, void *var=
-g)
-> =20
->  void
->  fhandler_termios::spawn_worker::setup (bool iscygwin, HANDLE h_stdin,
-> -				       const WCHAR *runpath, bool nopcon,
-> +				       path_conv &pc, bool nopcon,
->  				       bool reset_sendsig,
->  				       const WCHAR *envblock)
->  {
-> @@ -794,7 +805,7 @@ fhandler_termios::spawn_worker::setup (bool iscygwin=
-, HANDLE h_stdin,
->  	    ptys->setup_locale ();
->  	  }
->      }
-> -  if (!iscygwin && ptys_primary && is_console_app (runpath))
-> +  if (!iscygwin && ptys_primary && is_console_app (pc))
->      {
->        if (h_stdin =3D=3D ptys_primary->get_handle_nat ())
->  	stdin_is_ptys =3D true;
-> diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/loc=
-al_includes/fhandler.h
-> index 0de82163e..16f55b4f7 100644
-> --- a/winsup/cygwin/local_includes/fhandler.h
-> +++ b/winsup/cygwin/local_includes/fhandler.h
-> @@ -2036,7 +2036,7 @@ class fhandler_termios: public fhandler_base
->      spawn_worker () :
->        ptys_need_cleanup (false), cons_need_cleanup (false),
->        stdin_is_ptys (false), ptys_ttyp (NULL) {}
-> -    void setup (bool iscygwin, HANDLE h_stdin, const WCHAR *runpath,
-> +    void setup (bool iscygwin, HANDLE h_stdin, path_conv &pc,
->  		bool nopcon, bool reset_sendsig, const WCHAR *envblock);
->      bool need_cleanup () { return ptys_need_cleanup || cons_need_cleanu=
-p; }
->      void cleanup ();
-> diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-> index 71add8755..7d993d081 100644
-> --- a/winsup/cygwin/spawn.cc
-> +++ b/winsup/cygwin/spawn.cc
-> @@ -579,7 +579,7 @@ child_info_spawn::worker (const char *prog_arg, cons=
-t char *const *argv,
-> =20
->        bool no_pcon =3D mode !=3D _P_OVERLAY && mode !=3D _P_WAIT;
->        term_spawn_worker.setup (iscygwin (), handle (fileno_stdin, false=
-),
-> -			       runpath, no_pcon, reset_sendsig, envblock);
-> +			       real_path, no_pcon, reset_sendsig, envblock);
-> =20
->        /* Set up needed handles for stdio */
->        si.dwFlags =3D STARTF_USESTDHANDLES;
-> --=20
-> 2.51.0
->=20
->=20
