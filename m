@@ -1,21 +1,21 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 31FC84BA2E06; Thu, 18 Dec 2025 11:23:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 31FC84BA2E06
+	id 40AEF4BA2E1C; Thu, 18 Dec 2025 11:23:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 40AEF4BA2E1C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
 	s=default; t=1766056990;
-	bh=n1+M8mPyg8zi1ImD/NJQMPHX8GTvy9pHk71bYA0oHAA=;
+	bh=AI04pbtLyjpoyEs4N6KdZuEXeclRJ2CuntFlmSLt8OU=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=et1jJCta8H4e/T04ykiPInPV8e0P1wi8U+5iYOpckj8ha+iK0tJiUsUGhOTEfjddw
-	 1IcgJo9j1oJEnWaTHc4nPg9z8AGH3fbvJ2kSovvQva/ny3bPTup/6WYe6gyY2NydkC
-	 886XhNlBc8ZQ4T/2L+1pnmWutWi4Jea2kv3MAvAo=
+	b=xnu3rWk/BxyKe8/JlvGSaFMvaNMgw3u4b7dZVQvZzSIAP2fSt1Q0PEw6OoRs9QzGc
+	 HA+BA45ZYKuZQidFflWPz23epDfyccfqPuYzDr9ivNFCGkUk6mwtFE0usupsttmKQ+
+	 YSoQ0EH8iqw/t9ecmr9UKMswCkLW9bRYHSjltuhc=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 44C98A80350; Thu, 18 Dec 2025 12:23:08 +0100 (CET)
+	id 4DE9AA80D54; Thu, 18 Dec 2025 12:23:08 +0100 (CET)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 1/4] Cygwin: uinfo: correctly check and override primary group
-Date: Thu, 18 Dec 2025 12:23:05 +0100
-Message-ID: <20251218112308.1004395-2-corinna-cygwin@cygwin.com>
+Subject: [PATCH v2 3/4] Cygwin: uinfo: fix overriding group from SAM comment on AD member machines
+Date: Thu, 18 Dec 2025 12:23:07 +0100
+Message-ID: <20251218112308.1004395-4-corinna-cygwin@cygwin.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
 References: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
@@ -25,69 +25,70 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Corinna Vinschen <corinna@vinschen.de>
 
-Commit dc7b67316d01 ("Cygwin: uinfo: prefer token primary group")
-broke the code overriding the primary group in two different ways:
+When overriding the (localized) primary group "None" of a local SAM
+account via SAM comment entry (e.g. '<cygwin group="some_group"/>') on a
+Active Directory domain member machine, we have to take into account,
+that the local account domain (actually the machine name) is always
+prepended to local account names, i. e.
 
-- It changed the way myself->gid was set before checking its value.
+  MACHINE+account
 
-  Prior to dc7b67316d01, myself->gid was always set to the primary group
-  from the passwd entry (pw_gid).  With the patch, it was set to the
-  primary group from the Windows user token (token_gid) in the first
-  place.
+because the names without prepended domain are reserved for the
+primary AD domain accounts.
 
-  The following condition checking if pw_gid is different
-  from token_gid did so, by checking token_gid against myself->gid,
-  rather than against pw_gid.  After dc7b67316d01 this was always
-  false and the code block overriding the primary group in Cygwin and
-  the Windows user token with pw_gid was never called anymore.
+Therefore commit cc332c9e271b added code to prepend the local account
+domain to the group name from the SAM comment, if the machine is a
+domain member.
 
-  The solution is obvious: Do not check token_gid against myself->gid,
-  but against the desires primary GID value in pw_gid instead.
+But here's the problem:
 
-- The code block overriding the primary group simply assumed that
-  myself->gid was already set to pw_gid, but, as outlined above,
-  this was not true anymore after dc7b67316d01.
+If the group in the SAM comment entry is a real local group, prepending
+the local account domain is all nice and dandy.  But if the account used
+in the SAM comment is a builtin like "Authenticated Users" (S-1-5-11) or
+an alias like "Users" (S-1-5-32-545), this falls flat.
 
-  This is a subtil error, because it leads to having the wrong primary
-  GID in `id' output, while the primary group SID in the user token was
-  correctly set.  But as soon as you run this under strace or GDB, the
-  problem disappears, because the second process tree under GDB or
-  strace takes over from the already changed user token.
+This patch keeps the check for "MACHINE+account" first.  This avoids
+fetching the AD group rather than the local SAM group, if a local
+group has the same name as an AD group.
 
-  The solution is to override myself->gid with pw_gid once more, after
-  successfully changing the primary GID to pw_gid.
+But now, if the group prepended with the local account domain doesn't
+result in a valid group entry, try again with the naked group name, to
+allow aliases or builtin accounts to pass as primary group.
 
-Fixes: dc7b67316d01 ("Cygwin: uinfo: prefer token primary group")
+Fixes: cc332c9e271b ("* uinfo.cc [...] (pwdgrp::fetch_account_from_windows): Drop outdated comment.  Fix code fetching primary group gid of group setting in SAM description field.")
 Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
- winsup/cygwin/uinfo.cc | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ winsup/cygwin/uinfo.cc | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index ffe71ee0726c..8e9b9e07de9d 100644
+index fb4618b8a19e..1eb52f14578c 100644
 --- a/winsup/cygwin/uinfo.cc
 +++ b/winsup/cygwin/uinfo.cc
-@@ -174,7 +174,7 @@ internal_getlogin (cygheap_user &user)
-       gsid = cygheap->dom.account_sid ();
-       gsid.append (DOMAIN_GROUP_RID_USERS);
-       if (!pgrp
--	  || (myself->gid != pgrp->gr_gid
-+	  || (pwd->pw_gid != pgrp->gr_gid
- 	      && cygheap->dom.account_sid () != cygheap->dom.primary_sid ()
- 	      && RtlEqualSid (gsid, user.groups.pgsid)))
- 	{
-@@ -209,7 +209,10 @@ internal_getlogin (cygheap_user &user)
- 			myself->gid = pwd->pw_gid = pgrp->gr_gid;
+@@ -2563,7 +2563,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t &arg, cyg_ldap *pldap)
+ 	      if (pgrp)
+ 		{
+ 		  /* Set primary group from the "Description" field.  Prepend
+-		     account domain if this is a domain member machine. */
++		     account domain if this is a domain member machine.  Do
++		     this first, to find a local group even if a domain
++		     group with this name exists.  Only if that doesn't
++		     result in a valid group, try the group name without prefix
++		     to catch builtin and alias groups. */
+ 		  char gname[2 * DNLEN + strlen (pgrp) + 1], *gp = gname;
+ 		  struct group *gr;
+ 
+@@ -2575,7 +2579,9 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t &arg, cyg_ldap *pldap)
+ 		      *gp++ = NSS_SEPARATOR_CHAR;
  		    }
- 		  else
--		    user.groups.pgsid = gsid;
-+		    {
-+		      user.groups.pgsid = gsid;
-+		      myself->gid = pwd->pw_gid;
-+		    }
- 		  clear_procimptoken ();
+ 		  stpcpy (gp, pgrp);
+-		  if ((gr = internal_getgrnam (gname, cldap)))
++		  if ((gr = internal_getgrnam (gname, cldap)) ||
++		      (cygheap->dom.member_machine ()
++		       && (gr = internal_getgrnam (pgrp, cldap))))
+ 		    gid = gr->gr_gid;
  		}
- 	    }
+ 	      char *e;
 -- 
 2.52.0
 
