@@ -1,21 +1,21 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 40AEF4BA2E1C; Thu, 18 Dec 2025 11:23:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 40AEF4BA2E1C
+	id 4E3BA4BA2E1D; Thu, 18 Dec 2025 11:23:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4E3BA4BA2E1D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
 	s=default; t=1766056990;
-	bh=AI04pbtLyjpoyEs4N6KdZuEXeclRJ2CuntFlmSLt8OU=;
+	bh=lyi+WPj9jGfEYecSninZ+xYmuKrZKbYlTFVNqxw0AKI=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=xnu3rWk/BxyKe8/JlvGSaFMvaNMgw3u4b7dZVQvZzSIAP2fSt1Q0PEw6OoRs9QzGc
-	 HA+BA45ZYKuZQidFflWPz23epDfyccfqPuYzDr9ivNFCGkUk6mwtFE0usupsttmKQ+
-	 YSoQ0EH8iqw/t9ecmr9UKMswCkLW9bRYHSjltuhc=
+	b=KVIWZXXU0RQjwM6eMt6BlgBfbJZxM6GkK0jtfUxtvxQkvN6RkHyotRWG7ea01X20w
+	 A34ifFQXFlfFkq4FdmnM2pj9JsTMn9kMyWaa5PCnarhnagqL7vivzOotJXngXd/x/x
+	 tKJyca2/ILS0UdkTP7wUaTojeWSqgxmtlfujzlzU=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 4DE9AA80D54; Thu, 18 Dec 2025 12:23:08 +0100 (CET)
+	id 47BE5A80CB0; Thu, 18 Dec 2025 12:23:08 +0100 (CET)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 3/4] Cygwin: uinfo: fix overriding group from SAM comment on AD member machines
-Date: Thu, 18 Dec 2025 12:23:07 +0100
-Message-ID: <20251218112308.1004395-4-corinna-cygwin@cygwin.com>
+Subject: [PATCH v2 2/4] Cygwin: uinfo: allow to override user account as primary group
+Date: Thu, 18 Dec 2025 12:23:06 +0100
+Message-ID: <20251218112308.1004395-3-corinna-cygwin@cygwin.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
 References: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
@@ -25,70 +25,41 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Corinna Vinschen <corinna@vinschen.de>
 
-When overriding the (localized) primary group "None" of a local SAM
-account via SAM comment entry (e.g. '<cygwin group="some_group"/>') on a
-Active Directory domain member machine, we have to take into account,
-that the local account domain (actually the machine name) is always
-prepended to local account names, i. e.
+Do not only allow to override the (localized) group "None" as primary
+group, but also the user account.  The user account is used as primary
+group in the user token, if the user account is a Microsoft Account or
+an AzureAD account.
 
-  MACHINE+account
-
-because the names without prepended domain are reserved for the
-primary AD domain accounts.
-
-Therefore commit cc332c9e271b added code to prepend the local account
-domain to the group name from the SAM comment, if the machine is a
-domain member.
-
-But here's the problem:
-
-If the group in the SAM comment entry is a real local group, prepending
-the local account domain is all nice and dandy.  But if the account used
-in the SAM comment is a builtin like "Authenticated Users" (S-1-5-11) or
-an alias like "Users" (S-1-5-32-545), this falls flat.
-
-This patch keeps the check for "MACHINE+account" first.  This avoids
-fetching the AD group rather than the local SAM group, if a local
-group has the same name as an AD group.
-
-But now, if the group prepended with the local account domain doesn't
-result in a valid group entry, try again with the naked group name, to
-allow aliases or builtin accounts to pass as primary group.
-
-Fixes: cc332c9e271b ("* uinfo.cc [...] (pwdgrp::fetch_account_from_windows): Drop outdated comment.  Fix code fetching primary group gid of group setting in SAM description field.")
+Fixes: dc7b67316d01 ("Cygwin: uinfo: prefer token primary group")
 Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
- winsup/cygwin/uinfo.cc | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ winsup/cygwin/uinfo.cc | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index fb4618b8a19e..1eb52f14578c 100644
+index 8e9b9e07de9d..fb4618b8a19e 100644
 --- a/winsup/cygwin/uinfo.cc
 +++ b/winsup/cygwin/uinfo.cc
-@@ -2563,7 +2563,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t &arg, cyg_ldap *pldap)
- 	      if (pgrp)
- 		{
- 		  /* Set primary group from the "Description" field.  Prepend
--		     account domain if this is a domain member machine. */
-+		     account domain if this is a domain member machine.  Do
-+		     this first, to find a local group even if a domain
-+		     group with this name exists.  Only if that doesn't
-+		     result in a valid group, try the group name without prefix
-+		     to catch builtin and alias groups. */
- 		  char gname[2 * DNLEN + strlen (pgrp) + 1], *gp = gname;
- 		  struct group *gr;
- 
-@@ -2575,7 +2579,9 @@ pwdgrp::fetch_account_from_windows (fetch_user_arg_t &arg, cyg_ldap *pldap)
- 		      *gp++ = NSS_SEPARATOR_CHAR;
- 		    }
- 		  stpcpy (gp, pgrp);
--		  if ((gr = internal_getgrnam (gname, cldap)))
-+		  if ((gr = internal_getgrnam (gname, cldap)) ||
-+		      (cygheap->dom.member_machine ()
-+		       && (gr = internal_getgrnam (pgrp, cldap))))
- 		    gid = gr->gr_gid;
- 		}
- 	      char *e;
+@@ -170,13 +170,17 @@ internal_getlogin (cygheap_user &user)
+ 	 group of a local user ("None", localized), we have to find the SID
+ 	 of that group and try to override the token primary group.  Also
+ 	 makes sure we're not on a domain controller, where account_sid ()
+-	 == primary_sid (). */
++	 == primary_sid ().
++	 CV 2025-12-05: Microsoft Accounts as well as AzureAD accounts have
++	 the primary group SID in their user token set to their own user SID.
++	 Allow to override them as well. */
+       gsid = cygheap->dom.account_sid ();
+       gsid.append (DOMAIN_GROUP_RID_USERS);
+       if (!pgrp
+ 	  || (pwd->pw_gid != pgrp->gr_gid
+ 	      && cygheap->dom.account_sid () != cygheap->dom.primary_sid ()
+-	      && RtlEqualSid (gsid, user.groups.pgsid)))
++	      && (gsid == user.groups.pgsid
++		  || user.sid () == user.groups.pgsid)))
+ 	{
+ 	  if (gsid.getfromgr (grp = internal_getgrgid (pwd->pw_gid, &cldap)))
+ 	    {
 -- 
 2.52.0
 
