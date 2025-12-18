@@ -1,65 +1,67 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 4E3BA4BA2E1D; Thu, 18 Dec 2025 11:23:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4E3BA4BA2E1D
+	id 67AC14BA2E05; Thu, 18 Dec 2025 11:47:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 67AC14BA2E05
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1766056990;
-	bh=lyi+WPj9jGfEYecSninZ+xYmuKrZKbYlTFVNqxw0AKI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KVIWZXXU0RQjwM6eMt6BlgBfbJZxM6GkK0jtfUxtvxQkvN6RkHyotRWG7ea01X20w
-	 A34ifFQXFlfFkq4FdmnM2pj9JsTMn9kMyWaa5PCnarhnagqL7vivzOotJXngXd/x/x
-	 tKJyca2/ILS0UdkTP7wUaTojeWSqgxmtlfujzlzU=
+	s=default; t=1766058431;
+	bh=QDo1p0cjq+njU3UY25u9/wKoU4bwmMvUMQh1Qp8BFyA=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=VTN9X2WSxPp7RqxOlyaBbKJUfN54j+AKr5fxrJsrUxYGRpRtxfLe8k8fAt+o176x7
+	 bCPz/ucxldHypUzHI4oFeOR4a3BI8wfoPfE3fHSnlGui0vyeUgOstcggWmKfOdt8WE
+	 TEzEoBKTGb6lETiNqCF6Hq1Cjksmhm/VkeOCW8Yk=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 47BE5A80CB0; Thu, 18 Dec 2025 12:23:08 +0100 (CET)
+	id 7748EA80B65; Thu, 18 Dec 2025 12:47:09 +0100 (CET)
+Date: Thu, 18 Dec 2025 12:47:09 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 2/4] Cygwin: uinfo: allow to override user account as primary group
-Date: Thu, 18 Dec 2025 12:23:06 +0100
-Message-ID: <20251218112308.1004395-3-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
+Subject: Re: [PATCH v2 0/4] Fix overriding primary group
+Message-ID: <aUPpvSw_kgeE6gdK@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
+I forgot...
 
-Do not only allow to override the (localized) group "None" as primary
-group, but also the user account.  The user account is used as primary
-group in the user token, if the user account is a Microsoft Account or
-an AzureAD account.
+On Dec 18 12:23, Corinna Vinschen wrote:
+> From: Corinna Vinschen <corinna@vinschen.de>
+> 
+> Fix broken code overriding primary group at process tree startup and
+> overriding groups from local SAM comment on domain member machines.
+> 
+> The first bug is fallout from adding newgrp(1) to the Cygwin
+> utils.  It turned out that the Cygwin startup code didn't take
+> an already changed primary group in the user token into account,
+> which made newgrp(1) a no-op.
+> 
+> Unfortunately the fix from commit dc7b67316d01 ("Cygwin: uinfo: prefer
+> token primary group") made newgrp(1) work as desired, but broke the
+> scenario where a user's primary group was changed in the passwd entry
+> or in a SAM comment.
+> 
+> The second bug is actually pretty long-standing behaviour, but
+> apparently local SAM accounts are not in muchg use on domain member
+> machines...
+> 
+> Corinna Vinschen (4):
+>   Cygwin: uinfo: correctly check and override primary group
+>   Cygwin: uinfo: allow to override user account as primary group
+>   Cygwin: uinfo: fix overriding group from SAM comment on AD member
+>     machines
+>   Cygwin: add release note for primary group override fix
+> 
+>  winsup/cygwin/release/3.6.6 |  4 ++++
+>  winsup/cygwin/uinfo.cc      | 25 +++++++++++++++++++------
+>  2 files changed, 23 insertions(+), 6 deletions(-)
 
-Fixes: dc7b67316d01 ("Cygwin: uinfo: prefer token primary group")
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/uinfo.cc | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+v2: Try to improve commit messages, add patch fixing primary group
+    override for local accounts on domain member machines to the
+    patchset.
 
-diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index 8e9b9e07de9d..fb4618b8a19e 100644
---- a/winsup/cygwin/uinfo.cc
-+++ b/winsup/cygwin/uinfo.cc
-@@ -170,13 +170,17 @@ internal_getlogin (cygheap_user &user)
- 	 group of a local user ("None", localized), we have to find the SID
- 	 of that group and try to override the token primary group.  Also
- 	 makes sure we're not on a domain controller, where account_sid ()
--	 == primary_sid (). */
-+	 == primary_sid ().
-+	 CV 2025-12-05: Microsoft Accounts as well as AzureAD accounts have
-+	 the primary group SID in their user token set to their own user SID.
-+	 Allow to override them as well. */
-       gsid = cygheap->dom.account_sid ();
-       gsid.append (DOMAIN_GROUP_RID_USERS);
-       if (!pgrp
- 	  || (pwd->pw_gid != pgrp->gr_gid
- 	      && cygheap->dom.account_sid () != cygheap->dom.primary_sid ()
--	      && RtlEqualSid (gsid, user.groups.pgsid)))
-+	      && (gsid == user.groups.pgsid
-+		  || user.sid () == user.groups.pgsid)))
- 	{
- 	  if (gsid.getfromgr (grp = internal_getgrgid (pwd->pw_gid, &cldap)))
- 	    {
--- 
-2.52.0
 
+Sorry,
+Corinna
