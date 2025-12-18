@@ -1,216 +1,239 @@
 Return-Path: <SRS0=Z/EC=6Y=gmx.de=Johannes.Schindelin@sourceware.org>
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by sourceware.org (Postfix) with ESMTPS id 206AB4BA2E05
-	for <cygwin-patches@cygwin.com>; Thu, 18 Dec 2025 07:45:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 206AB4BA2E05
+	by sourceware.org (Postfix) with ESMTPS id D59594BA2E1D
+	for <cygwin-patches@cygwin.com>; Thu, 18 Dec 2025 08:08:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D59594BA2E1D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 206AB4BA2E05
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D59594BA2E1D
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.20
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1766043915; cv=none;
-	b=xeJmMV1vj/+CNLwEooo7r7sjaqWTvOQU343EKsBnJS0L9zOHCAAuOTztHh2g6Lvw80MVAtuN2ySQWMeA5FIaeoyNShm7KQgPnJBn0u9iM6UlODO5wFVLmrdGafcV0+vs5HYyWb3RrYVTOyCOI1+WoMLVhOBZZsHbmbRvcn/m4qc=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1766045313; cv=none;
+	b=M2ZB1bKrH9l5REdxMST8638gt5XudRlaW2MfFSxaRQKNQjv7Xr+FpBy2DHeNvnPId94ptZp0gbpLhu1bDKbwea93RLk5sc2H8YHjKMkaY2fziPnASWM64HVliv4eUEldWgZoCqFWOoSLfiBygkvjm2kTONqd0Cw4GAdERx0fL6M=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1766043915; c=relaxed/simple;
-	bh=SuTHPLBviOebtiSRjac/04MxrO0BbWoN+MzpX8CL76A=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=R3bA1XeAAXuNJuDfLSMJs5yC872jIf4gEIWP9mUNFEXTWa+AkVYv4vcFe3j9QFFErHSAQ9yxGCtffFh0AH5kB/C1JvTrFYbwxHgaoMAmaehM24ZyQ5FeMLv8QzD6BN9+HGoUxVx7vWJSF4+N8OXEV7jT1T4GJow+0q3nd+PQORY=
+	t=1766045313; c=relaxed/simple;
+	bh=fPphNeyXsqRDAoUteTnw7Wx4Cz0EkFhbEglGUhD5Xz4=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=lUDHHLqcjmMjFIzD4OzVPTQJNLH+/2N5hjVM+PHBfT6BqM3QUeK0jQLuhgtL+vAXhrTecqXgjnZT3tTHWmKpYEzSgIxSaeSFdDw/dBvg+V5YgMW2VaAKN1Italaei1Ilb6r/6af9qrlh3yrHyO9R66U936B9iXXAfTbjbDch5Gg=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 206AB4BA2E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D59594BA2E1D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=JeOzSDX1
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=Fq5RsQBU
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1766043914; x=1766648714;
+	s=s31663417; t=1766045306; x=1766650106;
 	i=johannes.schindelin@gmx.de;
-	bh=SuTHPLBviOebtiSRjac/04MxrO0BbWoN+MzpX8CL76A=;
+	bh=9Uc6mtYuUMat55ZE0RbQuj18uW781om5utRpc+9/8ig=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=JeOzSDX1HvRhgmsWNIhZ3s0nRiREoMKp17YNkRkndQe5qSdUwYERcNMoTYXjWixp
-	 SQtqnJP20MF5ea4mnOXNSIuyvyKH/+lnx4ScF9TfkSk1fC1P6KIg06w9KO8wnnh80
-	 FvvUvOcMca6UFPBgBtAWTgsMzF4EjogOOLEk1uSt1iQikP77Y9axC5yy90Yr2oxL4
-	 9a8iEIFuszrk6AAsUfTH3m28CahbF0uw2+gTBql+ZzaYpPppimGi+xSuA+AkFs1A8
-	 Y4QKbCkgEjC62ZrtnarxMqnxLhB+qlCfJaueLYClgRK3kQ8iX+5LADUP2xObbjur3
-	 GgVd9rWwr7DsaxscJg==
+	b=Fq5RsQBUXXhLDisMH/MjvKNqdaTLa/1Z+sEpnlfSNNi/St9DnI3EtWMLahz7uI4o
+	 08RKDS1LQCBhNwsWHaTOVhHpCeSJZFCfxE4sSA5j/wgMb3cYY9tOHEn1banSz/UxI
+	 QKiD6KBBAjp27WWt6I+EHOTaALWj4paOgE04pva/86U3b3k5QQ4fqRVubQQQM3Uf/
+	 CE0XcKNjSsG/lgxzOw4/756l1UuJxQ8CGnjLG+ogOm5Dpz/WbcBltgaxyMHK2nSKk
+	 L44T5aCVhpBmQKosE1Qg/WcKtc6yK4qYXWBnbildSn+xe1OnDKXmIXJgk2ZMhN1hy
+	 8YTLH/SlHj9GCCCyJQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [172.23.242.68] ([89.1.212.212]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MK3Rm-1vHNGZ3QSs-00Hbmg; Thu, 18
- Dec 2025 08:45:13 +0100
-Date: Thu, 18 Dec 2025 08:45:12 +0100 (CET)
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhU9j-1w8lKL2Qsd-00hOiX; Thu, 18
+ Dec 2025 09:08:26 +0100
+Date: Thu, 18 Dec 2025 09:08:24 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
- disable_master_thread
-In-Reply-To: <20250715162741.bd33f1249f088ba6947fbd32@nifty.ne.jp>
-Message-ID: <2ad7299d-9561-fcd9-9fec-8b492c48caee@gmx.de>
-References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp> <9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de> <20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp> <259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de> <20250703195336.2d5900b4988a6918ad397582@nifty.ne.jp>
- <5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de> <20250715162741.bd33f1249f088ba6947fbd32@nifty.ne.jp>
+Subject: Re: [PATCH v3 2/2] Cygwin: termios: Handle app execution alias in
+ is_console_app()
+In-Reply-To: <20251218020426.2d726257fd3cce4d2405d67e@nifty.ne.jp>
+Message-ID: <adf3c29b-5c94-9612-5de7-2f19141b723d@gmx.de>
+References: <20251217093003.375-1-takashi.yano@nifty.ne.jp> <20251217093003.375-3-takashi.yano@nifty.ne.jp> <a4777af3-0f55-1b29-9fa7-cc38c47a3291@gmx.de> <20251218020426.2d726257fd3cce4d2405d67e@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:RGp7b+JbJ7aJSgv83KodthdubfBjRceTVE7wW0Ez6yhFNqusbtO
- z2oRNZhOShG9JEzrPXeQB1XzMmAznEbym1a6it8HfZGs8ZIYDxgHJD5QSElGH/ChOdIL4zK
- 6m8SXgWADCtlLnXaKfaLwON03D93rTbwgtRhfJ5TUZWcaXT/Q3/xucrFzzYU4Cl2y/RjOhS
- LuQKlZLRVzh0Z/maGoDlw==
-UI-OutboundReport: notjunk:1;M01:P0:4jhVU1RfKC4=;YR77w7OBc9aJBCFPfZIwzehEClf
- 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
- jzypOvr8=
+X-Provags-ID: V03:K1:TssyeelvI9MuQXYz1ACjEUiMgaZt65nHWxZmw1ipCEsCyS5vTgr
+ PpVv8Acr3xQzT8x0QwZw50d0Ro4EezPqy9vaPauM0NQb2A8HedqbhMCkA3bMu1UYqwXD+xf
+ 33TtCaKFSQSW7e++cXcyYwCs+0cCYNjy1L36AFyUARgDC5JWt0Hgmsqgn/lcMeBtwx8Zven
+ Jifs1gsV267sJQJWMJ1uw==
+UI-OutboundReport: notjunk:1;M01:P0:Qv0+SaC/DBo=;+bxXQoPClisNcQL8in9h8hMr/NV
+ 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
+ nPRXLDGE=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,LIKELY_SPAM_BODY,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Takashi,
 
-On Tue, 15 Jul 2025, Takashi Yano wrote:
+On Thu, 18 Dec 2025, Takashi Yano wrote:
 
-> On Mon, 7 Jul 2025 12:50:24 +0200 (CEST)
+> On Wed, 17 Dec 2025 15:55:58 +0100 (CET)
 > Johannes Schindelin wrote:
-> >=20
-> > On Thu, 3 Jul 2025, Takashi Yano wrote:
-> >=20
-> > > On Thu, 3 Jul 2025 11:15:44 +0200 (CEST)
-> > > Johannes Schindelin wrote:
-> > > >=20
-> > > > On Thu, 3 Jul 2025, Takashi Yano wrote:
-> > > >=20
-> > > > > I noticed this patch needs additional fix. Please apply also
-> > > > > https://cygwin.com/pipermail/cygwin-patches/2025q3/014053.html
-> > > >=20
-> > > > Thank you for the update!
-> > > >=20
-> > > > I am curious, though: Under what circumstances does this patch mak=
-e a
-> > > > difference? I tried to deduce this from the diff and the commit
-> > > > message but was unable to figure it out.
-> > >=20
-> > > In my environment, the command cat | /cygdrive/c/windows/system32/pi=
-ng
-> > > -t localhost in Command Prompt cannt stop with single Ctrl-C. ping i=
-s
-> > > stopped, but cat remains without the sencond patch, IIRC.
-> >=20
-> > I have added this as an (AutoHotKey-based) integration test to
-> > https://github.com/git-for-windows/msys2-runtime/pull/105 and was able=
- to
-> > verify that your fix is necessary to let that test pass.
-> >=20
-> > Speaking of tests: Have you had any time to consider how to accompany =
-your
-> > fix by a regression test in `winsup/testsuite/`?
-> >=20
-> > For several days, I tried to find a way to reproduce a way to reproduc=
-e
-> > the SSH hang using combinations of Cygwin programs and MINGW
-> > programs/Node.JS scripts and did not find any. FWIW I don't think that
-> > MINGW programs or Node.JS scripts would be allowed in the test suite,
-> > anyway, but I wanted to see whether I could replicate the conditions
-> > necessary for the hang without resorting to SSH and `git.exe` _at all_=
-.
-> >=20
-> > I deem it crucial to start including tests with your fixes that can be=
- run
-> > automatically, and that catch regressions in the CI builds.
 >=20
-> To be honest, I already have local test suites that check the behavior
-> of special keys for both pty and console. However, I currently have no
-> clear idea how to integrate them into winsup/testsuite...
+> > On Wed, 17 Dec 2025, Takashi Yano wrote:
+> >=20
+> > > Fixes: f74dc93c6359 ("fix native symlink spawn passing wrong arg0")
+> > > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > > ---
+> > >  winsup/cygwin/fhandler/termios.cc       | 21 ++++++++++++++++-----
+> > >  winsup/cygwin/local_includes/fhandler.h |  2 +-
+> > >  winsup/cygwin/spawn.cc                  |  2 +-
+> > >  3 files changed, 18 insertions(+), 7 deletions(-)
+> > >=20
+> > > diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhand=
+ler/termios.cc
+> > > index 19d6220bc..7fdbf6a97 100644
+> > > --- a/winsup/cygwin/fhandler/termios.cc
+> > > +++ b/winsup/cygwin/fhandler/termios.cc
+> > > @@ -702,10 +702,21 @@ fhandler_termios::fstat (struct stat *buf)
+> > >  }
+> > > =20
+> > >  static bool
+> > > -is_console_app (const WCHAR *filename)
+> > > +is_console_app (path_conv &pc)
+> >=20
+> > I see you insist of mixing the refactor where `path_conv &` is passed
+> > instead of `WCHAR *` with the actual fix.
+> >=20
+> > Not a fan. I regularly hit your commits when bisecting Cygwin runtime
+> > regressions, and I have not yet learned to be okay with finding patche=
+s
+> > that do too many things at the same time.
+>=20
+> Do you mean there should be a separate patch which just change
+> the argument WCHAR * to path_conv & before the acutual fix?
+> Doesn't that make the intent of the first commit unclear?
 
-If Cygwin were merely a personal project of yours, I would understand and
-probably agree.
+The first commit just needs a clear commit message that conveys the
+intention. Then everything becomes a lot better. For example, `git bisect`
+would become more efficient because it wouldn't find a commit that does
+several things at the same time (refactoring and working around an API
+limitation), but would instead find a commit that does one thing. I have
+spent enough time bisecting Cygwin breakages to know how much of a time
+saver that is, let alone a morale booster.
 
-However, Cygwin is used (via the MSYS2 runtime) in Git for Windows, and by
-extension millions of users rely on it.
+> > I'm weven less a fan of the non-descriptive variable name `pc` which
+> > unnecessarily increases cognitive load.
+> >=20
+> > But hey, rather than shouting my objections to the form in the void, I=
+'ll
+> > just accept that my recommendations are not welcome,
+>=20
+> ??? I don't understand why you think so. Which recommendations you mean?
 
-Therefore, it would be good to at least publish those local tests.
-Ideally, a good deal of thought should be spent on figuring out a way to
-integrate the tests into the CI builds.
+I regularly suggest to you to spend more love on the commit messages so
+that they become more useful than they are now.
 
-You mentioned winsup/testsuite, and I do agree that it sounds more than
-just tricky to integrate the tests there. Essentially, you would probably
-end up reimplementing AutoHotKey's fundamental functionality: sending
-keystrokes and inspecting the results.
+Don't get me wrong, I have nothing against being concise. I have something
+against being incomplete. The commit message that is proposed here only
+makes sense to somebody who just investigated the bug, in depth. Anybody
+who hasn't poured over the code for a substantial amount of time will be
+confounded by the provided explanation. I have been in this situation with
+your commit messages on more occasions than I care to remember, and I am
+not exactly what one would call a novice software engineer. Granted, your
+commit messages are way, way better than, say, commit messages like this:
+https://github.com/evcc-io/evcc/commit/258bd9e1f550. But I seriously long
+for the commit message to provide the four pillars of a good message (see
+https://github.blog/developer-skills/github/write-better-commits-build-bet=
+ter-projects/):
+Intent, Context, Implementation and Justification. I want to understand
+what is going on after reading the commit message, not be sent on a crazy
+goose chase.
 
-Now, to be sure, running AutoHotKey-based tests is a lot more finicky than
-running winsup/testsuite. In the absence of any better idea, though, I
-would take the confidence from having tests over not having tests, any
-day. After all, you and I are both fully aware of the unfortunate pattern
-in the code under discussion where on multiple occasions, bug fixes
-introduced new bugs whose fixes introduced yet other bugs, etc ad nauseam.
-If AutoHotKey-based tests can help break that pattern, let's integrate
-them.
+Maybe I should find an analogy to illustrate the problem. Have a look at
+https://www.youtube.com/watch?v=3DlDSbg-1y5UY. It is an exquisitely funny
+and concise summary of the movie "Frozen". But if you don't know the movie
+before watching Olaf recount the story, you understand precisely nothing.
+It's not "concise", it's "too incomplete".
+
+Commit messages are not a diary. They are messages you send to software
+engineers who need to work with your changes. Sometimes, they are even
+messages to your future self.
+
+This is particularly important in the context of bug fixing. As I have
+debugged Cygwin bugs quite often in the past, I can tell you that it is
+quite frustrating to end up finding commits that leave everything unclear,
+whose diffs are too large to find any obvious bugs. There are no obvious
+bugs. There are only the non-obvious, hard to track down ones. This is the
+kind of frustration I aim to avoid by telling you how I want you to
+improve the commits. This is my attempt to turn that frustration into an
+outcome worth having.
 
 Ciao,
 Johannes
 
-
+>=20
+> > and this is the shape
+> > of the patch that you want to have. It does fix the bug, so that's goo=
+d.
+>=20
+> --=20
+> Takashi Yano <takashi.yano@nifty.ne.jp>
+>=20
