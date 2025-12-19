@@ -1,188 +1,388 @@
-Return-Path: <SRS0=H4g6=6Z=multicorewareinc.com=thirumalai.nagalingam@sourceware.org>
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazon11021078.outbound.protection.outlook.com [40.107.57.78])
-	by sourceware.org (Postfix) with ESMTPS id 2F5874BA2E04;
-	Fri, 19 Dec 2025 11:58:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2F5874BA2E04
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=multicorewareinc.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=multicorewareinc.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2F5874BA2E04
-Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=40.107.57.78
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1766145503; cv=pass;
-	b=V8tSHEI8dYU9NXpq3eOCXPBAtzXcwIpWmgSEF0ACXGP5isoKhMC0NwQlhKCP0m9CVxDUptFiQCyL1AuStne1XHA0VrZkrCJjMOccLCf7eh2SzSl2US7UKMCJEj5GTANSoGPVm43mALPA0lpwJjjLjExCQ1ZDhbX0vjS2TK75C1M=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1766145503; c=relaxed/simple;
-	bh=moRfz4QzQIj5TFIxvdAqmWyNCkE/HNVTq7sfpGEgIxg=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=MCHWQT1dU3zrztH+nr5ibSFRAIyKoZ6E8giVOjKVGidyKhDhY6X6tb7ZYWNvB0FqhOf6Q34MvQrjcWRMOttba7bfj1VZ3psjJnVkfjhqbLxYptEFAUPxNcJaNlHHkSr6IxnCom2wPYcfisCZJkCYYI5a2C78/05az0FiF9SQyNg=
-ARC-Authentication-Results: i=2; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2F5874BA2E04
+Return-Path: <SRS0=15Wh=6Z=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id 6D1654BA2E26
+	for <cygwin-patches@cygwin.com>; Fri, 19 Dec 2025 13:17:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6D1654BA2E26
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6D1654BA2E26
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1766150273; cv=none;
+	b=krGkuY/1zVd0+3VDTVu77YTQMiZx9L8TcNl4g3gvkaklIqXPQxhDaIMsezEVDHYPdaLd8nAI51XtFz38/DT8b5eV8VKvONAE8Z52W36JIv9+//pD5zV1fb+idIsXi48+IzmzKPkS9V17tPz9XM1JFAjjWlV+eaUzEDXgYmVOCk0=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1766150273; c=relaxed/simple;
+	bh=/szRd8RBy6ZEbezSdaTRpsnKU+ibtSKCv8bsBYXs8i8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=VplPiIBl2v7dCzHApXILZjsfd55LQ6k7vVW/iC8q9PMcKvO4zp49NSNTAeHIi4PBLUyepqdqAvJclfvsM2SPVji7qYW6l6Ws2lqei8YZ3ZBiEqTy7vw6BMyMcdzdkQ6Ipw67fyt2CNwg5o/950549BsvlxJNwVATA4658bnDW1M=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6D1654BA2E26
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=O4C2CVAN
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ls5MuTFr1KCNQWgiB0tGJGwUhLL5W5htq0DGgzr+7G9nwL2U1+8WY16QD3Pz2hBfCT+EoDIruWv0q9TJSOx7ZPKYt8yNIiI3cPjo2UChUmUqt3H3nJ/3TvUG3A1XhoG2TxfUXnJ3T7e+NWjg4W4R4O3pKBj9GwUXTLm7hFLmG8YF1TBeklHB/jx9HYRFsOvXdtD1J4pEw4BjkxF3NWmB2oIYSWXdcxEOS0o53fSp1qyJdSgQH6GhB7eWfnhgZJFd9XW98ynlED13zTTlsdVxCEqyCgKg+TxqsOUcWV+7djGyJm2go7N5VUdCgWJxxVHkq5aHg6r+8QJ3rhjuqPgWBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=moRfz4QzQIj5TFIxvdAqmWyNCkE/HNVTq7sfpGEgIxg=;
- b=R0DUborlG2mqwNRgxjoScZ+meKBe9KcCyiI5EFGUunlcbxWcYcnkvbpKciG4cft+mz3pe1NK5XF646ecfFCbq+d9HRL/ARHNa2tEZahpbikPUCkdeL9kjlGbKPIkAPw6MaBiyv3GfrixXXeIUQ7rGWmSvraz8+qIhBw1qNtuFApGpdWz0POXVeMXLox24u4+QnJqirFmSmBx7ReFp/x1QM200tMIrMqV85Hex2dB+ABF+78GpSoGr8/YUNPfs9eJtt9wuJpWfvtuVG7n8y5m60+q9HAysAhoUfNkq0FeYL7yVrDcycBSc6Bsc61w1t+/wpsDmZXmRyicwuNhj2PuKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=multicorewareinc.com; dmarc=pass action=none
- header.from=multicorewareinc.com; dkim=pass header.d=multicorewareinc.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=multicorewareinc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=moRfz4QzQIj5TFIxvdAqmWyNCkE/HNVTq7sfpGEgIxg=;
- b=O4C2CVANv2npoKcSKsIGnLkNl7aUsxj14oyy3BmdSYur0ap5Uj9famxo9iowBRFNVDBRPXfS3M9RFMSP2mVO9rE+UQBU0fipEYQttoXdQE6IUrbvzSeguKsDe1Bh1UaeCr7f5nCcBG0LcZFDzEJ8OXtu9rV5MIbIf4S2J/8rdJSolxvM2Q61xIrzF63/mHHF4pcXpSIgE2OC/ptGl5bVlYDyd5wnXoviGBvdL/K6t8E9sOWdz4EWFR461MZUA8QNwqb5MvhRXEZFJYLA8UWUT9ZHKu/37P7R8ax+jFcoZ98Ubv5T6svWD476EqdWzpIgKrngbXMUSAvBLz/ihqxFhA==
-Received: from MA0P287MB3082.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:141::12)
- by MA5P287MB4396.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:169::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.9; Fri, 19 Dec
- 2025 11:58:19 +0000
-Received: from MA0P287MB3082.INDP287.PROD.OUTLOOK.COM
- ([fe80::e76a:ce2f:84fe:3362]) by MA0P287MB3082.INDP287.PROD.OUTLOOK.COM
- ([fe80::e76a:ce2f:84fe:3362%6]) with mapi id 15.20.9434.009; Fri, 19 Dec 2025
- 11:58:19 +0000
-From: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-CC: Corinna Vinschen <corinna-cygwin@cygwin.com>
-Subject: RE: [WIP::PATCHES] [RFC] Preliminary ARM64 compilation support for
- Cygwin
-Thread-Topic: [WIP::PATCHES] [RFC] Preliminary ARM64 compilation support for
- Cygwin
-Thread-Index: AdxoKhFxMNzP67ZvSzuqLMsZVRNe9AB0YcGAAbSXvdAAAjbBgAABwwQQ
-Date: Fri, 19 Dec 2025 11:58:19 +0000
-Message-ID:
- <MA0P287MB3082E997271542FC9CDE099C9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
-References:
- <MA0P287MB3082C051C4E43AB64AD4B9959FA2A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <aTmvvwfClr2suB2R@calimero.vinschen.de>
- <MA0P287MB30824A7CD2D09D49825C01809FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <aUUwh5EFke-rrQTV@calimero.vinschen.de>
-In-Reply-To: <aUUwh5EFke-rrQTV@calimero.vinschen.de>
-Accept-Language: en-US, en-IN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=multicorewareinc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MA0P287MB3082:EE_|MA5P287MB4396:EE_
-x-ms-office365-filtering-correlation-id: fcf17ef4-6c39-4c05-1e20-08de3ef5e6d9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|10070799003|366016|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?VDA4ZFQvODdMMzBsdUdoWkZZaHg4WGUrQVNvakprRnQzc3NyV21vTEVuaVlr?=
- =?utf-8?B?YzlyV3RYQ2l1YVlzemk5TDlRN002Y3h1bDZZeDFCT2o5SHdweDZKRnRyVjAy?=
- =?utf-8?B?aEJmODExWjg4Smh5K1Vnc1hDZjRJMEZyT2YySWVvcEUvQ3E0dUY3NEhFdWkx?=
- =?utf-8?B?R0Nid3dGRllzNWVFQU9KaEQ3bGF3MzBKME8wMExyZlVBK1Q2WG9FcmJVNVl3?=
- =?utf-8?B?Y2RoTytpaE8wSFBrRWhLZE1QRGhuYklCRXAySjB4eEJ0RUVHYzlhNEpjU3FW?=
- =?utf-8?B?WFVaTGozZG1kY0xRaXBXQXhIQWNhTGpZTm9pRDF3Sm5lUHo3VkVkWk41encz?=
- =?utf-8?B?eERIV01DTVE4MDlaQWs0MGgwRWtQYmsvVXAxMnhnOTVxL3I2bVQ5L2h3NXUr?=
- =?utf-8?B?aVRkOE10Ri94U2d3SUlsaVdsLzJ0Vy80SnNhSHYrdjAvSHJrNENnTnJHSVQ3?=
- =?utf-8?B?aithZHlJQ3ZuNEpFcVpNWmVIZjBCWFpHak53ZUo0eGxITHBCeUx5VHVXNGRZ?=
- =?utf-8?B?WktXbjlpL2xWVDJDN3BhSytLR1l5UVhNZ2QxUVlPUTBNSjMxZ0xPcW9EQUhs?=
- =?utf-8?B?U29vNFhHZUl4ZFBCdkpJeGdDUnB4K3p0UUNjMExiUHRNY3FIbkcyK2Zsblp1?=
- =?utf-8?B?dUtVNnlNWmFxRmh1aTFXS2M4Q2s5eC9RL290OFBWMXVjZEI2cEhETmQ3VHlY?=
- =?utf-8?B?cnhiUStTbFg3bTNoeldFV3hmakZwRmovSGJydDlkc1d5T0dYbFN4ZGFXdVY2?=
- =?utf-8?B?blpFbXFhQWd1QndpNzVzNm92cUYxTFdvME9vYmRuRUhDWHNpVWdqYzdhU0w5?=
- =?utf-8?B?c3RHbm9ZczR4MVYyS1RHbEhHeVRWbWI4NWhxUERJWm1NRVhId2plSGFLazFW?=
- =?utf-8?B?T3JhOWc3aVgvcjZPTWl5YS9nbWdGdlRZdDBrWG9lWkdKZWFveG1xZlhSUkNX?=
- =?utf-8?B?cGlOdVhQbzM4eFBHR2EvUFZ0b3ZPanJKSGFZZmZkRmloNXdQa1BrbzJ5SFVp?=
- =?utf-8?B?Q2tVVVZRVXpoR3h5YlFwVjBDZnEyVE5jeUl5ek9Pay9RWU9XSDVlUnYxSUR2?=
- =?utf-8?B?V0piMVZqalZpak56RW1YaVhLY2pCZHE1MUR0dU9LQS9ubTRzeWo2Rm5ETXRU?=
- =?utf-8?B?TG9DQnFhYS9mTVJwUXVVdWNNVmNOY3p5S08wa1JPMllQQysxdnB6c0NrNVMw?=
- =?utf-8?B?MUZRMzNTazlVYW9WN3NSSHFVcDI1WnU4TmhnbFM0eVRiTGxxTWl5OEYybGJS?=
- =?utf-8?B?Zys2THhaVzFhT3hKNnpoQkVmYUs1bklRMkRTemFiYVJDeXFJcERFbndsWHkx?=
- =?utf-8?B?ZW1tVWp1TWhsc1gweHJrb01rSTJUdUFsdExMR3lzejUvTThwRHo0Qk5DbnVS?=
- =?utf-8?B?a2xqcnE4TmMxVC9WdnB6T2NnbFEwd2RrUUtFTHFScFN5bTFDRGxFYjh1c1VQ?=
- =?utf-8?B?TTNHTTdnaGIyYlgxWVFFL1YrVkRHQnJQWVBTUmE2S01Cc1ZnMGVidFdPNmpK?=
- =?utf-8?B?cWUxNkovSW15SVlPTE5XU2h2a2lrVDRSNEt6WUJRQ0FONHAwYnZhOXRRek1E?=
- =?utf-8?B?WmgzbnM0TnI2UU5YU1pJV3FoRkw1V1p4SzdLUWtJSC93eE04U0FjMHhKVkk4?=
- =?utf-8?B?Sjd4TXdZemlDQXUxcFl4eHFDRTVUN0JlRjBPbWRYUlkzam1IbzFSVzUvWkxa?=
- =?utf-8?B?d05jWHZWdnU0dFgwQ1Y0VVJTck9YSGVpMVJrZFFVRXZyQUI3ZE9MQ1ozNHJv?=
- =?utf-8?B?dGxaTUtkb1NjYVVRdVRSRWQ5dFBjSVI4UE5BM1V1aEdBYXR1RVYvVXRBVFQy?=
- =?utf-8?B?RFRobjhGSDIzQVFJdXpnNllQS2N2Tk01Y21uS0xPK213OFBuL3hmbVlNVjJt?=
- =?utf-8?B?ZTl2ektZT1JvUEI4SU40T2lGVWxrSDQrT3p1VDlRbXV6MS9Jd05jb2xUYWw3?=
- =?utf-8?B?WGQ4dHhCMVY2MmhOVHFpWUNhWXd5NmZZTndnS0xERHRuWVpRN1N0L3lXOTlx?=
- =?utf-8?B?TEFrbVNnYURyWjUzTXBvZEh3U3VkazBaZ1U4V0JpeVY3QnVhc0FSUUg5TGtx?=
- =?utf-8?Q?6cl5yk?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0P287MB3082.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(10070799003)(366016)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?a01Ed3RPdTVmdDNUTjBsdXdlVlhLb2gwOXhwcTRHMHNZNHp6bDBYNVN0SU5V?=
- =?utf-8?B?RGlXaVRuaFVXWmdldEpZN0hOcVJNNk1KUEMwbHZvb2ZxMEtKcTRmV0trMDNm?=
- =?utf-8?B?R0h2bzFGNkdxRlN3cFBCVDhORDJUTjFLQzZ1MXR2OWV3aUEvY1ptQW9LUldr?=
- =?utf-8?B?NFlSQTRFVUxLcjFlMStTa3I4SFh0K1dtRkRlcFpreVhtS0V6SU1VTnp4aVNw?=
- =?utf-8?B?WVpLTGtqbzQ5WW95L3g3azc4NGpYTzh0bkErTUcvTjhWNnAvR09oNFNwd3BY?=
- =?utf-8?B?bXREMlhpd243SVUzUWVKVjRKbW56c2xRbzQrUURuMGZuOE5GM3hmUnAweWxC?=
- =?utf-8?B?WENiS1EweStYYjRFY09Vc1RqQmo0UlV2RjNoRU5pa3FGbDhOeXJtcDdTNTF2?=
- =?utf-8?B?VTVjZjd0b3dKb0N1d3hUbGJ0SXU4RXYyT3pEYTcydlVjWFlkVzMyYmZidml4?=
- =?utf-8?B?Yzl1dk9YVmVjTTlmeDloM3FKSDl4OFhYL3BuajlPSnNncW5rVVErejhKRHdE?=
- =?utf-8?B?bUVRYVYvcVJDSkVXdC9nYzdaS01BMVozOFdWRmVZVFU3eWs5ZnFyNXY0U3Rw?=
- =?utf-8?B?NHVrbE5mS3hCWUx1ajJFQTdMdjRnc3VUa29Dd2c1bVlnVllIOWNNYnpzZFhi?=
- =?utf-8?B?WDNtNUVqRXlJOWdwdFlWc1VKSDNnVzZwQlJSZnpnYmgxL1hqKzVHWW1qWWFS?=
- =?utf-8?B?akVkKzl3Y0E0SXJmd3E0anJyOEVZdzJ5UTlNQnJ1V0pqNFAzOEpFbWFWM2lo?=
- =?utf-8?B?TFp1UDZGNzB6SFhlRG8yS2FCMlcxL3hUMVM5YTZiU3daNWNGYTAyMW1zVUgy?=
- =?utf-8?B?bWpPOHZQR2JaaU1hRTJINS92eXpMQk1pWWFHYmNKbktZWlpDbEtZRUdCNmJl?=
- =?utf-8?B?NUhDdHlWendEYjNWcTFydjd6Y1Mya01sRW4xWDNpYXdYeXU2SGNsYWlzS3Bh?=
- =?utf-8?B?aDlPWUZUZGk4UGVXTTg1Rzdickp5ek02SVN1RmRDbVk5dkZyS3oxQlEzRGVr?=
- =?utf-8?B?SXVzOE94MEdVUG9ZNG5ubXNJVEZYaDZjSGVHbU1QbmhXUUdqTE9tNzQyMXpa?=
- =?utf-8?B?LzJGSnh3b0o5K2JyU21abU1JM0VJb0tzM25PSm9LUEhYSFhOK3UxYi9TdUxP?=
- =?utf-8?B?UUN0dDBXVWJ3UTVzemVLK3BGSjJWTkNlWU1mTU5aY3dmdHQyZmdyNDdOMURs?=
- =?utf-8?B?dW9yM1VsMjhPLzluZzFmdUJaMmxnUGZiNEFpUXZSTVJMWHNxRTVoNDh0WW9i?=
- =?utf-8?B?R2orUmpkUGJad01zSC80TnV0aXNMNFRsanVEVlZUeDlxUDVneGRsUmpjMmhK?=
- =?utf-8?B?NUxwMWVwSFpkU21kZS9ZVXRvRUJ3OVJzbmJObmtXc1Znc3ZZU0owU3pDK0tp?=
- =?utf-8?B?TlFKbjFLZ2RCK1VZaUQrZ2ZMS0dBcUhzQnJFYThuY3hYZmc5Q0xSU1U3ZEJt?=
- =?utf-8?B?amU0dSt5c0dTVzYrWXgyYlBSOHo2T1BwSG9MZlhKSW14M1FTRUtYdzF2dG13?=
- =?utf-8?B?eVhJOGRWTXJIck1UZUl5ZERLWEZuVVR1R3loUnlhSGdjc0hsZStzbnUxNGgw?=
- =?utf-8?B?ZW5HQnhtbXFienpRYU9sTG1PRG8rNkFZbzJrRklPVkpnY3E1YVRwcVlZQUxM?=
- =?utf-8?B?dFRyM3dUY3FkOVF3MnZYQ1F6c2hmdDZWVmlqd2Y3UDRmQlJLdFZYbW9lWTF3?=
- =?utf-8?B?Z01Gazg2OG1keEQ0TitaZGlsT21RWXNJVS9vVWVpdEg4VE9wdmVBUlJkdDBq?=
- =?utf-8?B?bzd3VmlCdnBjY3p0a3JJcHpCVGhBTnByaXFNMlg0K0QrQTNrNGhHVnZWOTdG?=
- =?utf-8?B?NERmbkhBTXVKd0xYMktBeXRYdS8xdzF1K3BkZ2tjT3l0aUFRaVNCVFNXcFFL?=
- =?utf-8?B?Y2NXczhKS0NsZzJKM3l6MHdZY2dIcHhmUEVrbnMwRW1YVy9RNVVOTXlES0tF?=
- =?utf-8?B?SHA0ZGpQY1RybnZwT3lTazNScE0zcTRKMXgzTEkyRTFrZ0ZmRGZHMG5TWSt0?=
- =?utf-8?B?WVYzZTFBVm10RDRZc0FScjBydGxBM0hLWXZ4NG8ybmpqUlhSWXZtQllZcWtZ?=
- =?utf-8?B?M0JXejhKeDkxbGRqWnduZmJHOExpK3UyZHFoaTBHV3U0b2wxRTd1cG9oRFJ0?=
- =?utf-8?B?N0hldksxejVnaTN4MXdDQjBWSU5aTUs5bkZzK09iRyt5bTZzaitsRlJKWG1h?=
- =?utf-8?B?YXcyTXdWVGViMUJNYVNZUXJWaVQzUFpTQWx1b2NvV0NlZGxuQU44aHUzdW9k?=
- =?utf-8?Q?qMiSQfPVAQ3hnhWg54LNoPvMGZGszFPahygfruGo8Y=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=djNM4oW2
+Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
+          id <20251219131741544.HOAU.98325.HP-Z230@nifty.com>;
+          Fri, 19 Dec 2025 22:17:41 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v2] Cygwin: pty: Refactor workaround code for pseudo console output
+Date: Fri, 19 Dec 2025 22:17:23 +0900
+Message-ID: <20251219131732.1433-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-OriginatorOrg: multicorewareinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB3082.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcf17ef4-6c39-4c05-1e20-08de3ef5e6d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2025 11:58:19.3766
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ffc5e88b-3fa2-4d69-a468-344b6b766e7d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SAk0k1DfC3i7QqhxFMl4Ac6V10Fiwn1/nnlFWG3fIf+hzAlJIgc8RsEwYeASi3hsmnuBz66qaTeuBXYbN8RUGZkpwoVFkGedgkkL9esSwfk9kx0Hw4UhkAnbrFWSi9XBa5l//0B0mFx0uSNSuNo0IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA5P287MB4396
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1766150261;
+ bh=mmmzlUZCo256sKLxZUaZ0cPhEjI46SA4LWDrjNwb19c=;
+ h=From:To:Cc:Subject:Date;
+ b=djNM4oW2nM3WGjyOetfGRU4cnuAFUfhRdi7R6ZgVSX4Bd3cBDApNhNOm9B7w0Pi9Y6CaX0Gh
+ 6KCt2u8coRWjGctdk8Gv6t62shHBOHJLmSMrJ4oa3mwZ/bfzcwvQRc4t/ObxHWe8Gdk6P+qqHj
+ vVvP5dbC5b8kx+N7ZU+/Mo9V4RLx904n1JPWjc/+HRnczU2FcHb94O6QxAYMyIIBpvKT9BAlJW
+ SVF/bvFg0aYNOqAvgFPinW30aMY910tUig21SEPbVNlwGDP0ajJFByEGMnqkjwQWmx78T1sA3S
+ eM5qgpoqWMWLWckM92gpa3245kO3jPh9+DGSHrfYlToRUetg==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-PiBUaGUgcGF0Y2ggY2hhbmdpbmcgdGhlIGFmZmVjdGVkIE1ha2VmaWxlLmluYyBmaWxlcyBzaG91
-bGQgY29udGFpbiBvbmx5IHRoZSBjaGFuZ2VzIHRvIHRoZSBpbmMgZmlsZS4gIA0KPiBKZWZmIG9y
-IEkgd2lsbCB0aGVuIHJlZ2VuZXJhdGUgdGhlIE1ha2VmaWxlLmluIGFuZCBjb25maWd1cmUgZmls
-ZXMgYXMgbmVjZXNzYXJ5Lg0KDQpHb3QgaXQsIHRoYW5rcy4NCg0KPiBZb3Ugc2hvdWxkIGNyZWF0
-ZSBwYXRjaGVzIGZvciBuZXdsaWIgc2VwYXJhdGVseSBmcm9tIHBhdGNoZXMgZm9yIEN5Z3dpbiBh
-bmQgc2VuZCB0aGVtIHRvIHRoZSBuZXdsaWIgbWFpbGluZyBsaXN0LiAgDQo+IEdpdmVuIHRoZSBv
-cmRlciBpbiB3aGljaCB0aGluZ3MgYXJlIGJ1aWx0IGluIHRoZSByZXBvLCBpdCdzIHVzdWFsbHkg
-YmV0dGVyIHRvIHNlbmQgdGhlIG5ld2xpYiBzdHVmZiBwcmlvciB0byBzZW5kaW5nIA0KPiBhbnkg
-Y2hhbmdlcyB0byBDeWd3aW4gd2hpY2ggYXJlIGFmZmVjdGVkIGJ5IHRoZSBuZXdsaWIgY2hhbmdl
-Lg0KDQpUaGFua3MgQ29yaW5uYSwgSeKAmWxsIGZvbGxvdyB0aGUgc3VnZ2VzdGVkIGFwcHJvYWNo
-Lg0KDQpGb3Igbm93LCBJ4oCZbSB1c2luZyB0aGlzIHRocmVhZCB0byBtYWtlIHRoZSBwYXRjaGVz
-IHB1YmxpYyBhbmQgdG8gY29udmV5IHRoZSBvbmdvaW5nIHdvcmsuDQpTb29uLCB0aGVzZSBjaGFu
-Z2VzIHdpbGwgYmUgc3BsaXQgaW50byBhcHByb3ByaWF0ZSBjb21taXRzIGFuZCBzZW50IGFzIGlu
-ZGl2aWR1YWwgcGF0Y2hlcyANCndpdGggYXBwcm9wcmlhdGUgY29tbWl0cyBtZXNzYWdlcyB3aWxs
-IGJlIHNlbnQgdG8gdGhlIHJlbGV2YW50IG1haWxpbmcgbGlzdHMuDQpJIGJlbGlldmUgdGhhdCBp
-bmRpdmlkdWFsIHRocmVhZHMgd2lsbCBtYWtlIHRoZW0gZWFzaWVyIHRvIHJldmlldyBhbmQgaW50
-ZWdyYXRlLg0KIA0KUmVnYXJkcywNClRoaXJ1bWFsYWkgTmFnYWxpbmdhbQ0KPFRoaXJ1bWFsYWku
-bmFnYWxpbmdhbUBtdWx0aWNvcmV3YXJlaW5jLmNvbT4NCg==
+Currently, there are four separate workarounds for pseudo console
+output in pty_master_fwd_thread. Each workaround has its own 'for'
+loop that iterates over the entire output buffer, which is not
+efficient. This patch consolidates these loops and introduces a
+single state machine to handle all workarounds at once. In addition,
+the workarounds are moved into a dedicated function,
+'workarounds_for_pseudo_console_output()' to improve readability.
+
+Suggested-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>, Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/fhandler/pty.cc | 301 +++++++++++++++++-----------------
+ 1 file changed, 147 insertions(+), 154 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 32e50540e..dcb0a742f 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -28,6 +28,7 @@ details. */
+ #include "registry.h"
+ #include "tls_pbuf.h"
+ #include "winf.h"
++#include <assert.h>
+ 
+ #ifndef PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE
+ #define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE 0x00020016
+@@ -2642,6 +2643,151 @@ pty_master_thread (VOID *arg)
+   return fhandler_pty_master::pty_master_thread (&p);
+ }
+ 
++inline static DWORD
++workarounds_for_pseudo_console_output (char *outbuf, DWORD rlen)
++{
++  int state = 0;
++  int start_at = 0;
++  bool is_csi = false;
++  bool is_osc = false;
++  int arg = 0;
++  bool saw_greater_than_sign = false;
++  bool saw_question_mark = false;
++  for (DWORD i=0; i<rlen; i++)
++    if (state == 0 && outbuf[i] == '\033')
++      {
++	start_at = i;
++	state = 1;
++	continue;
++      }
++    else if (state == 1)
++      {
++	switch (outbuf[i])
++	  {
++	  case '[':
++	    is_csi = true;
++	    state = 2;
++	    break;
++	  case ']':
++	    is_osc = true;
++	    state = 2;
++	    break;
++	  case '\033':
++	    start_at = i;
++	    state = 1;
++	    break;
++	  default:
++	    state = 0;
++	  }
++	continue;
++      }
++    else if (is_csi)
++      {
++	assert (state == 2);
++	if (outbuf[i-1] == '[' && outbuf[i] == '>')
++	  saw_greater_than_sign = true;
++	else if (isdigit (outbuf[i]) || outbuf[i] == ';')
++	  continue;
++	else if (saw_greater_than_sign && outbuf[i] == 'm')
++	  {
++	    /* Remove CSI > Pm m */
++	    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
++	    rlen = start_at + rlen - i - 1;
++	    i = start_at - 1;
++	    state = 0;
++	  }
++	else if (wincap.has_pcon_omit_nl_before_cursor_move ()
++		 && !saw_greater_than_sign && outbuf[i] == 'H')
++	  /* Workaround for rlwrap in Win11. rlwrap treats text between
++	     NLs as a line, however, pseudo console in Win11 somtimes
++	     omits NL before "CSIm;nH". This does not happen in Win10. */
++	  {
++	    /* Add omitted CR NL before "CSIm;nH". However, when the
++	       cusor is on the bottom-most line, adding NL might cause
++	       unexpected scrolling. To avoid this, add "CSI H" before
++	       CR NL. */
++#define CSIH_INSERT "\033[H\r\n"
++#define CSIH_INSLEN (sizeof (CSIH_INSERT) - 1)
++	    if (rlen + CSIH_INSLEN <= NT_MAX_PATH)
++	      {
++		memmove (&outbuf[start_at + CSIH_INSLEN], &outbuf[start_at],
++			 rlen - start_at);
++		memcpy (&outbuf[start_at], CSIH_INSERT, CSIH_INSLEN);
++		rlen += CSIH_INSLEN;
++		i += CSIH_INSLEN;
++	      }
++	    state = 0;
++	  }
++	else if (outbuf[i] == '\033')
++	  {
++	    start_at = i;
++	    state = 1;
++	  }
++	else
++	  state = 0;
++
++	if (state < 2)
++	  {
++	    is_csi = false;
++	    saw_greater_than_sign = false;
++	  }
++      }
++    else if (is_osc)
++      {
++	if (state == 2 && isdigit (outbuf[i]))
++	  arg = arg * 10 + (outbuf[i] - '0');
++	else if (state == 2 && outbuf[i] == ';')
++	  state = 3;
++	else if (state == 3 && outbuf[i-1] == ';' && outbuf[i] == '?')
++	  saw_question_mark = true;
++	else if (state == 3 && outbuf[i] == '\033')
++	  state = 4;
++	else if ((state == 3 && outbuf[i] == '\a')
++		 || (state == 4 && outbuf[i] == '\\'))
++	  {
++#define CONSOLE_HELPER "\\bin\\cygwin-console-helper.exe"
++#define CONSOLE_HELPER_LEN (sizeof (CONSOLE_HELPER) - 1)
++	    if (saw_question_mark /* OSC Ps; ? BEL/ST */
++		/* Suppress stray set title at start up of pcon */
++		|| (arg == 0 && memmem (&outbuf[start_at], i + 1 - start_at,
++					CONSOLE_HELPER, CONSOLE_HELPER_LEN)))
++	      {
++		/* Remove this ESC sequence */
++		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
++		rlen = start_at + rlen - i - 1;
++		i = start_at - 1;
++	      }
++	    state = 0;
++	  }
++	else if (state == 3)
++	  continue;
++	else if (outbuf[i] == '\033')
++	  {
++	    start_at = i;
++	    state = 1;
++	  }
++	else
++	  state = 0;
++
++	if (state < 2)
++	  {
++	    is_osc = false;
++	    saw_question_mark = false;
++	    arg = 0;
++	  }
++      }
++    else
++      { /* Never reached */
++	is_csi = false;
++	is_osc = false;
++	saw_greater_than_sign = false;
++	saw_question_mark = false;
++	arg = 0;
++	state = 0;
++      }
++  return rlen;
++}
++
+ /* The function pty_master_fwd_thread() should be static because the
+    instance is deleted if the master is dup()'ed and the original is
+    closed. In this case, dup()'ed instance still exists, therefore,
+@@ -2676,160 +2822,7 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+       char *ptr = outbuf;
+       if (p->ttyp->pcon_activated)
+ 	{
+-	  /* Avoid setting window title to "cygwin-console-helper.exe" */
+-	  int state = 0;
+-	  int start_at = 0;
+-	  for (DWORD i=0; i<rlen; i++)
+-	    if (state == 0 && outbuf[i] == '\033')
+-	      {
+-		start_at = i;
+-		state = 1;
+-		continue;
+-	      }
+-	    else if ((state == 1 && outbuf[i] == ']') ||
+-		     (state == 2 && outbuf[i] == '0') ||
+-		     (state == 3 && outbuf[i] == ';') ||
+-		     (state == 4 && outbuf[i] == '\033'))
+-	      {
+-		state ++;
+-		continue;
+-	      }
+-	    else if ((state == 4 && outbuf[i] == '\a')
+-		     || (state == 5 && outbuf[i] == '\\'))
+-	      {
+-		const char *helper_str = "\\bin\\cygwin-console-helper.exe";
+-		if (memmem (&outbuf[start_at], i + 1 - start_at,
+-			    helper_str, strlen (helper_str)))
+-		  {
+-		    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
+-		    rlen = wlen = start_at + rlen - i - 1;
+-		    i = start_at - 1;
+-		  }
+-		state = 0;
+-		continue;
+-	      }
+-	    else if (state == 4)
+-	      continue;
+-	    else if (outbuf[i] == '\033')
+-	      {
+-		start_at = i;
+-		state = 1;
+-		continue;
+-	      }
+-	    else
+-	      {
+-		state = 0;
+-		continue;
+-	      }
+-
+-	  /* Remove CSI > Pm m */
+-	  state = 0;
+-	  for (DWORD i = 0; i < rlen; i++)
+-	    if (outbuf[i] == '\033')
+-	      {
+-		start_at = i;
+-		state = 1;
+-		continue;
+-	      }
+-	    else if ((state == 1 && outbuf[i] == '[')
+-		     || (state == 2 && outbuf[i] == '>'))
+-	      {
+-		state ++;
+-		continue;
+-	      }
+-	    else if (state == 3 && (isdigit (outbuf[i]) || outbuf[i] == ';'))
+-	      continue;
+-	    else if (state == 3 && outbuf[i] == 'm')
+-	      {
+-		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
+-		rlen = wlen = start_at + rlen - i - 1;
+-		state = 0;
+-		i = start_at - 1;
+-		continue;
+-	      }
+-	    else
+-	      state = 0;
+-
+-	  /* Remove OSC Ps ; ? BEL/ST */
+-	  state = 0;
+-	  for (DWORD i = 0; i < rlen; i++)
+-	    if (state == 0 && outbuf[i] == '\033')
+-	      {
+-		start_at = i;
+-		state = 1;
+-		continue;
+-	      }
+-	    else if ((state == 1 && outbuf[i] == ']')
+-		     || (state == 2 && outbuf[i] == ';')
+-		     || (state == 3 && outbuf[i] == '?')
+-		     || (state == 4 && outbuf[i] == '\033'))
+-	      {
+-		state ++;
+-		continue;
+-	      }
+-	    else if (state == 2 && isdigit (outbuf[i]))
+-	      continue;
+-	    else if ((state == 4 && outbuf[i] == '\a')
+-		     || (state == 5 && outbuf[i] == '\\'))
+-	      {
+-		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
+-		rlen = wlen = start_at + rlen - i - 1;
+-		state = 0;
+-		i = start_at - 1;
+-		continue;
+-	      }
+-	    else if (outbuf[i] == '\033')
+-	      {
+-		start_at = i;
+-		state = 1;
+-		continue;
+-	      }
+-	    else
+-	      state = 0;
+-
+-	  /* Workaround for rlwrap in Win11. rlwrap treats text between
+-	     NLs as a line, however, pseudo console in Win11 somtimes
+-	     omits NL before "CSIm;nH". This does not happen in Win10. */
+-	  if (wincap.has_pcon_omit_nl_before_cursor_move ())
+-	    {
+-	      state = 0;
+-	      for (DWORD i = 0; i < rlen; i++)
+-		if (state == 0 && outbuf[i] == '\033')
+-		  {
+-		    start_at = i;
+-		    state++;
+-		    continue;
+-		  }
+-		else if (state == 1 && outbuf[i] == '[')
+-		  {
+-		    state++;
+-		    continue;
+-		  }
+-		else if (state == 2
+-			 && (isdigit (outbuf[i]) || outbuf[i] == ';'))
+-		  continue;
+-		else if (state == 2 && outbuf[i] == 'H')
+-		  {
+-		    /* Add omitted CR NL before "CSIm;nH". However, when the
+-		       cusor is on the bottom-most line, adding NL might cause
+-		       unexpected scrolling. To avoid this, add "CSI H" before
+-		       CR NL. */
+-		    const char *ins = "\033[H\r\n";
+-		    const int ins_len = strlen (ins);
+-		    if (rlen + ins_len <= NT_MAX_PATH)
+-		      {
+-			memmove (&outbuf[start_at + ins_len],
+-				 &outbuf[start_at], rlen - start_at);
+-			memcpy (&outbuf[start_at], ins, ins_len);
+-			rlen += ins_len;
+-			i += ins_len;
+-		      }
+-		    state = 0;
+-		    continue;
+-		  }
+-		else
+-		  state = 0;
+-	    }
++	  wlen = rlen = workarounds_for_pseudo_console_output (outbuf, rlen);
+ 
+ 	  if (p->ttyp->term_code_page != CP_UTF8)
+ 	    {
+-- 
+2.51.0
+
