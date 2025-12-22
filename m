@@ -1,67 +1,77 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id F31294BA2E05; Mon, 22 Dec 2025 10:48:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F31294BA2E05
+	id 3B6364BA2E04; Mon, 22 Dec 2025 10:58:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3B6364BA2E04
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1766400491;
-	bh=n2Wsz9d2u44E9p00X90aTBdeDwMI/uXSai6GwtnhAno=;
+	s=default; t=1766401119;
+	bh=K2wglgbD3KK8R4/a72EKkxqyxinJxKvYmc84GH5MD8E=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=K/BZ3pwbalFwZ8JMxZxm83PrL+XBDPW80SKgtqzVamANkYohd8OMZh+bU6XzhJwCe
-	 vrBlnSBV1qDPB/R4epDyWce8VOadGPrXHK6PNEqSd8Nkd8YL9zhomMCYMB9EOL/JVa
-	 AL9cZdlN8xWPEY8qxThG9jTCCChs6V9in3YTP0qE=
+	b=p/BagwactFfVfvHaXB4ak3TrQCtQMYibdvK8w7OpDXUSOYc7DPwlLYlwhYak3uwpK
+	 EL+gOUoSidheamhuF7lh9C1wfXARN2ANU/8WTis9U+R943lrV4KTQETLOnVK5guxPn
+	 kORe0NfMNlqe3/rwCVN8Xu4PZRPx2wv11jhxBogA=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 25E52A80D4B; Mon, 22 Dec 2025 11:48:09 +0100 (CET)
-Date: Mon, 22 Dec 2025 11:48:09 +0100
+	id 5FE6AA80797; Mon, 22 Dec 2025 11:58:37 +0100 (CET)
+Date: Mon, 22 Dec 2025 11:58:37 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Refactor workaround code for pseudo
- console output
-Message-ID: <aUkh6WFkebCZl5YN@calimero.vinschen.de>
+Subject: Re: [PATCH v2 2/4] Cygwin: uinfo: allow to override user account as
+ primary group
+Message-ID: <aUkkXcKDGRF3eNYz@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20251219131732.1433-1-takashi.yano@nifty.ne.jp>
+References: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
+ <20251218112308.1004395-3-corinna-cygwin@cygwin.com>
+ <20251222150715.1a927b6963b98a34b172d7a9@nifty.ne.jp>
+ <aUkb9XD6oKFaSqOr@calimero.vinschen.de>
+ <20251222194312.888d00d69bc42831173eaf95@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251219131732.1433-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20251222194312.888d00d69bc42831173eaf95@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec 19 22:17, Takashi Yano wrote:
-> Currently, there are four separate workarounds for pseudo console
-> output in pty_master_fwd_thread. Each workaround has its own 'for'
-> loop that iterates over the entire output buffer, which is not
-> efficient. This patch consolidates these loops and introduces a
-> single state machine to handle all workarounds at once. In addition,
-> the workarounds are moved into a dedicated function,
-> 'workarounds_for_pseudo_console_output()' to improve readability.
+On Dec 22 19:43, Takashi Yano wrote:
+> On Mon, 22 Dec 2025 11:22:45 +0100
+> Corinna Vinschen wrote:
+> > On Dec 22 15:07, Takashi Yano wrote:
+> > > On Thu, 18 Dec 2025 12:23:06 +0100
+> > > Corinna Vinschen wrote:
+> > > > From: Corinna Vinschen <corinna@vinschen.de>
+> > > > 
+> > > > Do not only allow to override the (localized) group "None" as primary
+> > > > group, but also the user account.  The user account is used as primary
+> > > > group in the user token, if the user account is a Microsoft Account or
+> > > > an AzureAD account.
+> > > 
+> > > Is there any evidence of:
+> > > "The user account is used as primary group in the user token, "
+> > 
+> > I don't quite understand the question.  That's what I'm trying to
+> > explain with this sentence:
+> > 
+> >   The user account is used as primary group in the user token, if the
+> >   user account is a Microsoft Account or an AzureAD account.
+> > 
+> > This was a known problem at the time Microsoft Accounts have been
+> > introduced.  I never had a Microsoft Account myself since I'm
+> > setting up my machines as AD DC or member machines, but we hit this
+> > problem back in 2014.
 > 
-> Suggested-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>, Corinna Vinschen <corinna@vinschen.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/cygwin/fhandler/pty.cc | 301 +++++++++++++++++-----------------
->  1 file changed, 147 insertions(+), 154 deletions(-)
+> I could not find the document that states that primary group of
+> user token for Microsoft Account is the user itself. Is this some
+> specification or known behaviour?
 
-There's just one typo missing, but you don't have to send a new version for
-that:
+I don't think there's anything like a specification.  It just turned
+out to be that way back in 2014, so it's rather a known behaviour.
+Same goes for AzureAD accounts.
 
-> +	  /* Workaround for rlwrap in Win11. rlwrap treats text between
-> +	     NLs as a line, however, pseudo console in Win11 somtimes
-                                                             sometimes
+As a sidenote, there may be other scenarios in AzureAD, maybe for admin
+accounts or whatever, but the 2016 patches were a result of discussions
+on the Cygwin ML.
 
-> +#define CSIH_INSERT "\033[H\r\n"
-> +#define CSIH_INSLEN (sizeof (CSIH_INSERT) - 1)
-> +[...]
-> +#define CONSOLE_HELPER "\\bin\\cygwin-console-helper.exe"
-> +#define CONSOLE_HELPER_LEN (sizeof (CONSOLE_HELPER) - 1)
-
-My personal preference would be to define these macros prior to the
-function, but that's a style question I'm not sure we should enforce.
-Whatever makes more sense to you. 
-
-Other than those, LGTM. In terms of the macros, no new version required,
-just go ahead, whether you move them or not.
+Unfortunately, the entry adding support for Microsoft Accounts in
+release/1.7.35 and the entry adding support for AzureAD accounts in
+release/2.6.0 both don't contain an "Addresses:" tag :(
 
 
-Thanks,
 Corinna
