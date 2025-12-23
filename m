@@ -1,87 +1,98 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id BAD9A4BA2E28; Mon, 22 Dec 2025 11:44:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BAD9A4BA2E28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1766403852;
-	bh=Whgs+egNIv2EV8xN8Nj7HfdUMS0A/apj2g5Q/aleb+0=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=KizYr7h0Dksvk7Pd7s26z2U9YP0FuB48mq1P4uNnX0DGRP5C5hk+Svcsv+cSmdhHx
-	 xtM/3q4aKat8SR6ACQnrbbL0n3MKRirT9y7rC5ncuIp/D6Lb/eGzm9Wv8/p7ZONmde
-	 9tJToUbJZfTr/5VDmaMPDyg6fWZFNgNHCGo3Rvd0=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 020C0A80D4B; Mon, 22 Dec 2025 12:44:10 +0100 (CET)
-Date: Mon, 22 Dec 2025 12:44:10 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=CjPM=65=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.181])
+	by sourceware.org (Postfix) with ESMTPS id 37DD84BA2E04
+	for <cygwin-patches@cygwin.com>; Tue, 23 Dec 2025 18:41:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 37DD84BA2E04
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 37DD84BA2E04
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.181
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1766515320; cv=none;
+	b=OZVeTqBJ++uuW6t1qYKD5nQP6goxSND7fcXBNUzD24GNc9fQGHZGw50XqQDH1HXsa8WumFLuiCK2vLTsoukvMJ1lxxQ6B3HOPpB961satv82WRU095o3aGkbfUT6HlNu8hN4vCVD7AQveNrgaEIF/1hgPGGOfenxODLuk9woGQA=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1766515320; c=relaxed/simple;
+	bh=+/Psmxi3BcJmFes3HScMEAlX1fSJEuoSCpMOPDbileA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ZmEoUoP/q6CChTiGN8/OtYtU6bQlOkfk0GD5plM/KV8noF+5i4LoSmbtZoNrBYQy214RIEk++zEhewgZdUGv20ozrVEFF3Hl7l0hJp6sjgH2u5+RkUFpfSRH1l2w0nrxW9fH4alEOTYKlpEy9AxQ3RBHL6iTxGQdOnX2r1hginM=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 37DD84BA2E04
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pxGg7q1m
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20251223184157142.ZKDI.36235.HP-Z230@nifty.com>;
+          Wed, 24 Dec 2025 03:41:57 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 2/4] Cygwin: uinfo: allow to override user account as
- primary group
-Message-ID: <aUkvCr9olGonfljo@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20251218112308.1004395-1-corinna-cygwin@cygwin.com>
- <20251218112308.1004395-3-corinna-cygwin@cygwin.com>
- <20251222150715.1a927b6963b98a34b172d7a9@nifty.ne.jp>
- <aUkb9XD6oKFaSqOr@calimero.vinschen.de>
- <20251222194312.888d00d69bc42831173eaf95@nifty.ne.jp>
- <aUkkXcKDGRF3eNYz@calimero.vinschen.de>
- <20251222203215.d00798c28f01906b6f0fb430@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Takashi Yano <takashi.yano@nity.ne.jp>
+Subject: [PATCH] Cygwin: thread: Fix stack alignment for PTHREAD_CANCEL_ASYNCHRONOUS
+Date: Wed, 24 Dec 2025 03:41:41 +0900
+Message-ID: <20251223184150.1415-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251222203215.d00798c28f01906b6f0fb430@nifty.ne.jp>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1766515317;
+ bh=hz+xpmHbLj91SDqpszbWnirvniFu6kYGx8qwW4JjXOk=;
+ h=From:To:Cc:Subject:Date;
+ b=pxGg7q1mTMktwHiBRMt2XzizAaCgHysLT89GI9XusTb2mNlYFiktTP9fGXqXvX/K9EmVxbHl
+ WefnqaYEDTQbJ9g5M+FGWgRv5ZByIX8mbSAQyxnv89BNenCQY2I3XyLoXVPoMXnE2GciCuUP0U
+ bGKteEH6jwQntlWHw2mXQ0KbSDQsESDF9LJoAGj1iKx0aahYKxyriyzvcnsyKIZkGYYbgIxj3e
+ Z+FxJFO4R+8B3NiST+6G3aV+XozWW0lx0XnrF6NtEVvfzYvJpEuzAuzKh7nYjTeh10cupxlYOR
+ Rn6OGQuWe/MWH+zTR0Qq9HZuM+IT8GAyi5JpixEzPYLq4jAw==
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED,URI_TRY_3LD autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Dec 22 20:32, Takashi Yano wrote:
-> On Mon, 22 Dec 2025 11:58:37 +0100
-> Corinna Vinschen wrote:
-> > On Dec 22 19:43, Takashi Yano wrote:
-> > > On Mon, 22 Dec 2025 11:22:45 +0100
-> > > Corinna Vinschen wrote:
-> > > > On Dec 22 15:07, Takashi Yano wrote:
-> > > > > On Thu, 18 Dec 2025 12:23:06 +0100
-> > > > > Corinna Vinschen wrote:
-> > > > > > From: Corinna Vinschen <corinna@vinschen.de>
-> > > > > > 
-> > > > > > Do not only allow to override the (localized) group "None" as primary
-> > > > > > group, but also the user account.  The user account is used as primary
-> > > > > > group in the user token, if the user account is a Microsoft Account or
-> > > > > > an AzureAD account.
-> > > > > 
-> > > > > Is there any evidence of:
-> > > > > "The user account is used as primary group in the user token, "
-> > > > 
-> > > > I don't quite understand the question.  That's what I'm trying to
-> > > > explain with this sentence:
-> > > > 
-> > > >   The user account is used as primary group in the user token, if the
-> > > >   user account is a Microsoft Account or an AzureAD account.
-> > > > 
-> > > > This was a known problem at the time Microsoft Accounts have been
-> > > > introduced.  I never had a Microsoft Account myself since I'm
-> > > > setting up my machines as AD DC or member machines, but we hit this
-> > > > problem back in 2014.
-> > > 
-> > > I could not find the document that states that primary group of
-> > > user token for Microsoft Account is the user itself. Is this some
-> > > specification or known behaviour?
-> > 
-> > I don't think there's anything like a specification.  It just turned
-> > out to be that way back in 2014, so it's rather a known behaviour.
-> > Same goes for AzureAD accounts.
-> > 
-> > As a sidenote, there may be other scenarios in AzureAD, maybe for admin
-> > accounts or whatever, but the 2016 patches were a result of discussions
-> > on the Cygwin ML.
-> > 
-> > Unfortunately, the entry adding support for Microsoft Accounts in
-> > release/1.7.35 and the entry adding support for AzureAD accounts in
-> > release/2.6.0 both don't contain an "Addresses:" tag :(
-> 
-> I see. Thanks.
-> Please go ahead.
+The test case winsup/testsuites/winsup.api/pthread/cancel2 fails
+on Windows 11 and Windows Server 2025, while it works on Windows 10
+and Windows Server 2022. PTHREAD_CANCEL_ASYNCHRONOUS is implemented
+using [GS]etThreadContext() on the target thread and forcibly
+overrides instruction pointer to pthread::static_cancel_self().
+Previously, the stack pointer was not trimmed to 16-byte alignment,
+even though this is required by 64-bit Windows ABI. This appears to
+have been overlooked when cygwin first added x86_64 support.
 
-Thanks, pushed!
+This patch fixes this issue by aligning the stack pointer as well as
+the instruction pointer in the PTHREAD_CANCEL_ASYNCHRONOUS handling.
 
+Addresses: https://cygwin.com/pipermail/cygwin/2025-December/259117.html
+Fixes: 61522196c715 ("* Merge in cygwin-64bit-branch.")
+Reported-by: Takashi Yano <takashi.yano@nity.ne.jp>
+Reviewed-by:
+Signed-off-by: Takashi Yano <takashi.yano@nity.ne.jp>
+---
+ winsup/cygwin/thread.cc | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Corinna
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index 86a00e76e..2270a248b 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -630,6 +630,25 @@ pthread::cancel ()
+       threadlist_t *tl_entry = cygheap->find_tls (cygtls);
+       if (!cygtls->inside_kernel (&context))
+ 	{
++#if defined(__x86_64__)
++	  /* Need to trim alignment of stack pointer.
++	     https://learn.microsoft.com/en-us/cpp/build/stack-usage?view=msvc-170
++	     states,
++	       "The stack will always be maintained 16-byte aligned,
++	        except within the prolog (for example, after the return
++		address is pushed),",
++	     that is, we need 16n + 8 byte alignment here. */
++	  context._CX_stackPtr &= 0xfffffffffffffff8UL;
++	  if ((context._CX_stackPtr & 8) == 0)
++	    context._CX_stackPtr -= 8;
++#elif defined(__aarch64__)
++	  /* 16 bytes alignment required. Trim stack pointer just in case.
++	  https://learn.microsoft.com/en-us/cpp/build/arm64-windows-abi-conventions?view=msvc-170
++	  */
++	  context._CX_stackPtr &= 0xfffffffffffffff0UL;
++#else
++#error unimplemented for this target
++#endif
+ 	  context._CX_instPtr = (ULONG_PTR) pthread::static_cancel_self;
+ 	  SetThreadContext (win32_obj_id, &context);
+ 	}
+-- 
+2.51.0
+
