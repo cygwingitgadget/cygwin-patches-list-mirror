@@ -1,64 +1,64 @@
-Return-Path: <SRS0=cgT5=7L=xs4all.nl=dhr-incognito@sourceware.org>
+Return-Path: <SRS0=86ZD=7M=xs4all.nl=dhr-incognito@sourceware.org>
 Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
-	by sourceware.org (Postfix) with ESMTPS id 4D9A14BA2E20
-	for <cygwin-patches@cygwin.com>; Tue,  6 Jan 2026 16:06:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4D9A14BA2E20
+	by sourceware.org (Postfix) with ESMTPS id 0F0E14BA2E05
+	for <cygwin-patches@cygwin.com>; Wed,  7 Jan 2026 02:13:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0F0E14BA2E05
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=xs4all.nl
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4D9A14BA2E20
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0F0E14BA2E05
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=195.121.94.167
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1767715560; cv=none;
-	b=pH2KBuP1AFM82vkI6iJff/h36XT1+n6Vm7ouu9I+oXb+TrwlDVkiUCTPq+H3iCbOFZhHWmAeUKgv+8QG5XITTZAEbignicBGKkCipEa27S+5kVLFSzjXZYbQe+HOC1UOTGVbeYMZ+EPqpQ+xpmEL9MecbeSMw7kqzoFgcMCFdFw=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1767752022; cv=none;
+	b=iebWIEC/Hk/FVLKPGYBW9oEr8jlv5iGohlhamM3VEEyrLlRWPw/PejhedcIdgGRRywNXHKTkIrAmXBWX3PznpQ3wPboOnzhdiVoav9BONVW3otxGKnQQI/InTBs3Jg3NGeZKQmZOjc9128hToHDfUwF8Cw965f6kOZxY2bRVaXE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1767715560; c=relaxed/simple;
-	bh=dejjgOKseIj1g5ZV8bL0c6poNrCP3kOBABsDcr/AWUI=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=xAVrZHLIOHmHE8YD73U+XXo6tZ44dZMK4gGFjs/7s7vRJn5opUyDO1QZpKuwSdvNibd6CFBT6xS7dtQwENb0srxOYSTVla3d9wVPe0HmYirpAeyUIy5nND7LqEBqYtAuP5zGLLiuqFHWJaOX/ctoUyJrhZNwoVOsQ4aMFtp6e+w=
+	t=1767752022; c=relaxed/simple;
+	bh=qlVFJ7zE35ueWzioCVkIS3DDZ5cm8HABbOOyzukucOs=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-Id:MIME-Version; b=i/mzAppIaDy68bmJbdaDHyUQ+UkakCqGwFhBbURIgfoEQM93rnd5NYY/JCB3JDFnfMwvmMorskffScAhEOcQF6DQlPL0cn8ljr9Xbj6vkMRW0i3d/2GCmET4wcgr+HMBv/7wK9yM7CbPLZaiwUL86wsDgpXQHeyS6KyNhhZOuvI=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4D9A14BA2E20
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0F0E14BA2E05
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=SA5dT9gF
-X-KPN-MessageId: 99cf90eb-eb19-11f0-9696-005056abbe64
-Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
+	dkim=pass (2048-bit key, secure) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=IJ+zBRcJ
+X-KPN-MessageId: 7fa1fc44-eb6e-11f0-9696-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
 	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 99cf90eb-eb19-11f0-9696-005056abbe64;
-	Tue, 06 Jan 2026 17:06:03 +0100 (CET)
+	id 7fa1fc44-eb6e-11f0-9696-005056abbe64;
+	Wed, 07 Jan 2026 03:13:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=xs4all.nl; s=xs4all01;
 	h=mime-version:message-id:date:subject:to:from;
-	bh=EYmhVI72rXXYKWkanq8KAWDlkmhEcAQYgjJmv1W5kgU=;
-	b=SA5dT9gFqAb7fm4hmaBZ8JBSZ9c2J+OeBSWL9qKVzwGxCi3Ozl9k43+b9aWDymumLcOD/8yxX+H1I
-	 5ki3qqT8XPymSUMIZ/T1hlKyS9Dg0xRfkkB5M3gUjkU8c4cFzJWVMX0p9z4qiFeyp2QHdDkbp+LGKY
-	 heGoe4sjJSbgbD6ZdDXtHREB8KKcE+eZt8HQv/eMcodYNlmVpHTwcOHaAqlXucin+ylRSAjI3GDATL
-	 vhj6QcTzMe+PVjD2cFhan+lnXi+QD4O0vC1aFoc6mE5XJlSwTF9qNoe6pQq2tBQKrAbCWC38CH09TQ
-	 /8XBBJjUzwUYZfA9AkLwyzhagwCbzsA==
-X-KPN-MID: 33|122VxjbRjWZc1nuHSOujGpBtYY+o1eE9Uoqz460Tp3BQga3v3uwLI/6YX0mqKLA
- QMX+9HrBDxKZu/jLQIJbf/fkpVTKTvvRawl5sVdzenQY=
+	bh=QxA4n9P9XPd+qEJ4OCmFchI1i/yeaS+3w0Tw1ss+nus=;
+	b=IJ+zBRcJA/CRw9JEwq8OepFSbQUM5cjq7G3SiK6A0bVDdWxak/2iMI1bIt4v86xAdGO0BLGHpRgzj
+	 vuydq/v01vgnaN5JuCEIyL/JjpD2I5vvbaaZHnDCoTKcEAE07pFYXJklWNi/87yfaFV4RWbDMTrpOo
+	 ldv93isfVjGV9EGYHzu/mXLZb5oIJFSlyv1F/wpelc1CTICJteITZfck0gPzt+mzpkCQPgaltHJ+1v
+	 nbUOnVaY2Wp8902VGOy7jFk2zuTIw/Dl6z2+uplW9S1sXj1jF+a+USzf56oaN5qmEVNZPDjG92M0oK
+	 70cfQED8dhNWsPqf6TMJwd3FlkfELqg==
+X-KPN-MID: 33|aHHL6C7WuweSC9CTT3OFAdszde/MzFe6s42BCyLoSqRZ9d/n9kUrAF6TisnQsEV
+ v07EkyS7CRpSIIQAYFEJ6FPzd0y7K+l74Pu95q8nbkGI=
 X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|Ovsy/K5IKRirr4Vu9hT8h+chEh7AsbNChTKJdeZg3FEokbSZYP3ZNEZm0egb6Uw
- Y7AWE2tbwMox88g1KkdtzhQ==
+X-CMASSUN: 33|3Kl1SVbTmzKR8gFFQZm2g/iDlK9OY3zQOBqmYHAOwab2m0wuw29IIai7DH0Ja36
+ etvKhGAVIdxjXywB2DO9dQw==
 X-Originating-IP: 77.173.35.122
 Received: from frodo.. (77-173-35-122.fixed.kpn.net [77.173.35.122])
 	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 96d6bd21-eb19-11f0-b8d7-005056ab7584;
-	Tue, 06 Jan 2026 17:05:58 +0100 (CET)
+	id 7b9958a1-eb6e-11f0-a6ca-005056abf0db;
+	Wed, 07 Jan 2026 03:13:40 +0100 (CET)
 From: "J.H. vd Water" <dhr-incognito@xs4all.nl>
 To: cygwin-patches@cygwin.com
 Cc: "J.H. vd Water" <dhr-incognito@xs4all.nl>
-Subject: [PATCH 1/1] Renaming AC_ARG_WITH([cross_bootstrap] to ... in order to avoid confusion.
-Date: Tue,  6 Jan 2026 17:05:17 +0100
-Message-Id: <20260106160517.4785-1-dhr-incognito@xs4all.nl>
+Subject: [PATCH v2] Rename cross_bootstrap to skip_mingw to avoid confusion.
+Date: Wed,  7 Jan 2026 03:13:36 +0100
+Message-Id: <20260107021336.2481-1-dhr-incognito@xs4all.nl>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Renaming macro  AC_ARG_WITH([cross_bootstrap]  to  AC_ARG_WITH([skip_mingw],  in
-order to avoid confusion ...
+Rename macro  AC_ARG_WITH([cross_bootstrap] to AC_ARG_WITH([skip_mingw], in order
+to avoid confusion ...
 
-About 10 years ago, Foley (a] was "messing around" with a stage1 gcc compiler for
-Cygwin, and decided to rebuild cygwin1.dll, as he required only cygwin1.dll.
+About 10 years ago, Foley (1] was "messing around" with a stage1 cross-compiler
+for Cygwin, and decided to rebuild cygwin1.dll, as he required only cygwin1.dll.
 
 He did not like to rebuild assets, like cygcheck, strace, for which he was forced
 to install mingw-runtime (then: mingw-crt) and the MinGW toolchain.
