@@ -1,95 +1,174 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id B77534BA23C7; Wed,  7 Jan 2026 10:52:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B77534BA23C7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1767783143;
-	bh=dbhoKPBwDBFyPeinl/8wdjWW+DDkbRHHRN7NPyGYzb8=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=XXfaCa1CfinSGRrxJxuFQphmhRKINIeC8xnUNoxKbcB7C30uVYgBhHBylZrFzEaFB
-	 fkcc7dQKTSwqdWR1+4aucVvFKFqviTxVAY4dEMggu7F+o/ubtM9kbWgt9xk62H04SL
-	 RPZBdKy8jeCtd+9HC6gI6QAHoDoMkLf0wgqNmPqg=
+Return-Path: <SRS0=diia=7M=redhat.com=vinschen@sourceware.org>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by sourceware.org (Postfix) with ESMTP id BCDBA4BA2E04
+	for <cygwin-patches@cygwin.com>; Wed,  7 Jan 2026 11:15:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BCDBA4BA2E04
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=redhat.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BCDBA4BA2E04
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=170.10.133.124
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1767784510; cv=none;
+	b=m184mgGDJ+sG1Y1Rzs8S1EfaLMsrFFTnNza2BeGnDSnjKwxnT2VcOtrIVJXbO0SXFiKvrhM0TQ+IfJcYMskcHE3XeJP6aFptUSdJgMFe5jNUnQJTSongg2W8tPgw+4bZ3cdRi8vu1IpKSPW+OsaR0vL6U+9x2yNkrLbywHHeNCw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1767784510; c=relaxed/simple;
+	bh=yrT8GitaVK9Q6Cq0AUeshSnr29bU92e90bbxIV7XQac=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tMcZBCzxpdzVimDCxr6u8nIA2QoAM5q3N6HeoLzIxhV0CFlIvPuhBu/4gqV+bEtGw+xVsUxdo8MiXhmRohRJhKWD6TYpcRdr3ZuZ6TfemROZZpZ6/WvmA5HrhU5pij/Zkd/AztmSK7Ff/BhiA1PUZkF/nfJAan/lmDZIFvFqcV4=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BCDBA4BA2E04
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Oku5nBsd
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767784505;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NiCKZqgRiYQBkW5ropo/ixE0EiaaPoe2H4XR9cT9aEM=;
+	b=Oku5nBsdB6QB9ja4k59x2artv9UV6CNq7BevnwD36tDYGHBVH8S0Nd36e+JXlzjlKS01Ng
+	P+QGRqmX3aA5lQxEgfnCshVP5UIRpPq/6c9sjo1KOBpQy8WjuPm1R+uKRjo+ZYGYAAzIa/
+	wifICcOZcm832WUDaP11DUaoFHcbZLg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-472-GbqYxYFZNRWcP2cSUvA6-g-1; Wed,
+ 07 Jan 2026 06:15:01 -0500
+X-MC-Unique: GbqYxYFZNRWcP2cSUvA6-g-1
+X-Mimecast-MFC-AGG-ID: GbqYxYFZNRWcP2cSUvA6-g_1767784501
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF2FB180034A;
+	Wed,  7 Jan 2026 11:15:00 +0000 (UTC)
+Received: from calimero.vinschen.de (unknown [10.45.225.235])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8A8171800285;
+	Wed,  7 Jan 2026 11:15:00 +0000 (UTC)
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id CCD42A80D4B; Wed, 07 Jan 2026 11:52:21 +0100 (CET)
-Date: Wed, 7 Jan 2026 11:52:21 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: flock deadlock
-Message-ID: <aV465e_t3Agp-uf0@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CA+1R0Vg7b7YyvgDf1=or8oxskEX4BJwMJQxxTKYaUHWPQeD9iQ@mail.gmail.com>
- <CA+1R0Vju3VQYaz-s00vCroEV3pH7vBeUhoMGqtUxi0x5k56vpQ@mail.gmail.com>
- <20260103230511.24a6f772323927a141bf595f@nifty.ne.jp>
+	id E3181A80D4B; Wed, 07 Jan 2026 12:14:57 +0100 (CET)
+Date: Wed, 7 Jan 2026 12:14:57 +0100
+From: Corinna Vinschen <vinschen@redhat.com>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+Cc: cygwin-patches@cygwin.com, newlib@sourceware.org
+Subject: Re: [PATCH] Cygwin: Add AArch64 support in config.guess, dfp.m4, and
+ configure.ac
+Message-ID: <aV5AMflh7_AUdQTR@calimero.vinschen.de>
+Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+	cygwin-patches@cygwin.com, newlib@sourceware.org
+References: <PN3P287MB3077B9E8B2A9B9A8C6B0005C9F86A@PN3P287MB3077.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+In-Reply-To: <PN3P287MB3077B9E8B2A9B9A8C6B0005C9F86A@PN3P287MB3077.INDP287.PROD.OUTLOOK.COM>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: yFTsZbTcIT3GVdogGmzD4hRw-kjaR4CFzKDLn8cp694_1767784501
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260103230511.24a6f772323927a141bf595f@nifty.ne.jp>
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_NONE,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+[CC newlib]
 
-On Jan  3 23:05, Takashi Yano wrote:
-> On Sun, 28 Dec 2025 11:52:36 -0800
-> Nahor <nahor.j+cygwin@gmail.com> wrote:
-> > Attached is a reproducible example.
-> > The example just calls `fork()` then open/flock/close a directory and
-> > repeats (fork/open/flock/close). The forks optionally sleep then
-> > open/flock/close the same directory and exit.
-> > 
-> > There is no issue if either the parent or the children don't call `flock()`.
-> > Without sleeping, the example deadlocks immediately on my system 100%
-> > of the time. Killing the child allow the parent to proceed, fork the
-> > next child, which triggers the next deadlock.
-> > When sleeping, _sometimes_ one child will deadlock with the parent.
-> > Killing that child allows the parent and remaining children to proceed
-> > (and potentially trigger another deadlock). Killing the parent also
-> > unblocks all the children.
-> 
-> Thanks for the report and the test case.
-> I looked into the issue and found the cause. I also confirmed that
-> the patch attached solves the issue.
-> 
-> Could anyone please review the patch?
-> 
-> -- 
-> Takashi Yano <takashi.yano@nifty.ne.jp>
+Hi Thirumalai,
 
-> From 5b0a3fac8c6f4f56626d108a2dfa9738f73ecf6b Mon Sep 17 00:00:00 2001
-> From: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Date: Sat, 3 Jan 2026 21:53:36 +0900
-> Subject: [PATCH] Cygwin: close: Do not lock fdtab
-> 
-> Otherwise, a deadlock can occur if the child process attempts to
-> lock a file while the parent process is closing the same file, which
-> is already locked. The deadlock mechanism is as follows.
-> 
-> When the child process attempts to lock a file, it notifies the parent
-> process by calling CreateRemoteThread(), which creates a remote thread
-> in the parent. That thread checks whether the file being locked is
-> currently opened in the parent. During the operation, cygheap->fdtab
-> is temporarily locked in order to enumerate the file descriptors.
-> 
-> However, if the parent process is closing the same file at that moment,
-> it also locks fdtab via cygheap_fdget cfd(fd, true) in __close().
-> If the parent acquires th fdtab lock first, it proceeds to call
-> del_my_locks(), which attempts to lock the inode in inode_t:get().
-> 
-> At this point, the inode is already locked in the child,
-> so the parent waits for the child to release the inode. Meanwhile,
-> the child is waiting to acquire the fdtab lock, which is still held
-> by the parent. As a result, the parent and child become deadlocked.
-> 
-> However, since close_all_files() and close_range() do not lock fdtab,
+the config changes in top-level are shared between various projects
+(gcc, binutils/gdb, newlib/cygwin) and are maintained centralized.
+Please have a look at the top-level MAINTAINERS file and search for
+config.guess.
 
-close_all_files() is called from _exit(), so there's no reason to lock
-fdtab.  close_range() locks fdtab explicitly right after EINVAL
-handling.
+The actual config repo is at
+https://https.git.savannah.gnu.org/git/config.git and patches should go
+to config-patches AT gnu DOT org.
 
-Since close() is a process manipulating the fdtab, I have a bad feeling
-to perform the action unlocked.  Wouldn't it make more sense to
-enumerate without locking in create_lock_in_parent()?
+We can selectively update our top-level config afterwards, I think.
 
 
 Thanks,
 Corinna
+
+
+On Jan  5 12:49, Thirumalai Nagalingam wrote:
+> Hi Everyone,
+> 
+> This patch adds support for AArch64 targets across the build
+> configuration files.
+> 
+> The changes include:
+> - Recognizing aarch64-pc-cygwin targets in config.guess
+> - Enabling dfp support for aarch64, consistent with existing x86 targets
+> - Disabling libgcj for aarch64 MinGW targets, matching x86_64 behaviour
+> - Ensuring appropriate target flags are applied for aarch64 MinGW builds
+> 
+> These updates prepare the build system for aarch64-based Windows
+> environments.
+> 
+>   *   No functional changes are introduced in this patch.
+> 
+> 
+> Please let me know if there are any concerns or if this should be split
+> into separate patches.
+> 
+> Thanks & regards
+> Thirumalai Nagalingam
+> <thirumalai.nagalingam@multicorewareinc.com<mailto:thirumalai.nagalingam@multicorewareinc.com>>
+> 
+> In-lined patch:
+> 
+> config.guess  | 3 +++
+>  config/dfp.m4 | 4 ++--
+>  configure.ac  | 4 ++--
+>  3 files changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/config.guess b/config.guess
+> index 1972fda8e..f7c9844b8 100755
+> --- a/config.guess
+> +++ b/config.guess
+> @@ -911,6 +911,9 @@ EOF
+>      i*:UWIN*:*)
+>         echo "$UNAME_MACHINE"-pc-uwin
+>         exit ;;
+> +    aarch64:CYGWIN*:*:*)
+> +       echo aarch64-pc-cygwin
+> +       exit ;;
+>      amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
+>         echo x86_64-pc-cygwin
+>         exit ;;
+> diff --git a/config/dfp.m4 b/config/dfp.m4
+> index 5b29089ce..714bee6b2 100644
+> --- a/config/dfp.m4
+> +++ b/config/dfp.m4
+> @@ -22,8 +22,8 @@ Valid choices are 'yes', 'bid', 'dpd', and 'no'.]) ;;
+>    case $1 in
+>      powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
+>      i?86*-*-elfiamcu | i?86*-*-gnu* | \
+> -    i?86*-*-mingw* | x86_64*-*-mingw* | \
+> -    i?86*-*-cygwin* | x86_64*-*-cygwin*)
+> +    aarch64-*-mingw* | i?86*-*-mingw* | x86_64*-*-mingw* | \
+> +    aarch64-*-cygwin* | i?86*-*-cygwin* | x86_64*-*-cygwin*)
+>        enable_decimal_float=yes
+>        ;;
+>      *)
+> diff --git a/configure.ac b/configure.ac
+> index 05ddf6987..7e8a6b1c6 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -869,7 +869,7 @@ case "${target}" in
+>    i[[3456789]]86-*-mingw*)
+>      noconfigdirs="$noconfigdirs ${libgcj}"
+>      ;;
+> -  x86_64-*-mingw*)
+> +  aarch64-*-mingw* | x86_64-*-mingw*)
+>      noconfigdirs="$noconfigdirs ${libgcj}"
+>      ;;
+>    mmix-*-*)
+> @@ -3225,7 +3225,7 @@ case " $target_configdirs " in
+>  esac
+> 
+>  case "$target" in
+> -  x86_64-*mingw* | *-w64-mingw*)
+> +  aarch64-*mingw* | x86_64-*mingw* | *-w64-mingw*)
+>    # MinGW-w64 does not use newlib, nor does it use winsup. It may,
+>    # however, use a symlink named 'mingw' in ${prefix} .
+> 
+> 
+
+
