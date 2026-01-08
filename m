@@ -1,84 +1,82 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id B198E4BA2E22; Thu,  8 Jan 2026 12:04:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B198E4BA2E22
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1767873843;
-	bh=ngTRchkc3SqM4FzX0GtNWT3yTUKe3xi9d4wwfEfTvdI=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=TlB5SrJOTWO0MpNMH9rlvp0FRZjBlAhsXcXajx1uLtLvtPH1bHPNy4mWGRgfkbF45
-	 bVa4HelPGoPtfpwQoBU2jsqZBR4jusLHAhgU1yt7SOo8FV9gDXOJCNrjSIp7tPltKs
-	 m0gNK+40xeDC6riDJ2ISKYBoq0uEf9nZiIp333Tc=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id C4C1BA80CFE; Thu, 08 Jan 2026 13:04:01 +0100 (CET)
-Date: Thu, 8 Jan 2026 13:04:01 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <SRS0=0NVs=7N=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e03.mail.nifty.com (mta-snd-e03.mail.nifty.com [106.153.227.115])
+	by sourceware.org (Postfix) with ESMTPS id 509B74BA2E05
+	for <cygwin-patches@cygwin.com>; Thu,  8 Jan 2026 12:35:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 509B74BA2E05
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 509B74BA2E05
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.115
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1767875713; cv=none;
+	b=URNF4yXEx3ZKSpoiBvpfdHgDVbfzQWcn3n5dUD0TCNv/VeLxzTRoBmB9TZZ75lPdqMoMSi9l8UPhZYFopW2bhmPA1d68X8+bZABIZuJDfqf7xTl/6CmfcK4OiiKbXc6STiC/JqLbtQYz6nZpyRSDsINWb8T6QPa6IFLcE4lxGUw=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1767875713; c=relaxed/simple;
+	bh=u1WT8cCe2kccku8Vjxs4X2EowQacPjjMPHHkDXCChxU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=qgHhzgnfgUCkEu2AlsijC0TNXl6voPBWDGGeLNpJ7dCTNCBU9/YAwWzOW+JAz2SMGu0R9VhzsYQ0+8M7XlElbop3CpakZuM97wMktP9P0Xc/ZwnrGFOBLAfJX52auoJDSGowmWJps1TVXMsbKmFce6Gr6xztAUNIqDuDrL0I0uk=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 509B74BA2E05
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=bP669UTL
+Received: from HP-Z230 by mta-snd-e03.mail.nifty.com with ESMTP
+          id <20260108123510194.JVTR.47114.HP-Z230@nifty.com>;
+          Thu, 8 Jan 2026 21:35:10 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Update _endian.h to handle unsupported arch
-Message-ID: <aV-dMa74ppST628N@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <MA0P287MB308241F2F6A8AB26A6249FB49F85A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Corinna Vinschen <corinna@vinschen.de>
+Subject: [PATCH] Cygwin: flock: Remove the unnecessary fdtab lock
+Date: Thu,  8 Jan 2026 21:34:40 +0900
+Message-ID: <20260108123502.989-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <MA0P287MB308241F2F6A8AB26A6249FB49F85A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1767875710;
+ bh=lp1hZpzOqm5Vs8eUMC2x/+k9qsKQizfeDzA9knfrSEA=;
+ h=From:To:Cc:Subject:Date;
+ b=bP669UTLJQfyXYMNpGniuj5pGVB1gj2+gX7kSWx1iF2GsZv64/diN4ooibKaRtHeXMm6vDYc
+ ypN3LS/wfGpa6N2lRQrd5+WoDqvyYuKJiYTHvrUMnUykQwNRbuvRz4qkpufP+bhT6Rbb9Gkyab
+ +oQ1DBF1EpxX6WGUw8lZzMV56lJFJgKd8uE3hPru5IQ6HtDv6FSdbJOsx2Juc6xug9U4lIZ4PX
+ WTMI3fe+BjJJFP5GGvrihDYErkEXB2A8r2RCgbxD9Gox1V2FNd5POWqMgtEoaHUXUFasyg8VBV
+ +kTZ9PqPgiat7pgo191kBVS9gyppccMFG0eNMVhPpP2qxSzQ==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Thirumalai,
+There were two fdtab locks: one is in inode_t::del_my_locks(), and
+the other is in fixup_lockf_after_exec().  The merely counts the file
+descriptors affected by the corresponding lock, so locking fdtab seems
+unnecessary.  The latter only only during execve(), when no other
+threads exist.  Therefore, these two locks are redundant. This patch
+removes them.
 
-can you check your patch again?  It fails to apply for me against
-current main.  Hunk #1 seems to have a whitespace problem only, but hunk
-#2 is suddenly missing the uxth opcode.
+Suggested-by: Corinna Vinschen <corinna@vinschen.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+---
+ winsup/cygwin/flock.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Also, would you mind to add a Fixes: tag?
-
-
-Thanks,
-Corinna
-
-
-On Jan  8 08:30, Thirumalai Nagalingam wrote:
-> Hi,
-> 
-> This patch Update _endian.h so that it explicitly throws an error when encountering
-> an unsupported architecture instead of returning the unmodified x.
-> Also tighten the arch detection logic by adding an explicit LE check.
-> 
-> Thanks & regards
-> Thirumalai Nagalingam
-> 
-> In-lined patch:
-> 
-> diff --git a/winsup/cygwin/include/machine/_endian.h b/winsup/cygwin/include/machine/_endian.h
-> index 681ae4abe..e591f375d 100644
-> --- a/winsup/cygwin/include/machine/_endian.h
-> +++ b/winsup/cygwin/include/machine/_endian.h
-> @@ -28,8 +28,10 @@ __ntohl(__uint32_t _x)
->  {
->  #if defined(__x86_64__)
->         __asm__("bswap %0" : "=r" (_x) : "0" (_x));
-> -#elif defined(__aarch64__)
-> +#elif defined(__aarch64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->      __asm__("rev %w0, %w0" : "=r" (_x) : "0" (_x));
-> +#else
-> +#error "unsupported architecture"
->  #endif
->         return _x;
->  }
-> @@ -41,10 +43,12 @@ __ntohs(__uint16_t _x)
->         __asm__("xchgb %b0,%h0"         /* swap bytes           */
->                 : "=Q" (_x)
->                 :  "0" (_x));
-> -#elif defined(__aarch64__)
-> +#elif defined(__aarch64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->      __asm__("\n\
->                         rev16 %0, %0 \n\
->                 " : "=r" (_x) : "0" (_x));
-> +#else
-> +#error "unsupported architecture"
->  #endif
->         return _x;
->  }
-
+diff --git a/winsup/cygwin/flock.cc b/winsup/cygwin/flock.cc
+index 221501d65..857762f4a 100644
+--- a/winsup/cygwin/flock.cc
++++ b/winsup/cygwin/flock.cc
+@@ -379,7 +379,7 @@ inode_t::del_my_locks (long long id, HANDLE fhdl)
+       else if (id && lock->lf_id == id)
+ 	{
+ 	  int cnt = 0;
+-	  cygheap_fdenum cfd (true);
++	  cygheap_fdenum cfd (false);
+ 	  while (cfd.next () >= 0)
+ 	    if (cfd->get_unique_id () == lock->lf_id && ++cnt > 1)
+ 	      break;
+@@ -441,7 +441,7 @@ fixup_lockf_after_exec (bool exec)
+     {
+       node->notused ();
+       int cnt = 0;
+-      cygheap_fdenum cfd (true);
++      cygheap_fdenum cfd (false);
+       while (cfd.next () >= 0)
+ 	if (cfd->get_dev () == node->i_dev
+ 	    && cfd->get_ino () == node->i_ino
+-- 
+2.51.0
 
