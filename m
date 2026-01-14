@@ -1,72 +1,46 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id C8A6C4BA2E2B; Wed, 14 Jan 2026 22:31:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C8A6C4BA2E2B
+	id AE98D4BA2E06; Wed, 14 Jan 2026 22:35:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE98D4BA2E06
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1768429868;
-	bh=lgDdAGhGqc+2QQJ853uIqTZ3i7wic/3Jy4o/DROwNcQ=;
-	h=From:To:Subject:Date:From;
-	b=mez87VigciKQbjx3mn2tEiC8v2/TalYzMHcnhCXSmKrOX715v3rAk10QrN+sxSYnA
-	 W7jQi0aRRFpaTFaFe06Ito64I4XH/qMinEEnXZJECBZxFyuCf/AtpjAJh+4pQVuYvN
-	 oFnSu9B6C/7bUASwqyTyfvXJ7F5ZlfhiFycGQoN4=
+	s=default; t=1768430148;
+	bh=sXjt18qUBRD6p5nTEjvr7p2giJK772OSFWxp9SZfmC4=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=GTvzRGyIJBUbbMV4V44eNCHdhcvPD80BcU1xWWXRplqQMesXwmI9yo+Cb/BcC8Rma
+	 DYLuHOhAuKkKRj0QjZix8ERtXopIH4zKU+qIlt3FvBaGJHd3nZtGMhfJ/hhxyf2J/h
+	 Gz0Mu0KhEBL0psZ2I1qNjPqJ/DGvREN9qE2GU2jY=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id D969BA80DDB; Wed, 14 Jan 2026 23:31:06 +0100 (CET)
+	id BD9F5A80DDB; Wed, 14 Jan 2026 23:35:46 +0100 (CET)
+Date: Wed, 14 Jan 2026 23:35:46 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: c32rtomb: add missing check for invalid UNICODE character
-Date: Wed, 14 Jan 2026 23:31:06 +0100
-Message-ID: <20260114223106.828985-1-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.52.0
+Subject: Re: [PATCH] Cygwin: doc: Explciitly name the output when building
+ .info files
+Message-ID: <aWgaQtq5XHqZWfGi@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20260114142803.3097-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260114142803.3097-1-jon.turney@dronecode.org.uk>
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
+Hi Jon,
 
-c32rtomb neglects to check the input character for being outside
-the valid UNICODE planes.  It happily converts the invalid character
-into a valid (but wrong) surrogate pair and carries on.
+On Jan 14 14:28, Jon Turney wrote:
+> This works arounda bug in docbook2x-texi seen with current bash in
+> Fedora 42 during cross-building.
+> 
+> If the -output-dir option to db2x_texixml isn't specified (always the
+> case when invoked by docbook2x-texi), then the script attempts cd ''
+> which is now an error ("cd: null directory") rather being treated as
+                                                   ^^^^^
+                                                   than
 
-Add a check so characters beyond 0x10ffff are not converted anymore.
-Return -1 with errno set to EILSEQ instead.
 
-Fixes: 4f258c55e87f ("Cygwin: Add ISO C11 functions c16rtomb, c32rtomb, mbrtoc16, mbrtoc32.")
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- winsup/cygwin/release/3.6.7 | 5 +++++
- winsup/cygwin/strfuncs.cc   | 7 +++++++
- 2 files changed, 12 insertions(+)
- create mode 100644 winsup/cygwin/release/3.6.7
+Other than that, LGTM.
 
-diff --git a/winsup/cygwin/release/3.6.7 b/winsup/cygwin/release/3.6.7
-new file mode 100644
-index 000000000000..defe55ffe75e
---- /dev/null
-+++ b/winsup/cygwin/release/3.6.7
-@@ -0,0 +1,5 @@
-+Fixes:
-+------
-+
-+- Guard c32rtomb against invalid input characters.
-+  Addresses a testsuite error in current gawk git master.
-diff --git a/winsup/cygwin/strfuncs.cc b/winsup/cygwin/strfuncs.cc
-index eb6576051d90..0cf41cefc8a2 100644
---- a/winsup/cygwin/strfuncs.cc
-+++ b/winsup/cygwin/strfuncs.cc
-@@ -146,6 +146,13 @@ c32rtomb (char *s, char32_t wc, mbstate_t *ps)
-     if (wc <= 0xffff || !s)
-       return wcrtomb (s, (wchar_t) wc, ps);
- 
-+    /* Check for character outside valid UNICODE planes */
-+    if (wc > 0x10ffff)
-+      {
-+	_REENT_ERRNO(_REENT) = EILSEQ;
-+	return (size_t)(-1);
-+      }
-+
-     wchar_t wc_arr[2];
-     const wchar_t *wcp = wc_arr;
- 
--- 
-2.52.0
 
+Cheers,
+Corinna
