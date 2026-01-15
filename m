@@ -1,46 +1,79 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id AE98D4BA2E06; Wed, 14 Jan 2026 22:35:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE98D4BA2E06
+	id 901934BA2E20; Thu, 15 Jan 2026 09:57:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 901934BA2E20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1768430148;
-	bh=sXjt18qUBRD6p5nTEjvr7p2giJK772OSFWxp9SZfmC4=;
-	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=GTvzRGyIJBUbbMV4V44eNCHdhcvPD80BcU1xWWXRplqQMesXwmI9yo+Cb/BcC8Rma
-	 DYLuHOhAuKkKRj0QjZix8ERtXopIH4zKU+qIlt3FvBaGJHd3nZtGMhfJ/hhxyf2J/h
-	 Gz0Mu0KhEBL0psZ2I1qNjPqJ/DGvREN9qE2GU2jY=
+	s=default; t=1768471052;
+	bh=UMG1IvhQuVJJ0frcCzOY9f4QviQyCzo8T6sSwJMbtBI=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=mptXDhxNPOVE8st9nQEnXKhLkDT5IlMfNuBQ+fFVOJG1oqxDm59QZ2dKUsA0JLCrl
+	 oh+fx73xIqe/I/0YS/QN6gG5EYYzmDBRGXVjevZI2emJ7fv/T8rj9tdAgXLIrE68jP
+	 YmByFsa0PBml1t0Z1Q18l9gJR+Ji7cLaCzCdk4ck=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BD9F5A80DDB; Wed, 14 Jan 2026 23:35:46 +0100 (CET)
-Date: Wed, 14 Jan 2026 23:35:46 +0100
+	id 893D7A80C88; Thu, 15 Jan 2026 10:57:30 +0100 (CET)
+Date: Thu, 15 Jan 2026 10:57:30 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: doc: Explciitly name the output when building
- .info files
-Message-ID: <aWgaQtq5XHqZWfGi@calimero.vinschen.de>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: gendef: Implement _sigfe function for TLS
+ handling on AArch64
+Message-ID: <aWi6CvAx4PNPJexK@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20260114142803.3097-1-jon.turney@dronecode.org.uk>
+Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <MA0P287MB3082B91F52855CCC343FEEF99FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260114142803.3097-1-jon.turney@dronecode.org.uk>
+In-Reply-To: <MA0P287MB3082B91F52855CCC343FEEF99FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Jon,
+Hi Thirumalai,
 
-On Jan 14 14:28, Jon Turney wrote:
-> This works arounda bug in docbook2x-texi seen with current bash in
-> Fedora 42 during cross-building.
+
+I was just trying to apply your gendef patches, but this patch here
+doesn't apply cleanly due to context diffs:
+
+On Dec 19 17:34, Thirumalai Nagalingam wrote:
+> Hi all,
 > 
-> If the -output-dir option to db2x_texixml isn't specified (always the
-> case when invoked by docbook2x-texi), then the script attempts cd ''
-> which is now an error ("cd: null directory") rather being treated as
-                                                   ^^^^^
-                                                   than
+> Please find the attached patch which adds an ARM64 stub for the `_sigfe` routine
+> in the gendef script.
+> 
+> Any feedback or nits are very welcome. The changes are documented with inline
+> comments intended to be self-explanatory. please let me know if any part
+> of this patch should be adjusted.
+> 
+> Thanks for your time and review.
+> 
+> Thanks & regards
+> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+> 
+> In-lined patch:
+> [...skipping to the end of the patch...]
+> +    br      x9                         // Branch to real function
+> +    .seh_endproc
+> +
+>  _sigbe:
+>         .global sigdelayed
+>         .seh_proc sigdelayed
+> 
+
+After appling the first two patches
+
+ 0001-Cygwin-gendef-add-ARM64-stub-for-fe-in-gendef.patch
+ 0002-Cygwin-gendef-add-_sigfe_maybe-for-TLS-initializatio.patch
+
+the above sigdelayed context looks like this:
+
+> _sigbe:
+>         .global sigdelayed
+> sigdelayed:
+> _sigdelayed_end:
+
+Is there anything missing here?  Another patch which should be
+applied boefore this one?
 
 
-Other than that, LGTM.
-
-
-Cheers,
+Thanks,
 Corinna
