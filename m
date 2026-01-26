@@ -1,21 +1,21 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 047C34BC8974; Mon, 26 Jan 2026 10:26:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 047C34BC8974
+	id C536F4B920ED; Mon, 26 Jan 2026 10:26:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C536F4B920ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1769423161;
-	bh=St5Kh7yKnDTu/eyPYg7SVORuuiTc+czvePFQxb80qgg=;
+	s=default; t=1769423214;
+	bh=vhSSO4ok7H7ia27zCCxkZGyAD43wl8blnCpnZWcsKe8=;
 	h=From:To:Subject:Date:From;
-	b=vDaOtpTNTYwhfjCFQgCmNXGGj1t1DBmYux7fMS3lf6cdVZgfOxuaE3N+M+N2S55Zi
-	 UPngMRp/cephLBKC8url55Y6O7eKSaaZ15SgAcnvrzsQlMf9mMhKlrF+P7834RHhY7
-	 Utki8ye1VUmI+Uj2cICsKnTu2hFD0Uob/u+27D2s=
+	b=jhfh3D0DGYXFTwLeBqA9RpbsKTGRpuq5WjpKc3NZvAr1bne6V2mW5QtbIPhqyb95/
+	 BWyQKiI/C5Y3u+kgAXzpTscgq4sEoyP1HIAQosTuKLBrbqhDdvoOz2fg6OC4sJy6LZ
+	 ecKh3nnps2h4P9k8nJuO8mN4pEnXBjnwA5ERx0sw=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 11CF8A81CEE; Mon, 26 Jan 2026 11:25:59 +0100 (CET)
+	id DE68BA81D16; Mon, 26 Jan 2026 11:26:52 +0100 (CET)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: fhandler_socket::fchown: fix check for admin user
-Date: Mon, 26 Jan 2026 11:25:58 +0100
-Message-ID: <20260126102559.382483-1-corinna-cygwin@cygwin.com>
+Subject: [PATCH] Cygwin: child_info: remove filler bytes
+Date: Mon, 26 Jan 2026 11:26:52 +0100
+Message-ID: <20260126102652.382670-1-corinna-cygwin@cygwin.com>
 X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -23,36 +23,44 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Corinna Vinschen <corinna@vinschen.de>
 
-This has never worked as desired.  The check for admin permissions
-is broken.  The call to check_token_membership() expects a PSID
-argument.  What it gets is a pointer to a cygpsid.  There's no
-class-specific type conversion for this to a PSID, so the pointer
-is converted verbatim.
+The filler bytes in child_info were only necessary for Vista to
+workaround a bug in WOW64. We just neglected to remove them so far.
 
-Pass the cygpsid directly, because cygpsid has a type conversion
-method to PSID defined.
-
-Pity that GCC doesn't warn here...
-
-Fixes: 859d215b7e00 ("Cygwin: split out fhandler_socket into inet and local classes")
+Fixes: a4efb2a6698f ("Cygwin: remove support for Vista entirely")
 Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
- winsup/cygwin/fhandler/socket.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/local_includes/child_info.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/socket.cc b/winsup/cygwin/fhandler/socket.cc
-index c0cef7d3eeb1..0e1fb1bd25f1 100644
---- a/winsup/cygwin/fhandler/socket.cc
-+++ b/winsup/cygwin/fhandler/socket.cc
-@@ -258,7 +258,7 @@ fhandler_socket::fchmod (mode_t newmode)
- int
- fhandler_socket::fchown (uid_t newuid, gid_t newgid)
- {
--  bool perms = check_token_membership (&well_known_admins_sid);
-+  bool perms = check_token_membership (well_known_admins_sid);
+diff --git a/winsup/cygwin/local_includes/child_info.h b/winsup/cygwin/local_includes/child_info.h
+index 25d99fa7de36..dc0b75dee694 100644
+--- a/winsup/cygwin/local_includes/child_info.h
++++ b/winsup/cygwin/local_includes/child_info.h
+@@ -33,7 +33,7 @@ enum child_status
+ #define EXEC_MAGIC_SIZE sizeof(child_info)
  
-   /* Admin rulez */
-   if (!perms)
+ /* Change this value if you get a message indicating that it is out-of-sync. */
+-#define CURR_CHILD_INFO_MAGIC 0x77f25a01U
++#define CURR_CHILD_INFO_MAGIC 0x3c5c4429U
+ 
+ #include "pinfo.h"
+ struct cchildren
+@@ -111,7 +111,6 @@ public:
+   void *stackbase;	// StackBase of parent thread
+   size_t guardsize;     // size of POSIX guard region or (size_t) -1 if
+ 			// user stack
+-  char filler[4];
+   child_info_fork ();
+   void handle_fork ();
+   bool abort (const char *fmt = NULL, ...);
+@@ -145,7 +144,6 @@ public:
+   cygheap_exec_info *moreinfo;
+   int __stdin;
+   int __stdout;
+-  char filler[4];
+ 
+   void cleanup ();
+   child_info_spawn () {};
 -- 
 2.52.0
 
