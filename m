@@ -1,63 +1,71 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 4D6ED4BA9035; Mon,  2 Feb 2026 17:17:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4D6ED4BA9035
+	id DD2814BB5906; Mon,  2 Feb 2026 17:17:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DD2814BB5906
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1770052621;
-	bh=DxIlwT+AKZZTy44GGEa767IxC27KMAeOK/0w9lvYDTk=;
+	s=default; t=1770052634;
+	bh=0s8WdrkyBW7Ld9wL0Eoa4Eums0aU15XiXBLkrsmeU80=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=VJ/WVzH9Qc+ILhdQTAeII0ZMVYkyWwKY9rb9XkpcZa4/qbaH0sWUUljEhDKWhvMhh
-	 kHvijhp36Ydq1NXKCcaEMmYdr/K/j/fS/HjA5+qF7wz+IO7r4MvwwDpVy9VHEyiRU/
-	 nXHAu/Dw0WHpsDqikKXy4F2I7+QvNHzF4i9EEW+c=
+	b=s6/56sAOk9rWlRdx1DNcKyfx9v1rYYKX9APDWdUlI89ubd9rB5NY5X5Po0fwp16KY
+	 zzxIsCbXH2uVbQFY20lsAWHpD9m9fiYt9NyUXuUNgFMThh4XOWMYNmF0ZO83zRnIsb
+	 CjKCdGcbxArRGWQ5ScVf4+sjuftL2/Mwsh19ufzo=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6B94CA80543; Mon, 02 Feb 2026 18:16:59 +0100 (CET)
-Date: Mon, 2 Feb 2026 18:16:59 +0100
+	id 11D77A80543; Mon, 02 Feb 2026 18:17:13 +0100 (CET)
+Date: Mon, 2 Feb 2026 18:17:13 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fhandler_socket::fchown: fix check for admin user
-Message-ID: <aYDcC2nBl0hAVI7D@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: child_info: remove filler bytes
+Message-ID: <aYDcGX11O0UMODrx@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20260126102559.382483-1-corinna-cygwin@cygwin.com>
+References: <20260126102652.382670-1-corinna-cygwin@cygwin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260126102559.382483-1-corinna-cygwin@cygwin.com>
+In-Reply-To: <20260126102652.382670-1-corinna-cygwin@cygwin.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Jan 26 11:25, Corinna Vinschen wrote:
+On Jan 26 11:26, Corinna Vinschen wrote:
 > From: Corinna Vinschen <corinna@vinschen.de>
 > 
-> This has never worked as desired.  The check for admin permissions
-> is broken.  The call to check_token_membership() expects a PSID
-> argument.  What it gets is a pointer to a cygpsid.  There's no
-> class-specific type conversion for this to a PSID, so the pointer
-> is converted verbatim.
+> The filler bytes in child_info were only necessary for Vista to
+> workaround a bug in WOW64. We just neglected to remove them so far.
 > 
-> Pass the cygpsid directly, because cygpsid has a type conversion
-> method to PSID defined.
-> 
-> Pity that GCC doesn't warn here...
-> 
-> Fixes: 859d215b7e00 ("Cygwin: split out fhandler_socket into inet and local classes")
+> Fixes: a4efb2a6698f ("Cygwin: remove support for Vista entirely")
 > Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 > ---
->  winsup/cygwin/fhandler/socket.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  winsup/cygwin/local_includes/child_info.h | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/winsup/cygwin/fhandler/socket.cc b/winsup/cygwin/fhandler/socket.cc
-> index c0cef7d3eeb1..0e1fb1bd25f1 100644
-> --- a/winsup/cygwin/fhandler/socket.cc
-> +++ b/winsup/cygwin/fhandler/socket.cc
-> @@ -258,7 +258,7 @@ fhandler_socket::fchmod (mode_t newmode)
->  int
->  fhandler_socket::fchown (uid_t newuid, gid_t newgid)
->  {
-> -  bool perms = check_token_membership (&well_known_admins_sid);
-> +  bool perms = check_token_membership (well_known_admins_sid);
+> diff --git a/winsup/cygwin/local_includes/child_info.h b/winsup/cygwin/local_includes/child_info.h
+> index 25d99fa7de36..dc0b75dee694 100644
+> --- a/winsup/cygwin/local_includes/child_info.h
+> +++ b/winsup/cygwin/local_includes/child_info.h
+> @@ -33,7 +33,7 @@ enum child_status
+>  #define EXEC_MAGIC_SIZE sizeof(child_info)
 >  
->    /* Admin rulez */
->    if (!perms)
+>  /* Change this value if you get a message indicating that it is out-of-sync. */
+> -#define CURR_CHILD_INFO_MAGIC 0x77f25a01U
+> +#define CURR_CHILD_INFO_MAGIC 0x3c5c4429U
+>  
+>  #include "pinfo.h"
+>  struct cchildren
+> @@ -111,7 +111,6 @@ public:
+>    void *stackbase;	// StackBase of parent thread
+>    size_t guardsize;     // size of POSIX guard region or (size_t) -1 if
+>  			// user stack
+> -  char filler[4];
+>    child_info_fork ();
+>    void handle_fork ();
+>    bool abort (const char *fmt = NULL, ...);
+> @@ -145,7 +144,6 @@ public:
+>    cygheap_exec_info *moreinfo;
+>    int __stdin;
+>    int __stdout;
+> -  char filler[4];
+>  
+>    void cleanup ();
+>    child_info_spawn () {};
 > -- 
 > 2.52.0
 
