@@ -1,66 +1,81 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 353DC4BA2E0D; Thu, 12 Feb 2026 20:34:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 353DC4BA2E0D
+	id 2FEAD4B9DB42; Thu, 12 Feb 2026 20:34:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2FEAD4B9DB42
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1770928441;
-	bh=yG36CGNJ0C/gHB7y6V14OobVsPIyjzoRHtf0bWoAgBw=;
+	s=default; t=1770928455;
+	bh=BzoFQFqzVWeeCna9Tzc9+TbhzHl3HCEZGVmPoSKFjOo=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=PXCYBTbbEK70wH1LOv7HoKJMuw8YSRQkh4tHgQySr2qHczzevc0Ofz4v49bWERFNu
-	 AHo/LGObZ7M4/rnA29DlpT+4EdeTxu/g9m4XZxE+bUukCkXsaLWldThb/KLY1kTRMP
-	 pcR2tNV336/r4biw56FIl4oIHZEnG1Pc9t7V38+g=
+	b=fq2VgApix7izpu2Od8Todvxd3Qe9uOX8ydhtZXnJ9HXv2KBwM6QxhGc7TCl/ChKzS
+	 hqqIy8EXWoccTyTGbvpfXQIVNM9Tq9QLRh67QzitTsBtocN6Uh4b0cQs9qh/xH/j6J
+	 O6MYu1+e9Dbwzt2gPPfbdKAgmc+NUpO3oqIDrpmY=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 53123A80714; Thu, 12 Feb 2026 21:33:59 +0100 (CET)
-Date: Thu, 12 Feb 2026 21:33:59 +0100
+	id 47064A80982; Thu, 12 Feb 2026 21:34:13 +0100 (CET)
+Date: Thu, 12 Feb 2026 21:34:13 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: Igor Podgainoi <Igor.Podgainoi@arm.com>
 Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
 	nd <nd@arm.com>
-Subject: Re: [PATCH] Cygwin: configure: disable High Entropy VA (64-bit ASLR)
- on AArch64
-Message-ID: <aY45Nwdx38DwAg_S@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: hookapi.cc: Fix some handles not being inherited
+ when spawning
+Message-ID: <aY45Re_bOuUxBUrz@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: Igor Podgainoi <Igor.Podgainoi@arm.com>,
 	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
 	nd <nd@arm.com>
-References: <aY3_QASxmA5tGa7u@arm.com>
+References: <aY4Gibum9Q1gj9lp@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aY3_QASxmA5tGa7u@arm.com>
+In-Reply-To: <aY4Gibum9Q1gj9lp@arm.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 12 16:26, Igor Podgainoi wrote:
-> Currently Cygwin does not support the High Entropy Virtual Addressing
-> feature, also known as IMAGE_DLL_CHARACTERISTICS_HIGH_ENTROPY_VA and
-> 64-bit Address Space Layout Randomization in Windows.
+On Feb 12 16:57, Igor Podgainoi wrote:
+> Under Windows on Arm (AArch64), the function hook_or_detect_cygwin will
+> return NULL early, which will cause the call to real_path.set_cygexec
+> in av::setup to accept false as a parameter instead of true.
 > 
-> Whereas on systems running on the x86_64 architecture this feature is
-> already disabled by default in the toolchain during the build process,
-> the AArch64 version of the toolchain leaves it enabled, even though it
-> is not mandatory to use it on Windows on Arm. Only the normal ASLR flag
-> IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE is mandatory, which this patch
-> does not address.
+> Afterwards, in child_info_spawn::worker the call to
+> child_info_spawn::set would eventually pass that false result of
+> real_path.iscygexec() to the child_info constructor as the boolean
+> variable need_subproc_ready, where the flag _CI_ISCYGWIN will be
+> erroneously not set.
 > 
-> Therefore, this patch manually introduces the addition of High Entropy
-> VA disabling flags into several places in various Makefile.am files.
-> This should prevent memory overlap bugs on AArch64.
+> Later in child_info_spawn::worker the failed iscygwin() flag check will
+> cause the "parent" process handle to become non-inheritable. This patch
+> fixes the non-inheritability issue by introducing a new check for the
+> IMAGE_FILE_MACHINE_ARM64 constant in the function PEHeaderFromHModule.
 > 
 > Tests fixed on AArch64:
-> winsup.api/ltp/fork06.exe
-> winsup.api/ltp/fork07.exe
-> winsup.api/ltp/fork11.exe
+> winsup.api/signal-into-win32-api.exe
+> winsup.api/ltp/fcntl07.exe
+> winsup.api/ltp/fcntl07B.exe
+> winsup.api/posix_spawn/chdir.exe
+> winsup.api/posix_spawn/fds.exe
+> winsup.api/posix_spawn/signals.exe
 > 
 > Signed-off-by: Igor Podgainoi <igor.podgainoi@arm.com>
 > ---
->  winsup/cygserver/Makefile.am | 2 +-
->  winsup/cygwin/Makefile.am    | 2 +-
->  winsup/testsuite/Makefile.am | 2 +-
->  winsup/utils/Makefile.am     | 4 ++--
->  4 files changed, 5 insertions(+), 5 deletions(-)
+>  winsup/cygwin/hookapi.cc | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/winsup/cygwin/hookapi.cc b/winsup/cygwin/hookapi.cc
+> index ee2edbafe..b0126ac04 100644
+> --- a/winsup/cygwin/hookapi.cc
+> +++ b/winsup/cygwin/hookapi.cc
+> @@ -45,6 +45,8 @@ PEHeaderFromHModule (HMODULE hModule)
+>      {
+>      case IMAGE_FILE_MACHINE_AMD64:
+>        break;
+> +    case IMAGE_FILE_MACHINE_ARM64:
+> +      break;
+>      default:
+>        return NULL;
+>      }
+> -- 
+> 2.43.0
 
-Pushed.  We can keep this in, it won't hurt and makes sure we never
-build Cygwin with HEVA enabled by accident.
+Pushed.
 
 
 Thanks,
