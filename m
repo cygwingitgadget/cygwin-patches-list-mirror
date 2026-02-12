@@ -1,82 +1,110 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 2FEAD4B9DB42; Thu, 12 Feb 2026 20:34:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2FEAD4B9DB42
+	id AF2164B9DB4D; Thu, 12 Feb 2026 20:36:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AF2164B9DB4D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1770928455;
-	bh=BzoFQFqzVWeeCna9Tzc9+TbhzHl3HCEZGVmPoSKFjOo=;
+	s=default; t=1770928587;
+	bh=xDg3Vy8PwLwEd16DdPmdqDxUu0a9mEyFpeg5LEhQEag=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=fq2VgApix7izpu2Od8Todvxd3Qe9uOX8ydhtZXnJ9HXv2KBwM6QxhGc7TCl/ChKzS
-	 hqqIy8EXWoccTyTGbvpfXQIVNM9Tq9QLRh67QzitTsBtocN6Uh4b0cQs9qh/xH/j6J
-	 O6MYu1+e9Dbwzt2gPPfbdKAgmc+NUpO3oqIDrpmY=
+	b=WlcrE8KffCMIbTyLdy7F/B0lchaFShgSGOkow0r+9sKYGZ1wQgeYSiCx0ecD8JYvv
+	 NnrIRjdNatBzoA72LP/t3ykKSRf0fV8WPyrC/79Si5FKQw8NWs4wZzgRcGzjksscnd
+	 JJqKWABClWhDnN2YbMkjcN3cxrIol9nD4lPeeIws=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 47064A80982; Thu, 12 Feb 2026 21:34:13 +0100 (CET)
-Date: Thu, 12 Feb 2026 21:34:13 +0100
+	id 0D950A808B1; Thu, 12 Feb 2026 21:36:25 +0100 (CET)
+Date: Thu, 12 Feb 2026 21:36:25 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Igor Podgainoi <Igor.Podgainoi@arm.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
-	nd <nd@arm.com>
-Subject: Re: [PATCH] Cygwin: hookapi.cc: Fix some handles not being inherited
- when spawning
-Message-ID: <aY45Re_bOuUxBUrz@calimero.vinschen.de>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: cpuid: add AArch64 build stubs
+Message-ID: <aY45yWYgGCvq5fhg@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Igor Podgainoi <Igor.Podgainoi@arm.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
-	nd <nd@arm.com>
-References: <aY4Gibum9Q1gj9lp@arm.com>
+Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <MA0P287MB30827D0112702D609C0D688A9F64A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aY4Gibum9Q1gj9lp@arm.com>
+In-Reply-To: <MA0P287MB30827D0112702D609C0D688A9F64A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 12 16:57, Igor Podgainoi wrote:
-> Under Windows on Arm (AArch64), the function hook_or_detect_cygwin will
-> return NULL early, which will cause the call to real_path.set_cygexec
-> in av::setup to accept false as a parameter instead of true.
-> 
-> Afterwards, in child_info_spawn::worker the call to
-> child_info_spawn::set would eventually pass that false result of
-> real_path.iscygexec() to the child_info constructor as the boolean
-> variable need_subproc_ready, where the flag _CI_ISCYGWIN will be
-> erroneously not set.
-> 
-> Later in child_info_spawn::worker the failed iscygwin() flag check will
-> cause the "parent" process handle to become non-inheritable. This patch
-> fixes the non-inheritability issue by introducing a new check for the
-> IMAGE_FILE_MACHINE_ARM64 constant in the function PEHeaderFromHModule.
-> 
-> Tests fixed on AArch64:
-> winsup.api/signal-into-win32-api.exe
-> winsup.api/ltp/fcntl07.exe
-> winsup.api/ltp/fcntl07B.exe
-> winsup.api/posix_spawn/chdir.exe
-> winsup.api/posix_spawn/fds.exe
-> winsup.api/posix_spawn/signals.exe
-> 
-> Signed-off-by: Igor Podgainoi <igor.podgainoi@arm.com>
-> ---
->  winsup/cygwin/hookapi.cc | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/winsup/cygwin/hookapi.cc b/winsup/cygwin/hookapi.cc
-> index ee2edbafe..b0126ac04 100644
-> --- a/winsup/cygwin/hookapi.cc
-> +++ b/winsup/cygwin/hookapi.cc
-> @@ -45,6 +45,8 @@ PEHeaderFromHModule (HMODULE hModule)
->      {
->      case IMAGE_FILE_MACHINE_AMD64:
->        break;
-> +    case IMAGE_FILE_MACHINE_ARM64:
-> +      break;
->      default:
->        return NULL;
->      }
-> -- 
-> 2.43.0
+Hi Thirumalai,
 
-Pushed.
+in terms of all three patches you sent on Feb 8, I wonder if this is
+the right thing to do.  I know you just want to get it built, but 
+doesn't this open up a can of worms?  How easy will it be to miss
+one of these places where the compiler warning doesn't occur anymore.
+
+Wouldn't it be better to wait until you can fill these places with
+actual code, even if it's a bit harder in the interim?
 
 
 Thanks,
 Corinna
+
+
+On Feb  8 19:30, Thirumalai Nagalingam wrote:
+> Hi,
+> 
+> This patch adds minimal AArch64 stubs to winsup/cygwin/local_includes/cpuid.h
+> to allow the header to compile for the Cygwin AArch64 target.
+> 
+> 
+>   *
+> Conditional handling for aarch64 is added alongside the existing x86_64 code.
+>   *
+> The cpuid() helper returns zeroed values, and can_set_flag()
+> is stubbed out for AArch64.
+>   *
+> No functional CPU feature detection is implemented.
+>   *
+> The change is intended solely to unblock the AArch64 build and will require
+> proper architecture-specific implementations in a follow-up patch.
+> 
+> Thanks & regards
+> Thirumalai Nagalingam
+> 
+> In-lined patch:
+> 
+> diff --git a/winsup/cygwin/local_includes/cpuid.h b/winsup/cygwin/local_includes/cpuid.h
+> index 6dbb1bddf..238c88777 100644
+> --- a/winsup/cygwin/local_includes/cpuid.h
+> +++ b/winsup/cygwin/local_includes/cpuid.h
+> @@ -13,17 +13,23 @@ static inline void __attribute ((always_inline))
+>  cpuid (uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d, uint32_t ain,
+>         uint32_t cin = 0)
+>  {
+> +#if defined(__x86_64__)
+>    asm volatile ("cpuid"
+>                 : "=a" (*a), "=b" (*b), "=c" (*c), "=d" (*d)
+>                 : "a" (ain), "c" (cin));
+> +#elif defined(__aarch64__)
+> +  // TODO
+> +  *a = *b = *c = *d = 0;
+> +#endif
+>  }
+> 
+> -#ifdef __x86_64__
+> +#if defined(__x86_64__) || defined(__aarch64__)
+>  static inline bool __attribute ((always_inline))
+>  can_set_flag (uint32_t long flag)
+>  {
+>    uint32_t long r1, r2;
+> 
+> +#if defined(__x86_64__)
+>    asm volatile ("pushfq\n"
+>                 "popq %0\n"
+>                 "movq %0, %1\n"
+> @@ -37,6 +43,9 @@ can_set_flag (uint32_t long flag)
+>                 : "=&r" (r1), "=&r" (r2)
+>                 : "ir" (flag)
+>    );
+> +#elif defined(__aarch64__)
+> +  // TODO
+> +#endif
+>    return ((r1 ^ r2) & flag) != 0;
+>  }
+>  #else
+> --
+> 
+
+
