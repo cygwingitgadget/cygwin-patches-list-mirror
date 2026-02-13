@@ -1,80 +1,40 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 537B74BA23C6; Fri, 13 Feb 2026 16:01:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 537B74BA23C6
+	id 703C84B9DB52; Fri, 13 Feb 2026 19:29:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 703C84B9DB52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1770998477;
-	bh=X7LcKSLwHG54u8o53fayHukz7fvPVg0YdczA1bGwU3Y=;
+	s=default; t=1771010947;
+	bh=1Wo0zXcsdnyIXToRTM6uZpHNkznnLUSks3tyrAq5Fww=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=XYtrcYgvEaMG0WPR7yGecC4aUjdGmuFUf32HQ+LIpF10vIuwUU3Rm1BeS/+cSfTOE
-	 wSJnkl5o04WWtPcrwUq1ebPEL2RYgh/uAmsdemYiE2AP6Gy/iC1zySameYMgRiVBl3
-	 Rziznp98txOSs+DIBldvBwrg6jwnQ1QXTK1VHvAc=
+	b=GuI6BTeF6J3qRZBVVux1Qxnl7ZklhIGM9pM7nLQ6yjrO5JpGNAM7CyD3x/Uf2w3xk
+	 q2fwz3kkugrXUqioXRF2d7jqdVbwlNXtshTAE6ncWcDOLeF9orbrL1g1gB4kRfwztV
+	 gUETJwgd+xnIaRjHRUbzt4vct2Cra4J5y5x3o/is=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 46FFBA80994; Fri, 13 Feb 2026 17:01:15 +0100 (CET)
-Date: Fri, 13 Feb 2026 17:01:15 +0100
+	id 8EF3BA81C4F; Fri, 13 Feb 2026 20:29:05 +0100 (CET)
+Date: Fri, 13 Feb 2026 20:29:05 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: hookapi.cc: Fix some handles not being inherited
- when spawning
-Message-ID: <aY9Ky2rJmDLyRqt7@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: setrlimit: fix comments in terms of input
+ checking
+Message-ID: <aY97gX1ePB0QBsHj@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <aY4Gibum9Q1gj9lp@arm.com>
- <aY45Re_bOuUxBUrz@calimero.vinschen.de>
- <3eb9430b-2457-4179-a9ab-1376da7860e3@dronecode.org.uk>
+References: <20260126102941.383039-1-corinna-cygwin@cygwin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3eb9430b-2457-4179-a9ab-1376da7860e3@dronecode.org.uk>
+In-Reply-To: <20260126102941.383039-1-corinna-cygwin@cygwin.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 13 13:32, Jon Turney wrote:
-> On 12/02/2026 20:34, Corinna Vinschen wrote:
-> > On Feb 12 16:57, Igor Podgainoi wrote:
-> > > diff --git a/winsup/cygwin/hookapi.cc b/winsup/cygwin/hookapi.cc
-> > > index ee2edbafe..b0126ac04 100644
-> > > --- a/winsup/cygwin/hookapi.cc
-> > > +++ b/winsup/cygwin/hookapi.cc
-> > > @@ -45,6 +45,8 @@ PEHeaderFromHModule (HMODULE hModule)
-> > >       {
-> > >       case IMAGE_FILE_MACHINE_AMD64:
-> > >         break;
-> > > +    case IMAGE_FILE_MACHINE_ARM64:
-> > > +      break;
-> > >       default:
-> > >         return NULL;
-> > >       }
-> > 
-> > Pushed.
+On Jan 26 11:29, Corinna Vinschen wrote:
+> From: Corinna Vinschen <corinna@vinschen.de>
 > 
-> This whole switch statement looks like a wart left over from x86 times?
-> 
-> Either that or it should be properly checking that we're not trying to mix
-> architectures somehow? (See the comment where PEHeaderFromHModule is used in
-> hook_or_detect_cygwin).
+> Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
+> ---
+>  winsup/cygwin/resource.cc | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Good point.
-
-Kind of like this?
-
-diff --git a/winsup/cygwin/hookapi.cc b/winsup/cygwin/hookapi.cc
-index b0126ac04e3e..861eea003660 100644
---- a/winsup/cygwin/hookapi.cc
-+++ b/winsup/cygwin/hookapi.cc
-@@ -43,10 +43,13 @@ PEHeaderFromHModule (HMODULE hModule)
-   /* Return valid PIMAGE_NT_HEADERS only for supported architectures. */
-   switch (pNTHeader->FileHeader.Machine)
-     {
-+#ifdef __x86_64__
-     case IMAGE_FILE_MACHINE_AMD64:
-       break;
-+#elif __aarch64__
-     case IMAGE_FILE_MACHINE_ARM64:
-       break;
-+#endif
-     default:
-       return NULL;
-     }
+Pushed.
 
 
 Corinna
