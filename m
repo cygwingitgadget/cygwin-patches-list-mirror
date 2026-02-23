@@ -1,253 +1,166 @@
 Return-Path: <SRS0=vXQ3=A3=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.226.33])
-	by sourceware.org (Postfix) with ESMTPS id 99D054BA23E4
-	for <cygwin-patches@cygwin.com>; Mon, 23 Feb 2026 08:02:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 99D054BA23E4
+	by sourceware.org (Postfix) with ESMTPS id 3BF3C4BA23DD
+	for <cygwin-patches@cygwin.com>; Mon, 23 Feb 2026 08:02:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3BF3C4BA23DD
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 99D054BA23E4
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3BF3C4BA23DD
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.33
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1771833722; cv=none;
-	b=I6KCF0ZmWfOVIB36x9N7k4I3YzUSrFRTBdr7WpWmHwJitAkYXtp6nDgka0yK+1GKDg7ChJV33Br3wX7FMJvDTXgVVtGP+jLWwhOZzhVblsX2PPWw9/TZy2e0QyPzamFntZa6tDxd1ErMqrs8BTCyUsL7KT1Kf+EWVh5H73RH78g=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1771833731; cv=none;
+	b=TLJytTRCKzgalSgvqJGZILJi+NCbHc8NsjuO3PJGb27GMuwbCyN+dHjFxAz1g7Yd62kk0r1yCiflbxBcTy2qVmS4g9Z2RZoRDUERJ9QcnfBDcTZb/60kwxSne7o5rZ1431B3uipj8x6OZpjufcTHVvTBVlkYCtybRc3f+Jc3k3s=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1771833722; c=relaxed/simple;
-	bh=Pd1CIxhJ8AWOmb+sEj43+ZKr4ZmNBD7sbbQ5ro6mY6o=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=r3sst1K9aof3uZI6UVOBWz746tsOHjQFiE1OKfJ8t0SlOtI9Ww8mygLFDeGZQLFu1ULG0P/HFIzPk24zd8QZ9wM5ncSU8yMLZ5easdBA7myLZHb6sp0e8qvj7wzWZ+emXHMbUFuok8N68QENAiX0SgpDz95/SbPbtse8G7NmieI=
+	t=1771833731; c=relaxed/simple;
+	bh=silDUgOQLkK23pHd6FfdZiO6ZmPR8E8L0hSHZgOnFO0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=fMz8dx3ke5MLY2FBnuf4Lz+TPQgQGW6S/OHKdC4LGPBLH6Ri9SVkjYPVQtoQNA8qj9SIX2O0OXHwrjosuSUFsn915HT4GBkwr1QQOT5961Xo6Eg8OW16HqGJ1k2iA8QobI9ORn6Y0We3kEFkINIc3Y0E9nEmpI7pytfHVSWcNxQ=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 99D054BA23E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3BF3C4BA23DD
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=SjRvNXkm
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Ab+9cGeW
 Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
-          id <20260223080159810.UFTU.48098.HP-Z230@nifty.com>;
-          Mon, 23 Feb 2026 17:01:59 +0900
+          id <20260223080208147.UFUA.48098.HP-Z230@nifty.com>;
+          Mon, 23 Feb 2026 17:02:08 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Thomas Wolff <towo@towo.net>
-Subject: [PATCH v3 1/4] Cygwin: pty: Use OpenConsole.exe if available
-Date: Mon, 23 Feb 2026 17:01:27 +0900
-Message-ID: <20260223080141.340-2-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v3 2/4] Cygwin: pty: Update workaround for rlwrap for pseudo console
+Date: Mon, 23 Feb 2026 17:01:28 +0900
+Message-ID: <20260223080141.340-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260223080141.340-1-takashi.yano@nifty.ne.jp>
 References: <20260223080141.340-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1771833719;
- bh=Wk6m5XDiFOdT1xlIRlnS6aDz8oqwb5VftXN39tLVNvk=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1771833728;
+ bh=nDSZ2WWowBofJBbJWG8qN7fakz+a+lxwLHF4L7fEsaw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=SjRvNXkmxYzKUPG0ypBKdUZaC28T+gWIIVyB9KsCCvI/G1KewJLKB44KjSToZadHK4TeXcEx
- esvI2U2V3QHQy58Gy7pBYUV9mekevDZ+tGlA380FgnULifNhev2/GzY3caLtLLNURNSrwh1bK/
- pRayVSNBYzZbYdimycn8M0uAMyodwfvlY+RSB2GY+0rSlj2ngLTlyfr9wrbbboebIdyyg/uwuJ
- 6AdoWDnzX/aDnuib1n/YruPvqQ0JnxBnosdreM2Ow2CTKCC+3/QZzlmFSs5hi2/P2bANhWOFFt
- rviqsAFofTMLz6s6nZ/FDLD8xmerhcKm83j+G0Fy+XQz+Kkg==
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,KAM_ASCII_DIVIDERS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=Ab+9cGeWQfAFZnYZbKt1HB7rUwOpMQ3iYH3ie5QDovGEkPdbXTkH1eohI0KEJFYbkc35qTZh
+ U9MIW6wnZN+7ObWbiJnZhXnYwDTAFUkg7/ZQDZMOdbuUX+Jkv/0NYQhuVsWn07AEsBPbCICORc
+ SRPAFqGhPJ6UA6BHd2eldnAjcu5hW4pplVIjS7fpS+QmyjWNvfFVLQUh826L1GBuSEhycSwwzb
+ 5Esn/39Glz4/gBKWEovUiZgAUCsdCdLYQTXWDDFIsTqlDrTQdzyN9pru00ZLXjsbNnpYb7pq+e
+ cuxutb1MlpM9Kbe8OKsBsLGdvx4YUWX6yhERTT+RY9vTqclA==
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This patch replaces legacy conhost.exe with OpenConsole.exe if
-it is available. This enables various new features such as mouse
-support in pseudo console and bug fixes. The legacy conhost has
-problems, e.g. character attributes are mangled or ignored, and
-terminal reports are not passed through. This patch resolve the
-issue by loading /usr/bin/OpenColnsole.exe instead of conhost.exe
-if it is available.
+In tcgetattr(), the conventional workaround for rlwrap v0.40 or later
+is not work as expected with OpenConsole.exe for some reason. This
+patch update the workaround so that it works even with OpenConsole.exe
+by rebuilding tcgetattr responce reffering the corrent console mode
+instead of just overriding it depends on pseudo console setting up
+state.
 
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Suggested-by: Thomas Wolff <towo@towo.net>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/pty.cc | 171 +++++++++++++++++++++++++++++++++-
- 1 file changed, 168 insertions(+), 3 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 86 ++++++++++++++++++++++++++++-------
+ 1 file changed, 70 insertions(+), 16 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index c1e03db41..576f11dea 100644
+index 576f11dea..b9ca5658d 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -34,6 +34,166 @@ details. */
- #define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE 0x00020016
- #endif /* PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE */
+@@ -1738,18 +1738,48 @@ fhandler_pty_slave::tcgetattr (struct termios *t)
+ {
+   *t = get_ttyp ()->ti;
  
-+/* The source code of following two functions, i.e. create_conhost_handle()
-+   and CreatePseudoConsole_new(), are borrowed from
-+   Microsoft WindowsTerminal project: https://github.com/microsoft/terminal/
-+   that is licensed under MIT license. */
-+
-+/* ----------------------------------------------------------------------------
-+Copyright (c) Microsoft Corporation. All rights reserved.
-+
-+MIT License
-+
-+Permission is hereby granted, free of charge, to any person obtaining a copy
-+of this software and associated documentation files (the "Software"), to deal
-+in the Software without restriction, including without limitation the rights
-+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+copies of the Software, and to permit persons to whom the Software is
-+furnished to do so, subject to the following conditions:
-+
-+The above copyright notice and this permission notice shall be included in all
-+copies or substantial portions of the Software.
-+
-+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+SOFTWARE.
-+---------------------------------------------------------------------------- */
-+
-+static NTSTATUS
-+create_conhost_handle (PHANDLE handle, PCWSTR device_name,
-+		       ACCESS_MASK desired_access, HANDLE parent,
-+		       BOOLEAN inheritable, ULONG open_options)
-+{
-+  ULONG flags = OBJ_CASE_INSENSITIVE;
-+  if (inheritable)
-+    flags |= OBJ_INHERIT;
-+
-+  UNICODE_STRING name;
-+  RtlInitUnicodeString (&name, device_name);
-+
-+  OBJECT_ATTRIBUTES object_attributes;
-+  InitializeObjectAttributes (&object_attributes, &name, flags, parent, NULL);
-+
-+  IO_STATUS_BLOCK io;
-+  return NtOpenFile (handle, desired_access, &object_attributes, &io,
-+		     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-+		     open_options);
-+}
-+
-+extern "C" WINBASEAPI HRESULT WINAPI
-+CreatePseudoConsole_new (COORD size, HANDLE h_input, HANDLE h_output,
-+			 DWORD flags, HPCON *hpcon)
-+{
-+
-+  HANDLE h_con_server, h_con_reference;
-+  NTSTATUS status;
-+  BOOL res;
-+  HANDLE h_read_pipe, h_write_pipe;
-+  BOOL inherit_cursor;
-+  path_conv conhost ("/usr/bin/OpenConsole.exe");
-+  size_t len;
-+  HANDLE inherited_handles[4];
-+  STARTUPINFOEXW si = {0, };
-+  PROCESS_INFORMATION pi;
-+  SIZE_T list_size = 0;
-+  LPPROC_THREAD_ATTRIBUTE_LIST attr_list;
-+  HPCON_INTERNAL *hpcon_internal;
-+
-+  status = create_conhost_handle (&h_con_server, L"\\Device\\ConDrv\\Server",
-+				  GENERIC_ALL, NULL, TRUE, 0);
-+  if (!NT_SUCCESS (status))
-+    goto cleanup;
-+  status = create_conhost_handle (&h_con_reference, L"\\Reference",
-+				  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-+				  h_con_server, FALSE,
-+				  FILE_SYNCHRONOUS_IO_NONALERT);
-+  if (!NT_SUCCESS (status))
-+    goto cleanup_h_con_server;
-+
-+  res = CreatePipe (&h_read_pipe, &h_write_pipe, &sec_none, 0);
-+  if (!res)
-+    goto cleanup_h_con_reference;
-+  res = SetHandleInformation (h_read_pipe,
-+			      HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT);
-+  if (!res)
-+    goto cleanup_pipe;
-+
-+  inherit_cursor = (flags & PSEUDOCONSOLE_INHERIT_CURSOR) ? TRUE : FALSE;
-+
-+  WCHAR cmd[MAX_PATH];
-+  len = conhost.get_wide_win32_path_len ();
-+  conhost.get_wide_win32_path (cmd);
-+  __small_swprintf (cmd + len,
-+		    L" --headless %W"
-+		    "--width %d --height %d --signal 0x%x --server 0x%x",
-+		    inherit_cursor ? L"--inheritcursor " : L"",
-+		    size.X, size.Y, h_read_pipe, h_con_server);
-+
-+  si.StartupInfo.cb = sizeof (STARTUPINFOEXW);
-+  si.StartupInfo.hStdInput = h_input;
-+  si.StartupInfo.hStdOutput = h_output;
-+  si.StartupInfo.hStdError = h_output;
-+  si.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
-+
-+  inherited_handles[0] = h_con_server;
-+  inherited_handles[1] = h_input;
-+  inherited_handles[2] = h_output;
-+  inherited_handles[3] = h_read_pipe;
-+
-+  InitializeProcThreadAttributeList (NULL, 1, 0, &list_size);
-+  attr_list =
-+    (LPPROC_THREAD_ATTRIBUTE_LIST) HeapAlloc (GetProcessHeap (), 0, list_size);
-+  if (!attr_list)
-+    goto cleanup_pipe;
-+
-+  si.lpAttributeList = attr_list;
-+  InitializeProcThreadAttributeList (si.lpAttributeList, 1, 0, &list_size);
-+  UpdateProcThreadAttribute (si.lpAttributeList, 0,
-+			     PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
-+			     inherited_handles, sizeof (inherited_handles),
-+			     NULL, NULL);
-+
-+
-+  res = CreateProcessW (NULL, cmd, NULL, NULL,
-+			TRUE, EXTENDED_STARTUPINFO_PRESENT,
-+			NULL, NULL, &si.StartupInfo, &pi);
-+  if (!res)
-+    goto cleanup_heap;
-+
-+  hpcon_internal = (HPCON_INTERNAL *)
-+    HeapAlloc (GetProcessHeap (), 0, sizeof (HPCON_INTERNAL));
-+  if (!hpcon_internal)
-+    goto cleanup_heap;
-+  hpcon_internal->hWritePipe = h_write_pipe;
-+  hpcon_internal->hConDrvReference = h_con_reference;
-+  hpcon_internal->hConHostProcess = pi.hProcess;
-+  *hpcon = (HPCON) hpcon_internal;
-+
-+  HeapFree (GetProcessHeap(), 0, attr_list);
-+  CloseHandle (h_con_server);
-+  CloseHandle (pi.hThread);
-+  CloseHandle (pi.hProcess);
-+
-+  return S_OK;
-+
-+cleanup_heap:
-+  HeapFree (GetProcessHeap(), 0, attr_list);
-+cleanup_pipe:
-+  CloseHandle (h_read_pipe);
-+  CloseHandle (h_write_pipe);
-+cleanup_h_con_reference:
-+  CloseHandle (h_con_reference);
-+cleanup_h_con_server:
-+  CloseHandle (h_con_server);
-+cleanup:
-+  return E_FAIL;
-+}
-+
-+
- extern "C" int sscanf (const char *, const char *, ...);
+-  /* Workaround for rlwrap */
+-  cygheap_fdenum cfd (false);
+-  while (cfd.next () >= 0)
+-    if (cfd->get_major () == DEV_PTYM_MAJOR
+-	&& cfd->get_minor () == get_minor ())
+-      {
+-	if (get_ttyp ()->pcon_start)
+-	  t->c_lflag &= ~(ICANON | ECHO);
+-	if (get_ttyp ()->pcon_activated)
+-	  t->c_iflag &= ~ICRNL;
+-	break;
+-      }
++  /* Conventional workaround for rlwrap v0.40 or later is not work
++     as expected with OpenConsole.exe for some reason. The following
++     workaround is perhaps better solution even for apps other than
++     rlwrap under pcon_activated mode. */
++  if (get_ttyp ()->pcon_activated)
++    {
++      DWORD mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
++      t->c_lflag &= ~(ICANON | ECHO);
++      t->c_iflag &= ~ICRNL;
++      cygheap_fdenum cfd (false);
++      while (cfd.next () >= 0)
++	if (cfd->get_major () == DEV_PTYM_MAJOR
++	    && cfd->get_minor () == get_minor ())
++	  {
++	    if (nat_pipe_owner_self (get_ttyp ()->nat_pipe_owner_pid))
++	      {
++		DWORD resume_pid =
++		  attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
++		GetConsoleMode (get_ttyp ()->h_pcon_in, &mode);
++		resume_from_temporarily_attach (resume_pid);
++		break;
++	      }
++	    HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++					     get_ttyp ()->nat_pipe_owner_pid);
++	    HANDLE h_pcon_in;
++	    DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
++			     GetCurrentProcess (), &h_pcon_in,
++			     0, FALSE, DUPLICATE_SAME_ACCESS);
++	    DWORD resume_pid =
++	      attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
++	    if (!GetConsoleMode (h_pcon_in, &mode) && get_ttyp ()->pcon_start)
++	      mode = 0;
++	    resume_from_temporarily_attach (resume_pid);
++	    CloseHandle (h_pcon_in);
++	    CloseHandle (pcon_owner);
++	    break;
++	  }
++      if (mode & ENABLE_LINE_INPUT)
++	t->c_lflag |= ICANON;
++      if (mode & ENABLE_ECHO_INPUT)
++	t->c_lflag |= ECHO;
++    }
+   return 0;
+ }
  
- #define close_maybe(h) \
-@@ -3329,9 +3489,14 @@ fhandler_pty_slave::setup_pseudoconsole ()
-       const DWORD inherit_cursor = 1;
-       hpcon = NULL;
-       SetLastError (ERROR_SUCCESS);
--      HRESULT res = CreatePseudoConsole (size, get_handle_nat (),
--					 get_output_handle_nat (),
--					 inherit_cursor, &hpcon);
-+      /* Try OpenConsole.exe before conhost.exe */
-+      HRESULT res = CreatePseudoConsole_new (size, get_handle_nat (),
-+					     get_output_handle_nat (),
-+					     inherit_cursor, &hpcon);
-+      if (res != S_OK) /* Fallback to legacy conhost.exe */
-+        res = CreatePseudoConsole (size, get_handle_nat (),
-+				   get_output_handle_nat (),
-+				   inherit_cursor, &hpcon);
-       if (res != S_OK || GetLastError () == ERROR_PROC_NOT_FOUND)
- 	{
- 	  if (res != S_OK)
+@@ -2469,11 +2499,35 @@ int
+ fhandler_pty_master::tcgetattr (struct termios *t)
+ {
+   *t = cygwin_shared->tty[get_minor ()]->ti;
+-  /* Workaround for rlwrap v0.40 or later */
+-  if (get_ttyp ()->pcon_start)
+-    t->c_lflag &= ~(ICANON | ECHO);
++
++  /* Conventional workaround for rlwrap v0.40 or later is not work
++     as expected with OpenConsole.exe for some reason. The following
++     workaround is perhaps better solution even for apps other than
++     rlwrap under pcon_activated mode. */
+   if (get_ttyp ()->pcon_activated)
+-    t->c_iflag &= ~ICRNL;
++    {
++      t->c_lflag &= ~(ICANON | ECHO);
++      t->c_iflag &= ~ICRNL;
++
++      HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++				       get_ttyp ()->nat_pipe_owner_pid);
++      HANDLE h_pcon_in;
++      DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
++		       GetCurrentProcess (), &h_pcon_in,
++		       0, FALSE, DUPLICATE_SAME_ACCESS);
++      DWORD resume_pid =
++	attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
++      DWORD mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
++      if (!GetConsoleMode (h_pcon_in, &mode) && get_ttyp ()->pcon_start)
++	mode = 0;
++      resume_from_temporarily_attach (resume_pid);
++      CloseHandle (h_pcon_in);
++      CloseHandle (pcon_owner);
++      if (mode & ENABLE_LINE_INPUT)
++	t->c_lflag |= ICANON;
++      if (mode & ENABLE_ECHO_INPUT)
++	t->c_lflag |= ECHO;
++    }
+   return 0;
+ }
+ 
 -- 
 2.51.0
 
