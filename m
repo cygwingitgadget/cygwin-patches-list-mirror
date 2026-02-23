@@ -1,166 +1,117 @@
 Return-Path: <SRS0=vXQ3=A3=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e01.mail.nifty.com (mta-snd-e01.mail.nifty.com [106.153.226.33])
-	by sourceware.org (Postfix) with ESMTPS id 3BF3C4BA23DD
-	for <cygwin-patches@cygwin.com>; Mon, 23 Feb 2026 08:02:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3BF3C4BA23DD
+	by sourceware.org (Postfix) with ESMTPS id A8A634BA23C0
+	for <cygwin-patches@cygwin.com>; Mon, 23 Feb 2026 08:02:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A8A634BA23C0
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3BF3C4BA23DD
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A8A634BA23C0
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.33
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1771833731; cv=none;
-	b=TLJytTRCKzgalSgvqJGZILJi+NCbHc8NsjuO3PJGb27GMuwbCyN+dHjFxAz1g7Yd62kk0r1yCiflbxBcTy2qVmS4g9Z2RZoRDUERJ9QcnfBDcTZb/60kwxSne7o5rZ1431B3uipj8x6OZpjufcTHVvTBVlkYCtybRc3f+Jc3k3s=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1771833744; cv=none;
+	b=mjHTnEVqWMRN8Qy1fZ90j0KaXl85M0bPChxPgszG/mr+H+Wn4HMOX/6Vi80/32CDZHnm+WboygSRC+gFhPsZ3CvYffimrbkCgxv9xt2eAwmWvINK2VPMBUG3RMRSyei02VlbZZyb68SLdZJ+zGP0TEa5eylovsQYD0tSTxI5ih0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1771833731; c=relaxed/simple;
-	bh=silDUgOQLkK23pHd6FfdZiO6ZmPR8E8L0hSHZgOnFO0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=fMz8dx3ke5MLY2FBnuf4Lz+TPQgQGW6S/OHKdC4LGPBLH6Ri9SVkjYPVQtoQNA8qj9SIX2O0OXHwrjosuSUFsn915HT4GBkwr1QQOT5961Xo6Eg8OW16HqGJ1k2iA8QobI9ORn6Y0We3kEFkINIc3Y0E9nEmpI7pytfHVSWcNxQ=
+	t=1771833744; c=relaxed/simple;
+	bh=7/lOGO/udq9KVQ1MrAiO1ODmsqnxb5c3BYPljM0uEv0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=UkI4N0G5nDZcKAMqXoak9Aj/tzZ7sHrZ8YNO+a0Wqt8YhJzvtaZMTIKXgE+RRspX4ekK3wt0MfV0KvDPD67PdWgigPih6aJjbR0DkbxhgZMW31rh8ZEqkKzXDphDxlwvarHE5es7HqIjD5+Uyag+Uioevd7BB6Mh36Ja6EPmWwc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3BF3C4BA23DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A8A634BA23C0
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Ab+9cGeW
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=BBWcxANu
 Received: from HP-Z230 by mta-snd-e01.mail.nifty.com with ESMTP
-          id <20260223080208147.UFUA.48098.HP-Z230@nifty.com>;
-          Mon, 23 Feb 2026 17:02:08 +0900
+          id <20260223080216700.UFUG.48098.HP-Z230@nifty.com>;
+          Mon, 23 Feb 2026 17:02:16 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v3 2/4] Cygwin: pty: Update workaround for rlwrap for pseudo console
-Date: Mon, 23 Feb 2026 17:01:28 +0900
-Message-ID: <20260223080141.340-3-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v3 3/4] Cygwin: pty: Add workaround for handling of Ctrl-H when pcon enabled
+Date: Mon, 23 Feb 2026 17:01:29 +0900
+Message-ID: <20260223080141.340-4-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260223080141.340-1-takashi.yano@nifty.ne.jp>
 References: <20260223080141.340-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1771833728;
- bh=nDSZ2WWowBofJBbJWG8qN7fakz+a+lxwLHF4L7fEsaw=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1771833736;
+ bh=aQn65266ykFPExdVqYKOwwWkIQDK30dYayk7IE34Uq0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Ab+9cGeWQfAFZnYZbKt1HB7rUwOpMQ3iYH3ie5QDovGEkPdbXTkH1eohI0KEJFYbkc35qTZh
- U9MIW6wnZN+7ObWbiJnZhXnYwDTAFUkg7/ZQDZMOdbuUX+Jkv/0NYQhuVsWn07AEsBPbCICORc
- SRPAFqGhPJ6UA6BHd2eldnAjcu5hW4pplVIjS7fpS+QmyjWNvfFVLQUh826L1GBuSEhycSwwzb
- 5Esn/39Glz4/gBKWEovUiZgAUCsdCdLYQTXWDDFIsTqlDrTQdzyN9pru00ZLXjsbNnpYb7pq+e
- cuxutb1MlpM9Kbe8OKsBsLGdvx4YUWX6yhERTT+RY9vTqclA==
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=BBWcxANuXFAZ0ZKMMCU42PBnoQ0yx/zjm8EfHpLff6Cqi1iPNWJpz+kBNJ1eakOX64bLhg6/
+ 1h39fhPq0S4SU8afb08yJfRgzkwWbIFzQh/ExUMP1QliOxfN+SEQLm15YcloJ5he9ZB1YPPYel
+ eKnLMecopcuCLcBFheve4uKqz6Ni2I6Fe2D+AVNEeV2Ijc54tu47YHO9nbYSXfWiNOf5NVh21R
+ BqonsrzU5pmqWBSQrVZUK30rd6DebIhcXloi2DRDZB9U4QNGPLuxgnMhZhx/MiZQTsyKHpcfDm
+ MlmaEQOVF1LLMpiqCd2uwgPzv+MJ2efQMEH4wrWQ8QzwI/TQ==
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-In tcgetattr(), the conventional workaround for rlwrap v0.40 or later
-is not work as expected with OpenConsole.exe for some reason. This
-patch update the workaround so that it works even with OpenConsole.exe
-by rebuilding tcgetattr responce reffering the corrent console mode
-instead of just overriding it depends on pseudo console setting up
-state.
+OpenConsole.exe has a bug(?) that the Ctrl-H is translated into
+Ctrl-Backspace (not Backspace). This is a workaround for that issue
+which pushes the Ctrl-H as a ConsoleInput event.
 
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/pty.cc | 86 ++++++++++++++++++++++++++++-------
- 1 file changed, 70 insertions(+), 16 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 47 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 576f11dea..b9ca5658d 100644
+index b9ca5658d..6b114c795 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1738,18 +1738,48 @@ fhandler_pty_slave::tcgetattr (struct termios *t)
- {
-   *t = get_ttyp ()->ti;
+@@ -2452,8 +2452,53 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	    }
+ 	}
  
--  /* Workaround for rlwrap */
--  cygheap_fdenum cfd (false);
--  while (cfd.next () >= 0)
--    if (cfd->get_major () == DEV_PTYM_MAJOR
--	&& cfd->get_minor () == get_minor ())
--      {
--	if (get_ttyp ()->pcon_start)
--	  t->c_lflag &= ~(ICANON | ECHO);
--	if (get_ttyp ()->pcon_activated)
--	  t->c_iflag &= ~ICRNL;
--	break;
--      }
-+  /* Conventional workaround for rlwrap v0.40 or later is not work
-+     as expected with OpenConsole.exe for some reason. The following
-+     workaround is perhaps better solution even for apps other than
-+     rlwrap under pcon_activated mode. */
-+  if (get_ttyp ()->pcon_activated)
-+    {
-+      DWORD mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
-+      t->c_lflag &= ~(ICANON | ECHO);
-+      t->c_iflag &= ~ICRNL;
-+      cygheap_fdenum cfd (false);
-+      while (cfd.next () >= 0)
-+	if (cfd->get_major () == DEV_PTYM_MAJOR
-+	    && cfd->get_minor () == get_minor ())
-+	  {
-+	    if (nat_pipe_owner_self (get_ttyp ()->nat_pipe_owner_pid))
-+	      {
-+		DWORD resume_pid =
-+		  attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
-+		GetConsoleMode (get_ttyp ()->h_pcon_in, &mode);
-+		resume_from_temporarily_attach (resume_pid);
-+		break;
-+	      }
-+	    HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
-+					     get_ttyp ()->nat_pipe_owner_pid);
-+	    HANDLE h_pcon_in;
-+	    DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
-+			     GetCurrentProcess (), &h_pcon_in,
-+			     0, FALSE, DUPLICATE_SAME_ACCESS);
-+	    DWORD resume_pid =
-+	      attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
-+	    if (!GetConsoleMode (h_pcon_in, &mode) && get_ttyp ()->pcon_start)
-+	      mode = 0;
-+	    resume_from_temporarily_attach (resume_pid);
-+	    CloseHandle (h_pcon_in);
-+	    CloseHandle (pcon_owner);
-+	    break;
-+	  }
-+      if (mode & ENABLE_LINE_INPUT)
-+	t->c_lflag |= ICANON;
-+      if (mode & ENABLE_ECHO_INPUT)
-+	t->c_lflag |= ECHO;
-+    }
-   return 0;
- }
- 
-@@ -2469,11 +2499,35 @@ int
- fhandler_pty_master::tcgetattr (struct termios *t)
- {
-   *t = cygwin_shared->tty[get_minor ()]->ti;
--  /* Workaround for rlwrap v0.40 or later */
--  if (get_ttyp ()->pcon_start)
--    t->c_lflag &= ~(ICANON | ECHO);
++      /* OpenConsole.exe has a bug(?) that Ctrl-H is translated into
++	 Ctrl-Backspace (not Backspace). The following code is a
++	 workaround for that issue. */
++      char *bs_pos = (char *) memchr (buf, '\010' /* ^H */, nlen);
++      HANDLE pcon_owner = NULL;
++      HANDLE h_pcon_in = NULL;
++      DWORD resume_pid = 0;
++      if (bs_pos)
++	{
++	  pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++				    get_ttyp ()->nat_pipe_owner_pid);
++	  DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
++			   GetCurrentProcess (), &h_pcon_in,
++			   0, FALSE, DUPLICATE_SAME_ACCESS);
++	  resume_pid =
++	    attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
++	}
 +
-+  /* Conventional workaround for rlwrap v0.40 or later is not work
-+     as expected with OpenConsole.exe for some reason. The following
-+     workaround is perhaps better solution even for apps other than
-+     rlwrap under pcon_activated mode. */
-   if (get_ttyp ()->pcon_activated)
--    t->c_iflag &= ~ICRNL;
-+    {
-+      t->c_lflag &= ~(ICANON | ECHO);
-+      t->c_iflag &= ~ICRNL;
+       DWORD n;
+-      WriteFile (to_slave_nat, buf, nlen, &n, NULL);
++      while (bs_pos)
++	{
++	  if (bs_pos - buf > 0)
++	    WriteFile (to_slave_nat, buf, bs_pos - buf, &n, NULL);
++	  INPUT_RECORD r;
++	  r.EventType = KEY_EVENT;
++	  r.Event.KeyEvent.bKeyDown = 1;
++	  r.Event.KeyEvent.wRepeatCount = 0;
++	  r.Event.KeyEvent.wVirtualKeyCode = 0;
++	  r.Event.KeyEvent.wVirtualScanCode = 0;
++	  r.Event.KeyEvent.uChar.AsciiChar = '\010'; /* ^H */
++	  r.Event.KeyEvent.dwControlKeyState = LEFT_CTRL_PRESSED;
++	  WriteConsoleInput(h_pcon_in, &r, 1, &n);
++	  r.Event.KeyEvent.bKeyDown = 0;
++	  WriteConsoleInput(h_pcon_in, &r, 1, &n);
++	  nlen -= bs_pos - buf + 1;
++	  buf = bs_pos + 1;
++	  bs_pos = (char *) memchr (buf, '\010' /* ^H */, nlen);
++	}
++      if (nlen > 0)
++	WriteFile (to_slave_nat, buf, nlen, &n, NULL);
 +
-+      HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
-+				       get_ttyp ()->nat_pipe_owner_pid);
-+      HANDLE h_pcon_in;
-+      DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
-+		       GetCurrentProcess (), &h_pcon_in,
-+		       0, FALSE, DUPLICATE_SAME_ACCESS);
-+      DWORD resume_pid =
-+	attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
-+      DWORD mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
-+      if (!GetConsoleMode (h_pcon_in, &mode) && get_ttyp ()->pcon_start)
-+	mode = 0;
-+      resume_from_temporarily_attach (resume_pid);
-+      CloseHandle (h_pcon_in);
-+      CloseHandle (pcon_owner);
-+      if (mode & ENABLE_LINE_INPUT)
-+	t->c_lflag |= ICANON;
-+      if (mode & ENABLE_ECHO_INPUT)
-+	t->c_lflag |= ECHO;
-+    }
-   return 0;
- }
++      if (resume_pid)
++	resume_from_temporarily_attach (resume_pid);
++      if (h_pcon_in)
++	CloseHandle(h_pcon_in);
++      if (pcon_owner)
++	CloseHandle(pcon_owner);
+       ReleaseMutex (input_mutex);
  
+       return len;
 -- 
 2.51.0
 
