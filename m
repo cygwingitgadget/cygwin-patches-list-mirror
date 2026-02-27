@@ -1,194 +1,290 @@
 Return-Path: <SRS0=+cfa=A7=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by sourceware.org (Postfix) with ESMTPS id 6A9034BA543C
-	for <cygwin-patches@cygwin.com>; Fri, 27 Feb 2026 16:02:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6A9034BA543C
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by sourceware.org (Postfix) with ESMTPS id C1ED34BA2E0D
+	for <cygwin-patches@cygwin.com>; Fri, 27 Feb 2026 17:58:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C1ED34BA2E0D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6A9034BA543C
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.22
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772208133; cv=none;
-	b=poLRhR4GajYXN9l/e5d++R/1Tt0uhbE2tH63sEJcWZHf8VyaZxazkckMhX6pXHk0vMgwZl90vYEOCgsTKu7bwmIuSVLvUWEY/MX25ocLJap9ZcfyVcDRpwc4G/f8fg9pFCm9PtYyLR6IUdxIW6eV1jausn0BCuVJJmHcw2EEwdc=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C1ED34BA2E0D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772215110; cv=none;
+	b=dnSNaJD3PWsAc5qvkXQj3+9vaiEmcnWJBIUkvOGM2NwMdUeKx4URvNdEzs7337RqRknQre02f8xg3DLhj5fE92W4zPuzBrQBPEtrwO+7IEklKaWxosmbAHftNfjm0vPbnDUorAxf3Xs6mWL+qtHqyKb4Jj3kvtfUExDR9S1fBGA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772208133; c=relaxed/simple;
-	bh=DDXc5g5TvhTHk46kVlUsELHtyjA2RB54WwoCtFVz3Rw=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=lRSzX/0hJyCqUn1uAc3VsavDSZ0ErdnTidQA12vq4XmEZ5+n8sBKC8eVGvCR5B3BamivDgoQ7dqRZ0btBHorxI/3x0IKlRQ2FIRDRV9XgcInm8eVheQeWuI038xCm6gdnadjTni7MqhjuNJIEjj9VSKJbxJSpC42oionfuAUd2o=
+	t=1772215110; c=relaxed/simple;
+	bh=pGP9S0/oXzX/1/1uHNO6ndnbrWHVsLHGR3JpiFUPUPw=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=raTITibo2txZARw13lC2x1lCM429YJfGmLO6vUV7XZWdbiJBmUXyFJIy2b4lua2b2uA2eV5jixqadYpf5aGG67rIPJy/ky6DRNa8+tjkj1WNEZMqyTOrYOT2alD+2mM1OoEKRjlAT7FIJB4m8ufcBFSiCQbB76kkUccsEnvl8Lc=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6A9034BA543C
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C1ED34BA2E0D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=mANKvwPF
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=UAgnhYCi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1772208132; x=1772812932;
+	s=s31663417; t=1772215108; x=1772819908;
 	i=johannes.schindelin@gmx.de;
-	bh=+aN0Kcb4Ena40YDJVXHvKMdo7t1xRbaxBpgG1n3RB2o=;
+	bh=oN7Ym7nLSzfmvM3jDrs6IWrLIg+dKtYJpusOq+p6Zl4=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=mANKvwPFUBDQANx5A+sQS3TECKgupSmKFNjXAFB0CA/PCxvHLzxty38HymUzaKzt
-	 Pwf+vT3OWcSviPv2UIS8lbJIKE9gcvG8/dDic9UI2njVdXtru5IwkkEf/xIA3Yefn
-	 OA5W6rITsQ6miZcWBSjUPJmsvj5IN/D8hNstGhkDOutg0vfjmVlQyUVci5BeSmWYG
-	 IGKf9cB2lFe6raOdtwyuFEvM2Q+7EX6kdfM0tx755+xz0jqUm0r4NCZO43Izp7Pia
-	 Z+nVmfvDFQw3fS+Zoqa8a8EurzQogvxM7jy+HfBwjnwEc8YP0eJCJrZWQdHIE6Ggu
-	 aBDkv6yOe9Ae6aRq8A==
+	b=UAgnhYCilaJJAnSGW9ejUtI9KVNdw/nEBJ1H4wRk9zq/QzzmJgeiBqzCK+q3voUz
+	 zZXxLHYhxMvHvl3XJjuhiLFisiFwrQxY1g2Z5rlmh0arML7fYCcBScjgYyilwE48S
+	 Qw7DH8XVpZkbY6v7tEtY2ys0acEY6ACs4qr8tKXKecE3Quk62/iLaMSeYSQ0RJfLY
+	 GGu4CdAvB9dUJ4BsprYvyFq/ub3ztGDR5UEhgD8HdtzQIEC9aacd+7InVVqv+MoQP
+	 2mR6M6MVAKOa1cljM1sgYmF2gkaRJkJjBBHypX0um2YLELlg+qT50xem5Xa+wZ2MK
+	 15HkGqdvhJuN2jQfrg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MplXp-1vLMN704RZ-00b0j6; Fri, 27
- Feb 2026 17:02:12 +0100
-Date: Fri, 27 Feb 2026 17:02:09 +0100 (CET)
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mof57-1vKEOb1PDt-00Zu2z; Fri, 27
+ Feb 2026 18:58:28 +0100
+Date: Fri, 27 Feb 2026 18:58:26 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Discard remnants of win32-input-mode
-In-Reply-To: <20260223080031.320-1-takashi.yano@nifty.ne.jp>
-Message-ID: <57c90d88-a1a0-b484-807c-e4e673dbf68c@gmx.de>
-References: <20260223080031.320-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: pty: Improve CSI6n handling in pcon_start
+ state
+In-Reply-To: <20260223080106.330-1-takashi.yano@nifty.ne.jp>
+Message-ID: <00548c9e-dd25-40e9-737a-4113910d4c8f@gmx.de>
+References: <20260223080106.330-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:SF+i2eIm2ULDWshwNIO7qpVOCNxPyWqyBv8NgcQUc2voJXMkZ0+
- QKn6gIVb9AnVhKJhqNGEjqMIx+TK0S91PKZIXHpfKnuzlqIEL6TCwCisN4rlSwDuECkM981
- 1rpLIDi97LXJJpAMPhZy2sBBAifDUa0yGsVR/yfnQtzKti4i1rQgLyvfs6sUB7cCB6bb8zW
- hwz4OeSlmpzpftWQHO/qg==
-UI-OutboundReport: notjunk:1;M01:P0:fQ8IlFTOooI=;eYhVFtFy/KhN2ftTpuRHQVMUS4N
- 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
+X-Provags-ID: V03:K1:YemUyu6ugtN8qHO02c/ohr+gwSx9jz+CWunoG59R4X6LQc1yimL
+ 0i3h9RV7fuCFi5GHaAboAdSqYAm69Dnn8uEHqk8RKC9vpMUifOMxU3rkNDcxDNtN2oi/j54
+ ki3oWijKNvT+p/IkPBWVIHF//7ID/Zh+HEm2qgoAxWZrQMswN/6JZOHIRDENS0HsJ3+m37L
+ SgmV8Tty+uDtu/XvpWI7w==
+UI-OutboundReport: notjunk:1;M01:P0:/ZUTJxDhHaw=;da9ZAjMpqIybUbc2R55Sua2roKp
+ 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
+ wZcBIMGKsMtiXte9wrRdXHbMRIZPD
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
+
 
 Hi Takashi,
 
 On Mon, 23 Feb 2026, Takashi Yano wrote:
 
-> In Windoes 11, some remnants sequences of win32-input-mode used by
-> pseudo console occasionally sent to shell which start non-cygwin
-> apps. With this patch, the remnants sequneces just after closing
-> pseudo console will be discarded.
+> Previsouly, CSI6n was not handled correctly if the some sequences
+> are appended after the responce for CSI6n. Especially, if the
+> appended sequence is a ESC sequence, which is longer than the
+> expected maximum length of the CSI6n responce, the sequence will
+> not be written atomically. With this patch, pcon_start state
+> is cleared at the end of CSI6n responce, and appended sequence
+> will be written outside of the CSI&n handling block.
 
-Could you kindly advise how to reproduce this?
+The idea of breaking out of the CSI 6n loop at `R` and falling through to
+the normal write paths is sound, but I think the `towrite` accounting has
+a bug, and the commit message could use some work.
 
-I have been investigating a related pcon transition issue (character
-reordering during pseudo console oscillation, see
-https://github.com/cygwingitgadget/cygwin/pull/6, which I plan on
-contributing in a bit) and initially suspected the same root cause. After
-analyzing your patch, I believe these are genuinely different bugs, but I
-think the time-based heuristic is the wrong approach for this one.
-
+>=20
+> Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> ---
+>  winsup/cygwin/fhandler/pty.cc | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+>=20
 > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
 cc
-> index b30cb0128..b90b2b609 100644
+> index 838be4a2b..c1e03db41 100644
 > --- a/winsup/cygwin/fhandler/pty.cc
 > +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -2504,6 +2504,16 @@ fhandler_pty_master::write (const void *ptr, size=
+> @@ -2137,6 +2137,8 @@ fhandler_pty_master::close (int flag)
+>  ssize_t
+>  fhandler_pty_master::write (const void *ptr, size_t len)
+>  {
+> +  size_t towrite =3D len;
+> +
+>    ssize_t ret;
+>    char *p =3D (char *) ptr;
+>    termios &ti =3D tc ()->ti;
+> @@ -2171,6 +2173,8 @@ fhandler_pty_master::write (const void *ptr, size_=
+t len)
+>  	    }
+>  	  if (state =3D=3D 1)
+>  	    {
+> +	      towrite--;
+> +	      ptr =3D p + i + 1;
+
+The per-byte `towrite--` only fires inside `state =3D=3D 1`, so bytes befo=
+re
+the ESC (which go through the `else` / `line_edit` branch) are never
+subtracted. If there happen to be N bytes before the ESC in the same
+write, `towrite` ends up N too large, and the `nat` pipe fast path reads
+past the end of the buffer.
+
+This can be fixed in a simpler way by not tracking `towrite` in the loop
+at all, and instead computing it once at the break, see below...
+
+>  	      if (ixput < wpbuf_len)
+>  		wpbuf[ixput++] =3D p[i];
+>  	      else
+> @@ -2184,7 +2188,10 @@ fhandler_pty_master::write (const void *ptr, size=
 _t len)
->        return len;
->      }
-> =20
-> +  /* Remnants of win32-input-mode sequence in pcon_activated mode */
-> +  bool is_remnants_to_nat =3D
-> +    GetTickCount64 () - get_ttyp ()->pcon_close_time < 32
+>  	  else
+>  	    line_edit (p + i, 1, ti, &ret);
+>  	  if (state =3D=3D 1 && p[i] =3D=3D 'R')
+> -	    state =3D 2;
+> +	    {
+> +	      state =3D 2;
+> +	      break;
+> +	    }
 
-As you noted in your follow-up, 32ms is not enough, and even ~200ms may
-not suffice on a loaded system. Any fixed number will be too short for
-some users under some conditions.
 
-I believe the underlying problem is that the pseudo console's conhost
-sends `\x1b[?9001h` (win32-input-mode enable) through the output pipe, and
-`pty_master_fwd_thread()` forwards it to the terminal emulator without
-filtering. Once the terminal enters win32-input-mode, it encodes
-keystrokes as `\x1b[Vk;Sc;Uc;Kd;Cs;Rk_` sequences. When the pcon closes,
-there is a propagation delay before the mode-disable (`\x1b[?9001l`)
-reaches the terminal, and keystrokes typed during that window arrive at
-`master::write()` in the wrong encoding.
+If you initialize `towrite =3D 0` and make this hunk look like this instea=
+d:
 
-Beyond the timeout fragility, the current approach also discards
-keystrokes rather than decoding them (the win32-input-mode format contains
-all the information needed to reconstruct the original keystroke), and the
-pattern match can false-positive on legitimate CSI sequences that happen
-to end with `_`.
+	  if (state =3D=3D 1 && p[i] =3D=3D 'R')
+-	    state =3D 2;
++	    {
++	      state =3D 2;
++	      towrite =3D len - i - 1;
++	      ptr =3D p + i + 1;
++	      break;
++	    }
 
-I think the proper fix is to filter `\x1b[?9001h` (and the corresponding
-`\x1b[?9001l`) in `pty_master_fwd_thread()`, preventing the terminal from
-ever entering win32-input-mode. This is consistent with the existing
-architecture: that function already strips several categories of pcon
-output artifacts that should not leak to the terminal (window-title
-sequences containing "cygwin-console-helper.exe", `CSI > Pm m`, `OSC Ps ;
-? BEL/ST`). Win32-input-mode enable falls in the same category.
+then no per-byte bookkeeping is needed, making the entire logic a lot more
+robust, not to mention: easier on the reader's brain.
 
-The native app should not be affected because it talks to conhost via the
-Win32 console API (`ReadConsoleInput`), not via VT sequences.
+Regarding the commit message: beyond the typos ("Previsouly" =3D>
+"Previously", "responce" =3D> "response" x3, "CSI&n" =3D> "CSI 6n"), the b=
+ody
+describes the bug as "the sequence will not be written atomically", but
+isn't the actual problem that bytes after the `R` terminator go through
+per-byte `line_edit` inside the CSI 6n loop and then hit `return len`
+without ever reaching the `nat` pipe fast path? In that case, it would be
+a routing problem, not an atomicity problem, and something like:
+
+    Cygwin: pty: Fix data after CSI 6n response bypassing normal write pat=
+hs
+
+    When the terminal's CSI 6n response and subsequent data (e.g.
+    keystrokes) arrive in the same write buffer, `master::write()`
+    processes all of it inside the pcon_start loop and returns early.
+    Bytes after the 'R' terminator go through per-byte `line_edit()` in
+    that loop instead of falling through to the `nat` pipe fast path or
+    the normal bulk `line_edit()` call.
+
+    Fix this by breaking out of the loop when 'R' is found and letting the
+    remaining data fall through to the normal write paths, which are now
+    reachable because `pcon_start` has been cleared.
+
+would be potentially more accurate in describing what is going on.
+
+I am still quite fuzzy on the exact goings-on in the pty code, essentially
+cobbling it all together "on the side" because I unfortunately cannot
+afford to spend much focus on the Cygwin/MSYS2 runtime. Hopefully what I
+said above makes some sense?
 
 Ciao,
 Johannes
+
+>  	}
+>        if (state =3D=3D 2)
+>  	{
+> @@ -2220,8 +2227,8 @@ fhandler_pty_master::write (const void *ptr, size_=
+t len)
+>  	    }
+>  	  get_ttyp ()->pcon_start_pid =3D 0;
+>  	}
+> -
+> -      return len;
+> +      if (towrite =3D=3D 0)
+> +	return len;
+>      }
+> =20
+>    /* Write terminal input to to_slave_nat pipe instead of output_handle
+> @@ -2233,15 +2240,14 @@ fhandler_pty_master::write (const void *ptr, siz=
+e_t len)
+>  	 is activated. */
+>        tmp_pathbuf tp;
+>        char *buf =3D (char *) ptr;
+> -      size_t nlen =3D len;
+> +      size_t nlen =3D towrite;
+>        if (get_ttyp ()->term_code_page !=3D CP_UTF8)
+>  	{
+>  	  static mbstate_t mbp;
+>  	  buf =3D tp.c_get ();
+>  	  nlen =3D NT_MAX_PATH;
+> -	  convert_mb_str (CP_UTF8, buf, &nlen,
+> -			  get_ttyp ()->term_code_page, (const char *) ptr, len,
+> -			  &mbp);
+> +	  convert_mb_str (CP_UTF8, buf, &nlen, get_ttyp ()->term_code_page,
+> +			  (const char *) ptr, towrite, &mbp);
+>  	}
+> =20
+>        for (size_t i =3D 0; i < nlen; i++)
+> --=20
+> 2.51.0
+>=20
+>=20
