@@ -1,117 +1,85 @@
 Return-Path: <SRS0=y73r=BA=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 0C53E4B9DB5F
-	for <cygwin-patches@cygwin.com>; Sat, 28 Feb 2026 09:03:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0C53E4B9DB5F
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
+	by sourceware.org (Postfix) with ESMTPS id 317904BA23D6
+	for <cygwin-patches@cygwin.com>; Sat, 28 Feb 2026 09:03:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 317904BA23D6
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0C53E4B9DB5F
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772269413; cv=none;
-	b=mm3H3rx7MFsZhdve0S63eNJmjm9jrX2acGqsUtCMPjaNCN5sIc2YthTBe6ot8gO6pMcbx9Ho5i20dMvGNzk7ns0/KXHpJ8sv6mWcUCLK8fuwfrRkeTYb7Rq/KWjStzp7lYHziM0rmqQ+yzpXKYaowYmj2bthTePS8065CeNbmx0=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 317904BA23D6
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772269420; cv=none;
+	b=o0qCqCiQEJldgfNGi/TKSfMgt926nFAcU+kQi0cnx5ndUbxPr9SR3zBVoWHRLLcMKrq/wpcJQ/xzAblMn+NOWXsyVsyyakM/kJXIltENx/dy0qP3EahOpBGcbCbHX8lwnNPty3E3YZfBFLo7NE3Z61haKlKduhoBjF873BXb+Ec=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772269413; c=relaxed/simple;
-	bh=+2URaMf2h7Oz7Q8L4fuCiNt640MsHzeGXLRaX8iYcrI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=NYJmSpwsTdFEv9rJHgrVCaNfpdw6cnhm6r+3lRnMo3l4dF92fWMp60FfTKyZW8iskMufxJwj2MvfjlHF5k1w3FUW+W23AkpNyhKjRh1OgGEKydXCxa0k534dcqOCpizK4n38Tt52q/OOTYFmjHalygoF9ON4e8ThtK4aEoFxDiY=
+	t=1772269420; c=relaxed/simple;
+	bh=dq7eIMHlHTLqjZ90pl0/baL8pcK4HtCDhGmRetI//FI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=j7wAFTc4zKx5VHihecalIxiABrpXdhld9Y7EmO90DTp37guy9WzPHRnwmJd7P2duOppH0TUWhlOh/5XKx8SJidYPJsPcU4GwDbFRuEzLfs90Y84/ueSR7E5cTWZhkTHvA3wrwoQKiQAbAPJ0jghyuvDYabP5Ci0Shbq4k218Hs0=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0C53E4B9DB5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 317904BA23D6
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JopZtEVD
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Q49OZmGc
 Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260228090331237.YDYX.127398.HP-Z230@nifty.com>;
-          Sat, 28 Feb 2026 18:03:31 +0900
+          id <20260228090338222.YDZB.127398.HP-Z230@nifty.com>;
+          Sat, 28 Feb 2026 18:03:38 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v4 3/4] Cygwin: pty: Add workaround for handling of Ctrl-H when pcon enabled
-Date: Sat, 28 Feb 2026 18:02:52 +0900
-Message-ID: <20260228090304.2562-4-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v4 4/4] Cygwin: pty: Fix the terminal state after leaving pcon
+Date: Sat, 28 Feb 2026 18:02:53 +0900
+Message-ID: <20260228090304.2562-5-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260228090304.2562-1-takashi.yano@nifty.ne.jp>
 References: <20260228090304.2562-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772269411;
- bh=kPEz4ZRCJcP3WQWry8SUEUD8eeD+Tg5UnJlJPQ15Xy0=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772269418;
+ bh=4zJGk9ssYzIuOBwfODAxlEOZQpUQi2OSAkp5viVnb58=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=JopZtEVDwsfebywkT+7/aHp0lDdt9v05QtVoxrTn7nz+saxOGdZlmDP1JP390uXp5WRv3Nu/
- Kf/VJ3n8RCZ6CrM5czbGDmg5+dBLN3j9eTGLGQsY1SdR4/J2f3khiADNBRpvsmaxgUor6JP/7W
- HwU0wY+28LrN1iF17+b/r2t+/n5C7pHGv5ePinM+qCUXahjgD4OKBK+bqiRR3i7BPEuKbNzCPg
- mkZ7VCCgNFTZxIMoXlQwpP6625TixzSgFFXPYERwG9zM6gF0HR8enfU4LeBS9zDjjhQYXi36EQ
- d8mRENhjOE2Eb9NZtJYpwgYm4cbR//IwSODQXT5AFGuF4Zdw==
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=Q49OZmGc1v0VkfkjSniOdoA3BS80pJmk56EmRJTxNyyY7ftrNNKji1X5aSwja2plmS56CvNG
+ bOn18apIUo1P0YSOYGWcyXXTvn3HmPj8te+Ji+09/sP+T1xicosZr3A9xDj88xE8SZkMjL+FSw
+ 2pbX0lsC6orrNeDB9lKSOEc4OUoQ8WcQmxTldR+X/x6SlMf41sPb0Dlnc++QFiWWc2iehzes/k
+ 1tsSXHqH/HWiYxl+SNq3YCA85kM5x7F38ESWsi7Ljl8LGRjxUDOvjPvkvw7s8PPnmxBN4Ht789
+ 4NRfTNSmqgOXVA3/O9BsIAu92Q6VX9aKaYRlqTQFENZGghcQ==
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-OpenConsole.exe has a bug(?) that the Ctrl-H is translated into
-Ctrl-Backspace (not Backspace). This is a workaround for that issue
-which pushes the Ctrl-H as a ConsoleInput event.
+OpenConsole.exe ocaasionally leaves the terminal state in the
+"CSI?1004h" after exiting. This is a workaround for that issue.
 
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/pty.cc | 47 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+ winsup/cygwin/fhandler/pty.cc | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 7366eea09..9a175e722 100644
+index 9a175e722..6c9572007 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2459,8 +2459,53 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	    }
+@@ -3990,6 +3990,23 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
+ 	  ttyp->nat_pipe_owner_pid = 0;
+ 	  ttyp->pcon_start = false;
+ 	  ttyp->pcon_start_pid = 0;
++	  /* OpenConsole.exe ocaasionally leaves the terminal state in
++	     the "CSI?1004h" after exiting. The following code block is
++	     a workaround for that. */
++	  do
++	    {
++	      pinfo p (ttyp->master_pid);
++	      HANDLE pty_master = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++					       p->dwProcessId);
++	      HANDLE to_master_nat;
++	      DuplicateHandle (pty_master, ttyp->to_master_nat (),
++			       GetCurrentProcess (), &to_master_nat,
++			       0, FALSE, DUPLICATE_SAME_ACCESS);
++	      WriteFile (to_master_nat, "\033[?1004l", 8, NULL, NULL);
++	      CloseHandle (to_master_nat);
++	      CloseHandle (pty_master);
++	    }
++	  while (false);
  	}
- 
-+      /* OpenConsole.exe has a bug(?) that Ctrl-H is translated into
-+	 Ctrl-Backspace (not Backspace). The following code is a
-+	 workaround for that issue. */
-+      char *bs_pos = (char *) memchr (buf, '\010' /* ^H */, nlen);
-+      HANDLE pcon_owner = NULL;
-+      HANDLE h_pcon_in = NULL;
-+      DWORD resume_pid = 0;
-+      if (bs_pos)
-+	{
-+	  pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
-+				    get_ttyp ()->nat_pipe_owner_pid);
-+	  DuplicateHandle (pcon_owner, get_ttyp ()->h_pcon_in,
-+			   GetCurrentProcess (), &h_pcon_in,
-+			   0, FALSE, DUPLICATE_SAME_ACCESS);
-+	  resume_pid =
-+	    attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
-+	}
-+
-       DWORD n;
--      WriteFile (to_slave_nat, buf, nlen, &n, NULL);
-+      while (bs_pos)
-+	{
-+	  if (bs_pos - buf > 0)
-+	    WriteFile (to_slave_nat, buf, bs_pos - buf, &n, NULL);
-+	  INPUT_RECORD r;
-+	  r.EventType = KEY_EVENT;
-+	  r.Event.KeyEvent.bKeyDown = 1;
-+	  r.Event.KeyEvent.wRepeatCount = 0;
-+	  r.Event.KeyEvent.wVirtualKeyCode = 0;
-+	  r.Event.KeyEvent.wVirtualScanCode = 0;
-+	  r.Event.KeyEvent.uChar.AsciiChar = '\010'; /* ^H */
-+	  r.Event.KeyEvent.dwControlKeyState = LEFT_CTRL_PRESSED;
-+	  WriteConsoleInput(h_pcon_in, &r, 1, &n);
-+	  r.Event.KeyEvent.bKeyDown = 0;
-+	  WriteConsoleInput(h_pcon_in, &r, 1, &n);
-+	  nlen -= bs_pos - buf + 1;
-+	  buf = bs_pos + 1;
-+	  bs_pos = (char *) memchr (buf, '\010' /* ^H */, nlen);
-+	}
-+      if (nlen > 0)
-+	WriteFile (to_slave_nat, buf, nlen, &n, NULL);
-+
-+      if (resume_pid)
-+	resume_from_temporarily_attach (resume_pid);
-+      if (h_pcon_in)
-+	CloseHandle(h_pcon_in);
-+      if (pcon_owner)
-+	CloseHandle(pcon_owner);
-       ReleaseMutex (input_mutex);
- 
-       return len;
+     }
+   else
 -- 
 2.51.0
 
