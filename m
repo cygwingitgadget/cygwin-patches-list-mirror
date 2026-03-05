@@ -1,73 +1,162 @@
 Return-Path: <SRS0=4QXr=BF=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:27])
-	by sourceware.org (Postfix) with ESMTPS id 67B934BA23E8
-	for <cygwin-patches@cygwin.com>; Thu,  5 Mar 2026 23:35:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 67B934BA23E8
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id B041A4BA2E12
+	for <cygwin-patches@cygwin.com>; Thu,  5 Mar 2026 23:38:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B041A4BA2E12
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 67B934BA23E8
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772753720; cv=none;
-	b=aVP9lazbcDzcEErfRRdvQVp6uFXbBdMfC7M4ZHAtTq5RfDkSJqz4SnAjFUIYYXkRvVemmjDZMR1KapzUDWz4x+0B/l+EGRo4GZLDEdzhPka0pG2mnTmyMphfgX2FZaKKI1Url+YEVHFandNXgXYv0xsUJ4dQt8iMHGAQ8aDqyMQ=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B041A4BA2E12
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772753886; cv=none;
+	b=RDxkTTzD4zpRD7q+D/507M3vQo8Ph+R8c1A4KUEqfCTTCyLF6K0+BF+5D53uqx855QePCyzgl6vrpEDA4IAPLU2s1USW5jW3AmFpAWqebPAI7t9dkhg8s4U7SspEEHHh6K9H1W9FIaRkcaTa3ZlATl93NNrjQHIAJ6BCRnS19lA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772753720; c=relaxed/simple;
-	bh=QkoZJ2k4JIibZ+qjaJLoK46P16AbYHHjSJ4Htvniq58=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=xCe4pk3NcyIwsGrrqojnf2RgdOkXh9pR1G3GbAq8FnkON96M8bOWf/yaooHPuYwliFjpDbifVAyImLv0dHPfZTLNxip/h1yxX0Lp7rUkRKJbO8OqghavgYiA9VzuUyzRnNkL7JFtSQmIGKCq+KZ5BBm53UtrZjCor78zC7n+DtA=
+	t=1772753886; c=relaxed/simple;
+	bh=xXp/1i4XHlDVQNHsoXhaDrxLoH4QSl7wEyQq0qiISjA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=mthX1ybKkU3dAnKR8Y8rpVGpBSyltr0b5kcCC96ImzgQmaH0fOZSaJkwkknvJhmBjjfMQ8Kridb6hBnVdtCnkEGed6hbTFVaEZWLnxM/ZhJzGghwTTh822nx8yCmLpux1D/dUADTzw4+C65s8OrfY5IWtFFrhh5oZrFZJbCs1x4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 67B934BA23E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B041A4BA2E12
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FVo1QXXY
-Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
-          id <20260305233509427.TMKX.19957.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 6 Mar 2026 08:35:09 +0900
-Date: Fri, 6 Mar 2026 08:35:08 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JI3xtdex
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260305233803859.CKZF.36235.HP-Z230@nifty.com>;
+          Fri, 6 Mar 2026 08:38:03 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Do not switch input to to_nat if native
- app is background
-Message-Id: <20260306083508.497207c24385e3223c1c12df@nifty.ne.jp>
-In-Reply-To: <c62dccd0-a723-1c06-b9b0-cc213b5b6eb7@gmx.de>
-References: <20260303134058.3517-1-takashi.yano@nifty.ne.jp>
-	<c62dccd0-a723-1c06-b9b0-cc213b5b6eb7@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772753709;
- bh=Mny9ELy9UgFIpGN2vhee705Y3dAZTDkVGyW4y0HOG4Q=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=FVo1QXXY5HME3sxx1o3fa2GdgCW2PQPcLN/8cGXlmaGEEl4KSQxCIdXI1doAXfWB54om2JZA
- NnQRcTohUi/jpuQVENg/97M2RehheXOJAyT2+ZMZ6mba/g0h1bvB0+G0E5enBwvein8BGr1yPo
- swXuBBappFzkdBkXysQcuXu5oeV4YuK6794LaWRq8sGJplou1bFfQLyZbMoRQq+hHveF7/YJif
- CoI/W2N/NRVsNLxtHiCUfSlBuWoJVYo7Ry/kPnc0/kM5hKtumueHrwrb66XpxeGBD1dXjOjeBZ
- pE9mklWTJZYwp4L6dkev52lHyBtkAEhqYcOEPfxF2VMnBw+Q==
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v4] Cygwin: pty: Fix handling of data after CSI6n response
+Date: Fri,  6 Mar 2026 08:37:47 +0900
+Message-ID: <20260305233757.886-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772753883;
+ bh=voKUAjj3GLvrBsq+C2m3GmklqkOQUaAVngCB1VKR9ME=;
+ h=From:To:Cc:Subject:Date;
+ b=JI3xtdex5pEeMwQKtJvaBJEdGKD+ZDx5s+j6FYtmTRcfWYvcw/QXLJQmtJSkOlcQDRgojLGw
+ rwax0X+bd5ZZtFnHCaOmH7ZC6y9vsgaEMDxSvRbdRUN3xS2NqeRU5ZvuGXlJYK+KvXZ3mjxflh
+ 8cMwS+nU7+trSMTtjjLNglT4It1tK+ZDQRhkEaEuABwoJiIMricM2kQRCRdq/6LDEUba4aLK4T
+ m4oYEe0oocHKcKZ9ur2QU6UkAW0U6XJJ+Rtxo6RwYh/XciiiKrTmpguzucqCQWTy/1Kh1f7myd
+ MksnytT/H0xBAlmNbCUQGFdtjUcb9Ba/Q03z2PMNZKHqUo7Q==
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 5 Mar 2026 09:50:09 +0100 (CET)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Tue, 3 Mar 2026, Takashi Yano wrote:
-> 
-> > If the native (non-cygwin) app is started as background process,
-> > the input should be kept in to_cyg mode because input data should
-> > go to the cygwin shell that start the non-cygwin app. However,
-> > currently it is switched to to_nat mode in a short time and reverted
-> > to to_cyg mode just after that.
-> > 
-> > With this patch, to avoid this behaviour, switching to to_nat mode
-> > is inhibited by checking PGID of the process, that is newly created
-> > for a background process and differs from PGID of the tty.
-> > 
-> > Fixes: Fixes: 9fc746d17dc3 ("Cygwin: pty: Fix transferring type-ahead input between input pipes.")
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by:
-> 
-> Well explained, and the patch is precise just like I like 'em!
+Previously, CSI6n was not handled correctly if the some sequences
+are appended after the response for CSI6n. Especially, if the
+appended sequence is a ESC sequence, which is longer than the
+expected maximum length of the CSI6n response, the sequence will
+not be written atomically.
 
-Thanks for reviewing. Pushed.
+Moreover, when the terminal's CSI 6n response and subsequent data
+(e.g. keystrokes) arrive in the same write buffer, master::write()
+processes all of it inside the pcon_start loop and returns early.
+Bytes after the 'R' terminator go through per-byte line_edit() in
+that loop instead of falling through to the `nat` pipe fast path
+or the normal bulk `line_edit()` call. Due to this behaviour,
+the chance of code conversion to the terminal code page for the
+subsequent data in `to_be_read_from_nat_pipe()` case, will be lost.
 
+Fix this by breaking out of the loop when 'R' is found and letting
+the remaining data fall through to the normal write paths, which
+are now reachable because `pcon_start` has been cleared.
+
+Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+---
+ winsup/cygwin/fhandler/pty.cc | 42 ++++++++++++++++++++---------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index b59f54096..3717542e6 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -2137,6 +2137,8 @@ fhandler_pty_master::close (int flag)
+ ssize_t
+ fhandler_pty_master::write (const void *ptr, size_t len)
+ {
++  size_t orig_len = len;
++
+   ssize_t ret;
+   char *p = (char *) ptr;
+   termios &ti = tc ()->ti;
+@@ -2160,7 +2162,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
+       DWORD n;
+       WaitForSingleObject (input_mutex, mutex_timeout);
+-      for (size_t i = 0; i < len; i++)
++      len = 0;
++      for (size_t i = 0; i < orig_len; i++)
+ 	{
+ 	  if (p[i] == '\033')
+ 	    {
+@@ -2185,18 +2188,21 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	    line_edit (p + i, 1, ti, &ret);
+ 	  if (state == 1 && p[i] == 'R')
+ 	    state = 2;
+-	}
+-      if (state == 2)
+-	{
+-	  /* req_xfer_input is true if "ESC[6n" was sent just for
+-	     triggering transfer_input() in master. In this case,
+-	     the responce sequence should not be written. */
+-	  if (!get_ttyp ()->req_xfer_input)
+-	    WriteFile (to_slave_nat, wpbuf, ixput, &n, NULL);
+-	  ixput = 0;
+-	  state = 0;
+-	  get_ttyp ()->req_xfer_input = false;
+-	  get_ttyp ()->pcon_start = false;
++	  if (state == 2)
++	    {
++	      /* req_xfer_input is true if "ESC[6n" was sent just for
++		 triggering transfer_input() in master. In this case,
++		 the response sequence should not be written. */
++	      if (!get_ttyp ()->req_xfer_input)
++		WriteFile (to_slave_nat, wpbuf, ixput, &n, NULL);
++	      len = orig_len - i - 1;
++	      ptr = p + i + 1;
++	      ixput = 0;
++	      state = 0;
++	      get_ttyp ()->req_xfer_input = false;
++	      get_ttyp ()->pcon_start = false;
++	      break;
++	    }
+ 	}
+       ReleaseMutex (input_mutex);
+ 
+@@ -2220,8 +2226,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	    }
+ 	  get_ttyp ()->pcon_start_pid = 0;
+ 	}
+-
+-      return len;
++      if (len == 0)
++	return orig_len;
+     }
+ 
+   /* Write terminal input to to_slave_nat pipe instead of output_handle
+@@ -2261,7 +2267,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	WriteFile (to_slave_nat, buf, nlen, &n, NULL);
+       ReleaseMutex (input_mutex);
+ 
+-      return len;
++      return orig_len;
+     }
+ 
+   /* The code path reaches here when pseudo console is not activated
+@@ -2283,8 +2289,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+   ReleaseMutex (input_mutex);
+ 
+   if (status > line_edit_signalled && status != line_edit_pipe_full)
+-    ret = -1;
+-  return ret;
++    return -1;
++  return orig_len - len + ret;
+ }
+ 
+ void
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
