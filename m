@@ -1,304 +1,210 @@
 Return-Path: <SRS0=qb86=BH=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id E2B804BA2E11
-	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 09:51:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E2B804BA2E11
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id 29A604BA2E0D
+	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 11:55:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 29A604BA2E0D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E2B804BA2E11
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772877108; cv=none;
-	b=UBkkwHJHdETSPre8oiSCEEMhX962HzRvMmps9poJIGO9JblMoFUxYIyT1/h2U7ln/W3vNTH/q9tFUVCQ32t6WyhJPluXJruZ140Uj6gZPc0eM14K6c5UsUyyCHDdgQCyzoF27DrAUsustewCymWTNtp+WsGEQj4C8HCTQjk/LjU=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 29A604BA2E0D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772884505; cv=none;
+	b=FvWIGu2UCELtjV5m6qupF8FCmTrqVu8Pl1V3YnD/uB24YIRqbRXWxXvtZGFka8qyS28/FcuNIMF9NJNYOAbq008QaA9BMAQCqz5v/FnICt9Qb3Kqpmzi7fKU8q9o8oUEG9czI8KdMEzkBJzJBCIdSSw4BZNYejUALwH4UfjnFwM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772877108; c=relaxed/simple;
-	bh=rPWdhe47G3e146EeUX+hdfkl/rbmjm9iPoq0l2jMdH4=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=ku1ILXSXm9x8aVS2iQ14n5clBXhQlsmUKUxzRpfVzn7j43xGOet97vLZe7a/LQK1Pd4Qom+bAHycMnTcVDfW+EfltAmUggx7KVBSFNzoFIuQXd2gwIPg8q/UmShYeYHp1R2FRV0ZqyvvsZTd4Hfs6HkDEJTiOCbBXL1pKZ6UkdY=
+	t=1772884505; c=relaxed/simple;
+	bh=NO/4+pctkbx08OCmtD3oXCxd2IKySZb1hcXgFED10QY=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=WaF8WAMMb9gSvqA3Al11XF8aCpeRNZcpQbExDURcWGjuJgts2TuTcX+wjRJh/8Qbi9VS+Pp98jkmR+KX7SojaETQLjWd04Cnm2HLjVVx0sLjs1/ra3zTLO3XlYgPmPlLrFJBVDR3JQ2CLkZvByF34UHv24f04ad9L7ser9dlJLk=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E2B804BA2E11
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 29A604BA2E0D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=Me/qGNqo
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=slXEXMLr
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1772877101; x=1773481901;
+	s=s31663417; t=1772884498; x=1773489298;
 	i=johannes.schindelin@gmx.de;
-	bh=xLek4q8++VCnEaktgWKDDjHl6kM6PMZyAlhGUy9xtNE=;
+	bh=4CSPnkDMoMudwJAAqTVWEp8tHLWvyBHRmK8fk+aZ8iA=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=Me/qGNqopFeOAE+ZaXg1pg8SaUtIl4drobPP3sJogozMuybZYPOnr7t/YJYb9KRh
-	 GeU9KorwVKbKVbyG/QZ1PGDCUNfbNeOPGe4j0wmRqf9FtNdH/P4+XbwSP4GDXHI12
-	 WUDH76YvGZe5yb85S+52z4CT6Rx/sq7lisZuhDNG1ks5NgiLAUOchaIQW5wwx3Bec
-	 bZh4Z0J5+KvkB3ZsW5HZQOyOo3pflI9caq4lLUaErO9LBbOdjU/cMnXEsBOod7Od6
-	 DP+0nTA9VVLFjDpdCd16qsYuFlHq3iMwz6x8cmgTVR6LYvHN98UVAnszBqxhMEFB4
-	 hj37RCgCoojgmn9nmA==
+	b=slXEXMLr5d5dGqsdvjANQ8Grrqa2W5pESiR4dZ/BZBZNc2BubB7ANNxUHHsRtNoY
+	 xLL8WNTNBhQP4irm7ln3rxYf6DxlKOin5kjQRQdsTuD+JusLIKDybzKft4YdaE7uu
+	 Qv4C6Y3bfvA9j2iwIiSmrUuSoSqAXG5U6OxUTQ60X0s5pNBwIQdG5OaJ36nVV3+dB
+	 N/6omAkNGLJFCl0meAttc7BmWbJ8sZCFvaTKs3fPhtm2+AddWpR8fAvc0SlVcASj8
+	 5rFmPKvCLZoFNko8+BfiOqgFkaDOefmXmF57Afep3Tz9IsyRahYlAQwJEyrFQM/95
+	 txhyqZGHCJPZ3pjT1g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MjS9C-1vDu2Z1XPW-00e1ER; Sat, 07
- Mar 2026 10:51:41 +0100
-Date: Sat, 7 Mar 2026 10:51:39 +0100 (CET)
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEV3I-1vsodn41ow-005WJH; Sat, 07
+ Mar 2026 12:54:58 +0100
+Date: Sat, 7 Mar 2026 12:54:55 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Make Ctrl-C work for non-cygwin app in
- GDB
-In-Reply-To: <20260228090219.2551-2-takashi.yano@nifty.ne.jp>
-Message-ID: <de0c0ac5-a266-804c-79fe-08726ce4f969@gmx.de>
-References: <20260228090219.2551-1-takashi.yano@nifty.ne.jp> <20260228090219.2551-2-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v4 0/4] Add support for OpenConsole.exe
+In-Reply-To: <20260306100503.787b2f6feb902036a2103fea@nifty.ne.jp>
+Message-ID: <7d5cf285-ce5e-69c8-c87b-228d07db19fe@gmx.de>
+References: <20260228090304.2562-1-takashi.yano@nifty.ne.jp> <257059f0-abeb-2109-9b6e-a4683deedb14@gmx.de> <20260306100503.787b2f6feb902036a2103fea@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:NxRRkzCYwckg0onFJwM/b1yxv9BzFdYjbM31bbx+FO71ujn+jGT
- DY8N50ARCJ0A4nvM9oUs9IB7yuZey54KvMNuzbmn5FjvaSq21ZipG24A+qUSOJZqaucpxcv
- yURF3bB6k4w/xkIsCi382+Bl5k1wjPWOExb7KtIHfUqDp1vudrUtR3hPa7m9bVlP3LwKpHf
- Hbyi24RuTOPrjhrbv/Qiw==
-UI-OutboundReport: notjunk:1;M01:P0:fwwlOo2PDdg=;eXDWr2ccPwCqQdXCHtNUGUWt3G4
- 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
- y149m9cuGoPJOy9lzjX23SLWbiE2I
+X-Provags-ID: V03:K1:6l06Dj8SK3tEmQ/HyDws3UOxSI4VyE6RGpVwVFjLlDmPP3oWCu9
+ F9GMX329aruEBceiHzmT4Zjm0wKP8yFYmHaTgAYIfzhZ2tPSDQOnfxB6Y55ccfEIIXinXg2
+ 6cEwfC9FA9xWJGeT3jFgrNhRJvPc7arVE0fivBMAVEd75zZveX6kkDPkvIhndwFZdbhSttk
+ TU2qywn1Rl9FY3OlsVH9g==
+UI-OutboundReport: notjunk:1;M01:P0:ugXZZlr7bWY=;wvP7l5NLF2E08lTGUxHKtHEyBZv
+ 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
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Takashi,
 
-On Sat, 28 Feb 2026, Takashi Yano wrote:
+On Fri, 6 Mar 2026, Takashi Yano wrote:
 
-> At some point in the past, GDB sets its own pgid to inferior pid
-> when the inferior is running.
-
-I _guess_ by "inferior" you refer to the program debugged in GDB? But no,
-that cannot be true, as GDB is the parent process of that and shouldn't
-_also_ be a child at the same time (which setting pgid in that way would
-imply).
-
-> Due to this behaviour, Ctrl-C does not work if the inferior is a
-> non-cygwin app.
-
-Wait, what? Setting pgid breaks Ctrl+C? _How_?
-
-> This is because, the current code sends Ctrl-C to GDB only when GDB's
-> pgid equeals to terminal pgid. This patch omit checking pgid when
-> recognizing GDB process whose inferior is non-cygwin app.
-
-Okay, that's a lot to unpack here, especially because the diff context
-below is way too small to give the full picture.
-
+> On Tue, 3 Mar 2026 12:03:25 +0100 (CET)
+> Johannes Schindelin wrote:
+> >=20
+> > On Sat, 28 Feb 2026, Takashi Yano wrote:
+> >=20
+> > > v4:
+> > >   * Do not close pi.hProcess in CreatePseudoConsole_new()
+> > >   * Modify handling of CSIc response
+> > >=20
+> > > Takashi Yano (4):
+> > >   Cygwin: pty: Use OpenConsole.exe if available
+> > >   Cygwin: pty: Update workaround for rlwrap for pseudo console
+> > >   Cygwin: pty: Add workaround for handling of Ctrl-H when pcon enabl=
+ed
+> > >   Cygwin: pty: Fix the terminal state after leaving pcon
+> >=20
+> >  Three out of these four patches seem to be workarounds for bugs in
+> >  OpenConsole.exe. The project is open-source and accepts PRs. Would it=
+ not
+> >  make _much_ more sense to contribute fixes for those bugs?
 >=20
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->  winsup/cygwin/fhandler/termios.cc | 18 +++++++++---------
->  winsup/cygwin/tty.cc              |  4 ++--
->  2 files changed, 11 insertions(+), 11 deletions(-)
+> Yeah, indeed. However, ...
 >=20
-> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/=
-termios.cc
-> index 694a5c20f..00700aed8 100644
-> --- a/winsup/cygwin/fhandler/termios.cc
-> +++ b/winsup/cygwin/fhandler/termios.cc
-> @@ -346,11 +346,11 @@ fhandler_termios::process_sigs (char c, tty* ttyp,=
- fhandler_termios *fh)
->  		     a marker for GDB with non-cygwin inferior in pty code.
->  	 !PID_CYGPARENT: check this for GDB with cygwin inferior or
->  			 cygwin apps started from non-cygwin shell. */
-> -      if (c =3D=3D '\003' && p && p->ctty =3D=3D ttyp->ntty && p->pgid =
-=3D=3D pgid
-> -	  && ((p->process_state & PID_NOTCYGWIN)
-> +      if (c =3D=3D '\003' && p && p->ctty =3D=3D ttyp->ntty
-> +	  && ((p->pgid =3D=3D pgid && ((p->process_state & PID_NOTCYGWIN)
-> +				   || !(p->process_state & PID_CYGPARENT)))
->  	      || ((p->exec_dwProcessId =3D=3D p->dwProcessId)
-> -		  && ttyp->pty_input_state_eq (tty::to_nat))
-> -	      || !(p->process_state & PID_CYGPARENT)))
-> +		  && ttyp->pty_input_state_eq (tty::to_nat))))
+> Cygwin: pty: Update workaround for rlwrap for pseudo console
+> This is not a bug of OpenConsole.exe. This is for translation
+> between POSIX terminall attribute and console mode.
 
-This is one complex change of logic. Primarily because the logic was
-already complicated before this patch, and it is still complicated after
-the patch, but in a different way. And therefore it is very hard for me to
-confirm that it is correct, not without further help.
+Okay... I guess ;-)
 
-The `p->pgid =3D=3D pgid` condition (whose purpose is hard to understand
-without being given any context) now no longer guards the `to_nat` check,
-before this change, it did.
+> Cygwin: pty: Add workaround for handling of Ctrl-H when pcon enabled
+> This may be a bug, however, by any chance, an intended behaviour.
 
-That's all I understand after pouring over this diff for 10 minutes, and I
-do not feel any closer to being able to confirm that this change is correc=
-t.
+The workaround, however, looks as if it invites problems. It's just going
+too far into hack mode. It's assuming too much about being the single
+actor.
 
->  	{
->  	  /* Ctrl-C event will be sent only to the processes attaching
->  	     to the same console. Therefore, attach to the console to
-> @@ -403,12 +403,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp,=
- fhandler_termios *fh)
->  	  if (!p->cygstarted && !(p->process_state & PID_NOTCYGWIN)
->  	      && (p->process_state & PID_DEBUGGED))
->  	    with_debugger =3D true; /* inferior is cygwin app */
-> -	  if (!(p->process_state & PID_NOTCYGWIN)
-> -	      && (p->exec_dwProcessId =3D=3D p->dwProcessId) /* Check marker *=
-/
-> -	      && ttyp->pty_input_state_eq (tty::to_nat)
-> -	      && p->pid =3D=3D pgid)
-> -	    with_debugger_nat =3D true; /* inferior is non-cygwin app */
->  	}
-> +      if (p &&  p->ctty =3D=3D ttyp->ntty
-> +	  && !(p->process_state & PID_NOTCYGWIN)
-> +	  && (p->exec_dwProcessId =3D=3D p->dwProcessId) /* Check marker */
-> +	  && ttyp->pty_input_state_eq (tty::to_nat))
-> +	with_debugger_nat =3D true; /* inferior is non-cygwin app */
+If there is any chance, any whatsoever, to avoid this workaround, I think
+we'll be a lot better off.
 
-Okay, so now this lengthy `if` statement was moved outside of a block, but
-the three diff context line are too few to help us here. So I looked it
-up: it is a block guarded by:
+> Cygwin: pty: Fix the terminal state after leaving pcon
+> Perhaps, this does not occur if the pseudo console is used as
+> suggested by Microsoft.
 
-	if (p && p->ctty =3D=3D ttyp->ntty && p->pgid =3D=3D pgid)
+Still. It is way too hacky, as it over-focuses on one particular mode that
+might be stuck, who knows what other terminal modes might need the same
+treatment "just in case". Even with just this single mode, a proper fix in
+OpenConsole.exe would be much preferable, as it leaves a lot less room for
+future regressions.
 
-Which means that the new code skips both `p->pgid =3D=3D pgid` and `p->pid=
- =3D=3D
-pgid` checks.
+> Anyway, for now, since I don't succeed to build OpenConsole.exe
+> in my environment, it is dificult to debug it by myself.
 
-But here, we're outside of the big `PID_NOTCYGWIN: check this for
-non-cygwin process` block, so it is conceivable that this change
-introduces unintended side effects for the non-GDB cases.
+Admittedly I struggled with this, too. After cloning
+https://github.com/microsoft/terminal I followed the documentation in
+`docs/building.md` how to build in PowerShell.
 
->      }
->    if ((with_debugger || with_debugger_nat) && need_discard_input)
->      {
-> diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-> index 0c49dc2bd..3ab30c0a7 100644
-> --- a/winsup/cygwin/tty.cc
-> +++ b/winsup/cygwin/tty.cc
-> @@ -340,8 +340,8 @@ tty::nat_fg (pid_t pgid)
->    for (unsigned i =3D 0; i < pids.npids; i++)
->      {
->        _pinfo *p =3D pids[i];
-> -      if (p->ctty =3D=3D ntty && p->pgid =3D=3D pgid
-> -	  && ((p->process_state & PID_NOTCYGWIN)
-> +      if (p->ctty =3D=3D ntty
-> +	  && (((p->process_state & PID_NOTCYGWIN) && p->pgid =3D=3D pgid)
+In addition to the documented `git submodule update --init`, also needed
+to run `nuget restore` and `dotnet restore`.
 
-This change is slightly less gnarly than the first one in this patch, and
-it recapitulates the idea that I _believe_ to understand to be behind that
-first change: to stop guarding the GDB check behind a `p->pgid =3D=3D pgid=
-`,
-but keep that guard for the other condition(s).
+The I had to use PowerShell 7, a regular Windows PowerShell won't do. Even
+after that, it failed the build (symptom: missing vcpkg dependencies), and
+I had to launch my Visual Studio 2022 Community instance which pointed out
+that I needed the WinUI workload (a hefty ~1.9G download).
 
-So now I am starting to understand the connection between the diff and the
-explanation in the commit message. But I have to say that I am highly
-suspicious of unintentional side effects: The commit message talks about a
-specific GDB behavior change that was introduced "[a]t some point in the
-past", and then describes a very specific pgid scenario. The diff,
-however, does not add that scenario to the guards, it takes the pgid guard
-away completely. This leaves a lot of room for scenarios that do not
-involve GDB at all to run into unintentional & unwanted behavioral
-changes.
+Even after that, the build was failing because of "C1076: compiler limit:
+internal heap limit reached": Apparently the default configuration is to
+use a _massively_ parallel build which brings my poor little laptop to its
+limits. I did manage, though, via this command-line (suggested by Claude
+Opus 4.6 when I set it to the task of fixing that build):
 
-In general, I would expect this patch to benefit greatly from wrappers
-around the conditions that are currently in place verbatim: reading
+  Invoke-OpenConsoleBuild /p:Platform=3Dx64 /p:Configuration=3DDebug /m:4 =
+/p:ProcessorNumber=3D2
 
-	(p->process_state & PID_NOTCYGWIN) && p->pgid =3D=3D pgid
-
-tells me very, very little, while reading
-
-	!p->is_foreground_process_a_cygwin_process ()
-
-would immediately give me enough context to understand the intention of
-the condition.
-
-Please consider refactoring especially these gnarly, deeply nested
-conditions to a more readable form by wrapping them in simple, small
-helper methods whose names refer to the intention more than to the
-implementation details ("is this a GDB child process", "is Cygwin in the
-foreground", etc instead of "in which process state are we in", "does the
-current pgid match the pgid of `p`", etc).
-
-It is okay for inlined conditions to duplicate sub-conditions. If you end
-up with `a () || b () || c ()` conditions where all of `a ()`, `b ()` and
-`c ()` start with the same, say, `p->pgid =3D=3D pgid &&` guard, the compi=
-ler
-will simplify the machine code. If the actual names of those methods are
-descriptive, it will make the code a lot more readable, and hence much
-easier to review, and hence much less likely to be buggy.
-
-Just to make myself clear: I do not fully understand this patch in the
-current shape, and therefore cannot confirm whether or not it is correct.
+Note: I just verified that I could build it, I did not run any tests nor
+did I look into the Ctrl+H problem yet.
 
 Ciao,
 Johannes
-
->  	      /* Below is true for GDB with non-cygwin inferior */
->  	      || p->exec_dwProcessId =3D=3D p->dwProcessId))
->  	return true;
-> --=20
-> 2.51.0
->=20
->=20
