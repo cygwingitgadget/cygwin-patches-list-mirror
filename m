@@ -1,209 +1,215 @@
 Return-Path: <SRS0=qb86=BH=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id BB7EA4BA2E11
-	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 07:44:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BB7EA4BA2E11
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id D48664BA2E10
+	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 08:23:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D48664BA2E10
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BB7EA4BA2E11
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772869474; cv=none;
-	b=Eh7ezI54j0Ixf46NgZD4txjD89qjNucyNVdGX0UtMP/vgSPxmqmh1BIsjuJj7m3G9ui30F+D6w1/SBvTiQGPO/MfFZM/JhG9M3WOP/lr7DVbRTgo6uN4nZAXxSKC0BKfFdQPWQh4salJWbKbkDRkSiMWI5v3EaE1ldnK5SzWEaE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D48664BA2E10
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772871798; cv=none;
+	b=fPsXqSma9APTLlUuRDhok48m1oMM1lImpRKLuqtLae1whTisWfuNdqpmuASqW8ca80YW7OxAISrikiT/dubTUyPU5f8FgzqvZC+61Dt1q1xXJbUugJImEIDQqOZ4Z9SU0nDbVBb/eYhtf+NIF0EMf15H8W/8ijo68cqIz5EY3qA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772869474; c=relaxed/simple;
-	bh=cwzHxiti4tR3IA6Be/vaOCcRoLWdC5IQdr2HARARls0=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=RLT4lpxazZ6XchT1VbxVOz/cgXWqDHeLl+FirnLUfx1myucLXdMYLSiulPFLbxyGK7aZKf7Xsgtq7sD4vWl2xEp3llxtweQTfdFQbjYgySy2Q1HrhQI+Irz+wT3uzoTKexnTW9qgMejAGTrADVXPXmbbwOIbrfT+Xk/oYZZ9o7Y=
+	t=1772871798; c=relaxed/simple;
+	bh=h0kBi2sNmnH85caGFm3W4NFRmkaurT65GT6umf/wcLI=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=iTEqyC4hvrgF6515JtFkNhaxw7kLVrdXj6c7LfKx6WzPVNO67IxVVddtTfU6xdWRJn5vr6VGRuhngWUL+AElBx51lL/2VGZzHMVT1KgiAZyNapB7exvEkKGvIaUqAgWBxS58ObYwzbPkAf5pwVT5I8HTUs5eAUj3xy7ghLvnuVw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BB7EA4BA2E11
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D48664BA2E10
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=PsLoB2Jt
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=UeL5ts8c
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1772869466; x=1773474266;
+	s=s31663417; t=1772871796; x=1773476596;
 	i=johannes.schindelin@gmx.de;
-	bh=FyrJijOdM5oWaNNlE8FCGi4VeyFo4FrijRHJgHhqHVg=;
+	bh=PsqvI50LyM+CR5K1bbLGjqW4NgjD9G/RS1PYflO4+eU=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=PsLoB2JtgFe4P9cxYGh+TvgskDqI6r3nJcqnEzI2wEco4Bhqt8ite4qzo4ofxZjU
-	 whGX2vd0F09pv0woz7GcsyhNvsatix56NuAKdOtded541DGqersYP2bB9dCrpO4Bt
-	 HXUs0xFtiMNXYNtutAqNfWXgxaSw9sAzVcUqyjA45wVHqxnG4FJADpFWgbEu45v4Q
-	 QS6MmeR3ht7oc3Vnu/QB+tNIMCORd6leXlS8OOs2QAJwhAiO+hc182Pi3mPA/Ju6V
-	 QWPl9TwX1JErCZ68juSLbVVSoofz5osn6MkqtZNOa1tYkjlcehPfLJ3+MAWuiXizz
-	 lY4NjQc4/8EG9rbgtQ==
+	 References:MIME-Version:Content-Type:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UeL5ts8ccJJhF1qeR/yZ/5Et0qbz3BRFVJL2Vpfdove570s1oPtXDlrPoqFynAHa
+	 4zf5j8KkzvBBJucX/wRGzrXAPoXlZqHjz5Z+v3PPN08CYYLDJpXuVdyXyv7+zUTLj
+	 4pi8V/3+MwpDiP6n3O7pZhWybPHlZAp+uNpUzi1rkps94uui9Diy20iZCun+Yrlxw
+	 EiVFhSrZL8m1bUl8+EsjK2qk67rfZNIGYaztM/sZasJy6iESbzfmfQ5fzuPCxjN7p
+	 5OkihfDCes4hJD0aA9mcbXiN6DXYliO+QpXRrKX+txwygOqiUGZuSrZbK1N++JvtW
+	 BZL7NCm/BUBKqko2NA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhU9j-1vSzwv2oeh-00k4D3; Sat, 07
- Mar 2026 08:44:26 +0100
-Date: Sat, 7 Mar 2026 08:44:24 +0100 (CET)
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mq2nA-1vKUMg2DdS-00h47N; Sat, 07
+ Mar 2026 09:23:16 +0100
+Date: Sat, 7 Mar 2026 09:23:15 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Fix out-of-order keystrokes
-In-Reply-To: <22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
-Message-ID: <d734978f-4941-616a-b7f0-a688d463f912@gmx.de>
-References: <pull.6.cygwin.1772461480.gitgitgadget@gmail.com> <20260303212405.25a2db7d786ac2db324e8f7a@nifty.ne.jp> <22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
+Subject: Re: [PATCH] Cygwin: console: Set ENABLE_PROCESSED_INPUT when
+ disable_master_thread
+In-Reply-To: <2fa791d4-9569-432d-b062-68bb8136e1ef@SystematicSW.ab.ca>
+Message-ID: <70268126-9ef3-3f0e-776f-26a233c8db3a@gmx.de>
+References: <20250701083742.1963-1-takashi.yano@nifty.ne.jp> <9a404679-40b5-1d55-db07-eb0dacf53dc7@gmx.de> <20250703154710.f7f35d0839a09f9141c63b1c@nifty.ne.jp> <259d8a20-46d5-c8cb-1efb-7d60d9391214@gmx.de> <20250703195336.2d5900b4988a6918ad397582@nifty.ne.jp>
+ <5be83d7c-a19f-a733-7d8f-1d41daa6b9f8@gmx.de> <20250715162741.bd33f1249f088ba6947fbd32@nifty.ne.jp> <2ad7299d-9561-fcd9-9fec-8b492c48caee@gmx.de> <6e67d97e-60a0-4bff-8a4e-cf4e90411603@SystematicSW.ab.ca>
+ <2fa791d4-9569-432d-b062-68bb8136e1ef@SystematicSW.ab.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:7iSDMJ+EjuaQZeuZMHlbOfrITp8hx5LEj/FuDEzk5+U2RHJhJxh
- GfH7/ElLr9Pf/vbaGFY53qN4WTWWUrxizt9WfKUCi9cWxY8YzxdUh8S08vGfwZMg52eqPeg
- edUbGqelZ+flVvysP03cznEqIZIqZM6wmXVTqlITfkmgipYCzVA/jOKyT2ubB4K/qWtuGEs
- sSjntLabP1pWqA3G8zx9g==
-UI-OutboundReport: notjunk:1;M01:P0:zbrzkvZCbls=;qAFsDmGjAHSsOx4w1LrisILxIry
- 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
- e307Dy15NJ3WFUN8BKXBa4YqWhp5Y
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323328-914565253-1772871763=:89"
+Content-ID: <03a0f702-d758-39bb-c860-3deffe302e0c@gitforwindows.org>
+X-Provags-ID: V03:K1:92iQB9fYDomiAvmMMH/H2Zfsv/D58pAsIvzRukNEwssaBdIh43+
+ Z7ymurCoLd3HVGlBxPIs6RQZ5IUTxvkgCdTJu89yynaULt4CP6Ofa+N0VLcKu1VFba0Dysn
+ G+2JejCLvCKKXMIDXBClkx9KUeor+ljYQUbX0gAIbb/aWKyoQcMEFLE4UqjfLpQYI+u1x6J
+ BMKIm07jHzqNgbVgMkpyA==
+UI-OutboundReport: notjunk:1;M01:P0:TSi5V0v7B1c=;SqG7blbd+xBmVvcBXrdThIy/z2C
+ 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
+ R8kuw3akuPONh72lMe5x
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Fri, 6 Mar 2026, Johannes Schindelin wrote:
+--8323328-914565253-1772871763=:89
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-ID: <a89d334a-d0fb-260b-a179-907f7545bb78@gitforwindows.org>
 
-> On Tue, 3 Mar 2026, Takashi Yano wrote:
->=20
-> > On Mon, 02 Mar 2026 14:24:36 +0000
-> > "Johannes Schindelin wrote:
-> > > A Git for Windows user reported that typing in a Bash session while =
-a native
-> > > Windows program is running (or has just exited) can produce scramble=
-d input
-> > > -- e.g. typing "git log" yields "igt olg":
-> > > https://github.com/git-for-windows/git/issues/5632
-> > >=20
+Hi Brian,
+
+On Thu, 18 Dec 2025, Brian Inglis wrote:
+
+> On 2025-12-18 15:24, Brian Inglis wrote:
+> > On 2025-12-18 00:45, Johannes Schindelin wrote:
+> > > If Cygwin were merely a personal project of yours, I would understan=
+d and
+> > > probably agree.
+> > >
+> > > However, Cygwin is used (via the MSYS2 runtime) in Git for Windows, =
+and by
+> > > extension millions of users rely on it.
+> > >
+> > > Therefore, it would be good to at least publish those local tests.
+> > > Ideally, a good deal of thought should be spent on figuring out a wa=
+y to
+> > > integrate the tests into the CI builds.
+> > >
+> > > You mentioned winsup/testsuite, and I do agree that it sounds more t=
+han
+> > > just tricky to integrate the tests there. Essentially, you would pro=
+bably
+> > > end up reimplementing AutoHotKey's fundamental functionality: sendin=
+g
+> > > keystrokes and inspecting the results.
+> > >
+> > > Now, to be sure, running AutoHotKey-based tests is a lot more finick=
+y than
+> > > running winsup/testsuite. In the absence of any better idea, though,=
+ I
+> > > would take the confidence from having tests over not having tests, a=
+ny
+> > > day. After all, you and I are both fully aware of the unfortunate pa=
+ttern
+> > > in the code under discussion where on multiple occasions, bug fixes
+> > > introduced new bugs whose fixes introduced yet other bugs, etc ad na=
+useam.
+> > > If AutoHotKey-based tests can help break that pattern, let's integra=
+te
+> > > them.
 > >=20
-> > [...]
+> > Who will port AHK to Cygwin tools to make it available as a package?
 > >=20
-> > In addition, after applying these four patches, non-cygwin apps
-> > lose its input. Please try cmd.exe in pcon_activated mode.
->=20
-> When I tried this with the MSYS2 runtime, it simply worked. But when I
-> tried it in Cygwin, it reproduced! To be clear, this is the meaning I
-> extracted from the quoted text:
->=20
-> 	Patch 2/4 "Cygwin: pty: Remove pcon_start readahead flush that
-> 	displaces readline data" is too broad, it breaks the scenario when
-> 	in an interactive Bash session in a MinTTY window (without
-> 	`disable_pcon`), `cmd.exe` is launched interactively: You will see
-> 	the typed characters, but `cmd.exe` won't receive them.
->=20
-> And this indeed reproduced here, but only with Cygwin. In MSYS2, it stil=
-l
-> worked with the patches as-are. I will keep investigating, but in the
-> meantime I'd like to propose this fixup:
->=20
-> -- snip --
-> Subject: [PATCH] fixup! Cygwin: pty: Remove pcon_start readahead flush t=
-hat
->  displaces readline data
->=20
-> ---
->  winsup/cygwin/fhandler/pty.cc | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
-cc
-> index 693e1a8062..1a3c50721b 100644
-> --- a/winsup/cygwin/fhandler/pty.cc
-> +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -2216,6 +2216,11 @@ fhandler_pty_master::write (const void *ptr, size=
-_t len)
->        if (!get_ttyp ()->pcon_start)
->  	{ /* Pseudo console initialization has been done in above code. */
->  	  pinfo pp (get_ttyp ()->pcon_start_pid);
-> +	  if (get_ttyp ()->switch_to_nat_pipe
-> +	      && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
-> +	    {
-> +	      get_ttyp ()->pty_input_state =3D tty::to_nat;
-> +	    }
->  	  get_ttyp ()->pcon_start_pid =3D 0;
->  	}
-> =20
-> -- snap --
+> > Alternatively, do we really need to:
+> >=20
+> >  =C2=A0=C2=A0=C2=A0=C2=A0https://www.autohotkey.com/boards/viewtopic.p=
+hp?t=3D9806
 
-Unfortunately, I only tested this with `cmd.exe` without verifying that it
-won't reintroduce the originally-reported problem. And sure enough, it
-does.
+I do understand the concern, at the same time I do not see any good
+alternative to AutoHotKey-based testing because constructing the exact
+scenarios under which the bugs trigger _is_ difficult.
 
-The reason is no longer "data stealing", it's the fast path bypassing
-`line_edit()` for some keystrokes. The result is the same: some keystrokes
-arrive at `line_edit()` while the backspaces arrive at the `nat` pipe via
-said fast path.
+> Also, you can do a lot using read with -p prompt (example queries xterm =
+info):
+>=20
+> 	read -s -t 1 -N 128 -p $'\E['"$p"'t' -d t r
+>=20
+> where $p are CSI query params in prompt, delimiter 't', reply $r.
 
-If you have any splendid idea how to fix this problem so that both the
-`cmd.exe` as well as the oscillation problem are fixed, please do share.
+While this works to replicate _some_ issues, note that in particular with
+the pseudo console (and `disable_pcon`) quite a few bugs require careful
+timing, which you simply cannot simulate using `read`.
+
+Mind you, even with AutoHotKey it is often difficult to recreate buggy
+scenarios in a reliable way. For the `Fix out-of-order keystrokes` patch
+series I am iterating on right now, it took me four days to get to an
+AutoHotKey-based test that would reliably reproduce the out-of-order bug.
 
 Ciao,
 Johannes
+
+--8323328-914565253-1772871763=:89--
