@@ -1,132 +1,131 @@
 Return-Path: <SRS0=qb86=BH=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by sourceware.org (Postfix) with ESMTPS id B73E84BA2E0D
-	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 11:58:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B73E84BA2E0D
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	by sourceware.org (Postfix) with ESMTPS id A66AA4BA2E0D
+	for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2026 12:07:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A66AA4BA2E0D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B73E84BA2E0D
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.15
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772884684; cv=none;
-	b=AliFWJgJWJtOD2ydzN7/R7iMnoaZdVddaxmi/1TaCG8yFndga6//0VanLcT7S7p8mZAZfDRc2tsyczwzXOzJoRXP0gCuInXkT0j9tIO/+3huOVXEYWjimNrOyLzqpg3XwF4fObS5Q20BVhQ3EFwdYXv/+TTmZqkEueuGM/yfLw8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A66AA4BA2E0D
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.19
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772885225; cv=none;
+	b=OIFa/vAbGCw2u9U/nNlK3+gizcDMwqvcbZDdTSfkAK6kc0oI9+T4XlE/gdWt+qUdCWK5ZVbR531npyhvKQkd51FF2UfUiFxXFTpFhCTEmrz3dDKxg0ASh5xrpFlA4FQ+wuG6rL3Y5GkTQW+NVy9B5U+bi/pZorM/cRNkVZl4EFM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772884684; c=relaxed/simple;
-	bh=rhbJESMMjIqn4HbwYR97XKfXlq/We9MwC4vCzhDJEWg=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=ezM5aPMQytlzGbFd+hcCB6kfmsQZglIcduWmalJ1KSvEptRG8t77AAZ9EvAUd5QnRGNokBCqc5A6aiyRnmSmRd8ELe6ajtNyz9AlndWiJZWzTWgBc7WgaowMWspe01VbR3973Zf4MWvtJZG5lc0ybRGzXsuv10QJExf1D6UJETo=
+	t=1772885225; c=relaxed/simple;
+	bh=hUyaWqkneCWWbibPUs+crE5cnf7zaQUjatwb1K+SjdE=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=n060JMlozEbRbZZblu0CtKI0THYeYJK+9fhJ8jDKQTaVWtOVsVbsoCFcxyBzKt3ueqepYk73v7nOBg89tqccTc69LOdPQr54PmSGIgzqUXG6G1WQgsLY0dBzNg99cImHPrI+WxjdXCjFQ22o2Y+u28WrveD9UuTZvl3Uajbh9FU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B73E84BA2E0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A66AA4BA2E0D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=EvMrybZS
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=f7HqGCN/
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1772884682; x=1773489482;
+	s=s31663417; t=1772885223; x=1773490023;
 	i=johannes.schindelin@gmx.de;
-	bh=/9gTPfj6cIeUTrTYDWcTnL8IZBNp5dIMjVvOOCK/4XM=;
+	bh=/lNNLUngCig5RcB7uinNroLpVfXDMHHCuv15u8AmuVk=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=EvMrybZS+6DMC+ZUoRA10TKaq7lj0ugTj12VY3OGojZFpW/CPq0WX0d6ejDcRs3q
-	 nDqUEkBPj5G/9RG/iA/QnR4GRhcckMZpxttXWyX7dIdMDNDFBNxlD7NzZWWZma1Kb
-	 E5dauj8HIMQhdm5dpU39jlrATl3hCy/G+nStrQaBLJUYBEetk8tCpaGywxvyHbRtp
-	 SkoSVVXCpRDsc2VUtYf6+r1rWCx9NDnhK8IsYtvQRKk5aCMzPPPVWdgYvX4K0mfhF
-	 XufON41r5bM91vGTKZiTx9c0RD30xQyptntj3kqRiB0qdwDFuXhrubQeB14bEGkKB
-	 7zMN1ba7F0ob7zrV5w==
+	b=f7HqGCN/8aIsc2+2EBrsalsrPIiJ8fNZD7nQQAmJm86/Hus26jESJZ3nU0AYng7O
+	 jJCGxt/yAbzAeKcnE6CJhE6tOKKYqRyY7B4YqnaGn0VrPWOrB6zeg5rkn4CF3TmLJ
+	 wkWbGCOt5XXNXYdGfqKdYBkiahJ6aVtJ7G5/bYlBAFbG9hcnctKnb9KL9qeBWjiG4
+	 heGcHuT4Bfi3VYcnslo4BqcNQvSBJeiCiehRi0DJ9zg5a909PyI2QPQxcOyrCm/CB
+	 dkp4MxISew5cD1ypnZkTz+IFngF6W1DYhtwESgiQSX6B09ekkTaugvlTjBrYR+Flr
+	 f9BxkZ5n4BthVeh2aQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1vGkFZ1gKl-00c40f; Sat, 07
- Mar 2026 12:58:02 +0100
-Date: Sat, 7 Mar 2026 12:58:00 +0100 (CET)
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtwZ4-1ve9il1B2i-010O4x; Sat, 07
+ Mar 2026 13:07:03 +0100
+Date: Sat, 7 Mar 2026 13:07:01 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4] Cygwin: pty: Fix handling of data after CSI6n
- response
-In-Reply-To: <20260305233757.886-1-takashi.yano@nifty.ne.jp>
-Message-ID: <f57571f3-e2d6-bfa6-875c-edaca6c24d64@gmx.de>
-References: <20260305233757.886-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v2] Cygwin: pty: Fix nat pipe hand-over when pcon is
+ disabled
+In-Reply-To: <20260306005037.1934-1-takashi.yano@nifty.ne.jp>
+Message-ID: <5f24a7c4-ed7a-da39-2e95-8f9252576ed9@gmx.de>
+References: <20260306005037.1934-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:lL+8OGYWh8+4vXrfKO2DKHMSakN/+Tdx5ATPlKkOxawokKtUv/O
- UWN9ht1IUa90HRUUswCxMi7L8NSRVm+4XG0BLJp1/jNoFmpo2k3z2jPBIDZvyDq0F8ME8oF
- +/5L+5RqFGC8983VpP8SzE0aHk95d6txEuFbpL8taFnS8CYWggn8Xi3gFK40fs1QE4dXnqi
- bFO4WOTmrbU0ZSlAYIrZQ==
-UI-OutboundReport: notjunk:1;M01:P0:95r6tctS98E=;kL/ZVg190M0XLOSc1IsAPbaJbkG
- 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
+X-Provags-ID: V03:K1:cjNWxM2AaC6ucuhbB1WIgMYZ3d/TX+AGPB6GYrDWGP9Taim95Cv
+ 3exrqA745GPWPpK62PvqhSde7FcA1NpxOMhgTb1AtZUo3/Dpw+jwEyIdILBYx9/OjtpTU91
+ PIksJGJVZEakvH8dBIJVe1kz2Ns3B4bACNsJlkdoYsiX4oEiDI9nn/rGaoKpIv70HAhLayz
+ VmM+FFu3L9eYuEhkKys4w==
+UI-OutboundReport: notjunk:1;M01:P0:foZVuLSbrGo=;ygmokLedfaAdU8jskONvHs0BM2D
+ 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
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -134,133 +133,68 @@ Hi Takashi,
 
 On Fri, 6 Mar 2026, Takashi Yano wrote:
 
-> Previously, CSI6n was not handled correctly if the some sequences
-> are appended after the response for CSI6n. Especially, if the
-> appended sequence is a ESC sequence, which is longer than the
-> expected maximum length of the CSI6n response, the sequence will
-> not be written atomically.
+> The nat pipe ownership hand-over mechanism relies on the console
+> process list - the set of processes attached to a console, enumerable
+> via `GetConsoleProcessList()`. For non-cygwin process in pcon_activated
+> case, this list contains all processes attached to the pseudo console.
+> Otherwise, it contains all processes attached to the invisible console.
 >=20
-> Moreover, when the terminal's CSI 6n response and subsequent data
-> (e.g. keystrokes) arrive in the same write buffer, master::write()
-> processes all of it inside the pcon_start loop and returns early.
-> Bytes after the 'R' terminator go through per-byte line_edit() in
-> that loop instead of falling through to the `nat` pipe fast path
-> or the normal bulk `line_edit()` call. Due to this behaviour,
-> the chance of code conversion to the terminal code page for the
-> subsequent data in `to_be_read_from_nat_pipe()` case, will be lost.
+> 04f386e9af (Cygwin: console: Inherit pcon hand over from parent pty,
+> 2024-10-31) added a last-resort fallback in `get_winpid_to_hand_over()`
+> that hands nat pipe ownership to any process in the console process
+> list, including Cygwin processes. This fallback is needed when a
+> Cygwin process on the pseudo console (that might be exec'ed from non-
+> cygwin process) must take over management of an active pseudo console
+> after the original owner exits.
 >=20
-> Fix this by breaking out of the loop when 'R' is found and letting
-> the remaining data fall through to the normal write paths, which
-> are now reachable because `pcon_start` has been cleared.
+> When the pseudo console is disabled, this fallback incorrectly finds a
+> Cygwin process (such as the shell) and assigns it nat pipe ownership,
+> because both the original nat pipe owner and the shell are assosiated
+> with the same invisible console. Since there is no console for that
+> process to manage, ownership never gets released, input stays stuck on
+> the nat pipe.
 >=20
-> Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> Only the third (last-resort) call in the cascade needs guarding: the
+> first two calls filter for native (non-Cygwin) processes via the `nat`
+> parameter, and handing ownership to another native process is fine
+> regardless of pcon state. It is only the fallback to Cygwin processes
+> that is dangerous without an active pseudo console.
+>=20
+> Guard the fallback with a `pcon_activated` check, since handing nat
+> pipe ownership to a Cygwin process only makes sense when there is an
+> active pseudo console for it to manage.
 
-Thank you! This version looks good to me!
+I recognize that commit message (and your edits) ;-)
+
+Thank you for indulging me, this looks ready to go to me.
 
 Ciao,
 Johannes
 
+>=20
+> Fixes: 04f386e9af99 ("Cygwin: console: Inherit pcon hand over from paren=
+t pty")
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 > ---
->  winsup/cygwin/fhandler/pty.cc | 42 ++++++++++++++++++++---------------
->  1 file changed, 24 insertions(+), 18 deletions(-)
+>  winsup/cygwin/fhandler/pty.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
 > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
 cc
-> index b59f54096..3717542e6 100644
+> index 2da46f8d9..06122def7 100644
 > --- a/winsup/cygwin/fhandler/pty.cc
 > +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -2137,6 +2137,8 @@ fhandler_pty_master::close (int flag)
->  ssize_t
->  fhandler_pty_master::write (const void *ptr, size_t len)
->  {
-> +  size_t orig_len =3D len;
-> +
->    ssize_t ret;
->    char *p =3D (char *) ptr;
->    termios &ti =3D tc ()->ti;
-> @@ -2160,7 +2162,8 @@ fhandler_pty_master::write (const void *ptr, size_=
-t len)
-> =20
->        DWORD n;
->        WaitForSingleObject (input_mutex, mutex_timeout);
-> -      for (size_t i =3D 0; i < len; i++)
-> +      len =3D 0;
-> +      for (size_t i =3D 0; i < orig_len; i++)
->  	{
->  	  if (p[i] =3D=3D '\033')
->  	    {
-> @@ -2185,18 +2188,21 @@ fhandler_pty_master::write (const void *ptr, siz=
-e_t len)
->  	    line_edit (p + i, 1, ti, &ret);
->  	  if (state =3D=3D 1 && p[i] =3D=3D 'R')
->  	    state =3D 2;
-> -	}
-> -      if (state =3D=3D 2)
-> -	{
-> -	  /* req_xfer_input is true if "ESC[6n" was sent just for
-> -	     triggering transfer_input() in master. In this case,
-> -	     the responce sequence should not be written. */
-> -	  if (!get_ttyp ()->req_xfer_input)
-> -	    WriteFile (to_slave_nat, wpbuf, ixput, &n, NULL);
-> -	  ixput =3D 0;
-> -	  state =3D 0;
-> -	  get_ttyp ()->req_xfer_input =3D false;
-> -	  get_ttyp ()->pcon_start =3D false;
-> +	  if (state =3D=3D 2)
-> +	    {
-> +	      /* req_xfer_input is true if "ESC[6n" was sent just for
-> +		 triggering transfer_input() in master. In this case,
-> +		 the response sequence should not be written. */
-> +	      if (!get_ttyp ()->req_xfer_input)
-> +		WriteFile (to_slave_nat, wpbuf, ixput, &n, NULL);
-> +	      len =3D orig_len - i - 1;
-> +	      ptr =3D p + i + 1;
-> +	      ixput =3D 0;
-> +	      state =3D 0;
-> +	      get_ttyp ()->req_xfer_input =3D false;
-> +	      get_ttyp ()->pcon_start =3D false;
-> +	      break;
-> +	    }
->  	}
->        ReleaseMutex (input_mutex);
-> =20
-> @@ -2220,8 +2226,8 @@ fhandler_pty_master::write (const void *ptr, size_=
-t len)
->  	    }
->  	  get_ttyp ()->pcon_start_pid =3D 0;
->  	}
-> -
-> -      return len;
-> +      if (len =3D=3D 0)
-> +	return orig_len;
+> @@ -3593,7 +3593,7 @@ fhandler_pty_slave::get_winpid_to_hand_over (tty *=
+ttyp,
+>        if (!switch_to)
+>  	switch_to =3D get_console_process_id (current_pid,
+>  					    false, true, false, true);
+> -      if (!switch_to)
+> +      if (!switch_to && ttyp->pcon_activated)
+>  	switch_to =3D get_console_process_id (current_pid,
+>  					    false, false, false, false);
 >      }
-> =20
->    /* Write terminal input to to_slave_nat pipe instead of output_handle
-> @@ -2261,7 +2267,7 @@ fhandler_pty_master::write (const void *ptr, size_=
-t len)
->  	WriteFile (to_slave_nat, buf, nlen, &n, NULL);
->        ReleaseMutex (input_mutex);
-> =20
-> -      return len;
-> +      return orig_len;
->      }
-> =20
->    /* The code path reaches here when pseudo console is not activated
-> @@ -2283,8 +2289,8 @@ fhandler_pty_master::write (const void *ptr, size_=
-t len)
->    ReleaseMutex (input_mutex);
-> =20
->    if (status > line_edit_signalled && status !=3D line_edit_pipe_full)
-> -    ret =3D -1;
-> -  return ret;
-> +    return -1;
-> +  return orig_len - len + ret;
->  }
-> =20
->  void
 > --=20
 > 2.51.0
 >=20
