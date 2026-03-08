@@ -1,116 +1,225 @@
 Return-Path: <SRS0=dH/q=BI=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id 3A2694BA23D1
-	for <cygwin-patches@cygwin.com>; Sun,  8 Mar 2026 11:24:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3A2694BA23D1
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id 77AF14BA2E1C
+	for <cygwin-patches@cygwin.com>; Sun,  8 Mar 2026 11:46:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 77AF14BA2E1C
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3A2694BA23D1
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772969040; cv=none;
-	b=GuAdnypHwpuYXhy0aJB3AYls4bw3cooKroVVIk4zvSMk3on5OqPo8DK0A4U7/oBxWY73PidoUkqhCq+/ZgjnykikMsArzrxmwGPWTxDq962TOA6kfDO327rSMLJZLzsYC1skcL6Mou5yvEo9XUxFkrTUk+OSk8Q2QPO1QOJ7V70=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 77AF14BA2E1C
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1772970395; cv=none;
+	b=sNxNylfRq9KON9hvyXkNVRkR4O8Wh3qx87T7sLesufuQF8u9atblMyaooKUhRjIQ75E20gzbIy6lhwSyU6jM0Qvob1p3ckyDQZzpwYfTCzUmBWenPTQly9SR3LqBbfnvq4Qfv4jJp0TCXcrf1XdAlwef5qIyzMhHwSS2t3nEX10=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1772969040; c=relaxed/simple;
-	bh=TiwtE3NcwofQGL/1Xg6Guafm3qHCG4beLAu9eMMu+AI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=JtTnoxeJPTgY8FDRklxVSKt4/s/FVaBUSrOGsrdBLlXZ2wPNwmwMF0hz6Ou1molRiP5z2BbXb9DeOsnqpPspPnTLX3fpvZEEzloADUNUWCt9XaVQZ4BAeEw3oUL2z3Jlq/hRN3SdveIOlckrnxagP+dRTtUg2Q4mtfUPKa48OPw=
+	t=1772970395; c=relaxed/simple;
+	bh=S1E+87x7VocWtyBcLFozxOSLyYdaAxueLBGuLsUgbxQ=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=KMrYuuW4mHIaRp/9yu9hRlVQi1s5Atq0eBQbqNBaKnoP3Y2JZfknV0OeUSG+hpxO96i3W9yKJ/S2gyPU1aYyNkCDQfOZc19nXFkHA0oMyURF43aMcBeHr8geCQu/PrQg5TNuc/KJzuUS9vUUBvyWxgOrFtE4zq3S7plw5z7Dmag=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3A2694BA23D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 77AF14BA2E1C
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=mWKDg7qf
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260308112357187.QVHR.14880.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 8 Mar 2026 20:23:57 +0900
-Date: Sun, 8 Mar 2026 20:23:54 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FbOtCWEp
+Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
+          id <20260308114632516.FEER.116672.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 8 Mar 2026 20:46:32 +0900
+Date: Sun, 8 Mar 2026 20:46:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Restore nat handles in all PTY-slave
- instances in GDB
-Message-Id: <20260308202354.44288a095a97b5f08f0511bd@nifty.ne.jp>
-In-Reply-To: <20260308111932.1380-1-takashi.yano@nifty.ne.jp>
-References: <20260308111932.1380-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: pty: Make Ctrl-C work for non-cygwin app in GDB
+Message-Id: <20260308204630.1783c799b67d9495f5f8dab8@nifty.ne.jp>
+In-Reply-To: <de0c0ac5-a266-804c-79fe-08726ce4f969@gmx.de>
+References: <20260228090219.2551-1-takashi.yano@nifty.ne.jp>
+	<20260228090219.2551-2-takashi.yano@nifty.ne.jp>
+	<de0c0ac5-a266-804c-79fe-08726ce4f969@gmx.de>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772969037;
- bh=WsGvto5DwR0f6uL6f8mdA2cO120cOyeWVoYpCvq/rWA=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1772970392;
+ bh=fcS/e1g+jewKHYMe/Gsa1mi31TTWvmy2rmEGV1xiuUI=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=mWKDg7qfVXSdtSK/FOhZNa8oK33Cn6SLEcTvHt4+btrnbh0tlc3HhbgpzJAbO/hewEy89Y4T
- vxM3Y/jxqI61ylAP7bemhEi+PhKk5RJaJWdpFepnCOvMZSWJrZsiu7Bo5dq39gb5a83f4h9rIc
- C3nIemcIiCM1orz9yKPQqfExmQe9qhai+G1YDGWlND8YbeTTWbcGx76daqBPSDhBlW9BsbsEQF
- 6ZHDn7vVGmaxIzL4310dTMyuxo04tNLvVGnBskgrpN0dnRxJBbLR4/lH59qFIks7M8gpPMajsz
- nYVUH1fwZBFg3nRteXUaM6sop5WiVaVrG9xrH0VUJfTFQWpQ==
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,KAM_SHORT,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=FbOtCWEpIpIvAA4KXR1MhFkQ3qltble+VNn+Cy34EppqpvfHXyctd17NGat9K7gUHk+oj24e
+ 9LnIgNuFuk7/a6+t6tGCzhTftggvW8P4GLF4zVd7N3LXFWLtPWb3YjbFBOR5Ww/OBUib3nv3Yv
+ J5v8e4vpeSyHgtWsXhMBSLC5SdjVD+kBb3xEBRHFI26J01YcBnDecdItSCbUvRw+praX3P+GYs
+ Wpn29Qt8H1WpN4uZSjWMcD3WURnvym9aAJvwOBaDSMTVL6vR8Cz7TtuoS9HAqP3xGr7Z+mWtap
+ EJQNsVgon6BPKntttdAUpiYV9V7BcgfcA56raH6FbDfKxZKA==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sun,  8 Mar 2026 20:19:21 +0900
-Takashi Yano wrote:
-> If non-cygwin app is started in GDB and terminating it normally,
-> re-running the non-cygwin app might fail in setup_pseudoconsole().
-> 
-> The error is something like:
-> 
-> $ gdb ./winsleep
-> GNU gdb (GDB) (Cygwin 15.2-1) 15.2
-> Copyright (C) 2024 Free Software Foundation, Inc.
-> License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-> This is free software: you are free to change and redistribute it.
-> There is NO WARRANTY, to the extent permitted by law.
-> Type "show copying" and "show warranty" for details.
-> This GDB was configured as "x86_64-pc-cygwin".
-> Type "show configuration" for configuration details.
-> For bug reporting instructions, please see:
-> <https://www.gnu.org/software/gdb/bugs/>.
-> Find the GDB manual and other documentation resources online at:
->     <http://www.gnu.org/software/gdb/documentation/>.
-> 
-> For help, type "help".
-> Type "apropos word" to search for commands related to "word"...
-> Reading symbols from ./winsleep...
-> (gdb) run
-> Starting program: /home/yano/winsleep
-> [New Thread 49324.0x14178]
-> [Thread 49324.0x14178 exited with code 0]
-> [Inferior 1 (process 49324) exited normally]
-> (gdb) run
-> Starting program: /home/yano/winsleep
->       0 [] gdb 294 fhandler_pty_slave::setup_pseudoconsole: CreatePseudoConsole() failed. 00000057 80070057
->                            [New Thread 86480.0xfd4]
-> [Thread 86480.0xfd4 exited with code 0]
-> [Inferior 1 (process 86480) exited normally]
-> (gdb)
-> 
-> The essential problem is lack of restoring nat handles for *ALL* the
-> PTY-slave instances after closing pseudo console in GDB.
-> 
-> Restoring handles from pseudo console handles to simple pipe handles
-> is not necessary in normal non-cygwin apps because pseudo console is
-> setup in the stub process for the non-cygwin app and the stub process
-> exits after the app is terminated.
-> 
-> However, for GDB, pseudo console is setup in GDB process in hooked
-> CreateProcess() because GDB does not use exec() to run an inferior
-> (debuggee). Therefore, after the inferior exits, nat handle must be
-> restored to simple pipe handles.
-> 
-> The current code restores only handles in the PTY-slave instance
-> that has called fhandler_pty_slave::reset_switch_to_nat_pipe(). If
-> this instance is different from the instance that will setup pseudo
-> console, the nat handles are not restored correctly, then call to
-> CreatePseudoConsole() causes error.
-> 
-> To solves this issue, restore nat handles in all the PTY-slave
-> instances to simple pipe handles when the inferior exits with this
-> patch.
-> 
-> Fixes: 8aeb3f3e5037 ("Cygwin: pty: Make apps using console APIs be able to debug with gdb.")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
+Hi Johannes,
 
-This is the replacement for:
-"Cygwin: pty: Use consistently first pty slave found in cygheap_fdenum"
-https://cygwin.com/pipermail/cygwin-patches/2026q1/014674.html
+Thanks for reviewing.
+
+On Sat, 7 Mar 2026 10:51:39 +0100 (CET)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> On Sat, 28 Feb 2026, Takashi Yano wrote:
+> 
+> > At some point in the past, GDB sets its own pgid to inferior pid
+> > when the inferior is running.
+> 
+> I _guess_ by "inferior" you refer to the program debugged in GDB? But no,
+> that cannot be true, as GDB is the parent process of that and shouldn't
+> _also_ be a child at the same time (which setting pgid in that way would
+> imply).
+
+IIUC, the word "inferior" is used as a "debuggee" in the GDB context.
+
+> > Due to this behaviour, Ctrl-C does not work if the inferior is a
+> > non-cygwin app.
+> 
+> Wait, what? Setting pgid breaks Ctrl+C? _How_?
+
+The inferior in GDB is not a normal cygwin process. That is executed
+used CreateProcessW() other than exec(). So the parent process of
+the inferior is not GDB. In the windows context, it is indeed a child
+process of GDB, but in the cygwin context, it is not.
+
+> > This is because, the current code sends Ctrl-C to GDB only when GDB's
+> > pgid equeals to terminal pgid. This patch omit checking pgid when
+> > recognizing GDB process whose inferior is non-cygwin app.
+> 
+> Okay, that's a lot to unpack here, especially because the diff context
+> below is way too small to give the full picture.
+> 
+> > 
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by:
+> > ---
+> >  winsup/cygwin/fhandler/termios.cc | 18 +++++++++---------
+> >  winsup/cygwin/tty.cc              |  4 ++--
+> >  2 files changed, 11 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+> > index 694a5c20f..00700aed8 100644
+> > --- a/winsup/cygwin/fhandler/termios.cc
+> > +++ b/winsup/cygwin/fhandler/termios.cc
+> > @@ -346,11 +346,11 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+> >  		     a marker for GDB with non-cygwin inferior in pty code.
+> >  	 !PID_CYGPARENT: check this for GDB with cygwin inferior or
+> >  			 cygwin apps started from non-cygwin shell. */
+> > -      if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
+> > -	  && ((p->process_state & PID_NOTCYGWIN)
+> > +      if (c == '\003' && p && p->ctty == ttyp->ntty
+> > +	  && ((p->pgid == pgid && ((p->process_state & PID_NOTCYGWIN)
+> > +				   || !(p->process_state & PID_CYGPARENT)))
+> >  	      || ((p->exec_dwProcessId == p->dwProcessId)
+> > -		  && ttyp->pty_input_state_eq (tty::to_nat))
+> > -	      || !(p->process_state & PID_CYGPARENT)))
+> > +		  && ttyp->pty_input_state_eq (tty::to_nat))))
+> 
+> This is one complex change of logic. Primarily because the logic was
+> already complicated before this patch, and it is still complicated after
+> the patch, but in a different way. And therefore it is very hard for me to
+> confirm that it is correct, not without further help.
+> 
+> The `p->pgid == pgid` condition (whose purpose is hard to understand
+> without being given any context) now no longer guards the `to_nat` check,
+> before this change, it did.
+> 
+> That's all I understand after pouring over this diff for 10 minutes, and I
+> do not feel any closer to being able to confirm that this change is correct.
+> 
+> >  	{
+> >  	  /* Ctrl-C event will be sent only to the processes attaching
+> >  	     to the same console. Therefore, attach to the console to
+> > @@ -403,12 +403,12 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+> >  	  if (!p->cygstarted && !(p->process_state & PID_NOTCYGWIN)
+> >  	      && (p->process_state & PID_DEBUGGED))
+> >  	    with_debugger = true; /* inferior is cygwin app */
+> > -	  if (!(p->process_state & PID_NOTCYGWIN)
+> > -	      && (p->exec_dwProcessId == p->dwProcessId) /* Check marker */
+> > -	      && ttyp->pty_input_state_eq (tty::to_nat)
+> > -	      && p->pid == pgid)
+> > -	    with_debugger_nat = true; /* inferior is non-cygwin app */
+> >  	}
+> > +      if (p &&  p->ctty == ttyp->ntty
+> > +	  && !(p->process_state & PID_NOTCYGWIN)
+> > +	  && (p->exec_dwProcessId == p->dwProcessId) /* Check marker */
+> > +	  && ttyp->pty_input_state_eq (tty::to_nat))
+> > +	with_debugger_nat = true; /* inferior is non-cygwin app */
+> 
+> Okay, so now this lengthy `if` statement was moved outside of a block, but
+> the three diff context line are too few to help us here. So I looked it
+> up: it is a block guarded by:
+> 
+> 	if (p && p->ctty == ttyp->ntty && p->pgid == pgid)
+> 
+> Which means that the new code skips both `p->pgid == pgid` and `p->pid ==
+> pgid` checks.
+> 
+> But here, we're outside of the big `PID_NOTCYGWIN: check this for
+> non-cygwin process` block, so it is conceivable that this change
+> introduces unintended side effects for the non-GDB cases.
+> 
+> >      }
+> >    if ((with_debugger || with_debugger_nat) && need_discard_input)
+> >      {
+> > diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+> > index 0c49dc2bd..3ab30c0a7 100644
+> > --- a/winsup/cygwin/tty.cc
+> > +++ b/winsup/cygwin/tty.cc
+> > @@ -340,8 +340,8 @@ tty::nat_fg (pid_t pgid)
+> >    for (unsigned i = 0; i < pids.npids; i++)
+> >      {
+> >        _pinfo *p = pids[i];
+> > -      if (p->ctty == ntty && p->pgid == pgid
+> > -	  && ((p->process_state & PID_NOTCYGWIN)
+> > +      if (p->ctty == ntty
+> > +	  && (((p->process_state & PID_NOTCYGWIN) && p->pgid == pgid)
+> 
+> This change is slightly less gnarly than the first one in this patch, and
+> it recapitulates the idea that I _believe_ to understand to be behind that
+> first change: to stop guarding the GDB check behind a `p->pgid == pgid`,
+> but keep that guard for the other condition(s).
+> 
+> So now I am starting to understand the connection between the diff and the
+> explanation in the commit message. But I have to say that I am highly
+> suspicious of unintentional side effects: The commit message talks about a
+> specific GDB behavior change that was introduced "[a]t some point in the
+> past", and then describes a very specific pgid scenario. The diff,
+> however, does not add that scenario to the guards, it takes the pgid guard
+> away completely. This leaves a lot of room for scenarios that do not
+> involve GDB at all to run into unintentional & unwanted behavioral
+> changes.
+> 
+> In general, I would expect this patch to benefit greatly from wrappers
+> around the conditions that are currently in place verbatim: reading
+> 
+> 	(p->process_state & PID_NOTCYGWIN) && p->pgid == pgid
+> 
+> tells me very, very little, while reading
+> 
+> 	!p->is_foreground_process_a_cygwin_process ()
+> 
+> would immediately give me enough context to understand the intention of
+> the condition.
+
+I agree.
+
+> Please consider refactoring especially these gnarly, deeply nested
+> conditions to a more readable form by wrapping them in simple, small
+> helper methods whose names refer to the intention more than to the
+> implementation details ("is this a GDB child process", "is Cygwin in the
+> foreground", etc instead of "in which process state are we in", "does the
+> current pgid match the pgid of `p`", etc).
+> 
+> It is okay for inlined conditions to duplicate sub-conditions. If you end
+> up with `a () || b () || c ()` conditions where all of `a ()`, `b ()` and
+> `c ()` start with the same, say, `p->pgid == pgid &&` guard, the compiler
+> will simplify the machine code. If the actual names of those methods are
+> descriptive, it will make the code a lot more readable, and hence much
+> easier to review, and hence much less likely to be buggy.
+> 
+> Just to make myself clear: I do not fully understand this patch in the
+> current shape, and therefore cannot confirm whether or not it is correct.
+
+Indeed, these 'if' clauses are complicated enough to make the intent
+of the code hard to understand (even for me...).
+
+I'll fix the issue while also trying to improve the readability of the
+code.
+ 
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
