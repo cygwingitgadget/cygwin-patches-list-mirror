@@ -1,161 +1,111 @@
-Return-Path: <SRS0=Vhwg=BK=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
-	by sourceware.org (Postfix) with ESMTPS id 29F964BA2E13
-	for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2026 08:56:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 29F964BA2E13
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 29F964BA2E13
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773133017; cv=none;
-	b=CdGkbqUefOz77hjzjWF3ji1lTcZEwKIlir07nU9nDJS707MNzcCxt+RcX4oK2ZVUryAAXSJMqPn4yCYOSttIJq9Ng/YjN3uThLasLX8n2/d2/DXf/daNC33i0iL6LIi715TrVihTbRUT7v01Cxslgz06jbBtlAwrIdIUnM7SgoQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1773133017; c=relaxed/simple;
-	bh=FXMxm8gt510rbpC+kIBhaS2thKAS3KuY9Mhs6tt2+YI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=IuR3nU59e5/g0vOyUyNB7TihuFwEzgiUAu2lN4U54K5EWy4y4pp4PsOACeSbHa69WZFnz4QCzBnj0086wMOQCpMR8L0YUgNkTFbOwYs3Q4oCVGCU19Xrk7xAn0I8s+8+X+5WCRVRpZD9UwI/YxEpyuTrHNhc7bxqQi3tmTAyT18=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 29F964BA2E13
+Return-Path: <SRS0=eczl=BK=gmail.com=takeshi.nishimura.linux@sourceware.org>
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+	by sourceware.org (Postfix) with ESMTPS id 0F3FC4BA23D0
+	for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2026 09:39:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0F3FC4BA23D0
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0F3FC4BA23D0
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a00:1450:4864:20::62f
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1773135586; cv=pass;
+	b=MJLnyQ+EfFRDsaBQadmbn8A8FeuwUgbMQ2wLwpAfDH1JCx5RBrWauexm2L2fI2sr1T2oWAdV6S8V3gg7diGI4thoUuLr4TholvnqbZSYsYCd+nVDoI+Pxi1754kiAbpWbQaYkx4t5fgNvgtqpxWyikhfRDJb8BUmgKLcPupiir4=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1773135586; c=relaxed/simple;
+	bh=GAnd7ria1v+sZX8OPeKhS6ggurYm89xvvpXxKpJGepc=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=MDbdbfBgiGr/01F1mYvxTcR86+zcwJNhUbksUGFBvLU5RVbDp78b5gpdOGHeVVgiNltn9KhwZKhA1qyC73w5tW5EOyaeXyNOTEiA+Lzpueoh7x800g5oOS41MSjwf0a9Hr9ClBVQhs2hGuieJSRbQWnHKPf1RT2kIcxI2VVCmBY=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0F3FC4BA23D0
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=aFkt2Wlv
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260310085654922.BASQ.36235.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2026 17:56:54 +0900
-Date: Tue, 10 Mar 2026 17:56:52 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Fix out-of-order keystrokes
-Message-Id: <20260310175652.a7c404ae59c02560956cfb59@nifty.ne.jp>
-In-Reply-To: <22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
-References: <pull.6.cygwin.1772461480.gitgitgadget@gmail.com>
-	<20260303212405.25a2db7d786ac2db324e8f7a@nifty.ne.jp>
-	<22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773133015;
- bh=+sRrBZ3bMIaScLZ0ycHxkJfi2aNIdr7o9cMyZr1VFWU=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=aFkt2Wlv3FUAG+LZlVXyTmhtdolOcIJVsPFbTLovMJ9b8rb28fuYrlRnhlwn0J8ir+XjeXyv
- w0lHT1TUmA/u0sHTGVJN/xJc/kdyd48hFWS/58hsZ1kt9zEQ5bBbsq2+GwwBWZ2gbdtgYDlq9C
- hJMEjMYAw1TLW0bT2lXmZqwO6yGAF1lG8SPcE9t7Vw/CQ72uioToYMqu8Q/KJ5KZ31KegralnB
- OtWE4MGEieDrrQ8MWeMkiWHtTTlEJryup5hvwdLn1RwxwH6V8fLbE4baP5iadPvEe+MEmHlX/A
- NB0YfuCFD/Vf4uOo5rM3nWyjEdbdqt373881rk18DiA6WxZg==
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=JNfH9coP
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-b886fc047d5so2054788066b.3
+        for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2026 02:39:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773135585; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TbJuvANPDdd/JvFjbq9odVgdnBwwefJG3m+vRdpq/g6oMR3IfB808T19w/HbimPrt6
+         di4QglcYF+1r29i/VxFtUCwpii5eX+Fy8wAdq72jWeI3TctkvDbfiXpqxzpp7nN44dzk
+         u+n6RLsf5HS5kcmqLrMKuQaq2EwoYWbq1qri2IkzVa4xywEcAWo7v/F24cYfZnJcy9tF
+         89rw/rBSMaHc5qKYWsF7Wopjr0pJM3SsBf9Ip6v3k+XYPyEbX8j7uaTxFMQx+xgL6Jf7
+         h2Sc0Wnv5Yn/vFy9225x9omc9kEpdANWzKxor18V7SxnH9D2UP22Ip8/+vHTOvyKV58a
+         sZKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pQOWh40d/nnZmtlxq0M914DAroUiw8MNKtpYHYH9+oQ=;
+        fh=N+TkVz5UX20zGxAi+zL59HO6q0Qui51rYgs+hcmR7cU=;
+        b=cnQ9j5Zo2BFpjMbUSyPpFMaTGlTqjU0gTFyrj/nmA8rp5TyKECbRAv6/43CUZTTWWO
+         2vJU19fETD2jttw5Wxmt3gBcJLZ7yhNkRDKtecUfmwc+BaTCZO6I8yvWBpSUQ3P4+ALC
+         VTPtRHpoS1d0Ho/puuo6sHGg1M2GNCAViheyT4Np5aZPNTOsOOswbauqZ5GDhXEXMZx1
+         7DkqUByD4UuOLftRq8PYq5ysHN2vuf5HKAOhila9FRJbLUDipuhhY0+zBoS+mW5sTdeF
+         BnpHsf90anv41uvyrulDJee03pHTiImFcsCkqZGFkvAfrmdwhLamW+eLSggmRJLAycpT
+         XBfg==;
+        darn=cygwin.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773135585; x=1773740385; darn=cygwin.com;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQOWh40d/nnZmtlxq0M914DAroUiw8MNKtpYHYH9+oQ=;
+        b=JNfH9coP6CsBM0WjqjnJFwicsF0r5WA4dtJefgu8931nlKr532qo2ON2tj+hMkqVyS
+         w5hTEpDvjJ6jnBr10tmYv5+qqu4U+7cPYKyk+cfnGn4ILcZdeKJyCgR3tc881PWNRYAa
+         L7ae2RcrNa5zLxLIxzPq3sVZu70OuJapR7A08M7D8JtRq7eWuvNuGw3TT+1bbz1V4Kyv
+         MlsHcc1UCSBv4wxZSbYBRd1WWBmJUqEpg+EofGEitQJYgjeKgl8lIkxq3DtF+j1TpMP8
+         ex6FTSHqZOtaApRTXaiR2AG3VX8byVNjl5QEvP4kMTxDqOMHCpM7WW06plwn0QtETDoH
+         t/xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773135585; x=1773740385;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pQOWh40d/nnZmtlxq0M914DAroUiw8MNKtpYHYH9+oQ=;
+        b=PVQghMiZnEv81IMAFI60XWvOy70likpGvlaGMgjf2EOSVroeOUTgA15ix1ZztCe6LV
+         MyYKquBi7UKSgwM7QbWAHjWa27aOyyCpam1ONtnY6zC1W4HfRCHZ9NOCi8tiePL6iR4n
+         HBDN5FCYBy+TIY7JrHhwe+ghm94smRkl+fJdCTFJ3fUcgq0OnFLDqTGrBGxOEKbpFQru
+         NGm8qN5TCL2pMQgvfQxk88udWDAkkCtvYDdd3VtybPYZnysW4eYiWWM3g5pLN6od11EO
+         Cyis/L6VJRjG55wiWCs/PV6cYbDqogrqfae4cc/zHMV5yKboZWsYQChu1wsWj/EQ6qoE
+         Pe9w==
+X-Gm-Message-State: AOJu0Yzj4dg6MwTkcrb3+d+B+C/Q+ctaP/d+uv34IR1j9rCAJYOeGS1m
+	P+vHTSTzw4a+cbmfKlTLs0p1xxW1/V/sc+tDD4O38FmNIu7po4JOhtlpJHIlno+UGY95FQNYHhM
+	hXwOnxYZHhL3h7cYuzLFop+fvJqiiSHooCS8k
+X-Gm-Gg: ATEYQzz92EE6Im7yXQDd+BzQMvJNv7f2VyQIrBSK6mKSlZGr73+nrb4+ihYrREylTj+
+	cZ2nrHfPZD+DD+2mL+LKbOK76XuBMIiS8vgAUN0fP1NdC2oT2bQXNYjJvynDAOkkiSw2VPtQMdf
+	qDQoLHXA7BQv/QEDGtm56kqKCETk51bfrQZ/2gpHDHKmwAUrr5lsZ/MF/eIdX1tMitNAnFIjI8n
+	tJ4kcNxN3JNg7K59YG4mdvAmUfDkKz1Ac77iNUJpXSnDAyivrI5QaoLYs0/Kb0TY0/2N29Sa5cz
+	DjuAHuWlooTkKRS00Xm1fTdqz6YijqSfft7ly7mS3bOSkFA+
+X-Received: by 2002:a17:906:ee88:b0:b8e:8874:8367 with SMTP id
+ a640c23a62f3a-b942dbcece2mr739570066b.8.1773135584259; Tue, 10 Mar 2026
+ 02:39:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20260310085041.102-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20260310085041.102-1-takashi.yano@nifty.ne.jp>
+From: Takeshi Nishimura <takeshi.nishimura.linux@gmail.com>
+Date: Tue, 10 Mar 2026 10:39:05 +0100
+X-Gm-Features: AaiRm507UrqFtYfTq6T9yCTYlrVCuQf6WsQGfPZsTPxuASCgmWRBRyfS0k4Itvw
+Message-ID: <CALWcw=EXF-MgsJ+=GYuVwUeQdAdKsxsSPu=J_KNvavCm6mGnKQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] A few fixes for signal
+To: cygwin-patches@cygwin.com, cygwin@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+On Tue, Mar 10, 2026 at 9:51=E2=80=AFAM Takashi Yano <takashi.yano@nifty.ne=
+.jp> wrote:
+>
+> Takashi Yano (3):
+>   Cygwin: signal: Wait for `sendsig` for a sufficient amount of time
+>   Cygwin: signal: Do not wait for sendsig for non-cygwin process
+>   Cygwin: signal: Implement fake stop/cont for non-cygwin process
+>
+>  winsup/cygwin/exceptions.cc | 19 ++++++++++++++++++-
+>  winsup/cygwin/sigproc.cc    |  8 ++++++--
+>  winsup/cygwin/spawn.cc      |  2 +-
+>  3 files changed, 25 insertions(+), 4 deletions(-)
 
-On Fri, 6 Mar 2026 08:46:40 +0100 (CET)
-Johannes Schindelin wrote:
-> 
-> Hi Takashi,
-> 
-> On Tue, 3 Mar 2026, Takashi Yano wrote:
-> 
-> > On Mon, 02 Mar 2026 14:24:36 +0000
-> > "Johannes Schindelin wrote:
-> > > A Git for Windows user reported that typing in a Bash session while a native
-> > > Windows program is running (or has just exited) can produce scrambled input
-> > > -- e.g. typing "git log" yields "igt olg":
-> > > https://github.com/git-for-windows/git/issues/5632
-> > > 
-> > > I have been experiencing what I suspect is the same bug for a long time in
-> > > my tmux sessions: after quitting a pager and immediately pressing cursor-up
-> > > to recall the previous command, often followed by Escape+Backspace, the Bash
-> > > session simply hangs. I suspect that the escape sequence bytes arrive out of
-> > > order, and hence the sequence does not parse, and the terminal hangs. Quite
-> > > frustrating, and it happens often enough to be a real productivity drain.
-> > > 
-> > > This bug report was therefore always on my mind, and gaining some good
-> > > experience with AI-assisted coding at work finally gave me the push to
-> > > investigate properly. I started by writing an AutoHotKey-based UI test (Git
-> > > for Windows has a small suite of those; they are not included in this series
-> > > because they are specific to our fork). Getting a reliable reproducer
-> > > required quite a bit of back-and-forth as the bug is timing-sensitive and
-> > > only manifests when pseudo console transitions happen while keystrokes are
-> > > in flight.
-> > > 
-> > > The investigation itself was substantial. The total session spread over a
-> > > week. To be transparent about the methodology: I used AI (Claude Opus) as an
-> > > investigative tool throughout this process. I dictated context and direction
-> > > via speech recognition, the AI searched the code, instrumented the code
-> > > liberally, and dug into the PTY internals. Every decision about what to
-> > > investigate, what to fix and how was mine, the AI merely executed my plans.
-> > > I typed very little (leaving typing to Parakeet's speech recognition and to
-> > > Claude Opus); the keystrokes are not mine, but the ideas are. For that
-> > > reason I use "Assisted-by" rather than "Co-authored-by" trailers in the
-> > > commits.
-> > > 
-> > > The root cause is what Opus labeled "pseudo console oscillation" (I called
-> > > it "flickering" but agree that "oscillation" is a better term): each time a
-> > > native program starts or exits, pcon_activated and pty_input_state change
-> > > rapidly, and several code paths in master::write() react by calling
-> > > transfer_input() to move data between the cyg and nat pipes. During
-> > > oscillation, these transfers steal readline's buffered data from the cyg
-> > > pipe, causing characters to arrive out of order.
-> > > 
-> > > My suspicion is that the originally reported bug is fixed entirely by the
-> > > first patch (1/4). The remaining three address edge cases that the
-> > > reproducer exposed through its more aggressive oscillation pattern. You
-> > > might say that I over-deliver a bit, but that seems like a good thing in
-> > > this instance.
-> > > 
-> > > I tested both with and without MSYS=disable_pcon to verify that the
-> > > scenarios the removed code was originally intended to handle are still
-> > > covered by setpgid_aux(). This is even automated in Git for Windows' fork
-> > > via the AutoHotKey-based tests; for full details see
-> > > https://github.com/git-for-windows/msys2-runtime/pull/124.
-> > 
-> > [...]
-> > 
-> > I tried to reproduce the issue, however I could not yet.
-> > 
-> > Is the issue reproducible in pcon_activated case?
-> > Or disable_pcon case?
-> > 
-> > If you can reproduce the issue in cygwin, could you kindly please
-> > let me know how to reproduce it?
-> 
-> It is admittedly difficult to reproduce. It took me a good 4 days to get
-> to a reliable reproducer. And I failed to do this in manual mode, I had to
-> employ the help of AutoHotKey to do it. The result can be seen here:
-> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/keystroke-order.ahk
-> 
-> Unfortunately, it is not quite stand-alone, it requires `powershell.exe`
-> in the `PATH`, and
-> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/ui-test-library.ahk
-> and
-> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/cpu-stress.ps1
-> in the same directory. I just verified that it reproduces even with vanilla
-> Cygwin, using the latest AutoHotKey version from
-> https://github.com/AutoHotkey/AutoHotkey/releases/tag/v2.0.21. I ensured
-> that Cygwin's `bin` directory is first in the `PATH` and then ran, from a
-> PowerShell session:
-> 
->   & "<path-to>\AutoHotkey64.exe" /force keystroke-order.ahk "$PWD\log.txt"
-> 
-> What this test does: It runs a small PowerShell script designed to add a
-> bit of CPU load and then spawns a Cygwin process (`sleep 1`). While these
-> are running, it then types _very_ rapidly four characters, then two
-> backspaces, then repeats that quite a few times ("ABXY" then deleting
-> "XY", then "CDXY", deleting "XY", etc). The number of characters was
-> chosen high enough that this reproducer basically reproduces the issue on
-> the first try. The "log.txt" file contains a detailed log including the
-> verdict. In my latest test, for example, it shows:
-> 
->   Iteration 1 of 20
->   MISMATCH in iteration 1!
->   Expected: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
->   Got:      ABCDEFGHIJKLMNOPQRXSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
-> 
-> You will spot the "X" between "R" and "S", meaning that the backspace was
-> not able to remove the "X" because it was routed to the wrong pipe, or
-> after the "X" was already consumed.
-
-Thanks for the reproducer. I finally could reproduce the issue!
-Please let me take a look.
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+What if the non-Cygwin process is MSYS2, or UWIN?
+--=20
+Internationalization&localization dev / =E5=A4=A7=E9=98=AA=E5=A4=A7=E5=AD=
+=A6
+Takeshi Nishimura <takeshi.nishimura.linux@gmail.com>
