@@ -1,74 +1,69 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id A1FE74BAE7FB; Wed, 11 Mar 2026 15:11:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A1FE74BAE7FB
+	id 3F52C4BB5886; Wed, 11 Mar 2026 15:11:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3F52C4BB5886
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1773241870;
-	bh=nl8J+a0pPVIssFVzYp7Zhc/HFpQnCU+fwV3u7jDCYjQ=;
+	s=default; t=1773241918;
+	bh=liyHrrq0zV1JpXP4/Br6YXk3jHQK8puL2rNumTcclnI=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=rx6S86mpjP+HT2PZnuiXKgB3DMB6+0zG5GIGH/fIluKMxs9SgWPTrFtbgeVcyjaXj
-	 JZnQs54rnfOg+EpWzcqjH1FnA5+DOlfNPbfY26ksQ2NmNYR+zeDaBxhuy2WZSXBJdv
-	 Yk/BSJccDI9P6Zfvz7uqbcSMBk8jzH/+CwtA4oqk=
+	b=GYT5OQcD2L1kQuVKJJQNtyo/n8BwGpbdbePyU/84V8EudWRVKwKR3QY6qL5GyoMEl
+	 sDfMY6MuqMRHr7dXymSei3TXrx5bsu9nZhEENXUnPp+hmNXETQ7e58DSN+WCH9tZTa
+	 Azbw2S24yc91AITmRMvAFAXgBNzQzaPoHWNsh/QI=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id A7641A80859; Wed, 11 Mar 2026 16:11:08 +0100 (CET)
-Date: Wed, 11 Mar 2026 16:11:08 +0100
+	id 5BAADA80859; Wed, 11 Mar 2026 16:11:56 +0100 (CET)
+Date: Wed, 11 Mar 2026 16:11:56 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3] Cygwin: signal: Wait for `sendsig` for a sufficient
- amount of time
-Message-ID: <abGGDAppzfO334u8@calimero.vinschen.de>
+Subject: Re: [PATCH 2/3] Cygwin: signal: Do not wait for sendsig for
+ non-cygwin process
+Message-ID: <abGGPMXOlkGdoz-M@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20260310085041.102-1-takashi.yano@nifty.ne.jp>
- <20260310085041.102-2-takashi.yano@nifty.ne.jp>
+ <20260310085041.102-3-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260310085041.102-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20260310085041.102-3-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
 On Mar 10 17:50, Takashi Yano wrote:
-> The current code waits for `sendsig` by `for` loop in sigproc.cc,
-> however, the wait time might be insufficient for recent CPU.
-> The current code is as follows.
-> 
->    for (int i = 0; !p->sendsig && i < 10000; i++)
->      yield ();
-> 
-> Due to this problem, in tcsh, the following command occasionally
-> cannot be terminated by Ctrl-C. This is because, SIGCONT does not
-> wake-up `sleep` process correctly.
-> 
->   $ cat | sleep 100 &
->   $ fg
->   $ (type Ctrl-C)
-> 
-> With this patch, the wait time for `sendsig` is guaranteed to be
-> up to 100ms instead of looping for 10000 times.
+> Waiting for `sendsig` to be non-zero for non-cygwin process is
+> pointless, because it never becomes non-zero (see spawn.cc).
+> Do not wait `sendsig` for a non-cygwin process.
 > 
 > Fixes: d584454c8231 ("* sigproc.cc (sig_send): Wait for dwProcessId to be non-zero as well as sendsig.")
 > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 > Reviewed-by:
 > ---
->  winsup/cygwin/sigproc.cc | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  winsup/cygwin/sigproc.cc | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
 > diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-> index 30779cf8e..0fd7ed3ba 100644
+> index 0fd7ed3ba..4ff05967b 100644
 > --- a/winsup/cygwin/sigproc.cc
 > +++ b/winsup/cygwin/sigproc.cc
-> @@ -646,7 +646,8 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
+> @@ -646,9 +646,12 @@ sig_send (_pinfo *p, siginfo_t& si, _cygtls *tls)
 >      {
 >        HANDLE dupsig;
 >        DWORD dwProcessId;
-> -      for (int i = 0; !p->sendsig && i < 10000; i++)
-> +      DWORD t0 = GetTickCount ();
+> -      DWORD t0 = GetTickCount ();
+> -      while (GetTickCount () - t0 < 100 && !p->sendsig)
+> -	yield ();
+> +      if (!ISSTATE (p, PID_NOTCYGWIN))
+> +	{
+> +	  DWORD t0 = GetTickCount ();
+> +	  while (GetTickCount () - t0 < 100 && !p->sendsig)
+> +	    yield ();
+> +	}
+>        if (p->sendsig)
+>  	{
+>  	  dupsig = p->sendsig;
+> -- 
+> 2.51.0
 
-Again a case where GetTickCount is sufficient?  I'd suggest
-to use GetTickCount64 instead.
-
-Other than that, LGTM.
+LGTM
 
 
 Thanks,
-Corinna
+COrinna
