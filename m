@@ -1,81 +1,71 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 650034BB58B6; Wed, 11 Mar 2026 14:54:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 650034BB58B6
+	id BABB74BB58AA; Wed, 11 Mar 2026 14:54:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BABB74BB58AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1773240864;
-	bh=7x8o/eqb7GNth4nP0GlAsmqj1jXA99MyoBjIwSj69A8=;
+	s=default; t=1773240898;
+	bh=xpjuR5A9JPic5AKLViFl4ne8chqmySEyT4QlDhNMyDY=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=V4mBLg4JL/ywqYpJAKotpBbV7d3WLdMSQl9iyuxSw/m8AO2u3nT9WY1rz/Hog9uMI
-	 bvgqSdNspyPMUqzyIqtl8wKEKJ66jfH2vAAEmEOS9HgSMKEjO/bRD/Uoyki8ab+0kc
-	 rnXkeHozzTWj/6lnPKccZQWCsmfDszaDRI6VbOIE=
+	b=vnSG9rzAr/EiqKCGaOtichB2UTIEsJE7WMqSBvhvKVBehRvD/PnT/J6/zrmLVllW/
+	 eA55dMJCjDYUlMve4/dskXMZkz/p9MCfDwZCOIWCo7yEI8D1WK14iVQBK5/1XYPoe9
+	 G3OpRCx3mHnq1BnInThpW0+Yc9imAfQX/WWW/ZBQ=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 7B0C2A80859; Wed, 11 Mar 2026 15:54:22 +0100 (CET)
-Date: Wed, 11 Mar 2026 15:54:22 +0100
+	id D2CE0A80859; Wed, 11 Mar 2026 15:54:56 +0100 (CET)
+Date: Wed, 11 Mar 2026 15:54:56 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Igor Podgainoi <Igor.Podgainoi@arm.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
-	nd <nd@arm.com>,
-	Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-Subject: Re: [PATCH 1/1] Cygwin: signal: Fix
- stabilize_sig_stack/setjmp/longjmp on AArch64
-Message-ID: <abGCHjZ7hFQM-PNO@calimero.vinschen.de>
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH 2/2 V3] Cygwin: gendef: export _alloca only on x86_64
+Message-ID: <abGCQB-jNOmxRQQH@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Igor Podgainoi <Igor.Podgainoi@arm.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
-	nd <nd@arm.com>,
-	Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-References: <cover.1771489560.git.igor.podgainoi@arm.com>
- <318a0070a6edb6f21d702786966a6d89351573c6.1771489560.git.igor.podgainoi@arm.com>
+Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <MA0P287MB3082B2BA4E9D476168C4DB919F65A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+ <aYpCJ6Tybk0mGTLa@calimero.vinschen.de>
+ <MA0P287MB3082A6AAABBF6611C1B989349F62A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+ <MA0P287MB308238F12BC9D259C02CC7EC9F6BA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <318a0070a6edb6f21d702786966a6d89351573c6.1771489560.git.igor.podgainoi@arm.com>
+In-Reply-To: <MA0P287MB308238F12BC9D259C02CC7EC9F6BA@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Feb 19 08:44, Igor Podgainoi wrote:
-> This commit fixes the AArch64 implementation of the following three
-> functions: stabilize_sig_stack, setjmp and longjmp.
+On Feb 19 19:30, Thirumalai Nagalingam wrote:
+> Hi,
 > 
-> Changes made:
+> Resending this patch to apply cleanly, as the previous version no longer applies due to changes in the dependent patch (https://cygwin.com/pipermail/cygwin-patches/2026q1/014647.html)
 > 
-> * Fixed code indentation in all three functions.
-> * Corrected some comments and added additional ones.
-> * Added missing SEH directives.
-> * Changed the locking algorithm in stabilize_sig_stack to Test and
->   Test-and-Set (TTAS).
-> * Stopped returning a value in x0 in stabilize_sig_stack to avoid
->   unnecessary clobbering. This should make it more similar to the
->   x86_64 version.
-> * Using x10 instead of x0 in setjmp and longjmp where needed as per
->   the previous change.
-> * Fixed bug in setjmp where the SP value after the prologue was used,
->   instead of the original one.
-> * Fixed bug in setjmp where the stackptr was saved at the wrong offset
->   into jmp_buf (should be 0).
-> * Now saving and restoring x0 in setjmp and x0/x1 in longjmp around the
->   call to stabilize_sig_stack. This should make it more similar to the
->   x86_64 version.
-> * Removed the prologue and epilogue in longjmp, as the function never
->   returns.
-> * Changed logic in longjmp to take the return value directly from the
->   second argument. This should make it more similar to the x86_64
->   version.
-> * Fixed bug in longjmp where the TLS stack pointer restoration used an
->   invalid base register.
-> * Using zero registers instead of an immediate 0 where possible.
+> Thanks,
+> Thiru
 > 
-> Tests fixed on AArch64:
-> winsup.api/mmaptest02.exe
-> winsup.api/mmaptest03.exe
-> winsup.api/ltp/mmap05.exe
+> In-Lined patch:
 > 
-> Signed-off-by: Igor Podgainoi <igor.podgainoi@arm.com>
-> ---
->  winsup/cygwin/scripts/gendef | 277 ++++++++++++++++++-----------------
->  1 file changed, 142 insertions(+), 135 deletions(-)
+> diff --git a/winsup/cygwin/cygwin.din b/winsup/cygwin/cygwin.din
+> index c3518f480..7709a0653 100644
+> --- a/winsup/cygwin/cygwin.din
+> +++ b/winsup/cygwin/cygwin.din
+> @@ -144,7 +144,6 @@ __xdrrec_getrec SIGFE
+>  __xdrrec_setnonblock SIGFE
+>  __xpg_sigpause SIGFE
+>  __xpg_strerror_r SIGFE
+> -_alloca = __alloca NOSIGFE
+>  _dll_crt0 NOSIGFE
+>  _Exit SIGFE
+>  _exit SIGFE
+> diff --git a/winsup/cygwin/x86_64/cygwin.din b/winsup/cygwin/x86_64/cygwin.din
+> index 12a49b009..f352b5e8c 100644
+> --- a/winsup/cygwin/x86_64/cygwin.din
+> +++ b/winsup/cygwin/x86_64/cygwin.din
+> @@ -4,3 +4,4 @@
+>  LIBRARY "cygwin1.dll" BASE=0x180040000
+>  
+>  EXPORTS
+> +_alloca = __alloca NOSIGFE
+> --
 
-Pushed on top of Thirumalai's patches.
+
+
+Both patches pushed.
 
 
 Thanks,
