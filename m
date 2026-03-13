@@ -1,86 +1,118 @@
-Return-Path: <SRS0=tudX=BM=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo005.btinternet.com (btprdrgo005.btinternet.com [65.20.50.218])
-	by sourceware.org (Postfix) with ESMTP id 23AFF4BAD171
-	for <cygwin-patches@cygwin.com>; Thu, 12 Mar 2026 14:45:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 23AFF4BAD171
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 23AFF4BAD171
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.218
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773326746; cv=none;
-	b=WpYBGI1EaREdnDO8n4J6RM37CUK5PSBAlyi4g19BfryaqfO3nvlLvS0CpPsWDVX+8o+XaqeyMQKrr+SDXGEOM+5nZTSLKhiM6vIj1YTa8y9hAsG7ZaBnMpgfabOyI5IKAPN1kjxhOPuejFzVHZlk5xKX75PDhNi+4TQyd5hA9y0=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1773326746; c=relaxed/simple;
-	bh=ghok0N5RZl/IZrgp2FVLowbIBGacy6GLokcDBfvv1zw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=gyO+h9jNuGjVuhomf+hZMcjKzE2LxvsnnggMqQAQ9zUlWlZA3P594hSQK6I0Vyom4JWL9huK5slFYfwkb+baRGY13bs7DDCLgbJlDS8tAhXoJLiS/FlIM4kR3jj/wVYX477/RJJbF9dTbWODNRUfQqgt9mvXvZchaQpAEDCymao=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 23AFF4BAD171
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 69AF67E4004064D1
-X-Originating-IP: [62.49.245.144]
-X-OWM-Source-IP: 62.49.245.144
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTF1lJbiAGS09jjYDbVGMKF5zfgBMGqwBZQq95EjOx7vf3e0yorwCRlDl3pNq8FVfqrmTHO56XtWiobNTFilXJ8zOVTxoYDWn75zjmKci1n2w9GB3CK92TlSfc17/OxiOnh7RTmbSswHYxaExJdBioF1NHv70TaMNI2WEWxJ8SQnNDN4PEbLUYg3GcSffEPhz1LvMEHZxzY/QQF39T4KiR0NuegkwwYH95IoYbnfvIW9sRkyjNE8TCFH44560sNuPAT87WzGYBXxyGRIRqMvQ8GsPCzObCaZ0tXCBrge9XLcQ/QCHLN/P5CWSvQQ5aCqNvP04L9DgBaJUGqOhExKFScWENFrIAb/OBRnBPXWjOICs2aHmxNpRV/WQfUImlQ6DoWOApszTeL53taIMhQ5GvgMQ+rgwK4lQ3Ya+i2IhbtdhhiRXqQ+6TvxLMSPyL/QiiRsgmjNUYo9EFEKMcHfijAiUs+RPYJzvSiIG8uNKENNMo6rJpFbgTQI8uhmcxgOc2kPz9NPcnPLHSdp/494yTvnAxNMxA6Q93S0WNUh+D79w9tVogOx4hsOoU5bZ/H/A2YXFGTD4P80wfu3FvCWd2bRHRR3SUWGB4xOZIYvwe9iN3DBmqNC5TzYF8BwqYNzuLEEniG/TiLqVLEPcurf0lF6rhWkwkz/DkMp25pMXfWw+w
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (62.49.245.144) by btprdrgo005.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 69AF67E4004064D1; Thu, 12 Mar 2026 14:45:40 +0000
-Message-ID: <8fadabda-8d77-4751-86a2-c9741624b648@dronecode.org.uk>
-Date: Thu, 12 Mar 2026 14:45:39 +0000
+Return-Path: <SRS0=7bOH=BN=gmail.com=sebastian.n.feld@sourceware.org>
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+	by sourceware.org (Postfix) with ESMTPS id DD8974BBCDA0
+	for <cygwin-patches@cygwin.com>; Fri, 13 Mar 2026 09:16:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DD8974BBCDA0
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DD8974BBCDA0
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a00:1450:4864:20::236
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1773393400; cv=pass;
+	b=t+W35ldssFnX6rapr0KMfnlLYQvFIIgVA1dUwQMdEf7OPPK4FRPcNJBYn7+XNBPnOJAFRgpBaRD+nH3xeV/t2k3nsTt6ywe3WMgC906m8vLHZMKHwPfsy1jaiOx2yLe469z9HjG0gKYuATmPSsKtz7NBHLOPynxrJvYgfwSc/fw=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1773393400; c=relaxed/simple;
+	bh=w8ujeSr9TQOaYWVC+za+ICbQfeSe/ZuhqOO24evZ4EQ=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=d3K4wEoEbEGPrKEMGXZesHKsJ1VZbhgl1uRL7t8GsJ0OXpqIcKX6sJx5SAOtaL0VXzZPJRI2aSWSQSyzENvhE8xUxLKMzSd68B8wOfDY5nHHE2xSxY5hgggSV09vzBD3g2c+ZWw/0DE8gHtLiVUMLRFFzI1suHC07nOdYss9NlU=
+ARC-Authentication-Results: i=2; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DD8974BBCDA0
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=ldlm47Rp
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-38a3066b68bso18265701fa.3
+        for <cygwin-patches@cygwin.com>; Fri, 13 Mar 2026 02:16:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773393398; cv=none;
+        d=google.com; s=arc-20240605;
+        b=G05XDZH0H6rLguNetz7CrUvDqOQNb0kyVrv8sdrXlemHDxi6fsmaLLM4jhN1jmkova
+         gS3fFPgZLwzTn/6BoYC40HDjQpGh/uTsZMggyY51ETZSs+zHYYw6GUW75miNYu2b9Lmo
+         0Qc+s/MhML2GFuSEzBdWoJTJtth1MlVDz1BM+n6PW+96kjk8fiTSwUX1C7rOAhHR+0Oh
+         iXtDsq8Y6lNCdrGVd/Xzyx4z2HEx/r6BuAFzRysNtqY6IOg9IQeSRDGxeK9s2gh+IpEq
+         5s+samaGLKttJWhpQrewodIR6Hu7g1N/GZhw6q0EcRoqul5LSfiytRXiBs4pwVHnjQba
+         /V5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LVl/2fuDPsYRgJHshWHCXMn6KBtRjoRG3CULzXFAuVI=;
+        fh=YLobnwiB6mlxg8mZw4jwzI5+9rNrzFWI954radGPi+I=;
+        b=VUWoEXGiTlB8sYYsNwigzWIMK423qZkKMkLis8HDwe9Uz0fDBzV7Zl7+ykzjLUF3df
+         OouS86mYSJ32bSMt/0p2c2rfrKiVJptQ6gr/XrjviLwqJylV5q1jlwkklv7T+3oYa0WT
+         TDuAgGEfZr1CxhGkYYE3qyqNw8Q2DxR10xK7j65o5ODrpBhSAeiWA4BRR0IZkG8J0VJN
+         bS8WOcXbZlU2eP9qxF6im4mW+7ktb9EKs16itGLFyapXotNuAR/BnCN3WjlWeQcIA5Qe
+         G2Z85avzZCVaDc63TBj4VEZaFAK4TrKThM1ydvPze+iKBAj7LbxK3TVh6YR9ljRwcXrF
+         i6Fg==;
+        darn=cygwin.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773393398; x=1773998198; darn=cygwin.com;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LVl/2fuDPsYRgJHshWHCXMn6KBtRjoRG3CULzXFAuVI=;
+        b=ldlm47RpH11OQqZeYjeP0Z/vpEV+yqrv+yd5WQOAs5Z4zAjd1plPHlYPbXQUCHSQ4G
+         0R4dQaqjMOdAGtpUFeJ9x6kHHvzJIaHvSqmB3HbqbrqM0K8kG0mEM9szkkxP+0SJGw/b
+         lKIpIm8qc8hvmUuJW65BDDEcWFqNMFrM7ZRe0CoXVbk7yWrg382aPX87saXTn5AeNDl6
+         Q0z/3pbjG/brrlPzpE634XpvNqSJf5jkic0CVRQUDAwXz4uH26akZC9cZypmCsb8RofR
+         KIeRT74l4QSMGeVCl+rX7gl6RzYTlT5Ma0XB1USdvzC1l7SzYeY79GVPGFAWeKst4j6T
+         1Pwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773393398; x=1773998198;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LVl/2fuDPsYRgJHshWHCXMn6KBtRjoRG3CULzXFAuVI=;
+        b=iqvViEBRhV0brLsbZvaqKRex3MeUZbhKZ+piWe4LOOxa3UWpSsqD61aomSWjPJInvL
+         ArWf7c99ewrK5flKG8Mdwdnc9hE2VRqo0DRGq4+4V8QyY+A/PPM8Tn0uIvfA17tRWLVB
+         vxffjdX9J+4zPG+GY1ujQla+n3xjJNthMVPPZ/KzhdGZG991MuEv1v5zxEd9T5ANY/X8
+         6sPM4rFmBnWypEe+4RbYBysufXblgLF6oHRxlICFZEAvvtwCaZgtzBmzFFveULeQFHFY
+         eaBCvacL/UjwKtm76ohbY9N+qF+zns9sqdALL13dbpKwb7FxGJHfTx+hdJQC7Ww2iBHk
+         KEUA==
+X-Gm-Message-State: AOJu0YwzbsggbPQ718c2frnQXNJEtxff2yMyEknozswPApOL0GOw0V9x
+	IIr2BJhWc4xJXcgqEvfnyTyyFkBRS6jzcF8Z6BsJVbe14oA+yfTkP42W5cl4pNud4zeWMoQAjlZ
+	gydU5bnQsJ02MEvUH40lfccgNG+iPM5aN3A==
+X-Gm-Gg: ATEYQzwysxB6DbEzJ3YHFgtHvRMJqBgpkx9tScdX5MiEDI6mxHrXJCVc9KPPgvi7ns9
+	DEMMZAgwVxYAxOMJ3P7NogpJXW+AwhNfwIrfWXhyBOK7rkZvRZzF6JN8vOSU/2Z+ewu19D9S10w
+	kIj7f9yjS+Cj6CviQbMtJ3NUTbPIKrMWPBcZi51Pom1g31KTMaPKj4nED8GWhxN/V4a9hO1FdPg
+	Eu2R86OLvE/Y9jN5UQmwBr5xPyw3YaFgKXijkbqRndIhpruqT4UGlwJERZWbcdnTSpAejY+lTUO
+	C6c38x4mGNFqcePQihnLt4AACEDsZkgysrY1Ig==
+X-Received: by 2002:a2e:9a0e:0:b0:38a:6acb:e5f5 with SMTP id
+ 38308e7fff4ca-38a897d3822mr7354671fa.29.1773393397620; Fri, 13 Mar 2026
+ 02:16:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
-To: Sebastian Feld <sebastian.n.feld@gmail.com>
 References: <5f60e191-e50e-32d3-53cc-903e03cc7a5e@jdrake.com>
- <aGUfpy6cTysuyaId@calimero.vinschen.de>
- <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
- <aGaZq6sSSuNCKX59@calimero.vinschen.de>
- <fcda3f51-7737-5e21-30a9-443f5f4f8c97@jdrake.com>
- <5e4ebc57-cedc-577f-264d-6cc68be6ee99@jdrake.com>
- <aGeQMtwhTueOa4MT@calimero.vinschen.de>
- <206e78ac-9417-605d-14c1-d9ae2e93782d@jdrake.com>
- <832b300d-9eb9-bef8-46ff-36cce4520f4d@jdrake.com>
- <aGulX_0Azb6GI-_C@calimero.vinschen.de>
- <aIJ2kbx6UOK6mAnG@calimero.vinschen.de>
- <b05a2798-ce6a-28cf-f8e2-3f0cd7bf165b@jdrake.com>
- <CAHnbEGJT8vKZjR8aXqB+aANZ8J9P8G5bnLO6gf860FzAeCCXMA@mail.gmail.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <CAHnbEGJT8vKZjR8aXqB+aANZ8J9P8G5bnLO6gf860FzAeCCXMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
+ <aGUfpy6cTysuyaId@calimero.vinschen.de> <fe6b5e2f-9709-e6fd-6031-1193c7fc8b94@jdrake.com>
+ <aGaZq6sSSuNCKX59@calimero.vinschen.de> <fcda3f51-7737-5e21-30a9-443f5f4f8c97@jdrake.com>
+ <5e4ebc57-cedc-577f-264d-6cc68be6ee99@jdrake.com> <aGeQMtwhTueOa4MT@calimero.vinschen.de>
+ <206e78ac-9417-605d-14c1-d9ae2e93782d@jdrake.com> <832b300d-9eb9-bef8-46ff-36cce4520f4d@jdrake.com>
+ <aGulX_0Azb6GI-_C@calimero.vinschen.de> <aIJ2kbx6UOK6mAnG@calimero.vinschen.de>
+ <b05a2798-ce6a-28cf-f8e2-3f0cd7bf165b@jdrake.com> <CAHnbEGJT8vKZjR8aXqB+aANZ8J9P8G5bnLO6gf860FzAeCCXMA@mail.gmail.com>
+ <8fadabda-8d77-4751-86a2-c9741624b648@dronecode.org.uk>
+In-Reply-To: <8fadabda-8d77-4751-86a2-c9741624b648@dronecode.org.uk>
+From: Sebastian Feld <sebastian.n.feld@gmail.com>
+Date: Fri, 13 Mar 2026 10:15:59 +0100
+X-Gm-Features: AaiRm53K8I7gyyaJnQY6JXH3DXMfZ1u6kt7yZy3grrKa4UdjTdcY5NXI2E47T1A
+Message-ID: <CAHnbEGLjarFbKBA37b5medyqcFAMuVo-dQB0n_Gwu_zWoHL90A@mail.gmail.com>
+Subject: Re: [PATCH 4/5] Cygwin: add fast-path for posix_spawn(p)
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_GMAIL_RCVD,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 09/03/2026 09:54, Sebastian Feld wrote:
-> Was this work ever merged into Cygwin1.dll?
+On Thu, Mar 12, 2026 at 3:45=E2=80=AFPM Jon Turney <jon.turney@dronecode.or=
+g.uk> wrote:
+>
+> On 09/03/2026 09:54, Sebastian Feld wrote:
+> > Was this work ever merged into Cygwin1.dll?
+>
+> Unfortunately, not.  And Jeremy seems to have moved on to other ways to
+> apply his talents.
+>
+> It would be ideal if someone else would pick up that work and get it
+> finished off.
 
-Unfortunately, not.  And Jeremy seems to have moved on to other ways to 
-apply his talents.
+That would require a cygwin.dll expert beyond my skill set.
 
-It would be ideal if someone else would pick up that work and get it 
-finished off.
+What about adding the current work as build option?
 
-> 
-> Sebi
-> 
-> On Thu, Jul 24, 2025 at 8:44 PM Jeremy Drake via Cygwin-patches
-> <cygwin-patches@cygwin.com> wrote:
->>
->> On Thu, 24 Jul 2025, Corinna Vinschen wrote:
->>
-[...]
->>
->> Great!  I rebased the topic/posix_spawn branch yesterday to use a local
->> child_info_spawn instance, but otherwise haven't really been looking at it
->> lately (I decided to test packinging the release candidate of llvm 21 and
->> found a fun new bug that only shows up when binaries are stripped).
->>
->> I'm trying to remember where things were at, and what I'm coming up with
->> was that I was going to revamp the struct with parameters to
->> child_info_spawn::worker.  I think having int mode and then the const
->> struct reference with all the other parameters makes sense.
+Sebi
+--=20
+Sebastian Feld - IT security consultant
