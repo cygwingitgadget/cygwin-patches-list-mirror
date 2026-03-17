@@ -1,128 +1,176 @@
 Return-Path: <SRS0=iP9N=BR=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id 9DE784BBC0C8
-	for <cygwin-patches@cygwin.com>; Tue, 17 Mar 2026 12:25:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9DE784BBC0C8
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 52D2F4A9F1C2
+	for <cygwin-patches@cygwin.com>; Tue, 17 Mar 2026 12:25:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 52D2F4A9F1C2
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9DE784BBC0C8
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773750333; cv=none;
-	b=Zg7YyrOXL74M7MlxMJoRdLxc1IBt78/tenxKAP2Ut4AYuA7q56q7T4X19veVYWkBY3Ksqzzs1Xx1TlSunH9P172ZCJEMI8eH5QkMyb6/8vW1NcZtUzSrL2sSZnigY4IWPpTTgFfejVndLfiYyL8DpgdZ0VKGTDiFmjsV6+XMQR8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 52D2F4A9F1C2
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773750347; cv=none;
+	b=skw9Mk8x7LliTOycZ9SIlMNDIdzNzh68JqwjA61iCh830YsMA2/piSr4mcT65Jw0rzjFIa0V0E3ZWFNVbDETwvPKrQHtpx3FCVoszjH+kt8VTLf3JGb5HL5RnT+rEpstEgZ8SQ1LFkvgJpTcNWl4/HhwZMIkUeglfPz8xCMfOjI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1773750333; c=relaxed/simple;
-	bh=jH3rM/pkKIv9CU+echKSV1cB5Uzuu7JD4C/Tr0Dzkt8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=EfO8ZLzN0vF97inyzPUz8iO1JaZ/DgqH+Y9thFpPuidFXZXF4HR9sEhnvof4i8ir2SoIZNRiZwSbFJ4pzVCBQ7hlk+psIrO/o7etXRmnO7Ot9PjtaAaTeWLo+WchaFRO0A45f9tF3O9SWSjSxMNeuCSuHc/7FbP2f8LW3uVRKuM=
+	t=1773750347; c=relaxed/simple;
+	bh=gw3tTkI95Bp1hM/qE8wzLwl9SHf/B9YuFGp8gCKOTok=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=jnfmoaAT3VyZNXJY6TlqkQ71BJXeIWxj3Chg4EV8W82qtdfenlWEHwEaGQTaAOQ2MV80E+dZourjeQPju5UoImsZL5oC7jnbtB/6UmW0SX1muBnhemveBjGHno5s1G3FAKcRZtQF7KGKK4pwVng6KfNmHP8gTtUqvwW1W9oB7No=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9DE784BBC0C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 52D2F4A9F1C2
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=QGMdX48l
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FBH6Ky5R
 Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260317122530842.NPTC.36235.HP-Z230@nifty.com>;
-          Tue, 17 Mar 2026 21:25:30 +0900
+          id <20260317122545387.NPUO.36235.HP-Z230@nifty.com>;
+          Tue, 17 Mar 2026 21:25:45 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 5/6] Cygwin: pty: Guard get_winpid_to_hand_over() with attach_mutex
-Date: Tue, 17 Mar 2026 21:23:09 +0900
-Message-ID: <20260317122433.721-6-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 6/6] Cygwin: pty: Guard to_be_read_from_nat_pipe() by pipe_sw_mutex
+Date: Tue, 17 Mar 2026 21:23:10 +0900
+Message-ID: <20260317122433.721-7-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260317122433.721-1-takashi.yano@nifty.ne.jp>
 References: <22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
  <20260317122433.721-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773750330;
- bh=VqYA5U55E2vcQXcZT3l8NyRopOpWiv3es6mBHTWun3k=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773750345;
+ bh=8VyrPI7AwXzxb41zEO7B9VPSULCA2QKjLUEEeizZXJs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=QGMdX48lDB+GknLk5XulRw4DsoyZ9A8LC/pPhVfdw3UP+XFdwiCn4ySoDN6hO+nm7tDKveoJ
- hDxYcb4ij/CzswITbzQLdT7GUXx/U2/GiQIv6nkYhCHgYH+UIoGt98ku4sUPxqhTY8Keom0BBV
- JDYcEvx64vOmxyrccM52vbnFFA56Zs6lEZz8vblLceO9rzJotXMLHn5PiJ7wvUF2w5ltpGZ0BT
- 8MzDxYCSz9spiA8YxdnVlppC/xRAvZu/yWLd03U/fkD6K8VjmqJmeplHbEAHhp2pnMbQU0c3mf
- RsruF6Bk8Rgx1PN84KKHBp97i63ekgW0j9/BpUCOvrdiBZ3w==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=FBH6Ky5RrwDVJOq22S8ngLSCIp+4aOggX6wWB7ZwGfEGz4fxRF55eV83k5KXVsRorYF/UNke
+ p1vgvmwYiIRGX3YDhy6y5FZO4YvNedy8F3plTn1sxpIAKNofCbg1FO6XU+R9MT1VZTM60JWPZz
+ jFGl9O9g6rAnS3SWNe/VXocPcJQDCza1FjPshGAe+UfqlUFUtcL6bNRuC7gsistBHZ1AsXaVIG
+ omGhsTcK9MWZGn6VKsCGsmURqc4b6LWRW8txf4Qy1K9f9Mdjg4aFB9O6CkN3x/D10V+C0Rs3kj
+ jsnDOHiKX0P09E8SjuHXm64zb0GsYAbODlkjWEUPnsb0W7vQ==
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, attach_mutex is shared only in the same process. As a
-result, if the master process of pty attaches to pseudo console
-temporarily, get_winpid_to_hand_over() may wrongly find the master
-process to hand over the pseudo console. make attach_mutex shared
-within the PTY and guard get_winpid_to_hand_over() with it.
+If to_be_read_from_nat_pipe() is called during pipe switching between
+cygwin pipe and nat pipe, the return value mignt not as expected due
+to incomplete state change. With this patch, to_be_read_from_nat_pipe()
+is guarded by pipe_sw_mutex to avoid that. In addition, duration of
+the acquiring the pipe_sw_mutex is reduced to avoid deadlock.
 
-Fixes: 1e6c51d74136 ("Cygwin: pty: Reorganize the code path of setting up and closing pcon.")
+Fixes: bb4285206207 ("Cygwin: pty: Implement new pseudo console support.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/pty.cc      | 14 ++++++++++++--
- winsup/cygwin/local_includes/tty.h |  1 +
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 40 +++++++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 1be853993..149e8e2cd 100644
+index 149e8e2cd..766df1b4f 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -773,6 +773,12 @@ fhandler_pty_slave::open (int flags, mode_t)
-       errmsg = "open pipe switch mutex failed, %E";
-       goto err;
-     }
-+  if (!(attach_mutex
-+	= get_ttyp ()->open_mutex (ATTACH_MUTEX, MAXIMUM_ALLOWED)))
-+    {
-+      errmsg = "open attach mutex failed, %E";
-+      goto err;
-+    }
-   shared_name (buf, INPUT_AVAILABLE_EVENT, get_minor ());
-   if (!(input_available_event = OpenEvent (MAXIMUM_ALLOWED, TRUE, buf)))
-     {
-@@ -2538,6 +2544,7 @@ void
- fhandler_pty_slave::fixup_after_fork (HANDLE parent)
+@@ -1301,22 +1301,34 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ bool
+ fhandler_pty_common::to_be_read_from_nat_pipe (void)
  {
-   create_invisible_console ();
-+  attach_mutex = get_ttyp ()->open_mutex (ATTACH_MUTEX, MAXIMUM_ALLOWED);
++  WaitForSingleObject (pipe_sw_mutex, mutex_timeout);
++  bool ret = false;
+   if (!get_ttyp ()->switch_to_nat_pipe)
+-    return false;
++    goto out;
  
-   // fork_fixup (parent, inuse, "inuse");
-   // fhandler_pty_common::fixup_after_fork (parent);
-@@ -3160,8 +3167,9 @@ fhandler_pty_master::setup ()
-   if (!(pipe_sw_mutex = CreateMutex (&sa, FALSE, buf)))
-     goto err;
+-  char name[MAX_PATH];
+-  shared_name (name, TTY_SLAVE_READING, get_minor ());
+-  HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
+-  CloseHandle (masked);
++  do
++    {
++      char name[MAX_PATH];
++      shared_name (name, TTY_SLAVE_READING, get_minor ());
++      HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
++      CloseHandle (masked);
  
--  if (!attach_mutex)
--    attach_mutex = CreateMutex (&sec_none_nih, FALSE, NULL);
-+  errstr = shared_name (buf, ATTACH_MUTEX, unit);
-+  if (!(attach_mutex = CreateMutex (&sa, FALSE, buf)))
-+    goto err;
+-  if (masked) /* The foreground process is cygwin process */
+-    return false;
++      if (masked) /* The foreground process is cygwin process */
++	goto out;
++    }
++  while (false);
  
-   /* Create master control pipe which allows the master to duplicate
-      the pty pipe handles to processes which deserve it. */
-@@ -3720,6 +3728,7 @@ fhandler_pty_slave::get_winpid_to_hand_over (tty *ttyp,
-       DWORD current_pid = myself->exec_dwProcessId ?: myself->dwProcessId;
-       if (ttyp->nat_pipe_owner_pid == GetCurrentProcessId ())
- 	current_pid = GetCurrentProcessId ();
-+      acquire_attach_mutex (mutex_timeout);
-       switch_to = get_console_process_id (current_pid,
- 					  false, true, true, true);
-       if (!switch_to)
-@@ -3728,6 +3737,7 @@ fhandler_pty_slave::get_winpid_to_hand_over (tty *ttyp,
-       if (!switch_to && ttyp->pcon_activated)
- 	switch_to = get_console_process_id (current_pid,
- 					    false, false, false, false);
-+      release_attach_mutex ();
-     }
-   return switch_to;
+   if (!pinfo (get_ttyp ()->getpgid ()))
+     /* GDB may set invalid process group for non-cygwin process. */
+-    return true;
++    {
++      ret = true;
++      goto out;
++    }
+ 
+-  return get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
++  ret = get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
++out:
++  ReleaseMutex (pipe_sw_mutex);
++  return ret;
  }
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index 6e4460e30..5f173fc06 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -21,6 +21,7 @@ details. */
- #define OUTPUT_MUTEX		"cygtty.output.mutex"
- #define INPUT_MUTEX		"cygtty.input.mutex"
- #define PIPE_SW_MUTEX		"cygtty.pipe_sw.mutex"
-+#define ATTACH_MUTEX		"cygtty.attach.mutex"
- #define TTY_SLAVE_ALIVE		"cygtty.slave_alive"
- #define TTY_SLAVE_READING	"cygtty.slave_reading"
  
+ void
+@@ -3943,7 +3955,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+     goto maybe_dumb;
+ 
+   /* Check if terminal has CSI6n */
+-  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   WaitForSingleObject (input_mutex, mutex_timeout);
+   /* Set pcon_activated and pcon_start so that the response
+      will sent to io_handle_nat rather than io_handle. */
+@@ -3979,7 +3990,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+   while (len);
+   get_ttyp ()->pcon_activated = false;
+   get_ttyp ()->nat_pipe_owner_pid = 0;
+-  ReleaseMutex (pipe_sw_mutex);
+   if (len == 0)
+     goto not_has_csi6n;
+ 
+@@ -3995,7 +4005,6 @@ not_has_csi6n:
+   get_ttyp ()->pcon_start = false;
+   get_ttyp ()->pcon_activated = false;
+   ReleaseMutex (input_mutex);
+-  ReleaseMutex (pipe_sw_mutex);
+ maybe_dumb:
+   get_ttyp ()->pcon_cap_checked = true;
+   return false;
+@@ -4320,7 +4329,6 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 						DWORD force_switch_to)
+ {
+   ttyp->wait_fwd ();
+-  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
+   if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
+     {
+       DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
+@@ -4335,6 +4343,7 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 	  ReleaseMutex (p->input_mutex);
+ 	}
+     }
++  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
+   if (ttyp->pcon_activated)
+     close_pseudoconsole (ttyp, force_switch_to);
+   else
+@@ -4353,6 +4362,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
+       && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+     {
++      ReleaseMutex (pipe_sw_mutex);
+       WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+@@ -4363,6 +4373,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
+ 	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+     {
++      ReleaseMutex (pipe_sw_mutex);
+       bool attach_restore = false;
+       HANDLE from = get_handle_nat ();
+       DWORD resume_pid = 0;
+@@ -4389,7 +4400,8 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 	release_attach_mutex ();
+       ReleaseMutex (input_mutex);
+     }
+-  ReleaseMutex (pipe_sw_mutex);
++  else
++    ReleaseMutex (pipe_sw_mutex);
+ }
+ 
+ bool
 -- 
 2.51.0
 
