@@ -1,185 +1,209 @@
 Return-Path: <SRS0=4rNz=BS=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:27])
-	by sourceware.org (Postfix) with ESMTPS id 87BD74BB58A3
-	for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 07:16:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 87BD74BB58A3
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 313684BBC0F5
+	for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 07:35:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 313684BBC0F5
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 87BD74BB58A3
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773818188; cv=none;
-	b=P2LOquTQV+Z7/cJht6G/IAlRFKCBCG2YATD7dS4k2s+IbwXC1iF6UdRJ2MMcGajdtB/Ovf79kYjXVvnUpN50HnGhMAjeGzoN3chl+IBQCxA/a5PSB1WzD4yo7CGwrQQ+mdwP3D78kYK+7U7qw1pm+OL6Y/I0LegM/+rnrD4sXFA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 313684BBC0F5
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773819331; cv=none;
+	b=oa1BejP7YY2CF95frIu0dxi4JnvvaNkjRN9EQOHNeF23/i4ckIN0iEciYW6m89v/eUAfBpQgoykRu63mZQXUJNRrLa7W+KJs16SbhIkvX54jh97VlgqxteaTTn2ioX3IV365vH4DIDp9UhVcGjDFQZkfP4wrO/LdcgAIcIDVb+E=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1773818188; c=relaxed/simple;
-	bh=D7ZFRkwiUs7+JHvtWlyLUq3hsqKdE9PPqliJnSwOHUI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=EVPIxNkiywxhQN7VB8/wW44Gr7ycGwc4b24+e4QroJjrEO35vBfZ4nLOlh+LfJLH6lqOhDqVucjKcuyD0bbTY6xxOMq1S3PUmAk595tH72QkId2KGCFK/81R+t5fmnBDCCWykeLRyHATYIe3T/k/s1JwQyjZrlJ8WeKCxbDqOfY=
+	t=1773819331; c=relaxed/simple;
+	bh=Y/GW8v8piEwhy53jEeTHjKrpjcdxX0Tx1MND9a3rJTI=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=JL+fQNPySjMqM1EdUUat5Mlnu/4rQ2EmQxBwlRaZYs+UBDeAuRv0JRqcX3SHW2Ihys5jFA6lSrKyIVN+O9FUWsNxAgrMd74ltGFG/oqV/b8LFufmEu3bqQVKXS8zJ0FJo1hi3buluP1TOKG1bC9XeFYwEcX4b+fq/kL8iZ0y95k=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 87BD74BB58A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 313684BBC0F5
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=sDAVTs3u
-Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
-          id <20260318071625613.SEWZ.19957.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 16:16:25 +0900
-Date: Wed, 18 Mar 2026 16:16:24 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ONkMT1nG
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260318073527579.ZVHL.36235.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 16:35:27 +0900
+Date: Wed, 18 Mar 2026 16:35:26 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/4] Cygwin: pty: Guard accept_input routing and flush
- stale readahead in fast path
-Message-Id: <20260318161624.6ecfa0e53714a8c9704ae4c7@nifty.ne.jp>
-In-Reply-To: <eba6e857a65bfab4e51a37b88d84829d8e65d5c7.1772461480.git.gitgitgadget@gmail.com>
+Subject: Re: [PATCH 0/4] Fix out-of-order keystrokes
+Message-Id: <20260318163526.d79b315b1485b3d67f82ad7a@nifty.ne.jp>
+In-Reply-To: <22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
 References: <pull.6.cygwin.1772461480.gitgitgadget@gmail.com>
-	<eba6e857a65bfab4e51a37b88d84829d8e65d5c7.1772461480.git.gitgitgadget@gmail.com>
+	<20260303212405.25a2db7d786ac2db324e8f7a@nifty.ne.jp>
+	<22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773818185;
- bh=lsKiOh01VJfN+zDvtiaQ7bQ+8s+6FaaoDwBBmyKV6Sk=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773819327;
+ bh=15v2PtXRx3f6oPqF4mqqDej5OKDMGzKa5hT0bGC5KY8=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=sDAVTs3uQTZOMYDQLGMhiH0DOEj05+u3WB+NXBkeoz31Z85i8K60PBcKGNHFSJYLahyOAAuu
- MAa/o4jjzN60Xcw6FLVKzxQPEaLUl+2ycGh6gmGbBmJFwFjixmMkLEUzUcG0HOVzLCwZnQ/PsV
- igEbt47EolVVZsvg9yEmtVBSZyb/ipFGKNzC7sXlNPDTTedDeI+/55Bfus80cJ7eTwo22lUbWt
- lZcCp2kFKPJ1jwVtOh4jocrVBT5FsaZ1FG9Weoh9IROzVYpFo/LNSGIMyoLo8UtW6yw6g/+4Wg
- ArBi8cb7Ezbjsf7JSJh2T811G+8oscEUETxWnsobWd9oUy9A==
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=ONkMT1nGB4VN5esp8ziSn2l+ddL/w+Dii/2jjK0MlisDGGEQCmoAGsbXB9+OTjtzM6rvo6i5
+ PRAjm77SiyiQp6P1w9XeOm0G0cUb9O2ELCjlqW771T91rYL2TkfQqf6Q2fIj76YciJZJiFJxtC
+ RG8L1VpqYy+siv6X012oREXKq0o35lrrWikgEUvPxE8oG4cGcAWLTb8h0OJpYFqi/1iCXizn6h
+ inheSYfkJH4DfD32AN/SiVZlxLN3UtA9zJDE0gIo32eSGbJxhCo/PypcqMtdAGkD+PjbCTlw4N
+ ZGZZG5VBFrFW8M7xgbhZQnXtHWkAIOtCiINkEeQpmVLGQgEg==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon, 02 Mar 2026 14:24:40 +0000
-"Johannes Schindelin wrote:
-> From: Johannes Schindelin <johannes.schindelin@gmx.de>
+Hi Johannes,
+
+On Fri, 6 Mar 2026 08:46:40 +0100 (CET)
+Johannes Schindelin wrote:
 > 
-> This final commit in the series addresses two remaining edge cases
-> where characters can escape through unintended routing during pseudo
-> console oscillation.
+> Hi Takashi,
 > 
-> Part 1: accept_input() routing guard
-> -------------------------------------
+> On Tue, 3 Mar 2026, Takashi Yano wrote:
 > 
-> accept_input() writes data from the readahead buffer to one of the
-> two PTY input pipes.  Its routing condition was:
+> > On Mon, 02 Mar 2026 14:24:36 +0000
+> > "Johannes Schindelin wrote:
+> > > A Git for Windows user reported that typing in a Bash session while a native
+> > > Windows program is running (or has just exited) can produce scrambled input
+> > > -- e.g. typing "git log" yields "igt olg":
+> > > https://github.com/git-for-windows/git/issues/5632
+> > > 
+> > > I have been experiencing what I suspect is the same bug for a long time in
+> > > my tmux sessions: after quitting a pager and immediately pressing cursor-up
+> > > to recall the previous command, often followed by Escape+Backspace, the Bash
+> > > session simply hangs. I suspect that the escape sequence bytes arrive out of
+> > > order, and hence the sequence does not parse, and the terminal hangs. Quite
+> > > frustrating, and it happens often enough to be a real productivity drain.
+> > > 
+> > > This bug report was therefore always on my mind, and gaining some good
+> > > experience with AI-assisted coding at work finally gave me the push to
+> > > investigate properly. I started by writing an AutoHotKey-based UI test (Git
+> > > for Windows has a small suite of those; they are not included in this series
+> > > because they are specific to our fork). Getting a reliable reproducer
+> > > required quite a bit of back-and-forth as the bug is timing-sensitive and
+> > > only manifests when pseudo console transitions happen while keystrokes are
+> > > in flight.
+> > > 
+> > > The investigation itself was substantial. The total session spread over a
+> > > week. To be transparent about the methodology: I used AI (Claude Opus) as an
+> > > investigative tool throughout this process. I dictated context and direction
+> > > via speech recognition, the AI searched the code, instrumented the code
+> > > liberally, and dug into the PTY internals. Every decision about what to
+> > > investigate, what to fix and how was mine, the AI merely executed my plans.
+> > > I typed very little (leaving typing to Parakeet's speech recognition and to
+> > > Claude Opus); the keystrokes are not mine, but the ideas are. For that
+> > > reason I use "Assisted-by" rather than "Co-authored-by" trailers in the
+> > > commits.
+> > > 
+> > > The root cause is what Opus labeled "pseudo console oscillation" (I called
+> > > it "flickering" but agree that "oscillation" is a better term): each time a
+> > > native program starts or exits, pcon_activated and pty_input_state change
+> > > rapidly, and several code paths in master::write() react by calling
+> > > transfer_input() to move data between the cyg and nat pipes. During
+> > > oscillation, these transfers steal readline's buffered data from the cyg
+> > > pipe, causing characters to arrive out of order.
+> > > 
+> > > My suspicion is that the originally reported bug is fixed entirely by the
+> > > first patch (1/4). The remaining three address edge cases that the
+> > > reproducer exposed through its more aggressive oscillation pattern. You
+> > > might say that I over-deliver a bit, but that seems like a good thing in
+> > > this instance.
+> > > 
+> > > I tested both with and without MSYS=disable_pcon to verify that the
+> > > scenarios the removed code was originally intended to handle are still
+> > > covered by setpgid_aux(). This is even automated in Git for Windows' fork
+> > > via the AutoHotKey-based tests; for full details see
+> > > https://github.com/git-for-windows/msys2-runtime/pull/124.
+> > 
+> > [...]
+> > 
+> > I tried to reproduce the issue, however I could not yet.
+> > 
+> > Is the issue reproducible in pcon_activated case?
+> > Or disable_pcon case?
+> > 
+> > If you can reproduce the issue in cygwin, could you kindly please
+> > let me know how to reproduce it?
 > 
->   if (to_be_read_from_nat_pipe()
->       && pty_input_state == to_nat)
->     write_to = to_slave_nat;   /* nat pipe */
->   else
->     write_to = to_slave;       /* cyg pipe */
+> It is admittedly difficult to reproduce. It took me a good 4 days to get
+> to a reliable reproducer. And I failed to do this in manual mode, I had to
+> employ the help of AutoHotKey to do it. The result can be seen here:
+> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/keystroke-order.ahk
 > 
-> A comment in the code documents the intention: "This code is reached
-> if non-cygwin app is foreground and pseudo console is NOT enabled."
+> Unfortunately, it is not quite stand-alone, it requires `powershell.exe`
+> in the `PATH`, and
+> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/ui-test-library.ahk
+> and
+> https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/cpu-stress.ps1
+> in the same directory. I just verified that it reproduces even with vanilla
+> Cygwin, using the latest AutoHotKey version from
+> https://github.com/AutoHotkey/AutoHotkey/releases/tag/v2.0.21. I ensured
+> that Cygwin's `bin` directory is first in the `PATH` and then ran, from a
+> PowerShell session:
 > 
-> But the condition does not actually check pcon_activated.  During
-> pseudo console oscillation, accept_input() can route data to the
-> nat pipe even while the pseudo console IS active.  When pcon is
-> active, input for native processes flows through conhost.exe, not
-> through direct pipe writes.  Routing data to the nat pipe via
-> accept_input() during pcon activation either duplicates what
-> conhost already delivers or displaces data that should have stayed
-> in the cyg pipe.
+>   & "<path-to>\AutoHotkey64.exe" /force keystroke-order.ahk "$PWD\log.txt"
 > 
-> Add `&& !pcon_activated` to make the code match its own documented
-> invariant.
+> What this test does: It runs a small PowerShell script designed to add a
+> bit of CPU load and then spawns a Cygwin process (`sleep 1`). While these
+> are running, it then types _very_ rapidly four characters, then two
+> backspaces, then repeats that quite a few times ("ABXY" then deleting
+> "XY", then "CDXY", deleting "XY", etc). The number of characters was
+> chosen high enough that this reproducer basically reproduces the issue on
+> the first try. The "log.txt" file contains a detailed log including the
+> verdict. In my latest test, for example, it shows:
 > 
-> Part 2: readahead flush in the pcon+nat fast code path
-> ------------------------------------------------------
+>   Iteration 1 of 20
+>   MISMATCH in iteration 1!
+>   Expected: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+>   Got:      ABCDEFGHIJKLMNOPQRXSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 > 
-> The pcon+nat fast code path in master::write() handles the common
-> case where a native app is in the foreground with pcon active.  It
-> writes keystrokes directly to the nat pipe via WriteFile(), bypassing
-> line_edit() entirely.
+> You will spot the "X" between "R" and "S", meaning that the backspace was
+> not able to remove the "X" because it was routed to the wrong pipe, or
+> after the "X" was already consumed.
 > 
-> If a previous call to master::write() went through line_edit()
-> (because pcon was momentarily inactive during oscillation),
-> line_edit() may have left data in the readahead buffer via
-> unget_readahead().  Without flushing this stale readahead, it
-> persists until the next line_edit() call, at which point
-> accept_input() emits it -- potentially after newer characters that
-> went through the fast code path, breaking chronological order.
+> > In addition, after applying these four patches, non-cygwin apps
+> > lose its input. Please try cmd.exe in pcon_activated mode.
 > 
-> Add an accept_input() call at the top of the pcon+nat fast code path
-> to flush any stale readahead before the current keystroke is written
-> via WriteFile().
+> When I tried this with the MSYS2 runtime, it simply worked. But when I
+> tried it in Cygwin, it reproduced! To be clear, this is the meaning I
+> extracted from the quoted text:
 > 
-> Together with the three preceding commits, this eliminates the
-> character reordering reported in git-for-windows/git#5632.
+> 	Patch 2/4 "Cygwin: pty: Remove pcon_start readahead flush that
+> 	displaces readline data" is too broad, it breaks the scenario when
+> 	in an interactive Bash session in a MinTTY window (without
+> 	`disable_pcon`), `cmd.exe` is launched interactively: You will see
+> 	the typed characters, but `cmd.exe` won't receive them.
 > 
-> Addresses: https://github.com/git-for-windows/git/issues/5632
-> Fixes: 3d46583d4fa8 ("Cygwin: pty: Update some comments in pty code.")
-> Assisted-by: Claude Opus 4.6
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> And this indeed reproduced here, but only with Cygwin. In MSYS2, it still
+> worked with the patches as-are. I will keep investigating, but in the
+> meantime I'd like to propose this fixup:
+> 
+> -- snip --
+> Subject: [PATCH] fixup! Cygwin: pty: Remove pcon_start readahead flush that
+>  displaces readline data
+> 
 > ---
->  winsup/cygwin/fhandler/pty.cc | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
+>  winsup/cygwin/fhandler/pty.cc | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-> index dd7ea9038..fcff53d88 100644
+> index 693e1a8062..1a3c50721b 100644
 > --- a/winsup/cygwin/fhandler/pty.cc
 > +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -489,6 +489,7 @@ fhandler_pty_master::accept_input ()
->    HANDLE write_to = get_output_handle ();
->    tmp_pathbuf tp;
->    if (to_be_read_from_nat_pipe ()
-> +      && !get_ttyp ()->pcon_activated
->        && get_ttyp ()->pty_input_state == tty::to_nat)
->      {
->        /* This code is reached if non-cygwin app is foreground and
-> @@ -2208,8 +2209,18 @@ fhandler_pty_master::write (const void *ptr, size_t len)
->    WaitForSingleObject (input_mutex, mutex_timeout);
->    if (to_be_read_from_nat_pipe () && get_ttyp ()->pcon_activated
->        && get_ttyp ()->pty_input_state == tty::to_nat)
-> -    { /* Reaches here when non-cygwin app is foreground and pseudo console
-> -	 is activated. */
-> +    {
-> +      /* Flush any stale readahead data from a prior line_edit call that
-> +	 ran while pty_input_state was temporarily to_cyg (e.g. during a
-> +	 setpgid_aux transition when a cygwin child of the native process
-> +	 started or exited).  Without this, the readahead contents would
-> +	 be stranded and emitted after the direct WriteFile below,
-> +	 breaking chronological order. */
-> +      if (get_readahead_valid ())
-> +	{
-> +	  accept_input ();
+> @@ -2216,6 +2216,11 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+>        if (!get_ttyp ()->pcon_start)
+>  	{ /* Pseudo console initialization has been done in above code. */
+>  	  pinfo pp (get_ttyp ()->pcon_start_pid);
+> +	  if (get_ttyp ()->switch_to_nat_pipe
+> +	      && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+> +	    {
+> +	      get_ttyp ()->pty_input_state = tty::to_nat;
+> +	    }
+>  	  get_ttyp ()->pcon_start_pid = 0;
+>  	}
+>  
+> -- snap --
+> 
+> What do you think?
 
-Does the code path really reach here?
-At the end of pcon_start phase, accept_input() is already called as
-shown below. After that, transfer_input (tty::to_nat, ...) is called.
-Therefore, in the pcon_activated state, all key input will go to nat-
-pipe, not to readahead-buffer/cyg-pipe.
+Do you mean removing transfer_input (tty::to_nat, ...) and
+just changing pty_input_state to tty::to_nat?
 
-      if (!get_ttyp ()->pcon_start)
-        { /* Pseudo console initialization has been done in above code. */
-          pinfo pp (get_ttyp ()->pcon_start_pid);
-          if (get_ttyp ()->switch_to_nat_pipe
-              && pp && pp->pgid == get_ttyp ()->getpgid ()
-              && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
-            {
-              /* This accept_input() call is needed in order to transfer input
-                 which is not accepted yet to non-cygwin pipe. */
-              WaitForSingleObject (input_mutex, mutex_timeout);
-              if (get_readahead_valid ())
-                accept_input ();                   // <========== This
-              acquire_attach_mutex (mutex_timeout);
-              fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
-                                                  get_ttyp (),
-                                                  input_available_event);
-              release_attach_mutex ();
-              ReleaseMutex (input_mutex);
-            }
-          get_ttyp ()->pcon_start_pid = 0;
-        }
-
-What situation do you assume? Is there any case that the key input goes
-into cyg-pipe during pcon_activated other than mask_switch_to_nat_pipe()
-case?
-
-> +	}
-> +
->        tmp_pathbuf tp;
->        char *buf = (char *) ptr;
->        size_t nlen = len;
-> -- 
-> cygwingitgadget
-
+I guess this break your AutoHotKey() test with cmd.exe.
+The input before pseudo console setup will be lost.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
