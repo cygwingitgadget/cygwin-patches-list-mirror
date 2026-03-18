@@ -1,181 +1,185 @@
 Return-Path: <SRS0=4rNz=BS=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 8E8114BB5907
-	for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 05:33:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8E8114BB5907
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:29])
+	by sourceware.org (Postfix) with ESMTPS id D93DD4BB5924
+	for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 05:34:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D93DD4BB5924
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8E8114BB5907
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773811987; cv=none;
-	b=dphWnQ5f/3DHi41BK7g9XkgozI67D6ypSC3ElNjvQ8RABBrCUCLYSnXsSAMaMXCNiL6tbt5HvRKW0mxWLTPGelcvSOWUuDHaeQWEtzQfbF9wNihCfgXluqfitVGCmI63i0+uUVGfVFhySq/CdXEBEvNOd3YkTGkKqCC7NcgquoM=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D93DD4BB5924
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:29
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1773812080; cv=none;
+	b=NssSAUEbnH3oq6bCNiggyeJQxs6gzQrZ9KW2VOzM4gFR4wwhshKKXBk2Y2F0UOVyPO9u1NiIxwXbT0zAYQSa9Ndimd5bLbA0FCeKHPzrvbejiY7KY/BkfmJBRVsTe3/8v/S9i9d2SL/PFeZMuN+rXox58+A7ClDENMTgl8TC1mA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1773811987; c=relaxed/simple;
-	bh=xjZ3sPFJiMR8AZZfOuDTdHU/vohNfLP/VOcbuShReYI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=ZY/xBG0FOOCk4z6mtUu8rdeq4rfNiv1JKFQDq9IXfPYFiiox8m+zU+DnLgbzFygijTllrgEU8Bjis1qADprLMud5VxFTOe1WzKJH62hFvd6ehVfFjH2PEz5c/WAfBIlE+URJsuKWniyT5kSHeMAQgub1QtujvFOA7vvB/odViss=
+	t=1773812080; c=relaxed/simple;
+	bh=r8o8PZCUNG5cSgYZwJy6P5XzKILPzH+R/BSG9M/KUNk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=tNsHsVVzlgTGZSmkdJ7O+WM9kgrrMTyzI/zLf7RlT70ACoVdo9kI3zMu34COjavdrTb9nZsXqR9Dajc8nzSwsCPxfRYlcvTEVmeVUGHqy0Q4f8DerJjuXJT0z1NlRqpGSuYOd9tlr1ch/PFAsiiNMzO+sguEDLnugepQxBxhobg=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8E8114BB5907
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D93DD4BB5924
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=IHTpREVk
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260318053304488.MRSH.127398.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 18 Mar 2026 14:33:04 +0900
-Date: Wed, 18 Mar 2026 14:33:03 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lOcbkwNE
+Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
+          id <20260318053437941.MJOL.116672.HP-Z230@nifty.com>;
+          Wed, 18 Mar 2026 14:34:37 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Fix out-of-order keystrokes
-Message-Id: <20260318143303.58cc77455258152b46c50f06@nifty.ne.jp>
-In-Reply-To: <d6fd357c-c1eb-487c-df77-81614354d5ed@gmx.de>
-References: <pull.6.cygwin.1772461480.gitgitgadget@gmail.com>
-	<20260303212405.25a2db7d786ac2db324e8f7a@nifty.ne.jp>
-	<22f45be0-3a22-f9c6-6d91-a7c2484621ef@gmx.de>
-	<20260310175652.a7c404ae59c02560956cfb59@nifty.ne.jp>
-	<20260317212208.cb8ac446f8da721cd82d3e51@nifty.ne.jp>
-	<d6fd357c-c1eb-487c-df77-81614354d5ed@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773811984;
- bh=jKQIbh6PtG7t2QZQjjqGCZP3K4uxmpL06WNAGvvoPPk=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=IHTpREVkCYkfYZVwiwVVatogfHiRvM4QgaMuZH6TmADZXzS9jK9xLx9A2twzBgKrH6/K6/AC
- 9ghZu7RX2QvFW9kBe1FO53a5xykSnO1H21h1L729Hxrvg2DF0MThIp7XS5GXgqv6bEmXMclYZA
- 1E2TAQwcKS0ZRCC00gSF5pWDW3IxmWfA6l41OQTmbLka5XkM4+50hS44YOS1aZh/sG6elxJ43P
- yPWRNV8qj2Rn2WzPW1lAfxEI+LOl/SsvI13egUIIBMEKUqd6oAH1RydCblvZV5OVTLiVhj2lAG
- MEikjFPZdstyJcQ4QKbis3/gP5XaMquVCBo+gliYmVr8AAjw==
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 6/6] Cygwin: pty: Guard to_be_read_from_nat_pipe() by pipe_sw_mutex
+Date: Wed, 18 Mar 2026 14:33:48 +0900
+Message-ID: <20260318053430.375-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260317122433.721-7-takashi.yano@nifty.ne.jp>
+References: <20260317122433.721-7-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1773812078;
+ bh=/EKJYKYAh8unQ8cI7MdfdkihRgSLkD82niuR+2KQ6cM=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=lOcbkwNELFnXO21H76gTKw7hlKFLx0WPLp9wKv8B7YmsAdBTN8HcwXZ1rxEwKeZWT7njph3y
+ n5a8hHpmEKNal2UdCxS+ZzrNpaEx4GSD24rpx1h4ZzPQ08r+T0bXq6TArmwDQWpc6xSzcqS8Wb
+ yjTz8ZgINurzsGXFDGejZ0GQaI2tW8DLhNXSulWJ+6XfNYqWXZBxI1PzSxGx/oM3q/Tv/kY3O7
+ 6+rVH+H2tFdicVdp6f9jQEA72GmXkCrIZRds01ynzyiaLK2B9UCpKg5slYfJK2g0G8rRzS6uFS
+ ZoON1C+MGrarLZDuQy3Pp/s8sDrrSfU1FqeHL1xcMHfWw2bw==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+If to_be_read_from_nat_pipe() is called during pipe switching between
+cygwin pipe and nat pipe, the return value mignt not as expected due
+to incomplete state change. With this patch, to_be_read_from_nat_pipe()
+is guarded by pipe_sw_mutex to avoid that. In addition, duration of
+the acquiring the pipe_sw_mutex is reduced to avoid deadlock.
 
-On Tue, 17 Mar 2026 14:57:05 +0100 (CET)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Tue, 17 Mar 2026, Takashi Yano wrote:
-> 
-> > On Tue, 10 Mar 2026 17:56:52 +0900
-> > Takashi Yano wrote:
-> > > 
-> > > On Fri, 6 Mar 2026 08:46:40 +0100 (CET)
-> > > Johannes Schindelin wrote:
-> > > > 
-> > > > Hi Takashi,
-> > > > 
-> > > > On Tue, 3 Mar 2026, Takashi Yano wrote:
-> > > > 
-> > > > > On Mon, 02 Mar 2026 14:24:36 +0000
-> > > > > "Johannes Schindelin wrote:
-> > > > > > A Git for Windows user reported that typing in a Bash session while a native
-> > > > > > Windows program is running (or has just exited) can produce scrambled input
-> > > > > > -- e.g. typing "git log" yields "igt olg":
-> > > > > > https://github.com/git-for-windows/git/issues/5632
-> > > > > > 
-> > > > > > [...]
-> > > > > 
-> > > > > Is the issue reproducible in pcon_activated case?
-> > > > > Or disable_pcon case?
-> > > > > 
-> > > > > If you can reproduce the issue in cygwin, could you kindly please
-> > > > > let me know how to reproduce it?
-> > > > 
-> > > > It is admittedly difficult to reproduce. It took me a good 4 days to get
-> > > > to a reliable reproducer. And I failed to do this in manual mode, I had to
-> > > > employ the help of AutoHotKey to do it. The result can be seen here:
-> > > > https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/keystroke-order.ahk
-> > > > 
-> > > > Unfortunately, it is not quite stand-alone, it requires `powershell.exe`
-> > > > in the `PATH`, and
-> > > > https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/ui-test-library.ahk
-> > > > and
-> > > > https://github.com/dscho/msys2-runtime/blob/fix-jumbled-character-order/ui-tests/cpu-stress.ps1
-> > > > in the same directory. I just verified that it reproduces even with vanilla
-> > > > Cygwin, using the latest AutoHotKey version from
-> > > > https://github.com/AutoHotkey/AutoHotkey/releases/tag/v2.0.21. I ensured
-> > > > that Cygwin's `bin` directory is first in the `PATH` and then ran, from a
-> > > > PowerShell session:
-> > > > 
-> > > >   & "<path-to>\AutoHotkey64.exe" /force keystroke-order.ahk "$PWD\log.txt"
-> > > > 
-> > > > What this test does: It runs a small PowerShell script designed to add a
-> > > > bit of CPU load and then spawns a Cygwin process (`sleep 1`). While these
-> > > > are running, it then types _very_ rapidly four characters, then two
-> > > > backspaces, then repeats that quite a few times ("ABXY" then deleting
-> > > > "XY", then "CDXY", deleting "XY", etc). The number of characters was
-> > > > chosen high enough that this reproducer basically reproduces the issue on
-> > > > the first try. The "log.txt" file contains a detailed log including the
-> > > > verdict. In my latest test, for example, it shows:
-> > > > 
-> > > >   Iteration 1 of 20
-> > > >   MISMATCH in iteration 1!
-> > > >   Expected: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
-> > > >   Got:      ABCDEFGHIJKLMNOPQRXSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
-> > > > 
-> > > > You will spot the "X" between "R" and "S", meaning that the backspace was
-> > > > not able to remove the "X" because it was routed to the wrong pipe, or
-> > > > after the "X" was already consumed.
-> > > 
-> > > Thanks for the reproducer. I finally could reproduce the issue!
-> > > Please let me take a look.
-> > 
-> > I finally have a patch series that fixes all the issue triggered by
-> > this reproducer.
-> 
-> Seeing as you did not reuse any part of my patches, not even the carefully
-> crafted commit messages, I wonder why you find them so horrible that you
-> don't even review them, let alone consider using them.
-> 
-> > I'll submit the patch series to cygwin-patches mailing list.
-> > Could you please test?
-> 
-> Yes, I tested. There is already a problem in the `cmd.exe` test I
-> introduced in response to your feedback. What it does is to launch
-> `cmd.exe`, wait a few milliseconds, and then start typing `echo
-> <long-string>`.
-> 
-> As you can see from the output here, that does not work. The first two
-> characters never make it to `cmd.exe`, and besides, `cmd.exe` is then
-> stuck:
-> 
-> -- snip --
-> $ cmd.exe
-> eMicrosoft Windows [Version 10.0.26200.7984]c
-> (c) Microsoft Corporation. All rights reserved.
-> 
-> D:\git-sdk-64\usr\src\MSYS2-packages\msys2-runtime\src\wip\ui-tests\msys2>ho ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
-> -- snap --
+Fixes: bb4285206207 ("Cygwin: pty: Implement new pseudo console support.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by:
+---
+ winsup/cygwin/fhandler/pty.cc | 50 +++++++++++++++++++++++++----------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-This seems to be a deadlock caused by PATCH 6/6.
-
-I've revised the PATCH 6/6 v2 so that to_be_read_from_nat_pipe() returns
-false if pcon_start is asserted while trying to acuqire pipe_sw_mutex.
-This is because if the slave is in setup_pseudoconsole(), the slave has
-pipe_sw_mutex acquired and asserts pcon_start. In pcon_start state,
-other input than response to CSI6n should go to cyg-pipe.
-
-> In my investigations (supported by Claude Opus, because I still have a
-> hard time with the current shape of the code and its lack of documenting
-> ideas clearly), I stumbled across something that I _think_ is the actual
-> cause of the many problems: When a native program is started, there is
-> this time window during which the console owner is the current process (in
-> my case, Bash), _not_ the native process (because it does not exist yet or
-> the parent process does not yet know its process ID). When any kind of
-> transfer happens during that time (and it does!), we're heading straight
-> into trouble. I get the impression that we need to address this, to close
-> that time window, not by narrowing it further, but by eliminating it
-> entirely: while a native process is starting up that will become the
-> console's owner, no transfer should happen.
-> 
-> Now, I really would like to collaborate with you on that. But I have to
-> admit that I'm struggling a bit when you don't even comment on the
-> contents of the commit message or patch to help me improve them, or when
-> you just ignore those patches and instead write completely different ones.
-> 
-> Can we work on this together, please?
-
-With pleasure!
-
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 4c38c49e1..ecd60f56c 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1301,22 +1301,44 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ bool
+ fhandler_pty_common::to_be_read_from_nat_pipe (void)
+ {
++  /* If the slave is in setup_pseudoconsole(), pipe_sw_mutex cannot
++     be acquired because the slave has it. In this case pcon_start
++     will be asserted. During pcon_start, other input than response
++     to CSI6n should be go to cyg-pipe. So, wait for pcon_start and
++     return false. */
++  while (WaitForSingleObject (pipe_sw_mutex, 0) != WAIT_OBJECT_0)
++    if (get_ttyp ()->pcon_start)
++      return false;
++    else
++      yield ();
++
++  bool ret = false;
+   if (!get_ttyp ()->switch_to_nat_pipe)
+-    return false;
++    goto out;
+ 
+-  char name[MAX_PATH];
+-  shared_name (name, TTY_SLAVE_READING, get_minor ());
+-  HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
+-  CloseHandle (masked);
++  do
++    {
++      char name[MAX_PATH];
++      shared_name (name, TTY_SLAVE_READING, get_minor ());
++      HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
++      CloseHandle (masked);
+ 
+-  if (masked) /* The foreground process is cygwin process */
+-    return false;
++      if (masked) /* The foreground process is cygwin process */
++	goto out;
++    }
++  while (false);
+ 
+   if (!pinfo (get_ttyp ()->getpgid ()))
+     /* GDB may set invalid process group for non-cygwin process. */
+-    return true;
++    {
++      ret = true;
++      goto out;
++    }
+ 
+-  return get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
++  ret = get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
++out:
++  ReleaseMutex (pipe_sw_mutex);
++  return ret;
+ }
+ 
+ void
+@@ -3943,7 +3965,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+     goto maybe_dumb;
+ 
+   /* Check if terminal has CSI6n */
+-  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   WaitForSingleObject (input_mutex, mutex_timeout);
+   /* Set pcon_activated and pcon_start so that the response
+      will sent to io_handle_nat rather than io_handle. */
+@@ -3979,7 +4000,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+   while (len);
+   get_ttyp ()->pcon_activated = false;
+   get_ttyp ()->nat_pipe_owner_pid = 0;
+-  ReleaseMutex (pipe_sw_mutex);
+   if (len == 0)
+     goto not_has_csi6n;
+ 
+@@ -3995,7 +4015,6 @@ not_has_csi6n:
+   get_ttyp ()->pcon_start = false;
+   get_ttyp ()->pcon_activated = false;
+   ReleaseMutex (input_mutex);
+-  ReleaseMutex (pipe_sw_mutex);
+ maybe_dumb:
+   get_ttyp ()->pcon_cap_checked = true;
+   return false;
+@@ -4302,7 +4321,6 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 						DWORD force_switch_to)
+ {
+   ttyp->wait_fwd ();
+-  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
+   if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
+     {
+       DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
+@@ -4317,6 +4335,7 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 	  ReleaseMutex (p->input_mutex);
+ 	}
+     }
++  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
+   if (ttyp->pcon_activated)
+     close_pseudoconsole (ttyp, force_switch_to);
+   else
+@@ -4335,6 +4354,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
+       && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+     {
++      ReleaseMutex (pipe_sw_mutex);
+       WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+@@ -4345,6 +4365,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
+ 	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+     {
++      ReleaseMutex (pipe_sw_mutex);
+       bool attach_restore = false;
+       HANDLE from = get_handle_nat ();
+       DWORD resume_pid = 0;
+@@ -4371,7 +4392,8 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 	release_attach_mutex ();
+       ReleaseMutex (input_mutex);
+     }
+-  ReleaseMutex (pipe_sw_mutex);
++  else
++    ReleaseMutex (pipe_sw_mutex);
+ }
+ 
+ bool
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
