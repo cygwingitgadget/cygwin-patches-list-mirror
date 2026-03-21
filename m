@@ -1,184 +1,118 @@
 Return-Path: <SRS0=Yn/K=BV=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
-	by sourceware.org (Postfix) with ESMTPS id 02CCD4BB5883
-	for <cygwin-patches@cygwin.com>; Sat, 21 Mar 2026 11:36:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 02CCD4BB5883
+	by sourceware.org (Postfix) with ESMTPS id 0BE184BC8965
+	for <cygwin-patches@cygwin.com>; Sat, 21 Mar 2026 11:36:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0BE184BC8965
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 02CCD4BB5883
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0BE184BC8965
 Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774092999; cv=none;
-	b=IueQ6NrRc8304V9RhimASmVeMnQ+jNupUiFzcNhONRVb1h2zOjaP2Zz9fP1gEc5XM3X0kbjiLBOJ3q5COk8qtugf6kDEcR2Ag4XqKf2QmbHR5IrG3VIzJiQAFYe/vLqi1T6ZxnTD2AE/pb4/JyaD1QsFDyJsBy2cM3yMwPMdf2M=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774093005; cv=none;
+	b=KMVwHItsLAA9qHbcLpJ5LRhvtnU6VcR3mPXWrvAd4FOlTHiePmK8RBid8uiv7lWXy+SfU5rZJJDa2KcjrPErc2KUrMIFfwsw5gNoSnyQKDjCqPqmzzCc/XSgHzJbyLhbPcysjo/Fb+JHVpmfx3SR011H/U/84XL3+pWwZR8r828=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774092999; c=relaxed/simple;
-	bh=zXQasUXZYald14ocPMC7lYDLMiP85Gi09MbTkqla9m0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=EU9Tuf7QZzH52SRMIFY0mvIEdNjljsc001SZfucfjwA7S1rsmWrY4DcsP08tCcnNxbMHpMX+Z38q8bT0x098Lu3RuhrvDMrrJspXTeuKtpSz4FvtA7t3WwlIx9MYwKrbBUyd1z1bYyuHr5VFDLxC+5FYlAvwYaRGgEVKfYFqaEg=
+	t=1774093005; c=relaxed/simple;
+	bh=OopE5AGmYwliiV2uStzH/RILmYhS0BdTqeyDgdTVUYA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=iyaFMSRpqDLDQnG+q9hNy8P6ie5oK9VNj4VPoQ2C9G3noq8Ivmi9CWi5GRCi4KkN1uqckwtYSAngdGI24I6SM8e5xh+oEpP2fX6Kw6Gt8MwgYZJggahprXQx6uvn5T2OcTpPEWmb5kcz8epk5qqoiaNzSNI9RKKHYpiKJWUCCFU=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 02CCD4BB5883
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0BE184BC8965
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=OVUiRLb/
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=RTGoHW2y
 Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260321113637040.VNSR.36235.HP-Z230@nifty.com>;
-          Sat, 21 Mar 2026 20:36:37 +0900
+          id <20260321113643319.VNTC.36235.HP-Z230@nifty.com>;
+          Sat, 21 Mar 2026 20:36:43 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v6 2/6] Cygwin: pty: Add workaround for handling of backspace when pcon enabled
-Date: Sat, 21 Mar 2026 20:35:27 +0900
-Message-ID: <20260321113613.9443-3-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v6 3/6] Cygwin: console Use input_mutex in the parent PTY in master thread
+Date: Sat, 21 Mar 2026 20:35:28 +0900
+Message-ID: <20260321113613.9443-4-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260321113613.9443-1-takashi.yano@nifty.ne.jp>
 References: <20260320160143.1548-1-takashi.yano@nifty.ne.jp>
  <20260321113613.9443-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774092997;
- bh=JXc92iktZeasWEjxbUcGUeJ72qcbAOJaDjxyRnkT36E=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774093003;
+ bh=TXdWW/AjMqNc3dCEH7/06sK5ynPU4O1eHmCTSI8XenM=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=OVUiRLb/UWb8A5baAck4mxgIRZEA3mT0IkGThygfvMFm0XWN2X9MiBYrZPjMp7/0U0n+ctU/
- huUrMDbgLXSmg18pW/k+Lv53llGIOf2pmO3capeUhIC90F745hZh8QE3GcQ2lBMKR5Xv2gUWYa
- EyiZ9dL1QSKJOXSBqBA40JQNQDdDBg/rdQA172NSL/vzZHRj4fp5czA1No9iBcZ6DzV9NEXa46
- sJm0isR69Z5FhUdkmaPfJ34gRXodu6U9uS7dHFN5gELXThSPwwfbNIUugedeuw+Id4Ps/pF8bQ
- YPeUL50H5WFLCJX+7raJ2FbYCHdokQ70178VPen91KzOXsNg==
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=RTGoHW2yzBJh9nV0hy9lvyqBIQAu/4hdvYR9VB0l3fVRNHrcn3B+E+W9Tzw9UvHOItKZekri
+ 2lT9+n+7gM9D0z04JQp1bXGKWh4qHoAQh4WIgylXae2DP3FGm8GEfi+fdq1zArDtTj4O1B158g
+ BGsYO0kYqeAMNvsRdf5hzeAcXIgNzWuJiTFBn4DiKaPinLkPsU2LzE/4+WapgoRjpXbRulzY6A
+ E+0PZpYJKCBIh126DVYntAwgKsTBiRio9lpXzCSG4JX+D5o7k1uRbJyLMl/zfVTlaoA9B6eWhB
+ N6OX6sKkb40jewzQSLiBwo4MeXI7gHyIyGYlx7hjqVELLefA==
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-In Windows 11, pseudo console has a weird behaviour that the Ctrl-H
-is translated into Ctrl-Backspace (not Backspace). Similary, Backspace
-(0x7f) is translated into Ctrl-H. Due to this behaviour, inrec_eq()
-in cons_master_thread() fails to compare backspace/Ctrl-H events in
-the input record sequence. This patch is a workaround for the issue
-that replaces Ctrl-H with backspace (0x7f), which will be translated
-into Ctrl-H in pseudo console.
+If the console is originating from pseudo console, the input into
+console is comming from PTY master. Therefore, input_mutex in PTY
+can be used to avoid conflicts between fhandler_pty_master::write()
+and cons_master_thread(). With this patch, use parent input_mutex
+as well as input_mutex in console device in cons_master_thread().
 
+Fixes: 04f386e9af99 ("Cygwin: console: Inherit pcon hand over from parent pty")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Reviewed-by:
 ---
- winsup/cygwin/fhandler/console.cc | 12 ++++++-
- winsup/cygwin/fhandler/pty.cc     | 57 ++++++++++++++++++++++++++-----
- 2 files changed, 60 insertions(+), 9 deletions(-)
+ winsup/cygwin/fhandler/console.cc | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 2f59f8f24..9678775d1 100644
+index 9678775d1..29cdba0d3 100644
 --- a/winsup/cygwin/fhandler/console.cc
 +++ b/winsup/cygwin/fhandler/console.cc
-@@ -318,6 +318,16 @@ inrec_eq (const INPUT_RECORD *a, const INPUT_RECORD *b, DWORD n)
- 	     written event. Therefore they are ignored. */
- 	  const KEY_EVENT_RECORD *ak = &a[i].Event.KeyEvent;
- 	  const KEY_EVENT_RECORD *bk = &b[i].Event.KeyEvent;
-+	  WCHAR c1 = ak->uChar.UnicodeChar;
-+	  WCHAR c2 = bk->uChar.UnicodeChar;
+@@ -63,6 +63,7 @@ fhandler_console::console_state NO_COPY
+ static bool NO_COPY inside_pcon_checked = false;
+ static bool NO_COPY inside_pcon = false;
+ static int NO_COPY parent_pty;
++static HANDLE NO_COPY parent_pty_input_mutex = NULL;
+ 
+ bool NO_COPY fhandler_console::invisible_console;
+ 
+@@ -464,6 +465,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	  continue;
+ 	}
+       total_read = 0;
++      if (inside_pcon)
++	WaitForSingleObject (parent_pty_input_mutex, mutex_timeout);
+       switch (cygwait (p->input_handle, (DWORD) 0))
+ 	{
+ 	case WAIT_OBJECT_0:
+@@ -488,6 +491,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	default: /* Error */
+ 	  free (input_rec);
+ 	  free (input_tmp);
 +	  if (inside_pcon)
-+	    {
-+	      /* Workaround for pseudo console in Windows 11 */
-+	      if (c1 == 8) /* Ctrl-H */
-+		c1 = 127; /* Backspace */
-+	      if (c2 == 8) /* Ctrl-H */
-+		c2 = 127; /* Backspace */
-+	    }
- 	  /* Fixup repeat count */
- 	  WORD r1 = ak->wRepeatCount;
- 	  WORD r2 = bk->wRepeatCount;
-@@ -326,7 +336,7 @@ inrec_eq (const INPUT_RECORD *a, const INPUT_RECORD *b, DWORD n)
- 	  if (r2 == 0)
- 	    r2 = 1;
- 	  if (ak->bKeyDown != bk->bKeyDown
--	      || ak->uChar.UnicodeChar != bk->uChar.UnicodeChar
-+	      || c1 != c2
- 	      || r1 != r2)
- 	    return false;
++	    ReleaseMutex (parent_pty_input_mutex);
+ 	  ReleaseMutex (p->input_mutex);
+ 	  return;
  	}
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 371e67103..72a8ba140 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2266,28 +2266,65 @@ fhandler_pty_master::write (const void *ptr, size_t len)
-     { /* Reaches here when non-cygwin app is foreground and pseudo console
- 	 is activated. */
-       tmp_pathbuf tp;
--      char *buf = (char *) ptr;
-+      char *buf = tp.c_get ();
-       size_t nlen = len;
-       if (get_ttyp ()->term_code_page != CP_UTF8)
- 	{
- 	  static mbstate_t mbp;
--	  buf = tp.c_get ();
- 	  nlen = NT_MAX_PATH;
- 	  convert_mb_str (CP_UTF8, buf, &nlen,
- 			  get_ttyp ()->term_code_page, (const char *) ptr, len,
- 			  &mbp);
+@@ -665,6 +670,8 @@ remove_record:
+ 	  while (true);
  	}
-+      else
-+	memcpy (buf, ptr, nlen);
-+
-+      /* Retrieve console mode */
-+      HANDLE h_pcon_in = get_ttyp ()->h_pcon_in;
-+      DWORD cons_mode;
-+      if (!nat_pipe_owner_self (get_ttyp ()->nat_pipe_owner_pid))
-+	{
-+	  HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
-+					   get_ttyp ()->nat_pipe_owner_pid);
-+	  DuplicateHandle (pcon_owner, h_pcon_in,
-+			   GetCurrentProcess (), &h_pcon_in,
-+			   0, FALSE, DUPLICATE_SAME_ACCESS);
-+	  CloseHandle(pcon_owner);
-+	  DWORD resume_pid =
-+	    attach_console_temporarily (get_ttyp()->nat_pipe_owner_pid);
-+	  GetConsoleMode (h_pcon_in, &cons_mode);
-+	  resume_from_temporarily_attach (resume_pid);
-+	  CloseHandle (h_pcon_in);
-+	}
-+      else
-+	GetConsoleMode (h_pcon_in, &cons_mode);
- 
--      for (size_t i = 0; i < nlen; i++)
-+      for (size_t i = 0, j = 0; i < nlen; i++)
- 	{
- 	  process_sig_state r = process_sigs (buf[i], get_ttyp (), this);
--	  if (r == done_with_debugger)
-+	  if (r != done_with_debugger)
- 	    {
--	      for (size_t j = i; j < nlen - 1; j++)
--		buf[j] = buf[j + 1];
--	      nlen--;
--	      i--;
-+	      char c = buf[i];
-+	      if (!(cons_mode & ENABLE_VIRTUAL_TERMINAL_INPUT))
-+		/* Workaround for pseudo console in Windows 11 */
-+		/* Undesired backspace conversion in pseudo console does
-+		   not happen if ENABLE_VIRTUAL_TERMINAL_INPUT is set. */
-+		switch (c)
-+		  {
-+		  case '\010': /* Ctrl-H */
-+		    c = '\177'; /* Backspace */
-+		    break;
-+		  case '\177': /* Backspace */
-+#if 0 /* Unfortunately, Ctrl-H will be translated into Ctrl-Backspace
-+	 (not Backspace) */
-+		    c = '\010'; /* Ctrl-H */
-+#endif
-+		    break;
-+		  }
-+	      buf[j++] = c;
- 	    }
-+	  else
-+	    nlen--;
- 	}
- 
-       DWORD n;
-@@ -4031,6 +4068,10 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
- 	    if (r[i].EventType == KEY_EVENT && r[i].Event.KeyEvent.bKeyDown)
- 	      {
- 		DWORD ctrl_key_state = r[i].Event.KeyEvent.dwControlKeyState;
-+		if (r[i].Event.KeyEvent.uChar.AsciiChar == '\010' /* Ctrl-H */
-+		    && !(ctrl_key_state & ALT_PRESSED))
-+		  /* Workaround for pseudo console in Windows 11 */
-+		  r[i].Event.KeyEvent.uChar.AsciiChar = '\177'; /* Backspace */
- 		if (r[i].Event.KeyEvent.uChar.AsciiChar)
- 		  {
- 		    if ((ctrl_key_state & ALT_PRESSED)
+ skip_writeback:
++      if (inside_pcon)
++	ReleaseMutex (parent_pty_input_mutex);
+       ReleaseMutex (p->input_mutex);
+       cygwait (40);
+     }
+@@ -1970,6 +1977,8 @@ fhandler_console::setup_pcon_hand_over ()
+ 	    inside_pcon = true;
+ 	    atexit (fhandler_console::pcon_hand_over_proc);
+ 	    parent_pty = i;
++	    parent_pty_input_mutex =
++	      cygwin_shared->tty[i]->open_input_mutex (MAXIMUM_ALLOWED);
+ 	    break;
+ 	  }
+       }
+@@ -1997,6 +2006,7 @@ fhandler_console::pcon_hand_over_proc (void)
+     }
+   else
+     system_printf("Acquiring pcon_ho_mutex failed.");
++  CloseHandle (parent_pty_input_mutex);
+   /* Do not release the mutex.
+      Hold onto the mutex until this process completes. */
+ }
 -- 
 2.51.0
 
