@@ -1,89 +1,72 @@
 Return-Path: <SRS0=haOa=BZ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id AE9DB4BB58FC
-	for <cygwin-patches@cygwin.com>; Wed, 25 Mar 2026 13:06:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AE9DB4BB58FC
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
+	by sourceware.org (Postfix) with ESMTPS id 61E8D4B920E4
+	for <cygwin-patches@cygwin.com>; Wed, 25 Mar 2026 13:07:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 61E8D4B920E4
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AE9DB4BB58FC
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774444025; cv=none;
-	b=RT8iu811glviPB+8mDgMxGhOLEz/Stena7sci5lcGVyn1a1+Ad2bS2r+xkwB/ZxFiThzSxeQg56CJx0iXGXDM4vPSEmbRKeq7tRUncdy2IgG1zhP8bha/Dn/JK7ZxPPwPKmATkPmd8USMu4dPHX0woIsVQa6X7TRnufbmGAvdMI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 61E8D4B920E4
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774444065; cv=none;
+	b=P/iPkbdu65gDEVcGyOkuLHkiCiRU6ZPGyChr4G3JC9/2wSv6+Kuc1aBSwC4PLNZaJihU1RyPJqylLoMKA1GcwWSHRdGEQ1wSFDlh6ENmlNQaeXlsTdTkZV9xnn2dAR62gMzFYxc4ewEJhgF9sglEgN6umF9WJqR5k0Xf0nxUnk8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774444025; c=relaxed/simple;
-	bh=KygBGRfaOLEmK3R6YMXKp8E+1mDpImKR63oEMXjCBVM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=q3Rli4BEwhuDWbgOxChWiqpQQEiSC/oWQokjLmuou0/OC6YufRISNRa7rbivv5nmaMzyIVQX5pj+CAC35ZDZ2yVOSLIwuYaRHe2rpRyLE1F49SAi5JJ03yOtUblbzmkDA5c3ANSegAnmxPvkFbGrODmSwKDYpEVzAnj3/zY6uPY=
+	t=1774444065; c=relaxed/simple;
+	bh=ooe5tjDY/R/sGIUOyH7It75PGl7b9WOu3cWbQdh3Nyo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=havZz+kaU7L63t5nOEeMkzAL7z+bawhI8m9vKJSij6fdSStri56oJgT9tHiuPzCdRXZ53XnfHHMkCOjCn6o2owzYPOqxCyPdlcZjQCuohM+5jDnitspUvuex/l8Ppojqsp6BCNA+daLutI1Sw+Urrp+MKLwixFVZyNKg2Df5tVw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE9DB4BB58FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 61E8D4B920E4
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=srnhS5wX
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260325130658048.CWWJ.14880.HP-Z230@nifty.com>;
-          Wed, 25 Mar 2026 22:06:58 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=hlKiXypi
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260325130742574.GXJF.36235.HP-Z230@nifty.com>;
+          Wed, 25 Mar 2026 22:07:42 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Release pipe_sw_mutex in pcon_hand_over_proc()
-Date: Wed, 25 Mar 2026 22:06:33 +0900
-Message-ID: <20260325130644.64948-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Clear discard_input flag on master write()
+Date: Wed, 25 Mar 2026 22:07:22 +0900
+Message-ID: <20260325130734.65955-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774444018;
- bh=CYZ2njYwTzX0aQbsj98jvqC2k0O23kCbq8BcbBXEqJQ=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774444062;
+ bh=rp6RTNMkUO2xG8C1xnV+N/Vao/8KdL/rn11XGCz/Vmo=;
  h=From:To:Cc:Subject:Date;
- b=srnhS5wXnOVzUR6GqtVX/MEx8+WkEwjYBymM5Pg9ob4aR8o6G0VEZGvP6Lq6QT5uYdXRp5J2
- H8TVmIKf31IxxTxpvJ+DZcUrOSrsqRv/bZrhfzelhjjcMP5yO+6ecZBzilfordKvv6sBe3ANuO
- fXPZXPmDxs8cFOU/AfIj5E3rTEJYYynT5Fei+aZg5vpwyWDlZyPteIgdQB+YQY1+gpcDq1VOZ3
- IoSp60CJwc/tpiVxY70LU+sqwQgbB/K3qmhMTQTCyXY/RKdGI0iqqgoxQKp2brki+PLR6prnSs
- 2bt9pu+h/Z6BWUEjZsQ9dDdVSCGMjkYI31dckBWcaypV8wvA==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=hlKiXypiZW5R9eN25C0Tk3AiCyy9VwqiyFpp4a41wAC3a0dWVA0Qtbx5ulGoC58DltlmINLn
+ FJbGoUvQ7FCZ4HOOQ/wH6OTYV+1exDdlPCwrwp/QK3C/zQHOGXGRKfGmT9XupPzkfJGoqne+Za
+ Pw0959UPAyk5q5qIWckZi84fior7Wzh04Xhq/Y58y3GH9PdgJ8xaqlyQdq5Kh523CH9LicrnC0
+ yxP/PvE0xoL2uCTkTk65IMdCggkyeJpK6ZCkanxSh5URZ4eEILKYPrzacHAl662Jn9KDu3NE1C
+ o4x9yFXUNDza7h1IdZNl1ZHxboLB2nHTpr5STWrknb/CCEPQ==
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, pipe_sw_mutex is held in the process which is running
-in console inherited from pseudo console until the process ends.
-Due to this behaviour, the process may cause deadlock when it
-attempts to acuqire input_mutex in set_input_mode() called via
-close_ctty(). This deadlock occurs because the pty master
-acuires input_mutex first and acuire pipe_sw_mutex next while
-the process exiting acuire pipe_sw_mutex first.
+Currently, the first transfer_input() after Ctrl-C does not work
+because discard_input flag remains asserted. This can cause loosing
+typeahead input for non-cygwin app after Ctrl-C. With this patch,
+the discard_input flag is cleared on master write() because the
+input is new valid input after discarding input.
 
-To avoid this deadlock, this patch releases pipe_sw_mutex in
-pcon_hand_over_proc(). In addition, pointless pipe_sw_mutex
-acquire/release is drppped in pcon_hand_over_proc().
-
-Fixes: 04f386e9af99 ("Cygwin: console: Inherit pcon hand over from parent pty")
+Fixes: 4e16e575db04 ("Cygwin: pty: Discard input already accepted on interrupt.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/console.cc | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 29cdba0d3..1dd5dfa1d 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -1994,8 +1994,6 @@ fhandler_console::pcon_hand_over_proc (void)
-   char buf[MAX_PATH];
-   shared_name (buf, PIPE_SW_MUTEX, parent_pty);
-   HANDLE mtx = OpenMutex (MAXIMUM_ALLOWED, FALSE, buf);
--  WaitForSingleObject (mtx, INFINITE);
--  ReleaseMutex (mtx);
-   DWORD res = WaitForSingleObject (mtx, INFINITE);
-   if (res == WAIT_OBJECT_0 || res == WAIT_ABANDONED)
-     {
-@@ -2006,9 +2004,8 @@ fhandler_console::pcon_hand_over_proc (void)
-     }
-   else
-     system_printf("Acquiring pcon_ho_mutex failed.");
-+  ReleaseMutex (mtx);
-   CloseHandle (parent_pty_input_mutex);
--  /* Do not release the mutex.
--     Hold onto the mutex until this process completes. */
- }
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 0c50e50f5..c05462d1f 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -2224,6 +2224,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
  
- bool
+   push_process_state process_state (PID_TTYOU);
+ 
++  get_ttyp ()->discard_input = false;
++
+   if (get_ttyp ()->pcon_start)
+     { /* Reaches here when pseudo console initialization is on going. */
+       /* Pseudo condole support uses "CSI6n" to get cursor position.
 -- 
 2.51.0
 
