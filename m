@@ -1,100 +1,84 @@
 Return-Path: <SRS0=haOa=BZ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
-	by sourceware.org (Postfix) with ESMTPS id AE2E54BB58E0
-	for <cygwin-patches@cygwin.com>; Wed, 25 Mar 2026 13:05:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AE2E54BB58E0
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id C7E914B920D8
+	for <cygwin-patches@cygwin.com>; Wed, 25 Mar 2026 13:05:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C7E914B920D8
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AE2E54BB58E0
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774443905; cv=none;
-	b=jHiNbProNvKmUUMvnqTe+O68RHNp/SiX5/HOjiKqnV8LaefVKhKCxd0UjadlRBwN/0TK86vSfRZ4AoWkbDA2rxObo+797CSg+E73/U+mXwoufmtlt3kLg3ZRqBhbnrOR5DIFIIt1cmdacyRI2nXUKL2oVhT9fGMkUqkz1c1TzS4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C7E914B920D8
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774443911; cv=none;
+	b=ScZ3zwMuak5afZId/L96nXVo8L84ihGTrFrxJ9SwFPZii3qR938M3W5mXpL9V27nXx2pD0HYVaW8uPNJkQqsoxJ0mA3z9OlkHuHi4AYbJqnPCaPOHxYPAFS7UPiZyH3LM3mtPMzEYc9A+/DSp/X1nT5qv6c6c1ypCJXvjcditJ4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774443905; c=relaxed/simple;
-	bh=D+0K2wHd1i1/K+a1OWDrb32me07UBRcnzjFSta9g3DY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=OJPCnnR7r6B2syHvF5KENo4Jk97zRsiwWY8tcvWoM6GvVFd3RQWWyOB+7nZUBdnBoe5h8/OxJKDf+nywxFuAWjq7G+xiAzLe+hrehiC3w9miXed7fTbUesjtVtRBsD0nR1o508qU8+VIFWfzIz7HtzQHfhTYFNln0o/OoIqzKqU=
+	t=1774443911; c=relaxed/simple;
+	bh=6kSwj7idYuY8zkkXQhugR7awsTsTmpwXNRxD7RG9YE4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=PCPr25cacMzqPMLigKR8T8X2tI9DVPRor/bJ7tj15RXWTeqzaGY0HmP1YDtIMoOyYqPzcnjrrkcfDRl87kq4quvHR9ox8RM5Qenv13uGTIfkOdJQoal6s9wpHXdUfiq9ZyhqiQonIKVUP1FzaoyGJQP2l4f7qaZB6xNx1prjaaY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE2E54BB58E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C7E914B920D8
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Dte4zCr7
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=B+5EmEIB
 Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260325130502807.TUAX.127398.HP-Z230@nifty.com>;
-          Wed, 25 Mar 2026 22:05:02 +0900
+          id <20260325130509003.TUBX.127398.HP-Z230@nifty.com>;
+          Wed, 25 Mar 2026 22:05:09 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v7 0/7] Fix out-of-order keystrokes
-Date: Wed, 25 Mar 2026 22:04:06 +0900
-Message-ID: <20260325130453.62246-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v7 1/7] Cygwin: console: Fix master thread
+Date: Wed, 25 Mar 2026 22:04:07 +0900
+Message-ID: <20260325130453.62246-2-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260321113613.9443-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20260325130453.62246-1-takashi.yano@nifty.ne.jp>
 References: <20260321113613.9443-1-takashi.yano@nifty.ne.jp>
+ <20260325130453.62246-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774443902;
- bh=Y36Ns7ddDvTduv33GzTniJHSX/XkEA1InIkibCzt03w=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774443909;
+ bh=SVe8rISNSTOq25X3TpEApz9G9be51KsshaFhAWvTPJU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Dte4zCr7QHB6qNnIiYjmzeHxyMj/XI5fovhKDyKlIfHc00jPSFEJN9kPuTQe7xKVIUX7oNYD
- n5OwxPUOBpNZtYP3cHXNL80yk1FjIlbpaDJN5y0BoBvOmSZrvVq9kqdlmdV+74wkCyvwm6QIAl
- 4lpa99G7O/fVEsr+KvK0NEnPz1CoYassQCq3zhAATjPHfsIurUH7FQdKnqXWDV2HyyO+6N1oyq
- va5/pZ7QhMSjAasJH12y6Kw7f4o/l/A1Q3JKEWOLughXtILEQV4GPOy4DO0u2GVM5Q6eDIWIp8
- 1hEFjHNroo21cfiLVQfxa96AuwgRTgMsdd1/exNS/s4LzAtA==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=B+5EmEIBiFdkWnifVPLXEKagJq13V5xGYV7w51Iu/ThYNEHZ62tfJ2jPReS6AFshO27/hlj/
+ WmwYgVfR0y4JzEkRoG++HgtCDEUOJOe+o7At974Nki7PB4q9esTTCQYx3HeCIu2/UxjOa2pixV
+ orvauaeB5w+bQOLzvNlzx2h2FxO0LznPAc/+7+7hcMrYGRZxDbMgF9IC6XnXCW9+bwLB8gOMzA
+ IfzGsJTkrsqtJzSrbEvFE/XHr8XWJz21yWutUHMYTqWYgcbJibVVdZrWmxZnh48VHoYtVNuDIm
+ Kvvgkfthwi3icTN8AQCRG8oxkM7yG+3lX1Ka/R7tU1wachmg==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The reproducer that uses AutoHotKey provided by Johannes:
-https://cygwin.com/pipermail/cygwin-patches/2026q1/014714.html
-uncovered several issues regarding input transfer between nat-
-pipe and cyg-pipe. Most of the issues happen when non-cygwin
-shell start cygwin-app. This patch series addresses these issues.
+In Windows 11, key event with wRepeatCount == 0 is fixed-up to
+wRepeatCount == 1 in conhost.exe. Due to this behaviour, inreq_eq()
+returns false even though the two event records are the same. This
+patch adds workaround for this behaviour in inrec_eq().
 
-v7: (changes from v6)
-  Add 7th patch: Fix another bug causes out-of-order keystroke
+Addresses: https://github.com/git-for-windows/git/issues/5632
+Fixes: ff4440fcf768 ("Cygwin: console: Introduce new thread which handles input signal.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by:
+---
+ winsup/cygwin/fhandler/console.cc | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-v6: (changes from v5)
-  PATCH 6/6: Wait for pcon_start_pid as well as pcon_start in
-             to_be_read_from_nat_pipe() because accept_input(),
-             called from master::write(), also calls
-             to_be_read_from_nat_pipe() after pcon_start is cleared.
-
-v5: (changes from v4)
-  PATCH 1/6: I was wrong in v4. The first attempt to reorder (fix)
-             is necessary after all to avoid incorrect fix.
-
-v4: (changes from v3)
-  PATCH 1/6: The patch reworked from the first step completely, because
-             understanding of the root cause was incorrect
-
-v4: (changes from v1, v2)
-  PATCH 1/6: Give-up input event nandling when input event sequence seems
-             corrupted to avoid infinite loop
-  PATCH 2/6: Drop pushing input event of backspace by WriteConsoleInput()
-             and adopt another workaround
-  PATCH 4/6: Use WFMO instead of busy loop waiting for flags in
-             master_fwd_thread
-  PATCH 6/6: Check WAIT_TIMEOUT rather than WAIT_OBJECT_0 in
-             to_be_read_from_nat_pipe() because mutex can be
-             acquired if the return value of WFSO is not WAIT_OBJECT_0,
-             e.g. WAIT_ABANDONED
-
-
-Takashi Yano (7):
-  Cygwin: console: Fix master thread
-  Cygwin: pty: Add workaround for handling of backspace when pcon
-    enabled
-  Cygwin: console Use input_mutex in the parent PTY in master thread
-  Cygwin: pty: Apply line_edit() for transferred input to to_cyg
-  Cygwin: pty: Guard get_winpid_to_hand_over() with attach_mutex
-  Cygwin: pty: Guard to_be_read_from_nat_pipe() by pipe_sw_mutex
-  Cygwin: pty: Drop nat_fg() check from to_be_read_from_nat_pipe()
-
- winsup/cygwin/fhandler/console.cc       |  31 ++-
- winsup/cygwin/fhandler/pty.cc           | 255 ++++++++++++++++++------
- winsup/cygwin/local_includes/fhandler.h |  10 +-
- winsup/cygwin/local_includes/tty.h      |   2 +
- 4 files changed, 229 insertions(+), 69 deletions(-)
-
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 9fd3ff506..2f59f8f24 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -318,9 +318,16 @@ inrec_eq (const INPUT_RECORD *a, const INPUT_RECORD *b, DWORD n)
+ 	     written event. Therefore they are ignored. */
+ 	  const KEY_EVENT_RECORD *ak = &a[i].Event.KeyEvent;
+ 	  const KEY_EVENT_RECORD *bk = &b[i].Event.KeyEvent;
++	  /* Fixup repeat count */
++	  WORD r1 = ak->wRepeatCount;
++	  WORD r2 = bk->wRepeatCount;
++	  if (r1 == 0)
++	    r1 = 1;
++	  if (r2 == 0)
++	    r2 = 1;
+ 	  if (ak->bKeyDown != bk->bKeyDown
+ 	      || ak->uChar.UnicodeChar != bk->uChar.UnicodeChar
+-	      || ak->wRepeatCount != bk->wRepeatCount)
++	      || r1 != r2)
+ 	    return false;
+ 	}
+       else if (a[i].EventType == MOUSE_EVENT)
 -- 
 2.51.0
 
