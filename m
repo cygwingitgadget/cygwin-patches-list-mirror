@@ -1,70 +1,80 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 70DF84B9DB6E; Wed, 25 Mar 2026 18:59:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 70DF84B9DB6E
+	id F37E34B9DB51; Wed, 25 Mar 2026 19:12:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F37E34B9DB51
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1774465186;
-	bh=IcWvjZpi0B1yxtbfOvz68/PojF3q52YbZb2Z/E5AGMM=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=qyO3VzkgjTaQj3be2FJlVo7gayvxq2Hmq3pPK145MQHPuN3BQjXeoXjiwc8I1ZStD
-	 IhAEvnXwIkdNGnRmA8i3MQS4Scr0ktPUG9Zscn2wKZ+nRuQ+3SVAkqV+1Q0fCY60w2
-	 BLIhS3k/UyEXL96SoIsCLcrsSCkGsuzFc5xVBfzg=
+	s=default; t=1774465970;
+	bh=f8N5ikPB+Jnvm+gWBbmbJfR1EU0aRApXC4mVe01+Ibc=;
+	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
+	b=UAaC95Tb4FYCvsl+kcss7libno/WuuJbUfqA7ac6ZcVEw3BckIPW88rtABB1CSk3t
+	 sUtnCIitZyAkBKXx3RZ8Pzx3+BBADuQm/+GydhQuOkao13SP4ZvuAe6Qmp5sTpKzpb
+	 xK6lMEO16eTZ/L5v98SNMgo/ykeqfJtqKtOLicSM=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 3C1E5A805DF; Wed, 25 Mar 2026 19:59:44 +0100 (CET)
-Date: Wed, 25 Mar 2026 19:59:44 +0100
+	id 2F7DCA805DF; Wed, 25 Mar 2026 20:12:48 +0100 (CET)
+Date: Wed, 25 Mar 2026 20:12:48 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: aarch64 SEH fixes and handler refactoring
-Message-ID: <acQwoPFM-FeioOIA@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Omit CSI?1004h/l from pseudo console output
+Message-ID: <acQzsE9p03u7UJsZ@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <MA0P287MB3082CAC457D335E3325522CD9F48A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20260309092442.1502-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <MA0P287MB3082CAC457D335E3325522CD9F48A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <20260309092442.1502-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Thirumalai,
+Hi Takashi,
 
-On Mar 24 12:42, Thirumalai Nagalingam wrote:
-> In-lined patch:
-> [...]
-> diff --git a/winsup/cygwin/local_includes/exception.h b/winsup/cygwin/local_includes/exception.h
-> index 19bb109de..b26f8ba17 100644
-> --- a/winsup/cygwin/local_includes/exception.h
-> +++ b/winsup/cygwin/local_includes/exception.h
-> @@ -10,8 +10,19 @@ details. */
+On Mar  9 18:24, Takashi Yano wrote:
+> "CSI?1004h" is the sequence that enabes focus event report. This
+                                   enables
+
+> can be handle correctly by pseudo console, however, if the pty
+> input is not connected to pseudo console, the focus event responces
+                                                            responses
+
+> such as "CSI I/O" are sent to the foreground process. Due to this,
+> `cat` receives these responces unexpectedly in the command below.
+                       responses
 > 
->  #if defined (__aarch64__)
->  #define EXCEPTION_HANDLE_REF "_ZN9exception6handleEP17_EXCEPTION_RECORDPvP8_CONTEXTP25_DISPATCHER_CONTEXT_ARM64"
-> - #else
-> +#define EXCEPTION_HANDLER_DATA
-> +#else
->  #define EXCEPTION_HANDLE_REF "_ZN9exception6handleEP17_EXCEPTION_RECORDPvP8_CONTEXTP19_DISPATCHER_CONTEXT"
-> +#define EXCEPTION_HANDLER_DATA \
-> +  asm volatile ("\n\
-> +  1:                                                                   \n\
-> +    .seh_handler "                                                       \
-> +      EXCEPTION_HANDLE_REF ",                                            \
-> +      @except                                                          \n\
-> +    .seh_handlerdata                                                   \n\
-> +    .long 1                                                            \n\
-> +    .rva 1b, 2f, 2f, 2f                                                        \n\
-> +    .seh_code                                                          \n")
->  #endif
+> $ cmd &
+> $ cat
+> 
+> This seems to happen after Windows 11.
 
-This, I don't understand and looks wrong to me.
-
-For aarch64, you're defining EXCEPTION_HANDLER_DATA as an empty macro.
-EXCEPTION_HANDLE_REF is exclusively referenced from this macro, so given
-it's empty, EXCEPTION_HANDLE_REF is entirely unused on aarch64.
-
-Isn't there a non-empty definition for EXCEPTION_HANDLER_DATA on aarch64
-missing from this patch?
+Not sure what this means. What is after W11?  Do you mean it happens
+since W11 already?
 
 
 Thanks,
 Corinna
+
+
+> 
+> To avoid this, this patch removes "CSI?1004h/l" from pseudo console
+> output.
+> 
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> ---
+>  winsup/cygwin/fhandler/pty.cc | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+> index 0717c043b..65b10dd62 100644
+> --- a/winsup/cygwin/fhandler/pty.cc
+> +++ b/winsup/cygwin/fhandler/pty.cc
+> @@ -2760,7 +2760,8 @@ workarounds_for_pseudo_console_output (char *outbuf, DWORD rlen)
+>  	      }
+>  	    state = 0;
+>  	  }
+> -	else if (saw_question_mark && arg == 9001
+> +	else if (saw_question_mark
+> +		 && (arg == 9001 || arg == 1004)
+>  		 && (outbuf[i] == 'h' || outbuf[i] == 'l'))
+>  	  {
+>  	    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
+> -- 
+> 2.51.0
