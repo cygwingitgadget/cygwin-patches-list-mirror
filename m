@@ -1,380 +1,302 @@
 Return-Path: <SRS0=doSl=B3=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	by sourceware.org (Postfix) with ESMTPS id EBF974BA23D0
-	for <cygwin-patches@cygwin.com>; Fri, 27 Mar 2026 15:25:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EBF974BA23D0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id 410EE4BA2E18
+	for <cygwin-patches@cygwin.com>; Fri, 27 Mar 2026 15:37:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 410EE4BA2E18
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EBF974BA23D0
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.19
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774625141; cv=none;
-	b=Hj8qW4smgquZZFU4dtAxpLOBR+udLc8J9oiWE6U8LK0ZSDdnRc6HGZfE/xXuU9F7pLqITwaIkDb9kthKtc+P9hM6qD1on8nqYp8iedOD3XoHlzKCMiunxWek15PwRb1Cu+hAmFhc+PUhbZY2WhzgsP56ydJSTw/ZA6n8vFffAvk=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 410EE4BA2E18
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.15.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774625828; cv=none;
+	b=c8VEkcERCwj5QX/9zkYv3BVmYjxsQQ0UoXE0QK5o6I9x+Mv2zKz89RTGHz+WG8+GbaRV0alrJi3PYKIYWd72FN0mKfz9KW38nlkJ+fVimB0owwirx9/8LCOLGn2MlL2urLCbpQeI1mmgy4hL2XSlXxpgSm4Nln0G5q5fc6Q67S8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774625141; c=relaxed/simple;
-	bh=CX0Tfnpebgf0fbBf2cqoBO2ROtTad58ymU8K2GIJtSA=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=L0ecW1MeiHoyHVLR0MN4pWzVAkJuT/Vyu+KEwKIaE9u50hNAQLdX/HYxKFWqFagogfge1YHWMGefv8rFFuDOQ7mfuOjjOJ9wu8QRDMijg0SfEjbcZ26RjMr+9aisNVxJp6uBBmzzLn2M7qsEn4W2b+En5Szhe4guVTWJf/SNwAk=
+	t=1774625828; c=relaxed/simple;
+	bh=FPnYGkSEVG9cNigHa2u8d+c9+Dt6EEE/xYWScDdxeek=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=We3ldXEY/Aiv1Y1+D7oQp9hF9Gec6rKWsGL7HLXepDQCYzeeqxOlJplcs7nwcufWkvasD/1ddOAQ6VbktABxx6HeePGjkmb2h8xZ5YUlyoWkG5OSTkFvshBQLDgK+BVRAkPbjoF6vvCXKnQ1yF4xgcUi/l6EVcqpcrsml/0l7W4=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EBF974BA23D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 410EE4BA2E18
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=EVQypN/Z
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=NqCpHrEo
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1774625139; x=1775229939;
+	s=s31663417; t=1774625826; x=1775230626;
 	i=johannes.schindelin@gmx.de;
-	bh=bXvisSlriGSINeamIxbqeabx5532EsDQEsJX9Ls493Y=;
+	bh=8VYZpQOpX2AKsEC9DVKJ4jVGzwvlzjqpDpzS8Te7hNs=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=EVQypN/ZqgIEOOcXWUdJMcREQ2HQ+qIHTHkxAf+u9Qnr6tuOytpp4rBPz9C9bsSw
-	 4R95IX15+kX1l8ZKynyUTH83SQPfS6A8oN3TR7rxxZiAKhJqcRAQjWi8c7QVj1MeT
-	 Km1dHYFsOCTIG4zoJG/Z9/dPHfPqcvrfWeQZDOu6qLuhIvcXYB7K/eGvY+/NSsPc3
-	 1tzNjAiH5S/Xw5bUGgy6ho7hgbyQNdIDIpfTqG+WPmcEVV32ehteFlATXI3Q6D98O
-	 aPTulMlrmuRV/upOs5GcfJEEyDXUoBBA6fBMYRZhUtVCHGZnUdTIxDRUGgpifTbJ0
-	 8GTw2PUP1bGkrWu98w==
+	b=NqCpHrEoB+wSyjQjzZA9V6RYu6MeGna+V+vdYlPnQBcfLO+t42nsA3C/eYetHdyJ
+	 8WRslWgxHwT6m1EJ0Xb7gtiCpgJROSv5zAIO9q4nlM8rVfWlrv3uYQ68ts97fgSSW
+	 K7iCYX07lzqApHs1CZjC46IILhT07TXpBqopWmyIcAhCNtYUjcKxbXRCz7gAd65Mw
+	 BhsqKx6BMjzKxV1B/DWIuGoABN7Gwph8ewCZhv716qV0Gagkv15lRP03iEINHBdlG
+	 1paNz2TbfoHIXGFQ6yPXKMV+y78XJqJb059zwEz+JLVtAiyKYZp06/G5A99/+e1Ej
+	 ExZsNhm5zHrcR97CmA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWzfv-1w4HMI2wNF-00QvjU; Fri, 27
- Mar 2026 16:25:39 +0100
-Date: Fri, 27 Mar 2026 16:25:37 +0100 (CET)
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmDIo-1vfZv02uWG-00odP7; Fri, 27
+ Mar 2026 16:37:06 +0100
+Date: Fri, 27 Mar 2026 16:37:05 +0100 (CET)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v7 6/7] Cygwin: pty: Guard to_be_read_from_nat_pipe() by
- pipe_sw_mutex
-In-Reply-To: <20260325130453.62246-7-takashi.yano@nifty.ne.jp>
-Message-ID: <90a27c2f-e001-abd8-9a7f-e85fc5ab4d92@gmx.de>
-References: <20260321113613.9443-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-7-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v7 7/7] Cygwin: pty: Drop nat_fg() check from
+ to_be_read_from_nat_pipe()
+In-Reply-To: <20260325130453.62246-8-takashi.yano@nifty.ne.jp>
+Message-ID: <e6bd57ce-1c1c-7969-aefe-43cb7c5362e3@gmx.de>
+References: <20260321113613.9443-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-8-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:lecDbnnX4SDeS0rGamnOAVbOX0eycqR/zNEyTZAS4C4cgA3SuPT
- MobTt1aLWb+WXAaHue55YTya80VYF3SKHF2iXwNwuO12tdEk/rtUtTCpuroxYQDXFu9vjJZ
- oR+oZwwTl8hgU9uRA1uFj6B7bPCifLWSpMms/lXg+6ll59Nef9IzoKlPmtvUd6rX+v+KwVG
- awZH+HWYL/l8Whxd1iIMw==
-UI-OutboundReport: notjunk:1;M01:P0:kJ8k+2JipRU=;2of6NR5IL00ivZAvTuLs5wa7iW7
- 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
- eGNFWzKGtLsqgOs/jugTHDYg==
+X-Provags-ID: V03:K1:SSbC5xb1W7Xo3m+36lmzcig6LMFQLnKiK79cdc13jga5vzf6boF
+ x6iAKCeGF60k7GQA5Mc6mGM0lzM0l5CU377WDtnth6QqDwQwSa4FsrUvz5GLnXtN+QkNp23
+ yd8/ArDKrmOv0RusslD6mtVFZGe/C2no8z/HKQwjw8OIVhm0ZqaNnuGmvOaw0bFa+iyKbTY
+ Kgr6fu0U86YPsQ6ichqKg==
+UI-OutboundReport: notjunk:1;M01:P0:JRFzYQXRnF0=;nir6a4GoUCYrdnTzs21MPDT/vjh
+ 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
+ R+/X2F57BztpIllTHEgYwx+D4NNchncTw==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Takashi,
 
-This patch is essential: without it, `master::write()` can read
-`switch_to_nat_pipe`, `pcon_activated`, and `pty_input_state` at
-different points during a slave-side transition, making an inconsistent
-routing decision that sends keystrokes to the wrong pipe. The fix is
-sound.
-
-A few notes inline, plus a request to rework the commit message.
+The code change itself is clean, minimal, and correct. This is the most
+important patch in the series: it eliminates the root cause of the
+keystroke reordering bug.
 
 On Wed, 25 Mar 2026, Takashi Yano wrote:
 
-> If to_be_read_from_nat_pipe() is called during pipe switching between
-> cygwin pipe and nat pipe, the return value mignt not as expected due
-
-Typo: "mignt" -> "might".
-
-> to incomplete state change. With this patch, to_be_read_from_nat_pipe()
-> is guarded by pipe_sw_mutex to avoid that. In addition, duration of
-> the acquiring the pipe_sw_mutex is reduced to avoid deadlock.
-
-"duration of the acquiring the pipe_sw_mutex" is awkward. More
-importantly, the commit message buries the most critical aspect of this
-patch: the lock ordering constraint.
-
-The key insight is this: `to_be_read_from_nat_pipe()` is called from
-`master::write()`, which already holds `input_mutex`. If
-`to_be_read_from_nat_pipe()` now acquires `pipe_sw_mutex`, the lock
-order on the master side becomes: `input_mutex` first, then
-`pipe_sw_mutex`. Meanwhile, `cleanup_for_non_cygwin_app()` and
-`setpgid_aux()` previously acquired `pipe_sw_mutex` first, then
-`input_mutex` (via `transfer_input()`). That is a textbook lock ordering
-problem ("ABBA deadlock").
-
-The restructuring in this patch fixes it by ensuring those functions
-release `pipe_sw_mutex` before acquiring `input_mutex`, maintaining a
-consistent lock order.
-
-I would suggest a commit message body that explains:
-
-  (a) the inconsistent-read problem (reading `switch_to_nat_pipe`,
-      `pcon_activated`, etc. without holding `pipe_sw_mutex`),
-  (b) the solution (guard `to_be_read_from_nat_pipe()` with
-      `pipe_sw_mutex`),
-  (c) the lock ordering constraint and how the restructuring of
-      `cleanup_for_non_cygwin_app()` and `setpgid_aux()` avoids the
-      ABBA deadlock, and
-  (d) the `pcon_start` spin-wait design (why the function returns
-      false immediately when `pipe_sw_mutex` cannot be acquired and
-      `pcon_start`/`pcon_start_pid` is set).
-
-That way a future reader does not have to reverse-engineer the
-reasoning from the diff.
-
-Maybe something like this?
-
-    `to_be_read_from_nat_pipe()` reads several shared-memory fields
-    (`switch_to_nat_pipe`, `pcon_activated`, `pty_input_state`) to
-    decide whether keystrokes should go to the nat pipe. It is called
-    from `master::write()` on every keystroke. Without synchronization,
-    the slave can be in the middle of a pipe switch (changing these
-    fields in `setup_for_non_cygwin_app()`, `cleanup_for_non_cygwin_app()`=
-,
-    or `setpgid_aux()`) while the master reads a half-updated snapshot,
-    making an inconsistent routing decision that sends keystrokes to the
-    wrong pipe.
-
-    Guard `to_be_read_from_nat_pipe()` with `pipe_sw_mutex` so it
-    always reads a consistent state. The spin-wait at entry handles the
-    pseudo console initialization case: when `pipe_sw_mutex` is held by
-    the slave during `setup_pseudoconsole()` and `pcon_start` is set,
-    the function returns false immediately, routing keystrokes to the
-    cyg pipe through `line_edit()` where the CSI6n response handler
-    expects them.
-
-    Acquiring `pipe_sw_mutex` inside `to_be_read_from_nat_pipe()`
-    creates a lock ordering constraint: `master::write()` holds
-    `input_mutex` before calling `to_be_read_from_nat_pipe()`, so the
-    master's lock order is `input_mutex` then `pipe_sw_mutex`.
-    Previously, `cleanup_for_non_cygwin_app()` and `setpgid_aux()`
-    acquired `pipe_sw_mutex` first and then `input_mutex` (for
-    `transfer_input()`), which is the reverse order and would deadlock.
-    Restructure both functions to release `pipe_sw_mutex` before
-    acquiring `input_mutex`, maintaining a consistent lock order
-    throughout.
-
+> While non-cygwin app exited but the stub process is not terminated
+> yet, nat_fg() returns false because no non-cygwin app is running.
+> In this duration, pty input goes cyg pipe. Due to this behaviour,
+> the key stroke oder is swapped unexpectedly in the following steps.
 >=20
-> Fixes: bb4285206207 ("Cygwin: pty: Implement new pseudo console support.=
-")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->  winsup/cygwin/fhandler/pty.cc | 50 +++++++++++++++++++++++++----------
->  1 file changed, 36 insertions(+), 14 deletions(-)
->=20
-> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
-cc
-> index 0de6ec007..c7e3ddf50 100644
-> --- a/winsup/cygwin/fhandler/pty.cc
-> +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -1311,22 +1311,44 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (boo=
-l mask, bool xfer)
->  bool
->  fhandler_pty_common::to_be_read_from_nat_pipe (void)
->  {
-> +  /* If the slave is in setup_pseudoconsole(), pipe_sw_mutex cannot
-> +     be acquired because the slave has it. In this case pcon_start
-> +     will be asserted. During pcon_start, other input than response
-> +     to CSI6n should be go to cyg-pipe. So, wait for pcon_start and
-> +     return false. */
-> +  while (WaitForSingleObject (pipe_sw_mutex, 0) =3D=3D WAIT_TIMEOUT)
-> +    if (get_ttyp ()->pcon_start || get_ttyp ()->pcon_start_pid)
-> +      return false;
-> +    else
-> +      yield ();
-> +
-> +  bool ret =3D false;
->    if (!get_ttyp ()->switch_to_nat_pipe)
-> -    return false;
-> +    goto out;
-> =20
-> -  char name[MAX_PATH];
-> -  shared_name (name, TTY_SLAVE_READING, get_minor ());
-> -  HANDLE masked =3D OpenEvent (READ_CONTROL, FALSE, name);
-> -  CloseHandle (masked);
-> +  do
-> +    {
-> +      char name[MAX_PATH];
-> +      shared_name (name, TTY_SLAVE_READING, get_minor ());
-> +      HANDLE masked =3D OpenEvent (READ_CONTROL, FALSE, name);
-> +      CloseHandle (masked);
-> =20
-> -  if (masked) /* The foreground process is cygwin process */
-> -    return false;
-> +      if (masked) /* The foreground process is cygwin process */
-> +	goto out;
-> +    }
-> +  while (false);
+> 1) start non-cygwin app
+> 2) press 'a' ('a' goes to nat pipe)
+> 3) non-cygwin app exited
+> 4) press 'b' ('b' goes to cyg pipe)
+> 5) the stub process for non-cygwin app transfers input in nat pipe
+>    to cyg pipe ('a' goes to cyg pipe)
+> 6) the result in the cyg pipe is "ba"
+>
+> To fix this issue, this patch drops nat_fg() check from
+> to_be_read_from_nat_pipe(). With this patch, it retunrs true when
+> (!pcon_start && switch_to_nat_pipe && !masked).
 
-The `do { ... } while (false)` block around the `TTY_SLAVE_READING`
-check: this wraps a simple linear sequence with no `break` and no
-actual loop. It looks like an artifact of the restructuring, perhaps to
-scope the `name` variable. Could this be simplified to a plain block
-`{ ... }`? That would be less surprising to a reader.
+This numbered sequence is excellent and clearly demonstrates the
+reordering mechanism. Exactly the right level of detail.
 
-Regarding the spin-wait at the top of `to_be_read_from_nat_pipe()`:
-the `else yield()` path blocks `master::write()` indefinitely when
-`pipe_sw_mutex` is held by the slave for reasons other than
-`pcon_start`. The comment says the slave holds it "briefly during state
-transitions," which is true in practice, but it would be worth noting
-this blocking behavior in the commit message so that future readers
-understand the assumption.
+Two small typos: "oder" -> "order", "retunrs" -> "returns".
+
+Apart from that, I think the commit message would benefit from explaining
+three additional things:
+
+(a) What each component of the new condition means.
+
+- `!pcon_start` ensures keystrokes go through the CSI6n response handler
+  during pseudo console initialization rather than the fast path.
+
+- `switch_to_nat_pipe` is the session-level flag that stays true from
+  `setup_for_non_cygwin_app()` through `cleanup_for_non_cygwin_app()`,
+  spanning the entire native process lifetime _including_ the post-exit
+  cleanup window. This is the key: it stays true even after the native
+  process exits, until cleanup explicitly clears it.
+
+- `!masked` (the `TTY_SLAVE_READING` event does not exist) ensures that
+  keystrokes go to the Cygwin pipe when a Cygwin process is actively
+  reading from the slave, since that process expects POSIX-processed
+  input.
+
+(b) Why removing `nat_fg()` is safe. The `nat_fg()` check existed to
+prevent keystrokes from going to the nat pipe when no native process was
+in the foreground process group. Removing it means keystrokes go to the
+nat pipe even after the native process has exited (as long as
+`switch_to_nat_pipe` is set). This is safe because conhost's input
+buffer accumulates the keystrokes as INPUT_RECORDs, and
+`transfer_input(to_cyg)` in `cleanup_for_non_cygwin_app()` reads them
+back via `ReadConsoleInputA()` and writes them to the cyg pipe. The
+transferred bytes then go through `line_edit()` in the master's forward
+thread (via `input_transferred_to_cyg` from the earlier patch in this
+series), ensuring proper POSIX line discipline processing before bash's
+readline sees them.
+
+(c) Why the added `nat_fg()` check in the disable_pcon transfer path in
+`master::write()` is needed. That transfer moves cyg pipe data to the
+nat pipe when a Cygwin child exits and a native process regains the
+foreground with pcon disabled. The `nat_fg()` check there prevents the
+transfer from firing during the post-exit window (when `nat_fg()` is
+false), which would steal readline's data. This is correct in the
+disable_pcon case because there is no conhost buffer to accumulate
+keystrokes; without pcon, the nat pipe is a raw pipe and keystrokes must
+only go there when a native process is genuinely in the foreground and
+ready to read them.
+
+Here is a suggested commit message body incorporating the above:
+
+    While a non-cygwin app has exited but the stub process has not yet
+    terminated, `nat_fg()` returns false because no non-cygwin app is
+    running. In this window, pty input goes to the cyg pipe. Due to
+    this, the keystroke order is swapped unexpectedly:
+
+    1) start non-cygwin app
+    2) press 'a' ('a' goes to nat pipe)
+    3) non-cygwin app exits
+    4) press 'b' ('b' goes to cyg pipe)
+    5) the stub process for non-cygwin app transfers input in nat pipe
+       to cyg pipe ('a' goes to cyg pipe)
+    6) the result in the cyg pipe is "ba"
+
+    Fix this by dropping the `nat_fg()` check from
+    `to_be_read_from_nat_pipe()`. The function now returns true when
+    `!pcon_start && switch_to_nat_pipe && !masked`. Each component has
+    a specific purpose:
+
+    - `!pcon_start`: keystrokes go through the CSI6n response handler
+      during pseudo console initialization rather than the fast path.
+    - `switch_to_nat_pipe`: this session-level flag stays true from
+      `setup_for_non_cygwin_app()` through
+      `cleanup_for_non_cygwin_app()`, spanning the entire native
+      process lifetime including the post-exit cleanup window.
+    - `!masked` (`TTY_SLAVE_READING` event does not exist): keystrokes
+      go to the Cygwin pipe when a Cygwin process is actively reading
+      from the slave, since that process expects POSIX-processed input.
+
+    Removing `nat_fg()` is safe because conhost's input buffer
+    accumulates keystrokes as INPUT_RECORDs during the post-exit
+    window, and `transfer_input(to_cyg)` in
+    `cleanup_for_non_cygwin_app()` reads them back via
+    `ReadConsoleInputA()` and writes them to the cyg pipe. Those
+    transferred bytes then go through `line_edit()` in the master's
+    forward thread (via `input_transferred_to_cyg` from an earlier
+    patch in this series), ensuring proper POSIX line discipline
+    processing.
+
+    Additionally, add a `nat_fg()` check to the disable_pcon transfer
+    path in `master::write()`. That transfer moves cyg pipe data to
+    the nat pipe when a Cygwin child exits and a native process
+    regains the foreground with pcon disabled. Without pcon, there is
+    no conhost buffer to accumulate keystrokes (the nat pipe is a raw
+    pipe), so keystrokes must only go there when a native process is
+    genuinely in the foreground and ready to read them. The `nat_fg()`
+    guard prevents the transfer from stealing readline's data during
+    the post-exit window.
 
 Thanks,
 Johannes
 
->    if (!pinfo (get_ttyp ()->getpgid ()))
->      /* GDB may set invalid process group for non-cygwin process. */
-> -    return true;
-> +    {
-> +      ret =3D true;
-> +      goto out;
-> +    }
-> =20
-> -  return get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
-> +  ret =3D get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
-> +out:
-> +  ReleaseMutex (pipe_sw_mutex);
-> +  return ret;
->  }
-> =20
->  void
-> @@ -3948,7 +3970,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR=
- *env)
->      goto maybe_dumb;
-> =20
->    /* Check if terminal has CSI6n */
-> -  WaitForSingleObject (pipe_sw_mutex, INFINITE);
->    WaitForSingleObject (input_mutex, mutex_timeout);
->    /* Set pcon_activated and pcon_start so that the response
->       will sent to io_handle_nat rather than io_handle. */
-> @@ -3984,7 +4005,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR=
- *env)
->    while (len);
->    get_ttyp ()->pcon_activated =3D false;
->    get_ttyp ()->nat_pipe_owner_pid =3D 0;
-> -  ReleaseMutex (pipe_sw_mutex);
->    if (len =3D=3D 0)
->      goto not_has_csi6n;
-> =20
-> @@ -4000,7 +4020,6 @@ not_has_csi6n:
->    get_ttyp ()->pcon_start =3D false;
->    get_ttyp ()->pcon_activated =3D false;
->    ReleaseMutex (input_mutex);
-> -  ReleaseMutex (pipe_sw_mutex);
->  maybe_dumb:
->    get_ttyp ()->pcon_cap_checked =3D true;
->    return false;
-> @@ -4318,7 +4337,6 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (ha=
-ndle_set_t *p, tty *ttyp,
->  						DWORD force_switch_to)
->  {
->    ttyp->wait_fwd ();
-> -  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
->    if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
->      {
->        DWORD switch_to =3D get_winpid_to_hand_over (ttyp, force_switch_t=
-o);
-> @@ -4334,6 +4352,7 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (ha=
-ndle_set_t *p, tty *ttyp,
->  	  ReleaseMutex (p->input_mutex);
->  	}
+>=20
+> Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> ---
+>  winsup/cygwin/fhandler/pty.cc | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
+cc
+> index c7e3ddf50..4187dafce 100644
+> --- a/winsup/cygwin/fhandler/pty.cc
+> +++ b/winsup/cygwin/fhandler/pty.cc
+> @@ -1338,14 +1338,8 @@ fhandler_pty_common::to_be_read_from_nat_pipe (vo=
+id)
 >      }
-> +  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
->    if (ttyp->pcon_activated)
->      close_pseudoconsole (ttyp, force_switch_to);
->    else
-> @@ -4352,6 +4371,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
->    if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
->        && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+>    while (false);
+> =20
+> -  if (!pinfo (get_ttyp ()->getpgid ()))
+> -    /* GDB may set invalid process group for non-cygwin process. */
+> -    {
+> -      ret =3D true;
+> -      goto out;
+> -    }
+> +  ret =3D true; /* !pcon_start && switch_to_nat_pipe && !masked */
+> =20
+> -  ret =3D get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
+>  out:
+>    ReleaseMutex (pipe_sw_mutex);
+>    return ret;
+> @@ -2391,6 +2385,7 @@ fhandler_pty_master::write (const void *ptr, size_=
+t len)
+>    /* This input transfer is needed when cygwin-app which is started fro=
+m
+>       non-cygwin app is terminated if pseudo console is disabled. */
+>    if (to_be_read_from_nat_pipe () && !get_ttyp ()->pcon_activated
+> +      && get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
+>        && get_ttyp ()->pty_input_state =3D=3D tty::to_cyg)
 >      {
-> +      ReleaseMutex (pipe_sw_mutex);
->        WaitForSingleObject (input_mutex, mutex_timeout);
 >        acquire_attach_mutex (mutex_timeout);
->        transfer_input (tty::to_nat, get_handle (), get_ttyp (),
-> @@ -4362,6 +4382,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
->    else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
->  	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
->      {
-> +      ReleaseMutex (pipe_sw_mutex);
->        bool attach_restore =3D false;
->        HANDLE from =3D get_handle_nat ();
->        DWORD resume_pid =3D 0;
-> @@ -4389,7 +4410,8 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
->  	release_attach_mutex ();
->        ReleaseMutex (input_mutex);
->      }
-> -  ReleaseMutex (pipe_sw_mutex);
-> +  else
-> +    ReleaseMutex (pipe_sw_mutex);
->  }
-> =20
->  bool
 > --=20
 > 2.51.0
 >=20
