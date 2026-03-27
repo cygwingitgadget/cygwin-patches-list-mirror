@@ -1,224 +1,167 @@
-Return-Path: <SRS0=doSl=B3=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by sourceware.org (Postfix) with ESMTPS id D17504BA2E0E
-	for <cygwin-patches@cygwin.com>; Fri, 27 Mar 2026 13:01:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D17504BA2E0E
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D17504BA2E0E
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=212.227.17.22
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774616520; cv=none;
-	b=miN923/ZAz7+aMCHBuOA+9gmr/gYIHVBBCkt62ocQJDlE5IhEv4Kz+pmgJqNWBzMolIB/R6NC9eBg+cbvaPUdMzR2/+jg46OfcpU19nZaWNeZ52UeNTOV1nsKK0pR1zUjyqHwbhStL68LVt4Cu5Zq8ohYr5wmgWWTEmAa3Upzj8=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774616520; c=relaxed/simple;
-	bh=SsiRtejX/5EvtaURaIW6Vd2gedCmR3YZ0welmQxRNkc=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=mZs4tWMsubFSShrP+hTLOZ3DVZeoYLDlrM6nrwkbjtJnRA2o+/jMvNCbbVDreq6B10CctptvL5Ua1Nsjmtp7bqsmT6G+gB2aZ46vY7SAT8HeOn5BjbTelHF3ddJZ2yVBjYbAWA1DjDoUaScBN74pRDXfgTKAKY68RGt3OegVpbM=
-ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D17504BA2E0E
+Return-Path: <SRS0=7rx0=B3=arm.com=Igor.Podgainoi@sourceware.org>
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazlp170130007.outbound.protection.outlook.com [IPv6:2a01:111:f403:c20f::7])
+	by sourceware.org (Postfix) with ESMTPS id A0CDA4BA23C1;
+	Fri, 27 Mar 2026 13:02:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A0CDA4BA23C1
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=arm.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A0CDA4BA23C1
+Authentication-Results: server2.sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c20f::7
+ARC-Seal: i=3; a=rsa-sha256; d=sourceware.org; s=key; t=1774616535; cv=pass;
+	b=br+HdLk9Ywo7XK4SmcV79wINi3ZwpF1OJSOv+6PuYtP9UtC23gSvU9ibHkbF//QtZ99eMWSC0Y6LzP2qJLPwd36rdgiGpE061/WX245gapOEj0mGDamJUo39ai0TWp0fwsG/Uxvqabyz9hs6FVxuiNuzRrLhs3CARoSM7Y6sGEQ=
+ARC-Message-Signature: i=3; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1774616535; c=relaxed/simple;
+	bh=a85tMcQg9efn4Ud811AIuBn09qAEN2YVLA5KBMkp8ik=;
+	h=DKIM-Signature:DKIM-Signature:From:To:Subject:Date:Message-ID:
+	 MIME-Version; b=hQKuw8I1SHU1bBO2IExd9TgKyJBjMZM1XexeGqvkdZxNujbjYX6CUXldnOjvKVm4QHLrfiGJ8asCaWzgN9B7vooPloIJU8+CzEveqzPWjHg9Ga+Apj482Y0LnMmr+NFVIYQzSl8uJJFcJIo4p7d+AX8enJElT894recp6RifAY4=
+ARC-Authentication-Results: i=3; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A0CDA4BA23C1
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=UXgQxPMy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1774616512; x=1775221312;
-	i=johannes.schindelin@gmx.de;
-	bh=rcph2QYjiXSLXSRPCRMzzipwfz5QgJ4FthqhCzz7Jeg=;
-	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=UXgQxPMyZVA/2K+w8NesJBS4x1IvFmPIvHMfeaUpChNACqB1kjjRvDXSvUgozl6i
-	 Xa25nwPWGwWV5jc7I/gZAD9PfaiVzo/ShXGFkpaAZTH8zf4DKicrB8qkjtJ/lTbPr
-	 KJLnvlfx86tJ/0gRKfL+xRxl4tKfRKipNZZdtbdIkSvozWwpoYE2I/VA6vRoouPvo
-	 LRbzzRYkKGblGDl1mRXYcJOoi+iKRGCKEJ+X2eUFInPDpExF1xq9Kt2StwI0hhaiy
-	 cb8zQ/HOj0P6VjJa9/nkaVnd0pUood7TZ2nPlpC0iky17DjAd3Yvbrye73a+l+jnL
-	 R1i31wI5krPmQdvvOA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZktj-1w0Crn1k7L-00N6hr; Fri, 27
- Mar 2026 14:01:52 +0100
-Date: Fri, 27 Mar 2026 14:01:50 +0100 (CET)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v7 1/7] Cygwin: console: Fix master thread
-In-Reply-To: <20260325130453.62246-2-takashi.yano@nifty.ne.jp>
-Message-ID: <6e4e7302-09f1-05d0-20f4-1805499e5df6@gmx.de>
-References: <20260321113613.9443-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-1-takashi.yano@nifty.ne.jp> <20260325130453.62246-2-takashi.yano@nifty.ne.jp>
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Jbm3rEri;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Jbm3rEri
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=kxTri9deeJUZdTchkOWS4yeXjD+3kPM7dO3r77McQfNVi8N632XKwzsz3ydJK3tb9ST1040baogqjsvh8se1yB3vil3yS8qrebf7hZgMtqevU1fFZFYexlByIIV0CKFg+Iz6jjKVVbUStZXxNNWD9cYdis8ywiVLDMgcxwjaqwKO04p9NCDENrSAZf7RULbrMgTHM4zEnUOScH5y42Rv2J4FUwtoCdp2tNa51yT3VhQrx/ZWjJalX4NY/71opZasF3tNhJcpqk4dbIj5xz6AHH2v3y5he+t7Y1jcs8yblvCHZwjdiXQrV0roXN+KRZqkUPQpMZ9m4ccDOXcHd76Lwg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a85tMcQg9efn4Ud811AIuBn09qAEN2YVLA5KBMkp8ik=;
+ b=L+W3mlSKDFcs8MUJI9sjr3Yl5lFlU1zA1AsEyO704o6wc8Q5wKYZfz5u72EutapH8jtzA6VRP87ByoMdEX5xbhZ+USSHU4S/7Yx+2sksi1pn33s25iTg2KKceDsh08RkQFwTH+sorUYOJQpk8J3yGnoZEyAdOW5AocWdaeh4RbbeoRY6AoRhkg7Cm0uAdLVhv5TmMM4ApXR+Nk2nU7Lh7N6Il5rNOFndNOptp1xVRoOQXUdmT2nRB/stvbSD3oVDsjOkQxl+JIXJ/Lxr6LPhSqMdEmTx+Fr+NOKvq2xKNKMHAkc4hXGm5F5GxjhxuE9Gj/UaYTFXEPzb1qsVaFfS8A==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=cygwin.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a85tMcQg9efn4Ud811AIuBn09qAEN2YVLA5KBMkp8ik=;
+ b=Jbm3rEricyTEpC3WhQedxbLkcYAJgDHqQmn1KV29Io3Aw26p8Heul5FrSJ9hK/sSuQhTFF5+rmYWI8ZF7XT2R7diak1243JmbH9pUyjXFV+O6AFTywXz54pxF0g6TQ/Ep5k5+kL7MU9btXehuSjJQ6LiJZHvOobJ2YVQkR/3sNg=
+Received: from AS9PR06CA0606.eurprd06.prod.outlook.com (2603:10a6:20b:46e::20)
+ by DB9PR08MB8649.eurprd08.prod.outlook.com (2603:10a6:10:3d3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Fri, 27 Mar
+ 2026 13:02:07 +0000
+Received: from AMS1EPF0000008F.eurprd05.prod.outlook.com
+ (2603:10a6:20b:46e:cafe::71) by AS9PR06CA0606.outlook.office365.com
+ (2603:10a6:20b:46e::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.33 via Frontend Transport; Fri,
+ 27 Mar 2026 13:02:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS1EPF0000008F.mail.protection.outlook.com (10.167.242.86) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.21
+ via Frontend Transport; Fri, 27 Mar 2026 13:02:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oTium7AOmkPtwMrW5oULCPZ7cF/nNev1x392U6eyKBEmr/iEOwTZ07Vc9Lj0D+IKWw2WfcaXzu0WvHEg7VdDT14yDhEVT49oJ6F4nDSNDma/KdrATcsGrA1hF2r+b/bOfLKGv7nLkFZ/J2+hrmlWCGAyHb24OeqTw3kX4SjoQwYqiw1owKqAsRfFWPwFqL8MttuvaFIqtCU6YBIYs0/y7gYYrMKZgQG888YJYRy1Dg5nmZDe5Sz1lu2LY+iG9nn8EsMKkfMklRhjfuHhRQ8HIV/xl8RQ6/ZspduIjzdEGPvSGKyIdmaG8b9PrziZz87k56ktLF+l7kTPB/qSsqYMdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a85tMcQg9efn4Ud811AIuBn09qAEN2YVLA5KBMkp8ik=;
+ b=OkyJxs+nX21AuUa3drrud0GjqkuiYwfWOMJuAUfLhkkM869yTIXw2MNUDdBTDolc/c60yKR67qUNz+f7ASK+oGEE3XJx8lGEmYCEWM++eEVpotP/iyUTt/9hQwMIQxKZ9ayRwpBjiYJq1QVA+UMfWq0dzwsrcvs0z1ItQlMnRzv4OTpLh8ap3Kt1IUcbos9GuwB/1RsF8J20GFBrHHM/sP3LIsg1qIa1M1bDTAn0XZgJuuJ6pYAuRlMk6rVk4ygES16Lu4WIMY9Jo39bDZRiuvG7qJsTD11GwtXve7LKOUYGjFMVTW0Xr5k8sbqKqQuYF4SJ0jbNrZ8KE/fMrS8tNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a85tMcQg9efn4Ud811AIuBn09qAEN2YVLA5KBMkp8ik=;
+ b=Jbm3rEricyTEpC3WhQedxbLkcYAJgDHqQmn1KV29Io3Aw26p8Heul5FrSJ9hK/sSuQhTFF5+rmYWI8ZF7XT2R7diak1243JmbH9pUyjXFV+O6AFTywXz54pxF0g6TQ/Ep5k5+kL7MU9btXehuSjJQ6LiJZHvOobJ2YVQkR/3sNg=
+Received: from PAXPR08MB7247.eurprd08.prod.outlook.com (2603:10a6:102:212::7)
+ by AS2PR08MB8671.eurprd08.prod.outlook.com (2603:10a6:20b:55e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.23; Fri, 27 Mar
+ 2026 13:01:03 +0000
+Received: from PAXPR08MB7247.eurprd08.prod.outlook.com
+ ([fe80::e2f7:f38e:3321:44fe]) by PAXPR08MB7247.eurprd08.prod.outlook.com
+ ([fe80::e2f7:f38e:3321:44fe%5]) with mapi id 15.20.9745.023; Fri, 27 Mar 2026
+ 13:01:03 +0000
+From: Igor Podgainoi <Igor.Podgainoi@arm.com>
+To: "corinna-cygwin@cygwin.com" <corinna-cygwin@cygwin.com>
+CC: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>, Thirumalai
+ Nagalingam <thirumalai.nagalingam@multicorewareinc.com>, nd <nd@arm.com>
+Subject: Re: [PATCH] Cygwin: aarch64 SEH fixes and handler refactoring
+Thread-Topic: [PATCH] Cygwin: aarch64 SEH fixes and handler refactoring
+Thread-Index: Ady7iqf8Kaqk9IbyQum4KYj9YcFaLwA/uLYAAFgMPYA=
+Date: Fri, 27 Mar 2026 13:01:03 +0000
+Message-ID: <acZ_gUdL77JdZgPd@arm.com>
+References:
+ <MA0P287MB3082CAC457D335E3325522CD9F48A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+ <acQwoPFM-FeioOIA@calimero.vinschen.de>
+In-Reply-To: <acQwoPFM-FeioOIA@calimero.vinschen.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+x-ms-traffictypediagnostic:
+	PAXPR08MB7247:EE_|AS2PR08MB8671:EE_|AMS1EPF0000008F:EE_|DB9PR08MB8649:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85565a07-ad69-4505-7be6-08de8c010c8e
+x-ld-processed: f34e5979-57d9-4aaa-ad4d-b122a662184d,ExtAddr
+x-checkrecipientrouted: true
+nodisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|366016|1800799024|38070700021|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ nl7Q20Wnu0i96isxWAJ3MCirgpzm0K9UsxIOnU02pY2gPyZq9/K2wxuhgQ5ntTD7Xu21FB6d4xlrT9TLSeQMnPX9a1+wobUlKKK2aYxNXEkGsRWZw6p77XJO4CI1Bv4GMxCjvw9an0yT3GjBR3K+ngeyxDD6SwhQ4+TV4YBzNtJ8cF6k3Mo5oA2DdBUBKswkOMOWlEGhwHdBsa20h57dKcz4EgFuEPPoveqrClQXyGwYFCDJMOWBEPKr1PN7wT2aPd9IEFBPCUD/OzRHOyhGfNyK5tRBWZ4ypYisUuHaOLoFMXDtGZqSzIkayoRhzOIpL3DAFm3KSEVX5ui8agjU9cP72/a7ajjSfS80QtLjVS6GTF4YuiHxu8XeiTTbGPGo1Qua3F9CyODUk1LUR/Jj2o0cc05AZFIuOY2Wa1svjse7+OCgnOr0wEB34xZly2lm+Ke0/liKrXTmlYiP0LWi9JsUbUz9g6kK4yYG6tjDDkZxB+MzaBdSxtKpgPIWErAdk6GIlB5qKafFq4+JLqpItggnEJ23X3elW9aefT5o9NXkk8Ch6o1aUvB3skgfyEfWwiauADZFAf+2X3/gQmQP3yy50+Log3uT7rl3BdBts9eqiZ4gGzwFqx8OoD3y//EkAreXG9uVEipIyki9K5fgcd06Au1Ghq2dh5K/0Ya7+8WwYawpDj6+fVSiVJTiClVgi16Y/16iL0RCcrSeEmCsus7pX6kQGXTw95Qfz9hLkChxZqX8Urd6RufmGIgub3ti
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR08MB7247.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700021)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C62EA1CBE9244849924C5897B1AA8BB1@eurprd08.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:HDpQe0y06FXWcdKp0xowd0FjZ9oT5w4by20DJzB/P/48XoQNoke
- ONYZUbebSZk/mePrMExlLwXdXrep/gCE++T/Bz+MdE5AjCooKRCEScI2oOfDJRiM1Nnn70a
- X+b6pbTRhUv3FR7Ql/IqCqrh9AnQWVaKpawOBnwzrW44r1W12JXW7ycJHa27jCsi7gzorPj
- c6MYvKVM4LjzyS+Er7W9Q==
-UI-OutboundReport: notjunk:1;M01:P0:kE8c4bHX2Ic=;kNV1Bnr4Duw8AmjzOdtrKAq+jif
- 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
- +9ZQSVsdZTSXQYfYQCNFHRPiqHaMVZriA==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Exchange-RoutingPolicyChecked:
+ utLi5bkhwbs01xiZFztlgs/VV+7aHVhZ4CTdDHIx1ZMJsOifeN7mL/d2mOgVe1vO5IkmbbdSpOmZPYYl0b7h+SRHALESwLkZAdAi0tBja9KsLywWzIbv1B6tN4bybw6M0N7DGV45f+deVcbZnnNI86EyRHHquesfyE4utp5kHdXmWnHzgloDelVBLPjP0W40/dCLBYaZprhww5FCaEk6w6lz7Y2+QPd/n9KPcm0bAXoq+HrNmryloHNTCUcmEHvJNrW4fWHlPcNALdIuBrIAKX8TJH2Y//przAj0jpzyYJLgxYxxXy+YfHbW54jDv6j6BpEzb/pXedZqFgR8yiDcWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8671
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS1EPF0000008F.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	227d979c-b055-4f00-d96e-08de8c00e6c2
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|35042699022|376014|36860700016|14060799003|1800799024|82310400026|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	47EHxLj1tuVKxEOQ0BmoOWs3slvTF0CIS3RZ93N6N6A6plp7WizgbjXdG06WMacQcEum1fYHvpZi2ZKEgmY1nK1AqoVMB2APH+mQljlUOmF+tH9A63/jzim1fQp8DDtgyVdR06qS40XDiyBk4Xx+QtxKe+ysDybSwCHelJkw67RvZ2J3JafYHSkJb8zEvHAciJsi+RH84Im+cKeSu0NnbpqSnYP+C1buKU/pU63+Ci+xhi68q9rMXzbo0HzBccpZ3IB3nAwZBjlJ1yZj2amv8KJpgwkpaaRz2XZ/KKuhR6C4rDSEj3Y54FYsooYygVUbJqhBAN3j+DTYp71LFloZoquY5cw3hDZGvKT5uVNcME0gK3viwBHUFRWpzwxedk37z1NMR5VEHA5x0ItiphHMs60NH1PR3dd3RLicM2Y1kcnAmfyN55DQU9bogRKc1IyVpt8SqTCcNfYiTwbrt20KjzzKHWuvckSxfXfalZQyGGAyENJg2XTTm9JDikoHEclMTlQsGHvrsXPWTPm60JKNf0d0VodpRHeeNWRXYfSSGJqLZgdDfJN9098khZBCGLj8jCjXOpFyY8Ig3omd87t/vjVkT3w7gWi20Ellmor2Tgnco8Af7L5rGGbsryRnAJ+zMBM3GOq494wi7vN5LtDZn/YoyFrAwY0Ei8FGt6ZytuRTLqg8a0DSd2HDVdchs4xnij5fdwjCfwauMOnOEOPPQSX+cfz3rv0fuQ+/s2LO/BM=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(376014)(36860700016)(14060799003)(1800799024)(82310400026)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	59HZepUlHAeX/ZAlGbyqhBTfNVSBLz47n/AlEvXtPbgOZtPvGnoav2eJpbotbePKWCXr+mdV8k3dVWbqwZFfjOg8b+OLCrHEN6D47g4JA2Dwu1hoJV1d2ptpcZYLKHopQIsHUdlFRbNY1vDlvWaqGMd6ZZ0DwDDEcXkSICaqyy14WOEkZdXq//wf9wBX71ois7c378wU8iGGeEZORP39d41BN76o5/Y89VvzCXuxN1glGRDucrv86081gHsfe+dVu8zYAUs2YgVskq9qynuZK9q5KPHLCwmOZAjH8peXdWqZ0wqabX8nYoXeieMcSjMI9gMGv5MwmR153PAYaFlMHVbmY4oNeM3wqRRfK87M5x4jZXtpuLpjb1jwy3U6WK6c6YlreklYcbNLna++XlTeEzcKZBMgYdUGLulFUzQJfaj/Bg9OGXuu8UiIcF2V6yDi
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 13:02:06.6253
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85565a07-ad69-4505-7be6-08de8c010c8e
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS1EPF0000008F.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB8649
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
-
-On Wed, 25 Mar 2026, Takashi Yano wrote:
-
-> In Windows 11, key event with wRepeatCount =3D=3D 0 is fixed-up to
-> wRepeatCount =3D=3D 1 in conhost.exe.
-
-I can confirm this, it's in
-https://github.com/microsoft/terminal/blob/v1.25.622.0/src/host/inputBuffe=
-r.cpp#L406
-
-> Due to this behaviour, inreq_eq() returns false even though the two
-> event records are the same. This patch adds workaround for this
-> behaviour in inrec_eq().
-
-The commit message explains the conhost behavior but not why comparing
-INPUT_RECORDs matters in the first place. A reader unfamiliar with the
-write-then-verify pattern in `cons_master_thread` would have a hard time
-understanding the impact.
-
-Could you expand the commit message body along these lines?
-
-    The console master thread (`cons_master_thread`) reads INPUT_RECORDs
-    from the console input buffer, processes signal-generating events,
-    and writes the remaining records back. After the writeback, it peeks
-    the buffer and uses `inrec_eq()` to verify that conhost stored the
-    records faithfully. On Windows 11, conhost normalizes `wRepeatCount`
-    from 0 to 1 on readback, causing `inrec_eq()` to report a mismatch
-    and triggering an unnecessary fixup path. Treat 0 and 1 as equivalent
-    for comparison purposes.
-
-Also feel free to add the reference to the conhost source code I provided
-above.
-
->=20
-> Addresses: https://github.com/git-for-windows/git/issues/5632
-> Fixes: ff4440fcf768 ("Cygwin: console: Introduce new thread which handle=
-s input signal.")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->  winsup/cygwin/fhandler/console.cc | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->=20
-> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/=
-console.cc
-> index 9fd3ff506..2f59f8f24 100644
-> --- a/winsup/cygwin/fhandler/console.cc
-> +++ b/winsup/cygwin/fhandler/console.cc
-> @@ -318,9 +318,16 @@ inrec_eq (const INPUT_RECORD *a, const INPUT_RECORD=
- *b, DWORD n)
->  	     written event. Therefore they are ignored. */
->  	  const KEY_EVENT_RECORD *ak =3D &a[i].Event.KeyEvent;
->  	  const KEY_EVENT_RECORD *bk =3D &b[i].Event.KeyEvent;
-> +	  /* Fixup repeat count */
-> +	  WORD r1 =3D ak->wRepeatCount;
-> +	  WORD r2 =3D bk->wRepeatCount;
-> +	  if (r1 =3D=3D 0)
-> +	    r1 =3D 1;
-> +	  if (r2 =3D=3D 0)
-> +	    r2 =3D 1;
-
-The comment is adequate, but it could mention _why_ the fixup is needed,
-matching the style of the existing comment right above it (which explains
-why `wVirtualKeyCode`, `wVirtualScanCode`, and `dwControlKeyState` are
-ignored). Something like:
-
-    /* On Windows 11, conhost normalizes wRepeatCount from 0 to 1
-       on readback. Treat them as equivalent for comparison. */
-
-That way the rationale stays local to the code instead of requiring a
-trip to `git log`.
-
-With the commit message updated per the above (the comment tweak is
-optional):
-
-Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-
-Thanks,
-Johannes
-
->  	  if (ak->bKeyDown !=3D bk->bKeyDown
->  	      || ak->uChar.UnicodeChar !=3D bk->uChar.UnicodeChar
-> -	      || ak->wRepeatCount !=3D bk->wRepeatCount)
-> +	      || r1 !=3D r2)
->  	    return false;
->  	}
->        else if (a[i].EventType =3D=3D MOUSE_EVENT)
-> --=20
-> 2.51.0
->=20
->=20
+SGkgQ29yaW5uYSwNCg0KT24gTWFyIDI1IDE4OjU5LCBDb3Jpbm5hIFZpbnNjaGVuIHdyb3RlOg0K
+PiBPbiBNYXIgMjQgMTI6NDIsIFRoaXJ1bWFsYWkgTmFnYWxpbmdhbSB3cm90ZToNCj4gPiBJbi1s
+aW5lZCBwYXRjaDoNCj4gPiBbLi4uXQ0KPiA+IGRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2xv
+Y2FsX2luY2x1ZGVzL2V4Y2VwdGlvbi5oIGIvd2luc3VwL2N5Z3dpbi9sb2NhbF9pbmNsdWRlcy9l
+eGNlcHRpb24uaA0KPiA+IFsuLi5dDQo+IA0KPiBUaGlzLCBJIGRvbid0IHVuZGVyc3RhbmQgYW5k
+IGxvb2tzIHdyb25nIHRvIG1lLg0KPiANCj4gRm9yIGFhcmNoNjQsIHlvdSdyZSBkZWZpbmluZyBF
+WENFUFRJT05fSEFORExFUl9EQVRBIGFzIGFuIGVtcHR5IG1hY3JvLg0KPiBFWENFUFRJT05fSEFO
+RExFX1JFRiBpcyBleGNsdXNpdmVseSByZWZlcmVuY2VkIGZyb20gdGhpcyBtYWNybywgc28gZ2l2
+ZW4NCj4gaXQncyBlbXB0eSwgRVhDRVBUSU9OX0hBTkRMRV9SRUYgaXMgZW50aXJlbHkgdW51c2Vk
+IG9uIGFhcmNoNjQuDQo+IA0KPiBJc24ndCB0aGVyZSBhIG5vbi1lbXB0eSBkZWZpbml0aW9uIGZv
+ciBFWENFUFRJT05fSEFORExFUl9EQVRBIG9uIGFhcmNoNjQNCj4gbWlzc2luZyBmcm9tIHRoaXMg
+cGF0Y2g/DQoNCkkgaGF2ZSBub3cgYWRkcmVzc2VkIHRoZSBlbXB0eSBFWENFUFRJT05fSEFORExF
+Ul9EQVRBIG1hY3JvIGluIGENCmZvbGxvdy11cCBwYXRjaCBvbiB0b3Agb2YgdGhpcyBzZXJpZXM6
+DQpodHRwczovL2N5Z3dpbi5jb20vcGlwZXJtYWlsL2N5Z3dpbi1wYXRjaGVzLzIwMjZxMS8wMTQ4
+NjEuaHRtbA0KDQpBbiB1cGRhdGVkIHZlcnNpb24gb2YgdGhlIFRSWV9IQU5ETEVSX0RBVEEgcGF0
+Y2ggd2lsbCBmb2xsb3cgc2hvcnRseS4NCg0KUmVnYXJkcywNCklnb3IgUG9kZ2Fpbm9pDQpBcm0=
