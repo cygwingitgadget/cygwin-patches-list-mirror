@@ -1,141 +1,526 @@
 Return-Path: <SRS0=/csx=B4=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:29])
-	by sourceware.org (Postfix) with ESMTPS id BDB184BA9018
-	for <cygwin-patches@cygwin.com>; Sat, 28 Mar 2026 10:57:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BDB184BA9018
+Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.226.41])
+	by sourceware.org (Postfix) with ESMTPS id 41D074BA23D1
+	for <cygwin-patches@cygwin.com>; Sat, 28 Mar 2026 10:57:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 41D074BA23D1
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BDB184BA9018
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:29
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774695424; cv=none;
-	b=dOPqmsdoBxIZ1bcedrM9akap3uotuIvVWnwqrEyKnf6MfYnnciJ6rVsUkI9VU5nxWB54j17Mc3SxMarahhoPgCDJhhXMyCQ2uJyPSIC1ykrcBO3PLEkY6xad1RBx+YpvbEHK4bQhfhDuH7qx3SKmb0fKh7XvnGxXPEggjiDOVa8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 41D074BA23D1
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774695434; cv=none;
+	b=s8jqX1iom2GlHv1cjYg0XudQIaGZZ0rWCRNrdgk+6tPwgDon9oKyq8IWZqOSWYX6ZwBuUR75F0Z4Pbw6fltLGh8SjAzZDB/FhpT7IMXnbdqL7ELm0G7q3DG25GhIuZb7WT65TSEiXtnUQkFgalTp9ikMnBtTeQ5srBUqVagsbxY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774695424; c=relaxed/simple;
-	bh=cMBnS2augoz28IRbi0N2oIQTPeOwZGFss9CtGTFSg/o=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=utN0jrg1nBqonB5ERL8jdODUwv0yCtTrA2tzwh9OyxLqpIjmR07/J2lpprOXTGSdHtthUeTwppIdjnjsJO4VYJPoeMtFdieir2fLuHZLQrJOX4EbOsYfhId+nD5dTNC0mLNhI9bMRiozTS/8D10JwTAKU6Pw/LKExHcGUmmyUag=
+	t=1774695434; c=relaxed/simple;
+	bh=wc7LWTmbofviDx8c2Y7zO63to+GCu6ncuzH/yfn/izA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=khxnWrA81/w+npbYPYVFQMUpr5T1O5G2G+cb0KtP4ZNtWZvEmPr6vOQzWdlXrk9uXgKxrD2/13XUw6i3jn7arZlq+Oplrd30rxUgX5lkj2O3UMtpcwRqDBnRnWmir66F27oonX/9xL8VLgxjK5Z3hgc6vxcjfWl3ORV9jo0jWcE=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BDB184BA9018
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 41D074BA23D1
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=KTovnN68
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=L/FkQWVQ
 Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20260328105701920.LDBG.58584.HP-Z230@nifty.com>;
-          Sat, 28 Mar 2026 19:57:01 +0900
+          id <20260328105707091.LDBZ.58584.HP-Z230@nifty.com>;
+          Sat, 28 Mar 2026 19:57:07 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v8 3/7] Cygwin: console: Use input_mutex in the parent PTY in master thread
-Date: Sat, 28 Mar 2026 19:55:47 +0900
-Message-ID: <20260328105632.1916-4-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v8 4/7] Cygwin: pty: Apply line_edit() for transferred input to to_cyg
+Date: Sat, 28 Mar 2026 19:55:48 +0900
+Message-ID: <20260328105632.1916-5-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260328105632.1916-1-takashi.yano@nifty.ne.jp>
 References: <20260325130453.62246-1-takashi.yano@nifty.ne.jp>
  <20260328105632.1916-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774695421;
- bh=yse905iDifXJTFOyHnWPlf0G0WGnQWF4rHaXtiwoCoc=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774695427;
+ bh=hSK3Rl3XU+jCsmgR1Q/bbrtSC6UH2svIEg37oy4kcEE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=KTovnN68XcyC2YgC6yJUKiUJKr3zVdPQCIYQRju1TRhtzVYTb3gv6qlslqtWJ5WGxPTTTqFj
- wxB8EaUIozcXgrTz9Dj1ai52yQVSJb2FlHTPewN9RtOsl2W3xuJEOBfz0RxpGKB9J/j+SKmEO7
- bUxU3b8p89s+OPu5112mDK5+xEkfrnsGeOXseYKEZtwuOKQTA3vr5z10P9LUQ03XTSKu/ahseL
- LFtvHRLqSA15st9W7vlP6i+oZAnEVHd9JOuRLF6MBmJo2TNIvXj8TLfDD/W8zbp0Z1pt48EvfF
- asdjq09QvWZnrXgg2BjNXByVNifVTtMGm3f2SV9cUojdQ8Wg==
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+ b=L/FkQWVQo8saDxDjIhEL2uiedD1ZsOEuGwx5Uz8qVW8Bu53A2Yc0UP6M3Jbz6jsoYTUCkpO/
+ T+PhHNXHry8MXx0WtA8QXAaWGtddundGoELOXT8aTlyEjT3bSyxE/H3WBYISapG7B1G4noPpvL
+ 8iiqaYuFfZ0Sp+vSv2DUQ5ZLnMrM/4/8aXUcHHNX05uk9rIGgPLeLFh8a546CJXz88Eu9imXun
+ oqv9uOZAku3Mf2R6yEkaTMKqf0lakTPTNJdFRG21fzkax62qeMPXaRXJN1kXapiErime5a2Env
+ /Pg9q0w1t9aGtGrt0rLMKPRDqq02kWWg4CxIA5S+fgmM77bA==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-If the console is originating from pseudo console, the input into
-console is coming from PTY master. This is because:
+When keystrokes travel through the nat pipe during a native process
+session, they bypass POSIX line discipline entirely. When they are
+transferred back to the cyg pipe at cleanup (via
+`transfer_input(to_cyg)`), they arrive as raw bytes. If the
+terminal is in canonical mode at that point, VERASE and VKILL
+characters in those raw bytes have no effect because `line_edit()`
+was never applied to them. The result: backspace typed while a
+native process was running fails to erase the preceding character
+once the input reaches bash's readline.
 
-When the pseudo console is active, and a cygwin process is started
-from non-cygwin process, `cons_master_thread()` runs inside the
-Cygwin process that inherited the pseudo console from its parent
-PTY. It reads all `INPUT_RECORD`s from the console input buffer via
-`ReadConsoleInputW()`, processes signal-generating events (e.g. Ctrl+C),
-and writes the remaining records back via `WriteConsoleInputW()`.
-Meanwhile, the PTY master process (e.g. mintty) calls
-`fhandler_pty_master::write()`, which writes keystrokes to `to_slave_nat`
-(one end of the nat pipe). Conhost reads from the other end of that
-pipe, parses the byte stream through its VT input path, and inserts
-the resulting `INPUT_RECORD`s into the console input buffer.
+The fix applies `line_edit()` to the transferred bytes before they
+reach the reading process. The right place to do this is the
+master's forward thread (`pty_master_fwd_thread()`), because it
+runs in the master process alongside `fhandler_pty_master::write()`
+and shares access to the readahead buffer and `line_edit()` state.
+Calling `line_edit()` from the slave (where `transfer_input()` runs)
+would not work because that state belongs to the master.
 
-If `cons_master_thread()` reads the buffer and removes a signal record
-while conhost is simultaneously inserting new records from the PTY
-master's write, the verify step (`inrec_eq()`) finds records in the
-buffer that were not part of the original read, reports a mismatch, and
-enters the fixup path. That fixup path itself can disturb the record
-order, turning what was merely an interference into an actual problem.
-Acquiring the PTY's `input_mutex` in `cons_master_thread()` prevents
-`fhandler_pty_master::write()` from feeding new bytes into the pipe
-while the read-process-writeback-verify cycle is in progress.
+To coordinate: `transfer_input(to_cyg)` writes the raw bytes to
+the cyg pipe's slave end (`to_slave`), then signals a new
+cross-process event (`input_transferred_to_cyg`) and spin-waits
+for the forward thread to clear it. The forward thread is converted
+from synchronous to overlapped I/O so it can wait on both the
+`from_slave_nat` read completion and the transfer event
+simultaneously. When the event fires, it reads the transferred
+bytes from the cyg pipe's master end (`from_master`), processes
+them through `line_edit()`, and clears the event.
 
-Use parent input_mutex as well as input_mutex in console device in
-cons_master_thread().
+The spin-wait in `transfer_input()` holds `input_mutex` (from its
+caller), which blocks `fhandler_pty_master::write()` from injecting
+new keystrokes until the forward thread has finished applying
+`line_edit()` to the transferred bytes.
 
-Fixes: 04f386e9af99 ("Cygwin: console: Inherit pcon hand over from parent pty")
+Fixes: 10d083c745dd ("Cygwin: pty: Inherit typeahead data between two input pipes.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 ---
- winsup/cygwin/fhandler/console.cc | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ winsup/cygwin/fhandler/pty.cc           | 143 +++++++++++++++++-------
+ winsup/cygwin/local_includes/fhandler.h |  10 +-
+ winsup/cygwin/local_includes/tty.h      |   1 +
+ 3 files changed, 113 insertions(+), 41 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 2a52ba575..39c4f6ff0 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -63,6 +63,7 @@ fhandler_console::console_state NO_COPY
- static bool NO_COPY inside_pcon_checked = false;
- static bool NO_COPY inside_pcon = false;
- static int NO_COPY parent_pty;
-+static HANDLE NO_COPY parent_pty_input_mutex = NULL;
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 7a7987c04..beb3747d7 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -210,6 +210,7 @@ atexit_func (void)
+ 	      {
+ 		ptys->get_handle_nat (),
+ 		ptys->get_input_available_event (),
++		ptys->input_transferred_to_cyg,
+ 		ptys->input_mutex,
+ 		ptys->pipe_sw_mutex
+ 	      };
+@@ -739,7 +740,7 @@ fhandler_pty_slave::open (int flags, mode_t)
+   {
+     &from_master_nat_local, &input_available_event, &input_mutex, &inuse,
+     &output_mutex, &to_master_nat_local, &pty_owner, &to_master_local,
+-    &from_master_local, &pipe_sw_mutex,
++    &from_master_local, &pipe_sw_mutex, &input_transferred_to_cyg,
+     NULL
+   };
  
- bool NO_COPY fhandler_console::invisible_console;
- 
-@@ -465,6 +466,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 	  continue;
- 	}
-       total_read = 0;
-+      if (inside_pcon && parent_pty_input_mutex)
-+	WaitForSingleObject (parent_pty_input_mutex, mutex_timeout);
-       switch (cygwait (p->input_handle, (DWORD) 0))
- 	{
- 	case WAIT_OBJECT_0:
-@@ -489,6 +492,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 	default: /* Error */
- 	  free (input_rec);
- 	  free (input_tmp);
-+	  if (inside_pcon && parent_pty_input_mutex)
-+	    ReleaseMutex (parent_pty_input_mutex);
- 	  ReleaseMutex (p->input_mutex);
- 	  return;
- 	}
-@@ -666,6 +671,8 @@ remove_record:
- 	  while (true);
- 	}
- skip_writeback:
-+      if (inside_pcon && parent_pty_input_mutex)
-+	ReleaseMutex (parent_pty_input_mutex);
-       ReleaseMutex (p->input_mutex);
-       cygwait (40);
+@@ -779,6 +780,12 @@ fhandler_pty_slave::open (int flags, mode_t)
+       errmsg = "open input event failed, %E";
+       goto err;
      }
-@@ -1971,6 +1978,8 @@ fhandler_console::setup_pcon_hand_over ()
- 	    inside_pcon = true;
- 	    atexit (fhandler_console::pcon_hand_over_proc);
- 	    parent_pty = i;
-+	    parent_pty_input_mutex =
-+	      cygwin_shared->tty[i]->open_input_mutex (MAXIMUM_ALLOWED);
- 	    break;
- 	  }
-       }
-@@ -1997,6 +2006,7 @@ fhandler_console::pcon_hand_over_proc (void)
-   else
-     system_printf("Acquiring pcon_ho_mutex failed.");
-   ReleaseMutex (mtx);
-+  ForceCloseHandle (parent_pty_input_mutex);
++  shared_name (buf, INPUT_TRANSFERRED_EVENT, get_minor ());
++  if (!(input_transferred_to_cyg = OpenEvent (MAXIMUM_ALLOWED, TRUE, buf)))
++    {
++      errmsg = "open input transferred event failed, %E";
++      goto err;
++    }
+ 
+   /* FIXME: Needs a method to eliminate tty races */
+   {
+@@ -993,6 +1000,8 @@ fhandler_pty_slave::close (int flag)
+     termios_printf ("CloseHandle (inuse), %E");
+   if (!ForceCloseHandle (input_available_event))
+     termios_printf ("CloseHandle (input_available_event<%p>), %E", input_available_event);
++  if (!ForceCloseHandle (input_transferred_to_cyg))
++    termios_printf ("CloseHandle (input_transferred_to_cyg<%p>), %E", input_transferred_to_cyg);
+   if (!ForceCloseHandle (get_output_handle_nat ()))
+     termios_printf ("CloseHandle (get_output_handle_nat ()<%p>), %E",
+ 	get_output_handle_nat ());
+@@ -1101,7 +1110,8 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
+ 		  WaitForSingleObject (input_mutex, mutex_timeout);
+ 		  acquire_attach_mutex (mutex_timeout);
+ 		  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
+-				  input_available_event);
++				  input_available_event,
++				  input_transferred_to_cyg);
+ 		  release_attach_mutex ();
+ 		  ReleaseMutex (input_mutex);
+ 		}
+@@ -1250,14 +1260,14 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ 	{
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
+-			  input_available_event);
++			  input_available_event, input_transferred_to_cyg);
+ 	  release_attach_mutex ();
+ 	}
+       else if (!mask && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+ 	{
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+-			  input_available_event);
++			  input_available_event, input_transferred_to_cyg);
+ 	  release_attach_mutex ();
+ 	}
+     }
+@@ -1835,11 +1845,15 @@ fhandler_pty_slave::fch_open_handles (bool chown)
+   shared_name (buf, INPUT_AVAILABLE_EVENT, get_minor ());
+   input_available_event = OpenEvent (READ_CONTROL | write_access,
+ 				     TRUE, buf);
++  shared_name (buf, INPUT_TRANSFERRED_EVENT, get_minor ());
++  input_transferred_to_cyg = OpenEvent (READ_CONTROL | write_access,
++					TRUE, buf);
+   output_mutex = get_ttyp ()->open_output_mutex (write_access);
+   input_mutex = get_ttyp ()->open_input_mutex (write_access);
+   pipe_sw_mutex = get_ttyp ()->open_mutex (PIPE_SW_MUTEX, write_access);
+   inuse = get_ttyp ()->open_inuse (write_access);
+-  if (!input_available_event || !output_mutex || !input_mutex || !inuse)
++  if (!input_available_event || !output_mutex || !input_mutex || !inuse
++      || !input_transferred_to_cyg)
+     {
+       __seterrno ();
+       return false;
+@@ -1856,11 +1870,13 @@ fhandler_pty_slave::fch_set_sd (security_descriptor &sd, bool chown)
+ 
+   get_object_sd (input_available_event, sd_old);
+   if (!set_object_sd (input_available_event, sd, chown)
++      && !set_object_sd (input_transferred_to_cyg, sd, chown)
+       && !set_object_sd (output_mutex, sd, chown)
+       && !set_object_sd (input_mutex, sd, chown)
+       && !set_object_sd (inuse, sd, chown))
+     return 0;
+   set_object_sd (input_available_event, sd_old, chown);
++  set_object_sd (input_transferred_to_cyg, sd_old, chown);
+   set_object_sd (output_mutex, sd_old, chown);
+   set_object_sd (input_mutex, sd_old, chown);
+   set_object_sd (inuse, sd_old, chown);
+@@ -1873,6 +1889,7 @@ void
+ fhandler_pty_slave::fch_close_handles ()
+ {
+   close_maybe (input_available_event);
++  close_maybe (input_transferred_to_cyg);
+   close_maybe (output_mutex);
+   close_maybe (input_mutex);
+   close_maybe (inuse);
+@@ -2125,6 +2142,9 @@ fhandler_pty_master::close (int flag)
+   if (!ForceCloseHandle (input_available_event))
+     termios_printf ("CloseHandle (input_available_event<%p>), %E",
+ 		    input_available_event);
++  if (!ForceCloseHandle (input_transferred_to_cyg))
++    termios_printf ("CloseHandle (input_transferred_to_cyg<%p>), %E",
++		    input_transferred_to_cyg);
+ 
+   /* The from_master must be closed last so that the same pty is not
+      allocated before cleaning up the other corresponding instances. */
+@@ -2228,7 +2248,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	      acquire_attach_mutex (mutex_timeout);
+ 	      fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
+ 						  get_ttyp (),
+-						  input_available_event);
++						  input_available_event,
++						  input_transferred_to_cyg);
+ 	      release_attach_mutex ();
+ 	      ReleaseMutex (input_mutex);
+ 	    }
+@@ -2336,7 +2357,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+     {
+       acquire_attach_mutex (mutex_timeout);
+       fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
+-					  get_ttyp (), input_available_event);
++					  get_ttyp (), input_available_event,
++					  input_transferred_to_cyg);
+       release_attach_mutex ();
+     }
+ 
+@@ -2697,6 +2719,26 @@ reply:
+   return 0;
  }
  
- bool
++void
++fhandler_pty_master::apply_line_edit_to_transferred_input ()
++{
++  /* cyg pipe is fhandler_pty_common::pipesize (128K) depth, so memory
++     allocated by w_get() (128K) is enough here. */
++  tmp_pathbuf tp;
++  char *buf = (char *) tp.w_get ();
++  DWORD n;
++  ReadFile (from_master, buf, NT_MAX_PATH * 2, &n, NULL);
++  char *p = buf;
++  while (n)
++    {
++      ssize_t ret;
++      line_edit (p, n, get_ttyp ()->ti, &ret);
++      n -= ret;
++      p += ret;
++    }
++  SetEvent (input_available_event);
++}
++
+ static DWORD
+ pty_master_thread (VOID *arg)
+ {
+@@ -2881,19 +2923,37 @@ fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+   char *outbuf = tp.c_get ();
+   char *mbbuf = tp.c_get ();
+   static mbstate_t mbp;
++  OVERLAPPED ov = {0, };
++  ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
++  HANDLE w[2] = {ov.hEvent, p->input_transferred_to_cyg};
+ 
+   termios_printf ("Started.");
+   for (;;)
+     {
+       p->ttyp->fwd_last_time = GetTickCount64 ();
+-      DWORD n;
+-      p->ttyp->fwd_not_empty =
+-	::bytes_available (n, p->from_slave_nat) && n;
+-      if (!ReadFile (p->from_slave_nat, outbuf, NT_MAX_PATH, &rlen, NULL))
++      if (!ReadFile (p->from_slave_nat, outbuf, NT_MAX_PATH, NULL, &ov)
++	  && GetLastError () != ERROR_IO_PENDING)
+ 	{
+ 	  termios_printf ("ReadFile for forwarding failed, %E");
+ 	  break;
+ 	}
++wait_event:
++      switch (WaitForMultipleObjects (2, w, FALSE, INFINITE))
++	{
++	case WAIT_OBJECT_0:
++	  GetOverlappedResult (p->from_slave_nat, &ov, &rlen, FALSE);
++	  ResetEvent (ov.hEvent);
++	  break;
++	case WAIT_OBJECT_0 + 1:
++	  p->master->apply_line_edit_to_transferred_input ();
++	  ResetEvent (p->input_transferred_to_cyg);
++	  goto wait_event;
++	default:
++	  /* Not expected to happen */
++	  debug_printf ("WaitForMultipleObjects() returns unexpectedly.");
++	  Sleep (10);
++	  goto wait_event;
++	}
+       if (p->ttyp->stop_fwd_thread)
+ 	break;
+       ssize_t wlen = rlen;
+@@ -3019,7 +3079,8 @@ fhandler_pty_master::setup ()
+   char pipename[sizeof ("ptyNNNN-from-master-nat")];
+   __small_sprintf (pipename, "pty%d-to-master-nat", unit);
+   res = fhandler_pipe::create (&sec_none, &from_slave_nat, &to_master_nat,
+-			       fhandler_pty_common::pipesize, pipename, 0);
++			       fhandler_pty_common::pipesize, pipename,
++			       FILE_FLAG_OVERLAPPED);
+   if (res)
+     {
+       errstr = "output pipe for non-cygwin apps";
+@@ -3080,6 +3141,10 @@ fhandler_pty_master::setup ()
+ 					     &sa, TRUE))
+       || GetLastError () == ERROR_ALREADY_EXISTS)
+     goto err;
++  if (!(input_transferred_to_cyg = t.get_event (errstr = INPUT_TRANSFERRED_EVENT,
++						&sa, TRUE))
++      || GetLastError () == ERROR_ALREADY_EXISTS)
++    goto err;
+ 
+   char buf[MAX_PATH];
+   errstr = shared_name (buf, OUTPUT_MUTEX, unit);
+@@ -3157,6 +3222,7 @@ err:
+   close_maybe (get_handle ());
+   close_maybe (get_output_handle ());
+   close_maybe (input_available_event);
++  close_maybe (input_transferred_to_cyg);
+   close_maybe (output_mutex);
+   close_maybe (input_mutex);
+   close_maybe (from_master_nat);
+@@ -3960,6 +4026,8 @@ fhandler_pty_master::get_master_fwd_thread_param (master_fwd_thread_param_t *p)
+   p->from_slave_nat = from_slave_nat;
+   p->output_mutex = output_mutex;
+   p->ttyp = get_ttyp ();
++  p->input_transferred_to_cyg = input_transferred_to_cyg;
++  p->master = this;
+   SetEvent (thread_param_copied_event);
+ }
+ 
+@@ -3967,7 +4035,8 @@ fhandler_pty_master::get_master_fwd_thread_param (master_fwd_thread_param_t *p)
+ #define CTRL_PRESSED (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)
+ void
+ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+-				    HANDLE input_available_event)
++				    HANDLE input_available_event,
++				    HANDLE input_transferred_to_cyg)
+ {
+   HANDLE to;
+   if (dir == tty::to_nat)
+@@ -4089,26 +4158,8 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+ 	      ptr = mbbuf;
+ 	      len = nlen;
+ 	    }
+-	  /* Call WriteFile() line by line */
+-	  char *p0 = ptr;
+-	  char *p_cr = (char *) memchr (p0, '\r', len - (p0 - ptr));
+-	  char *p_lf = (char *) memchr (p0, '\n', len - (p0 - ptr));
+-	  while (p_cr || p_lf)
+-	    {
+-	      char *p1 =
+-		p_cr ?  (p_lf ? ((p_cr + 1 == p_lf)
+-				 ?  p_lf : min(p_cr, p_lf)) : p_cr) : p_lf;
+-	      *p1 = '\n';
+-	      n = p1 - p0 + 1;
+-	      if (n && WriteFile (to, p0, n, &n, NULL) && n)
+-		transfered = true;
+-	      p0 = p1 + 1;
+-	      p_cr = (char *) memchr (p0, '\r', len - (p0 - ptr));
+-	      p_lf = (char *) memchr (p0, '\n', len - (p0 - ptr));
+-	    }
+-	  n = len - (p0 - ptr);
+-	  if (n && WriteFile (to, p0, n, &n, NULL) && n)
+-	    transfered = true;
++	  if (len && WriteFile (to, ptr, len, &n, NULL) && n)
++	    transfered = true;;
+ 	}
+     }
+   else
+@@ -4147,13 +4198,20 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+     }
+   CloseHandle (to);
+ 
++  ttyp->pty_input_state = dir;
+   /* Fix input_available_event which indicates availability in cyg pipe. */
+   if (dir == tty::to_nat) /* all data is transfered to nat pipe,
+ 			     so no data available in cyg pipe. */
+     ResetEvent (input_available_event);
+   else if (transfered) /* There is data transfered to cyg pipe. */
+-    SetEvent (input_available_event);
+-  ttyp->pty_input_state = dir;
++    {
++      SetEvent (input_transferred_to_cyg);
++      /* Wait for line_edit() to be applied to the data in the cyg pipe.
++	 Holding input mutex while waiting here is necessary to
++	 prevent mixing transferred input and new master::write() input. */
++      while (IsEventSignalled (input_transferred_to_cyg))
++	yield ();
++    }
+   ttyp->discard_input = false;
+ }
+ 
+@@ -4173,6 +4231,9 @@ fhandler_pty_slave::get_duplicated_handle_set (handle_set_t *p)
+   DuplicateHandle (GetCurrentProcess (), input_available_event,
+ 		   GetCurrentProcess (), &p->input_available_event,
+ 		   0, 0, DUPLICATE_SAME_ACCESS);
++  DuplicateHandle (GetCurrentProcess (), input_transferred_to_cyg,
++		   GetCurrentProcess (), &p->input_transferred_to_cyg,
++		   0, 0, DUPLICATE_SAME_ACCESS);
+   DuplicateHandle (GetCurrentProcess (), input_mutex,
+ 		   GetCurrentProcess (), &p->input_mutex,
+ 		   0, 0, DUPLICATE_SAME_ACCESS);
+@@ -4188,6 +4249,8 @@ fhandler_pty_slave::close_handle_set (handle_set_t *p)
+   p->from_master_nat = NULL;
+   CloseHandle (p->input_available_event);
+   p->input_available_event = NULL;
++  CloseHandle (p->input_transferred_to_cyg);
++  p->input_transferred_to_cyg = NULL;
+   CloseHandle (p->input_mutex);
+   p->input_mutex = NULL;
+   CloseHandle (p->pipe_sw_mutex);
+@@ -4223,7 +4286,7 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+       WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+-		      input_available_event);
++		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+       ReleaseMutex (input_mutex);
+     }
+@@ -4245,7 +4308,8 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 	  WaitForSingleObject (p->input_mutex, mutex_timeout);
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  transfer_input (tty::to_cyg, p->from_master_nat, ttyp,
+-			  p->input_available_event);
++			  p->input_available_event,
++			  p->input_transferred_to_cyg);
+ 	  release_attach_mutex ();
+ 	  ReleaseMutex (p->input_mutex);
+ 	}
+@@ -4271,7 +4335,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+       WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+-		      input_available_event);
++		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+       ReleaseMutex (input_mutex);
+     }
+@@ -4297,7 +4361,8 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 	}
+       else
+ 	acquire_attach_mutex (mutex_timeout);
+-      transfer_input (tty::to_cyg, from, get_ttyp (), input_available_event);
++      transfer_input (tty::to_cyg, from, get_ttyp (), input_available_event,
++		      input_transferred_to_cyg);
+       if (attach_restore)
+ 	resume_from_temporarily_attach (resume_pid);
+       else
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index 7ea04a26c..5d3bf5eca 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2012,6 +2012,7 @@ class fhandler_termios: public fhandler_base
+   {
+     HANDLE from_master_nat;
+     HANDLE input_available_event;
++    HANDLE input_transferred_to_cyg;
+     HANDLE input_mutex;
+     HANDLE pipe_sw_mutex;
+   };
+@@ -2385,13 +2386,14 @@ class fhandler_pty_common: public fhandler_termios
+   fhandler_pty_common ()
+     : fhandler_termios (),
+     output_mutex (NULL), input_mutex (NULL), pipe_sw_mutex (NULL),
+-    input_available_event (NULL)
++    input_available_event (NULL), input_transferred_to_cyg (NULL)
+   {
+     pc.file_attributes (FILE_ATTRIBUTE_NORMAL);
+   }
+   static const unsigned pipesize = 128 * 1024;
+   HANDLE output_mutex, input_mutex, pipe_sw_mutex;
+   HANDLE input_available_event;
++  HANDLE input_transferred_to_cyg;
+ 
+   bool use_archetype () const {return true;}
+   DWORD __acquire_output_mutex (const char *fn, int ln, DWORD ms);
+@@ -2514,7 +2516,8 @@ class fhandler_pty_slave: public fhandler_pty_common
+   void setup_locale (void);
+   void create_invisible_console (void);
+   static void transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+-			      HANDLE input_available_event);
++			      HANDLE input_available_event,
++			      HANDLE input_transferred_to_cyg);
+   HANDLE get_input_available_event (void) { return input_available_event; }
+   bool pcon_activated (void) { return get_ttyp ()->pcon_activated; }
+   void cleanup_before_exit ();
+@@ -2549,8 +2552,10 @@ public:
+   struct master_fwd_thread_param_t {
+     HANDLE to_master;
+     HANDLE from_slave_nat;
++    HANDLE input_transferred_to_cyg;
+     HANDLE output_mutex;
+     tty *ttyp;
++    fhandler_pty_master *master;
+   };
+ private:
+   int pktmode;			// non-zero if pty in a packet mode.
+@@ -2629,6 +2634,7 @@ public:
+   void get_master_thread_param (master_thread_param_t *p);
+   void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
+   bool need_send_ctrl_c_event ();
++  void apply_line_edit_to_transferred_input ();
+ };
+ 
+ class fhandler_dev_null: public fhandler_base
+diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
+index 9485e24c5..cd1e202f1 100644
+--- a/winsup/cygwin/local_includes/tty.h
++++ b/winsup/cygwin/local_includes/tty.h
+@@ -18,6 +18,7 @@ details. */
+ /* Input/Output/ioctl events */
+ 
+ #define INPUT_AVAILABLE_EVENT	"cygtty.input.avail"
++#define INPUT_TRANSFERRED_EVENT	"cygtty.input.xfer"
+ #define OUTPUT_MUTEX		"cygtty.output.mutex"
+ #define INPUT_MUTEX		"cygtty.input.mutex"
+ #define PIPE_SW_MUTEX		"cygtty.pipe_sw.mutex"
 -- 
 2.51.0
 
