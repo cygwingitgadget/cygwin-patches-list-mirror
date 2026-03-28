@@ -1,132 +1,119 @@
 Return-Path: <SRS0=/csx=B4=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.226.41])
-	by sourceware.org (Postfix) with ESMTPS id A610D4BA23F6
-	for <cygwin-patches@cygwin.com>; Sat, 28 Mar 2026 10:57:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A610D4BA23F6
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id E8F084BA23D1
+	for <cygwin-patches@cygwin.com>; Sat, 28 Mar 2026 11:01:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E8F084BA23D1
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A610D4BA23F6
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.41
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774695453; cv=none;
-	b=Ve+FxtvtJhWebroxujWHJLEH6qf7NY8LQ/Kg92yGph4dZOrMgLANcJ4hEaZK0oFnY5ojGYUD66lLBctbSnWLuz9IWKwZeBC/YeAnDAgGO9e/4D9L/VDMvj0/ZJNjFdnI//PUjFb1+KgQ1FF8nJu1GAGuLo92U9tNqJXw5exw/6k=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E8F084BA23D1
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774695661; cv=none;
+	b=KZk/dgkNcwli/BDTewV8/KHxIZ570vQAo+Oj7Y/aQkW2fPRnpKyp3OTxWPFMq0qlytbQhIj7dOlJZDmORomHrYj7iC74B0NDhB/tJ3mK+UdNrn7xOSkgUekA+WGknPJH730fVo5PTOcAuqVa6gNtdIAtUBzqhefiZzG0VZwmTAc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1774695453; c=relaxed/simple;
-	bh=XwoSSvrLXR2t6mz5m1u1QUI4ZNkOC88EIQSrTeb7FuU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ZvplBxMjNYPR9EMfG5/FwfVwmPMUeaqFvVpcQjjBJZYzx91Voz2yxSpw4acU6bFUBebrpMwtQWon2QA/rFKSu1bMqsYjnQRsr3tCaAIlJU5djRX6dEDpeV/JYUI2Rjj3ULAtxCg1xK1ViHapySbT2nXSBOQBR88kXMZsanfjfYE=
+	t=1774695661; c=relaxed/simple;
+	bh=462Ji2NW7TcvowpWfU8JJq1j1YmRZaXCnOAK0Uoq/Fs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=EEQ+JVshLWfxmi+uY3oe+dVxKe7xwscOPuXhAFrFyYvOe6TBAELWXTMijAmgBksUFkUmATrIG1QUsUApzHHXKMgLJvVhHQJMBz5kybt8EgIjhyADRSERe0gRsl7cIMfig92eoB/MrQpyM/0cVuAg9IIOMD83q/vwec4Rx5F9OBw=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A610D4BA23F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E8F084BA23D1
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=RtIZ/tVi
-Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20260328105730871.LDFE.58584.HP-Z230@nifty.com>;
-          Sat, 28 Mar 2026 19:57:30 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=eRj7OWrZ
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260328110058952.VWMD.14880.HP-Z230@nifty.com>;
+          Sat, 28 Mar 2026 20:00:58 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v8 7/7] Cygwin: pty: Drop nat_fg() check from to_be_read_from_nat_pipe()
-Date: Sat, 28 Mar 2026 19:55:51 +0900
-Message-ID: <20260328105632.1916-8-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: pty: Fix input transfer when multiple non-cygwin apps exist
+Date: Sat, 28 Mar 2026 19:59:29 +0900
+Message-ID: <20260328110050.1928-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260328105632.1916-1-takashi.yano@nifty.ne.jp>
-References: <20260325130453.62246-1-takashi.yano@nifty.ne.jp>
- <20260328105632.1916-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20260310085139.113-1-takashi.yano@nifty.ne.jp>
+References: <20260310085139.113-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774695450;
- bh=pFsP1vNEt3Ltwyk4TDWZPPnlmioJD9VewayGhKuBSTw=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1774695659;
+ bh=wZHezo5dMG2ZaRjm4f2ZL2d6KVpwx1KeNJstlXge/Yo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=RtIZ/tViKpBNzBBuaYchPj6cMZhd4TNqemK6uCWvs4GoIept8hkp6Vy2F19hy0FfZWgl4Nun
- hsFXciHXyLyKEvn4Y385jkalJoqH7dIFn24JjlLAxTPWQ6LIqkRrLFWobcoNaXzmrxXhlAOpYv
- 2BcGZw+SeFD9eb2/jhojsM4TIBz1HK0+U7j1kxOINUvZdPTLtHNUcH6popDgu45NfkmLuWDzsB
- rAHx1izIlk+D9wFprnZe+u4VIxgE/oNznE++aWG14vrqTHir3RHfvHLrx0dhxqvejYB8Tpawap
- pCYSEy1MyDG66jwLhly2TOy88oWKK+YG85t388WP7hAqc6gg==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ b=eRj7OWrZh3xQGwy+0HmGaj47ClhKNyn0GnWLJ2YB/Wc53Ab0bFonu1FQakC6r/Onk1I0PMAu
+ aWM5FUqa6Js9nWun0i1J2O63sKLOhE13JmAV4Glx84NgKXfdMGRrUmn4xRk9SR3pcAlykGmWv0
+ Uzu7EUqMm8CVEV1+0m08UWRgmXv1QzrtsSyADL4MkI7j5KYemsOp6DGvucH9bMKSiaQ08rO0gM
+ Sga99s4huL0ssoMfZWGD0KtfAQMOn7Nggn0qEApYsh/zasG8vFpe55cAzcmTItP81DPrO8MuYQ
+ UJTRtQVhoO/IUdmpIHnzUs+b2nxHwXrDN2VvHUTG3XBvfN4g==
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-While a non-cygwin app has exited but the stub process has not yet
-terminated, `nat_fg()` returns false because no non-cygwin app is
-running. In this window, pty input goes to the cyg pipe. Due to
-this, the keystroke order is swapped unexpectedly:
+Cygwin maintains POSIX line discipline for its own processes:
+input goes through `line_edit()` before reaching the reading process.
+Native (non-Cygwin) processes must not receive line-edited input;
+they expect raw console input instead. To support both, the PTY keeps
+two independent pipe pairs for input: a "cyg" pipe for Cygwin processes
+and a "nat" pipe for native ones. The runtime switches between the two
+as the foreground process changes.
 
-1) start non-cygwin app
-2) press 'a' ('a' goes to nat pipe)
-3) non-cygwin app exits
-4) press 'b' ('b' goes to cyg pipe)
-5) the stub process for non-cygwin app transfers input in nat pipe
-   to cyg pipe ('a' goes to cyg pipe)
-6) the result in the cyg pipe is "ba"
+The PTY tracks which process "owns" the nat pipe session via the
+shared-memory field `nat_pipe_owner_pid`. Only one process is the
+owner at any time. When `setup_for_non_cygwin_app()` finds that the
+current owner is still alive, it leaves ownership with that process
+rather than claiming it for the new one.
 
-Fix this by dropping the `nat_fg()` check from
-`to_be_read_from_nat_pipe()`. The function now returns true when
-`!pcon_start && switch_to_nat_pipe && !masked`. Each component has
-a specific purpose:
+This means that a Cygwin-spawned native process can go through
+`cleanup_for_non_cygwin_app()` without being the nat pipe owner.
+Before this fix, that cleanup called `transfer_input(to_cyg)`
+unconditionally, draining the pseudo console's input buffer even
+though another process still owned the session. Keystrokes that the
+user had typed were moved to the cyg pipe prematurely, so the actual
+owner found an empty console input buffer and appeared to lose all
+input.
 
-- `!pcon_start`: keystrokes go through the CSI6n response handler
-  during pseudo console initialization rather than the fast path.
-- `switch_to_nat_pipe`: this session-level flag stays true from
-  `setup_for_non_cygwin_app()` through `cleanup_for_non_cygwin_app()`,
-  spanning the entire native process lifetime including the post-exit
-  cleanup window.
-- `!masked` (`TTY_SLAVE_READING` event does not exist): keystrokes
-  go to the Cygwin pipe when a Cygwin process is actively reading
-  from the slave, since that process expects POSIX-processed input.
+When looking for the next owner of the console in
+`cleanup_for_non_cygwin_app()` (via `get_winpid_to_hand_over()`),
+and when transferring the input back to the cyg pipe, guard both with
+a `nat_pipe_owner_self()` check so that only the actual owner performs
+these operations. Non-owner processes skip straight to detaching from
+the pseudo console without disturbing the input buffer.
 
-Removing `nat_fg()` is safe because conhost's input buffer
-accumulates keystrokes as INPUT_RECORDs during the post-exit
-window, and `transfer_input(to_cyg)` in `cleanup_for_non_cygwin_app()`
-reads them back via `ReadConsoleInputA()` and writes them to the
-cyg pipe. Those transferred bytes then go through `line_edit()` in
-the master's forward thread (via `input_transferred_to_cyg` from an
-earlier patch in this series), ensuring proper POSIX line discipline
-processing.
-
-Additionally, add a `nat_fg()` check to the disable_pcon transfer
-path in `master::write()`. That transfer moves cyg pipe data to
-the nat pipe when a Cygwin child exits and a native process
-regains the foreground with pcon disabled. Without pcon, there is
-no conhost buffer to accumulate keystrokes (the nat pipe is a raw
-pipe), so keystrokes must only go there when a native process is
-genuinely in the foreground and ready to read them. The `nat_fg()`
-guard prevents the transfer from stealing readline's data during
-the post-exit window.
-
-Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+Fixes: f9542a2e8e75 ("Cygwin: pty: Re-fix the last bug regarding nat-pipe.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 ---
- winsup/cygwin/fhandler/pty.cc | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 6a36075f1..6f886d957 100644
+index 8c290eb59..fbc6152e5 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1309,14 +1309,8 @@ fhandler_pty_common::to_be_read_from_nat_pipe (void)
-       goto out;
-   }
- 
--  if (!pinfo (get_ttyp ()->getpgid ()))
--    /* GDB may set invalid process group for non-cygwin process. */
--    {
--      ret = true;
--      goto out;
--    }
-+  ret = true; /* !pcon_start && switch_to_nat_pipe && !masked */
- 
--  ret = get_ttyp ()->nat_fg (get_ttyp ()->getpgid ());
- out:
-   ReleaseMutex (pipe_sw_mutex);
-   return ret;
-@@ -2379,6 +2373,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
-   /* This input transfer is needed when cygwin-app which is started from
-      non-cygwin app is terminated if pseudo console is disabled. */
-   if (to_be_read_from_nat_pipe () && !get_ttyp ()->pcon_activated
-+      && get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
-       && get_ttyp ()->pty_input_state == tty::to_cyg)
+@@ -4180,16 +4180,19 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ {
+   ttyp->wait_fwd ();
+   WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
+-  DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
+-  if ((!switch_to && (ttyp->pcon_activated || stdin_is_ptys))
+-      && ttyp->pty_input_state_eq (tty::to_nat))
++  if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
      {
-       acquire_attach_mutex (mutex_timeout);
+-      WaitForSingleObject (p->input_mutex, mutex_timeout);
+-      acquire_attach_mutex (mutex_timeout);
+-      transfer_input (tty::to_cyg, p->from_master_nat, ttyp,
+-		      p->input_available_event);
+-      release_attach_mutex ();
+-      ReleaseMutex (p->input_mutex);
++      DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
++      if ((!switch_to && (ttyp->pcon_activated || stdin_is_ptys))
++	  && ttyp->pty_input_state_eq (tty::to_nat))
++	{
++	  WaitForSingleObject (p->input_mutex, mutex_timeout);
++	  acquire_attach_mutex (mutex_timeout);
++	  transfer_input (tty::to_cyg, p->from_master_nat, ttyp,
++			  p->input_available_event);
++	  release_attach_mutex ();
++	  ReleaseMutex (p->input_mutex);
++	}
+     }
+   if (ttyp->pcon_activated)
+     close_pseudoconsole (ttyp, force_switch_to);
 -- 
 2.51.0
 
