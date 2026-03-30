@@ -1,237 +1,79 @@
-Return-Path: <corinna@sourceware.org>
-Received: by sourceware.org (Postfix, from userid 2155)
-	id B4F834BA2E26; Mon, 30 Mar 2026 14:41:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B4F834BA2E26
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1774881675;
-	bh=wRTl2Jm40ao8bo8Oz1tbfSbGlNOmcBr+lKTkcO/Wc20=;
-	h=From:To:Subject:Date:From;
-	b=ugwxbBc7DukKMUpbgs15J4SlUFWfwggn5i4guOpNm1CqiT+xHlCQONwoOUAgTYGwu
-	 Ye5bN5JdLiRf5UJvubhxPimpGzlGlhJn9/DItIed+MquvnLsLlpqgeQAAuT/FoUi+w
-	 iB4lHinAn7pKOY569zZLITbkOUvSG+zD3prSKbqE=
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id BD56CA80610; Mon, 30 Mar 2026 16:41:13 +0200 (CEST)
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: add _Fork() system call per POSIX.1-2024
-Date: Mon, 30 Mar 2026 16:41:13 +0200
-Message-ID: <20260330144113.1636278-1-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.53.0
+Return-Path: <SRS0=6n7K=B6=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.48])
+	by sourceware.org (Postfix) with ESMTP id 74E9C4BA2E0A;
+	Mon, 30 Mar 2026 20:29:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 74E9C4BA2E0A
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 74E9C4BA2E0A
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.48
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1774902549; cv=none;
+	b=DEXV1P8qXrvK5PMVUMwCeFkc5SryYIV0Cggk1PzelOpVyirJwMlsVx+UxY13bpN/OdTpyD2FZrZ+OFewJ4KPZxi3Tk1VQKeTK+rtV05dfNdgkTYL1Of/mXWQG0fOSGDS2R18Np7zhVheoiG3jOzTrvC3CPQDZHsHib468qjHm5w=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1774902549; c=relaxed/simple;
+	bh=h+oNt6Jq8Ex1ZmTQaFPwKDNcs/i1mLEDT+sY4a0uedE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=F9Ff1LbxubYR0Ve4iRDvBM/sMcQOwsjVbHR7SGSarbOkcwBqQCCFv/w7ToLBQvCmOocoyv7ujuuioWXUGhfehbpJnAUefEVHXFIrrv5ZXqwi36PkJwdBRKdun9sE/lt0RXjMN2iZkLh8pUs7bIxsQXip2JIqxaBsUM+di4yfYCk=
+ARC-Authentication-Results: i=1; server2.sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 74E9C4BA2E0A
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 69AF652F01FCF2E5
+X-Originating-IP: [62.49.245.144]
+X-OWM-Source-IP: 62.49.245.144
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTFvHhhX12zzbU1dWQgpLqYb/FCM4UECWqnLfnNl3QHAXtMT0TyOwUR96XIjYaaeW0hVwVKmCSr6hH4yXdob6IUtsYvy8yC5/MR0HUJ6QZaNkqOC9gFGKtS3qNNUlclgMIUoANpUcPZb+H7ifr7na0MppY7LqmXz5Xd8rlaw1CgFEgCWcEmg6IZpqmJKx89ksBpR+9nIF8IqPrQIYqCmXt77U0NYS7fwKl1OLCeJeYPK8MQ0nm+CTQtXKGs4aAe8pFSnDExjSwaR6CRsz8lyY89CMaHSZUKlsCG7qn/UvXjvYcetA91TlO4Q0NNPY+oxrSp/Ue7a5LqHh5h0JU4Zob4Gczw+FfgietK0it6gy2d0SqbUdtIE/FobC6eT9FSERybs2j+AGCX3F1xIU3a+AFrLLP1CXv8p50NQpZ7Rpq4B0KWw5C1YuhTDakwFoH+cEn9JW4F8DRfVwyePFuaMmJA0uS/QSGoKg5I4cKJmp19Vim4Lk36x+51+I4biy7zHNoyypGSM9S5h6i5iI5JbqjHZq85nK+wOYOMRzeIL+xex2n/wcRcJxhdX/rq2evGfXjmS9ZmvPdI2lDsDc3YR3/BxoH/gapvG7KOayTK6yHbDphfnfbod+vN9BFo+J9QcoL/pxk7roAp/xdkX7+Z7Kka3tq4WCB+Stw6bukGicHQ8eA
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (62.49.245.144) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 69AF652F01FCF2E5; Mon, 30 Mar 2026 21:29:03 +0100
+Message-ID: <bd7fc7cf-ac28-44b4-b1e8-bb22641f1962@dronecode.org.uk>
+Date: Mon, 30 Mar 2026 21:29:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: add _Fork() system call per POSIX.1-2024
+To: Corinna Vinschen <corinna-cygwin@cygwin.com>
+References: <20260330144113.1636278-1-corinna-cygwin@cygwin.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <20260330144113.1636278-1-corinna-cygwin@cygwin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Corinna Vinschen <corinna@vinschen.de>
+On 30/03/2026 15:41, Corinna Vinschen wrote:
+> From: Corinna Vinschen <corinna@vinschen.de>
+> 
+> The _Fork() function shall be equivalent to fork(), except that fork
+> handlers established by means of the pthread_atfork() function shall
+> not be called and _Fork() shall be async-signal-safe.  Our fork()
+> already is async-signal-safe, so just make sure the pthread_atfork()
+> handlers are not called.
 
-The _Fork() function shall be equivalent to fork(), except that fork
-handlers established by means of the pthread_atfork() function shall
-not be called and _Fork() shall be async-signal-safe.  Our fork()
-already is async-signal-safe, so just make sure the pthread_atfork()
-handlers are not called.
+Nice.
 
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
- newlib/libc/include/sys/unistd.h       |  3 ++
- winsup/cygwin/cygwin.din               |  1 +
- winsup/cygwin/fork.cc                  | 40 ++++++++++++++++++++------
- winsup/cygwin/include/cygwin/version.h |  3 +-
- winsup/cygwin/local_includes/sigproc.h | 13 +++++++--
- winsup/cygwin/release/3.7.0            |  1 +
- 6 files changed, 49 insertions(+), 12 deletions(-)
+[...]
+> diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+> index 48e8b7557d00..82ad3aaf0899 100644
+> --- a/winsup/cygwin/fork.cc
+> +++ b/winsup/cygwin/fork.cc
+> @@ -31,7 +31,7 @@ details. */
+>   /* FIXME: Once things stabilize, bump up to a few minutes.  */
+>   #define FORK_WAIT_TIMEOUT (300 * 1000)     /* 300 seconds */
+>   
+> -static int dofork (void **proc, bool *with_forkables);
+> +static int dofork (void **proc, bool is__Fork, bool *with_forkables);
 
-diff --git a/newlib/libc/include/sys/unistd.h b/newlib/libc/include/sys/unistd.h
-index 4cf9f0636276..d1c9126e53ab 100644
---- a/newlib/libc/include/sys/unistd.h
-+++ b/newlib/libc/include/sys/unistd.h
-@@ -96,6 +96,9 @@ int	fchownat (int __dirfd, const char *__path, uid_t __owner, gid_t __group, int
- int	fexecve (int __fd, char * const __argv[], char * const __envp[]);
- #endif
- pid_t   fork (void);
-+#if __POSIX_VISIBLE >= 202405
-+pid_t   _Fork (void);
-+#endif
- long    fpathconf (int __fd, int __name);
- int     fsync (int __fd);
- #if __POSIX_VISIBLE >= 199309
-diff --git a/winsup/cygwin/cygwin.din b/winsup/cygwin/cygwin.din
-index 7709a0653eb9..76477bb4aec2 100644
---- a/winsup/cygwin/cygwin.din
-+++ b/winsup/cygwin/cygwin.din
-@@ -147,6 +147,7 @@ __xpg_strerror_r SIGFE
- _dll_crt0 NOSIGFE
- _Exit SIGFE
- _exit SIGFE
-+_Fork SIGFE
- _feinitialise NOSIGFE
- _fscanf_r SIGFE
- _get_osfhandle SIGFE
-diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
-index 48e8b7557d00..82ad3aaf0899 100644
---- a/winsup/cygwin/fork.cc
-+++ b/winsup/cygwin/fork.cc
-@@ -31,7 +31,7 @@ details. */
- /* FIXME: Once things stabilize, bump up to a few minutes.  */
- #define FORK_WAIT_TIMEOUT (300 * 1000)     /* 300 seconds */
- 
--static int dofork (void **proc, bool *with_forkables);
-+static int dofork (void **proc, bool is__Fork, bool *with_forkables);
- class frok
- {
-   frok (bool *forkables)
-@@ -47,7 +47,7 @@ class frok
-   int parent (volatile char * volatile here);
-   int child (volatile char * volatile here);
-   bool error (const char *fmt, ...);
--  friend int dofork (void **proc, bool *with_forkables);
-+  friend int dofork (void **, bool, bool *);
- };
- 
- static void
-@@ -201,7 +201,6 @@ frok::child (volatile char * volatile here)
-   CloseHandle (hParent);
-   hParent = NULL;
-   cygwin_finished_initializing = true;
--  pthread::atforkchild ();
-   return 0;
- }
- 
-@@ -609,15 +608,33 @@ extern "C" int
- fork ()
- {
-   bool with_forkables = false; /* do not force hardlinks on first try */
--  int res = dofork (NULL, &with_forkables);
-+  int res = dofork (NULL, false, &with_forkables);
-   if (res >= 0)
-     return res;
-   if (with_forkables)
-     return res; /* no need for second try when already enabled */
-   with_forkables = true; /* enable hardlinks for second try */
--  return dofork (NULL, &with_forkables);
-+  return dofork (NULL, false, &with_forkables);
- }
- 
-+/* POSIX.1-2024:
-+
-+    The _Fork() function shall be equivalent to fork(), except that fork
-+    handlers established by means of the pthread_atfork() function shall
-+    not be called and _Fork() shall be async-signal-safe.  Our fork()
-+    already is async-signal-safe. */
-+extern "C" int
-+_Fork ()
-+{
-+  bool with_forkables = false; /* do not force hardlinks on first try */
-+  int res = dofork (NULL, true, &with_forkables);
-+  if (res >= 0)
-+    return res;
-+  if (with_forkables)
-+    return res; /* no need for second try when already enabled */
-+  with_forkables = true; /* enable hardlinks for second try */
-+  return dofork (NULL, true, &with_forkables);
-+}
- 
- /* __posix_spawn_fork is called from newlib's posix_spawn implementation.
-    The original code in newlib has been taken from FreeBSD, and the core
-@@ -628,17 +645,17 @@ extern "C" int
- __posix_spawn_fork (void **proc)
- {
-   bool with_forkables = false; /* do not force hardlinks on first try */
--  int res = dofork (proc, &with_forkables);
-+  int res = dofork (proc, false, &with_forkables);
-   if (res >= 0)
-     return res;
-   if (with_forkables)
-     return res; /* no need for second try when already enabled */
-   with_forkables = true; /* enable hardlinks for second try */
--  return dofork (proc, &with_forkables);
-+  return dofork (proc, false, &with_forkables);
- }
- 
- static int
--dofork (void **proc, bool *with_forkables)
-+dofork (void **proc, bool is__Fork, bool *with_forkables)
- {
-   frok grouped (with_forkables);
- 
-@@ -659,7 +676,7 @@ dofork (void **proc, bool *with_forkables)
-     }
- 
-   {
--    hold_everything held_everything (ischild);
-+    hold_everything held_everything (ischild, is__Fork);
-     /* This tmp_pathbuf constructor is required here because the below setjmp
-        magic will otherwise not restore the original buffer count values in
-        the thread-local storage.  A process forking too deeply will run into
-@@ -695,6 +712,11 @@ dofork (void **proc, bool *with_forkables)
-     else
-       {
- 	res = grouped.child (stackp);
-+	/* So far pthread::atforkchild() was called as last function
-+	   from inside frok::child().  Move the call here, so we don't have
-+	   to propagate the is__Fork variable to frok::child(). */
-+	if (!is__Fork)
-+	  pthread::atforkchild ();
- 	__in_forkee = FORKED;
- 	ischild = true;	/* might have been reset by fork mem copy */
-       }
-diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
-index ef552ffcba9c..695477bec265 100644
---- a/winsup/cygwin/include/cygwin/version.h
-+++ b/winsup/cygwin/include/cygwin/version.h
-@@ -500,12 +500,13 @@ details. */
-        acl_is_trivial_np, acl_set_fd_np, acl_set_link_np, acl_strip_np.
-   359: Export wrappers for C++14 and C++17 new and delete overloads.
-   360: Add RLIMIT_NPROC.
-+  361: Export _Fork.
- 
-   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
-   sigaltstack, sethostname. */
- 
- #define CYGWIN_VERSION_API_MAJOR 0
--#define CYGWIN_VERSION_API_MINOR 360
-+#define CYGWIN_VERSION_API_MINOR 361
- 
- /* There is also a compatibity version number associated with the shared memory
-    regions.  It is incremented when incompatible changes are made to the shared
-diff --git a/winsup/cygwin/local_includes/sigproc.h b/winsup/cygwin/local_includes/sigproc.h
-index ce7263338f0a..bf4096c68503 100644
---- a/winsup/cygwin/local_includes/sigproc.h
-+++ b/winsup/cygwin/local_includes/sigproc.h
-@@ -131,7 +131,8 @@ class lock_pthread
- {
-   bool bother;
- public:
--  lock_pthread (): bother (1)
-+  lock_pthread (): bother (1) {}
-+  void prepare ()
-   {
-     pthread::atforkprepare ();
-   }
-@@ -165,7 +166,15 @@ class hold_everything
-   lock_process process;
- 
- public:
--  hold_everything (bool& x): ischild (x) {}
-+  hold_everything (bool& x, bool is__Fork): ischild (x)
-+  {
-+    /* POSIX.1-2024: _Fork() does not call any handler established
-+		     by pthread_atfork(). */
-+    if (is__Fork)
-+      pthread.dont_bother ();
-+    else
-+      pthread.prepare ();
-+  }
-   operator int () const {return signals;}
- 
-   ~hold_everything()
-diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
-index 4736fd17c3f4..d5b63b0586a9 100644
---- a/winsup/cygwin/release/3.7.0
-+++ b/winsup/cygwin/release/3.7.0
-@@ -11,3 +11,4 @@ What's new:
- - Improved support for soft and hard limits in setrlimit(2), support
-   RLIMIT_NPROC.
- 
-+- New API: _Fork.
--- 
-2.53.0
+This looks fine.
+
+Maybe the new parameter should be named to indicate what extra step it 
+enables, rather than what API we're executing? (So, like, 
+do_atfork_handlers or something? Or maybe that's less clear)
+
+
+If you have a STC you used to test this you want to share, maybe I can 
+look at adding that to testsuite.
 
