@@ -1,52 +1,54 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 83D4A4BA2E3B; Mon, 30 Mar 2026 08:32:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 83D4A4BA2E3B
+	id ADF354BA2E3B; Mon, 30 Mar 2026 08:33:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org ADF354BA2E3B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1774859571;
-	bh=1l4Ntpqov47YlxZQy35qkJ4Fo5tQDNyRYFR4M3JaoCY=;
+	s=default; t=1774859599;
+	bh=NorbSmZLK0LjgPWe31wlnTr866YUNA6GKlo3uSV1Ueo=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=US3Xob/2aKJRqCQOwAGnrtK8+L/H1D6RVan5GGm7lR0Ztjf0ZpbcGg1m+/h/upTmn
-	 KFsW0f9E7FQ69CcIugzX3YHOPG8N2LnRAOUY8+XP10Zq/vv5zRKtb46hJT6Ui7OQl1
-	 Ys9AC8opHX+xow4CPLEmjh1gPAIewzntiMQBhDPM=
+	b=fumAz21h+736PaQjq9GZFdCCUefJ7+mI7LwYgwxGWanvXyWSU5hmHr0CSy5v6kQWY
+	 qrikLgV5EDILJ+AZJzVjZu9Z8aDfFYKKn2YNfpqRrdQUKPOXNQZ4wS5YYPUGgDP8M+
+	 LoqhuLOnrRNUF0+SxP6E1/yoDZ/WZwOY8T1fZrLc=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 82D41A80C43; Mon, 30 Mar 2026 10:32:49 +0200 (CEST)
-Date: Mon, 30 Mar 2026 10:32:49 +0200
+	id 77C5AA80B7C; Mon, 30 Mar 2026 10:33:17 +0200 (CEST)
+Date: Mon, 30 Mar 2026 10:33:17 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: aarch64 SEH fixes and handler refactoring
-Message-ID: <aco1MXC1NVxdBMp4@calimero.vinschen.de>
+To: Igor Podgainoi <Igor.Podgainoi@arm.com>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
+	nd <nd@arm.com>
+Subject: Re: [PATCH 0/1] Cygwin: Fix SEH and signal handling on AArch64
+Message-ID: <aco1TU7r-Y2C13iR@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <MA0P287MB3082CAC457D335E3325522CD9F48A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Mail-Followup-To: Igor Podgainoi <Igor.Podgainoi@arm.com>,
+	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
+	nd <nd@arm.com>
+References: <cover.1774613608.git.igor.podgainoi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <MA0P287MB3082CAC457D335E3325522CD9F48A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <cover.1774613608.git.igor.podgainoi@arm.com>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Thirumalai,
+Hi Igor,
 
-On Mar 24 12:42, Thirumalai Nagalingam wrote:
-> Hi all,
+On Mar 27 12:41, Igor Podgainoi wrote:
+> Hello,
 > 
-> The previously posted patches for aarch64 SEH support and handler refactoring were marked as work-in-progress. Now they should be ready for upstream review.
-> This series [2 patches] includes changes related to:
+> The following patch is one of two additions that extends the two
+> patches posted on 2026-03-24 by
+> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
+> which fills in the missing EXCEPTION_HANDLER_DATA definition for
+> AArch64 as well as performs other modifications. Please refer to
+> the commit message for more information about what those are.
 > 
+> URL to base patches:
+> https://cygwin.com/pipermail/cygwin-patches/2026q1/014825.html
 > 
->   *   Proper symbol references for exception handlers on aarch64
->   *   Refactoring of SEH handler data setup via macros
->   *   Guarding altstack_wrapper in exceptions.cc for supported architectures
-> 
-> These patches will unblock merging of patch from Igor Podgainoi [SEH: Fix crash and handle second unwind phase on aarch64]( https://cygwin.com/pipermail/cygwin-patches/2026q1/014741.html)
+> This patch should apply cleanly on top of the base patches and
+> current main as of 2026-03-27.
 
-Patches pushed with Igor's followup patch.
+All patches pushed.
 
 
 Thanks,
 Corinna
-
-
-
