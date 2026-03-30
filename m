@@ -1,107 +1,237 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 7B2424BA9001; Mon, 30 Mar 2026 08:39:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7B2424BA9001
+	id B4F834BA2E26; Mon, 30 Mar 2026 14:41:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B4F834BA2E26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1774859970;
-	bh=7mXHg3Ub6jefiQj8amWMCUuQvOtbrDvO25GI2uYZqxU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=UGmp764OS6PeSndjgm0pzcskEN90QtFxORZDDMc6C+VzjT3hU+joJ+Ct0MynQj/R7
-	 vnjs3/gDRD35OARJHJcdKfLAqjZS4WP7PlgJuugp5G8p96mNlTSk8OITXlPrb7HYl9
-	 hekjDMAxdrPKWfSlgfVch3qZodnUus4RklONUOPA=
+	s=default; t=1774881675;
+	bh=wRTl2Jm40ao8bo8Oz1tbfSbGlNOmcBr+lKTkcO/Wc20=;
+	h=From:To:Subject:Date:From;
+	b=ugwxbBc7DukKMUpbgs15J4SlUFWfwggn5i4guOpNm1CqiT+xHlCQONwoOUAgTYGwu
+	 Ye5bN5JdLiRf5UJvubhxPimpGzlGlhJn9/DItIed+MquvnLsLlpqgeQAAuT/FoUi+w
+	 iB4lHinAn7pKOY569zZLITbkOUvSG+zD3prSKbqE=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 9E116A80C43; Mon, 30 Mar 2026 10:39:28 +0200 (CEST)
-Date: Mon, 30 Mar 2026 10:39:28 +0200
+	id BD56CA80610; Mon, 30 Mar 2026 16:41:13 +0200 (CEST)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
-	Takashi Yano <takashi.yano@nifty.ne.jp>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: Status of pty and console pathces
-Message-ID: <aco2wLRJMJO3_06T@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
-	Takashi Yano <takashi.yano@nifty.ne.jp>, cygwin-patches@cygwin.com
-References: <20260325224343.5d92b9ee72ec70e0a09b133a@nifty.ne.jp>
- <20260329095346.aece4ca9b5b9144dd87b45b8@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: add _Fork() system call per POSIX.1-2024
+Date: Mon, 30 Mar 2026 16:41:13 +0200
+Message-ID: <20260330144113.1636278-1-corinna-cygwin@cygwin.com>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260329095346.aece4ca9b5b9144dd87b45b8@nifty.ne.jp>
+Content-Transfer-Encoding: 8bit
 List-Id: <cygwin-patches.cygwin.com>
 
-Johannes,
+From: Corinna Vinschen <corinna@vinschen.de>
 
-any chance you could review these patches as well?
+The _Fork() function shall be equivalent to fork(), except that fork
+handlers established by means of the pthread_atfork() function shall
+not be called and _Fork() shall be async-signal-safe.  Our fork()
+already is async-signal-safe, so just make sure the pthread_atfork()
+handlers are not called.
 
+Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
+---
+ newlib/libc/include/sys/unistd.h       |  3 ++
+ winsup/cygwin/cygwin.din               |  1 +
+ winsup/cygwin/fork.cc                  | 40 ++++++++++++++++++++------
+ winsup/cygwin/include/cygwin/version.h |  3 +-
+ winsup/cygwin/local_includes/sigproc.h | 13 +++++++--
+ winsup/cygwin/release/3.7.0            |  1 +
+ 6 files changed, 49 insertions(+), 12 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/newlib/libc/include/sys/unistd.h b/newlib/libc/include/sys/unistd.h
+index 4cf9f0636276..d1c9126e53ab 100644
+--- a/newlib/libc/include/sys/unistd.h
++++ b/newlib/libc/include/sys/unistd.h
+@@ -96,6 +96,9 @@ int	fchownat (int __dirfd, const char *__path, uid_t __owner, gid_t __group, int
+ int	fexecve (int __fd, char * const __argv[], char * const __envp[]);
+ #endif
+ pid_t   fork (void);
++#if __POSIX_VISIBLE >= 202405
++pid_t   _Fork (void);
++#endif
+ long    fpathconf (int __fd, int __name);
+ int     fsync (int __fd);
+ #if __POSIX_VISIBLE >= 199309
+diff --git a/winsup/cygwin/cygwin.din b/winsup/cygwin/cygwin.din
+index 7709a0653eb9..76477bb4aec2 100644
+--- a/winsup/cygwin/cygwin.din
++++ b/winsup/cygwin/cygwin.din
+@@ -147,6 +147,7 @@ __xpg_strerror_r SIGFE
+ _dll_crt0 NOSIGFE
+ _Exit SIGFE
+ _exit SIGFE
++_Fork SIGFE
+ _feinitialise NOSIGFE
+ _fscanf_r SIGFE
+ _get_osfhandle SIGFE
+diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+index 48e8b7557d00..82ad3aaf0899 100644
+--- a/winsup/cygwin/fork.cc
++++ b/winsup/cygwin/fork.cc
+@@ -31,7 +31,7 @@ details. */
+ /* FIXME: Once things stabilize, bump up to a few minutes.  */
+ #define FORK_WAIT_TIMEOUT (300 * 1000)     /* 300 seconds */
+ 
+-static int dofork (void **proc, bool *with_forkables);
++static int dofork (void **proc, bool is__Fork, bool *with_forkables);
+ class frok
+ {
+   frok (bool *forkables)
+@@ -47,7 +47,7 @@ class frok
+   int parent (volatile char * volatile here);
+   int child (volatile char * volatile here);
+   bool error (const char *fmt, ...);
+-  friend int dofork (void **proc, bool *with_forkables);
++  friend int dofork (void **, bool, bool *);
+ };
+ 
+ static void
+@@ -201,7 +201,6 @@ frok::child (volatile char * volatile here)
+   CloseHandle (hParent);
+   hParent = NULL;
+   cygwin_finished_initializing = true;
+-  pthread::atforkchild ();
+   return 0;
+ }
+ 
+@@ -609,15 +608,33 @@ extern "C" int
+ fork ()
+ {
+   bool with_forkables = false; /* do not force hardlinks on first try */
+-  int res = dofork (NULL, &with_forkables);
++  int res = dofork (NULL, false, &with_forkables);
+   if (res >= 0)
+     return res;
+   if (with_forkables)
+     return res; /* no need for second try when already enabled */
+   with_forkables = true; /* enable hardlinks for second try */
+-  return dofork (NULL, &with_forkables);
++  return dofork (NULL, false, &with_forkables);
+ }
+ 
++/* POSIX.1-2024:
++
++    The _Fork() function shall be equivalent to fork(), except that fork
++    handlers established by means of the pthread_atfork() function shall
++    not be called and _Fork() shall be async-signal-safe.  Our fork()
++    already is async-signal-safe. */
++extern "C" int
++_Fork ()
++{
++  bool with_forkables = false; /* do not force hardlinks on first try */
++  int res = dofork (NULL, true, &with_forkables);
++  if (res >= 0)
++    return res;
++  if (with_forkables)
++    return res; /* no need for second try when already enabled */
++  with_forkables = true; /* enable hardlinks for second try */
++  return dofork (NULL, true, &with_forkables);
++}
+ 
+ /* __posix_spawn_fork is called from newlib's posix_spawn implementation.
+    The original code in newlib has been taken from FreeBSD, and the core
+@@ -628,17 +645,17 @@ extern "C" int
+ __posix_spawn_fork (void **proc)
+ {
+   bool with_forkables = false; /* do not force hardlinks on first try */
+-  int res = dofork (proc, &with_forkables);
++  int res = dofork (proc, false, &with_forkables);
+   if (res >= 0)
+     return res;
+   if (with_forkables)
+     return res; /* no need for second try when already enabled */
+   with_forkables = true; /* enable hardlinks for second try */
+-  return dofork (proc, &with_forkables);
++  return dofork (proc, false, &with_forkables);
+ }
+ 
+ static int
+-dofork (void **proc, bool *with_forkables)
++dofork (void **proc, bool is__Fork, bool *with_forkables)
+ {
+   frok grouped (with_forkables);
+ 
+@@ -659,7 +676,7 @@ dofork (void **proc, bool *with_forkables)
+     }
+ 
+   {
+-    hold_everything held_everything (ischild);
++    hold_everything held_everything (ischild, is__Fork);
+     /* This tmp_pathbuf constructor is required here because the below setjmp
+        magic will otherwise not restore the original buffer count values in
+        the thread-local storage.  A process forking too deeply will run into
+@@ -695,6 +712,11 @@ dofork (void **proc, bool *with_forkables)
+     else
+       {
+ 	res = grouped.child (stackp);
++	/* So far pthread::atforkchild() was called as last function
++	   from inside frok::child().  Move the call here, so we don't have
++	   to propagate the is__Fork variable to frok::child(). */
++	if (!is__Fork)
++	  pthread::atforkchild ();
+ 	__in_forkee = FORKED;
+ 	ischild = true;	/* might have been reset by fork mem copy */
+       }
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index ef552ffcba9c..695477bec265 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -500,12 +500,13 @@ details. */
+        acl_is_trivial_np, acl_set_fd_np, acl_set_link_np, acl_strip_np.
+   359: Export wrappers for C++14 and C++17 new and delete overloads.
+   360: Add RLIMIT_NPROC.
++  361: Export _Fork.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 360
++#define CYGWIN_VERSION_API_MINOR 361
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/cygwin/local_includes/sigproc.h b/winsup/cygwin/local_includes/sigproc.h
+index ce7263338f0a..bf4096c68503 100644
+--- a/winsup/cygwin/local_includes/sigproc.h
++++ b/winsup/cygwin/local_includes/sigproc.h
+@@ -131,7 +131,8 @@ class lock_pthread
+ {
+   bool bother;
+ public:
+-  lock_pthread (): bother (1)
++  lock_pthread (): bother (1) {}
++  void prepare ()
+   {
+     pthread::atforkprepare ();
+   }
+@@ -165,7 +166,15 @@ class hold_everything
+   lock_process process;
+ 
+ public:
+-  hold_everything (bool& x): ischild (x) {}
++  hold_everything (bool& x, bool is__Fork): ischild (x)
++  {
++    /* POSIX.1-2024: _Fork() does not call any handler established
++		     by pthread_atfork(). */
++    if (is__Fork)
++      pthread.dont_bother ();
++    else
++      pthread.prepare ();
++  }
+   operator int () const {return signals;}
+ 
+   ~hold_everything()
+diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
+index 4736fd17c3f4..d5b63b0586a9 100644
+--- a/winsup/cygwin/release/3.7.0
++++ b/winsup/cygwin/release/3.7.0
+@@ -11,3 +11,4 @@ What's new:
+ - Improved support for soft and hard limits in setrlimit(2), support
+   RLIMIT_NPROC.
+ 
++- New API: _Fork.
+-- 
+2.53.0
 
-
-On Mar 29 09:53, Takashi Yano wrote:
-> [New feature]
-> ===== OpenConsole [v6] ====
-> Cygwin: console: Fix master thread for OpenConsole.exe
-> Cygwin: pty: Handle CSIc in pcon_start phase (*)
-> Cygwin: pty: Use OpenConsole.exe if available (*)
-> ===========================
-> 
-> [Bug fixes]
-> Cygwin: pty: Make pcon_start handling more multi thread durable
-> Cygwin: pty: Fix write data handling in pcon_start phase
-> 
-> Cygwin: pty: Make Ctrl-C work for non-cygwin app in GDB  [v2] (*)
-> Cygwin: pty: Restore nat handles in all PTY-slave instances in GDB [v2]
-> 
-> (*) means the patch reviewed once and revised.
-> 
-> 
-> On Wed, 25 Mar 2026 22:43:43 +0900
-> Takashi Yano wrote:
-> > I currently am proposing the following patches that is waiting for review.
-> > 
-> > Many of bugs are uncovered by Johannes's reproducer:
-> > https://cygwin.com/pipermail/cygwin-patches/2026q1/014714.html
-> > I really appreciate for providing such a reproducer.
-> > 
-> > 
-> > [New feature]
-> > ===== OpenConsole (v6) ====
-> > Cygwin: console: Fix master thread for OpenConsole.exe
-> > Cygwin: pty: Handle CSIc in pcon_start phase (*)
-> > Cygwin: pty: Use OpenConsole.exe if available (*)
-> > ===========================
-> > 
-> > 
-> > [Bug fixes]
-> > Cygwin: pty: Make pcon_start handling more multi thread durable
-> > Cygwin: pty: Fix write data handling in pcon_start phase
-> > 
-> > Cygwin: pty: Clear discard_input flag on master write()
-> > Cygwin: console: Release pipe_sw_mutex in pcon_hand_over_proc()
-> > 
-> > ====== out-of-order patch (v7) ====
-> > Cygwin: pty: Drop nat_fg() check from to_be_read_from_nat_pipe()
-> > Cygwin: pty: Guard to_be_read_from_nat_pipe() by pipe_sw_mutex
-> > Cygwin: pty: Guard get_winpid_to_hand_over() with attach_mutex
-> > Cygwin: pty: Apply line_edit() for transferred input to to_cyg
-> > Cygwin: console: Use input_mutex in the parent PTY in master thread
-> > Cygwin: pty: Add workaround for handling of backspace when pcon enabled (*)
-> > Cygwin: console: Fix master thread
-> > ===================================
-> > 
-> > Cygwin: pty: Omit CSI?1004h/l from pseudo console output
-> > Cygwin: pty: Fix input transfer when multiple non-cygwin apps exist
-> > 
-> > Cygwin: pty: Make Ctrl-C work for non-cygwin app in GDB (*)
-> > Cygwin: pty: Restore nat handles in all PTY-slave instances in GDB
-> > 
-> > 
-> > (*) means the patch reviewed once and revised.
-> > 
-> > -- 
-> > Takashi Yano <takashi.yano@nifty.ne.jp>
-> 
-> 
-> -- 
-> Takashi Yano <takashi.yano@nifty.ne.jp>
