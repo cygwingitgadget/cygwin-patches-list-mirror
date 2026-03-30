@@ -1,152 +1,107 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id E2A8B4BA2E0F; Mon, 30 Mar 2026 08:35:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E2A8B4BA2E0F
+	id 7B2424BA9001; Mon, 30 Mar 2026 08:39:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7B2424BA9001
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1774859743;
-	bh=oMOFQXM5cVUkOpIWO9WJ2EeHDKHD+2xhb91SXoAaYsI=;
+	s=default; t=1774859970;
+	bh=7mXHg3Ub6jefiQj8amWMCUuQvOtbrDvO25GI2uYZqxU=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=xi0ISTjTBJagabWhh3EBm/D1aKZd0t+ODP3wevqj+FLIc/wd2cj3CxqkbWNg8p5b9
-	 xxWYxzgCQ2nfy01xGe8ov6/Z68iLd7yYc1Y/uJZ/JoTMRjb3gIhwMVKdO4h4yEVJ31
-	 y40x20YngF1d1znONO/uQ8M7vLc/ebs0Au6tTNv8=
+	b=UGmp764OS6PeSndjgm0pzcskEN90QtFxORZDDMc6C+VzjT3hU+joJ+Ct0MynQj/R7
+	 vnjs3/gDRD35OARJHJcdKfLAqjZS4WP7PlgJuugp5G8p96mNlTSk8OITXlPrb7HYl9
+	 hekjDMAxdrPKWfSlgfVch3qZodnUus4RklONUOPA=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id EB0F0A80C43; Mon, 30 Mar 2026 10:35:41 +0200 (CEST)
-Date: Mon, 30 Mar 2026 10:35:41 +0200
+	id 9E116A80C43; Mon, 30 Mar 2026 10:39:28 +0200 (CEST)
+Date: Mon, 30 Mar 2026 10:39:28 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: Adapt math functions to use 64bit long double on
- aarch64
-Message-ID: <aco13ZZcDzCdFwnz@calimero.vinschen.de>
+To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
+	Takashi Yano <takashi.yano@nifty.ne.jp>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: Status of pty and console pathces
+Message-ID: <aco2wLRJMJO3_06T@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>,
-	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <MA0P287MB3082742D4D0C170079EF9B7A9F74A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <abHLpybECZPbwOn4@calimero.vinschen.de>
+Mail-Followup-To: Johannes Schindelin <Johannes.Schindelin@gmx.de>,
+	Takashi Yano <takashi.yano@nifty.ne.jp>, cygwin-patches@cygwin.com
+References: <20260325224343.5d92b9ee72ec70e0a09b133a@nifty.ne.jp>
+ <20260329095346.aece4ca9b5b9144dd87b45b8@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <abHLpybECZPbwOn4@calimero.vinschen.de>
+In-Reply-To: <20260329095346.aece4ca9b5b9144dd87b45b8@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Thirumalai,
+Johannes,
 
-Ping?
+any chance you could review these patches as well?
 
 
-On Mar 11 21:08, Corinna Vinschen wrote:
-> the long double math functions are taken from mingw-w64 and only
-> slightly changed to fit into Cygwin.
+Thanks,
+Corinna
+
+
+On Mar 29 09:53, Takashi Yano wrote:
+> [New feature]
+> ===== OpenConsole [v6] ====
+> Cygwin: console: Fix master thread for OpenConsole.exe
+> Cygwin: pty: Handle CSIc in pcon_start phase (*)
+> Cygwin: pty: Use OpenConsole.exe if available (*)
+> ===========================
 > 
-> Ideally, all changes to make aarch64 work, too, are also taken
-> right from mingw-w64.
+> [Bug fixes]
+> Cygwin: pty: Make pcon_start handling more multi thread durable
+> Cygwin: pty: Fix write data handling in pcon_start phase
 > 
-> Are the below changes the only ones required to make long double
-> arithmetic work on aarch64?  Are they in line with the upstream
-> changes in mingw-w64?
+> Cygwin: pty: Make Ctrl-C work for non-cygwin app in GDB  [v2] (*)
+> Cygwin: pty: Restore nat handles in all PTY-slave instances in GDB [v2]
 > 
-> 
-> Thanks,
-> Corinna
+> (*) means the patch reviewed once and revised.
 > 
 > 
-> On Feb 24 08:38, Thirumalai Nagalingam wrote:
-> > Hi,
+> On Wed, 25 Mar 2026 22:43:43 +0900
+> Takashi Yano wrote:
+> > I currently am proposing the following patches that is waiting for review.
 > > 
-> > On Cygwin AArch64, long double has the same representation and precision
-> > as double (64-bit), unlike x86 extended precision.
+> > Many of bugs are uncovered by Johannes's reproducer:
+> > https://cygwin.com/pipermail/cygwin-patches/2026q1/014714.html
+> > I really appreciate for providing such a reproducer.
 > > 
-> > This patch updates math functions to correctly handle this case by avoiding
-> > assumptions about extended precision in nextafterl and related functions.
-> > It also updates rintl to use the generic implementation on AArch64 and
-> > adjusts constants in cephes_mconf.h and lgammal.c accordingly.
 > > 
-> > Thanks & regards
-> > Thiru
+> > [New feature]
+> > ===== OpenConsole (v6) ====
+> > Cygwin: console: Fix master thread for OpenConsole.exe
+> > Cygwin: pty: Handle CSIc in pcon_start phase (*)
+> > Cygwin: pty: Use OpenConsole.exe if available (*)
+> > ===========================
 > > 
-> > In-lined patch:
-> > ---
-> >  winsup/cygwin/math/cephes_mconf.h | 4 ++--
-> >  winsup/cygwin/math/lgammal.c      | 4 ++--
-> >  winsup/cygwin/math/nextafterl.c   | 4 ++++
-> >  winsup/cygwin/math/rintl.c        | 2 +-
-> >  4 files changed, 9 insertions(+), 5 deletions(-)
 > > 
-> > diff --git a/winsup/cygwin/math/cephes_mconf.h b/winsup/cygwin/math/cephes_mconf.h
-> > index 832fae0df..654de88bf 100644
-> > --- a/winsup/cygwin/math/cephes_mconf.h
-> > +++ b/winsup/cygwin/math/cephes_mconf.h
-> > @@ -66,7 +66,7 @@ extern double __QNAN;
-> >  #endif
+> > [Bug fixes]
+> > Cygwin: pty: Make pcon_start handling more multi thread durable
+> > Cygwin: pty: Fix write data handling in pcon_start phase
 > > 
-> >  /*long double*/
-> > -#if defined(__arm__) || defined(_ARM_)
-> > +#if defined(__arm__) || defined(_ARM_) || defined(__aarch64__)
-> >  #define MAXNUML        1.7976931348623158E308
-> >  #define MAXLOGL        7.09782712893383996843E2
-> >  #define MINLOGL        -7.08396418532264106224E2
-> > @@ -84,7 +84,7 @@ extern double __QNAN;
-> >  #define PIL    3.1415926535897932384626L
-> >  #define PIO2L  1.5707963267948966192313L
-> >  #define PIO4L  7.8539816339744830961566E-1L
-> > -#endif /* defined(__arm__) || defined(_ARM_) */
-> > +#endif /* defined(__arm__) || defined(_ARM_)  || defined(__aarch64__) */
+> > Cygwin: pty: Clear discard_input flag on master write()
+> > Cygwin: console: Release pipe_sw_mutex in pcon_hand_over_proc()
 > > 
-> >  #define isfinitel isfinite
-> >  #define isinfl isinf
-> > diff --git a/winsup/cygwin/math/lgammal.c b/winsup/cygwin/math/lgammal.c
-> > index 022a16acf..961eec280 100644
-> > --- a/winsup/cygwin/math/lgammal.c
-> > +++ b/winsup/cygwin/math/lgammal.c
-> > @@ -198,11 +198,11 @@ static uLD C[] = {
+> > ====== out-of-order patch (v7) ====
+> > Cygwin: pty: Drop nat_fg() check from to_be_read_from_nat_pipe()
+> > Cygwin: pty: Guard to_be_read_from_nat_pipe() by pipe_sw_mutex
+> > Cygwin: pty: Guard get_winpid_to_hand_over() with attach_mutex
+> > Cygwin: pty: Apply line_edit() for transferred input to to_cyg
+> > Cygwin: console: Use input_mutex in the parent PTY in master thread
+> > Cygwin: pty: Add workaround for handling of backspace when pcon enabled (*)
+> > Cygwin: console: Fix master thread
+> > ===================================
 > > 
-> >  /* log( sqrt( 2*pi ) ) */
-> >  static const long double LS2PI  =  0.91893853320467274178L;
-> > -#if defined(__arm__) || defined(_ARM_)
-> > +#if defined(__arm__) || defined(_ARM_) || defined(__aarch64__)
-> >  #define MAXLGM 2.035093e36
-> >  #else
-> >  #define MAXLGM 1.04848146839019521116e+4928L
-> > -#endif /* defined(__arm__) || defined(_ARM_) */
-> > +#endif /* defined(__arm__) || defined(_ARM_) || defined(__aarch64__) */
+> > Cygwin: pty: Omit CSI?1004h/l from pseudo console output
+> > Cygwin: pty: Fix input transfer when multiple non-cygwin apps exist
 > > 
-> >  /* Logarithm of gamma function */
-> >  /* Reentrant version */
-> > diff --git a/winsup/cygwin/math/nextafterl.c b/winsup/cygwin/math/nextafterl.c
-> > index b1e479a95..80c9c3c4d 100644
-> > --- a/winsup/cygwin/math/nextafterl.c
-> > +++ b/winsup/cygwin/math/nextafterl.c
-> > @@ -16,6 +16,9 @@
-> >  long double
-> >  nextafterl (long double x, long double y)
-> >  {
-> > +#if defined(__aarch64__) && (LDBL_MANT_DIG == DBL_MANT_DIG)
-> > +  return (long double) nexttoward (x, y);
-> > +# else
-> >    union {
-> >        long double ld;
-> >        struct {
-> > @@ -63,6 +66,7 @@ nextafterl (long double x, long double y)
-> >      u.parts.mantissa |=  normal_bit;
+> > Cygwin: pty: Make Ctrl-C work for non-cygwin app in GDB (*)
+> > Cygwin: pty: Restore nat handles in all PTY-slave instances in GDB
 > > 
-> >    return u.ld;
-> > +# endif /* defined(__aarch64__) */
-> >  }
 > > 
-> >  /* nexttowardl is the same function with a different name.  */
-> > diff --git a/winsup/cygwin/math/rintl.c b/winsup/cygwin/math/rintl.c
-> > index 9ec159d17..1e30de069 100644
-> > --- a/winsup/cygwin/math/rintl.c
-> > +++ b/winsup/cygwin/math/rintl.c
-> > @@ -9,7 +9,7 @@ long double rintl (long double x) {
-> >    long double retval = 0.0L;
-> >  #if defined(_AMD64_) || defined(__x86_64__) || defined(_X86_) || defined(__i386__)
-> >    __asm__ __volatile__ ("frndint;": "=t" (retval) : "0" (x));
-> > -#elif defined(__arm__) || defined(_ARM_)
-> > +#elif defined(__arm__) || defined(_ARM_)|| defined(__aarch64__)
-> >      retval = rint(x);
-> >  #endif
-> >    return retval;
-> > --
+> > (*) means the patch reviewed once and revised.
 > > 
+> > -- 
+> > Takashi Yano <takashi.yano@nifty.ne.jp>
 > 
+> 
+> -- 
+> Takashi Yano <takashi.yano@nifty.ne.jp>
