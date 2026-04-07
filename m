@@ -1,287 +1,156 @@
 Return-Path: <SRS0=Vzu2=CG=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id B786C4BA2E05
-	for <cygwin-patches@cygwin.com>; Tue,  7 Apr 2026 12:27:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B786C4BA2E05
+Received: from mta-snd-w09.mail.nifty.com (mta-snd-w09.mail.nifty.com [106.153.227.41])
+	by sourceware.org (Postfix) with ESMTPS id 177524BA2E05
+	for <cygwin-patches@cygwin.com>; Tue,  7 Apr 2026 12:29:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 177524BA2E05
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B786C4BA2E05
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1775564877; cv=none;
-	b=C8OUL/w3xbBRrO24XX4gfBLIORkVPPHAXsZd25jo4Tonk1qdgLlrcTI59utULE5HVmeT6bM8HzuaFKncis7nUJmUWR2k9zshKpet/0LFu2fIW3CGlj5Y4zI3mFKmE+0/9B6lXrz3BinQx4Ty92p/M1ZGqB4GsBOR9xlONjOJlv8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 177524BA2E05
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=106.153.227.41
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1775564954; cv=none;
+	b=uTl3ZyNSy4C0uWAQrP8oM2iG4NW3MZiFuIHYYC7zylt6/mrWzRfWpKGKXTgshr3/gW942AeRxiVBMABkRY2RKvMDm+GzjXw41XJ/7vaqd4Z4jShDSzHyovbU65ZkvkmOJuaYQ9H9pHLet7eIHJbJ8kVRDyu9ZXVpa0iiCgflTEo=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1775564877; c=relaxed/simple;
-	bh=c5aji2ZA++CQrlEWKgGEO6WQf7LGxaE/p6RCjsZWQ38=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=TGjPr45cF5c16/T+fxOeH8m9DJ84y61Fwek5tqqJDv6EdGJvofS3tBmbSGWQmP07Vme17YUg3djpeN6zLeIQ40oY4tsmqx+rPA0Njjg12Z46nP02cHhH1mMr0ZflfgimRgQyk2F+iIVpAbB4Xr8bqawTZKFI9QfrjN4rISwyleU=
+	t=1775564954; c=relaxed/simple;
+	bh=G1AEaW9k60LNXky/GCq9koakDwuxNyVZc5/Xhmsoadg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=v6t4wV5aG0CoLhulyggZ11aeGGunF05jSeHP7oyjbws9OYXkKb4cYL+nSd7iYcsVBDZNLO2QtzHeeNOASZSPhvb8Rr6oKusApO7heKoU+t2zMnc5woLN3j0ktveXNuuz0Pn8lnaCl1OLoX8LL76WW/aPoRd6msxoVdPhwOWi2PY=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B786C4BA2E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 177524BA2E05
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Q1yl1Pap
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260407122749677.PPCF.14880.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 7 Apr 2026 21:27:49 +0900
-Date: Tue, 7 Apr 2026 21:27:47 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FZSRYvQS
+Received: from HP-Z230 by mta-snd-w09.mail.nifty.com with ESMTP
+          id <20260407122911446.CVEA.116672.HP-Z230@nifty.com>;
+          Tue, 7 Apr 2026 21:29:11 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v6 3/3] Cygwin: console: Fix master thread for
- OpenConsole.exe
-Message-Id: <20260407212747.b84f2178e723c9645cd06799@nifty.ne.jp>
-In-Reply-To: <fa6ac2e9-1eec-ffde-5fe8-17bc957f3528@gmx.de>
-References: <20260312113923.1528-1-takashi.yano@nifty.ne.jp>
-	<20260325131056.69116-1-takashi.yano@nifty.ne.jp>
-	<20260325131056.69116-4-takashi.yano@nifty.ne.jp>
-	<fa6ac2e9-1eec-ffde-5fe8-17bc957f3528@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1775564869;
- bh=CDvs68bu3a4sircN9duiVpX80uvsqKCSxQlJ/YhBe8M=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=Q1yl1PapM9VrcX9qznpCh8yrjfoizYSNI/YSKcQZCqcfxck3cMv+45QUek6i0OZKWK+MNh/4
- YoUhpB+BR3LZBf5KB61AjIfDnZBVmeeXS/Af8q4fNxtczeF4IlL3SM5AJ+mTKNqF30O86u8vQX
- 3Qb4cZRx63Mnmfcso9riyshbTsVG8lmKrvQTCT7liKKnALujVWihKK8rrI2w237w1kQIjDD7H+
- N3CgZrJq7rNvY//ku2muyY2STwTi3eei/c+lHOvEZJCNZmeTEtB2mnGoeREcnL0N6f4AJd6ecQ
- QYefLWznGfdiIjdPbUjCoVnrc81lpuLeKaPtjY0zQCvH6oNw==
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v7 3/3] Cygwin: console: Fix master thread for OpenConsole.exe
+Date: Tue,  7 Apr 2026 21:26:30 +0900
+Message-ID: <20260407122852.2153-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260407212747.b84f2178e723c9645cd06799@nifty.ne.jp>
+References: <20260407212747.b84f2178e723c9645cd06799@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1775564951;
+ bh=RMqnZf7c8+UU88QfCbEavdkIvtpvQZ5RdWHdW+wqekY=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=FZSRYvQSBFyALwjnx5abjKcbIgNpmKTgEp6yBFDX9rTeW8Wh95vIAXO1eCYhRD5gV7zNJ4qH
+ hF6tUR1/w650nlN5fa77Z8oXERM+yVP20G/xzssGguBAMxQx82vZlfLkXZayO4UYUroIW8ojV0
+ Sye/g85CnQmGXIsyE5bY6r1736YDxwda5OvBg6UXVVscfQScBm/adnc2onbW41U7rq7F/w8Gsb
+ 5gMF+BJfk6/4t2m9WVct1Z2mkEGmxbN8x8uXRdIrRqLLt9oZnWOFGCoG03wmp2FJ5zWJTvcS/U
+ oxULxeP5vZhv6Zn309XpOllRMzp5QRtg7tnVxj3JJ6Qz+3Lw==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+If the console is originating from a pseudo console, current master
+thread code does not work as expected if ENABLE_VIRTUAL_TERMINAL_INPUT
+flag is set, particularly when OpenConsole.exe is used. This is because
+the pseudo console does not preserve all the key event as is.
+All bKeyDown == 0 events will be omitted from the input record written
+by WriteConsoleInput() and events regarding pressing shift/control/alt
+keys will be dropped as well.
 
-Thanks for revewing this patch.
+This patch adds strip_inrec() function to remove all the key events
+of bKeyDown == 0 or UnicodeChar == 0 before comparing/writing input
+record. This function is called only when the console is originating
+from a pseudo console and ENABLE_VIRTUAL_TERMINAL_INPUT flag is set.
 
-On Mon, 6 Apr 2026 10:14:30 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> Thank you for the new patch. A few observations:
-> 
-> On Mon, 6 Apr 2026, Takashi Yano wrote:
-> 
-> > If the console is originating from a pseudo console, current master
-> > thread code does not work as expected. This is because the pseudo
-> > console does not keep all the event as is. All bKeyDown == 0 events
-> > will be omitted from the input record written by WriteConsoleInput().
-> >
-> > [...]
-> 
-> The commit message describes this as general pseudo console behavior, but
-> the code comment in `strip_inrec()` is more specific:
-> 
-> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > index 1dd5dfa1d..1693a5be7 100644
-> > --- a/winsup/cygwin/fhandler/console.cc
-> > +++ b/winsup/cygwin/fhandler/console.cc
-> > @@ -305,6 +305,23 @@ cons_master_thread (VOID *arg)
-> >    return 0;
-> >  }
-> >  
-> > +static inline DWORD
-> > +strip_inrec (INPUT_RECORD *r, DWORD n)
-> > +{
-> > +  /* Pseudo console with OpenConsole.exe removes the events
-> > +     whose bKeyDown is 0 as well as ones whose charcode is 0. */
-> 
-> And the patch title itself says "Fix master thread for OpenConsole.exe".
-> 
-> Can you help me understand: does legacy conhost.exe _also_ strip these
-> events when used as a pseudo console host? If it does, the commit message
-> is fine but the code comment should drop the "with OpenConsole.exe" part.
-> If it does _not_, then guarding with `inside_pcon` is too broad: when the
-> user sets `use_legacy_pcon` (introduced in patch 1/3 of this series),
-> `strip_inrec()` would discard events on the Cygwin side that conhost.exe
-> actually preserves in its input buffer. Those stripped records would then
-> not be written back at lines 579-584, and the `inrec_eq()` comparison
-> against the peeked buffer would also see a mismatch.
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+---
+ winsup/cygwin/fhandler/console.cc | 42 +++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-You are right. Legacy conhost.exe does not drop KeyUp events and
-events without UnicodeChar for now.
-
-I confirmed the behaviour more precisely using the following test code.
-This program write "shift key ->'A' key down -> 'A' key up -> shift key up"
-into input record and check key events in input record. In addition,
-if argument of non zero is given, change the terminal mode to
-ENABLE_VIRTUAL_TERMINAL_INPUT. Compile with mingw compiler.
-
-#include <windows.h>
-#include <stdio.h>
-
-#define BUFSIZE 16
-int main(int argc, char *argv[])
-{
-	INPUT_RECORD r[BUFSIZE];
-	DWORD n;
-	DWORD mode;
-	HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-
-	/* Set console mode */
-	GetConsoleMode(h, &mode);
-	if (argc >= 2 && atoi(argv[1]))
-		SetConsoleMode(h, mode | ENABLE_VIRTUAL_TERMINAL_INPUT);
-	/* Press shift */
-	r[0].EventType = KEY_EVENT;
-	r[0].Event.KeyEvent.bKeyDown = 1;
-	r[0].Event.KeyEvent.uChar.AsciiChar = 0;
-	r[0].Event.KeyEvent.wVirtualKeyCode = 16;
-	r[0].Event.KeyEvent.wVirtualScanCode = 42;
-	r[0].Event.KeyEvent.dwControlKeyState = SHIFT_PRESSED;
-	r[0].Event.KeyEvent.wRepeatCount = 1;
-	/* Press 'A' */
-	r[1].EventType = KEY_EVENT;
-	r[1].Event.KeyEvent.bKeyDown = 1;
-	r[1].Event.KeyEvent.uChar.AsciiChar = 65;
-	r[1].Event.KeyEvent.wVirtualKeyCode = 65;
-	r[1].Event.KeyEvent.wVirtualScanCode = 30;
-	r[1].Event.KeyEvent.dwControlKeyState = SHIFT_PRESSED;
-	r[1].Event.KeyEvent.wRepeatCount = 1;
-	/* Release 'A' */
-	r[2].EventType = KEY_EVENT;
-	r[2].Event.KeyEvent.bKeyDown = 0;
-	r[2].Event.KeyEvent.uChar.AsciiChar = 65;
-	r[2].Event.KeyEvent.wVirtualKeyCode = 65;
-	r[2].Event.KeyEvent.wVirtualScanCode = 30;
-	r[2].Event.KeyEvent.dwControlKeyState = SHIFT_PRESSED;
-	r[2].Event.KeyEvent.wRepeatCount = 1;
-	/* Press shift */
-	r[3].EventType = KEY_EVENT;
-	r[3].Event.KeyEvent.bKeyDown = 0;
-	r[3].Event.KeyEvent.uChar.AsciiChar = 0;
-	r[3].Event.KeyEvent.wVirtualKeyCode = 16;
-	r[3].Event.KeyEvent.wVirtualScanCode = 42;
-	r[3].Event.KeyEvent.dwControlKeyState = 0;
-	r[3].Event.KeyEvent.wRepeatCount = 1;
-	/* Write */
-	WriteConsoleInput(h, r, 4, &n);
-	/* Clear */
-	n = 0;
-	memset(r, 0, sizeof(r));
-	/* Read */
-	ReadConsoleInput(h, r, BUFSIZE, &n);
-	for (int i=0; i<n; i++) {
-		int c = r[i].Event.KeyEvent.uChar.AsciiChar;
-		printf("%d: Key %c[%02x] (%3d,%3d) %3d %2d %1d\n", i,
-			isprint(c) ? c : ' ', c,
-			r[i].Event.KeyEvent.wVirtualKeyCode,
-			r[i].Event.KeyEvent.wVirtualScanCode,
-			r[i].Event.KeyEvent.dwControlKeyState,
-			r[i].Event.KeyEvent.wRepeatCount,
-			r[i].Event.KeyEvent.bKeyDown);
-	}
-	/* Restore console mode */
-	SetConsoleMode(h, mode);
-	return 0;
-}
-
-Real console:
-$ a.exe
-0: Key  [00] ( 16, 42)  16  1 1
-1: Key A[41] ( 65, 30)  16  1 1
-2: Key A[41] ( 65, 30)  16  1 0
-3: Key  [00] ( 16, 42)   0  1 0
-$ a.exe 1
-0: Key  [00] ( 16, 42)  16  1 1
-1: Key A[41] (  0,  0)   0  1 1
-2: Key A[41] ( 65, 30)  16  1 0
-3: Key  [00] ( 16, 42)   0  1 0
-
-Legacy pseudo console:
-$ a.exe
-0: Key  [00] ( 16, 42)  16  1 1
-1: Key A[41] ( 65, 30)  16  1 1
-2: Key A[41] ( 65, 30)  16  1 0
-3: Key  [00] ( 16, 42)   0  1 0
-$ a.exe 1
-0: Key  [00] ( 16, 42)  16  1 1
-1: Key A[41] (  0,  0)   0  1 1
-2: Key A[41] ( 65, 30)  16  1 0
-3: Key  [00] ( 16, 42)   0  1 0
-
-Pseudo console with OpenConsole.exe:
-$ a.exe
-0: Key  [00] ( 16, 42)  16  1 1
-1: Key A[41] ( 65, 30)  16  1 1
-2: Key A[41] ( 65, 30)  16  1 0
-3: Key  [00] ( 16, 42)   0  1 0
-$ a.exe 1
-0: Key A[41] (  0,  0)   0  1 1
-
-So, the legacy conhost.exe behaves as same as real console.
-However:
-
-> In that case, could the guard be tightened to `inside_pcon &&
-> !use_legacy_pcon` (or a dedicated flag) so that stripping only happens
-> when OpenConsole.exe is the actual host?
-
-I’m concerned that conhost.exe in Windows 11 may start behaving the same
-as OpenConsole.exe in the future.
-
-
-> > +  DWORD j = 0;
-> > +  for (DWORD i = 0; i < n; i++)
-> > +    {
-> > +      if (r[i].EventType != KEY_EVENT)
-> > +	r[j++] = r[i];
-> > +      else if (r[i].Event.KeyEvent.bKeyDown
-> > +	       && r[i].Event.KeyEvent.uChar.UnicodeChar)
-> > +	r[j++] = r[i];
-> 
-> Note: this strips not only key-up events (`bKeyDown == 0`) but also
-> KEY_EVENTs where `UnicodeChar == 0`, which includes arrow keys and
-> function keys. For signal processing that is harmless because the existing
-> loop already skips exactly those events.
-> 
-> However, it means those events are permanently removed from
-> `input_rec`/`input_tmp` before writeback, so any downstream code that
-> reads raw INPUT_RECORDs from the console input buffer (e.g. via
-> `ReadConsoleInput()`) will never see them.
-> 
-> Is that the intended behavior with OpenConsole.exe? I.e., does
-> OpenConsole.exe _also_ strip those events when it processes
-> `WriteConsoleInput()`, so the records would be lost regardless? If so, the
-> commit message should say so explicitly (it currently only mentions
-> `bKeyDown == 0` events, not the `UnicodeChar == 0` case). If not, we might
-> be discarding more than necessary.
-
-Further investigation shows:
-
-With ENABLE_VIRTUAL_TERMINAL_INPUT:
-(1) Sending "\033[A" to pusedo console:
-       Got uChar.UnicodeChar 0x1b, 0x5b, 0x41
-(2) Writing uChar.UnicodeChar 0x1b, 0x5b, 0x41 to console input:
-       Got uChar.UnicodeChar 0x1b, 0x5b, 0x41
-(3) Writing uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-       Got uChar.UnicodeChar 0x1b, 0x5b, 0x41
-
-Without ENABLE_VIRTUAL_TERMINAL_INPUT:
-(1) Sending "\033[A" to pusedo console:
-       Got uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-(2) Writing uChar.UnicodeChar 0x1b, 0x5b, 0x41 to console input:
-       Got uChar.UnicodeChar 0x1b, 0x5b, 0x41
-(3) Writing uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-       Got uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-
-Therefore,
-
-When ENABLE_VIRTUAL_TERMINAL_INPUT is set:
-Up arrow key -> Sending "\033[A" to pusedo console ->
-  Got uChar.UnicodeChar 0x1b, 0x5b, 0x41 ->
-  Writing back uChar.UnicodeChar 0x1b, 0x5b, 0x41 ->
-  Got uChar.UnicodeChar 0x1b, 0x5b, 0x41
-
-When ENABLE_VIRTUAL_TERMINAL_INPUT is not set:
-Up arrow key -> Sending "\033[A" to pusedo console ->
-  Got uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-  Writing back uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-  Got uChar.UnicodeChar = 0, wVirtualKeyCode = 38
-
-This means we have to maintain UnicodeChar == 0 and bKeyDown == 0
-only when ENABLE_VIRTUAL_TERMINAL_INPUT is set.
-When ENABLE_VIRTUAL_TERMINAL_INPUT is not set, all key events are
-preserved.
-
-Based on above investigation, I'd revise [PATCH v6 3/3].
-Could you please review it?
-
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 39c4f6ff0..3da3a80db 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -305,6 +305,23 @@ cons_master_thread (VOID *arg)
+   return 0;
+ }
+ 
++static inline DWORD
++strip_inrec (INPUT_RECORD *r, DWORD n)
++{
++  /* Pseudo console with OpenConsole.exe removes the events
++     whose bKeyDown is 0 as well as ones whose charcode is 0. */
++  DWORD j = 0;
++  for (DWORD i = 0; i < n; i++)
++    {
++      if (r[i].EventType != KEY_EVENT)
++	r[j++] = r[i];
++      else if (r[i].Event.KeyEvent.bKeyDown
++	       && r[i].Event.KeyEvent.uChar.UnicodeChar)
++	r[j++] = r[i];
++    }
++  return j;
++}
++
+ /* Compare two INPUT_RECORD sequences */
+ static inline bool
+ inrec_eq (const INPUT_RECORD *a, const INPUT_RECORD *b, DWORD n)
+@@ -417,6 +434,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+   while (con.owner == GetCurrentProcessId ())
+     {
+       DWORD total_read, n, i;
++      DWORD mode;
++      bool need_strip = false;
+ 
+       if (con.disable_master_thread)
+ 	{
+@@ -472,6 +491,23 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	{
+ 	case WAIT_OBJECT_0:
+ 	  acquire_attach_mutex (mutex_timeout);
++	  /* When ENABLE_VIRTUAL_TERMINAL_INPUT is set, the key events
++	     are not preserved as is. Particularly, when OpenConsole.exe
++	     is used, the following key events are simlified so much.
++	     Writing the events:
++	         press shift key -> press 'A' key ->
++	         release 'A' key -> release shift key
++	     results in only one key event whth:
++	         uChar.UnicodeChar = 0x41,
++		 wVirtualKeyCode = 0,
++		 wVirtualScanCode = 0,
++		 dwControlKeyState = 0,
++		 bKeyDown = 1
++	     Therefore, we need fixup the input record by calling
++	     strip_inrec() if the ENABLE_VIRTUAL_TERMINAL_INPUT flag is
++	     set, so that the input records are compared as expected. */
++	  GetConsoleMode (p->input_handle, &mode);
++	  need_strip = inside_pcon && (mode & ENABLE_VIRTUAL_TERMINAL_INPUT);
+ 	  total_read = 0;
+ 	  while (cygwait (p->input_handle, (DWORD) 0) == WAIT_OBJECT_0
+ 		 && total_read < inrec_size)
+@@ -483,6 +519,8 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	      total_read += len;
+ 	    }
+ 	  release_attach_mutex ();
++	  if (need_strip)
++	    total_read = strip_inrec (input_rec, total_read);
+ 	  break;
+ 	case WAIT_TIMEOUT:
+ 	  con.num_processed = 0;
+@@ -607,6 +645,8 @@ remove_record:
+ 	      acquire_attach_mutex (mutex_timeout);
+ 	      PeekConsoleInputW (p->input_handle, input_tmp, inrec_size, &n);
+ 	      release_attach_mutex ();
++	      if (need_strip)
++		n = strip_inrec (input_tmp, n);
+ 	      if (n < min (total_read, inrec_size))
+ 		break; /* Someone has read input without acquiring
+ 			  input_mutex. ConEmu cygwin-connector? */
+@@ -625,6 +665,8 @@ remove_record:
+ 		  n += len;
+ 		}
+ 	      release_attach_mutex ();
++	      if (need_strip)
++		n = strip_inrec (input_tmp, n);
+ 	      bool fixed = false;
+ 	      for (DWORD ofs = n - total_read; ofs > 0; ofs--)
+ 		{
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
