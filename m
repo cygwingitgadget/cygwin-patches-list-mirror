@@ -1,75 +1,209 @@
 Return-Path: <corinna@sourceware.org>
 Received: by sourceware.org (Postfix, from userid 2155)
-	id 03CF64BA2E07; Tue, 14 Apr 2026 08:28:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 03CF64BA2E07
+	id 4C81D4BA2E09; Tue, 14 Apr 2026 09:04:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4C81D4BA2E09
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cygwin.com;
-	s=default; t=1776155288;
-	bh=ldfCz4W4CaB76cCywBElnSHvShSM24QAF9NedjZFUL4=;
+	s=default; t=1776157444;
+	bh=L5zYR3wYwdeZhy4RjYNMZzBeWRbysIupCtjQwigJumI=;
 	h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-	b=G7fWkywbN0sJ4xjr2nmVU5JPUl7h6BxpKbtGdCPm+SFO5SjSftYN1NmMLf+OSN2xG
-	 OSeqvSdyMP2QtXyQjXk9wQkwS+ILVLKkBN+V/wYff/yIikXpZ2pL5bj31CFwuMLJNa
-	 eS/3DIY1FWl/0Bt95BY4Ez2m+j+4Xv+LzFPVs3ZE=
+	b=OQxO6HGFIkEpH9tmRLIsHjGEBmlmw2oWKE9hB7RAGsNmwWSKcZBW1z7FNUgQV/O6G
+	 ZMulkiKnXU5F0O/gzNqr4e80KCLX6BNsR81aYipShRrmtk4hz7oF0awngeJLzLbE+F
+	 7pYYPVbAQQqQ/bGZ6/A9MLurJZjWT4qSh1IIbHcI=
 Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 1AB65A80897; Tue, 14 Apr 2026 10:28:06 +0200 (CEST)
-Date: Tue, 14 Apr 2026 10:28:06 +0200
+	id 585C1A80897; Tue, 14 Apr 2026 11:04:02 +0200 (CEST)
+Date: Tue, 14 Apr 2026 11:04:02 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Add missing DeleteProcThreadAttributeList()
- call
-Message-ID: <ad36ltx5N8HtFQcb@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: pty: Make Ctrl-C work for non-cygwin app in
+ GDB
+Message-ID: <ad4DAiKm8gzm7bAB@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20260407103022.1380-1-takashi.yano@nifty.ne.jp>
+References: <20260309070818.5952-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260407103022.1380-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20260309070818.5952-1-takashi.yano@nifty.ne.jp>
 List-Id: <cygwin-patches.cygwin.com>
 
-On Apr  7 19:30, Takashi Yano wrote:
-> Currently, the cleanup path of setup_pseudoconsole() is missing
-> DeleteProcThreadAttributeList() call, while microsoft's document
-> requires that and the normal path has it.
-> https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-initializeprocthreadattributelist
-> 
-> This patch adds DeleteProcThreadAttributeList() call to the cleanup
-> path.
-> 
-> Fixes: bb4285206207 ("Cygwin: pty: Implement new pseudo console support.")
-> Suggested-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->  winsup/cygwin/fhandler/pty.cc | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-> index e9191aaad..cdfb363c9 100644
-> --- a/winsup/cygwin/fhandler/pty.cc
-> +++ b/winsup/cygwin/fhandler/pty.cc
-> @@ -3730,7 +3730,7 @@ fhandler_pty_slave::setup_pseudoconsole ()
->  				      PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE,
->  				      hpcon, sizeof (hpcon), NULL, NULL))
->  
-> -	goto cleanup_heap;
-> +	goto cleanup_proc_thread_attr;
->  
->        hello = CreateEvent (&sec_none, true, false, NULL);
->        goodbye = CreateEvent (&sec_none, true, false, NULL);
-> @@ -3899,6 +3899,8 @@ skip_close_hello:
->    CloseHandle (goodbye);
->    CloseHandle (hr);
->    CloseHandle (hw);
-> +cleanup_proc_thread_attr:
-> +  DeleteProcThreadAttributeList (si.lpAttributeList);
->  cleanup_heap:
->    HeapFree (GetProcessHeap (), 0, si.lpAttributeList);
->  cleanup_pseudo_console:
-> -- 
-> 2.51.0
+Hi Takashi,
 
-LGTM
+two (minor) points:
+
+- is_gdb_with_foreground_non_cygwin_inferior() is defined twice.
+  It would probably make sense to move all these inline functions
+  is_gdb_with_foreground_non_cygwin_inferior(),
+  is_foreground_special_process() and
+  is_non_cygwin_foreground_process() into a header.
+  pinfo.h might be a good place.
+
+- The check in is_gdb_with_foreground_non_cygwin_inferior() looks
+  a bit on the fragile side.  Wouldn't it make sense to check with
+  CheckRemoteDebuggerPresent(), or at least, try to?
 
 
 Thanks,
 Corinna
+
+On Mar  9 16:08, Takashi Yano wrote:
+> At some point in the past, GDB sets terminal pgid to inferior pid
+> when the inferior is running. Moreover, the inferior is non-cygwin
+> process, GDB sets the terminal pgid to windows pid of the inferior.
+> Due to this behaviour, Ctrl-C does not work if the inferior is a
+> non-cygwin app. This is because, the current code sends Ctrl-C to
+> GDB only when GDB's pgid equeals to terminal pgid. This patch omit
+> checking pgid when recognizing GDB process whose inferior is non-
+> cygwin app.
+> 
+> In addition, to improve the readabiliby of the code, this patch
+> introduces inline functions such as:
+> is_foreground_special_process (),
+> is_gdb_with_foreground_non_cygwin_inferior (), etc.,
+> instead of complicated conditions in 'if' clauses.
+> 
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> ---
+>  winsup/cygwin/fhandler/termios.cc | 62 +++++++++++++++++++++----------
+>  winsup/cygwin/tty.cc              | 24 ++++++++++--
+>  2 files changed, 63 insertions(+), 23 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+> index 694a5c20f..08cab9a01 100644
+> --- a/winsup/cygwin/fhandler/termios.cc
+> +++ b/winsup/cygwin/fhandler/termios.cc
+> @@ -311,6 +311,41 @@ fhandler_termios::echo_erase (int force)
+>      doecho ("\b \b", 3);
+>  }
+>  
+> +/* PID_NOTCYGWIN: check this for non-cygwin process.
+> +   exec_dwProcessId == dwProcessId:
+> +	       check this for GDB with non-cygwin inferior in pty
+> +	       without pcon enabled. In this case, the inferior is not
+> +	       cygwin process list. This condition is set true as
+> +	       a marker for GDB with non-cygwin inferior in pty code.
+> +   !PID_CYGPARENT: check this for GDB with cygwin inferior or
+> +		   cygwin apps started from non-cygwin shell. */
+> +
+> +/* "Special" here means a non-cygwin process or a process whose parent
+> +   is not a cygwin process */
+> +inline static bool
+> +is_foreground_special_process (_pinfo *p, pid_t tty_pgid)
+> +{
+> +  if (!p)
+> +    return false;
+> +  if (p->pgid != tty_pgid)
+> +    return false;
+> +  return !((p->process_state & PID_CYGPARENT)
+> +	   && !(p->process_state & PID_NOTCYGWIN));
+> +}
+> +
+> +/* exec_dwProcessId == dwProcessId:
+> +       check this for GDB with non-cygwin inferior in pty
+> +       In this case, the inferior is not cygwin process list.
+> +       This condition is set true as a marker for GDB with
+> +       non-cygwin inferior in pty code. */
+> +inline static bool
+> +is_gdb_with_foreground_non_cygwin_inferior (_pinfo *p, tty *ttyp)
+> +{
+> +  if (p->exec_dwProcessId != p->dwProcessId)
+> +    return false;
+> +  return ttyp->pty_input_state_eq (tty::to_nat);
+> +}
+> +
+>  /* The basic policy is as follows:
+>     - The signal generated by key press will be sent only to cygwin process.
+>     - For non-cygwin process, CTRL_C_EVENT will be sent on Ctrl-C. */
+> @@ -338,19 +373,9 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+>    for (unsigned i = 0; i < pids.npids; i++)
+>      {
+>        _pinfo *p = pids[i];
+> -      /* PID_NOTCYGWIN: check this for non-cygwin process.
+> -	 exec_dwProcessId == dwProcessId:
+> -		     check this for GDB with non-cygwin inferior in pty
+> -		     without pcon enabled. In this case, the inferior is not
+> -		     cygwin process list. This condition is set true as
+> -		     a marker for GDB with non-cygwin inferior in pty code.
+> -	 !PID_CYGPARENT: check this for GDB with cygwin inferior or
+> -			 cygwin apps started from non-cygwin shell. */
+> -      if (c == '\003' && p && p->ctty == ttyp->ntty && p->pgid == pgid
+> -	  && ((p->process_state & PID_NOTCYGWIN)
+> -	      || ((p->exec_dwProcessId == p->dwProcessId)
+> -		  && ttyp->pty_input_state_eq (tty::to_nat))
+> -	      || !(p->process_state & PID_CYGPARENT)))
+> +      if (c == '\003' && p && p->ctty == ttyp->ntty
+> +	  && (is_foreground_special_process (p, pgid)
+> +	      || is_gdb_with_foreground_non_cygwin_inferior (p, ttyp)))
+>  	{
+>  	  /* Ctrl-C event will be sent only to the processes attaching
+>  	     to the same console. Therefore, attach to the console to
+> @@ -372,7 +397,7 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+>  	  if (p->process_state & PID_NEW_PG)
+>  	    GenerateConsoleCtrlEvent (CTRL_BREAK_EVENT, p->dwProcessId);
+>  	  else if ((!fh || fh->need_send_ctrl_c_event ()
+> -		    || p->exec_dwProcessId == p->dwProcessId)
+> +		    || is_gdb_with_foreground_non_cygwin_inferior (p, ttyp))
+>  		   && !ctrl_c_event_sent)
+>  	    {
+>  	      GenerateConsoleCtrlEvent (CTRL_C_EVENT, 0);
+> @@ -403,12 +428,11 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+>  	  if (!p->cygstarted && !(p->process_state & PID_NOTCYGWIN)
+>  	      && (p->process_state & PID_DEBUGGED))
+>  	    with_debugger = true; /* inferior is cygwin app */
+> -	  if (!(p->process_state & PID_NOTCYGWIN)
+> -	      && (p->exec_dwProcessId == p->dwProcessId) /* Check marker */
+> -	      && ttyp->pty_input_state_eq (tty::to_nat)
+> -	      && p->pid == pgid)
+> -	    with_debugger_nat = true; /* inferior is non-cygwin app */
+>  	}
+> +      if (p &&  p->ctty == ttyp->ntty
+> +	  && !(p->process_state & PID_NOTCYGWIN)
+> +	  && is_gdb_with_foreground_non_cygwin_inferior (p, ttyp))
+> +	with_debugger_nat = true; /* inferior is non-cygwin app */
+>      }
+>    if ((with_debugger || with_debugger_nat) && need_discard_input)
+>      {
+> diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+> index 0c49dc2bd..acc21c0ca 100644
+> --- a/winsup/cygwin/tty.cc
+> +++ b/winsup/cygwin/tty.cc
+> @@ -331,6 +331,23 @@ tty::wait_fwd ()
+>      }
+>  }
+>  
+> +inline static bool
+> +is_non_cygwin_foreground_process (_pinfo *p, pid_t pgid)
+> +{
+> +  if (p->pgid != pgid)
+> +    return false;
+> +  return !!(p->process_state & PID_NOTCYGWIN);
+> +}
+> +
+> +inline static bool
+> +is_gdb_with_foreground_non_cygwin_inferior (_pinfo *p, pid_t pgid)
+> +{
+> +  if (p->pgid == pgid) /* GDB is the foreground process */
+> +    return false;
+> +  /* Below is true for GDB with non-cygwin inferior */
+> +  return p->exec_dwProcessId == p->dwProcessId;
+> +}
+> +
+>  bool
+>  tty::nat_fg (pid_t pgid)
+>  {
+> @@ -340,10 +357,9 @@ tty::nat_fg (pid_t pgid)
+>    for (unsigned i = 0; i < pids.npids; i++)
+>      {
+>        _pinfo *p = pids[i];
+> -      if (p->ctty == ntty && p->pgid == pgid
+> -	  && ((p->process_state & PID_NOTCYGWIN)
+> -	      /* Below is true for GDB with non-cygwin inferior */
+> -	      || p->exec_dwProcessId == p->dwProcessId))
+> +      if (p->ctty == ntty
+> +	  && (is_non_cygwin_foreground_process (p, pgid)
+> +	      || is_gdb_with_foreground_non_cygwin_inferior (p, pgid)))
+>  	return true;
+>      }
+>    if (pgid > MAX_PID)
+> -- 
+> 2.51.0
