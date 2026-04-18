@@ -1,77 +1,136 @@
-Return-Path: <SRS0=Wk1n=CQ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id F11AD4CCCA07
-	for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2026 19:45:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org F11AD4CCCA07
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org F11AD4CCCA07
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1776455141; cv=none;
-	b=IdftKZU5+B+eELbipQX+pJtKNac75M6hMF7TXkw5dOdTEmiH3xqMwX5jaTM39in23IPRnIL87Re+L0FQYGuHdzjUBBmcGNmCuIf/k2dOSAqAL/8WxNcLspfwUoIMG/i/5zIdMLMHIK2vrpPRXjXG/nGxF33aTHzQ+amzP4WpEZA=
+Return-Path: <SRS0=gsD5=CR=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	by sourceware.org (Postfix) with ESMTPS id C805E4BA23DE
+	for <cygwin-patches@cygwin.com>; Sat, 18 Apr 2026 07:29:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C805E4BA23DE
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C805E4BA23DE
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=216.40.44.16
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1776497373; cv=none;
+	b=NEnvUoCsbDkQlYU9bgWd6QbCIUJIXK8pb14Kclz7nTCdLJf9KTMVcG1rKjymiLEagpSNR40L9CEHcEAs4bm1m3XNnLViRu9Dj3QM08Io/SqSofZwLzAHqwQucmpTGmVFcb1SjfqA6cO6i7qGqT5Odq+NGz0YEjAkBtjUzY+uAr8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1776455141; c=relaxed/simple;
-	bh=u3umhfL1Dm+mQvm38u++u3zRkYSOisBXgQKiv4BjKEc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=H25jRAQAE9Au/vlX80dNvaMDTVSK2FROONbAq38xBNta0gbM3l8U7hT6PDtnMOJiLAuA/fazoh65/iAyCUQtfGpvgRN+Xs7idQn1F10reJaQ9y5qqPfbEGUDvCmKt8Uun50Hlofif4EVqvM0ogYZmlSQI4IRlzOI1SmWVNkhBNU=
+	t=1776497373; c=relaxed/simple;
+	bh=be9DMcGl6cJ8tZ5L0GT8XuTxtYOx5WAyGS9nhptpcyI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=mbME14iMq86iimy2BauSm8zrcpk5FjNHCbDMttD/iDOWkcyOcHdAuA4ZKrjJlzTU0/Syj2wygzU+WEw+6zag1PW/HuKe5EDoBC2yWZoWh9Qy0OZTb2X7cU/IEpJT4GYAy4+zjnbf3VELICnWzFHC4KHfUG4noADmqEB1wCJpmoM=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org F11AD4CCCA07
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C805E4BA23DE
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=RKAbH8zI
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260417194537084.CRSV.36235.HP-Z230@nifty.com>;
-          Sat, 18 Apr 2026 04:45:37 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Nahor <nahor.j+cygwin@gmail.com>
-Subject: [PATCH] Cygwin: select: Set errno when peek() returns -1
-Date: Sat, 18 Apr 2026 04:45:22 +0900
-Message-ID: <20260417194531.993-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=kYrPex+R
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 1CE36E43F8
+	for <cygwin-patches@cygwin.com>; Sat, 18 Apr 2026 07:29:32 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf09.hostedemail.com (Postfix) with ESMTPA id 79DDD20034
+	for <cygwin-patches@cygwin.com>; Sat, 18 Apr 2026 07:29:30 +0000 (UTC)
+Message-ID: <1d28c50c-1a25-498d-a556-858e3c1dc052@SystematicSW.ab.ca>
+Date: Sat, 18 Apr 2026 01:29:27 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: cygwin-htdocs: website fresh coat of paint
+Content-Language: en-CA
+To: cygwin-patches@cygwin.com
+References: <69e1cbb2.530a0220.249b6f.22da@mx.google.com>
+Organization: Systematic Software
+In-Reply-To: <69e1cbb2.530a0220.249b6f.22da@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1776455137;
- bh=rBKDcpl197O5eMIt97gnMZHw9qPeeIsvfVrrN6PHabo=;
- h=From:To:Cc:Subject:Date;
- b=RKAbH8zI5S2xaJAPyiTDFreAHHIq25yr6nPKVHyck/hZqEzb0x+MKdrKtQIcI2wUf2nTKYy5
- 5wjwQa7glZHYS67wATb/wfkE8RAsJNLLnAZessNVFuGQgy6IGBl7eEeTbtcQnEyDG/625b+pJM
- 5vpa6rU4k0K43QEsCLYPwWB62kNxuuzYltKv2Yu0ZoheMrR0UpMznyMu0stxWyXU1p8NJ+wVDo
- V5TxN8as8s9OlTUFsgWvJINlwagRP3j+E3Q6KBNgl/e3o50VMG0u8FLo1KqnQOta9wd3ti4iyk
- pzTIdxPSJSjVblFp/EESe4zL+jcOyg971L7u85GBjVWutLXw==
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: hq59rojt9u3eikkz3p88wonbwjyhofur
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 79DDD20034
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,KAM_SHORT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL_BLOCKED,RCVD_IN_VALIDITY_SAFE_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX1+urwpT5IwVv3MykyYIDvjV7hSrXMRG/s0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=UaIrcoghv+Wbv+9ZJxXEekNXoJpKBE0plbHnUDphD8c=; b=kYrPex+RjYptEtsUV0c/hDLNeSyjLnyJ244zrG6ykKPmQj9qECtngRozeBIt1yufRJEq44d5q6xXdh8drfqbY+aFO8M/g/ah8SIZtukZm0hXrNa2DPUcsQPW9t8U4T/D3xhZ4kjFvS0PdpEBsBXN6oTH2gI+5R1yMIxxihMfd0kCNeMDrBRTvlTVn3FH86Dshoxk231xtf+IrGWJIMp4tAEQOrV+9VoztasJCfJqNybaVwTCksSt3ixIoDS3YiKY1DU4+DlTRZZNfz7cnWLRIFU8EO4DQGbTaooWny3W/O/JHGT3U2EkveqRVchfXlbPQbEP12C+UZKD8fBPebf8hQ==
+X-HE-Tag: 1776497370-508959
+X-HE-Meta: U2FsdGVkX18FhJpajiwBO40eRQcYvWxJFXhmd8+no9NvBi5c2Yl6AN33WTpdicTrbHqUx7rOy0yan23L4Vrezd608jVncPpU4tMN9CgOpg503zWi3Nqw4ZCiMW0a4XOkpcRQQzUiWf92XWVsOF1MJZeVC3I4e5ZKgU6hZDQM7qyel5+pidn+KsUQVIE1yhrFu14ONHMMNt9rHA1C42cF1mTSPVFj0Ee+WmGRtSfnOBOJF/y/9gkSrgpHtiY/gdMZxC2G0rycVxtZWUqP0oYvsOD9xbPJNq6X86CyvUjZSn6INlD64wK44ZBoggtDi9D+Hywxs1USbcHiRcqykfu1wu4g2K1dW8loGGcCwp6E4ba4DwQ1l6GL/MDkVWuztOPgh5pNhPrCK3JjQR/ShsQ4F6mC7dLxEHNejqOlB8G/P57qYUR5U0afKq1BKFt6jsFE09I5bUNZlEjBX9SrutcemZTn3wwGthKOJCmGKFiD8aVnZzGPfqQAlIw7ukwmGDQF720BRtdaJ9eS95mzTAS7yLx6MDQnCFtJE0NztXQifuonZXmLpqPWUwdKhltNcPmNWuCF1pJwU0G4DZrxIcu9vm2rt1ztz+s2D4xULQndbA4=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, poll() sometimes returns -1 with errno == 0 if the fd is
-not opened. This is due to lack of setting errno when peek() fails.
-This patch ensure to set errno to thread_errno if peek() returns
-NULL.
+Hi John,
 
-Addresses: https://cygwin.com/pipermail/cygwin/2026-April/259602.html
-Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
-Reported-by: Nahor <nahor.j+cygwin@gmail.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by:
----
- winsup/cygwin/select.cc | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+While all this work and rationale sounds like it should improve the site, could 
+you please add more documentation details within each change to explain the 
+content of each change and its visual impact, for example:
+   content: "\2B50"; /* U+2B50 WHITE MEDIUM STAR */
 
-diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-index 8a94ac076..523c46ee6 100644
---- a/winsup/cygwin/select.cc
-+++ b/winsup/cygwin/select.cc
-@@ -561,7 +561,10 @@ select_stuff::poll (fd_set *readfds, fd_set *writefds, fd_set *exceptfds)
-     {
-       int ret = s->peek ? s->peek (s, true) : 1;
-       if (ret < 0)
--	return -1;
-+	{
-+	  set_errno (s->thread_errno);
-+	  return -1;
-+	}
-       n += (ret > 0) ?  set_bits (s, readfds, writefds, exceptfds) : 0;
-     }
-   return n;
+The image below looks like the Wikipedia article logo, which has an unknown 
+author and licence, but could do with a text description, and mentions after the 
+paths, for example:
+
+/* Black shaded squarish C with triangular points and grey outline */
+<path 
+d='M94,19l-28-9h-39c-9,0-19,9-19,19v47c0,9,10,19,19,19h39l28-10l-28-9h-26c-9,0-13-3-13-13v-22c0-10,4-13,13-13h26z' 
+fill='#000' stroke='#000'/>
+/* Green shaded Arrow Head within bowl of Black C */
++<path d='M94,52l-41-11h-13v3c10,0,10,16,0,16v3h13z' fill='#0F0' stroke='#0F0'/>
+
+and not as nice as the apps/setup/cygwin.ico Copyright 2011-08/9 Warren Young, 
+licensed under some GPL I believe, as no other license is attached on the lists 
+or in the repo? Mentioned were FAL, CC0, and PD.
+
+Then could you please include those details under your description below as the 
+log message in each patch consisting of a patch summary line, a blank line, then 
+the details, then put all those in a cover letter [PATCH 0 of #] as the zeroth 
+attachment or post, generated by git format-patch then send-email, including a 
+Signed-off-by (-s) header.
+
+It would also be useful to see the visual impact on an updated web site built 
+using the provided scripts, allowing an A/B comparison of the effect.
+
+
+On 2026-04-16 23:57, johnhaugabook@gmail.com wrote:
+> Attached are several patches that update the site's UI/UX. As a whole, this is a fresh coat of paint for the website. For a full demonstration of all the patches applied to the site, see this support repo:
+> 
+> https://github.com/jhauga/cygwin-htdocs
+> 
+> For the debatably controversial patches, I added nested links to UX/UI research in support of the "whys".
+> This mostly consists of links to UX/UI studies, and the research takeaways.
+> 
+> Apart from that the nestetd list items are the corresponding patch name, or additional info.
+> 
+> Changes include:
+> 
+> - Clean style.css, making consitent formatting
+>    - clean-style.css.patch
+> - Fixed menu position
+>    - fixed-menu-position.patch
+> - Logo added to top.html
+>    - add-logo-to-top.html.patch
+>    - Gets better user recall - https://www.nngroup.com/articles/logo-placement-brand-recall/
+>    - NOTE - logo downloaded from `https://commons.wikimedia.org/wiki/File:Cygwin_logo.svg`
+> - Menu font weight applied hierarchically per menu section
+>    - font-weight-applied-hierarchically-per-menu-section.patch
+>    - Differentiate text levels - https://medium.com/@oluwanifemiajayi61/typography-hierarchy-3ed06c206ea7#:~:text=Using%20weight%20strategically%20prevents%20visual%20clutter
+> - Prepend a HTML star entity the "Gold Stars" menu item
+>    - add-html-star-entity-for-the-Gold-Stars-menu-item.patch
+>    - Draw attention to item and clearly labels it as not the current page - https://www.netwaveinteractive.com/blog/visual-hierarchy-in-ui-ux-design-principles-strategies-and-best-practices/#:~:text=enhance%20hierarchy%20by%20breaking%20up%20text
+> - Change HTML `h1` header's font family to system-ui
+>    - h1-header-s-font-family-to-sans-serif.patch
+>    - Keeping other text as serif makes for good visual contrast
+>    - Sans serif is best for digital:
+>      - https://ixdf.org/literature/topics/typography#:~:text=preferable%20for%20digital%20interfaces
+>      - https://medium.com/the-interaction-design-foundation/the-ux-designers-guide-to-typography-7ddf87288123#:~:text=preferred%20for%20digital%20interfaces
+> - Style `code` HTML elements
+>    - style-code-HTML-elements.patch
+>    - I mean - I'd ballpark it at 90% of website that have software documentation apply background color to code blocks
+> - Style `pre` code-blocks
+>    - style-pre-code-blocks.patch
+>    - Same for `pre` tags that hold code examples; at least 90% of software docs, blogs, articles, etc. use a differentiating background color for code-blocks
+> - Link hover UX effect
+>    - link-hover-UX-effect.patch
+>    - Users expect hover effects, and essentailly a web standard - https://www.nngroup.com/articles/guidelines-for-visualizing-links/#:~:text=hover%20states%20have%20become%20a%20standard%20and%20expected%20interaction%20pattern
+> - Responsive styling
+>    - responsive-styling.patch
+> - Use CSS variables for colors to keep DRY (Do not Repeat Yourself)
+>    - css-variables-for-colors-to-keep-DRY.patch
+
+
 -- 
-2.51.0
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
