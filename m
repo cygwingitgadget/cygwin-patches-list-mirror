@@ -1,69 +1,61 @@
-Return-Path: <SRS0=mhjT=CS=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:2a])
-	by sourceware.org (Postfix) with ESMTPS id A86134BA23FD
-	for <cygwin-patches@cygwin.com>; Sun, 19 Apr 2026 10:53:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A86134BA23FD
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A86134BA23FD
-Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1776596023; cv=none;
-	b=HvRf8ebXoMwmTXj2W/LA0zyJ64x+HeuDamM1Im4Ce7GQh/qgkUlLQ5MRoFdug0OzIoPIJjnRs4uccToSBd4yPo+LQy24FiIOKKfCuoNrJQQXdoG1UyD6NGgGVx1xSnNXqxC/6yTSwSYa84qdiYDDafGZeXkiQ4ysTEQ39i/2mPM=
+Return-Path: <SRS0=7xjp=CS=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo002.btinternet.com (btprdrgo002.btinternet.com [65.20.50.146])
+	by sourceware.org (Postfix) with ESMTP id 3FA164C900E9
+	for <cygwin-patches@cygwin.com>; Sun, 19 Apr 2026 15:46:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3FA164C900E9
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3FA164C900E9
+Authentication-Results: server2.sourceware.org; arc=none smtp.remote-ip=65.20.50.146
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1776613598; cv=none;
+	b=Hdzc8AiT/szB0wzVQJWIldqQvUYthzrS+5Wki+2by2NtA7m3qMal3CYRqxqfDzPp9lykBb86XFU+p/yArxw01HfMkEhjvtO2W5jmsN3tf9NTNTlxFM5QZvD7ONQic/9EaOKI7yThxbegHBnH6ndSVuDhnju1XXjf22axyN0fWVE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1776596023; c=relaxed/simple;
-	bh=gbMCw2gczqh3T1jn14dfeYOEEOf0xcC+2yAAUkpY7IY=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=w/aKRUkj3H+3jP2L8voa+Y03VMOLK9+xwMsIgSJLj4tnCbjSWWa2iAdcgZ8PIphXpe/q9SKCoaQnGhGxw9mazwdDq7KvMnz5kC66tShpusqqJ8c1nIqvWKemzgfiYASWG7QL8cyUYpvXP0lrqCjOhopGjAsHTDWL9lOGZoqJF/Q=
+	t=1776613598; c=relaxed/simple;
+	bh=1KHiDMQCk+F5OzjVVGqaJbo1KWkRlB0nB0qfl/7/ZKo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=YPT2P3USB4ZdRjd6H8+Uojf9ByCuOpehYHJg/LmuqKqask7UB2Svt2q7cvVa2OkmhRkJbpfCF4w1VZkZNHD5yP22BJC+Rc1/pmgULjlqIUAYO0+7DVw87YYPvjrluXiRUiq3TiPMLMyz9GmodNNRPacdBaCIYMF5sMJIUaVP2No=
 ARC-Authentication-Results: i=1; server2.sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A86134BA23FD
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=i38GuScC
-Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
-          id <20260419105338676.XUCZ.3198.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 19 Apr 2026 19:53:38 +0900
-Date: Sun, 19 Apr 2026 19:53:36 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3FA164C900E9
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 69D87AD800E7D31D
+X-Originating-IP: [62.49.245.144]
+X-OWM-Source-IP: 62.49.245.144
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTEBUYll/Ty5udmspsrQrPs4/fyQXEmnida/AKbiQ1RExZ4WLaz3GE8wAUsJ52w5bRPs+H0WGu370WJtpN2LZWSIVD92UUlSmCmnn45gSb1JcbPdHTi70R5byiVkMFdL6v++MUkHZV69DWoBFuvKiMAGErMBdOoONU7GpsNisl5+vTFTL/jYsAiI663VZGrLsc9mvI/B4stCt9OLzv4BBET4bWahOii6fnF98Hq7oAKBUyW/D844G4BZIAFe1Xe6GtjsjlN7orupJY5ePJ6CLbN12cFvimu1H9sDhIlBrkrJAcm/1oErMhS3o2RLTj3rJogt4WNUhOg9W0hLeu6D1hO5gU01UfPEqeeuqNY9ikqa4vXKpQmZwUy3pSHv2nJDVRTnh+S1uQoceUFMxU2+wTAzVAoJ8KJNthRdQn8MsBnGYpOlbswzGIF2p0aJXxWJOkCjq0JAatV0c9shWZKTcQjcciSsfDctzGrebUnNx1imI87mfQbZ3wRIaYkCxEV6jLIbwa57/DMwlKz8asZkm60n+WT71xST2lPiGp6hje7+1geVmiGTLzOULa6S6Vc+TKnDWA537x2kM2I1I0SEsUnXXQFoLPdA8EvmyJWzlCvou7bYhwBvH02GpScmZ0O4HcQRRjknnrqOHUSDjtJI4HWpcIuNTn4+LZrCFOnJwPLEaw
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (62.49.245.144) by btprdrgo002.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 69D87AD800E7D31D for cygwin-patches@cygwin.com; Sun, 19 Apr 2026 16:46:36 +0100
+Message-ID: <ca240824-43d5-4fbe-b0bb-640d214aa3f6@dronecode.org.uk>
+Date: Sun, 19 Apr 2026 16:46:35 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/11] cygwin-htdocs: website fresh coat of paint
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: select: Set errno when peek() returns -1
-Message-Id: <20260419195336.32d7d8b2c424714bda4f2d40@nifty.ne.jp>
-In-Reply-To: <aeStNfAaLRmw9H3X@calimero.vinschen.de>
-References: <20260417194531.993-1-takashi.yano@nifty.ne.jp>
-	<aeStNfAaLRmw9H3X@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20260419052701.513-1-johnhaugabook@gmail.com>
+ <aeStmeiBYWp4iVKM@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+In-Reply-To: <aeStmeiBYWp4iVKM@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1776596018;
- bh=pauhfqr/RYRsjPJOMLsBewAxP3kj7Etuj4B+2Tq9nrU=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=i38GuScCQ6xiU7ROpUlg+es9rhFTjxpulkCsxddIyL5ipuWg8hTaqHEnsK8bVvbTogX1w+2R
- B0p+vEJH+sRnjePnQk86aGagg91MY7GEnVJjuuaV2wvQZq5IFiqieXtU4zTsJuFRkt3hI+dQfF
- kPMmteKQV2rRK8ofNhsjsrFSpolfZAhhjBTrfMmif9SxjGfmuQC8A8D2IOWaUDhHglCCx1ut0i
- TfQoIimK06jTPaNL0l+iEyxcY57uy6PgHB29W/LmiECUxlVL8rszwr5yPlp4eF2O09Rm+1HmTf
- wXW2Rm3eQUU7jyYgHFwlnbbpmohEfK7pLpy7a6ueMweZIHfg==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sun, 19 Apr 2026 12:23:49 +0200
-Corinna Vinschen wrote:
-> On Apr 18 04:45, Takashi Yano wrote:
-> > Currently, poll() sometimes returns -1 with errno == 0 if the fd is
-> > not opened. This is due to lack of setting errno when peek() fails.
-> > This patch ensure to set errno to thread_errno if peek() returns
-> > NULL.
-> > 
-> > Addresses: https://cygwin.com/pipermail/cygwin/2026-April/259602.html
-> > Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
-> > Reported-by: Nahor <nahor.j+cygwin@gmail.com>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by:
-> > ---
-> >  winsup/cygwin/select.cc | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
+On 19/04/2026 11:25, Corinna Vinschen wrote:
+> Hi John,
 > 
-> Looks like an obvious fix :)
+> Thanks for this!
+> 
+> I guess it really doesn't hurt to update the look of this site, which is
+> kinda stuck in the early 2000s.
+  Indeed, thanks!
 
-Thanks! Pushed.
+> Jon, would you mind to review this patchset?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Yes, I'd noted this to take a look at.
+
+Hopefully I'll get to it this week! :)
+
