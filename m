@@ -1,278 +1,984 @@
 Return-Path: <SRS0=xB0n=DG=gmail.com=johnhaugabook@sourceware.org>
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-	by sourceware.org (Postfix) with ESMTPS id 5D2214BA2E2A
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+	by sourceware.org (Postfix) with ESMTPS id 017CE4BA2E04
 	for <cygwin-patches@cygwin.com>; Sat,  9 May 2026 01:28:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5D2214BA2E2A
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 017CE4BA2E04
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5D2214BA2E2A
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::112c
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1778290114; cv=none;
-	b=bOjHDtlTQnahJMeaIMwhbt6fbAs0Dl1kDyZN+OTP/CHFoKONj0QuWdftIffGQfpJBdqDDFg851CnrbpJZDr3R6DEk4KonIUjIaQ9KZbEbc9QjY4fAbBpyI0y8MEa8cmR558jnD+Oh7IqV1w2h1TH+OULtKGRs0bAiUX960LeKxs=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 017CE4BA2E04
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::112a
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1778290115; cv=none;
+	b=acMEYqXtv6me4yobqWmTYCDuod+dgN6FGIvJHJ6tSB9kI/yd3LdEBB3N2iOPxNQFWGw0ab06RPWp58lw5CunFFQUB7ZmZ7b2JawgY93CObFxqlZuwEs31wgmd1GlvaavQ2IG4eZ+8B2sbPRdfRF23l8muXvHwkQ/lg5fsrmUykc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1778290114; c=relaxed/simple;
-	bh=rnncKLOx3yGv6WNbcZpbdR11JfYGIVaoQA3jEV3a5y4=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=dphKRCu1hfoKbwC+Dfr4PFNPMjL0ErQDkje3Y51b7zkMdgRhNF779Jtn+tL9KQThescb0MfPHha9IjzBUE+NKZ5Gi0Z++Ax1GLGyRWqaaLLypsOR0qkt0gDWwtD2q9VNZpT7NBgX/sQ9DxEt6DgzThhs2kPViLhbxTC7E7q/mmY=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GDPSn6cB
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5D2214BA2E2A
+	t=1778290115; c=relaxed/simple;
+	bh=TYEpyFd2ZVn8ytGm9gqQGkciRERfvMG26IIZ3lu9C7w=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=hBKnOXr3ogebGKbAxEvTS2AUJ0YlCCyHzjplOUIYWTU5m21dS9HzNuVh3BoS4smG6EdhtnDgUMkaHXEwFfm3nwzw7fJPovrGI36yGPQJyksYLD3Py95EQJaD4JfJum38u/pCvnzHOOsuxS4m33JpPTZc6p3Oy8YVeqblecXJT5Q=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BZdHjFV5
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 017CE4BA2E04
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GDPSn6cB
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-7bd9f61458eso20555777b3.0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BZdHjFV5
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-7bdc947aaa3so28278947b3.0
         for <cygwin-patches@cygwin.com>; Fri, 08 May 2026 18:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778290113; x=1778894913; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1778290114; x=1778894914; darn=cygwin.com;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RPXI9appgkkvXEvoMH0o+UkF8xDaE25Vf677uwPiyRA=;
-        b=GDPSn6cBNZ46DaZPZidI/8omdmSHLb4Mdm8Dn2wckA4o2o6EzHRJgXwhsEg+OMo9z6
-         kzsQqpgrjM1TV++wkBoMSnWXmucUzQYfrhzzoXBdoRXiSG1ojxbGPH5hfMoyK6kouYCX
-         llF/KIVLUroNGYWi7Ev05HaKJddO0csSzTFU3iXpIZyFSEKzGRtVTvC8foh1ZV7h02aq
-         kpNT+OtrAsQoNjczsDNMbt4UF9bZiTU6ucx9L58Tyf9FSuNMKwbYrg9VV8Rfm+Qb3oFp
-         Hdp5XMPFnOkyIBduZJZAAKW4YKXsMyMm1Gwwv96MqOu1KvdySWc1WC3addO9RNLnjtBT
-         80mA==
+        bh=yWj5ursltytuP3V2z8QD30tjKXeAKe24G88sbyAg5Pg=;
+        b=BZdHjFV5ex6gPXELf4nnAZcNw0jsmUj1fPibg6JUWDnhYfk4E+1ThROSuPNavSfSfj
+         HEdO+20jlwNcwTjHKv+C943OjXThb2ENitWmgYT01HQVDqKfVUxhCKoLsgoBRvNbh/Zj
+         v1HB7wvTp53CKhQ+sx8mNK0LI1C0WqYKpiFAyUAG4n9WGySGGfDSmWNtNBYO94oxf9ML
+         EKND1MTDdJp+KpSMntbItN93d25CvVg8v3nyp7YQbl00wYS4Bz9pJMu6pkhVAWqymTWi
+         9LOiJKaTqFB8QRFh6SgfdOM8L/3Y5Vs6FHgF1IYCwKS4KwM24D7YoeN6WVzzhTuajLEf
+         eDeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778290113; x=1778894913;
+        d=1e100.net; s=20251104; t=1778290114; x=1778894914;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RPXI9appgkkvXEvoMH0o+UkF8xDaE25Vf677uwPiyRA=;
-        b=jNbkBCkB+KWJ8nLh8kK5drT+B20A9UYjGtpvC2ujXF/kWAfnZKtlh12osviHLwRjLY
-         uw2kf8noB5TfTbZhv5s3H8bnjsDzYGxxasLRIYJixXIHazq0QpsIc2b5NfZFxShJkEjf
-         iEuKAaqDbLIGwXmjDLFu8vfqd/n4ZPoRSWHOIT09l5JZrt9mmxqHPhx8nqp7fBo9Qen7
-         PhDgmQRuYMbvmjqVrAVnOC9FbZpjzdxBfnO5hifnxPnghooEgYFyY/mkHfpCLLIKfCjg
-         HEAnBxhEY+e/dB1Ji5P5R57SzU3wuzuMb+BRRs3XsmFj/jOcNW13h3S6UGiUpCvZKzIa
-         zd8g==
-X-Gm-Message-State: AOJu0Yzbbs/JvRdB2PCSLEhpU/XlECya9tK+ul6YslIZuRhd66whENai
-	oMx1x7CjeFJTn2E8r4NWbQtneCbKad10G9frrOWHYJnorxa46PeJL5HXyBWPAg==
-X-Gm-Gg: Acq92OFnd1y2p0EpjsikLyytpRstTNw/HZWaj+BEwm0+8dm79kzriEfzmoHTIxf6E+y
-	ah9u3jDJ2sRE9uKVkjxhf5gQGa94kpExmBLWIjLMbq5wi3KbeAdlLre+6y+Q2DELDio2qKsFdL/
-	+F1ZE98gOrytmXb50zWNh/fc1vi+UzQxRtX92lWJ3QChaNTiibW3xy5IqEwBRaiTe+Z9a3GjOLc
-	3q5iso6HsLRf74rWwXM2ob5kn9d+mZBnHmQHwFUdSPCxwVXRJQTsfZPNDHECyEkrtAjYr6y9jMo
-	cdtDn9lVtLHnTzp46bhmAbjfpUOSwNJTJzi5cutY1AP16ItCzOiKOxD07/3Df1tYppti5UMKZ2p
-	YfuDoezl6kcI3cQDcOrhT339Hoyg5OcqPmyoRBrSg9hOCM3EkqD+5o+l/SPz+CTEgyS4SzhcfBO
-	lhJyERRwimxOvX5r728mScbfYMAyn4BFu4zFCNTqGCxVeoUaijXbDBGGuf2EjqTPXQezF4YBkxv
-	JlFtPlETjtyHFCqJOnfxsQDztE=
-X-Received: by 2002:a05:690c:e4d5:b0:7bd:7c16:170e with SMTP id 00721157ae682-7c10361e899mr7846487b3.22.1778290112848;
-        Fri, 08 May 2026 18:28:32 -0700 (PDT)
+        bh=yWj5ursltytuP3V2z8QD30tjKXeAKe24G88sbyAg5Pg=;
+        b=SZgpw5uZQH80uA3c5pfg14D5+hO7ypYrmdEDQT2t0NIgR9fnn07T2rB9SRG1t1mkpo
+         DL9FHbqqmeTaG31IQ0pfW0v+eSuIgUIikZvvW1rFLozgmFZJj+UqX8hyszxrGtu3qGNi
+         dfEm3Pj0VtFisYZYwBBLbUWA2GiarZGrxOReAh21+9a+Kw8M2mztY7Y0Dio3a/lqDp5B
+         dqP6f4tLIxHkjn9gPmoagSfym8tv78ADXwoVBVT2+/L7QsPPVH/Mg4XTk/nJGZz9nBAS
+         TU+d+NeMg4uLAJQqL57jkcGHOp9wHphyMkm42p0qUo/WJ0mHaTrQlP4es29uMvvDVgh9
+         06Gg==
+X-Gm-Message-State: AOJu0Yz+tQttFZCtL3S1FJwCH0h4xb7utSz7MEudKxA385r2qtjHxMys
+	kl8kWq8337lEW68Bkqy2L4GIp0Ia1+rpRkHWou/4NY5U06+C4loyj+BprlprNA==
+X-Gm-Gg: Acq92OFIPJBA0g+tmA3uTpYN7vokwXYh9CZYLA0YN/gsIfrkwriqYZ0uLrnH23EUKwr
+	9/tr8S204bblvHCiMxh3fubev6x8RlQxPtlW5YMYAo/hdMtv9HzsfLXyA22X2zCv1QG0aCZErgV
+	Z6rkFBYED6AhyPWrSGN6I86iiPBgg70cU7AzWHCkJPPX9cfMRPRBzb0Tv3mor2xn37dU+gIjTFL
+	OSthzkg6z2kQK4A+uRhKZXzwOTpagsXtH2ZsLrAMQga0cKcajwGNF5R5Rum1n2d+DJqbF+8hU+3
+	Zg0O3SdhppDPRtTkj0zFCw+hvqhodrPnMOAeqFyu5bLvRjkEwtZDz33FRxVpFa6C/QpVdQdhHfC
+	Sz93ld7mWeiBz3ofcU/0Usx/K8xpFBpQrgmjk/0IlXngfiE0nFW3SM9tpS19SITWJDxZMcfNYyK
+	lgOUktj01PrxLSqem4tVpigasbmGH8mQFHNCHSkzA9nIuvpvgptmXf5Ekx21cZdH51PHjOTqub2
+	JFeFSgIpGMyLfktmtOocmjbXxU=
+X-Received: by 2002:a05:690c:c511:b0:7bd:a4dc:c25a with SMTP id 00721157ae682-7bdf5f2b7fcmr161286597b3.49.1778290113644;
+        Fri, 08 May 2026 18:28:33 -0700 (PDT)
 Received: from localhost.localdomain (h231.205.88.75.dynamic.ip.windstream.net. [75.88.205.231])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd66888cc7sm113210917b3.44.2026.05.08.18.28.31
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd66888cc7sm113210917b3.44.2026.05.08.18.28.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 18:28:32 -0700 (PDT)
+        Fri, 08 May 2026 18:28:33 -0700 (PDT)
 From: johnhaugabook@gmail.com
 To: cygwin-patches@cygwin.com
 Cc: John Haugabook <johnhaugabook@gmail.com>
-Subject: [PATCH 5/7] cygwin-htdocs: website fresh coat of paint
-Date: Fri,  8 May 2026 21:27:47 -0400
-Message-ID: <20260509012815.1157-6-johnhaugabook@gmail.com>
+Subject: [PATCH 6/7] cygwin-htdocs: website fresh coat of paint
+Date: Fri,  8 May 2026 21:27:48 -0400
+Message-ID: <20260509012815.1157-7-johnhaugabook@gmail.com>
 X-Mailer: git-send-email 2.49.0.windows.1
 In-Reply-To: <20260509012815.1157-1-johnhaugabook@gmail.com>
 References: <20260509012815.1157-1-johnhaugabook@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,KAM_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,KAM_ASCII_DIVIDERS,KAM_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: John Haugabook <johnhaugabook@gmail.com>
 
-logo.svg: use only svg elements, add to top.html
+responsive: add responsive style section, update html to `head.html` template
 
 Signed-off-by: John Haugabook <johnhaugabook@gmail.com>
 ---
- logo.svg | 170 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- top.html |   3 +
- 2 files changed, 173 insertions(+)
- create mode 100644 logo.svg
+ acronyms/index.html                           |   3 +-
+ contrib.html                                  |   3 +-
+ contrib/dll.html                              |   3 +-
+ cygwin-api.html                               |   3 +-
+ cygwin-api/index.html                         |   3 +-
+ cygwin-ug-net.html                            |   3 +-
+ docs.html                                     |   3 +-
+ donations.html                                |   3 +-
+ faq.html                                      |   3 +-
+ git.html                                      |   3 +-
+ goldstars/index.html                          |   3 +-
+ goldstars/src/index.html.tpl                  |   3 +-
+ head.html                                     |   3 +
+ index.html                                    |   3 +-
+ install.html                                  |   3 +-
+ irc.html                                      |   3 +-
+ licensing.html                                |   3 +-
+ links.html                                    |   3 +-
+ lists.html                                    |   3 +-
+ mirrors-report.html                           |   3 +-
+ mirrors.html                                  |   3 +-
+ navbar.html                                   |   7 +
+ news.html                                     |   3 +-
+ package-server.html                           |   3 +-
+ package-upload.html                           |   3 +-
+ packages.html                                 |   3 +-
+ packages/index.html                           |   3 +-
+ packages/package_docs.html                    |   3 +-
+ packages/package_list.html                    |   3 +-
+ packages/src_package_list.html                |   3 +-
+ packaging-contributors-guide.html             |   3 +-
+ packaging-hint-files.html                     |   3 +-
+ packaging-package-files.html                  |   3 +-
+ packaging/build.html                          |   3 +-
+ packaging/cygport_tips.html                   |   3 +-
+ packaging/key.html                            |   3 +-
+ packaging/repos.html                          |   3 +-
+ .../trusted-maintainer-policy-manual.html     |   3 +-
+ problems.html                                 |   3 +-
+ profiling/index.html                          |   1 +
+ setup-packaging-historical.html               |   3 +-
+ snapshots/index.html                          |   3 +-
+ style.css                                     | 248 ++++++++++++++++++
+ who.html                                      |   3 +-
+ 44 files changed, 299 insertions(+), 80 deletions(-)
+ create mode 100644 head.html
 
-diff --git a/logo.svg b/logo.svg
+diff --git a/acronyms/index.html b/acronyms/index.html
+index e0fbad71..392755c4 100755
+--- a/acronyms/index.html
++++ b/acronyms/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="../head.html" -->
+     <title>Cygwin Acronyms</title>
+   </head>
+ 
+diff --git a/contrib.html b/contrib.html
+index 0f441474..cec6b301 100755
+--- a/contrib.html
++++ b/contrib.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Contribution</title>
+   </head>
+ <body>
+diff --git a/contrib/dll.html b/contrib/dll.html
+index b442f63a..af9456bd 100755
+--- a/contrib/dll.html
++++ b/contrib/dll.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="/style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Cygwin Contribution</title>
+   </head>
+ <body>
+diff --git a/cygwin-api.html b/cygwin-api.html
+index 604973db..d6ef641d 100644
+--- a/cygwin-api.html
++++ b/cygwin-api.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin API Reference</title>
+   </head>
+ 
+diff --git a/cygwin-api/index.html b/cygwin-api/index.html
+index 1d9c5d1c..17008f72 100755
+--- a/cygwin-api/index.html
++++ b/cygwin-api/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="../head.html" -->
+     <title>Cygwin API Reference</title>
+   </head>
+ 
+diff --git a/cygwin-ug-net.html b/cygwin-ug-net.html
+index 19aba90d..71f4b8b8 100755
+--- a/cygwin-ug-net.html
++++ b/cygwin-ug-net.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin User's Guide</title>
+   </head>
+ 
+diff --git a/docs.html b/docs.html
+index ca50b178..ce9e4eb8 100755
+--- a/docs.html
++++ b/docs.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Documentation</title>
+   </head>
+ 
+diff --git a/donations.html b/donations.html
+index f8a83a58..464fb79d 100755
+--- a/donations.html
++++ b/donations.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Donations</title>
+     <meta name="robots" content="nofollow"/>
+   </head>
+diff --git a/faq.html b/faq.html
+index b8550a37..d066ffc4 100755
+--- a/faq.html
++++ b/faq.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin FAQ</title>
+   </head>
+ 
+diff --git a/git.html b/git.html
+index cd05a8d1..80406b58 100755
+--- a/git.html
++++ b/git.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin in Git</title>
+   </head>
+ 
+diff --git a/goldstars/index.html b/goldstars/index.html
+index df32925b..66c58bcc 100755
+--- a/goldstars/index.html
++++ b/goldstars/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-  <link rel="stylesheet" type="text/css" href="../style.css" />
++  <!--#include virtual="../head.html" -->
+   <link rel="stylesheet" type="text/css" href="style.css" />
+   <title>Cygwin Gold Stars</title>
+ </head>
+diff --git a/goldstars/src/index.html.tpl b/goldstars/src/index.html.tpl
+index 19542fd0..a71e6d6f 100644
+--- a/goldstars/src/index.html.tpl
++++ b/goldstars/src/index.html.tpl
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-  <link rel="stylesheet" type="text/css" href="../style.css" />
++  <!--#include virtual="../head.html" -->
+   <link rel="stylesheet" type="text/css" href="style.css" />
+   <title>Cygwin Gold Stars</title>
+ </head>
+diff --git a/head.html b/head.html
 new file mode 100644
-index 00000000..6d77698f
+index 00000000..3332439c
 --- /dev/null
-+++ b/logo.svg
-@@ -0,0 +1,170 @@
-+<?xml version="1.0" encoding="UTF-8"?>
-+<!-- logo.svg -->
-+<!-- SVG graphic created in Adobe Illustrator. -->
-+<svg id="logo"
-+ xmlns="http://www.w3.org/2000/svg"
-+ xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 143.97 148.22">
-+ <!-- Set SVG styles, and define gradients used. -->
-+ <defs>
-+  <!-- Style tag similar to embedded style tag of HTML. -->
-+  <style>.cls-1{fill:url(#Sharp-C_Inner-Gradient-2);}.cls-2{fill:url(#Green-Arrow_Linear-gradient-2);}.cls-3{fill:url(#Green-Arrow_Linear-gradient-5);opacity:.7;}.cls-4{fill:url(#Sharp-C_Main-Feather-2);}.cls-4,.cls-5{opacity:.5;}.cls-6,.cls-7,.cls-8{fill:none;}.cls-9{fill:url(#Green-Arrow_Linear-gradient-4);}.cls-10{fill:#06bb13;}.cls-10,.cls-7,.cls-11,.cls-8{isolation:isolate;}.cls-7{opacity:.05;stroke:#666;stroke-width:3px;}.cls-7,.cls-8{stroke-miterlimit:10;}.cls-12{fill:url(#Green-Arrow_Linear-gradient-3);}.cls-13{clip-path:url(#clippath-1);}.cls-14{fill:url(#Green-Arrow_Left-Edge-Gradient);}.cls-15{fill:url(#Highlight);}.cls-16{fill:url(#Green-Arrow_Bottom-Gradient);}.cls-5{fill:url(#Highlight_2);}.cls-17{fill:url(#Green-Arrow_Linear-gradient);}.cls-18{clip-path:url(#clippath);}.cls-8{stroke:#1a1a1a;stroke-linecap:round;stroke-width:2px;}</style>
-+  <!-- Shape for "C", clipping all elements nested in layers starting with Sharp-C for C#. -->
-+  <clipPath id="clippath">
-+   <!-- Clip with shape so nothing extends past "C" outline -->
-+   <path id="Sharp-C_Main-Outline" class="cls-6" d="M39.5,113.43c-.05,0-.1-.04-.1-.1V34.89c0-.05.04-.1.1-.1h64.62s34.49-15.12,34.49-15.64-34.49-13.75-34.49-13.75H35.6c-16.7,0-30.24,13.16-30.24,29.39v78.64c0,16.23,13.54,29.39,30.24,29.39h68.52s34.49-14.15,34.49-14.67-34.49-14.72-34.49-14.72H39.5Z"/>
-+  </clipPath>
-+  <!-- Define gradients for "C" shape. -->
-+  <!-- Inner-most gradient applied to majority of "C" shape. -->
-+  <linearGradient id="Sharp-C_Inner-Gradient-2" x1="16.01" y1="128.92" x2="125.94" y2="18.98" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#1a1a1a"/>
-+   <stop offset=".26" stop-color="#333"/>
-+   <stop offset=".39" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset=".56" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset=".79" stop-color="#333" stop-opacity=".5"/>
-+   <stop offset="1" stop-color="#000" stop-opacity=".5"/>
-+  </linearGradient>
-+  <!-- Cover the "C" shape to mimic a feather effect so th edges are softened. -->
-+  <linearGradient id="Sharp-C_Main-Feather-2" x1="13.75" y1="133.75" x2="133.48" y2="14.01" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#1a1a1a" stop-opacity=".9"/>
-+   <stop offset=".26" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset=".39" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset=".56" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset=".79" stop-color="#333" stop-opacity=".9"/>
-+   <stop offset="1" stop-color="#4d4d4d"/>
-+  </linearGradient>
-+  <!-- Top left highlight of "C" shape. This is what really tricks the eye into seeing a 3D effect. -->
-+  <linearGradient id="Highlight" x1="11.57" y1="18.81" x2="33.35" y2="18.81" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#fff" stop-opacity=".1"/>
-+   <stop offset=".49" stop-color="#fff" stop-opacity=".5"/>
-+   <stop offset="1" stop-color="#f2f2f2" stop-opacity=".1"/>
-+  </linearGradient>
-+  <!-- Shape for ">", clipping all elements nested in layers starting with Green-Arrow. -->
-+  <clipPath id="clippath-1">
-+   <!-- Clip with shape so nothing extends past ">" outline -->
-+   <path id="Green-Arrow_Main-Outline-2" class="cls-6" d="M45.05,97.26l18.45-22.84c.15-.18.15-.44,0-.62l-18.45-22.84c-.3-.37.04-.9.5-.78l94.37,23.46c.5.12.5.83,0,.95l-94.37,23.46c-.46.11-.79-.42-.5-.78Z"/>
-+  </clipPath>
-+  <!-- Define gradients for ">" shape. -->
-+  <!-- This is inner-most gradient, taking up most of the space. -->
-+  <linearGradient id="Green-Arrow_Linear-gradient" x1="52.09" y1="74.11" x2="129.4" y2="74.11" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#08fb1a"/>
-+   <stop offset=".49" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset="1" stop-color="#08fb1a"/>
-+  </linearGradient>
-+  <!-- This is top-most gradient along the edge. -->
-+  <linearGradient id="Green-Arrow_Linear-gradient-2" x1="129.84" y1="98.31" x2="49.98" y2="19.89" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset=".49" stop-color="#9cfda3" stop-opacity=".9"/>
-+   <stop offset="1" stop-color="#08fb1a"/>
-+  </linearGradient>
-+  <!-- Left most gradient on end portion for 3D effect. -->
-+  <linearGradient id="Green-Arrow_Left-Edge-Gradient" x1="34.01" y1="66.12" x2="58.1" y2="82.99" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#047b0d" stop-opacity=".9"/>
-+   <stop offset=".25" stop-color="#06bb13" stop-opacity=".9"/>
-+   <stop offset=".5" stop-color="#08fb1a" stop-opacity=".2"/>
-+   <stop offset=".58" stop-color="#08fb1a" stop-opacity=".23"/>
-+   <stop offset=".7" stop-color="#08fb1a" stop-opacity=".3"/>
-+   <stop offset=".85" stop-color="#08fb1a" stop-opacity=".43"/>
-+   <stop offset="1" stop-color="#08fb1a" stop-opacity=".6"/>
-+  </linearGradient>
-+  <!-- Left edge but closer to the top-most gradient. -->
-+  <linearGradient id="Green-Arrow_Linear-gradient-3" x1="34.71" y1="85.95" x2="60.2" y2="64.56" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#9cfda3" stop-opacity=".9"/>
-+   <stop offset=".25" stop-color="#08fb1a"/>
-+   <stop offset=".6" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset=".73" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset=".81" stop-color="#07f919" stop-opacity=".89"/>
-+   <stop offset=".85" stop-color="#07f519" stop-opacity=".87"/>
-+   <stop offset=".89" stop-color="#07ee18" stop-opacity=".82"/>
-+   <stop offset=".92" stop-color="#07e417" stop-opacity=".76"/>
-+   <stop offset=".95" stop-color="#06d816" stop-opacity=".68"/>
-+   <stop offset=".98" stop-color="#06c814" stop-opacity=".59"/>
-+   <stop offset="1" stop-color="#06bb13" stop-opacity=".5"/>
-+  </linearGradient>
-+  <!-- Bottom-most gradient of ">" shape at edge of bottom surface. -->
-+  <linearGradient id="Green-Arrow_Linear-gradient-4" x1="92.21" y1="84.48" x2="92.93" y2="87.18" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#06bb13" stop-opacity=".9"/>
-+   <stop offset=".25" stop-color="#06bb13" stop-opacity=".9"/>
-+   <stop offset=".32" stop-color="#05b712" stop-opacity=".9"/>
-+   <stop offset=".38" stop-color="#05ac11" stop-opacity=".9"/>
-+   <stop offset=".43" stop-color="#049a0f" stop-opacity=".9"/>
-+   <stop offset=".48" stop-color="#04810d" stop-opacity=".9"/>
-+   <stop offset=".49" stop-color="#047b0d" stop-opacity=".9"/>
-+   <stop offset="1" stop-color="#047b0d" stop-opacity=".9"/>
-+  </linearGradient>
-+  <!-- Upper gradient of the bottom edge of ">" shape. -->
-+  <linearGradient id="Green-Arrow_Bottom-Gradient" x1="91.73" y1="83.44" x2="92.22" y2="85.41" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#9cfda3" stop-opacity=".9"/>
-+   <stop offset=".1" stop-color="#08fb1a"/>
-+   <stop offset=".14" stop-color="#08fb1a" stop-opacity=".94"/>
-+   <stop offset=".18" stop-color="#08fb1a" stop-opacity=".91"/>
-+   <stop offset=".25" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset=".46" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset=".49" stop-color="#08fb1a" stop-opacity=".9"/>
-+   <stop offset="1" stop-color="#06bb13" stop-opacity=".9"/>
-+  </linearGradient>
-+  <!-- Gradient to apply a feather effect on left edge to soften the edges. -->
-+  <linearGradient id="Green-Arrow_Linear-gradient-5" x1="33.58" y1="64.01" x2="58.88" y2="85.23" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#08fb1a" stop-opacity=".5"/>
-+   <stop offset=".5" stop-color="#08fb1a"/>
-+   <stop offset=".8" stop-color="#9cfda3"/>
-+   <stop offset=".95" stop-color="#9cfda3" stop-opacity=".8"/>
-+   <stop offset="1" stop-color="#08fb1a" stop-opacity=".8"/>
-+  </linearGradient>
-+  <!-- Highlight at the top-left portion of the ">" shape. -->
-+  <linearGradient id="Highlight_2" x1="46.14" y1="52.93" x2="52.53" y2="52.93" gradientTransform="translate(3.33 -2.89) rotate(3.52)" gradientUnits="userSpaceOnUse">
-+   <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
-+   <stop offset=".49" stop-color="#fff"/>
-+   <stop offset="1" stop-color="#f2f2f2" stop-opacity=".5"/>
-+  </linearGradient>
-+ </defs>
-+ <!-- One group for the "C" and ">" shape. -->
-+ <g id="Logo-Icon">
-+  <!-- Elements for the "C" shape. -->
-+  <g id="Sharp-C">
-+   <g class="cls-18">
-+    <g id="Sharp-C_Elements">
-+     <!-- At the very back of rendered SVG; ensures shape is solid color. -->
-+     <path id="Sharp-C_Main-Background" class="cls-11" d="M39.5,113.43c-.05,0-.1-.04-.1-.1V34.89c0-.05.04-.1.1-.1h64.62s34.49-15.12,34.49-15.64-34.49-13.75-34.49-13.75H35.6c-16.7,0-30.24,13.16-30.24,29.39v78.64c0,16.23,13.54,29.39,30.24,29.39h68.52s34.49-14.15,34.49-14.67-34.49-14.72-34.49-14.72H39.5Z"/>
-+     <!-- The edges around the "C" are a solid color -->
-+     <path id="Sharp-C_Outer-Edge_BackGround" class="cls-11" d="M103.38,9.4c9.2,3.53,19,7.35,25.56,9.97-7.12,3.24-17.84,7.99-25.66,11.42h-63.78c-2.26,0-4.1,1.84-4.1,4.1v78.44c0,2.26,1.84,4.1,4.1,4.1h63.83c7.79,3.21,18.48,7.66,25.62,10.71-7.13,3.04-17.83,7.48-25.62,10.68H35.6c-14.47,0-26.24-11.39-26.24-25.39V34.79c0-14,11.77-25.39,26.24-25.39h67.78M104.12,5.4H35.6c-16.7,0-30.24,13.16-30.24,29.39v78.64c0,16.23,13.54,29.39,30.24,29.39h68.52s34.49-14.15,34.49-14.67-34.49-14.72-34.49-14.72H39.5c-.05,0-.1-.04-.1-.1V34.89c0-.05.04-.1.1-.1h64.62s34.49-15.12,34.49-15.64-34.49-13.75-34.49-13.75h0Z"/>
-+     <!-- Edge of "C" ensuring solid color is applied when gradients are not 100% opacity. -->
-+     <path id="Sharp-C_Inner-Background" class="cls-8" d="M35.6,137.82c-13.92,0-25.24-10.94-25.24-24.39V34.79c0-13.45,11.32-24.39,25.24-24.39h67.59c8.16,3.13,16.8,6.49,23.2,9.03-6.39,2.89-15.09,6.75-23.32,10.36h-63.57c-2.81,0-5.1,2.29-5.1,5.1v78.44c0,2.81,2.29,5.1,5.1,5.1h63.63c8.2,3.38,16.87,7,23.26,9.71-6.39,2.71-15.06,6.31-23.26,9.68H35.6Z"/>
-+     <!-- Overlap outer edge so it blends with the gradients. -->
-+     <path id="Sharp-C_Outer-Edge-Feather" class="cls-7" d="M103.43,139.32H35.6c-14.75,0-26.74-11.61-26.74-25.89V34.79c0-14.28,12-25.89,26.74-25.89h67.87l.26.1c8.58,3.29,17.04,6.59,23.21,9.04l3.29,1.3-3.22,1.46c-6.17,2.79-14.67,6.57-23.33,10.37l-.29.13h-63.89c-1.98,0-3.6,1.61-3.6,3.6v78.44c0,1.98,1.61,3.6,3.6,3.6h63.93l.27.11c8.68,3.58,17.17,7.12,23.28,9.72l3.25,1.38-3.25,1.38c-6.13,2.6-14.61,6.12-23.27,9.68l-.27.11ZM35.6,11.9c-13.09,0-23.74,10.27-23.74,22.89v78.63c0,12.62,10.65,22.89,23.74,22.89h67.24c7.11-2.92,14.08-5.81,19.7-8.18-5.62-2.37-12.59-5.27-19.71-8.21h-63.33c-3.64,0-6.6-2.96-6.6-6.6V34.89c0-3.64,2.96-6.6,6.6-6.6h63.26c7.12-3.13,14.12-6.23,19.78-8.77-5.64-2.22-12.58-4.92-19.62-7.62H35.6Z"/>
-+     <!-- Inner-most portion of "C" shape, taking up majority of the element. -->
-+     <path id="Sharp-C_Inner-Gradient" class="cls-1 cls-11" d="M35.6,137.82c-13.92,0-25.24-10.94-25.24-24.39V34.79c0-13.45,11.32-24.39,25.24-24.39h67.59c8.16,3.13,16.8,6.49,23.2,9.03-6.39,2.89-15.09,6.75-23.32,10.36h-63.57c-2.81,0-5.1,2.29-5.1,5.1v78.44c0,2.81,2.29,5.1,5.1,5.1h63.63c8.2,3.38,16.87,7,23.26,9.71-6.39,2.71-15.06,6.31-23.26,9.68H35.6Z"/>
-+     <!-- Transparent element to soften all the edges of the "C" shape. -->
-+     <path id="Sharp-C_Main-Feather" class="cls-4 cls-11" d="M39.5,113.43c-.05,0-.1-.04-.1-.1V34.89c0-.05.04-.1.1-.1h64.62s34.49-15.12,34.49-15.64-34.49-13.75-34.49-13.75H35.6c-16.7,0-30.24,13.16-30.24,29.39v78.64c0,16.23,13.54,29.39,30.24,29.39h68.52s34.49-14.15,34.49-14.67-34.49-14.72-34.49-14.72H39.5Z"/>
-+     <!-- Top-left hightlight, selling 3D effect. -->
-+     <path id="Highlight-2" class="cls-15" d="M33.35,10.47c-.94.12-1.89.32-2.84.57-6.65,1.74-12.36,5.98-16.31,11.6-1.06,1.51-2.01,3.07-2.61,4.49-.32-.96,4.02-16.75,21.76-16.66Z"/>
-+    </g>
-+   </g>
-+  </g>
-+  <!-- Clip for ">" shape elements. -->
-+  <g id="Green-Arrow_Main-Outline">
-+   <g class="cls-13">
-+    <!-- Group for ">" shape elements. -->
-+    <g id="Green-Arrow_Elements">
-+     <!-- Solid background for ">" ensuring solid color. -->
-+     <path id="Green-Arrow_Main-Background" class="cls-10" d="M45.05,97.26l18.45-22.84c.15-.18.15-.44,0-.62l-18.45-22.84c-.3-.37.04-.9.5-.78l94.37,23.46c.5.12.5.83,0,.95l-94.37,23.46c-.46.11-.79-.42-.5-.78Z"/>
-+     <!-- Inner-most element, taking up moafority of ">" shape. -->
-+     <path id="Green-Arrow_Inner-Background" class="cls-17" d="M65.84,76.3c1.02-1.27,1.02-3.11,0-4.38l-13.76-17.03,77.31,19.22-77.31,19.22,13.75-17.03Z"/>
-+     <!-- Top element of ">" shape with gradient to mimic 3D edge. -->
-+     <path id="Green-Arrow_Top-Edge-Gradient" class="cls-2" d="M45.5,50.16l6.59,4.73,77.31,19.22,10.9-.04s-.02-.11-.07-.2c-.08-.15-.22-.2-.26-.22s-94.48-23.49-94.48-23.49Z"/>
-+     <!-- Outside element of the left edge for ">" shape with fradient to mimic 3D edge. -->
-+     <path id="Green-Arrow_Left-Edge-Gradient-2" class="cls-14" d="M49.17,52.79s-3.56-2.63-3.67-2.63-.35.04-.45.19-.12.4-.06.5,18.35,22.75,18.41,22.82.14.15.17.23.04.08.04.2-.03.18-.06.23-.05.07-.07.1l-.06.07-17.79,22.03s-.52.64-.57.71-.17.32-.09.49.09.15.09.15c0,0,.07-.13.09-.17s.28-.38.32-.43,18.74-23.09,18.78-23.14c.02-.02.08-.1.16-.2.05-.06.1-.12.14-.18.05-.09.09-.18.1-.26.01-.06,0-.13,0-.19,0-.23-.07-.44-.12-.57-.02-.03-.04-.06-.05-.09-.07-.12-.12-.17-.16-.22-.04-.06-13.19-17.08-13.3-17.22s-.68-.79-.83-.95-1.27-1.25-1.32-1.36c-.08-.11-.15-.23-.15-.23l-.17-.32s.3.22.33.24.26.19.26.19Z"/>
-+     <!-- Upper portion of the ">" shape's left edge with gradient. -->
-+     <path id="Green-Arrow_Left-Gradient" class="cls-12" d="M45.01,98.23l7.08-4.9,13.75-17.03s.7-.72.76-1.99c.06-1.27-.36-1.77-.4-1.85s-.23-.38-.33-.5-13.78-17.06-13.78-17.06l-3.15-2.26-.36-.27s.19.36.26.48c.2.32,1.71,1.72,1.96,2.06s13.43,17.36,13.65,17.68c.04.04.08.12.12.21.03.08.06.16.08.26.05.25.06.55-.07.73-.22.32-19.25,23.72-19.25,23.72,0,0-.42.55-.31.74Z"/>
-+     <!-- Botom-most element of ">" shape at bottom of the edge.-->
-+     <path id="Green-Arrow_Bottom-Edge-Gradient" class="cls-9" d="M45.01,98.23l2.41-1.67c.14-.1,1.67-.54,1.95-.6s86.07-21.57,86.32-21.62,1.36-.24,1.36-.24l3.27-.04s0,.23-.12.36c-.01.01-.07.1-.18.13-.87.29-4.54,1.14-4.54,1.14,0,0-89.44,22.61-89.57,22.64s-.59.1-.68.07-.2-.18-.2-.18Z"/>
-+     <!-- Still bottom edge of ">" shape, but the upper portion of the bottom surface. -->
-+     <path id="Green-Arrow_Bottom-Gradient-2" class="cls-16" d="M52.09,93.33l-4.72,3.27s.08-.06.35-.15.71-.22.76-.24.55-.16.73-.21,1.35-.33,1.35-.33c0,0,84.61-21.2,84.77-21.23s.77-.16.89-.18.69-.14.81-.14v-.03s-7.64.03-7.64.03l-77.31,19.22Z"/>
-+     <!-- Covers the entire left edge with low opacity to soften the outlines so they blend better. -->
-+     <path id="Green-Arrow_Left-Feather" class="cls-3" d="M66.6,74.31c-.06,1.27-.77,1.99-.77,1.99l-13.75,17.03-7.08,4.9c-.04-.07,0-.21.06-.34-.01,0-.03-.01-.09-.15-.08-.17,0-.37.09-.49.05-.08.57-.71.57-.71l17.79-22.03s.04-.04.06-.07c.02-.03.05-.06.07-.1.03-.05.06-.11.06-.23s0-.11-.04-.2c-.03-.08-.11-.16-.17-.23-.06-.08-18.35-22.72-18.41-22.82-.07-.11-.05-.36.05-.51.11-.14.35-.19.46-.19.09,0,2.64,1.88,3.43,2.47l.05.03s.02.01.03.03l.06.03h0s.04.04.05.05c.01,0,.02.01.03.01,0,.01.01.01.01.01l2.92,2.1s13.69,16.95,13.78,17.06c.1.12.29.42.33.51.05.08.47.58.41,1.85Z"/>
-+     <!-- Top-left hightlight for the ">" shape. -->
-+     <path id="Highlight-3" class="cls-5" d="M52.03,55.25c-.06,0-.11-.02-.16-.06l-5.55-4.34c-.14-.1-.03-.23.1-.14l5.88,3.84c.14.1.16.37,0,.58-.07.08-.17.13-.27.12Z"/>
-+    </g>
-+   </g>
-+  </g>
-+ </g>
-+</svg>
-diff --git a/top.html b/top.html
-index 8d31a56d..08543164 100644
---- a/top.html
-+++ b/top.html
-@@ -1,4 +1,7 @@
- <div id="top">
-+  <div class="logo">
-+   <a href="/index.html"><img src="/logo.svg"></a>
-+  </div>
-   <div class="cartouche">
-    <h1 id="big-title">Cygwin</h1>
-    <p class="catchphrase">Get that <a href="https://www.linuxfoundation.org/">Linux</a> feeling - on Windows</p>
++++ b/head.html
+@@ -0,0 +1,3 @@
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
++<link rel="stylesheet" type="text/css" href="/style.css" />
+diff --git a/index.html b/index.html
+index 27c6fd68..21206ccc 100755
+--- a/index.html
++++ b/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin</title>
+   </head>
+ 
+diff --git a/install.html b/install.html
+index ec7a4815..0a35c1db 100755
+--- a/install.html
++++ b/install.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Installation</title>
+   </head>
+ 
+diff --git a/irc.html b/irc.html
+index 82a577a7..7574c44a 100755
+--- a/irc.html
++++ b/irc.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Mailing Lists</title>
+   </head>
+ 
+diff --git a/licensing.html b/licensing.html
+index 9e614a87..4d80d553 100755
+--- a/licensing.html
++++ b/licensing.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Licensing Terms</title>
+   </head>
+ 
+diff --git a/links.html b/links.html
+index 154e684c..a8e9114e 100755
+--- a/links.html
++++ b/links.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Related Sites</title>
+   </head>
+ 
+diff --git a/lists.html b/lists.html
+index 836207e3..f5e5c5e9 100755
+--- a/lists.html
++++ b/lists.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Mailing Lists</title>
+   </head>
+ 
+diff --git a/mirrors-report.html b/mirrors-report.html
+index 1a8f678a..d4a3daa1 100755
+--- a/mirrors-report.html
++++ b/mirrors-report.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Mirror Report</title>
+     <script src="packages/reports/sorttable.js"></script>
+   </head>
+diff --git a/mirrors.html b/mirrors.html
+index 18fdade1..99ca09e5 100755
+--- a/mirrors.html
++++ b/mirrors.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en-US" xml:lang="en-US">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Mirror Sites</title>
+   </head>
+ 
+diff --git a/navbar.html b/navbar.html
+index cf87aeb3..90b14966 100644
+--- a/navbar.html
++++ b/navbar.html
+@@ -1,3 +1,10 @@
++<!-- Responsive menu toggler -->
++<input type="checkbox" id="navbar-toggle" class="navbar-toggle" aria-hidden="true">
++<div id="hamburger-background">
++ <label for="navbar-toggle" class="hamburger-icon" role="button" aria-label="Toggle navigation menu" tabindex="0">
++   <span></span><span></span><span></span>
++ </label>
++</div>
+ <div class="cartouche" id="navbar">
+ <ul>
+   <li><a href="/index.html">Cygwin</a></li>
+diff --git a/news.html b/news.html
+index c4e7da3e..9eb3152a 100755
+--- a/news.html
++++ b/news.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Newsgroups</title>
+   </head>
+ 
+diff --git a/package-server.html b/package-server.html
+index cfdadf9a..640c6e35 100755
+--- a/package-server.html
++++ b/package-server.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-  <link rel="stylesheet" type="text/css" href="style.css" />
++  <!--#include virtual="head.html" -->
+ <title>Cygwin Package Server</title>
+ </head>
+ <body>
+diff --git a/package-upload.html b/package-upload.html
+index 8e656f10..318c8155 100755
+--- a/package-upload.html
++++ b/package-upload.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-<link rel="stylesheet" type="text/css" href="style.css" />
++<!--#include virtual="head.html" -->
+ <title>Uploading Packages to cygwin.com</title>
+ </head>
+ <body>
+diff --git a/packages.html b/packages.html
+index 95b3857d..ca9e2fe4 100755
+--- a/packages.html
++++ b/packages.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Packages</title>
+   </head>
+ 
+diff --git a/packages/index.html b/packages/index.html
+index ed7bc6bc..de46fe59 100755
+--- a/packages/index.html
++++ b/packages/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="/style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Cygwin Packages</title>
+   </head>
+ 
+diff --git a/packages/package_docs.html b/packages/package_docs.html
+index 632bb484..3f36659e 100755
+--- a/packages/package_docs.html
++++ b/packages/package_docs.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Cygwin-Specific Package Documentation</title>
+   </head>
+ 
+diff --git a/packages/package_list.html b/packages/package_list.html
+index aa73dea7..e0446329 100755
+--- a/packages/package_list.html
++++ b/packages/package_list.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="../head.html" -->
+     <title>Cygwin Package List</title>
+   </head>
+ 
+diff --git a/packages/src_package_list.html b/packages/src_package_list.html
+index bc007a45..c3ce73d2 100755
+--- a/packages/src_package_list.html
++++ b/packages/src_package_list.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="/style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Cygwin Source Package List</title>
+   </head>
+ 
+diff --git a/packaging-contributors-guide.html b/packaging-contributors-guide.html
+index 9aa815d0..5765716a 100755
+--- a/packaging-contributors-guide.html
++++ b/packaging-contributors-guide.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Package Contributor's Guide</title>
+   </head>
+ 
+diff --git a/packaging-hint-files.html b/packaging-hint-files.html
+index 17900ed3..ce8a5402 100755
+--- a/packaging-hint-files.html
++++ b/packaging-hint-files.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin package .hint files</title>
+   </head>
+ 
+diff --git a/packaging-package-files.html b/packaging-package-files.html
+index 23efb5e5..c0014335 100755
+--- a/packaging-package-files.html
++++ b/packaging-package-files.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin package files</title>
+   </head>
+ 
+diff --git a/packaging/build.html b/packaging/build.html
+index d5123ce3..cb04833f 100755
+--- a/packaging/build.html
++++ b/packaging/build.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-<link rel="stylesheet" type="text/css" href="../style.css" />
++<!--#include virtual="/head.html" -->
+ <title>Package build service</title>
+ </head>
+ <body>
+diff --git a/packaging/cygport_tips.html b/packaging/cygport_tips.html
+index 16ea5fe2..bca3c840 100755
+--- a/packaging/cygport_tips.html
++++ b/packaging/cygport_tips.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="/style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Tips for writing a .cygport file</title>
+   </head>
+ 
+diff --git a/packaging/key.html b/packaging/key.html
+index 0282cb77..11a1616a 100755
+--- a/packaging/key.html
++++ b/packaging/key.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-<link rel="stylesheet" type="text/css" href="../style.css" />
++<!--#include virtual="/head.html" -->
+ <title>Providing an SSH key</title>
+ </head>
+ <body>
+diff --git a/packaging/repos.html b/packaging/repos.html
+index 0def9973..a9f27612 100755
+--- a/packaging/repos.html
++++ b/packaging/repos.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-<link rel="stylesheet" type="text/css" href="../style.css" />
++<!--#include virtual="/head.html" -->
+ <title>git repositories for Cygwin packaging</title>
+ </head>
+ <body>
+diff --git a/packaging/trusted-maintainer-policy-manual.html b/packaging/trusted-maintainer-policy-manual.html
+index 81a8ea41..6129c88b 100755
+--- a/packaging/trusted-maintainer-policy-manual.html
++++ b/packaging/trusted-maintainer-policy-manual.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="/head.html" -->
+     <title>Trusted Maintainer Policy Guidelines</title>
+   </head>
+ 
+diff --git a/problems.html b/problems.html
+index 11f73bbc..714c3f0a 100755
+--- a/problems.html
++++ b/problems.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Reporting Cygwin Problems</title>
+   </head>
+ 
+diff --git a/profiling/index.html b/profiling/index.html
+index 23d2cd66..1c7180a0 100644
+--- a/profiling/index.html
++++ b/profiling/index.html
+@@ -1,6 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
++ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <title>Profiling Cygwin</title>
+diff --git a/setup-packaging-historical.html b/setup-packaging-historical.html
+index 12c8bdc0..fc01bd49 100755
+--- a/setup-packaging-historical.html
++++ b/setup-packaging-historical.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Historical Cygwin Packaging</title>
+   </head>
+ 
+diff --git a/snapshots/index.html b/snapshots/index.html
+index 927640d2..2b34964a 100755
+--- a/snapshots/index.html
++++ b/snapshots/index.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="../style.css" />
++    <!--#include virtual="../head.html" -->
+     <title>Cygwin Snapshots</title>
+   </head>
+ 
+diff --git a/style.css b/style.css
+index b7429c79..654d4551 100644
+--- a/style.css
++++ b/style.css
+@@ -627,3 +627,251 @@ table.grid td.failed
+   margin-left:auto;
+   margin-right:auto;
+ }
++
++/* PATCH */
++
++/* hamburger toggle (hidden checkbox) ------------------------------------ */
++.navbar-toggle
++{
++  position: absolute;
++  opacity: 0;
++  pointer-events: none;
++  width: 0;
++  height: 0;
++}
++
++/* Background for hamburger menu. */
++div#hamburger-background
++{
++  display: none;
++  position: fixed;
++  z-index: 1001; /* ensure it stays over navbar and can close */
++  right: 11px;
++  background-color: #80a0a0;
++  border-radius: 8px;
++  width: 50px;
++  height: 50px;
++}
++
++/* hamburger icon (3 stacked bars) - hidden on desktop, shown on small screens */
++.hamburger-icon
++{
++  display: none; /* shown via media query below */
++  position: fixed;
++  background-color: white;
++  top: 0.85em;
++  right: 16px;
++  width: 2.5em;
++  height: 2.5em;
++  padding: 0.5em;
++  box-sizing: border-box;
++  border: 1px solid #80a0a0;
++  border-radius: 4px;
++  cursor: pointer;
++  user-select: none;
++}
++
++.hamburger-icon span
++{
++  display: block;
++  width: 100%;
++  height: 3px;
++  margin: 3px 0;
++  background-color: #80a0a0;
++  border-radius: 2px;
++  transition: transform 0.25s ease, opacity 0.2s ease;
++}
++
++.hamburger-icon:hover
++{
++  background-color: #608080;
++}
++
++/* keyboard focus ring for accessibility */
++.navbar-toggle:focus-visible + .hamburger-icon
++{
++  outline: 2px solid white;
++  outline-offset: 2px;
++}
++
++@media (max-width: 800px) /* tablet display */
++{
++  /* Fit content to screen. */
++  #main
++  {
++    left: 0em;         /* overrides current style */
++    margin-right: 0em; /* overrides current style */
++  }
++
++  div#main
++  {
++    margin-left: 0px; /* overrides current style */
++    min-width: 20em;
++    width: 85%;
++  }
++
++  pre
++  {
++    width: fit-content;
++    overflow-x: scroll;
++  }
++
++  /* Show hamburger icon on small screens */
++  .hamburger-icon
++  {
++    display: block;
++  }
++
++  /* Show hamburger background */
++  div#hamburger-background
++  {
++    display: inline-block;
++    padding: 5px;   
++  }
++
++  /* Hide #navbar by default on small screens; reveal when toggled */
++  #navbar
++  {
++    position: fixed;
++    top: 2em;       /* below the hamburger icon */
++    left: 0;
++    right: 0;
++    max-width: none;   /* override desktop max-width */
++    max-height: calc(100vh - 3.25em);
++    overflow-y: auto;
++    z-index: 1000;
++    border-radius: 0;
++    transform: translateY(-110%);
++    transition: transform 0.25s ease;
++    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
++  }
++
++  /* Reveal navbar when checkbox is checked */
++  .navbar-toggle:checked ~ #navbar
++  {
++    transform: translateY(0);
++  }
++
++  /* Animate hamburger bars into an "X" when open */
++  .navbar-toggle:checked ~ .hamburger-icon span:nth-child(1)
++  {
++    transform: translateY(6px) rotate(45deg);
++  }
++
++  .navbar-toggle:checked ~ .hamburger-icon span:nth-child(2)
++  {
++    opacity: 0;
++  }
++
++  .navbar-toggle:checked ~ .hamburger-icon span:nth-child(3)
++  {
++    transform: translateY(-6px) rotate(-45deg);
++  }
++}
++
++@media (max-width: 450px) /* phone display */
++{
++  div#main
++  {
++    width: 100%;
++    padding-right: 10px;
++  }
++}
++
++/* global responsive rules ----------------------------------------------- */
++/* PATCH */
++/* Updated: 2026-05-05 - global responsive rules for tables, media, layout */
++
++/* Apply border-box so widths/paddings don't blow out their container */
++*, *::before, *::after
++{
++  box-sizing: border-box;
++}
++
++/* Prevent the page itself from horizontally scrolling */
++html, body
++{
++  max-width: 100%;
++  overflow-x: hidden;
++}
++
++/* Replaced media: images, video, iframes scale to their container */
++img, video, iframe, embed, object
++{
++  max-width: 100%;
++  height: auto;
++}
++
++/* Long URLs / unbroken strings should wrap rather than overflow */
++p, li, dd, dt, td, th, figcaption, blockquote
++{
++  overflow-wrap: anywhere;
++  word-break: break-word;
++}
++
++/* <pre> blocks: keep formatting but never overflow their container */
++pre
++{
++  max-width: 100%;
++  overflow-x: auto;
++  white-space: pre;
++}
++
++/* Tables ---------------------------------------------------------------- */
++
++/* Cap every table to its container; permit horizontal scroll if needed */
++table
++{
++  max-width: 100%;
++  /* Wrap the table in its own scroll context via display:block at narrow
++     widths (see media query below). On wide screens keep native table layout. */
++}
++
++/* Cells: allow word breaking so long URLs in cells don't force the table wide */
++table td, table th
++{
++  overflow-wrap: anywhere;
++  word-break: break-word;
++}
++
++/* On tablet and below, convert wide tables into a horizontally scrollable
++   block so the rest of the page (and the navbar) cannot be pushed off-screen.
++   This applies to ALL tables, not only the named ones. */
++@media (max-width: 800px)
++{
++  /* The table becomes a scroll container; its inner layout still renders
++     as a table because <thead>/<tbody>/<tr>/<td> keep their default display. */
++  table
++  {
++    display: block;
++    width: 100%;
++    overflow-x: auto;
++    -webkit-overflow-scrolling: touch;
++  }
++
++  /* Restore proper table semantics inside the scroll container so columns
++     still align. Wrapping the rows in an inner table-row-group keeps the
++     layout tabular while the outer block scrolls. */
++  table > caption
++  {
++    display: table-caption;
++  }
++
++  table > thead,
++  table > tbody,
++  table > tfoot
++  {
++    display: table-row-group;
++  }
++
++  table tr
++  {
++    display: table-row;
++  }
++
++  table th,
++  table td
++  {
++    display: table-cell;
++  }
++}
+diff --git a/who.html b/who.html
+index f5c4a989..786863bb 100755
+--- a/who.html
++++ b/who.html
+@@ -1,8 +1,7 @@
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-    <link rel="stylesheet" type="text/css" href="style.css" />
++    <!--#include virtual="head.html" -->
+     <title>Cygwin Community</title>
+   </head>
+ 
 -- 
 2.49.0.windows.1
 
