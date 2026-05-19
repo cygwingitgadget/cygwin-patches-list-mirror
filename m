@@ -1,43 +1,43 @@
 Return-Path: <SRS0=fysI=DQ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
-	by sourceware.org (Postfix) with ESMTPS id 31D8A4BB3BCC
-	for <cygwin-patches@cygwin.com>; Tue, 19 May 2026 23:46:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 31D8A4BB3BCC
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id D25634BB3BCC
+	for <cygwin-patches@cygwin.com>; Tue, 19 May 2026 23:51:42 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D25634BB3BCC
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 31D8A4BB3BCC
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1779234403; cv=none;
-	b=cY90pK3esmutUg4OBFYYlXQX6/32iR4MxriscYtEAXJa0aTwg9UmfS3VD+DWamHh24T0lict5e2U4FshN8pDM+04Lr9Ho6pqzYHvCoJEGb/R3zaxDi0O7NANIupZ58RvbaHhqB/4fHE1JWQSpGIZ5SHMZxW/ssGiaBAiknUqNgw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D25634BB3BCC
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1779234703; cv=none;
+	b=XSkziBICEm7bwamIfZOT7UQWHHXW8T/noM2yN4i8eDCVcn9EEAxRrgZ82Q1VXCpyhywz1gfarIb0f0sLjR24/MbtzI7AmBUQX6+BO99iCBHXWqBFCROHLc5d7VSzABaERItLaqTLRLdDC5HPuTA2s4Y20a2Pt0P1u5+gatU9yOw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1779234403; c=relaxed/simple;
-	bh=lVPH9YgjL3jroNN7j0Y8vB3WwIE5SeTlRt4upFa0Gu0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=vDjhMha3GUmdVCFYKDZh7UpHlt70A0WEub0D47HxM+agwiPok8IMbhF641/7BFS+uAvhgFF/Ulj1S6cY4v8RKJxB5IT1Uy89ZDkpuhCFYmZhm9o7DAW6gqLUIWax7dTEv8Znvbu+9LPBgCD1+FexD5U/HU4UuHmSfHhwrTWk5u8=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JJQrMAer
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 31D8A4BB3BCC
+	t=1779234703; c=relaxed/simple;
+	bh=dNls29N8L6iG4SJBYhf1aS+qF35Dtpx5BygYKnC3t6I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=ROOqE1O9E7/kic8PhK5cIhPaiRJraT3Lr4D6AHpILcbSYmSC2ELjXwqmPLdt30/hFMUdZYyYMOu+XFBNG+ZF1sB4sOagSBRpYNuLVz9w4vjTtJuBjOZqXZRmPDCtbhORHyyZ511PBNUUMTDhqRVfybpy0Lql04neeW5Xibw6T3w=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=jDi6pwtn
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D25634BB3BCC
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JJQrMAer
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260519234638638.LXSX.102121.HP-Z230@nifty.com>;
-          Wed, 20 May 2026 08:46:38 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=jDi6pwtn
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260519235140317.MLEC.17441.HP-Z230@nifty.com>;
+          Wed, 20 May 2026 08:51:40 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: fork: Call pthread::atforkprepare() in the constructor
-Date: Wed, 20 May 2026 08:46:22 +0900
-Message-ID: <20260519234631.19257-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: fork: Call pthread::atforkprepare() in lock_pthread()
+Date: Wed, 20 May 2026 08:51:21 +0900
+Message-ID: <20260519235133.19276-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1779234398;
- bh=Du57M8GtoVdEKrYBGxO2Jcm2Bw5Lt3t3M/ihb8drjXA=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1779234700;
+ bh=ctmQyp2djM4Elvyz4/eoDOhU/mRvbcKqZhLu3kB94wE=;
  h=From:To:Cc:Subject:Date;
- b=JJQrMAerF0Moj3WqIuS5wY5ZSMjCfxQuo9fb7pUT+YkOAwZSA3slKOWsZW4yy8fR2urQzfXS
- e4HRuP+HO/aUPY5EXKjVp6/iAbIPxHmcTcdpvPNLgEhVxiS9iYshoEDi6SF2ZAUnRk9QJJCHln
- rjLk0+uhnWG1DEiVBg8aZOxCss2/uQB65HCKu7gCNqREWO31mrai1ERPaNhbxuJVaEuAXLb0rm
- OA1VoimN9TnvWoUPnnQrrTlNbflADljAYET2AX6fFCtpnRY9P8H61Ai9S+Sr9ft+PracmWhbdB
- GdP9W+EM4U0mDSaktqNoYlUmDFrFnjTtBev998W4/shwjCWQ==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=jDi6pwtnBzVknCEdUq7K1zcPPhLZkqKMgLYFaEOkax6adUjpn8UdoIZgfdqZevvF58eYfPe9
+ fBwZ29ePAkm7cb5LSO3RkASqxsQqTbh1VplG4PZO7mf6o7K7ab+uXJHHzv+gur61PVz1kimHSW
+ B6/ziDp/4CEQ9yI57/6lWAwmNhXRohH6pgHgNvqjbcq+SdDFGH2ioMkG64839dXw15yHKV3z8x
+ EAZS6Rknl5JrBwOM7CC2OKrhWjBO7JAuNRx0gLzV+4Egg5IbougLWy60ZnXZx2IBVn90jgosI2
+ tRwfwnFhksBtYfsdEWbxxlBm8RyGHrJlDQmqJFXy/XTUxfHw==
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -67,6 +67,8 @@ Fixes: 5f515cf3d6e3 ("Cygwin: add _Fork() system call per POSIX.1-2024")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
+v2: Fix the commit title
+
  winsup/cygwin/local_includes/sigproc.h | 21 +++++++++++----------
  1 file changed, 11 insertions(+), 10 deletions(-)
 
