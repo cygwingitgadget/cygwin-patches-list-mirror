@@ -1,92 +1,196 @@
-Return-Path: <SRS0=2AmO=DS=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:2a])
-	by sourceware.org (Postfix) with ESMTPS id 7D5A04C91762
-	for <cygwin-patches@cygwin.com>; Thu, 21 May 2026 21:26:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7D5A04C91762
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7D5A04C91762
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1779398791; cv=none;
-	b=a4l7hfc+xHC5f1ky/gba61sAhrX1SyhTqJJYPZYMOrZfBMebC7U2yOGdXaJVbTowUlP89xSXIJeI9De9WQgTnCnOwLpV/QONooZDdoZZ05Low3ny/49yidIuKO0B2aYmAaxSD0YaaiSZWdPy6PcMX4Aj2qq3EsPI89pfbujMZik=
+Return-Path: <SRS0=Hoif=DT=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 1D78C4B92089
+	for <cygwin-patches@cygwin.com>; Fri, 22 May 2026 07:29:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1D78C4B92089
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1D78C4B92089
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1779434957; cv=none;
+	b=RNsNggYexdw+Uk626MzEBJYQmlVXyreuqpwIbL2ynUUlmiCo7w96rza1ydbYx0+lmdP7fUP2ZVmInTPYi8Tr5HBkQEUbCqJ+xZhcrteHI1n573XORv0RmjjtUp9zXsTfoeLKvfSRwjIAw0dt7ybJyzBCa6Q7NuGBTv+ysXTT2/M=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1779398791; c=relaxed/simple;
-	bh=rOzTLOklke+3Pd8SKQ2WH+gxS9VPkmtJ5/XbzRgKX6g=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=J/bDKyua090GjXM+1Qwe+Q8O47ZL7QrGphduuHJl9Hw817Mkx8LzdpYcIeT2hWyZ4BDKmq1yBgAZJ+75VDgvd2dVE9ugKUqOpQk8RN+7PVGPHpkGCGGEwpRQ9NJK+UyVByNEWsk+k3+sl88yG6S/W/Y45oUORJXZCUsV58/wkY4=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Y+zpEjZM
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7D5A04C91762
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Y+zpEjZM
-Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
-          id <20260521212627963.UFPU.3198.HP-Z230@nifty.com>;
-          Fri, 22 May 2026 06:26:27 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	t=1779434957; c=relaxed/simple;
+	bh=yMvUUy9Yg32IyZItarhlqfC1c+ZxZnZpIkusT+8S0Ck=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=strO7sBto5v+dDl3gvIbvHWm8oNnZGYh16jx0SYlPGOutQSzd4MH2ST3MqkWTA2xkMylRJn0ojs+P9jAiOlDT+f5oXvhzmp6TJY95MBA5yeyV0DS6b6UxPRyIdA5VmgurdJsA3yauh8mJp5tytVCG7gr4ro0S9Fy0buT9a1PcNA=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1D78C4B92089
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 64M7igaE098547;
+	Fri, 22 May 2026 00:44:42 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
+ via SMTP by m0.truegem.net, id smtpd7fNRa1; Fri May 22 00:44:37 2026
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Fix deadlock in console teardown that arises from pcon
-Date: Fri, 22 May 2026 06:26:10 +0900
-Message-ID: <20260521212621.130760-1-takashi.yano@nifty.ne.jp>
+Cc: Mark Geisert <mark@maxrnd.com>,
+        Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Cygwin: Implement 'reserved' marker in fdtable entries
+Date: Fri, 22 May 2026 00:28:19 -0700
+Message-ID: <20260522072913.574-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2026q2/014989.html>
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q2/014989.html>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1779398788;
- bh=cm+3Bj9CBhHA2iq7Q4H8vIOR5ygvxYiJZ4pIMJOstyI=;
- h=From:To:Cc:Subject:Date;
- b=Y+zpEjZMZqGNbSCS9bCSpAYKvJyzWZLLU4v1FVy6qLn0zzSL5C+V+750Ixwx6EYVpxEsRnpq
- mtNFWJZdKsGAqRPDBoRZT2wsOzXt45w93Hlz9xr9XrKu5bWxlxkrUTC5+WX5nwFGE/zU0Y1mYs
- 5aiviTTlW7s5TDf3guiOWKElHqvGuBhrmkTwO7MoEzEdSIvKFdgLgDBtyP9/dpLndO+0i8bdyn
- +E5NwlokYCwtMzH2maEReozJf0YnjjWzwLMt9G4IQlcLAgXFZhp9wWQgMqXCRjc5BjpDj8y3sV
- FT/qHuH4GPU5oy1YnePr4zJ/+Tiv22l9u6CaapFl9YgT6hjA==
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-When a console process originating from a pseudo console exits, the
-current sequence is as follows:
+The existing logic for open() assumes an entry is always available in
+the fdtable for a newly-created file.  The fdtable is extended if needed
+up to OPEN_MAX in size.  Stress testing has found a situation where, if
+there is no fdtable entry available, the file is created (by Windows)
+but cannot be referenced by a Cygwin fd.
 
-  1) atexit handlers (pcon_handover_proc) called. This also closes
-     parent_pty_input_mutex which is introduced by the commit
-     c4fb720afcf1.
-  2) close_all_files() is called via _exit(). This terminates
-     cons_master_thread.
+Investigation found the fdtable entry was not obtained until after low-
+level operations had been done.  If the fdtable was full, the problem
+situation occurs.  The solution is to obtain the fd earlier in open().
 
-parent_pty_input_mutex is referenced in cons_master_thread, so
-cons_master_thread may still use the mutex after it has been closed.
-This can lead to undesired behaviour, including a deadlock. Instead
-of registering pcon_hand_over_proc() as an atexit handler, this
-patch calls pcon_handover_proc() at a point in fhandler_console::close
-where cons_master_thread has already terminated, ensuring that no
-other thread accesses the mutex.
+Then it was realized that there is no multi-thread protection of the
+fdtable entries.  The fdtable itself can be locked and unlocked, but
+the fdtable entries are either NULL (unused) or non-NULL (pointer to
+fhandler_base structure associated with that fd).
 
-Addresses: https://github.com/msys2/msys2-runtime/issues/338
-Fixes: c4fb720afcf1 ("Cygwin: console: Use input_mutex in the parent PTY in master thread")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by:
+With the planned update to open(), there was now a larger timing window
+between obtaining the fdtable entry then associating the fhandler_base.
+There is no protection against another thread obtaining the same fdtable
+entry during that time.  This is true for any users of cygheap_fdnew;
+open() is just one of the syscalls that have a possibly problematic
+timing window.
+
+This patch implements a 'reserved' marker for fdtable entries.  That
+marker is an integer value equal to the fdtable entry index.  This leads
+to localized changes in dtable.h and cygheap.h as laid out below.
+
+The notion is that an fdtable entry provided by cygheap_fdnew is marked
+so that another thread can't obtain it.  Care is taken to reset the
+marker when the entry is no longer needed.  Actually, in the usual case
+the marker is overwritten with a pointer to an fhandler_base structure,
+by the reserving thread, as the syscall completes.
+
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Addresses: https://cygwin.com/pipermail/cygwin/2026-May/259664.html
+Signed-off-by: Mark Geisert <mark@maxrnd.com>
+Fixes: e859706578ba (* autoload.cc (NtCreateFile): Add.)
+
 ---
- winsup/cygwin/fhandler/console.cc | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ winsup/cygwin/local_includes/cygheap.h | 31 +++++++++++++++++++++-----
+ winsup/cygwin/local_includes/dtable.h  |  4 +++-
+ winsup/cygwin/syscalls.cc              | 14 +++++-------
+ 3 files changed, 35 insertions(+), 14 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index c76347f6f..6fd4cd965 100644
---- a/winsup/cygwin/fhandler/console.cc
-+++ b/winsup/cygwin/fhandler/console.cc
-@@ -2018,7 +2018,6 @@ fhandler_console::setup_pcon_hand_over ()
- 	if (get_console_process_id (owner, true, false, false, false))
- 	  {
- 	    inside_pcon = true;
--	    atexit (fhandler_console::pcon_hand_over_proc);
- 	    parent_pty = i;
- 	    parent_pty_input_mutex =
- 	      cygwin_shared->tty[i]->open_input_mutex (MAXIMUM_ALLOWED);
-@@ -2157,6 +2156,8 @@ fhandler_console::close (int flag)
-   CloseHandle (output_mutex);
-   output_mutex = NULL;
+diff --git a/winsup/cygwin/local_includes/cygheap.h b/winsup/cygwin/local_includes/cygheap.h
+index 74cfff652..1eccf6d36 100644
+--- a/winsup/cygwin/local_includes/cygheap.h
++++ b/winsup/cygwin/local_includes/cygheap.h
+@@ -576,9 +576,13 @@ class cygheap_fdmanip
+   fhandler_base *operator -> () const {return cygheap->fdtab[fd];}
+   bool isopen () const
+   {
+-    if (cygheap->fdtab[fd])
++    /* check fdtab entry present (i.e. non-NULL) and not a "reserved" marker */
++    if (cygheap->fdtab[fd] && cygheap->fdtab[fd] != (fhandler_base *)(int64_t) fd)
+       return true;
+-    set_errno (EBADF);
++    /* check fdtab entry is not present */
++    if (cygheap->fdtab[fd] == NULL)
++      set_errno (EBADF);
++    /* remaining case is fdtab entry present and is a "reserved" marker */
+     return false;
+   }
+ };
+@@ -595,7 +599,11 @@ class cygheap_fdnew : public cygheap_fdmanip
+     else
+       fd = cygheap->fdtab.find_unused_handle (seed_fd + 1);
+     if (fd >= 0)
+-      locked = lockit;
++      {
++        locked = lockit;
++        /* mark as "reserved" for open(), or other syscall, in progress */
++        cygheap->fdtab[fd] = (fhandler_base *)(int64_t) fd;
++      }
+     else
+       {
+ 	/* errno set by find_unused_handle */
+@@ -607,7 +615,18 @@ class cygheap_fdnew : public cygheap_fdmanip
+   ~cygheap_fdnew ()
+   {
+     if (cygheap->fdtab[fd])
+-      cygheap->fdtab[fd]->inc_refcnt ();
++      {
++        /* check if fdtab entry is a "reserved" marker */
++        if (cygheap->fdtab[fd] == (fhandler_base *)(int64_t) fd)
++          {
++            /* remove "reserved" marker */
++            cygheap->fdtab.lock ();
++            cygheap->fdtab[fd] = NULL;
++            cygheap->fdtab.unlock ();
++          }
++        else
++          cygheap->fdtab[fd]->inc_refcnt ();
++      }
+   }
+   void operator = (fhandler_base *fh) {cygheap->fdtab[fd] = fh;}
+ };
+@@ -620,7 +639,9 @@ public:
+   {
+     if (lockit)
+       cygheap->fdtab.lock ();
+-    if (fd >= 0 && fd < (int) cygheap->fdtab.size && cygheap->fdtab[fd] != NULL)
++    /* this is similar to ::isopen() above, but doesn't set_errno() on fail */
++    if (fd >= 0 && fd < (int) cygheap->fdtab.size && cygheap->fdtab[fd] &&
++	cygheap->fdtab[fd] != (fhandler_base *)(int64_t) fd)
+       {
+ 	this->fd = fd;
+ 	locked = lockit;
+diff --git a/winsup/cygwin/local_includes/dtable.h b/winsup/cygwin/local_includes/dtable.h
+index 7803fae1b..a434554fb 100644
+--- a/winsup/cygwin/local_includes/dtable.h
++++ b/winsup/cygwin/local_includes/dtable.h
+@@ -51,7 +51,9 @@ public:
+   inline int not_open (int fd)
+   {
+     lock ();
+-    int res = fd < 0 || fd >= (int) size || fds[fd] == NULL;
++    /* treat fds entry marked "reserved" same as not present fds entry */
++    int res = fd < 0 || fd >= (int) size ||
++              fds[fd] == NULL || fds[fd] == (fhandler_base *)(int64_t) fd;
+     unlock ();
+     return res;
+   }
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 7a8e5d4fd..e42771c18 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -1460,6 +1460,12 @@ open (const char *unix_path, int flags, ...)
  
-+  pcon_hand_over_proc ();
-+
-   WaitForSingleObject (shared_info_mutex, INFINITE);
-   if (--shared_info_state[unit] == 0 && shared_console_info[unit])
+   __try
      {
++      /* try to reserve a new fd now rather than later in this block */
++      cygheap_fdnew fd;
++
++      if (fd < 0)
++        __leave;		/* errno already set */
++
+       syscall_printf ("open(%s, %y)", unix_path, flags);
+       if (!*unix_path)
+ 	{
+@@ -1573,14 +1579,6 @@ open (const char *unix_path, int flags, ...)
+ 	try_to_bin (fh->pc, fh->get_handle (), DELETE,
+ 		    FILE_OPEN_FOR_BACKUP_INTENT);
+ 
+-      cygheap_fdnew fd;
+-
+-      if (fd < 0)
+-	{
+-	  fh->close();
+-	  __leave;		/* errno already set */
+-	}
+-
+       fd = fh;
+       if (fd <= 2)
+ 	set_std_handle (fd);
 -- 
 2.51.0
 
