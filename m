@@ -1,102 +1,90 @@
-Return-Path: <SRS0=Aef5=D2=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
-	by sourceware.org (Postfix) with ESMTPS id 0BA574BA2E3C
-	for <cygwin-patches@cygwin.com>; Fri, 29 May 2026 02:56:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0BA574BA2E3C
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0BA574BA2E3C
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780023384; cv=none;
-	b=QBzQ/NeXSWeD++iSuEP3Pn9EO9vxzJzUexKLNJ43XPOyyXdo3oiipSrxnMovEVbx8f2Cb/x1MPmRMyscDHCpQBt16XCMxWwVW++6mSg8kfHaFPjtoUoyT0ulJKUp9qL87PLbG3/+b3WrA0aD1aPNegxKg+WH6iBSsilqw7YjpR0=
+Return-Path: <SRS0=+170=D2=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo006.btinternet.com (btprdrgo006.btinternet.com [65.20.50.80])
+	by sourceware.org (Postfix) with ESMTP id 42C744BA2E2E
+	for <cygwin-patches@cygwin.com>; Fri, 29 May 2026 13:02:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 42C744BA2E2E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 42C744BA2E2E
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.80
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780059727; cv=none;
+	b=dS/MwZJauC0KNdgEE1JPUHV9Hub8wJmEI40Mol+0EU/RXfEhg2nDlunvHjKPzIf3dxpP2DgmUlf1xEyf6HPjZ5FWsOUWZu1R/RwKOBU5VBJxTyvXryMIuEMdy+w805mHuwbmb5jH2q7xKmMQ15onc5VHbwTcTV+YDNbI2Kp6zkU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780023384; c=relaxed/simple;
-	bh=X3kTM5w4am+T2IWHyQ8lRHCxG3EWkF+imxNJNUKSn1s=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=hyi2XuqxdtTpROhw5ODUla+IEsm8PmfxWvIwWdsoS33tXKrVLh1/bW4B20AoeaUM9gCKtUit4ejy6td7+dkaI9xig1ZjarJjAL9gPpp5+JEXEHTVLyd8WLLPCpcxQScbZRvyzxv/A1Q5ENXOvYboYQ4bAHcST/f3jO2sq3Dt7/I=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=mZWUnnRh
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0BA574BA2E3C
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=mZWUnnRh
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260529025622116.SHUR.117312.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 29 May 2026 11:56:22 +0900
-Date: Fri, 29 May 2026 11:56:20 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	t=1780059727; c=relaxed/simple;
+	bh=yjSt0M24DEWtaAD34fLZFhfrGsU4kNxJ6iSOLLMez1g=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=opffju5S8TPXfN6xbPPVaQpZagIWMkpdCSdo4MG1GUCnrswCKL6lOkBk+UY4PX/4t/vCWGKalOC6KbCGhBgusrXgYnD6K1z9AOAkP28sTJFXivRm5ZNw7/F8KdKdL3YgS6+PKcE0iBqB2fMZdKdZBsuOErhy0BIHamCuQxBTAxs=
+ARC-Authentication-Results: i=1; sourceware.org
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A03A62201586AF4
+X-Originating-IP: [83.105.142.8]
+X-OWM-Source-IP: 83.105.142.8
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTFwwtrzc739WTQmMosjf/vLZbtjCtlR5euThiEKnX0vViTKyNlggmKk4gcE4lPUvBR0Lc5Se5euMfOTgZ4oL4wZ38742v4QC1bWO90j3ArIfJUrrNkhsEJ3UHLK2PTp868T4TuOnsPYXGC9O4m2j4kZSkUMjaNQjmgQaQb0GGjT1huodlFZuui1m+NSDRqKgWMgKaad9B5dpKpSXkTfGPGtDWF2SBp37X7r+BgwUoqo0BMkxy+58Ho0Af5RKnUuy2/U9MofkgaykpbgGdSBl34iZFZFZe3z3MWcZYpB40lzdXGmPkP+GrZsHRybgA9h51b9BcRF0OQTc903jITrcUZZA9bxJB9Ynm29sQmL14lIXB5sHuztjjuEbI6p1PB0GTFmxfuoEU7sfQXWLX/1gcETueTKG1JAIg3ISct8YqPpeJEHE6/VLEk2bRISdNgm0yse3INu6rfZOxhJDDDl/arvLEOqseFWJ+E0lrUYuZkIySvhe+m/M1uaTWimviUR9xw7vZklEzdd0LOu0UZ1tKybKYAvVCgTD+5ojLJgQ/y44/7LNjKyO7W+CCnHPLvn7aP4hUmJLd6mJ9YWuMfUxtlzpTHoqX0z74azQew7JISrzt2sAMNsKZuuBYCmojiYHJW+tStIpAiXOcIVPP482JnmN6TdJOgWDI9DR4xUyf1Tgg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from tambora (83.105.142.8) by btprdrgo006.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A03A62201586AF4; Fri, 29 May 2026 14:01:46 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: detect pcon-backed pty for
- non-Cygwin-spawned children
-Message-Id: <20260529115620.1ae78cd8926d65720e97d850@nifty.ne.jp>
-In-Reply-To: <b11ddb3b-52c1-984d-6879-5257a2952b02@gmx.de>
-References: <pull.7.cygwin.1777561444611.gitgitgadget@gmail.com>
-	<20260505212503.fdf6b912b76c5cae97a1372c@nifty.ne.jp>
-	<b11ddb3b-52c1-984d-6879-5257a2952b02@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780023382;
- bh=04aYGdQlpacue8SKUB/rcRPQq5DUiprg2yC4VS3kBCQ=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=mZWUnnRhERc0kapzODrcazeOTHJwiuWex1IbRTDRcQHKDh4zSv9EsKxrh4Gfvv+dh7qhNSz1
- I5gXpGimmtoJqZEk3aWzREZHsaKhZsWEue5PFo54LEDncshSRBd0Umd16swo3lRqnakwf5P8Yz
- bipdCvGYN4adT41jgIjr4QtRgt/Lw0Y3sNFfhsubyL9SZ6D2kUL7nWJu2ujNk+I3EyXag96lrY
- fSwrrDlarOgNRIPAktAx6V4Qd3kOgrdB44YIfnNRu/uFrky0R+kaaCCiNbOD2atprfPzq+U9Ig
- p9vlH5BI8ianPfAriAeMyk4x9BwKYSB3Iz9MpKK6L8RMOz5w==
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Only compute BFD_LIBS if building dumper
+Date: Fri, 29 May 2026 14:01:40 +0100
+Message-ID: <20260529130140.1275824-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Thu, 28 May 2026 15:48:24 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Tue, 5 May 2026, Takashi Yano wrote:
-> 
-> > On Thu, 30 Apr 2026 15:04:04 +0000
-> > "Johannes Schindelin via GitGitGadget" wrote:
-> > > From: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > > 
-> > > diff --git a/winsup/cygwin/dtable.cc b/winsup/cygwin/dtable.cc
-> > > index 7303f7eac..ce29f4608 100644
-> > > --- a/winsup/cygwin/dtable.cc
-> > > +++ b/winsup/cygwin/dtable.cc
-> > > @@ -327,7 +327,17 @@ dtable::init_std_file_from_handle (int fd, HANDLE handle)
-> > >  	dev.parse (myself->ctty);
-> > >        else
-> > >  	{
-> > > -	  dev.parse (FH_CONSOLE);
-> > > +	  /* Check whether the inherited console is actually a pseudo
-> > > +	     console bridging a pty.  This happens when our non-Cygwin
-> > > +	     parent was itself spawned by a Cygwin process from a pty
-> > > +	     (e.g. bash spawning git.exe which then spawns vim).  In
-> > > +	     that case, connect to the pty slave instead of treating
-> > > +	     the handle as a real console. */
-> > > +	  int pcon_minor = cygwin_shared->tty.find_pcon_pty ();
-> > > +	  if (pcon_minor >= 0)
-> > > +	    dev.parse (FHDEV (DEV_PTYS_MAJOR, pcon_minor));
-> > > +	  else
-> > > +	    dev.parse (FH_CONSOLE);
-> > >  	  CloseHandle (handle);
-> > >  	  handle = INVALID_HANDLE_VALUE;
-> > 
-> > The lines:
-> > CloseHandle (handle);
-> > handle = INVALID_HANDLE_VALUE;
-> > are dropped in master branch. Do you think that these two lines
-> > are necessary for this patch when applying this patch to cygwin
-> > master branch?
-> 
-> Those two lines are not necessary, all added code ignores the handle
-> entirely.
+Don't bother trying to determine the flags needed to link the BFD
+library if we're not even building dumper.
 
-OK. I think this patch is not a bug fix but a behavioral change,
-so it should go only to the master branch. What do you think?
+(AC_NO_EXECUTABLES doesn't do what the name would simply suggest: It
+silently checks if a trivial program can link, and turns itself off if
+that suceeds.
 
-If so, the patch does not apply to master branch due to these
-two lines. Could you please update the patch for master branch?
+Tests which rely on linking are only made to fail by AC_NO_EXECUTABLES
+if that trivial link has failed (which OK, were probably going to fail
+anyway, but now you get the error 'link tests are not allowed after
+AC_NO_EXECUTABLES', which is perhaps slightly more informative when you
+are cross-compiling with a bootstrap compiler).)
 
-In addition, I would appreciate it if you could consider incorporating
-the two additional patches I posted earlier.
+Anyhow, if we're using a compiler which can't link executables, these
+instances of AC_CHECK_LIB will definitely fail.  But we can't possibly
+build dumper in that situation, so we'll be configuring with
+--disable-dumper, and doing those checks serves no purpose.
+---
+ winsup/configure.ac | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index ac96968e4..ad63cbf95 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -153,12 +153,14 @@ AC_ARG_ENABLE([dumper],
+ 
+ AM_CONDITIONAL(BUILD_DUMPER, [test "x$build_dumper" = "xyes"])
+ 
+-# libbfd.a doesn't have a pkgconfig file, so we guess what it's dependencies
+-# are, based on what's present in the build environment
+-BFD_LIBS="-lintl -liconv -liberty -lz"
+-AC_CHECK_LIB([sframe], [sframe_decode], [BFD_LIBS="${BFD_LIBS} -lsframe"])
+-AC_CHECK_LIB([zstd], [ZSTD_isError], [BFD_LIBS="${BFD_LIBS} -lzstd"])
+-AC_SUBST([BFD_LIBS])
++if test "x$build_dumper" != "xno"; then
++  # libbfd.a doesn't have a pkgconfig file, so we guess what it's dependencies
++  # are, based on what's present in the build environment
++  BFD_LIBS="-lintl -liconv -liberty -lz"
++  AC_CHECK_LIB([sframe], [sframe_decode], [BFD_LIBS="${BFD_LIBS} -lsframe"])
++  AC_CHECK_LIB([zstd], [ZSTD_isError], [BFD_LIBS="${BFD_LIBS} -lzstd"])
++  AC_SUBST([BFD_LIBS])
++fi
+ 
+ AC_CONFIG_FILES([
+     Makefile
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
