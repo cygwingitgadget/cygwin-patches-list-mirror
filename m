@@ -1,41 +1,50 @@
-Return-Path: <SRS0=0kWj=D3=m.gmane-mx.org=gocp-cygwin-patches@sourceware.org>
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-	by sourceware.org (Postfix) with ESMTPS id CE47B4BA23C6
+Return-Path: <SRS0=t1ok=D3=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo007.btinternet.com (btprdrgo007.btinternet.com [65.20.50.168])
+	by sourceware.org (Postfix) with ESMTP id E80FF4BA7988
 	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 14:48:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CE47B4BA23C6
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E80FF4BA7988
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CE47B4BA23C6
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=116.202.254.214
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E80FF4BA7988
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.168
 ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780152527; cv=none;
-	b=c05/J9uIS3qoe6htRi4eLwogz3FCMm17qhlU2aPw9mi/yBjBEhckD3fNRdFBWcOF5NH/+cucvyh+d44+r2x6C6SblrGoq5viQ1IGgs46gIr98gIpPiTm5qXPXTc9aoycnlUPosNxt0KuMEPaChWOfjDowA2vih1aR2XBXdx9g/s=
+	b=CbMz66ngwm0oQoLfrkrjQY9kBp8ut4bB+4KZ0jgCUxRxjapZaJTWCYDjpcZFtTPefg2QW467BZ4sVWHbQG7OhQf7faF6A5P3azT7nXe/sjEwvLNDmXqL49WU11bakwF4QHwDDtCPeR9QNOaHVE4QSeTV9jS+lozIDurtLSuZWjw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
 	t=1780152527; c=relaxed/simple;
 	bh=rIF8sTT3O/3tCniWcWZnH2+ZXWc4GxmDcjFbKZ/btDo=;
-	h=To:From:Subject:Date:Message-ID:Mime-Version; b=TkFvMGQb5odGNKcjCf+nqBxdTGcR3TGP57Lk0Irmrls47iTvtEMSmZtu2JQb5MO1Pjr417/TtERHu5aqfpj4VyMRhih+3nMINhLHezZOZge83lqJzKnZW2jHgYURxssrMf2v2xlT2/NxGZPQhoa/1iXc21dhuyAsT5CtMeSU+uI=
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Hxr2hwuxiJ7O0KR6idEelE+O8ZNKbRR4AGSanAJwiMLZVvgAh9UXD+wYazT3TkUTm37rZLcGCnEaK8Qaz7+7o6QeNYVgoAqlpg5MkZj4tYghkJWZaqt4BKLlnPSxEFE3Vg3QUAFhpm79E1f9OZPu9ykLWY3EnL5haWtd702lC/Y=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CE47B4BA23C6
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-	(envelope-from <gocp-cygwin-patches@m.gmane-mx.org>)
-	id 1wTKzV-0006Vz-LS
-	for cygwin-patches@cygwin.com; Sat, 30 May 2026 16:48:45 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: cygwin-patches@cygwin.com
-From: Jon Turney <jon.turney@dronecode.org.uk>
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E80FF4BA7988
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 69E78BD4032BF735
+X-Originating-IP: [83.105.142.8]
+X-OWM-Source-IP: 83.105.142.8
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: dmFkZTFqi7w21kLQ/bsff4idq3gJOJxd1yeYNnOGCMTtvD6ZitLxrhcvxxhx9Fr7dtb9gGbZZRoGCH9qzjYIPlTMJ4Sd/KJoVocizA6W7nYvZUd1DuKvZnkAqZocOsNpcg2GhGMrraYj2TVXX8OZOsBbwTbeqs3OObQmEN7kyElI7caUC1oeOkyvPJlmgx7MkzfqzPKzkkoPkCzEy7E1AMDfGZN8oZBikoW8y03NySDkkhlyQbIyuMc34kLdSn3U+qNylY6cRM3JGpaJE8dVYiN72cw/lNTOesoA7VzmrqDF7XUUttLnPzaLyuyLd3KAx3lXI8q5SgOuuvVPHkqlR05paTYEjgdcJpcMm9JPv2u0XmzxXGKS1Y/WVaZ+0UHgGGK1I/38M56O7mQQRd1CQfveTUAq0oyuUvByduPy4/guIitGnQktBxxRMLfCKT2g10IR58c24eqdogK8evpsYXxFRTcNyb068gdSoBWC8N28uA0WqGmOGtCWOMeClZ7jaqLh58X7gRrSA4bmE4TwEQCBC41ZiJ+a+zQQCW0NkIEvFpwnyYH4CDDW8av2AOf+dafSdE97y6njT+z0ZSEcwM1pC+ePvCbMfvXzeDItJM6qQ0xzzVnAylpBm3ltZckmaN4zxTguNfShhdPC4SZOXsEWgUDpbquVosF12I2ZvmaAaPjp9w
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (83.105.142.8) by btprdrgo007.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 69E78BD4032BF735; Sat, 30 May 2026 15:48:39 +0100
+Content-Type: multipart/mixed; boundary="------------0ziXRr6E9jQ3nqZJ17FOeQm3"
+Message-ID: <d86f951d-5bee-4c70-9180-54f3f47a2320@dronecode.org.uk>
+Date: Sat, 30 May 2026 15:48:37 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] Cygwin: Adapt math functions to use 64bit long double on
  aarch64
-Date: Sat, 30 May 2026 15:48:37 +0100
-Message-ID: <d86f951d-5bee-4c70-9180-54f3f47a2320@dronecode.org.uk>
+To: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
+Newsgroups: gmane.os.cygwin.patches
 References: <PN0P287MB029594AE234FC6A4B7F6B23A92342@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------0ziXRr6E9jQ3nqZJ17FOeQm3"
-User-Agent: Mozilla Thunderbird
-Cc: cygwin-patches@cygwin.com
+From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com
 In-Reply-To: <PN0P287MB029594AE234FC6A4B7F6B23A92342@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,GIT_PATCH_0,HEADER_FROM_DIFFERENT_DOMAINS,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
+Message-ID: <20260530144837.1qazlIH-pYANgQzkTdoukMomLPyF18vs5ZYbQenP2Vw@z>
 
 This is a multi-part message in MIME format.
 --------------0ziXRr6E9jQ3nqZJ17FOeQm3
@@ -130,4 +139,3 @@ Ci0jZWxpZiBfZGVmaW5lZChfX2FhcmNoNjRfXykKKyNlbGlmIGRlZmluZWQoX19hYXJjaDY0
 X18pCiAJYmwJcmVtYWluZGVyCiAJcmV0CiAjZWxzZQotLSAKMi41MS4wCgo=
 
 --------------0ziXRr6E9jQ3nqZJ17FOeQm3--
-
