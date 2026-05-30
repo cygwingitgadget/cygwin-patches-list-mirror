@@ -1,141 +1,96 @@
-Return-Path: <SRS0=t1ok=D3=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo007.btinternet.com (btprdrgo007.btinternet.com [65.20.50.168])
-	by sourceware.org (Postfix) with ESMTP id E80FF4BA7988
-	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 14:48:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E80FF4BA7988
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E80FF4BA7988
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.168
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780152527; cv=none;
-	b=CbMz66ngwm0oQoLfrkrjQY9kBp8ut4bB+4KZ0jgCUxRxjapZaJTWCYDjpcZFtTPefg2QW467BZ4sVWHbQG7OhQf7faF6A5P3azT7nXe/sjEwvLNDmXqL49WU11bakwF4QHwDDtCPeR9QNOaHVE4QSeTV9jS+lozIDurtLSuZWjw=
+Return-Path: <SRS0=pqsL=D3=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+	by sourceware.org (Postfix) with ESMTPS id 931404BA23E2
+	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 16:03:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 931404BA23E2
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 931404BA23E2
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=216.40.44.10
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780157003; cv=none;
+	b=GLffFAtIK00yV+Yvc172m3SAqH+nYTZpzcOxz86FzFJH8zRgnwF2OrVrHdI04qGQSZDrC10k2JugyYPlNkQG5Piq2boqkx9D3Sj8Hp47HTvq1yXQKZ0u6arlbs5dgZ5okDAZnIfYdt17kHERjL4XwF46TDgKlx57xs27urt997o=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780152527; c=relaxed/simple;
-	bh=rIF8sTT3O/3tCniWcWZnH2+ZXWc4GxmDcjFbKZ/btDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Hxr2hwuxiJ7O0KR6idEelE+O8ZNKbRR4AGSanAJwiMLZVvgAh9UXD+wYazT3TkUTm37rZLcGCnEaK8Qaz7+7o6QeNYVgoAqlpg5MkZj4tYghkJWZaqt4BKLlnPSxEFE3Vg3QUAFhpm79E1f9OZPu9ykLWY3EnL5haWtd702lC/Y=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E80FF4BA7988
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 69E78BD4032BF735
-X-Originating-IP: [83.105.142.8]
-X-OWM-Source-IP: 83.105.142.8
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTFqi7w21kLQ/bsff4idq3gJOJxd1yeYNnOGCMTtvD6ZitLxrhcvxxhx9Fr7dtb9gGbZZRoGCH9qzjYIPlTMJ4Sd/KJoVocizA6W7nYvZUd1DuKvZnkAqZocOsNpcg2GhGMrraYj2TVXX8OZOsBbwTbeqs3OObQmEN7kyElI7caUC1oeOkyvPJlmgx7MkzfqzPKzkkoPkCzEy7E1AMDfGZN8oZBikoW8y03NySDkkhlyQbIyuMc34kLdSn3U+qNylY6cRM3JGpaJE8dVYiN72cw/lNTOesoA7VzmrqDF7XUUttLnPzaLyuyLd3KAx3lXI8q5SgOuuvVPHkqlR05paTYEjgdcJpcMm9JPv2u0XmzxXGKS1Y/WVaZ+0UHgGGK1I/38M56O7mQQRd1CQfveTUAq0oyuUvByduPy4/guIitGnQktBxxRMLfCKT2g10IR58c24eqdogK8evpsYXxFRTcNyb068gdSoBWC8N28uA0WqGmOGtCWOMeClZ7jaqLh58X7gRrSA4bmE4TwEQCBC41ZiJ+a+zQQCW0NkIEvFpwnyYH4CDDW8av2AOf+dafSdE97y6njT+z0ZSEcwM1pC+ePvCbMfvXzeDItJM6qQ0xzzVnAylpBm3ltZckmaN4zxTguNfShhdPC4SZOXsEWgUDpbquVosF12I2ZvmaAaPjp9w
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (83.105.142.8) by btprdrgo007.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 69E78BD4032BF735; Sat, 30 May 2026 15:48:39 +0100
-Content-Type: multipart/mixed; boundary="------------0ziXRr6E9jQ3nqZJ17FOeQm3"
-Message-ID: <d86f951d-5bee-4c70-9180-54f3f47a2320@dronecode.org.uk>
-Date: Sat, 30 May 2026 15:48:37 +0100
+	t=1780157003; c=relaxed/simple;
+	bh=vmYjjRd/xDSZRNL+ljCAGIeefMVqxbP//zwyEoqOim4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:DKIM-Signature; b=QkJtnGr/2+FHb6wxlGLe7p8GPgbqwlcVNzyOAmhfkrSM/zKdjtk+ogu2A6lZkjGe0skVeHmYMmfL3QUDBMC9u9u24XkAVjmV03tSAbPWWXzGgXGcLnSBtqejEHqOuaQRP7CynTQp5k5fjd4YFOUbBj8nwmAckebescT23B8DsB0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=TUCMU4AR
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 931404BA23E2
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=TUCMU4AR
+Received: from omf09.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 30122161A86
+	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 16:03:20 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf09.hostedemail.com (Postfix) with ESMTPA id B589820028
+	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 16:03:18 +0000 (UTC)
+Message-ID: <f3d9fd85-7055-436e-b78f-12a925320043@SystematicSW.ab.ca>
+Date: Sat, 30 May 2026 10:03:17 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: Adapt math functions to use 64bit long double on
- aarch64
-To: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-Newsgroups: gmane.os.cygwin.patches
-References: <PN0P287MB029594AE234FC6A4B7F6B23A92342@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <PN0P287MB029594AE234FC6A4B7F6B23A92342@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=unavailable autolearn_force=no version=3.4.6
+Reply-To: Cygwin core component patch submission and discussion
+ <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: cpuid: add AArch64 build stubs
+To: Cygwin core component patch submission and discussion
+ <cygwin-patches@cygwin.com>
+References: <PN0P287MB0295E7BAEC9FFE804D2A7CDD923C2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+ <54c93ea8-3e7a-4045-b1d0-2671c8ebef2f@dronecode.org.uk>
+Content-Language: en-CA
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Organization: Systematic Software
+In-Reply-To: <54c93ea8-3e7a-4045-b1d0-2671c8ebef2f@dronecode.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Stat-Signature: ehxip7skdfzxzwmwpx95p4zwor1nqyge
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: B589820028
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX18a2NpUlpuSQosq388b8J/w8o6b1tzfRUQ=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=message-id:date:mime-version:reply-to:subject:to:references:from:in-reply-to:content-type:content-transfer-encoding; s=he; bh=2gGMstMZ2w8owLaFTpynEoX2Ybc/EPGTs4XgLZqbpCk=; b=TUCMU4ARmN1ng2S4Aua7PfQu/dSnvvOXWJlN24RCW5B8b9bjANNTYp/iYDHCID45A7vcFyco9EaSEWDy3EH/pZ5sOPb3OJiNXsJX+bxANN2261j+j9VqrFaIM1Jl6y5s4uIuiAi6KimmBe6BKP+L3R+841J+3HpM2tcu0MCmBnpEpPXu2w/YXB8L3JXjSrPC91hmwx5p5VnG7uMzLpTNSWpfuxJXlSdDtgcKqgG3DfmpfdFlckrbW5RHmXgHMOjB/g3EXa3JQqdIp6A8FoVlkGzHcG61fpy/fX6LsgTKG74i+/HulFSwka66fKUTBUnqljEAIDDSjaXda4CFLPivHw==
+X-HE-Tag: 1780156998-88422
+X-HE-Meta: U2FsdGVkX1+AwCWYhxAxWQNWFD3KXzrprFQK/utRghQlZi+e+PtIAv2QuJzrX4q/5dEgJ1GUyyxCq+klZcEoYk+cpuWNH1TkMAd8fuND8Dc+6fc9MG6NLoJRIcyDY9KAW7I9bv9GyoocZ6qQ7RCEL4VbLik5N8k+IdfwjfaFcaukiQJ5rje6cvIczsE94xKWxpELLsrxwaf6mvYg5T3AD7LNN9r+anyE30vIO6NrYosMybI55EBAUNXZGXkusb6t6F6Xd4d3Q5vSfPbHdanrL3emI5FKYrnjPMmCbVOehJuKCtm6AzP/WAUGMv5dSlwnxeFDK9ILXRntWanOetGAbig7Ii1LhNdm
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
-Message-ID: <20260530144837.1qazlIH-pYANgQzkTdoukMomLPyF18vs5ZYbQenP2Vw@z>
 
-This is a multi-part message in MIME format.
---------------0ziXRr6E9jQ3nqZJ17FOeQm3
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 29/04/2026 12:33, Chandru Kumaresan wrote:
-> Hi Corinna,
-> The previously mentioned changes are not the only ones required. A few additional files also need to be modified to ensure that Cygwin works correctly on aarch64.
-> The approach taken is consistent with mingw-w64. mingw-w64 uses the __SIZEOF_LONG_DOUBLE__ == __SIZEOF_DOUBLE__ macro to implement aarch64-specific code for math functions.
-> For reference, a similar approach is used in this upstream mingw-w64 commit:
-> https://github.com/mingw-w64/mingw-w64/commit/dbb60ad07c2983027cd09f0f7221505400391caa
+On 2026-05-28 06:33, Jon Turney wrote:
+> On 07/05/2026 11:45, Chandru Kumaresan wrote:
+>> Hi Corinna,
+>>
+>> This patch adds ARM64 support for CPU information and cache detection used 
+>> by /proc/cpuinfo and sysconf cache queries.
+>> Thanks & regards,
+>> K Chandru
+>> In-lined patch:
+>>
+>> ---
+>>   winsup/cygwin/fhandler/proc.cc       | 242 +++++++++++++++++++++++++++
+>>   winsup/cygwin/local_includes/cpuid.h |  21 ++-
+>>   winsup/cygwin/sysconf.cc             | 148 ++++++++++++++++
+>>   3 files changed, 408 insertions(+), 3 deletions(-)
 > 
-[...]
-> diff --git a/winsup/cygwin/math/remainderl.S b/winsup/cygwin/math/remainderl.S
-> index a69e38296..f05724e94 100644
-> --- a/winsup/cygwin/math/remainderl.S
-> +++ b/winsup/cygwin/math/remainderl.S
-> @@ -7,15 +7,15 @@
+> Thanks.
 > 
->      .file   "remainderl.S"
->      .text
-> -#ifdef __x86_64__
-> +#if defined(__x86_64__)
->      .align 8
-> -#else
-> +#elif defined(__i386__)
->      .align 4
->   #endif
->   .globl __MINGW_USYMBOL(remainderl)
->      .def    __MINGW_USYMBOL(remainderl);    .scl    2;  .type   32; .endef
->   __MINGW_USYMBOL(remainderl):
-> -#ifdef __x86_64__
-> +#if defined(__x86_64__)
->      fldt    (%r8)
->      fldt    (%rdx)
->   1: fprem1
-> @@ -27,7 +27,7 @@ __MINGW_USYMBOL(remainderl):
->      movq    $0,8(%rcx)
->      fstpt   (%rcx)
->      ret
-> -#else
-> +#elif defined(__i386__)
->      fldt    16(%esp)
->      fldt    4(%esp)
->   1: fprem1
-> @@ -36,4 +36,9 @@ __MINGW_USYMBOL(remainderl):
->      jp  1b
->      fstp    %st(1)
->      ret
-> +#elif _defined(__aarch64__)
+> I don't have any substantive comments (apart from "oh, you're supposed to grovel 
+> over a registry key to get the cpu information, nice :(").
+> 
+> Brian,
+> 
+> I think you're much more familiar with this area of the code than me. Please 
+> chime in if you have any comments!
 
-Now I have a (minimal) ability to compile this, I've noticed that there 
-seems to be typo here.
+Thanks Jon,
 
-I'm assuming the attached trivial patch is what's needed.
+Never received the original patches in my email, so imported all from p-i, and 
+will have a look soon, comparing against x86_64 and Linux-next x86 and arm64 
+cpufeature enumeration and cpuinfo output.
 
-> +   bl  remainder
-> +   ret
-> +#else
-> +   .error "Not supported on your platform yet"
->   #endif
+It would be easier if MS Windows also exposed elevated CPU and MSR info to 
+regular user space.
 
---------------0ziXRr6E9jQ3nqZJ17FOeQm3
-Content-Type: text/plain; charset=UTF-8;
- name="0001-Cygwin-Fix-typo-in-aarch64-preprocessor-conditional-.patch"
-Content-Disposition: attachment;
- filename*0="0001-Cygwin-Fix-typo-in-aarch64-preprocessor-conditional-.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
+-- 
+Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
 
-RnJvbSAzMTU2YzNjMzUwZWIwZTllMWExYjY1ZTg2NDE0Zjk0YmExYjRiN2U0IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVHVybmV5IDxqb24udHVybmV5QGRyb25lY29k
-ZS5vcmcudWs+CkRhdGU6IFRodSwgMjggTWF5IDIwMjYgMjI6MTc6MjkgKzAxMDAKU3ViamVj
-dDogW1BBVENIXSBDeWd3aW46IEZpeCB0eXBvIGluIGFhcmNoNjQgcHJlcHJvY2Vzc29yIGNv
-bmRpdGlvbmFsIGluCiByZW1haW5kZXJsLlMKTUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1U
-eXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CkNvbnRlbnQtVHJhbnNmZXItRW5jb2Rp
-bmc6IDhiaXQKCkZpeCBhIHR5cG8gaW4gdGhlIGFhcmNoNjQgcHJlcHJvY2Vzc29yIGNvbmRp
-dGlvbmFsIHVzZWQgaW4gcmVtYWluZGVybC5TLgoKPiAuLi8uLi8uLi8uLi9zcmMvd2luc3Vw
-L2N5Z3dpbi9tYXRoL3JlbWFpbmRlcmwuUzozOToxNTogZXJyb3I6IG1pc3NpbmcgYmluYXJ5
-IG9wZXJhdG9yIGJlZm9yZSB0b2tlbiDigJgo4oCZCj4gICAgMzkgfCAjZWxpZiBfZGVmaW5l
-ZChfX2FhcmNoNjRfXykKPiAgICAgICB8ICAgICAgICAgICAgICAgXgoKRml4ZXM6IGExZjM0
-N2MwZDViOCAoIkN5Z3dpbjogQWRhcHQgbWF0aCBmdW5jdGlvbnMgdG8gdXNlIDY0Yml0IGxv
-bmcgZG91YmxlIG9uIGFhcmNoNjQiKQotLS0KIHdpbnN1cC9jeWd3aW4vbWF0aC9yZW1haW5k
-ZXJsLlMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
-b24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL21hdGgvcmVtYWluZGVybC5TIGIv
-d2luc3VwL2N5Z3dpbi9tYXRoL3JlbWFpbmRlcmwuUwppbmRleCBmMDU3MjRlOTQuLjliMDc5
-ZWNhMyAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9tYXRoL3JlbWFpbmRlcmwuUworKysg
-Yi93aW5zdXAvY3lnd2luL21hdGgvcmVtYWluZGVybC5TCkBAIC0zNiw3ICszNiw3IEBAIF9f
-TUlOR1dfVVNZTUJPTChyZW1haW5kZXJsKToKIAlqcAkxYgogCWZzdHAJJXN0KDEpCiAJcmV0
-Ci0jZWxpZiBfZGVmaW5lZChfX2FhcmNoNjRfXykKKyNlbGlmIGRlZmluZWQoX19hYXJjaDY0
-X18pCiAJYmwJcmVtYWluZGVyCiAJcmV0CiAjZWxzZQotLSAKMi41MS4wCgo=
+La perfection est atteinte                   Perfection is achieved
+non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
+mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
+                                 -- Antoine de Saint-Exupéry
 
---------------0ziXRr6E9jQ3nqZJ17FOeQm3--
