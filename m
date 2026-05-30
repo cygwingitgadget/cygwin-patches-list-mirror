@@ -1,90 +1,78 @@
-Return-Path: <SRS0=+170=D2=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo006.btinternet.com (btprdrgo006.btinternet.com [65.20.50.80])
-	by sourceware.org (Postfix) with ESMTP id 42C744BA2E2E
-	for <cygwin-patches@cygwin.com>; Fri, 29 May 2026 13:02:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 42C744BA2E2E
+Return-Path: <SRS0=t1ok=D3=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo010.btinternet.com (btprdrgo010.btinternet.com [65.20.50.244])
+	by sourceware.org (Postfix) with ESMTP id 7F6EE4BA7988
+	for <cygwin-patches@cygwin.com>; Sat, 30 May 2026 11:33:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7F6EE4BA7988
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 42C744BA2E2E
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.80
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780059727; cv=none;
-	b=dS/MwZJauC0KNdgEE1JPUHV9Hub8wJmEI40Mol+0EU/RXfEhg2nDlunvHjKPzIf3dxpP2DgmUlf1xEyf6HPjZ5FWsOUWZu1R/RwKOBU5VBJxTyvXryMIuEMdy+w805mHuwbmb5jH2q7xKmMQ15onc5VHbwTcTV+YDNbI2Kp6zkU=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7F6EE4BA7988
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.244
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780140816; cv=none;
+	b=FO2kZEXdwGyfh8+li1OS6UGUyeJIjCFgBp+uXn2hP+V4djtOPNufDMa/giqqTop0nxXuwSn9aoEAKcCRAeXPfrUY7EmiUeK6UspNnaO/Ogn8AAhwz/x7dhEOvEgoIwns2zd3h5ZzPJ2OsP6f6DbAzxT1OIPR2l6gIN1++NbguEc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780059727; c=relaxed/simple;
-	bh=yjSt0M24DEWtaAD34fLZFhfrGsU4kNxJ6iSOLLMez1g=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=opffju5S8TPXfN6xbPPVaQpZagIWMkpdCSdo4MG1GUCnrswCKL6lOkBk+UY4PX/4t/vCWGKalOC6KbCGhBgusrXgYnD6K1z9AOAkP28sTJFXivRm5ZNw7/F8KdKdL3YgS6+PKcE0iBqB2fMZdKdZBsuOErhy0BIHamCuQxBTAxs=
+	t=1780140816; c=relaxed/simple;
+	bh=AN0OH4G0tsfmxUSVn9jsFUXS6ONtWDAe6tDdOUZdvyI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=Y4HLjnD+o4DEB3BBvkve2675LZivkRtcVVhNpznNm0mH+msTKT/Hu0pVKfTiUcBvn772TvYu4hUD5Pc4DU2KirMqBRTascZoivB0f7taZ1temncvShrxLOi578CndlFP8oiMz7qFYK+z3/Bd+TLbUgPjJ/b+d6QUle1RYbA5Bak=
 ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7F6EE4BA7988
 Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A03A62201586AF4
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 69FE539D01BE839F
 X-Originating-IP: [83.105.142.8]
 X-OWM-Source-IP: 83.105.142.8
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTFwwtrzc739WTQmMosjf/vLZbtjCtlR5euThiEKnX0vViTKyNlggmKk4gcE4lPUvBR0Lc5Se5euMfOTgZ4oL4wZ38742v4QC1bWO90j3ArIfJUrrNkhsEJ3UHLK2PTp868T4TuOnsPYXGC9O4m2j4kZSkUMjaNQjmgQaQb0GGjT1huodlFZuui1m+NSDRqKgWMgKaad9B5dpKpSXkTfGPGtDWF2SBp37X7r+BgwUoqo0BMkxy+58Ho0Af5RKnUuy2/U9MofkgaykpbgGdSBl34iZFZFZe3z3MWcZYpB40lzdXGmPkP+GrZsHRybgA9h51b9BcRF0OQTc903jITrcUZZA9bxJB9Ynm29sQmL14lIXB5sHuztjjuEbI6p1PB0GTFmxfuoEU7sfQXWLX/1gcETueTKG1JAIg3ISct8YqPpeJEHE6/VLEk2bRISdNgm0yse3INu6rfZOxhJDDDl/arvLEOqseFWJ+E0lrUYuZkIySvhe+m/M1uaTWimviUR9xw7vZklEzdd0LOu0UZ1tKybKYAvVCgTD+5ojLJgQ/y44/7LNjKyO7W+CCnHPLvn7aP4hUmJLd6mJ9YWuMfUxtlzpTHoqX0z74azQew7JISrzt2sAMNsKZuuBYCmojiYHJW+tStIpAiXOcIVPP482JnmN6TdJOgWDI9DR4xUyf1Tgg
+X-RazorGate-Vade: dmFkZTGuzH+E0S1ntaQhuIDohLhJVANiF8olArOdMz2IaVuPc0sHP/BBjcdskDTpD3TG1wL4IuwpvlPMjgqM3Hx1/mDQj9TFATo0HI9iuRQJ6RyJYm3W1B7eeFCU6uuPjPaPsiiietAunP7gUdIfi1pERDf91+UWMHiXg6otMic1hwEFD3SO92msjiePDOCLNz+OuPVhAmGRXRDdAdxpQt0qJdMSl8qrOxQQc/aVpH30iZJDE+gZlMlN04C/bzTIb8uE5mOpkG6Zzf24sxjN2V2ur1r8dyULoPdxyB6GQfcXr1692uKrsEV51EpraQ3h9quJ/2BAjHUs3/Zb5E836cUrlGi3WvZVgwhW3V1w2BAdBRPb89HaK+tdrvauWSXmAVSECQK4Den0AZeGdlT0nx+xYyA7OkgREV6RD0l9dmhniaAQ3uMu2xEZMhocxkVjGJtyhqZP3pc4Jn4aoVmKLKSGM1cIrzpkDmpW0QWkDVieNjgPMW+Iq6hSv1g5VMW9PkJGh1kkNF2gbcVR8UemImgrNh8lsrbM1iw01SbWGYPtIw20ydITMgze9IPGC1OM/KeAWWv1wHUoj9FiTB7TD8VnDNGugBLrHRZRojP+ySdVBgDfaekjqNrYl3lvFyrGcmt2yTY9blCne4nb/Z4qMbrn2bitDVkRufFGPBIscKdeoG924Q
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
-Received: from tambora (83.105.142.8) by btprdrgo006.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A03A62201586AF4; Fri, 29 May 2026 14:01:46 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Only compute BFD_LIBS if building dumper
-Date: Fri, 29 May 2026 14:01:40 +0100
-Message-ID: <20260529130140.1275824-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.51.0
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (83.105.142.8) by btprdrgo010.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 69FE539D01BE839F; Sat, 30 May 2026 12:33:32 +0100
+Message-ID: <743b62ce-feab-49bf-95d0-f958fd5dacde@dronecode.org.uk>
+Date: Sat, 30 May 2026 12:33:26 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: Implement 'reserved' marker in fdtable entries
+To: Christian Franke <Christian.Franke@t-online.de>
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q2/014989.html>
+ <20260522072913.574-1-mark@maxrnd.com>
+ <e5a59828-cdab-4d8a-980c-14b52a5c0d32@dronecode.org.uk>
+ <d457a7fd-1eee-0dd0-b2f7-d46b84eeaa42@t-online.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <d457a7fd-1eee-0dd0-b2f7-d46b84eeaa42@t-online.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Don't bother trying to determine the flags needed to link the BFD
-library if we're not even building dumper.
+On 22/05/2026 15:21, Christian Franke wrote:
+> Jon Turney wrote:
+>> On 22/05/2026 08:28, Mark Geisert wrote:
+>>> ...
+>>>
+>>> The notion is that an fdtable entry provided by cygheap_fdnew is marked
+>>> so that another thread can't obtain it.  Care is taken to reset the
+>>> marker when the entry is no longer needed.  Actually, in the usual case
+>>> the marker is overwritten with a pointer to an fhandler_base structure,
+>>> by the reserving thread, as the syscall completes.
+>>>
+>>> Reported-by: Christian Franke <Christian.Franke@t-online.de>
+>>> Addresses: https://cygwin.com/pipermail/cygwin/2026-May/259664.html
+>>> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+>>> Fixes: e859706578ba (* autoload.cc (NtCreateFile): Add.)
+>>
+>> Thanks!
+>>
+>> This all seems fine and reasonable, but I have a couple of small 
+>> comments.
+> 
+> A test with an enhanced version of the STC was successful.
+> I could push this version (attached) to cygwin-apps/stc if desired.
 
-(AC_NO_EXECUTABLES doesn't do what the name would simply suggest: It
-silently checks if a trivial program can link, and turns itself off if
-that suceeds.
+Yes, that would be great. Please do so.
 
-Tests which rely on linking are only made to fail by AC_NO_EXECUTABLES
-if that trivial link has failed (which OK, were probably going to fail
-anyway, but now you get the error 'link tests are not allowed after
-AC_NO_EXECUTABLES', which is perhaps slightly more informative when you
-are cross-compiling with a bootstrap compiler).)
-
-Anyhow, if we're using a compiler which can't link executables, these
-instances of AC_CHECK_LIB will definitely fail.  But we can't possibly
-build dumper in that situation, so we'll be configuring with
---disable-dumper, and doing those checks serves no purpose.
----
- winsup/configure.ac | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/winsup/configure.ac b/winsup/configure.ac
-index ac96968e4..ad63cbf95 100644
---- a/winsup/configure.ac
-+++ b/winsup/configure.ac
-@@ -153,12 +153,14 @@ AC_ARG_ENABLE([dumper],
- 
- AM_CONDITIONAL(BUILD_DUMPER, [test "x$build_dumper" = "xyes"])
- 
--# libbfd.a doesn't have a pkgconfig file, so we guess what it's dependencies
--# are, based on what's present in the build environment
--BFD_LIBS="-lintl -liconv -liberty -lz"
--AC_CHECK_LIB([sframe], [sframe_decode], [BFD_LIBS="${BFD_LIBS} -lsframe"])
--AC_CHECK_LIB([zstd], [ZSTD_isError], [BFD_LIBS="${BFD_LIBS} -lzstd"])
--AC_SUBST([BFD_LIBS])
-+if test "x$build_dumper" != "xno"; then
-+  # libbfd.a doesn't have a pkgconfig file, so we guess what it's dependencies
-+  # are, based on what's present in the build environment
-+  BFD_LIBS="-lintl -liconv -liberty -lz"
-+  AC_CHECK_LIB([sframe], [sframe_decode], [BFD_LIBS="${BFD_LIBS} -lsframe"])
-+  AC_CHECK_LIB([zstd], [ZSTD_isError], [BFD_LIBS="${BFD_LIBS} -lzstd"])
-+  AC_SUBST([BFD_LIBS])
-+fi
- 
- AC_CONFIG_FILES([
-     Makefile
--- 
-2.51.0
+(I guess ideally after the fix is committed so it stays green, but it's 
+red at the moment and I severely lack the time to investigate why...)
 
