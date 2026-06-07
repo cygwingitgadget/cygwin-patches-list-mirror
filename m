@@ -1,63 +1,85 @@
-Return-Path: <SRS0=yzP8=EB=m.gmane-mx.org=gocp-cygwin-patches@sourceware.org>
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-	by sourceware.org (Postfix) with ESMTPS id 23B1A4BA2E06
-	for <cygwin-patches@cygwin.com>; Fri,  5 Jun 2026 14:37:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 23B1A4BA2E06
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 23B1A4BA2E06
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=116.202.254.214
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780670275; cv=none;
-	b=aFGeBx/bNer5yi+UvyfUnK0FgLJnl4NkfRcTjEVC9f5fmgDWxXCryIFFpiNHWSay1BJxigAbJaKHagnpqvO8nQfI2dMwnNoYjjn0k3RW+nCC7z1bc6vk9t6WWrqBItFNLQM//jFTpLR8slfoiezdeVjyPlneb2h6eXLQx8U4dZY=
+Return-Path: <SRS0=Q3Gq=ED=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 0DCC34B7A1CC
+	for <cygwin-patches@cygwin.com>; Sun,  7 Jun 2026 07:54:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0DCC34B7A1CC
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0DCC34B7A1CC
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780818863; cv=none;
+	b=KR6pbReXfqRdBR8lFXsLjbUen/W6aLup5P/31GNo0qbQqVN71cgCx9M+TyawrhgxNOrtPhGdtiCPIukFwqzUT6m37Yf2ODxoYcTB9JXqpcSUAFW8/gDcBNlfLm5ly0tOOvpuUCXFetKhInDO4lxQHy+hPQgRiLbVs9NhO7WEVtg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780670275; c=relaxed/simple;
-	bh=rwOTzAXxEHOuDld/EDi+Enz1Ti5xZNPUXSHfzqMgiV0=;
-	h=To:From:Subject:Date:Message-ID:Mime-Version; b=hUMZzUM9SYDkQ4owyiDc5Ew/3474nm7lJ750CfBMUhL6P3L20YorZWGStHA2SFjyPPLPSLIAP3Q+gd5y1M9Ite5H3zhZWSmVCQwac1gcJH5zN/a3fNhUHOi/yXUrKnOwT2A2MKL0BRWUKSLKLCDh/95zsstnZI/kaV/7cIm0HVk=
+	t=1780818863; c=relaxed/simple;
+	bh=19brGj6GZNYnbrMPw5bNTezuw0rBPteibzLB7j6Kc70=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=rIo6BCc1RMfgKLlfT+m/41ADf03uWxI0W7yT4KpxwlLgs0XjZv+0GPAWbmSbtc/UycziRvJH7NpsbzW+nIeBc0tkK8MSSDV1ZSEkgr3frcfPWcBSmPvfG3nU4o3hRlwvaCQ7kJOulSThiAFrBTrqbsURxSSLgvBcAJAsPGh0Buc=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 23B1A4BA2E06
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-	(envelope-from <gocp-cygwin-patches@m.gmane-mx.org>)
-	id 1wVVgH-000ATg-PZ
-	for cygwin-patches@cygwin.com; Fri, 05 Jun 2026 16:37:53 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: cygwin-patches@cygwin.com
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: Re: [PATCH] Cygwin: resolve AArch64 linking by linking to onecore
- instead of kernel32
-Date: Fri, 5 Jun 2026 15:37:47 +0100
-Message-ID: <2549df98-c96f-48b7-9ddf-f1272ff505c2@dronecode.org.uk>
-References: <DB9PR83MB09239F1F48DD7D215E1A0B6E9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aHUCHQvK7UKMepvh@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0DCC34B7A1CC
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 65789bXP087046
+	for <cygwin-patches@cygwin.com>; Sun, 7 Jun 2026 01:09:37 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpdBZqd2J; Sun Jun  7 01:09:30 2026
+Message-ID: <f907bb7e-8817-43e2-a384-6b848f184151@maxrnd.com>
+Date: Sun, 7 Jun 2026 00:54:15 -0700
+MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: cygwin-patches@cygwin.com
-Content-Language: en-GB
-In-Reply-To: <aHUCHQvK7UKMepvh@calimero.vinschen.de>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,HEADER_FROM_DIFFERENT_DOMAINS,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] Cygwin: Ensure unused fd available for open()
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q2/014989.html>
+ <20260528054307.16582-1-mark@maxrnd.com>
+ <19ae30b8-610c-465f-94aa-4599b03c2363@dronecode.org.uk>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <19ae30b8-610c-465f-94aa-4599b03c2363@dronecode.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
-Message-ID: <20260605143747.8EvTPVeGX4VEbI7WgTAsCALofJJ-0lPM8-Bj-QMUgXA@z>
 
-On 14/07/2025 14:11, Corinna Vinschen wrote:
-> Hi Radek,
+Hi Jon,
+
+On 6/1/2026 6:30 AM, Jon Turney wrote:
+> On 28/05/2026 06:42, Mark Geisert wrote:
+>> The existing logic for open() assumes an fd is always available in
+>> the fdtable for a created file.  This leads to a situation where, if
+>> there is no fd available due to the OPEN_MAX limit being hit, the
+>> file is created but cannot be referenced by a Cygwin fd.
+>>
+>> Move the fd reservation code to an earlier location within open().
 > 
-> On Jul 10 19:14, Radek Barton via Cygwin-patches wrote:
->> Hello.
->>
->> As Windows Arm64 platform does not carry historical compatibility layers, the structure of Windows API DLLs is cleaner on Arm64 than on x64. For this reason, the x64 linking against `kernel32.dll` is not sufficient leading to undefined references to many Windows API symbols that are in different DLLs that would have to be added to the linking command explicitly.
->>
->> To address that, there is a concept of umbrella DLLs (https://learn.microsoft.com/en-us/windows/win32/apiindex/windows-umbrella-libraries), that can be added instead. The recommended replacement for `kernel32.dll` is `onecore.dll` (https://learn.microsoft.com/en-us/windows-hardware/drivers/develop/building-for-onecore#building-for-onecore) that should be available since Windows 7.
->>
->> In case of Cygwin linking, there is one exception, `pdh.dll` (Performance Data Helper, https://learn.microsoft.com/en-us/windows/win32/perfctrs/performance-counters-functions), that is not included in the `onecore.dll`.
+> Hmm... the more I stare at cygheap_fdnew, the less sure I am I 
+> understand what's going on.
 > 
-> The pdh functions used by Cygwin are NOT linked against.  They are
-> runtime loaded (see autoload.cc, right at the end), so it should not be
-> necessary to link against libpdh.a.  Can you please check again?
-  I assume that -lpdh has been added here because the autoload stubs 
-used during aarch64 development translate into direct linkage.
+> I'm sure you considered this, but just so I can tell myself I've done 
+> due diligence, perhaps you can briefly explain why this doesn't create 
+> the opposite leak? (i.e. the reserved fd is released if actually opening 
+> the file fails).
 
-Hopefully, it's not necessary with a full autoload implementation .
+Sure.  What happens is that cygheap_fdnew doesn't mark the chosen fd 
+reserved (i.e. the fdtable is not updated at all, yet), it's that the 
+calling thread has locked the fdtable and knows where the first unused 
+fd in fdtable is.
 
+All the validations of open() parameters are done and eventually a file, 
+pipe, device, socket, whatever open attempt at Windows level is done. 
+If that succeeds, fdtable[fd] is updated with a pointer to the 
+fhandler_XXX stuff being carried along in variable fh.  The fdtable is 
+unlocked at the end of the __try block by a dtor (see below).
 
+If that Windows-level open attempt fails, a __leave is performed to exit 
+the enclosing __try block.  The destructor for cygheap_fdmanip, 
+superclass of cygheap_fdnew, unlocks the fdtable.  fdtable[fd] is left 
+as it was, NULL.
+
+That's my story and I'm sticking to it, but I'm at the limits of my C++ 
+knowledge.  The overloading of "fd" really makes it difficult to follow 
+things.. but I have to admit this seems like tight code to me.  H/T to 
+CGF warranted.
+
+Feel free to ask more questions.
+Thanks & Regards,
+
+..mark
