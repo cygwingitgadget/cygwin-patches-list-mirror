@@ -1,75 +1,54 @@
 Return-Path: <SRS0=N3FD=EE=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:2a])
-	by sourceware.org (Postfix) with ESMTPS id 97E594B196AD
-	for <cygwin-patches@cygwin.com>; Mon,  8 Jun 2026 13:34:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 97E594B196AD
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 626764A9E07D
+	for <cygwin-patches@cygwin.com>; Mon,  8 Jun 2026 13:35:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 626764A9E07D
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 97E594B196AD
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780925668; cv=none;
-	b=frT0qN1kvkEra88ZK8MTTbkHWk5biFSeCFTDoTeKBBdyKmYJ7dHFVnquiit60u88xuL3LdJ4jQDf3sKTRnC+mHJyZJxeZuLvdG8Hox6+f+YO3u4xmotjZcjOCWSBlUOG+lD4Yl3obW5DOgEHxa/vAUNeCgW7RyjfshMzk+FFtf0=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 626764A9E07D
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780925719; cv=none;
+	b=noqKEKfCK3TOf1GXlp74xHhzCyHDSMdmZuE/LwaJ0aWnPM9VnPCsF5aufbe1HBbdjhnyLakIisfqJePobZYvhKTacqeVS7yKAfV6VGpSlvKWK/2AD+sEoRO7OX4mrSvUuwIbr17XR4hXNFIB8ujRc7Was27+bNhBomtpGHg3RvE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780925668; c=relaxed/simple;
-	bh=pV90GYUyWFsCWxOTkQyPly5qd49Q4kbMrhYUXz1Z8cg=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=RiNQLOU07KWeOGtUlS5xaQhdXo3qMmcYu1D4hwzFC/rLmoOWxu2qZMR7L8vPfl8TElQ0noLgl0rL/7wl5y+LFYY5aZdgJyDIOSnDqyCs5oDYhYdCnuFLwaFVkUqOHfmvotsHBCkBRhBjGDj5bFUTfgr0xzJDiD3SJxCWsGrc2hQ=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=BIB+tcYc
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 97E594B196AD
+	t=1780925719; c=relaxed/simple;
+	bh=IsUJHdgk5xy1Elfe2Vw2eap27AtQJb45r81gw1ZSv6Y=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=jXvBegSygHoH6wuSvR0RJAPifBpXIH/7ArTgfT8xn+EaOYfrhS3EMe0eSJ46B0ZcK/z9v457uPRchMhwJ+c2J4BTzx2/y+218zrvDFQWXNj6uUoaqTys/v7I7XkfvNduCVltyozan3l+iD1xBWyIf7hEWFc0BiNIt2/ROOH26FA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=L4Oqj54q
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 626764A9E07D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=BIB+tcYc
-Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
-          id <20260608133422378.OOEK.3198.HP-Z230@nifty.com>;
-          Mon, 8 Jun 2026 22:34:22 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=L4Oqj54q
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260608133516249.OZZB.102121.HP-Z230@nifty.com>;
+          Mon, 8 Jun 2026 22:35:16 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Koichi Murase <myoga.murase@gmail.com>
-Subject: [PATCH] Cygwin: pty: Do not set input_available_event when applying line_edit()
-Date: Mon,  8 Jun 2026 22:34:06 +0900
-Message-ID: <20260608133414.1979-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/2] Prevent unintended conversion for cursor position report
+Date: Mon,  8 Jun 2026 22:34:46 +0900
+Message-ID: <20260608133507.1990-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780925662;
- bh=JBdxzu6E2DzqMJeC4672yp2R8mYMihKQG8/XK96Wwu0=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780925716;
+ bh=CP58yoWE6v8nfXrlo9+Idjvj6cthSpK0oOOAjsdlHzU=;
  h=From:To:Cc:Subject:Date;
- b=BIB+tcYcVkWyf0eI30/lYzc639loGtvDL64QgL+w43KJSvT9BOtw4/2Z0p2BV/trU+vBNMNz
- cjVoxio0E0qVW3v4YohsMPwLA/FtTyVeHkKXkZfB+koROgqjqvw8zrPnfJCGNy0Ife1f2DEYpg
- iqcglHJHhMLTJBbIFudsAfLPIk8rRAQq3YEFpUYjrQDLnpeh6+dZj2TgY3CbZ0y+96P8r2douA
- bR9k1GGIpyMBLVB6KZEL6wUbvKWrAUh5XaVADekrMxHkCCY7e1BeaMuTJ46dRXyAAvoTbi9Coj
- WLXx0RGXe//zkB9ok+FjkSBJ8P468mG5Q7eG+OtfK6katU2Q==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=L4Oqj54q8ihZvqfKMzRiHbuP1eBX3AfPSWrngoMz5wZFSaz8XNXMFTvOM3JZTIlBbi6k1WEa
+ gC0P0tuzDlkx57OqC6OAcJgl3jbiudhLS2iWhMbtbyeWO7+aGLNuABVmSkYdOq2yj0Bz7jzN5o
+ zam42NoP4kIdWkBVjUg+K1kLJ25wmpVVjXlgUKUqajAWm9XfjzxKpqVR881akTCtHilGNWC0mK
+ HWL1+SqOna/rNEUpppRlT5yJ5mXmkmYE7QW9cPT+gNSxVeAMw28xX7mS5JEgccldE10vXxoTm5
+ rlcoRD4x/W9XrhgpFGqgHGl56Ofc8BWIA/3A49rAtlAL0ktA==
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-The commit a0b38a81b9be sets input_available_event even if the
-transferred input is still in the readahead buffer and is not ready
-to read. The SetEvent() is called in accept_input() via line_edit(),
-so setting this event here is not correct. This causes the issue
-that read() returns 0 instead of blocking until accept_input() is
-called. This patch removes this SetEvent() call.
+Takashi Yano (2):
+  Cygwin: pty: Introduce a helper function get_handle_from_process()
+  Cygwin: pty: Prevent unintended conversion for cursor position report
 
-Fixes: a0b38a81b9be ("Cygwin: pty: Apply line_edit() for transferred input to to_cyg")
-Addresses: https://cygwin.com/pipermail/cygwin/2026-June/259776.html
-Reported-by: Koichi Murase <myoga.murase@gmail.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by:
----
- winsup/cygwin/fhandler/pty.cc | 1 -
- 1 file changed, 1 deletion(-)
+ winsup/cygwin/fhandler/pty.cc      | 109 ++++++++++++++++++++---------
+ winsup/cygwin/local_includes/tty.h |   1 +
+ 2 files changed, 77 insertions(+), 33 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 80331c36d..2558fa799 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2946,7 +2946,6 @@ fhandler_pty_master::apply_line_edit_to_transferred_input ()
-       n -= ret;
-       p += ret;
-     }
--  SetEvent (input_available_event);
- }
- 
- static DWORD
 -- 
 2.51.0
 
