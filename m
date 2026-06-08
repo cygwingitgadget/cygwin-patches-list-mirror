@@ -1,165 +1,57 @@
 Return-Path: <SRS0=N3FD=EE=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id A732B51A4330
-	for <cygwin-patches@cygwin.com>; Mon,  8 Jun 2026 13:35:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A732B51A4330
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id 829024900303
+	for <cygwin-patches@cygwin.com>; Mon,  8 Jun 2026 13:49:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 829024900303
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A732B51A4330
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780925735; cv=none;
-	b=E0FguoUzVJnjzFqaiXI2VDnbgVgJx0eXzOLSjihRjkPBXEN2yWdIjzZTu3UFLWzRUWAU8Ew00l+Ta/Eg7Mu3SrgNU+e88jRNXR6ud4kwlxygvKiDD3AfetALqLUF4pzLA8vuuHaf0dSSfL2sryAyYWkkshUtMB3Ejo78gcZUML4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 829024900303
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780926593; cv=none;
+	b=ZrX/3mlWMq+s2mva6dk5GlUyoC1iI3jVKOEp2FkauWq3lU18dqj37ltdQiUIVWOqNi70EHGDkAefqklyCfXJtj08ABst2qzXO1C4ELr/xqQyeIk4fG2n2t7D3OBVq7YTjDORyTA052cyxujAyHbbpQJSUcVwjJ37jP7butCfa5U=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780925735; c=relaxed/simple;
-	bh=pgHcg6H5xpxwgpW0KHisHiEOTwaiKxdvr/IpemtMNIs=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=fPWwom6MCzrVsRoJ3boFSs5RuytrJ/YhKHnxD0bahidhb9cXxBP9BDM1JYJleGT62sjgx/Eg/b2VCt59bFmaBUNOD8XsBufV3bNc8HdZ8CD8/o1d/8+RHHgXGgJZOHJVIzHePg+cW6z0BVpWlGUgrfwNVYQ9g7PfEru99WZ+cm0=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Exos3j6S
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A732B51A4330
+	t=1780926593; c=relaxed/simple;
+	bh=sF0gdy6FDwzi95i8d7hKdiAbKOK/ojkgmQrnY7p0w7M=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=le6EnGhN9MWNGDpRcVQXGy3Aq+O7pCMpdrUHqEntJ289FxZwdLiIObJy0YrOVIjlmVqf+uoeAFm58GG1UKZ3lp1ekIpdEtBwJzwy7FbtcGkq55ts09fYo7kvHu0jMmKZU2+5Un5GprqYQU8EljWfABrJHbEuK9AIBKdLfCEPrXE=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Nd/VrJ0v
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 829024900303
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Exos3j6S
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260608133532843.PABL.102121.HP-Z230@nifty.com>;
-          Mon, 8 Jun 2026 22:35:32 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Nd/VrJ0v
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260608134950632.PIMX.17441.HP-Z230@nifty.com>;
+          Mon, 8 Jun 2026 22:49:50 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Koichi Murase <myoga.murase@gmail.com>
-Subject: [PATCH 2/2] Cygwin: pty: Prevent unintended conversion for cursor position report
-Date: Mon,  8 Jun 2026 22:34:48 +0900
-Message-ID: <20260608133507.1990-3-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 0/2] Prevent unintended conversion for cursor position report
+Date: Mon,  8 Jun 2026 22:49:33 +0900
+Message-ID: <20260608134943.2095-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260608133507.1990-1-takashi.yano@nifty.ne.jp>
-References: <20260608133507.1990-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780925732;
- bh=HehKx0j4yr97j5us59/Wq4jrVavFvOO+zlXIdsUZ6OY=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Exos3j6SYVtl04kxWEcUmDzVJ7TsFGx/mAvsHRkagvWx64sveUf2r5UXDYEUZUY+lNBXiScv
- siolE3x7dHak8A3X6uVYLUgjXqAAg4gzj6fBm42w5Jxn6YKqQREDOuvh8xe1//+ruVD/KWdiJg
- thStCV7LpzlysBEUsgegtAwpyo50g5Ps7ieSD1iS6l066XfNEtXJYkGi4+e8XzQPFdMYX06tDB
- Ptu4umCqdiBY/UvZfHOUoP3GXyDc0W2uqZx0Fea1AbYoq+KGXIZktV2WmhSE9O17x3Vibr8mmW
- R+rov8XKOxor7at5bpGujoMIzTSXjAwR+Z88yOzFeuAzlqpw==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780926590;
+ bh=c+Sx8UqxFZrM+/RkPy3DXxRrSH1kzgM3R11HC5RPEes=;
+ h=From:To:Cc:Subject:Date;
+ b=Nd/VrJ0v9mR5ozwDMTbnG0gh+R6qEothcEv7zO01STCYtTSm1ZnlKuhVnSMIyq/Cw/fqpthZ
+ g/IKfX8oMjeJC4YojJ7zgV0hU0PTblK6Iaa/mLnX0DskXIQ4tWIVNeOm3AbRhOStK7nbkrNrvK
+ b/LmVsW6kNH1cHXw8+63qtV7WiaJT/+0PFe9Pm7ElFpguzPF16l1rQC+t+2zQ8vvGIQtEVXxTa
+ w4eRc4TZ3reuoaMYyKNrxehT3rx4tS3guzT4FUwi+ENPaDUTONG6Q0s4wlc38QkUWdXtUOCIbM
+ imItzxqpuD4AEcEdmOQIP+z8KJ71i/CcfprR7U2gIf+yzyDg==
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-When the cursor position report ("CSI m;n R") is transferred from
-cyg-pipe to nat-pipe, it is undesirably converted into Fn3 key by
-pseudo console. This patch adds a workaround to prevent this
-unintended conversion for cursor position report by enabling
-ENABLE_VIRTUAL_TERMINAL_INPUT flag temporarily.
+v2: Close pcon_handle_ready_event when the first (not the last) pcon owner
+    is closed.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2026-June/259776.html
-Reported-by: Koichi Murase <myoga.murase@gmail.com>
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by:
----
- winsup/cygwin/fhandler/pty.cc      | 43 ++++++++++++++++++++++++++++++
- winsup/cygwin/local_includes/tty.h |  1 +
- 2 files changed, 44 insertions(+)
+Takashi Yano (2):
+  Cygwin: pty: Introduce a helper function get_handle_from_process()
+  Cygwin: pty: Prevent unintended conversion for cursor position report
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index e60e30230..5ddeec92d 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2460,6 +2460,16 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	      && pp && pp->pgid == get_ttyp ()->getpgid ()
- 	      && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
- 	    {
-+	      HANDLE pcon_handle_ready_event =
-+		get_handle_from_process (get_ttyp ()->nat_pipe_owner_pid,
-+					 get_ttyp ()->pcon_handle_ready_event);
-+	      if (pcon_handle_ready_event)
-+		{
-+		  cygwait (pcon_handle_ready_event, INFINITE);
-+		  ResetEvent (pcon_handle_ready_event);
-+		  CloseHandle (pcon_handle_ready_event);
-+		}
-+
- 	      /* This accept_input() call is needed in order to transfer input
- 		 which is not accepted yet to non-cygwin pipe. */
- 	      WaitForSingleObject (input_mutex, mutex_timeout);
-@@ -3767,6 +3777,8 @@ fhandler_pty_slave::setup_pseudoconsole ()
-       si.StartupInfo.hStdOutput = NULL;
-       si.StartupInfo.hStdError = NULL;
- 
-+      get_ttyp ()->pcon_handle_ready_event =
-+	CreateEvent (&sec_none_nih, TRUE, FALSE, NULL);
-       get_ttyp ()->pcon_activated = true;
-       get_ttyp ()->pcon_start = true;
-       get_ttyp ()->pcon_start_pid = myself->pid;
-@@ -3853,6 +3865,7 @@ skip_create:
-       /* Discard the pseudo console handler container here.
- 	 Reconstruct it temporary when it is needed. */
-       HeapFree (GetProcessHeap (), 0, hp);
-+      SetEvent (get_ttyp ()->pcon_handle_ready_event);
-     }
- 
-   acquire_attach_mutex (mutex_timeout);
-@@ -4059,6 +4072,7 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
- 	  ttyp->nat_pipe_owner_pid = 0;
- 	  ttyp->pcon_start = false;
- 	  ttyp->pcon_start_pid = 0;
-+	  CloseHandle (ttyp->pcon_handle_ready_event);
- 	}
-     }
-   else
-@@ -4308,6 +4322,26 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
- 
-   UINT cp_from = 0, cp_to = 0;
- 
-+  HANDLE h_pcon_in = NULL;
-+  DWORD con_mode = 0;
-+  if (ttyp->pcon_activated && dir == tty::to_nat)
-+    {
-+      /* Escape sequences such as the cursor position report ("CSI m;n R")
-+	 are undesirably converted into an Fn3 key by pseudo console.
-+	 To privent this unintended conversion, temporarily enable
-+	 ENABLE_VIRTUAL_TERMINAL_INPUT flag. */
-+      h_pcon_in =
-+	get_handle_from_process (ttyp->nat_pipe_owner_pid, ttyp->h_pcon_in);
-+      if (h_pcon_in)
-+	{
-+	  DWORD target_pid = ttyp->nat_pipe_owner_pid;
-+	  DWORD resume_pid = attach_console_temporarily (target_pid);
-+	  GetConsoleMode (h_pcon_in, &con_mode);
-+	  SetConsoleMode (h_pcon_in, con_mode | ENABLE_VIRTUAL_TERMINAL_INPUT);
-+	  resume_from_temporarily_attach (resume_pid);
-+	}
-+    }
-+
-   if (dir == tty::to_nat)
-     {
-       cp_from = ttyp->term_code_page;
-@@ -4422,6 +4456,15 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
-     }
-   CloseHandle (to);
- 
-+  if (h_pcon_in)
-+    {
-+      DWORD target_pid = ttyp->nat_pipe_owner_pid;
-+      DWORD resume_pid = attach_console_temporarily (target_pid);
-+      SetConsoleMode (h_pcon_in, con_mode);
-+      resume_from_temporarily_attach (resume_pid);
-+      CloseHandle (h_pcon_in);
-+    }
-+
-   ttyp->pty_input_state = dir;
-   /* Fix input_available_event which indicates availability in cyg pipe. */
-   if (dir == tty::to_nat) /* all data is transfered to nat pipe,
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index 4fbebd820..0adad03e6 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -125,6 +125,7 @@ private:
-   bool pcon_start_csi_c;
-   bool switch_to_nat_pipe;
-   DWORD nat_pipe_owner_pid;
-+  HANDLE pcon_handle_ready_event;
-   UINT term_code_page;
-   ULONGLONG fwd_last_time;
-   bool fwd_not_empty;
+ winsup/cygwin/fhandler/pty.cc      | 113 ++++++++++++++++++++---------
+ winsup/cygwin/local_includes/tty.h |   1 +
+ 2 files changed, 81 insertions(+), 33 deletions(-)
+
 -- 
 2.51.0
 
