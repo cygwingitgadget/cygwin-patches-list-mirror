@@ -1,74 +1,87 @@
-Return-Path: <SRS0=Aeas=EE=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 18F424BA2E25
-	for <cygwin-patches@cygwin.com>; Mon,  8 Jun 2026 22:11:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 18F424BA2E25
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 18F424BA2E25
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780956666; cv=none;
-	b=cO8u5hNZU1BePrpwGVb3qDYH2Bc/q5AwLD6XpyVTbFRLTSTgZkcohL4BMT28zTxPDCQgW/qCtJo0pIvEQPUTuoh0ZubiGd7QcLm1/fi+mFlEtcs6wyFTUaZ5cd2NTinuxzYPu2lKPPOMZbTu/ssDHlIE21pAoycKvGBVER6+JQU=
+Return-Path: <SRS0=EfWH=EF=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 47E274BA2E25
+	for <cygwin-patches@cygwin.com>; Tue,  9 Jun 2026 00:21:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 47E274BA2E25
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 47E274BA2E25
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1780964470; cv=none;
+	b=HOqQvZzoj39HQzA2qLOJPa8lY248d33wRU5jn8nP3jhTRLKFmJgq1eRgCrlP3wEY9JDvpOXNglCE9eVe7EQzHUNJjfO2RGvUIcz5vvBNL1sryzrMi7BNUtyLfAQVdt1vT949ThimvT1pf00RbPoTZZcAvqPgdoU5HExMQy55p9A=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1780956666; c=relaxed/simple;
-	bh=3/nlA0ap7WxgPX7/Nriw+UIfnmoZOqwwoIBHH7fZrWk=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=l8msMDO4km3YvXsfRyfcojHubHFFhOoWLX38wG+jcAcZMUU5U6QZYhIhWTjizloQ8ZymScjJR8uZKu78L2sYsWUiz5FbAgsoxLuL8NL0JEul2RCaGOPt9QtIK9h7SqU3XdrWSVQTDLxwmbDIPV3NCbRvGQW0D+OeT7UeIB7gpXc=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 18F424BA2E25
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 658MQHSF084741;
-	Mon, 8 Jun 2026 15:26:17 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
- via SMTP by m0.truegem.net, id smtpdZK5JDC; Mon Jun  8 15:26:13 2026
-From: Mark Geisert <mark@maxrnd.com>
+	t=1780964470; c=relaxed/simple;
+	bh=qtpQTHJS+VHEYSbTAVBgeaoh7EhDsnAeP/pNoPbIe08=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=I2u5dekm7gZjJeoPrONQZCYzjFnqztpVl7ZSaK0pqY2tNxtCRmDkKuxYrLpcuDUqamfupw4P170fG6w9UXXR2/RvCgcyY5BYG9+d+CLnPMPjE8Zz8W2lmC3a6Q5kD25UjJeGmr4HQhT/zLnBTiDOosaK6DzVYS+1Ls/syudyLeI=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=sPOIHEtr
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 47E274BA2E25
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=sPOIHEtr
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260609002107179.UJRI.102121.HP-Z230@nifty.com>;
+          Tue, 9 Jun 2026 09:21:07 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>, Lionel Cons <lionelcons1972@gmail.com>
-Subject: [PATCH] Cygwin: Fix chown commands in cygserver-config
-Date: Mon,  8 Jun 2026 15:10:09 -0700
-Message-ID: <20260608221103.958-1-mark@maxrnd.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Cygwin: clipboard: Add workaround for ERROR_CLIPBOARD_NOT_OPEN
+Date: Tue,  9 Jun 2026 09:20:51 +0900
+Message-ID: <20260609002100.615-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <https://cygwin.com/pipermail/cygwin/2026-June/259787.html>
-References: <https://cygwin.com/pipermail/cygwin/2026-June/259787.html>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1780964467;
+ bh=Bm2ulwsRG3717Mwk/jgUFjHVbJb/Gy1EJx9Sy7tomtM=;
+ h=From:To:Cc:Subject:Date;
+ b=sPOIHEtr7gKdDMsq6JfcpWEpUyP9BXaHAUmb+EfD+1mdtC8Z8pqb6kEjOtsmr7b0GvfpYht+
+ 1TK50KRk4hUmZcl32bve17Axblkdq2tqKp8aTtHYbenRqNtuz/Wvkub9B5PXuAqinZ/6qVadAV
+ ptBWrccUJy5JTLk0ExPhfPM4FJ7+/tCiyQQ8jascIz7C0adq6hflNMus/DQtbgvPkyI05z7uSo
+ KVCvsTVwcrx+NZnVF9Uwujchdid8lUuFJJPnWIeoTRckKiNMqNWwntoL19KU1Ztt1x1PpnY6TY
+ COUZR0KXZs58rNrtEKotNdnWUDdMJgzBBmvQJqe4owYJ5yXw==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,TXREP,URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Change "chown 18.544" to "18:544" in two locations.
+SetClipboard/Data() and GetClipboardData() occasionally fail with
+ERROR_CLIPBOARD_NOT_OPEN, even though OpenClipboard() succeeded if
+NULL HWND is used. Retry until GetClipboardData() does not return
+ERROR_CLIPBOARD_NOT_OPEN.
 
-Reported-by: Lionel Cons <lionelcons1972@gmail.com>
-Addresses: <https://cygwin.com/pipermail/cygwin/2026-June/259786.html>
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
-Fixes: b5a7cb02cd9d (* cygserver-config: Use numeric id 18 instead of "system" in chown.)
-
+Addresses: https://cygwin.com/pipermail/cygwin/2026-February/259438.html
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Mark Geisert <mark@maxrnd.com>
 ---
- winsup/cygserver/cygserver-config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler/clipboard.cc | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygserver/cygserver-config b/winsup/cygserver/cygserver-config
-index abda18644..3130de7bc 100755
---- a/winsup/cygserver/cygserver-config
-+++ b/winsup/cygserver/cygserver-config
-@@ -162,7 +162,7 @@ then
-     exit 1
-   fi
-   chmod 664 "${SYSCONFDIR}/cygserver.conf"
--  chown 18.544 "${SYSCONFDIR}/cygserver.conf"
-+  chown 18:544 "${SYSCONFDIR}/cygserver.conf"
- fi
- 
- # On NT ask if cygserver should be installed as service
-@@ -194,7 +194,7 @@ then
-       echo "To start it, call \`net start ${service_name}' or \`cygrunsrv -S ${service_name}'."
-     fi
-     touch "${LOCALSTATEDIR}/log/cygserver.log"
--    chown 18.544 "${LOCALSTATEDIR}/log/cygserver.log"
-+    chown 18:544 "${LOCALSTATEDIR}/log/cygserver.log"
-   fi
- fi
- 
+diff --git a/winsup/cygwin/fhandler/clipboard.cc b/winsup/cygwin/fhandler/clipboard.cc
+index 12691c7c1..db33d839f 100644
+--- a/winsup/cygwin/fhandler/clipboard.cc
++++ b/winsup/cygwin/fhandler/clipboard.cc
+@@ -25,11 +25,21 @@ details. */
+ static inline bool
+ open_clipboard ()
+ {
+-  const int max_retry = 10;
++  const int max_retry = 20;
+   for (int i = 0; i < max_retry; i++)
+     {
++      /* No appropriate HWND exists here. */
+       if (OpenClipboard (NULL))
+-	return true;
++	{
++	  /* SetClipboard/Data() and GetClipboardData() occasionally
++	     fail with ERROR_CLIPBOARD_NOT_OPEN, even though
++	     OpenClipboard() succeeded if NULL HWND is used.
++	     Retry until GetClipboardData() does not return
++	     ERROR_CLIPBOARD_NOT_OPEN. */
++	  if (GetClipboardData (CF_UNICODETEXT)
++	      || GetLastError () != ERROR_CLIPBOARD_NOT_OPEN)
++	    return true;
++	}
+       Sleep (1);
+     }
+   return false;
 -- 
 2.51.0
 
