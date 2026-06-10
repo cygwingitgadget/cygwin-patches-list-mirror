@@ -1,158 +1,150 @@
 Return-Path: <SRS0=dMBQ=EG=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [106.153.226.42])
-	by sourceware.org (Postfix) with ESMTPS id D02D341439A9
-	for <cygwin-patches@cygwin.com>; Wed, 10 Jun 2026 16:35:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D02D341439A9
+	by sourceware.org (Postfix) with ESMTPS id 6D2F64152D36
+	for <cygwin-patches@cygwin.com>; Wed, 10 Jun 2026 16:36:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6D2F64152D36
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D02D341439A9
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6D2F64152D36
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781109358; cv=none;
-	b=RCogNQLyjgF3b5mN+KRzy3qZahVnbDE4IkpW4TSaTJwuGK7yeqI17odhUCigNM1Evg+ycG3szCkGwv9Ev19gDqOyyu6AMBnA+ptcUYx5EdP2MLXPLsLnRw4MP3iI00XqLwNonpUSUOWIp5/4tzRGgL3uL0ELqzXPwxKb10m8S0I=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781109369; cv=none;
+	b=pu1h33LaCrJm0LKepbW9qjHyQL5w4XOIMs6I8qhrLTaBcFdqaA85UxPPSt/xNS5npR3gqfDIKa16IbtsV7vlcSsiv8D6jCm600jIUOPsXPTxBNdrYMaUU7aeyWlbZ6oabJCnVBkuKKFHMxjjlGR+s6WKuc4vo0/0QuqNzmSvntE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781109358; c=relaxed/simple;
-	bh=ZqLOOvSnVouHYwhUMaD6JuNIEq16ILffBPr9n9F7r04=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=wpCOH+OUOaje9GUgZqPYRD2OTjmTBkir+UU4KtT9Aq6TVawgOAx7EGEVoeSKvcu3xjk6FJI5xB+cWB7fQuZYi/y3UXk6S/m6e7rE9cm+gRT6SHK/R6n9JCW3jEXrp7bB0ZB44VEXZZwEw9UZx2N38TMoTKypG9se0JE9juEBTFk=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=oLgvPv6U
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D02D341439A9
+	t=1781109369; c=relaxed/simple;
+	bh=YRgz3XV/9UdgIuKHE6nQs5HCPUkj1wiPyeH7uZznj48=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=hVKSt8U45RIxcj/+Kp05WeozA/PzAf4M5NSu7Ep4AwnmHt1hG7i7aLfyL1rIHjEasVQKXOq+jXr5IHImMhmLqWueRT0TVvnBz6pTmTiRZwVlK9sttrragH3nL14fDhYcDI7jgNy2YnO6f+9nsuM6rBGQjhhGN5XzhV6/MShgnYM=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ONLvQ6+L
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6D2F64152D36
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=oLgvPv6U
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ONLvQ6+L
 Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
-          id <20260610163556108.KSYK.3198.HP-Z230@nifty.com>;
-          Thu, 11 Jun 2026 01:35:56 +0900
+          id <20260610163601741.KSYW.3198.HP-Z230@nifty.com>;
+          Thu, 11 Jun 2026 01:36:01 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 1/3] Cygwin: console: Ensure the master thread runs only when it is supposed to
-Date: Thu, 11 Jun 2026 01:35:12 +0900
-Message-ID: <20260610163533.10187-2-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 2/3] Cygwin: console: Fix NOFLSH mode a little
+Date: Thu, 11 Jun 2026 01:35:13 +0900
+Message-ID: <20260610163533.10187-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260610163533.10187-1-takashi.yano@nifty.ne.jp>
 References: <20260610163533.10187-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781109356;
- bh=k5p1YV6VnaLaC7md6wd81C2Vz77a4Y1fjK0P6mLXCCU=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781109361;
+ bh=GjjILjjb6PHqItj200D53kOaIoiKOiy3xZKplfs1m8k=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=oLgvPv6UJ3i2EvlcnvA8XtDQoGCopDGNGgz92k6yLieo9u+9ZUPLGSYQzG/yVrZyDgAOBPY0
- Zco7bJTV9Ntx3V5Nc97TWLYSOWEZLotE22qfcNKu6ZvLNDjJCH6ckPMlXnp0Eu9F8pmH1WJCEz
- b87baSRRt4kyeJnd++CRjIu2SZjfp6l9NPLsqhLUkLZpzPEjrqQ3RcekVobT9Fdiz1Ndz7716I
- mQ66z8bcnHY37nz63NSCLi9vIJ242XxvxuyRnRNOJjfe2i9YOeopG59PUUqUD0g6SBSuS9XYpB
- k1LKaB+GkpSzLDha8rSD28rFuC6ebK3g3slx57/0H+TJnZcQ==
+ b=ONLvQ6+LnRs2XdPUUTDzzvvBpeB8oP803IujkA7tuWe7zKwMRHCItKLuE0vJO/yfeyEZMpEp
+ XFCGd2TZ91R8KdfFVjDKSgG42aymjUF1ei+WuSYbiVR1aTllSidLEotrlXcmXE2oxqHGF68sP8
+ vJc87lZpsqLKNduFY/5FXt31h4XYZfQvf0ToEgRKpu0kx1vS6ThOBjCUp/tyBjdDPvN+9o5vCm
+ Px8DZEpTBKgNsg+CudhemlCUFDG5EHn9gpbqWYmar7WnRohzS11zsvSoi5UBvo/KdqLT3BXNC6
+ pvdo2Jr7tuFNS886XcchNWKdTNybCB/DLZ5MHUV5kVX5/19w==
 X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, disabling cons_master_thread is done by just setting the
-flag disable_master_thread. In fact, actual suspension of master
-thread is delayed a bit. Therefore, non-cygwin program where the
-master thread should be disabled may run even though the master
-thread is running in a short time. This patch ensure that the master
-thread is suspended when non-cygwin app is running. In addition,
-while master thread is running, console mode should not be changed.
-Therefore, the order of set_input_mode() call and disabling/enabling
-master thread is swapped.
+If you run "stty noflsh; cat" in "bash", and stop "cat" by Ctrl-C,
+a stray ^C is passed to "bash". The current code calls tcflush() if
+NOFLSH is not set, however, tcflush() is not called when NOFLSH is
+set. So, Ctrl-C remains in console input buffer. This should be
+discarded even in NOFLSH mode. This patch introduces a helper
+function discard_key_events() and call it to erase Ctrl-C in the
+console input buffer.
 
-Fixes: d2b14c303c04 ("Cygwin: console: Redesign handling of special keys.")
+Note that even with this patch, NOFLSH is not fully functional in
+console because the readahead buffer is unique to process, so it
+cannot be inherited to other processes. However, it should work
+intra process.
+
+Fixes: 118e51be1d04 ("(tty_min::kill_pgrp): Handle tty flush when signal detected.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/console.cc | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ winsup/cygwin/fhandler/console.cc       | 20 +++++++++++++++++---
+ winsup/cygwin/fhandler/termios.cc       | 10 +++++++---
+ winsup/cygwin/local_includes/fhandler.h |  2 ++
+ 3 files changed, 26 insertions(+), 6 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index 45eff6efe..a5e6cd89d 100644
+index a5e6cd89d..9ac492980 100644
 --- a/winsup/cygwin/fhandler/console.cc
 +++ b/winsup/cygwin/fhandler/console.cc
-@@ -439,6 +439,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
- 
-       if (con.disable_master_thread)
- 	{
-+	  con.master_thread_suspended = true;
- 	  cygwait (40);
- 	  continue;
- 	}
-@@ -976,9 +977,9 @@ fhandler_console::setup_for_non_cygwin_app ()
-      console mode. */
-   if (get_ttyp ()->getpgid () == myself->pgid)
+@@ -1744,17 +1744,31 @@ out:
+     discard_len = 0;
+   if (discard_len)
      {
-+      set_disable_master_thread (true, this);
-       set_input_mode (tty::native, &tc ()->ti, get_handle_set ());
-       set_output_mode (tty::native, &tc ()->ti, get_handle_set ());
--      set_disable_master_thread (true, this);
+-      DWORD discarded;
+       acquire_attach_mutex (mutex_timeout);
+       DWORD resume_pid = attach_console (con.owner);
+-      ReadConsoleInputW (get_handle (), input_rec, discard_len, &discarded);
++      discard_key_events (discard_len);
+       detach_console (resume_pid, con.owner);
+       release_attach_mutex ();
+-      con.num_processed -= min (con.num_processed, discarded);
      }
+   return stat;
  }
  
-@@ -990,7 +991,6 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
-   termios *ti = shared_console_info[unit] ?
-     &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
-   /* Cleaning-up console mode for non-cygwin app. */
--  set_disable_master_thread (con.owner == GetCurrentProcessId ());
-   /* conmode can be tty::restore when non-cygwin app is
-      exec'ed from login shell. */
-   tty::cons_mode conmode = cons_mode_on_close (p);
-@@ -998,6 +998,7 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
-     set_output_mode (conmode, ti, p);
-   if (con.curr_input_mode != conmode)
-     set_input_mode (conmode, ti, p);
-+  set_disable_master_thread (con.owner == GetCurrentProcessId ());
++void
++fhandler_console::discard_key_events (size_t n)
++{
++  DWORD discarded = 0;
++  INPUT_RECORD input_rec[INREC_SIZE];
++  DWORD n1 = min (INREC_SIZE, n);
++  while (n)
++    {
++      ReadConsoleInputW (get_handle (), input_rec, n1, &n1);
++      n -= n1;
++      discarded += n1;
++      n1 = min (INREC_SIZE, n);
++    }
++  con.num_processed -= min (con.num_processed, discarded);
++}
++
+ bool
+ dev_console::fillin (HANDLE h)
+ {
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index ca5fa4b7e..605258731 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -666,9 +666,13 @@ fhandler_termios::sigflush ()
+      be NULL while this is alive.  However, we can conceivably close a
+      ctty while exiting and that will zero this. */
+   if ((!have_execed || have_execed_cygwin) && tc ()
+-      && (tc ()->getpgid () == myself->pgid)
+-      && !(tc ()->ti.c_lflag & NOFLSH))
+-    tcflush (TCIFLUSH);
++      && (tc ()->getpgid () == myself->pgid))
++    {
++      if (!(tc ()->ti.c_lflag & NOFLSH))
++	tcflush (TCIFLUSH);
++      else
++	discard_key_events (1);
++    }
  }
  
- /* Return the tty structure associated with a given tty number.  If the
-@@ -1190,8 +1191,8 @@ fhandler_console::bg_check (int sig, bool dontsignal)
-      in the same process group. */
-   if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
-     {
--      set_disable_master_thread (false, this);
-       set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
-+      set_disable_master_thread (false, this);
-     }
-   if (sig == SIGTTOU && con.curr_output_mode != tty::cygwin)
-     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
-@@ -2087,8 +2088,8 @@ fhandler_console::post_open_setup (int fd)
-   /* Setting-up console mode for cygwin app started from non-cygwin app. */
-   if (fd == 0)
-     {
--      set_disable_master_thread (false, this);
-       set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
-+      set_disable_master_thread (false, this);
-     }
-   else if (fd == 1 || fd == 2)
-     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
-@@ -2106,11 +2107,11 @@ fhandler_console::close (int flag)
-   if (shared_console_info[unit] && (dev_t) myself->ctty == get_device ()
-       && cons_mode_on_close (&handle_set) == tty::restore)
-     {
-+      set_disable_master_thread (true, this);
-       if (con.curr_output_mode != tty::restore)
- 	set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
-       if (con.curr_input_mode != tty::restore)
- 	set_input_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
--      set_disable_master_thread (true, this);
-     }
+ pid_t
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index 4f5605524..49e0e7983 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -1983,6 +1983,7 @@ class fhandler_termios: public fhandler_base
+   pid_t tcgetsid ();
+   virtual int fstat (struct stat *buf);
+   int tcflow (int);
++  virtual void discard_key_events (size_t n) {}
  
-   if (shared_console_info[unit] && con.owner == GetCurrentProcessId ())
-@@ -4445,10 +4446,10 @@ fhandler_console::set_console_mode_to_native ()
- 	fhandler_console *cons = (fhandler_console *) (fhandler_base *) cfd;
- 	if (cons->get_device () == cons->tc ()->getntty ())
- 	  {
-+	    set_disable_master_thread (true, cons);
- 	    termios *cons_ti = &cons->tc ()->ti;
- 	    set_input_mode (tty::native, cons_ti, cons->get_handle_set ());
- 	    set_output_mode (tty::native, cons_ti, cons->get_handle_set ());
--	    set_disable_master_thread (true, cons);
- 	    break;
- 	  }
-       }
-@@ -4825,6 +4826,8 @@ fhandler_console::set_disable_master_thread (bool x, fhandler_console *cons)
-   cons->acquire_input_mutex (mutex_timeout);
-   con.disable_master_thread = x;
-   cons->release_input_mutex ();
-+  while (con.master_thread_suspended != x)
-+    Sleep (1);
- }
+   fhandler_termios (void *) {}
  
- int
+@@ -2363,6 +2364,7 @@ private:
+   void wpbuf_put (char c);
+   void wpbuf_send ();
+   int fstat (struct stat *buf);
++  void discard_key_events (size_t n);
+ 
+   class console_unit
+   {
 -- 
 2.51.0
 
