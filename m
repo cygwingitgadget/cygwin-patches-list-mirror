@@ -1,43 +1,43 @@
 Return-Path: <SRS0=e8Pc=EH=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 833B94BA2E13
-	for <cygwin-patches@cygwin.com>; Thu, 11 Jun 2026 07:35:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 833B94BA2E13
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 16B914BA543C
+	for <cygwin-patches@cygwin.com>; Thu, 11 Jun 2026 11:27:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 16B914BA543C
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 833B94BA2E13
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781163357; cv=none;
-	b=crSZLcdCm0pRIYRB/q8RTrzKDbKr8aWZ9+2ocbgHvvG+MDnVNqT+61o8RYPAbQ/q+8QroEowJ/cjnh7stV31yHkx4nfGGDb2szDNwHxswJpQ/mxKfQJ3mSvO6v7BDikEJE1yinyAZulpKt85lNyzohmWmyeupSWbdvrI/GUy4Cw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 16B914BA543C
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781177265; cv=none;
+	b=AJKWXCtAAGVvnjqerSxIMkBH//zir8kIRr6bDEaarKhYCcytON6/4hJIlqm9LbWX8RxTxSfTXfFwAMDc3aWd66it5qfTIFERL9CFYA98Z0XvLdGAjtms/PuD4K0qkV5e/TY3+YByMEPBtqTJAtj2BmlR6BOEN0ko8NqS6nCQwqs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781163357; c=relaxed/simple;
-	bh=q+yYoe6fVLNPPQprDdpH99tUwK4KZIwNOtsqUc70ITY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=qZbyGNYKPVkKbGFYw/jyRc0MVfwW+KUcoitqs6lupYeQOhRsmmE+RKA6x1+ciFfb1TgiS3oFvkfZH/7B0kbrTqECvOuyCsndsGIxKNxdLrFhWqDlveYHQx9uzY23b96obnTv675MA+HjlpdBcnyKOxWaE3BjJzeHhGvD7/9tgYs=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=QOAfG+Xh
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 833B94BA2E13
+	t=1781177265; c=relaxed/simple;
+	bh=j2jgjrqC/zjstNDHy2bPwS5e4T/S0HjnM/g1Oarx2IQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=jw6rfQxgU/2wXqG+dvY+S14e6fNe307O459iGMnJK+ZDQZF6Mf/8m8zM9bWqS0gOdxYZmgHMjGMadAW6UCqKV9QVnEcvBhpQok6v6I9lbSfy9y7e/+qPVcijj6vAHrDHTgSbeh7F9e6Ax/VsNpkB5IuwL//w5Iseg6/OBfXg99k=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=nAYRANHE
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 16B914BA543C
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=QOAfG+Xh
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20260611073550962.JUFW.44671.HP-Z230@nifty.com>;
-          Thu, 11 Jun 2026 16:35:50 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=nAYRANHE
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260611112742240.OHJY.17441.HP-Z230@nifty.com>;
+          Thu, 11 Jun 2026 20:27:42 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2] Cygwin: pty: Fix race issue between starting and exiting non-cygwin apps
-Date: Thu, 11 Jun 2026 16:35:36 +0900
-Message-ID: <20260611073545.1197-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v3] Cygwin: pty: Fix race issue between starting and exiting non-cygwin apps
+Date: Thu, 11 Jun 2026 20:27:26 +0900
+Message-ID: <20260611112736.5574-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781163351;
- bh=d9pLiZRrgg9t25aemlu/n3D27FADFIZza78/voJrK5g=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781177262;
+ bh=UY7e4awsStqnGC/fANnNlpBX7XQUHGLkNukHqJxf1zM=;
  h=From:To:Cc:Subject:Date;
- b=QOAfG+XhW1H1yI8eU48axOl0jwFEzUL9bCfBIovgcvRlvrdapPtX/AvkajxMUXNLcvUhmZN1
- LNirFfHv1fS8duJPxAqDviDwNXD8bsbdHzWnlt5sfwt5Lh3aSOlAAcVhrDEBi5SkNs8GEzvHGh
- UR8fSdcSbG0D5T7/bqmdxhSeUdv8TyI1+2DvbRJwgvjDIi4FLYEwMLC1TJxB5Zg96IYwa6dOrp
- sLvPQVGI16A3tN5tDZz7cftRluNrIJsm1/Y7hGmod90hE6qtc/wqTyb0AZZ4uOcNgdt0EksFN7
- DIIkE6jWtUC8gsMP9zs48EaNLaRkpyoloJEpprMaDyxmwaOQ==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=nAYRANHEt/k/32lbIenRv4532uGH8rQw0NKH5Xm3EQbVJzN7UJzWrFbj4gRldxfVa9XO8mNd
+ 8FH3nJbiuqtMdBVLyuHqNKqfw9ktKHDzqGktwEspvXp/KHhnLHrsfcxV5Nd4TCkKvx0yDsKgFc
+ /k3R1wBsX55+i7UKcZDXFpkEiWPLsjm41Q53GkBBXmLSdbg36biOtEebqU9IeNwJOA5T14uZvz
+ pK6qyU0TLfpeY5UOKfXjpebDrGWKjXMDPm1kiRA7e4HkRylR1pIC3KVe+8kskRrIdaxIFq4TFV
+ cW9hKkkpt/XiN+wY9q6VmG77TZBLuwcre0ZWHZERp6GUjzhw==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -71,12 +71,13 @@ Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
 v2: Guard term_has_pcon_cap() as well
+v3: Acquire pipe_sw_mutex first before acquiring input_mutex
 
- winsup/cygwin/fhandler/pty.cc | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 34 +++++++++++++++-------------------
+ 1 file changed, 15 insertions(+), 19 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index a8557bf3c..baba1046f 100644
+index a8557bf3c..031ea696a 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
 @@ -1274,18 +1274,18 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
@@ -166,12 +167,12 @@ index a8557bf3c..baba1046f 100644
  }
  
  void
-@@ -4569,27 +4570,27 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+@@ -4569,26 +4570,26 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
  						DWORD force_switch_to)
  {
    ttyp->wait_fwd ();
-+  WaitForSingleObject (p->input_mutex, mutex_timeout);
 +  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (p->input_mutex, mutex_timeout);
    if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
      {
        DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
@@ -192,23 +193,21 @@ index a8557bf3c..baba1046f 100644
      close_pseudoconsole (ttyp, force_switch_to);
    else
      hand_over_only (ttyp, force_switch_to);
-   ReleaseMutex (p->pipe_sw_mutex);
 +  ReleaseMutex (p->input_mutex);
+   ReleaseMutex (p->pipe_sw_mutex);
  }
  
- void
-@@ -4597,6 +4598,7 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
- {
+@@ -4598,27 +4599,23 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
    reset_switch_to_nat_pipe ();
  
-+  WaitForSingleObject (input_mutex, mutex_timeout);
    WaitForSingleObject (pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (input_mutex, mutex_timeout);
    bool was_nat_fg = get_ttyp ()->nat_fg (tc ()->pgid);
    bool nat_fg = get_ttyp ()->nat_fg (pid);
-@@ -4604,12 +4606,10 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
        && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
      {
-       ReleaseMutex (pipe_sw_mutex);
+-      ReleaseMutex (pipe_sw_mutex);
 -      WaitForSingleObject (input_mutex, mutex_timeout);
        acquire_attach_mutex (mutex_timeout);
        transfer_input (tty::to_nat, get_handle (), get_ttyp (),
@@ -218,7 +217,8 @@ index a8557bf3c..baba1046f 100644
      }
    else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
  	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
-@@ -4618,7 +4618,6 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+     {
+-      ReleaseMutex (pipe_sw_mutex);
        bool attach_restore = false;
        HANDLE from = get_handle_nat ();
        DWORD resume_pid = 0;
@@ -226,15 +226,16 @@ index a8557bf3c..baba1046f 100644
        if (get_ttyp ()->pcon_activated && get_ttyp ()->nat_pipe_owner_pid
  	  && !get_console_process_id (get_ttyp ()->nat_pipe_owner_pid, true))
  	{
-@@ -4636,10 +4635,10 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+@@ -4636,10 +4633,9 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
  	resume_from_temporarily_attach (resume_pid);
        else
  	release_attach_mutex ();
 -      ReleaseMutex (input_mutex);
      }
-   else
-     ReleaseMutex (pipe_sw_mutex);
+-  else
+-    ReleaseMutex (pipe_sw_mutex);
 +  ReleaseMutex (input_mutex);
++  ReleaseMutex (pipe_sw_mutex);
  }
  
  bool
