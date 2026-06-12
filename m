@@ -1,136 +1,333 @@
-Return-Path: <SRS0=lO2D=EH=k12targetiq.com=wren.m@sourceware.org>
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazlp170110002.outbound.protection.outlook.com [IPv6:2a01:111:f403:c409::2])
-	by sourceware.org (Postfix) with ESMTPS id A42004BA23D3;
-	Thu, 11 Jun 2026 22:20:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A42004BA23D3
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=k12targetiq.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=k12targetiq.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A42004BA23D3
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c409::2
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1781216435; cv=pass;
-	b=LsXwPWF/iOkR02CtbWzHvsllVQ782lJwWPGEO9rNKSVrbHKq7y3eHDkeZqaXbcK9AZSdKBes1VYPLF6qJXeZyYiB7ZTNhVBTelicKTejJoPZKM15fILjmnHIvJ3VNbUXuU7BstEs5bJr09qAQx61ZYIqsfsex4yeL884pA+t+/8=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781216435; c=relaxed/simple;
-	bh=8uNo4nafRUTywEWFkJXaWonN7xUApRTs55avb/Gb4SE=;
-	h=From:Subject:Date:Message-ID:MIME-Version; b=Kdqm+yC5SXIjxKu1Vg9ZkoQclK+i9AErBozAmuUL5rCcy5DUbOQa3tCo2IbyYeee5HE+NvQCz4N/yNgaQuGXkDNZ+cSg0whdr6tIQbdxb1JZmRCwpQowJvCcPbI1CPJvzxhTpYq8tjbQ9ob8hGxHGHaiNMMbdJdWk0GDHhNgIoI=
-ARC-Authentication-Results: i=2; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A42004BA23D3
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RF1bzIeiGpmOPCQtG7YwvgGBM4+trGl8OJgXSNbwk4hB+LHi3ZhKKk0RS35VZ/EXbBJByCplCkmRYkZE0u/6LdOrLJxlcemftufx9VVKlyxOL+PXZeDwgFOFlGtJHLY4+eP27crUAFaEUT4UB7qGWQgVt8YO87+DvoZqdUSZhRQY9aSZtHTEsyZmNdSffy8ZeBW3dHhMqp2jumAhQNuQPV2QypnSHxBL4sB7NaqVt9vqeKYCStTqjACaHyV49VzaUJxS/WtFA1E50zao6tdwFe5um58y4esFB9i6YQrvfdUUm+AmZWqcEiFClJJyWZcqAiKnJDjwVrJVgNTqzGDsJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8uNo4nafRUTywEWFkJXaWonN7xUApRTs55avb/Gb4SE=;
- b=mouuZvy64uvOHt71zOqbw63bGG06YVBJ82+1mgm9BX99nKO3a0k8FslqcoNYHSzczMVeCuxepjYADnkk/57uD/46yUF7jh/1mXQUtFdbdIwWwyTj7gG/QCn3o/Y+IqzmOICf9BqDQd0xZ7/Q9OLC9L17XEbE+sGN8F3yNCm/iWHpBlO0u0Y7skwfTH4fLw77U6a89JVkptzYyH4jYB1YcTz0D8GKx4bV3nhaVjKbnPCLj7BWMgPq9wzVSoEv5OYKSXVzrro/EAnb+bRygc1f11pQ4DXs3+Mr9sfPP2kyHUoI4ALTNhNZCBD3D18AYY/P7bbIn5w1zF1RA0UP6XeZtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=k12targetiq.com; dmarc=pass action=none
- header.from=k12targetiq.com; dkim=pass header.d=k12targetiq.com; arc=none
-Received: from PN2P287MB0537.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:114::11)
- by PN6P287MB4916.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:302::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.11; Thu, 11 Jun
- 2026 22:20:28 +0000
-Received: from PN2P287MB0537.INDP287.PROD.OUTLOOK.COM
- ([fe80::3191:8b7d:adc6:af07]) by PN2P287MB0537.INDP287.PROD.OUTLOOK.COM
- ([fe80::3191:8b7d:adc6:af07%5]) with mapi id 15.21.0113.013; Thu, 11 Jun 2026
- 22:20:28 +0000
-From: Wren M <wren.m@k12targetiq.com>
-Subject: Verified district contacts
-Thread-Topic: Verified district contacts
-Thread-Index: Adz58H7lKX3OWhzCRp2K4Zxq9ZPiLg==
-Date: Thu, 11 Jun 2026 22:20:28 +0000
-Message-ID:
- <PN2P287MB0537A1B5A59B76CCFDDCF527991B2@PN2P287MB0537.INDP287.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=k12targetiq.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN2P287MB0537:EE_|PN6P287MB4916:EE_
-x-ms-office365-filtering-correlation-id: 4e169ab0-ee14-4ade-12ee-08dec807a4b7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|34096008|376014|23010399003|42112799006|1800799024|56012099006|8096899003|18002099003|38070700021|7055299006;
-x-microsoft-antispam-message-info:
- AJRi5kRKFI7ZjrlHK+tngkTmHF+Q5f9SVVCTpOm/4UN6vbwRIrSfFw8UV5lKEfPzVkv+OHZHGNAcIL40Zo++urXzgLnguB4DbZSjDwiDiYKm0dIzbjxgJ4K3LKt3nLFwJRR4d/R5iIJzVvaugDu2jEAotU/3h6kLOH9H1AOnHoYqHFwXtfTXFpYUQhsevah0OzfEbOUZXMKArHQ6wu3SSAYU3mkEwGrCZBgY5hUJEccUsCi1fREYS87umGaRfxuIYk3xzjoEg0dVjdDU2oFL6JJUyZGaH69z+5Vn/6cKBvMq7V/AICOc1wN9MssGB3efh0E+sLhl/xqSPCzUIGL2cPXQZ2PBdoMNCyAlLWOgQ+zUOHK6i6OCLZ6HucnkByzCTOtV7YPEFwXJc3vkaNh6OMq91rvb9qL+qHgGdV/aufJZtPzcQ9EEX4aAeyr2pUyasEZEHnEUnMmamfEKEiHfevw68qp6k8ixoLQct2R6BPJrw4K0uPp+ZJYxopTsLdEHPQBWOW7s7yAT/fKj3HYhBYmbZYZYwHYFz+MDAxmkZWGrZkWTgl9CTzlFUwYLj/SaIp+3zFowGNmQw7KozuTX6gxfbUKxP8Ci0gSqAhHP8B+XPeIRGcmB3E6keCu55YmGbNHA7Q+mUZFuV/Is/T8hvZQIYz8qRpUt7qdNdg7qWb9ePQPKKGfjYjB3CmYeSk1t0KRZDA+ewV1ggCJkt+jSO6eCQ4a8skITong1xS9FBWTL6Ci8qzhKWIiStbuUWJq7DgSKehFzCP9P8ykKrdiKPQ==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2P287MB0537.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(34096008)(376014)(23010399003)(42112799006)(1800799024)(56012099006)(8096899003)(18002099003)(38070700021)(7055299006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?fKnntm7TfJ2gNzrChToTBtnTE+OVXt7scvESKK7YaF5cSVVKdd7rXWdRP/++?=
- =?us-ascii?Q?MGPSKzxxsefsKrH6Nm3zu4/pVoNnewA09/Zo4kEUNkYAZdO3wNAadKQztzrv?=
- =?us-ascii?Q?63Gw+RKysbRs7LUrxtOmFpBD8IrFM2qGJY4k2BYpIRWbu3Khc5nFypLjQ2Tu?=
- =?us-ascii?Q?YGfU38nUXZlR6DX2OgHmzrcj8mhLrfzjhTrYWLm7ibw2CEsN99t+AmsBmZyq?=
- =?us-ascii?Q?oEQuvE4WhHzF/TnRbVXCvnwUGy8Kx6xiQCDlmKK6mcK+TZC95Xz62FM5vOHu?=
- =?us-ascii?Q?GR4UOce5r5oIEamJ2etiZWnTJ90VHrIMBddwu5DuhNjrgnL/V2jcJ7uJAzd1?=
- =?us-ascii?Q?MM1btX/+KZmo/wnPp7R2RpT+CARh/S/Fj6+XgK+yPrVVodLo+Gi6Rh33jS/F?=
- =?us-ascii?Q?Vo/xSyLsQ4FN551S4vwDFF6gko/zh9lIxqXfBdah1zFS1Fcu8wTg6YjPTyrP?=
- =?us-ascii?Q?uzRg9a8VFcQqJApbY3McmWnmBaM8IDG/+/U0zkR/Uz4Lr19A/1uvFyoF8AEd?=
- =?us-ascii?Q?kneHlWk3b74TxEDKUVIbnv+eg956RuURFHm2p5e0C8q33bSkzUO0p83PER7t?=
- =?us-ascii?Q?6wADnKq5ZKSzvdje7iduDh2K7HlRrY9XQQYKRo8r5MeuF7v/TByg/hwdV43i?=
- =?us-ascii?Q?nWXODY3H1O/X2Ih/jRP9El0/kTOB/6UEpprfmuYZAcbPMm4YRjXdv0Zv+L09?=
- =?us-ascii?Q?qLpQ6iAK8yBHwztUNACm2ULxQWs7BztzaFeaXmYDsHr3eHUEKoi4+DEmYH5q?=
- =?us-ascii?Q?aRctn8bgN1M8Hj3RriOZyrnqUq/958SlkNPvBIwtjYqInP8fDGCO1MAThF4V?=
- =?us-ascii?Q?V+/7ImBEs/3I8A7Lnx7b2JaRrl3wV+RyCoKjx/SbXdwHHtmlE+6EbmY3abSv?=
- =?us-ascii?Q?Ndn7oj6Hc/eRKDQOPBi3D1RHSuQwM/bCS6GvPeBFgdtWrwhhq1ubHWIE3ZPm?=
- =?us-ascii?Q?Ioj0aXDbXL8jWWtyWNSMNicNExO9P8zcS/gEVmkSrVzQVzD9UU2cy6KZDWvC?=
- =?us-ascii?Q?XAsouRo3e8K/EoR4aKhDxStcVh6/SAhd6LOpw1z8/lz86fv4B6dQB/4rLlgE?=
- =?us-ascii?Q?TnAZfOWh4Tfj9sF88tp5OjK1JHjsNhPuaKWT1l4iIjU4tQIrMaH5FN+c6e3q?=
- =?us-ascii?Q?N5ZqB9IEX9bWeVHIXcBs7HyOzROcY/2/TFnqeCaRb+O6OtXraGion2pvblHO?=
- =?us-ascii?Q?h1Ismg2Wr5HQJsfhxewDiEbuv9yh5j+B4k/sCKq2TdnBJ1NDU7ZgUqQat7f4?=
- =?us-ascii?Q?KJ6LnJDK+MJZQZHVW5nGfKRGHe1Mzk6GmcAN2Vka3gZIlCNxzGc9nYiq/3/r?=
- =?us-ascii?Q?r+Aj6O6lFeFdZCGX00HfOAMxarW1lizEGD+9e+CwWvSXkPIaLKMhu4bBF3d5?=
- =?us-ascii?Q?BAbzLvmJKYfRPD+grVXeglLV2kXS/Mm7TBA50knnsvAphB3xNfBTQ3cFlh3U?=
- =?us-ascii?Q?PR/0Qfn/Ai6WjohYMl4Pc4C+fJqdKWoycQ/xdwM7/n8rV6jZxGSh0hzPn7T/?=
- =?us-ascii?Q?x4a3JaNYNVf0HyJgLZNa+Jl4sFtpqpo4IHGbLIjbJAfX6JmFtICa4fUfartI?=
- =?us-ascii?Q?1nCKaU0iH6VcHzvjHDc3zm67csn9Wi6HVW+PkW8Cu3W2gYNqEVMPd9sX8f6g?=
- =?us-ascii?Q?NNkqgRT34/1KQQ6asohcKzL71o9C9JY2nxuhXlQW7N6NB2Cu0HxW3vc+lTaQ?=
- =?us-ascii?Q?O1QxYOBR8/DKfwahepFWoRm7R4UesJc8CbwVjdEZScOipg6O8n46szps53na?=
- =?us-ascii?Q?C9kHniXv84pedcdR/rL9bHOuxVYxkAU=3D?=
-Content-Type: multipart/alternative;
-	boundary="_000_PN2P287MB0537A1B5A59B76CCFDDCF527991B2PN2P287MB0537INDP_"
+Return-Path: <SRS0=9siz=EI=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id 190FB4BA2E07
+	for <cygwin-patches@cygwin.com>; Fri, 12 Jun 2026 04:17:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 190FB4BA2E07
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 190FB4BA2E07
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781237834; cv=none;
+	b=e9H5gweBWcYmwzLlF/xfY2pDG5Ry6kAWqWRr+ELYYoHg070N0H9nnLLcplHydwAYzsJJQS2dtuR10Mk3Rdu8poKM3w7jDvr+6k96Ef/+R6UmX9FCzDTFSPI2YQqVYt4fpu9hRTGLj4CmJNztN69MOKRcm6Mku9hhbZxxOZl5apU=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1781237834; c=relaxed/simple;
+	bh=0Sj0WCGgUJ8LooEj/fnx/3PPDtw21+PdeYXHxKYRk3A=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=lx/Pvb15zEarloGQeIWR4SIr+oDTTZPVKRZN7nkE32xCCcEaPNrmTNOjrLV+bo3l76sDk9rPbsq0irX1eLMptA0pIAZt0Qzex//ojtApZxe55lXimhqyvsgz+/r3EW1v3LuTr0MyA6/ZTu8n8ygA7Hp4rtlexlDFV3S+7+3jFCI=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Hord0Egs
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 190FB4BA2E07
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Hord0Egs
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260612041709440.YUWC.17441.HP-Z230@nifty.com>;
+          Fri, 12 Jun 2026 13:17:09 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v4] Cygwin: pty: Fix race issue between starting and exiting non-cygwin apps
+Date: Fri, 12 Jun 2026 13:16:55 +0900
+Message-ID: <20260612041703.172932-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-OriginatorOrg: k12targetiq.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN2P287MB0537.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e169ab0-ee14-4ade-12ee-08dec807a4b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2026 22:20:28.6804
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60e1d8e4-9c0d-438a-a39e-cbaaf1d7a2bd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xtDlLUc4gmVvtZS16ELoYevXph7AHsA99X597sehdbzecgIqZA+XAX5BtsZRk0HXtrXES7xsiLEvswxL4O80il0UhI3eRUTDIrlmCFHwCqUK+21QKU0s9zCgrESfnlpT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN6P287MB4916
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,HTML_MESSAGE,KAM_DMARC_STATUS,MISSING_HEADERS,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781237829;
+ bh=0fvMeyalxn1CQJ2jlkfJWZIv02QDp42lovjdO+2P+Hk=;
+ h=From:To:Cc:Subject:Date;
+ b=Hord0EgscOV72G3+DtJqRe3le+VZdkQ32qcUP0EJJ+0fEKguKECjl6woAobkjjJ0y6r9UHzF
+ Z9jaSjgVkcggJnw9JarAm8fEQcjDYm5H4r1vMkwzMXn6unjUCqI8bc3+AFjXaBFxt7P6dy4LW3
+ fS4UUkAu9+c/ilyV3SHBf2wzgTGgO/ZvEHa2Ob7ImlDGnD8MEYp6BcpIVkatpxafK6v31h4w7S
+ W5eRRREF144UVjzPNsxdDpmcSfxmShBhrx7hvRTCeSaB88jniDHmvELJnSim+j/s9HKepj9zh4
+ AD5w5ypPRnOxxHoEcp790ocpTujLhs9eVMnoP2+ftjHpLZlw==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_000_PN2P287MB0537A1B5A59B76CCFDDCF527991B2PN2P287MB0537INDP_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Currently, when a non-cygwin program (A) is about to exit, and another
+non-cygwin program (B) is started, input transferring between cyg-pipe
+and nan-pipe may not work as expected. When the non-cygwin program (A)
+exits, input transferring from nat-pipe to cyg-pipe will be performed.
+However, the the non-cygwin program (B) will performs input transferring
+from cyg-pipe to nat-pipe at the same time.
+ 1) The the non-cygwin program (A) checks current input pipe state,
+    then it is nat-pip since the this program is a non-cygwin program.
+    The program (A) also checkes if any handover target exists, but
+    it is not found since the probram (B) is not started yet. So,
+    the program (A) decided to transfer input form nat-pipe to cyg-
+    pipe.
+ 2) Before the non-cygwin (A) program performs input transferring,
+    if the non-cygwin program (B) is started and checks the input
+    pipe state, it is nat-pipe state, so the non-cygwin program (B)
+    does not perform input transferring.
+ 3) However, just after that, the non-cygwin program (A) performs
+    input transferring from nat-pipe to cyg-pipe, so typeahead input
+    will be stored in cyg-pipe.
+ 4) The non-cygwin program (B) cannot read the typeahead input
+    because it is now in the cyg-pipe.
+Transferring input itself is guarded by input_mutex, but the pre-
+check is not. With this patch, the guard is enhanced so that the
+state check and tranferring input are done in atomic way.
 
-Greetings,
+Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by:
+---
+v2: Guard term_has_pcon_cap() as well
+v3: Acquire pipe_sw_mutex first before acquiring input_mutex
+v4: Don't call to_be_read_from_nat_pipe() while holding input_mutex
+    (This simplifies the to_be_read_from_nat_pipe())
 
-Would you be interested in reaching principals, deans, and superintendents =
-directly?
+ winsup/cygwin/fhandler/pty.cc | 89 ++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 49 deletions(-)
 
-Covers Principals, Admissions Directors, Superintendents, Provosts, and Pro=
-gram Directors.
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index a8557bf3c..ef79ea679 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -657,8 +657,7 @@ fhandler_pty_master::accept_input ()
+ 
+   HANDLE write_to = get_output_handle ();
+   tmp_pathbuf tp;
+-  if (to_be_read_from_nat_pipe ()
+-      && get_ttyp ()->pty_input_state == tty::to_nat)
++  if (get_ttyp ()->pty_input_state == tty::to_nat)
+     {
+       /* This code is reached if non-cygwin app is foreground and
+ 	 pseudo console is not enabled. */
+@@ -1274,18 +1273,18 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
+ 	  mutex_timeout = INFINITE;
+ 	  if (isHybrid)
+ 	    {
++	      WaitForSingleObject (input_mutex, mutex_timeout);
+ 	      if (get_ttyp ()->getpgid () == myself->pgid
+ 		  && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
+ 		  && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+ 		{
+-		  WaitForSingleObject (input_mutex, mutex_timeout);
+ 		  acquire_attach_mutex (mutex_timeout);
+ 		  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
+ 				  input_available_event,
+ 				  input_transferred_to_cyg);
+ 		  release_attach_mutex ();
+-		  ReleaseMutex (input_mutex);
+ 		}
++	      ReleaseMutex (input_mutex);
+ 	      if (get_ttyp ()->master_is_running_as_service
+ 		  && get_ttyp ()->pcon_activated)
+ 		/* If the master is running as service, re-attaching to
+@@ -1452,19 +1451,10 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ bool
+ fhandler_pty_common::to_be_read_from_nat_pipe (void)
+ {
+-  /* If the slave is in setup_pseudoconsole(), pipe_sw_mutex cannot
+-     be acquired because the slave has it. In this case pcon_start
+-     will be asserted. During pcon_start, other input than response
+-     to CSI6n should be go to cyg-pipe. So, wait for pcon_start and
+-     return false. */
+-  while (WaitForSingleObject (pipe_sw_mutex, 0) == WAIT_TIMEOUT)
+-    if (get_ttyp ()->pcon_start || get_ttyp ()->pcon_start_csi_c
+-	|| get_ttyp ()->pcon_start_pid)
+-      return false;
+-    else
+-      yield ();
+-
+   bool ret = false;
++
++  WaitForSingleObject (pipe_sw_mutex, INFINITE);
++
+   if (!get_ttyp ()->switch_to_nat_pipe)
+     goto out;
+ 
+@@ -2383,6 +2373,26 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
+   int pcon_start_mode =
+     get_ttyp ()->pcon_start ? 1 : (get_ttyp ()->pcon_start_csi_c ? 2 : 0);
++
++  /* This input transfer is needed when cygwin-app which is started from
++     non-cygwin app is terminated if pseudo console is disabled. */
++  if (!get_ttyp ()->pcon_activated && !pcon_start_mode
++      && to_be_read_from_nat_pipe ())
++    {
++      WaitForSingleObject (input_mutex, mutex_timeout);
++      if (get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
++	  && get_ttyp ()->pty_input_state == tty::to_cyg)
++	{
++	  acquire_attach_mutex (mutex_timeout);
++	  fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
++					      get_ttyp (),
++					      input_available_event,
++					      input_transferred_to_cyg);
++	  release_attach_mutex ();
++	}
++      ReleaseMutex (input_mutex);
++    }
++
+   if (pcon_start_mode)
+     { /* Reaches here when pseudo console initialization is on going. */
+       /* Pseudo condole support uses "CSI6n" to get cursor position.
+@@ -2455,6 +2465,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+       if (pcon_start_mode
+ 	  && !get_ttyp ()->pcon_start && !get_ttyp ()->pcon_start_csi_c)
+ 	{ /* Pseudo console initialization has been done in above code. */
++	  WaitForSingleObject (input_mutex, mutex_timeout);
+ 	  pinfo pp (get_ttyp ()->pcon_start_pid);
+ 	  if (get_ttyp ()->switch_to_nat_pipe
+ 	      && pp && pp->pgid == get_ttyp ()->getpgid ()
+@@ -2472,7 +2483,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
+ 	      /* This accept_input() call is needed in order to transfer input
+ 		 which is not accepted yet to non-cygwin pipe. */
+-	      WaitForSingleObject (input_mutex, mutex_timeout);
+ 	      if (get_readahead_valid ())
+ 		accept_input ();
+ 	      acquire_attach_mutex (mutex_timeout);
+@@ -2481,8 +2491,8 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 						  input_available_event,
+ 						  input_transferred_to_cyg);
+ 	      release_attach_mutex ();
+-	      ReleaseMutex (input_mutex);
+ 	    }
++	  ReleaseMutex (input_mutex);
+ 	  get_ttyp ()->pcon_start_pid = 0;
+ 	}
+       if (len == 0)
+@@ -2492,7 +2502,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+   /* Write terminal input to to_slave_nat pipe instead of output_handle
+      if current application is native console application. */
+   WaitForSingleObject (input_mutex, mutex_timeout);
+-  if (to_be_read_from_nat_pipe () && get_ttyp ()->pcon_activated
++  if (get_ttyp ()->pcon_activated
+       && get_ttyp ()->pty_input_state == tty::to_nat)
+     { /* Reaches here when non-cygwin app is foreground and pseudo console
+ 	 is activated. */
+@@ -2576,20 +2586,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+   /* The code path reaches here when pseudo console is not activated
+      or cygwin process is foreground even though pseudo console is
+      activated. */
+-
+-  /* This input transfer is needed when cygwin-app which is started from
+-     non-cygwin app is terminated if pseudo console is disabled. */
+-  if (to_be_read_from_nat_pipe () && !get_ttyp ()->pcon_activated
+-      && get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
+-      && get_ttyp ()->pty_input_state == tty::to_cyg)
+-    {
+-      acquire_attach_mutex (mutex_timeout);
+-      fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
+-					  get_ttyp (), input_available_event,
+-					  input_transferred_to_cyg);
+-      release_attach_mutex ();
+-    }
+-
+   line_edit_status status = line_edit (p, len, ti, &ret);
+   ReleaseMutex (input_mutex);
+ 
+@@ -4533,9 +4529,9 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+ 					      const WCHAR *envblock,
+ 					      bool stdin_is_ptys)
+ {
++  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   if (disable_pcon || !term_has_pcon_cap (envblock))
+     nopcon = true;
+-  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   /* Setting switch_to_nat_pipe is necessary even if pseudo console
+      will not be activated. */
+   fhandler_base *fh = ::cygheap->fdtab[0];
+@@ -4551,16 +4547,16 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+     pcon_enabled = setup_pseudoconsole ();
+   ReleaseMutex (pipe_sw_mutex);
+   /* For pcon enabled case, transfer_input() is called in master::write() */
++  WaitForSingleObject (input_mutex, mutex_timeout);
+   if (!pcon_enabled && get_ttyp ()->getpgid () == myself->pgid
+       && stdin_is_ptys && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+     {
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+ 		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
+     }
++  ReleaseMutex (input_mutex);
+ }
+ 
+ void
+@@ -4569,22 +4565,22 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 						DWORD force_switch_to)
+ {
+   ttyp->wait_fwd ();
++  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (p->input_mutex, mutex_timeout);
+   if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
+     {
+       DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
+       if ((!switch_to && (ttyp->pcon_activated || stdin_is_ptys))
+ 	  && ttyp->pty_input_state_eq (tty::to_nat))
+ 	{
+-	  WaitForSingleObject (p->input_mutex, mutex_timeout);
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  transfer_input (tty::to_cyg, p->from_master_nat, ttyp,
+ 			  p->input_available_event,
+ 			  p->input_transferred_to_cyg);
+ 	  release_attach_mutex ();
+-	  ReleaseMutex (p->input_mutex);
+ 	}
+     }
+-  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
++  ReleaseMutex (p->input_mutex);
+   if (ttyp->pcon_activated)
+     close_pseudoconsole (ttyp, force_switch_to);
+   else
+@@ -4598,27 +4594,23 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   reset_switch_to_nat_pipe ();
+ 
+   WaitForSingleObject (pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (input_mutex, mutex_timeout);
+   bool was_nat_fg = get_ttyp ()->nat_fg (tc ()->pgid);
+   bool nat_fg = get_ttyp ()->nat_fg (pid);
+   if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
+       && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+     {
+-      ReleaseMutex (pipe_sw_mutex);
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+ 		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
+     }
+   else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
+ 	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+     {
+-      ReleaseMutex (pipe_sw_mutex);
+       bool attach_restore = false;
+       HANDLE from = get_handle_nat ();
+       DWORD resume_pid = 0;
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       if (get_ttyp ()->pcon_activated && get_ttyp ()->nat_pipe_owner_pid
+ 	  && !get_console_process_id (get_ttyp ()->nat_pipe_owner_pid, true))
+ 	{
+@@ -4636,10 +4628,9 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 	resume_from_temporarily_attach (resume_pid);
+       else
+ 	release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
+     }
+-  else
+-    ReleaseMutex (pipe_sw_mutex);
++  ReleaseMutex (input_mutex);
++  ReleaseMutex (pipe_sw_mutex);
+ }
+ 
+ bool
+@@ -4649,8 +4640,8 @@ fhandler_pty_master::need_send_ctrl_c_event ()
+      apps will be done in pseudo console, therefore, sending it in
+      fhandler_pty_master::write() duplicates that event for non-cygwin
+      apps. So return false if pseudo console is activated. */
+-  return !(to_be_read_from_nat_pipe () && get_ttyp ()->pcon_activated
+-    && get_ttyp ()->pty_input_state == tty::to_nat);
++  return !(get_ttyp ()->pcon_activated
++	   && get_ttyp ()->pty_input_state == tty::to_nat);
+ }
+ 
+ void
+-- 
+2.51.0
 
-97% email deliverability - every record is verified and accurate.
-
-Every contact includes direct email, phone, and complete institution detail=
-s.
-
-Can I forward a sample with pricing?
-
-Best regards
-Wren M
-
-To remove from this mailing, reply with the subject line "LEAVE US"
-
---_000_PN2P287MB0537A1B5A59B76CCFDDCF527991B2PN2P287MB0537INDP_--
