@@ -1,189 +1,380 @@
 Return-Path: <SRS0=y1f5=EJ=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 4B0D14B99F46
-	for <cygwin-patches@cygwin.com>; Sat, 13 Jun 2026 14:06:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4B0D14B99F46
+	by sourceware.org (Postfix) with ESMTPS id CAD984B99F6E
+	for <cygwin-patches@cygwin.com>; Sat, 13 Jun 2026 14:07:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CAD984B99F6E
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4B0D14B99F46
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CAD984B99F6E
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781359616; cv=none;
-	b=bB3jnGvcqbQXqTuCaTqljn1xaxJgXj5XJbrtpw+Eh8Xlf23dMGzllS2nHcT1PsnxFq4shXvla+7oX+T6YjiisLdYXSI+fpZg68HdEmvjiR5HRsQtdNKLohLsHfHaS8C8Yxw5r2Pt2O6BP2e1+SzKeS/EM0X7iGiKJCpKnvI2DdU=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781359649; cv=none;
+	b=D33VQqZK7vsyAy52V6ZXKyYF4xojBoELOxPBBGsT5x/0WxYx6HP2h/0rC5BPaWoEnACDY80VEFg2hJGYzVP31xSEGdFicHzrv62fyUSkB36tCIdcdPRcPs+zl/4IY9g4VFr4b31iM9qUvtp4sTuXyXeeg+z5tjQPe7qF1sk75Xk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781359616; c=relaxed/simple;
-	bh=AZ39C57n1ZWn3EUC1a1ayB9DT3IGxpht6nahEAYObio=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=K/TUGBzPTIk0HBmv+ua1Gx5fZrz7TswEcnS6uN3W2K1MaY0ew9fko+tE2e1K8FYAXMmEsfifoFcE5EALY2tdH2ei1/ikR5sBO5gWtx0GBC7NM1WHxbRrSohCmQaeOmArS8S8qRVtpPQFzHQumZdgj8fl8fTIijt14N2tkJtIq58=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=fPorKzF8
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4B0D14B99F46
+	t=1781359649; c=relaxed/simple;
+	bh=o4OkVKDC0dGb6wQi6gASSgWtZBZ1HvDESOyVeJEp0NE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=WFssKM/nfdeEYPKSBvJ3LQOIQhpQcCqzeLz1HRdkpJglNyjIhVh52JgeVkTyhsGIpN9TzYG64VQ92QQVsf1S9vS8X6LAHxixE7q6mRD3RI63hr2T3nZsXPJdQXtChawdasAQf9s9NWFu5MelFC7KTdxaAe3v0r9c+Ej+N5KWaF8=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Ro2mP/Mm
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CAD984B99F6E
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=fPorKzF8
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Ro2mP/Mm
 Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20260613140654565.UYQS.44671.HP-Z230@nifty.com>;
-          Sat, 13 Jun 2026 23:06:54 +0900
+          id <20260613140727125.UYUD.44671.HP-Z230@nifty.com>;
+          Sat, 13 Jun 2026 23:07:27 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Koichi Murase <myoga.murase@gmail.com>
-Subject: [PATCH v3 2/2] Cygwin: pty: Prevent unintended conversion for cursor position report
-Date: Sat, 13 Jun 2026 23:06:20 +0900
-Message-ID: <20260613140630.24451-3-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v5] Cygwin: pty: Fix race issue between starting and exiting non-cygwin apps
+Date: Sat, 13 Jun 2026 23:07:11 +0900
+Message-ID: <20260613140718.25268-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260613140630.24451-1-takashi.yano@nifty.ne.jp>
-References: <20260613140630.24451-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781359614;
- bh=xbuGBEs0ajtp68VA2z9g/XFd6yoSN+Yji2Pp3lMwZTU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=fPorKzF8cyKElnFTZh3jSzBWHMAlR75Na7gRidkALhDNe/lt4iMISc1nUXGTu6dlx+5ODucf
- LV/tIVrYVDJpIRNDS72Svx8IEf0vWI6L5jU8TNAb52hFi9dD68RFt1oy4il4QZ0ok2Jjo0BrNn
- n2hhw7pijDpLZ3ia81VfJkPwJqfMo603BmA3qjux+vhDXpm0LFx+AnDA92X8tpckvuBDa1Hp0k
- oQ5VENZRjEoxsBMVNvDY03IEM6m5DQFsI3PO0C2hsOs/iUqjxAdCqfeFxADNle0kro8EFVSbEE
- EFYlqRe+FFY3lottW+2bGgQEwaemOknzxiJWkHHIh4YXnwWw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781359647;
+ bh=YJyotIfN6Tm2THjIgBxXyj4ZJexfi9DF2wSctIeoFyE=;
+ h=From:To:Cc:Subject:Date;
+ b=Ro2mP/MmCD32J7XUr33Fy1YFALUIkA82PtcZ44yQqDkWuULNpUOxewORJSHp0Q9oSKKR/+cE
+ bPT0JCu8PYUgmkFyD3LIwYpir6v6x1b8gyHPOJ2vcA1koOc1832LruiziyYHxKys3TSHusVqal
+ GiwU1OVLBW1ZDNzypw5GSh+7JW6dk+LnsE69Zt7jvTT8X6bgR+/t3RwEu8K+IoaERvmhNB3AC7
+ rFEOMw4AQphJ90xlTIqTd1l+u+SqshfHvw8QOdnsrIkdE8ccKT2iVm7hAQ0PMWqsQ5i0gTPbEe
+ KgLNCEB+BAYMgvixdKRIkilwhK8RPJ6snc5IjKWK605ArPeg==
 X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-When the cursor position report ("CSI m;n R") is transferred from
-cyg-pipe to nat-pipe, it is undesirably converted into Fn3 key by
-pseudo console. This patch adds a workaround to prevent this
-unintended conversion for cursor position report by enabling
-ENABLE_VIRTUAL_TERMINAL_INPUT flag temporarily.
+Currently, when a non-cygwin program (A) is about to exit, and another
+non-cygwin program (B) is started, input transferring between cyg-pipe
+and nan-pipe may not work as expected. When the non-cygwin program (A)
+exits, input transferring from nat-pipe to cyg-pipe will be performed.
+However, the the non-cygwin program (B) will performs input transferring
+from cyg-pipe to nat-pipe at the same time.
+ 1) The the non-cygwin program (A) checks current input pipe state,
+    then it is nat-pip since the this program is a non-cygwin program.
+    The program (A) also checkes if any handover target exists, but
+    it is not found since the probram (B) is not started yet. So,
+    the program (A) decided to transfer input form nat-pipe to cyg-
+    pipe.
+ 2) Before the non-cygwin (A) program performs input transferring,
+    if the non-cygwin program (B) is started and checks the input
+    pipe state, it is nat-pipe state, so the non-cygwin program (B)
+    does not perform input transferring.
+ 3) However, just after that, the non-cygwin program (A) performs
+    input transferring from nat-pipe to cyg-pipe, so typeahead input
+    will be stored in cyg-pipe.
+ 4) The non-cygwin program (B) cannot read the typeahead input
+    because it is now in the cyg-pipe.
+Transferring input itself is guarded by input_mutex, but the pre-
+check is not. With this patch, the guard is enhanced so that the
+state check and tranferring input are done in atomic way.
 
-Addresses: https://cygwin.com/pipermail/cygwin/2026-June/259776.html
-Reported-by: Koichi Murase <myoga.murase@gmail.com>
+Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/fhandler/pty.cc      | 53 +++++++++++++++++++++++++++++-
- winsup/cygwin/local_includes/tty.h |  1 +
- 2 files changed, 53 insertions(+), 1 deletion(-)
+v2: Guard term_has_pcon_cap() as well
+v3: Acquire pipe_sw_mutex first before acquiring input_mutex
+v4: Don't call to_be_read_from_nat_pipe() while holding input_mutex
+    (This simplifies the to_be_read_from_nat_pipe())
+v5: Don't wait pcon_handle_ready_event in req_xfer_input is set.
+    In pcon_start mode, send input data except for response to CSI6n
+    and CSI c to nat-pipe (to_slave_nat) rather than line_edit() if
+    pipe state is tty::to_nat (this happens when req_xfer_input mode).
+
+ winsup/cygwin/fhandler/pty.cc | 110 ++++++++++++++++++----------------
+ 1 file changed, 57 insertions(+), 53 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index e60e30230..e0fc67ae1 100644
+index e0fc67ae1..17bef7ea4 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2445,7 +2445,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	      ixput = 0;
- 	      state = 0;
- 	      wp_tid = 0;
--	      get_ttyp ()->req_xfer_input = false;
- 	      if (!get_ttyp ()->pcon_start && !get_ttyp ()->pcon_start_csi_c)
- 		break;
- 	    }
-@@ -2460,6 +2459,20 @@ fhandler_pty_master::write (const void *ptr, size_t len)
- 	      && pp && pp->pgid == get_ttyp ()->getpgid ()
- 	      && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+@@ -657,8 +657,7 @@ fhandler_pty_master::accept_input ()
+ 
+   HANDLE write_to = get_output_handle ();
+   tmp_pathbuf tp;
+-  if (to_be_read_from_nat_pipe ()
+-      && get_ttyp ()->pty_input_state == tty::to_nat)
++  if (get_ttyp ()->pty_input_state == tty::to_nat)
+     {
+       /* This code is reached if non-cygwin app is foreground and
+ 	 pseudo console is not enabled. */
+@@ -1274,18 +1273,18 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
+ 	  mutex_timeout = INFINITE;
+ 	  if (isHybrid)
  	    {
-+	      if (!get_ttyp ()->req_xfer_input)
-+		{
-+		  HANDLE pcon_handle_ready_event =
-+		    get_ttyp ()->pcon_handle_ready_event;
-+		  get_handle_from_process (get_ttyp ()->nat_pipe_owner_pid,
-+					   pcon_handle_ready_event);
-+		  if (pcon_handle_ready_event)
-+		    {
-+		      cygwait (pcon_handle_ready_event, INFINITE);
-+		      ResetEvent (pcon_handle_ready_event);
-+		      CloseHandle (pcon_handle_ready_event);
-+		    }
-+		}
++	      WaitForSingleObject (input_mutex, mutex_timeout);
+ 	      if (get_ttyp ()->getpgid () == myself->pgid
+ 		  && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
+ 		  && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+ 		{
+-		  WaitForSingleObject (input_mutex, mutex_timeout);
+ 		  acquire_attach_mutex (mutex_timeout);
+ 		  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
+ 				  input_available_event,
+ 				  input_transferred_to_cyg);
+ 		  release_attach_mutex ();
+-		  ReleaseMutex (input_mutex);
+ 		}
++	      ReleaseMutex (input_mutex);
+ 	      if (get_ttyp ()->master_is_running_as_service
+ 		  && get_ttyp ()->pcon_activated)
+ 		/* If the master is running as service, re-attaching to
+@@ -1452,19 +1451,10 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ bool
+ fhandler_pty_common::to_be_read_from_nat_pipe (void)
+ {
+-  /* If the slave is in setup_pseudoconsole(), pipe_sw_mutex cannot
+-     be acquired because the slave has it. In this case pcon_start
+-     will be asserted. During pcon_start, other input than response
+-     to CSI6n should be go to cyg-pipe. So, wait for pcon_start and
+-     return false. */
+-  while (WaitForSingleObject (pipe_sw_mutex, 0) == WAIT_TIMEOUT)
+-    if (get_ttyp ()->pcon_start || get_ttyp ()->pcon_start_csi_c
+-	|| get_ttyp ()->pcon_start_pid)
+-      return false;
+-    else
+-      yield ();
+-
+   bool ret = false;
 +
++  WaitForSingleObject (pipe_sw_mutex, INFINITE);
++
+   if (!get_ttyp ()->switch_to_nat_pipe)
+     goto out;
+ 
+@@ -2383,6 +2373,26 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
+   int pcon_start_mode =
+     get_ttyp ()->pcon_start ? 1 : (get_ttyp ()->pcon_start_csi_c ? 2 : 0);
++
++  /* This input transfer is needed when cygwin-app which is started from
++     non-cygwin app is terminated if pseudo console is disabled. */
++  if (!get_ttyp ()->pcon_activated && !pcon_start_mode
++      && to_be_read_from_nat_pipe ())
++    {
++      WaitForSingleObject (input_mutex, mutex_timeout);
++      if (get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
++	  && get_ttyp ()->pty_input_state == tty::to_cyg)
++	{
++	  acquire_attach_mutex (mutex_timeout);
++	  fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
++					      get_ttyp (),
++					      input_available_event,
++					      input_transferred_to_cyg);
++	  release_attach_mutex ();
++	}
++      ReleaseMutex (input_mutex);
++    }
++
+   if (pcon_start_mode)
+     { /* Reaches here when pseudo console initialization is on going. */
+       /* Pseudo condole support uses "CSI6n" to get cursor position.
+@@ -2404,7 +2414,13 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 	  if (p[i] == '\033')
+ 	    {
+ 	      if (ixput)
+-		line_edit (wpbuf, ixput, ti, &ret);
++		{
++		  if (get_ttyp ()->req_xfer_input
++		      && get_ttyp ()->pty_input_state_eq (tty::to_nat))
++		    WriteFile (to_slave_nat, wpbuf, ixput, &n, NULL);
++		  else
++		    line_edit (wpbuf, ixput, ti, &ret);
++		}
+ 	      ixput = 0;
+ 	      state = 1;
+ 	      wp_tid = _my_tls.thread_id;
+@@ -2422,7 +2438,13 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 		}
+ 	    }
+ 	  else
+-	    line_edit (p + i, 1, ti, &ret);
++	    {
++	      if (get_ttyp ()->req_xfer_input
++		  && get_ttyp ()->pty_input_state_eq (tty::to_nat))
++		WriteFile (to_slave_nat, p + i, 1, &n, NULL);
++	      else
++		line_edit (p + i, 1, ti, &ret);
++	    }
+ 	  len = orig_len - i - 1;
+ 	  ptr = p + i + 1;
+ 	  if (state == 1 && wp_tid == _my_tls.thread_id && p[i] == 'R')
+@@ -2454,6 +2476,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+       if (pcon_start_mode
+ 	  && !get_ttyp ()->pcon_start && !get_ttyp ()->pcon_start_csi_c)
+ 	{ /* Pseudo console initialization has been done in above code. */
++	  WaitForSingleObject (input_mutex, mutex_timeout);
+ 	  pinfo pp (get_ttyp ()->pcon_start_pid);
+ 	  if (get_ttyp ()->switch_to_nat_pipe
+ 	      && pp && pp->pgid == get_ttyp ()->getpgid ()
+@@ -2463,8 +2486,9 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 		{
+ 		  HANDLE pcon_handle_ready_event =
+ 		    get_ttyp ()->pcon_handle_ready_event;
+-		  get_handle_from_process (get_ttyp ()->nat_pipe_owner_pid,
+-					   pcon_handle_ready_event);
++		  pcon_handle_ready_event =
++		    get_handle_from_process (get_ttyp ()->nat_pipe_owner_pid,
++					     pcon_handle_ready_event);
+ 		  if (pcon_handle_ready_event)
+ 		    {
+ 		      cygwait (pcon_handle_ready_event, INFINITE);
+@@ -2475,7 +2499,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 
  	      /* This accept_input() call is needed in order to transfer input
  		 which is not accepted yet to non-cygwin pipe. */
- 	      WaitForSingleObject (input_mutex, mutex_timeout);
-@@ -2473,6 +2486,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+-	      WaitForSingleObject (input_mutex, mutex_timeout);
+ 	      if (get_readahead_valid ())
+ 		accept_input ();
+ 	      acquire_attach_mutex (mutex_timeout);
+@@ -2484,9 +2507,9 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+ 						  input_available_event,
+ 						  input_transferred_to_cyg);
  	      release_attach_mutex ();
- 	      ReleaseMutex (input_mutex);
+-	      ReleaseMutex (input_mutex);
  	    }
-+	  get_ttyp ()->req_xfer_input = false;
+ 	  get_ttyp ()->req_xfer_input = false;
++	  ReleaseMutex (input_mutex);
  	  get_ttyp ()->pcon_start_pid = 0;
  	}
        if (len == 0)
-@@ -3767,6 +3781,8 @@ fhandler_pty_slave::setup_pseudoconsole ()
-       si.StartupInfo.hStdOutput = NULL;
-       si.StartupInfo.hStdError = NULL;
+@@ -2496,7 +2519,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+   /* Write terminal input to to_slave_nat pipe instead of output_handle
+      if current application is native console application. */
+   WaitForSingleObject (input_mutex, mutex_timeout);
+-  if (to_be_read_from_nat_pipe () && get_ttyp ()->pcon_activated
++  if (get_ttyp ()->pcon_activated
+       && get_ttyp ()->pty_input_state == tty::to_nat)
+     { /* Reaches here when non-cygwin app is foreground and pseudo console
+ 	 is activated. */
+@@ -2580,20 +2603,6 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+   /* The code path reaches here when pseudo console is not activated
+      or cygwin process is foreground even though pseudo console is
+      activated. */
+-
+-  /* This input transfer is needed when cygwin-app which is started from
+-     non-cygwin app is terminated if pseudo console is disabled. */
+-  if (to_be_read_from_nat_pipe () && !get_ttyp ()->pcon_activated
+-      && get_ttyp ()->nat_fg (get_ttyp ()->getpgid ())
+-      && get_ttyp ()->pty_input_state == tty::to_cyg)
+-    {
+-      acquire_attach_mutex (mutex_timeout);
+-      fhandler_pty_slave::transfer_input (tty::to_nat, from_master,
+-					  get_ttyp (), input_available_event,
+-					  input_transferred_to_cyg);
+-      release_attach_mutex ();
+-    }
+-
+   line_edit_status status = line_edit (p, len, ti, &ret);
+   ReleaseMutex (input_mutex);
  
-+      get_ttyp ()->pcon_handle_ready_event =
-+	CreateEvent (&sec_none_nih, TRUE, FALSE, NULL);
-       get_ttyp ()->pcon_activated = true;
-       get_ttyp ()->pcon_start = true;
-       get_ttyp ()->pcon_start_pid = myself->pid;
-@@ -3853,6 +3869,7 @@ skip_create:
-       /* Discard the pseudo console handler container here.
- 	 Reconstruct it temporary when it is needed. */
-       HeapFree (GetProcessHeap (), 0, hp);
-+      SetEvent (get_ttyp ()->pcon_handle_ready_event);
-     }
- 
-   acquire_attach_mutex (mutex_timeout);
-@@ -4060,6 +4077,11 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
- 	  ttyp->pcon_start = false;
- 	  ttyp->pcon_start_pid = 0;
- 	}
-+      if (ttyp->pcon_handle_ready_event)
-+	{
-+	  CloseHandle (ttyp->pcon_handle_ready_event);
-+	  ttyp->pcon_handle_ready_event = NULL;
-+	}
-     }
-   else
-     { /* Just detach from the pseudo console if I am not owner. */
-@@ -4308,6 +4330,26 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
- 
-   UINT cp_from = 0, cp_to = 0;
- 
-+  HANDLE h_pcon_in = NULL;
-+  DWORD con_mode = 0;
-+  if (ttyp->pcon_activated && dir == tty::to_nat)
-+    {
-+      /* Escape sequences such as the cursor position report ("CSI m;n R")
-+	 are undesirably converted into an Fn3 key by pseudo console.
-+	 To privent this unintended conversion, temporarily enable
-+	 ENABLE_VIRTUAL_TERMINAL_INPUT flag. */
-+      h_pcon_in =
-+	get_handle_from_process (ttyp->nat_pipe_owner_pid, ttyp->h_pcon_in);
-+      if (h_pcon_in)
-+	{
-+	  DWORD target_pid = ttyp->nat_pipe_owner_pid;
-+	  DWORD resume_pid = attach_console_temporarily (target_pid);
-+	  GetConsoleMode (h_pcon_in, &con_mode);
-+	  SetConsoleMode (h_pcon_in, con_mode | ENABLE_VIRTUAL_TERMINAL_INPUT);
-+	  resume_from_temporarily_attach (resume_pid);
-+	}
-+    }
-+
-   if (dir == tty::to_nat)
+@@ -4537,9 +4546,9 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+ 					      const WCHAR *envblock,
+ 					      bool stdin_is_ptys)
+ {
++  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   if (disable_pcon || !term_has_pcon_cap (envblock))
+     nopcon = true;
+-  WaitForSingleObject (pipe_sw_mutex, INFINITE);
+   /* Setting switch_to_nat_pipe is necessary even if pseudo console
+      will not be activated. */
+   fhandler_base *fh = ::cygheap->fdtab[0];
+@@ -4555,16 +4564,16 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+     pcon_enabled = setup_pseudoconsole ();
+   ReleaseMutex (pipe_sw_mutex);
+   /* For pcon enabled case, transfer_input() is called in master::write() */
++  WaitForSingleObject (input_mutex, mutex_timeout);
+   if (!pcon_enabled && get_ttyp ()->getpgid () == myself->pgid
+       && stdin_is_ptys && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
      {
-       cp_from = ttyp->term_code_page;
-@@ -4422,6 +4464,15 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+ 		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
      }
-   CloseHandle (to);
++  ReleaseMutex (input_mutex);
+ }
  
-+  if (h_pcon_in)
-+    {
-+      DWORD target_pid = ttyp->nat_pipe_owner_pid;
-+      DWORD resume_pid = attach_console_temporarily (target_pid);
-+      SetConsoleMode (h_pcon_in, con_mode);
-+      resume_from_temporarily_attach (resume_pid);
-+      CloseHandle (h_pcon_in);
-+    }
-+
-   ttyp->pty_input_state = dir;
-   /* Fix input_available_event which indicates availability in cyg pipe. */
-   if (dir == tty::to_nat) /* all data is transfered to nat pipe,
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index 4fbebd820..0adad03e6 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -125,6 +125,7 @@ private:
-   bool pcon_start_csi_c;
-   bool switch_to_nat_pipe;
-   DWORD nat_pipe_owner_pid;
-+  HANDLE pcon_handle_ready_event;
-   UINT term_code_page;
-   ULONGLONG fwd_last_time;
-   bool fwd_not_empty;
+ void
+@@ -4573,22 +4582,22 @@ fhandler_pty_slave::cleanup_for_non_cygwin_app (handle_set_t *p, tty *ttyp,
+ 						DWORD force_switch_to)
+ {
+   ttyp->wait_fwd ();
++  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (p->input_mutex, mutex_timeout);
+   if (nat_pipe_owner_self (ttyp->nat_pipe_owner_pid))
+     {
+       DWORD switch_to = get_winpid_to_hand_over (ttyp, force_switch_to);
+       if ((!switch_to && (ttyp->pcon_activated || stdin_is_ptys))
+ 	  && ttyp->pty_input_state_eq (tty::to_nat))
+ 	{
+-	  WaitForSingleObject (p->input_mutex, mutex_timeout);
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  transfer_input (tty::to_cyg, p->from_master_nat, ttyp,
+ 			  p->input_available_event,
+ 			  p->input_transferred_to_cyg);
+ 	  release_attach_mutex ();
+-	  ReleaseMutex (p->input_mutex);
+ 	}
+     }
+-  WaitForSingleObject (p->pipe_sw_mutex, INFINITE);
++  ReleaseMutex (p->input_mutex);
+   if (ttyp->pcon_activated)
+     close_pseudoconsole (ttyp, force_switch_to);
+   else
+@@ -4602,27 +4611,23 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+   reset_switch_to_nat_pipe ();
+ 
+   WaitForSingleObject (pipe_sw_mutex, INFINITE);
++  WaitForSingleObject (input_mutex, mutex_timeout);
+   bool was_nat_fg = get_ttyp ()->nat_fg (tc ()->pgid);
+   bool nat_fg = get_ttyp ()->nat_fg (pid);
+   if (!was_nat_fg && nat_fg && get_ttyp ()->switch_to_nat_pipe
+       && get_ttyp ()->pty_input_state_eq (tty::to_cyg))
+     {
+-      ReleaseMutex (pipe_sw_mutex);
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       transfer_input (tty::to_nat, get_handle (), get_ttyp (),
+ 		      input_available_event, input_transferred_to_cyg);
+       release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
+     }
+   else if (was_nat_fg && !nat_fg && get_ttyp ()->switch_to_nat_pipe
+ 	   && get_ttyp ()->pty_input_state_eq (tty::to_nat))
+     {
+-      ReleaseMutex (pipe_sw_mutex);
+       bool attach_restore = false;
+       HANDLE from = get_handle_nat ();
+       DWORD resume_pid = 0;
+-      WaitForSingleObject (input_mutex, mutex_timeout);
+       if (get_ttyp ()->pcon_activated && get_ttyp ()->nat_pipe_owner_pid
+ 	  && !get_console_process_id (get_ttyp ()->nat_pipe_owner_pid, true))
+ 	{
+@@ -4640,10 +4645,9 @@ fhandler_pty_slave::setpgid_aux (pid_t pid)
+ 	resume_from_temporarily_attach (resume_pid);
+       else
+ 	release_attach_mutex ();
+-      ReleaseMutex (input_mutex);
+     }
+-  else
+-    ReleaseMutex (pipe_sw_mutex);
++  ReleaseMutex (input_mutex);
++  ReleaseMutex (pipe_sw_mutex);
+ }
+ 
+ bool
+@@ -4653,8 +4657,8 @@ fhandler_pty_master::need_send_ctrl_c_event ()
+      apps will be done in pseudo console, therefore, sending it in
+      fhandler_pty_master::write() duplicates that event for non-cygwin
+      apps. So return false if pseudo console is activated. */
+-  return !(to_be_read_from_nat_pipe () && get_ttyp ()->pcon_activated
+-    && get_ttyp ()->pty_input_state == tty::to_nat);
++  return !(get_ttyp ()->pcon_activated
++	   && get_ttyp ()->pty_input_state == tty::to_nat);
+ }
+ 
+ void
 -- 
 2.51.0
 
