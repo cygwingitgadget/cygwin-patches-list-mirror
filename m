@@ -1,106 +1,58 @@
 Return-Path: <SRS0=y1f5=EJ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
-	by sourceware.org (Postfix) with ESMTPS id 51EB74BA23D5
-	for <cygwin-patches@cygwin.com>; Sat, 13 Jun 2026 07:33:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 51EB74BA23D5
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id E7E0F4B99F58
+	for <cygwin-patches@cygwin.com>; Sat, 13 Jun 2026 14:06:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E7E0F4B99F58
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 51EB74BA23D5
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781335996; cv=none;
-	b=eP84m0/+L2JyWvNk7N2xU21pyutYWzBoNFXIB/GuqZi/X4+tdnVtf/m7qCjYyd+jgYtbdius1CHnOHgzTFJjSKh9nNag2qB8M6/1N2hKVATjH9/DkBWMJU/fLpHig+emwGSgTdPYA9nkDDh26dy4zgoj1A+hQlx8IICcVXtKEjE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E7E0F4B99F58
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781359602; cv=none;
+	b=UKHEnoyaAUBL782mPpkEURic3dxN3x0lckwFWWDvQ727FZKwfVmmNNBz4Ct5RzsGNSoQsloD2Pg3V+nxDiniDLkajH083QQIYCvmx5KefCd5ZIP1Tu64D1kyaHhlTxpqAja97DbIJv4o0uO3i+jf0SXAb6llCm4eldXejFD7D78=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781335996; c=relaxed/simple;
-	bh=YRKWNG37qNf/FqV5Xj6XFTgY6SoGaMTyquqps4sCvWo=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=tXlpT7LecoDDkNZod5dI0jEpf7bxlTKcy17MGXRdDezJartkBJtJ0YuvXGaeQUtZtnnwqBm8Atlz3kerB1x29VDrzU7LKtA+6rPHwo4dXcfBRQveVCGyGwUG0bmH4chohrXrTJVXip2nKgJdnT8MoWVM+sdUdX4s+56mO4bUPYc=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=jOo9LuMo
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 51EB74BA23D5
+	t=1781359602; c=relaxed/simple;
+	bh=ryeomBli8cL2bxPUaMgKGY1x0+qsiFrHa0k8/5GqERA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=enISVJKxs9RPpAD6Szm3BOx/q2NQp3oQPRrvH5rfnfMAl0r5a6cMAejn3q5huwraCj8ofVEUrxVjyABpDKbGAtf0zmNsf37HjehrCl0TydBm4B0ibW+l7F3hr3DH8pnl4VbWKe55dQB3DpKpL6p3RItRiTukuy5r1HRTYJURGEY=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Gu5mCyjv
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E7E0F4B99F58
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=jOo9LuMo
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260613073312795.RKSP.102121.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sat, 13 Jun 2026 16:33:12 +0900
-Date: Sat, 13 Jun 2026 16:33:11 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Gu5mCyjv
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20260613140639075.UYOV.44671.HP-Z230@nifty.com>;
+          Sat, 13 Jun 2026 23:06:39 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Cygwin: clipboard: Add workaround for
- ERROR_CLIPBOARD_NOT_OPEN
-Message-Id: <20260613163311.e9e33c245bda88ebd4f1fe74@nifty.ne.jp>
-In-Reply-To: <a141abf4-29f6-4259-bb10-d4f45a9996d1@maxrnd.com>
-References: <20260613025412.642-1-takashi.yano@nifty.ne.jp>
-	<a141abf4-29f6-4259-bb10-d4f45a9996d1@maxrnd.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781335992;
- bh=ki4IQTSud3sGkVwHOQrbvITeLN1urhB/v3x4dL+VARw=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=jOo9LuMom9g+WCdJTjkFAaO/VvFvXMmxMTaRZE7tWeFg7X3tRJhGiUBpHhikxRCfSxq2N7G8
- B/MnuYu9cCM2B7doiE03YtBns/zUJq000S9inn/TC93ePq36+7nmFzxStu89qCtfs3K7LkDAI7
- YtH/L/KAoRGqIj/cKxWbSZYhsFbEr+dTSxK99gebJq1aqfiiM+nz3sWuaRxeYhaF4At6f2ZNwN
- NzflArWYnqDGQ/OrM3ewKDcGzVhOeykdiK69yWw/+DZHXlK4/h/pNjoxS+EbwmY59tHsM0EoEN
- T+ZukdulHL9tKkZtxBm40Zi0szqQiVAqJJHZwsUpGXYaCi5w==
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v3 0/2] Prevent unintended conversion for cursor position report
+Date: Sat, 13 Jun 2026 23:06:18 +0900
+Message-ID: <20260613140630.24451-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781359599;
+ bh=1kVWe/+jSTwbadGegQtZW4igwE1DsAbquGguFrlu9NU=;
+ h=From:To:Cc:Subject:Date;
+ b=Gu5mCyjv0UgUZOWpyNAzBC6hA6dJQ1vRPTP4qx/fwpJo2fWlF4NWYJu3kY6WqswHFHhRbL9K
+ 0t+43RivjWdbV8yvbCnoxSVCQlEacAhWyoQNfwJByclgCZFT4Rsm/fNlMoLm8BjBv+41rY58rK
+ dnE6JVBaOCiscAgGpCFmABQi9B/n99xc2tOlk2WcpIFzcVmsht2VRsPSauKC/7sZYftX1loBUX
+ iSTCVfu2Iyr7m3ntuXSClZwlj0PoBVJFmp7Vx/2okquVhV5xWHdbrZMM84YXn2LCUwQAzs6ww3
+ zBJsrt0obIAySsDE3p6+QbZIztb9nGmYNvEiKJglS61ZgBfg==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Fri, 12 Jun 2026 22:55:05 -0700
-Mark Geisert wrote:
-> Hi Takashi,
-> 
-> On 6/12/2026 7:54 PM, Takashi Yano wrote:
-> > SetClipboardData() and GetClipboardData() occasionally fail with
-> > ERROR_CLIPBOARD_NOT_OPEN, even though OpenClipboard() succeeded if
-> > NULL HWND is used. Retry until GetClipboardData() does not return
-> > ERROR_CLIPBOARD_NOT_OPEN.
-> > 
-> > Addresses: https://cygwin.com/pipermail/cygwin/2026-February/259438.html
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Mark Geisert <mark@maxrnd.com>
-> > ---
-> > v2: Handle ERROR_NOT_FOUND case. Call CloseClipboard() in the loop.
-> > v3: Change the timing of CloseClipboard().
-> 
-> Thanks for catching this ^^^ I was just about to mention it myself...
-> 
-> >   winsup/cygwin/fhandler/clipboard.cc | 19 +++++++++++++++++--
-> >   1 file changed, 17 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/clipboard.cc b/winsup/cygwin/fhandler/clipboard.cc
-> > index 12691c7c1..1273863f4 100644
-> > --- a/winsup/cygwin/fhandler/clipboard.cc
-> > +++ b/winsup/cygwin/fhandler/clipboard.cc
-> > @@ -25,11 +25,26 @@ details. */
-> >   static inline bool
-> >   open_clipboard ()
-> >   {
-> > -  const int max_retry = 10;
-> > +  const int max_retry = 20;
-> >     for (int i = 0; i < max_retry; i++)
-> >       {
-> > +      /* No appropriate HWND exists here. */
-> >         if (OpenClipboard (NULL))
-> > -	return true;
-> > +	{
-> > +	  /* SetClipboardData() and GetClipboardData() occasionally
-> > +	     fail with ERROR_CLIPBOARD_NOT_OPEN, even though
-> > +	     OpenClipboard() succeeded if NULL HWND is used.
-> > +	     Retry until GetClipboardData() does not return
-> > +	     ERROR_CLIPBOARD_NOT_OPEN. */
-> > +	  if (GetClipboardData (CF_UNICODETEXT))
-> > +	    return true;
-> > +	  DWORD err = GetLastError ();
-> 
-> Given the ambiguity of "ERROR_NOT_FOUND" I would add a one-line comment 
-> here saying ERROR_NOT_FOUND means GetClipboardData() couldn't find 
-> CF_UNICODETEXT data, but it would return data if you ask for the correct 
-> format. This latter case means the clipboard is indeed open. (Or some 
-> briefer way of saying this complicated case.)
-> 
-> Hmm. Maybe more than one line for that comment. With that, patch is GTG.
+v2: Close pcon_handle_ready_event when the first (not the last) pcon owner
+    is closed.
+v3: Do not wait for pcon_handle_ready_event when req_xfer_input case
 
-Thanks! Pushed.
+Takashi Yano (2):
+  Cygwin: pty: Introduce a helper function get_handle_from_process()
+  Cygwin: pty: Prevent unintended conversion for cursor position report
+
+ winsup/cygwin/fhandler/pty.cc      | 119 ++++++++++++++++++++---------
+ winsup/cygwin/local_includes/tty.h |   1 +
+ 2 files changed, 86 insertions(+), 34 deletions(-)
 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
