@@ -1,112 +1,86 @@
-Return-Path: <SRS0=d61H=EK=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
-	by sourceware.org (Postfix) with ESMTP id 8683A4B9DB7C
-	for <cygwin-patches@cygwin.com>; Sun, 14 Jun 2026 16:17:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8683A4B9DB7C
+Return-Path: <SRS0=Czgb=EN=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.227])
+	by sourceware.org (Postfix) with ESMTP id 01F2C4BB1C11
+	for <cygwin-patches@cygwin.com>; Wed, 17 Jun 2026 11:07:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 01F2C4BB1C11
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8683A4B9DB7C
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.197
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781453820; cv=none;
-	b=na2w7cwcqOXMPMr/Safszqgj9U5O2aXuaaifuIjGVB4xSUhUlqqbX65q7eFkmL7kdvLVh4XAz+kB62KI1Ome3wAEnLi8Loim/k69KMzwz7Xwnkx8lLrw9UeP+uPURQjE8/jmiJBTta3SeVFP5j1P0iRyU1xUWhfOo7e1omvRsSQ=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 01F2C4BB1C11
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.227
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781694469; cv=none;
+	b=MfufnY9jdwk9c1jl2onbPnMKWnhmHsi/yaD+PouUzgSOZYJpGzYiOX11sFVXgsxvJHri8wTOESirdp/2GvyddiQPV6hIWMPgyzXVZCZ3R9ibSJloygXbDzBtrrcoZAjsVbdHoWh+NWri5jNud6itrM6QmifhpeROL9IQ+PdxhIQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781453820; c=relaxed/simple;
-	bh=eSWCFNpM8eAFlnltlXr8EQ3EGSdB2Csc/HDax9UWzAU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=o1KqBuZMGhDjALHqKvA2mvysAZKHDc/2oF9ZDtiQnk+6WN/xcAY62TUxTttpiBdl1wbjLc1fwyvzapglJO2B8b1CKsTsoNL3gqhj0L5FWwt6HiN+bg5QGViKTXJqeBklKr++9XJLOlYYm/GNbyJDU9slpsT959U2RBqlWacj+PA=
+	t=1781694469; c=relaxed/simple;
+	bh=sEFnUKeTsXWRxKhJJp9ceXMesMfSqvGVTPeJ9ITvQZg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To; b=tBWSy9jE4JXxlrcxNxf80fEi9aGTC7InUsne6Dvd8yQDAb6MycrhJUOeDKfUxJbWQNmWxDN0g+FoJls0cdx3S0z4zHmX1b5Tn13OcCNV73FEv+vBnGBqEa2LwfDGTRVuPz1H9ePbNI8rZnGzT4JVUDeB5JI2cn60uBcj5ip6lBo=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8683A4B9DB7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 01F2C4BB1C11
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 69FAABE703306CF9
+X-SNCR-Rigid: 6A02527902F28F29
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTEikD2p4bSKP7x3hRdmix+odSR2JAGekg5RhGRQjmtPJ/m0dy8gFTgD+ZQGqBV7K2+0ESE1aFgDFyR7oT1yh8Yq/jMeIegpiHhU5ML3QVcEEPMF4x2bpKQHhOJTvN8Iy3p4JLF/Tbea/cG82nbiVIDjV37T1HzJexkbDiYRY9q39mott2jjzVK9fnrVF0wGndzhxjDHbLqdTwrIbqVgLav13ktW0PPLuzdOFfJN3esPzcu1NgkTsaOi8rBz7nr1nY2SbbYBJSMdlZS4j5+AgHZcxnOQOR1+uTHJH5EOKV0HA2WVfCiXFYHp+lMJypIqkml1etDaxGMjUqJRGQ1UEWgklrFKMid2pCncY1TVxx6PTZLbVMaG0blhyuIzfMqEZqIkNMw77hrWC9PsF3Gx2LS7LD0X1XfJ+coZIcNbs+hdkDkX+GKazeiCvM0lA3qkH67pSAe2ktFqagPhbwl5zm35B55Dc6VJwhCrNZyWfXCa54JlLANacBLx31FitejnmjjlbFvd//FKEhCkqsrptnXdLNQkJTWMhYrloEISSLeTU4G6Jtm/e8MHjHHWGaBD/ikB48gDOmohwascBvwzkFNl8uQt/qCpeMdYvod6dbpAJ/Q1yJK8gpsMKPRhWAnZZ+xYsh0J7TzhfHMa1vl36guG1i5Y+PFhbzLhUBPbLAMb0g
+X-RazorGate-Vade: dmFkZTEDk3v2VtlieMkzMl135AFq59w1t2h0LKnDZiBhnlFv4chmMGr++8d6K6mhK2TNW4TwBLyoQonyy4fNhe/DIzV5PEc/3x9HMEAsPVdEnayBvZqFIyqZJUEk5kitgUWm1vqruZb0+aZP4ZhlrC89qyMXXX7tBl1z6zKUuMNNgYMvCyArqzoRgHUnHh4Uo1KhPkhbV5HWPUASQswvZ0mDevAykiWoXwss7iZNvz0hPsGK9AGE5nTogpkQ6Ep+1Vzx4YZl9bXXzxwDEFnKiXwvau9xN4FWeAweLycIl4RpP4S7//JsFgZjmbdpm95JckiLuhVX7pldibRrtVzv+70/R7vHVy/sq+4zkeEAbzDXfxpXUkFDhkIb76eExQHkVJ2T2u6qNEpCSD5xrNNZx4pTwie5luSpONmPPuG0zq56YmqTc9gmOCFz+QTaLFbnxWWABYyu5EaRyE39CLXh7n8xZR857lLCvMn1+kdCwAjh04TxEM4Gtz1aSX+K+aQBsBN+FpxVGUxnc7UK0COEQd7UxxstMTbUtIww1rwh10/G3PXolcEhkmavHTdgwQFuonqbxEfnDaqH9hO12xaPxdsv9lQwQtpXshppAQIvm/xYI4biLWkswiB7SDaFM2JCTGZo/hOFHOvZzcWzhg8TmRB0DQgTsKcNAdME6swhQeqf34YC/Q
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (62.56.66.111) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 69FAABE703306CF9; Sun, 14 Jun 2026 17:16:52 +0100
-Message-ID: <d775f31b-f552-409c-b21b-f280180e8089@dronecode.org.uk>
-Date: Sun, 14 Jun 2026 17:16:51 +0100
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A02527902F28F29; Wed, 17 Jun 2026 12:07:44 +0100
+Message-ID: <f09d13dd-49dc-440b-a818-819941010657@dronecode.org.uk>
+Date: Wed, 17 Jun 2026 12:07:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Cygwin: ssp: Add AArch64 implementation
-To: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-References: <PN0P287MB02952FCE57C59FF18096B96D920E2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <34b42100-1722-4bdc-abf9-e9d159456ee0@dronecode.org.uk>
- <PN0P287MB0295E9D540A342B741B82CC592122@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <PN0P287MB0295F1D93B25FA3B90293E35921C2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
 From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
+Subject: Re: [PATCH] Cygwin: exceptions: Fix AArch64 non-incyg signal handling
+To: =?UTF-8?Q?M=C3=A1te_Dimand?= <mate.dimand@arm.com>
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <PN0P287MB0295F1D93B25FA3B90293E35921C2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+References: <d8339a03-a0d3-4b0c-bb10-f706fcc6da49@arm.com>
+Content-Language: en-GB
+In-Reply-To: <d8339a03-a0d3-4b0c-bb10-f706fcc6da49@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 08/06/2026 07:08, Chandru Kumaresan wrote:
-> Thanks for the review!
->> did you consider writing something like (untested): [SW_BREAKPOINT_SIZE refactor]
-> Yes, adopted in v2. I introduced SW_BREAKPOINT_SIZE as a macro (1 for x86/x86_64, 4
-> for aarch64, #error otherwise), unified the PendingBreakpoints struct to use
-> real_insn[SW_BREAKPOINT_SIZE] throughout, and renamed the variable to brk_insn on both
-> architectures. This eliminates the per-arch #ifdef blocks in add_breakpoint and remove_breakpoint.
+On 12/06/2026 09:02, Máte Dimand wrote:
+> This patch fixes crashes that occur when a signal interrupts sigfe or
+> any non-cygwin function that does not preserve the LR register in its
+> prologue/epilogue. This crash was discovered through the "run-heredoc"
+> testcase in bash's testsuite, which caused bash to call "read"
+> frequently, leading to a high chance of a signal interrupting sigfe.
+
+Interesting.
+
+It seems like it should be possible to construct a relatively simple 
+test to demonstrate this.  Could you suggest what that test might look like?
+
+> The "sigdelayed" function in gendef clobbers the LR register to return
+> to the instruction where the thread was interrupted. Picking any other
+> register for branching back would also clobber said register. Leaf
+> functions are not guaranteed to be compiled with LR being preserved on
+> the stack. The solution is to use RtlRestoreContext to restore all
+> registers without needing to sacrifice any.
 > 
->> Hmmm... this is probably just generically right, I guess.
->> (re: only setting running=0 on !dwFirstChance for aarch64)
->   On Windows/AArch64, the single-step mechanism (PSTATE.SS) triggers a first-chance STATUS_SINGLE_STEP
-> exception for every instruction we step through. If we set running=0 on first-chance exceptions,
-> the profiler would exit on the very first step. Limiting it to second-chance (i.e. unhandled) exceptions
-> means we only stop on genuine faults, matching the intent of the original x86 code.
+> The patch includes a C++ version of sigdelayed, which calls
+> RtlRestoreContext at the end. The non-incyg signal handling codepath
+> will change the thread's IP register to this new function instead of
+> the original sigdelayed function written in assembly. Cygwin functions
+> interrupted by signals still use the original function.
 
-Hmmm... I think the x86 code is wrong in that, if a program normally 
-handles and continues from an exception, under profiling we'll just stop 
-on the exception.
+Hmmm... it seems like this is functionally incremental to a patch which 
+hasn't been applied yet, but I can't work out which one.
 
-But I think we can safely leave that until someone actually encounters 
-the maybe-problem.
+> Signed-off-by: Máté Dimand <mate.dimand@arm.com>
 
-> 
-> All other issues (whitespace regression, spurious fprintf indent, missing cmdline_copy comment) are fixed in v2 as well.
+Thanks.
 
-Thanks. Applied.
+> | git am
+> warning: Patch sent with format=flowed; space at the end of lines might be lost.
+> Applying: Cygwin: exceptions: Fix AArch64 non-incyg signal handling
+> error: corrupt patch at line 11
+> Patch failed at 0001 Cygwin: exceptions: Fix AArch64 non-incyg signal handling
 
-> ---
->   winsup/utils/ssp.c | 154 ++++++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 140 insertions(+), 14 deletions(-)
-> 
-[...]
-> -
-> -  run_program (argv[optind]);
-> +  {
-> +    /* CreateProcess (called below with lpApplicationName == NULL) is
-> +       documented to modify the lpCommandLine buffer in place.  argv[optind]
-> +       points into our own argv, so passing it directly lets CreateProcess
-> +       scribble on it; this was observed on aarch64-cygwin as the command
-> +       line coming back mangled (e.g. 'test_hello.exe' -> 'st_hello.exxee')
-> +       on later use.  Pass a private writable copy instead.  It is not freed
-> +       because run_program() stores it in dll_info[0].name, which is read
-> +       later when printing the DLL-profile table.  */
-> +    char *cmdline_copy = strdup (argv[optind]);
-> +    if (!cmdline_copy)
-> +      {
-> +   fprintf (stderr, "Out of memory duplicating cmdline\n");
-> +   exit (1);
-> +      }
-> +    run_program (cmdline_copy);
-> +  }
-
-Hmmm... from the explanation above, it seems like this is in the wrong 
-place and should be inside run_program, around the call to CreateProcess?
-
-Otherwise, the same pointer which is passed to CreateProcess and 
-potentially has its contents mutated by that is also assigned to 
-dll_info[0].name, leading to a potentially corrupted string appearing in 
-the DLL-profile table.
-
-If that supposition is correct, I'd appreciate it if you could come up 
-with a follow-up patch to change that.
-
+I spent about an hour trying to salvage this, without success. Could I 
+possibly trouble you to resend it as an attachment?
