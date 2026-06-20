@@ -1,97 +1,107 @@
-Return-Path: <SRS0=IQe/=EP=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 402474BA799F
-	for <cygwin-patches@cygwin.com>; Fri, 19 Jun 2026 10:40:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 402474BA799F
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 402474BA799F
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781865628; cv=none;
-	b=QIzRTCmeitZS76KNUhQfPI9jrwq7LwMhXkh1YGKfHaYTMHbeK/TPWH3oOgwtZUmJGyKOlxmyYVZM/0UVyuuLu2cAL2LIWrd/EWxpJtjU9fP3ALSjN5Y42XzJSLd03FtRf4bg5n2CVlh0/fPy5RfdU6G6nYQORGdQNU072m7OJ6I=
+Return-Path: <SRS0=JR7i=EQ=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.240])
+	by sourceware.org (Postfix) with ESMTP id A9F074BB1C11
+	for <cygwin-patches@cygwin.com>; Sat, 20 Jun 2026 12:46:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A9F074BB1C11
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A9F074BB1C11
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.240
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781959581; cv=none;
+	b=PLfAlANx+rUMkh4Q0V7WYVgSo12jMoqFq1yM08s+WgfPqM15wQ+st2UDHaXqPDXCtlo5eKBZIK6Bhv3vD8pviWgJt8T7m537qck2oNnOCMdlrMKfyd5ozq7JVawucCNZAYvf6NIirU0nkGzL2wEqNlNRbyDRBocdRy9nlxzfuAQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781865628; c=relaxed/simple;
-	bh=jPtfO3DJIgdN90zmUuXYasK2tZ8DD8nuKzQ6xmDXbOU=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=f3sihmKZtAceErK+w6Z4ikhtDkWNx+QMi1w2jDLN4eROsrDzxYAviUTNvxzdODaaL6uSlbLn5Hm95LPx6BPrtcpOMOBY9ZJngzaIUbF0JkviUM5AQ3azPMdh11nX8VaD2Y5tY4QGVfQJoWbFMtOtfLmDdWeKmFbV8VxyOGxH7ao=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=R+tjBKjv
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 402474BA799F
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=R+tjBKjv
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20260619104025252.KABN.44671.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 19 Jun 2026 19:40:25 +0900
-Date: Fri, 19 Jun 2026 19:40:23 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: Status of patches I proposed recently
-Message-Id: <20260619194023.d52908fe4288d45961568c20@nifty.ne.jp>
-In-Reply-To: <c88a00b4-4bff-4c5d-bb7b-336a7a1d45c8@maxrnd.com>
-References: <20260612224229.a1b848b8a14bb84a471fc958@nifty.ne.jp>
-	<20260613232444.d4bf8f3d8d33908d8be14e74@nifty.ne.jp>
-	<20260619140542.158c4f34e9083169a1882b9c@nifty.ne.jp>
-	<c88a00b4-4bff-4c5d-bb7b-336a7a1d45c8@maxrnd.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+	t=1781959581; c=relaxed/simple;
+	bh=EDAFU6CIL8UMzPujp0K16LBQ9hCgxntSEIEmdLBcRNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=vshCZVPQR7a0SihZsb/frCbJ40oDsoUJ9J0rC4KXDY1X+FbR3xc7u8pK2JUQRKjkeKu7yzwAu3ItWrXvNfx8PICofMn8H7W94A3NLylsrHOA7LyI9wC2NYxXqDMRbmXaAQWkAX0qBqRJJP6ukSnaGuLHMQjsZMyvEGfoKa5f68s=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A9F074BB1C11
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A02527803372E65
+X-Originating-IP: [62.56.66.111]
+X-OWM-Source-IP: 62.56.66.111
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: dmFkZTGJw6sYFaMS3LAll2X9IzS5J4Q70BvrnQltVRcU8PG9XmdKtvrsWk3oBRdWq4dlHDsvQpHtwsCqdQcVz+nw5ruTiQS0o3QVEI3FvR7BQbX2U0J5HvduUpcjmuSTYzmSvWWeRhuXpzgRC4vkJJDqrL5G5QEoy4w3nqWeM+FBsrjdulDjFEIsnJ5PE+UxzGXzcHDQqvY/3WPFbcmwTWUErMHYa0XhUB/GcBXt3399wc2n936wA46vWxC2Yu/xHBRiGaj7Qvgv2qkP0UzlX6l4o9FQUJ5Onxzqqf8vzku1hu+e0/tCKbVzUjLL7i5hRGAURgQJcVwTGOoGXTyAozZdqzHzcfAfBlHySqlRwNWMRd+GG/3YBA8vcrxlQ9lL5QCsJWO425K8ygbkFqb886ue2VDbmZrLP8A58zVT0yP2REg3AwkJpsioR9zW/7485HXmE6dDaubdtJNJr+ZUdD+SsHWU3S6I1LV2SIQha93PaH9ZegjwBKvfe5R3Y1KwJO47wLdK/hb5EAxxS1j7dmsKLlHy5ZPtsBhxD4VmZnNL1l8199PtnCQRaHrI1QZOpEKq7Boz2WzH/Mo+/rtzYe8Czk1815eAOs7LRHdgsABOJBdwIlaD3vppcDJXID3/ovFgZszljuzAxKZALv1oY5Tja/LXGF8J4rkXfA09rQ3EMKDtqg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A02527803372E65; Sat, 20 Jun 2026 13:46:14 +0100
+Message-ID: <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
+Date: Sat, 20 Jun 2026 13:46:13 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: gendef: add _sigfe_maybe for TLS initialization
+To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+References: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1781865625;
- bh=IbzxUjZ7d0Lwr/ldrTiRqKGtKausZXR1ZNu/bupSFD0=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=R+tjBKjvCtcgrwwE9CJmDqJBrZqDqzFowEaLsahNbJML8tF5fFFgzmj8UAWsuA0qTZ12EXaS
- N444Ct6kwEuLfVOJzCeRkPoxyFRJfzEmZoeK76LPtqrLNOS7cb3tDWiAeNV33Zu6S3kWeeRpvx
- eUu16l4o1sM8q0AYVhDSwePgtyVLqHtaYotMR7VnX/5kExhLqKXRZJFbkaRHowp1y8jhwlzKAN
- t0D18PWEVxlegxKCFw7Qr1v/jNoVFTmC6W40gRIIJzU2t1JjHYUlFhEhhJzkQ0VmO1PTv3Jvpe
- oIW1fGBBt93E8uVAwD+1HDFHfZ2YWk4PKCWERtD0OKSUHAzg==
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Mark,
-
-On Fri, 19 Jun 2026 01:54:27 -0700
-Mark Geisert wrote:
-> Hi Takashi,
+On 19/12/2025 17:30, Thirumalai Nagalingam wrote:
+> Hi all,
 > 
-> On 6/18/2026 10:05 PM, Takashi Yano wrote:
-> > Hi,
-> > 
-> > Is anyone willing to review these pty/console patches?
-> > 
-> > On Sat, 13 Jun 2026 23:24:44 +0900
-> > Takashi Yano wrote:
-> >> All pty/console patches are not reviewed yet. Three patches are tested by Koichi.
-> >>
-> >> * pty patches [New feature]:
-> >> [PATCH v2 2/3] Cygwin: pty: Discard pcon input buffer when discard_input is called.      +     [13 Jun]
-> >> [PATCH v2 3/3] Cygwin: pty: Fixup pty state after a cygwin app exits                     +     [13 Jun]
-> >> (These two patches require following pty bug fix patches.)
-> >>
-> >> * pty/console pathces [Bug fix]:
-> >> [PATCH] Cygwin: pty: Do not set input_available_event when applying line_edit()          (T)   [ 8 Jun]
-> >> [PATCH v3 1/2] Cygwin: pty: Introduce a helper function get_handle_from_process()        (T)+  [ 8 Jun]
-> >> [PATCH v3 2/2] Cygwin: pty: Prevent unintended conversion for cursor position report     (T)+  [ 8 Jun]
-> >> [PATCH v5] Cygwin: pty: Fix race issue between starting and exiting non-cygwin app       +     [11 Jun]
-> >> [PATCH 1/3] Cygwin: console: Ensure the master thread runs only when it is supposed to         [11 Jun]
-> >> [PATCH 2/3] Cygwin: console: Fix NOFLSH mode a little                                          [11 Jun]
-> >> [PATCH 3/3] Cygwin: console: Fix typeahead input for bash                                      [11 Jun]
-> >> [PATCH] Cygwin: pty: Treat CR/NL in accept_input() the same as in transfer_input()             [12 Jun]
-> >>
-> >> * Others [ALl done]
-> >> [PATCH v3] Cygwin: clipboard: Add workaround for ERROR_CLIPBOARD_NOT_OPEN                (R)+(P)
-> >>
-> >> + Patch revised after the last report
-> >> (T) Tested
-> >> (R) Under review
-> >> (P) Pushed
+> Please find the attached patch which adds an ARM64 stub for the _sigfe_maybe routine
+> in the gendef script.
 > 
-> I will start looking at these later today, June 19.  Given this code is 
-> new to me and (unlike Johannes) I'm not yet using Claude to assist, it 
-> might be slow-going.  But it's all we've got, looks like ;-).
+> Any feedback or nits are very welcome. The changes are documented with inline
+> comments intended to be self-explanatory. please let me know if any part
+> of this patch should be adjusted.
+> 
+> Thanks for your time and review.
+> 
+> Thanks & regards
+> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+> 
+> In-lined patch:
+> 
+> diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
+> index 1419704b8..52a5b77ca 100755
+> --- a/winsup/cygwin/scripts/gendef
+> +++ b/winsup/cygwin/scripts/gendef
+> @@ -367,8 +367,24 @@ EOF
+>          .include "tlsoffsets"
+>          .text
+> 
+> -_sigfe_maybe:
+> -       .global _sigbe
+> +       .seh_proc _sigfe_maybe
+> +_sigfe_maybe:                                  # stack is aligned on entry!
+> +       .seh_endprologue
+> +       ldr     x10, [x18, #0x8]                // Load TEB pointer in x10
+> +       ldr     x11, =_cygtls.initialized       // Load relative offset of _cygtls.initialized
+> +       add     x11, x10, x11                   // compute absolute address and store in x11
+> +       cmp     sp, x11                         // Compare current stack pointer with TLS location
+> +       b.hs    0f                              // if sp >= tls, skip TLS logic
+> +       ldr     w12, [x11]                      // Load the value at _cygtls.initialized (32-bit)
+> +       movz    w13, #0xc763                    // Prepare magic value(0xc763173f) lower 16 bits
+> +       movk    w13, #0x173f, lsl #16           // Add upper 16 bits, full value now in w13
+> +       cmp     w12, w13                        // Compare loaded value with magic
+> +       b.ne    0f                              // If not equal, not initialized, skip TLS logic
 
-Thanks in advance!
+Hmmm... while staring at this code, trying to refresh my memory of how 
+this it all works... this seems wrong.
 
-> Anybody else with some free time (yeah, right) feel free to join.  The 
-> more eyes on this, the better.  That goes for all patches of course.
+Comparing this to the x86_64 version of sigfe_maybe, shouldn't the 
+branch here be to forward to label 1? Otherwise this function 
+effectively does nothing.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+(Of course, this isn't very important since sigfe_maybe is only used by 
+cygwin_detach_dll())
+
+> +       ret
+> +0:
+> +       ret
+> +       .seh_endproc
+> +
+>   _sigfe:
+>   _sigbe:
+>          .global sigdelayed
+> --
+
