@@ -1,107 +1,102 @@
 Return-Path: <SRS0=JR7i=EQ=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.240])
-	by sourceware.org (Postfix) with ESMTP id A9F074BB1C11
-	for <cygwin-patches@cygwin.com>; Sat, 20 Jun 2026 12:46:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A9F074BB1C11
+Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.159])
+	by sourceware.org (Postfix) with ESMTP id 35B104B99F5A
+	for <cygwin-patches@cygwin.com>; Sat, 20 Jun 2026 13:40:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 35B104B99F5A
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A9F074BB1C11
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.240
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781959581; cv=none;
-	b=PLfAlANx+rUMkh4Q0V7WYVgSo12jMoqFq1yM08s+WgfPqM15wQ+st2UDHaXqPDXCtlo5eKBZIK6Bhv3vD8pviWgJt8T7m537qck2oNnOCMdlrMKfyd5ozq7JVawucCNZAYvf6NIirU0nkGzL2wEqNlNRbyDRBocdRy9nlxzfuAQ=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 35B104B99F5A
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.159
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1781962856; cv=none;
+	b=uKg+Bd5XwJjQIZXHMXwUbmqBzWLLGSxDPu8nTRVEg9rNcUuz3m2jOnVsH4MnyteBOvKTMtqZr/dDm6C0CHhMOYSxxVgQG4kOntKUnf7Y4vdjVGWLRmR+HptIsW5ZxNKWKDd7hPoSaS2QJumlizBcRYxlovV+xxZIwBC1XtfaW9g=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1781959581; c=relaxed/simple;
-	bh=EDAFU6CIL8UMzPujp0K16LBQ9hCgxntSEIEmdLBcRNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=vshCZVPQR7a0SihZsb/frCbJ40oDsoUJ9J0rC4KXDY1X+FbR3xc7u8pK2JUQRKjkeKu7yzwAu3ItWrXvNfx8PICofMn8H7W94A3NLylsrHOA7LyI9wC2NYxXqDMRbmXaAQWkAX0qBqRJJP6ukSnaGuLHMQjsZMyvEGfoKa5f68s=
+	t=1781962856; c=relaxed/simple;
+	bh=M0sgFf5uhXGE/q1cbYtwILLuKodWaRGicKsRBQxxlIQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To; b=R+z5i7MYkmMGx5PJoEBWOTxCU1wnaHEtjAFhk2qUDhvT3c8OvnRH2zEoM2TPs4VtqdsmopuEhYzGa+9iMFO66Wdj8Hc1i+P+ZwoIVZ7vnmpBS9AVru3bfdh4yMPGgmnjYOjnMkMCjj11wq7t9y0cV2T0hEeVce786IkI4CE3Uqk=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A9F074BB1C11
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 35B104B99F5A
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A02527803372E65
+X-SNCR-Rigid: 69FAABE703AE61A6
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTGJw6sYFaMS3LAll2X9IzS5J4Q70BvrnQltVRcU8PG9XmdKtvrsWk3oBRdWq4dlHDsvQpHtwsCqdQcVz+nw5ruTiQS0o3QVEI3FvR7BQbX2U0J5HvduUpcjmuSTYzmSvWWeRhuXpzgRC4vkJJDqrL5G5QEoy4w3nqWeM+FBsrjdulDjFEIsnJ5PE+UxzGXzcHDQqvY/3WPFbcmwTWUErMHYa0XhUB/GcBXt3399wc2n936wA46vWxC2Yu/xHBRiGaj7Qvgv2qkP0UzlX6l4o9FQUJ5Onxzqqf8vzku1hu+e0/tCKbVzUjLL7i5hRGAURgQJcVwTGOoGXTyAozZdqzHzcfAfBlHySqlRwNWMRd+GG/3YBA8vcrxlQ9lL5QCsJWO425K8ygbkFqb886ue2VDbmZrLP8A58zVT0yP2REg3AwkJpsioR9zW/7485HXmE6dDaubdtJNJr+ZUdD+SsHWU3S6I1LV2SIQha93PaH9ZegjwBKvfe5R3Y1KwJO47wLdK/hb5EAxxS1j7dmsKLlHy5ZPtsBhxD4VmZnNL1l8199PtnCQRaHrI1QZOpEKq7Boz2WzH/Mo+/rtzYe8Czk1815eAOs7LRHdgsABOJBdwIlaD3vppcDJXID3/ovFgZszljuzAxKZALv1oY5Tja/LXGF8J4rkXfA09rQ3EMKDtqg
+X-RazorGate-Vade: dmFkZTFl5WE/mUIP3WJiU2CrqgSwDvxpbtcVo0fVsVDOKarUaxSR0UBG51CmRDNMV2hTdXYCzg4f0A+pyBZhKFeRmk9gK7JTFR1Ldbpe/PBcfgayRXTZ3DZZosYZ3WLexskVdVmoSsyOQvPa+BLccQK0mMmghxZdRSiRMDoL/dt8J9VVra8fFTEU5cux9ND3Rjjf33xWBdbkc56WZqdyp7ajG/PBHd0Zb9v/ae3w9IwjQWm/gnVv+VI4mz6GhOLy99SIi6XwCxLGsxdt8kmmdq1rQxqyzCbkZTTy7ooAdsOQZP9dxhb4tdVvRrVAAAJ61Zw27Ib/yrjWHOAdRsf4HDnrn5fOjaei4kYqPn04lEvpmRL6Xb/Aumlu5IxOJWB0AoyM08JaMZWTgnd+5zlseSlq1mGGwxlLKvj3FV7OsZOb3BCIyJSefyteUJ9Ag8DAmGcuNd5i5NRPtjKnBD4rTqVCDo0hMYV8B3+Hjc8KrdIxoaJnYogiu9plnqluKOi+iTfY5mDAocZ5gFSz43eXvDL1zPDkxi+N+FcJbda1nUef0LXkW1VviWbkA1O64j6MGY9BkmjIw7WEyUACuTyhznfWdGUAi6KxDwZD1OlIjAbCjw1NqsSD/DeuPRNqCyE4bgF/3il05SpDUkmcxsmyCmemNeRvxiE7/eaH4nGhcPvdj9ccNw
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (62.56.66.111) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A02527803372E65; Sat, 20 Jun 2026 13:46:14 +0100
-Message-ID: <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
-Date: Sat, 20 Jun 2026 13:46:13 +0100
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 69FAABE703AE61A6; Sat, 20 Jun 2026 14:40:53 +0100
+Message-ID: <bfc95c83-ecf9-44fa-8d5f-0b827feba26f@dronecode.org.uk>
+Date: Sat, 20 Jun 2026 14:40:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: gendef: add _sigfe_maybe for TLS initialization
-To: Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-References: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
 From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
+Subject: Re: [PATCH] Cygwin: exceptions: Fix AArch64 non-incyg signal handling
+To: =?UTF-8?Q?M=C3=A1te_Dimand?= <mate.dimand@arm.com>
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+References: <d8339a03-a0d3-4b0c-bb10-f706fcc6da49@arm.com>
+ <f09d13dd-49dc-440b-a818-819941010657@dronecode.org.uk>
+ <b0cc315f-fd63-417c-9a2c-e7ea871847fd@arm.com>
+Content-Language: en-GB
+In-Reply-To: <b0cc315f-fd63-417c-9a2c-e7ea871847fd@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 19/12/2025 17:30, Thirumalai Nagalingam wrote:
-> Hi all,
+On 18/06/2026 15:05, Máte Dimand wrote:
+> Thank you for the response!
 > 
-> Please find the attached patch which adds an ARM64 stub for the _sigfe_maybe routine
-> in the gendef script.
+> On 6/17/2026 1:07 PM, Jon Turney wrote:
+>> It seems like it should be possible to construct a relatively simple 
+>> test to demonstrate this.  Could you suggest what that test might look 
+>> like? 
 > 
-> Any feedback or nits are very welcome. The changes are documented with inline
-> comments intended to be self-explanatory. please let me know if any part
-> of this patch should be adjusted.
-> 
-> Thanks for your time and review.
-> 
-> Thanks & regards
-> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
-> 
-> In-lined patch:
-> 
-> diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
-> index 1419704b8..52a5b77ca 100755
-> --- a/winsup/cygwin/scripts/gendef
-> +++ b/winsup/cygwin/scripts/gendef
-> @@ -367,8 +367,24 @@ EOF
->          .include "tlsoffsets"
->          .text
-> 
-> -_sigfe_maybe:
-> -       .global _sigbe
-> +       .seh_proc _sigfe_maybe
-> +_sigfe_maybe:                                  # stack is aligned on entry!
-> +       .seh_endprologue
-> +       ldr     x10, [x18, #0x8]                // Load TEB pointer in x10
-> +       ldr     x11, =_cygtls.initialized       // Load relative offset of _cygtls.initialized
-> +       add     x11, x10, x11                   // compute absolute address and store in x11
-> +       cmp     sp, x11                         // Compare current stack pointer with TLS location
-> +       b.hs    0f                              // if sp >= tls, skip TLS logic
-> +       ldr     w12, [x11]                      // Load the value at _cygtls.initialized (32-bit)
-> +       movz    w13, #0xc763                    // Prepare magic value(0xc763173f) lower 16 bits
-> +       movk    w13, #0x173f, lsl #16           // Add upper 16 bits, full value now in w13
-> +       cmp     w12, w13                        // Compare loaded value with magic
-> +       b.ne    0f                              // If not equal, not initialized, skip TLS logic
+> I have attached the source code for a reproducer. It reproduces the 
+> issue by forking the process and having the child process signal the 
+> parent process while the parent process is in a leaf function (which 
+> doesn't preserve the link register). The expected behavior is both begin 
+> and end getting printed successfully and the process ending gracefully. 
+> However, without the patch, only begin gets printed, the parent process 
+> crashes inside the test function, and the child process will fail to 
+> send SIGUSR1 to the dead parent process.
 
-Hmmm... while staring at this code, trying to refresh my memory of how 
-this it all works... this seems wrong.
+Ah, got it. So we don't even need to be interrupting read() for it to 
+occur.  Even simpler.
 
-Comparing this to the x86_64 version of sigfe_maybe, shouldn't the 
-branch here be to forward to label 1? Otherwise this function 
-effectively does nothing.
+I'll put this to one side to hopefully add to our testing when I can.
 
-(Of course, this isn't very important since sigfe_maybe is only used by 
-cygwin_detach_dll())
+> Unfortunately, to my knowledge, the current upstream version of AArch64 
+> Cygwin GCC is not yet suitable for compiling it.
 
-> +       ret
-> +0:
-> +       ret
-> +       .seh_endproc
-> +
->   _sigfe:
->   _sigbe:
->          .global sigdelayed
-> --
+I have built myself a cross-compiler with Evgeny Karpov's patch set from 
+a few months ago. I don't know if there's something more recent I should 
+be using.
+
+But that's academic since I don't have any hardware to run it on :).
+
+>> Hmmm... it seems like this is functionally incremental to a patch 
+>> which hasn't been applied yet, but I can't work out which one. 
+> Maybe you were thinking of this patch: https://cygwin.com/pipermail/ 
+> cygwin-patches/2026q1/014641.html but as far as I can tell it has 
+> already been applied, for example this is where the X30/LR register gets 
+> set in sigdelayed: https://cygwin.com/cgit/newlib-cygwin/tree/winsup/ 
+> cygwin/scripts/gendef#n558.
+
+Ah, right. I'd got mixed up.
+
+Anyhow, I'll take a more detailed look at the patch, but I need to 
+refresh my memory of how all this stuff works first, which might take a 
+little while.
+
+>> I spent about an hour trying to salvage this, without success. Could I 
+>> possibly trouble you to resend it as an attachment?
+> I'm sorry for giving you trouble with the formatting of my patch yet 
+> again, I have attached it in this message.
+
+No problem.
+
+Sending it as an attachment worked fine. Thanks.
 
