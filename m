@@ -1,108 +1,87 @@
-Return-Path: <SRS0=j7nd=ES=icddrb.org=ziaul.haque@sourceware.org>
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazhn150120002.outbound.protection.outlook.com [IPv6:2a01:111:f403:dc05::2])
-	by sourceware.org (Postfix) with ESMTPS id 057384BA2E0F;
-	Mon, 22 Jun 2026 19:44:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 057384BA2E0F
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=icddrb.org
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=icddrb.org
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 057384BA2E0F
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:dc05::2
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1782157485; cv=pass;
-	b=G7kA1C0fSdnL4iAAKROtv56I9Hs/jiGfPoj2ashf0WFNDA3lXpEypRp3jzb82b+CymEFdpvUbIvp6SYxyUf+NXzG9v4zhdmInC1UvkOTfe8bfP9gr6iKn93z8O7M6WpXG/at51f5YMoLBEI3rBcEpyDjYRQN0POaGf4nGTZFLAo=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782157485; c=relaxed/simple;
-	bh=h9613B1SwiwWMBO8Ks1tCbGKktvtwJaD98HyyH2gsho=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Ny+WEPnZYUgkK8mrxyLgvHy/EEx5DXa/ZLdTsFMCeJNKDvJDfzz0Q/pQw2Qk/mKH1umw+Qh9wqK4EjMOwslRHoGNV0yxbQ77KrhGWJXGWy3asl6wyC3ERJqqBQ3ZPsxEmtz2fjFBQvoDdM/K2mJA7LDjQKWFAZF9c71Digfvvfo=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=icddrb.org header.i=@icddrb.org header.a=rsa-sha256 header.s=selector1 header.b=cec6VL7H
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 057384BA2E0F
+Return-Path: <SRS0=oHIC=ET=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 4BB694BA2E0F
+	for <cygwin-patches@cygwin.com>; Tue, 23 Jun 2026 01:16:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4BB694BA2E0F
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4BB694BA2E0F
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782177367; cv=none;
+	b=NchrTTd05a+rMfsboBDFXQJ5oJ2Vlj7AQBcbwGxz9YoBm+PPs5lW6zmRWcOrX94BfHlB6IfuoFIHxiPpgjwQQWUBONplRXPD+eHuJL5eLRB7Ej0scrV90N1B6Pt7W75G0vYW+OO7mAlz0AI40fFQ+OOXBoF2oM3+iJdvHKG0Eq0=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1782177367; c=relaxed/simple;
+	bh=3r+55ojxUfdyjY3uZ4OlaDPOjMxeg6VxZdKPj6UZGLA=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=hEtREKLE+S46meud8Eb+hvX12eK88w0+v2ajMHJNcfToW/jZBfCgqUfQJHwBi4udPOSIcZl6u0WE01gZuytXA7C1DwozGU8TPj0xdfiA1yhGFcI0sR+IUxOoWwvEYe0jaQvoCbMs8QpPi1YP4U/654gkyg9iMsMHHWZxMdJEfuA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=X7NwSzHG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4BB694BA2E0F
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=icddrb.org header.i=@icddrb.org header.a=rsa-sha256 header.s=selector1 header.b=cec6VL7H
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bzLBUYCxMQVUl1MTIjJ9AZ2yAn2q4/kMq46BpCQd7jnNyQAt54q28D57/PeUVywGeC3giGcmN/3gj9AsYIS3X3feJASG/aAJm7mO3KoQbVVtFhEMvn5HA9iy8g7zNNE/QIEvEyaIerKRnIA42F3Yj+Kit9waQIYiCfd0zBi7EIVbDSzN0IdMTfcCk6zKd6EPF8gD9dD/tONgIvieDG+GiVOSac6d7qEW1s1ISdyxSozKPP2dWBGuoNo6UB5Wnay1TbKAyZtqqSeqJIDZ2F4mG0I/Y3WYdcpLqWo7crGrdup10OJrSXesG5SglRxhvCRotdMSMHgmlIp0+A7u/NCtAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g4bTkjaW88YOnusRxh89NqR7DGwwuzkyISLYgzKQPQo=;
- b=ucm7Y2zB5r3OUSlOJPF26U8uIhIoD3BY6N+4/NDOxPi/5QQguIqNyZnii8K85PLPdOQQrkRzA949sVHTZwBJRiuZDTMmeOpDFEezuN9tJebt+VlrHeYfbsNiYuYcN4Tfgi/s6tDkjqd1VyMiMLvM4dTxUlepNHWM8tJbyIH8MNE+Sjy/UliNsifuzbebjNu+OIk6RUTpXoYbYerTsMLFp3hlJsWrSH5Nlv1di8vwroPDLzbN6sADY63fZMnDhQhi6oTe1oWv9wTqnXTh4yC4ni6n4sGPEl56RnrpG3EaMeYaKyRZrR8yVIi23YWlfTU9HslseGIx9xP25n/lFl8wTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 203.190.254.10) smtp.rcpttodomain=hitachigst.com smtp.mailfrom=icddrb.org;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=icddrb.org; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icddrb.org;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g4bTkjaW88YOnusRxh89NqR7DGwwuzkyISLYgzKQPQo=;
- b=cec6VL7HL1n9vQUHSD+4AYJSfXJePvWIwpnbWHdTJc5cbGuPNUaK1zOl2zNC8Uds1VDtXosPW+CxNk1tT3BgtwcaUpPs/SuSc6H6Ddmj06gRWTLfT/e756jCpkzTrqgs8453DY9SsMXMrR6E4MH48s54tZF07azbnrEKXJY3QKt0eInboWAFyGoUYni84isxV2apE6mOIv8FVfA43hdp7ok2CMkKPg4SZrHyw75jZ9lxPiHPEXqd7jGcP+DLohDk4sT+ZfrwK12krNGBPkVSdW/Wp8Pez9uMC/GhUNTv3nWtOCjHc4nVpm5GPe4TGEWfpX4eJGWRlbVIr82cj6y9Hw==
-Received: from SI3PR03CA0010.apcprd03.prod.outlook.com (2603:1096:4:297::7) by
- SEZPR01MB7218.apcprd01.prod.exchangelabs.com (2603:1096:101:2a3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Mon, 22 Jun
- 2026 19:44:21 +0000
-Received: from SG2PEPF000B66CE.apcprd03.prod.outlook.com
- (2603:1096:4:297:cafe::99) by SI3PR03CA0010.outlook.office365.com
- (2603:1096:4:297::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.139.13 via Frontend Transport; Mon,
- 22 Jun 2026 19:44:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.190.254.10)
- smtp.mailfrom=icddrb.org; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=icddrb.org;
-Received-SPF: Pass (protection.outlook.com: domain of icddrb.org designates
- 203.190.254.10 as permitted sender) receiver=protection.outlook.com;
- client-ip=203.190.254.10; helo=mail.icddrb.org; pr=C
-Received: from mail.icddrb.org (203.190.254.10) by
- SG2PEPF000B66CE.mail.protection.outlook.com (10.167.240.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.21.159.10 via Frontend Transport; Mon, 22 Jun 2026 19:44:19 +0000
-From: "MD. Ziaul Haque Shaikh" <ziaul.haque@icddrb.org>
-To: "info@mail.cc" <info@mail.cc>
-Subject: Are you seeking for a loan? 
-Thread-Topic: Are you seeking for a loan? 
-Thread-Index: Ad0Cf4LyalmBU6AqDU2YK7ZDJtYlUA==
-Date: Mon, 22 Jun 2026 19:44:17 +0000
-Message-ID: <f1ec174c0ab64d47b5e9373972faa610@icddrb.org>
-Reply-To: "kateryna.muchen@fuibk.com" <kateryna.muchen@fuibk.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: multipart/alternative;
-	boundary="_000_f1ec174c0ab64d47b5e9373972faa610icddrborg_"
-MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CE:EE_|SEZPR01MB7218:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4952beb-78dd-4b08-6e18-08ded096a6de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|32650700020|23010399003|376014|7416014|82310400026|1800799024|8096899003|56012099006|11063799006|280700005|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	v1kGPQkdPr0VHHkXgxxekpv2dbkggk7oZBHAXyywnV8stgukP1NW5GCAzUQHKhInqKNI7L9a8etfNsplizzH3dwZXyRCAk/daqyKPmVMMzoPpRehD5Id2AdYoWJbpffnJ+7g1muydcXVULXXHtGXPg1lO8T/Zlz2xgSC3itTjca62BcjJzgFWJak8jtovEl5ab/iYTI+zQ9/LgOy7WlL1C+sd+Byb7DX4bdMTRpd7FjMr2YwBDLghWkf4P0sBo+EsPoLTgHHaPwRI6J6GW4Os6F4FvhXC7BR9ccMGnOQenv6hig++Fu+K0RWHgbLyAUkeqgFYD9B94nl6PpiYk937s+VTzynaNy7vIRD9ibCLoqkRGfSsuFfrzKfbbtAuFMziwh5DnhWkkSdyRew4rof+0jf1MwnlP1pm5VPgKsStRnP9M1WJOOQFQEVfY7acVkmCWAk6Ch+py3W3rT/gyKUKPWMXlzzfZ4+LojwP1M1zedsUJfPhYgawvdWUucyIGOXot1pR+rZAcBlt5b8TK1XJWhqm0bpL4ylsXNMIv8PD9tq73MKZRUrXGq1O5qr0lWYZfthNMarDv7WWP8Uu+6wfXi2X0+ztNsKijoJVkTIUJfCjWxpyeNLl2+HB31EuqbK+TSVuaXaFpnAryYYWFGEYT6WkIgj0sp6DBbnrfoKuUW3M49yZWb/3b2BBphFEYlVmfxkKXKh2bh56PoPZGpwHQ==
-X-Forefront-Antispam-Report:
-	CIP:203.190.254.10;CTRY:BD;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.icddrb.org;PTR:webmail.icddrb.org;CAT:NONE;SFS:(13230040)(36860700016)(32650700020)(23010399003)(376014)(7416014)(82310400026)(1800799024)(8096899003)(56012099006)(11063799006)(280700005)(18002099003);DIR:OUT;SFP:1501;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	GEZrqkl/Q5HFEPQpA9Coq5BrMx6q68m2wXrMI8VsV9RjyYgjla7XN1OcuOVbt2g2abMXq9pAWa9aA79s7QEkmCx+U8dLIDfzPQvbvIahy9UQ4oiNqhVm7NoFgdjV+gXzGMoww30wJ1zmzL4hdekNjOStoloB0v6KDNabx4Qc6GyzlF2gi5AhGx/k2fqg0qWV+Kqi20kaSdlY9U2cQdrN46BwsvHy8SHkd0pZzlxaDxvV+MGx7WeQsAM55IVBzfON+oxtjT2SzUUiXBsC0iJSfkxb0bl/MWIkg3+Yy31i0aPdL05qNQCPJSLAQABjK+yMl8vt5RbnP/TEVYuECJfZrBsg5gH5qJYDVQnJT7/eIBoQBe7iqEWIIMDJwu8xZk7T1BKIrqa8khL/Wg+meA7vsbDqpv7fCzurzwPof33pFPPhbGfzRJFh3MrErEY3uUCN
-X-OriginatorOrg: icddrb.org
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2026 19:44:19.5425
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4952beb-78dd-4b08-6e18-08ded096a6de
-X-MS-Exchange-CrossTenant-Id: ebc3b063-df9a-4de0-b426-41a71f84e296
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=ebc3b063-df9a-4de0-b426-41a71f84e296;Ip=[203.190.254.10];Helo=[mail.icddrb.org]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CE.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB7218
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=X7NwSzHG
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260623011601935.SDI.17441.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 23 Jun 2026 10:16:01 +0900
+Date: Tue, 23 Jun 2026 10:16:01 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Do not set input_available_event when
+ applying line_edit()
+Message-Id: <20260623101601.473c7ba53f07605a3577d98d@nifty.ne.jp>
+In-Reply-To: <fc159923-bb9c-46cd-b633-23f56a7c2fad@maxrnd.com>
+References: <20260608133414.1979-1-takashi.yano@nifty.ne.jp>
+	<fc159923-bb9c-46cd-b633-23f56a7c2fad@maxrnd.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782177362;
+ bh=adaKAHccRuH40KNH50LIHu8t/+yYWQ7OQjI2YJ4tFv8=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=X7NwSzHGWQoYhT0z8ejjI+0vxLUlSA/MOQn+1EDJQqHuwQ58DvdazPhCSwk3aaaassaKFo6x
+ 54T/PD1KUdK2eX//o4Flt0YXfB/6UG2cC2pu8JP5yVL2DSGlgwFmkaW0W4l8HrJRMvRz32ke3l
+ J8p6i1yddWRJtbWbp/eREm5YHmoH4AITB1pB7yyqNOLmWybq2p3gUPfti2pi2ck2f955iutnm1
+ GtCgD147ocbSsFmfD4iS6PT2XxGjiuDyEYc9UAi+uJwGBOjhn7CkxHf4Z0nGTp2H4zzehcOD5h
+ s3SYkatg2mVuqtS64lpyp7QXTeNrF/m7su/zmDc304Nls9Kg==
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_000_f1ec174c0ab64d47b5e9373972faa610icddrborg_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+On Sat, 20 Jun 2026 23:45:29 -0700
+Mark Geisert wrote:
+> Hi Takashi,
+> 
+> On 6/8/2026 6:34 AM, Takashi Yano wrote:
+> > The commit a0b38a81b9be sets input_available_event even if the
+> > transferred input is still in the readahead buffer and is not ready
+> > to read. The SetEvent() is called in accept_input() via line_edit(),
+> > so setting this event here is not correct. This causes the issue
+> > that read() returns 0 instead of blocking until accept_input() is
+> > called. This patch removes this SetEvent() call.
+> > 
+> > Fixes: a0b38a81b9be ("Cygwin: pty: Apply line_edit() for transferred input to to_cyg")
+> > Addresses: https://cygwin.com/pipermail/cygwin/2026-June/259776.html
+> > Reported-by: Koichi Murase <myoga.murase@gmail.com>
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by:
+> > ---
+> >   winsup/cygwin/fhandler/pty.cc | 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+> > index 80331c36d..2558fa799 100644
+> > --- a/winsup/cygwin/fhandler/pty.cc
+> > +++ b/winsup/cygwin/fhandler/pty.cc
+> > @@ -2946,7 +2946,6 @@ fhandler_pty_master::apply_line_edit_to_transferred_input ()
+> >         n -= ret;
+> >         p += ret;
+> >       }
+> > -  SetEvent (input_available_event);
+> >   }
+> >   
+> >   static DWORD
+> 
+> LGTM.  OK to push.
 
-We offer 2% interest rate. Reply if interested
+Thanks! Pushed.
 
-
---_000_f1ec174c0ab64d47b5e9373972faa610icddrborg_--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
