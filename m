@@ -1,101 +1,121 @@
 Return-Path: <SRS0=3SWy=EU=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 939834BA2E18
-	for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 12:12:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 939834BA2E18
+Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [106.153.226.42])
+	by sourceware.org (Postfix) with ESMTPS id 5E7A24BA2E19
+	for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 12:33:31 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5E7A24BA2E19
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 939834BA2E18
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782303186; cv=none;
-	b=DgNepPlcb5Hha67Yta+ac/W2dG164G64aNg0cZjkuP8pCvMKoKt1Tzu40hVYK0W9C6Rg7+RUs4XS8kiZiPZ2cVqtvcC3A/9CUHkxjJM/zagSs93ueAlRhs4z8mubS+qClg5+0RksQsy1TBPdzyde4kwBs87+yydAqPy4RQYrBF8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5E7A24BA2E19
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782304412; cv=none;
+	b=gYMO1zZYWvunnH3AM2bIdjqgkHjb/oHFh5+3UGBCIFZHr/oQDVGvxyMOZrpjNbhkxTlzQqP7UO9IbxpLsKpi1xugSTHIELNoXRvGgWmAN12v6Bo0x8tAv/5fL/YpDZuLv8xNDVbE1nFrkqWXLGqFL9o/aqkmNliTRDjaVg6+NIw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782303186; c=relaxed/simple;
-	bh=Vc5alNG5xC4CTviXaTNGESqxjd1TwNA6sglV4ug/CaA=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=emsZMczZoiU7KQ16WWGImfjFbAsAs+cZrDkc3IrkvsIFiaR5WfFCAfcglMmfon9qsDdhLSXAkQN1vcm1WOcI7mA14SH2DEBZxwQhT7Rdu75wBma7lDDpVWaHy3YU+tFKu+0eQGa16RIO4Z++GlEtmWTF4gNF9BvFi3dE2rWwSXM=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=dfzwoAxe
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 939834BA2E18
+	t=1782304412; c=relaxed/simple;
+	bh=3102WPpwLVj0dpnOdTq1Jtglx/p6fQ7xFtn74GKVo9I=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=fOBCF25rI6cTCdb5jbdKcJYqd3Wc7bH0RnjzRwcVEqLABV+6zqwpLY8Pg2oXwEp6pGAp8kUh+Lw0JnfR6ltz6ojY4UyR5vV1d1tM2lZMorwJI3BeNoW4LPWUbkzCVnrOHffq4/bgicjidP56oqabxHKAFX1mNNqXSb/m1BJHS1U=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=rZmtPTL4
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5E7A24BA2E19
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=dfzwoAxe
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260624121252337.HIZJ.117312.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 21:12:52 +0900
-Date: Wed, 24 Jun 2026 21:12:49 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=rZmtPTL4
+Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
+          id <20260624123329582.DMEW.3198.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 21:33:29 +0900
+Date: Wed, 24 Jun 2026 21:33:27 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3] Cygwin: console: Ensure the master thread runs only
- when it is supposed to
-Message-Id: <20260624211249.7d0d817b564cf5ee717e070e@nifty.ne.jp>
-In-Reply-To: <88edad1a-5ae6-4ba4-989d-1e26491353bb@maxrnd.com>
-References: <20260610163533.10187-1-takashi.yano@nifty.ne.jp>
-	<20260610163533.10187-2-takashi.yano@nifty.ne.jp>
-	<88edad1a-5ae6-4ba4-989d-1e26491353bb@maxrnd.com>
+Subject: Re: [PATCH v7] Cygwin: pty: Fix race issue between starting and
+ exiting non-cygwin apps
+Message-Id: <20260624213327.c3670a30618957fe3d482cdd@nifty.ne.jp>
+In-Reply-To: <47a930e6-12ec-4512-a566-1bbccffcbaf2@maxrnd.com>
+References: <20260623225137.263-1-takashi.yano@nifty.ne.jp>
+	<47a930e6-12ec-4512-a566-1bbccffcbaf2@maxrnd.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782303172;
- bh=k2SbHFpUMM2mr5+1Nw7cAmPsr13McZk07wyjizGUAwQ=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782304409;
+ bh=apoNyEt7i4Wa8CmCrDY9zMXnFCW++7rnepe56mCVclk=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=dfzwoAxePZZ5bMFK697Nn3VzMynhRoqU+lH45S6RTbf8iPPTtAjH96qhM0lUoUUb0MuSeNFR
- /BnN8YwvCQbrgOt+PdCVNJSx3o+1367HwzqmifmDc01hdA8fGPF5Kg1goulrmUSX87dD8zpE47
- Y4Zib7YNCwQfLyMWvWtKYfvaZNhxW7Za0bb/iBnu+vN9PSiaFrfrhZKjjl9hxIGm0GQsvEGI3I
- Jb2JHVj8hgWHDT3nlBnM3j8bQfovp+j1+CyS+L1l29J3cU238ihFzRLdjtk13uKhZCWAZfJT/h
- Jt7lR+R2DKjjAZDIz/KNMvyp+/Tpy0vjDPzP2qrf5xiPiRyg==
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=rZmtPTL4auFr2hIrR2/o0iGKm8/vgvbADCV6Q/TZQuDSF92Nw96AkYCVB+tMBD0T+LckAu6Z
+ e/FSEyv4WMa28BGmdUvNIUmQ/R0pxe88yNL7grKrfWmE3nnwHjCbiuyOX7Vcwzaf+mZCkISyI2
+ goYn5ZPhE5foXr4GCyXVzNRLSu4F7AixDgZijcC8Te4RnXjXQVsdmxBFMPZtCl53Si487JgFcG
+ FEgZe3IOP+Zn3ehlMWb1P/5HX4AJQqV+JdWFs5KUoU5eCssDvYIQygofGDpC6qWDlYlZExU6dC
+ +hZ/nza1zbW1vE773+sY0giqfhcubndDze6q/ajtD8UN+ogQ==
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Thanks Mark,
+Thanks Mark. Pushed.
 
-On Wed, 24 Jun 2026 01:02:32 -0700
+On Wed, 24 Jun 2026 00:09:26 -0700
 Mark Geisert wrote:
 > Hi Takashi,
 > 
-> On 6/10/2026 9:35 AM, Takashi Yano wrote:
-> > Currently, disabling cons_master_thread is done by just setting the
-> > flag disable_master_thread. In fact, actual suspension of master
-> > thread is delayed a bit. Therefore, non-cygwin program where the
-> > master thread should be disabled may run even though the master
-> > thread is running in a short time. This patch ensure that the master
-> > thread is suspended when non-cygwin app is running. In addition,
-> > while master thread is running, console mode should not be changed.
-> > Therefore, the order of set_input_mode() call and disabling/enabling
-> > master thread is swapped.
-> > 
-> > Fixes: d2b14c303c04 ("Cygwin: console: Redesign handling of special keys.")
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by:
-> > ---
-> >   winsup/cygwin/fhandler/console.cc | 15 +++++++++------
-> >   1 file changed, 9 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > index 45eff6efe..a5e6cd89d 100644
-> > --- a/winsup/cygwin/fhandler/console.cc
-> > +++ b/winsup/cygwin/fhandler/console.cc
-> > @@ -439,6 +439,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-> >   
-> >         if (con.disable_master_thread)
-> >   	{
-> > +	  con.master_thread_suspended = true;
-> >   	  cygwait (40);
-> >   	  continue;
-> >   	}
-> [...]
+> This v7 LGTM.  OK to push.
+> Thanks,
 > 
-> The only question I have for this patch is whether you need to set
->      con.master_thread_suspended = false
-> right after the cygwait(40) call.  Can't tell if that's an omission or 
-> it's intentional to 'continue' into the main body of the function with 
-> that flag still true.
+> ..mark
+> 
+> On 6/23/2026 3:51 PM, Takashi Yano wrote:
+> > Without this patch, when a non-cygwin program (A) is about to exit, and
+> > another non-cygwin program (B) is started, input transferring between
+> > cyg-pipe and nat-pipe may not work as expected. When the non-cygwin
+> > program (A) exits, input transferring from nat-pipe to cyg-pipe will be
+> > performed. However, the the non-cygwin program (B) will performs input
+> > transferring from cyg-pipe to nat-pipe at the same time. The mechanism
+> > of the problem is as follows.
+> >   1) The the non-cygwin program (A) checks current input pipe state,
+> >      then it is nat-pipe since the this program is a non-cygwin program.
+> >      The program (A) also checks if any handover target exists, but
+> >      it is not found since the program (B) is not started yet. So,
+> >      the program (A) decided to transfer input form nat-pipe to cyg-
+> >      pipe.
+> >   2) Before the non-cygwin (A) program performs input transferring,
+> >      if the non-cygwin program (B) is started and checks the input
+> >      pipe state, it is nat-pipe state, so the non-cygwin program (B)
+> >      does not perform input transferring.
+> >   3) However, just after that, the non-cygwin program (A) performs
+> >      input transferring from nat-pipe to cyg-pipe, so typeahead input
+> >      will be stored in cyg-pipe.
+> >   4) The non-cygwin program (B) cannot read the typeahead input
+> >      because it is now in the cyg-pipe.
+> > 
+> > The following code demonstrates the issue.
+> >    #include <stdio.h>
+> >    #include <stdlib.h>
+> >    #include <unistd.h>
+> > 
+> >    int main(int argc, char *argv[])
+> >    {
+> >      int n = 1;
+> >      if (argc > 1)
+> >        n = atoi(argv[1]);
+> >      if (fork()) {
+> >        execlp("cmd.exe", "cmd", NULL);
+> >        perror("execlp(\"cmd\"): ");
+> >      }
+> >      for (int i=0; i<n; i++) {
+> >        if (fork() == 0) {
+> >          execlp("./winsleep.exe", "winsleep", "0", NULL);
+> >          perror("execlp(\"winsleep\"): ");
+> >        }
+> >      }
+> >      return 0;
+> >    }
+> > 
+> > Transferring input itself is guarded by input_mutex, but the pre-
+> > check is not. With this patch, the guard is enhanced so that the
+> > state check and transferring input are done in atomic way.
+> > 
+> > Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by: Mark Geisert <mark@maxrnd.com>
+> > ---
+> >   winsup/cygwin/fhandler/pty.cc           | 99 +++++++++++++++----------
+> >   winsup/cygwin/local_includes/fhandler.h |  2 +
+> >   2 files changed, 60 insertions(+), 41 deletions(-)
+> [...]
 
-It's intentional. While disable_master_thread is true, master_thread is
-suspended. master_thread checks disable_master_thread every 40msec, and
-if disable_master_thread becomes false, set master_thread_suspended
-false and starts working again.
-
-> Other than that, LGTM.  OK to push.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
