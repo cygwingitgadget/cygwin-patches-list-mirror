@@ -1,69 +1,101 @@
-Return-Path: <SRS0=WipY=EU=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 9BF3E4BA2E04
-	for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 08:05:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9BF3E4BA2E04
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9BF3E4BA2E04
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782288318; cv=none;
-	b=Pyii5hB5b4NI1TCpGr1A1f4glgHyISVgbDlOXNdt/K8gCIixVh3SJLWHquiOWkPYvG76nO2e0mGLe1pKw5cianUEkRy97lse7wiISZ84gUSSZSH8vLoeAKgn5rWw3Uyym9Af8jS4I7/dBUkRJHnp4P10M3WedlJn2+xdpClaYfg=
+Return-Path: <SRS0=3SWy=EU=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 939834BA2E18
+	for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 12:12:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 939834BA2E18
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 939834BA2E18
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782303186; cv=none;
+	b=DgNepPlcb5Hha67Yta+ac/W2dG164G64aNg0cZjkuP8pCvMKoKt1Tzu40hVYK0W9C6Rg7+RUs4XS8kiZiPZ2cVqtvcC3A/9CUHkxjJM/zagSs93ueAlRhs4z8mubS+qClg5+0RksQsy1TBPdzyde4kwBs87+yydAqPy4RQYrBF8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782288318; c=relaxed/simple;
-	bh=wqPKyRpc2Tkg9frDb837ms9pXV1WtSTMqvmjTxu1X6M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=gflH5e5pgFvm+P+Un9wI/DycKI8Uqu1VHc+/kkegwcBhvgbPUGz9r5V4hOz2b05eaKm62xWFAOjKGjicLAL9tg08nQf71JUdtSCNo3N9+j7cVO8sT5IIKLe1rlDzfqVL1aSL4IEyxhMqajS5+xUVQCd8zkGwvQt+FttQ0jnFwjI=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9BF3E4BA2E04
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 65O8KJea042833
-	for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 01:20:19 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdJgQ9g4; Wed Jun 24 01:20:17 2026
-Message-ID: <bfbe7db3-dfb9-4a3e-a0bc-fe48c7235337@maxrnd.com>
-Date: Wed, 24 Jun 2026 01:05:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] Cygwin: console: Fix typeahead input for bash
+	t=1782303186; c=relaxed/simple;
+	bh=Vc5alNG5xC4CTviXaTNGESqxjd1TwNA6sglV4ug/CaA=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=emsZMczZoiU7KQ16WWGImfjFbAsAs+cZrDkc3IrkvsIFiaR5WfFCAfcglMmfon9qsDdhLSXAkQN1vcm1WOcI7mA14SH2DEBZxwQhT7Rdu75wBma7lDDpVWaHy3YU+tFKu+0eQGa16RIO4Z++GlEtmWTF4gNF9BvFi3dE2rWwSXM=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=dfzwoAxe
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 939834BA2E18
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=dfzwoAxe
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20260624121252337.HIZJ.117312.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Wed, 24 Jun 2026 21:12:52 +0900
+Date: Wed, 24 Jun 2026 21:12:49 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/3] Cygwin: console: Ensure the master thread runs only
+ when it is supposed to
+Message-Id: <20260624211249.7d0d817b564cf5ee717e070e@nifty.ne.jp>
+In-Reply-To: <88edad1a-5ae6-4ba4-989d-1e26491353bb@maxrnd.com>
 References: <20260610163533.10187-1-takashi.yano@nifty.ne.jp>
- <20260610163533.10187-4-takashi.yano@nifty.ne.jp>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <20260610163533.10187-4-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+	<20260610163533.10187-2-takashi.yano@nifty.ne.jp>
+	<88edad1a-5ae6-4ba4-989d-1e26491353bb@maxrnd.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782303172;
+ bh=k2SbHFpUMM2mr5+1Nw7cAmPsr13McZk07wyjizGUAwQ=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=dfzwoAxePZZ5bMFK697Nn3VzMynhRoqU+lH45S6RTbf8iPPTtAjH96qhM0lUoUUb0MuSeNFR
+ /BnN8YwvCQbrgOt+PdCVNJSx3o+1367HwzqmifmDc01hdA8fGPF5Kg1goulrmUSX87dD8zpE47
+ Y4Zib7YNCwQfLyMWvWtKYfvaZNhxW7Za0bb/iBnu+vN9PSiaFrfrhZKjjl9hxIGm0GQsvEGI3I
+ Jb2JHVj8hgWHDT3nlBnM3j8bQfovp+j1+CyS+L1l29J3cU238ihFzRLdjtk13uKhZCWAZfJT/h
+ Jt7lR+R2DKjjAZDIz/KNMvyp+/Tpy0vjDPzP2qrf5xiPiRyg==
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Thanks Mark,
 
-This patch LGTM.  OK to push.
-
-..mark
-
-On 6/10/2026 9:35 AM, Takashi Yano wrote:
-> Currently, following misbehaviour occurs in bash.
->    1) Run "sleep 10".
->    2) Type "cmd<enter>ps<enter>" while "sleep is running".
->    3) After "sleep" ends, "ps" does not run in "cmd".
->    4) exit from "cmd". Then, "ps" is executed.
-> This is because process_input_message() handles all the events in
-> the console input buffer, and stores key input into readahead buffer.
-> However, since the readahead buffer is unique to process, "cmd"
-> cannot read it. Since "ps<enter>" is stored in bash's readahead
-> buffer, it is executed by bash after "cmd" exits. With this patch,
-> process_input_message() handles only the requested amount of events
-> by read().
+On Wed, 24 Jun 2026 01:02:32 -0700
+Mark Geisert wrote:
+> Hi Takashi,
 > 
-> Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->   winsup/cygwin/fhandler/console.cc       | 15 ++++++++++++---
->   winsup/cygwin/local_includes/fhandler.h |  2 +-
->   winsup/cygwin/select.cc                 |  2 +-
->   3 files changed, 14 insertions(+), 5 deletions(-)
-[...]
+> On 6/10/2026 9:35 AM, Takashi Yano wrote:
+> > Currently, disabling cons_master_thread is done by just setting the
+> > flag disable_master_thread. In fact, actual suspension of master
+> > thread is delayed a bit. Therefore, non-cygwin program where the
+> > master thread should be disabled may run even though the master
+> > thread is running in a short time. This patch ensure that the master
+> > thread is suspended when non-cygwin app is running. In addition,
+> > while master thread is running, console mode should not be changed.
+> > Therefore, the order of set_input_mode() call and disabling/enabling
+> > master thread is swapped.
+> > 
+> > Fixes: d2b14c303c04 ("Cygwin: console: Redesign handling of special keys.")
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by:
+> > ---
+> >   winsup/cygwin/fhandler/console.cc | 15 +++++++++------
+> >   1 file changed, 9 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+> > index 45eff6efe..a5e6cd89d 100644
+> > --- a/winsup/cygwin/fhandler/console.cc
+> > +++ b/winsup/cygwin/fhandler/console.cc
+> > @@ -439,6 +439,7 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+> >   
+> >         if (con.disable_master_thread)
+> >   	{
+> > +	  con.master_thread_suspended = true;
+> >   	  cygwait (40);
+> >   	  continue;
+> >   	}
+> [...]
+> 
+> The only question I have for this patch is whether you need to set
+>      con.master_thread_suspended = false
+> right after the cygwait(40) call.  Can't tell if that's an omission or 
+> it's intentional to 'continue' into the main body of the function with 
+> that flag still true.
+
+It's intentional. While disable_master_thread is true, master_thread is
+suspended. master_thread checks disable_master_thread every 40msec, and
+if disable_master_thread becomes false, set master_thread_suspended
+false and starts working again.
+
+> Other than that, LGTM.  OK to push.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
