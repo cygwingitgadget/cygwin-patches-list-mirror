@@ -1,173 +1,248 @@
 Return-Path: <SRS0=QjWS=E2=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id 405034BA2E10
-	for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 12:35:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 405034BA2E10
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 775784BA2E07
+	for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 13:09:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 775784BA2E07
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 405034BA2E10
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782822951; cv=none;
-	b=jWbL+o2UYXsEHEDJ8GoNV5kN9e5Z5bu5Q9z1uvjtlvnNkhk1fOqDcrD0Ni1DnHP0/MDe7w7w04av/fejZ/ftjcbSgPSbANbsIEQxYYhyjQWTkOGgF/cMBLZMKjKeSyDGg22mtf472KI2TD0XvOch1Ume5zkb7g7SeSzPIHiI7Hk=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 775784BA2E07
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782824992; cv=none;
+	b=YRz8NsLTGz93dVYhbwlzxBEovG5Kg/80liT+jpjGX1Hp2TcFw9wz0/9Nwt0sTT/DL4ERPRWb5QzL1NsZqUiuUIiHJ6tMWNWKrBQf0epA1koTbXVnhrYJr+GXbOcciL1mfB3TKeC1RbfLh1jAWhKjrq01RzOCKGtnO95EfMjiSXk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782822951; c=relaxed/simple;
-	bh=stNHwI4ZdChgiQ1PxgW7QErA+fMmn9/XbrxFkZ2+Vt4=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=lNKKdmQw4dTt6i5a9+duElWrQizdhYlGc76t42+TaLK9cPFRUzvxsUOKYyKUighMVXfCnAiAxg6P5gtXAr6XaBMgSM01tRzUFBs6/xUDsugzKCg04s3ibq/LW1uJn3iH/MAD/U4CQpP/WK6SZqGqMJXP+h0h5bGqeunjvuPa3dg=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Lg/MgkWF
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 405034BA2E10
+	t=1782824992; c=relaxed/simple;
+	bh=6mY7SFGWOqALY/JnKsetuJ8T6tAQzSy22vCGkqKlqZM=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=rL60Vq/KDd4iob/tuhlRMJF8jwT+c5XXf5X2zjaI571f/A4YkVD1ueFiI1G0HyIewHZmG2xGiplWMls1H9u6eimPEDWbkWXaX+NqO3VndmU9HBM8h6Ln7ZElCFRJwzxiJ7GuDi8B7ZjfyrewOuU/O245VXv2bSouB1yNxvRr+JQ=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=NhVVwmlo
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 775784BA2E07
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Lg/MgkWF
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260630123549135.WEIW.102121.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 21:35:49 +0900
-Date: Tue, 30 Jun 2026 21:35:47 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=NhVVwmlo
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260630130948006.WHJX.17441.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 22:09:48 +0900
+Date: Tue, 30 Jun 2026 22:09:46 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/3] Cygwin: console: Fix NOFLSH mode a little
-Message-Id: <20260630213547.e66059127f8007b244c09ca0@nifty.ne.jp>
-In-Reply-To: <20260630131135.e6996786a3b3ab8316d0ae3e@nifty.ne.jp>
-References: <20260610163533.10187-1-takashi.yano@nifty.ne.jp>
-	<20260610163533.10187-3-takashi.yano@nifty.ne.jp>
-	<d8dacefa-68a4-d6bd-e6c4-d6291bb02256@gmx.de>
-	<20260629233017.5e6eef4020915f0154623954@nifty.ne.jp>
-	<20260630011456.ffd645885e56f7d33b4d1412@nifty.ne.jp>
-	<20260630131135.e6996786a3b3ab8316d0ae3e@nifty.ne.jp>
+Subject: Re: [PATCH v2 3/3] Cygwin: pty: Fixup pty state after a cygwin app
+ exits
+Message-Id: <20260630220946.0a48b86844d9a450059f706c@nifty.ne.jp>
+In-Reply-To: <20260630173659.6fef765e6d60dd2c54e42796@nifty.ne.jp>
+References: <20260613140917.27155-1-takashi.yano@nifty.ne.jp>
+	<20260613140917.27155-4-takashi.yano@nifty.ne.jp>
+	<b9c76c12-c300-69c1-b6e3-5b03396ed8e0@gmx.de>
+	<20260630173659.6fef765e6d60dd2c54e42796@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782822949;
- bh=HQeMR6Rmn82lq8N9pDxfmtdszvkucVJdsQxYMn368O4=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782824988;
+ bh=Snu7J68cLQTldqAJWDz1SlpS6U1kao5S25NRTuvchIE=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=Lg/MgkWF/+0wH0CRmIA99mV/6IifrcbWvb3BT0k+yq4ZYc1nxxmiG7VqpmbFZusyVHLCVlU8
- U6SditNIaL+xJKUVFNpQF6ffT5Ic6dHj8F/JFncWUKM1PA2jIp7sBoWJF6uT5N39e6WjsKnemG
- b1qyMYF/35FBBmPbSdRT5Zzk1OHCbgDeq5aNzNcc6F1OXANwc+QSi4vqyZXVUKj7BVFMeYm7AJ
- D9SK47izgJYueVgjPR6m3cfkurCToxFiZ4IHzXOxEfIMRxO2ZGG60ZZosR6oPPfDpU3zA4jzu+
- eEB8EM4wWMINYF+KvTAZPYblmXvMdm4il6FkaExX5LMMFiVw==
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=NhVVwmlo1ncG6eF/In0dCZeF/7jTYr9N7vP23gYk2ui2mx4+9Yy7QwM+Qfp2N4B3f861Lf5b
+ 04W4lhRrdSgf+euaCO3Rd7gP7LGWi9WrhB0UZhWudeQZHW1vtr6lK5SRaXntZzCIjH4IDmsK3m
+ M2MB/VjppbXsqSJjPCAONoMMCllX3kWkLxLm605SgV/hFEE4fO7HRvJxlofopep3LvDkZ/32xY
+ 4RyzeXVZ+/jhIj/eo3OB5hRFFSaGyRLO0UvAvpQssPPu/0FJjCExiiv1qsHsZhj0dFrv8GMhvL
+ HHK8G+9Rx/N7n+438ciclQxLRg0Mctto6wFlDVYHXCkLfVrA==
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Johannes,
 
-On Tue, 30 Jun 2026 13:11:35 +0900
+As for the first patch, a small fix is necessary as below.
+With the fix, the patch LGTM. Pushed to master.
+
+Thanks!
+
+On Tue, 30 Jun 2026 17:36:59 +0900
 Takashi Yano wrote:
 > Hi Johannes,
 > 
-> On Tue, 30 Jun 2026 01:14:56 +0900
-> Takashi Yano wrote:
-> > On Mon, 29 Jun 2026 23:30:17 +0900
-> > Takashi Yano wrote:
-> > > Hi Johannes,
-> > > 
-> > > Thanks for finding that.
-> > > 
-> > > On Sat, 27 Jun 2026 09:27:12 +0200 (CEST)
-> > > Johannes Schindelin wrote:
-> > > > Hi Takashi, Mark,
-> > > > 
-> > > > I have a fix for the issue below sitting in
-> > > > https://github.com/git-for-windows/msys2-runtime/pull/131/commits/0b0976a5e85de52312c17d21f1d3fc41dc572179
-> > > > that I should have sent earlier, but I was struggling to find the time to
-> > > > validate the fix via automated AutoHotKey-based tests. Sorry for the
-> > > > delay.
-> > > > 
-> > > > On Thu, 11 Jun 2026, Takashi Yano wrote:
-> > > > 
-> > > > > If you run "stty noflsh; cat" in "bash", and stop "cat" by Ctrl-C,
-> > > > > a stray ^C is passed to "bash". The current code calls tcflush() if
-> > > > > NOFLSH is not set, however, tcflush() is not called when NOFLSH is
-> > > > > set. So, Ctrl-C remains in console input buffer. This should be
-> > > > > discarded even in NOFLSH mode. This patch introduces a helper
-> > > > > function discard_key_events() and call it to erase Ctrl-C in the
-> > > > > console input buffer.
-> > > > > 
-> > > > > Note that even with this patch, NOFLSH is not fully functional in
-> > > > > console because the readahead buffer is unique to process, so it
-> > > > > cannot be inherited to other processes. However, it should work
-> > > > > intra process.
-> > > > > 
-> > > > > Fixes: 118e51be1d04 ("(tty_min::kill_pgrp): Handle tty flush when signal detected.")
-> > > > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > > > > Reviewed-by:
-> > > > > ---
-> > > > >  winsup/cygwin/fhandler/console.cc       | 20 +++++++++++++++++---
-> > > > >  winsup/cygwin/fhandler/termios.cc       | 10 +++++++---
-> > > > >  winsup/cygwin/local_includes/fhandler.h |  2 ++
-> > > > >  3 files changed, 26 insertions(+), 6 deletions(-)
-> > > > > 
-> > > > > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > > > > index a5e6cd89d..9ac492980 100644
-> > > > > --- a/winsup/cygwin/fhandler/console.cc
-> > > > > +++ b/winsup/cygwin/fhandler/console.cc
-> > > > > @@ -1744,17 +1744,31 @@ out:
-> > > > >      discard_len = 0;
-> > > > >    if (discard_len)
-> > > > >      {
-> > > > > -      DWORD discarded;
-> > > > >        acquire_attach_mutex (mutex_timeout);
-> > > > >        DWORD resume_pid = attach_console (con.owner);
-> > > > > -      ReadConsoleInputW (get_handle (), input_rec, discard_len, &discarded);
-> > > > > +      discard_key_events (discard_len);
-> > > > >        detach_console (resume_pid, con.owner);
-> > > > >        release_attach_mutex ();
-> > > > > -      con.num_processed -= min (con.num_processed, discarded);
-> > > > >      }
-> > > > >    return stat;
-> > > > >  }
-> > > > >  
-> > > > > +void
-> > > > > +fhandler_console::discard_key_events (size_t n)
-> > > > > +{
-> > > > > +  DWORD discarded = 0;
-> > > > > +  INPUT_RECORD input_rec[INREC_SIZE];
-> > > > > +  DWORD n1 = min (INREC_SIZE, n);
-> > > > > +  while (n)
-> > > > > +    {
-> > > > > +      ReadConsoleInputW (get_handle (), input_rec, n1, &n1);
-> > > > > +      n -= n1;
-> > > > > +      discarded += n1;
-> > > > > +      n1 = min (INREC_SIZE, n);
-> > > > > +    }
-> > > > > +  con.num_processed -= min (con.num_processed, discarded);
-> > > > > +}
-> > > > 
-> > > > `discard_key_events()` loops on `ReadConsoleInputW()` until it has
-> > > > consumed the requested count, and `ReadConsoleInputW()` blocks while the
-> > > > input buffer is empty. The `sigflush()` caller passes a hard-coded `1`
-> > > > with no guarantee that a record is actually queued: in the master-thread
-> > > > path the signalling record has already been read out of the buffer before
-> > > > `sigflush()` runs, so the call blocks until the user's next keystroke
-> > > > arrives, and then swallows it. And because `ReadConsoleInputW()`'s return
-> > > > is unchecked, a failed read leaves `n1` indeterminate, so `n -= n1` can
-> > > > underflow and spin.
-> > > 
-> > > The root cause of above situation is that the master-thread is not
-> > > disable even when line_edit() is called via read(). This may cause
-> > > other issues we have not seen yet. Usually, input_mutex is held by
-> > > the thread calling line_edit(), so the master-thread does not touch
-> > > the input events. However, the current code calls discard_key_events()
-> > > after release_input_mutex_if_necessary().
-> > 
-> > No, this is not correct. The root problem is that the key event should
-> > not be touched if process_sigs() is called from cons_master_thread().
-> > 
-> > > So, what about the patch (1/2) attached instead?
-> > 
-> > New patch (1/2) attached.
+> The second and the third patches of your three additional patches LGTM.
+> Pushed to master.
+> Thanks!
 > 
-> This was still broken... Sorry.
-> Please check out:
-> https://cygwin.com/pipermail/cygwin-patches/2026q2/015129.html
+> I'm reviewing the first one. Please wait.
 > 
-> The commit message is borrowed from your patch. Thanks!
+> On Sat, 27 Jun 2026 09:18:41 +0200 (CEST)
+> Johannes Schindelin wrote:
+> > Hi Takashi, Mark,
+> > 
+> > I had started working on those patches, been pulled away, and meant coming
+> > back to them but failed. The work was tracked in
+> > https://github.com/git-for-windows/msys2-runtime/pull/131, but I
+> > admittedly did not find the time to complete the work earlier.
+> > 
+> > There are fixes in that PR (in addition to UI tests based on AutoHotKey
+> > that helped me catch a couple of bugs) for the following three issues:
+> > 
+> > 
+> > On Sat, 13 Jun 2026, Takashi Yano wrote:
+> > 
+> > > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+> > > index b3a8d57cc..f4473bb69 100644
+> > > --- a/winsup/cygwin/fhandler/pty.cc
+> > > +++ b/winsup/cygwin/fhandler/pty.cc
+> > > @@ -388,6 +388,52 @@ atexit_func (void)
+> > >      }
+> > >  }
+> > >  
+> > > +void
+> > > +fhandler_pty_slave::req_fixup_pcon_state (void)
+> > > +{
+> > > +  while (true)
+> > > +    {
+> > > +      WaitForSingleObject (input_mutex, mutex_timeout);
+> > > +      if (!get_ttyp ()->pcon_start_pid)
+> > > +	break;
+> > > +      /* Another request is on going. */
+> > > +      ReleaseMutex (input_mutex);
+> > > +      yield ();
+> > > +    }
+> > > +
+> > > +  DWORD n;
+> > > +  /* indicates that this "ESC[6n" is just for fixing-up corsor position */
+> > > +  get_ttyp ()->req_fixup_pcon_cur_pos = true;
+> > > +  get_ttyp ()->req_xfer_input = true; /* indicates that this "ESC[6n"
+> > > +					 is just for transfer input */
+> > > +  get_ttyp ()->pcon_start = true;
+> > > +  get_ttyp ()->pcon_start_pid = myself->pid;
+> > > +  WriteFile (get_output_handle (), "\033[6n", 4, &n, NULL);
+> > > +  ReleaseMutex (input_mutex);
+> > > +  while (get_ttyp ()->pcon_start_pid)
+> > > +    /* wait for completion of fixing-up in master::write(). */
+> > > +    yield ();
+> > 
+> > Both of these loops are unbounded, and both depend on somebody else
+> > clearing `pcon_start_pid`. If the master never replies (terminal closing,
+> > broken pipe, or the previous requester died mid-handshake), the exiting
+> > process spins forever in the second loop, and a stale slot wedges the next
+> > exiting process in the first one. This commit also drops the
+> > `pcon_start_pid = 0` reset that `close_pseudoconsole()` used to do, so the
+> > stale-slot case is no longer self-healing across pcon teardown either.
+> > 
+> > Bounding both waits with a 3-second `GetTickCount64()` deadline, clearing
+> > our own `pcon_start_pid` on timeout only if it is still ours, and
+> > restoring the `close_pseudoconsole()` reset as a backstop makes the
+> > pathological case degrade to a slightly stale cursor rather than a hung
+> > exit.
+> > 
+> > The fix I would propose is in
+> > https://github.com/git-for-windows/msys2-runtime/pull/131/changes/c366a1c02e66a242a3437f6b9335c2319c095c92:
+> > 
+> > -- snip --
+> > From c366a1c02e66a242a3437f6b9335c2319c095c92 Mon Sep 17 00:00:00 2001
+> > From: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > Date: Thu, 25 Jun 2026 13:41:42 +0200
+> > Subject: [PATCH] Cygwin: pty: bound the cursor-sync round-trip so an exiting
+> >  process cannot hang
+> > 
+> > The cursor-position fixup added in "Cygwin: pty: Fixup pty state after
+> > a cygwin app exits" runs from cleanup() on every foreground Cygwin-app
+> > exit while a pseudo console is active, and it waits on two unbounded
+> > loops for the master to answer the "ESC[6n" it just sent: one that
+> > spins until the pcon_start_pid slot is free, and one that spins until
+> > the master clears the slot again. pcon_start_pid is only ever cleared
+> > once master::write() parses the terminal's reply, so if that reply
+> > never comes, because the terminal is going away, the forwarding pipe
+> > is broken, or a previous requester died mid-handshake, the exiting
+> > process spins on yield() forever and never exits.
+> > 
+> > Bound both waits with a three second deadline using GetTickCount64(),
+> > and on timeout clear our own pcon_start_pid slot, but only if it is
+> > still ours, so a give-up does not stomp a later requester. Also restore
+> > the pcon_start and pcon_start_pid reset that the same commit removed
+> > from close_pseudoconsole(); it is the backstop that keeps a requester
+> > which died without clearing its slot from wedging the next one. The
+> > worst case is now a slightly stale cursor after a timeout rather than a
+> > process that refuses to exit.
+> > 
+> > Fixes: b34394d456b6 ("Cygwin: pty: Fixup pty state after a cygwin app exits")
+> > Assisted-by: Opus 4.8
+> > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > ---
+> >  winsup/cygwin/fhandler/pty.cc | 27 ++++++++++++++++++++++++++-
+> >  1 file changed, 26 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+> > index c79fd1f975..669e18238b 100644
+> > --- a/winsup/cygwin/fhandler/pty.cc
+> > +++ b/winsup/cygwin/fhandler/pty.cc
+> > @@ -226,6 +226,7 @@ atexit_func (void)
+> >  void
+> >  fhandler_pty_slave::req_fixup_pcon_state (void)
+> >  {
+> > +  ULONGLONG deadline = GetTickCount64 () + 3000;
+> >    while (true)
+> >      {
+> >        WaitForSingleObject (input_mutex, mutex_timeout);
+> > @@ -233,6 +234,10 @@ fhandler_pty_slave::req_fixup_pcon_state (void)
+> >  	break;
+> >        /* Another request is on going. */
+> >        ReleaseMutex (input_mutex);
+> > +      if (GetTickCount64 () > deadline)
+> > +	/* A previous requester is stuck; give up this sync rather than
+> > +	   spin forever. */
+> > +	return;
+> >        yield ();
+> >      }
+> >  
+> > @@ -245,9 +250,25 @@ fhandler_pty_slave::req_fixup_pcon_state (void)
+> >    get_ttyp ()->pcon_start_pid = myself->pid;
+> >    WriteFile (get_output_handle (), "\033[6n", 4, &n, NULL);
+> >    ReleaseMutex (input_mutex);
+> > -  while (get_ttyp ()->pcon_start_pid)
+> > +  deadline = GetTickCount64 () + 3000;
+> > +  while (get_ttyp ()->pcon_start_pid && GetTickCount64 () <= deadline)
+> >      /* wait for completion of fixing-up in master::write(). */
+> >      yield ();
+> > +  /* If the master never answered (e.g. the terminal is going away),
+> > +     clear our own request so a stale pcon_start_pid cannot wedge the
+> > +     next requester. */
+> > +  if (get_ttyp ()->pcon_start_pid == (pid_t) myself->pid)
+> > +    {
+> > +      WaitForSingleObject (input_mutex, mutex_timeout);
+> > +      if (get_ttyp ()->pcon_start_pid == (pid_t) myself->pid)
+> > +	{
+> > +	  get_ttyp ()->req_fixup_pcon_cur_pos = false;
+> > +	  get_ttyp ()->req_xfer_input = false;
+> > +	  get_ttyp ()->pcon_start = false;
+> > +	  get_ttyp ()->pcon_start_pid = 0;
+> > +	}
+> > +      ReleaseMutex (input_mutex);
+> > +    }
+> >  }
+> >  
+> >  void
+> > @@ -4007,6 +4028,10 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
+> >  	  ttyp->pcon_activated = false;
+> >  	  ttyp->switch_to_nat_pipe = false;
+> >  	  ttyp->nat_pipe_owner_pid = 0;
+> > +	  /* Safety net: if a req_fixup_pcon_state() requester died without
+> > +	     clearing its slot, do not leave pcon_start_pid set forever. */
+> > +	  ttyp->pcon_start = false;
+> > +	  ttyp->pcon_start_pid = 0;
+> >  	}
+> >        if (ttyp->pcon_handle_ready_event)
+> >  	{
 
-Although you kindly reviewed my patches and even provided a proposed fix,
-I have suggested an alternative patch.
-https://cygwin.com/pipermail/cygwin-patches/2026q2/015129.html
-
-I apologize for having wasted your efforts. However, your analysis was
-extremely helpful, and I am also making good use of your commit messages.
+Clearing pcon_start and pcon_start_pid unconditionally here is
+not correct. The request from the other process may be active.
+Therefore, this should be:
+@@ -4228,6 +4249,13 @@ fhandler_pty_slave::close_pseudoconsole (tty *ttyp, DWORD force_switch_to)
+          ttyp->pcon_activated = false;
+          ttyp->switch_to_nat_pipe = false;
+          ttyp->nat_pipe_owner_pid = 0;
++         /* Safety net: if a req_fixup_pcon_state() requester died without
++            clearing its slot, do not leave pcon_start_pid set forever. */
++         if (ttyp->pcon_start_pid == myself->pid)
++           {
++             ttyp->pcon_start = false;
++             ttyp->pcon_start_pid = 0;
++           }
+        }
+       if (ttyp->pcon_handle_ready_event)
+        {
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
