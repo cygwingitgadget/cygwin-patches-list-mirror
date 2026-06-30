@@ -1,158 +1,170 @@
 Return-Path: <SRS0=QjWS=E2=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:2a])
-	by sourceware.org (Postfix) with ESMTPS id D159D4BA2E17
-	for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 08:14:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D159D4BA2E17
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
+	by sourceware.org (Postfix) with ESMTPS id 43C394BA2E28
+	for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 08:26:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 43C394BA2E28
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D159D4BA2E17
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782807294; cv=none;
-	b=VCVUU1B1YGizUN35N2TXgHFCOcW2bgRDi1sn8GgclK+SgX5MwueckuejcBUS5Y2xzdjl0PA6pYjZ6KnXF6b4chY4QZuXb7tqwRS50eABribge7RNMdpUva3X+PkwDN3XqYPSPieELKSeSpOMbc/efgUtPYWslKDSZyLDGeTErBU=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 43C394BA2E28
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782807981; cv=none;
+	b=Y6UEljAPrYRlurKjmK6ADUD+U0mPu6BDvBsW+ck0wUBEQpkwbPqVY5h5GShwojFcfUOqz9lQEwfJKqNOfIBsnJriLp69saPOMxiogmRw+n8BhH7LrbP2wp/whBSH6CwDEd/bJtodFO6cRf1TpaP4M0Ros7j9tmCv16XwKS+yTEk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782807294; c=relaxed/simple;
-	bh=VIHp64I253XtcJZGr54aYtldtl+wLk37h1/5UNUsVek=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=PnhHJMD5JAOEOmK41M73UcpN9UE6CtQ6s1GoOyXIBZZhNjtCUUiup1g6PTwWweAw1E6edB4LxJXbVexSc3fPmmWnoT/xMTH9vpSb1sEVoklVasrP0kR679syw6qt6REcmEArO3JYOrxK5nuu7EPVW8liNoobnDYGFnjsHWL2TP4=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=c3zso1ox
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D159D4BA2E17
+	t=1782807981; c=relaxed/simple;
+	bh=/lzm4dqDVvZu7WWlTCPCy7zpDZFtXGW3JaRSAWWN8aU=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=exLqfnYQHpwVS/MT3RvkX/4HCSWRCxq9+ZMBIVse9uOvZuB1CbVS5+qDEfOwt+SV28XWNUZlJaZiEAibRcdbRNyjMnVz8yjjmltXewf5RHKYsNCN7rhjFcGahmqMU79d+/XsbPCZO4fXp/+0mDcbFwoay4OzniPRtc2ZLrnVLeQ=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=TTI3ISMZ
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 43C394BA2E28
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=c3zso1ox
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20260630081444490.SRUE.44671.HP-Z230@nifty.com>;
-          Tue, 30 Jun 2026 17:14:44 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=TTI3ISMZ
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260630082619264.SPTV.102121.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2026 17:26:19 +0900
+Date: Tue, 30 Jun 2026 17:26:17 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2] Cygwin: pty: Do not transfer input to nat-pipe while masked
-Date: Tue, 30 Jun 2026 17:14:29 +0900
-Message-ID: <20260630081436.2427-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.51.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782807284;
- bh=Dz5qy4F4PFR3WJus7ZHSvRPLp+i+mJHCIOMZ7635nS0=;
- h=From:To:Cc:Subject:Date;
- b=c3zso1oxDkwJq0dsh+G9x49fATkKNepn3wnoDPVsbm6g8iq0ipZY7EWCGeqz1l3JYafFSMSH
- 1E6wlZtxUiRYICzkpdOMWNESFLLFJMo3ZTqNAK7u975ymsT1lSw8zACmAtqPy2t/TMx/Gnovzh
- 7jQZs3jnyQp21b8WPff/ttkBiXFaZNvPYn3+X6Tkah88r1MTC17uMQwJWseaSJNFtetACoGYos
- 4vBV3+kcRKVGtwzA1kvPPF30GXVfiZhcEqV985mvat2DfeW6LmZjbV7C3P+In8htB5pZQk8ftg
- SG8DE/Lv2Jnu5+SDnzBJcU2kUOQGRmJ6tz+LzjeInnAps+5Q==
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: pty: detect pcon-backed pty for
+ non-Cygwin-spawned children
+Message-Id: <20260630172617.f483a3a853b9f071dfe618a7@nifty.ne.jp>
+In-Reply-To: <2b226810-4032-9933-51cc-e4251d8c32a6@gmx.de>
+References: <pull.7.cygwin.1777561444611.gitgitgadget@gmail.com>
+	<20260624221256.e474f94cc223fcb13ab7db61@nifty.ne.jp>
+	<2b226810-4032-9933-51cc-e4251d8c32a6@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1782807979;
+ bh=LkZBM87mesQmv/REydKFAHbHyW6C9TGQoyZUNzUohEI=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=TTI3ISMZIUuf9g5RNttK/C+b9w1t6F8oC54pm1xTCk2be0Wb95znor00G5A6HVHBWFqOK+uM
+ gE4MQtSNM7zqNvM/CE38KkjjcDFuYvVhlk4ut8YBkOQkPgFvKbHKUai4TleOtD7ewJfb9hmjuh
+ zhPBZtjtt2h3aU2R15Oo5VTugSwsmOCMOa0E8ZYkzeUQKfdeCTop5rHJS48XA6kOctDidDw1Cn
+ d89/fpAIhG4EVX6ny+FbUrNCX/P8jot+1mOZ0gZkSVLQjXG06P3/ipZC4tuuPxXjyZZFj6gw/C
+ lvDV5y6VdjtbfRGkUzhUDXaUu01YyQXk309M9FTR4n2vVe6g==
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On the command "cat | non-cygwin-app", `cat` sometimes fails to read
-key input. This happens when `cat` starts to read input before `non-
-cygwin-app` configures pseudo console. This is because pipe state is
-switched to nat-pipe when pseudo console is configured.
+On Sat, 27 Jun 2026 10:18:27 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi & Mark,
+> 
+> On Wed, 24 Jun 2026, Takashi Yano wrote:
+> 
+> > On Thu, 30 Apr 2026 15:04:04 +0000
+> > "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com> wrote:
+> > > From: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > > 
+> > > When a Cygwin process (e.g. `bash` under MinTTY) spawns a native
+> > > Win32 child (e.g. `git.exe`) with pseudo console support enabled,
+> > > the child gets a pseudo console that bridges the pty. If that native
+> > > child then spawns a Cygwin grandchild (e.g. `vim`, `less`), the
+> > > grandchild inherits the pseudo console's console handles. In
+> > > `init_std_file_from_handle()`, the grandchild's msys2-runtime sees
+> > > `GetConsoleScreenBufferInfo()` succeed on those handles and, with
+> > > no valid `ctty` set, falls back to `FH_CONSOLE` and gives the
+> > > process `cons0` instead of connecting to the pty.
+> > > 
+> > [...]
+> > 
+> > Pushed to master branch with my fixup patches.
+> 
+> I had a buffer-grow follow-up to this patch sitting in
+> https://github.com/git-for-windows/msys2-runtime/pull/131/commits/77e01abd83836b4b7488328ca899aea3a8e4ffbe
+> that I should have sent before you picked up the original and pushed it to
+> master; sorry for the delay.
+> 
+> -- snip --
+> From 77e01abd83836b4b7488328ca899aea3a8e4ffbe Mon Sep 17 00:00:00 2001
+> From: Johannes Schindelin <johannes.schindelin@gmx.de>
+> Date: Fri, 29 May 2026 19:07:26 +0200
+> Subject: [PATCH] Cygwin: pty: grow GetConsoleProcessList buffer in
+>  find_pcon_pty()
+> 
+> find_pcon_pty() was passing a fixed 128-DWORD stack array to
+> GetConsoleProcessList(). If the calling Cygwin process happens to be
+> attached to a console with more than 128 processes, the Win32
+> function returns the required size and the buffer contents are
+> undefined; the existing if-zero check did not catch that case, so
+> the subsequent loop walked uninitialised data and could either miss
+> the candidate pty or, worse, match against junk PIDs and return the
+> wrong tty index.
+> 
+> Adopt the buffer-too-small dance from
+> fhandler_termios::get_console_process_id() in
+> winsup/cygwin/fhandler/termios.cc, which already had to solve this
+> problem and which also notes that the new condrv does not accept
+> oversized first-call buffers
+> (https://github.com/microsoft/terminal/issues/18264#issuecomment-2515448548).
+> The buffer comes from tmp_pathbuf so the same NT_MAX_PATH cap
+> (currently 1024 DWORDs, i.e. 4096 processes) applies; we bail out
+> with -1 if even that is not enough rather than allocate unbounded
+> memory or guess. Bumping the start-with size from 1 would defeat the
+> condrv work-around mentioned above, so we keep the same one-element
+> initial probe as termios.cc and let the loop grow.
+> 
+> Suggested-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Assisted-by: Opus 4.7
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> (cherry picked from commit b65e1544d45567f0033c57a0aa1543c5e654950a)
+> ---
+>  winsup/cygwin/tty.cc | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+> index 5cce05de34..9bc2a084fb 100644
+> --- a/winsup/cygwin/tty.cc
+> +++ b/winsup/cygwin/tty.cc
+> @@ -19,6 +19,7 @@ details. */
+>  #include "cygheap.h"
+>  #include "pinfo.h"
+>  #include "shared_info.h"
+> +#include "tls_pbuf.h"
+>  
+>  HANDLE NO_COPY tty_list::mutex = NULL;
+>  
+> @@ -135,7 +136,9 @@ tty_list::init ()
+>  int
+>  tty_list::find_pcon_pty ()
+>  {
+> -  DWORD pids[128];
+> +  tmp_pathbuf tp;
+> +  DWORD *pids = (DWORD *) tp.c_get ();
+> +  const DWORD buf_size = NT_MAX_PATH / sizeof (DWORD);
+>    DWORD count = 0;
+>    bool got_pids = false;
+>  
+> @@ -144,10 +147,20 @@ tty_list::find_pcon_pty ()
+>        if (!ttys[i].has_active_pcon ())
+>  	continue;
+>  
+> -      /* Fetch the console process list lazily, only on first candidate. */
+> +      /* Fetch the console process list lazily, only on first candidate.
+> +	 The buffer-too-large dance mirrors the one in termios.cc's
+> +	 get_console_process_id() and works around new condrv's dislike
+> +	 of oversized first-call buffers, see
+> +	 https://github.com/microsoft/terminal/issues/18264#issuecomment-2515448548 */
+>        if (!got_pids)
+>  	{
+> -	  count = GetConsoleProcessList (pids, 128);
+> +	  DWORD buf_size1 = 1;
+> +	  while ((count = GetConsoleProcessList (pids, buf_size1)) > buf_size1)
+> +	    {
+> +	      if (count > buf_size)
+> +		return -1;
+> +	      buf_size1 = count;
+> +	    }
+>  	  if (!count)
+>  	    return -1;
+>  	  got_pids = true;
+> -- snap --
+> 
+> Ciao,
+> Johannes
+> 
 
-This patch prevent the pipe state from changing to nat-pipe state if
-some cygwin process is reading input from the cyg-pipe.
+LGTM. Thanks! Pushed to master.
 
-Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by:
----
-v2: Release all masks owned by myself on cleanup()
-
- winsup/cygwin/fhandler/pty.cc           | 33 +++++++++++++++++++++----
- winsup/cygwin/local_includes/fhandler.h |  3 +--
- winsup/cygwin/local_includes/tty.h      |  2 ++
- 3 files changed, 31 insertions(+), 7 deletions(-)
-
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 35e320507..54cd64a47 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -951,7 +951,7 @@ out:
- 
- fhandler_pty_slave::fhandler_pty_slave (int unit, dev_t via)
-   : fhandler_pty_common (), inuse (NULL), output_handle_nat (NULL),
--  io_handle_nat (NULL), slave_reading (NULL), num_reader (0)
-+  io_handle_nat (NULL), masked_cnt (0)
- {
-   dev_referred_via = via;
-   if (unit >= 0)
-@@ -1230,6 +1230,10 @@ fhandler_pty_slave::open_setup (int flags)
- void
- fhandler_pty_slave::cleanup ()
- {
-+  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
-+  while (arch->masked_cnt)
-+    mask_switch_to_nat_pipe (false, false);
-+
-   if (get_ttyp ()->pcon_activated && get_ttyp ()->getpgid () == myself->pgid)
-     req_fixup_pcon_state ();
- 
-@@ -1499,11 +1503,18 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
-   WaitForSingleObject (input_mutex, mutex_timeout);
-   if (mask)
-     {
--      if (InterlockedIncrement (&num_reader) == 1)
--	slave_reading = CreateEvent (&sec_none_nih, TRUE, FALSE, name);
-+      if (InterlockedIncrement (&get_ttyp ()->num_reader) == 1)
-+	get_ttyp ()->slave_reading =
-+	  CreateEvent (&sec_none_nih, TRUE, FALSE, name);
-     }
--  else if (InterlockedDecrement (&num_reader) == 0)
--    CloseHandle (slave_reading);
-+  else if (InterlockedDecrement (&get_ttyp ()->num_reader) == 0)
-+    CloseHandle (get_ttyp ()->slave_reading);
-+
-+  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
-+  if (mask)
-+    InterlockedIncrement (&arch->masked_cnt);
-+  else
-+    InterlockedDecrement (&arch->masked_cnt);
- 
-   if (!!masked != mask && xfer && get_ttyp ()->switch_to_nat_pipe)
-     {
-@@ -4401,6 +4412,18 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
- 				    HANDLE input_available_event,
- 				    HANDLE input_transferred_to_cyg)
- {
-+  if (dir == tty::to_nat)
-+    {
-+      char name[MAX_PATH];
-+      shared_name (name, TTY_SLAVE_READING, ttyp->get_minor ());
-+      HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
-+      CloseHandle (masked);
-+      if (masked)
-+	/* Cygwin process is reading cyg-pipe.
-+	   Do not transfer input to nat-pipe. */
-+	return;
-+    }
-+
-   HANDLE to;
-   if (dir == tty::to_nat)
-     to = ttyp->to_slave_nat ();
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 8e9cbef4b..d8b6f5950 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2442,8 +2442,7 @@ class fhandler_pty_slave: public fhandler_pty_common
- {
-   HANDLE inuse;			// used to indicate that a tty is in use
-   HANDLE output_handle_nat, io_handle_nat;
--  HANDLE slave_reading;
--  LONG num_reader;
-+  LONG masked_cnt;
- 
-   /* Helper functions for fchmod and fchown. */
-   bool fch_open_handles (bool chown);
-diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_includes/tty.h
-index c5102eb81..407565ce9 100644
---- a/winsup/cygwin/local_includes/tty.h
-+++ b/winsup/cygwin/local_includes/tty.h
-@@ -146,6 +146,8 @@ private:
-   bool discard_input;
-   bool stop_fwd_thread;
-   bool req_fixup_pcon_cur_pos;
-+  HANDLE slave_reading;
-+  LONG num_reader;
- 
- public:
-   HANDLE from_master_nat () const { return _from_master_nat; }
 -- 
-2.51.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
