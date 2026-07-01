@@ -1,71 +1,98 @@
 Return-Path: <SRS0=gQMU=E3=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo001.btinternet.com (btprdrgo001.btinternet.com [65.20.50.6])
-	by sourceware.org (Postfix) with ESMTP id DDFB74BA2E0E
-	for <cygwin-patches@cygwin.com>; Wed,  1 Jul 2026 12:51:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DDFB74BA2E0E
+Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.48])
+	by sourceware.org (Postfix) with ESMTP id 6A37E4BA2E08
+	for <cygwin-patches@cygwin.com>; Wed,  1 Jul 2026 23:14:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6A37E4BA2E08
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DDFB74BA2E0E
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.6
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782910284; cv=none;
-	b=IBV08Q39Shk/XIadDqM5IklLYPnpxCNlDMHOZdY6RIVhm1f88R1ShTGT6L+F6J5LzKioaSHF+VxTNgMciwbVb2TxG9yiA1T3OUOmazUVMh3ALWYHeFqmgVvqpJgBT/+gjpAaH/V0/etdDGlOyPGDWgRiHA1aTXnux3MOEUhIDjI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6A37E4BA2E08
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.48
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1782947650; cv=none;
+	b=gsjUbZ/FB+LPs/pVpYh9WeBzH14pMse1b+0pkBSRqA3Ov3Ynt5gMPOTmwx65yAN6+i3WlTouS77Hywkt5urvWJ/TlxSz43cm4YutlNGk+LENUsG96Mfv85CzMansRZ6GVgcCUfRKeN6zoL8qUioIaZB74/SqlS6w0P3D/oYZGio=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1782910284; c=relaxed/simple;
-	bh=VwhUu74PIKxRQuASDqF3JuaBv0JfX9WBIKrY8hF2eT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=ETOubzC1oT2fhd2GW+JsJQc1zZgXBFCgqS4mEycA3Ic57gFnBjvJbf7hLKR7CbrXJDPIhwXpCdViAceqMNReUUkLrKdWITrlaLSxRAotdEzPmcyEfmfQhoTTDPKRSTHS3H9o8QqZ0uJJFDzHmpeUx1AwaJf4fkTAcNzNRSj8vhA=
+	t=1782947650; c=relaxed/simple;
+	bh=NXA1mHzluM0ByGtvV4tyPDbXNMbtZSJQzWj9z6+6Y7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=iN6UHGT33nOhFf8nNsvuNa2NZ1rg6qNDpIkygr/LLKjdLfuD1/YlwkXS3J2g6Hkr8ATnQ23iFJ610KeUitC1aqMnZO+KUYdf8nab3ug4AFLixk4KCyOt20DAZaa+CiNSy3mgkZUGotS09qJjhzf/Mk/uEnutDTV/YB41AYk1Dbo=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DDFB74BA2E0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6A37E4BA2E08
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 69E784C505CC459E
+X-SNCR-Rigid: 6A025278041CCD3B
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTEYVk60UCHOjnMuAE1neW29e4YUpQVt1uqDF149O3xOqEPB5gyby4uGHtFrroZ2FOnKjjgf6RJZlp38Q7+SQ04GxsW6ywS1nVfy9Tr/D+9pwxi/jaxi9IH2jgkDUkJFigNC9R4yLrhfPs1ng8/0N3Wcz8L1eRl4utP5h55+E/8/GyqSqvGXJlm8ncXay1xLQac++pOug3ugdpz8AwKaHM80gy1N+eF7w6A6xBLIBkK9fFXxmTNlcW0bSU2Y04kbxWsVpdatQIfv5ZpxortNgDfvKgCy/4oAEmf/N+5r/JJGgYJj6Y81+6YgULMv+u+3FtXIMgTtC3s+v9SqAUYdTBIdZiOKcMk0RR5SuXwJkteqaa/mAVYLUve1QWk1GsNiiGJcWqWf3+ugYuZmwtJmb58Mwbp7kWVcvdvVUQienc1cgyFL37fH8e88oHJzg1SEJjgPH5eLnbDBNPDqzioIUX3dOYLDrbG1U5HWPY78r6R7Yn92lhXr1X8WB8CvoN5TgVhnCLlsTh63oSVZy3oHxFYCNEFc0+fg8N6TEuIyiiFz+Jy9aSSTnNoLZrNhJCI5Cqu8vfxfxZgGKZZy7NofRIR5jmI1B3JsfiLbWwjZibfNgNzGr20T2xGahorQMz7GapeFl2P19akS3bSZg1Ahq/Csnl7WO02B9sFPjJKjufUbpQ
+X-RazorGate-Vade: dmFkZTEmFMdoirVp6cczSNoVVRgbmnPhLriaVxk9IdnH0L49qYdSp1cC+PRyofsMRDl9n/3bNG7rdevemUGpeIaLizU8ksZFdCwpLjtQ6fkHNXrYNwC4b31QW2EQyGy03tsSMjCsPet3hAT7pTOdVB3wmltF2DtU+6uAE6kTvMn5gWgKtyhfnFIe/G1rjhaRkq8UUmsq31zL05NpPnttmNzThGVv6mvEf0MoM8QMjPbBa+CGsQysnmAD/7/6gqVTZwhDzfu6IGqXY52TlUSiSzSyBCq8EdXyFJU7ivrQ1cvajr89UxdeE/7laf8XQYBPcmtazvhqJrC9dMbzcl8JXWZrZSQrIati+6cOXQ9gMAK3SPmljd3rj/hvSBfyGZ7tUvxs74Mt5E3ik1TPdBBmZzWkQzy0iVeJ00MIvPdjfuVBpV1v7XOg3SlmvXoo7n//ZzN4vMuaMzq+gyPreR0N6C7rTW1lmI8WDb6zZ0OEqn/4HGk1Rjw01eDKktrOvHQptob07Dtj2rGvGlGjEBFoPZExiP3n8XT45M9i7/XgvcsZMr1WzVndKjRcX8uBIjjhgMqCr0MBuI3JEtDfz6MTtgwO9v6hpXsTKTmI4Ts64sKQRPvQL//k7IobhdN0T3yGH/ZbPdaM4OhRFoQdJwcRJJQDgcMEp22iiAPS59oIGqo8/5jjpg
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (62.56.66.111) by btprdrgo001.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 69E784C505CC459E; Wed, 1 Jul 2026 13:51:16 +0100
-Message-ID: <259c44dc-9e05-4549-9768-e91c7fc8ca3f@dronecode.org.uk>
-Date: Wed, 1 Jul 2026 13:51:13 +0100
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A025278041CCD3B; Thu, 2 Jul 2026 00:14:03 +0100
+Message-ID: <054a3964-a4db-4add-9531-4b899e356f4b@dronecode.org.uk>
+Date: Thu, 2 Jul 2026 00:14:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] Cygwin: autoload: fix ws2_32 chained init on AArch64
-To: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-References: <PN0P287MB0295342E2109C2CB8EECCE6B92062@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <ag8IvAkqoNVM-AH2@arm.com>
- <PN0P287MB02951A11C49A1208A9BA66F392102@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <99590c72-bc88-4466-95c2-ae540a11c031@dronecode.org.uk>
- <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] Cygwin: exceptions: Fix AArch64 non-incyg signal handling
+To: =?UTF-8?Q?M=C3=A1te_Dimand?= <mate.dimand@arm.com>
+References: <d8339a03-a0d3-4b0c-bb10-f706fcc6da49@arm.com>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <d8339a03-a0d3-4b0c-bb10-f706fcc6da49@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 26/06/2026 10:03, Chandru Kumaresan wrote:
-[...]
+On 12/06/2026 09:02, Máte Dimand wrote:
+> This patch fixes crashes that occur when a signal interrupts sigfe or
+> any non-cygwin function that does not preserve the LR register in its
+
+Right. So I think I understand how this problem manifests when 
+interrupting a leaf function, but I wonder if you could go into a bit 
+more detail about how it occurs inside sigfe?
+
+> prologue/epilogue. This crash was discovered through the "run-heredoc"
+> testcase in bash's testsuite, which caused bash to call "read"
+> frequently, leading to a high chance of a signal interrupting sigfe.
 > 
->> * Looking at the git history, the comment on the problem the
->> no_resolve_on_fork flag is working around has disappeared, but the
->> functionality is still there.  Is it still needed?
+> The "sigdelayed" function in gendef clobbers the LR register to return
+> to the instruction where the thread was interrupted. Picking any other
+> register for branching back would also clobber said register. Leaf
+> functions are not guaranteed to be compiled with LR being preserved on
+> the stack. The solution is to use RtlRestoreContext to restore all
+> registers without needing to sacrifice any.
 > 
-> The no_resolve_on_fork removal addresses your question about whether
-> that flag is still needed -- it was always 0 at every call site, so
-> the patch drops it entirely.
+> The patch includes a C++ version of sigdelayed, which calls
+> RtlRestoreContext at the end. The non-incyg signal handling codepath
+> will change the thread's IP register to this new function instead of
+> the original sigdelayed function written in assembly. Cygwin functions
+> interrupted by signals still use the original function.
 
-Hmmm. Are you sure? It looks to me like it's non-zero in all the 
-existing winmm uses.
+Hmm... so, this looks like a reasonable implementation of the change 
+described to address the problem identified, but...
 
+One concern I have is that this adds a single CONTEXT.
 
-Anyhow, the "fix ws2_32 chained init on AArch64" part of this looks 
-reasonable and doesn't seem to be connected. Can you submit that as a 
-separate patch?
+I'm not entirely sure about the situations in which nested signal 
+interrupts can occur. Is that something you considered? Is there reason 
+to believe that can't happen in these circumstances?
 
-Thanks.
+I wonder if there's a possible implementation where we maintain a stack 
+of (lr, pc) tuples, and then exit by rotating those onto the top of the 
+stack frame and popping them both?
+
+(It might also be worthwhile looking at the aarch64 implementation of 
+RtlRestoreContext - since it must know how to restore all registers 
+without clobbering any of them - which is exactly what we want to do in 
+sigdelayed?)
+
+> 
+> Signed-off-by: Máté Dimand <mate.dimand@arm.com>
+> ---
+>   winsup/cygwin/exceptions.cc           | 87 ++++++++++++++++++++++++++-
+>   winsup/cygwin/local_includes/cygtls.h | 13 ++++
+>   2 files changed, 98 insertions(+), 2 deletions(-)
+> 
+
 
