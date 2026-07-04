@@ -1,167 +1,264 @@
-Return-Path: <SRS0=+QPO=E5=multicorewareinc.com=chandru.kumaresan@sourceware.org>
-Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c409::1])
-	by sourceware.org (Postfix) with ESMTPS id B87544BA2E13
-	for <cygwin-patches@cygwin.com>; Fri,  3 Jul 2026 12:12:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B87544BA2E13
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=multicorewareinc.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=multicorewareinc.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B87544BA2E13
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c409::1
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1783080776; cv=pass;
-	b=HlLdpwaDje5MmM8o76IJh8wbr4BCcL9Zi1+jVfk9UGLJ6uQUEkiF8X1NXEPGITiMrGJVO+P+gUy1nkvkRGL4PdsWTfkNf9Mi3nF7yXsCRgddTYZAJ8WOUBLD+v9fB7DLOb/Vs5U9J2N5wSPBjYiMivOecyR7pRFigqGlaj7Nh/M=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783080776; c=relaxed/simple;
-	bh=XXRw3JgmmOv+eF8HvOIa7cKyGVSWHb+8iGNCRvJC+nc=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=ZYi5kE5MzLIVbgoKgZMbRZCeSD0n/Wsku9iMtvto8riyF+fF+r8Gdj5zOJ22FB2tcTBV5/dnMNqkTyau0aRYPU7aymgLNKUK3kok6k5Lz+n4phAKg+Pz12Pitt7pDxeXbMSr2/bUjp8P5gSxE72pHYUMLye+4U/l3TYDr1Gt+5M=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=rq2bZ7q/
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B87544BA2E13
+Return-Path: <SRS0=e8/d=E6=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by sourceware.org (Postfix) with ESMTPS id 8F6EC4BA79AD
+	for <cygwin-patches@cygwin.com>; Sat,  4 Jul 2026 12:38:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8F6EC4BA79AD
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8F6EC4BA79AD
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.17.20
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783168740; cv=none;
+	b=DvQ1rvGWcg5nHaKnb+EAF/eRRxbm/DxI2/Q0Zd7qaXJm09cX8P+mTtd9sTNSFCTuZYaFc4CGd10IeutFH3csmfvp554LPQNzfpDAvXY7HqUNAO9HlJ76JqM/K4KAUW+IubWUexNSPLoYRajwXHVe/8aBFFBX0EDlXgZv0j74/A8=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1783168740; c=relaxed/simple;
+	bh=qud/kpbfH2zfM4uHcFSbzmzhD6qWljGbMjZFNm80OZY=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=mnQi1FqCaohgvuUimF8Xgxa7nMgXdRQS6VdxmpxbBF1CYOCCuBtnfAUTDfe3lFY48iuEoVFSoDYWiqbckJh2zO4uOBKkdVp8Cv+CaqBGSXapHUyAl2Itsl0c4YnBB+TCgqiCzc9jHTw4MOGAOm+gC2n7MIACzQLCpnyH7blfE+0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=KqjkLm/O
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8F6EC4BA79AD
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=rq2bZ7q/
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r7KkcQfuCqVGVPt1OTL4Cu0jKX4IezF8wtexAoYuCarwMoWh3rOR6XHH9EFL95SowrrUGa8humfqZVXgRuDTFvBE/4aXSUNSG/edYkpS/JgLh2IJZMDvy3iN4xvVXNaRIsSjB+Hpe4+UdIL1wn/G8vP9+Bpq+Hu0ecLoj4W13yW11BH1eTk6VOeSx1xIv6wTgVP8EJKK2Do9BJwt3JbE6yfsOWyfTBc1BvJRj2A5ltcj0me7tw5uSDTdecHOhcmy7G/0UpnLB3SCwRjY5tDf8ryja5C8VzXqgRMriI/UHVO8yQULPpmVNAHJJJRa2YlHs7UpZ8eIi4vFJ/4V7ODFdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v/bBbJJxlO7a0iKGRhJUHZu+68avpEKB9SictgvNbbg=;
- b=w/Wx2LBJuIMltnHtF3nZU2mS0+jUK8ljFiG0JDyd08ugEWpsjlzFzPmsxWK34BLRBAu9ZFWDfmaPzF+vyywFsHJa0ennmjUV7lB/kMM3m7EUiOe2U3tk6JkJ7I+yUKdcBowden+akloE0CHH3h0fBOl/2lOXP8YmAoiNMn9T4eQWUchsEWvHFcag4QxuttnxFMf82mhHYxs9SvfJjg0M8t3cM/X33r/3F7VUqKU7suHJO9wC/62YgL8UcxNmC8ehNd3O+lOOFOcwEFQYC30dSKKm9ediEevyhld7ASkMJqIo0L+cEUjvix4+G6qz12o4N1a/deeIDNcMonFijoCkyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=multicorewareinc.com; dmarc=pass action=none
- header.from=multicorewareinc.com; dkim=pass header.d=multicorewareinc.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=multicorewareinc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v/bBbJJxlO7a0iKGRhJUHZu+68avpEKB9SictgvNbbg=;
- b=rq2bZ7q/4tFEUrBLBkxv1p1qCTjWycs7SHavwmaHo82EIWpk+FMqGgwovckWpKgXts2W0rJy8Blk2AioCd3YfHkenMR4jmgjq3bRZ1uY3siS9mwH3ylYnaf/AE+7aQTXkViHmPu5+2HWzcQ/pf5yr9JX5FOjLNnV5gAwjZBSmKuLrnyzWe5X6w8LZhodHV090iPp/9U4jc9EwE4k5wZ0ClsTbF5rO9qZwjgR5z6+nOtQYJpSMJpEa12aC9HewktKuwcuG0D9UtkjjD4ddXJoHJb4c5MlN/iHDUDw+SaPfj7v1gJn5l+Pl2VDvvq+B1/9Rj8+PX/FjOGUq3y5Ihvdmg==
-Received: from PN0P287MB0295.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:e6::10)
- by PN0P287MB1305.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:190::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.11; Fri, 3 Jul
- 2026 12:12:45 +0000
-Received: from PN0P287MB0295.INDP287.PROD.OUTLOOK.COM
- ([fe80::cb75:9295:2928:9070]) by PN0P287MB0295.INDP287.PROD.OUTLOOK.COM
- ([fe80::cb75:9295:2928:9070%7]) with mapi id 15.21.0139.018; Fri, 3 Jul 2026
- 12:12:45 +0000
-From: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-To: Jon Turney <jon.turney@dronecode.org.uk>
-CC: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH v3] Cygwin: autoload: fix ws2_32 chained init on AArch64
-Thread-Topic: [PATCH v3] Cygwin: autoload: fix ws2_32 chained init on AArch64
-Thread-Index: AQHdBUqYQOvFz8P5iEWbhjhpQHTJoLZYpgOAgAL/MIs=
-Date: Fri, 3 Jul 2026 12:12:44 +0000
-Message-ID:
- <PN0P287MB02951D01A967275601A56B3092F42@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-References:
- <PN0P287MB0295342E2109C2CB8EECCE6B92062@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <ag8IvAkqoNVM-AH2@arm.com>
- <PN0P287MB02951A11C49A1208A9BA66F392102@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <99590c72-bc88-4466-95c2-ae540a11c031@dronecode.org.uk>
- <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <259c44dc-9e05-4549-9768-e91c7fc8ca3f@dronecode.org.uk>
-In-Reply-To: <259c44dc-9e05-4549-9768-e91c7fc8ca3f@dronecode.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=multicorewareinc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN0P287MB0295:EE_|PN0P287MB1305:EE_
-x-ms-office365-filtering-correlation-id: fb1fcf5c-351c-4097-e196-08ded8fc63bb
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|1800799024|23010399003|39142699007|31052699007|366016|38070700021|22082099003|18002099003|4143699003|56012099006|8096899003|55112099003;
-x-microsoft-antispam-message-info:
- 2kMkpxcfa8aoG3TmDEPMa1nuO6XqJbzWuXohjYdRmkbXym5TxgVfzRQekzqYkTWfZ+LYirLscHxthATnrhfGGt91mA60Nx0Tz1yem9rXh+9yy2IuMGkJPFcZJI1p0KlFkQAsbhds94pIAV6I7WVrvBUdAETEzl7n8EkkCL1d0vKo3rK7Q99qrRhK1iTni+CtQwyxwSGBPjmzOEYAk4EW7sDbcKTsiiuYitlcA/QvYpW5PRywFpGdxvQ3ElDEmHvzvhOGvePLDmpqcO5mQKiJatCuuCRKkvc/14ivfY+Rd+93VisVH6fm6rOqgqyUtNI36kHDd6/SXPgSiDHSLlkak1M2scE7t4JzIQwdgUFLqSblcQVoTXLtDUDb0NbgY/oLuKc6GMwQCIQfM6MZ32LMIKdW+5KgQz0RzRM9G7X03/E5AlQ2QmbNkM5/DVos7YgtKRrvZRGZVr1q13QtGFAkg8XENUuSKJR/uIo81knRIDND6Wuxvmz0Dc5WUczLar5EaVpNqC+pIi7yrAf2594rilqGQ8a4VAhwW8tziCwuz6vHhnSS1rA80BxRO8npi3DH75ZrfoZPrzzI2uPI5FGyXJ9bwyH42StDiIB5KJrfaddfQoz+oyc50RkeXfhCLc+Uob4khFqCtp5DjYbVmkNK4KQkjNhktniFy49Mjteh1zrEz1PNf44W76h3+4Zzd6f2SWM35aTxGOINrlqKv+6DOw==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN0P287MB0295.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(39142699007)(31052699007)(366016)(38070700021)(22082099003)(18002099003)(4143699003)(56012099006)(8096899003)(55112099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?P8YWzFMxypQ92YcstgjvWesR5Mv3W76hywbL8SV6WLDd6kwyV4qjC8wk3d?=
- =?iso-8859-1?Q?EJVpLAYuLsuldXNsq4FgarZvS8ifzH9ECQJSydJuhZhHXW7HqgAtImATdU?=
- =?iso-8859-1?Q?vNPi1gwdWEv42Hymw5IkVCa70C2BrVure66HOwZ+2CcQPv57HujFtClUn+?=
- =?iso-8859-1?Q?Y4pvybZbxdoIpy7649rFKHVceYD7aoEz5R+KoXmDbdslAuJUr1RtkhdnOp?=
- =?iso-8859-1?Q?c/AkOgLmp7W2QsfDNhevG2xpFGvD+FMELQqw5Xjv8xOqE4+9iO9UcBtK1R?=
- =?iso-8859-1?Q?XWctrGcwyy96OEKpmEh9xdDOjExiwIheBHavLgGZKe5Y8vx8Xdr8J0NGCH?=
- =?iso-8859-1?Q?UBsVTd8F4hDQF9XBaPiTGGaM7IPcz8WvKDgmlMDnJkYkE7HC5j2wfcSbOG?=
- =?iso-8859-1?Q?SFdDqS6q6LSKZ75A80521jmB7w5xB3LTT8Ozcbv+/o2ho9Mcn/Lg79lN30?=
- =?iso-8859-1?Q?u7lyAi4jkHa+A4wmYVX8MDag34PRb9sRek/FJMXSuGl+Tqd0yZ7Zrx4oUx?=
- =?iso-8859-1?Q?f0bV5gw3D5mDr9tf8ZaZzEP27Hwk+XleusbMtdTXnOn9HrbA5t0K/AbXXA?=
- =?iso-8859-1?Q?LfAHv3GabfZ5pPrha6fT7G8/gg8ZN3cCVTo/01WDJfi0O1hENS9nkckJKj?=
- =?iso-8859-1?Q?FpvTYpGzm5OJEy+Vm+n5YeaQ8jellc83lsvZhjv2M8wnz47COUEKwPA/Pl?=
- =?iso-8859-1?Q?sjKdwKFkYtz3JVr+hORnrEbECl7K/RwCK1xlUN/QXcPwU6r/KVke1NU8gC?=
- =?iso-8859-1?Q?mPGE8ENQcOD9vJJZ94/cdfc4X1Q8Ea2H2Gar392XyhP9DzI1UFquVJBflq?=
- =?iso-8859-1?Q?J5GMr08+iQVAy8DzjRvi6q7diVk06OL0nrIggU4bfB3HKN1gXHn8WNiSxg?=
- =?iso-8859-1?Q?y7tlMn7Ugk3TlgMP2hKltr/3Fg+FY5VkF3qVn9fanwm8CAEP/Vfch0gfDe?=
- =?iso-8859-1?Q?NSby86pBGsDH+AMB/YbwisADuxpbAC+RO9Fh/QCOB7//ueftLX4WC8CiKt?=
- =?iso-8859-1?Q?pHVSCI/VIzqCjfgfJId6L0PklG9NRSDhehcNSdtXjCVcm2I8QaoZuyGSut?=
- =?iso-8859-1?Q?C65fpSBOjVLavLNDvt3QvgeQvfRsLNmnKWpnLcOSqNOsBeVMibz4i7dBXb?=
- =?iso-8859-1?Q?2tiyKtPYK/AgptKWPsOWX1bY2Hr+1NcGtQQsmt4gVwU3hiJnqE12qPH4mX?=
- =?iso-8859-1?Q?u1qZGm+fgLzR0vnxQcpM4+qcSO3FJgltN32UdImGXLmou27ku9N3DwiM9E?=
- =?iso-8859-1?Q?iKsA/DZoch1Zns5PCsPkpJxAzKMyiO7oL9El+LPf+l7PYq3UtpXP0UsmLE?=
- =?iso-8859-1?Q?wB8wQNa9W9+iRLhQuRfAXDNcMEepHrXJP+LR4vjcp8p7r7zerlKqVw0HYB?=
- =?iso-8859-1?Q?PqsH8WF3RJfHuBz2n30DpteZyCytlx7t5cqz/zMqgok1IHGM1eOUt5PJbW?=
- =?iso-8859-1?Q?uOZn7DMbitOeAT01PVyR1iLC+SmUZ+edfES2X4LTqQIF787Jwmr0BJaq9E?=
- =?iso-8859-1?Q?rB9sLk4JzWPBYFdxFcEVLh2k0JgPW8SgnaeD0sWr1MSkWc8BWjAyUOgppE?=
- =?iso-8859-1?Q?V/Dac/CpjKkcCmZCAASvoqgLfLAfcUxbmC38nd+jNuUei8DmRrYGeAdyV2?=
- =?iso-8859-1?Q?Qdtgd5dtb5ySzWy2SXLP2SxQUO8fuLLwMzrFgNuaHOHBCzs3RqEg4UXFo8?=
- =?iso-8859-1?Q?tFZOl9EbQgx4HUEIm3cLd+HFZGUz7K9QnbMx+konJ5QueGlUWc2F4Egcqh?=
- =?iso-8859-1?Q?tdQP8fHqT+gI7jYf5UsxzH4mTx7Q56VZDqOUg349QZuIz4GBOFjkKstnUy?=
- =?iso-8859-1?Q?6Pde4EyW/aUtIgFxQG871Jx0cjr55YI=3D?=
-Content-Type: multipart/alternative;
-	boundary="_000_PN0P287MB02951D01A967275601A56B3092F42PN0P287MB0295INDP_"
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=KqjkLm/O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1783168732; x=1783773532;
+	i=johannes.schindelin@gmx.de;
+	bh=aexpI4ZaZI6BJZe4/z57XKVIqD7wKUEkK7yRsTcq8J8=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=KqjkLm/OSXmYrnotPRIhzvIAHbTBzoMgj42GDnqisiZLpSzL1VnDIe7hyWbno9k5
+	 ZV6NdhNrgTNXQxBiZWpimewwzVsvB6akgCQ+oFOKsVSIxj1a7O3mgwxJ5wO4SKXfj
+	 yLZxEqCVm4ZTJ0gIoujfFmdBgU6HlaPsrOhjH8704HgKOHs4YyDtllWg/TV+UlJ5C
+	 j7gW47HDVfpHh1G7NkBgyg5+Mnt+1HtGC0zk1Sf+5WslAVlgt50ZDbBOSHNsWhOs/
+	 A1/D9+7E7lC+YOybUR/sJfaO7cS+kxSr8J8dedeuH1aA9wEvCB8KyPpx4iYf+gzC3
+	 27khPAMI6hDHP7RnTQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgNh1-1xJ98t2RDT-00gn9J; Sat, 04
+ Jul 2026 14:38:52 +0200
+Date: Sat, 4 Jul 2026 14:38:55 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] Cygwin: console: re-enable the master thread before
+ selecting cygwin input mode
+In-Reply-To: <20260630114735.118967-1-takashi.yano@nifty.ne.jp>
+Message-ID: <69136f7a-24a3-0d96-7ef5-2d444aad8d7c@gmx.de>
+References: <20260630114735.118967-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-X-OriginatorOrg: multicorewareinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN0P287MB0295.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb1fcf5c-351c-4097-e196-08ded8fc63bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2026 12:12:44.9667
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ffc5e88b-3fa2-4d69-a468-344b6b766e7d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ypoNCvCFYdJnNV38qyu3ytIGti0r1Y7EjOqg1jSDjDIPHf5b57g+m6ILiTBZ4nXL8pERPWOiYi7LYLhxD59Vabth58HJCw+GwgNCzMIX0uv0aQDLlZS4qerDKvtAiMMJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1305
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary=83233281589620911783168735142343
+X-Provags-ID: V03:K1:K0LR0E7O72MijraNu5g0rah+Jza8qXdiKflDbpHtYndZXh3mFoh
+ ncQWIDD5784zfyILQF9V4GQFMC/70alKeYwv/pR68RXZ8f67WjdP9dtXT3zzI4taF5sZGIg
+ soSEPKTLnu4E9KSeILfxcyYFOcWq2tdFHAFTSqkG3XaCYO+YDRgFeiblnI1kzRpSKHbXtic
+ Y2OSB9riPr7a6yaaDDOXg==
+UI-OutboundReport: notjunk:1;M01:P0:vo+QOUgiygc=;n3GH8RTHR9O1hTm8tUyTvm4ni3U
+ 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
+ =
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_000_PN0P287MB02951D01A967275601A56B3092F42PN0P287MB0295INDP_
-Content-Type: text/plain; charset="iso-8859-1"
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--83233281589620911783168735142343
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jon,
+Hi Takashi,
 
->Hmmm. Are you sure? It looks to me like it's non-zero in all the
->existing winmm uses.
+On Tue, 30 Jun 2026, Takashi Yano wrote:
 
-You're right, I misstated that. winmm does pass 1 (all 20 waveIn/waveOut en=
-tries).
-The correct argument for removal isn't that it's always 0, but that the val=
-ue
-is never read anywhere, whether 0 or 1. The flag was only ever consumed
-by the DONT_RESOLVE_DLL_REFERENCES reload branch in dll_load()
-(added in a16b0549d for winmm's FreeLibrary-in-DllMain problem). Corinna
-removed that branch in 105f79b48 ("Drop use_dont_resolve_hack flag", 2016).
-Since then the value seeded into the handle slot is inert: std_dll_init's
-(uintptr_t) dll->handle <=3D 1 check treats both 0 and 1 as "not loaded," so
-winmm's 1 and everyone else's 0 follow the identical load path. Removing the
- plumbing and simplifying  =3D 1 to !handle is therefore behavior-preservin=
-g.
-This is why the comment explaining the flag disappeared (in 2016) while the
-plumbing lingered - the functionality it described was already gone.
+> From: Johannes Schindelin <johannes.schindelin@gmx.de>
+>=20
+> When a cygwin program and a non-cygwin program run in the same foregroun=
+d
+> process group (for example the pipeline `cat | ping`), Ctrl-C stopped
+> interrupting the cygwin program after "Cygwin: console: Ensure the maste=
+r
+> thread runs only when it is supposed to".
+>=20
+> The console only delivers Ctrl-C as a raw 0x03 byte (which the console
+> master thread reads and turns into a SIGINT for the foreground process
+> group) while that thread is live. When it is suspended or disabled,
+> set_input_mode (tty::cygwin) instead requests ENABLE_PROCESSED_INPUT, so
+> the console raises a CTRL_C_EVENT and the 0x03 byte never reaches the
+> master thread. The referenced commit reordered the two enable paths,
+> bg_check () and post_open_setup (), so that set_input_mode (tty::cygwin)
+> runs while disable_master_thread is still set; that leaves
+> ENABLE_PROCESSED_INPUT on and the cygwin program never receives its SIGI=
+NT.
+>=20
+> Clear disable_master_thread before selecting cygwin input mode in those =
+two
+> paths, so the mode is configured with the master thread already live and
+> ENABLE_PROCESSED_INPUT stays off. The disable paths and the synchronous
+> suspension that the referenced commit added are left unchanged, so
+> non-cygwin programs still get the master thread reliably suspended.
+>=20
+> Fixes: 733d5a953fa9 ("Cygwin: console: Ensure the master thread runs onl=
+y when it is supposed to")
+> Assisted-by: Opus 4.8
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> Co-Authored-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> ---
 
->Anyhow, the "fix ws2_32 chained init on AArch64" part of this looks
->reasonable and doesn't seem to be connected. Can you submit that as a
->separate patch?
+Thank you for extending this patch! My only concern: The commit message
+still says "the two enable paths,=C2=A0bg_check () and post_open_setup ()"=
+ and
+"Clear=C2=A0disable_master_thread before selecting cygwin input mode in th=
+ose
+two paths."
 
-Sure, I will submit a separate patch for  no_resolve_on_fork and ws2_32.
+With the `cleanup_for_non_cygwin_app()` hunk added, this needs to say
+three paths and enumerate them. Also, "clear" isn't accurate for the
+cleanup path where the argument is `con.owner =3D=3D GetCurrentProcessId()=
+`,
+not literal `false`. Maybe "set `disable_master_thread` to its target
+value before..."?
 
-Thanks ,
-K Chandru
+The functional change looks like a real improvement over the version I had
+sent. The reorder is internally consistent, the asymmetry with the
+"disable" paths is correct, and the change is a strict improvement (no
+regressions for the owner of the `tty:restore` sub-cases, and closes a
+latent bug for the non-owner `tty::cygwin` sub-case). I integrated it into
+https://github.com/git-for-windows/msys2-runtime/pull/131 just to be extra
+certain, and the AutoHotKey-based UI tests still show that the tested
+scenarios do not regress.
 
+Thank you!
+Johannes
 
---_000_PN0P287MB02951D01A967275601A56B3092F42PN0P287MB0295INDP_--
+>  winsup/cygwin/fhandler/console.cc | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/=
+console.cc
+> index 1e4367816..730bb0b45 100644
+> --- a/winsup/cygwin/fhandler/console.cc
+> +++ b/winsup/cygwin/fhandler/console.cc
+> @@ -991,6 +991,7 @@ fhandler_console::cleanup_for_non_cygwin_app (handle=
+_set_t *p)
+>    termios *ti =3D shared_console_info[unit] ?
+>      &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
+>    /* Cleaning-up console mode for non-cygwin app. */
+> +  set_disable_master_thread (con.owner =3D=3D GetCurrentProcessId ());
+>    /* conmode can be tty::restore when non-cygwin app is
+>       exec'ed from login shell. */
+>    tty::cons_mode conmode =3D cons_mode_on_close (p);
+> @@ -998,7 +999,6 @@ fhandler_console::cleanup_for_non_cygwin_app (handle=
+_set_t *p)
+>      set_output_mode (conmode, ti, p);
+>    if (con.curr_input_mode !=3D conmode)
+>      set_input_mode (conmode, ti, p);
+> -  set_disable_master_thread (con.owner =3D=3D GetCurrentProcessId ());
+>  }
+> =20
+>  /* Return the tty structure associated with a given tty number.  If the
+> @@ -1191,8 +1191,8 @@ fhandler_console::bg_check (int sig, bool dontsign=
+al)
+>       in the same process group. */
+>    if (sig =3D=3D SIGTTIN && con.curr_input_mode !=3D tty::cygwin)
+>      {
+> -      set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+>        set_disable_master_thread (false, this);
+> +      set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+>      }
+>    if (sig =3D=3D SIGTTOU && con.curr_output_mode !=3D tty::cygwin)
+>      set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+> @@ -2111,8 +2111,8 @@ fhandler_console::post_open_setup (int fd)
+>    /* Setting-up console mode for cygwin app started from non-cygwin app=
+. */
+>    if (fd =3D=3D 0)
+>      {
+> -      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+>        set_disable_master_thread (false, this);
+> +      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+>      }
+>    else if (fd =3D=3D 1 || fd =3D=3D 2)
+>      set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+> --=20
+> 2.51.0
+>=20
+>=20
+
+--83233281589620911783168735142343--
