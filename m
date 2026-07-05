@@ -1,115 +1,210 @@
 Return-Path: <SRS0=TCz0=E7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:27])
-	by sourceware.org (Postfix) with ESMTPS id 7653A4BA2E0C
-	for <cygwin-patches@cygwin.com>; Sun,  5 Jul 2026 14:28:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7653A4BA2E0C
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id 2662D4BA2E07
+	for <cygwin-patches@cygwin.com>; Sun,  5 Jul 2026 15:37:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2662D4BA2E07
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7653A4BA2E0C
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783261722; cv=none;
-	b=JYw3BoR34UoOkjVcce/oLw5Ox0MHQqlrCLHnxKgZBWJaRx022+6TVtyP0wfSjjt1PkDsvzLeWx+K33j/z2dT5Lm2+8Nq9eh9gzw/BTYrpxNIJd/QtG43gE3tqcBtnYxLjWjfMrJ46v7nsenYUe4G0d12eZDLxERF5kbeREu3IEI=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2662D4BA2E07
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783265878; cv=none;
+	b=gsqXyGyMfObtJrl86zrg66Ita2/Wcmxb2NJOnNlUnJWmRXRyMY1gxXoMI375EnrNtXaXNlTyv2jU9kjL2U/1mW/6vIG1iZQDhoceZ5CPBYspYzQhnJ6r1+VFx+LeIHNkX84JBN3s+tCNK7oV7RIPh09aLNYr5gxTQalhZJ1DZwQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783261722; c=relaxed/simple;
-	bh=22vJTwE6wk+ozFoTX1C51Xw47H1E6mXkxYBDCvoF1Dg=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=hV+Vrb4+L0TsnjguONu/Vy8l8d/UbIyrPTXvczH51Uf3ZYoepkhzlJUpOdS/2hVRC1/kse3Md2Nl7eRGjaiSQsnaPu6tBs0+6egOXtit+plMz4P2aYSnf+FIJ1Pn/iouuvR8jpKAqC4Noom6g0weLhUxJ+j4tLXb3F5sXubk+Xk=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=WkpcfvTS
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7653A4BA2E0C
+	t=1783265878; c=relaxed/simple;
+	bh=eyTU5Mw+RAuzWfmMgQK76TtSSxyaysDQWXL+fxVCyzo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=O2rMpRzouQ/lJAHtp8eRMpFEVazmt8kWsFwG1P0e4paDG/ue/rSvpE8dIQ8FwtA+kSVOJzqhmhT/d9VmRy19cnw2QVzr/6VIFsgyHWuAToAsMNWaZWK4+pqkl1XKVH+pC5mGIbYqtlxfos/I+/SOABaWsnX0U9AC5mh9ST3WoSA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JCrwAAr3
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2662D4BA2E07
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=WkpcfvTS
-Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
-          id <20260705142838249.EDWR.18412.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 5 Jul 2026 23:28:38 +0900
-Date: Sun, 5 Jul 2026 23:28:36 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=JCrwAAr3
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20260705153751990.LJXK.44671.HP-Z230@nifty.com>;
+          Mon, 6 Jul 2026 00:37:51 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: console: re-enable the master thread before
- selecting cygwin input mode
-Message-Id: <20260705232836.92d456032d8f7b7d1a1e02f3@nifty.ne.jp>
-In-Reply-To: <69136f7a-24a3-0d96-7ef5-2d444aad8d7c@gmx.de>
-References: <20260630114735.118967-1-takashi.yano@nifty.ne.jp>
-	<69136f7a-24a3-0d96-7ef5-2d444aad8d7c@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v2] Cygwin: console: Correct previous NOFLSH fix
+Date: Mon,  6 Jul 2026 00:37:35 +0900
+Message-ID: <20260705153745.1827-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783261718;
- bh=KDol1kNiT4E8MlgF/d2ppx/uAKl9FkUX7RlhfZMt1K8=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=WkpcfvTScJYKjDigTQiF/9XGUioKAydxsEJ5klY4C1Btw6uW+rsHtQgqT7ZnNN27qIhUaSNm
- gRwdZfkXLDM7GV0Llj8sykFmNW0d08z8JN2rbyylZ48gL0FaG66GP0ycQ9WNLT1sYhfLh+UHkV
- NcfJ2jN5qDnu8fh2XWqTCyKnHVNPRxeMZBONOsY2x4RYo6EgRtKu8p9FmihResP1CC0BIVJAFm
- hfpAs0HlSPR3SDDnPLcn+TeEwJ0L9j3rxU+OK3wKfhtUi5s43fqfwHlGu2oIVsJeKG8RRo8UXI
- DXCXsxFMAcM+jMOo9dK2euZRmwTpbHiJ7YQeB/5G8uvNvqEg==
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783265872;
+ bh=RJ3HxEK+bPR4BBil/wJAxSyp5lP2W7CofmgUHKx0XnM=;
+ h=From:To:Cc:Subject:Date;
+ b=JCrwAAr3+ppMeQGOv+6qo673RzkSCNFReVlA/X/RbzGjpLHItWN6R2VGK9VD+4Lwm4Z/5pem
+ Sz+BO2NkTaGuqyCBt6ARPn0fry6XGqgamaVEdovoMuMG/0tW3SROtuy9I4GnQrzzXGEVAG9hJH
+ Z0OhtUZoYFmwL6VrLyaAC3vXAHn+CtNaaqODESjkyaJhb7FkO8fQiekP6w6fCTwEFSj9u7FHc2
+ ZWfVLAhmj+DpO2Y2bo5Uj85W+CL8pFQ8oW4xDQiaMR6UqtL8uQnJvd2DbMdUkDPCyIsb5F8QZW
+ pSAzqsOQPQZ90jABrgTpI9DLqAIY6BZIf9HvY+2GBdyxkWUg==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 4 Jul 2026 14:38:55 +0200 (CEST)
-Johannes Schindelinwrote:
-> Hi Takashi,
-> 
-> On Tue, 30 Jun 2026, Takashi Yano wrote:
-> 
-> > From: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > 
-> > When a cygwin program and a non-cygwin program run in the same foreground
-> > process group (for example the pipeline `cat | ping`), Ctrl-C stopped
-> > interrupting the cygwin program after "Cygwin: console: Ensure the master
-> > thread runs only when it is supposed to".
-> > 
-> > The console only delivers Ctrl-C as a raw 0x03 byte (which the console
-> > master thread reads and turns into a SIGINT for the foreground process
-> > group) while that thread is live. When it is suspended or disabled,
-> > set_input_mode (tty::cygwin) instead requests ENABLE_PROCESSED_INPUT, so
-> > the console raises a CTRL_C_EVENT and the 0x03 byte never reaches the
-> > master thread. The referenced commit reordered the two enable paths,
-> > bg_check () and post_open_setup (), so that set_input_mode (tty::cygwin)
-> > runs while disable_master_thread is still set; that leaves
-> > ENABLE_PROCESSED_INPUT on and the cygwin program never receives its SIGINT.
-> > 
-> > Clear disable_master_thread before selecting cygwin input mode in those two
-> > paths, so the mode is configured with the master thread already live and
-> > ENABLE_PROCESSED_INPUT stays off. The disable paths and the synchronous
-> > suspension that the referenced commit added are left unchanged, so
-> > non-cygwin programs still get the master thread reliably suspended.
-> > 
-> > Fixes: 733d5a953fa9 ("Cygwin: console: Ensure the master thread runs only when it is supposed to")
-> > Assisted-by: Opus 4.8
-> > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > Co-Authored-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > ---
-> 
-> Thank you for extending this patch! My only concern: The commit message
-> still says "the two enable paths, bg_check () and post_open_setup ()" and
-> "Clear disable_master_thread before selecting cygwin input mode in those
-> two paths."
-> 
-> With the `cleanup_for_non_cygwin_app()` hunk added, this needs to say
-> three paths and enumerate them. Also, "clear" isn't accurate for the
-> cleanup path where the argument is `con.owner == GetCurrentProcessId()`,
-> not literal `false`. Maybe "set `disable_master_thread` to its target
-> value before..."?
+The previous fix for NOFLSH mode does not work as intended.
 
-This is for a special case, that itself is a master process which calls
-exec() for a non-cygwin app. In this case, subsequent set_input_mode()
-call sets the mode to tty::restore, and the master thread should be kept
-'disabled' until the process exits.
+discard_key_events(), added in "Cygwin: console: Fix NOFLSH behaviour a
+bit", loops on ReadConsoleInputW() until it has consumed the requested
+number of records, but ReadConsoleInputW() blocks while the console
+input buffer is empty. sigflush() calls it with a hard-coded count of
+one and no guarantee that a record is actually queued: in the
+master-thread path the signalling record has already been read out of
+the buffer before sigflush() runs, so the call blocks until, and then
+swallows, the user's next keystroke.
 
-> The functional change looks like a real improvement over the version I had
-> sent. The reorder is internally consistent, the asymmetry with the
-> "disable" paths is correct, and the change is a strict improvement (no
-> regressions for the owner of the `tty:restore` sub-cases, and closes a
-> latent bug for the non-owner `tty::cygwin` sub-case). I integrated it into
-> https://github.com/git-for-windows/msys2-runtime/pull/131 just to be extra
-> certain, and the AutoHotKey-based UI tests still show that the tested
-> scenarios do not regress.
+To avoid this, this patch does not discard input when process_sigs()
+is called from cons_master_thread, where the value of `fh` is NULL,
+because discarding will be done in cons_master_thread.
 
-I modified the commit message regarding above commnet, and pushed master
-and cygwin-3_6-branch.
+And because the ReadConsoleInputW() return value is unchecked, a failed
+read leaves the count indeterminate, so "n -= n1" can underflow and spin.
+Check return value of ReadConsoleInputW() and abort if it fails.
 
-Thank you very much!
+Moreover, discard_key_event(1) does not work as intended if the first
+key event is not a bKeyDown event correspoding to the signalling key.
+Use discard_key_events(0) instead. This means discarding input events
+to the current position processed. Since the key-strokes prior to the
+signalling key are already in the readahead buffer, so this call discards
+only the signalling key. The important point here is to discard input
+before releasing input_mutex by release_input_mutex_if_necessary(),
+because, if not, cons_master_thread starts to process key events before
+discarding signalling key event because the thread can acquire
+input_mutex. This causes the signalling key is processed twice.
 
+One separate point: the `process_input_message()` caller wraps
+`discard_key_events()` in `acquire_attach_mutex()` + `attach_console
+(con.owner)`, but the `sigflush()` call site does not, so the
+`ReadConsoleInputW()` there runs against whatever console the calling
+process happens to be attached to. With the guard above the worst case
+is a no-op when the calling process happens not to be attached, so
+it would be more correct to move the attach into the helper itself.
+
+Fixes: 66324edf64a9 ("Cygwin: console: Fix NOFLSH behaviour a bit")
+Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+---
+
+v2: Use discard_key_events(0) instead of tcflush(TCIFLUSH), which
+    discards events to the current position processed.
+
+ winsup/cygwin/fhandler/console.cc       | 25 +++++++++++++++----------
+ winsup/cygwin/fhandler/termios.cc       | 20 ++++++++++----------
+ winsup/cygwin/local_includes/fhandler.h |  1 +
+ 3 files changed, 26 insertions(+), 20 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 730bb0b45..cc4591c14 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -1718,6 +1718,7 @@ fhandler_console::process_input_message (size_t len)
+ 	  continue;
+ 	}
+ 
++      num_input_events_processed = i + 1;
+       num_chars += nread;
+       if (toadd)
+ 	{
+@@ -1748,17 +1749,11 @@ out:
+   /* Discard processed recored. */
+   DWORD discard_len = min (total_read, i + 1);
+   /* If input is signalled, do not discard input here because
+-     tcflush() is already called from line_edit(). */
+-  if (stat == input_signalled && !(ti->c_lflag & NOFLSH))
++     discard_key_events() is already called from line_edit(). */
++  if (stat == input_signalled)
+     discard_len = 0;
+   if (discard_len && (len || stat != input_ok))
+-    {
+-      acquire_attach_mutex (mutex_timeout);
+-      DWORD resume_pid = attach_console (con.owner);
+-      discard_key_events (discard_len);
+-      detach_console (resume_pid, con.owner);
+-      release_attach_mutex ();
+-    }
++    discard_key_events (discard_len);
+   return stat;
+ }
+ 
+@@ -1766,15 +1761,25 @@ void
+ fhandler_console::discard_key_events (size_t n)
+ {
+   DWORD discarded = 0;
++  if (n == 0)
++    {
++      n = num_input_events_processed;
++      num_input_events_processed = 0;
++    }
+   INPUT_RECORD input_rec[INREC_SIZE];
+   DWORD n1 = min (INREC_SIZE, n);
++  acquire_attach_mutex (mutex_timeout);
++  DWORD resume_pid = attach_console (con.owner);
+   while (n)
+     {
+-      ReadConsoleInputW (get_handle (), input_rec, n1, &n1);
++      if (!ReadConsoleInputW (get_handle (), input_rec, n1, &n1) || !n1)
++	break;
+       n -= n1;
+       discarded += n1;
+       n1 = min (INREC_SIZE, n);
+     }
++  detach_console (resume_pid, con.owner);
++  release_attach_mutex ();
+   con.num_processed -= min (con.num_processed, discarded);
+ }
+ 
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index 605258731..6395a99ea 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -444,10 +444,14 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
+ 	goto not_a_sig;
+ 
+       termios_printf ("got interrupt %d, sending signal %d", c, sig);
+-      if (!(ti.c_lflag & NOFLSH) && fh)
++      if (fh)
+ 	{
+-	  fh->eat_readahead (-1);
+-	  fh->discard_input ();
++	  if (!(ti.c_lflag & NOFLSH))
++	    {
++	      fh->eat_readahead (-1);
++	      fh->discard_input ();
++	    }
++	  fh->discard_key_events (0 /* to current position */);
+ 	}
+       if (fh)
+ 	fh->release_input_mutex_if_necessary ();
+@@ -666,13 +670,9 @@ fhandler_termios::sigflush ()
+      be NULL while this is alive.  However, we can conceivably close a
+      ctty while exiting and that will zero this. */
+   if ((!have_execed || have_execed_cygwin) && tc ()
+-      && (tc ()->getpgid () == myself->pgid))
+-    {
+-      if (!(tc ()->ti.c_lflag & NOFLSH))
+-	tcflush (TCIFLUSH);
+-      else
+-	discard_key_events (1);
+-    }
++      && (tc ()->getpgid () == myself->pgid)
++      && !(tc ()->ti.c_lflag & NOFLSH))
++    tcflush (TCIFLUSH);
+ }
+ 
+ pid_t
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index 8e9cbef4b..d11b3ec4f 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2201,6 +2201,7 @@ private:
+   HANDLE input_mutex, output_mutex;
+   handle_set_t handle_set;
+   _minor_t unit;
++  size_t num_input_events_processed;
+ 
+   /* Used when we encounter a truncated multi-byte sequence.  The
+      lead bytes are stored here and revisited in the next write call. */
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
