@@ -1,344 +1,336 @@
 Return-Path: <SRS0=AK3Y=E7=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	by sourceware.org (Postfix) with ESMTPS id 40D254BA2E05
-	for <cygwin-patches@cygwin.com>; Sun,  5 Jul 2026 08:05:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 40D254BA2E05
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	by sourceware.org (Postfix) with ESMTPS id AF0F44BA2E08
+	for <cygwin-patches@cygwin.com>; Sun,  5 Jul 2026 08:10:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AF0F44BA2E08
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 40D254BA2E05
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.17.20
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783238737; cv=none;
-	b=Yt8TCJ6hZg72B8GM0M2YFwNADhtkj4AwbzK0ri3X1Mbb0LIdJSVCSORmNFIjUe3FISLBepOuPW9ZrQM893wD1Hh6Au73Wn7+60XbCEl6sfD5cqjxwzAyo4IzYfGKsGk//mZ9Qu9E95jAjJSRSGu9IxyJKiOXWIHFmMd7OuS10d4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AF0F44BA2E08
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.15.18
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783239052; cv=none;
+	b=REDaX0hgS73PSqo/ZB3YOMVPVzqAwLbranw7TV6By2cK0d0YvlKPL5rLRqc6e0twYi+vF5n2uo7/CTB+6xyPBqeJ+mDgEZUie9AcZiECQRu9L4oxsacdwXlafOQp0td9NNxa6psJ9nLvDsZ8hzyTzLJNYEgCxjQceD0Y9OjhXws=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783238737; c=relaxed/simple;
-	bh=Z7vkvhE/L3UGv7BwF2keMyv99H4jSB8hAn3CbpuRtCE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=tjCFYADlKmU6lacK+W0l+W29HSgeaIqzB1lbLqb4hZIesv6uTiPWt9fJpXmfZrPKLW8VoIWZ8NOwhmEAyLMTULajhPtJYWopbgio7/zAZ/hiEns69GFNc+MrNNWaYfLYnLA+oOsIE9RSsb6ZzbJqZIAhRdKXW/upzX0rZhzo5NY=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=YE3DiNVQ
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 40D254BA2E05
+	t=1783239052; c=relaxed/simple;
+	bh=HPkr+faH0T+5vf62PzF9KC5XT4QSjG1uGwusEpD5GaU=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=rhHBOmeAexqCxKIU27Eska3GaJjZ3KOpDKDG+HZLIykJbI2GXqRMyG61o3ScN8RH09DUt7g99d6x1dsiIUPE4U0hfpDB9JGS9g4Ue51aShpimni575+qmN03hysp4kg3bU0hSJHxZZ+fM8aB+YgMK5Q657gihtBhSXKw9xpcJd8=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=hZMhwQ6O
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AF0F44BA2E08
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=YE3DiNVQ
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=hZMhwQ6O
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1783238730; x=1783843530;
+	s=s31663417; t=1783239050; x=1783843850;
 	i=johannes.schindelin@gmx.de;
-	bh=SRWZeFCM/nkk7WbgVi53p8F0XVNUxthKUgiLZ/76MN4=;
+	bh=5i0ERsMJ3BbYAUzn5w5BDp+E2k9lYKJBMHniyyix/LI=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=YE3DiNVQ79Xv9gNtWiF8XXbZEA/31TczuMqciv9CT6LFvXu4XXsc+0p/kyTasCu2
-	 PVyuAJ5Tvr0tMa1YyCpsHpzwHJs7kLC9bRKKmT/263wdpMKduwroY5pv2ylYsB2uN
-	 +cWJi9W+rpVPwTxjLJeJ9lSXHinISOHaZesBZWZjdhk31gbYxLSClQPgVb/US2YjU
-	 B2ocmC8MniPgsC3Boyx0jl2rMyFmRsMn49z+rkN0jKgAritu/ZyprCgRokWrigOb1
-	 inBT3C/FlOTdzMF94Sl7VgaGoEg2ks5XkgGk896yRv8mqldIGhUMZixKn+0HLUThT
-	 PycFD9BAw8LDV2i6Qg==
+	b=hZMhwQ6O7Fsp9tc1SC+wVfz4QbJt7/N5uhsU66Il4RngO/HqvMorCJ2KeJKTM8K0
+	 xx9LRrqwTuR3919S1rbKxHt+y4Ka57i2R/jjwxJichH37RRt0UeCfLMf8WC6yAPhd
+	 Jpx3bY57dD9y1NP6gfpx3mnrWZ/1zYdqyKnvFNPMYHyYVIbOClg4z46sysQkV0x11
+	 4y1+nYWgUqRVNfFDvVR4YmRm5BInvojVwZE+RzB80VqY4a8Qtt2wtHXm6Iihb1fUO
+	 Vfb0JeHAZ4Q3Z0UDAz202Apbw8V0117QOj0tQ0gSx0RLbiFgQsX8u1KXm66q48z8z
+	 qLKncpBms23o5XdyRA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuDbx-1wxHVP3I6f-00uhMk; Sun, 05
- Jul 2026 10:05:30 +0200
-Date: Sun, 5 Jul 2026 10:05:31 +0200 (CEST)
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1wxor31KEN-013xuy; Sun, 05
+ Jul 2026 10:10:50 +0200
+Date: Sun, 5 Jul 2026 10:10:51 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Correct previous NOFLSH fix
-In-Reply-To: <20260630041017.1006-1-takashi.yano@nifty.ne.jp>
-Message-ID: <8a82def9-2d48-2d9f-3a37-e9429a961945@gmx.de>
-References: <20260630041017.1006-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v2] Cygwin: pty: Do not transfer input to nat-pipe while
+ masked
+In-Reply-To: <20260630081436.2427-1-takashi.yano@nifty.ne.jp>
+Message-ID: <67131026-6c13-7d7e-f80f-56565aea5aa2@gmx.de>
+References: <20260630081436.2427-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-Provags-ID: V03:K1:OclgOwHqOrZoinhTNc6l+/TtDbeCtyxgB8eOCNXrRXlxJo5iPLS
- c6WJOzHn3e19Eq2kaOCG5b/oburKp/Fpo5AwEXy2tvz+zIoz6yAjrM5zNvn2QhTwo6HqFtg
- 7yu2hZcOVkZ/g6/8SLWPyoigQJ6u/3xUDX+24viAMp9zn8sodoRL0Pqh+2ZXFr/5ObvWVYY
- CnntsC6+F4+L0g60KvhRg==
-UI-OutboundReport: notjunk:1;M01:P0:BId/F12C//0=;z0H1zpwtaKWG2JC2RdfmPi7+Vpa
- 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
- Qu+hZz3xAyU7xE25M7Wf7gMrT3SnTBsVL+U+gBM
+X-Provags-ID: V03:K1:17OBEx1HLEyyM5VtjrdNMKpqceoiCPi9W+shKyiAKKJ30EJz2Yf
+ AT2A8jyCPbo8anlmm6J9baqdG49YXBSU4vYSyeJ8+smtvRJ91KmcS5bVsRzNhfubrKehyDE
+ 05XELr7qnWSAZPE2RQQmeR+grVX688y/dIt5Ln6YrM3yD/yPMQMAD4gHlA+yBlOrc+qkn7z
+ vMk+VST2DMxP89Im8PYlA==
+UI-OutboundReport: notjunk:1;M01:P0:UPOF0PICLrI=;wylxxYm/7/Ke0mJbKWZRWF+FnaI
+ 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
+ 2U7bM3vj7HDLWDT9So=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Takashi,
 
-Thank you for v2. It cleanly addresses the blocking `ReadConsoleInputW()`
-in `sigflush()` and the underflow in `discard_key_events()`, and moving
-the attach into the helper is the right cleanup. There is one concern I
-would like to talk through, though: the new unconditional `tcflush
-(TCIFLUSH)` in `process_sigs()`.
+Thank you for v2. The overall direction (blocking the nat-pipe transfer
+while a cygwin reader is active on the cyg-pipe) is correct, and the new
+cleanup hook is a good defensive addition against a slave that exits
+mid-read wedging the pipe state. I do want to flag one hazard, though,
+which I think v2 introduces by moving `slave_reading` and `num_reader`
+from the fhandler into the shared `tty` struct.
 
 On Tue, 30 Jun 2026, Takashi Yano wrote:
 
-> The previous fix for NOFLSH mode does not work as intended.
+> On the command "cat | non-cygwin-app", `cat` sometimes fails to read
+> key input. This happens when `cat` starts to read input before `non-
+> cygwin-app` configures pseudo console. This is because pipe state is
+> switched to nat-pipe when pseudo console is configured.
 >=20
-> discard_key_events(), added in "Cygwin: console: Fix NOFLSH behaviour a
-> bit", loops on ReadConsoleInputW() until it has consumed the requested
-> number of records, but ReadConsoleInputW() blocks while the console
-> input buffer is empty. sigflush() calls it with a hard-coded count of
-> one and no guarantee that a record is actually queued: in the
-> master-thread path the signalling record has already been read out of
-> the buffer before sigflush() runs, so the call blocks until, and then
-> swallows, the user's next keystroke.
+> This patch prevent the pipe state from changing to nat-pipe state if
+> some cygwin process is reading input from the cyg-pipe.
 >=20
-> To avoid this, this patch does not discard input when process_sigs()
-> is called from cons_master_thread, where the value of `fh` is NULL,
-> because discarding will be done in cons_master_thread.
->=20
-> And because the ReadConsoleInputW() return value is unchecked, a failed
-> read leaves the count indeterminate, so "n -=3D n1" can underflow and sp=
-in.
-> Check return value of ReadConsoleInputW() and abort if it fails.
->=20
-> Moreover, discard_key_event(1) does not work as intended if the first
-> key event is not a bKeyDown event correspoding to the signalling key.
-> Use tcflush() instead(). Since the ey-strokes prior to the signalling
-> key are already in the readahead buffer, so tcflush() discards only
-> the signalling key.
-
-Let's keep this sentence in mind, and continue the discussion below:
-
-> The important point here is to discard input before
-> releasing input_mutex by release_input_mutex_if_necessary(), because,
-> if not, cons_master_thread starts to process key events before discardin=
-g
-> signalling key event because the thread can acquire input_mutex. This
-> causes the signalling key is processed twice.
->=20
-> One separate point: the `process_input_message()` caller wraps
-> `discard_key_events()` in `acquire_attach_mutex()` + `attach_console
-> (con.owner)`, but the `sigflush()` call site does not, so the
-> `ReadConsoleInputW()` there runs against whatever console the calling
-> process happens to be attached to. With the guard above the worst case
-> is a no-op when the calling process happens not to be attached, so
-> it would be more correct to move the attach into the helper itself.
->=20
-> Fixes: 66324edf64a9 ("Cygwin: console: Fix NOFLSH behaviour a bit")
-> Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
 > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 > Reviewed-by:
 > ---
->  winsup/cygwin/fhandler/console.cc | 17 ++++++++---------
->  winsup/cygwin/fhandler/termios.cc | 21 +++++++++++----------
->  2 files changed, 19 insertions(+), 19 deletions(-)
+> v2: Release all masks owned by myself on cleanup()
 >=20
-> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/=
-console.cc
-> index 730bb0b45..925db828c 100644
-> --- a/winsup/cygwin/fhandler/console.cc
-> +++ b/winsup/cygwin/fhandler/console.cc
-> @@ -1749,16 +1749,10 @@ out:
->    DWORD discard_len =3D min (total_read, i + 1);
->    /* If input is signalled, do not discard input here because
->       tcflush() is already called from line_edit(). */
-> -  if (stat =3D=3D input_signalled && !(ti->c_lflag & NOFLSH))
-> +  if (stat =3D=3D input_signalled)
->      discard_len =3D 0;
->    if (discard_len && (len || stat !=3D input_ok))
-> -    {
-> -      acquire_attach_mutex (mutex_timeout);
-> -      DWORD resume_pid =3D attach_console (con.owner);
-> -      discard_key_events (discard_len);
-> -      detach_console (resume_pid, con.owner);
-> -      release_attach_mutex ();
-> -    }
-> +    discard_key_events (discard_len);
->    return stat;
->  }
+>  winsup/cygwin/fhandler/pty.cc           | 33 +++++++++++++++++++++----
+>  winsup/cygwin/local_includes/fhandler.h |  3 +--
+>  winsup/cygwin/local_includes/tty.h      |  2 ++
+>  3 files changed, 31 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
+cc
+> index 35e320507..54cd64a47 100644
+> --- a/winsup/cygwin/fhandler/pty.cc
+> +++ b/winsup/cygwin/fhandler/pty.cc
+> @@ -951,7 +951,7 @@ out:
 > =20
-> @@ -1768,13 +1762,18 @@ fhandler_console::discard_key_events (size_t n)
->    DWORD discarded =3D 0;
->    INPUT_RECORD input_rec[INREC_SIZE];
->    DWORD n1 =3D min (INREC_SIZE, n);
-> +  acquire_attach_mutex (mutex_timeout);
-> +  DWORD resume_pid =3D attach_console (con.owner);
->    while (n)
+>  fhandler_pty_slave::fhandler_pty_slave (int unit, dev_t via)
+>    : fhandler_pty_common (), inuse (NULL), output_handle_nat (NULL),
+> -  io_handle_nat (NULL), slave_reading (NULL), num_reader (0)
+> +  io_handle_nat (NULL), masked_cnt (0)
+>  {
+>    dev_referred_via =3D via;
+>    if (unit >=3D 0)
+> @@ -1230,6 +1230,10 @@ fhandler_pty_slave::open_setup (int flags)
+>  void
+>  fhandler_pty_slave::cleanup ()
+>  {
+> +  fhandler_pty_slave *arch =3D (fhandler_pty_slave *) archetype ? : thi=
+s;
+> +  while (arch->masked_cnt)
+> +    mask_switch_to_nat_pipe (false, false);
+> +
+>    if (get_ttyp ()->pcon_activated && get_ttyp ()->getpgid () =3D=3D mys=
+elf->pgid)
+>      req_fixup_pcon_state ();
+> =20
+> @@ -1499,11 +1503,18 @@ fhandler_pty_slave::mask_switch_to_nat_pipe (boo=
+l mask, bool xfer)
+>    WaitForSingleObject (input_mutex, mutex_timeout);
+>    if (mask)
 >      {
-> -      ReadConsoleInputW (get_handle (), input_rec, n1, &n1);
-> +      if (!ReadConsoleInputW (get_handle (), input_rec, n1, &n1) || !n1=
-)
-> +	break;
->        n -=3D n1;
->        discarded +=3D n1;
->        n1 =3D min (INREC_SIZE, n);
+> -      if (InterlockedIncrement (&num_reader) =3D=3D 1)
+> -	slave_reading =3D CreateEvent (&sec_none_nih, TRUE, FALSE, name);
+> +      if (InterlockedIncrement (&get_ttyp ()->num_reader) =3D=3D 1)
+> +	get_ttyp ()->slave_reading =3D
+> +	  CreateEvent (&sec_none_nih, TRUE, FALSE, name);
 >      }
-> +  detach_console (resume_pid, con.owner);
-> +  release_attach_mutex ();
->    con.num_processed -=3D min (con.num_processed, discarded);
->  }
+> -  else if (InterlockedDecrement (&num_reader) =3D=3D 0)
+> -    CloseHandle (slave_reading);
+> +  else if (InterlockedDecrement (&get_ttyp ()->num_reader) =3D=3D 0)
+> +    CloseHandle (get_ttyp ()->slave_reading);
+
+`num_reader` is fine to share (it is just a counter, and the interlocked
+increment/decrement pair does the right thing across processes).
+`slave_reading`, however, is a `HANDLE`, and HANDLE values are
+per-process: they index into the owning process's handle table and are not
+portable to another process without `DuplicateHandle`. Storing the raw
+value in shared memory and letting an arbitrary process call `CloseHandle`
+on it later is therefore hazardous.
+
+Concretely, consider two cygwin readers on the same pty:
+
+Process A takes the first mask. `InterlockedIncrement` returns 1, so A
+calls `CreateEvent` and writes A's handle value into `get_ttyp
+()->slave_reading`. Process B then takes a second mask; the counter goes
+to 2, so B does not create or store anything. A releases first: the
+counter goes to 1, so A does not close. B releases last: the counter goes
+to 0, and B executes `CloseHandle (get_ttyp ()->slave_reading)`. But that
+HANDLE value lives in A's handle table, not B's. In the benign case B gets
+`ERROR_INVALID_HANDLE` and the event object leaks (A already lost its slot
+in this API, so nobody will ever close it). In the malignant case, that
+same numeric HANDLE value happens to be live in B's own handle table
+pointing at an unrelated object, which B then closes out from under
+itself.
+
+In v1 both fields were per-fhandler, so this could not arise: whichever
+fhandler created the event also closed it, in the same process. For the
+specific same-process teardown path that v2's `cleanup ()` adds ("release
+all masks I still own"), the hazard also does not trigger by construction,
+since the process draining `masked_cnt` is the same one that took those
+masks. So the concern is purely about the general mask/unmask API contract
+now that the storage is shared.
+
+Two questions, then:
+
+First, is cross-process mask ownership actually reachable via the current
+call sites (read paths, `cleanup ()`, `close ()`, exec/spawn transitions)?
+If every mask is guaranteed to be released by the same process that took
+it, the hazard is theoretical and it would suffice to document that
+invariant near the field. I have not fully traced this myself and would
+trust your reading here.
+
+Second, if it _is_ reachable, would it make sense to mirror the by-name
+lookup you already do in `transfer_input ()` on the release side as well,
+that is, `OpenEvent` the named event by name inside
+`mask_switch_to_nat_pipe (false, ...)` when the counter hits zero and
+close the freshly opened handle, so `CloseHandle` always operates on a
+handle native to the closing process? Then `slave_reading` in the shared
+struct would only serve as the "an event with this name exists" flag, and
+no cross-process HANDLE ever gets closed.
+
+One much smaller, non-blocking observation on the check you added at the
+top of `transfer_input ()`:
+
+> +
+> +  fhandler_pty_slave *arch =3D (fhandler_pty_slave *) archetype ? : thi=
+s;
+> +  if (mask)
+> +    InterlockedIncrement (&arch->masked_cnt);
+> +  else
+> +    InterlockedDecrement (&arch->masked_cnt);
 > =20
-> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/=
-termios.cc
-> index 605258731..c59027093 100644
-> --- a/winsup/cygwin/fhandler/termios.cc
-> +++ b/winsup/cygwin/fhandler/termios.cc
-> @@ -444,10 +444,15 @@ fhandler_termios::process_sigs (char c, tty* ttyp,=
- fhandler_termios *fh)
->  	goto not_a_sig;
-> =20
->        termios_printf ("got interrupt %d, sending signal %d", c, sig);
-> -      if (!(ti.c_lflag & NOFLSH) && fh)
-> +      if (fh)
->  	{
-> -	  fh->eat_readahead (-1);
-> -	  fh->discard_input ();
-> +	  if (!(ti.c_lflag & NOFLSH))
-> +	    {
-> +	      fh->eat_readahead (-1);
-> +	      fh->discard_input ();
-> +	    }
-> +	  if (fh->is_console ())
-> +	    fh->tcflush (TCIFLUSH);
+>    if (!!masked !=3D mask && xfer && get_ttyp ()->switch_to_nat_pipe)
+>      {
+> @@ -4401,6 +4412,18 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir=
+ dir, HANDLE from, tty *ttyp,
+>  				    HANDLE input_available_event,
+>  				    HANDLE input_transferred_to_cyg)
+>  {
+> +  if (dir =3D=3D tty::to_nat)
+> +    {
+> +      char name[MAX_PATH];
+> +      shared_name (name, TTY_SLAVE_READING, ttyp->get_minor ());
+> +      HANDLE masked =3D OpenEvent (READ_CONTROL, FALSE, name);
+> +      CloseHandle (masked);
+> +      if (masked)
+> +	/* Cygwin process is reading cyg-pipe.
+> +	   Do not transfer input to nat-pipe. */
+> +	return;
+> +    }
 
-That invariant holds for records `line_edit()` has already consumed from
-the console input buffer. It does not hold for records that were peeked
-in the same `PeekConsoleInputW()` batch but sit at indices after the
-signalling record, nor for records that arrive during the yield window
-before `process_input_message()` drains the batch. Both of those cases
-stay in the console input buffer and get dropped by the new `tcflush()`
-along with the signalling record.
-
-Concretely: `process_input_message()` obtains records via
-`PeekConsoleInputW()` rather than consuming them, then walks
-`0..total_read-1`. If a signalling character (say `^C`) sits at index
-`i`, `line_edit()` has run for indices `0..i-1`, then `process_sigs()`
-on the signalling byte returns `signalled`, control jumps to `out`, and
-the new code sets `discard_len =3D 0`. All `total_read` records still sit
-in the console input buffer at the moment `process_sigs()` runs, and
-`fh->tcflush (TCIFLUSH)` (backed by `FlushConsoleInputBuffer()`) drops
-all of them, regardless of `NOFLSH`.
-
-The yield window that makes this a normal-load hazard, rather than a
-corner case, is the backoff heuristic in `cons_master_thread()` with the
-explicit comment "read() seems to be called. Process special keys in
-`process_input_message ()`.". When it fires, `master_thread_suspended`
-is set to `true` and the master thread yields; type-ahead then
-accumulates in the console input buffer until `process_input_message()`
-picks it up.
-
-Compare with the master thread's own signal handling in
-`cons_master_thread()` where `signalled` with `NOFLSH` set does
-`goto remove_record` and writes the surviving records back, preserving
-type-ahead. The new user-thread path, by contrast, flushes
-unconditionally, so the two paths disagree on `NOFLSH` semantics.
-
-For completeness, there is also a narrower reachable state where
-`disable_master_thread=3Dtrue` coexists with `curr_input_mode=3Dcygwin`,
-entered via the win32-input-mode DEC private mode 9001 handler which
-flips `disable_master_thread` without touching `curr_input_mode`, so
-the guard in `fhandler_console::bg_check()` does not fire. Narrower
-than the type-ahead case, but worth flagging while we are here.
-
-Two ways I could see to resolve it, and I have no strong preference:
-
-(a) Gate the new `tcflush (TCIFLUSH)` on `!(ti.c_lflag & NOFLSH)`,
-matching the `eat_readahead()` / `discard_input()` branch immediately
-above and the reshaped `sigflush()`.
-
-(b) Replace `tcflush (TCIFLUSH)` with a targeted single-record consume
-via `ReadConsoleInputW()` (bounded and return-checked, in the shape of
-the rewritten `discard_key_events()`), so only the signalling record is
-dropped and `NOFLSH` type-ahead survives.
-
-Does that reasoning make sense to you?
+There is a small TOCTOU window here: another thread can take the first
+mask (and create the event) in between our `OpenEvent` returning NULL and
+our `to_nat` transfer actually starting. The bounded worst case is one
+spurious transfer, not corruption, so I do not consider this a blocker;
+just noting it for the record in case a tighter interlock via
+`input_mutex` is cheap here.
 
 Ciao,
 Johannes
 
->  	}
->        if (fh)
->  	fh->release_input_mutex_if_necessary ();
-> @@ -666,13 +671,9 @@ fhandler_termios::sigflush ()
->       be NULL while this is alive.  However, we can conceivably close a
->       ctty while exiting and that will zero this. */
->    if ((!have_execed || have_execed_cygwin) && tc ()
-> -      && (tc ()->getpgid () =3D=3D myself->pgid))
-> -    {
-> -      if (!(tc ()->ti.c_lflag & NOFLSH))
-> -	tcflush (TCIFLUSH);
-> -      else
-> -	discard_key_events (1);
-> -    }
-> +      && (tc ()->getpgid () =3D=3D myself->pgid)
-> +      && !(tc ()->ti.c_lflag & NOFLSH))
-> +    tcflush (TCIFLUSH);
->  }
+> +
+>    HANDLE to;
+>    if (dir =3D=3D tty::to_nat)
+>      to =3D ttyp->to_slave_nat ();
+> diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/loc=
+al_includes/fhandler.h
+> index 8e9cbef4b..d8b6f5950 100644
+> --- a/winsup/cygwin/local_includes/fhandler.h
+> +++ b/winsup/cygwin/local_includes/fhandler.h
+> @@ -2442,8 +2442,7 @@ class fhandler_pty_slave: public fhandler_pty_comm=
+on
+>  {
+>    HANDLE inuse;			// used to indicate that a tty is in use
+>    HANDLE output_handle_nat, io_handle_nat;
+> -  HANDLE slave_reading;
+> -  LONG num_reader;
+> +  LONG masked_cnt;
 > =20
->  pid_t
+>    /* Helper functions for fchmod and fchown. */
+>    bool fch_open_handles (bool chown);
+> diff --git a/winsup/cygwin/local_includes/tty.h b/winsup/cygwin/local_in=
+cludes/tty.h
+> index c5102eb81..407565ce9 100644
+> --- a/winsup/cygwin/local_includes/tty.h
+> +++ b/winsup/cygwin/local_includes/tty.h
+> @@ -146,6 +146,8 @@ private:
+>    bool discard_input;
+>    bool stop_fwd_thread;
+>    bool req_fixup_pcon_cur_pos;
+> +  HANDLE slave_reading;
+> +  LONG num_reader;
+> =20
+>  public:
+>    HANDLE from_master_nat () const { return _from_master_nat; }
 > --=20
 > 2.51.0
 >=20
