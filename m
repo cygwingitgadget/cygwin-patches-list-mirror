@@ -1,134 +1,80 @@
-Return-Path: <SRS0=7rK+=FC=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 6CD3C4BA5436
-	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 08:04:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6CD3C4BA5436
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6CD3C4BA5436
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783497843; cv=none;
-	b=OrxIPpzMsrcXyX7zjwUSdLcYf5tpi+GrwAG68JZQT5HHhfPSHwT15m6cbPDUGJxr/VfYFP9Z6z5jGiOyf67DAidgYdWHSlhJXJ5kf/obw/ASY3pR1pQh/Wqe4SfciCj0MEQKmNOfCERxlHl8EnD60WOe20Io8FpfiZkoi4DpUB4=
+Return-Path: <SRS0=wCit=FC=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 85C934BA2E04
+	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 13:16:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 85C934BA2E04
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 85C934BA2E04
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783516590; cv=none;
+	b=Zo9AJMlVpwwina1SUTIn+XwSU69qd8wHPZhF0w/vjFkS+iiy4dI4nZZ4s4chcTx/PiIqOGg66gj16qubzVuGL5sxqvp5lLCxoqH1BGPih2x4rB39hp42WEsZZgY9ijYLRqhQOkAe78cwzsRGiy7LDV0ZSOsAG31iiklc95fzmjQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783497843; c=relaxed/simple;
-	bh=9WVWdge4g7azztPPbcEFrgytf8+LkR6g8uZ01SlgFXI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=D65l8zyZeoo5eRmUYU1Tivz6OTORavx1rjcp9n7QDeaMOTA2wz0AukMQxfSGrIe2GO9jV/PJYcQSalYj9Tq1/3/bPGNnEKr27t77YOhg6Bbuawlce1eZBQAebhqNibnaVb6sdawIK4oTWQraUl1Lmsg2iJQzfxO4kFlxsECE2JY=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6CD3C4BA5436
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 6688IoNf095473;
-	Wed, 8 Jul 2026 01:18:50 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
- via SMTP by m0.truegem.net, id smtpd2mfDDu; Wed Jul  8 01:18:43 2026
-From: Mark Geisert <mark@maxrnd.com>
+	t=1783516590; c=relaxed/simple;
+	bh=X5Ynq8xa7iDVNnUXsaYycRx1nEaygvEAfcYGwzhDAbU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=vcYSuLVHbL2PRq29eSFtu4MgBzHY6+rMQ2JC9r0eKxnNtlQMDAnqCWgquWWoqJw1UE9k85Ewaf9NQQwAKOT7N+02qg6YimVfR4OQ1fkno1yW5EwsOlF84Ci0KdIzx+CozqJRyTBntcvvDA9z6U+x8sPrGd2L56N++b1zH5383qo=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=VM+E07Mn
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 85C934BA2E04
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=VM+E07Mn
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20260708131627552.IXHD.117312.HP-Z230@nifty.com>;
+          Wed, 8 Jul 2026 22:16:27 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>,
-        Christian Franke <Christian.Franke@t-online.de>
-Subject: [PATCH v2] Cygwin: Fix error return for madvise()
-Date: Wed,  8 Jul 2026 01:03:05 -0700
-Message-ID: <20260708080349.570-1-mark@maxrnd.com>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix nat_pipe_owner_pid when gdb runs non-cygwin app
+Date: Wed,  8 Jul 2026 22:16:06 +0900
+Message-ID: <20260708131618.2259-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015163.html>
-References: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015163.html>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783516587;
+ bh=LGchjp173sK1DbEjRMlvHi9cOy0Q2LgJcqjn/38Aw/I=;
+ h=From:To:Cc:Subject:Date;
+ b=VM+E07MnI3zIljoKHwJ7di37DDuQo1rBLzty6z68dOZYxHH/09DZ7AiqfBRvazEZKHXhhM+l
+ r5kvNGELGstsaaDxR/bwDrjcZY1/SgbMcdQNdx3nsVRxYEbLVDlhLjzhA4PvQ06s8gxtrP5tf9
+ nZQfFnp81EMHsg3gQqP23zcWcf+A6xIN6F5p+VWMD7mxhppad3fnN6acG4v95puuMDp4F2ed5o
+ Ls0zjQv2qmL4voCkPvFLOpMhtWcSMMsEuzg1EJwObcJvAES8EarpeID1d+u0qd9LYRjUS9daAC
+ WkfGIBWfiUG+AOelp4Ded2LhI9+dKqCqCfp/F7LGeyolOjPQ==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently madvise() and posix_madvise() are wired together as one
-function: the latter.  But their error returns should be different.
-Make madvise a first-class export in cygwin.din.
+Previously, nat_pipe_owner_pid was wrongly set to 0 when the inferior
+of gdb is a non-cygwin app. Due to this bug, running non-cygwin app
+repeatedly in gdb causes unexpected crash.
 
-v2: Create madvise_worker() and have madvise() and posix_madvise()
-    call it, then handling their error returns compliant to POSIX.
-    Add a release note for 3.7.0.
+This happens because previsou code in setup_for_non_cygwin_app() set
+nat_pipe_owner_pid to exec_dwProcessId which is correct for the case
+that the caller is the stub process of non-cygwin app. However, if the
+caller is gdb, since the owner should be gdb itself, nat_pipe_owner_pid
+should be set to myself->dwProcessId.
 
-Reported-by: Christian Franke <Christian.Franke@t-online.de>
-Addresses: https://cygwin.com/pipermail/cygwin/2026-July/259872.html
-Signed-off-by: Mark Geisert <mark@maxrnd.com>
-Fixes: 61522196c715 (* Merge in cygwin-64bit-branch.)
-Reviewed-by: Takashi Yano, Christian Franke
-
+Fixes: 1e6c51d74136 ("Cygwin: pty: Reorganize the code path of setting up and closing pcon.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by:
 ---
- winsup/cygwin/cygwin.din    |  2 +-
- winsup/cygwin/mm/mmap.cc    | 24 ++++++++++++++++++++++--
- winsup/cygwin/release/3.7.0 |  8 ++++++++
- 3 files changed, 31 insertions(+), 3 deletions(-)
+ winsup/cygwin/fhandler/pty.cc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/cygwin.din b/winsup/cygwin/cygwin.din
-index 2e53bc819..937eacdaf 100644
---- a/winsup/cygwin/cygwin.din
-+++ b/winsup/cygwin/cygwin.din
-@@ -951,7 +951,7 @@ lseek SIGFE
- lsetxattr SIGFE
- lstat SIGFE
- lutimes SIGFE
--madvise = posix_madvise SIGFE
-+madvise SIGFE
- makecontext NOSIGFE
- mallinfo SIGFE
- malloc SIGFE
-diff --git a/winsup/cygwin/mm/mmap.cc b/winsup/cygwin/mm/mmap.cc
-index 1416e4ddc..bce819eb0 100644
---- a/winsup/cygwin/mm/mmap.cc
-+++ b/winsup/cygwin/mm/mmap.cc
-@@ -1422,8 +1422,8 @@ munlock (const void *addr, size_t len)
-   return ret;
- }
- 
--extern "C" int
--posix_madvise (void *addr, size_t len, int advice)
-+static int
-+madvise_worker (void *addr, size_t len, int advice)
- {
-   int ret = 0;
-   /* Check parameters. */
-@@ -1514,6 +1514,26 @@ posix_madvise (void *addr, size_t len, int advice)
-       break;
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 1b453a499..37266d8dd 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -4734,7 +4734,11 @@ fhandler_pty_slave::setup_for_non_cygwin_app (bool nopcon,
+       fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
+       ptys->get_ttyp ()->switch_to_nat_pipe = true;
+       if (!process_alive (ptys->get_ttyp ()->nat_pipe_owner_pid))
+-	ptys->get_ttyp ()->nat_pipe_owner_pid = myself->exec_dwProcessId;
++	/* In normal case where the current process is the stub process for
++	   non-cygwin app, set owner to exec_dwProcessId (non-cygwin app).
++	   However, in gdb case, gdb itself should be the owner. */
++	ptys->get_ttyp ()->nat_pipe_owner_pid =
++	  myself->exec_dwProcessId ? : myself->dwProcessId;
      }
- out:
-+  return ret;
-+}
-+
-+extern "C" int
-+madvise (void *addr, size_t len, int advice)
-+{
-+  int ret = madvise_worker (addr, len, advice);
-+  if (ret > 0)
-+    {
-+      set_errno (ret);
-+      ret = -1;
-+    }
-+  syscall_printf ("%R = madvise(%p, %lu, %d)", ret, addr, len, advice);
-+  return ret;
-+}
-+
-+extern "C" int
-+posix_madvise (void *addr, size_t len, int advice)
-+{
-+  int ret = madvise_worker (addr, len, advice);
-   syscall_printf ("%d = posix_madvise(%p, %lu, %d)", ret, addr, len, advice);
-   return ret;
- }
-diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
-index 3fc32433e..3f6a0ecd7 100644
---- a/winsup/cygwin/release/3.7.0
-+++ b/winsup/cygwin/release/3.7.0
-@@ -25,3 +25,11 @@ What's new:
- - Now, a Cygwin process started from a non‑Cygwin process on a pseudo console
-   runs on a pty rather than on the console device originating from the pseudo
-   console.
-+
-+Fixes:
-+------
-+
-+- Error return logic for madvise() is now separated from posix_madvise().
-+  If madvise() errors, it returns -1 with errno set. If posix_madvise()
-+  errors, it returns an error number without changing errno.
-+  Addresses: https://cygwin.com/pipermail/cygwin/2026-July/259872.html
+   bool pcon_enabled = false;
+   if (!nopcon)
 -- 
 2.51.0
 
