@@ -1,349 +1,126 @@
 Return-Path: <SRS0=wCit=FC=nifty.ne.jp=takashi.yano@sourceware.org>
 Received: from mta-snd-e10.mail.nifty.com (mta-snd-e10.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:2a])
-	by sourceware.org (Postfix) with ESMTPS id 360074BA2E09
-	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 03:57:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 360074BA2E09
+	by sourceware.org (Postfix) with ESMTPS id 18AF24BA2E09
+	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 03:58:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 18AF24BA2E09
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 360074BA2E09
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 18AF24BA2E09
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783483037; cv=none;
-	b=Js4l/fGSlY98Vep1zWHwgfwOCS/vv2sCQyQ/fugA4CtrG39KEmTNVf4nNhSYTpe8xVuKmmpROrDIsVz2v2hY708hl+M8lZn9nLIJt9HDXH2qM6Pk7BULyDEk9W6xyE/asgMpOxukyFVBPmPdxsnYQYbqwLBaGWcjZcPYNPoEJV4=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783483085; cv=none;
+	b=L+8FLizWHmNZsWE0DgCBx6CfDgRGIS9lOPyzTpBc1yYlLAa2gsw7iTOAcKP9rU4lsqgRR1ZVN2uI5jrmd4h0hsOFQRpRLfcPmXHB9XPcQnPGH4uO6euOh3AN9WWNpoihNyyD53JudFvwIbSiEfrOJP9KDACA+EF0bgR65jZ6PWI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783483037; c=relaxed/simple;
-	bh=54VOFB4ju1VlHqzOctwtKB8SlkB2yNQQ46mDDAh05M8=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=TJFR7HV19kRe9AGzG0TI2fGg6iHRejW5pIXEBtqm1x4q0gf29gwzuJXNQFjyD4PXq0DVUV1haUbmFllLOsdlIFQ26jxMIA1FNqUOG+TB6UkBmF2+o/nH9QjUNWzJShCx13sFo/sa+cezQZYEG0hZ5d3TBuM/f06S37wquWG+C14=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ILtqA4wY
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 360074BA2E09
+	t=1783483085; c=relaxed/simple;
+	bh=MyvSXNOprIOC0meK1pAyM+YPHxOuAxAjO5Dw8XIMKuA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=V6//18f1d5SGEBzCzWeBC5JTUR/gSkbpUYb6Hwh56eiLXWEv2n3m1FBL5YHTnGEbbwm0lZagps/wJ28durE4a8M4Rra2uA/DonnRARcAlb9QKEkl94s2GLO5vV6FLNXKoD+T/AV9iPuPunoyq2OJ+ON9Qy8W876ZSIjbTx+BHPc=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pz8H/Qii
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 18AF24BA2E09
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ILtqA4wY
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pz8H/Qii
 Received: from HP-Z230 by mta-snd-e10.mail.nifty.com with ESMTP
-          id <20260708035712464.LUPO.3198.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Wed, 8 Jul 2026 12:57:12 +0900
-Date: Wed, 8 Jul 2026 12:57:11 +0900
+          id <20260708035803428.LUXY.3198.HP-Z230@nifty.com>;
+          Wed, 8 Jul 2026 12:58:03 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: console: Correct previous NOFLSH fix
-Message-Id: <20260708125711.0f98de8bc9137020a87f5b24@nifty.ne.jp>
-In-Reply-To: <c2c9a3e8-d992-b8f0-7441-4d0567fa9567@gmx.de>
-References: <20260705153745.1827-1-takashi.yano@nifty.ne.jp>
-	<c2c9a3e8-d992-b8f0-7441-4d0567fa9567@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783483032;
- bh=By9AM3HBrPg4AcoCAvj9CFKCZqA2CcOWOu2FTyVM1z8=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=ILtqA4wY7ND46KVm7ubI1J2z4gJ21yQKiTUOuLfHiGXfdrFEJ05t0XhPYH5w9dRtFibPhjVf
- IkM1oUvxcHvtasujkSvYYBvwWp0ITVOmPkBoiILKmFONut5WOgYwwMywEEjpReoP9jVJM68we0
- BhKKavgo3ZpyqMoR+EIZD+lUDBeLoOC6OjKG2LL/2LYLcriDxNIu9/uV+Wf77oLaLfFMZkON1m
- Dxarc+qi/jqPwQaQq9AxFNnUCF9o2438daPlO4ULwmO5/OMJXOfM3I2pekRQ0ImQxwXXohuiC0
- 85Qivnvi9ApkDCNF2FNdJBPZkBiUuMPy0kPuQyBd/CscbIlw==
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v3] Cygwin: pty: Do not transfer input to nat-pipe while masked
+Date: Wed,  8 Jul 2026 12:57:48 +0900
+Message-ID: <20260708035757.885-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783483083;
+ bh=OXAXCyGseO+6Zhr4tlcaOHhyxoYrA2Oah4lg1HLucsg=;
+ h=From:To:Cc:Subject:Date;
+ b=pz8H/QiipdhBRYpOrcTBHDXfc0fqOwSmaIHduLbhMPyiAuUPDThwhprFyVrSEaJb1zQYAxDN
+ 9BsaXTl1Zuq3tytKF617riFBnbmt8DrpTISylZkMGTxzANaIKVz2Sx3OqujIZSmLpfY0+y8OIs
+ ltv2xgNLoEZACbU9gm23cA1H1WfJN5y/nMQUF036fCxU7v5Vx7PiI2f1YPw2sgIkjk0ByU7Lfx
+ aUytAD2h1rm48rtjw3g3z4aqQEeMVsPgkiXIwM7YfUMeOrveHJkDUrPG4btuTGL8t3fe9/QVZ6
+ RntncQ7rRa88VP+a73bYLceyZyfybX7tQWRR6YnckYpWnlMw==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+On the command "cat | non-cygwin-app", `cat` sometimes fails to read
+key input. This happens when `cat` starts to read input before `non-
+cygwin-app` configures pseudo console. This is because pipe state is
+switched to nat-pipe when pseudo console is configured.
 
-Thanks for the detailed review.
+This patch prevent the pipe state from changing to nat-pipe state if
+some cygwin process is reading input from the cyg-pipe.
 
-On Tue, 7 Jul 2026 12:23:37 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> Thank you for v2. It correctly addresses the NOFLSH concern from the v1
-> review by adopting approach (b): replacing the unconditional `tcflush()`
-> with a targeted discard of only the records the user thread has already
-> handed to `line_edit`.
-> 
-> On Mon, 6 Jul 2026, Takashi Yano wrote:
-> 
-> > The previous fix for NOFLSH mode does not work as intended.
-> > 
-> > discard_key_events(), added in "Cygwin: console: Fix NOFLSH behaviour a
-> > bit", loops on ReadConsoleInputW() until it has consumed the requested
-> > number of records, but ReadConsoleInputW() blocks while the console
-> > input buffer is empty. sigflush() calls it with a hard-coded count of
-> > one and no guarantee that a record is actually queued: in the
-> > master-thread path the signalling record has already been read out of
-> > the buffer before sigflush() runs, so the call blocks until, and then
-> > swallows, the user's next keystroke.
-> > 
-> > To avoid this, this patch does not discard input when process_sigs()
-> > is called from cons_master_thread, where the value of `fh` is NULL,
-> > because discarding will be done in cons_master_thread.
-> > 
-> > And because the ReadConsoleInputW() return value is unchecked, a failed
-> > read leaves the count indeterminate, so "n -= n1" can underflow and spin.
-> > Check return value of ReadConsoleInputW() and abort if it fails.
-> > 
-> > Moreover, discard_key_event(1) does not work as intended if the first
-> > key event is not a bKeyDown event correspoding to the signalling key.
-> > Use discard_key_events(0) instead. This means discarding input events
-> > to the current position processed. Since the key-strokes prior to the
-> > signalling key are already in the readahead buffer, so this call discards
-> > only the signalling key. The important point here is to discard input
-> > before releasing input_mutex by release_input_mutex_if_necessary(),
-> > because, if not, cons_master_thread starts to process key events before
-> > discarding signalling key event because the thread can acquire
-> > input_mutex. This causes the signalling key is processed twice.
-> > 
-> > One separate point: the `process_input_message()` caller wraps
-> > `discard_key_events()` in `acquire_attach_mutex()` + `attach_console
-> > (con.owner)`, but the `sigflush()` call site does not, so the
-> > `ReadConsoleInputW()` there runs against whatever console the calling
-> > process happens to be attached to. With the guard above the worst case
-> > is a no-op when the calling process happens not to be attached, so
-> > it would be more correct to move the attach into the helper itself.
-> > 
-> > Fixes: 66324edf64a9 ("Cygwin: console: Fix NOFLSH behaviour a bit")
-> > Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > ---
-> > 
-> > v2: Use discard_key_events(0) instead of tcflush(TCIFLUSH), which
-> >     discards events to the current position processed.
-> > 
-> >  winsup/cygwin/fhandler/console.cc       | 25 +++++++++++++++----------
-> >  winsup/cygwin/fhandler/termios.cc       | 20 ++++++++++----------
-> >  winsup/cygwin/local_includes/fhandler.h |  1 +
-> >  3 files changed, 26 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > index 730bb0b45..cc4591c14 100644
-> > --- a/winsup/cygwin/fhandler/console.cc
-> > +++ b/winsup/cygwin/fhandler/console.cc
-> > @@ -1718,6 +1718,7 @@ fhandler_console::process_input_message (size_t len)
-> >  	  continue;
-> >  	}
-> >  
-> > +      num_input_events_processed = i + 1;
-> >        num_chars += nread;
-> >        if (toadd)
-> >  	{
-> > @@ -1748,17 +1749,11 @@ out:
-> >    /* Discard processed recored. */
-> >    DWORD discard_len = min (total_read, i + 1);
-> >    /* If input is signalled, do not discard input here because
-> > -     tcflush() is already called from line_edit(). */
-> > -  if (stat == input_signalled && !(ti->c_lflag & NOFLSH))
-> > +     discard_key_events() is already called from line_edit(). */
-> > +  if (stat == input_signalled)
-> >      discard_len = 0;
-> >    if (discard_len && (len || stat != input_ok))
-> > -    {
-> > -      acquire_attach_mutex (mutex_timeout);
-> > -      DWORD resume_pid = attach_console (con.owner);
-> > -      discard_key_events (discard_len);
-> > -      detach_console (resume_pid, con.owner);
-> > -      release_attach_mutex ();
-> > -    }
-> > +    discard_key_events (discard_len);
-> >    return stat;
-> >  }
-> >  
-> > @@ -1766,15 +1761,25 @@ void
-> >  fhandler_console::discard_key_events (size_t n)
-> >  {
-> >    DWORD discarded = 0;
-> > +  if (n == 0)
-> > +    {
-> > +      n = num_input_events_processed;
-> > +      num_input_events_processed = 0;
-> > +    }
-> >    INPUT_RECORD input_rec[INREC_SIZE];
-> >    DWORD n1 = min (INREC_SIZE, n);
-> > +  acquire_attach_mutex (mutex_timeout);
-> > +  DWORD resume_pid = attach_console (con.owner);
-> >    while (n)
-> >      {
-> > -      ReadConsoleInputW (get_handle (), input_rec, n1, &n1);
-> > +      if (!ReadConsoleInputW (get_handle (), input_rec, n1, &n1) || !n1)
-> > +	break;
-> >        n -= n1;
-> >        discarded += n1;
-> >        n1 = min (INREC_SIZE, n);
-> >      }
-> > +  detach_console (resume_pid, con.owner);
-> > +  release_attach_mutex ();
-> >    con.num_processed -= min (con.num_processed, discarded);
-> >  }
-> >  
-> > diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-> > index 605258731..6395a99ea 100644
-> > --- a/winsup/cygwin/fhandler/termios.cc
-> > +++ b/winsup/cygwin/fhandler/termios.cc
-> > @@ -444,10 +444,14 @@ fhandler_termios::process_sigs (char c, tty* ttyp, fhandler_termios *fh)
-> >  	goto not_a_sig;
-> >  
-> >        termios_printf ("got interrupt %d, sending signal %d", c, sig);
-> > -      if (!(ti.c_lflag & NOFLSH) && fh)
-> > +      if (fh)
-> >  	{
-> > -	  fh->eat_readahead (-1);
-> > -	  fh->discard_input ();
-> > +	  if (!(ti.c_lflag & NOFLSH))
-> > +	    {
-> > +	      fh->eat_readahead (-1);
-> > +	      fh->discard_input ();
-> > +	    }
-> > +	  fh->discard_key_events (0 /* to current position */);
-> 
-> Originally, I worried that in the non-NOFLSH case the leading `def` byte
-> would now survive in the console input buffer, because `discard_key_events
-> (0)` only consumes records 0..i. On re-reading `process_sigs`, that worry
-> is unfounded: after the targeted discard, the `signalled` branch proceeds
-> to `kill_pgrp`, which invokes `sigflush()` on the ctty, and `sigflush()`
-> calls `tcflush (TCIFLUSH)`, which in turn calls
-> `FlushConsoleInputBuffer()`. So the remaining records get dropped by the
-> existing `sigflush` path, and the net effect matches the pre-patch
-> behavior for non-NOFLSH. Please disregard that part of my earlier reply.
-> 
-> That said, while auditing the same area I noticed a related internal
-> inconsistency that is worth raising, though it is more of a "clean up
-> while you are here" than a v2 blocker.
-> 
-> The new `discard_key_events (0)` in v2 sits on the main `signalled` branch
-> of `process_sigs`. There are two other returns from `process_sigs` that
-> `line_edit`'s switch treats the same way as `signalled`:
-> 
->         switch (process_sigs (c, get_ttyp (), this))
->           {
->           case signalled:
->           case not_signalled_but_done:
->           case done_with_debugger:
->             sawsig = true;
->             get_ttyp ()->output_stopped = false;
->             continue;
-> 
-> All three set `sawsig`, which eventually makes `line_edit` return
-> `line_edit_signalled` and drives `process_input_message` into `if (stat ==
-> input_signalled) discard_len = 0;`. That branch assumes the records at
-> 0..i have already been consumed. For the main `signalled` branch that is
-> now true, thanks to the new `discard_key_events (0)`. But the other two
-> returns in `process_sigs` do neither the targeted discard nor `kill_pgrp`,
-> so nothing consumes those records:
-> 
->         if ((with_debugger || with_debugger_nat) && need_discard_input)
->           {
->             if (!(ti.c_lflag & NOFLSH) && fh)
->               {
->                 fh->eat_readahead (-1);
->                 fh->discard_input ();
->               }
->             ti.c_lflag &= ~FLUSHO;
->             return done_with_debugger;
->           }
-> 
-> and, at `not_a_sig:`,
-> 
->         if ((ti.c_lflag & ISIG) && need_discard_input)
->           {
->             if (!(ti.c_lflag & NOFLSH) && fh)
->               {
->                 fh->eat_readahead (-1);
->                 fh->discard_input ();
->               }
->             ti.c_lflag &= ~FLUSHO;
->             return not_signalled_but_done;
->           }
-> 
-> Neither path drains the console input buffer at all. Combined with the
-> unconditional `discard_len = 0;` in `process_input_message`, records 0..i
-> survive into the next `read()`, which re-peeks them and re-enters
-> `process_sigs` on the same records, potentially re-sending `CTRL_C_EVENT`.
-> 
-> For the record, this is not strictly a v2 regression. The pre-a42e4625e1
-> shape of that condition was
-> 
->         if (stat == input_signalled && !(ti->c_lflag & NOFLSH))
->           discard_len = 0;
-> 
-> so for NOFLSH plus one of the debugger/ISIG paths, `discard_len` stayed
-> non-zero and the fallback discard at the `out:` label consumed the
-> records. The `!NOFLSH` sub-case was already broken pre-v1 (it relied on
-> `sigflush()` firing, which it does not on these two returns). v1 dropped
-> the `!NOFLSH` gate; v2 preserves that shape. So the NOFLSH sub-case was
-> regressed by v1, the non-NOFLSH sub-case is pre-existing, and neither is
-> fixed by v2 on its own.
-> 
-> The two shapes I can see for addressing this are (a) also call
-> `fh->discard_key_events (0)` from the `done_with_debugger` and
-> `not_signalled_but_done` returns in `process_sigs`, so the postcondition
-> "when `process_sigs` returns something that `line_edit` treats as
-> signalled, records 0..i have been consumed" holds uniformly across the
-> three return values; or (b) narrow the `if (stat == input_signalled)
-> discard_len = 0;` condition in `process_input_message` so it only fires on
-> the code path where the discard has actually happened.
-> 
-> I lean slightly toward (a), because it makes the postcondition symmetric
-> across the three returns that `line_edit`'s switch coalesces, but I do not
-> feel strongly.
-> 
-> Do you think this is worth folding into a v3, or would you rather ship v2
-> as is and address it as a separate follow-up? Given how narrow the
-> scenario is (GDB attached to a Cygwin process reading `/dev/cons0` with
-> `need_discard_input` set, or a foreground pgroup containing only
-> non-Cygwin processes with Ctrl-C into a `foreground_special_process`), I
-> have no objection to splitting. Or have I missed something and this does
-> not need fixing at all?
+Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+---
+v2: Release all masks owned by myself on cleanup()
+v3: Reverts the change that made num_reader and slave_reading shared
 
-In the done_with_debugger case, tcflush() is called at:
-     if (fh && p == myself && being_debugged ())
-       { /* Avoid deadlock in gdb on console. */
-         fh->tcflush(TCIFLUSH);
-         fh->release_input_mutex_if_necessary ();
-       }
-so, process_input_message() should not call discard_key_events(). However,
-tcflush() discards key events even after Ctrl-C.
+ winsup/cygwin/fhandler/pty.cc | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-Therefore, discard_key_events(0) should be called here for console.
-So I tink:
-          if (fh && p == myself && being_debugged ())
-            { /* Avoid deadlock in gdb on console. */
--             fh->tcflush(TCIFLUSH);
-+             if (fh->is_console ())
-+               fh->discard_key_events (0 /* to current position */);
-+             else
-+               fh->tcflush(TCIFLUSH);
-              fh->release_input_mutex_if_necessary ();
-            }
-is correct.
-
-The not_signalled_but_done case is an extremely special case.
-`not_a_sig` meas the key input is neither VINTR nor VQUIT. However,
-need_discard_input is set only when
-(c == '\003' &&
-(is_foreground_special_process || is_gdb_with_foreground_non_cygwin_inferior))
-
-For example, there are both cygwin process and non-cygwin process is in
-the same process grouop, such as `cat | non-cygwin-app`.
-
-So, this case happens when both VINTR and VQUIT are not Ctrl-C.
-We can observe such situation, e.g.
-`stty intr ^x; cat | non-cygwin-app`
-In this case, discard_key_events() should be called at the end of
-process_input_message() (as you pointed out above), and also Ctrl-C
-should be received by `cat` as a normal key input.
-So, I think:
-       switch (process_sigs (c, get_ttyp (), this))
-        {
-        case signalled:
--       case not_signalled_but_done:
-        case done_with_debugger:
-          sawsig = true;
-          get_ttyp ()->output_stopped &= ~BY_VSTOP;
-          continue;
-+       case not_signalled_but_done:
-+         break;
-        case not_signalled_with_nat_reader:
-          disable_eof_key = true;
-          break;
-is correct.
-
-Thanks for finding these misbehaviour. Please have a look for v3 patch.
-
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index ca85ae679..963f95801 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1282,6 +1282,10 @@ fhandler_pty_slave::open_setup (int flags)
+ void
+ fhandler_pty_slave::cleanup ()
+ {
++  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
++  while (arch->num_reader)
++    mask_switch_to_nat_pipe (false, false);
++
+   if (get_ttyp ()->pcon_activated && get_ttyp ()->getpgid () == myself->pgid)
+     req_fixup_pcon_state ();
+ 
+@@ -1543,19 +1547,22 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+ void
+ fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+ {
++  acquire_attach_mutex (mutex_timeout);
+   char name[MAX_PATH];
+   shared_name (name, TTY_SLAVE_READING, get_minor ());
+   HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
+   CloseHandle (masked);
+ 
++  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
+   WaitForSingleObject (input_mutex, mutex_timeout);
+   if (mask)
+     {
+-      if (InterlockedIncrement (&num_reader) == 1)
+-	slave_reading = CreateEvent (&sec_none_nih, TRUE, FALSE, name);
++      if (InterlockedIncrement (&arch->num_reader) == 1)
++	arch->slave_reading = CreateEvent (&sec_none_nih, TRUE, FALSE, name);
+     }
+-  else if (InterlockedDecrement (&num_reader) == 0)
+-    CloseHandle (slave_reading);
++  else if (InterlockedDecrement (&arch->num_reader) == 0)
++    CloseHandle (arch->slave_reading);
++  release_attach_mutex ();
+ 
+   if (!!masked != mask && xfer && get_ttyp ()->switch_to_nat_pipe)
+     {
+@@ -4460,6 +4467,18 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+ 				    HANDLE input_available_event,
+ 				    HANDLE input_transferred_to_cyg)
+ {
++  if (dir == tty::to_nat)
++    {
++      char name[MAX_PATH];
++      shared_name (name, TTY_SLAVE_READING, ttyp->get_minor ());
++      HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
++      CloseHandle (masked);
++      if (masked)
++	/* Cygwin process is reading cyg-pipe.
++	   Do not transfer input to nat-pipe. */
++	return;
++    }
++
+   HANDLE to;
+   if (dir == tty::to_nat)
+     to = ttyp->to_slave_nat ();
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
