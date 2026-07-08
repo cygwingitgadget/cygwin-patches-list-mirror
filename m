@@ -1,126 +1,134 @@
-Return-Path: <SRS0=wCit=FC=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 8826F4BA5439
-	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 04:54:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8826F4BA5439
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8826F4BA5439
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783486462; cv=none;
-	b=wJpIYRP1qIId6RF1GXUka9CRESwv6iJF6qIgrEAUqX3ewsWKTQZnmqZ4ML1Y91yLOsTfS36p+Sv/3wth90dL+LflaqbaTG5YeF5KjcuBh/vYARRNvtmvMWO3ow8bTrZ2BWIBhUKonjN4jNyXfCczcGb6lteP9nThZA7K8GAf9TY=
+Return-Path: <SRS0=7rK+=FC=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 6CD3C4BA5436
+	for <cygwin-patches@cygwin.com>; Wed,  8 Jul 2026 08:04:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6CD3C4BA5436
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6CD3C4BA5436
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783497843; cv=none;
+	b=OrxIPpzMsrcXyX7zjwUSdLcYf5tpi+GrwAG68JZQT5HHhfPSHwT15m6cbPDUGJxr/VfYFP9Z6z5jGiOyf67DAidgYdWHSlhJXJ5kf/obw/ASY3pR1pQh/Wqe4SfciCj0MEQKmNOfCERxlHl8EnD60WOe20Io8FpfiZkoi4DpUB4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783486462; c=relaxed/simple;
-	bh=7yrx5HHP7uvh5UHP5TjEo8ufFnCSEhbp1hxVoKSFWxs=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=qMXbcqxYoyfItkcxWewOtzFjgm/AtIYZhEBYAtyPZzPSveUZGFShuBI8Y8yuM+ALKB3442AtB5s+L69QsGLguebA4OEDJcmj1HGRJEKSbq591A8FJljxq0z0J3eUR9TOr5NNWRU3s0dOus+nsu45z67lv23V3Ywp4QdLQpfNyRQ=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ntSmwyJc
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 8826F4BA5439
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ntSmwyJc
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260708045418298.ZHKY.117312.HP-Z230@nifty.com>;
-          Wed, 8 Jul 2026 13:54:18 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	t=1783497843; c=relaxed/simple;
+	bh=9WVWdge4g7azztPPbcEFrgytf8+LkR6g8uZ01SlgFXI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=D65l8zyZeoo5eRmUYU1Tivz6OTORavx1rjcp9n7QDeaMOTA2wz0AukMQxfSGrIe2GO9jV/PJYcQSalYj9Tq1/3/bPGNnEKr27t77YOhg6Bbuawlce1eZBQAebhqNibnaVb6sdawIK4oTWQraUl1Lmsg2iJQzfxO4kFlxsECE2JY=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6CD3C4BA5436
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 6688IoNf095473;
+	Wed, 8 Jul 2026 01:18:50 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
+ via SMTP by m0.truegem.net, id smtpd2mfDDu; Wed Jul  8 01:18:43 2026
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
-	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v4] Cygwin: pty: Do not transfer input to nat-pipe while masked
-Date: Wed,  8 Jul 2026 13:54:04 +0900
-Message-ID: <20260708045412.945-1-takashi.yano@nifty.ne.jp>
+Cc: Mark Geisert <mark@maxrnd.com>,
+        Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH v2] Cygwin: Fix error return for madvise()
+Date: Wed,  8 Jul 2026 01:03:05 -0700
+Message-ID: <20260708080349.570-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015163.html>
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015163.html>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783486458;
- bh=PbAZQCVBYrsPryKxvQvh1kO3wN/zrbfEO1BwpOEPLME=;
- h=From:To:Cc:Subject:Date;
- b=ntSmwyJcsArW/1OYkIMhMXeTBKIdypH4psY21dmNoYguLiQCMfaqWN7a5Lo+dnP2TrykqVQ2
- PalONH8REAKopR+3jVLP68PaPbZGUvn+Vk0cXSRagJec9lAqGhXyqOUlld0JEnYSBSrbfVQZF1
- 7jJuSQqhgbcOc2ncJQUPB7ajV5yzpx0g88q4kqnr0tfQ7I9ri+Jr+ZRvessvk9RjKYcKhRdYgi
- Q+Hcnl28MbIVJCFvFIbpIonskYPAdWNNJL9CZRTzdTaWCvAj//rhhkZaFeQUpNaxSLF/pn/QNK
- SwwRNYA8zt7tAfZiuoul4xD+6Yz1yTN4KKKEP/jcbo87wxaw==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On the command "cat | non-cygwin-app", `cat` sometimes fails to read
-key input. This happens when `cat` starts to read input before `non-
-cygwin-app` configures pseudo console. This is because pipe state is
-switched to nat-pipe when pseudo console is configured.
+Currently madvise() and posix_madvise() are wired together as one
+function: the latter.  But their error returns should be different.
+Make madvise a first-class export in cygwin.din.
 
-This patch prevent the pipe state from changing to nat-pipe state if
-some cygwin process is reading input from the cyg-pipe.
+v2: Create madvise_worker() and have madvise() and posix_madvise()
+    call it, then handling their error returns compliant to POSIX.
+    Add a release note for 3.7.0.
 
-Fixes: f20641789427 ("Cygwin: pty: Reduce unecessary input transfer.")
-Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Reported-by: Christian Franke <Christian.Franke@t-online.de>
+Addresses: https://cygwin.com/pipermail/cygwin/2026-July/259872.html
+Signed-off-by: Mark Geisert <mark@maxrnd.com>
+Fixes: 61522196c715 (* Merge in cygwin-64bit-branch.)
+Reviewed-by: Takashi Yano, Christian Franke
+
 ---
-v2: Release all masks owned by myself on cleanup()
-v3: Reverts the change that made num_reader and slave_reading shared
-v4: Correct what mutex shoud be acquired in mask_switch_to_nat_pipe()
+ winsup/cygwin/cygwin.din    |  2 +-
+ winsup/cygwin/mm/mmap.cc    | 24 ++++++++++++++++++++++--
+ winsup/cygwin/release/3.7.0 |  8 ++++++++
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
- winsup/cygwin/fhandler/pty.cc | 27 ++++++++++++++++++++++-----
- 1 file changed, 22 insertions(+), 5 deletions(-)
-
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index ca85ae679..1b453a499 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1282,6 +1282,10 @@ fhandler_pty_slave::open_setup (int flags)
- void
- fhandler_pty_slave::cleanup ()
- {
-+  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
-+  while (arch->num_reader)
-+    mask_switch_to_nat_pipe (false, false);
-+
-   if (get_ttyp ()->pcon_activated && get_ttyp ()->getpgid () == myself->pgid)
-     req_fixup_pcon_state ();
+diff --git a/winsup/cygwin/cygwin.din b/winsup/cygwin/cygwin.din
+index 2e53bc819..937eacdaf 100644
+--- a/winsup/cygwin/cygwin.din
++++ b/winsup/cygwin/cygwin.din
+@@ -951,7 +951,7 @@ lseek SIGFE
+ lsetxattr SIGFE
+ lstat SIGFE
+ lutimes SIGFE
+-madvise = posix_madvise SIGFE
++madvise SIGFE
+ makecontext NOSIGFE
+ mallinfo SIGFE
+ malloc SIGFE
+diff --git a/winsup/cygwin/mm/mmap.cc b/winsup/cygwin/mm/mmap.cc
+index 1416e4ddc..bce819eb0 100644
+--- a/winsup/cygwin/mm/mmap.cc
++++ b/winsup/cygwin/mm/mmap.cc
+@@ -1422,8 +1422,8 @@ munlock (const void *addr, size_t len)
+   return ret;
+ }
  
-@@ -1543,19 +1547,20 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
- void
- fhandler_pty_slave::mask_switch_to_nat_pipe (bool mask, bool xfer)
+-extern "C" int
+-posix_madvise (void *addr, size_t len, int advice)
++static int
++madvise_worker (void *addr, size_t len, int advice)
  {
-+  WaitForSingleObject (input_mutex, mutex_timeout);
-   char name[MAX_PATH];
-   shared_name (name, TTY_SLAVE_READING, get_minor ());
-   HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
-   CloseHandle (masked);
- 
--  WaitForSingleObject (input_mutex, mutex_timeout);
-+  fhandler_pty_slave *arch = (fhandler_pty_slave *) archetype ? : this;
-   if (mask)
-     {
--      if (InterlockedIncrement (&num_reader) == 1)
--	slave_reading = CreateEvent (&sec_none_nih, TRUE, FALSE, name);
-+      if (InterlockedIncrement (&arch->num_reader) == 1)
-+	arch->slave_reading = CreateEvent (&sec_none_nih, TRUE, FALSE, name);
+   int ret = 0;
+   /* Check parameters. */
+@@ -1514,6 +1514,26 @@ posix_madvise (void *addr, size_t len, int advice)
+       break;
      }
--  else if (InterlockedDecrement (&num_reader) == 0)
--    CloseHandle (slave_reading);
-+  else if (InterlockedDecrement (&arch->num_reader) == 0)
-+    CloseHandle (arch->slave_reading);
- 
-   if (!!masked != mask && xfer && get_ttyp ()->switch_to_nat_pipe)
-     {
-@@ -4460,6 +4465,18 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
- 				    HANDLE input_available_event,
- 				    HANDLE input_transferred_to_cyg)
- {
-+  if (dir == tty::to_nat)
-+    {
-+      char name[MAX_PATH];
-+      shared_name (name, TTY_SLAVE_READING, ttyp->get_minor ());
-+      HANDLE masked = OpenEvent (READ_CONTROL, FALSE, name);
-+      CloseHandle (masked);
-+      if (masked)
-+	/* Cygwin process is reading cyg-pipe.
-+	   Do not transfer input to nat-pipe. */
-+	return;
-+    }
+ out:
++  return ret;
++}
 +
-   HANDLE to;
-   if (dir == tty::to_nat)
-     to = ttyp->to_slave_nat ();
++extern "C" int
++madvise (void *addr, size_t len, int advice)
++{
++  int ret = madvise_worker (addr, len, advice);
++  if (ret > 0)
++    {
++      set_errno (ret);
++      ret = -1;
++    }
++  syscall_printf ("%R = madvise(%p, %lu, %d)", ret, addr, len, advice);
++  return ret;
++}
++
++extern "C" int
++posix_madvise (void *addr, size_t len, int advice)
++{
++  int ret = madvise_worker (addr, len, advice);
+   syscall_printf ("%d = posix_madvise(%p, %lu, %d)", ret, addr, len, advice);
+   return ret;
+ }
+diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
+index 3fc32433e..3f6a0ecd7 100644
+--- a/winsup/cygwin/release/3.7.0
++++ b/winsup/cygwin/release/3.7.0
+@@ -25,3 +25,11 @@ What's new:
+ - Now, a Cygwin process started from a non‑Cygwin process on a pseudo console
+   runs on a pty rather than on the console device originating from the pseudo
+   console.
++
++Fixes:
++------
++
++- Error return logic for madvise() is now separated from posix_madvise().
++  If madvise() errors, it returns -1 with errno set. If posix_madvise()
++  errors, it returns an error number without changing errno.
++  Addresses: https://cygwin.com/pipermail/cygwin/2026-July/259872.html
 -- 
 2.51.0
 
