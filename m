@@ -1,110 +1,108 @@
-Return-Path: <SRS0=MQXb=FD=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
-	by sourceware.org (Postfix) with ESMTPS id 73E094BA2E09
-	for <cygwin-patches@cygwin.com>; Thu,  9 Jul 2026 12:25:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 73E094BA2E09
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 73E094BA2E09
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783599919; cv=none;
-	b=IWHcnjlqiNYN7iOwgqqcnc1eygjaKdrDUnJ5+2YnMoQ2OUf6niExhdvOuKyf38AHI7FEZ+LeTHK5COwBCrY9gFbQeZKbjmd/Ypr/4a7O12XAtwyGVynh6qzxhRF3WuYTnmAoQKNm7mKy7xg3EgKgkI67+u6oonhpWc7iNEDavvQ=
+Return-Path: <SRS0=Nc2n=FE=t-online.de=Christian.Franke@sourceware.org>
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+	by sourceware.org (Postfix) with ESMTPS id AA0F74BA540B
+	for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2026 11:13:49 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AA0F74BA540B
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=t-online.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AA0F74BA540B
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=194.25.134.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1783682029; cv=none;
+	b=LPGloYPA2CHFvepT/h0ssZoe/d6qtgxYdpmZ+mMB0jH1JB+6zeZ3HA8AIuul6DJRGXRsH4oSbZgJxsA9MCkdzv4Aknz4buBL3XgBYLOvLRZ7617SKyUcyfTc5axPl4wrKRSnNXpqa7vxaTBhrnkOjcBDsY2RxyP6Ker5o8jr+c0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1783599919; c=relaxed/simple;
-	bh=JD9g7o5Sf5puwVEuxDoTqQX52qd++PfJvICkaMx4+Us=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=Z6ZdyDEKG7zraqYozp5zR6QugMPgIr40bWKghHYLWMKbmHJFhVQKxy6srCQNgHAGxYV3mmE2fmdLiY5c814e80BbhsosYRzXCfmaNRjIpJENw+bquRaoHIjPQrpGOPlTNu1g2OBXxfIq9VLykd5pKWLR3IMntdNIBrpRNdQ5oQc=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=KIntvVDr
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 73E094BA2E09
+	t=1783682029; c=relaxed/simple;
+	bh=WlEU5cy1/3HMCQ9zThGSOZ6uA87TaVSo/PdgVx0cUjE=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version:DKIM-Signature; b=BCj5ci8vmyJ1U/4o+pZtKy5A/dUHW0vbDt72rvUDd7e8shj1PQZvhAMwZ7kCgM/xzBuhsz+l/0kFzXzeTjLQ2OrBLEEY/7q7f9clMHvVMHum47etQzNOp3JNHcJioV7RAWYHE0pqGbKvzBZF0vcvuRfymYniR53X/qKWAkZfg7Q=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=t-online.de header.i=Christian.Franke@t-online.de header.a=rsa-sha256 header.s=20260216 header.b=vohvkPMs
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AA0F74BA540B
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=KIntvVDr
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260709122515924.SOPN.102121.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2026 21:25:15 +0900
-Date: Thu, 9 Jul 2026 21:25:14 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	dkim=pass (2048-bit key, unprotected) header.d=t-online.de header.i=Christian.Franke@t-online.de header.a=rsa-sha256 header.s=20260216 header.b=vohvkPMs
+Received: from fwd86.aul.t-online.de (fwd86.aul.t-online.de [10.223.144.112])
+	by mailout02.t-online.de (Postfix) with SMTP id 66F49EC49
+	for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2026 13:13:46 +0200 (CEST)
+Received: from [192.168.2.103] ([79.230.161.37]) by fwd86.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1wi9Au-1l2RO40; Fri, 10 Jul 2026 13:13:45 +0200
+Subject: Re: [PATCH v2] Cygwin: Fix error return for madvise()
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Fix nat_pipe_owner_pid when gdb runs
- non-cygwin app
-Message-Id: <20260709212514.05f9409ec97112887fbedeb7@nifty.ne.jp>
-In-Reply-To: <843d06c0-22a2-1937-6b6a-92adb4d09342@gmx.de>
-References: <20260708143017.1073-1-takashi.yano@nifty.ne.jp>
-	<843d06c0-22a2-1937-6b6a-92adb4d09342@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1783599915;
- bh=cNbU4NK6MZqF4E0kJPShxGh02Z0h1Wi3jbu1dddFKrw=;
- h=Date:From:To:Subject:In-Reply-To:References;
- b=KIntvVDrEaiCvT2MWfJVHurBjjle5qisUV8jAUEX306jvG9lh9zv7IglUftbwtv/c+tnWxGf
- viPS1yBCMP55c2wiyhc0fAmaqpklycMV7WszweigCmy3mNlozDmPYReDxZsGpNtEh3ecWhKOj0
- bOh1BrWZGoDmzhqCsO2VowRNGhPf6T0X4U6QHYEt4qrm3J/nY6FgA3jiQ+0Wb+6l/267dUPZR5
- GrxmV5Yv1yyEPAGKjhlvMcxiBcaKNPiVilSq/TOhUfncJ9HiTN+Qbu4rtN7qcu3Ctb0XQSEjU+
- 1f5fM+3xeNhwgmOeEAKVZ5EflyADUY51CUP0wqtqK4YB7XHQ==
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015163.html>
+ <20260708080349.570-1-mark@maxrnd.com>
+ <dbe2155d-198f-76a8-13ae-924001cdf1b1@t-online.de>
+ <77c47130-8a2f-4de0-ac6d-d80480bdbf20@maxrnd.com>
+Reply-To: cygwin-patches@cygwin.com
+From: Christian Franke <Christian.Franke@t-online.de>
+Message-ID: <09ff62ce-42fd-f331-b541-c26af487a213@t-online.de>
+Date: Fri, 10 Jul 2026 13:13:43 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101
+ SeaMonkey/2.53.23
+MIME-Version: 1.0
+In-Reply-To: <77c47130-8a2f-4de0-ac6d-d80480bdbf20@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1783682025-84FF69E2-5BB94AFE/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7c5781e5-96ce-4220-a946-553aa27e8525
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=t-online.de;
+	s=20260216; t=1783682026; i=Christian.Franke@t-online.de;
+	bh=Y6cE8St3OlBDHUXq/N/L6NtbxKiFh9A4dxGM/AAe1WI=;
+	h=Subject:To:References:Reply-To:From:Date:In-Reply-To;
+	b=vohvkPMsfs5XoCPhQzGx9Gsp8PQMlFSiCyP1tUuSRn0bYdJRhr4pcDTJ7R75E55/g
+	 6OOHQq9BWfj1a0HRDa11QpaJ5qz3BsuWI/LGpsMArwKRnWs3nxXoUC3b7ZVrC+w+Hy
+	 B8YPNHrIlVfVd4zrKPKtmjBfImdYUn/vntpr0nWn0yVxkDhIlPrvpGjy2ozkTBnUYy
+	 OlnwOs+jR89dWYdNaWW7Cr5QZiGK3Qpko0fNzwx8eRuietJosOb9qhDhPwPx9jpwSk
+	 jYD3SGVBbJIQDarlAj1KMwlR42MmxZHiRbenbXDkJVMrxXhyrwxa0xOSTK5dS7Sdu9
+	 N3lD6jFGrlTvQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,TONLINE_FAKE_DKIM,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+Hi Mark,
 
-On Thu, 9 Jul 2026 10:13:26 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Wed, 8 Jul 2026, Takashi Yano wrote:
-> 
-> > Previously, nat_pipe_owner_pid was incorrectly set to 0 when the
-> > inferior of gdb was a non-cygwin app. Due to this bug, repeatedly
-> > running a non-cygwin app under gdb could lead to an unexpected crash.
-> > 
-> > This occurred because the previous code in setup_for_non_cygwin_app()
-> > set nat_pipe_owner_pid to exec_dwProcessId, which is correct when the
-> > caller is the stub process of the non-cygwin app. However, when the
-> > caller is gdb, the owner should be gdb itself, so nat_pipe_owner_pid
-> > must be set to myself->dwProcessId.
-> > 
-> > With this fix, attach_console_temporarily() can be called with target
-> > pid equal to the process's own pid, in which case the attach operation
-> > is skipped.
-> > 
-> > Fixes: 1e6c51d74136 ("Cygwin: pty: Reorganize the code path of setting up and closing pcon.")
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by:
-> > ---
-> > v2: Skip attaching operation when attaching to myself is requested.
-> 
-> From what I can see, the fix is correct. Three non-blocking notes:
-> 
-> The new source comment (and the commit message) has exec_dwProcessId and
-> dwProcessId the wrong way round, I think. exec_dwProcessId holds the
-> stub's own pid, saved before the overlay; dwProcessId is what gets
-> repointed to the native child. The code still does the right thing because
-> `exec_dwProcessId ?: dwProcessId` reduces to "our own pid" on every path
-> that reaches it, which is exactly what the owner-self check already
-> assumes. But the commentary as written will mislead the next reader.
+Mark Geisert wrote:
+> Hi Christian,
+>
+> On 7/8/2026 7:58 AM, Christian Franke wrote:
+>> Mark Geisert wrote:
+>>> Currently madvise() and posix_madvise() are wired together as one
+>>> function: the latter.  But their error returns should be different.
+>>> Make madvise a first-class export in cygwin.din.
+>>>
+>>> v2: Create madvise_worker() and have madvise() and posix_madvise()
+>>>      call it, then handling their error returns compliant to POSIX.
+>>>      Add a release note for 3.7.0.
+>>
+>> LGTM, thanks!
+>>
+>>
+>>> ...
+>>> -extern "C" int
+>>> -posix_madvise (void *addr, size_t len, int advice)
+>>> +static int
+>>> +madvise_worker (void *addr, size_t len, int advice)
+>>>   {
+>>>     int ret = 0;
+>>>     /* Check parameters. */
+>>> @@ -1514,6 +1514,26 @@ posix_madvise (void *addr, size_t len, int 
+>>> advice)
+>>>         break;
+>>>       }
+>>>   out:
+>>> +  return ret;
+>>> +}
+>>
+>> PS: The 'goto out' could now be replaced by 'return ref'.
+>
+> I prefer to keep both 'goto out' so there's just one exit from the 
+> function to aid future debugging. Perhaps that's an old-school habit.
 
-Ah, right. I revised the comment and the commit message.
+:-)
 
-> The sibling assignment in `setup_pseudoconsole()` still writes
-> exec_dwProcessId directly, without the fallback. Harmless today because
-> its sole caller sets the owner first, but leaving the two spots
-> inconsistent invites a future regression. Worth applying the same `?:`
-> there.
-
-Indeed. I also apply the fix here.
-
-> Also: I believe that the bug is not really gdb-specific: _any_ Cygwin
-> process that spawns a non-cygwin app through the CreateProcess hook
-> without _P_OVERLAY hits it. If that is so, the subject and log undersell
-> the scope.
-
-Noted to the commit message.
-
-> In any case, I happily provide my:
-> 
->   Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-
-Thanks! I'll push the patch to master and cygwin-3_6-branch.
+Don't take me wrong, the patch is GTG, IMO.
 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Regards,
+Christian
+
+PS: I prefer early returns if possible, declarations when needed instead 
+of on top, and avoid 'goto's (which conflict with 'declarations when 
+needed' of C++ objects). See fhandler/dev_disk.cc.
+
