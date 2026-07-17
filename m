@@ -1,44 +1,44 @@
 Return-Path: <SRS0=sMld=FL=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
-	by sourceware.org (Postfix) with ESMTPS id EE5034BA2E11
-	for <cygwin-patches@cygwin.com>; Fri, 17 Jul 2026 02:38:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE5034BA2E11
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.117])
+	by sourceware.org (Postfix) with ESMTPS id EE4284BA2E11
+	for <cygwin-patches@cygwin.com>; Fri, 17 Jul 2026 03:10:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE4284BA2E11
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EE5034BA2E11
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784255917; cv=none;
-	b=ol204aL30OrLRRbEkheVQ/PUDdK+HaG3wd8b4kijJE6igQ1uqWr+X/sK/0e7rF5hZl3e/MOqNgTulHrkaCIDmEe1VXjQtR8dkksPYOS1SSD49jqbSJSZFSE3oUqyvjWCEDJwPLo1eiSe9X0JGC6UxM5PzTUu9Iu9zEgSGSLOvVQ=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EE4284BA2E11
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.117
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784257831; cv=none;
+	b=F60YnINchV3vIz15ZBqf/2D9AMcSA3aCEjwbLtu0Dg58CMlwS9IiEYRFJCb+GY76UgVVBl0MUJd5HH5Ebv5BNlrBewKW3aP1hWJmFBmPmKqpG2hnY/O0l9XBhkDqumYapdCJ/Nl2y56tI4+Kq/jwCK2YGe0OyOfFghAUIoE32Ew=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1784255917; c=relaxed/simple;
-	bh=WHKp2pbfmnrIvQmQjjAWT9i1M6pWz5uPbCrZcpm/sZw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=IMY11v0pZBU87CyjN0OwJ4pSWUYVdNvxCgdtq2j6b3//pRoSnpZIxfL+5HvXhrX2kDVHr3sFmJNCQdkNyFWqQtj/D/8a/8hS8RVUWUCPumiS/gRTM3VcF04c0aJv5v99w69Mal3T827uwo7xYO6+Qor8frV/QEYgNmswLP8l1k0=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Opg8+1j2
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EE5034BA2E11
+	t=1784257831; c=relaxed/simple;
+	bh=oAkpFfgTS4zoQaSBrlmX508B7GfbGBirQhiKiOt9uOM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=jzg06uJGwaRiQ5i8FKnhwPy3RyBdtyubRjwV0Gb45gAeXYrL2rOjFqt6mLdJrkfMh1ayPMAZPTFqHstZU+YbqAxYjKvmSe36uU+5P6ryx4bKJEiJOXmMDYcxxVkDSillo7jnGlUYibSt4qGlZjzS3+Db4/Sg2zfFKHMd4WPE7wk=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=qETMH4Wx
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EE4284BA2E11
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=Opg8+1j2
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260717023832633.ERSO.17441.HP-Z230@nifty.com>;
-          Fri, 17 Jul 2026 11:38:32 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=qETMH4Wx
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260717031028700.BSGW.102121.HP-Z230@nifty.com>;
+          Fri, 17 Jul 2026 12:10:28 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	kikairoya <kikairoya@gmail.com>
-Subject: [PATCH] Cygwin: open: Unlock fdtab before open_with_arch()
-Date: Fri, 17 Jul 2026 11:38:18 +0900
-Message-ID: <20260717023826.1398-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: open: Unlock fdtab before open_with_arch()
+Date: Fri, 17 Jul 2026 12:10:12 +0900
+Message-ID: <20260717031021.1537-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784255912;
- bh=Z1TQcX5suzBlhQrhHc/8zR5Bcys/mnln+7bD0+DkBMM=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784257828;
+ bh=dEobIIDYnKTP8l3nO7kgdreoZxtTQTwD2rm9r9UNVWk=;
  h=From:To:Cc:Subject:Date;
- b=Opg8+1j2QAGn9KZgAEF/uCerZsr20a/QLhP9SPnXhF8ilWm0thT+I5MKksXsBGjT0dyqQYlQ
- MXoBk6lTOxizDl7urZ8xKEOqqaCVST5HvN3brs2OdsUvQsRkNCrxcEIJZqK1smRyms47EXIgZ5
- iaXk2Kd+Wgbk4eq2JAop2HLNrY3O9L6GYt5DE0uO0oNBscg0Jnei2MUSrJDym2b62UnJKj9rS/
- xRKsZMiwFvyKlqn5D1wd4IPFZc08jSmT1l5XTYASl8iKPIF4G7fz7kann2Z5dwNFkdB/KM5oAS
- 3TMrPSMwznUFsV/SlPdv5H/aROEkJZpTg4Gd2+3iG0B6DoqA==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=qETMH4WxFpI6GhYhjqFDE/1VmmXvzTUdUtb7P+tcfdvilvE3gudyx7JlO2RvDEXieKLpAtGB
+ hEULHkFZAQfQvo+j7/Elu2ud42woR4vegiywh0ro7mrq38mYM6e5HQeBBdhO8VwKw0PiSPgYXI
+ 13MP9vHvksQhuyQs+7zHRPODchbtNP6ZxWd6p2L4KRRG+rmKY/uEpKQOycqzsRdA5iScVupi+Y
+ SCt5bwSFCjIGhzl262/etJyE5Tzf7qkD8X8qi3rRXBzFmcSDwVcrPD6caYinL52VbZSLRVQvP5
+ eSzRfUspBPbjaoDj+D6UiReh7GorfnIFF2ugl4icnFT6RhvA==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -71,11 +71,13 @@ Reported-by: kikairoya <kikairoya@gmail.com>
 Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Reviewed-by:
 ---
- winsup/cygwin/syscalls.cc | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+v2: Add lock/unlock when modifying the fdtab, just to be safe.
+
+ winsup/cygwin/syscalls.cc | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 2bea79768..5ea006034 100644
+index 2bea79768..e3ba8c65c 100644
 --- a/winsup/cygwin/syscalls.cc
 +++ b/winsup/cygwin/syscalls.cc
 @@ -1451,6 +1451,7 @@ extern "C" int
@@ -101,13 +103,15 @@ index 2bea79768..5ea006034 100644
  
        if (fh->dev () == FH_PROCESSFD && fh->pc.follow_fd_symlink ())
  	{
-@@ -1580,13 +1584,17 @@ open (const char *unix_path, int flags, ...)
+@@ -1580,13 +1584,23 @@ open (const char *unix_path, int flags, ...)
  	try_to_bin (fh->pc, fh->get_handle (), DELETE,
  		    FILE_OPEN_FOR_BACKUP_INTENT);
  
 -      fd = fh;
++      cygheap->fdtab.lock ();
 +      cygheap->fdtab[fd] = fh;
 +      fh->inc_refcnt ();
++      cygheap->fdtab.unlock ();
 +
        if (fd <= 2)
  	set_std_handle (fd);
@@ -116,7 +120,11 @@ index 2bea79768..5ea006034 100644
    __except (EFAULT) {}
    __endtry
 +    if (res < 0 && fd >= 0)
-+      cygheap->fdtab[fd] = NULL; /* Mark as unused */
++      {
++	cygheap->fdtab.lock ();
++	cygheap->fdtab[fd] = NULL; /* Mark as unused */
++	cygheap->fdtab.unlock ();
++      }
    if (res < 0 && fh)
      delete fh;
    syscall_printf ("%R = open(%s, %y)", res, unix_path, flags);
