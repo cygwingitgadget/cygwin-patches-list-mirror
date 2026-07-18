@@ -1,44 +1,44 @@
 Return-Path: <SRS0=7Ga2=FM=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:2a])
-	by sourceware.org (Postfix) with ESMTPS id 7D1064BA2E23
-	for <cygwin-patches@cygwin.com>; Sat, 18 Jul 2026 23:39:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7D1064BA2E23
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.181])
+	by sourceware.org (Postfix) with ESMTPS id 90D084BA23F7
+	for <cygwin-patches@cygwin.com>; Sat, 18 Jul 2026 23:54:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 90D084BA23F7
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7D1064BA2E23
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:2a
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784417991; cv=none;
-	b=qu5rpcLGY2i2Xj5c8/7sMwdBaE3hHxBco5YjkJGlwmh4sNlltVaRmbD+AJEPT8mhNsbbghgajnOI53EFd4ECwQH7pjhkds2d6uHs+8vm+crYgsEbWlOKq133EBc5rxt3WA0aXHTqFgP7pFLZcWYx1ma9r30eHs1sfpa9tsFS3zc=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 90D084BA23F7
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.181
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784418899; cv=none;
+	b=nJIxMidBs5WeIV22udm45IJXXLSkY1cPCX6gNSctyE3DlRJf0lCJ+29hunH539tTEY3HbpHWgayRFDa2eZHt159e/KsabJEUievcbUd35Yl8TPIBS29FQSO9ArjTMzstAu4+nRp8WnFMjszAGxsVoBM6h5LwpHmh3vhK/vRa87E=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1784417991; c=relaxed/simple;
-	bh=/bR55m9FGxsX47LnYrpWNXZazv+x0bSitM0JMx/5liE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=r9fivj0wgCTzm81IrDRAaWFbxiN9x7YaCpbT2DZC+O+HtrA1Um0y4t2vj6Xu35SqK1gPOPE4Eow5XuZPBRRtXVyOZct5N0QFL3t+/qqi/3iNhhW8GyilCRJxN67naU9zgLtpCePMvUGs0oPW8A1cJedn2rgjvrgK7blg4N0GerY=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=CokiqqIF
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7D1064BA2E23
+	t=1784418899; c=relaxed/simple;
+	bh=pXuw4OKohyv5CX2mQLRi5hmdEE2S/9q9Q71/KOab9PQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=YiHR7d2rjmLZJfxOfKz3ohjKKi5tU7D6mJhKX9kdJohoFSGse2/7WrOZ9StF4ppNBO/6wGQ6nYFX40yubxPaPsl8J9a3Gis/SOhfkFZccJbzaSJ4TNX1jiMyKrarg3MfrNxr2S7/+14Qo5EIkZjdPJT2LtsiL+E0PL/YIOHbF7Q=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ArlLC+sH
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 90D084BA23F7
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=CokiqqIF
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20260718233947416.ZPKI.44671.HP-Z230@nifty.com>;
-          Sun, 19 Jul 2026 08:39:47 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ArlLC+sH
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260718235455528.DLPR.102121.HP-Z230@nifty.com>;
+          Sun, 19 Jul 2026 08:54:55 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v7] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
-Date: Sun, 19 Jul 2026 08:39:30 +0900
-Message-ID: <20260718233940.17393-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v8] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
+Date: Sun, 19 Jul 2026 08:54:35 +0900
+Message-ID: <20260718235446.39932-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784417987;
- bh=bQ9VLtFKJTW8afK5+o86jQjNwMjotoUIngWW/qFRCZU=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784418895;
+ bh=MW75oR0xYc1rcDpLWhWZnltB8ni3Xec0udjbuUxQ70Y=;
  h=From:To:Cc:Subject:Date;
- b=CokiqqIFo6vCqnAR5XB4mPNuJQrlvCiOiWQpbBke0ce4osg2fLHqY9+B23RXN6ojURG/ERUy
- 4zLh37qSI1cXL/xsXszWQg0BX9qQ1QkHe+QqdFuFE9S6d28GrrdJr6lhs7skxVR6WqiQBVJL4H
- 5v+Ne02SlpFRv5MXLmqSAtzcDYNNHu7VOzqU74EJBryrRLymLVKyy3ID3CRnl/Xs988Ot+suvk
- lrQpdcgMZfKTxgy23kAE8X2M6taNU0Zrm2gFvXvgL0c4O4C9uwmvclGvJhmzit3j/6kOFRwmEE
- 96PiytRMu5Uy85Pv85pZwiPK1VjQChBfgFbaOnozqq7jsuBA==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=ArlLC+sH62ToRoNnEYiXI5c2RTXe1zSEXXBTSvFZHEaWeLvQmFE20Yc5Wv+pBy+N9yP6pYOq
+ lfQNE41DRrtl0Diie2Ef175hpwqPoKQsmAccw3yFpWcH8eryeO8ws2sam3A1g3CNeqka5H/Y3B
+ 5EuhkNTzb64w2IZYOe6DMqbbvQcQGG2NiWtf1eASTd0wuhsQHilf0umswvLWA+PArYLP2u33He
+ /gGcMs1RWe5O16lnvXd4yXNKMmPddJh+oWFceT6Ph8ku1IN8md8fYBWH4tt1rLkvXD87LE59MF
+ 11cJyG5bHytLxLCupchxQ4fAGAaebtzt6206yrXanWDP3icQ==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -65,6 +65,8 @@ v5: Fix the issue of mutex acquisition order.
     Handle errors in checking existence of non-cygwin apps.
 v6: Match the conditions for incrementing and decrementing the counter.
 v7: Decrement the counter only if it was incremented by myself.
+v8: Symlify the conditions for incrementing and decrementing the counter
+    a bit.
 
  winsup/cygwin/fhandler/console.cc       | 150 ++++++++++++++++++++++--
  winsup/cygwin/fhandler/termios.cc       |  10 ++
