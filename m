@@ -1,44 +1,44 @@
-Return-Path: <SRS0=7Ga2=FM=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.181])
-	by sourceware.org (Postfix) with ESMTPS id 90D084BA23F7
-	for <cygwin-patches@cygwin.com>; Sat, 18 Jul 2026 23:54:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 90D084BA23F7
+Return-Path: <SRS0=jEHf=FN=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
+	by sourceware.org (Postfix) with ESMTPS id 500D74BA2E23
+	for <cygwin-patches@cygwin.com>; Sun, 19 Jul 2026 00:05:25 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 500D74BA2E23
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 90D084BA23F7
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.181
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784418899; cv=none;
-	b=nJIxMidBs5WeIV22udm45IJXXLSkY1cPCX6gNSctyE3DlRJf0lCJ+29hunH539tTEY3HbpHWgayRFDa2eZHt159e/KsabJEUievcbUd35Yl8TPIBS29FQSO9ArjTMzstAu4+nRp8WnFMjszAGxsVoBM6h5LwpHmh3vhK/vRa87E=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 500D74BA2E23
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1784419525; cv=none;
+	b=udPPa0INox1A0MwK2bWcb2IvEHKbS6Fp6evjy6iTt9VAlqkW9yw7VVYc01+6sduGvNeAP3ugWuu13ZKY3mBpmeC+5ol8LVC98n4oDu33+MOegdJe4a6i95LIBumMnMuC7fc4QPBiTzYjK4wcAf+XRNFdcR4U5cLkFXK66K0aMVg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1784418899; c=relaxed/simple;
-	bh=pXuw4OKohyv5CX2mQLRi5hmdEE2S/9q9Q71/KOab9PQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=YiHR7d2rjmLZJfxOfKz3ohjKKi5tU7D6mJhKX9kdJohoFSGse2/7WrOZ9StF4ppNBO/6wGQ6nYFX40yubxPaPsl8J9a3Gis/SOhfkFZccJbzaSJ4TNX1jiMyKrarg3MfrNxr2S7/+14Qo5EIkZjdPJT2LtsiL+E0PL/YIOHbF7Q=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ArlLC+sH
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 90D084BA23F7
+	t=1784419525; c=relaxed/simple;
+	bh=xg54EIcT2H6g09rh8iow9OVDYZ0SVkcnQOPOgwQ6GrY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=YOX1J6LI4zq6f4ZgumOQCTMArjL8di64Eu79iqTOuoxW+qFWmz5imQAow6CCbTte13xz17iL+6s/kT3eisf+rWPLucc1/Ed/mOC123KCa5DS4646lKJzVpythgzoY9MC6s2AAkliFtiEErajRf0cfzrsVpUngcA6veHN9OPc5m0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pOrQYD3m
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 500D74BA2E23
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ArlLC+sH
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=pOrQYD3m
 Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260718235455528.DLPR.102121.HP-Z230@nifty.com>;
-          Sun, 19 Jul 2026 08:54:55 +0900
+          id <20260719000523369.DPDM.102121.HP-Z230@nifty.com>;
+          Sun, 19 Jul 2026 09:05:23 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
 	Johannes Schindelin <Johannes.Schindelin@gmx.de>
-Subject: [PATCH v8] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
-Date: Sun, 19 Jul 2026 08:54:35 +0900
-Message-ID: <20260718235446.39932-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v9] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
+Date: Sun, 19 Jul 2026 09:05:00 +0900
+Message-ID: <20260719000514.74466-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784418895;
- bh=MW75oR0xYc1rcDpLWhWZnltB8ni3Xec0udjbuUxQ70Y=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1784419523;
+ bh=B8/yLhniv6jmrQzX0Fud5FQZAa5I4BotgkH70yzVATM=;
  h=From:To:Cc:Subject:Date;
- b=ArlLC+sH62ToRoNnEYiXI5c2RTXe1zSEXXBTSvFZHEaWeLvQmFE20Yc5Wv+pBy+N9yP6pYOq
- lfQNE41DRrtl0Diie2Ef175hpwqPoKQsmAccw3yFpWcH8eryeO8ws2sam3A1g3CNeqka5H/Y3B
- 5EuhkNTzb64w2IZYOe6DMqbbvQcQGG2NiWtf1eASTd0wuhsQHilf0umswvLWA+PArYLP2u33He
- /gGcMs1RWe5O16lnvXd4yXNKMmPddJh+oWFceT6Ph8ku1IN8md8fYBWH4tt1rLkvXD87LE59MF
- 11cJyG5bHytLxLCupchxQ4fAGAaebtzt6206yrXanWDP3icQ==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=pOrQYD3mQK+78ikZcmXJVyevZvem+vXRYMvgj6oLZxf7LLI7GfQv6v5TIJYjj4FqAYjyMUJ2
+ Pj5DKOdloFmzBEoHsPf5SmVh71h3IN7HI/wUdeWXhFAFSI9n3ymKUhD36vCFh9fRvnBRifan1H
+ uWzEz7hvDhYQPb/2m0seMOW9y0TfcAMSYt0oF5swzKAcUVSOdhX+GezqdIloq4BFXU+fZrIiWM
+ 5bktkSvmoVnMHZfe/YqgW2/kQl55wLhFtb0whOZVeV0Tx0HeU2/XnLp0Fa/iLT4cCK32tXMwvM
+ ugUJqRt4rWx5wAlqzH2fpCHz4CBmTZf8I2mjK3sBr5LyoOZg==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -67,15 +67,16 @@ v6: Match the conditions for incrementing and decrementing the counter.
 v7: Decrement the counter only if it was incremented by myself.
 v8: Symlify the conditions for incrementing and decrementing the counter
     a bit.
+v9: Minimize the argument of set_non_cygwin_app_setup_ongoing().
 
- winsup/cygwin/fhandler/console.cc       | 150 ++++++++++++++++++++++--
- winsup/cygwin/fhandler/termios.cc       |  10 ++
+ winsup/cygwin/fhandler/console.cc       | 147 ++++++++++++++++++++++--
+ winsup/cygwin/fhandler/termios.cc       |  12 ++
  winsup/cygwin/local_includes/fhandler.h |   6 +
  winsup/cygwin/spawn.cc                  |   8 ++
- 4 files changed, 164 insertions(+), 10 deletions(-)
+ 4 files changed, 163 insertions(+), 10 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-index d4c87f29f..203ce3e04 100644
+index d4c87f29f..dc3c2662c 100644
 --- a/winsup/cygwin/fhandler/console.cc
 +++ b/winsup/cygwin/fhandler/console.cc
 @@ -841,6 +841,7 @@ fhandler_console::setup ()
@@ -86,11 +87,11 @@ index d4c87f29f..203ce3e04 100644
      }
  }
  
-@@ -977,16 +978,96 @@ fhandler_console::setup_for_non_cygwin_app ()
+@@ -977,16 +978,93 @@ fhandler_console::setup_for_non_cygwin_app ()
       console mode. */
    if (get_ttyp ()->getpgid () == myself->pgid)
      {
-+      set_non_cygwin_app_setup_ongoing (true, &handle_set);
++      set_non_cygwin_app_setup_ongoing (true, get_minor ());
 +      WaitForSingleObject (cons_mode_mutex, INFINITE);
        set_disable_master_thread (true, this);
        set_input_mode (tty::native, &tc ()->ti, get_handle_set ());
@@ -101,17 +102,14 @@ index d4c87f29f..203ce3e04 100644
  
 +static NO_COPY bool non_cygwin_app_setup_ongoing = false;
 +void
-+fhandler_console::set_non_cygwin_app_setup_ongoing (bool x, handle_set_t *p)
++fhandler_console::set_non_cygwin_app_setup_ongoing (bool x, _minor_t unit)
 +{
-+  const _minor_t unit = p->unit;
-+  pid_t pgid = shared_console_info[unit] ?
-+    shared_console_info[unit]->tty_min_state.getpgid () : 0;
-+  if (x && pgid == myself->pgid)
++  if (x)
 +    {
 +      non_cygwin_app_setup_ongoing = true;
 +      InterlockedIncrement (&con.non_cygwin_app_setup_ongoing_cnt);
 +    }
-+  else if (!x && non_cygwin_app_setup_ongoing)
++  else if (non_cygwin_app_setup_ongoing)
 +    {
 +      InterlockedDecrement (&con.non_cygwin_app_setup_ongoing_cnt);
 +      non_cygwin_app_setup_ongoing = false;
@@ -183,7 +181,7 @@ index d4c87f29f..203ce3e04 100644
    termios dummy = {0, };
    termios *ti = shared_console_info[unit] ?
      &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
-@@ -999,6 +1080,7 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+@@ -999,6 +1077,7 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
      set_output_mode (conmode, ti, p);
    if (con.curr_input_mode != conmode)
      set_input_mode (conmode, ti, p);
@@ -191,7 +189,7 @@ index d4c87f29f..203ce3e04 100644
  }
  
  /* Return the tty structure associated with a given tty number.  If the
-@@ -1055,6 +1137,10 @@ fhandler_console::setup_io_mutex (void)
+@@ -1055,6 +1134,10 @@ fhandler_console::setup_io_mutex (void)
    if (res == WAIT_OBJECT_0)
      release_output_mutex ();
  
@@ -202,7 +200,7 @@ index d4c87f29f..203ce3e04 100644
    extern HANDLE attach_mutex;
    if (!attach_mutex)
      attach_mutex = CreateMutex (&sec_none_nih, FALSE, NULL);
-@@ -1189,6 +1275,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
+@@ -1189,6 +1272,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
    /* Setting-up console mode for cygwin app. This is necessary if the
       cygwin app and other non-cygwin apps are started simultaneously
       in the same process group. */
@@ -210,7 +208,7 @@ index d4c87f29f..203ce3e04 100644
    if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
      {
        set_disable_master_thread (false, this);
-@@ -1196,6 +1283,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
+@@ -1196,6 +1280,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
      }
    if (sig == SIGTTOU && con.curr_output_mode != tty::cygwin)
      set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
@@ -218,7 +216,7 @@ index d4c87f29f..203ce3e04 100644
  
    return fhandler_termios::bg_check (sig, dontsignal);
  }
-@@ -2010,6 +2098,7 @@ fhandler_console::open (int flags, mode_t)
+@@ -2010,6 +2095,7 @@ fhandler_console::open (int flags, mode_t)
    if (in_is_console)
      CloseHandle (h_in);
  
@@ -226,7 +224,7 @@ index d4c87f29f..203ce3e04 100644
    if (in_is_console && con.curr_input_mode != tty::cygwin)
      {
        prev_input_mode_backup = con.prev_input_mode;
-@@ -2022,6 +2111,7 @@ fhandler_console::open (int flags, mode_t)
+@@ -2022,6 +2108,7 @@ fhandler_console::open (int flags, mode_t)
        GetConsoleMode (get_output_handle (), &con.prev_output_mode);
        set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
      }
@@ -234,7 +232,7 @@ index d4c87f29f..203ce3e04 100644
  
    debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
  		get_output_handle ());
-@@ -2105,6 +2195,7 @@ fhandler_console::open_setup (int flags)
+@@ -2105,6 +2192,7 @@ fhandler_console::open_setup (int flags)
        handle_set.output_handle = get_output_handle ();
        handle_set.input_mutex = input_mutex;
        handle_set.output_mutex = output_mutex;
@@ -242,7 +240,7 @@ index d4c87f29f..203ce3e04 100644
        handle_set.unit = unit;
      }
    return fhandler_base::open_setup (flags);
-@@ -2114,6 +2205,7 @@ void
+@@ -2114,6 +2202,7 @@ void
  fhandler_console::post_open_setup (int fd)
  {
    /* Setting-up console mode for cygwin app started from non-cygwin app. */
@@ -250,7 +248,7 @@ index d4c87f29f..203ce3e04 100644
    if (fd == 0)
      {
        set_disable_master_thread (false, this);
-@@ -2121,6 +2213,7 @@ fhandler_console::post_open_setup (int fd)
+@@ -2121,6 +2210,7 @@ fhandler_console::post_open_setup (int fd)
      }
    else if (fd == 1 || fd == 2)
      set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
@@ -258,7 +256,7 @@ index d4c87f29f..203ce3e04 100644
  
    fhandler_base::post_open_setup (fd);
  }
-@@ -2130,18 +2223,20 @@ fhandler_console::close (int flag)
+@@ -2130,18 +2220,20 @@ fhandler_console::close (int flag)
  {
    debug_printf ("closing: %p, %p", get_handle (), get_output_handle ());
  
@@ -281,7 +279,7 @@ index d4c87f29f..203ce3e04 100644
    if (shared_console_info[unit] && con.owner == GetCurrentProcessId ())
      {
        if (master_thread_started)
-@@ -2196,6 +2291,8 @@ fhandler_console::close (int flag)
+@@ -2196,6 +2288,8 @@ fhandler_console::close (int flag)
    input_mutex = NULL;
    CloseHandle (output_mutex);
    output_mutex = NULL;
@@ -290,7 +288,7 @@ index d4c87f29f..203ce3e04 100644
  
    pcon_hand_over_proc ();
  
-@@ -2369,10 +2466,12 @@ int
+@@ -2369,10 +2463,12 @@ int
  fhandler_console::tcsetattr (int a, struct termios const *t)
  {
    get_ttyp ()->ti = *t;
@@ -303,7 +301,7 @@ index d4c87f29f..203ce3e04 100644
    return 0;
  }
  
-@@ -3140,10 +3239,24 @@ fhandler_console::char_command (char c)
+@@ -3140,10 +3236,24 @@ fhandler_console::char_command (char c)
  		    con.cursor_key_app_mode = (c == 'h');
  		  if (con.args[i] == 9001) /* win32-input-mode (https://github.com/microsoft/terminal/blob/main/doc/specs/%234999%20-%20Improved%20keyboard%20handling%20in%20Conpty.md) */
  		    {
@@ -332,7 +330,7 @@ index d4c87f29f..203ce3e04 100644
  		    }
  		}
  	      /* Call fix_tab_position() if screen has been alternated. */
-@@ -4475,10 +4588,13 @@ fhandler_console::set_console_mode_to_native ()
+@@ -4475,10 +4585,13 @@ fhandler_console::set_console_mode_to_native ()
  	fhandler_console *cons = (fhandler_console *) (fhandler_base *) cfd;
  	if (cons->get_device () == cons->tc ()->getntty ())
  	  {
@@ -348,7 +346,7 @@ index d4c87f29f..203ce3e04 100644
  	    break;
  	  }
        }
-@@ -4535,8 +4651,17 @@ ContinueDebugEvent_Hooked
+@@ -4535,8 +4648,17 @@ ContinueDebugEvent_Hooked
  static FARPROC
  GetProcAddress_Hooked (HMODULE h, LPCSTR n)
  {
@@ -368,7 +366,7 @@ index d4c87f29f..203ce3e04 100644
    return GetProcAddress_Orig (h, n);
  }
  
-@@ -4817,6 +4942,9 @@ fhandler_console::get_duplicated_handle_set (handle_set_t *p)
+@@ -4817,6 +4939,9 @@ fhandler_console::get_duplicated_handle_set (handle_set_t *p)
    DuplicateHandle (GetCurrentProcess (), output_mutex,
  		   GetCurrentProcess (), &p->output_mutex,
  		   0, FALSE, DUPLICATE_SAME_ACCESS);
@@ -378,7 +376,7 @@ index d4c87f29f..203ce3e04 100644
    p->unit = unit;
  }
  
-@@ -4833,6 +4961,8 @@ fhandler_console::close_handle_set (handle_set_t *p)
+@@ -4833,6 +4958,8 @@ fhandler_console::close_handle_set (handle_set_t *p)
    p->input_mutex = NULL;
    CloseHandle (p->output_mutex);
    p->output_mutex = NULL;
@@ -388,10 +386,10 @@ index d4c87f29f..203ce3e04 100644
  
  bool
 diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
-index ee576a0a8..9f0829d78 100644
+index ee576a0a8..55d0e7f85 100644
 --- a/winsup/cygwin/fhandler/termios.cc
 +++ b/winsup/cygwin/fhandler/termios.cc
-@@ -826,6 +826,16 @@ fhandler_termios::spawn_worker::setup (bool iscygwin, HANDLE h_stdin,
+@@ -826,6 +826,18 @@ fhandler_termios::spawn_worker::setup (bool iscygwin, HANDLE h_stdin,
      }
  }
  
@@ -399,8 +397,10 @@ index ee576a0a8..9f0829d78 100644
 +fhandler_termios::spawn_worker::notify_spawned (bool success)
 +{
 +  if (cons_need_cleanup)
-+    fhandler_console::set_non_cygwin_app_setup_ongoing (false,
-+							&cons_handle_set);
++    {
++      const _minor_t unit = cons_handle_set.unit;
++      fhandler_console::set_non_cygwin_app_setup_ongoing (false, unit);
++    }
 +  if (!success && need_cleanup ())
 +    cleanup ();
 +}
@@ -409,7 +409,7 @@ index ee576a0a8..9f0829d78 100644
  fhandler_termios::spawn_worker::cleanup ()
  {
 diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index d11b3ec4f..10efb7f6c 100644
+index d11b3ec4f..7aab7e203 100644
 --- a/winsup/cygwin/local_includes/fhandler.h
 +++ b/winsup/cygwin/local_includes/fhandler.h
 @@ -2023,6 +2023,7 @@ class fhandler_termios: public fhandler_base
@@ -449,7 +449,7 @@ index d11b3ec4f..10efb7f6c 100644
    static void pcon_hand_over_proc ();
    static tty::cons_mode cons_mode_on_close (handle_set_t *);
 +  static int active_non_cygwin_apps_exist (pid_t pgid);
-+  static void set_non_cygwin_app_setup_ongoing (bool, handle_set_t *);
++  static void set_non_cygwin_app_setup_ongoing (bool, _minor_t);
  
    friend tty_min * tty_list::get_cttyp ();
  };
