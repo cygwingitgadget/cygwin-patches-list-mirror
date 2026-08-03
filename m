@@ -1,135 +1,97 @@
-Return-Path: <SRS0=o0Gb=FW=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-	by sourceware.org (Postfix) with ESMTPS id B72114B9DB5E
-	for <cygwin-patches@cygwin.com>; Tue, 28 Jul 2026 10:39:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B72114B9DB5E
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B72114B9DB5E
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::831
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785235177; cv=none;
-	b=uA14FfhoQv4E68mwvJ0TN0H4KlaKApiCkhn2VKMZhM1jrL8aYcX6m//cycH1KjGQCxa8zxX/D6ylEC8CPxRap48iRHf7Cr3ec1fI/bsn+L7dftFFD8DdMrysCGz2/6r7KPemoUXZU3hQ0+nGpbnbbi1jrX4irCB4EH9SouX9CU8=
+Return-Path: <SRS0=LDpO=F4=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [106.153.227.39])
+	by sourceware.org (Postfix) with ESMTPS id A83924BA9019
+	for <cygwin-patches@cygwin.com>; Mon,  3 Aug 2026 02:41:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A83924BA9019
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A83924BA9019
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785724862; cv=none;
+	b=BptuvbGvTR8dSZSbhBN3jYjekkjJUSA7Y+OR4u2GVmG4MVOn0YL8UiUJrgP39TG+jkhdyDpsQRHsVFQo8+PS/38/11EEQ6SL7zF8pdwRnB/xDPUe9TyXATCBupBaYO/Hb0UAwF7EnkJGjqyDZ5XXbk+8VIkFg1R9+MOTIOnrn9A=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1785235177; c=relaxed/simple;
-	bh=EQ02onDuIznR15hDBSD0nHgk4X+3j9r3rHfujl5nfG8=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=BTyGlWj5BSpLigw02qgdypqg4v/LfPJytQT4NAR590VO4Xq/hKZPmmta1D9Ua64JEavqVS1LEzVYUg8B3x/OHUv9XdFw3DyT3HvvKZiGfBDJWmjuz5lrL1v8QDUeQF20/wVfVTF0tnQ/f4pwq0i/BtzUHAlpldWzAxplyeIux1c=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=I6o07QLq
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B72114B9DB5E
+	t=1785724862; c=relaxed/simple;
+	bh=NEc7Ae1CGKuNzIW2svqfdJdt3gRoKwhLghPfhJEOfFI=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=q2Aqul96T5PxWrue3ODGD8OcOzmQr7E0PYE9zEHZXd4FmomBB2r3dlv/57s+ThYJQe6LlfQHUGcutjvJeMjRC7M252hApgFnCtnBGtWhKjpn1m+tig0WHJZNL6xgTnzgMdLolnyOs/zd4XrEdFmcdg+M160PSWM1GzeE7g2k3gs=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=eNYtk+Ka
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A83924BA9019
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=I6o07QLq
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-5283e3eff60so25144211cf.2
-        for <cygwin-patches@cygwin.com>; Tue, 28 Jul 2026 03:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785235176; x=1785839976; darn=cygwin.com;
-        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
-         :subject:date:from:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=PfJVbGZPV2wjeS5a5fbadwTQzgg3rtseSfHkCPBddMs=;
-        b=I6o07QLqyWyES666m0VGDQ6z03P6XNDzDCVonOWi3ppG0JqDM9Uq691HabsiGcVkUn
-         YmEO/fsPgLy274Dy3QlCn0VO7zLKlHqD30qHpiM+5B0BHBn+iGOFXCcdKS7Tdza23uSy
-         cEIXmJwbCdZPQxQzgi8lJrHdU/e7zoyI+FF672dLKX5RAWtOo5RHq2RSaKm9BjOBL+p/
-         N9TeHZZrjiggAo00WythcEMYlRoS7AWbHeHpuC3xG0VrP4b0BSyspiAlUM2sRQoAa8y2
-         VYAmvjrxpbinilGAc9ZIVpPGCEqkz9sEqHoA4IQBqDZEmfzbIFkVkPJG8Anz+aN3ympJ
-         R9mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785235176; x=1785839976;
-        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
-         :subject:date:from:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=PfJVbGZPV2wjeS5a5fbadwTQzgg3rtseSfHkCPBddMs=;
-        b=Q1zCj6xjGb104gRaKfolTo96Oemuto5kSNhKUFzBUmV+1l92LTNRjgUpfb6f7i/72G
-         +EREXH6wIsI37+7w76324ZDwip1lzlrw/lzqA9J4nKdtiSpYlnEasKX27NTF4q5wXoFw
-         aKoNGeD1VfFdUMhICMuHN7cn2TZ1QL8nNxUJXh6T03KLKi73+ph3nI4Clljn6J/pOysC
-         NT+XF7sPqd6bq8D55fApUWJS6m/trOfehVxPOPEi8vvBm6jJtZGR7rGWzkRqt+IeF8bm
-         gttyZW3YNszgnZpl7qWfmhiz5rGoFCV/WU2UK9xZkZd0cXf7HpZmQLTLkyTZ7io+GuSx
-         R3pA==
-X-Gm-Message-State: AOJu0YwgUJjf8bAVgLIJ0CIVO3uEenCnk/J75e4/+wQUz39/wrQricSU
-	LE+yC1CF5B/jfPIzd7UsAmtJeOrVYKS45ssPHHDaB0lzVqHCWoZ/6rmr7ARRe8iS
-X-Gm-Gg: AR+sD1284xN+AUhfJKBq2Y1k7GFD+2V7BLJCP0PRECZkNpUZrwAmg1s0xKd58wqYBY7
-	dBeZpX7LkRNieoBBDvwM0rYInxphfzY61NBuTHVb4FCr7fR82M6oq56QhS5KwLyk6Yk4Ot5edXb
-	6UJhE8lz/s1JeNryV6BWI7fyp0sq6wpteHvFACi4BOuFF+PQ7Ni1CEMftGMkRnTqTD5mmgxyzKk
-	XNVu3WaKOmEZxnAjcs3SKPoNEjRQEittVDQi7q62zaUhMwRwkb7jgOG2Tg4Ftjp77CtttpRB6KJ
-	ehT+vy8w9MbqZQo/xTvYuASuWbkJO1vW+YiZHfuit9MB18fxL/DFiJrkVEjBb7WD8D2x+OIV5+6
-	8FQpVbrCKfHhgnv5VwJlJr5r9NjsuaSuIElH7BmUTx5yT9AzytiFRMtUo5fVpXiwSg+kNQrQ69f
-	NSf8SoDA==
-X-Received: by 2002:a05:622a:4d43:b0:519:dfd7:70cd with SMTP id d75a77b69052e-529d70e31cdmr13443391cf.49.1785235176454;
-        Tue, 28 Jul 2026 03:39:36 -0700 (PDT)
-Received: from [127.0.0.1] ([20.125.176.176])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-529a29ff66fsm71345631cf.25.2026.07.28.03.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 03:39:35 -0700 (PDT)
-Message-Id: <pull.9.cygwin.1785235174913.gitgitgadget@gmail.com>
-From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Tue, 28 Jul 2026 10:39:34 +0000
-Subject: [PATCH] dumper: allow compiling with binutils 2.47
-Fcc: Sent
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=eNYtk+Ka
+Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
+          id <20260803024057104.CSRI.18412.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 3 Aug 2026 11:40:57 +0900
+Date: Mon, 3 Aug 2026 11:40:55 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
-    Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: pty: Fix cursor position on new nat app in
+ existing pcon
+Message-Id: <20260803114055.bf569b322f12ac1e6d6fd3d2@nifty.ne.jp>
+In-Reply-To: <9bdf8a92-bc23-109c-0905-78139f0bfe54@gmx.de>
+References: <20260720200802.436-1-takashi.yano@nifty.ne.jp>
+	<9bdf8a92-bc23-109c-0905-78139f0bfe54@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1785724857;
+ bh=aa+sEGpfkvStFOoUAAst1NB6K3VsTPbgqJ2J1W5r8mM=;
+ h=Date:From:To:Subject:In-Reply-To:References;
+ b=eNYtk+KaCniTEtRf99WybSg4ugD4RMWSdCb+YOPVJXb+ATGRXYVuNG+gfF2sxVwfMl7EKbmU
+ raVHwq+rJaqwLP/ikO69IU1yBYo75aAaSSALMt7dZ6Z9Pz2kEvG0FJ/WBFjFcNL3GiLc878Ob6
+ eQRfzGV5/OyLhv6YvwMCvA398uIJp0LyOwenjzB907Y3Sq0PhTVcTwMiPsWpRkPF6lOpGmsb2D
+ d3FDFdbTCwEGP5NtT2cZvxEV6ocri/SWCp0plvx97qhqHMrlgYQKFCp3AFTkFR+d2AKrVu/ATm
+ fvrYuAHnEiiTI+WbRGpc/L9sdhtete/H5465OEmmTDUbK5vg==
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+Hi Johannes,
 
-In the latest version, binutils' BFD no longer declares a `bfd_boolean`,
-and the `bfd_record_phdr()` function accepts plain `bool` parameters
-instead.
+Thanks for reviewing and sorry for late action.
 
-Let's accommodate for that to avoid these build failures:
+On Thu, 23 Jul 2026 13:47:13 +0200 (CEST)
+Johannes Schindelin <Johannes.Schindelin@gmx.de> wrote:
+> Hi Takashi,
+> 
+> Thanks! This is correct and well-targeted. It should go in.
+> 
+> On Tue, 21 Jul 2026, Takashi Yano wrote:
+> 
+> > Previously, the steps: cmd.exe -> bash -> cmd.exe exhibit broken
+> > cursor position even with the commit b34394d456b6 ("Cygwin: pty:
+> > Fixup pty state after a cygwin app exits").
+> > 
+> > This patch sets req_fixup_pcon_cur_pos also when reusing existing
+> > pseudo console as well as req_xfer_input.
+> 
+> The coupling in `setup_pseudoconsole()` is sound: Before this patch, only
+> `req_xfer_input` would be set, and a reply to CSI6n would simply be
+> swallowed. With this patch, the reply is consumed instead (and
+> intentionally not forwarded), the same handshake `req_fixup_pcon_state()`
+> already performs.
+> 
+> It complements b34394d456 (Cygwin: pty: Fixup pty state after a cygwin app
+> exits, 2026-06-13) by covering the sibling boundary: a new native app
+> reusing the existing pseudo console (your cmd.exe -> bash -> cmd.exe
+> case), rather than a cygwin app exiting.
+> 
+> One pre-existing race, not a blocker: the reuse branch sets
+> `pcon_start_pid` without the spin-until-clear reservation loop
+> `req_fixup_pcon_state()` uses, and the master clears `pcon_start_pid`
+> outside `input_mutex` (the store sits just past `ReleaseMutex`). So an
+> overlapping handshake from another process can clobber it to zero early,
+> and the slave stops spinning before its own DSR reply is handled. Before
+> this patch that stray late reply was harmless (swallowed); now it could
+> drive a stale `fixup_pcon_cursor_position()`. Probability is very low, and
+> the same exposure already exists via `req_fixup_pcon_state()`, so the
+> verdict stands. Optional separate fix: move the clear inside
+> `input_mutex`, and/or give the reuse branch the reservation loop.
+> 
+>   Reviewed-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-  .../winsup/utils/dumper.cc: In member function 'int dumper::prepare_core_dump()':
-  .../winsup/utils/dumper.cc:830:7: error: 'bfd_boolean' was not declared in this scope; did you mean 'boolean'?
-    830 |       bfd_boolean filehdr = 0;
-        |       ^~~~~~~~~~~
-        |       boolean
-  .../winsup/utils/dumper.cc:831:18: error: expected ';' before 'phdrs'
-    831 |       bfd_boolean phdrs = 0;
-        |                  ^~~~~~
-        |                  ;
-  [...]
+Thanks for the advice. I'll push this patch to master branch,
+with the fix in which 'pcon_start_pid' is cleared inside the
+`input_mutex`.
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
----
-    dumper: allow compiling with binutils 2.47
-    
-    MSYS2 just updated to this version, and I tried to deploy a new MSYS2
-    runtime... oops ;-)
-
-Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-9%2Fdscho%2Faccommodate-for-binutils-2.47-v1
-Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-9/dscho/accommodate-for-binutils-2.47-v1
-Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/9
-
- winsup/utils/dumper.cc | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/winsup/utils/dumper.cc b/winsup/utils/dumper.cc
-index 994f9b683..ac261d03c 100644
---- a/winsup/utils/dumper.cc
-+++ b/winsup/utils/dumper.cc
-@@ -827,14 +827,14 @@ dumper::prepare_core_dump ()
-       p->section = new_section;
-       int section_count = 1;
- 
--      bfd_boolean filehdr = 0;
--      bfd_boolean phdrs = 0;
-+      bool filehdr = false;
-+      bool phdrs = false;
- 
-       bfd_vma at = 0;
--      bfd_boolean valid_at = 0;
-+      bool valid_at = false;
- 
-       flagword flags = 0;
--      bfd_boolean valid_flags = 1;
-+      bool valid_flags = true;
- 
-       if (p->type == pr_ent_memory)
- 	{
-
-base-commit: 273e66172494aa276f08155c12e6934f80abb10b
 -- 
-cygwingitgadget
+Takashi Yano <takashi.yano@nifty.ne.jp>
