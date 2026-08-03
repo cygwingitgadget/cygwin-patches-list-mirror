@@ -1,182 +1,217 @@
 Return-Path: <SRS0=g5AQ=F4=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by sourceware.org (Postfix) with ESMTPS id 9148D4BB1C35
-	for <cygwin-patches@cygwin.com>; Mon,  3 Aug 2026 19:36:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9148D4BB1C35
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	by sourceware.org (Postfix) with ESMTPS id 8698B4BB24C0
+	for <cygwin-patches@cygwin.com>; Mon,  3 Aug 2026 19:37:00 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 8698B4BB24C0
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9148D4BB1C35
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.15.15
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785785764; cv=none;
-	b=CqNG3rY1lwu+Tu3Sm3Ab2mGx+2YvQdWACpn6ZVreGV6Nsmi/r6VoQ0ctOnUR0onUSiDtEexcKt6gadF8gdFcZIu/E9fAxUc1Yjw+P8Ks2I+sTfjbioY8ZI4H5DnppR66rGVoz39hGrOZ9w5uffznVs7D+fNnL8Nt8v7WU7gOp4I=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 8698B4BB24C0
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.15.19
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785785820; cv=none;
+	b=VJdkxCp8FEtm8qvLVQYkn9DTMNKK8CYovulCRIjglVWoSp/I4DtiITU7Ri+jSD1ZTF+vquCyksvlQg2qturNxz9SZwEORj74B7bZndnu4EIMeVjILPAld+Y9uPXaTXjTP6ArPtwtLObM3tyDxNxA8b1lT9eUgfxhdl3JDejbAHE=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1785785764; c=relaxed/simple;
-	bh=gsseO0skjHyQM3qi5uDgn1DHoDCb22iKM6+DDIC2PCE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=csirqxoFZIZdOak63QM7BFujRTHrCHF5OZVWOs+PeyK9Q+x/bTUgIkEErC981D/yhRYRJinfvvMcay5ZCBZ3TKBBa8TNpTcr6or46P7kp4Qys4tE4okUT/PeuYZXwmmB30ln4Vy83ZGlAYHrnf4/8v9ttkQtaJgcTM9u5PgMby4=
+	t=1785785820; c=relaxed/simple;
+	bh=B+/E9FrXrsJHKeL989rHbALWJ7PVdUD1rYFy//qXv38=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=VbrIBECai/ZpF3Wl0JpMe3gU6BmXu5/K5JSeZjqECTiTZ2KH9c7weM4gms8iWYxnTbbchAMhQK1puyZh89TkTrQYoWSzkRMJxcbybDscEnQzJ9r+haVgPTBURLPQJhZ9tIG7pCoVuGiyJc6m3+uKcdPqcXf6gOoOOQz0kLbU1rA=
 ARC-Authentication-Results: i=1; sourceware.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1785785756; x=1786390556;
+	s=s31663417; t=1785785781; x=1786390581;
 	i=johannes.schindelin@gmx.de;
-	bh=F8+OFCvhWUnoTyhfemw945vnybC81YwpZYEQkFAnsEs=;
+	bh=ajeJYVoQqctEJIwP9tmZMCD3hlUyuyGJN7aujrq5uds=;
 	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=YrRHWWTr4N6fNnuvR8x34B2emtCtM6GsCC5DpvjuYb8mCvOEWLQM8QQjimF3qDQk
-	 +TuTao/ChPUkbnnd4bQBrqWVJEBK/C2+96VQl/6pc2VqlSHYHVndaUSPT6kzWrHwv
-	 6a88q/rsmwclqvCH/OMaIci6o4ce1ngn+l2TVYSQT9mIYkqJjUehDEuAZMr+VVFzx
-	 1ATpARbF6xvOP3Z692NEdHHJmqy4JZqAZX8qqEO7xeAjqqQ5IFlTXb9CFkgZUAbu+
-	 mGdESpYTZx86Z/9o4SeTm1qK/SQmCNq6p6u87LDbBjKKpvdMj8sVCay5Qa+9wOSxL
-	 DFG8TLCmenkL7LWSaw==
+	b=lb88bk1JMSWUXQQ8LrqUXuVnuIYo2RvAav7xSUrbacrjFNAUCjtxOC9/QvUQRzsk
+	 C9WEnVDtKJOf+0AjQjGR7oiVQfOs8wmmP639PAclP0MUL2fN9hXS1az0nlflo5vYP
+	 wk7y+4GE7AD0G0h+jPez6idmJ8yyyqaXcAD1qcZj7OMUfRSIY2T9bx4R02EmTygYu
+	 r36IDLEPxdbVTpbbznuMGJoK5CFnJXCa0LAx+Fnkf//HR7sisA9KP0SjgYGjCRaTM
+	 lzhiw/qHsV/PNBQDiMvESDayZCJ+3nhW0S11/iou7skQimIJdsErm77foxLb5foWs
+	 wSyxvEmS16zW/XQxZw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1OXZ-1x2YA31qwN-00rfFj; Mon, 03
- Aug 2026 21:35:56 +0200
-Date: Mon, 3 Aug 2026 21:35:54 +0200 (CEST)
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtwZ4-1xBeZd1Yke-010hQ4; Mon, 03
+ Aug 2026 21:36:21 +0200
+Date: Mon, 3 Aug 2026 21:36:19 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Jon Turney <jon.turney@dronecode.org.uk>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] dumper: allow compiling with binutils 2.47
-In-Reply-To: <80f37fa3-a53f-4d62-8a04-34dfdb948475@dronecode.org.uk>
-Message-ID: <01c28fbc-a85e-3952-ac91-49afb262156d@gmx.de>
-References: <pull.9.cygwin.1785235174913.gitgitgadget@gmail.com> <80f37fa3-a53f-4d62-8a04-34dfdb948475@dronecode.org.uk>
+Subject: Re: [PATCH] Cygwin: open: Add missing unlock on error
+In-Reply-To: <20260803032303.5382-1-takashi.yano@nifty.ne.jp>
+Message-ID: <0f3a1f92-f9fa-5aff-c837-249a2408b95f@gmx.de>
+References: <20260803032303.5382-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-Provags-ID: V03:K1:Ogkrp5+ddc9cI4dkZ/X4v/VEbsH4GeYt+vOMc8wPVWEeNq9w1rJ
- hl3gMa3Qm2BZk/O7taGzFJU3owdYFjdhgiBaTsoiQe7fbrgfTWIa/GEuUAASEEPli/jTQRN
- tH5vEWPNIS4hRemFU2j7Incxfd9aty6DGYy3OB++IMOF93G7AHim4rLfEFNVsQlkgGS6x4v
- WWA7uXTAs4ElTMssuQfow==
-UI-OutboundReport: notjunk:1;M01:P0:gUvrBkZw4Ng=;ZhGFwOeW2yaJoeICFtnVnYzaxkP
- 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
+X-Provags-ID: V03:K1:A0YXE1wqXTWXrUvzoPtAA1zqvveAQfA6TTGdgLRBBuqa/tQKeqO
+ N3zK/S24Fnhees/Sfmzw//vQ9qV4imghKPbEt7lch1J7R4YOlChDNMK5oPkUQrLsSlvN2gP
+ B7SM3vZYAnbrboUYwVhXoRMCKpoWITN1bEAhsU64sU+QhjZqBLEaJlBlAmU2muUJlMXiSTD
+ HLrfdMFaWaM9R1JOLUBbw==
+UI-OutboundReport: notjunk:1;M01:P0:mvlsD2YHHY0=;3trri32oaA+3/0/nKcLfnA1Gia5
+ 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
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Jon,
+Hi Takashi,
 
-On Mon, 3 Aug 2026, Jon Turney wrote:
+I independently reviewed this and reached the same conclusion: the fix is
+correct and minimal. I see it already landed on master as 0d3ea0ee653f
+(with Mark's Reviewed-by), so it's kind of a belated review.
 
-> On 28/07/2026 11:39, Johannes Schindelin via GitGitGadget wrote:
-> > From: Johannes Schindelin <johannes.schindelin@gmx.de>
-> >=20
-> > In the latest version, binutils' BFD no longer declares a `bfd_boolean=
-`,
-> > and the `bfd_record_phdr()` function accepts plain `bool` parameters
-> > instead.
-> >=20
-> > Let's accommodate for that to avoid these build failures:
+On Mon, 3 Aug 2026, Takashi Yano wrote:
+
+> the commit 524d75ff7398 ("Cygwin: open: Unlock fdtab before open_
+> with_arch()") introduced a bug that fdtab lock was not unlocked
+> when new fd cannot be allocated due to an error.
+
+Worth restating how much this matters, because the leaked lock is not
+fd-table-local. The dtable lock acquires and releases
+`lock_process::locker`, a process-wide recursive muto that also guards
+`fork`, exec/spawn, `dup`, and every `open` and `close`. So the pre-fix
+code let the owning thread hold it forever, turning a transient
+out-of-descriptors failure (`EMFILE`) into a permanent, process-wide
+deadlock. That is why it is a showstopper even though the trigger is rare.
+
+> This patch adds missing unlock for fdtab lock on error.
 >=20
-> The obvious question I would ask is "does it still build with older
-> bfd", to which the answer seems to be "yes".
+> Fixes: 524d75ff7398 ("Cygwin: open: Unlock fdtab before open_with_arch()=
+")
+> Suggested-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> ---
+>  winsup/cygwin/syscalls.cc | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >=20
-> So, applied. Thanks!
+> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+> index e3ba8c65c..8373482e9 100644
+> --- a/winsup/cygwin/syscalls.cc
+> +++ b/winsup/cygwin/syscalls.cc
+> @@ -1554,7 +1554,10 @@ open (const char *unix_path, int flags, ...)
+>        cygheap->fdtab.lock();
+>        fd =3D cygheap->fdtab.find_unused_handle ();
+>        if (fd < 0)
+> -	__leave;		/* errno already set */
+> +	{
+> +	  cygheap->fdtab.unlock();
+> +	  __leave;		/* errno already set */
+> +	}
 
-Thank you!
+This is safe and addresses the issue. At that early exit the lock is
+unconditionally still held: neither `find_unused_handle()` nor `extend()`
+touches it; they just return a negative value on failure. So exactly one
+unlock is correct, with no risk of a double-release.
+
+The rest of the error handling stays sound. The return value is still
+negative and the reserved index is still negative, so the end-of-function
+cleanup (which only runs for a non-negative index) is correctly skipped,
+while the built `fhandler` is still freed. And this is the only early exit
+between the lock and its matching unlock.
+
+Incidentally, the version that landed differs from the posted hunk in
+exactly one whitespace detail: the new call is written
+`cygheap->fdtab.unlock ();` with a space before the parenthesis (GNU
+style). No functional difference.
+
+To reiterate the scope from the v2 discussion: this addresses the first of
+the two follow-ups, releasing the lock when no descriptor is available.
+
+For the second item, the reserved-marker design so that a
+reserved-but-not-yet-open descriptor does not look fully open to the rest
+of the fd table, you sent two alternative patches, which I will review
+next.
+
+Ciao,
 Johannes
 
+>        cygheap->fdtab[fd] =3D fh; /* tentative setting to mark as used *=
+/
+>        cygheap->fdtab.unlock();
+> =20
+> --=20
+> 2.51.0
 >=20
-> >=20
-> >    .../winsup/utils/dumper.cc: In member function 'int
-> >    dumper::prepare_core_dump()':
-> >    .../winsup/utils/dumper.cc:830:7: error: 'bfd_boolean' was not decl=
-ared
-> >    in this scope; did you mean 'boolean'?
-> >      830 |       bfd_boolean filehdr =3D 0;
-> > |       ^~~~~~~~~~~
-> > |       boolean
-> >    .../winsup/utils/dumper.cc:831:18: error: expected ';' before 'phdr=
-s'
-> >      831 |       bfd_boolean phdrs =3D 0;
-> > |                  ^~~~~~
-> > |                  ;
-> >    [...]
-> >=20
-> > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > ---
-> >      dumper: allow compiling with binutils 2.47
-> >     =20
-> [...]
 >=20
