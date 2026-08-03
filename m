@@ -1,90 +1,161 @@
 Return-Path: <SRS0=LDpO=F4=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
-	by sourceware.org (Postfix) with ESMTPS id 52E064BAE7F3
-	for <cygwin-patches@cygwin.com>; Mon,  3 Aug 2026 10:49:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 52E064BAE7F3
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 4A1584BA2E12
+	for <cygwin-patches@cygwin.com>; Mon,  3 Aug 2026 10:54:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4A1584BA2E12
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 52E064BAE7F3
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785754191; cv=none;
-	b=np4bCJlL2D9K6AlAD8JISKr8aECvrtgLX6jS/x8FtxdRQ4KUYBXVSCjU8SyJSOk6dtjCQuPUmUk3/VDIOutdjJsN15ARgYyXpsRcoIkmYIAL/iXeSZ9YANth7nPPrIdX7zBJs/Zlij51h30Lr7UiTckHvwkZVQcU3oO3MsiDshU=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4A1584BA2E12
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1785754487; cv=none;
+	b=scdWMyI12HKxCXoV7K2NauxcjrVE7s/jZnzssxF+OJSP3G2yNgQqDr6+HEdNH6n8VqR5caaQaVR6dzah+Bib08hT8qeTjXyiwHHjHeZKMtmG8TTcLSugy6iMDXXUHk9AnwlZ9GxqeK4i6zIJOITbTtfMkEiLSlud9P+VlZ8EK/o=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1785754191; c=relaxed/simple;
-	bh=RE6tH52/CWXiRzXwAB+Nm3AVc1/t5Qkt9dQH68dG6ro=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=r9kh41ogPAy7tNOvrE0VZ4jCcT6fJ4wbC8Shln/2d/kHnSjfkTE3aS7hhIeT+7R++pb+CzRKlat3P6NkMPp7DVgRWdu6zpL2m3eiiGrnYC96FoElMO/YCkGLOqk34m7+suCk3cp3128tb9WXxsSvA8XTSgRSCIgPtlVDWReQNuE=
-ARC-Authentication-Results: i=1; sourceware.org
+	t=1785754487; c=relaxed/simple;
+	bh=a5kCtpbFxjahlU0VCNUMI4DA03nMtlW7S3FhuCbdSKU=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=cvMoS3n2Boq1gGCmDJQdKkMCW35DNa2CfJm/fvKPmSP9L7So8LduMnlMGtYq2/KMHAGitoxUpWcU6k/Ub5MNnoUyOR7Hzg+cm7JmNHkA35t0BXpr2aztKFBzYnF4oLw6cmRTuEBac6DZELaSR6ZWidS7z391KgA32/g7Aiv9TyM=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=HQFNdBqQ
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4A1584BA2E12
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=HQFNdBqQ
 Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260803104948456.ZSCO.117312.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Mon, 3 Aug 2026 19:49:48 +0900
-Date: Mon, 3 Aug 2026 19:49:46 +0900
+          id <20260803105445065.ZTOH.117312.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 3 Aug 2026 19:54:45 +0900
+Date: Mon, 3 Aug 2026 19:54:43 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: open: Add missing unlock on error
-Message-Id: <20260803194946.6036d562150d8a63f16cce2f@nifty.ne.jp>
-In-Reply-To: <0f65a017-2590-4d55-a4bc-05730da1f521@maxrnd.com>
-References: <20260803032303.5382-1-takashi.yano@nifty.ne.jp>
-	<0f65a017-2590-4d55-a4bc-05730da1f521@maxrnd.com>
+Subject: Re: [PATCH v2] Cygwin: open: Unlock fdtab before open_with_arch()
+Message-Id: <20260803195443.2ef79fe1f505267789e9e12e@nifty.ne.jp>
+In-Reply-To: <6d404942-f6c1-6c4d-9915-a359c1f196f5@gmx.de>
+References: <20260717031021.1537-1-takashi.yano@nifty.ne.jp>
+	<bccbac3b-78e9-67d3-2a92-30986f6ff9b6@gmx.de>
+	<20260722201012.8403bbf6045b2fb041af985b@nifty.ne.jp>
+	<20260722215641.e9aad82023614cea4e1aec63@nifty.ne.jp>
+	<6d404942-f6c1-6c4d-9915-a359c1f196f5@gmx.de>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1785754188;
- bh=XFfExY075wXKiKaXDgrbS1j0aYsiQeBKka1yq94eHeU=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1785754485;
+ bh=Qz1cPwUuPHjc7Zbr26KR7vyWWN1W3+rDmCyPabMZ45Y=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=EYcWivbKLIxJrnRUoJ8AttdOsxMd4ouqpsUyXIxPfLngYXnjJgEi6ME0SDFmHvV6YYHWld0v
- CWOUllsxoGNM5e6g15+91duca5lQFL9lTXL4dgeE8omOKNWe/BFzFA5pMWqolScE365WUV6I30
- 6crkbQSAFg1ekDQmHYHSyEEOLlBD2yB4R35uSCGlLvxw3VcYk+XXtYFWfxhi/LH5etd3qdmiX4
- eEGR2OjmMGwp62Wzk5eUGCagn7PkRn+IEQHfE+OvAMJq04DVPh5k4xe68f+75B6CD1zD1s5sI6
- IMipu6u7fuMr0pmMqIvZ8sWv+rDDaTIj7QufLQkRJil4j07A==
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=HQFNdBqQvaTuqZV6acifhLEnShuAzh8V5cbue6R/xQRGxHY1jf2T1R2GNIDY0RpDr2Od6Q37
+ fEvbGwXUqHElklAbl1Ohexjl8tzMqHx8pckSxok30Nx825wUh0Twwebf/YfMz/2ei7gviEF6NR
+ GMAfsBsJ9FEbMjLldFVRkYdNNFbi41vfNciG3eRtQGRQ65lCMtUXkZ4mFIKCxx/gQH08/UfjIb
+ 4A1Y0aYhJakj30+8n/58hf9Ez8FZEvRguxdY7zyhiHZjAl53FLHRZD52xg6eSvbdP1L4Wm4rO5
+ 95VGZAUgATtCwWFk/5+rhaFjpIH1B2BbYx0tBh8utcpBvDJg==
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Mark,
+Hi Johannes,
 
-Thanks for reviewing so quickly!
-
-On Mon, 3 Aug 2026 01:52:29 -0700
-Mark Geisert wrote:
+On Wed, 22 Jul 2026 22:29:44 +0200 (CEST)
+Johannes Schindelin wrote:
 > Hi Takashi,
 > 
-> On 8/2/2026 8:22 PM, Takashi Yano wrote:
-> > the commit 524d75ff7398 ("Cygwin: open: Unlock fdtab before open_
-> > with_arch()") introduced a bug that fdtab lock was not unlocked
-> > when new fd cannot be allocated due to an error.
-> > 
-> > This patch adds missing unlock for fdtab lock on error.
-> > 
-> > Fixes: 524d75ff7398 ("Cygwin: open: Unlock fdtab before open_with_arch()")
-> > Suggested-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by:
-> > ---
-> >   winsup/cygwin/syscalls.cc | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> > index e3ba8c65c..8373482e9 100644
-> > --- a/winsup/cygwin/syscalls.cc
-> > +++ b/winsup/cygwin/syscalls.cc
-> > @@ -1554,7 +1554,10 @@ open (const char *unix_path, int flags, ...)
-> >         cygheap->fdtab.lock();
-> >         fd = cygheap->fdtab.find_unused_handle ();
-> >         if (fd < 0)
-> > -	__leave;		/* errno already set */
-> > +	{
-> > +	  cygheap->fdtab.unlock();
-> > +	  __leave;		/* errno already set */
-> > +	}
-> >         cygheap->fdtab[fd] = fh; /* tentative setting to mark as used */
-> >         cygheap->fdtab.unlock();
-> >   
+> Thank you for trying the experiment so quickly. To answer your closing
+> question first: yes, both outputs are exactly what a correct fix should
+> produce. Let me walk through why, and then flag two caveats about the
+> reserved-marker design before we build it out.
 > 
-> This patch LGTM.  Apologies for not catching this in my review.
-> Thanks & Regards,
+> On Wed, 22 Jul 2026, Takashi Yano wrote:
+> 
+> > On Wed, 22 Jul 2026 20:10:12 +0900
+> > Takashi Yano wrote:
+> > > Hi Johannes,
+> > > 
+> > > Thanks for reviewing!
+> > > 
+> > > On Tue, 21 Jul 2026 19:16:11 +0200 (CEST)
+> > > Johannes Schindelin wrote:
+> > > > This is the first point where the slot and its reference count agree
+> > > > again; Too late for anything that looked in between. And the cleanup only
+> > > > runs for non-negative descriptors, so it never covers the case above.
+> > > > 
+> > > > Since it is already in `master`, a follow-up patch probably makes most
+> > > > sense. Two things to fix: release the lock when no descriptor is
+> > > > available, and stop a reserved-but-not-yet-open descriptor from looking
+> > > > like a fully open one to the rest of the fdtable. Reviving the old integer
+> > > > marker would mean teaching every consumer of the table about it, so it is
+> > > > not a drop-in.
+> > > 
+> > > Ah, I got it. The user program cannot know that, but cygwin1.dll can
+> > > refere fdtab inside it. What about adding reserved flag to fdtab?
+> 
+> Adding a reserved marker is the right approach, and it is what I had in
+> mind too. Keeping the reserved slot hidden from the rest of the table lets
+> `open()` remain the sole owner of the handler and delete it on any error
+> path, including the `FH_PROCESSFD` reopen, without any reference-count
+> juggling.
+> 
+> The first caveat, and the bigger one: this is not a drop-in change. Every
+> place that treats a non-NULL slot as a live handler has to learn to skip
+> the reserved marker. Besides `cygheap_fdget`, that includes
+> `cygheap_fdenum::next`, `not_open`, and the five fork/exec fixup loops
+> (`set_file_pointers_for_exec`, `fixup_after_exec`, `fixup_after_fork`,
+> `fixup_before_fork`, and `fixup_before_exec`). If a fork or exec runs on
+> another thread while a FIFO open is still holding the reservation, those
+> loops would dereference the marker.
+> 
+> To keep that safe, I would encode the marker as a single distinguished
+> pointer value stored in the slot itself, rather than as a separate flag.
+> Then the lock-free `cygheap_fdget` keeps working with one added
+> comparison, and there is no risk of a torn read.
+> 
+> > 
+> > I tried it as quick experiment.
+> > 
+> > The result of the first reproducer is:
+> > baseline close(-1): result=-1 errno=9
+> > descriptor allocation stopped after 3197 opens: errno=24
+> > second-thread close(-1): result=-1 errno=9
+> 
+> The decisive line here is the second thread's `close(-1)` returning
+> `EBADF` (errno 9) instead of blocking. That is the proof that the table
+> lock is no longer held when no descriptor is available; before the fix,
+> the second thread would have waited forever on the process-wide lock. The
+> allocation stopping after 3197 opens with `EMFILE` (errno 24) is right as
+> well: that is `OPEN_MAX` (3200, spelled `__OPEN_MAX` in the headers) minus
+> the three standard descriptors, so the ceiling is reached cleanly.
+> 
+> > The result of the second reproducer is:
+> > expected FIFO writer descriptor: 4
+> > provisional descriptor query: result=-1 writer_done=0
+> 
+> This one is exactly right too. The writer taking descriptor 4 is just the
+> expected setup; the line that matters is the provisional-descriptor query,
+> which returns -1 (`EBADF`) with `writer_done` still 0 while the FIFO open
+> is still blocked waiting for the other end. The reserved descriptor now
+> reports a bad descriptor instead of triggering the access violation
+> (status 0xC0000005) I saw before, where `cygheap_fdget` raised the
+> reference count from zero to one and its destructor then lowered it back
+> to zero and deleted the handler while `open()` was still blocked inside
+> `open_with_arch()`.
+> 
+> > Are these results as you expected?
+> 
+> Yes, as detailed above. The second caveat is about coverage: the two
+> reproducers drive `close()` and the descriptor lookup on a single known
+> number, but not the paths that walk the whole table. `close_range` is the
+> clearest of those. It iterates every descriptor in the range and looks
+> each one up, so it reaches a reserved slot without ever being told its
+> number. That, incidentally, answers the question you raised earlier about
+> how the racing thread could reference a descriptor that `open()` has not
+> returned yet: it does not _have_ to. The internal iterators reach the slot
+> regardless. A `close_range` call and a fork or exec, each racing an
+> in-flight open, would exercise the paths the current reproducers miss.
+> 
+> Independently of all that, the lock-leak fix stands on its own and is
+> trivial, namely releasing the table lock when no descriptor is available,
+> so it could land first as a separate commit while we work out the marker
+> design.
 
-Pushed.
+I implemented two different ways, one uses independent reserved flag,
+the other uses special value ((fhandler_base *) -1) as a reservation
+marker.
+
+I'll submit both patches, so please review the one you think is the
+better approach.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
