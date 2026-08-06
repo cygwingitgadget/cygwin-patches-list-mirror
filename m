@@ -1,30 +1,30 @@
 Return-Path: <SRS0=i6Vi=F7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.227.121])
-	by sourceware.org (Postfix) with ESMTPS id 9FCE14BA23DD
-	for <cygwin-patches@cygwin.com>; Thu,  6 Aug 2026 16:36:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9FCE14BA23DD
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id 1BB994BA902D
+	for <cygwin-patches@cygwin.com>; Thu,  6 Aug 2026 16:59:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 1BB994BA902D
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9FCE14BA23DD
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.121
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1786034184; cv=none;
-	b=QiaZV1+SgGanTvnCbe2uxW8nPzxe8jG6IKOJtoqHeMsr3NCvmr5r1RmtLRSZRaLXgTdZk3r4mUs5DDXGVembh7utKyI7ZktvWtelRdaFSZUP4bXxnWZtBKDMpKj6/EYSRrAaTuxslcMcxyQyLstGyl63CJKxXl+Zg92uMCkEyK8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 1BB994BA902D
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1786035584; cv=none;
+	b=SKl1kPBX4ktKjAeiqbIVEogbONdJYDSe6HRY/3DH0GbRd9WnhOJPdFNpTB7+9VEtOTHym7ACgQBgTGFtDJpC4MJczlbcW8qNi+3gZufSmEKXTCHJqBAJMXVLNRfYh7IvvD3pWmmkpChmYeyHtJEAndDtCwoPjh0g8mxuIs27QE0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1786034184; c=relaxed/simple;
-	bh=W2PUW3f4hX2HlNAB4Z9P/3AKUgcNri/MTg0F3qkuEyE=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=huvjocaVEFyE89+g1Y9y3YJM0589EGznVdPxL7w33IffLDo75fEdMMd88o8Je1Ct+IuRT1+RsTjdU1xAGHiTXEoWcaw+uV4Ekb+mocsA/WII4iCqRnM56bN1W6a1Gk8sm5b3vU6/aEa4Wk9tl022PQY9lcgTE29ruux5q8CuU+8=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=reXm96fB
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9FCE14BA23DD
+	t=1786035584; c=relaxed/simple;
+	bh=gAGuI9td+jKN6wtfL5rcXsatPEe7U3MtmSbVltsPnSM=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=A9/7bZ0BUA1N9PAsXehnbqyjj8QBumEOIsFCDnE2Vrm660j3c/ycCfXugboW1dl8rxPQT7AXLknDGpFggW4I3tLGHmk4OKhTirgFaG2WfyMy+/fqrSdAUf5jIDFjLSSCxe+BBJWhgyja8Lj0aWRikggauKhegdc32Odg5NrqyGc=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=sB8hIJH7
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 1BB994BA902D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=reXm96fB
-Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20260806163621577.JECA.60338.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 7 Aug 2026 01:36:21 +0900
-Date: Fri, 7 Aug 2026 01:36:20 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=sB8hIJH7
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20260806165941965.WGHJ.44671.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 7 Aug 2026 01:59:41 +0900
+Date: Fri, 7 Aug 2026 01:59:40 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: console: Fix regression in console input
-Message-Id: <20260807013620.678c7579ce2846ec0e658d6f@nifty.ne.jp>
+Message-Id: <20260807015940.e854b67888c381aa7a26d6c3@nifty.ne.jp>
 In-Reply-To: <20260807012551.c176e66e6288f13ad597d9a2@nifty.ne.jp>
 References: <20260803025011.5289-1-takashi.yano@nifty.ne.jp>
 	<9a1a2379-361e-86b4-b310-d162af82a417@gmx.de>
@@ -33,15 +33,15 @@ X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1786034181;
- bh=ddlon1L64BY3tKwfKzAPTvgxC9df+9mp/BZFTazYvu0=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1786035582;
+ bh=/UyxZ/j7MM/Gy/GiPh30BWXNlikeNOkFUXj3+mqRMs4=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=reXm96fBMr5Lo5UqSvs8ewTiZsERVpBhhzTQT4efnX/SIBuTeOOdbJKsuSObowXg2MyvFpp2
- lPZTHklBguQO5t1zmdjTdh9f9XZKiR0jDdcPdw7eLoWi2eMCrqA5WojutXq2W4Gqj+WJ48euPD
- 9aUDMnSLlQALE3jRQdWs5XQLbI+SPY8hkDUI9FSLVYtdwYHueNATVRjhT7k05Y67Mf67bsHj5K
- UvcosTjENW227j6FMGBgpNy3Nx5NRryEG4x5nZoVlKgiFOx1MUTAxsVcWFpFY8uFcEVoaWad19
- QGx9A7xdAgrU3g+92IFtr6VRIdp+1I6KX/5k9oJ0gx/Ft08Q==
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=sB8hIJH7AhvLjP7F42CQ84q5frWSMHtRKSj88udPdJbU1cZlrK3pgZxWkiwpbty+9jeyfjiA
+ 8e2HJmtKawGJLIywrXFNHFFS5Uz98ivov3PPoZiX/wvypzH1daCjfnTEaHwtgPRDOG0qwZBSET
+ b7UqFE+0OIJN/iaRZDs4IrwtWAVzubdhr0Ogpzj1JKUtjtWMenhpMmgw6arte4CZSBIwE/IIrn
+ Qobu18v6mZPAULkHyrdyOMiPjuKOrdh6IK6Uq4WU16ps1cOZXyCJMp5zCdDthqkh0AKEEZwXu2
+ TQjh+6VcNVkUa3VndOKQg+yLb/S7fTMghMN3Xvtn56viMQuA==
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -162,8 +162,14 @@ Takashi Yano wrote:
 > After the `while` loop, the chars in readahead data of length `con_ra.ralen`
 > will be copied into buffer of `buflen`. So the `len` should be total buffer
 > size here.
+> 
+> As for tcflush(), let me check. Please wait for a while.
 
-`copied_chars` is always 0 here in the first place, isn't it?
+`tcflush()` seems to need clearing readahead buffer and `input_ready` flag.
+Without that, select()->tcflush()->read() does not block at read() and
+returns the contents of readahead buffer.
+
+I'll submit another patch shortly.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
