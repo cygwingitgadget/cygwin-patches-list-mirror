@@ -1,192 +1,210 @@
 Return-Path: <SRS0=Gg12=GA=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
-	by sourceware.org (Postfix) with ESMTPS id D41FC4BA9016
-	for <cygwin-patches@cygwin.com>; Fri,  7 Aug 2026 05:44:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D41FC4BA9016
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.181])
+	by sourceware.org (Postfix) with ESMTPS id 73ABE4B9DB49
+	for <cygwin-patches@cygwin.com>; Fri,  7 Aug 2026 10:47:35 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 73ABE4B9DB49
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D41FC4BA9016
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1786081485; cv=none;
-	b=HtPRCxxIs66BliTVHLszqhdO8RbQPQmrP5q/X/HO1O+Uf2FkOfTWtpUxvzWQiFNEipVdZGROcMP18xrrQf4u2FiFRNmj+1R4EqZGinuPM1wPUQpprzrKQK+h8unUHw5Tiwk2TvPARvVP21LpSEi0cZbOG1qAbZgIzK/Ktn0APGY=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 73ABE4B9DB49
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.181
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1786099656; cv=none;
+	b=xqhHHkkuekfCL48bxokdmxKws/iL4218EVoe6g1te43ETOsOsZOrjQrOReDxtWsodhpYiLtY91l87m5Lm9bNa8peJvMYSdTtOsfxMx9ExHuI50mi/BhI47Y6nuhM+si6SphEQIINI3F7OzDeIaUgB4WdyApkZ7IaDmdSn/WY/vA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1786081485; c=relaxed/simple;
-	bh=0FNIzI/VrUd29nd315/jP+awXHM5j34s4xUki2QOa+c=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=epcNpgfzfJC7mC4lbqh9/aeqIFla7a19Zvla5e5c2diim8c0SDMM3lh74B/WGq20jjKKxlO0yZpUZJlJyFmLgg03awTevoAkLmsOnr+2O7HoAubTC11cToVNAtsZLxHmLHd00QYBcfdaDBykwnf4Jjq7BgYmSIoHbMqu92jqJPg=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=UBD/gooN
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D41FC4BA9016
+	t=1786099656; c=relaxed/simple;
+	bh=ImLmaym6ashgk5Aaf296g52CgY1cTBW7mPb+rp/wOdU=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=WjQ2IwALS7Uu2DgvggfrbVl+erurF5K6CbW8l5GmQRE6uzOc7sAGz8aBtjoBcHlVI8Q4YU7fzANA+PqLm1OkRolW1hdiPvMTbnJRcqTOq8q+BZyGFsechNEBsmX1Ip9cxtLvcyFnC33xxthwnHcMvm9UTMVfmnwWMfJnhK8bM7s=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=iREbWhd2
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 73ABE4B9DB49
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=UBD/gooN
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260807054441945.UAVI.17441.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 7 Aug 2026 14:44:41 +0900
-Date: Fri, 7 Aug 2026 14:44:40 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=iREbWhd2
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260807104732552.ROVY.102121.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Fri, 7 Aug 2026 19:47:32 +0900
+Date: Fri, 7 Aug 2026 19:47:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: pty: keep interactive console input for native
  programs via Cygwin
-Message-Id: <20260807144440.a1bc79ad5fede93073ef7bae@nifty.ne.jp>
-In-Reply-To: <44947be6-f15d-8e6b-2b8a-295f54bc6b1e@gmx.de>
+Message-Id: <20260807194730.736e6364077b65db9afe2daa@nifty.ne.jp>
+In-Reply-To: <pull.8.cygwin.1784540598759.gitgitgadget@gmail.com>
 References: <pull.8.cygwin.1784540598759.gitgitgadget@gmail.com>
-	<20260721044125.b0564ce6a797404b79a0f0a8@nifty.ne.jp>
-	<44947be6-f15d-8e6b-2b8a-295f54bc6b1e@gmx.de>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1786081482;
- bh=C7g1vjQU7E+IssjXQ4n1YL76K+jRmoJuWdTTElXzBn8=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1786099652;
+ bh=iJv9+Lb4V/W+QrVQVEHh17Jg8ALnKy7tuOrMcf4SyPI=;
  h=Date:From:To:Subject:In-Reply-To:References;
- b=UBD/gooNpZMCz1uWWBfthhyrm63wgclq/sAE+YahnSl8nN4mau47OatKieqIKGfh9vKzwWoq
- LWuJDJuQbTXyv45+1WnfTMEiMrVnjTSyyZVhU4o4sOBwEL/ljchTnHyERr14Tkb/vno9XwlxtE
- oQDwmVAyFU1wd6fSw7OGp7RGN+wQszVcOWqDkIAMtn8f6lu/RGPcNpYYR3l8hS3u40+N+/jQ6W
- fhmemJMQAwaqDYKcTB4Oe99UeTqqcD4zN/sv3amiWYZIouLiGNyQI5kp6ZTcLHvJq/8LDHb+zA
- 6mOZXuxO+75+6PE1zKMp0he/cCB2pNv2EldroxrHF+ZOF+tA==
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=iREbWhd20tOU9hM7U+frQ0WBgBsQVWnq7q4GCeyXxbyE7K5lYMgIeO8KTs2krXvejRueTmlb
+ W2n5DZe5n7AtgfEwAFoAQhYAAQM61cKv6akjABNLCfk+OyyxULWIEcf3OLjdstsUq26jukVbyn
+ Glh0dMBFx5aKxvt5U3j+VaBX/xgfkSkWOBcpYhJ6Ggvx1e59enjJrX82+o4Z/TxIsWSuZ0JV3R
+ 9rKmUzck2Jj6dJI5DDvvQHvwEMhh+zDE+VVQSOdNoXGYf+ATefw72JFo5TueWpAvjKrQzLGPIV
+ 9M9q0uBA63b9qZX0168b1pQPWyINtl5Xzrye2gw2130CHPKg==
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 Hi Johannes,
 
-On Wed, 22 Jul 2026 01:18:16 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
+On Mon, 20 Jul 2026 09:43:18 +0000
+"Johannes Schindelin wrote:
+> From: Johannes Schindelin <johannes.schindelin@gmx.de>
 > 
-> On Tue, 21 Jul 2026, Takashi Yano wrote:
+> Currently, when a native Windows program starts a Cygwin program while a
+> pseudo console is active, and the Cygwin program then starts another
+> native Windows program, the final program can lose access to console
+> input. It then behaves as though its standard input were redirected
+> instead of remaining interactive.
 > 
-> > On Mon, 20 Jul 2026 09:43:18 +0000
-> > "Johannes Schindelin  wrote:
-> > > From: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > > 
-> > > Currently, when a native Windows program starts a Cygwin program while a
-> > > pseudo console is active, and the Cygwin program then starts another
-> > > native Windows program, the final program can lose access to console
-> > > input. It then behaves as though its standard input were redirected
-> > > instead of remaining interactive.
-> > > 
-> > > For example, a native `git.exe` may invoke shell aliases (i.e. execute a
-> > > shell command) that would in turn call interactive Git commands who
-> > > would no longer work because their standard input appeared to be
-> > > redirected. This can be demonstrated as follows:
-> > > 
-> > >   git -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "
-> > >     Write-Output ([Console]::IsInputRedirected)
-> > >     try {
-> > >       [void][Console]::KeyAvailable
-> > >       exit 0
-> > >     } catch {
-> > >       exit 1
-> > >     }
-> > >   "' console-probe
-> > > 
-> > > Running this command with a Win32 version of `git.exe` currently prints
-> > > `True` and exits with exit code 1. In the latest official release, where
-> > > this bug is not present, it prints `False` and results in exit code 0.
-> > > 
-> > > The reason is to be fonud in the archetype code. Reminder: For each
-> > > pseudo terminal (pty), the archetype is the shared pty fhandler that
-> > > owns the underlying native handles and supplies them to every
-> > > per-file-descriptor fhandler for that pty.
-> > > 
-> > > `open_with_arch()` calls `open()`, copies the first pty fhandler's state
-> > > into the archetype, and then calls `open_setup()`. At that stage, pcon
-> > > handle adoption already took place in `open_setup()`. This was not
-> > > anticipated by 60a88896dc (Cygwin: pty: do not leak nat handles when
-> > > adopting the pcon's in open_setup(), 2026-06-25), which tried to fix a
-> > > leak by closing the superseded native handles as they were replaced in
-> > > `open_setup()`.  Because `open_with_arch()` had already copied those
-> > > handle values into the archetype, closing them invalidated the
-> > > archetype's copies.
-> > > 
-> > > The archetype therefore retained stale values for those closed handles,
-> > > which later pty fd fhandlers would inherit. If Windows reuses one of
-> > > those values for a newly duplicated pcon handle, closing the stale value
-> > > closes the new handle instead. The nested native program then receives
-> > > unusable console input.
-> > > 
-> > > Preserve usable console input by moving the unchanged transactional pcon
-> > > handle adoption to `open()`, before the archetype snapshot. The archetype
-> > > then receives valid pcon handles, all pty fd fhandlers inherit live
-> > > handles, and the superseded raw pipe handles are closed exactly once.
-> > > 
-> > > This commit is best viewed with `--color-moved`.
-> > > 
-> > > Fixes: 60a88896dce0 ("Cygwin: pty: do not leak nat handles when
-> > >  adopting the pcon's in open_setup()")
-> > > Assisted-by: GPT-5.6 Sol
-> > > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > 
-> > How can I reproduce the issue in cygwin?
-> > I tried:
-> > $ git -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "
-> >     Write-Output ([Console]::IsInputRedirected)
-> >     try {
-> >       [void][Console]::KeyAvailable
-> >       exit 0
-> >     } catch {
-> >       exit 1
-> >     }
-> >   "' console-probe
-> > False
-> > $ '/cygdrive/c/Program Files/Git/mingw64/bin/git.exe' -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "
-> >     Write-Output ([Console]::IsInputRedirected)
-> >     try {
-> >       [void][Console]::KeyAvailable
-> >       exit 0
-> >     } catch {
-> >       exit 1
-> >     }
-> >   "' console-probe
-> > False
-> > $ '/cygdrive/c/Program Files/Git/bin/git.exe'  -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "
-> >     Write-Output ([Console]::IsInputRedirected)
-> >     try {
-> >       [void][Console]::KeyAvailable
-> >       exit 0
-> >     } catch {
-> >       exit 1
-> >     }
-> >   "' console-probe
-> > False
-> > $
-> > 
-> > All look successfull on master branch...
+> For example, a native `git.exe` may invoke shell aliases (i.e. execute a
+> shell command) that would in turn call interactive Git commands who
+> would no longer work because their standard input appeared to be
+> redirected. This can be demonstrated as follows:
 > 
-> I'm sorry, I should have clarified several things:
+>   git -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "
+>     Write-Output ([Console]::IsInputRedirected)
+>     try {
+>       [void][Console]::KeyAvailable
+>       exit 0
+>     } catch {
+>       exit 1
+>     }
+>   "' console-probe
 > 
-> - First of all, this reproducer has to be run in MinTTY.
+> Running this command with a Win32 version of `git.exe` currently prints
+> `True` and exits with exit code 1. In the latest official release, where
+> this bug is not present, it prints `False` and results in exit code 0.
 > 
-> - Second, it does _not_ actually reproduce the bug with the Cygwin runtime
->   built from cygwin/master. It only reproduces in Git for Windows' flavor
->   of the MSYS2 runtime because of the backports of:
+> The reason is to be fonud in the archetype code. Reminder: For each
+> pseudo terminal (pty), the archetype is the shared pty fhandler that
+> owns the underlying native handles and supplies them to every
+> per-file-descriptor fhandler for that pty.
 > 
->   - 6eed1ef748 (Cygwin: pty: detect pcon-backed pty for non-Cygwin-spawned
->     children, 2026-04-30)
+> `open_with_arch()` calls `open()`, copies the first pty fhandler's state
+> into the archetype, and then calls `open_setup()`. At that stage, pcon
+> handle adoption already took place in `open_setup()`. This was not
+> anticipated by 60a88896dc (Cygwin: pty: do not leak nat handles when
+> adopting the pcon's in open_setup(), 2026-06-25), which tried to fix a
+> leak by closing the superseded native handles as they were replaced in
+> `open_setup()`.  Because `open_with_arch()` had already copied those
+> handle values into the archetype, closing them invalidated the
+> archetype's copies.
 > 
->   - b34394d456 (Cygwin: pty: Fixup pty state after a cygwin app exits,
->     2026-06-13)
+> The archetype therefore retained stale values for those closed handles,
+> which later pty fd fhandlers would inherit. If Windows reuses one of
+> those values for a newly duplicated pcon handle, closing the stale value
+> closes the new handle instead. The nested native program then receives
+> unusable console input.
 > 
->   - 60a88896dc (Cygwin: pty: do not leak nat handles when adopting the
->     pcon's in open_setup(), 2026-06-25)
+> Preserve usable console input by moving the unchanged transactional pcon
+> handle adoption to `open()`, before the archetype snapshot. The archetype
+> then receives valid pcon handles, all pty fd fhandlers inherit live
+> handles, and the superseded raw pipe handles are closed exactly once.
 > 
->   The combination of these three commits is the trifecta that surfaces
->   that bug, and the same issue _does_ reproduce when cherry-picking those
->   backports on top of `cygwin-3_6-branch`. For your convenience, I have
->   pushed that branch to
->   https://github.com/dscho/msys2-runtime/commits/minimal-backports-for-nat-leakfix-bug
+> This commit is best viewed with `--color-moved`.
 > 
-> - The reproducer not only requires the use of Git for Windows' `git.exe`
->   (as an easy way to run a Win32 program that calls a non-Win32 Bash that
->   in turn calls a Win32 program again, I should probably have come up with
->   a command-line that uses powershell.exe instead of git.exe). In
->   addition, `git.exe`'s _strong_ preference for _its own_ `sh.exe` needs
->   to be side-stepped by defining `MSYSTEM=MINGW64` (which stops that
->   PATH-editing logic of `git.exe`):
+> Fixes: 60a88896dce0 ("Cygwin: pty: do not leak nat handles when
+>  adopting the pcon's in open_setup()")
+> Assisted-by: GPT-5.6 Sol
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> ---
+>     Fix a regression on cygwin/master
+>     
+>     I noticed this regression in Git for Windows' fork, to which I had
+>     backported the faulty commit from Cygwin's master branch.
 > 
->   MSYSTEM=MINGW64 PATH=/cygdrive/c/Program\ Files/Git/mingw64/bin:/usr/bin:$PATH git -c 'alias.console-probe=!powershell.exe -NoLogo -NoProfile -Command "Write-Output ([Console]::IsInputRedirected); try { [void][Console]::KeyAvailable; exit 0} catch {exit 1}"' console-probe
+> Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-8%2Fdscho%2Ffix-nat-handle-leakfix-cygwin-v1
+> Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-8/dscho/fix-nat-handle-leakfix-cygwin-v1
+> Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/8
+> 
+>  winsup/cygwin/fhandler/pty.cc | 44 +++++++++++++++++------------------
+>  1 file changed, 22 insertions(+), 22 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+> index f3df55f34..37a480933 100644
+> --- a/winsup/cygwin/fhandler/pty.cc
+> +++ b/winsup/cygwin/fhandler/pty.cc
+> @@ -1220,26 +1220,6 @@ fhandler_pty_slave::open (int flags, mode_t)
+>        release_attach_mutex ();
+>      }
+>  
+> -  set_open_status ();
+> -  return 1;
+> -
+> -err:
+> -  if (GetLastError () == ERROR_FILE_NOT_FOUND)
+> -    set_errno (ENXIO);
+> -  else
+> -    __seterrno ();
+> -err_no_errno:
+> -  termios_printf (errmsg);
+> -err_no_msg:
+> -  for (HANDLE **h = handles; *h; h++)
+> -    if (**h && **h != INVALID_HANDLE_VALUE)
+> -      CloseHandle (**h);
+> -  return 0;
+> -}
+> -
+> -bool
+> -fhandler_pty_slave::open_setup (int flags)
+> -{
+>    if (get_ttyp ()->pcon_activated)
+>      {
+>        HANDLE pcon_owner = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
+> @@ -1255,8 +1235,8 @@ fhandler_pty_slave::open_setup (int flags)
+>  				        0, TRUE, DUPLICATE_SAME_ACCESS);
+>  	  if (ok_in && ok_out)
+>  	    {
+> -	      /* Close the cyg master-side handles open() installed before
+> -		 replacing them, so they do not leak. */
+> +	      /* Replace these before open_with_arch() copies them into the
+> +		 archetype shared by all pty slave fhandlers. */
+>  	      CloseHandle (get_handle_nat ());
+>  	      CloseHandle (get_output_handle_nat ());
+>  	      set_handle_nat (new_in);
+> @@ -1273,6 +1253,26 @@ fhandler_pty_slave::open_setup (int flags)
+>  	}
+>      }
+>  
+> +  set_open_status ();
+> +  return 1;
+> +
+> +err:
+> +  if (GetLastError () == ERROR_FILE_NOT_FOUND)
+> +    set_errno (ENXIO);
+> +  else
+> +    __seterrno ();
+> +err_no_errno:
+> +  termios_printf (errmsg);
+> +err_no_msg:
+> +  for (HANDLE **h = handles; *h; h++)
+> +    if (**h && **h != INVALID_HANDLE_VALUE)
+> +      CloseHandle (**h);
+> +  return 0;
+> +}
+> +
+> +bool
+> +fhandler_pty_slave::open_setup (int flags)
+> +{
+>    set_flags ((flags & ~O_TEXT) | O_BINARY);
+>    myself->set_ctty (this, flags);
+>    report_tty_counts (this, "opened", "");
+> 
+> base-commit: 524d75ff73986b263161665af771cc90e55b5e01
 
-Thanks. I was able to reproduce the issue. Belatedly, I’ll review your patch.
-Please give me a little more time.
+At first glance, I thought this patch was incorrect, because open()
+is only called in the process that initially opened the pty.
+But that was a mistake on my part.
+
+Since the commit 6eed1ef74869 ("Cygwin: pty: detect pcon-backed pty
+for non-Cygwin-spawned children"), open() is also called when a cygwin
+app is started from non-cygwin app. So open() is indeed the right
+place to fix nat-handle, rather that open_setup().
+
+In the first place, my patch b34394d456b6 ("Cygwin: pty: Fixup pty
+state after a cygwin app exits") should place that logic in open().
+
+Thanks for fixing that. Pushed to master branch.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
