@@ -1,229 +1,204 @@
-Return-Path: <SRS0=Wi/b=GE=gmx.de=Johannes.Schindelin@sourceware.org>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by sourceware.org (Postfix) with ESMTPS id EE68F4BA23F6
-	for <cygwin-patches@cygwin.com>; Tue, 11 Aug 2026 10:34:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EE68F4BA23F6
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EE68F4BA23F6
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.17.21
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1786444463; cv=none;
-	b=jxePonzoxZ9/46kqcHgTSUQgpul33kwmmWsWr2Dan6rxZG2dJlJ7PV7OoAgatnqMgJDYN9U91/UOwNKj5wVAoXyAmvTWC00YIAxIwYrSt27cCqeApszymuNCaEUkhJk4dsdvsGEYkxTs6F+YLYr5AL8zfzS4mcIG0Y7sFmgedCc=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1786444463; c=relaxed/simple;
-	bh=Gt9SUJ0+wBNXP51zTKbvcOUaEoD6aQeWsQO+9FpRddE=;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=HGc8fNIvFBWP6czQI8g6hL3XusD+ifPtZjcu6ijANuT6tHfX1CXhiFJroPiBm0ByimVYC6AWGuRdaUF2TfksH01pTiivb4A5BnoExn4Z77YHK79xw0IOj7cfGX/7cJoK13Tbzdvl7FkdGGfCEzIC1zCr3Tkrl4xBNGLh5RXXPM4=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=hMqKTkn1
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EE68F4BA23F6
+Return-Path: <SRS0=2ccK=GE=gmail.com=lionelcons1972@sourceware.org>
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by sourceware.org (Postfix) with ESMTPS id 394F14BA79A6
+	for <cygwin-patches@cygwin.com>; Tue, 11 Aug 2026 21:06:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 394F14BA79A6
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 394F14BA79A6
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a00:1450:4864:20::530
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1786482370; cv=pass;
+	b=X38yDC1sY4eZdQ1WJ8TTaTSed7aN7JdT9hqP2VB8628Vla4yyUc0dg+da5YVb/rm5Dlvw8/vGvYgiF+5rDBx6O8cwoJqls+LFzhHdW6uffyRHHhz8eKJCsItk2JjRetYmR0CPrYm8ZQTlIVjuTAi0z5Jx+YnuA8dcoE1qDYVrpE=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1786482370; c=relaxed/simple;
+	bh=aURvcjjDN7eHWmeXTtfky7hItpojHzG64K66MMTXEbg=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=XHmY6Ewo1aK5CkdujabgVUyPCtdpeq1HXIz17SnbrjzXd+6CUj8Bu7yBEFVas5+BxqgRB1dPEIPSHk++ca3jZD4/LssvkRlTJtCnQk+I8L1c1XFoa0akidvGJMduzZMVFE2FNNSyEzH79ovf4zq76vGblFR0laeoqx/tLg+pj0I=
+ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZJten3KE
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 394F14BA79A6
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=hMqKTkn1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1786444461; x=1787049261;
-	i=johannes.schindelin@gmx.de;
-	bh=Humjw3zNfLLw2M1m2bvmL1UnuqMRsSEdGLyxT/dRBfE=;
-	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=hMqKTkn143Q//3h64zob7Jw+7Q45ET/Gw0pxOZfDCvS+9sPOpi8gkjzlVzl1wK09
-	 sGjPxtNM5RN3k+/dVCS931fLTSImmYsHj8rie3tBBUKjrDeyz2XqJyqcEVORVhKYA
-	 9GN8AgIyAsLcl4/lsCDx8OwiiDBB2HkQCy/CFA/IZ/7KOke49gSSnkWTSTJBq9fbo
-	 VnHSWcJanySYae+biPlQ3h4AHjIY4zK6O+yA19qtunOvIRLMVW3zC2oQGr4JCO63w
-	 Xhxn9zd0Ci17Wna72W6+ca65NU4Xj9kxfvOBu6XMhrdtBuIGGA+4jAYhSMw7+tYS9
-	 9radIlZuRWUp8YbjdQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUowb-1wTVqW2P8T-00OLT4; Tue, 11
- Aug 2026 12:34:21 +0200
-Date: Tue, 11 Aug 2026 12:34:19 +0200 (CEST)
-From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Fix regression in console input
-In-Reply-To: <20260807013620.678c7579ce2846ec0e658d6f@nifty.ne.jp>
-Message-ID: <4550afe5-7728-80a4-87b3-1565eec5609c@gmx.de>
-References: <20260803025011.5289-1-takashi.yano@nifty.ne.jp> <9a1a2379-361e-86b4-b310-d162af82a417@gmx.de> <20260807012551.c176e66e6288f13ad597d9a2@nifty.ne.jp> <20260807013620.678c7579ce2846ec0e658d6f@nifty.ne.jp>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZJten3KE
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-6a10b20634fso505794a12.3
+        for <cygwin-patches@cygwin.com>; Tue, 11 Aug 2026 14:06:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786482369; cv=none;
+        d=google.com; s=arc-20260327;
+        b=DrsRV3KJePjRoUdDrEaJZnMIIVfgE+1rQcofEhyTVsNgr8/wcakKv+17do81KNeA0z
+         +05yVcK60aVZMu5iVK5nJa4WnDrNwaFvp/1B1Ur8wYlMDc2dsOkViVEN3pPOSdlt60tS
+         wll3QJivgMp9O2iYdZEWRjQKZThIZFFmZ9mDgxzF2UrjSt89B5yP7kzMpAoqYD/GOZDi
+         vLDfpXzPwyJA/sfA93T3iGyZmIv4BCf4/iKO8Ape/DX+2edj1KJyXLctZu9sITD+StXz
+         o12hwDo0W3S9iw9gnCkfIFQwK8MPUXO3GM0oY72oY0Pi8KV5FNv2QzkENfsfxEhhgpij
+         DMXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
+        fh=TGfz9IGWS1Bu2lRfKs6RyjTeHHTS/YPw7wAB5YPVafk=;
+        b=FhESert3FLc554YamCZAWi1SB2ChS1vLLmsfsTkjmgLCCef49++4LKcvxqbSpdnBEx
+         GC3jWM5PU/jtxAhgFKgjVW+XppGMTTyETOIhZVQHyoTVYxyLLD2DueCKTneq7rJ5SxnF
+         09yYbq5e9FZsuJ0wX9A8ZDrdBbvN5QaRGm4SlvPP/ZE6W2bsE0jmTJyBcm/rIs4vxfde
+         8FnLh1BQIqGQdpXiQSetEkLI4QS6oLNM4nT6g+y6PdXAUf1lp3soIkRWs8rDdZ8zt0RH
+         +aUM14NIlQZDiXNkBoU6wPu7XOq+qUTMBUq7+3+m1cZCBvbEuFj4LiSoLonH2nT2/lAH
+         FJzQ==;
+        darn=cygwin.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786482369; x=1787087169; darn=cygwin.com;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
+        b=ZJten3KE3g6oiUpls+yF9cV6uCK99WlNpTJ9DA9WcPAjrjGXpY9JPSzzQmB+dz4LwM
+         5HSjybTjb8md+/6IcIE6JLLmfwEufa3DJfh1Olfz9zZV8KaEMyNri/KtmAhYuSSg7Fmz
+         2WXBeIDgwAd4VmqCOTqmCLinAqhue4zpa+H0wYk40YZ2td+O6SKoSxRYvDxjKZ3a0KZr
+         GJs3UsbiT79iB5N4j15TEiukkEZ9/qnNsm0H2rxU22yQXc4zfgQjg60oNpvZ7CWNL1yL
+         pkToSkCW2M1UVOCG2wSjDBePkq+m5JVgTl0aOXz8VkCQz//RLS1W2TfFdSPRtnW/Ab2y
+         UHiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786482369; x=1787087169;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
+        b=fq8rP8w1HsTMLSep0nCzknkgwiEIbcx9egva7u9xecCzb1KcbAE8vreHiIuh0szEio
+         wPRNiXAZcmP7ZrAIEyjx/twT9j2YbyBnFdJea2DDabwxXeV04dUgHYzNdWKT2sfZ3zvc
+         OiZPomq0S8BtoBF7SM8gTWpolsCpCsOvO2Lon3qgxTlUhsGCXrCPIZMmDNINfigd3N4O
+         gmOjACHhcLHW4Jg/RPZ4IErNvT8rUvu9uLLwzbjkFl7VxWzNR4EupGGli9W9Zf75JcCF
+         giglkVDD7eSw58IZ/yhZhrBrNhdO/uncO1dMSltu0TT9kvv7d/cxDSv0C4uX0KmZIfjp
+         Tb0g==
+X-Gm-Message-State: AOJu0YyveKShfKGsqZSc4CWOm+eg2tJ3qVFA43DWuxtMnoQWdMkWcUaC
+	N+C5+XqydnKou1NAm8giIzhRkB69nsMz79HfGg9JpDh5dGGt2MwhXZDMmL6c1jcTg95DiG/7EKk
+	qBgdcIlihPpderozpixMGtswELMFdIYWzv2ba
+X-Gm-Gg: AR+sD11F/YCDmQS/LfPCHjJNVHyBVgQBAd2c7LJqbpn2ga4YsiN983yGEj6ao22BJew
+	49KXbVSBYKeVFZllKbjQmI7HoCIGyPyyEShiu+z9QFyfaYEFuhG0xzntPf13MtosYewJpxeVK4r
+	Mw0wVkpeB9HN18I0fBrAA8zHS9d8oB3QqmZ8zeTHSKj+gma/3h2aTsAD6s7Ug0ufguUdC/AD2V1
+	vZ2jSj0dXaTBFYDR7wFx7KVrOSlPZP1JsGH9We7KjimydYEXiFIm5jeLkkQjgVr8Qss1y5XtfmR
+	RA7x52HOaTnIIROQyZjCp0Ayb6U02HlSUs7m57BuKCCZLQ==
+X-Received: by 2002:a05:6938:a094:10b0:c20:d4bf:6547 with SMTP id
+ a640c23a62f3a-c20f3103d69mr6351166b.32.1786482368660; Tue, 11 Aug 2026
+ 14:06:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary=8323329103285793117864444611628651
-X-Provags-ID: V03:K1:8MQytb3IdmCXZtgftPkfagHFhg/rmbiW8gQWaVkwo5lT2Gi9dPV
- BQY6B6n/kUWrQM+3fvfr5Z4VWSHU6NA9N/fsAfoOvp7a/eIQGYObAAKvXH5LaM4TQmjhwFI
- +Qx5K2we2SXnP+YjHx37CvK06cBchhqiEhP/3fIxyh3Jqt6SVFX6uLgPgFy5/55J3TlrULM
- pcQjJtMwVmYFsH96cTgzA==
-UI-OutboundReport: notjunk:1;M01:P0:Xe9yucgCgnk=;aHI025srVt9CIt8nP7wdea+M0UB
- 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
- X2zw4hA==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+From: Lionel Cons <lionelcons1972@gmail.com>
+Date: Tue, 11 Aug 2026 23:05:31 +0200
+X-Gm-Features: AUfX_mzXZEgAkHJChugSPmHI6uT6kw8XyRCwNzQddMwwKCAwHhBkLwLnQ3LYOfs
+Message-ID: <CAPJSo4UZZN2w=RhhsycAgBW9mim928K9MVw+T7O_9W2uynMD3g@mail.gmail.com>
+Subject: Patch to fix uid/gid lookup for NFSv4 filesystems
+To: cygwin-patches@cygwin.com
+Cc: ms-nfs41-client-devel@lists.sourceforge.net
+Content-Type: multipart/mixed; boundary="000000000000fb85840658cbd64a"
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+--000000000000fb85840658cbd64a
+Content-Type: text/plain; charset="UTF-8"
 
---8323329103285793117864444611628651
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+I've attached a patch
+(cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt from the
+ms-nfs41-client project) that resolves an issue with uid/gid lookups
+on Windows NFSv4 filesystems.
 
-Hi Takashi,
+Currently, Cygwin assumes that all Windows NFS clients operate
+similarly to the Windows NFSv3 client. It expects that account names
+and numeric uid/gid values are identical on both the client and server
+sides, with LDAP acting as the sole authority for these numeric
+values.
 
-On Fri, 7 Aug 2026, Takashi Yano wrote:
+However, the NFSv4 protocol fundamentally changes this paradigm. As
+defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
+for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
+protocol representation in favor of string-based identifiers (e.g.,
+user@domain and group@domain).
 
-> On Fri, 7 Aug 2026 01:25:51 +0900 Takashi Yano wrote:
-> >=20
-> > On Thu, 6 Aug 2026 16:21:49 +0200 (CEST) Johannes Schindelin wrote:
-> > >=20
-> > > On Mon, 3 Aug 2026, Takashi Yano wrote:
-> > > [...]
-> > > > +
-> > > >    for (i =3D 0; i < total_read; i ++)
-> > > >      {
-> > > >        DWORD nread =3D 1;
-> > > > @@ -1794,7 +1797,6 @@ fhandler_console::process_input_message (siz=
-e_t len)
-> > > >  	}
-> > > > =20
-> > > >        num_input_events_processed =3D i + 1;
-> > > > -      num_chars +=3D nread;
-> > > >        if (toadd)
-> > > >  	{
-> > > >  	  ssize_t ret;
-> > > > @@ -1813,21 +1815,17 @@ fhandler_console::process_input_message (s=
-ize_t len)
-> > > >  	    }
-> > > >  	}
-> > > >        /* len =3D=3D 0 if called from select.cc:peek_console() */
-> > > > -      if (len && num_chars >=3D len)
-> > > > +      if (input_ready && (len =3D=3D 0 || con_ra.ralen >=3D len))
-> > >=20
-> > > Something GPT 5.6 Sol stumbled over, before noticing that this is a
-> > > pre-existing issue: the raw multi-pass caller passes full `buflen`
-> > > (not `buflen - copied_chars`). That was already there before this
-> > > patch (and both GPT and Opus think that this is incorrect, I haven't
-> > > had time to wrap my head around it), and the new `ralen`-based check
-> > > is actually neutral-to-better; and `tcflush(TCIFLUSH)` doesn't flush
-> > > `con_ra`.
-> > >=20
-> > > I'm fairly certain that this is out of scope for this here bug fix,
-> > > if it is an issue at all (what do you think? Is this `buflen` issue
-> > > real? Should `tcflush()` also flush `con_ra`?).
-> >=20
-> > Thanks for finding this. I rechecked here and concluded passing
-> > `buflen` for process_input_message() is correct. This is because, the
-> > length check in the process_input_message is:
-> >=20
-> >       if (input_ready && (len =3D=3D 0 || con_ra.ralen >=3D len))
-> >         goto out;
-> >=20
-> > After the `while` loop, the chars in readahead data of length `con_ra.=
-ralen`
-> > will be copied into buffer of `buflen`. So the `len` should be total b=
-uffer
-> > size here.
->=20
-> `copied_chars` is always 0 here in the first place, isn't it?
+To handle this, all NFSv4 clients implement a local "idmapper"
+component that translates these string-based identities from the
+network side into local account data (in the case of Windows, mapping
+user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
+clients manage their own uid/gid translation locally, Cygwin's
+reliance on raw LDAP data fails in these environments and results in
+the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
+owner/group output in Cygwin ls -l.
 
-Not necessarily. The total-buffer-size explanation overlooks the
-`read_more` path. In non-canonical mode, `read()` jumps back there when
-fewer than `VMIN` bytes were copied, so a subsequent
-`process_input_message(buflen)` can run with `copied_chars` already
-greater than zero.
+The attached patch addresses this by detecting whether the underlying
+filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
+performs a direct pass-through of the uid/gid values supplied by the
+NFSv4 client's idmapper.
 
-For example, with `buflen =3D=3D VMIN =3D=3D 10`, the first pass may copy =
-6 bytes.
-On the second pass only 4 bytes of the caller=E2=80=99s buffer remain, but=
- passing
-10 can consume up to 10 more bytes into `con_ra`, leaving 6 in this
-process=E2=80=99s private readahead. Passing `buflen - copied_chars` would=
- stop
-after filling the remaining 4 bytes and leave later typeahead in the
-console buffer.
+I have successfully tested this fix against several major clients, including:
+- Exceed NFSv4 client
+- OpenText NFSv4 client
+- ms-nfs41-client
+- ms-nfs42-client
+- Windows NFSv3 client (no change, it continues to use LDAP raw data)
 
-The exact batching depends on `line_edit()`, but `copied_chars` is
-therefore not always zero at that call.
+Please let me know if you have any questions or require modifications
+to the patch.
 
-Ciao,
-Johannes
+Lionel
 
---8323329103285793117864444611628651--
+--000000000000fb85840658cbd64a
+Content-Type: text/plain; charset="US-ASCII"; 
+	name="cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt"
+Content-Disposition: attachment; 
+	filename="cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_msp4xq6g0>
+X-Attachment-Id: f_msp4xq6g0
+
+IyBQcm90b3R5cGUgZml4IGZvciBDeWd3aW4gRExMIHRvIGhhbmRsZSB1aWRzL2dpZHMgY29ycmVj
+dGx5IG9uCiMgTkZTdjQgZmlsZXN5c3RlbXMsIHdoaWNoIHVzdWFsbHkgdXNlIGFuIGlkbWFwcGVy
+IHRvIG1hcAojIFdpbjMyIHVzZXImZ3JvdXAgbmFtZXMgdG8gTkZTIHNlcnZlciBhY2NvdW50IG5h
+bWVzLgojIFdpdGhvdXQgTERBUCB0aGUgTkZTdjQgaWRtYXBwZXJzIHVzdWFsbHkgdXNlIEN5Z3dp
+biBvciBVV0lOIHRvIG9idGFpbiB0aGUKIyB1aWQvZ2lkIGZvciBmaWxlcywgd2hpY2ggYnJlYWtz
+IHRoZSBhc3N1bXB0aW9ucyBpbgojIHxmaGFuZGxlcl9iYXNlOjpmc3RhdF9ieV9uZnNfZWEoKXwg
+YW5kIGNhdXNlcyBpdCB0byBtYXAgYWxsIHVpZC9naWQgdmFsdWVzCiMgaW50byB0aGUgVW5peF9V
+c2VyKzx1aWQ+L1VuaXhfR3JvdXArPGdpZD4gU0lEIHJhbmdlCmRpZmYgLS1naXQgYS93aW5zdXAv
+Y3lnd2luL2ZoYW5kbGVyL2Rpc2tfZmlsZS5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvZGlz
+a19maWxlLmNjCmluZGV4IGQ1NGQzNzQ3ZS4uYTI4MGVhOWM2IDEwMDY0NAotLS0gYS93aW5zdXAv
+Y3lnd2luL2ZoYW5kbGVyL2Rpc2tfZmlsZS5jYworKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVy
+L2Rpc2tfZmlsZS5jYwpAQCAtMjE0LDcgKzIxNCw3IEBAIGZoYW5kbGVyX2Jhc2U6OmZzdGF0X2J5
+X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKICAgICAgYWNjZXNzIHRocm91Z2ggYW5vdGhlciBo
+YW5kbGUgaW52YWxpZGF0ZXMgdGhlIGNhY2hpbmcgd2l0aGluIHRoZQogICAgICBORlMgY2xpZW50
+LiAgU2tpcCB0aGlzIGZvciBDeWd3aW4tY3JlYXRlZCBTeW1saW5rcyBwbGF5aW5nIEZJRk9zCiAg
+ICAgICh0aGlzIHNldHMgdGhlIGZpbGxlcjEgbWVtYmVyIHRvIE5GM0ZJRk8pLiAqLwotICBpZiAo
+Z2V0X2hhbmRsZSAoKSAmJiBuZnNfYXR0ci0+ZmlsbGVyMSAhPSBORjNGSUZPKQorICBpZiAoZ2V0
+X2hhbmRsZSAoKSAmJiBwYy5mc19pc19uZnMzKCkgJiYgKG5mc19hdHRyLT5maWxsZXIxICE9IE5G
+M0ZJRk8pKQogICAgIHsKICAgICAgIGlmIChnZXRfYWNjZXNzICgpICYgR0VORVJJQ19XUklURSkK
+IAlGbHVzaEZpbGVCdWZmZXJzIChnZXRfaGFuZGxlICgpKTsKQEAgLTIzNiwxMSArMjM2LDE1IEBA
+IGZoYW5kbGVyX2Jhc2U6OmZzdGF0X2J5X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKIAl7CiAJ
+ICB1aWRfdCBtYXBfdWlkID0gSUxMRUdBTF9VSUQ7CiAKLQkgIGRvbWFpbiA9IGN5Z2hlYXAtPmRv
+bS5nZXRfcmZjMjMwN19kb21haW4gKCk7Ci0JICBpZiAoKGxkYXBfb3BlbiA9IChjbGRhcC5vcGVu
+IChkb21haW4pID09IE5PX0VSUk9SKSkpCi0JICAgIG1hcF91aWQgPSBjbGRhcC5yZW1hcF91aWQg
+KG5mc19hdHRyLT51aWQpOwotCSAgaWYgKG1hcF91aWQgPT0gSUxMRUdBTF9VSUQpCi0JICAgIG1h
+cF91aWQgPSBNQVBfVU5JWF9UT19DWUdXSU5fSUQgKG5mc19hdHRyLT51aWQpOworICAgICAgICAg
+IGlmIChwYy5mc19pc19uZnM0KCkpCisgICAgICAgICAgICBtYXBfdWlkID0gbmZzX2F0dHItPnVp
+ZDsKKyAgICAgICAgICBlbHNlIHsKKwkgICAgZG9tYWluID0gY3lnaGVhcC0+ZG9tLmdldF9yZmMy
+MzA3X2RvbWFpbiAoKTsKKwkgICAgaWYgKChsZGFwX29wZW4gPSAoY2xkYXAub3BlbiAoZG9tYWlu
+KSA9PSBOT19FUlJPUikpKQorCSAgICAgIG1hcF91aWQgPSBjbGRhcC5yZW1hcF91aWQgKG5mc19h
+dHRyLT51aWQpOworCSAgICBpZiAobWFwX3VpZCA9PSBJTExFR0FMX1VJRCkKKwkgICAgICBtYXBf
+dWlkID0gTUFQX1VOSVhfVE9fQ1lHV0lOX0lEIChuZnNfYXR0ci0+dWlkKTsKKyAgICAgICAgICB9
+CiAJICBjeWdoZWFwLT51Z2lkX2NhY2hlLmFkZF91aWQgKG5mc19hdHRyLT51aWQsIG1hcF91aWQp
+OwogCSAgYnVmLT5zdF91aWQgPSBtYXBfdWlkOwogCX0KQEAgLTI1NSwxMSArMjU5LDE1IEBAIGZo
+YW5kbGVyX2Jhc2U6OmZzdGF0X2J5X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKIAl7CiAJICBn
+aWRfdCBtYXBfZ2lkID0gSUxMRUdBTF9HSUQ7CiAKLQkgIGRvbWFpbiA9IGN5Z2hlYXAtPmRvbS5n
+ZXRfcmZjMjMwN19kb21haW4gKCk7Ci0JICBpZiAoKGxkYXBfb3BlbiB8fCBjbGRhcC5vcGVuIChk
+b21haW4pID09IE5PX0VSUk9SKSkKLQkgICAgbWFwX2dpZCA9IGNsZGFwLnJlbWFwX2dpZCAobmZz
+X2F0dHItPmdpZCk7Ci0JICBpZiAobWFwX2dpZCA9PSBJTExFR0FMX0dJRCkKLQkgICAgbWFwX2dp
+ZCA9IE1BUF9VTklYX1RPX0NZR1dJTl9JRCAobmZzX2F0dHItPmdpZCk7CisgICAgICAgICAgaWYg
+KHBjLmZzX2lzX25mczQoKSkKKyAgICAgICAgICAgIG1hcF9naWQgPSBuZnNfYXR0ci0+Z2lkOwor
+ICAgICAgICAgIGVsc2UgeworCSAgICBkb21haW4gPSBjeWdoZWFwLT5kb20uZ2V0X3JmYzIzMDdf
+ZG9tYWluICgpOworCSAgICBpZiAoKGxkYXBfb3BlbiB8fCBjbGRhcC5vcGVuIChkb21haW4pID09
+IE5PX0VSUk9SKSkKKwkgICAgICBtYXBfZ2lkID0gY2xkYXAucmVtYXBfZ2lkIChuZnNfYXR0ci0+
+Z2lkKTsKKwkgICAgaWYgKG1hcF9naWQgPT0gSUxMRUdBTF9HSUQpCisJICAgICAgbWFwX2dpZCA9
+IE1BUF9VTklYX1RPX0NZR1dJTl9JRCAobmZzX2F0dHItPmdpZCk7CisgICAgICAgICAgfQogCSAg
+Y3lnaGVhcC0+dWdpZF9jYWNoZS5hZGRfZ2lkIChuZnNfYXR0ci0+Z2lkLCBtYXBfZ2lkKTsKIAkg
+IGJ1Zi0+c3RfZ2lkID0gbWFwX2dpZDsKIAl9CmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2xv
+Y2FsX2luY2x1ZGVzL3BhdGguaCBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvcGF0aC5o
+CmluZGV4IGFkMTQyZGRkMy4uYjg1NTBjMDVjIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2xv
+Y2FsX2luY2x1ZGVzL3BhdGguaAorKysgYi93aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL3Bh
+dGguaApAQCAtNDIzLDYgKzQyMyw4IEBAIGNsYXNzIHBhdGhfY29udgogICBib29sIGZzX2lzX3Jl
+ZnMgKCkgY29uc3Qge3JldHVybiBmcy5pc19yZWZzICgpO30KICAgYm9vbCBmc19pc19zYW1iYSAo
+KSBjb25zdCB7cmV0dXJuIGZzLmlzX3NhbWJhICgpO30KICAgYm9vbCBmc19pc19uZnMgKCkgY29u
+c3Qge3JldHVybiBmcy5pc19uZnMgKCk7fQorICBib29sIGZzX2lzX25mczMgKCkgY29uc3Qge3Jl
+dHVybiBmcy5pc19uZnMgKCkgJiYgIWZzLmhhc19hY2xzICgpO30KKyAgYm9vbCBmc19pc19uZnM0
+ICgpIGNvbnN0IHtyZXR1cm4gZnMuaXNfbmZzICgpICYmIGZzLmhhc19hY2xzICgpO30KICAgYm9v
+bCBmc19pc19uZXRhcHAgKCkgY29uc3Qge3JldHVybiBmcy5pc19uZXRhcHAgKCk7fQogICBib29s
+IGZzX2lzX2Nkcm9tICgpIGNvbnN0IHtyZXR1cm4gZnMuaXNfY2Ryb20gKCk7fQogICBib29sIGZz
+X2lzX212ZnMgKCkgY29uc3Qge3JldHVybiBmcy5pc19tdmZzICgpO30K
+--000000000000fb85840658cbd64a--
