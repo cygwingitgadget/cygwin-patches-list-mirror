@@ -1,204 +1,185 @@
-Return-Path: <SRS0=2ccK=GE=gmail.com=lionelcons1972@sourceware.org>
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-	by sourceware.org (Postfix) with ESMTPS id 394F14BA79A6
-	for <cygwin-patches@cygwin.com>; Tue, 11 Aug 2026 21:06:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 394F14BA79A6
+Return-Path: <SRS0=p1vJ=GG=gmail.com=chenlijon@sourceware.org>
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+	by sourceware.org (Postfix) with ESMTPS id D33C04BA23F3
+	for <cygwin-patches@cygwin.com>; Thu, 13 Aug 2026 00:50:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D33C04BA23F3
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 394F14BA79A6
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a00:1450:4864:20::530
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1786482370; cv=pass;
-	b=X38yDC1sY4eZdQ1WJ8TTaTSed7aN7JdT9hqP2VB8628Vla4yyUc0dg+da5YVb/rm5Dlvw8/vGvYgiF+5rDBx6O8cwoJqls+LFzhHdW6uffyRHHhz8eKJCsItk2JjRetYmR0CPrYm8ZQTlIVjuTAi0z5Jx+YnuA8dcoE1qDYVrpE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D33C04BA23F3
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2607:f8b0:4864:20::22f
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1786582230; cv=pass;
+	b=lIwScUIqZcmkfdY2CY+QTJHPB4ZgZ+plvDGlALwGiSzSKKieD2T+ZM8YM5+1SEDmT8aTfS7mmgv7hRH8XYO+qWs1MIp4cNFeVBr3Rfpn+kTFaM90eWl8YQR9Xnp1Xi49PYlToxxhQwEizgrq472gFaNspOPprZsyKpS7u4QvEik=
 ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1786482370; c=relaxed/simple;
-	bh=aURvcjjDN7eHWmeXTtfky7hItpojHzG64K66MMTXEbg=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=XHmY6Ewo1aK5CkdujabgVUyPCtdpeq1HXIz17SnbrjzXd+6CUj8Bu7yBEFVas5+BxqgRB1dPEIPSHk++ca3jZD4/LssvkRlTJtCnQk+I8L1c1XFoa0akidvGJMduzZMVFE2FNNSyEzH79ovf4zq76vGblFR0laeoqx/tLg+pj0I=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZJten3KE
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 394F14BA79A6
+	t=1786582230; c=relaxed/simple;
+	bh=0j86FmHbm7IedKFE7QgFrp8tJxxdycGRE8d+7Hqm+0w=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=F5+ZsnJwLxH3oGTvNZJVRLxX0SzTpjL7ZCWCOtblEiaN1cU2sbxn3jL7G2uGLrvprI02/e1gNbJPKLwH9q4h/2geLAG7F/t29AH0MtkScRTAi37zELuo1xwu0SsFhPWJcQ0z48KMQTQI2VmImxqFxmQzwrcC4MXZwt/PtLH8A/0=
+ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=O9FsqS4o
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D33C04BA23F3
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZJten3KE
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-6a10b20634fso505794a12.3
-        for <cygwin-patches@cygwin.com>; Tue, 11 Aug 2026 14:06:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786482369; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=O9FsqS4o
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-497deab2d66so430970b6e.0
+        for <cygwin-patches@cygwin.com>; Wed, 12 Aug 2026 17:50:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786582228; cv=none;
         d=google.com; s=arc-20260327;
-        b=DrsRV3KJePjRoUdDrEaJZnMIIVfgE+1rQcofEhyTVsNgr8/wcakKv+17do81KNeA0z
-         +05yVcK60aVZMu5iVK5nJa4WnDrNwaFvp/1B1Ur8wYlMDc2dsOkViVEN3pPOSdlt60tS
-         wll3QJivgMp9O2iYdZEWRjQKZThIZFFmZ9mDgxzF2UrjSt89B5yP7kzMpAoqYD/GOZDi
-         vLDfpXzPwyJA/sfA93T3iGyZmIv4BCf4/iKO8Ape/DX+2edj1KJyXLctZu9sITD+StXz
-         o12hwDo0W3S9iw9gnCkfIFQwK8MPUXO3GM0oY72oY0Pi8KV5FNv2QzkENfsfxEhhgpij
-         DMXw==
+        b=oYjiKQTcxz9EB7d3WYt+7/I9/sfG5RpdceKhlBeBBbHDeSXR2D3Kqbsjn7+Uq/SuTs
+         aLdT9R1QuZLZ/fyuAbRIwkm4ivEQogWUmOrI3NkRsSQiAIyjod2TCkrdScOhi4q+xdoh
+         lsvC68n8UYPD3Ddt6EQ8DhUGztaSlu3sP69sw3XfndP5NtIgJSnD/DfcIFZCfRFezDFJ
+         WfG8M7Cp0fykeGnf35TnfXmcpY/J32lCudWyQ2cxfgLNlnGza+1xqdrpbWn6BV5i9Ep5
+         VsW7kOrdp1lwof4ShrgVw2/kP1m2GSiykss9rNowAyZSjhwwmowqyEKncoZ9Cz84/nGV
+         hpvQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
-        fh=TGfz9IGWS1Bu2lRfKs6RyjTeHHTS/YPw7wAB5YPVafk=;
-        b=FhESert3FLc554YamCZAWi1SB2ChS1vLLmsfsTkjmgLCCef49++4LKcvxqbSpdnBEx
-         GC3jWM5PU/jtxAhgFKgjVW+XppGMTTyETOIhZVQHyoTVYxyLLD2DueCKTneq7rJ5SxnF
-         09yYbq5e9FZsuJ0wX9A8ZDrdBbvN5QaRGm4SlvPP/ZE6W2bsE0jmTJyBcm/rIs4vxfde
-         8FnLh1BQIqGQdpXiQSetEkLI4QS6oLNM4nT6g+y6PdXAUf1lp3soIkRWs8rDdZ8zt0RH
-         +aUM14NIlQZDiXNkBoU6wPu7XOq+qUTMBUq7+3+m1cZCBvbEuFj4LiSoLonH2nT2/lAH
-         FJzQ==;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=LTglf7Rv04jCisEelK/MObItEW6xipRdAyIVFBkSsWc=;
+        fh=YLobnwiB6mlxg8mZw4jwzI5+9rNrzFWI954radGPi+I=;
+        b=dlee7TpQ2+sQPjMEiqj0vbpwY7Vgtr2B1+8670GyvLtgerMJWqYxpquiUdt2vt5PFj
+         OgRbO5Ulsc420TZ1t7jEVpqTYW7ZYxcfguQgY49EDP4SqNr/KW43qlu5l+H7kLY561+W
+         bEYAqOckHLybQf82QdzJ/evizo/USwjFDFr1A/gLQLEp81AHDS3go1DZVeOtStFBhgay
+         PGfQNOTPReEA1HA4tpQeXq56Szy84yygQWdjBWg7oQNqosfKotgXI27JvozaNuEi+kTy
+         fT81jgDDVEXVZ0h3yD5YxQUMVEqG4X7C04EuhuR4RzT1NUstAymfc/HPcuQ1BaRxEAvf
+         ErzQ==;
         darn=cygwin.com
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786482369; x=1787087169; darn=cygwin.com;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
-        b=ZJten3KE3g6oiUpls+yF9cV6uCK99WlNpTJ9DA9WcPAjrjGXpY9JPSzzQmB+dz4LwM
-         5HSjybTjb8md+/6IcIE6JLLmfwEufa3DJfh1Olfz9zZV8KaEMyNri/KtmAhYuSSg7Fmz
-         2WXBeIDgwAd4VmqCOTqmCLinAqhue4zpa+H0wYk40YZ2td+O6SKoSxRYvDxjKZ3a0KZr
-         GJs3UsbiT79iB5N4j15TEiukkEZ9/qnNsm0H2rxU22yQXc4zfgQjg60oNpvZ7CWNL1yL
-         pkToSkCW2M1UVOCG2wSjDBePkq+m5JVgTl0aOXz8VkCQz//RLS1W2TfFdSPRtnW/Ab2y
-         UHiQ==
+        d=gmail.com; s=20251104; t=1786582228; x=1787187028; darn=cygwin.com;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=LTglf7Rv04jCisEelK/MObItEW6xipRdAyIVFBkSsWc=;
+        b=O9FsqS4o93oGuF8wXFMRzQHeaJnyXIQERmbShXJ/DlCzDbe0VH7Z/oyX26R3kBju9G
+         r2AbaVdoimtXj/KX5rkbphLzXjpL9OxaQYeCdwdYxLjstmWmJbkZsI43hkr/RRroypCd
+         k22BfI+hi28v0Y9ZJCJ+l10aA6P3PaxUBktrApNdXV3sgffn71aMx+vtMFcESHQcpEnr
+         XNy4yK5m4ToqnWhRUc7+FWzbARNvs7CAR+7LtCNVhNlNeyufB7HBY+Jy0ISQ3LO9Wt51
+         JF1ptIgOoFWflc/aDoaaFoDqQ2KM0GkZManDnPTiC2L53kygXtzfdOLn4nQKNL5veX4j
+         sjNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786482369; x=1787087169;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=2VjxSBKiqI+AGrNvxARMAaofMOX1bh5RAy6Hbxcz7MI=;
-        b=fq8rP8w1HsTMLSep0nCzknkgwiEIbcx9egva7u9xecCzb1KcbAE8vreHiIuh0szEio
-         wPRNiXAZcmP7ZrAIEyjx/twT9j2YbyBnFdJea2DDabwxXeV04dUgHYzNdWKT2sfZ3zvc
-         OiZPomq0S8BtoBF7SM8gTWpolsCpCsOvO2Lon3qgxTlUhsGCXrCPIZMmDNINfigd3N4O
-         gmOjACHhcLHW4Jg/RPZ4IErNvT8rUvu9uLLwzbjkFl7VxWzNR4EupGGli9W9Zf75JcCF
-         giglkVDD7eSw58IZ/yhZhrBrNhdO/uncO1dMSltu0TT9kvv7d/cxDSv0C4uX0KmZIfjp
-         Tb0g==
-X-Gm-Message-State: AOJu0YyveKShfKGsqZSc4CWOm+eg2tJ3qVFA43DWuxtMnoQWdMkWcUaC
-	N+C5+XqydnKou1NAm8giIzhRkB69nsMz79HfGg9JpDh5dGGt2MwhXZDMmL6c1jcTg95DiG/7EKk
-	qBgdcIlihPpderozpixMGtswELMFdIYWzv2ba
-X-Gm-Gg: AR+sD11F/YCDmQS/LfPCHjJNVHyBVgQBAd2c7LJqbpn2ga4YsiN983yGEj6ao22BJew
-	49KXbVSBYKeVFZllKbjQmI7HoCIGyPyyEShiu+z9QFyfaYEFuhG0xzntPf13MtosYewJpxeVK4r
-	Mw0wVkpeB9HN18I0fBrAA8zHS9d8oB3QqmZ8zeTHSKj+gma/3h2aTsAD6s7Ug0ufguUdC/AD2V1
-	vZ2jSj0dXaTBFYDR7wFx7KVrOSlPZP1JsGH9We7KjimydYEXiFIm5jeLkkQjgVr8Qss1y5XtfmR
-	RA7x52HOaTnIIROQyZjCp0Ayb6U02HlSUs7m57BuKCCZLQ==
-X-Received: by 2002:a05:6938:a094:10b0:c20:d4bf:6547 with SMTP id
- a640c23a62f3a-c20f3103d69mr6351166b.32.1786482368660; Tue, 11 Aug 2026
- 14:06:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786582228; x=1787187028;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LTglf7Rv04jCisEelK/MObItEW6xipRdAyIVFBkSsWc=;
+        b=Cdwd6t8cx/2lmjWfmLe5ViBqBfYQhMadPP/6dh9cTg8ICUomiV2ccnvsnmAKyM0H99
+         4aEFsZKYHNygNMWE2AtZYAwtvqlZl6ACjXOLGzT0MglQ8Ze0IBAzXyYyACsaP5U0pfKo
+         RNi1WxB+0LHFRsLT8CyyplDMHxs/lXCkZUyKRUEwp4tWEVS34C34x542mFHQfoBZ61KF
+         fUtJGgqIhKyrTgH3p0X+iVYynkp6yMy5Xn4gLUoS9Oxanxai/U2wKKM6pn7FdaXxtPJE
+         Xh9JOI8Z/ofH0Zshj9yEfHmel/8Stk0oiQxZfKQter3OAqRAI4H514+G9P414ISjsZTa
+         eOQQ==
+X-Gm-Message-State: AOJu0YzeIhf8onY24k1UVWSWTl0eZZZNFTpyJ9oe16MeHOznFGofYwkz
+	YyCVuOSAHByJQRG/G/TW6rsMezdW8JY+07CUeveyuASCyey8UVdfw7z1K449i7Md6cWxuUAht+8
+	BeBobAYp6GQe+Fp2CByTklZuNyU0r9LaECg==
+X-Gm-Gg: AR+sD1244wh0q5SD5epClB3OGoiqFo9nDJEu1d/b9bos3fYIseimDDRkkOvPYTyBK+b
+	DFY3RBo7xalOXXyz7DEo4+GnCK/w5XuzN3x0JaINom74y5r7DKLW85pp9CJesWeXgMNtM8+BQDk
+	dD8erRI5m5JwXiebL2MIdRVL8cQjpx2cMQ/dhCc+1kUbB0HJ1pJJT1ejFfIK6d+8pKct2/KM8Aw
+	bb6ZnUGl31LTwkCVy7UzXFSY7OFHxjk0iOyoOPjE9Te/S+WLNUT20R+wrXbGS9pGg+lpl6yg8NT
+	pvmMYjMAUnPje+b1O2nwOEMoAbgcVqVXgmr52/g9vD2+iwYjRrTCYvbd7cNVBfKH7ByEnIWmNR9
+	P
+X-Received: by 2002:a05:6808:4fc7:b0:49a:7714:ed25 with SMTP id
+ 5614622812f47-4b227e66b2emr1904631b6e.3.1786582228462; Wed, 12 Aug 2026
+ 17:50:28 -0700 (PDT)
 MIME-Version: 1.0
-From: Lionel Cons <lionelcons1972@gmail.com>
-Date: Tue, 11 Aug 2026 23:05:31 +0200
-X-Gm-Features: AUfX_mzXZEgAkHJChugSPmHI6uT6kw8XyRCwNzQddMwwKCAwHhBkLwLnQ3LYOfs
-Message-ID: <CAPJSo4UZZN2w=RhhsycAgBW9mim928K9MVw+T7O_9W2uynMD3g@mail.gmail.com>
-Subject: Patch to fix uid/gid lookup for NFSv4 filesystems
+From: =?UTF-8?B?6aOb6aOb6aOb?= <chenlijon@gmail.com>
+Date: Thu, 13 Aug 2026 08:50:17 +0800
+X-Gm-Features: AUfX_myzmrsWxjuZvilLr8wSjJwEZ1aP3QsR5KBdgFDw71H9I4JaQ8xrV2uFnGw
+Message-ID: <CAD8hRBMi6qaH8xP4Zw0j0VpTz0CFLRRU2cb--H4FCZcpQ=nhEA@mail.gmail.com>
+Subject: [PATCH/RFC] console: avoid master-thread suspend request from
+ non-master processes
 To: cygwin-patches@cygwin.com
-Cc: ms-nfs41-client-devel@lists.sourceforge.net
-Content-Type: multipart/mixed; boundary="000000000000fb85840658cbd64a"
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/alternative; boundary="00000000000016f25b0658e31766"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---000000000000fb85840658cbd64a
+--00000000000016f25b0658e31766
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I've attached a patch
-(cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt from the
-ms-nfs41-client project) that resolves an issue with uid/gid lookups
-on Windows NFSv4 filesystems.
+Hi,
+I have been investigating a reproducible hang in highly parallel builds on
+Windows 11, especially while building LibreOffice with multiple jobs.
+The hang appears to involve fhandler_console::close() calling:
 
-Currently, Cygwin assumes that all Windows NFS clients operate
-similarly to the Windows NFSv3 client. It expects that account names
-and numeric uid/gid values are identical on both the client and server
-sides, with LDAP acting as the sole authority for these numeric
-values.
+set_disable_master_thread (true, this);
 
-However, the NFSv4 protocol fundamentally changes this paradigm. As
-defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
-for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
-protocol representation in favor of string-based identifiers (e.g.,
-user@domain and group@domain).
 
-To handle this, all NFSv4 clients implement a local "idmapper"
-component that translates these string-based identities from the
-network side into local account data (in the case of Windows, mapping
-user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
-clients manage their own uid/gid translation locally, Cygwin's
-reliance on raw LDAP data fails in these environments and results in
-the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
-owner/group output in Cygwin ls -l.
+even from processes that do not have a local console master thread.
 
-The attached patch addresses this by detecting whether the underlying
-filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
-performs a direct pass-through of the uid/gid values supplied by the
-NFSv4 client's idmapper.
+set_disable_master_thread() updates the shared disable_master_thread state
+and then waits for:
 
-I have successfully tested this fix against several major clients, including:
-- Exceed NFSv4 client
-- OpenText NFSv4 client
-- ms-nfs41-client
-- ms-nfs42-client
-- Windows NFSv3 client (no change, it continues to use LDAP raw data)
+while (con.master_thread_suspended !=3D x)
+  Sleep (1);
 
-Please let me know if you have any questions or require modifications
-to the patch.
+During testing I captured a case where one process published a suspend
+request (true) and started waiting for
 
-Lionel
+ master_thread_suspended =3D=3D true,
 
---000000000000fb85840658cbd64a
-Content-Type: text/plain; charset="US-ASCII"; 
-	name="cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt"
-Content-Disposition: attachment; 
-	filename="cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_msp4xq6g0>
-X-Attachment-Id: f_msp4xq6g0
+but another process later published false into the same shared state before
+the first request had completed.
 
-IyBQcm90b3R5cGUgZml4IGZvciBDeWd3aW4gRExMIHRvIGhhbmRsZSB1aWRzL2dpZHMgY29ycmVj
-dGx5IG9uCiMgTkZTdjQgZmlsZXN5c3RlbXMsIHdoaWNoIHVzdWFsbHkgdXNlIGFuIGlkbWFwcGVy
-IHRvIG1hcAojIFdpbjMyIHVzZXImZ3JvdXAgbmFtZXMgdG8gTkZTIHNlcnZlciBhY2NvdW50IG5h
-bWVzLgojIFdpdGhvdXQgTERBUCB0aGUgTkZTdjQgaWRtYXBwZXJzIHVzdWFsbHkgdXNlIEN5Z3dp
-biBvciBVV0lOIHRvIG9idGFpbiB0aGUKIyB1aWQvZ2lkIGZvciBmaWxlcywgd2hpY2ggYnJlYWtz
-IHRoZSBhc3N1bXB0aW9ucyBpbgojIHxmaGFuZGxlcl9iYXNlOjpmc3RhdF9ieV9uZnNfZWEoKXwg
-YW5kIGNhdXNlcyBpdCB0byBtYXAgYWxsIHVpZC9naWQgdmFsdWVzCiMgaW50byB0aGUgVW5peF9V
-c2VyKzx1aWQ+L1VuaXhfR3JvdXArPGdpZD4gU0lEIHJhbmdlCmRpZmYgLS1naXQgYS93aW5zdXAv
-Y3lnd2luL2ZoYW5kbGVyL2Rpc2tfZmlsZS5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIvZGlz
-a19maWxlLmNjCmluZGV4IGQ1NGQzNzQ3ZS4uYTI4MGVhOWM2IDEwMDY0NAotLS0gYS93aW5zdXAv
-Y3lnd2luL2ZoYW5kbGVyL2Rpc2tfZmlsZS5jYworKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVy
-L2Rpc2tfZmlsZS5jYwpAQCAtMjE0LDcgKzIxNCw3IEBAIGZoYW5kbGVyX2Jhc2U6OmZzdGF0X2J5
-X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKICAgICAgYWNjZXNzIHRocm91Z2ggYW5vdGhlciBo
-YW5kbGUgaW52YWxpZGF0ZXMgdGhlIGNhY2hpbmcgd2l0aGluIHRoZQogICAgICBORlMgY2xpZW50
-LiAgU2tpcCB0aGlzIGZvciBDeWd3aW4tY3JlYXRlZCBTeW1saW5rcyBwbGF5aW5nIEZJRk9zCiAg
-ICAgICh0aGlzIHNldHMgdGhlIGZpbGxlcjEgbWVtYmVyIHRvIE5GM0ZJRk8pLiAqLwotICBpZiAo
-Z2V0X2hhbmRsZSAoKSAmJiBuZnNfYXR0ci0+ZmlsbGVyMSAhPSBORjNGSUZPKQorICBpZiAoZ2V0
-X2hhbmRsZSAoKSAmJiBwYy5mc19pc19uZnMzKCkgJiYgKG5mc19hdHRyLT5maWxsZXIxICE9IE5G
-M0ZJRk8pKQogICAgIHsKICAgICAgIGlmIChnZXRfYWNjZXNzICgpICYgR0VORVJJQ19XUklURSkK
-IAlGbHVzaEZpbGVCdWZmZXJzIChnZXRfaGFuZGxlICgpKTsKQEAgLTIzNiwxMSArMjM2LDE1IEBA
-IGZoYW5kbGVyX2Jhc2U6OmZzdGF0X2J5X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKIAl7CiAJ
-ICB1aWRfdCBtYXBfdWlkID0gSUxMRUdBTF9VSUQ7CiAKLQkgIGRvbWFpbiA9IGN5Z2hlYXAtPmRv
-bS5nZXRfcmZjMjMwN19kb21haW4gKCk7Ci0JICBpZiAoKGxkYXBfb3BlbiA9IChjbGRhcC5vcGVu
-IChkb21haW4pID09IE5PX0VSUk9SKSkpCi0JICAgIG1hcF91aWQgPSBjbGRhcC5yZW1hcF91aWQg
-KG5mc19hdHRyLT51aWQpOwotCSAgaWYgKG1hcF91aWQgPT0gSUxMRUdBTF9VSUQpCi0JICAgIG1h
-cF91aWQgPSBNQVBfVU5JWF9UT19DWUdXSU5fSUQgKG5mc19hdHRyLT51aWQpOworICAgICAgICAg
-IGlmIChwYy5mc19pc19uZnM0KCkpCisgICAgICAgICAgICBtYXBfdWlkID0gbmZzX2F0dHItPnVp
-ZDsKKyAgICAgICAgICBlbHNlIHsKKwkgICAgZG9tYWluID0gY3lnaGVhcC0+ZG9tLmdldF9yZmMy
-MzA3X2RvbWFpbiAoKTsKKwkgICAgaWYgKChsZGFwX29wZW4gPSAoY2xkYXAub3BlbiAoZG9tYWlu
-KSA9PSBOT19FUlJPUikpKQorCSAgICAgIG1hcF91aWQgPSBjbGRhcC5yZW1hcF91aWQgKG5mc19h
-dHRyLT51aWQpOworCSAgICBpZiAobWFwX3VpZCA9PSBJTExFR0FMX1VJRCkKKwkgICAgICBtYXBf
-dWlkID0gTUFQX1VOSVhfVE9fQ1lHV0lOX0lEIChuZnNfYXR0ci0+dWlkKTsKKyAgICAgICAgICB9
-CiAJICBjeWdoZWFwLT51Z2lkX2NhY2hlLmFkZF91aWQgKG5mc19hdHRyLT51aWQsIG1hcF91aWQp
-OwogCSAgYnVmLT5zdF91aWQgPSBtYXBfdWlkOwogCX0KQEAgLTI1NSwxMSArMjU5LDE1IEBAIGZo
-YW5kbGVyX2Jhc2U6OmZzdGF0X2J5X25mc19lYSAoc3RydWN0IHN0YXQgKmJ1ZikKIAl7CiAJICBn
-aWRfdCBtYXBfZ2lkID0gSUxMRUdBTF9HSUQ7CiAKLQkgIGRvbWFpbiA9IGN5Z2hlYXAtPmRvbS5n
-ZXRfcmZjMjMwN19kb21haW4gKCk7Ci0JICBpZiAoKGxkYXBfb3BlbiB8fCBjbGRhcC5vcGVuIChk
-b21haW4pID09IE5PX0VSUk9SKSkKLQkgICAgbWFwX2dpZCA9IGNsZGFwLnJlbWFwX2dpZCAobmZz
-X2F0dHItPmdpZCk7Ci0JICBpZiAobWFwX2dpZCA9PSBJTExFR0FMX0dJRCkKLQkgICAgbWFwX2dp
-ZCA9IE1BUF9VTklYX1RPX0NZR1dJTl9JRCAobmZzX2F0dHItPmdpZCk7CisgICAgICAgICAgaWYg
-KHBjLmZzX2lzX25mczQoKSkKKyAgICAgICAgICAgIG1hcF9naWQgPSBuZnNfYXR0ci0+Z2lkOwor
-ICAgICAgICAgIGVsc2UgeworCSAgICBkb21haW4gPSBjeWdoZWFwLT5kb20uZ2V0X3JmYzIzMDdf
-ZG9tYWluICgpOworCSAgICBpZiAoKGxkYXBfb3BlbiB8fCBjbGRhcC5vcGVuIChkb21haW4pID09
-IE5PX0VSUk9SKSkKKwkgICAgICBtYXBfZ2lkID0gY2xkYXAucmVtYXBfZ2lkIChuZnNfYXR0ci0+
-Z2lkKTsKKwkgICAgaWYgKG1hcF9naWQgPT0gSUxMRUdBTF9HSUQpCisJICAgICAgbWFwX2dpZCA9
-IE1BUF9VTklYX1RPX0NZR1dJTl9JRCAobmZzX2F0dHItPmdpZCk7CisgICAgICAgICAgfQogCSAg
-Y3lnaGVhcC0+dWdpZF9jYWNoZS5hZGRfZ2lkIChuZnNfYXR0ci0+Z2lkLCBtYXBfZ2lkKTsKIAkg
-IGJ1Zi0+c3RfZ2lkID0gbWFwX2dpZDsKIAl9CmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2xv
-Y2FsX2luY2x1ZGVzL3BhdGguaCBiL3dpbnN1cC9jeWd3aW4vbG9jYWxfaW5jbHVkZXMvcGF0aC5o
-CmluZGV4IGFkMTQyZGRkMy4uYjg1NTBjMDVjIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2xv
-Y2FsX2luY2x1ZGVzL3BhdGguaAorKysgYi93aW5zdXAvY3lnd2luL2xvY2FsX2luY2x1ZGVzL3Bh
-dGguaApAQCAtNDIzLDYgKzQyMyw4IEBAIGNsYXNzIHBhdGhfY29udgogICBib29sIGZzX2lzX3Jl
-ZnMgKCkgY29uc3Qge3JldHVybiBmcy5pc19yZWZzICgpO30KICAgYm9vbCBmc19pc19zYW1iYSAo
-KSBjb25zdCB7cmV0dXJuIGZzLmlzX3NhbWJhICgpO30KICAgYm9vbCBmc19pc19uZnMgKCkgY29u
-c3Qge3JldHVybiBmcy5pc19uZnMgKCk7fQorICBib29sIGZzX2lzX25mczMgKCkgY29uc3Qge3Jl
-dHVybiBmcy5pc19uZnMgKCkgJiYgIWZzLmhhc19hY2xzICgpO30KKyAgYm9vbCBmc19pc19uZnM0
-ICgpIGNvbnN0IHtyZXR1cm4gZnMuaXNfbmZzICgpICYmIGZzLmhhc19hY2xzICgpO30KICAgYm9v
-bCBmc19pc19uZXRhcHAgKCkgY29uc3Qge3JldHVybiBmcy5pc19uZXRhcHAgKCk7fQogICBib29s
-IGZzX2lzX2Nkcm9tICgpIGNvbnN0IHtyZXR1cm4gZnMuaXNfY2Ryb20gKCk7fQogICBib29sIGZz
-X2lzX212ZnMgKCkgY29uc3Qge3JldHVybiBmcy5pc19tdmZzICgpO30K
---000000000000fb85840658cbd64a--
+The first process was then left waiting indefinitely.
+In the captured trace, both requesting processes had:
+
+master_thread_started =3D 0
+
+while the actual console owner/master-thread process was a different
+process.
+A minimal guard in
+ fhandler_console::close() avoids this:
+
+if (master_thread_started)
+  set_disable_master_thread (true, this);
+
+This prevents processes without a local master thread from entering the
+master-thread suspend request/wait path.
+The intent is not to change Windows process/thread scheduling. It only
+restricts Cygwin's shared console master-thread control to a process which
+actually has a local master thread.
+This also avoids non-master processes entering a wait loop whose completion
+condition may be invalidated by another process modifying the same shared
+state.
+Test results:
+
+Windows 11
+AMD Ryzen 7 9800X3D
+Intel i7-13620
+parallel LibreOffice builds
+
+repeated high-parallelism testing
+full LibreOffice build completed successfully with the guard applied
+Without the guard, I was able to reproduce the hang and capture the request
+overwrite described above.
+With the guard restored, the full LibreOffice build completed successfully
+with exit code 0.
+
+One possible trade-off is that processes without a local master thread can
+no longer request suspension of the console master thread through this
+path. So this narrows some existing cross-process master-thread control
+behavior.
+
+So far I have not observed a functional regression from this restriction on
+the tested Windows 11 systems.
+My current understanding is that the important behavioral change is very
+small: processes without master_thread_started no longer enter the
+potentially unbounded set_disable_master_thread() wait path.
+I would appreciate feedback on whether this ownership restriction is
+consistent with the intended console master-thread design.
+Thanks.
+
+
+
+
+=F0=9F=AB=86Trace Process Log=F0=9F=AB=86
+
+Process A:
+  started=3D0
+  publish disable=3D1
+  wait for suspended=3D1
+
+Process B:
+  started=3D0
+  publish disable=3D0
+  completes immediately
+
+Process A:
+  never completes
+
+--00000000000016f25b0658e31766--
