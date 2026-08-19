@@ -1,465 +1,782 @@
-Return-Path: <SRS0=Jf1Q=GL=multicorewareinc.com=aswin.kalies@sourceware.org>
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c408::1])
-	by sourceware.org (Postfix) with ESMTPS id D33FE4BA540B
-	for <cygwin-patches@cygwin.com>; Tue, 18 Aug 2026 08:35:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D33FE4BA540B
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=multicorewareinc.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=multicorewareinc.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D33FE4BA540B
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c408::1
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1787042148; cv=pass;
-	b=ZZTJZrBkSnX0JeQsinr08ue4hkRHBk9Gsib85dj2YVqAfzacLEZWjle91X49lzFy4suTMj0dYxKw9zymi2tuJ/l5AWAhinVupbw+5vw5D1B5rZJw5nW36Ea5yey/L79TPwSO0HwTPNv+B88ogHTOqbW+ZjnHgGiXfUKabkfvu6Y=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1787042148; c=relaxed/simple;
-	bh=Od6/iYIXbuQww8uzUPMEn5d2hCV5KWLU5lDMimewhQU=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=YmYEGnj4nRKYoSWpL4ai7TC1uq9wv0nW9JbYdcoSsy7cB6nj3jKYZKVZS1xwgN8TchcNHyIe5kdJVPrhKVwcOstSxC0BNLAzQxL1RQV5jtRVMzFEUH0H7K3VMrzPgcB1NsYA3y7bNTchRArAvbMXVY+r4xwm5OKhKCwFuQNvuUM=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=jojlM8v6
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D33FE4BA540B
+Return-Path: <SRS0=SG5m=GM=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 030644BA23F8
+	for <cygwin-patches@cygwin.com>; Wed, 19 Aug 2026 04:43:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 030644BA23F8
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 030644BA23F8
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1787114601; cv=none;
+	b=jcPO2/6RyMdWdtrboL7d1kS2xJRyxTAIV0SzUJlEjL+pG2OMIuf+VvgPUGl1EhMcaC++69jkAkLc9SWXMYxD7oG5zHBvLo/cRKbmM9Gr6UTW9yoPsdh4r/7CRCuutpRwAo/lDGAbGOHZPL4HxUInLlSwhtFQIr7YGkoMvCMYK5w=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1787114601; c=relaxed/simple;
+	bh=t49dCc7L6NwudW6wM2eGfR+Rpm/EB3Nsj2BJRsaD/so=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=tHa3IchLRjpfIyz5P3wmJ+Rib691600Q5NMSxpCf/QbpVLLdDeLNK//RAG+GvoR2cuBmxM05C87v+xkqGYvjG5fFOhmZ4Qkdr/9gHsHmaEze+1upb76PKipWeakTegGqMfcr6t42T5z00OJ7jJkfi6qP0zarZXOo9Whb/qXCyEA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=DEXCQOeG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 030644BA23F8
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=jojlM8v6
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jVZlDInP+KkxZERFYBxSo3etQoWQULnCRsbzqEtMJcBh/TiXqYKYKHfFhnHunby9Emukkcoxr5bjo38n+4rMTho7mWSYCfxJQS/qcaGiOQ1t7i69qBFvCkvlWnB0IiKGjWmhBzAGaMxc447wBcnj0GC0EmUwoyRssCuRFOuFiJ6dbylHVOTxv54OGYfZK/VgzLs/NOjvAp4TEmPAjR3ltInIydZCTB7rCcembLDDdgGJFv2I+xDfr7yPs5TZQnQ4QZcOxSQTDfIuOcXoeLs0N85SDYi6aZjeX+HsKjFi5R49zLkOVxC3nTxmJAL0w1nTuNLxUrI+Wdl+lGrrIcSydg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jxFAkkMSq2SEVCrJFpoJ9RJJQALvH6gaTxZpTr889oE=;
- b=owM/oLqo4dWgYwWNtf5lm9uobvPqbNl7sqJg7JJ0C3DuNkjEGl+QBEiZZM+cKAfwRoADwD0DElIZwFISahcOhhiDTD+F3h9vbHDTy6vCaiLeE5NQbswQvAQvZl74pAeusxydt5LWsPIQb4kaWB21/ikwhEyEUUswoEcSdsUDyRHNvRjtccq4vL7I4OGegWVKEBFA78uDfIBBcoRIzC5M+Noau1XqcAPEAK9zv/jlomQzCWckD9E/g3MAaldYSzy/I3xUn6qmG/Xs3rxXiUOm79X4dxlIlIafTE2cP6mg6vDe1vwF7h9YAC7Tc+CrZjaLMi1XaqAlFrPI3tG0y4RiKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=multicorewareinc.com; dmarc=pass action=none
- header.from=multicorewareinc.com; dkim=pass header.d=multicorewareinc.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=multicorewareinc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jxFAkkMSq2SEVCrJFpoJ9RJJQALvH6gaTxZpTr889oE=;
- b=jojlM8v6OmqQ9+nHS+qXbyOmbaa6Y8syP8IF7Txu+hI7xu2SBQIu2BQ5AAPYottxSw7D+q56krXYC9GFBmjn3jl3DGYnIl8frz3YadKGhIF4YcFLlmWsXY9gZLx9hp0oUy1VRk8OgGIhQkG38NHP6AbeZkcKie3bLninmUheQ/XDWOMVEld/4Zb82FexwIj4WLAOmoqFKRDG6JfAxR2gmn/L0ljHsTgabtLb7L4FZDrgFwYHo1Sub9k7v6GbjWjCZUPM958IRQQhw5xw5wRs4NRn1IsX6YQf7R5cK68vuEWkRBIM+HAGlsgSkkzkBzcNGyL4rf7NoFrR2eYMEy7XbQ==
-Received: from PN3P287MB1320.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:193::14)
- by MA0P287MB1792.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:d8::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Tue, 18 Aug
- 2026 08:35:41 +0000
-Received: from PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
- ([fe80::8f7c:54ae:2172:b97b]) by PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
- ([fe80::8f7c:54ae:2172:b97b%4]) with mapi id 15.21.0315.016; Tue, 18 Aug 2026
- 08:35:40 +0000
-From: Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH] Cygwin: autoload: drop the unused no_resolve_on_fork
- parameter
-Thread-Topic: [PATCH] Cygwin: autoload: drop the unused no_resolve_on_fork
- parameter
-Thread-Index: AQHdLust/7rWN5NIIkiSa2YonW37aQ==
-Date: Tue, 18 Aug 2026 08:35:40 +0000
-Message-ID:
- <PN3P287MB13209A14DE960126F3311558F7A62@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
-Accept-Language: en-IN, en-GB, en-US
-Content-Language: en-IN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=multicorewareinc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN3P287MB1320:EE_|MA0P287MB1792:EE_
-x-ms-office365-filtering-correlation-id: aece75b6-b17e-4535-ede9-08defd03afc0
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|23010399003|6049299003|1800799024|366016|39142699007|31052699007|18002099003|55112099003|56012099006|8096899003|4053099003|13003099007|38070700021|6133799003|5023799004|10067099003;
-x-microsoft-antispam-message-info:
- Yflnp8zVWXRHpw1CqnRVnQldERD3Lpp637BsT7PUT5K0s53W25dVd9Dz3tk0KvEvNx3N0ViMNuS7qscqy2o1lkpvBsBNA1nCCXIgFFrO81uXFf3XpfeWo43tUTtPqiN3PcDet2N78qIzwgGKaAHGa6XFfN2zbJ/8y/pEpVNks1fa4+JkXgO6tmBhRnrpK6hAvC94AQr3ljV2IW6BPAGlSPIJyG6AdOOB4Ox/3D7xkWqJVWnr+p2JYh7uGJcsxzHg12atbpmio4AKfbrHbboN/6RENITpAbqyPkFkCvKRwKnoVMLDEb8D6Ef0yIzmxI5s2s+r427/8OVzaPEi75Njb8Lw8rG84VV1dEYWcowdzwN3GvuRX10Wk4JIL9SnoJZnrMLwj+aRvNHPbuLhd3WsmKUDS8+W5WVEoWGT0pm+q6ddW+A/9+cdSC3zWB1uDtfHxZZaLV36zdKTG79xr7T3rn5iPN5QvU4ND/1CDRZCn9GJzqIaztI7+ItB3VV6KE9ILOoqGxzwPxpOdNYumc1J67V3KkxDnRV/jwBHir4nHQJsckJyq1N6ekT53AOec0OAjXysttBpTHvXjrLAumkxcC2Kljn3seKZwY+LhOGEvRtN9RS7gmlOjz1gT6KQqco1TD1boLhPzEaF8oiKj9iUaH03B5BMTwgRyTxWuzYOcbGz1yZxOB4WsX0Xk80poz5C
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN3P287MB1320.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(6049299003)(1800799024)(366016)(39142699007)(31052699007)(18002099003)(55112099003)(56012099006)(8096899003)(4053099003)(13003099007)(38070700021)(6133799003)(5023799004)(10067099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?NxULeshdp8SGR4gqpp2+nG5y668wAiGYIAUdaPBGKzxY4nXdDeqJgiMPgd?=
- =?iso-8859-1?Q?XuNhY+JsEyxLzGbz9mNlWaxeKIufzeA0HJIpgTN/pUDOzXqMyat/0SKGZJ?=
- =?iso-8859-1?Q?qOyGCuD56eFveRJmE6SAxb9ZZKSy77LM9SXk4kgjJQcP8cL7EjgUiVjtuA?=
- =?iso-8859-1?Q?xGfvduj7cP4UnLuiKsYK4fq/eFkJr6Bhm1e+Iy1hvQH9It8rT4nTtyOtnQ?=
- =?iso-8859-1?Q?ynz8BxHu+Wp/IYT1C5xHMBhDeMcYX7uc7g3fZR6RFB78Dg0LD4RCJ74Ec5?=
- =?iso-8859-1?Q?uQshQ2FWGSby//dpVevgvVaPz4oAzClye60ME2iI6NUZuym+dN4MoHrlPd?=
- =?iso-8859-1?Q?GcSayiqtYUsEzmC0KYiuM8OTBJVunylenukEQ7pXEdU14k2vmiEN5so7C1?=
- =?iso-8859-1?Q?LMil3UCelBCnGB/FZxc6UIOzynMKzuwbrXh4ffHMVaLE8lX9sdTRoudQ0T?=
- =?iso-8859-1?Q?NiCqiC2XjD+P9ww6HfIc5IqL5dZWLwOYlyutgnlkdTQkTgGaejP3KVwmRu?=
- =?iso-8859-1?Q?k7Lm/W1ueFCpkC2/eNfnQokXDH3s6WAGFE8PXZbgOVSczgB9nHCjMWFO6i?=
- =?iso-8859-1?Q?HI0P8qUst9lvKelJXhwCEyP+s2BzOLgJ1Cks4ewj/R0B8ToZsxqx+xodts?=
- =?iso-8859-1?Q?+GRySDD3HEm3VjSqiSImShfwgzwwTHLqxzerdN6m2ot5ChgsCHff07nm2l?=
- =?iso-8859-1?Q?Gb+gTbRqZiUf+2pT/SAd5fMH7KdSCiiSV2UewXsDZT02H2ndYrPS03QCJB?=
- =?iso-8859-1?Q?Uy8qxfKOlHoBGsbd68gJXJyC5PV0ITsD0iNSO7pMA+OfdjnoGCqfQoZqJj?=
- =?iso-8859-1?Q?3L1JJOBiqCaCwLx6eh5IEQKCeeFwAXPQhTF6WFdn31eaUmrgtCTIGu1GCT?=
- =?iso-8859-1?Q?0SzWj64BbM0GHUBMS6+/TKSksJksLdUr8KS6+55Mmdi39OXHBt1l/7I3KT?=
- =?iso-8859-1?Q?mCqBQAM4NJmCJ14wGv/vqFNq3gYXH0lfbSck3zU9zVNXNfpTVqwXGGIwZi?=
- =?iso-8859-1?Q?o4HeYCtTj/mDVi04qASjnHZaAVzUH/04ncLvk5DNel329b3Ghg/ZbSh+YR?=
- =?iso-8859-1?Q?3Ao9plWgccKsUN2fGkvstFu7E1biLqcuxB8mylHWSNf8MZq8kgguVphe0o?=
- =?iso-8859-1?Q?Uadjc4KkiWM6ELV/WIkWZGX8XA983FfYg4uhnbhaeON/TIqIufRpIEP6yF?=
- =?iso-8859-1?Q?PKgqDTH/RsN3mMiHoLvRREK74F0uTjvA4TA0ojOUh/KYNOkZ/Xr6hDGC5T?=
- =?iso-8859-1?Q?A5GPshZ70GDfM5IXabhjMgPyYU+EJ8VT3KqBXGkHYdfaT+/+D0FcksGuyM?=
- =?iso-8859-1?Q?ox5G9RAzJm04n0OXuAkWSJ+Fhlpe5oA/EtDK1co2Xeime20zfa6xcNpBHt?=
- =?iso-8859-1?Q?mbT6v6kl9IhgvGHMbHkG8LYNY93nTXbomTVf4N5eUre8DHas/71P6Zi1Mp?=
- =?iso-8859-1?Q?zboHjF+gZhHjj47u7hFoBmjdiE6CFIo8Zgb3vfoGQ8d+8y0LO3wifzrxt8?=
- =?iso-8859-1?Q?Nklow+APlvT6GmsOXescCanIKNdSg4QN+HVSe9GrpF5CH1ZwYFL+djzTiz?=
- =?iso-8859-1?Q?Db3DQnWrgWL/5H7El0cEo68ANLJxw2a5w2hZMb09x9Xrv/zQkkACXU2RrO?=
- =?iso-8859-1?Q?Z9SAjKB627gYPcyq8xXiyuHHSjaYzqPJdYvYYl22kl/IRLGppX20aar6ue?=
- =?iso-8859-1?Q?h2C+BIoNciVbkqZW0z/doL4PkPtVElqMv9ASviK76H7DUJkGo40llWjprt?=
- =?iso-8859-1?Q?RqkFCXpW5pNE9VC3aYLfVT/iK9G4azPw5ffgErUi70H3DYD+/YWH7qpZmG?=
- =?iso-8859-1?Q?VUsGFe7w8Oj5OxaytIDG1IGG7hOC1Vw=3D?=
-Content-Type: multipart/mixed;
-	boundary="_004_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_"
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=DEXCQOeG
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260819044315977.SCWZ.17441.HP-Z230@nifty.com>;
+          Wed, 19 Aug 2026 13:43:15 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v13] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
+Date: Wed, 19 Aug 2026 13:43:00 +0900
+Message-ID: <20260819044307.128245-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-OriginatorOrg: multicorewareinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: aece75b6-b17e-4535-ede9-08defd03afc0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2026 08:35:40.8002
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ffc5e88b-3fa2-4d69-a468-344b6b766e7d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +d8y4tXTelZjBGszrLAbnJ39m5maoBAQtNYiMskWB4TKoWLTtfS0wewEaVYnxKaJpo35NAt7eZnAwJwBLAN+2Hxf2Kqk+vfrwUq9BKbR+sjpsEjaAbEwvhr7ZoSDXblz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0P287MB1792
-X-Spam-Status: No, score=-13.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1787114596;
+ bh=OMfS67UtqQSQy+eGdVmMEoUPkmXoU0HGhff/NHoEZm4=;
+ h=From:To:Cc:Subject:Date;
+ b=DEXCQOeGRyjdtoTT0gGq54+U5Rode1LSBWtuTH7CjL+H5GFIYUG2PmqIQ6jjNwg6jIJ7h1kT
+ fQUUxtDyN5WHhgZKvFx3VxccDKEcb233wmpYTx6AZSlWxLvcoAxOETcArz1YMxhD8EouVJAj9p
+ qtr5cKWJ9Xiz7iOt7Heur5s/QRrWhIu7nJREFuHKf4ifcyv6P6EbgPG0VL0rSu6HvdLLR1QLAc
+ PGZJ6i1NoBcM/hFRW1h7xdIVEwE50Aj5M2JR/8acKc3H5j+YjutLhJY5Gd9maShnUTqDsVSxyN
+ fH5GZ1FAnqW9IPcQPmMykftsqrDu04e+WgIhVtZaXz3NXNsA==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_004_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_
-Content-Type: multipart/alternative;
-	boundary="_000_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_"
+Previously, if two non-cygwin apps are started and one of them
+exits first, the other one lost appropriate console mode, since
+the first one restored it to tty::cygwin. This patch counts the
+active console process whose pgid is pgid of the tty and if the
+result is zero (means the last non-cygwin foreground process),
+restore console mode. To avoid race issue between apps modifying
+console mode simultaneously, this patch also introduce a mutex
+named `cons_mode_mutex`.
 
---_000_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Known limitation:
+In the case of non-overlayed spawn, there still exists a small
+window in which another non-cygwin process may restore tty::cygwin
+mode even though new non-cygwin app is about to start.
 
-Hi Jon,
-
-This is the second half of the split you asked for in
-https://cygwin.com/pipermail/cygwin-patches/2026q3/015146.html
-
-You wrote:
-
-> the "fix ws2_32 chained init on AArch64" part of this looks
-> reasonable and doesn't seem to be connected. Can you submit that
-> as a separate patch?
-
-The ws2_32 half went out separately as
-https://cygwin.com/pipermail/cygwin-patches/2026q3/015160.html
-This patch is the remaining part: removing the no_resolve_on_fork
-macro parameter.  It carries no ws2_32 changes and does not depend
-on that patch; the two can go in in either order.
-
-On the earlier thread we said the flag was never consumed but did
-not identify when that became true.  It was commit 105f79b489d5
-("Drop use_dont_resolve_hack flag", Jun 2016), which removed the
-only reader:
-
-  if (!h && handle && wincap.use_dont_resolve_hack ()
-      && GetLastError () =3D=3D ERROR_INVALID_ADDRESS)
-    h =3D LoadLibraryExW (dll_path, NULL, DONT_RESOLVE_DLL_REFERENCES);
-
-The "&& handle" there was what the sentinel fed.  Once that went,
-the only remaining reader of the field became
-
-  else if ((uintptr_t) dll->handle <=3D 1)
-
-in std_dll_init, which treats 1 exactly as it treats 0.  So the
-nineteen winmm entries primed with 1 behave identically to every
-other DLL, and nothing else in the tree examines the field.
-
-The patch drops the parameter, initialises the slot to 0
-unconditionally, and simplifies the two tests to !dll->handle,
-which is equivalent once the field can no longer hold 1.  No
-functional change.
-
-Thanks and Regards,
-Aswin Kalies
-
-Inline patch
-
+Fixes: 48285aa36c2c ("Cygwin: console: Fix handling of Ctrl-S in Win7.")
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 ---
- winsup/cygwin/autoload.cc | 58 +++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 29 deletions(-)
+v2: Stop counting up/down the counter by itself.
+    Use num_active_non_cygwin_apps() instead.
+v3: Guard setup_for_non_cygwin_app() by cons_mode_mutex as well.
+v4: Guard all mode changes in console by cons_mode_mutex.
+v5: Fix the issue of mutex acquisition order.
+    Fix the race window around the process creation.
+    Improve latency of checking existence of non-cygwin apps.
+    Handle errors in checking existence of non-cygwin apps.
+v6: Match the conditions for incrementing and decrementing the counter.
+v7: Decrement the counter only if it was incremented by myself.
+v8: Symlify the conditions for incrementing and decrementing the counter
+    a bit.
+v9: Minimize the argument of set_non_cygwin_app_setup_ongoing().
+v10: Set process_state before calling spawn_worker::setup() rather than
+     using the counter. In addition, resume non-cygwin app before
+	 modifying process table. These make things much simpler.
+     Narrowing the period of acquiring input_mutex in peek_console()
+     in select.cc.
+v11: Release output_mutex before calling bg_check() in ioctl().
+     Suppress unecessary console-mode change attempts.
+v12: Change handling of disabling master thread in the case of win32
+     input mode.
+     Wait for console attaching only when the spawned app is a console
+     app. In addition, a timeout is introduced to this wait loop for
+     safety.
+v13: Do not perform cleanup for non-cygwin apps on the error in
+     active_non_cygwin_apps_exist().
+     Handle WAIT_ABANDONED in CSI?9001h/l handling.
+     Fix ABBA deadlock about echo code path.
+     Set need_win32_input_mode_fix before set_disable_master_thread()
+     in CSI?2009h/l handling.
+     Setting and checking for need_win32_input_mode_fix inside the
+     input_mutex.
+     Fix the problem that the flag need_win32_input_mode_fix is set,
+     but disable_master_thread does not set if another thread holds
+     cons_mode_mutex.
+    
+ winsup/cygwin/fhandler/console.cc       | 212 +++++++++++++++++++++---
+ winsup/cygwin/fhandler/termios.cc       |  40 +++--
+ winsup/cygwin/local_includes/fhandler.h |  12 +-
+ winsup/cygwin/select.cc                 |  14 +-
+ winsup/cygwin/spawn.cc                  |  44 ++---
+ 5 files changed, 257 insertions(+), 65 deletions(-)
 
-diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
-index 7054511b6..37c4a3438 100644
---- a/winsup/cygwin/autoload.cc
-+++ b/winsup/cygwin/autoload.cc
-@@ -85,13 +85,13 @@ bool NO_COPY wsock_started;
-    The macro WORD64 stands in for .quad/.xword, and .balign (which means
-    "align to N bytes" on all targets, unlike .align) is used for
-    alignment.  */
--#define LoadDLLprime(dllname, init_also, no_resolve_on_fork) __asm__ ("\n\
-+#define LoadDLLprime(dllname, init_also) __asm__ ("\n\
- .ifndef " #dllname "_primed                              \n\
-   .section   .data_cygwin_nocopy,\"w\"                   \n\
-   .balign    8                                           \n\
- ." #dllname "_info:                                      \n\
-   " WORD64 "   _std_dll_init                             \n\
--  " WORD64 "   " #no_resolve_on_fork "                   \n\
-+  " WORD64 "   0                                         \n\
-   .long      -1                                          \n\
-   .balign    8                                           \n\
-   " WORD64 "   " #init_also "                            \n\
-@@ -108,12 +108,12 @@ bool NO_COPY wsock_started;
- #define LoadDLLfuncEx(name, dllname, notimp) \
-   LoadDLLfuncEx2(name, dllname, notimp, 0)
- #define LoadDLLfuncEx2(name, dllname, notimp, err) \
--  LoadDLLfuncEx3(name, dllname, notimp, err, 0)
-+  LoadDLLfuncEx3(name, dllname, notimp, err)
-
- /* Main DLL setup stuff. */
- #if defined(__x86_64__)
--#define LoadDLLfuncEx3(name, dllname, notimp, err, no_resolve_on_fork) \
--  LoadDLLprime (dllname, dll_func_load, no_resolve_on_fork) \
-+#define LoadDLLfuncEx3(name, dllname, notimp, err) \
-+  LoadDLLprime (dllname, dll_func_load) \
-   __asm__ ("           \n\
-   .section ." #dllname "_autoload_text,\"wx\"  \n\
-   .global  " #name "       \n\
-@@ -138,8 +138,8 @@ _win32_" #name ":         \n\
-   .text              \n\
- ");
- #elif defined(__aarch64__)
--#define LoadDLLfuncEx3(name, dllname, notimp, err, no_resolve_on_fork) \
--  LoadDLLprime (dllname, dll_func_load, no_resolve_on_fork) \
-+#define LoadDLLfuncEx3(name, dllname, notimp, err) \
-+  LoadDLLprime (dllname, dll_func_load) \
-   __asm__ ( "\n\
-   .section   ." #dllname "_autoload_text,\"wx\"          \n\
-   .global    " #name "                                   \n\
-@@ -438,7 +438,7 @@ std_dll_init (struct func_info *func)
-  yield ();
-       }
-     while (InterlockedIncrement (&dll->here));
--  else if ((uintptr_t) dll->handle <=3D 1)
-+  else if (!dll->handle)
-     {
-       fenv_t fpuenv;
-       fegetenv (&fpuenv);
-@@ -461,7 +461,7 @@ std_dll_init (struct func_info *func)
-    if (i < RETRY_COUNT)
-      yield ();
-  }
--      if ((uintptr_t) dll->handle <=3D 1)
-+      if (!dll->handle)
-  {
-    if ((func->decoration & 1))
-      dll->handle =3D INVALID_HANDLE_VALUE;
-@@ -534,7 +534,7 @@ wsock_init (struct func_info *func)
-   return ret.ll;
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index d3fb2fcbd..7eb76e570 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -841,6 +841,7 @@ fhandler_console::setup ()
+       con.num_processed = 0;
+       con.curr_input_mode = tty::restore;
+       con.curr_output_mode = tty::restore;
++      con.need_win32_input_mode_fix = false;
+     }
  }
+ 
+@@ -977,16 +978,93 @@ fhandler_console::setup_for_non_cygwin_app ()
+      console mode. */
+   if (get_ttyp ()->getpgid () == myself->pgid)
+     {
++      WaitForSingleObject (cons_mode_mutex, INFINITE);
+       set_disable_master_thread (true, this);
+       set_input_mode (tty::native, &tc ()->ti, get_handle_set ());
+       set_output_mode (tty::native, &tc ()->ti, get_handle_set ());
++      ReleaseMutex (cons_mode_mutex);
+     }
+ }
+ 
++/* Return values
++   0: not exist
++   1: exist
++  -1: error */
++int
++fhandler_console::active_non_cygwin_apps_exist (pid_t pgid)
++{
++  tmp_pathbuf tp;
++  DWORD *list = (DWORD *) tp.c_get ();
++  const DWORD buf_size = NT_MAX_PATH / sizeof (DWORD);
++
++  DWORD buf_size1 = 1;
++  DWORD num;
++  /* The buffer of too large size does not seem to be expected by new condrv.
++     https://github.com/microsoft/terminal/issues/18264#issuecomment-2515448548
++     Use the minimum buffer size in the loop. */
++  while ((num = GetConsoleProcessList (list, buf_size1)) > buf_size1)
++    {
++      if (num > buf_size)
++	return -1;
++      buf_size1 = num;
++    }
++  if (num == 0)
++    return -1;
++
++  /* Last one is the oldest. */
++  /* https://github.com/microsoft/terminal/issues/95 */
++  /* Assuming that newer processes are more likely to be non-cygwin. */
++  for (DWORD i = 0; i < num; i++)
++    {
++      DWORD my_pid = myself->exec_dwProcessId ? : myself->dwProcessId;
++      if (list[i] == my_pid)
++	continue;
++      pid_t pid = cygwin_pid (list[i]);
++      if (pid == 0)
++	continue;
++      pinfo p (pid);
++      if (!!p && p->pgid == pgid && ISSTATE (p, PID_NOTCYGWIN))
++	return 1;
++    }
++  return 0;
++}
++
+ void
+ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+ {
+   const _minor_t unit = p->unit;
++  pid_t pgid = shared_console_info[unit] ?
++    shared_console_info[unit]->tty_min_state.getpgid () : 0;
++
++  WaitForSingleObject (p->cons_mode_mutex, INFINITE);
++  tty::cons_mode conmode = cons_mode_on_close (p);
++  if (con.curr_input_mode == conmode && con.curr_output_mode == conmode
++      && con.disable_master_thread == (con.owner == GetCurrentProcessId ()))
++    {
++      ReleaseMutex (p->cons_mode_mutex);
++      return;
++    }
++  switch (active_non_cygwin_apps_exist (pgid))
++    {
++    case -1: /* Error */
++      /* In case of an error, do not perform the cleanup, since the
++	 cygwin app has a chance to restore console mode in bg_check()
++	 called from read()/write(). So give a priority to non-cygwin
++	 apps here that may exist. */
++      system_printf("Checking for existence of non-cygwin app failed.");
++      if (con.owner == GetCurrentProcessId ())
++	/* In this case, this process is supposed to be
++	   the last non-cygwin process. */
++	break;
++      fallthrough;
++    case 1: /* Exist */
++      ReleaseMutex (p->cons_mode_mutex);
++      return;
++    case 0: /* Not exist */
++    default: /* Should not reach */
++      break;
++    }
++
+   termios dummy = {0, };
+   termios *ti = shared_console_info[unit] ?
+     &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
+@@ -994,11 +1072,11 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+   set_disable_master_thread (con.owner == GetCurrentProcessId ());
+   /* conmode can be tty::restore when non-cygwin app is
+      exec'ed from login shell. */
+-  tty::cons_mode conmode = cons_mode_on_close (p);
+   if (con.curr_output_mode != conmode)
+     set_output_mode (conmode, ti, p);
+   if (con.curr_input_mode != conmode)
+     set_input_mode (conmode, ti, p);
++  ReleaseMutex (p->cons_mode_mutex);
+ }
+ 
+ /* Return the tty structure associated with a given tty number.  If the
+@@ -1055,6 +1133,10 @@ fhandler_console::setup_io_mutex (void)
+   if (res == WAIT_OBJECT_0)
+     release_output_mutex ();
+ 
++  shared_name (buf, "cygcons.cons_mode.mutex", get_minor ());
++  if (!cons_mode_mutex)
++    cons_mode_mutex = CreateMutex (&sec_none, FALSE, buf);
++
+   extern HANDLE attach_mutex;
+   if (!attach_mutex)
+     attach_mutex = CreateMutex (&sec_none_nih, FALSE, NULL);
+@@ -1184,18 +1266,30 @@ fhandler_console::mouse_aware (MOUSE_EVENT_RECORD& mouse_event)
+ 
+ 
+ bg_check_types
+-fhandler_console::bg_check (int sig, bool dontsignal)
++fhandler_console::bg_check (int sig, bool dontsignal, bool is_echo)
+ {
+-  /* Setting-up console mode for cygwin app. This is necessary if the
+-     cygwin app and other non-cygwin apps are started simultaneously
+-     in the same process group. */
+-  if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
++  if (!is_echo)
+     {
+-      set_disable_master_thread (false, this);
+-      set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
++      /* Setting-up console mode for cygwin app. This is necessary if the
++	 cygwin app and other non-cygwin apps are started simultaneously
++	 in the same process group. */
++      WaitForSingleObject (cons_mode_mutex, INFINITE);
++      if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
++	{
++	  set_disable_master_thread (false, this);
++	  set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
++	}
++      else if (con.curr_input_mode == tty::cygwin)
++	{
++	  /* win32_input_mode fix */
++	  set_disable_master_thread (con.disable_master_thread);
++	  set_input_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
++	}
++      if ((sig == SIGTTOU || (get_ttyp ()->ti.c_lflag & ECHO))
++	  && con.curr_output_mode != tty::cygwin)
++	set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
++      ReleaseMutex (cons_mode_mutex);
+     }
+-  if (sig == SIGTTOU && con.curr_output_mode != tty::cygwin)
+-    set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
+ 
+   return fhandler_termios::bg_check (sig, dontsignal);
+ }
+@@ -2011,18 +2105,26 @@ fhandler_console::open (int flags, mode_t)
+   if (in_is_console)
+     CloseHandle (h_in);
+ 
++  WaitForSingleObject (cons_mode_mutex, INFINITE);
+   if (in_is_console && con.curr_input_mode != tty::cygwin)
+     {
+       prev_input_mode_backup = con.prev_input_mode;
+       GetConsoleMode (get_handle (), &con.prev_input_mode);
+       set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+     }
++  else if (con.curr_input_mode == tty::cygwin)
++    {
++      /* win32_input_mode fix */
++      set_disable_master_thread (con.disable_master_thread);
++      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
+   if (out_is_console && con.curr_output_mode != tty::cygwin)
+     {
+       prev_output_mode_backup = con.prev_output_mode;
+       GetConsoleMode (get_output_handle (), &con.prev_output_mode);
+       set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+     }
++  ReleaseMutex (cons_mode_mutex);
+ 
+   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
+ 		get_output_handle ());
+@@ -2106,6 +2208,7 @@ fhandler_console::open_setup (int flags)
+       handle_set.output_handle = get_output_handle ();
+       handle_set.input_mutex = input_mutex;
+       handle_set.output_mutex = output_mutex;
++      handle_set.cons_mode_mutex = cons_mode_mutex;
+       handle_set.unit = unit;
+     }
+   return fhandler_base::open_setup (flags);
+@@ -2115,6 +2218,7 @@ void
+ fhandler_console::post_open_setup (int fd)
+ {
+   /* Setting-up console mode for cygwin app started from non-cygwin app. */
++  WaitForSingleObject (cons_mode_mutex, INFINITE);
+   if (fd == 0)
+     {
+       set_disable_master_thread (false, this);
+@@ -2122,6 +2226,13 @@ fhandler_console::post_open_setup (int fd)
+     }
+   else if (fd == 1 || fd == 2)
+     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++  if (fd != 0 && con.curr_input_mode == tty::cygwin)
++    {
++      /* win32_input_mode fix */
++      set_disable_master_thread (con.disable_master_thread);
++      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
++  ReleaseMutex (cons_mode_mutex);
+ 
+   fhandler_base::post_open_setup (fd);
+ }
+@@ -2131,18 +2242,20 @@ fhandler_console::close (int flag)
+ {
+   debug_printf ("closing: %p, %p", get_handle (), get_output_handle ());
+ 
+-  acquire_output_mutex (mutex_timeout);
+-
+   if (shared_console_info[unit] && (dev_t) myself->ctty == get_device ()
+       && cons_mode_on_close (&handle_set) == tty::restore)
+     {
++      WaitForSingleObject (cons_mode_mutex, INFINITE);
+       set_disable_master_thread (true, this);
+       if (con.curr_output_mode != tty::restore)
+ 	set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
+       if (con.curr_input_mode != tty::restore)
+ 	set_input_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
++      ReleaseMutex (cons_mode_mutex);
+     }
+ 
++  acquire_output_mutex (mutex_timeout);
++
+   if (shared_console_info[unit] && con.owner == GetCurrentProcessId ())
+     {
+       if (master_thread_started)
+@@ -2197,6 +2310,8 @@ fhandler_console::close (int flag)
+   input_mutex = NULL;
+   CloseHandle (output_mutex);
+   output_mutex = NULL;
++  CloseHandle (cons_mode_mutex);
++  cons_mode_mutex = NULL;
+ 
+   pcon_hand_over_proc ();
+ 
+@@ -2246,8 +2361,8 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	release_output_mutex ();
+ 	return 0;
+       case TIOCSWINSZ:
+-	bg_check (SIGTTOU);
+ 	release_output_mutex ();
++	bg_check (SIGTTOU);
+ 	return 0;
+       case KDGKBMETA:
+ 	*(int *) arg = (con.metabit) ? K_METABIT : K_ESCPREFIX;
+@@ -2372,10 +2487,16 @@ int
+ fhandler_console::tcsetattr (int a, struct termios const *t)
+ {
+   get_ttyp ()->ti = *t;
++  WaitForSingleObject (cons_mode_mutex, INFINITE);
+   if (con.curr_input_mode == tty::cygwin)
+-    set_input_mode (tty::cygwin, t, &handle_set);
++    {
++      /* win32_input_mode fix */
++      set_disable_master_thread (con.disable_master_thread);
++      set_input_mode (tty::cygwin, t, &handle_set);
++    }
+   if (con.curr_output_mode == tty::cygwin)
+     set_output_mode (tty::cygwin, t, &handle_set);
++  ReleaseMutex (cons_mode_mutex);
+   return 0;
+ }
+ 
+@@ -3143,10 +3264,22 @@ fhandler_console::char_command (char c)
+ 		    con.cursor_key_app_mode = (c == 'h');
+ 		  if (con.args[i] == 9001) /* win32-input-mode (https://github.com/microsoft/terminal/blob/main/doc/specs/%234999%20-%20Improved%20keyboard%20handling%20in%20Conpty.md) */
+ 		    {
+-		      set_disable_master_thread (c == 'h', this);
+-		      if (con.curr_input_mode == tty::cygwin)
+-			set_input_mode (tty::cygwin,
+-					&tc ()->ti, get_handle_set ());
++		      /* The correct order of acquiring mutex should be
++			 cons_mode_mutex first, then output_mutex.
++			 However, here, output_mutex is already acquired.
++			 So, to avoid deadlock, if another mode change is
++			 ongoing concurrently, set the flag requesting
++			 a fixup for win32-input-mode. */
++		      con.need_win32_input_mode_fix = (c == 'h');
++		      DWORD wret = WaitForSingleObject (cons_mode_mutex, 0);
++		      if (wret == WAIT_OBJECT_0 || wret == WAIT_ABANDONED)
++			{
++			  set_disable_master_thread (c == 'h', this);
++			  if (con.curr_input_mode == tty::cygwin)
++			    set_input_mode (tty::cygwin,
++					    &tc ()->ti, get_handle_set ());
++			  ReleaseMutex (cons_mode_mutex);
++			}
+ 		    }
+ 		}
+ 	      /* Call fix_tab_position() if screen has been alternated. */
+@@ -3977,9 +4110,9 @@ do_print:
+ }
+ 
+ ssize_t
+-fhandler_console::write (const void *vsrc, size_t len)
++fhandler_console::write (const void *vsrc, size_t len, bool is_echo)
+ {
+-  bg_check_types bg = bg_check (SIGTTOU);
++  bg_check_types bg = bg_check (SIGTTOU, false, is_echo);
+   if (bg <= bg_eof)
+     return (ssize_t) bg;
+ 
+@@ -4339,7 +4472,7 @@ fhandler_console::doecho (const void *str, DWORD len)
+ {
+   int stopped = get_ttyp ()->output_stopped;
+   get_ttyp ()->output_stopped = 0;
+-  write (str, len);
++  write (str, len, true);
+   get_ttyp ()->output_stopped = stopped;
+ }
+ 
+@@ -4478,10 +4611,13 @@ fhandler_console::set_console_mode_to_native ()
+ 	fhandler_console *cons = (fhandler_console *) (fhandler_base *) cfd;
+ 	if (cons->get_device () == cons->tc ()->getntty ())
+ 	  {
++	    const fhandler_console::handle_set_t *p = cons->get_handle_set ();
++	    WaitForSingleObject (p->cons_mode_mutex, INFINITE);
+ 	    set_disable_master_thread (true, cons);
+ 	    termios *cons_ti = &cons->tc ()->ti;
+-	    set_input_mode (tty::native, cons_ti, cons->get_handle_set ());
+-	    set_output_mode (tty::native, cons_ti, cons->get_handle_set ());
++	    set_input_mode (tty::native, cons_ti, p);
++	    set_output_mode (tty::native, cons_ti, p);
++	    ReleaseMutex (p->cons_mode_mutex);
+ 	    break;
+ 	  }
+       }
+@@ -4538,8 +4674,17 @@ ContinueDebugEvent_Hooked
+ static FARPROC
+ GetProcAddress_Hooked (HMODULE h, LPCSTR n)
+ {
+-  if (strcmp(n, "RequestTermConnector") == 0)
+-    fhandler_console::set_disable_master_thread (true);
++  if (cygheap->ctty && strcmp(n, "RequestTermConnector") == 0)
++    {
++      char buf[MAX_PATH];
++      const _minor_t unit = cygheap->ctty->get_minor ();
++      shared_name (buf, "cygcons.cons_mode.mutex", unit);
++      HANDLE cons_mode_mutex = CreateMutex (&sec_none, FALSE, buf);
++      WaitForSingleObject (cons_mode_mutex, INFINITE);
++      fhandler_console::set_disable_master_thread (true);
++      ReleaseMutex (cons_mode_mutex);
++      CloseHandle (cons_mode_mutex);
++    }
+   return GetProcAddress_Orig (h, n);
+ }
+ 
+@@ -4820,6 +4965,9 @@ fhandler_console::get_duplicated_handle_set (handle_set_t *p)
+   DuplicateHandle (GetCurrentProcess (), output_mutex,
+ 		   GetCurrentProcess (), &p->output_mutex,
+ 		   0, FALSE, DUPLICATE_SAME_ACCESS);
++  DuplicateHandle (GetCurrentProcess (), cons_mode_mutex,
++		   GetCurrentProcess (), &p->cons_mode_mutex,
++		   0, FALSE, DUPLICATE_SAME_ACCESS);
+   p->unit = unit;
+ }
+ 
+@@ -4836,6 +4984,8 @@ fhandler_console::close_handle_set (handle_set_t *p)
+   p->input_mutex = NULL;
+   CloseHandle (p->output_mutex);
+   p->output_mutex = NULL;
++  CloseHandle (p->cons_mode_mutex);
++  p->cons_mode_mutex = NULL;
+ }
+ 
+ bool
+@@ -4856,6 +5006,18 @@ fhandler_console::set_disable_master_thread (bool x, fhandler_console *cons)
+     }
+   const _minor_t unit = cons->get_minor ();
+   cons->acquire_input_mutex (mutex_timeout);
++  if (con.need_win32_input_mode_fix)
++    /* Even when enabling cons_master_thread is requested, the master
++       thread should not be enabled if win32_input_mode is set. */
++    {
++      if (con.disable_master_thread)
++	{
++	  cons->release_input_mutex ();
++	  return;
++	}
++      else
++	x = true;
++    }
+   con.disable_master_thread = x;
+   cons->release_input_mutex ();
+   while (con.master_thread_suspended != x)
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index ee576a0a8..0134ec8b8 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -830,20 +830,37 @@ void
+ fhandler_termios::spawn_worker::cleanup ()
+ {
+   if (ptys_need_cleanup)
+-    fhandler_pty_slave::cleanup_for_non_cygwin_app (&ptys_handle_set,
+-						    ptys_ttyp, stdin_is_ptys);
++    {
++      fhandler_pty_slave::cleanup_for_non_cygwin_app (&ptys_handle_set,
++						      ptys_ttyp, stdin_is_ptys);
++      fhandler_pty_slave::close_handle_set (&ptys_handle_set);
++      ptys_need_cleanup = false;
++    }
+   if (cons_need_cleanup)
+-    fhandler_console::cleanup_for_non_cygwin_app (&cons_handle_set);
+-  close_handle_set ();
++    {
++      fhandler_console::cleanup_for_non_cygwin_app (&cons_handle_set);
++      fhandler_console::close_handle_set (&cons_handle_set);
++      cons_need_cleanup = false;
++    }
++}
++
++bool
++fhandler_termios::spawn_worker::is_attaching (DWORD pid)
++{
++  return !!fhandler_termios::get_console_process_id (pid, true);
+ }
+ 
+ void
+-fhandler_termios::spawn_worker::close_handle_set ()
++fhandler_termios::spawn_worker::wait_for_resume_if_necessary
++			      (path_conv &pc, PROCESS_INFORMATION &pi)
+ {
+-  if (ptys_need_cleanup)
+-    fhandler_pty_slave::close_handle_set (&ptys_handle_set);
+-  if (cons_need_cleanup)
+-    fhandler_console::close_handle_set (&cons_handle_set);
++  if (is_attaching (myself->dwProcessId) && is_console_app (pc))
++    {
++      DWORD t0 = GetTickCount ();
++      while (GetTickCount () - t0 < 40 && !is_attaching (pi.dwProcessId)
++	     && WaitForSingleObject (pi.hProcess, 0) == WAIT_TIMEOUT)
++	Sleep (1);
++    }
+ }
+ 
+ void
+@@ -916,7 +933,10 @@ fhandler_termios::get_console_process_id (DWORD pid, bool match,
+ 	  }
+ 	else
+ 	  {
+-	    pinfo p (cygwin_pid (list[i]));
++	    pid_t cygpid = cygwin_pid (list[i]);
++	    if (cygpid == 0)
++	      continue;
++	    pinfo p (cygpid);
+ 	    if (nat && !!p && !ISSTATE(p, PID_NOTCYGWIN))
+ 	      continue;
+ 	    if (!!p && p->exec_dwProcessId)
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index d11b3ec4f..9a3c164eb 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2023,6 +2023,7 @@ class fhandler_termios: public fhandler_base
+     HANDLE output_handle;
+     HANDLE input_mutex;
+     HANDLE output_mutex;
++    HANDLE cons_mode_mutex;
+     _minor_t unit;
+   };
+   class spawn_worker
+@@ -2042,7 +2043,8 @@ class fhandler_termios: public fhandler_base
+ 		bool nopcon, bool reset_sendsig, const WCHAR *envblock);
+     bool need_cleanup () { return ptys_need_cleanup || cons_need_cleanup; }
+     void cleanup ();
+-    void close_handle_set ();
++    bool is_attaching (DWORD pid);
++    void wait_for_resume_if_necessary (path_conv &, PROCESS_INFORMATION &);
+   };
+ };
+ 
+@@ -2157,6 +2159,7 @@ class dev_console
+   volatile bool master_thread_suspended;
+   int num_processed; /* Number of input events in the current input buffer
+ 			already processed by cons_master_thread(). */
++  bool need_win32_input_mode_fix;
+ 
+   inline UINT get_console_cp ();
+   DWORD con_to_str (char *d, int dlen, WCHAR w);
+@@ -2199,6 +2202,7 @@ private:
+   static console_state *shared_console_info[MAX_CONS_DEV + 1];
+   static bool invisible_console;
+   HANDLE input_mutex, output_mutex;
++  HANDLE cons_mode_mutex;
+   handle_set_t handle_set;
+   _minor_t unit;
+   size_t num_input_events_processed;
+@@ -2267,7 +2271,7 @@ private:
+   int dup (fhandler_base *, int);
+ 
+   void read (void *ptr, size_t& len);
+-  ssize_t write (const void *ptr, size_t len);
++  ssize_t write (const void *ptr, size_t len, bool is_echo = false);
+   void doecho (const void *str, DWORD len);
+   int close (int flag = -1);
+   static bool exists ()
+@@ -2329,7 +2333,8 @@ private:
+     return fh;
+   }
+   input_states process_input_message (size_t len);
+-  bg_check_types bg_check (int sig, bool dontsignal = false);
++  bg_check_types bg_check (int sig, bool dontsignal = false,
++			   bool is_echo = false);
+   void setup_io_mutex (void);
+   DWORD __acquire_input_mutex (const char *fn, int ln, DWORD ms);
+   void __release_input_mutex (const char *fn, int ln);
+@@ -2379,6 +2384,7 @@ private:
+   void setup_pcon_hand_over ();
+   static void pcon_hand_over_proc ();
+   static tty::cons_mode cons_mode_on_close (handle_set_t *);
++  static int active_non_cygwin_apps_exist (pid_t pgid);
+ 
+   friend tty_min * tty_list::get_cttyp ();
+ };
+diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+index b72083447..592f6d14d 100644
+--- a/winsup/cygwin/select.cc
++++ b/winsup/cygwin/select.cc
+@@ -1154,23 +1154,23 @@ peek_console (select_record *me, bool)
+   HANDLE h;
+   set_handle_or_return_if_not_open (h, me);
+ 
+-  fh->acquire_input_mutex (mutex_timeout);
+   while (!fh->input_ready && !fh->get_cons_readahead_valid ())
+     {
+       if (fh->bg_check (SIGTTIN, true) <= bg_eof)
+-	{
+-	  fh->release_input_mutex ();
+-	  return me->read_ready = true;
+-	}
++	return me->read_ready = true;
+       else
+ 	{
++	  fh->acquire_input_mutex (mutex_timeout);
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  DWORD resume_pid = fh->attach_console (fh->get_owner ());
+ 	  BOOL r = PeekConsoleInputW (h, &irec, 1, &events_read);
+ 	  fh->detach_console (resume_pid, fh->get_owner ());
+ 	  release_attach_mutex ();
+ 	  if (!r || !events_read)
+-	    break;
++	    {
++	      fh->release_input_mutex ();
++	      break;
++	    }
+ 	}
+       if (fhandler_console::input_winch == fh->process_input_message (0)
+ 	  && global_sigs[SIGWINCH].sa_handler != SIG_IGN
+@@ -1180,8 +1180,8 @@ peek_console (select_record *me, bool)
+ 	  fh->release_input_mutex ();
+ 	  return -1;
+ 	}
++      fh->release_input_mutex ();
+     }
+-  fh->release_input_mutex ();
+   if (fh->input_ready || fh->get_cons_readahead_valid ())
+     return me->read_ready = true;
+ 
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 8f976b9a0..abaa34d32 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -559,6 +559,14 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 			 PROCESS_QUERY_LIMITED_INFORMATION))
+ 	sa = &sec_none_nih;
+ 
++      if (!real_path.iscygexec () && mode == _P_OVERLAY)
++	{
++	  LONG pidflags = PID_NOTCYGWIN;
++	  if (c_flags & CREATE_NEW_PROCESS_GROUP)
++	    pidflags |= PID_NEW_PG;
++	  InterlockedOr ((LONG *) &myself->process_state, pidflags);
++	}
++
+       int fileno_stdin = in__stdin < 0 ? 0 : in__stdin;
+       int fileno_stdout = in__stdout < 0 ? 1 : in__stdout;
+       int fileno_stderr = 2;
+@@ -586,14 +594,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	 up on ruid. The new process will have ruid == euid. */
+       ::cygheap->user.deimpersonate ();
+ 
+-      if (!real_path.iscygexec () && mode == _P_OVERLAY)
+-	{
+-	  LONG pidflags = PID_NOTCYGWIN;
+-	  if (c_flags & CREATE_NEW_PROCESS_GROUP)
+-	    pidflags |= PID_NEW_PG;
+-	  InterlockedOr ((LONG *) &myself->process_state, pidflags);
+-	}
+-
+       cygpid = (mode != _P_OVERLAY) ? create_cygwin_pid () : myself->pid;
+ 
+       cygheap->lock ();
+@@ -737,6 +737,18 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       /* Name the handle similarly to proc_subproc. */
+       ProtectHandle1 (pi.hProcess, childhProc);
+ 
++      /* Start the child running for non-cygwin process*/
++      if (!iscygwin () && (c_flags & CREATE_SUSPENDED))
++	{
++	  /* Inject a non-inheritable wr_proc_pipe handle into child so that we
++	     can accurately track when the child exits without keeping this
++	     process waiting around for it to exit.  */
++	  DuplicateHandle (GetCurrentProcess (), wr_proc_pipe, pi.hProcess,
++			   NULL, 0, false, DUPLICATE_SAME_ACCESS);
++	  ResumeThread (pi.hThread);
++	  term_spawn_worker.wait_for_resume_if_necessary (real_path, pi);
++	}
++
+       if (mode == _P_OVERLAY)
+ 	{
+ 	  myself->dwProcessId = pi.dwProcessId;
+@@ -810,18 +822,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	    }
+ 	}
+ 
+-      /* Start the child running */
+-      if (c_flags & CREATE_SUSPENDED)
++      /* Start the child running for cygwin process*/
++      if (iscygwin () && (c_flags & CREATE_SUSPENDED))
+ 	{
+-	  /* Inject a non-inheritable wr_proc_pipe handle into child so that we
+-	     can accurately track when the child exits without keeping this
+-	     process waiting around for it to exit.  */
+-	  if (!iscygwin ())
+-	    DuplicateHandle (GetCurrentProcess (), wr_proc_pipe, pi.hProcess, NULL,
+-			     0, false, DUPLICATE_SAME_ACCESS);
+ 	  ResumeThread (pi.hThread);
+-	  if (iscygwin ())
+-	    strace.write_childpid (pi.dwProcessId);
++	  strace.write_childpid (pi.dwProcessId);
+ 	}
+       ForceCloseHandle (pi.hThread);
+ 
+@@ -868,7 +873,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 		prev_sigExeced =
+ 		  InterlockedCompareExchange (&sigExeced, 0, prev_sigExeced);
+ 	      term_spawn_worker.cleanup ();
+-	      term_spawn_worker.close_handle_set ();
+ 	    }
+ 	  /* Make sure that ctrl_c_handler() is not on going. Calling
+ 	     init_console_handler(false) locks until returning from
+@@ -906,7 +910,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       res = -1;
+     }
+   __endtry
+-  term_spawn_worker.close_handle_set ();
++  term_spawn_worker.cleanup ();
+   this->cleanup ();
+   if (envblock)
+     free (envblock);
+-- 
+2.51.0
 
--LoadDLLprime (ws2_32, _wsock_init, 0)
-+LoadDLLprime (ws2_32, _wsock_init)
-
- LoadDLLfunc (CheckTokenMembership, advapi32)
- LoadDLLfunc (CreateProcessAsUserW, advapi32)
-@@ -711,25 +711,25 @@ LoadDLLfuncEx2 (CreateProfile, userenv, 1, 1)
- LoadDLLfunc (DestroyEnvironmentBlock, userenv)
- LoadDLLfunc (LoadUserProfileW, userenv)
-
--LoadDLLfuncEx3 (waveInAddBuffer, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInClose, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInGetNumDevs, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInOpen, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInPrepareHeader, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInReset, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInStart, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveInUnprepareHeader, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutClose, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutGetNumDevs, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutGetVolume, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutOpen, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutPrepareHeader, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutReset, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutSetVolume, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutUnprepareHeader, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutWrite, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutMessage, winmm, 1, 0, 1)
--LoadDLLfuncEx3 (waveOutGetDevCapsA, winmm, 1, 0, 1)
-+LoadDLLfuncEx3 (waveInAddBuffer, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInClose, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInGetNumDevs, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInOpen, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInPrepareHeader, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInReset, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInStart, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveInUnprepareHeader, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutClose, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutGetNumDevs, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutGetVolume, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutOpen, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutPrepareHeader, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutReset, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutSetVolume, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutUnprepareHeader, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutWrite, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutMessage, winmm, 1, 0)
-+LoadDLLfuncEx3 (waveOutGetDevCapsA, winmm, 1, 0)
-
- LoadDLLfunc (accept, ws2_32)
- LoadDLLfunc (bind, ws2_32)
---
-2.49.0.windows.1
-
-
-
-
---_000_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_--
-
---_004_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_
-Content-Type: application/octet-stream;
-	name="cygwin-autoload-drop-no_resolve_on_fork.patch"
-Content-Description: cygwin-autoload-drop-no_resolve_on_fork.patch
-Content-Disposition: attachment;
-	filename="cygwin-autoload-drop-no_resolve_on_fork.patch"; size=6509;
-	creation-date="Tue, 18 Aug 2026 08:31:58 GMT";
-	modification-date="Tue, 18 Aug 2026 08:32:46 GMT"
-Content-Transfer-Encoding: base64
-
-RnJvbSBkNDQ0MTgzMzNlNWUwNDc2OTRiMmJmODgwYzUwZGY2NWFhNTA1YThk
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBBc3dpbiBLYWxpZXMg
-UmFta3VtYXIgTWFuZ2F5YXJrYXJhc2kgPGFzd2luLmthbGllc0BtdWx0aWNv
-cmV3YXJlaW5jLmNvbT4KRGF0ZTogVHVlLCAxOCBBdWcgMjAyNiAxMDowOToy
-NyArMDUzMApTdWJqZWN0OiBbUEFUQ0hdIEN5Z3dpbjogYXV0b2xvYWQ6IGRy
-b3AgdGhlIHVudXNlZCBub19yZXNvbHZlX29uX2ZvcmsKIHBhcmFtZXRlcgoK
-VGhlIHNlY29uZCB3b3JkIG9mIGVhY2ggRExMIGluZm8gYmxvY2sgaXMgaW5p
-dGlhbGlzZWQgZnJvbSB0aGUKbm9fcmVzb2x2ZV9vbl9mb3JrIG1hY3JvIHBh
-cmFtZXRlciBhbmQgbGFuZHMgaW4gZGxsX2luZm86OmhhbmRsZS4gIEl0cwpv
-bmx5IGNvbnN1bWVyIHdhcyB0aGUgRE9OVF9SRVNPTFZFX0RMTF9SRUZFUkVO
-Q0VTIHJldHJ5IGluIGRsbF9sb2FkLAoKICBpZiAoIWggJiYgaGFuZGxlICYm
-IHdpbmNhcC51c2VfZG9udF9yZXNvbHZlX2hhY2sgKCkKICAgICAgJiYgR2V0
-TGFzdEVycm9yICgpID09IEVSUk9SX0lOVkFMSURfQUREUkVTUykKICAgIGgg
-PSBMb2FkTGlicmFyeUV4VyAoZGxsX3BhdGgsIE5VTEwsIERPTlRfUkVTT0xW
-RV9ETExfUkVGRVJFTkNFUyk7Cgp3aGljaCBjb21taXQgMTA1Zjc5YjQ4OWQ1
-ICgiRHJvcCB1c2VfZG9udF9yZXNvbHZlX2hhY2sgZmxhZyIpIHJlbW92ZWQg
-aW4KMjAxNi4gIFRoZSB2YWx1ZSBoYXMgYmVlbiBkZWFkIGV2ZXIgc2luY2U6
-IHRoZSBuaW5ldGVlbiB3aW5tbSBlbnRyaWVzCmFyZSB0aGUgb25seSBvbmVz
-IHByaW1lZCB3aXRoIDEsIGFuZCB0aGUgc29sZSByZW1haW5pbmcgdGVzdCwK
-CiAgZWxzZSBpZiAoKHVpbnRwdHJfdCkgZGxsLT5oYW5kbGUgPD0gMSkKCmlu
-IHN0ZF9kbGxfaW5pdCwgdHJlYXRzIDEgZXhhY3RseSBhcyBpdCB0cmVhdHMg
-MCwgc28gdGhvc2UgZW50cmllcwpiZWhhdmUgaWRlbnRpY2FsbHkgdG8gZXZl
-cnkgb3RoZXIgRExMLgoKRHJvcCB0aGUgcGFyYW1ldGVyIGZyb20gTG9hZERM
-THByaW1lIGFuZCBMb2FkRExMZnVuY0V4MywgaW5pdGlhbGlzZSB0aGUKc2xv
-dCB0byAwIHVuY29uZGl0aW9uYWxseSwgYW5kIHNpbXBsaWZ5IHRoZSB0d28g
-dGVzdHMgdG8gIWRsbC0+aGFuZGxlCm5vdyB0aGF0IHRoZSBmaWVsZCBjYW4g
-bmV2ZXIgaG9sZCAxLgoKTm8gZnVuY3Rpb25hbCBjaGFuZ2UuCgpTaWduZWQt
-b2ZmLWJ5OiBBc3dpbiBLYWxpZXMgPGFzd2luLmthbGllc0BtdWx0aWNvcmV3
-YXJlaW5jLmNvbT4KLS0tCiB3aW5zdXAvY3lnd2luL2F1dG9sb2FkLmNjIHwg
-NTggKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKSwgMjkgZGVsZXRpb25z
-KC0pCgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9hdXRvbG9hZC5jYyBi
-L3dpbnN1cC9jeWd3aW4vYXV0b2xvYWQuY2MKaW5kZXggNzA1NDUxMWI2Li4z
-N2M0YTM0MzggMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vYXV0b2xvYWQu
-Y2MKKysrIGIvd2luc3VwL2N5Z3dpbi9hdXRvbG9hZC5jYwpAQCAtODUsMTMg
-Kzg1LDEzIEBAIGJvb2wgTk9fQ09QWSB3c29ja19zdGFydGVkOwogICAgVGhl
-IG1hY3JvIFdPUkQ2NCBzdGFuZHMgaW4gZm9yIC5xdWFkLy54d29yZCwgYW5k
-IC5iYWxpZ24gKHdoaWNoIG1lYW5zCiAgICAiYWxpZ24gdG8gTiBieXRlcyIg
-b24gYWxsIHRhcmdldHMsIHVubGlrZSAuYWxpZ24pIGlzIHVzZWQgZm9yCiAg
-ICBhbGlnbm1lbnQuICAqLwotI2RlZmluZSBMb2FkRExMcHJpbWUoZGxsbmFt
-ZSwgaW5pdF9hbHNvLCBub19yZXNvbHZlX29uX2ZvcmspIF9fYXNtX18gKCJc
-blwKKyNkZWZpbmUgTG9hZERMTHByaW1lKGRsbG5hbWUsIGluaXRfYWxzbykg
-X19hc21fXyAoIlxuXAogLmlmbmRlZiAiICNkbGxuYW1lICJfcHJpbWVkICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXG5cCiAgIC5zZWN0aW9uICAg
-LmRhdGFfY3lnd2luX25vY29weSxcIndcIiAgICAgICAgICAgICAgICAgICBc
-blwKICAgLmJhbGlnbiAgICA4ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIFxuXAogLiIgI2RsbG5hbWUgIl9pbmZvOiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG5cCiAgICIgV09S
-RDY0ICIgICBfc3RkX2RsbF9pbml0ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBcblwKLSAgIiBXT1JENjQgIiAgICIgI25vX3Jlc29sdmVfb25fZm9y
-ayAiICAgICAgICAgICAgICAgICAgIFxuXAorICAiIFdPUkQ2NCAiICAgMCAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG5cCiAg
-IC5sb25nICAgICAgLTEgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBcblwKICAgLmJhbGlnbiAgICA4ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuXAogICAiIFdPUkQ2NCAi
-ICAgIiAjaW5pdF9hbHNvICIgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-XG5cCkBAIC0xMDgsMTIgKzEwOCwxMiBAQCBib29sIE5PX0NPUFkgd3NvY2tf
-c3RhcnRlZDsKICNkZWZpbmUgTG9hZERMTGZ1bmNFeChuYW1lLCBkbGxuYW1l
-LCBub3RpbXApIFwKICAgTG9hZERMTGZ1bmNFeDIobmFtZSwgZGxsbmFtZSwg
-bm90aW1wLCAwKQogI2RlZmluZSBMb2FkRExMZnVuY0V4MihuYW1lLCBkbGxu
-YW1lLCBub3RpbXAsIGVycikgXAotICBMb2FkRExMZnVuY0V4MyhuYW1lLCBk
-bGxuYW1lLCBub3RpbXAsIGVyciwgMCkKKyAgTG9hZERMTGZ1bmNFeDMobmFt
-ZSwgZGxsbmFtZSwgbm90aW1wLCBlcnIpCiAKIC8qIE1haW4gRExMIHNldHVw
-IHN0dWZmLiAqLwogI2lmIGRlZmluZWQoX194ODZfNjRfXykKLSNkZWZpbmUg
-TG9hZERMTGZ1bmNFeDMobmFtZSwgZGxsbmFtZSwgbm90aW1wLCBlcnIsIG5v
-X3Jlc29sdmVfb25fZm9yaykgXAotICBMb2FkRExMcHJpbWUgKGRsbG5hbWUs
-IGRsbF9mdW5jX2xvYWQsIG5vX3Jlc29sdmVfb25fZm9yaykgXAorI2RlZmlu
-ZSBMb2FkRExMZnVuY0V4MyhuYW1lLCBkbGxuYW1lLCBub3RpbXAsIGVycikg
-XAorICBMb2FkRExMcHJpbWUgKGRsbG5hbWUsIGRsbF9mdW5jX2xvYWQpIFwK
-ICAgX19hc21fXyAoIgkJCQkJCVxuXAogICAuc2VjdGlvbgkuIiAjZGxsbmFt
-ZSAiX2F1dG9sb2FkX3RleHQsXCJ3eFwiCVxuXAogICAuZ2xvYmFsCSIgI25h
-bWUgIgkJCQlcblwKQEAgLTEzOCw4ICsxMzgsOCBAQCBfd2luMzJfIiAjbmFt
-ZSAiOgkJCQkJXG5cCiAgIC50ZXh0CQkJCQkJCVxuXAogIik7CiAjZWxpZiBk
-ZWZpbmVkKF9fYWFyY2g2NF9fKQotI2RlZmluZSBMb2FkRExMZnVuY0V4Myhu
-YW1lLCBkbGxuYW1lLCBub3RpbXAsIGVyciwgbm9fcmVzb2x2ZV9vbl9mb3Jr
-KSBcCi0gIExvYWRETExwcmltZSAoZGxsbmFtZSwgZGxsX2Z1bmNfbG9hZCwg
-bm9fcmVzb2x2ZV9vbl9mb3JrKSBcCisjZGVmaW5lIExvYWRETExmdW5jRXgz
-KG5hbWUsIGRsbG5hbWUsIG5vdGltcCwgZXJyKSBcCisgIExvYWRETExwcmlt
-ZSAoZGxsbmFtZSwgZGxsX2Z1bmNfbG9hZCkgXAogICBfX2FzbV9fICggIlxu
-XAogICAuc2VjdGlvbiAgIC4iICNkbGxuYW1lICJfYXV0b2xvYWRfdGV4dCxc
-Ind4XCIgICAgICAgICAgXG5cCiAgIC5nbG9iYWwgICAgIiAjbmFtZSAiICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcblwKQEAgLTQzOCw3
-ICs0MzgsNyBAQCBzdGRfZGxsX2luaXQgKHN0cnVjdCBmdW5jX2luZm8gKmZ1
-bmMpCiAJeWllbGQgKCk7CiAgICAgICB9CiAgICAgd2hpbGUgKEludGVybG9j
-a2VkSW5jcmVtZW50ICgmZGxsLT5oZXJlKSk7Ci0gIGVsc2UgaWYgKCh1aW50
-cHRyX3QpIGRsbC0+aGFuZGxlIDw9IDEpCisgIGVsc2UgaWYgKCFkbGwtPmhh
-bmRsZSkKICAgICB7CiAgICAgICBmZW52X3QgZnB1ZW52OwogICAgICAgZmVn
-ZXRlbnYgKCZmcHVlbnYpOwpAQCAtNDYxLDcgKzQ2MSw3IEBAIHN0ZF9kbGxf
-aW5pdCAoc3RydWN0IGZ1bmNfaW5mbyAqZnVuYykKIAkgIGlmIChpIDwgUkVU
-UllfQ09VTlQpCiAJICAgIHlpZWxkICgpOwogCX0KLSAgICAgIGlmICgodWlu
-dHB0cl90KSBkbGwtPmhhbmRsZSA8PSAxKQorICAgICAgaWYgKCFkbGwtPmhh
-bmRsZSkKIAl7CiAJICBpZiAoKGZ1bmMtPmRlY29yYXRpb24gJiAxKSkKIAkg
-ICAgZGxsLT5oYW5kbGUgPSBJTlZBTElEX0hBTkRMRV9WQUxVRTsKQEAgLTUz
-NCw3ICs1MzQsNyBAQCB3c29ja19pbml0IChzdHJ1Y3QgZnVuY19pbmZvICpm
-dW5jKQogICByZXR1cm4gcmV0LmxsOwogfQogCi1Mb2FkRExMcHJpbWUgKHdz
-Ml8zMiwgX3dzb2NrX2luaXQsIDApCitMb2FkRExMcHJpbWUgKHdzMl8zMiwg
-X3dzb2NrX2luaXQpCiAKIExvYWRETExmdW5jIChDaGVja1Rva2VuTWVtYmVy
-c2hpcCwgYWR2YXBpMzIpCiBMb2FkRExMZnVuYyAoQ3JlYXRlUHJvY2Vzc0Fz
-VXNlclcsIGFkdmFwaTMyKQpAQCAtNzExLDI1ICs3MTEsMjUgQEAgTG9hZERM
-TGZ1bmNFeDIgKENyZWF0ZVByb2ZpbGUsIHVzZXJlbnYsIDEsIDEpCiBMb2Fk
-RExMZnVuYyAoRGVzdHJveUVudmlyb25tZW50QmxvY2ssIHVzZXJlbnYpCiBM
-b2FkRExMZnVuYyAoTG9hZFVzZXJQcm9maWxlVywgdXNlcmVudikKIAotTG9h
-ZERMTGZ1bmNFeDMgKHdhdmVJbkFkZEJ1ZmZlciwgd2lubW0sIDEsIDAsIDEp
-Ci1Mb2FkRExMZnVuY0V4MyAod2F2ZUluQ2xvc2UsIHdpbm1tLCAxLCAwLCAx
-KQotTG9hZERMTGZ1bmNFeDMgKHdhdmVJbkdldE51bURldnMsIHdpbm1tLCAx
-LCAwLCAxKQotTG9hZERMTGZ1bmNFeDMgKHdhdmVJbk9wZW4sIHdpbm1tLCAx
-LCAwLCAxKQotTG9hZERMTGZ1bmNFeDMgKHdhdmVJblByZXBhcmVIZWFkZXIs
-IHdpbm1tLCAxLCAwLCAxKQotTG9hZERMTGZ1bmNFeDMgKHdhdmVJblJlc2V0
-LCB3aW5tbSwgMSwgMCwgMSkKLUxvYWRETExmdW5jRXgzICh3YXZlSW5TdGFy
-dCwgd2lubW0sIDEsIDAsIDEpCi1Mb2FkRExMZnVuY0V4MyAod2F2ZUluVW5w
-cmVwYXJlSGVhZGVyLCB3aW5tbSwgMSwgMCwgMSkKLUxvYWRETExmdW5jRXgz
-ICh3YXZlT3V0Q2xvc2UsIHdpbm1tLCAxLCAwLCAxKQotTG9hZERMTGZ1bmNF
-eDMgKHdhdmVPdXRHZXROdW1EZXZzLCB3aW5tbSwgMSwgMCwgMSkKLUxvYWRE
-TExmdW5jRXgzICh3YXZlT3V0R2V0Vm9sdW1lLCB3aW5tbSwgMSwgMCwgMSkK
-LUxvYWRETExmdW5jRXgzICh3YXZlT3V0T3Blbiwgd2lubW0sIDEsIDAsIDEp
-Ci1Mb2FkRExMZnVuY0V4MyAod2F2ZU91dFByZXBhcmVIZWFkZXIsIHdpbm1t
-LCAxLCAwLCAxKQotTG9hZERMTGZ1bmNFeDMgKHdhdmVPdXRSZXNldCwgd2lu
-bW0sIDEsIDAsIDEpCi1Mb2FkRExMZnVuY0V4MyAod2F2ZU91dFNldFZvbHVt
-ZSwgd2lubW0sIDEsIDAsIDEpCi1Mb2FkRExMZnVuY0V4MyAod2F2ZU91dFVu
-cHJlcGFyZUhlYWRlciwgd2lubW0sIDEsIDAsIDEpCi1Mb2FkRExMZnVuY0V4
-MyAod2F2ZU91dFdyaXRlLCB3aW5tbSwgMSwgMCwgMSkKLUxvYWRETExmdW5j
-RXgzICh3YXZlT3V0TWVzc2FnZSwgd2lubW0sIDEsIDAsIDEpCi1Mb2FkRExM
-ZnVuY0V4MyAod2F2ZU91dEdldERldkNhcHNBLCB3aW5tbSwgMSwgMCwgMSkK
-K0xvYWRETExmdW5jRXgzICh3YXZlSW5BZGRCdWZmZXIsIHdpbm1tLCAxLCAw
-KQorTG9hZERMTGZ1bmNFeDMgKHdhdmVJbkNsb3NlLCB3aW5tbSwgMSwgMCkK
-K0xvYWRETExmdW5jRXgzICh3YXZlSW5HZXROdW1EZXZzLCB3aW5tbSwgMSwg
-MCkKK0xvYWRETExmdW5jRXgzICh3YXZlSW5PcGVuLCB3aW5tbSwgMSwgMCkK
-K0xvYWRETExmdW5jRXgzICh3YXZlSW5QcmVwYXJlSGVhZGVyLCB3aW5tbSwg
-MSwgMCkKK0xvYWRETExmdW5jRXgzICh3YXZlSW5SZXNldCwgd2lubW0sIDEs
-IDApCitMb2FkRExMZnVuY0V4MyAod2F2ZUluU3RhcnQsIHdpbm1tLCAxLCAw
-KQorTG9hZERMTGZ1bmNFeDMgKHdhdmVJblVucHJlcGFyZUhlYWRlciwgd2lu
-bW0sIDEsIDApCitMb2FkRExMZnVuY0V4MyAod2F2ZU91dENsb3NlLCB3aW5t
-bSwgMSwgMCkKK0xvYWRETExmdW5jRXgzICh3YXZlT3V0R2V0TnVtRGV2cywg
-d2lubW0sIDEsIDApCitMb2FkRExMZnVuY0V4MyAod2F2ZU91dEdldFZvbHVt
-ZSwgd2lubW0sIDEsIDApCitMb2FkRExMZnVuY0V4MyAod2F2ZU91dE9wZW4s
-IHdpbm1tLCAxLCAwKQorTG9hZERMTGZ1bmNFeDMgKHdhdmVPdXRQcmVwYXJl
-SGVhZGVyLCB3aW5tbSwgMSwgMCkKK0xvYWRETExmdW5jRXgzICh3YXZlT3V0
-UmVzZXQsIHdpbm1tLCAxLCAwKQorTG9hZERMTGZ1bmNFeDMgKHdhdmVPdXRT
-ZXRWb2x1bWUsIHdpbm1tLCAxLCAwKQorTG9hZERMTGZ1bmNFeDMgKHdhdmVP
-dXRVbnByZXBhcmVIZWFkZXIsIHdpbm1tLCAxLCAwKQorTG9hZERMTGZ1bmNF
-eDMgKHdhdmVPdXRXcml0ZSwgd2lubW0sIDEsIDApCitMb2FkRExMZnVuY0V4
-MyAod2F2ZU91dE1lc3NhZ2UsIHdpbm1tLCAxLCAwKQorTG9hZERMTGZ1bmNF
-eDMgKHdhdmVPdXRHZXREZXZDYXBzQSwgd2lubW0sIDEsIDApCiAKIExvYWRE
-TExmdW5jIChhY2NlcHQsIHdzMl8zMikKIExvYWRETExmdW5jIChiaW5kLCB3
-czJfMzIpCi0tIAoyLjQ5LjAud2luZG93cy4xCgo=
-
---_004_PN3P287MB13209A14DE960126F3311558F7A62PN3P287MB1320INDP_--
