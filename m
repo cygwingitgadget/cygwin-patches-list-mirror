@@ -1,141 +1,94 @@
-Return-Path: <SRS0=fihM=G5=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 82E794BA7980
-	for <cygwin-patches@cygwin.com>; Sat,  5 Sep 2026 08:00:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 82E794BA7980
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 82E794BA7980
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788595236; cv=none;
-	b=VmX0aQN/9jT/hPxPEhkS8ABa6pQt1YzHU6V+dmqef157RihRUV4cjhYDgcErMZZPZHtpYjwUH57lvqSqf/BqtdHcYuTOydYKQXhNkIINUcmXlqzF/qHttxPUb71YUeZYALPM6OspXeIhxEzVWYm9zXMWJaaDnm7A1ueD3vKc+YY=
+Return-Path: <SRS0=5WD9=G6=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id D69864BB8F61
+	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 11:01:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D69864BB8F61
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D69864BB8F61
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788692472; cv=none;
+	b=iRbRemsWdY8bW8fWtvJvJfMutthYnTtnUPBCLr4tRLLeqOO1duIcLPwLXd1X3DDNuGAk4i7VRt0+P+ioG5M5VO3pfwd+IEKa+XJKfng+CiHa0eWB0iW8Lyt0dFNBp81iswdyrW6mdJ0qIWO73Y1+rJtp1DzC15jR72U8ovRtXRc=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788595236; c=relaxed/simple;
-	bh=1JWiWrjsYKKL8yNXiDcaVFfbekVE+Fj9W/oh1PQRmDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=k0XZ1BLOVH7JurkIlz71yQk1SkUm1DNKx3+MfFVAoDwwUkea1nryQP7ItX2GzAmVe25sPGfmq4Erso4beQumuqSdlMucLjX541GMCwt60C1fj0Ys5MroGVaCM1BlPAjiL37tYxLECjf0O4zTOdaTsdzlhKrWNXU8Ku/E3nI4StE=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 82E794BA7980
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 6858EcE2049937
-	for <cygwin-patches@cygwin.com>; Sat, 5 Sep 2026 01:14:38 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdtjQo1G; Sat Sep  5 01:14:36 2026
-Message-ID: <cdc9d74e-f95b-4fb9-849c-b9f80f99bbb2@maxrnd.com>
-Date: Sat, 5 Sep 2026 01:00:36 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: proc: Cache system process information
+	t=1788692472; c=relaxed/simple;
+	bh=62TbK4aYQTxUBtlSw9Nm2dZgGdnEsGrG+O3gNTBtA9w=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=kpA6fLMduGzhhFrYRNoz8HJZaxV4w37ifqF/QhUGDVT0KyFt3NzpuS8SNwNgsELQBm7YwuM1pggSaRa4Apf3sqsBQKmGPyL++Sr6ouScA33At2idKtbKu0B3d6r2WLl/WpWz5TAsOzyzgEDS4IW9XCaH3tSYa3CSW1ndjt7aKoA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=WdbK1i7s
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D69864BB8F61
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=WdbK1i7s
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260906110107609.SYTB.17441.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 6 Sep 2026 20:01:07 +0900
+Date: Sun, 6 Sep 2026 20:01:05 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: proc: Cache system process information
+Message-Id: <20260906200105.068b9478fb6a2301f6560dfa@nifty.ne.jp>
+In-Reply-To: <cdc9d74e-f95b-4fb9-849c-b9f80f99bbb2@maxrnd.com>
 References: <20260904035910.1376-1-takashi.yano@nifty.ne.jp>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <20260904035910.1376-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	<cdc9d74e-f95b-4fb9-849c-b9f80f99bbb2@maxrnd.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1788692467;
+ bh=PIicvcf07tj/ZcTfMDCTagFM380NZSOxt0e2ohaiHjk=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=WdbK1i7s4hTKXwJcL5p1T3Z+bsZKyKPsIEr0nCyfxhOaSr/XoxctM24A4DUkZJHuwByV1Fvz
+ D17M+ZSVDvE6Nrlv8NTC01Er2S1c19KCgBkfAxRCJyvwTnLknR8tsADdbwlLgqrGNu5RPtsfw6
+ J8lHqw6fianNBOxCBo6UN3eoM+OxB+7vpLDiuNkuTQfgHxL5cqHq1OBvgFQ6aYYGI3S5OCFFX1
+ wPgwTmUXAy97N7t/B16daE0tahqo7Vklt/bVJaK5lgKfzRyhTkPb9gkf7oqClX1xW0DuB8ZLpV
+ FUzafO/JsoEPUOFYkKtk4gbJ8MQP8ZnL27gtXvH4m3XPafeA==
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Takashi,
+Hi Mark,
 
-On 9/3/2026 8:58 PM, Takashi Yano wrote:
-> If a process reads /proc/<pid>/stat for multiple PIDs, current code
-> every time calls NtQuerySystemInformation(SystemProcessInformation).
-> In addition, the buffer size is estimated by calling that function
-> with increasing buffer size. This takes 15 - 20 msec. This is looks
-> short time, however it is not negligible in some situation. If the
-> number of the process is 100, reading /proc/<pid>/stat takes 1.5 -
+Thanks for the review.
 
-   ^^^^^^^^^^^^^^^^^^^^^ number of processes
-
-> 2.0 sec. Due to this behaviour, process pane of the btop is very
-> heavy.
-
-(I've noticed that 'top' seems to use somewhat excessive cpu for what 
-it's doing; maybe this area of Cygwin has something to do with it.)
-
-> With this patch, system process information is cached per process
-> for a short time (20 msec) to improve efficiency. Also, the buffer
-> size needed by NtQuerySystemInformation() is stored in static area,
-> so that the number of function call is reduced (~1/7). As a result,
-> the process pane of btop becomes significantly light (takes only
-> ~15 msec for 100 processes).
-
-I think you're on the right track with this fix.  I would suggest 
-keeping the address of the malloc'd buffer in static storage too.  That 
-way the buffer can be extended as needed (but not shrunk), over many 
-calls to the function, and doesn't have to be freed.  What do you think?
-
-> Signef-off-by: Takashi Yano <takashi.yano@nift.ne.jp>
-   ^^^^^^ Signed
-
-   Also needs a Fixed: line.
-
-> Reviewed-by:
-> ---
->   winsup/cygwin/fhandler/process.cc | 27 +++++++++++++++++++++++----
->   1 file changed, 23 insertions(+), 4 deletions(-)
+On Sat, 5 Sep 2026 01:00:36 -0700
+Mark Geisert wrote:
+> Hi Takashi,
 > 
-> diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
-> index 537a4b370..97f3e0a2f 100644
-> --- a/winsup/cygwin/fhandler/process.cc
-> +++ b/winsup/cygwin/fhandler/process.cc
-> @@ -1524,14 +1524,30 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
->   {
->     /* This isn't really heavy magic - just go through the processes' threads
->        one by one and return a value accordingly.  Errors are silently ignored. */
-> +  const ULONGLONG cache_time = 20;
-> +  static NO_COPY muto cache_guard;
->     NTSTATUS status;
-> -  PSYSTEM_PROCESS_INFORMATION p, sp;
-> -  ULONG n = 0x4000;
-> +  static PSYSTEM_PROCESS_INFORMATION p = NULL;
-> +  static ULONGLONG t0 = 0;
-> +  PSYSTEM_PROCESS_INFORMATION sp;
-> +  static ULONG last_n = 0x4000;
-> +  ULONG n;
->     int state =' ';
->   
-> +  cache_guard.init ("get_process_state")->acquire ();
-> +  n = last_n;
-> +
-> +  if (GetTickCount64 () - t0 < cache_time && p)
-> +    goto reuse_query;
-> +  else if (p)
-> +    {
-> +      free (p);
-> +      p = NULL;
-> +    }
-> +
->     p = (PSYSTEM_PROCESS_INFORMATION) malloc (n);
->     if (!p)
-> -    return state;
-> +    goto out;
->     while (true)
->       {
->         status = NtQuerySystemInformation (SystemProcessInformation,
-> @@ -1550,6 +1566,9 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
->   		    status, RtlNtStatusToDosError (status));
->         goto out;
->       }
-> +  last_n = n;
-> +  t0 = GetTickCount64 ();
-> +reuse_query:
->     state = 'Z';
->     sp = p;
->     for (;;)
-> @@ -1579,7 +1598,7 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
->         sp = (PSYSTEM_PROCESS_INFORMATION) ((char *) sp + sp->NextEntryOffset);
->       }
->   out:
-> -  free (p);
-> +  cache_guard.release ();
->     return state;
->   }
->   
+> On 9/3/2026 8:58 PM, Takashi Yano wrote:
+> > If a process reads /proc/<pid>/stat for multiple PIDs, current code
+> > every time calls NtQuerySystemInformation(SystemProcessInformation).
+> > In addition, the buffer size is estimated by calling that function
+> > with increasing buffer size. This takes 15 - 20 msec. This is looks
+> > short time, however it is not negligible in some situation. If the
+> > number of the process is 100, reading /proc/<pid>/stat takes 1.5 -
+> 
+>    ^^^^^^^^^^^^^^^^^^^^^ number of processes
+> 
+> > 2.0 sec. Due to this behaviour, process pane of the btop is very
+> > heavy.
+> 
+> (I've noticed that 'top' seems to use somewhat excessive cpu for what 
+> it's doing; maybe this area of Cygwin has something to do with it.)
 
-Thanks for taking this on!
+I agree.
 
-..mark
+> > With this patch, system process information is cached per process
+> > for a short time (20 msec) to improve efficiency. Also, the buffer
+> > size needed by NtQuerySystemInformation() is stored in static area,
+> > so that the number of function call is reduced (~1/7). As a result,
+> > the process pane of btop becomes significantly light (takes only
+> > ~15 msec for 100 processes).
+> 
+> I think you're on the right track with this fix.  I would suggest 
+> keeping the address of the malloc'd buffer in static storage too.  That 
+> way the buffer can be extended as needed (but not shrunk), over many 
+> calls to the function, and doesn't have to be freed.  What do you think?
 
+Ah, that makes sense. I'll revise the patch and submit v2.
+
+>    Also needs a Fixed: line.
+
+Strictly speaking, this is not a bug fix; however, an O(n²) processing
+time for every access to the /proc file system is undesirable. So,
+I'll add Fixes: line and would like to apply cygwin-3_6-branch as well.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
