@@ -1,93 +1,142 @@
 Return-Path: <SRS0=Jx4T=G6=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.128])
-	by sourceware.org (Postfix) with ESMTP id 45D994BC7EEB
-	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 20:51:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 45D994BC7EEB
+Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.237])
+	by sourceware.org (Postfix) with ESMTP id 23FF64BC7EEB
+	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 20:53:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 23FF64BC7EEB
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 45D994BC7EEB
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.128
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788727886; cv=none;
-	b=Kxk6iHIlMyw9ZiunOBu3zaq6TDaMZ8PTzlIWtOoGzxPtbrkHF3LNq9aGauQR3uTEAt2bC55F8Nt8kRidmKrlU1vmUMZvKP8VZ6gPfscPwwQLHCqLNW3hKoTCWgnY9gU6yW60W6PMrqMFuHc1T+P7MNEHIZo6agW/KFXWmB7faPo=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 23FF64BC7EEB
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.237
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788728031; cv=none;
+	b=R8mBfQAsJWNs4UmDXXoeYcd78sTyxy9vtp3orfVAvvBakOjZn+TZ8xbJf9SIl3xoe0qDBsZzmuJnWTm4Th4rA1UEnRIzS5OlTvdlOIhDVnz5xnIpc+4GyMBX6DkNobREo4S4kbQDCwgQ8JeROcH/iB3Y0ojGg6VaJnbOXNTNan8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788727886; c=relaxed/simple;
-	bh=nS3SVsl5n5vSk0o6fE01y68ZvyalYsWJNgHV8hcGIHw=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=Ly4t05Mvg6KnSHzZV0tcJ+o9DXaIB1UB+SlbqRqQGNB2/MNTgIc9eIeQwOcTHSAqbAy3Vfxda6PWUOd2RsiD1Q2ExJeTy3EaapohPdpxEIWq3lK7sefRibSm/Kvwn0AlIapzCfzk5nOi7o+nKOPS2k7qnh0ZKVI0//Fv43vRtv0=
+	t=1788728031; c=relaxed/simple;
+	bh=bq8Fmsb5YbDNyGBJu9iol9Gpld26SouZ5yfuntR7F6g=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=b4qCTrJFXqCt8O+TG5yFVGcIluRBO4TvHJb+JiS5+9r1R2KIV7JN7fhvbIVj4GPttPpuDTAZTXStOhlO7/hexkyeGNNojOYc4KhNjBc8WEOYoVzw0JuGZ0az4te+U8DvtUgW4QH8on9/NZNKtupDyXD7gB/t/9RLQICpAJYymoY=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 45D994BC7EEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 23FF64BC7EEB
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A715CD60614D84D
+X-SNCR-Rigid: 6A7161CE06147F40
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTEJBYheMestGWxfuliYThlOJmOimxsPO7AeOv8DNHmN2DryWQb1OYP3r70TA5t9y6bfr8yq52S4GQr7I9WNLXaI4fm4vrvdUZeyTcQMO1uO9xtQbN8nRNqYPPBd8IBwdHHcArAyO5E6gkv/vrkEOMf4ctiYCOpsTVs3D9vGAtbbCEW2IPmU3Iff4AUj2d+skJGjCQp1VO9fScUIKcKUWBPCpl6gDxDH41a44+Y5DWvCI2/bknhFXdNqyA29pWQ0TjGuSXeHHPxtLF0WaAhsbzUCR8MYc+lgm1wKS50Z6M1P8F3CqFPhDQTyLC1qrDk1xIao9ixJnuebnI4I23wOGCzzTDggI6Fuy23trA2nCU/Auh/mYx54V+NnaV3+3B2kTZ7AQ2wyG44Y9ykYEsQtCfAXV4rvXjs97zbw//aCWJuYWQB4iqq7HXqDHJDCMD6CSBAQsSv3FPM4FA+vJLnwhUmiSjQnEC4VOCc7XcQ1k3nqGD8yMctd1VGmUwp4YqG/lsoVXKED2YhgXl1Vz97K1YCD3uTc8FlkzJWwWSyzRzoqqDSJ/wcqL8X8DYrtReyrMGJ72elokK5chVyzTCJK9TkUxBIXroi+wS609egIX+7/ApoF1w8jMwlvVWUR6GNkm4dPiqtvTlgh+e4YTnWFkARj6a/g8Ol1GGbpt5JjX8UH6g
+X-RazorGate-Vade: dmFkZTG1FWxU5La6SEAa3ruxB+WrlpKll52Xr/WhyJM5WfBnaEWtUrPJi1LxEZ07yFgI15GgjtEJxlMXYSVXjZoqpiVpWbVsamobVypYkGmX8GCtnxjbUZnxTsTX8ZbAdqmxk/dC3JUjxGfxVHcb1t8ipNe0ntClmq5AEYIwlRsY9TGW6MV6NdVvdKAmNAy533GbUcY3c+dhwqm0aoVO5bQbiFasmxzLOUq0kEBkzE9K4ojMVboeLotustbXVtYNkldmgAjmj1upvd21/56eHDIcetQf4JmuMpyIqzNsLwEYGoclEMQcboeLwMSJB8l4xwYtAuNSCH5bI4qNJXyU8CwWAoqyPY+2OhdP6fQOu9KjN01gpRBGpCBJ60G34ykHeg1oC4rU6pPPke458SehcnV+F4yDCCLB25b354AGpkNU923xyJ7Kv7WndAFmSEQKBv6BDO4fpISE7SjDuFfVulquf9sQCPNpHDCbNaSFIoD04b3N59ul9hRT+vT16DOYwq+BcZ5WTTyZ1iSvTxDFEgL63f++1jmuDIXgAxqqIffkXClke/wNz2TiaNpIKWK/9UKAj/PA4K3kuxZ7Z2UzaZNmJm5hFQMokcWlNjfAyeXTfOGrnM1d3ZgdkKXFJ3G4wpvv0ipMusv1l2G3leZLUflW70UQv4ww5wYJT88x8IVmyMKy0w
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.56.66.111) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A715CD60614D84D; Sun, 6 Sep 2026 21:51:24 +0100
-Message-ID: <19b45471-6a57-4ee3-9438-0791e3ef1fa3@dronecode.org.uk>
-Date: Sun, 6 Sep 2026 21:51:23 +0100
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A7161CE06147F40; Sun, 6 Sep 2026 21:53:47 +0100
+Message-ID: <00920009-6ca5-4b19-b61c-5b5e6ea8c608@dronecode.org.uk>
+Date: Sun, 6 Sep 2026 21:53:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: cpuid: add AArch64 build stubs
-References: <PN0P287MB0295E7BAEC9FFE804D2A7CDD923C2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <54c93ea8-3e7a-4045-b1d0-2671c8ebef2f@dronecode.org.uk>
- <f3d9fd85-7055-436e-b78f-12a925320043@SystematicSW.ab.ca>
- <80e59c0e-3c08-4c36-8e54-93fd300316b2@dronecode.org.uk>
+Subject: Re: [PATCH] Cygwin: autoload: fix ws2_32 chained init on AArch64
+References: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com, Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-In-Reply-To: <80e59c0e-3c08-4c36-8e54-93fd300316b2@dronecode.org.uk>
+Cc: cygwin-patches@cygwin.com,
+ Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
+In-Reply-To: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,BODY_8BITS,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 16/07/2026 16:56, Jon Turney wrote:
-> On 30/05/2026 17:03, Brian Inglis wrote:
->> On 2026-05-28 06:33, Jon Turney wrote:
->>> On 07/05/2026 11:45, Chandru Kumaresan wrote:
->>>> Hi Corinna,
->>>>
->>>> This patch adds ARM64 support for CPU information and cache 
->>>> detection used by /proc/cpuinfo and sysconf cache queries.
->>>> Thanks & regards,
->>>> K Chandru
->>>> In-lined patch:
->>>>
->>>> ---
->>>>   winsup/cygwin/fhandler/proc.cc       | 242 +++++++++++++++++++++++ 
->>>> ++++
->>>>   winsup/cygwin/local_includes/cpuid.h |  21 ++-
->>>>   winsup/cygwin/sysconf.cc             | 148 ++++++++++++++++
->>>>   3 files changed, 408 insertions(+), 3 deletions(-)
->>>
->>> Thanks.
->>>
->>> I don't have any substantive comments (apart from "oh, you're 
->>> supposed to grovel over a registry key to get the cpu information, 
->>> nice :(").
->>>
->>> Brian,
->>>
->>> I think you're much more familiar with this area of the code than me. 
->>> Please chime in if you have any comments!
->>
->> Thanks Jon,
->>
->> Never received the original patches in my email, so imported all from 
->> p- i, and will have a look soon, comparing against x86_64 and Linux- 
->> next x86 and arm64 cpufeature enumeration and cpuinfo output.
->>
->> It would be easier if MS Windows also exposed elevated CPU and MSR 
->> info to regular user space.
+On 07/07/2026 10:31, Chandru Kumaresan wrote:
+> Hi everyone,
 > 
-> Brian,
+> On AArch64, the autoload INIT_WRAPPER passes func_info* via x30 ("mov
+> x0, x30").  This works for the first init stage (std_dll_init), reached
+> by the trampoline's "blr".  It breaks for a chained second init, because
+> dll_chain reaches it via "br x1" without updating x30.
 > 
-> Just a gentle ping to follow this up. Any comments or "looks good"?
+> ws2_32 is the only DLL with such a chain (std_dll_init -> wsock_init ->
+> dll_func_load).  wsock_init received garbage in x0, so WSAStartup was
+> never called; every ws2_32 call failed with WSANOTINITIALISED / EFAULT.
+> 
+> dll_chain also runs twice for ws2_32, pushing a 16-byte frame each time.
+> wsock_init consumes its arg from x30, not the stack, so the first frame
+> strands.  dll_func_load then restores caller-save registers from a
+> shifted offset, corrupting the first call's arguments.
+> 
+> Fix: copy func_info into x30 in dll_chain before the tail-branch, and
+> give AArch64 a dedicated _wsock_init wrapper that drops the stranded
+> frame ("add sp, sp, #16") before chaining to dll_func_load.
 
-Ping^2?
+The loss of generality here makes me slightly unhappy.
 
+(Although, practically, it's extremely likely that we'll ever have to 
+deal with another DLL having special initialization requirements like 
+ws2_32 does)
+
+But.. it seems like maybe this could be written without dll_chain as a 
+tail call, which would also balance the stack, so something like:
+
+push x0 and lr
+move lr to x0
+bl x1
+pop x0 and lr
+ret
+
+idk, this code is a real maze and every time I look at it I have to 
+spend an hour drawing diagrams. So I'm perfectly prepared to be told 
+that won't work!
+
+It seems like there must be a generic way to write this for aarch64, but 
+maybe it looks so different from the existing implementation it's not 
+worth the effort of finding it...
+
+> ---
+>   winsup/cygwin/autoload.cc | 28 ++++++++++++++++++++++++++--
+>   1 file changed, 26 insertions(+), 2 deletions(-)
+> 
+> diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
+> index 7054511b6..8d0f2a59e 100644
+> --- a/winsup/cygwin/autoload.cc
+> +++ b/winsup/cygwin/autoload.cc
+> @@ -302,6 +302,10 @@ dll_func_load:                                           \n\
+>     .global    dll_chain                                   \n\
+>   dll_chain:                                               \n\
+>     stp        x0, xzr, [sp, #-16]! // x0 = func_info* (= ret.high); push for dll_func_load\n\
+> +  mov        x30, x0              // also pass func_info in x30: a chained INIT_WRAPPER\n\
+> +                                  // (e.g. _wsock_init) reads its arg from x30, but is\n\
+> +                                  // reached here via 'br' which would otherwise leave\n\
+> +                                  // x30 stale.  dll_func_load ignores x30 (reads [sp]).\n\
+>     br         x1                   // x1 = dll->init (= ret.low); tail-call resolver\n\
+>   ");
+>   #else
+> @@ -481,9 +485,29 @@ std_dll_init (struct func_info *func)
+> 
+>   /* Initialization function for winsock stuff. */
+> 
+> -#if defined(__x86_64__) || defined(__aarch64__)
+> -/* See above comment preceeding std_dll_init. */
+> +#if defined(__x86_64__)
+> +/* See above comment preceding std_dll_init. */
+>   INIT_WRAPPER (wsock_init)
+> +#elif defined(__aarch64__)
+> +__asm__("\n\
+> +  .text                                                  \n\
+> +  .p2align 2                                             \n\
+> +  .seh_proc _wsock_init                                  \n\
+> +_wsock_init:                                             \n\
+> +  stp        x29, x30, [sp, #-16]!  // save fp/lr, open our 16-byte frame\n\
+> +  .seh_save_fplr_x 16                                   \n\
+> +  .seh_endprologue                                      \n\
+> +  mov        x0, x30              // x0 = func_info  (the wsock_init() argument)\n\
+> +  bl         wsock_init           // run WSAStartup; returns x0=func_info, x1=dll_func_load\n\
+> +  ldp        x29, xzr, [sp], #16  // restore fp, discard saved lr, close our frame\n\
+> +  add        sp, sp, #16          // drop the stranded dll_chain frame so the\n\
+> +                                  // downstream dll_func_load sees exactly one\n\
+> +                                  // dll_chain frame above the trampoline frame\n\
+> +  adrp       x30, dll_chain       // x30 = &dll_chain ...\n\
+> +  add        x30, x30, #:lo12:dll_chain  // ... so the 'ret' below tail-chains there\n\
+> +  ret                             // -> dll_chain, which tail-calls x1 (dll_func_load)\n\
+> +  .seh_endproc                                          \n\
+> +");
+>   #else
+>   #error unimplemented for this target
+>   #endif
+> --
