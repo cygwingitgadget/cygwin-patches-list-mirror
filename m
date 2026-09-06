@@ -1,129 +1,134 @@
 Return-Path: <SRS0=Jx4T=G6=dronecode.org.uk=jon.turney@sourceware.org>
 Received: from btprdrgo001.btinternet.com (btprdrgo001.btinternet.com [65.20.50.131])
-	by sourceware.org (Postfix) with ESMTP id 67B0B4BB3BF3
-	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 22:00:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 67B0B4BB3BF3
+	by sourceware.org (Postfix) with ESMTP id 142404BC7EDB
+	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 22:10:35 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 142404BC7EDB
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 67B0B4BB3BF3
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 142404BC7EDB
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.131
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788732035; cv=none;
-	b=i+46rpWBsojweiCorR9bxpkVGxP6Eynow4NjSnBNncwZiBHaHfJWKGDpSKIbXIQNb03UZcraPXJStUyvavlfz++CeHmblS2eebPR49+sB2wjsKop9ywhEJl6xIUywVUqrSvSwXe+B6WZcW2dUL/QrZYD26NtT2AYYX+P+B/jFE0=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788732635; cv=none;
+	b=mVVABRi0zO+WYNm+1nVbfgG5h4z7AHxpQ9BH0J4MD+ljsnFNF9qP97AAvPQywbCtSLDLAsubzuNDclKIziTU+2cAihKDlsJwt4dw4ceYXTYLrclpVwpJmCOVpG7xx5whG0Qaq/iOzwLWYNHsC+SCOhK+YYCKBQZ1SquoDVi8hvQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788732035; c=relaxed/simple;
-	bh=SGxjxhnN0gb1drbMV6dzyFvQdrp+da/8uRaq+6RHCGE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To; b=FMLrE9+9oBT7Vm0vuqrffkgPVAbTNtQ4LQRv/fng9UbmLDCYou1OVqEfjfQymrHyz5rZAaUCg8kPh9Aqv59AFmAvU+6XZ3GYb/u8HmuYy48FJYnsRiV9w3MCiS4glSywtYmKJs2AB/ObRZPqlDI73v35VrFp7kMbZVA1ger0bn0=
+	t=1788732635; c=relaxed/simple;
+	bh=Pk+Jy4WauS1AxFeBq0KuRNqJpQbDmhEKRvyqk9/LpH0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To; b=fPYFJvZ/uwezH1qjKbgS4MdhOp/P+X3fq1a+wp/yk5vHFld9+jxe+RMaV0qOyeZ+ccry7cg6ctth4O8q4lVXP0tZCAfCDEO0RBimjFP8g7PJe8eLyi9wg0ka5r8KsITdtlBUun/4IywK7tvN6Qk9OiHjIce/mOSqsXuypTFWAL4=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 67B0B4BB3BF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 142404BC7EDB
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A700E34064BB74E
+X-SNCR-Rigid: 6A700E34064C0CA5
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTEaxzV4E3oCdB2snsVosJTfNX+BayYBJirRn4vh7EFlLAjcGSMSpOiOq+i6iHWpJZvqAar6eXRS9v+lZNgFIKAyRBqWk0SQldlkK4AXVkeurdPFxnpuHOwjPmFkuFwbVyiQSwtLQrQxp/yRQ20m9kqtm51btTBlx3j1M/vGQB+799GYnkxpbCemzm/N4uM/pl3EhsOh4N7aOWJ2QtzjuT4O8HGEaEynKRwFycybMteAbU+YcqZJkKCQ0pRpgYY/pEufRfmyJkVD8/7HQ+ZL/T+evCsdh8zE5BNWvTOsX9PArpxImR4wN4N7W1WQP11RZ02dVxrQj6phyXmSbNT8yPYrO/oMhjIBHI75dA7xA7rSzWOWfm1dLFMU760P7pD30exxXqyUb7HC01lPVbZZ1GbEd7FHbKoNWBLxwHAYierULotRNr39Zf4Leq1jItcdVlM7mRTXyED29HQo5f2m2bkben4zVs4/hcMFB1IGx7VajYA4nhXNIE6pKSzlFDRztQ+7oPEG1C7grr0gLbSdSwRqA0DYd9dgHBjq/hn/2WoCySkeluOs1eLfm3+6i4qgg2LWFpkO9uajLVjkm93KNB4kRMujqqgNHpi9clmRv7+0YzbG2PBGST+kspHmUqurqMFg6VM7B8gx2NpU2rpbmCOAu7RU2hQ0sYoxr3U1JLODaw
+X-RazorGate-Vade: dmFkZTEZACq1Mqbn1LwnW3zXsflqZoTzC6q+5dwH2PlvLkqjzUk5rOnKhFTbvEVNp++0yqQs50zPRyCU8MucAlKs/UjgAkFjRGQcoo+QYOx3k/PH8j8bwDvbuGWwVZwCb1XdVQ0xsOcEgZsz0njBwMs9jIxfyxvmXJghBlx9pPqMICthdvZP64Jjvca3WTi9kkely7/BgwcO8xKc0qRBiBSKXaTDIiksJuOnbuUNkcsUH3rprZunXMqetvWVnn9os6Q7Sz3Pi/7pzmg6YN6QvQz3JZfZlhvIOvxX0YPJlg+CcaFR2/ysHbitjkfsgGPYifilSyBKOL3b4sB3EoJLquijE69itFrFueELGIiuuc3CAz9bYUBkN+7YhsvpGiyZcbVDKd94JHaE66tALK/CARMxRMUHp6o7C99PU2WFBsVKGn/1o6mOHdZ0wQo0WPjaNohNJSt+aZf6u6gkxKCoqPvfg/3OkNO0VqKTnwX2ia3FIYFLeLov70AFTEYrefsgMZgU6i+wx4jrO0U7xv+kb7AJ1hiBb9cuth7QGDA5zyeSZ495SDytbueVRdHipnUeVMHsdZZuddzjbgqJ3cSKPqsSSLapJVSk8IKCkdSIpL+U9Ep381/x3yLA7D1ZYbWU25nuI8fRzwuptrrF5KlTnziSJOdhsTP0SEZJYxOgQO9VAOcpNg
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
 Received: from [192.168.1.109] (62.56.66.111) by btprdrgo001.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A700E34064BB74E; Sun, 6 Sep 2026 23:00:29 +0100
-Message-ID: <8ad1d40a-0842-47c4-bdb0-fa2278abcde1@dronecode.org.uk>
-Date: Sun, 6 Sep 2026 23:00:28 +0100
+        id 6A700E34064C0CA5; Sun, 6 Sep 2026 23:10:31 +0100
+Message-ID: <c6f2d178-7b2c-44b6-9d70-8f3e4ce461cc@dronecode.org.uk>
+Date: Sun, 6 Sep 2026 23:10:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: gendef: add _sigfe_maybe for TLS initialization
-References: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
+Subject: Re: [PATCH] Cygwin: resolve AArch64 linking by linking to onecore
+ instead of kernel32
 From: Jon Turney <jon.turney@dronecode.org.uk>
+To: Radek Barton <radek.barton@microsoft.com>
+Cc: cygwin-patches@cygwin.com,
+ Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>,
+ Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>,
+ Mate Dimand <Mate.Dimand@arm.com>
+References: <DB9PR83MB09239F1F48DD7D215E1A0B6E9248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aHUCHQvK7UKMepvh@calimero.vinschen.de>
+ <2549df98-c96f-48b7-9ddf-f1272ff505c2@dronecode.org.uk>
+ <ecebaf4b-7558-41b1-ad80-a7fe52995673@dronecode.org.uk>
 Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com
-To: Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>,
- Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-In-Reply-To: <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
+In-Reply-To: <ecebaf4b-7558-41b1-ad80-a7fe52995673@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,BODY_8BITS,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This mail I sent to your colleague Thirumalai Nagalingam a few months 
-ago was returned undeliverable.
+On 13/06/2026 21:03, Jon Turney wrote:
+> On 05/06/2026 15:37, Jon Turney wrote:
+>> On 14/07/2025 14:11, Corinna Vinschen wrote:
+>>> Hi Radek,
+>>>
+>>> On Jul 10 19:14, Radek Barton via Cygwin-patches wrote:
+>>>> Hello.
+>>>>
+>>>> As Windows Arm64 platform does not carry historical compatibility 
+>>>> layers, the structure of Windows API DLLs is cleaner on Arm64 than 
+>>>> on x64. For this reason, the x64 linking against `kernel32.dll` is 
+>>>> not sufficient leading to undefined references to many Windows API 
+>>>> symbols that are in different DLLs that would have to be added to 
+>>>> the linking command explicitly.
+>>>>
+>>>> To address that, there is a concept of umbrella DLLs (https:// 
+>>>> learn.microsoft.com/en-us/windows/win32/apiindex/windows-umbrella- 
+>>>> libraries), that can be added instead. The recommended replacement 
+>>>> for `kernel32.dll` is `onecore.dll` (https://learn.microsoft.com/en- 
+>>>> us/windows-hardware/drivers/develop/building-for-onecore#building- 
+>>>> for-onecore) that should be available since Windows 7.
+>>>>
+>>>> In case of Cygwin linking, there is one exception, `pdh.dll` 
+>>>> (Performance Data Helper, https://learn.microsoft.com/en-us/windows/ 
+>>>> win32/perfctrs/performance-counters-functions), that is not included 
+>>>> in the `onecore.dll`.
+>>>
+>>> The pdh functions used by Cygwin are NOT linked against.  They are
+>>> runtime loaded (see autoload.cc, right at the end), so it should not be
+>>> necessary to link against libpdh.a.  Can you please check again?
+> 
+>>   I assume that -lpdh has been added here because the autoload stubs 
+>> used during aarch64 development translate into direct linkage.
+>>
+>> Hopefully, it's not necessary with a full autoload implementation .
+> 
+> So, my speculation seems to be correct.
+> 
+> The other issue here is that we can't link against non-well-known DLLs 
+> here without making ourselves vulnerable to DLL hijacking attacks. (This 
+> detail probably needs to be noted in a comment here).
+> 
+> It's unclear that to me that the onecore umbrella import library makes 
+> that guarantee? (So we could accidentally introduce the use of an API 
+> from a non-well-known DLLs without noticing)
+> 
+> So maybe this needs to be conditional on the arch? Or perhaps the 
+> solution is to autoload the problematic APIs here?
 
-Perhaps you could take a look at the question I raise?
+CC'ing recent aarch64 contributors, as this seems to be the remaining 
+outstanding aarch64 patch without a resolution.
 
-On 20/06/2026 13:46, Jon Turney wrote:
-> On 19/12/2025 17:30, Thirumalai Nagalingam wrote:
->> Hi all,
->>
->> Please find the attached patch which adds an ARM64 stub for the 
->> _sigfe_maybe routine
->> in the gendef script.
->>
->> Any feedback or nits are very welcome. The changes are documented with 
->> inline
->> comments intended to be self-explanatory. please let me know if any part
->> of this patch should be adjusted.
->>
->> Thanks for your time and review.
->>
->> Thanks & regards
->> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
->>
->> In-lined patch:
->>
->> diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
->> index 1419704b8..52a5b77ca 100755
->> --- a/winsup/cygwin/scripts/gendef
->> +++ b/winsup/cygwin/scripts/gendef
->> @@ -367,8 +367,24 @@ EOF
->>          .include "tlsoffsets"
->>          .text
->>
->> -_sigfe_maybe:
->> -       .global _sigbe
->> +       .seh_proc _sigfe_maybe
->> +_sigfe_maybe:                                  # stack is aligned on 
->> entry!
->> +       .seh_endprologue
->> +       ldr     x10, [x18, #0x8]                // Load TEB pointer in 
->> x10
->> +       ldr     x11, =_cygtls.initialized       // Load relative 
->> offset of _cygtls.initialized
->> +       add     x11, x10, x11                   // compute absolute 
->> address and store in x11
->> +       cmp     sp, x11                         // Compare current 
->> stack pointer with TLS location
->> +       b.hs    0f                              // if sp >= tls, skip 
->> TLS logic
->> +       ldr     w12, [x11]                      // Load the value at 
->> _cygtls.initialized (32-bit)
->> +       movz    w13, #0xc763                    // Prepare magic 
->> value(0xc763173f) lower 16 bits
->> +       movk    w13, #0x173f, lsl #16           // Add upper 16 bits, 
->> full value now in w13
->> +       cmp     w12, w13                        // Compare loaded 
->> value with magic
->> +       b.ne    0f                              // If not equal, not 
->> initialized, skip TLS logic
-> 
-> Hmmm... while staring at this code, trying to refresh my memory of how 
-> this it all works... this seems wrong.
-> 
-> Comparing this to the x86_64 version of sigfe_maybe, shouldn't the 
-> branch here be to forward to label 1? Otherwise this function 
-> effectively does nothing.
-> 
-> (Of course, this isn't very important since sigfe_maybe is only used by 
-> cygwin_detach_dll())
-> 
->> +       ret
->> +0:
->> +       ret
->> +       .seh_endproc
->> +
->>   _sigfe:
->>   _sigbe:
->>          .global sigdelayed
->> -- 
-> 
-> 
+When I try to build with '-lkernel32 -lntdll'
+
+>   CXXLD    new-cygwin1.dll
+> libdll.a(exceptions.o): in function `__unwind_single_frame':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:329:(.text+0x420): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlLookupFunctionEntry' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01253.o)
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:331:(.text+0x490): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlVirtualUnwind' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01260.o)
+> libdll.a(exceptions.o): in function `cygwin_stackdump':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:500:(.text+0x184c): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlCaptureContext' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01245.o)
+> libdll.a(exceptions.o): in function `signal_exit':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:1514:(.text+0x1acc): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlCaptureContext' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01245.o)
+> libdll.a(exceptions.o): in function `exception::myfault(_EXCEPTION_RECORD*, void*, _CONTEXT*, _DISPATCHER_CONTEXT_ARM64*)':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:628:(.text+0x1b5c): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlUnwindEx' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01259.o)
+> libdll.a(exceptions.o): in function `myfault_altstack_handler(_EXCEPTION_POINTERS*)':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:656:(.text+0x1bd8): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlRestoreContext' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01257.o)
+> libdll.a(exceptions.o): in function `_cygtls::call_signal_handler()':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:1872:(.text+0x396c): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlCaptureContext' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01245.o)
+> libdll.a(exceptions.o): in function `__unwind_single_frame':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:329:(.text+0x3980): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlLookupFunctionEntry' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01253.o)
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:331:(.text+0x39f4): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlVirtualUnwind' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01260.o)
+> libdll.a(exceptions.o): in function `_cygtls::sigdelayed_impl(_CONTEXT*)':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:977:(.text+0x3cc8): relocation truncated to fit: IMAGE_REL_ARM64_PAGEOFFSET_12L against symbol `__imp_RtlRestoreContext' defined in .idata$5 section in /usr/aarch64-pc-cygwin/sys-root/usr/lib/w32api/libkernel32.a(libkernel32s01257.o)
+> libdll.a(exceptions.o): in function `getcontext':
+> /home/jon/src/newlib-cygwin/build_aarch64/aarch64-pc-cygwin/winsup/cygwin/../../../../winsup/cygwin/exceptions.cc:2222:(.text+0x3e28): additional relocation overflows omitted from the output
+These are relocation truncation rather than undefined symbol errors.
+
+Linking with just '-lonecore' resolves this somehow, but since these 
+symbols seem to be provided by ntdll, this looks like maybe a toolchain 
+issue instead?
+
