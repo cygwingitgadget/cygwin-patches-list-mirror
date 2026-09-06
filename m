@@ -1,142 +1,129 @@
 Return-Path: <SRS0=Jx4T=G6=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.237])
-	by sourceware.org (Postfix) with ESMTP id 23FF64BC7EEB
-	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 20:53:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 23FF64BC7EEB
+Received: from btprdrgo001.btinternet.com (btprdrgo001.btinternet.com [65.20.50.131])
+	by sourceware.org (Postfix) with ESMTP id 67B0B4BB3BF3
+	for <cygwin-patches@cygwin.com>; Sun,  6 Sep 2026 22:00:35 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 67B0B4BB3BF3
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 23FF64BC7EEB
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.237
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788728031; cv=none;
-	b=R8mBfQAsJWNs4UmDXXoeYcd78sTyxy9vtp3orfVAvvBakOjZn+TZ8xbJf9SIl3xoe0qDBsZzmuJnWTm4Th4rA1UEnRIzS5OlTvdlOIhDVnz5xnIpc+4GyMBX6DkNobREo4S4kbQDCwgQ8JeROcH/iB3Y0ojGg6VaJnbOXNTNan8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 67B0B4BB3BF3
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.131
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788732035; cv=none;
+	b=i+46rpWBsojweiCorR9bxpkVGxP6Eynow4NjSnBNncwZiBHaHfJWKGDpSKIbXIQNb03UZcraPXJStUyvavlfz++CeHmblS2eebPR49+sB2wjsKop9ywhEJl6xIUywVUqrSvSwXe+B6WZcW2dUL/QrZYD26NtT2AYYX+P+B/jFE0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788728031; c=relaxed/simple;
-	bh=bq8Fmsb5YbDNyGBJu9iol9Gpld26SouZ5yfuntR7F6g=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=b4qCTrJFXqCt8O+TG5yFVGcIluRBO4TvHJb+JiS5+9r1R2KIV7JN7fhvbIVj4GPttPpuDTAZTXStOhlO7/hexkyeGNNojOYc4KhNjBc8WEOYoVzw0JuGZ0az4te+U8DvtUgW4QH8on9/NZNKtupDyXD7gB/t/9RLQICpAJYymoY=
+	t=1788732035; c=relaxed/simple;
+	bh=SGxjxhnN0gb1drbMV6dzyFvQdrp+da/8uRaq+6RHCGE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To; b=FMLrE9+9oBT7Vm0vuqrffkgPVAbTNtQ4LQRv/fng9UbmLDCYou1OVqEfjfQymrHyz5rZAaUCg8kPh9Aqv59AFmAvU+6XZ3GYb/u8HmuYy48FJYnsRiV9w3MCiS4glSywtYmKJs2AB/ObRZPqlDI73v35VrFp7kMbZVA1ger0bn0=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 23FF64BC7EEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 67B0B4BB3BF3
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A7161CE06147F40
+X-SNCR-Rigid: 6A700E34064BB74E
 X-Originating-IP: [62.56.66.111]
 X-OWM-Source-IP: 62.56.66.111
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTG1FWxU5La6SEAa3ruxB+WrlpKll52Xr/WhyJM5WfBnaEWtUrPJi1LxEZ07yFgI15GgjtEJxlMXYSVXjZoqpiVpWbVsamobVypYkGmX8GCtnxjbUZnxTsTX8ZbAdqmxk/dC3JUjxGfxVHcb1t8ipNe0ntClmq5AEYIwlRsY9TGW6MV6NdVvdKAmNAy533GbUcY3c+dhwqm0aoVO5bQbiFasmxzLOUq0kEBkzE9K4ojMVboeLotustbXVtYNkldmgAjmj1upvd21/56eHDIcetQf4JmuMpyIqzNsLwEYGoclEMQcboeLwMSJB8l4xwYtAuNSCH5bI4qNJXyU8CwWAoqyPY+2OhdP6fQOu9KjN01gpRBGpCBJ60G34ykHeg1oC4rU6pPPke458SehcnV+F4yDCCLB25b354AGpkNU923xyJ7Kv7WndAFmSEQKBv6BDO4fpISE7SjDuFfVulquf9sQCPNpHDCbNaSFIoD04b3N59ul9hRT+vT16DOYwq+BcZ5WTTyZ1iSvTxDFEgL63f++1jmuDIXgAxqqIffkXClke/wNz2TiaNpIKWK/9UKAj/PA4K3kuxZ7Z2UzaZNmJm5hFQMokcWlNjfAyeXTfOGrnM1d3ZgdkKXFJ3G4wpvv0ipMusv1l2G3leZLUflW70UQv4ww5wYJT88x8IVmyMKy0w
+X-RazorGate-Vade: dmFkZTEaxzV4E3oCdB2snsVosJTfNX+BayYBJirRn4vh7EFlLAjcGSMSpOiOq+i6iHWpJZvqAar6eXRS9v+lZNgFIKAyRBqWk0SQldlkK4AXVkeurdPFxnpuHOwjPmFkuFwbVyiQSwtLQrQxp/yRQ20m9kqtm51btTBlx3j1M/vGQB+799GYnkxpbCemzm/N4uM/pl3EhsOh4N7aOWJ2QtzjuT4O8HGEaEynKRwFycybMteAbU+YcqZJkKCQ0pRpgYY/pEufRfmyJkVD8/7HQ+ZL/T+evCsdh8zE5BNWvTOsX9PArpxImR4wN4N7W1WQP11RZ02dVxrQj6phyXmSbNT8yPYrO/oMhjIBHI75dA7xA7rSzWOWfm1dLFMU760P7pD30exxXqyUb7HC01lPVbZZ1GbEd7FHbKoNWBLxwHAYierULotRNr39Zf4Leq1jItcdVlM7mRTXyED29HQo5f2m2bkben4zVs4/hcMFB1IGx7VajYA4nhXNIE6pKSzlFDRztQ+7oPEG1C7grr0gLbSdSwRqA0DYd9dgHBjq/hn/2WoCySkeluOs1eLfm3+6i4qgg2LWFpkO9uajLVjkm93KNB4kRMujqqgNHpi9clmRv7+0YzbG2PBGST+kspHmUqurqMFg6VM7B8gx2NpU2rpbmCOAu7RU2hQ0sYoxr3U1JLODaw
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.56.66.111) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A7161CE06147F40; Sun, 6 Sep 2026 21:53:47 +0100
-Message-ID: <00920009-6ca5-4b19-b61c-5b5e6ea8c608@dronecode.org.uk>
-Date: Sun, 6 Sep 2026 21:53:46 +0100
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (62.56.66.111) by btprdrgo001.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A700E34064BB74E; Sun, 6 Sep 2026 23:00:29 +0100
+Message-ID: <8ad1d40a-0842-47c4-bdb0-fa2278abcde1@dronecode.org.uk>
+Date: Sun, 6 Sep 2026 23:00:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: autoload: fix ws2_32 chained init on AArch64
-References: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] Cygwin: gendef: add _sigfe_maybe for TLS initialization
+References: <MA0P287MB3082181CE402F12F043C3A0B9FA9A@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
+ <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com,
+Cc: cygwin-patches@cygwin.com
+To: Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>,
  Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-In-Reply-To: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <6fd27001-6a1f-4d20-a621-e395b6b85762@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,BODY_8BITS,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 07/07/2026 10:31, Chandru Kumaresan wrote:
-> Hi everyone,
-> 
-> On AArch64, the autoload INIT_WRAPPER passes func_info* via x30 ("mov
-> x0, x30").  This works for the first init stage (std_dll_init), reached
-> by the trampoline's "blr".  It breaks for a chained second init, because
-> dll_chain reaches it via "br x1" without updating x30.
-> 
-> ws2_32 is the only DLL with such a chain (std_dll_init -> wsock_init ->
-> dll_func_load).  wsock_init received garbage in x0, so WSAStartup was
-> never called; every ws2_32 call failed with WSANOTINITIALISED / EFAULT.
-> 
-> dll_chain also runs twice for ws2_32, pushing a 16-byte frame each time.
-> wsock_init consumes its arg from x30, not the stack, so the first frame
-> strands.  dll_func_load then restores caller-save registers from a
-> shifted offset, corrupting the first call's arguments.
-> 
-> Fix: copy func_info into x30 in dll_chain before the tail-branch, and
-> give AArch64 a dedicated _wsock_init wrapper that drops the stranded
-> frame ("add sp, sp, #16") before chaining to dll_func_load.
+This mail I sent to your colleague Thirumalai Nagalingam a few months 
+ago was returned undeliverable.
 
-The loss of generality here makes me slightly unhappy.
+Perhaps you could take a look at the question I raise?
 
-(Although, practically, it's extremely likely that we'll ever have to 
-deal with another DLL having special initialization requirements like 
-ws2_32 does)
-
-But.. it seems like maybe this could be written without dll_chain as a 
-tail call, which would also balance the stack, so something like:
-
-push x0 and lr
-move lr to x0
-bl x1
-pop x0 and lr
-ret
-
-idk, this code is a real maze and every time I look at it I have to 
-spend an hour drawing diagrams. So I'm perfectly prepared to be told 
-that won't work!
-
-It seems like there must be a generic way to write this for aarch64, but 
-maybe it looks so different from the existing implementation it's not 
-worth the effort of finding it...
-
-> ---
->   winsup/cygwin/autoload.cc | 28 ++++++++++++++++++++++++++--
->   1 file changed, 26 insertions(+), 2 deletions(-)
+On 20/06/2026 13:46, Jon Turney wrote:
+> On 19/12/2025 17:30, Thirumalai Nagalingam wrote:
+>> Hi all,
+>>
+>> Please find the attached patch which adds an ARM64 stub for the 
+>> _sigfe_maybe routine
+>> in the gendef script.
+>>
+>> Any feedback or nits are very welcome. The changes are documented with 
+>> inline
+>> comments intended to be self-explanatory. please let me know if any part
+>> of this patch should be adjusted.
+>>
+>> Thanks for your time and review.
+>>
+>> Thanks & regards
+>> Thirumalai Nagalingam <thirumalai.nagalingam@multicorewareinc.com>
+>>
+>> In-lined patch:
+>>
+>> diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
+>> index 1419704b8..52a5b77ca 100755
+>> --- a/winsup/cygwin/scripts/gendef
+>> +++ b/winsup/cygwin/scripts/gendef
+>> @@ -367,8 +367,24 @@ EOF
+>>          .include "tlsoffsets"
+>>          .text
+>>
+>> -_sigfe_maybe:
+>> -       .global _sigbe
+>> +       .seh_proc _sigfe_maybe
+>> +_sigfe_maybe:                                  # stack is aligned on 
+>> entry!
+>> +       .seh_endprologue
+>> +       ldr     x10, [x18, #0x8]                // Load TEB pointer in 
+>> x10
+>> +       ldr     x11, =_cygtls.initialized       // Load relative 
+>> offset of _cygtls.initialized
+>> +       add     x11, x10, x11                   // compute absolute 
+>> address and store in x11
+>> +       cmp     sp, x11                         // Compare current 
+>> stack pointer with TLS location
+>> +       b.hs    0f                              // if sp >= tls, skip 
+>> TLS logic
+>> +       ldr     w12, [x11]                      // Load the value at 
+>> _cygtls.initialized (32-bit)
+>> +       movz    w13, #0xc763                    // Prepare magic 
+>> value(0xc763173f) lower 16 bits
+>> +       movk    w13, #0x173f, lsl #16           // Add upper 16 bits, 
+>> full value now in w13
+>> +       cmp     w12, w13                        // Compare loaded 
+>> value with magic
+>> +       b.ne    0f                              // If not equal, not 
+>> initialized, skip TLS logic
 > 
-> diff --git a/winsup/cygwin/autoload.cc b/winsup/cygwin/autoload.cc
-> index 7054511b6..8d0f2a59e 100644
-> --- a/winsup/cygwin/autoload.cc
-> +++ b/winsup/cygwin/autoload.cc
-> @@ -302,6 +302,10 @@ dll_func_load:                                           \n\
->     .global    dll_chain                                   \n\
->   dll_chain:                                               \n\
->     stp        x0, xzr, [sp, #-16]! // x0 = func_info* (= ret.high); push for dll_func_load\n\
-> +  mov        x30, x0              // also pass func_info in x30: a chained INIT_WRAPPER\n\
-> +                                  // (e.g. _wsock_init) reads its arg from x30, but is\n\
-> +                                  // reached here via 'br' which would otherwise leave\n\
-> +                                  // x30 stale.  dll_func_load ignores x30 (reads [sp]).\n\
->     br         x1                   // x1 = dll->init (= ret.low); tail-call resolver\n\
->   ");
->   #else
-> @@ -481,9 +485,29 @@ std_dll_init (struct func_info *func)
+> Hmmm... while staring at this code, trying to refresh my memory of how 
+> this it all works... this seems wrong.
 > 
->   /* Initialization function for winsock stuff. */
+> Comparing this to the x86_64 version of sigfe_maybe, shouldn't the 
+> branch here be to forward to label 1? Otherwise this function 
+> effectively does nothing.
 > 
-> -#if defined(__x86_64__) || defined(__aarch64__)
-> -/* See above comment preceeding std_dll_init. */
-> +#if defined(__x86_64__)
-> +/* See above comment preceding std_dll_init. */
->   INIT_WRAPPER (wsock_init)
-> +#elif defined(__aarch64__)
-> +__asm__("\n\
-> +  .text                                                  \n\
-> +  .p2align 2                                             \n\
-> +  .seh_proc _wsock_init                                  \n\
-> +_wsock_init:                                             \n\
-> +  stp        x29, x30, [sp, #-16]!  // save fp/lr, open our 16-byte frame\n\
-> +  .seh_save_fplr_x 16                                   \n\
-> +  .seh_endprologue                                      \n\
-> +  mov        x0, x30              // x0 = func_info  (the wsock_init() argument)\n\
-> +  bl         wsock_init           // run WSAStartup; returns x0=func_info, x1=dll_func_load\n\
-> +  ldp        x29, xzr, [sp], #16  // restore fp, discard saved lr, close our frame\n\
-> +  add        sp, sp, #16          // drop the stranded dll_chain frame so the\n\
-> +                                  // downstream dll_func_load sees exactly one\n\
-> +                                  // dll_chain frame above the trampoline frame\n\
-> +  adrp       x30, dll_chain       // x30 = &dll_chain ...\n\
-> +  add        x30, x30, #:lo12:dll_chain  // ... so the 'ret' below tail-chains there\n\
-> +  ret                             // -> dll_chain, which tail-calls x1 (dll_func_load)\n\
-> +  .seh_endproc                                          \n\
-> +");
->   #else
->   #error unimplemented for this target
->   #endif
-> --
+> (Of course, this isn't very important since sigfe_maybe is only used by 
+> cygwin_detach_dll())
+> 
+>> +       ret
+>> +0:
+>> +       ret
+>> +       .seh_endproc
+>> +
+>>   _sigfe:
+>>   _sigbe:
+>>          .global sigdelayed
+>> -- 
+> 
+> 
