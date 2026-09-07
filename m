@@ -1,83 +1,125 @@
-Return-Path: <SRS0=/fae=G7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:29])
-	by sourceware.org (Postfix) with ESMTPS id D5FDA4BA7997
-	for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2026 00:17:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D5FDA4BA7997
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D5FDA4BA7997
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:29
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788740271; cv=none;
-	b=r2rBiwkv4z+QiZ1td4OuVO8siAOE7XEZ1qJv9cXy12fUimZEP+/dKyP3RWpjqxyBWhN4mbA1ZRDlhZg8fIsm1tCk7lN56C3i5sK9J12xGKELfohXZJA3xA1mhucvt0E7CUeLKd9vhDHVb6O42SYsS87DrXgGCxp9KRKbJ1QJR1s=
+Return-Path: <SRS0=ftRC=G7=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 9A0274BC0546
+	for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2026 05:28:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9A0274BC0546
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9A0274BC0546
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788758924; cv=none;
+	b=iCjsTbFDlD3isNVXJIwD4HGhnwpHCRggtNe41BhG5Hzaa5qhEQH+XNckJPHAdjAmqd9ILJ/QazekN6okEWU0cPWr5m5/HT/5talPeZPkL2pxDHrcMNPR1NZXzKt9BXB4lu34yERKuCje/Ky4/TVAPqmZOXfArOtq3AbAEqQfoMw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788740271; c=relaxed/simple;
-	bh=zXe8GMMXNjLQNdG6S7QtqgNIGjIl9jncmBn5cenG1M4=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=xwNR2KFvPN9BESLET1mK5Msv5PNg61sszIHpw2JNe9HsNzBU9ZlQIqIz1Pp9DxGag7Xz3IQA0x8jG+MfbE5hnVFHm2bTfxFOJ8BaIfskbLkkXRt9d+fMJ4r43KqwW5TSL2ustNpJjYMPLCFqi/1FnKNNWqovXojcusrfBzaUMDI=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lMp81F3q
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D5FDA4BA7997
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lMp81F3q
-Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20260907001748247.YGDR.60338.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Mon, 7 Sep 2026 09:17:48 +0900
-Date: Mon, 7 Sep 2026 09:17:47 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	t=1788758924; c=relaxed/simple;
+	bh=S/JWKNLBraJpbj2Noe5rWp1ArTseOcalIZfnh3GHVWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=rm/YjQbBcs3lbwKewuHhAidixY2K8RFeyYV9IBLaTEoGPoVzeul+E/pN38Tohy76/QhNqb1ugxOEymz3XJMi5imRhPmJEOapW57K0+onygcl8ZQHUmRUBIJ5JLaLZYjuuDgzFr6BOd7AugzFwEreO3FBW3b3KvPIrhHMLvaWHnI=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9A0274BC0546
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 6875gi9q098826
+	for <cygwin-patches@cygwin.com>; Sun, 6 Sep 2026 22:42:44 -0700 (PDT)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpdqxICCs; Sun Sep  6 22:42:35 2026
+Message-ID: <57dbcbba-2fcc-43a6-8c82-5f0b6488bee1@maxrnd.com>
+Date: Sun, 6 Sep 2026 22:28:36 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Cygwin: proc: Cache system process information
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: cygcheck: Fix unused-but-set-variable error
-Message-Id: <20260907091747.01bd2b482ae88da51ae8caf7@nifty.ne.jp>
-In-Reply-To: <20260906234452.1593-1-takashi.yano@nifty.ne.jp>
-References: <20260906234452.1593-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20260906111103.102115-1-takashi.yano@nifty.ne.jp>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <20260906111103.102115-1-takashi.yano@nifty.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1788740268;
- bh=fA9Gj8z8NfNjVBzbz6t30/92NYQS6zy/1Li4vy4mw70=;
- h=Date:From:To:Subject:In-Reply-To;
- b=lMp81F3q4+IasLkPoEqJNHhbh54W17gEkFQc9HETLTrjnJXw+o+Kmmh4H1QIJm09k4VhsGTi
- 9lhTSk5Hcnps4K0X3/mIBVzTWhbky13b8RNq1DjPsp0TT1Ugqxasoja/nZMwag3QLO8Ix/GTkJ
- n1ZL/VrqsjOiCLiMB8n+nuxCB4PTb5JlertYrHm36kRx8E9OM7hM8N9IETK/ntLtbkX+t1zuwz
- lyegOiZhGJ5rUC4Bp5fQqLMg7k7EzmxKOMnY7OBskjlb/YNTJmQ1XV79gqcIQFQHwVEMCuRw1T
- c0jKC4aJPfaLvfFxdM9dq+ytIVRcGx8puGbuy0cH3aABcd6A==
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Mon,  7 Sep 2026 08:44:43 +0900
-Takashi Yano wrote:
-> Fixes: 1fd5e000ace5 ("import winsup-2000-02-17 snapshot");
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> ---
->  winsup/utils/mingw/cygcheck.cc | 2 --
->  1 file changed, 2 deletions(-)
+Hi Takashi,
+
+This v2 patch LGTM.  Thanks for investigating!
+Regards,
+
+..mark
+
+On 9/6/2026 4:10 AM, Takashi Yano wrote:
+> If a process reads /proc/<pid>/stat for multiple PIDs, current code
+> every time calls NtQuerySystemInformation(SystemProcessInformation).
+> In addition, the buffer size is estimated by calling that function
+> with increasing buffer size. This takes 15 - 20 msec. This looks
+> short time, however it is not negligible in some situation. If the
+> number of processes is 100, reading /proc/<pid>/stat takes 1.5 - 2.0
+> sec. Due to this behaviour, process pane of the btop is very heavy.
 > 
-> diff --git a/winsup/utils/mingw/cygcheck.cc b/winsup/utils/mingw/cygcheck.cc
-> index 89a08e560..934816939 100644
-> --- a/winsup/utils/mingw/cygcheck.cc
-> +++ b/winsup/utils/mingw/cygcheck.cc
-> @@ -1707,7 +1707,6 @@ dump_sysinfo ()
->    else
->      {
->        char sep = strchr (s, ';') ? ';' : ':';
-> -      int count_path_items = 0;
->        while (1)
->  	{
->  	  for (e = s; *e && *e != sep; e++);
-> @@ -1715,7 +1714,6 @@ dump_sysinfo ()
->  	    printf ("\t%.*s\n", (int) (e - s), s);
->  	  else
->  	    puts ("\t.");
-> -	  count_path_items++;
->  	  if (!*e)
->  	    break;
->  	  s = e + 1;
-> -- 
-> 2.51.0
+> With this patch, system process information is cached per process
+> for a short time (20 msec) to improve efficiency. The buffer is
+> allocated first time when the corresponding /proc file system is
+> read, and held until process exits. If the buffer size needed by
+> NtQuerySystemInformation() is increased, the buffer will be re-
+> allocated, however never freed. The buffer pointer and the buffer
+> size are stored in the static area, so that the number of the
+> function call is reduced much. As a result, the process pane of
+> btop becomes significantly light. It takes only ~15 msec for 100
+> processes.
+> 
+> Fixes: 9ba913a56dd6 ("* fhandler_process.cc (process_listing): Add 'stat' and 'statm'.")
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by: Mark Geisert <mark@maxrnd.com>
+> ---
+>   winsup/cygwin/fhandler/process.cc | 22 +++++++++++++++++-----
+>   1 file changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
+> index 537a4b370..404668661 100644
+> --- a/winsup/cygwin/fhandler/process.cc
+> +++ b/winsup/cygwin/fhandler/process.cc
+> @@ -1524,14 +1524,24 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
+>   {
+>     /* This isn't really heavy magic - just go through the processes' threads
+>        one by one and return a value accordingly.  Errors are silently ignored. */
+> +  const ULONGLONG cache_time = 20;
+> +  static NO_COPY muto cache_guard;
+>     NTSTATUS status;
+> -  PSYSTEM_PROCESS_INFORMATION p, sp;
+> -  ULONG n = 0x4000;
+> +  static PSYSTEM_PROCESS_INFORMATION p = NULL;
+> +  static ULONGLONG t0 = 0;
+> +  PSYSTEM_PROCESS_INFORMATION sp;
+> +  static ULONG n = 0x4000;
+>     int state =' ';
+>   
+> -  p = (PSYSTEM_PROCESS_INFORMATION) malloc (n);
+> +  cache_guard.init ("get_process_state")->acquire ();
+> +
+> +  if (GetTickCount64 () - t0 < cache_time && p)
+> +    goto reuse_query;
+> +
+> +  if (!p)
+> +    p = (PSYSTEM_PROCESS_INFORMATION) malloc (n);
+>     if (!p)
+> -    return state;
+> +    goto out;
+>     while (true)
+>       {
+>         status = NtQuerySystemInformation (SystemProcessInformation,
+> @@ -1550,6 +1560,8 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
+>   		    status, RtlNtStatusToDosError (status));
+>         goto out;
+>       }
+> +  t0 = GetTickCount64 ();
+> +reuse_query:
+>     state = 'Z';
+>     sp = p;
+>     for (;;)
+> @@ -1579,7 +1591,7 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
+>         sp = (PSYSTEM_PROCESS_INFORMATION) ((char *) sp + sp->NextEntryOffset);
+>       }
+>   out:
+> -  free (p);
+> +  cache_guard.release ();
+>     return state;
+>   }
+>   
 
-Sorry, simply cherry-picking 54692d3ad6c0b0b360e13c47f23046788676554c
-is enough.
-
-I'd withdrow this patch.
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
