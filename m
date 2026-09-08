@@ -1,141 +1,146 @@
-Return-Path: <SRS0=/fae=G7=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.227.117])
-	by sourceware.org (Postfix) with ESMTPS id A1F714BA2E0D
-	for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2026 11:54:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A1F714BA2E0D
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A1F714BA2E0D
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.117
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1788782094; cv=none;
-	b=WE+EAQEBlR5z+wzlbOui57Sb7499HODH3o1xwG881ZFo6eZAxtpBjn48wHuWqc8roWERCKcOxuZ2AfuhhbakBjo6biOkzd3Ak+QrPBnvdQ2XwMqRDJ6oBmb7rZT6QONVg0/rdn857wL8QzNqFou1C05Zju43D/Q2/Hs5iYwmz7k=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788782094; c=relaxed/simple;
-	bh=UX3JeldIvmujX2jyzoHKtLwg2y15EXYG9jhXi6FZv+4=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=e5tSpgJT0MZTEWFCT8LjAs4GTLUqDn/99Cel7erHDhyqKwxTpSuzzVqnfKlqYS9bRC59PGAqLkJiDN7p3eq5pl2zIwyoylMVHZr8oIAk2vsEif/543/7rF5WgYdpV9a3vRrkaYjZpvXn4sUmom9bRWjFOIB4k8U6EBBSvjdxxx4=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=bHvxNq6j
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A1F714BA2E0D
+Return-Path: <SRS0=IJIq=HA=gmail.com=thirumalaicse2020@sourceware.org>
+Received: from mail-yx2-x10.google.com (mail-yx2-x10.google.com [IPv6:2607:f8b0:4864:41::10])
+	by sourceware.org (Postfix) with ESMTPS id 4BD4A4B920E9
+	for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2026 04:44:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 4BD4A4B920E9
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 4BD4A4B920E9
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2607:f8b0:4864:41::10
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1788842684; cv=pass;
+	b=QPQ0PQgq4jie3rdPAyYo/lXMG4bV4LHqInELHZ2DTClPCW/SKe29CxXu6YxC68sQ3i1PPHBYg/vHUV67gs9Sm21CIHZnZciN8OW6tdigIZZc/Uw9L5dOH2XCcCqJo4cSub9VVbus1pWp7hc5WgIi3vgFghFbztMdrkV55xG8I+E=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1788842684; c=relaxed/simple;
+	bh=c2+SROvd3GwVpsvO0+UZXWfLpyJYgCqrI2MN0ir3KPQ=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=faxBKMlXFYxRqpNbfiEEn9+zO7sclvJZvlRW4daM1sHEqIsQ8PSZO6YK3wfPByuLoEk6kiCARjhQp1Jz8mkQA0dz54ehauF9ib/wJPTH1iPjiXGBOtAnFEtg2v/GWm+DFRcYRSfsFt/Pmq1wNCX/bkld0dDbxvFlNSPPS9KFiGs=
+ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rgN2Eybs
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 4BD4A4B920E9
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=bHvxNq6j
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260907115448832.DUGT.102121.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Mon, 7 Sep 2026 20:54:48 +0900
-Date: Mon, 7 Sep 2026 20:54:46 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: proc: Cache system process information
-Message-Id: <20260907205446.c14fdc7e8ac3a4589529bec6@nifty.ne.jp>
-In-Reply-To: <57dbcbba-2fcc-43a6-8c82-5f0b6488bee1@maxrnd.com>
-References: <20260906111103.102115-1-takashi.yano@nifty.ne.jp>
-	<57dbcbba-2fcc-43a6-8c82-5f0b6488bee1@maxrnd.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1788782088;
- bh=0yzUAyWlnQKy/hRmVlIRpIjYyZRCr2B3OxBZk/eyuTw=;
- h=Date:From:To:Subject:In-Reply-To;
- b=bHvxNq6jYZkVnadeCulHmcd2BS9QnqJtjzhZVMx7u3fPc9J6PbHot9vUkPMvqEutucOr+u17
- 0WyTCHD1JHj58futvGSQuHxR5KtJAYEJn0XRYbqThi6WZ9pwJumpe/PaUVdWZjy4vSNMXE/VVt
- qAFAbIY6XDgLRi0VZUZIGHwoW3fYPCiUvG0rTcV531j+5JMPES0JCesYvQsz6pNvf2IbHqEjcl
- NjIe5pnJegz89xeSCE/al+KhzZokOIUzFdQbWojI6TzTwmbxuypwfZYOqhdWOfZr3fUHpWWmKX
- iHXUIyZjWrrxH18prLw088HSTvWvHEaO1V+k13JTotoVAoWw==
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rgN2Eybs
+Received: by mail-yx2-x10.google.com with SMTP id 00721157ae682-858facc86feso281597b3.2
+        for <cygwin-patches@cygwin.com>; Mon, 07 Sep 2026 21:44:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788842683; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CSRPEZgrLb9IQ8nQE46IWj7VTUppJ9+izYuZzCWcJoC7UzfQzBO17WeEiINuvqthcA
+         4v6vVw4ac7eSEevDx+uOSJrjKhw+4Jf3zKOEwqN9CIDb9YEpjRLZBqPFu41jo38+tF80
+         T5QZgCkMG6rJ4H45PCNdS3+kWJlvPrDwx3looa5nerS8vbYu5I1KDukWH1m0Tkd1wwaG
+         wmErslm3kHxn+h/62bH3ypZuDXueNeUh6DFAG35SfF9q4HSfYgIsQKLovPKRLv7D+teb
+         74b5T2YQhNgndobwQzosspgO15/SJdNiYy6THgkN4f4pGLcsUt9v7tFOcaJJ5geEHqk/
+         B6xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=c2+SROvd3GwVpsvO0+UZXWfLpyJYgCqrI2MN0ir3KPQ=;
+        fh=0QKKDkzYjEnbwpzEUVkLTL8e0Bu2pr/udJnCSu5+gDQ=;
+        b=OGMlUohtjapU91t9UJ6qx06Zk8DXTLsBbqthHyyhvCzpKl6IGOxIrBEtwJ+VWpuogV
+         Sot5G67/0PxCKrbXN24LzMfMQJLKjYIdo73l65kYroc3JCF+cNuzk+ayjXSRAMFRDXGl
+         8/owocgTmeXmqYRz5yCBZRbOJwRL/PxaVRwGUcEk3/C2dOfWlXvthUDTeMiX0FwijqB2
+         4EKvZm3OZ6a2e0fSEis/Se9h32MN/y21cgICnnoJa5p41qhuZQvy98DJ2fWLvBqnSnuP
+         PH9e8NogS0bf7GtGrWDCpWG/XJF6dC1ZzLaA5ddmGgxpFzSPaPW/HAXdfnHU0w7pqnmI
+         /7Bg==;
+        darn=cygwin.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788842683; x=1789447483; darn=cygwin.com;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=c2+SROvd3GwVpsvO0+UZXWfLpyJYgCqrI2MN0ir3KPQ=;
+        b=rgN2EybsDFSD3FOUXxnoLQsDCAAU3RWE8neZpQLagAhN3MjvUbMVd9Dv0pkVZMyHZ1
+         TAcuB+Lhj8hV5CgaMO0/YJ4RDOEDnJWdR9vpCi/OytAzzwJeZysqQcD4ozOplu9mOmgo
+         OAIHz/DlPotMquXL4C+iVjywt+o0QqrBAkTD2IjqF8+BX7YbqxnDmLvlW5iP1zG7FSCX
+         VlpX2l3XKEPTyRqlQOyEc/2BbjoHTcstLvC7bovbXpK5Am1Z6zk8hh5TdTFQMxwYpPmR
+         rjXkFY0ZqYsJJxpp2O5cT69ckzbh+ZgZadZ4FLtkQ6Wy9sJiVGri5ALGk2CJo+GPsPgI
+         UZ8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788842683; x=1789447483;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=c2+SROvd3GwVpsvO0+UZXWfLpyJYgCqrI2MN0ir3KPQ=;
+        b=DkSS5laTuouWX5SXhmLU2km9QElWBoJZj4GlnoBtH3LhrZeM5GPJf3/iIRZwHkdCcs
+         OrEs3vG2znI5W0+TL9/zW9CoKojwpMKIn+uo3O3btsi4DZSy5HReDmg3dO4mGXptTiWn
+         CXo2DCr09hwFDS/RcUjwHQJxJHbHGn49S0elWuTXRTm2UHEIuO+Sr7Fx+6LI8EiyteDd
+         bKobPehO+SGcJI63Sou6WZHHm9w0m0fizxTyE5nwdYGcgi7MDPILej4lBTgxhOi3Ulbz
+         alEjYcgM56WSUlQ6bp2rHedwZHxP3mrFozeQJs8Y9wIjSL61+LRmSPKrGvhfLNZU+wbP
+         9CpA==
+X-Forwarded-Encrypted: i=1; AKwUvBys00DCSvimY3it61CciUcerXwLNHBZzkuqp82XRMmzbv5yf/mmv262yi0WxSGgOGSZQrvtNnRccmSG2DkCuA==@cygwin.com
+X-Gm-Message-State: AFuF++kQjq8H8s82EXmfwrfr2Vz4ZYey9Tu/gx8Wwoz5ixHqT/62tsvf
+	EFo9Igm89D/hSEnJ7zT4jRqB0lckKnaXNA6Y1e2KX/Q+PKT/hkhJ0p3I8nuJi5oi+X7k3/32gB6
+	Ra3sIWkrEIE+GO+6A1Mo693d5/GIwoJMbvA==
+X-Gm-Gg: AYBFou2MiSs0Tqc687Kzh09yN6GEFIO+/LqlYr2pPikFhVdhjszy1lRaLJ7SsWYlEb/
+	RapQ9KaivG+QbGL4mgBMhlMuVJfjh43Br/KJ2CJmpLg9Y/ru/N3QKENbzg7tUJKGdguSXHb757N
+	GjUUFo5ErWhZiHpK1e8waWFqqBZYPQl4GLLGl+3mWC7x6bKYpDZdvCC7xX1FJ3VdaVrccf7xWYH
+	QJXLPCk5RDZHHAI3BPklJ2LcjIsmOoIQ+kq/QWMUDJUO6J+gIip5numfY9LIFZA34Jny739EA+t
+	lEYhwhruZLkImCpuUGYT9fuAQ9FkqSShmk79OBKsPt7HwH9QQc30O/tGV+g4U7yFrzy7iKPJnmz
+	dn8hcLHJCbs7/ww3a6we2xiH6vdox1tFg
+X-Received: by 2002:a05:690c:3582:b0:870:48aa:472e with SMTP id
+ 00721157ae682-87171651665mr100449957b3.0.1788842683036; Mon, 07 Sep 2026
+ 21:44:43 -0700 (PDT)
+MIME-Version: 1.0
+From: Thirumalai Nagalingam <thirumalaicse2020@gmail.com>
+Date: Tue, 8 Sep 2026 10:14:42 +0530
+X-Gm-Features: AcwNN1Vod2l-MswBbaSBflclByRNXKw0ECGkHtAfh9Rv1IuB_Lq7yvv_3HUz7Xs
+Message-ID: <CADiGZiEemav5YcWESCqs=Bh2uxGKbpTLsnFxkAKAwS7EGfMnZw@mail.gmail.com>
+Subject: [PATCH] Cygwin: gendef: add_sigfe_maybe for TLS initialization
+To: jon.turney@dronecode.org.uk
+Cc: Corinna Vinschen <corinna-cygwin@cygwin.com>, cygwin-patches@cygwin.com
+Content-Type: multipart/alternative; boundary="000000000000ae77ea065af164f5"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sun, 6 Sep 2026 22:28:36 -0700
-Mark Geisert <mark@maxrnd.com> wrote:
-> Hi Takashi,
-> 
-> This v2 patch LGTM.  Thanks for investigating!
+--000000000000ae77ea065af164f5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks! Pushed.
+++ Jon turney & other folks on mailing list
 
-> Regards,
-> 
-> ..mark
-> 
-> On 9/6/2026 4:10 AM, Takashi Yano wrote:
-> > If a process reads /proc/<pid>/stat for multiple PIDs, current code
-> > every time calls NtQuerySystemInformation(SystemProcessInformation).
-> > In addition, the buffer size is estimated by calling that function
-> > with increasing buffer size. This takes 15 - 20 msec. This looks
-> > short time, however it is not negligible in some situation. If the
-> > number of processes is 100, reading /proc/<pid>/stat takes 1.5 - 2.0
-> > sec. Due to this behaviour, process pane of the btop is very heavy.
-> > 
-> > With this patch, system process information is cached per process
-> > for a short time (20 msec) to improve efficiency. The buffer is
-> > allocated first time when the corresponding /proc file system is
-> > read, and held until process exits. If the buffer size needed by
-> > NtQuerySystemInformation() is increased, the buffer will be re-
-> > allocated, however never freed. The buffer pointer and the buffer
-> > size are stored in the static area, so that the number of the
-> > function call is reduced much. As a result, the process pane of
-> > btop becomes significantly light. It takes only ~15 msec for 100
-> > processes.
-> > 
-> > Fixes: 9ba913a56dd6 ("* fhandler_process.cc (process_listing): Add 'stat' and 'statm'.")
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Mark Geisert <mark@maxrnd.com>
-> > ---
-> >   winsup/cygwin/fhandler/process.cc | 22 +++++++++++++++++-----
-> >   1 file changed, 17 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
-> > index 537a4b370..404668661 100644
-> > --- a/winsup/cygwin/fhandler/process.cc
-> > +++ b/winsup/cygwin/fhandler/process.cc
-> > @@ -1524,14 +1524,24 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
-> >   {
-> >     /* This isn't really heavy magic - just go through the processes' threads
-> >        one by one and return a value accordingly.  Errors are silently ignored. */
-> > +  const ULONGLONG cache_time = 20;
-> > +  static NO_COPY muto cache_guard;
-> >     NTSTATUS status;
-> > -  PSYSTEM_PROCESS_INFORMATION p, sp;
-> > -  ULONG n = 0x4000;
-> > +  static PSYSTEM_PROCESS_INFORMATION p = NULL;
-> > +  static ULONGLONG t0 = 0;
-> > +  PSYSTEM_PROCESS_INFORMATION sp;
-> > +  static ULONG n = 0x4000;
-> >     int state =' ';
-> >   
-> > -  p = (PSYSTEM_PROCESS_INFORMATION) malloc (n);
-> > +  cache_guard.init ("get_process_state")->acquire ();
-> > +
-> > +  if (GetTickCount64 () - t0 < cache_time && p)
-> > +    goto reuse_query;
-> > +
-> > +  if (!p)
-> > +    p = (PSYSTEM_PROCESS_INFORMATION) malloc (n);
-> >     if (!p)
-> > -    return state;
-> > +    goto out;
-> >     while (true)
-> >       {
-> >         status = NtQuerySystemInformation (SystemProcessInformation,
-> > @@ -1550,6 +1560,8 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
-> >   		    status, RtlNtStatusToDosError (status));
-> >         goto out;
-> >       }
-> > +  t0 = GetTickCount64 ();
-> > +reuse_query:
-> >     state = 'Z';
-> >     sp = p;
-> >     for (;;)
-> > @@ -1579,7 +1591,7 @@ get_process_state (DWORD dwProcessId, DWORD *num_threads)
-> >         sp = (PSYSTEM_PROCESS_INFORMATION) ((char *) sp + sp->NextEntryOffset);
-> >       }
-> >   out:
-> > -  free (p);
-> > +  cache_guard.release ();
-> >     return state;
-> >   }
-> >   
-> 
+Hi Jon,
 
+I saw your email regarding [PATCH] Cygwin: gendef: add_sigfe_maybe for TLS
+initialization on the mailing list.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+I realized that I had missed sharing the earlier context with everyone. To
+keep the mailing list informed, I'm forwarding below the email I sent to
+Corinna on April 28, 2026, while transitioning out of my previous role.
+
+Adding it here for reference.
+
+Thanks for your guidance & support always.
+
+Thanks,
+Thirumalai Nagalingam
+
+On Tue, 28 Apr, 2026, 3:54=E2=80=AFpm Thirumalai Nagalingam, <
+thirumalai.nagalingam@multicorewareinc.com> wrote:
+
+> Hi Corinna,
+>
+>
+>
+> quick heads-up that I=E2=80=99ll be moving on from my current role so my =
+colleague
+> Chandru [chandru.kumaresan@multicorewareinc.com] from our team will be
+> taking over and will follow up on ongoing discussions and any pending
+> queries.
+>
+>
+>
+> Also, a few pieces of our extended work are nearing completion and
+> currently under internal review. These include patches around aarch64
+> support (autoload stubs, SSP enablement, exceptions.cc [make-context]) and
+> an initial CPU ID implementation.
+>
+> Patches will be sent upstream once it is ready.
+>
+>
+>
+> Thanks for the support so far :)
+>
+>
+>
+> Thanks & regards
+>
+> Thirumalai Nagalingam
+>
+
+--000000000000ae77ea065af164f5--
