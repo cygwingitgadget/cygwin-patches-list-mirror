@@ -1,164 +1,66 @@
-Return-Path: <SRS0=IJIq=HA=gmail.com=thirumalaicse2020@sourceware.org>
-Received: from mail-yx2-x10.google.com (mail-yx2-x10.google.com [IPv6:2607:f8b0:4864:41::10])
-	by sourceware.org (Postfix) with ESMTPS id 28E584C3182D
-	for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2026 05:04:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 28E584C3182D
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 28E584C3182D
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2607:f8b0:4864:41::10
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1788843846; cv=pass;
-	b=cki4mbar3Xhb/511GLdcNQXpfPKfMVXcQ74ACTuxtUVobULukdCabJCTqzvQOAzhLVf38qJR+oMHhtc9kiBp3jbLwjcmXPEZ8XqE+fZ7E5V86P1Es5H4UZgnfPSc6VbfPh5mkbKDICl55S6l4h7zlKAZw8nz6sjtI5KaEUhf+ec=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1788843846; c=relaxed/simple;
-	bh=ZAczVxPECD/S6LZifLcf+wYYRTrazYgSdmNTsUcJRY0=;
-	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=UvR6OtFuoIf2qCAOO5Fk8z1PgKh85MokaypIpfpHgeyilmJa5cSqso4WECD8dfVQpRnRQeaEs+X7H/hjylCZV0NUMOJfHzqUjgeL1O4wmBYJ4hoOZyUldq/m572dkBPVZcMKORO+FI274o3to6D4/1PXRZMDnDw7eIkTj9op2Lg=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VmB/AF4g
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 28E584C3182D
+Return-Path: <SRS0=92hR=HC=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+	by sourceware.org (Postfix) with ESMTPS id E41B34BAE7F6
+	for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2026 06:24:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E41B34BAE7F6
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E41B34BAE7F6
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=216.40.44.17
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789021447; cv=none;
+	b=uSTUwI5x3aEEUEVVeYz2lxgkZuI2lCKxUsMqMp7hdC0jei9gbsGozX7oQpG2YzxZkls7nM+rAlvGOHeoJwAhJ5kD+yJMJSpBw0rt5w9JiqXOIDvag6sUrT2FQrQ+8u0ILUTYH7u+U5lLKLOjivTT1RvMQXpwZAyMWZ+spJqX7us=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1789021447; c=relaxed/simple;
+	bh=VHX2aAAAfPtBSLyibCkYD+p7CDLsgaWl6QFP0S16/c0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=igIoLeuov+PZOVd+qa9PhHBfdpYRi89FQdcinHvMbmrqvyvR4beToitpujOpmd7kJ3flHkogigZUNs28B57ELkJ/WdHzgf8AWbJfuzCroOF74NwTQQmJ3x0V3Nf0FMtObPyNLec43R6x/yYb1JG4SlhcHEvzdONpmuHRfcFnYIM=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=qoC2sWRl
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E41B34BAE7F6
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VmB/AF4g
-Received: by mail-yx2-x10.google.com with SMTP id 956f58d0204a3-66fb2f600e7so219718d50.2
-        for <cygwin-patches@cygwin.com>; Mon, 07 Sep 2026 22:04:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788843845; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IKUBOCxlGE4kBsxH6K9mvHQzdl+Vuc6C1tqmMxqgTqhv4hYDmmXjboLNAFSf+KH7RU
-         V/CbC6RAAOqiIkYnST8ybCRMLc5A80uxs9sUca1V403RquzO520LzuxTUoF9HdFvPnQ6
-         vSszL7ahYapgrsa2RiadrcC5UPMSR5S1po8WehHX3qLfCcD9K8IWzGeKAcBZbuwADVP5
-         7V1rP7BxApFviVV81ZI9UvRxhwO9v9huVasO/5k8RXe4v3WEy64iS+C9EHjbj2h2T5Mu
-         XMpF2YErK1c0UorC9Qj3/zQrqnG5EfAqUP0hFnU95mCBnlMSwuCrQ99Pcvn6i3cSgrQ6
-         wPVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ZAczVxPECD/S6LZifLcf+wYYRTrazYgSdmNTsUcJRY0=;
-        fh=dnYhfB7TbtRg6DZLkE4O4OTHCWpcXl9Jdr7b8wFufac=;
-        b=bfDl+CGeotuHgFjsSXJZWIyUuTbmENNO9LHVm903mSUIMvzwAZS0bWFMqiG7e8N9dt
-         nPOQ5zufDOTcX4dEKgXMp350vesB9aolrNMPdThIfkDPhVKm5EoAWfFfYwsk777ikcrX
-         CSxyEtXEgFOk8ZKsFU8GpvY4rsKjkP9KcqC/SoL3STDmJv/IXGiNL4f03Ru70ZIe/NYv
-         nwexFakJvu5ApeH2ytDOt19u1XbtBVVXvxpnrLXH1ofKBMGD24ktj3QEUlxYEyeOTs15
-         1V8+CFbYhDMIBk6HKVsuEHq/A1fScTBpVNzmXLnWG63kO8Z3grwU4xkYfPv7bRZZsOwU
-         g7eA==;
-        darn=cygwin.com
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788843845; x=1789448645; darn=cygwin.com;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZAczVxPECD/S6LZifLcf+wYYRTrazYgSdmNTsUcJRY0=;
-        b=VmB/AF4ghHJvA0mP0EQfRjoBhegEKGKvfj0XIfoXsgZLg+gKEHP+BmUMQDT7aAtW6l
-         t3M6x6o5F7vLtlC5Hw83pR1DwiNGJXuHsLSuXUp78dJg30p2W2H9B2DmH7QQ+AYadURH
-         qLqd3afs+DJG4m3mi9+l5z1GkxsQezPH6tZftRJZNlO8MGjCzAK7tGf/E109VipP3fVa
-         ZXJV1il4AI4fls0K8jK53MTDlFQKJ7dsb1EXzEsyogmNERxNhJmMHyeleMKpwuv/R36b
-         gnIU7d9Eo0iJ/fogra94NE31k3egyp3xQNSYCn6gyQYZLjmc7OsT0FXQKjE8D9c61BMh
-         XF7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788843845; x=1789448645;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ZAczVxPECD/S6LZifLcf+wYYRTrazYgSdmNTsUcJRY0=;
-        b=Lz3qd9ZVzR3tqMRyv+gqV9nIm5Yxb+9bydnxy6UkPigAghCVwnhv9eJr0T1ovCWuWo
-         Gc8hFQvuuHrKB0DzRTWPMMuPPv50yh0ebHbLG1JMzJDAay/5qjyAynkgoATWYjp7cexq
-         /8iBXfSw+4OI9DT6sHRPnwKHPSQd92+B1eo7TXBhfjdbuxF5oh01IHRsdUA9eibEJnfb
-         6MFTB0cPTrBIwbexT6C9tbICGkBFS2JSTwiMvtDtq4HuIqi/M9A2LEsI5I0AUbB0m1i8
-         4PCKIem0BskI5oyl9yRnNeVAq1J2MCe9brLqNrESXOOAO4H8wUHy33tpM//Hf+Hp8l3u
-         gh3A==
-X-Gm-Message-State: AFuF++k2fAa19WHG0i0Hw7rgQWLe1WbR2swH/PWfX2rGja1QLW47x+zy
-	ACkRiaOJ6uJeEu9yoa13StEm2of1qgaRbIOkgNquDbek2KPRq1HybXksTxdkPHPFq/p/updbtYM
-	h35JnL0g/5oTjHwE8MYjIFDd6eraPjnPJmg==
-X-Gm-Gg: AYBFou0KFs8ecfTXS3hRTsVEohDPCoSFZrV7kiTENyOpAFmsPWqHvNO6XZuArcvuxfY
-	aZ1ldVbRIljnLnVU/GCbjV7+FB5bvYcau6eQXPPZ+Mdrlx2WWpQNmSH8kFnFnEIQO7dtrfMVfXR
-	i6UYyf+hdk923PoZTof1fwTc4c+XHQCGssX00wnUOCf0aoTcY4iQ4bt0XsWX24MFHT4/KJ7WQUl
-	OPNOSnlA4y8DcfYS76ldpmZeRjdnSP2vE0pAa7/DNdYDG79c9XBq/pcv8wzzYN6h+Lop8ywSaEM
-	t4sNdmL3ROSLEsLNsWJVw1o75qAn1AOKHmHYvjrHIY91p430wlHiQYtasNF4exfTI30BcXb4PhY
-	eb3obUysY7N+RKzWlI2+urH22LyphSiJVw5JEra9Uu4U=
-X-Received: by 2002:a53:c445:0:b0:66f:86e5:93e2 with SMTP id
- 956f58d0204a3-66fc44fd329mr3562123d50.0.1788843845494; Mon, 07 Sep 2026
- 22:04:05 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=qoC2sWRl
+Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id A49284042B;
+	Thu, 10 Sep 2026 06:24:01 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf05.hostedemail.com (Postfix) with ESMTPA id 48B722001B;
+	Thu, 10 Sep 2026 06:24:00 +0000 (UTC)
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com (Cygwin Patches)
+Subject: [PATCH] Cygwin 3.6.10 release
+Date: Thu, 10 Sep 2026 00:22:46 -0600
+Message-ID: <c4835768b043a802c4fde5f68323005571c32567.1789021325.git.Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-References: <MA0P287MB3082786039509EE4071456959F372@MA0P287MB3082.INDP287.PROD.OUTLOOK.COM>
- <CADiGZiHEUYJ-+Acp4sGLFM3h-ggN_12ivDjCXAF6OcpvDPy0Cw@mail.gmail.com>
-In-Reply-To: <CADiGZiHEUYJ-+Acp4sGLFM3h-ggN_12ivDjCXAF6OcpvDPy0Cw@mail.gmail.com>
-From: Thirumalai Nagalingam <thirumalaicse2020@gmail.com>
-Date: Tue, 8 Sep 2026 10:33:53 +0530
-X-Gm-Features: AcwNN1Uw8-zNLEc2E0y1m8aXqTuDK2Js38-DYIlAkNrn1agp04vsx8csewu2Vec
-Message-ID: <CADiGZiHqDLasNmGHie9iSCgkyWRjuXeWiLqC5YmtsZyXwBW21g@mail.gmail.com>
-Subject: Re: [PATCH] Cygwin: gendef: add_sigfe_maybe for TLS initialization
-To: cygwin-patches@cygwin.com
-Cc: jon.turney@dronecode.org.uk
-Content-Type: multipart/alternative; boundary="000000000000f82ed7065af1a9b9"
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Organization: Systematic Software
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 48B722001B
+X-Stat-Signature: yds7nhnykimmem899p3gnn47cph8h1e6
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
+X-Session-ID: U2FsdGVkX18G5SH7bg7JV3WO0u4N2mRVb9DLouIyVME=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-transfer-encoding; s=he; bh=icwOTSn9Lt4fAQOcipRFdpZK6zkVvObhI2DRaSIRRR8=; b=qoC2sWRlCV8fhnVAnjtIBwwafzOsQSuHkxmi+/xwSI8mwRHS5xtupasN+DOzib0wzec/dJ5NwMHaxCyQ/HIoObdeYivNek6/DHMUQh652m4PpgMUozfn5efBgiSyfFEqDQKLjanDHuJDLUWt6diCzZd4+DTFeuQOavUfwgBmQ/82CHEmyHvgEYq3EgUXXNH4zW7KhRHHKzTGR+MGyKlE2aXLC1yRQOnTTs9m3uzMvB/d07bRZKQv5KpHM5yum0zJPJpNUfv4wzB1aWeF0i7Q3Kxlv6wFHZX0fLM9VL6fpl1+z5QvTKIVrO0Z/plhxCJRZAeqeuPfB/Iu1niMBbx1KQ==
+X-HE-Tag: 1789021440-767096
+X-HE-Meta: U2FsdGVkX18ilHuoQ8lG4/wD+vFDxT9kR6pbzhOFJ9fdMUSdSYMznAxhsWPsMQnjEZBESHj++bbTLOB+KRF3Q13EYZgD/Z0r8kPdYRgIAyTD7Dw5C40RN4CcyioqTFBcLpN6AUpx8LTcwMPPSts4ps02A515RMuWWpqNTbwwOH/Cizq4atUUKKetB+xaz3afvCIIo/+Mziw2/Y8Cj6GM/2b2o7u7ZkL7iQ0AiQ1NONXnzJ3b9/QbpTTcup6I0fG758lVHV42awi57bpEwuaZmJTyuyqb2eV8DPBi61MWpDuF5naSc3Kc5ykrRvlxuquVzXSz57QnP6Zbr9vI0h1QSC66upZw83WuGf39teg2BGQVA9SgZJdRxYzK1PoLFnhY3f6lZ7g814OeI/rym13S14ZjWs0LfXsvp/5uOUXHfLF7XHD+vOmlbPTzKlD8cScGPIW4qUqwnxaWjLsa0roWjFFyied+fxJf/iOeh/5+IBnwkjXqx1lnlg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---000000000000f82ed7065af1a9b9
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+---
+ index.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Resending this email as when it was sent, I wasn't subscribed to the
-mailing list.
+diff --git a/index.html b/index.html
+index 27c6fd68c289..3b81ee0eaae3 100755
+--- a/index.html
++++ b/index.html
+@@ -45,7 +45,7 @@
+ 
+   <p>
+     The most recent version of the Cygwin DLL is
+-    <b><a href="https://sourceware.org/pipermail/cygwin-announce/2026-April/012969.html">3.6.9</a></b>.
++    <b><a href="https://cygwin.com/pipermail/cygwin-announce/2026-July/013133.html">3.6.10</a></b>.
+   </p>
+   <p>
+     The Cygwin DLL currently works with all recent, commercially released
+-- 
+2.51.0
 
-Sorry for the spam, Jon. :(
-
---
-Thanks
-Thirumalai Nagalingam
-
-
-On Tue, 8 Sept, 2026, 10:22=E2=80=AFam Thirumalai Nagalingam, <
-thirumalaicse2020@gmail.com> wrote:
-
-> Hi Jon,
->
-> I saw your email regarding [PATCH] Cygwin: gendef: add_sigfe_maybe for TLS
-> initialization on the mailing list.
->
-> I realized that I had missed sharing the earlier context with everyone. To
-> keep the mailing list informed, I'm forwarding below the email I sent to
-> Corinna on April 28, 2026, while transitioning out of my previous role.
->
-> Adding it here for reference.
->
-> Thanks for your guidance & support always.
->
-> Thanks,
-> Thirumalai Nagalingam
->
->
->
-> On Tue, 28 Apr, 2026, 3:54=E2=80=AFpm Thirumalai Nagalingam, <
-> thirumalai.nagalingam@multicorewareinc.com> wrote:
->
->> Hi Corinna,
->>
->>
->>
->> quick heads-up that I=E2=80=99ll be moving on from my current role so my
->> colleague Chandru [chandru.kumaresan@multicorewareinc.com] from our team
->> will be taking over and will follow up on ongoing discussions and any
->> pending queries.
->>
->>
->>
->> Also, a few pieces of our extended work are nearing completion and
->> currently under internal review. These include patches around aarch64
->> support (autoload stubs, SSP enablement, exceptions.cc [make-context]) a=
-nd
->> an initial CPU ID implementation.
->>
->> Patches will be sent upstream once it is ready.
->>
->>
->>
->> Thanks for the support so far :)
->>
->>
->>
->> Thanks & regards
->>
->> Thirumalai Nagalingam
->>
->
-
---000000000000f82ed7065af1a9b9--
