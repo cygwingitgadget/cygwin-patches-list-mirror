@@ -1,151 +1,324 @@
-Return-Path: <SRS0=KMKm=HF=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-pz2-x24.google.com (mail-pz2-x24.google.com [IPv6:2607:f8b0:4864:3b::24])
-	by sourceware.org (Postfix) with ESMTPS id 3826B4BB3BA7
-	for <cygwin-patches@cygwin.com>; Sun, 13 Sep 2026 12:30:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3826B4BB3BA7
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3826B4BB3BA7
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:3b::24
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789302608; cv=none;
-	b=uWILAnetXL325uvx5fx4JdMvX4n//dsSBKsbTqk3NcbdxxOonaF7S/qymcWLnZkXcSxKJ7jto8cVyQO3GWJVV2BEBVtSIH7DzYiX7LL9v71f1zOBwRV/1fSS2TV/x/klxKi3QScvCpB54OShyJAMkc/L0ZhMPKyhjE3bG83eHNI=
+Return-Path: <SRS0=bcf7=HF=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
+	by sourceware.org (Postfix) with ESMTPS id 093954BAE7E8
+	for <cygwin-patches@cygwin.com>; Sun, 13 Sep 2026 21:45:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 093954BAE7E8
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 093954BAE7E8
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789335945; cv=none;
+	b=Wv1mXIj+5tmglNoJh+0Ht0+5iXpihXix2D7D285tScnlUZ5g0dvJMfGIZ1ZQbxSW9Jw5BTIeyp61WtDEs8ngioQkCEwK83vReBQ8OxCviKpBoBWxNGJHLREzzAfcUeo8BOYMg98Mk/LU7dZ4POSTT4fQvBOA5i4Of9/L71Y2HS8=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789302608; c=relaxed/simple;
-	bh=GVO4sGUw6UN7Pi8bjwxxl5ngz42eL5lIcR+Pjd0rUVM=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=TcXSS4zYYEt2+3Faf/Znj9I/qSjFKt/zwTftq9LMP6GiPuiXMYuE7CnkwbxxFpzHczI6bMI0/bq96ADLs7vhFxw7u5/cr4aIwwr3aREEZyNGCfN+lVhFAviw0S3VREOEeKaONSZ1FM1BZxeLiVuWPrUWWSwz0I2DgVZutCsU9Wg=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oTTjiTHF
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3826B4BB3BA7
+	t=1789335945; c=relaxed/simple;
+	bh=fmkI1BEus0rSx+i8/VWiZ1EPSGcKXQi1NXCMuNqGkXE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=aEItgV3ZIjWyA5hfMfh6PQMBvWysJpjr5KOuiBmNvG8wXxrNtm2aGd5OQ59Md4e9tn0BCXe4i+MXFTNajmtZ7+zxPk1bvrW97fcmBgnXEAaqFqqePLdpANEbmgXTz4RKXIC28iER3WBa5U1Z2hzeNfQNTYGHKQyxx6dcIZfbbew=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=G19t/Zo8
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 093954BAE7E8
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oTTjiTHF
-Received: by mail-pz2-x24.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so874503a12.1
-        for <cygwin-patches@cygwin.com>; Sun, 13 Sep 2026 05:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789302607; x=1789907407; darn=cygwin.com;
-        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
-         :subject:date:from:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=6oN4ItJAANJmJYD2TfmptU9TypDkIEC6mUZFp4HNDbA=;
-        b=oTTjiTHFU4QDA3TfwaCg00TGgKeHPh7YBw5+AUJIgKMB6BgeMKaxYavthQYLEA5ojX
-         KAtVRkawBFGvKIAwkzg4R+JcuSKDBhXpJGEPDb49qTvMmc4/j+LyvChHHMgN1QUBcPb5
-         0ewuwATOcpCl1z9yi1m2FZ5xblboav5dKyGtRaYC8yhAqnR0Wr4iR8LUYK70dklCc8mr
-         bnZvGkEluLKj+R9KmTB9uNa52mLIzXk7DL6lADhgrO/gO+gflg3l4Hn2BfuWmJa3NEuc
-         R3rT1HQm1eWE7KIpJDo330+xGZ8z6QitATwYSVZ6f4ZDRXRI8YZWU5gJl7Sm/MI52ftP
-         zDtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789302607; x=1789907407;
-        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
-         :subject:date:from:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6oN4ItJAANJmJYD2TfmptU9TypDkIEC6mUZFp4HNDbA=;
-        b=VFmKKgPYUGabIktGm+BdTCnz5Ky6GOooZ2I+VRSE7pVksNs8HoW10nInZJWnbzZhm7
-         WQ28WmWqGsyaQqnycQUOdAvqkwIKLFeSDVEu4qvKVYFP+paue8dAQKbMTF7dHzGiZxkf
-         2wR0TNxWoru2GuVATTO8IpovZR4ANTFgQD804kKXpTNnvhci3BD3Dx0o43X6yp3doouS
-         n8hW6+ojsnFVNDSmTiD1PuH06l5yM02eSofb/uFS1LxRkwCMgfgVKFgePGijVrDmollA
-         ZfA/sad3nqleHqMCT2UpotAC4G6Znv1E2l3RReKnvPplfPpunbVd37J5y6kXrGfYBAb0
-         CTtw==
-X-Gm-Message-State: AFuF++m3tvTEHtKhZxd+hJ3iGWOYSELwLz6DnwjFuo3jVgiAunzYP4Rp
-	aetGKEChcF0LfT+1xkkFgZdj/YWFhJa/eemBEkeJ30rvkbon1UcL+G8VGFm+KA==
-X-Gm-Gg: AYBFou0gAeDKQk5YWZjS/4icVAukPnRGu/Sfdu35qNyWbRwo1MLaWdcsIctujLKAhJX
-	YjVqPm+7dx84Z1UshDnXjEgeGOsw+dQUcRPZAwRc1qHAUdrH3V1Hda3MFG4UzEPyHSRaUf/O18f
-	V2cyhvPa9YNRp+iU+/sDDv/0Kh7gTWaHvx9BnTMbv4BFBwXYj/z1RiiEFo18QbxC4V3IVHLsehE
-	QTAZuef9TWKtkAHmp2v0HyZFlcLkvYlnEfTvr7GPg2fifPLGxbtqre3bfWtl4IpmbI19b8M17Mw
-	DdNA/gNecqzJp5ZxHDr5TyMYyC6IfTmMuXTm3XrZxVwkuxReYQTHfjU9XwtC54snY9aD0/kGw0g
-	Cqe+V1QCY0bnxzItEKv6HYRDeDl2kPQGW57K5xYGBKu89ow2Mw9pNW9X6W4uRY7BRhzFulKW+3u
-	kfysET8aHVgIakDgxRII4Zwo5Fj42XZce4LK+f46YwK0Tg6DHFXL68voyOJsa4Oy8AZTyYGQCuO
-	woL+F6wE4U=
-X-Received: by 2002:a05:6a20:da05:b0:3c4:4272:b400 with SMTP id adf61e73a8af0-3db0e44a724mr13873560637.18.1789302607047;
-        Sun, 13 Sep 2026 05:30:07 -0700 (PDT)
-Received: from [127.0.0.1] ([13.66.174.81])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc4c6550e06sm3515179a12.14.2026.09.13.05.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Sep 2026 05:30:06 -0700 (PDT)
-Message-Id: <pull.10.cygwin.1789302605264.gitgitgadget@gmail.com>
-From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Sun, 13 Sep 2026 12:30:05 +0000
-Subject: [PATCH] Cygwin: pty: preserve terminal replies after PTY adoption
-Fcc: Sent
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=G19t/Zo8
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260913214541359.QJJL.17441.HP-Z230@nifty.com>;
+          Mon, 14 Sep 2026 06:45:41 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
-    Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <johannes.schindelin@gmx.de>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v3] Cygwin: console: Clear readahead buffer on tcflush()
+Date: Mon, 14 Sep 2026 06:45:25 +0900
+Message-ID: <20260913214534.708-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789335941;
+ bh=tUg5entERHgxuJ2ZR4ca1za/V4zmR/xQ2g28nDmKXA8=;
+ h=From:To:Cc:Subject:Date;
+ b=G19t/Zo8W0bpmbWmdecSNyMa1GBKahySl6X+VrFIkO6Ptu6/5rx+DE8qpgRmNVm9TuLMH0vM
+ by6jz50s5QIl33a5GrqGaWv/FuidoPfkKfwZCnejhlxZDUPk0jdW9t7ysO+TFOpUF+FswQTM65
+ ngD1u4V/WRgtMlNv2zE3AKN/qm99KRR7QTZInvrMiZQWdHFwjG5kpR6PMTyHyTgkJwMsB4CDpy
+ kzu/a7xGuhl8umMfv92vsDwFvkH5enCDIxrnUluXDTaP2tRFCg7eL/xDNgz2t4deS8mXChrMk4
+ N/Ma5/IGfmJ2lZYbcJqI8Mx8bAlHjLUM/OECIvNuUWe9lxlg==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+Previously, tcflush(TCIFLUSH) only discarded the input events and
+did not clear the readahead buffer. Because of this bug, when user
+program called select() -> tcflush() -> read(), the last read()
+returned the contents of the readahead buffer instead of blocking
+as it should.
 
-This fixes an issue reported about MSYS2/Win32 interaction, but applies
-to regular Cygwin as well. In the following, the original scenario is
-described.
+Correctly, tcflush() must discard all pending input, so read()
+should block until new input arrives. With this patch, the read-
+ahead buffer and `rapoi` are also cleared as well as input events.
 
-MSYS Vim launched by native Git from Bash in MinTTY can delete the first
-line, enter Insert mode or insert RGB text at startup. PTY adoption sends
-Vim's output directly to MinTTY, but input stays with ConHost until the
-first Cygwin read/select. Vim inherits Git's foreground process group, so
-the process-group callback does not trigger an earlier handoff.
-
-Vim sends terminal queries before reading. ConHost interprets cursor
-position reports as function keys, which the later input transfer delivers
-to Vim as keystrokes. A color reply split across the handoff reaches Vim
-without its introducer. Fragmented writes are valid; inconsistent routing
-corrupts their contents.
-
-Requesting noncanonical input with tcsetattr() provides a control point
-before these queries. Handing input to the Cygwin PTY there aligns both
-directions before replies can be misdirected, rather than waiting for
-consumption. Only the foreground process on an active pseudoconsole takes
-this path; canonical, background and pcon-disabled calls are unaffected.
-
-The existing synchronized transfer preserves queued input and line
-discipline. Balancing the temporary reader registration without transferring
-back keeps input on the Cygwin pipe without a permanent reader claim or
-changes to native-owner cleanup. Releasing the output mutex first avoids
-holding it across the input-transfer path.
-
-Addresses: https://github.com/git-for-windows/git/issues/6403
-Fixes: 6eed1ef74869 ("Cygwin: pty: detect pcon-backed pty for non-Cygwin-spawned children")
-Assisted-by: GPT-6
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
+Suggested-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 ---
-    Cygwin: pty: preserve terminal replies after PTY adoption
-    
-    I just merged this into Git for Windows' fork of the MSYS2 runtime, as
-    it is a somewhat pressing problem due to Git for Windows v2.56.0-rc0
-    already being overdue.
-    
-    This patch is based on cygwin-3_6-branch, but is easily cherry-picked
-    onto master, too.
+v2: Add input_mutex guard. Clear rapoi as well.
+v3: Acquire input_mutex before output_mutex in ioctl() to avoid
+    deadlock in tcflush().
+    Make input_ready static as con_ra is.
 
-Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-10%2Fdscho%2Ffix-vim-terminal-replies-v1
-Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-10/dscho/fix-vim-terminal-replies-v1
-Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/10
+ winsup/cygwin/fhandler/console.cc       | 41 +++++++++++++++++++++----
+ winsup/cygwin/local_includes/fhandler.h |  2 +-
+ winsup/cygwin/select.cc                 |  8 ++---
+ 3 files changed, 40 insertions(+), 11 deletions(-)
 
- winsup/cygwin/fhandler/pty.cc | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index c5081bcaf..f6e051b9e 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1637,6 +1637,15 @@ fhandler_pty_slave::tcsetattr (int, const struct termios *t)
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index be41bf3a2..a995f3acc 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -70,6 +70,7 @@ bool NO_COPY fhandler_console::invisible_console;
+ /* con_ra is shared in the same process.
+    Only one console can exist in a process, therefore, static is suitable. */
+ static struct fhandler_base::rabuf_t con_ra;
++static bool input_ready;
+ 
+ /* Write pending buffer for ESC sequence handling
+    in xterm compatible mode */
+@@ -1224,7 +1225,7 @@ fhandler_console::read (void *pv, size_t& buflen)
+       (get_ttyp ()->ti.c_cc[VTIME]*100 ? : INFINITE)));
+ 
+ read_more:
+-  while (!input_ready && !get_cons_readahead_valid ())
++  while (!::input_ready && !get_cons_readahead_valid ())
+     {
+       int bgres;
+       if ((bgres = bg_check (SIGTTIN)) <= bg_eof)
+@@ -1305,7 +1306,7 @@ wait_retry:
+     get_readahead_into_buffer (buf + copied_chars, buflen - copied_chars);
+ 
+   if (!con_ra.ralen)
+-    input_ready = false;
++    ::input_ready = false;
+   release_input_mutex ();
+ 
+   if (buflen > copied_chars && !(get_ttyp ()->ti.c_lflag & ICANON)
+@@ -1357,7 +1358,7 @@ fhandler_console::process_input_message (size_t len)
+   /* This code is reached only when being passed the input_ready check,
+      however, the check was done outside input_mutex. Therefore, another
+      thread may set input_ready after the check. Check it again here. */
+-  if (input_ready && (len == 0 || (get_ttyp ()->ti.c_lflag & ICANON)))
++  if (::input_ready && (len == 0 || (get_ttyp ()->ti.c_lflag & ICANON)))
+     return input_ok;
+ 
+   for (i = 0; i < total_read; i ++)
+@@ -1736,14 +1737,14 @@ fhandler_console::process_input_message (size_t len)
+ 	    }
+ 	  else if (res == line_edit_input_done)
+ 	    {
+-	      input_ready = true;
++	      ::input_ready = true;
+ 	      stat = input_ok;
+ 	      if (ti->c_lflag & ICANON)
+ 		goto out;
+ 	    }
+ 	}
+       /* len == 0 if called from select.cc:peek_console() */
+-      if (input_ready && (len == 0 || con_ra.ralen >= len))
++      if (::input_ready && (len == 0 || con_ra.ralen >= len))
+ 	goto out;
+     }
+ out:
+@@ -2217,6 +2218,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+   int res = fhandler_termios::ioctl (cmd, arg);
+   if (res <= 0)
+     return res;
++  acquire_input_mutex (mutex_timeout);
    acquire_output_mutex (mutex_timeout);
-   get_ttyp ()->ti = *t;
+   switch (cmd)
+     {
+@@ -2234,6 +2236,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 			   ((struct winsize *) arg)->ws_row,
+ 			   ((struct winsize *) arg)->ws_col);
+ 	    release_output_mutex ();
++	    release_input_mutex ();
+ 	    return 0;
+ 	  }
+ 	else
+@@ -2241,17 +2244,21 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	    syscall_printf ("WINSZ failed");
+ 	    __seterrno ();
+ 	    release_output_mutex ();
++	    release_input_mutex ();
+ 	    return -1;
+ 	  }
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return 0;
+       case TIOCSWINSZ:
+ 	bg_check (SIGTTOU);
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return 0;
+       case KDGKBMETA:
+ 	*(int *) arg = (con.metabit) ? K_METABIT : K_ESCPREFIX;
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return 0;
+       case KDSKBMETA:
+ 	if ((intptr_t) arg == K_METABIT)
+@@ -2262,19 +2269,23 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	  {
+ 	    set_errno (EINVAL);
+ 	    release_output_mutex ();
++	    release_input_mutex ();
+ 	    return -1;
+ 	  }
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return 0;
+       case TIOCLINUX:
+ 	if (*(unsigned char *) arg == 6)
+ 	  {
+ 	    *(unsigned char *) arg = (unsigned char) con.nModifiers;
+ 	    release_output_mutex ();
++	    release_input_mutex ();
+ 	    return 0;
+ 	  }
+ 	set_errno (EINVAL);
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return -1;
+       case FIONREAD:
+       case TIOCINQ:
+@@ -2291,6 +2302,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	    {
+ 	      set_errno (EINVAL);
+ 	      release_output_mutex ();
++	      release_input_mutex ();
+ 	      return -1;
+ 	    }
+ 	  bool saw_eol = false;
+@@ -2327,20 +2339,24 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	  else
+ 	    *(int *) arg = ret;
+ 	  release_output_mutex ();
++	  release_input_mutex ();
+ 	  return 0;
+ 	}
+ 	break;
+       case TCXONC:
+ 	res = this->tcflow ((int)(intptr_t) arg);
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return res;
+       case TCFLSH:
+ 	res = this->tcflush ((int)(intptr_t) arg);
+ 	release_output_mutex ();
++	release_input_mutex ();
+ 	return res;
+     }
+ 
    release_output_mutex ();
-+
-+  /* Terminal queries can precede the first read/select after entering
-+     noncanonical mode.  Their replies must bypass the native console. */
-+  if (!(t->c_lflag & ICANON) && get_ttyp ()->pcon_activated
-+      && get_ttyp ()->getpgid () == myself->pgid)
-+    {
-+      mask_switch_to_nat_pipe (true, true);
-+      mask_switch_to_nat_pipe (false, false);
-+    }
-   return 0;
++  release_input_mutex ();
+   return fhandler_base::ioctl (cmd, arg);
  }
  
-
-base-commit: c19c1e6ad9d8abad640ffcb95996642cc35955ec
+@@ -2351,6 +2367,9 @@ fhandler_console::tcflush (int queue)
+   if (queue == TCIFLUSH
+       || queue == TCIOFLUSH)
+     {
++      /* tcflush() may be called inside the input_mutex,
++	 however, mutex of Win32 can be acquired recursively. */
++      acquire_input_mutex (mutex_timeout);
+       acquire_attach_mutex (mutex_timeout);
+       DWORD resume_pid = attach_console (con.owner);
+       BOOL r = FlushConsoleInputBuffer (get_handle ());
+@@ -2362,6 +2381,10 @@ fhandler_console::tcflush (int queue)
+ 	  res = -1;
+ 	}
+       con.num_processed = 0;
++      eat_readahead (-1);
++      ::input_ready = false;
++      con.cons_rapoi = NULL;
++      release_input_mutex ();
+     }
+   return res;
+ }
+@@ -2386,7 +2409,7 @@ fhandler_console::tcgetattr (struct termios *t)
+ }
+ 
+ fhandler_console::fhandler_console (fh_devices devunit) :
+-  fhandler_termios (), input_ready (false), thread_sync_event (NULL),
++  fhandler_termios (), thread_sync_event (NULL),
+   input_mutex (NULL), output_mutex (NULL), unit (MAX_CONS_DEV),
+   num_input_events_processed (0)
+ {
+@@ -4912,3 +4935,9 @@ fhandler_console::tcdrain ()
+ {
+   return 0;
+ }
++
++bool
++fhandler_console::input_ready ()
++{
++  return ::input_ready;
++}
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index d11b3ec4f..73d121508 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2183,7 +2183,6 @@ public:
+     tty_min tty_min_state;
+     dev_console con;
+   };
+-  bool input_ready;
+   enum input_states
+   {
+     input_error = -1,
+@@ -2366,6 +2365,7 @@ private:
+   void wpbuf_send ();
+   int fstat (struct stat *buf);
+   void discard_key_events (size_t n);
++  bool input_ready ();
+ 
+   class console_unit
+   {
+diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+index b72083447..120273b70 100644
+--- a/winsup/cygwin/select.cc
++++ b/winsup/cygwin/select.cc
+@@ -1140,7 +1140,7 @@ peek_console (select_record *me, bool)
+   if (fh->get_cons_readahead_valid ())
+     return me->read_ready = true;
+ 
+-  if (fh->input_ready)
++  if (fh->input_ready ())
+     return me->read_ready = true;
+ 
+   if (me->read_ready)
+@@ -1155,7 +1155,7 @@ peek_console (select_record *me, bool)
+   set_handle_or_return_if_not_open (h, me);
+ 
+   fh->acquire_input_mutex (mutex_timeout);
+-  while (!fh->input_ready && !fh->get_cons_readahead_valid ())
++  while (!fh->input_ready () && !fh->get_cons_readahead_valid ())
+     {
+       if (fh->bg_check (SIGTTIN, true) <= bg_eof)
+ 	{
+@@ -1182,7 +1182,7 @@ peek_console (select_record *me, bool)
+ 	}
+     }
+   fh->release_input_mutex ();
+-  if (fh->input_ready || fh->get_cons_readahead_valid ())
++  if (fh->input_ready () || fh->get_cons_readahead_valid ())
+     return me->read_ready = true;
+ 
+   return me->write_ready;
+@@ -1282,7 +1282,7 @@ fhandler_console::select_read (select_stuff *ss)
+ 
+   s->peek = peek_console;
+   s->read_selected = true;
+-  s->read_ready = input_ready || get_cons_readahead_valid ();
++  s->read_ready = input_ready () || get_cons_readahead_valid ();
+   s->cleanup = console_cleanup;
+   return s;
+ }
 -- 
-cygwingitgadget
+2.51.0
+
