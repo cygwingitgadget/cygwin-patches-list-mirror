@@ -1,154 +1,165 @@
-Return-Path: <SRS0=GwCJ=HG=arm.com=Mate.Dimand@sourceware.org>
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazlp170110003.outbound.protection.outlook.com [IPv6:2a01:111:f403:c207::3])
-	by sourceware.org (Postfix) with ESMTPS id D31194BA2E0A
-	for <cygwin-patches@cygwin.com>; Mon, 14 Sep 2026 07:03:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D31194BA2E0A
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=arm.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D31194BA2E0A
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c207::3
-ARC-Seal: i=3; a=rsa-sha256; d=sourceware.org; s=key; t=1789369398; cv=pass;
-	b=hOZZJpe1frqwRI92ewPTf7Rt1++6j26TmPrQi/xpBIIlAdvn1Zge8V1GsWxxYMkDrdP7A7j9se7U+M1nFVKKOLtWyte0R2/CiKMFApdMNMYvv3q2RO5Iiifr/mSq2OmvTDFDFuTe8U5tQWSc9ydiyNOKMnoLDTatuIGTS4iLWj8=
-ARC-Message-Signature: i=3; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789369398; c=relaxed/simple;
-	bh=YmUAtqNTQ1uUtL4pw4qCUfvOOZKSKKqz2Q1E5qvFcyY=;
-	h=DKIM-Signature:DKIM-Signature:Message-ID:Date:Subject:From:To:
-	 MIME-Version; b=bAxu5ffOzBxlyMUhTx5xZfJ9pzwUKy6OHaBAqo234l8/xfvfQ+dLLsqiYL1f4mT//vz6xUJT6IvP418L0iilVZEVb6S5arOVxqqu/wbRHcWvvLRMMzfbbiZp4L2s2GnYOfwOA1LIOu24XIY5cZeg/0b0RopteImFcai/LuMZJ6M=
-ARC-Authentication-Results: i=3; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=qTQ7cScf; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=qTQ7cScf
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D31194BA2E0A
+Return-Path: <SRS0=vx/W=HG=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [106.153.227.39])
+	by sourceware.org (Postfix) with ESMTPS id B6EEB4BAE7E9
+	for <cygwin-patches@cygwin.com>; Mon, 14 Sep 2026 11:46:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B6EEB4BAE7E9
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B6EEB4BAE7E9
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789386417; cv=none;
+	b=mcP99bNFMw5j3b6rVkppXD/43Z8yIWY83A0Pg4bWPbq3KhqcsdNFoumprqdyHpFFGD7092bbTynIzeMDtfWPkfdb3F1+gmFtYzZQjvyPpvujgZ8p/98cPt7m5r6GeUTcfA9pf0E7+JNcp0xw0UcnXLKcC/NJEZl9jOi2t5qezWI=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1789386417; c=relaxed/simple;
+	bh=skpAUOPeDdkOlSbhlwg1B/R5J2nmgTK06PQBinVRXdE=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=AxdXQKGX69ztdkQ1fDfcqqdeDtpMvstAeSC4jLtqHrur+U90X5aUPsqOAqkSIhdRF+TeQM7f2h1CKVolTKVlz/15xHYE0mQitlC3Zf0ER6Hsww7wcbOeyVlFbQ+kaLIttuLA1vUZZhZP3q5M3NPYVltI4T5T7NuP1PXEnJTdltg=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=IvjTyJnX
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B6EEB4BAE7E9
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=qTQ7cScf;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=qTQ7cScf
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=PUhhEWb9t0RAvSfgjYHVd9ZU2pYFPlx3tSFqyM18i8U/Vo0Hks4zQDDd5WJt24utwGWF2sgXLla8AimjJ+5DwHShGslVS9tJLRxzBTT5Raea97AFXlkytQm7pKxkzNehiFICTh4tdb5MyAWHXAmH/YWH4rVyC0D2z0MuxoNWUNeeHBKpVj5Dxas7YYo6QVtiTbtv0uJkBKvtPc+sUllS1gEK9St5eJV4Wm0+maQxqp9RcFdmGaIlQmvV71kTjG6i/bmM/GJ59QlilPk14n1DqZK3LUZycXx1WOdtzTFLeVUf+L4cplLXhoztZTlifEY2In7yQU3QQPVM6gJ5wqhgVw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rYdzbTfZmq/hPF8c5xutwqVVXUYSh+UZ6Pbx9lYQBlM=;
- b=e+k7sWlE+nLAeNYMvnbVtKbOk+4ByGLAg0rSI5HKa+t2SYVRXmGF0CkEvFYUh66nnJpEY56jhrli/QNp0A+580/7BF5+56FKrmTGRbr2GpT94nMBAtKhH5Ui0+SPSnWyj8feBzpatekh2m3lAzJlliqjLvCmms7I4f8AsbA4/TWX3JqNjYNCGck6908EIu3rNi+y4TGc8zci7+e257DcQy2IRHp95SLZhO8JPdLaS655rU6udsCQNopeukVZgPEkt/Vqj0dQ2T1WkVVI+u5EO1HjEbho9bu0Wga5HBbbtpqjVCgcjRJfw7Hd53LPeYYKTCAShuVFpx2zQ2H1mv2w8A==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=cygwin.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rYdzbTfZmq/hPF8c5xutwqVVXUYSh+UZ6Pbx9lYQBlM=;
- b=qTQ7cScfqBWRHJJubrDGd7ddsTKJko4Hg6N7h7Wm0187q/gIuVDHemgx2E32+M345xiwootx2wRnk8VBVEY71HUFvNQ8YgKogrRLWGKJOEFYo/lO2jNOzdHjWpIlc8SAaQbzYRVjGve0+xz6pbyxi6Oz6BYMt/TFplj4wzTAz0M=
-Received: from AS4P251CA0001.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:5d2::19)
- by DB9PR08MB9492.eurprd08.prod.outlook.com (2603:10a6:10:459::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.8; Mon, 14 Sep
- 2026 07:03:13 +0000
-Received: from AMS1EPF00000097.eurprd02.prod.outlook.com
- (2603:10a6:20b:5d2:cafe::65) by AS4P251CA0001.outlook.office365.com
- (2603:10a6:20b:5d2::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.12 via Frontend Transport; Mon,
- 14 Sep 2026 07:03:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF00000097.mail.protection.outlook.com (10.167.242.68) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.7
- via Frontend Transport; Mon, 14 Sep 2026 07:03:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EWnhZi4hRBdI4qDQ8zTZ13dxRl0Mu1jSgyzQ5/BBXYmhwX9N4GcSOB1mCXa0nXEK4vYcsWF87/uyW/SVc37KyBrRfuEMEOlISWWZZJWCXTu8hPYcKBHnhYFRS29psXVLnEDb7T8BbojJUkZpO2m+YU9DkkVqZOPBJAvEHti9MbwzgLemr9ebnc6Fj+FSPoHbBT0JKHzl1U2GgahHjByadNtnSoE09aubn6+CaBsh4ABwajbyLB8IMK2hV4GupoentT4vQEMBHHFJ/n9xgROWttVadyT3HcrGTtZphCulpAO5l1p2rMtgLF8PurHxyrmrbDPPKc9NrvLCv2wAC+7Jnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rYdzbTfZmq/hPF8c5xutwqVVXUYSh+UZ6Pbx9lYQBlM=;
- b=h2j9LeWGqOKKnCyT/Vnf4Y9H3CeqrhWrgAXxTyULr3xPt6tlZ+Ae6DMZhZ8NO55LatZ9CQs4T3QaC9t3IC8dCGotJiXEL9PXprnBDz+D6SUWJEPq+M+5/FfWw4jaldE+YFZsUm/KZ8CPc29XZuIGmOssYSPt9Hq/ChcBNP3/mVtyOUJ4RCEJPy4+7Gmr9QxsY05isg5K4+2bSsSlFiuLy98mP+INPkL0gOqur1VvDmO4HRHJ1RyjByUe0HiYpHA9SDIF2JIkF3FZ04CglPyKjRPC33poz9RmVQr1CpkPZJ9FRAyeeqKyRow9d/wxOnzN1dLG467VtTP6g2XwD3MpNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rYdzbTfZmq/hPF8c5xutwqVVXUYSh+UZ6Pbx9lYQBlM=;
- b=qTQ7cScfqBWRHJJubrDGd7ddsTKJko4Hg6N7h7Wm0187q/gIuVDHemgx2E32+M345xiwootx2wRnk8VBVEY71HUFvNQ8YgKogrRLWGKJOEFYo/lO2jNOzdHjWpIlc8SAaQbzYRVjGve0+xz6pbyxi6Oz6BYMt/TFplj4wzTAz0M=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB4PR08MB9310.eurprd08.prod.outlook.com (2603:10a6:10:3f6::22)
- by GVXPR08MB10864.eurprd08.prod.outlook.com (2603:10a6:150:154::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.8; Mon, 14 Sep
- 2026 07:02:31 +0000
-Received: from DB4PR08MB9310.eurprd08.prod.outlook.com
- ([fe80::73e6:2715:9ac4:e576]) by DB4PR08MB9310.eurprd08.prod.outlook.com
- ([fe80::73e6:2715:9ac4:e576%7]) with mapi id 15.21.0406.005; Mon, 14 Sep 2026
- 07:02:31 +0000
-Message-ID: <80308c9d-127d-4f12-bf91-aac8e3124cc7@arm.com>
-Date: Mon, 14 Sep 2026 09:02:26 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: gendef: fixed AArch64 setjmp storing incorrect
- frame pointer in jmpbuf
-From: =?UTF-8?B?TcOhdMOpIERpbWFuZA==?= <mate.dimand@arm.com>
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=IvjTyJnX
+Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
+          id <20260914114641333.REVL.18412.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Mon, 14 Sep 2026 20:46:41 +0900
+Date: Mon, 14 Sep 2026 20:46:39 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: nd@arm.com
-References: <4635aed1-eceb-4540-9071-2a4cd257b27c@arm.com>
-Content-Language: en-US
-In-Reply-To: <4635aed1-eceb-4540-9071-2a4cd257b27c@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0189.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a4::14) To DB4PR08MB9310.eurprd08.prod.outlook.com
- (2603:10a6:10:3f6::22)
-MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DB4PR08MB9310:EE_|GVXPR08MB10864:EE_|AMS1EPF00000097:EE_|DB9PR08MB9492:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74d86a21-c9d5-4159-c501-08df122e3e28
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|376014|23010399003|1800799024|10067099003|18002099003|22082099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info-Original:
- E6JCciiggH2eZz+bI2srPyTre1EJ61torhQazlpd4FPI3AsxLRRMVhuzcBt+p2rlTbpoV7XtectLYVxfrDf94OVynU9M56uaRK/8Y4jjJ2vwG4YURHQLXBEMKPM6tF/9qtFcaoHNlW2nvZbJcdu+Whx80B7HdhH5e7YQjL9+oJ3KpC/Kn7yjnMMuGX/lmya6TUij3+yedq/wv0xKWM3QXpUMJ+jhGHUK2pVAgljccYeRdPQQ0n9eMxhRtozPsv+8jE8J6pbg9pgxGVp3WNIKSjrlMPkoMcLC7BT66cmiCka18Lev/JCdPLYij9IjS2Q53b0F1zGywjGuug/mCgCHuR7oR+zqmtU7NtyMbThCtSK2w5xLEZX0s2w5KwVA6KwHazNuhP4zyEVLomajjJigyWF8FYphBqD9XrovznIi44kvzb1YsEdXKWG86BRGKiXLm7WDgUZoOH8hfOW3MhbcePDFvefKyo8oQ062YRHU/IHZnyuPjBPdPLn+Dp9lM5npUuJ1voaQWCthfVAONPVyqJaRC+PpD8kkLMnQa+Dde0NIut8acXUR+VLFGyPdbYuj9QQ0sIKSmvTM0j/zSBoDkmyM6ssqpTNnZRi/mdIbJIZJXxXpbG5b0fZi6xCsUw3as4HmycNJwhQW1WInQ9qOZvMOT7WcVk0JvDoZ4vEqn30=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB4PR08MB9310.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(23010399003)(1800799024)(10067099003)(18002099003)(22082099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- EUIR7gpNiWbanep1b66iPE3xE0Iet7OUwNq6BK4n29aPzDKFFQqkyK9y6otdFUT4tw+Tyor33l1hAveteHGexL2YYhnjpyLMVmBzVVi/QroQxegyEKgeiv5Pi1NcAhXrAaqLgLwikSI/sa03er9Is+7b5oj/TaPz7SnRavMztMgEXuG8WoPHIZYp4Z7MuSzCplCkrK+DExlmHccs34qJOoPf/v9PfpDUAtqvZDbzFkQMuLLne3tEgF8H1TlfAGQc3fL+WpHDOCg4/J5DzL+Sio0Xo42WprwVIG5F63fe1i1EtBwyheoCUmCAmbPffU2z1Y4wutqkogEO8M1wDhUEXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB10864
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF00000097.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	c423337e-02b3-4d4d-adc2-08df122e2521
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|376014|23010399003|82310400026|36860700016|1800799024|14060799003|10067099003|11063799006|56012099006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	cVi8kXQvuBK0qarwhKjkRMvsz7CoMmzYE3Dh6wJ9XTTGyUOXuu62aMywBZJ3n+PSGSgtAhXaV7myqaiWDaJuWkRx1vLN3XCcdAgOZwVkS8a+5NvoamZmGpIyBXQ2b+qlvT8AHR2n4jSUGzUsjb5COCJoVHyzKFthQAa/tZyM5OAP98YIaPOH2FFizekddYtiKwvufooyaTYhoqA0EPaxDKJe6S8HWducGAOVo+9ehXSgktfqAeE6tDG10qjD2OjiSyojrrtIA+HuRP0Rg36xsaOWGvZzV3QUpnMNZBFWSq9N+3Ok7bCI1EVHF+eq/L4Ui27laDKvFBhHA8xNI9JFNkjgUkbDs1Hhy8ek1ec8aa4lFqKvIPxxjJifzpMeIv8olFIj/UXJgJqhGMfco36SENa2sIeUtERkDyFRcDgQ8om91584tDuK6vEq75grCTv4PeHUhhYceNjQ0wd6Mc39OFwbXuDCaGAeJBtG69YOwHwAYTl7Kw/ti51/kL9MEHe5CZ0vIyU33qHnJmTLEvkJL1xhJBeWdsErtoFE5eQMMFXV+B1dBEZA3jrKGwmWV2uGd96achRhckAaEoCo3msz0DwrkE7b0hRoGoc7GzAjV2uguUeQizf8o6/otTalumMgR9mxJjusdwgXpQBKx+iIwW69JpCTPkrMNakZz51CEGpzIfhxhMYxbEgTJMXEkuIXAAkPX2LtZQSBIMV4m6hGUA==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(376014)(23010399003)(82310400026)(36860700016)(1800799024)(14060799003)(10067099003)(11063799006)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	zctZGxobakwezbEReOaruGTzSuOQssyFcXHYJ66nt8rOR8X0tha8XQTPsyCOKEU7zj06aE5TPcPKcd1J2jbWmdd7jIdtXsrYL2qfc7vaVnN1tBxsnWG9dMzwX6gbMo7/Skw1c6jiZzViYWLW88ucNw2Vo+v37q/hdgVpfcukciyydulIt8FFRNjC/78uJryUb++1NGEO9WFO7u73XqiQSWDpU42hcrWV/Lv8T7udYUyFZ2T/HX6vz5Gcrr123oITPIs03Q3ihmoBoUKmNfKSfPH1C0JoF48BKDRHEiT0/bycKynPHWLryJjEKFmLmaIiqa4wMLGof8q300B4GNue7hpSbUE6WFOEB+UXXEdtfLJWPDhbHzCvzwPrzJFRLni3EGPQvyb/3/DFZmQJM0EYPEpF44z7WRpGzTUQ/aO/0tSDbDn2yUkTNmGsYepXMo3O
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2026 07:03:13.0245
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74d86a21-c9d5-4159-c501-08df122e3e28
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF00000097.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9492
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Cygwin: console: Improve the performance of
+ peek_console
+Message-Id: <20260914204639.e0e82ff87a6794781416865f@nifty.ne.jp>
+In-Reply-To: <cbb2e74c-ae66-7c47-808a-a9b68d954655@gmx.de>
+References: <20260903234859.344934-1-takashi.yano@nifty.ne.jp>
+	<cbb2e74c-ae66-7c47-808a-a9b68d954655@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789386401;
+ bh=vcmIbyT1SyBfOBHnJYDK3kOcrGg+u6X5Dx5i3WbDljs=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=IvjTyJnXrWHVxASlUG8SofJ69SOmyHFNN+9hL1mT4iRFiUwBqJxds5xeNlrdDIVFjGeFWo7Y
+ 0s+XfjmH5zw2Ah9EEtpLYhA0PPEaZy/5SEnjIe5yw/QngDFWnJ6IQLp6h+Tj20pZi1SGW78EyC
+ YVldvcJtb82hgUmaJ6+JeCA4boWC9Agne3l/ZWXJKDQb+ol8oCwRu8yLDFKKpRQBQoYa/P2y83
+ +E39wdbVPzsDjE6Y3qf3+cOSQz49JkJ/VLobB0hym/st5GnObLKgXOB25AGBnQm3BG2G2dYlyl
+ XepNZl5jeZLB10InYwEPcTPFXRaAykIu/mV2uEf67OVqwiKA==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi everyone,
+Hi Johannes,
 
-Just a gentle ping on this patch, any thoughts or feedback would be 
-appreciated. Thanks!
+Thanks for reviewing.
 
-Best regards,
-Máté Dimand
+On Sun, 13 Sep 2026 13:56:38 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
+> 
+> On Fri, 4 Sep 2026, Takashi Yano wrote:
+> 
+> > Previously, peek_console() used PeekConsoleInput() to confirm whether
+> > the console input buffer has some input records. However, this need
+> > attaching to the console if the process does not attach to the console.
+> > To reduce that overhead, this patch uses WaitForSingleObject() with
+> > console input handle instead. WaitForSingleObject() works without
+> > attaching to the console, so this simplifies the peek_console()
+> > code.
+> 
+> Great! I like when Cygwin's code is taught to avoid expensive operations.
+> 
+> One issue, though:
+> 
+> > 
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by:
+> > ---
+> >  winsup/cygwin/select.cc | 9 +--------
+> >  1 file changed, 1 insertion(+), 8 deletions(-)
+> > 
+> > diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+> > index 592f6d14d..d565f4d5b 100644
+> > --- a/winsup/cygwin/select.cc
+> > +++ b/winsup/cygwin/select.cc
+> > @@ -1149,8 +1149,6 @@ peek_console (select_record *me, bool)
+> >        return 1;
+> >      }
+> >  
+> > -  INPUT_RECORD irec;
+> > -  DWORD events_read;
+> >    HANDLE h;
+> >    set_handle_or_return_if_not_open (h, me);
+> >  
+> > @@ -1161,12 +1159,7 @@ peek_console (select_record *me, bool)
+> >        else
+> >  	{
+> >  	  fh->acquire_input_mutex (mutex_timeout);
+> > -	  acquire_attach_mutex (mutex_timeout);
+> > -	  DWORD resume_pid = fh->attach_console (fh->get_owner ());
+> > -	  BOOL r = PeekConsoleInputW (h, &irec, 1, &events_read);
+> > -	  fh->detach_console (resume_pid, fh->get_owner ());
+> > -	  release_attach_mutex ();
+> > -	  if (!r || !events_read)
+> > +	  if (WaitForSingleObject (h, 0) != WAIT_OBJECT_0)
+> 
+> With this change, a host can report readiness without leaving any records
+> to process. Here is a concrete source counterexample in released
+> OpenConsole `v1.24.11911.0`:
+> 
+> 1. `SetConsoleActiveScreenBufferImpl()`
+>    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/getset.cpp#L474-L498)
+>    calls `SetActiveScreenBuffer()`
+>    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/output.cpp#L446-L476),
+>    which invokes `FlushAllButKeys()`.
 
+I wonder why
+    if (_storage.empty())
+    {
+        ServiceLocator::LocateGlobals().hInputEvent.ResetEvent();
+    }
+is missing from:
+https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp#L347-L353
+while flush()
+https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp#L333-L337
+and read()
+https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp#L466-L469
+reset the event.
+
+> 2. If the queue contained only non-key records, it becomes empty while the
+>    input-available event remains signaled.
+> 3. An empty subsequent peek returns before the event-reset code
+>    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/inputBuffer.cpp#L460-L470).
+>    With no other input activity repairing that state, Cygwin's new loop
+>    can repeatedly see "signaled handle" followed by "zero records."
+> 
+> In other words: changing active screen buffers can discard the remaining
+> non-key records without resetting the input-available event. The queue is
+> then empty but the handle remains signaled; an empty peek does not repair
+> the event. The new preliminary wait consequently succeeds repeatedly,
+> while `process_input_message(0)` finds zero records and returns
+> `input_processing` without changing readiness. `peek_console()` loops
+> without progress, so even a zero-timeout `select()` can hang. The old
+> preliminary peek explicitly broke out when its record count was zero.
+> 
+> This is not merely the normal distinction between a keypress and a
+> complete line. It is a stale host notification paired with an actually
+> empty queue. The source counterexample keeps Cygwin's worker paused
+> through Win32 input mode, with no new input or other reader repairing the
+> state.
+> 
+> I think we can keep the cheap `WaitForSingleObject()` check, but could we
+> let `process_input_message()` report an empty queue separately from
+> `input_processing`? If its `PeekConsoleInputW()` call finds no records,
+> `peek_console()` needs to stop retrying rather than spin on a handle that
+> stays signaled. Simply breaking on `input_processing` would also stop when
+> we consumed input but hadn't yet completed a canonical line, so we need to
+> keep those cases separate. Please handle input errors explicitly, too.
+
+What about calling read() with AmountToRead == 0
+https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp#L372-L475
+?
+
+It seems that read() with length 0 resets the event if the
+input buffer is empty.
+
+What do you think?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
