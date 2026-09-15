@@ -1,388 +1,304 @@
-Return-Path: <SRS0=CxYQ=HH=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [106.153.226.37])
-	by sourceware.org (Postfix) with ESMTPS id 6D6744BA7993
-	for <cygwin-patches@cygwin.com>; Tue, 15 Sep 2026 06:43:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6D6744BA7993
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6D6744BA7993
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789454599; cv=none;
-	b=nu82vWfC/qsaEMyxLvSS78qmB5/68V9j0bHUuAFe4Puu8LYAy4mukyzsH8msMs4W27wpZi33HY3y17+/EFiyFGIQuqr6IPAyU/3DPj6M+/6OmTKw2wAJl5e7F4GfkbcdM1YmLmhxJuirXdyThtx+1cQOEaAHYzfSUuM6wkA+FWQ=
+Return-Path: <SRS0=ZHTZ=HH=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by sourceware.org (Postfix) with ESMTPS id 20E6B4BA23FD
+	for <cygwin-patches@cygwin.com>; Tue, 15 Sep 2026 07:32:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 20E6B4BA23FD
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 20E6B4BA23FD
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.17.20
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789457548; cv=none;
+	b=uH8WLvvebv92xO1nfGItXw3foRGXPvvtv0IPddlqUkxweK1nUCvnFMlhiFjlyLhLskm8WdKK8dhaC5AdUjC/GrghEv1M35GE4iP6VsIalOtDx2IX2BwZn1ehjSDOxOep2gysrT2kYowOote7DHwYt2ftjdBhuS6K5Rt41ZVAlEw=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789454599; c=relaxed/simple;
-	bh=KD/olTvzEcgL2pAyYHBHqRX/735/q9zQQ6HZpAGjuGw=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=jCQlB7HQLGKvzI9rTXCQKDipvDY115XTw8+xBWdm0cVU0/osO/IqxPcI/2IfNCHIAuc1OmM4obcBhSzwB6aNG+ZqVRXNFTveZRhqWfq2v3oe/Aq3nGBacsWKrdN0mXTIuYrmRTV/d+jW0L2vmJ6l7t6WoFsTzJBm+sHkvZSpexI=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=gEMgZrcX
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6D6744BA7993
+	t=1789457548; c=relaxed/simple;
+	bh=c4BNeza6pH+cWnHmyunEJZ6LOzpqYZsCGDG9NiYheGI=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=dGUlFVvRF2wsoAEC28g9e1aoMZ/Y+iJUnGKSU+durFFPIlJIAff4YERFJbaT80Tt9C7h3ZTcOzEPyqKBBdHutCUmgN4Q/DKwo9Hv3G+TSo+ezOOEq2mWi9KfdjIJ2AJArxHmKQZNVIvkybpHAZh2OFY+2TxdVPLeTWoM5Ao6J7Y=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=pKnBRLBp
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 20E6B4BA23FD
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=gEMgZrcX
-Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
-          id <20260915064315415.IHFR.102121.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 15 Sep 2026 15:43:15 +0900
-Date: Tue, 15 Sep 2026 15:43:16 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Cygwin: console: Clear readahead buffer on tcflush()
-Message-Id: <20260915154316.483c0570221f5ade075dafd7@nifty.ne.jp>
-In-Reply-To: <a7895a77-f5d2-739c-9e17-808f4142b8ec@gmx.de>
-References: <20260913214534.708-1-takashi.yano@nifty.ne.jp>
-	<a7895a77-f5d2-739c-9e17-808f4142b8ec@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789454595;
- bh=tPw0NAloq9zaMLjouqDS4thvBzVSlE+kC/ZiYd/eUZ8=;
- h=Date:From:To:Subject:In-Reply-To;
- b=gEMgZrcXqU/iRG1ZCSBijaINsothX+7EUsd0WtN6P2lTSI9315OQMI9EWFiyQmf2I5Ks2QA8
- +BUsmeVNBG7FNQFxchqkg1XsOl1KMzuJZl78OIYN+QoYlXoKoWsk7o1E8PtwMTGy/WJNayGsLA
- KaXZKQr3bG4wL4Dbpf4yeCMMJZ4EzSFTT79ZyAbD7YBXN+mg+OW4zhMVCgO/AtKQs+jAHBBIyT
- O9zsnboqGIlvJwsc+p9/35yKRToBdJ/swS0QwuCOkekhCmvt9CnxSXUSjEjxtwYovxxT6Cfcwr
- qrh15QZXaeFdk1YBSGILfL3pXY+UV22AVlL0IWdKzeen5dfg==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=pKnBRLBp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1789457546; x=1790062346;
+	i=johannes.schindelin@gmx.de;
+	bh=5AADYBAIH6l4RLUG4deT+0pnKPpYXfQmhvuCSmusoFM=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=pKnBRLBpofBjWzX6OAszvL1TZEHV13viGtNVXs5AA5cNaLYDGuYRM6vOkBKmfv8s
+	 fXMcAIqPHiCUbB+eHfere+pqckNK1zhJE0vvr8dZIoWddMGEpgxrT5czzR5j79JKZ
+	 WGUKCdM0ZEjSVkcljo3Nb29AeLU5YdPmyeWWH0PvyAQ+BQzaYTRYs3DC+5TPEUgCh
+	 k14WWpUDQ0WXd4RXOSNIBZO0CkbxUTyrojB0ajiCwZ/Gi6oaI+ey8O2nGdT02r74u
+	 842wBN5kjWA4cqa76lv+G/vKbYjO874LGqgD/42QN5OU1t3xA7bQuNy2Xa5ZSvATh
+	 hGZl/xQWXxdKNL/QYg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MjS9C-1wMZW41V50-00a5s3; Tue, 15
+ Sep 2026 09:32:26 +0200
+Date: Tue, 15 Sep 2026 09:32:26 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: console: Improve the performance of
+ peek_console
+In-Reply-To: <20260914204639.e0e82ff87a6794781416865f@nifty.ne.jp>
+Message-ID: <7a8728b4-39d3-8f8c-5620-030a9e6501b2@gmx.de>
+References: <20260903234859.344934-1-takashi.yano@nifty.ne.jp> <cbb2e74c-ae66-7c47-808a-a9b68d954655@gmx.de> <20260914204639.e0e82ff87a6794781416865f@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Provags-ID: V03:K1:jtV4hOsD3NV9vHeQvr6EhZTGcULIh9rd0EDVop6f085Qa5FVNo/
+ R5NV0PkJAURu/jFLJ5olVpkAE4cFks3runen4qvZ0vuJvBvbsyhgVEI05vxOERKd1lTQTXD
+ 3AUBDaGeduS4hk2Lz/3VxjJmgYDxqlu81uWfyU+NbFPi/N2ZqS3uwNT4nTwxXvVufq1VAA7
+ d4pBQdhSXi1vdWMMlwVRg==
+UI-OutboundReport: notjunk:1;M01:P0:WU6i8MjeFTA=;x1XXbgazANMx9Hut4EkjQPDlIx3
+ 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
+ A3DVO0cPlfxayXOR5pd+JHyDcaaR4bfapiQ==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+Hi Takashi,
 
-On Mon, 14 Sep 2026 14:55:13 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Mon, 14 Sep 2026, Takashi Yano wrote:
-> 
-> > Previously, tcflush(TCIFLUSH) only discarded the input events and
-> > did not clear the readahead buffer. Because of this bug, when user
-> > program called select() -> tcflush() -> read(), the last read()
-> > returned the contents of the readahead buffer instead of blocking
-> > as it should.
-> > 
-> > Correctly, tcflush() must discard all pending input, so read()
-> > should block until new input arrives. With this patch, the read-
-> > ahead buffer and `rapoi` are also cleared as well as input events.
-> > 
-> > Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
-> > Suggested-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > ---
-> > v2: Add input_mutex guard. Clear rapoi as well.
-> > v3: Acquire input_mutex before output_mutex in ioctl() to avoid
-> >     deadlock in tcflush().
-> >     Make input_ready static as con_ra is.
-> 
-> Thank you! This addresses the examples I gave in my review of v2.
-> 
-> Thinking a bit deeper about this, I have two more questions:
-> 
-> - Can closing a console dead-lock now?
-> 
->   Consider this scenario: Process A's `ioctl(TIOCGWINSZ)` takes
->   `input_mutex`, then waits for `output_mutex`. Meanwhile, process B's
->   `close()` can hold `output_mutex` and request `input_mutex` through
->   `set_disable_master_thread()`, when restoring the console's original
->   settings. A console-owning Cygwin process launched by a native parent
->   can take that restoration path. If A gets the input lock and B gets the
->   output lock first, don't they both wait forever for the other?
-> 
->   These are named locks for the same console, shared across processes;
->   recursive acquisition does not resolve this cycle. The reverse order in
->   `close()` predates v3, but v3 newly exposes an otherwise output-only
->   size query to it. No reader or flush is required.
+On Mon, 14 Sep 2026, Takashi Yano wrote:
 
-Ugh...
-Things were getting messy, so I cleaned them up. Please take a look at v4.
+> On Sun, 13 Sep 2026 13:56:38 +0200 (CEST)
+> Johannes Schindelin wrote:
+> >=20
+> > On Fri, 4 Sep 2026, Takashi Yano wrote:
+> >=20
+> > > Previously, peek_console() used PeekConsoleInput() to confirm
+> > > whether the console input buffer has some input records. However,
+> > > this need attaching to the console if the process does not attach to
+> > > the console. To reduce that overhead, this patch uses
+> > > WaitForSingleObject() with console input handle instead.
+> > > WaitForSingleObject() works without attaching to the console, so
+> > > this simplifies the peek_console() code.
+> >=20
+> > Great! I like when Cygwin's code is taught to avoid expensive operatio=
+ns.
+> >=20
+> > One issue, though:
+> >=20
+> > >=20
+> > > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > > Reviewed-by:
+> > > ---
+> > >  winsup/cygwin/select.cc | 9 +--------
+> > >  1 file changed, 1 insertion(+), 8 deletions(-)
+> > >=20
+> > > diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+> > > index 592f6d14d..d565f4d5b 100644
+> > > --- a/winsup/cygwin/select.cc
+> > > +++ b/winsup/cygwin/select.cc
+> > > @@ -1149,8 +1149,6 @@ peek_console (select_record *me, bool)
+> > >        return 1;
+> > >      }
+> > > =20
+> > > -  INPUT_RECORD irec;
+> > > -  DWORD events_read;
+> > >    HANDLE h;
+> > >    set_handle_or_return_if_not_open (h, me);
+> > > =20
+> > > @@ -1161,12 +1159,7 @@ peek_console (select_record *me, bool)
+> > >        else
+> > >  	{
+> > >  	  fh->acquire_input_mutex (mutex_timeout);
+> > > -	  acquire_attach_mutex (mutex_timeout);
+> > > -	  DWORD resume_pid =3D fh->attach_console (fh->get_owner ());
+> > > -	  BOOL r =3D PeekConsoleInputW (h, &irec, 1, &events_read);
+> > > -	  fh->detach_console (resume_pid, fh->get_owner ());
+> > > -	  release_attach_mutex ();
+> > > -	  if (!r || !events_read)
+> > > +	  if (WaitForSingleObject (h, 0) !=3D WAIT_OBJECT_0)
+> >=20
+> > With this change, a host can report readiness without leaving any reco=
+rds
+> > to process. Here is a concrete source counterexample in released
+> > OpenConsole `v1.24.11911.0`:
+> >=20
+> > 1. `SetConsoleActiveScreenBufferImpl()`
+> >    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/=
+getset.cpp#L474-L498)
+> >    calls `SetActiveScreenBuffer()`
+> >    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/=
+output.cpp#L446-L476),
+> >    which invokes `FlushAllButKeys()`.
+>=20
+> I wonder why
+>     if (_storage.empty())
+>     {
+>         ServiceLocator::LocateGlobals().hInputEvent.ResetEvent();
+>     }
+> is missing from:
+> https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp=
+#L347-L353
+> while flush()
+> https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp=
+#L333-L337
+> and read()
+> https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp=
+#L466-L469
+> reset the event.
 
-> - Can the new readiness flag survive destruction of its buffer?
-> 
->    A process whose controlling terminal is a PTY can open another live
->    console with `O_NOCTTY`, select a complete line without reading it,
->    close its last reference to that console, then reopen it while another
->    process keeps the console alive. Actual console close frees and zeroes
->    `con_ra`, but leaves the new static `input_ready` true. A fresh handler
->    no longer resets that flag, so wouldn't its next canonical `read()`
->    skip waiting, find no bytes and return zero, i.e. apparent EOF without
->    an EOF keystroke?
-> 
->    Before v3, the fresh handler initialized its own flag to
->    false. This is a sequential close/reopen case, not closing one of
->    several surviving duplicates.
+This seems to be a genuine omission. I did research discussions, issues
+and PRs in microsoft/terminal, but it does not seem to be discussed
+directly. The closest I (or more precisely, GPT-6) found is:
+https://github.com/microsoft/terminal/pull/14745#discussion_r1107879996
+which is followed by an explanation that the `resetWaitEvent` mechanism
+was replaced with `_storage.empty()`. So from my point of view, you're
+right, `FlushAllButKeys()` should probably also reset the event if
+`_storage` is empty. But take that with a big rock of salt, as I am
+_definitely_ out of my depth when talking about `microsoft/terminal` code.
 
-I do not think so. con_ra and input_ready is static but not shared
-between processes. That is, the input_ready for 'another process' is
-initially false without explicit initialization.
+> > 2. If the queue contained only non-key records, it becomes empty while=
+ the
+> >    input-available event remains signaled.
+> > 3. An empty subsequent peek returns before the event-reset code
+> >    (https://github.com/microsoft/terminal/blob/v1.24.11911.0/src/host/=
+inputBuffer.cpp#L460-L470).
+> >    With no other input activity repairing that state, Cygwin's new loo=
+p
+> >    can repeatedly see "signaled handle" followed by "zero records."
+> >=20
+> > In other words: changing active screen buffers can discard the remaini=
+ng
+> > non-key records without resetting the input-available event. The queue=
+ is
+> > then empty but the handle remains signaled; an empty peek does not rep=
+air
+> > the event. The new preliminary wait consequently succeeds repeatedly,
+> > while `process_input_message(0)` finds zero records and returns
+> > `input_processing` without changing readiness. `peek_console()` loops
+> > without progress, so even a zero-timeout `select()` can hang. The old
+> > preliminary peek explicitly broke out when its record count was zero.
+> >=20
+> > This is not merely the normal distinction between a keypress and a
+> > complete line. It is a stale host notification paired with an actually
+> > empty queue. The source counterexample keeps Cygwin's worker paused
+> > through Win32 input mode, with no new input or other reader repairing =
+the
+> > state.
+> >=20
+> > I think we can keep the cheap `WaitForSingleObject()` check, but could=
+ we
+> > let `process_input_message()` report an empty queue separately from
+> > `input_processing`? If its `PeekConsoleInputW()` call finds no records=
+,
+> > `peek_console()` needs to stop retrying rather than spin on a handle t=
+hat
+> > stays signaled. Simply breaking on `input_processing` would also stop =
+when
+> > we consumed input but hadn't yet completed a canonical line, so we nee=
+d to
+> > keep those cases separate. Please handle input errors explicitly, too.
+>=20
+> What about calling read() with AmountToRead =3D=3D 0
+> https://github.com/microsoft/terminal/blob/main/src/host/inputBuffer.cpp=
+#L372-L475
+> ?
 
-> We will want to keep the shared-readiness fix and input-flush
-> serialization, but we might need to make lock ordering consistent with
-> close, and retire readiness with its buffer. I don't think that we could
-> clear readiness on every open, or equate it with a nonempty buffer: other
-> descriptors and genuine canonical `VEOF` must keep working.
-> 
-> Ciao,
-> Johannes
-> 
-> >  winsup/cygwin/fhandler/console.cc       | 41 +++++++++++++++++++++----
-> >  winsup/cygwin/local_includes/fhandler.h |  2 +-
-> >  winsup/cygwin/select.cc                 |  8 ++---
-> >  3 files changed, 40 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > index be41bf3a2..a995f3acc 100644
-> > --- a/winsup/cygwin/fhandler/console.cc
-> > +++ b/winsup/cygwin/fhandler/console.cc
-> > @@ -70,6 +70,7 @@ bool NO_COPY fhandler_console::invisible_console;
-> >  /* con_ra is shared in the same process.
-> >     Only one console can exist in a process, therefore, static is suitable. */
-> >  static struct fhandler_base::rabuf_t con_ra;
-> > +static bool input_ready;
-> >  
-> >  /* Write pending buffer for ESC sequence handling
-> >     in xterm compatible mode */
-> > @@ -1224,7 +1225,7 @@ fhandler_console::read (void *pv, size_t& buflen)
-> >        (get_ttyp ()->ti.c_cc[VTIME]*100 ? : INFINITE)));
-> >  
-> >  read_more:
-> > -  while (!input_ready && !get_cons_readahead_valid ())
-> > +  while (!::input_ready && !get_cons_readahead_valid ())
-> >      {
-> >        int bgres;
-> >        if ((bgres = bg_check (SIGTTIN)) <= bg_eof)
-> > @@ -1305,7 +1306,7 @@ wait_retry:
-> >      get_readahead_into_buffer (buf + copied_chars, buflen - copied_chars);
-> >  
-> >    if (!con_ra.ralen)
-> > -    input_ready = false;
-> > +    ::input_ready = false;
-> >    release_input_mutex ();
-> >  
-> >    if (buflen > copied_chars && !(get_ttyp ()->ti.c_lflag & ICANON)
-> > @@ -1357,7 +1358,7 @@ fhandler_console::process_input_message (size_t len)
-> >    /* This code is reached only when being passed the input_ready check,
-> >       however, the check was done outside input_mutex. Therefore, another
-> >       thread may set input_ready after the check. Check it again here. */
-> > -  if (input_ready && (len == 0 || (get_ttyp ()->ti.c_lflag & ICANON)))
-> > +  if (::input_ready && (len == 0 || (get_ttyp ()->ti.c_lflag & ICANON)))
-> >      return input_ok;
-> >  
-> >    for (i = 0; i < total_read; i ++)
-> > @@ -1736,14 +1737,14 @@ fhandler_console::process_input_message (size_t len)
-> >  	    }
-> >  	  else if (res == line_edit_input_done)
-> >  	    {
-> > -	      input_ready = true;
-> > +	      ::input_ready = true;
-> >  	      stat = input_ok;
-> >  	      if (ti->c_lflag & ICANON)
-> >  		goto out;
-> >  	    }
-> >  	}
-> >        /* len == 0 if called from select.cc:peek_console() */
-> > -      if (input_ready && (len == 0 || con_ra.ralen >= len))
-> > +      if (::input_ready && (len == 0 || con_ra.ralen >= len))
-> >  	goto out;
-> >      }
-> >  out:
-> > @@ -2217,6 +2218,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >    int res = fhandler_termios::ioctl (cmd, arg);
-> >    if (res <= 0)
-> >      return res;
-> > +  acquire_input_mutex (mutex_timeout);
-> >    acquire_output_mutex (mutex_timeout);
-> >    switch (cmd)
-> >      {
-> > @@ -2234,6 +2236,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >  			   ((struct winsize *) arg)->ws_row,
-> >  			   ((struct winsize *) arg)->ws_col);
-> >  	    release_output_mutex ();
-> > +	    release_input_mutex ();
-> >  	    return 0;
-> >  	  }
-> >  	else
-> > @@ -2241,17 +2244,21 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >  	    syscall_printf ("WINSZ failed");
-> >  	    __seterrno ();
-> >  	    release_output_mutex ();
-> > +	    release_input_mutex ();
-> >  	    return -1;
-> >  	  }
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return 0;
-> >        case TIOCSWINSZ:
-> >  	bg_check (SIGTTOU);
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return 0;
-> >        case KDGKBMETA:
-> >  	*(int *) arg = (con.metabit) ? K_METABIT : K_ESCPREFIX;
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return 0;
-> >        case KDSKBMETA:
-> >  	if ((intptr_t) arg == K_METABIT)
-> > @@ -2262,19 +2269,23 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >  	  {
-> >  	    set_errno (EINVAL);
-> >  	    release_output_mutex ();
-> > +	    release_input_mutex ();
-> >  	    return -1;
-> >  	  }
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return 0;
-> >        case TIOCLINUX:
-> >  	if (*(unsigned char *) arg == 6)
-> >  	  {
-> >  	    *(unsigned char *) arg = (unsigned char) con.nModifiers;
-> >  	    release_output_mutex ();
-> > +	    release_input_mutex ();
-> >  	    return 0;
-> >  	  }
-> >  	set_errno (EINVAL);
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return -1;
-> >        case FIONREAD:
-> >        case TIOCINQ:
-> > @@ -2291,6 +2302,7 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >  	    {
-> >  	      set_errno (EINVAL);
-> >  	      release_output_mutex ();
-> > +	      release_input_mutex ();
-> >  	      return -1;
-> >  	    }
-> >  	  bool saw_eol = false;
-> > @@ -2327,20 +2339,24 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-> >  	  else
-> >  	    *(int *) arg = ret;
-> >  	  release_output_mutex ();
-> > +	  release_input_mutex ();
-> >  	  return 0;
-> >  	}
-> >  	break;
-> >        case TCXONC:
-> >  	res = this->tcflow ((int)(intptr_t) arg);
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return res;
-> >        case TCFLSH:
-> >  	res = this->tcflush ((int)(intptr_t) arg);
-> >  	release_output_mutex ();
-> > +	release_input_mutex ();
-> >  	return res;
-> >      }
-> >  
-> >    release_output_mutex ();
-> > +  release_input_mutex ();
-> >    return fhandler_base::ioctl (cmd, arg);
-> >  }
-> >  
-> > @@ -2351,6 +2367,9 @@ fhandler_console::tcflush (int queue)
-> >    if (queue == TCIFLUSH
-> >        || queue == TCIOFLUSH)
-> >      {
-> > +      /* tcflush() may be called inside the input_mutex,
-> > +	 however, mutex of Win32 can be acquired recursively. */
-> > +      acquire_input_mutex (mutex_timeout);
-> >        acquire_attach_mutex (mutex_timeout);
-> >        DWORD resume_pid = attach_console (con.owner);
-> >        BOOL r = FlushConsoleInputBuffer (get_handle ());
-> > @@ -2362,6 +2381,10 @@ fhandler_console::tcflush (int queue)
-> >  	  res = -1;
-> >  	}
-> >        con.num_processed = 0;
-> > +      eat_readahead (-1);
-> > +      ::input_ready = false;
-> > +      con.cons_rapoi = NULL;
-> > +      release_input_mutex ();
-> >      }
-> >    return res;
-> >  }
-> > @@ -2386,7 +2409,7 @@ fhandler_console::tcgetattr (struct termios *t)
-> >  }
-> >  
-> >  fhandler_console::fhandler_console (fh_devices devunit) :
-> > -  fhandler_termios (), input_ready (false), thread_sync_event (NULL),
-> > +  fhandler_termios (), thread_sync_event (NULL),
-> >    input_mutex (NULL), output_mutex (NULL), unit (MAX_CONS_DEV),
-> >    num_input_events_processed (0)
-> >  {
-> > @@ -4912,3 +4935,9 @@ fhandler_console::tcdrain ()
-> >  {
-> >    return 0;
-> >  }
-> > +
-> > +bool
-> > +fhandler_console::input_ready ()
-> > +{
-> > +  return ::input_ready;
-> > +}
-> > diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-> > index d11b3ec4f..73d121508 100644
-> > --- a/winsup/cygwin/local_includes/fhandler.h
-> > +++ b/winsup/cygwin/local_includes/fhandler.h
-> > @@ -2183,7 +2183,6 @@ public:
-> >      tty_min tty_min_state;
-> >      dev_console con;
-> >    };
-> > -  bool input_ready;
-> >    enum input_states
-> >    {
-> >      input_error = -1,
-> > @@ -2366,6 +2365,7 @@ private:
-> >    void wpbuf_send ();
-> >    int fstat (struct stat *buf);
-> >    void discard_key_events (size_t n);
-> > +  bool input_ready ();
-> >  
-> >    class console_unit
-> >    {
-> > diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-> > index b72083447..120273b70 100644
-> > --- a/winsup/cygwin/select.cc
-> > +++ b/winsup/cygwin/select.cc
-> > @@ -1140,7 +1140,7 @@ peek_console (select_record *me, bool)
-> >    if (fh->get_cons_readahead_valid ())
-> >      return me->read_ready = true;
-> >  
-> > -  if (fh->input_ready)
-> > +  if (fh->input_ready ())
-> >      return me->read_ready = true;
-> >  
-> >    if (me->read_ready)
-> > @@ -1155,7 +1155,7 @@ peek_console (select_record *me, bool)
-> >    set_handle_or_return_if_not_open (h, me);
-> >  
-> >    fh->acquire_input_mutex (mutex_timeout);
-> > -  while (!fh->input_ready && !fh->get_cons_readahead_valid ())
-> > +  while (!fh->input_ready () && !fh->get_cons_readahead_valid ())
-> >      {
-> >        if (fh->bg_check (SIGTTIN, true) <= bg_eof)
-> >  	{
-> > @@ -1182,7 +1182,7 @@ peek_console (select_record *me, bool)
-> >  	}
-> >      }
-> >    fh->release_input_mutex ();
-> > -  if (fh->input_ready || fh->get_cons_readahead_valid ())
-> > +  if (fh->input_ready () || fh->get_cons_readahead_valid ())
-> >      return me->read_ready = true;
-> >  
-> >    return me->write_ready;
-> > @@ -1282,7 +1282,7 @@ fhandler_console::select_read (select_stuff *ss)
-> >  
-> >    s->peek = peek_console;
-> >    s->read_selected = true;
-> > -  s->read_ready = input_ready || get_cons_readahead_valid ();
-> > +  s->read_ready = input_ready () || get_cons_readahead_valid ();
-> >    s->cleanup = console_cleanup;
-> >    return s;
-> >  }
-> > -- 
-> > 2.51.0
-> > 
-> > 
+Unfortunately, there's an early return in that function if `OutEvents` is
+empty, _before_ the event is reset:
+https://github.com/microsoft/terminal/blob/dcfbcdd8639813994734ced60abec37=
+474cb3ec7/src/host/inputBuffer.cpp#L462-L469
 
+Ciao,
+Johannes
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+>=20
+> It seems that read() with length 0 resets the event if the
+> input buffer is empty.
+>=20
+> What do you think?
+>=20
+> --=20
+> Takashi Yano <takashi.yano@nifty.ne.jp>
+>=20
