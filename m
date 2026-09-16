@@ -1,173 +1,428 @@
-Return-Path: <SRS0=W+MN=HI=arm.com=Evgeny.Karpov@sourceware.org>
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazlp170130006.outbound.protection.outlook.com [IPv6:2a01:111:f403:c201::6])
-	by sourceware.org (Postfix) with ESMTPS id B62C54BA2E17
-	for <cygwin-patches@cygwin.com>; Wed, 16 Sep 2026 08:50:42 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B62C54BA2E17
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=arm.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B62C54BA2E17
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c201::6
-ARC-Seal: i=3; a=rsa-sha256; d=sourceware.org; s=key; t=1789548643; cv=pass;
-	b=nxxuAfXHhxrscAOjGFCE/4qBzEU4yPsI2oZOxqm/w4ZhYc3yHjdPgHJsCS0d1+FsYn7/5c9fa1zV2bGPMvmXwY2VNz+APkJt/X5NuqHNzyo7mthUoi7U/232HE6Jn0VgQp1XOMkC2M09S7vutXXrn3qsqyRQG4cOLBN7cI20JXw=
-ARC-Message-Signature: i=3; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789548643; c=relaxed/simple;
-	bh=pwX5N3k1h694C9+arpIeilPD8WRnp+opLcCAKMc71d0=;
-	h=DKIM-Signature:DKIM-Signature:Date:From:To:Subject:Message-ID:
-	 MIME-Version; b=hCciXtc56URmQ6+Iv6NjjpyQYanYjCCmLxANO8TVUf4JZchvnX3N7cPWLz5o2QGVeLZvntl1byWbilDXLuzf6cUEgFtI1OEmICWoq3V9ET2ewF07BFQaR7m04itEjBYa2y+WRrxvZHX4wMTt7E1UdRKpGp69v4gndMrGXuwmMMc=
-ARC-Authentication-Results: i=3; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=pZvScGP6; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=pZvScGP6
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B62C54BA2E17
+Return-Path: <SRS0=cqtw=HI=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by sourceware.org (Postfix) with ESMTPS id CDDC14BA2E3F
+	for <cygwin-patches@cygwin.com>; Wed, 16 Sep 2026 13:41:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org CDDC14BA2E3F
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org CDDC14BA2E3F
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.15.15
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789566078; cv=none;
+	b=qVi6xr4gLUZRA29JFC5MSJXH9rVyF1X9Mjl7nhNmeCvFnHCw2tXXxff8uiIQD4SPVCBCqFxsGdhugCvhdKmQgd90ah10lxlO4T+TjzFe6MGGXGh5j8TX2CqWAdUzx1l1qjN+7YTpoPC0CaGgE2llGJ3gvSIJx/Fc9x50nEijBVE=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1789566078; c=relaxed/simple;
+	bh=zu8CxnZhpDR8i3brCbY75jAqpTBCGNOfwqWToXCZP9M=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=lrK/wlpwRkZ5FcqcGLNBL2yglDNppLkXhhtLC7vPhy7TkxFQsKX3xo2g8PCVNrqZzFld2r5ZYXNv0Npba5jMMe8ejcmoeOiE9fsl/2nS8cTkZrF+puCiYt2plj3r7PFQMh6qiD9KOTNb1xhU3hkJBxAb22hp/XjjrvP6mVWwnsw=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=X5gePfkR
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org CDDC14BA2E3F
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=pZvScGP6;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=pZvScGP6
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=gegHNFanuDPABF4pYEjX2EuK7C4WS3bTSTUQfA8SZcau2hFiwdBCWRZ1mYo4MWPFYNpTKPuKysed2Kqvon9Oi327hWLwVW5TQROVgPCuh71NesXwwmM+XX5xLbJlM4YPgvBmIVoW2ts9mjAggyy+cHV3AC/G/58RnjNCBumOWnuk/BPuxnFFfr/wDcHfl38eFPWnBa1vQZxggIdd4WxcHnwbrGB2C+dN5cNaOtEPUbxF470j7O+90gH49UYkvfrEfbTzi3kA/LdfDMI/0xvv38+/zWbJTptxlsZm2P4YxoufqO71SYVVqPXHYx7euhlQ3YVqInLQNlwPrYUEJZzcwQ==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PKtcJ8zhGZGTzu8F7ya9WURyYgpoC8ynPK8q41OPu08=;
- b=qOak4EzjK/jBGhp6H8yBeldVfGzcM3+0a1XhxVT+Zc0GSHo321L6VWQTCHREzGateh5al4JididgqlBatG4l7CgDhS440m+otETXUFruEuyI0wGAuAmsNdvyJBtQjT8GSwMSVVFjHXPF6Km2F02I/2k+JlpAbNdQPTdSMNQGUJKpV9o1b1wGIwGLeiaJviXkNnjTGUf+oZkzHMJLG2C41SnSvbGNgLJUaure6L5oW2127ObyJKQQZOeSnwtu15LfvGWw8aKF+DFp5ywKWweabgo4nAGJMtCvaDIRMyM5GqJG/7yL/2dmi/SK9b9fo8ySEWF2KUxMxFG2EooSpGxD6Q==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=cygwin.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PKtcJ8zhGZGTzu8F7ya9WURyYgpoC8ynPK8q41OPu08=;
- b=pZvScGP6j8nzQqA7zz1hRSW2VNud5CLpBjglpujeLws3zz5YUJT2KBW7aa8aKLGn5J9mtM5WvmW3xsqPRX0NxMuY6B9lbQy/rxKXpwvw6VnzNvDPXWQqmozQ7wwHPfv3vzzFRqCrcaooMstjx0067DvlXEmSF4XpwLVVnhAHLF4=
-Received: from AS9PR06CA0604.eurprd06.prod.outlook.com (2603:10a6:20b:46e::6)
- by DU0PR08MB8662.eurprd08.prod.outlook.com (2603:10a6:10:402::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.11; Wed, 16 Sep
- 2026 08:50:34 +0000
-Received: from MI3PEPF00008556.eurprd05.prod.outlook.com
- (2603:10a6:20b:46e:cafe::8f) by AS9PR06CA0604.outlook.office365.com
- (2603:10a6:20b:46e::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.11 via Frontend Transport; Wed,
- 16 Sep 2026 08:50:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- MI3PEPF00008556.mail.protection.outlook.com (10.167.240.10) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.7
- via Frontend Transport; Wed, 16 Sep 2026 08:50:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Nt5EPuP36dmEi66Z5JtyszKmzOQypqh6s+60OmbzM/8H21KWyZTjeOx0USB4IX/V1kqkFE1ULSjjSsCPyhwiDOsvef5QcL9FT/zt/I3sraXh8UgM31d2SWUznGCy6Ail200SSlW9O6Oc8frF4W8CEHuyk9WsIN2/V5YERNSabLIzxk9Ll9HsQkkJOEx/FFb5Irf0ExGBcKUGg1LSXdxzsf1UWbYpct5HC44Qc56nl7zId8fVPFs1m4Mh8yBVrjagYqTWeC/xOxiVRqT6txn1TU1qQdQg0jhIN72h1vTD1/MxWc+tWhH5bgiZwW/1KwOqmTfxok4tQhu9PDnyanJxPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PKtcJ8zhGZGTzu8F7ya9WURyYgpoC8ynPK8q41OPu08=;
- b=ASaZEucMrcKBBrVfZDiMJGjGN1DN/F9F/kJEJSNCrCIcKKlgB9OoAaawvKB+cEDjEEX4iZizb5DBTi4i3xpJeUFw3uDdX18a26wirFXOYXgbvLPQPMgZtoLZ+y+Xdi1xAg9triwBioeNnMMFsuLILvsACIWTDe4FBe0P73edaQXLalfB2CmCqq/qQxFxQe/0JyM68Otu9az4kVFeiZc1Vf44wQAV4u1mlKVFQjispglDWCznO0PHHzNq0KO0Zg14sEbe4mBd6HxLYDpWHFoJIVVwJCrAyBleEe6l9a9VOvuXJ6kolESQm74pgv7AkccwXtD0UHQl2FuA3fRxd2uqng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 172.205.89.229) smtp.rcpttodomain=multicorewareinc.com smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PKtcJ8zhGZGTzu8F7ya9WURyYgpoC8ynPK8q41OPu08=;
- b=pZvScGP6j8nzQqA7zz1hRSW2VNud5CLpBjglpujeLws3zz5YUJT2KBW7aa8aKLGn5J9mtM5WvmW3xsqPRX0NxMuY6B9lbQy/rxKXpwvw6VnzNvDPXWQqmozQ7wwHPfv3vzzFRqCrcaooMstjx0067DvlXEmSF4XpwLVVnhAHLF4=
-Received: from AS4P189CA0037.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:5dd::8)
- by DU2PR08MB10230.eurprd08.prod.outlook.com (2603:10a6:10:46e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.7; Wed, 16 Sep
- 2026 08:49:57 +0000
-Received: from DB1PEPF000509F9.eurprd02.prod.outlook.com
- (2603:10a6:20b:5dd:cafe::1d) by AS4P189CA0037.outlook.office365.com
- (2603:10a6:20b:5dd::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.11 via Frontend Transport; Wed,
- 16 Sep 2026 08:49:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 172.205.89.229)
- smtp.mailfrom=arm.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 172.205.89.229 as permitted sender) receiver=protection.outlook.com;
- client-ip=172.205.89.229; helo=nebula.arm.com; pr=C
-Received: from nebula.arm.com (172.205.89.229) by
- DB1PEPF000509F9.mail.protection.outlook.com (10.167.242.155) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.428.7 via Frontend Transport; Wed, 16 Sep 2026 08:49:56 +0000
-Received: from AZ-NEU-EXJ02.Arm.com (10.240.25.139) by AZ-NEU-EX04.Arm.com
- (10.240.25.138) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Wed, 16 Sep
- 2026 08:49:56 +0000
-Received: from AZ-NEU-EX04.Arm.com (10.240.25.138) by AZ-NEU-EXJ02.Arm.com
- (10.240.25.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Wed, 16 Sep
- 2026 08:49:55 +0000
-Received: from arm.com (10.57.51.247) by mail.arm.com (10.240.25.138) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29 via Frontend
- Transport; Wed, 16 Sep 2026 08:49:55 +0000
-Date: Wed, 16 Sep 2026 10:49:54 +0200
-From: Evgeny Karpov <evgeny.karpov@arm.com>
-To: Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-CC: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>, <nd@arm.com>
-Subject: Re: [PATCH] Cygwin: autoload: fix ws2_32 chained init on AArch64
-Message-ID: <aqpYA_4qPMpjT7b_@arm.com>
-References: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=X5gePfkR
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1789566070; x=1790170870;
+	i=johannes.schindelin@gmx.de;
+	bh=4wpfVFLzlkR26MWS6nwLyAVIFZX199s6j8HMJpyd91A=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=X5gePfkRl4244rJoEwWdqhDFUiWHTCyG4C/ai/7gp7gbKpP1WyxqTwd2NvngHoQk
+	 oVZN0VxA9B/YtmmwCxcazko8e16E883a067MRRqLpf7aFieYp5yktFFaUyEmu2RZH
+	 bW+d3Vpsd1Vu8ORoS7HjSCOg0mIwara2txF7yRUilkP/+E9OqtB8VgwfqrlxHXQcg
+	 uyIUeDAIVRDXFNOlEN5WEmPibuUjWPAFLSb9Rs2uzJcXf+aE87u2nwm6IpSNWt8g9
+	 0Pr7GVStLdrD9LWonlKR3zgKdLGbzazcQ64Vx3eHOeWvwfUhyeCvCzOpikTWLCGVG
+	 gkDd+IfSjMuUOY3LLQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiaY9-1wchvN0nih-00hxLg; Wed, 16
+ Sep 2026 15:41:10 +0200
+Date: Wed, 16 Sep 2026 15:41:10 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v16] Cygwin: console: Fix undesired mode change at exit
+ of non-cygwin apps
+In-Reply-To: <20260915075713.726-1-takashi.yano@nifty.ne.jp>
+Message-ID: <b5cc7615-8db1-6f65-cd2b-88095d491667@gmx.de>
+References: <20260915075713.726-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
-X-EOPAttributedMessage: 1
-X-MS-TrafficTypeDiagnostic:
-	DB1PEPF000509F9:EE_|DU2PR08MB10230:EE_|MI3PEPF00008556:EE_|DU0PR08MB8662:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0aee605e-f5a5-4008-d2c8-08df13cf91a6
-X-LD-Processed: f34e5979-57d9-4aaa-ad4d-b122a662184d,ExtAddr
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|82310400026|23010399003|36860700016|376014|56012099006|11063799006|10067099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info-Original:
- xQQ36zjr4m4uKlkCtyodkPs4DO7qXReJjQ4Emu/LPyhXsRmRP6VZ34jbxEA4HpLrEPWIfYqozPrJQ76tAGRf2cwTPhAfHzs777h0RK6GRJe5RNFD3dcX5OECROKOrNszVskUDS85U0F4f8QiUXmxNAmhud4CNzjqN+A8pswV0nzxyjFqQpeix5XNLdtJZrMfA9N0KH85M+WPGPn/x0IAQ12FEpOY9FZMgY29Fxb3loyYiIGfHUA622UxduLv0hvrdF2BOiimpCCS3aUb+K9ep/KPWFjr52JkE9XI0aYLUwjujGbabG1UcsOjl4GZiB8V0v8BQBqfx+pDcthsplFzulPFYO7E6RTfrr4QKUjNwmu5qT1jjRT471f4BVwrsU59U8sD334tsa9RDad5BkplZShVJFBlp7Kd/RteI5MwM+oBnNEPh+fYiaK+UKubbXeWlZPjRE3jH+KNUJBpWaaDmkXwgQV6ar7iOCuvWya7NncESdtdGKJMMyrJOmPHJxk4SpyBdsn2LLW3gKa0Cd230dMMr+ZPGlqzmdUJeIA/2NqNOqFVw1gIFyWt95AvL6aDr+rYP1oq3WxktkXVShj3Iy3RY1RdxhoWEleg+D/LEPAN9nPl5DBRW3FtDYl9SAIsURgPrs5dA8ews48uy52Rq4Pge/TaKue35VN3JqtGRnc9DmGDuDwOlhUF7T/6OFieNOiBZYPb5h7zUviVPa5ZYQ==
-X-Forefront-Antispam-Report-Untrusted:
- CIP:172.205.89.229;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(23010399003)(36860700016)(376014)(56012099006)(11063799006)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- 0ePAUoIeGydirqHXo1S/ff4Kv1XL+p2xUBW/au+JkMM0Phi6je2C+erM+tVstD8scQ+mKdE+qYXAa3GqtkLnlMpi2oT9PMYUkpxhonbP88JYIsw0l26GTCbR7ENSDGRVRmIZnh/f+PrHdy84xo57o7bx2A3HiTdQg/jI9fEIpxs2yg+p0QNsyyYA8YRJtkjZ0m5kwb0j/DDpaQLTbrAKZ5lpBtJkxQk0H8QPLcvE94C8Oy9PC8nbKQBK3RfP/NyPXv9UydfqZsxJ31++Exjb1gN9+rg+RFHEtjkeTemfu6y8BmoqaDZ55b5nY4knODYnNMBPen2Rn7II/YFRtCnkcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10230
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- MI3PEPF00008556.eurprd05.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	7c12cff2-eb3b-40fa-c6a8-08df13cf7bcb
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|14060799003|1800799024|35042699022|376014|82310400026|36860700016|22082099003|18002099003|10067099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	kzRvfG88MkPTO+FKkOd4w/PqLCs/qaA1Iugm+zc/yMS5RTbgcL03w1mcyltD334m1tiD33Yuqtssj/K9VMX18w8LgsKIEDo7/fq5vciQhu5JAL5FcxEKjN0FNasLEwUycPkQyJ1zOuIg+Fc1MR3Bxs0HPZ9Xh0Y0+LY2mstK2iMHWG0F7QxfQqXJjjaS/fdxYDc2BZjCMwHQbekkfrD1oaYCKSsSmrkbKuU+ZIZYBKr9J6yMmEQ+Ho8VTFyHyuk6+yxnlLUlCpXYxRrvRiVH5Zy6zN8nBznfddNRxR2p5NoPqbIZobUaMD1nxJmQ95kBiwtxmFZVRp5XJ+W5VsJpCo+xerHGqnnc4v546Hks9GiQbMlATzr7kcjiOPaM+5PbvaxGzz1w4QYnd6owzYKlgoJlD9BX9zQ+ZArmYCEof67uLTRzwCrlpmbfiAkjiqYor63bExQgL17+0+p5PVYRBlYU34l7AQOSexuo8UmF2z9LAK2lWg7unVgSPr6QPAie7DU3BXycdB8PGDvni9xF9BRbAAvJEfbuVWGZHBj+D6TJtTfiIMKyvd1iZoLNSYL6msASyryRLPCkfNixQIS7V2m0chvw1T6dzAnNh6NurOP8OdtEUjbTeAJmn/QEQ86m/5zH02NtfFS7teaWSPPg66OlpjuvQJppUnMpg4f9kZpiKpYz4MnOuA/3b5AXDpCGPjhNk4V2LgN3HASOymMJqA==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(14060799003)(1800799024)(35042699022)(376014)(82310400026)(36860700016)(22082099003)(18002099003)(10067099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	BYXoh2jr+iZ5Iu3ZzWtPJD1q3y4aTUaGbPu2HSpnANsAvLf2d9vHL+LH9palasLX2rl4K176nVD2dhVEU5UKRKKhWSD+g+W/H/SHw4tlAvX2odiVYHhLbTP3ArbI9gvzfJFWhQCapbfWzJ7fbH2uRFuuZAvQHT2P6ieRolCCFBax1c623Cus8avGcLHqlqXQCz2YK5EGKfgGPz1O4hTZlwgmVPZJKrv/U11o5Kuf2HHGBwszjvyHPpJeH9waRdjCivqaUwZwFVPiek8HjedsGSGQlwOA/l02Epu49YBqyATyN+Z55iAP7A/kewZ1tCejR5PIejjpxc0Z4k4AYnafYbB+FhOKJ6jD33eZOvB8abO5U9JTp5t373NOblgZ8zvku8y/9f5TSqOFCmU9UPYs+7oRuXgF5wFNd/WOWPyyV58N8EcxEQ4c+le5Rjuudz19
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2026 08:50:33.1885
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0aee605e-f5a5-4008-d2c8-08df13cf91a6
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MI3PEPF00008556.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8662
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+X-Provags-ID: V03:K1:LDZvLCaPXRMHh6En1vZFqMQnxGhx9B53v2RTgvtVzsx/UgTar5p
+ wfvgZwP1PR8MWH+ABMne3Bt5uH8lbTMXhKxGrSWxh6Y9VUppML+Ly0fLRlX6QSfTdWZ9yaU
+ zCM7BGzcw5N29Kh8pIIXtSL2eKJBGK83XwW+PSLrnka2L2UFtep7UYwsr6+LDK0KHaAVjJC
+ l767conswgyYqJ6rffGuQ==
+UI-OutboundReport: notjunk:1;M01:P0:URVgLPuLbuI=;0RKPefBDiRb92DMp7HOVR+njRwy
+ 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
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Tue, 07 Jul 2026, Chandru Kumaresan wrote:
-> On AArch64, the autoload INIT_WRAPPER passes func_info* via x30 ("mov
-> x0, x30").  This works for the first init stage (std_dll_init), reached
-> by the trampoline's "blr".  It breaks for a chained second init, because
-> dll_chain reaches it via "br x1" without updating x30.
+Hi Takashi,
 
-A more general question, could the autoload implementation be replaced by delay loaded DLLs?
+On Tue, 15 Sep 2026, Takashi Yano wrote:
 
-Regards,
-Evgeny
+> Previously, if two non-cygwin apps are started and one of them
+> exits first, the other one lost appropriate console mode, since
+> the first one restored it to tty::cygwin. This patch counts the
+> active console process whose pgid is pgid of the tty and if the
+> result is zero (means the last non-cygwin foreground process),
+> restore console mode. To avoid race issue between apps modifying
+> console mode simultaneously, this patch also introduce a mutex
+> named `cons_mode_mutex`.
+>=20
+> Known limitation:
+> In the case of non-overlayed spawn, there still exists a small
+> window in which another non-cygwin process may restore tty::cygwin
+> mode even though new non-cygwin app is about to start.
+>=20
+> Fixes: 48285aa36c2c ("Cygwin: console: Fix handling of Ctrl-S in Win7.")
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> ---
+> v2: Stop counting up/down the counter by itself.
+>     Use num_active_non_cygwin_apps() instead.
+> v3: Guard setup_for_non_cygwin_app() by cons_mode_mutex as well.
+> v4: Guard all mode changes in console by cons_mode_mutex.
+> v5: Fix the issue of mutex acquisition order.
+>     Fix the race window around the process creation.
+>     Improve latency of checking existence of non-cygwin apps.
+>     Handle errors in checking existence of non-cygwin apps.
+> v6: Match the conditions for incrementing and decrementing the counter.
+> v7: Decrement the counter only if it was incremented by myself.
+> v8: Symlify the conditions for incrementing and decrementing the counter
+>     a bit.
+> v9: Minimize the argument of set_non_cygwin_app_setup_ongoing().
+> v10: Set process_state before calling spawn_worker::setup() rather than
+>      using the counter. In addition, resume non-cygwin app before
+> 	 modifying process table. These make things much simpler.
+>      Narrowing the period of acquiring input_mutex in peek_console()
+>      in select.cc.
+> v11: Release output_mutex before calling bg_check() in ioctl().
+>      Suppress unecessary console-mode change attempts.
+> v12: Change handling of disabling master thread in the case of win32
+>      input mode.
+>      Wait for console attaching only when the spawned app is a console
+>      app. In addition, a timeout is introduced to this wait loop for
+>      safety.
+> v13: Do not perform cleanup for non-cygwin apps on the error in
+>      active_non_cygwin_apps_exist().
+>      Handle WAIT_ABANDONED in CSI?9001h/l handling.
+>      Fix ABBA deadlock about echo code path.
+>      Set need_win32_input_mode_fix before set_disable_master_thread()
+>      in CSI?9001h/l handling.
+>      Setting and checking for need_win32_input_mode_fix inside the
+>      input_mutex.
+>      Fix the problem that the flag need_win32_input_mode_fix is set,
+>      but disable_master_thread does not set if another thread holds
+>      cons_mode_mutex.
+> v14: Re-design echo code path. (Introduce raw_write() for doecho())
+>      Re-design the handling of need_win32_input_mode_fix from scratch.
+> v15: Fix possible deadlock with input_mutex regarding doecho()
+> v16: Avoid to overwrite ENABLE_PROCESS_INPUT in tty::native mode.
+>      Call fix_input_mode_if_necessary in TIMEOUT case as well.
 
+Unfortunately, v16 still does not quite address the hangs. See for example
+https://github.com/msys2/msys2-runtime/issues/351, with whose reproducer
+at https://github.com/mrev11/msys2-bugreport (which still hangs with a
+backported v16) I was able to come up with a fixup for the backported v15,
+https://github.com/msys2/msys2-runtime/pull/364/commits/dbc070a9d472021d0a=
+ecf771ea1d5280a6a48031:
+
+=2D- snip --
+Avoid the cleanup/startup deadlock: cleanup can hold `cons_mode_mutex`
+while waiting for a console master that a new owner cannot start until
+acquiring that mutex. Startup must precede the mode-mutex wait without
+changing the handshake or mode serialization.
+
+Also avoid waiting forever for an owner that exited without clearing
+ownership. A confirmed exit permits ending the wait only while the
+captured owner is still recorded, excluding the -1 normal-retirement
+sentinel. Preserve the published request for a replacement worker;
+a missing worker is not an acknowledgement.
+
+Assisted-by: GPT-6
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+=2D--
+ winsup/cygwin/fhandler/console.cc | 47 +++++++++++++++++++------------
+ 1 file changed, 29 insertions(+), 18 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/co=
+nsole.cc
+index 1c30d5f981..c499ae491f 100644
+=2D-- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -2086,6 +2086,26 @@ fhandler_console::open (int flags, mode_t)
+   if (in_is_console)
+     CloseHandle (h_in);
+=20
++  /* Another process may hold cons_mode_mutex while waiting for the
++     master thread to acknowledge a state change. */
++  if (GetCurrentProcessId () =3D=3D con.owner)
++    {
++      if (GetModuleHandle ("ConEmuHk64.dll"))
++	hook_conemu_cygwin_connector ();
++      char name[MAX_PATH];
++      shared_name (name, CONS_THREAD_SYNC, get_minor ());
++      thread_sync_event =3D CreateEvent(NULL, FALSE, FALSE, name);
++      if (thread_sync_event)
++	{
++	  new cygthread (::cons_master_thread, this, "consm");
++	  WaitForSingleObject (thread_sync_event, INFINITE);
++	  CloseHandle (thread_sync_event);
++	}
++      else
++	debug_printf ("Failed to create thread_sync_event %08x",
++		      GetLastError ());
++    }
++
+   WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+   if (in_is_console && con.curr_input_mode !=3D tty::cygwin)
+     {
+@@ -2104,23 +2124,6 @@ fhandler_console::open (int flags, mode_t)
+   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
+ 		get_output_handle ());
+=20
+-  if (GetCurrentProcessId () =3D=3D con.owner)
+-    {
+-      if (GetModuleHandle ("ConEmuHk64.dll"))
+-	hook_conemu_cygwin_connector ();
+-      char name[MAX_PATH];
+-      shared_name (name, CONS_THREAD_SYNC, get_minor ());
+-      thread_sync_event =3D CreateEvent(NULL, FALSE, FALSE, name);
+-      if (thread_sync_event)
+-	{
+-	  new cygthread (::cons_master_thread, this, "consm");
+-	  WaitForSingleObject (thread_sync_event, INFINITE);
+-	  CloseHandle (thread_sync_event);
+-	}
+-      else
+-	debug_printf ("Failed to create thread_sync_event %08x",
+-		      GetLastError ());
+-    }
+   return 1;
+ }
+=20
+@@ -4938,7 +4941,15 @@ fhandler_console::set_disable_master_thread (bool x=
+, fhandler_console *cons)
+   con.disable_master_thread =3D x;
+   cons->release_input_mutex ();
+   while (con.master_thread_suspended !=3D x)
+-    Sleep (1);
++    {
++      DWORD owner =3D con.owner;
++      /* Keep the request for a replacement worker, but do not wait for a
++	 dead owner.  -1 denotes an owner completing normal retirement. */
++      if (owner !=3D (DWORD) -1 && !process_alive (owner)
++	  && con.owner =3D=3D owner)
++	break;
++      Sleep (1);
++    }
+ }
+=20
+ int
+=2D- snap --
+
+Note: I am _not_ claiming that this should be the final fix. I'm just
+observing that it addresses the reported hangs reliably.
+
+The reason is a startup deadlock. The reproducer launches Bash and native
+children from concurrent native threads. In my tests, already its first of
+five passes hung: one started, zero completed. Cleanup process A holds
+`cons_mode_mutex` in `cleanup_for_non_cygwin_app()` and calls
+`set_disable_master_thread(false)`, waiting for resume acknowledgement.
+Live owner B waits in `open()` for the same mutex _before creating the
+worker_ that must acknowledge A. Process A cannot release the mutex until
+B's worker runs; B cannot start it until A releases the mutex. The
+captures show a `false` request, `true` acknowledgement, no started worker
+and `need_win32_input_mode_fix=3Dfalse`: this failure does not involve
+Win32-input suppression.
+
+The fixup I came up with moves worker startup before the mode-lock wait
+and adds an owner-liveness escape preserving the request. Startup
+reordering alone still hung on a dead, nonzero owner. The combined
+v15-backport fix completed five uninstrumented reproducer runs (495 jobs,
+no child-command failures); GitHub user `@lhmouse` reported in
+https://github.com/msys2/MSYS2-packages/pull/6445#issuecomment-5677483786
+that their own hang was _also_ resolved by this v15+fixup.
+
+>=20
+>  winsup/cygwin/fhandler/console.cc       | 207 +++++++++++++++++++++---
+>  winsup/cygwin/fhandler/termios.cc       |  40 +++--
+>  winsup/cygwin/local_includes/fhandler.h |  10 +-
+>  winsup/cygwin/select.cc                 |  16 +-
+>  winsup/cygwin/spawn.cc                  |  44 ++---
+>  5 files changed, 257 insertions(+), 60 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/=
+console.cc
+> index be41bf3a2..5de74a6a6 100644
+> --- a/winsup/cygwin/fhandler/console.cc
+> +++ b/winsup/cygwin/fhandler/console.cc
+> @@ -443,6 +443,11 @@ fhandler_console::cons_master_thread (handle_set_t =
+*p, tty *ttyp)
+>  	  cygwait (40);
+>  	  continue;
+>  	}
+> +      if (con.need_win32_input_mode_fix)
+> +	{
+> +	  cygwait (40);
+> +	  continue;
+> +	}
+
+An already-started worker can still fail to acknowledge resume. The 40msec
+window covers setting acknowledgement `true` for pause. While
+`need_win32_input_mode_fix` remains `true`, the worker sleeps and
+continues before clearing that acknowledgement. A caller requesting
+`false` can therefore wait indefinitely despite periodic wakes. This
+unchanged source-level concern is distinct from the captured startup
+deadlock; the experimental startup/death safeguards do not fix it.
+
+> =20
+>        acquire_attach_mutex (mutex_timeout);
+>        GetNumberOfConsoleInputEvents (p->input_handle, &total_read);
+> @@ -841,6 +846,8 @@ fhandler_console::setup ()
+>        con.num_processed =3D 0;
+>        con.curr_input_mode =3D tty::restore;
+>        con.curr_output_mode =3D tty::restore;
+> +      con.need_win32_input_mode_fix =3D false;
+> +      con.is_processed_input =3D false;
+>      }
+>  }
+> =20
+> [... snipping ...]
+> @@ -1248,6 +1378,7 @@ wait_retry:
+>  	case WAIT_TIMEOUT:
+>  	  if (copied_chars)
+>  	    {
+> +	      fix_input_mode_if_necessary (); /* for win32_input_mode */
+>  	      buflen =3D copied_chars;
+>  	      return;
+>  	    }
+
+This timeout fix still misses canonical echo (a blocking canonical read
+uses `INFINITE`). If it echoes a mode-switch sequence without receiving a
+newline, input processing can return `input_processing`, release
+`input_mutex`, and loop back to waiting. It reaches neither this timeout
+branch nor the normal finishing fix-up. Thus this hunk addresses the
+specific partial-timeout example, but not that canonical-echo path.
+
+I do like the native guard and timeout improvement, but also think that
+worker startup/retirement, `false` acknowledgement and deferred
+reconciliation before approval need addressing.
+
+I.e. the code needs to finish processing the current input under
+`input_mutex`, release that lock, then apply any mode change recorded
+during echo, _before_ waiting for more input or returning to the
+application. The order should be something along the lines of:
+
+	case input_processing:
+	  release_input_mutex ();
+	  fix_input_mode_if_necessary ();
+	  continue;
+
+v16 currently goes straight from `release_input_mutex()` to `continue`,
+potentially waiting indefinitely for more input before applying the echoed
+mode change. Early returns after input processing need the same
+consideration.
+
+So why release input first? The helper acquires `cons_mode_mutex` and
+then, when an update is needed, `input_mutex`. Calling it while the caller
+still holds `input_mutex` would introduce the reverse ordering:
+
+	echoing reader:		holds INPUT -> waits for MODE
+	mode changer:		holds MODE -> waits for INPUT
+
+That's the deadlock we need to remove.
+
+At least that's how I interpret the observed hangs in that reproducer.
+
+Ciao,
+Johannes
