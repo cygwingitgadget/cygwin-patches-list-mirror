@@ -1,340 +1,886 @@
 Return-Path: <SRS0=k2H2=HJ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [106.153.227.121])
-	by sourceware.org (Postfix) with ESMTPS id EDDD24BA23C0
-	for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2026 05:28:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org EDDD24BA23C0
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id BF4114BA23FD
+	for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2026 05:40:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BF4114BA23FD
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org EDDD24BA23C0
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.121
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789622920; cv=none;
-	b=iLZjdS41rC3ETBzmT4sfCrnExssUQHay2nViETHWkvcU4J79OOXYrYgb/r3Vh8TOCZ9T/a/HQMWjb3vXiVYqTQfXQzK5IHn7XtsvQ7CqlLLd27RpOMuTG61Nax/jOCFUJ940XOIi9SAuiT/8x8LghyYpTM2GilUx7kUtITFmAk4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BF4114BA23FD
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789623644; cv=none;
+	b=bQ/pNgHaZy0kjerwBtFIKx54zg8A7IhmGZvVobvIex/U0nVGnnxEKJ/4bZYY4iqEZ/uLqSyyUGHFxlT2JbVLKBmmHsgaYeTVycHGBmEla4505IlT/0f1O1jwFLo53KAlafW9ay52sU7X4jAq/FMUFO38PahNiNKVfoWsSA1nJtM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789622920; c=relaxed/simple;
-	bh=ZWu19iFq5p98ot2mIj5BEnfbIuFvuT7APW3ZJRrzt2I=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=E3FAjL7XdJniJkjS9sJwyusVF3otDfrfT+uKtganvC3XkpKdTW+ypm3724s/bgrj9b3nSp5JKPoMTe4iZkbICD5Y1GgWwq90O+UA50PIQuVqCCfJJD/V6byoDkPPirYZYh6NnA/MDSXuHjrFBy+WbvZn2T2pnEy0c9dKssNZ2aU=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=S9KQfe9A
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org EDDD24BA23C0
+	t=1789623644; c=relaxed/simple;
+	bh=mDnDma8z4gUFXIsuSghfNUMK9cH1PR4uFxKauk3RCNc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=Pnf9V1dseuejVgRnuNxyjb12weOQrgrZs/veaS0rPJ1o0fS9hRXaNA0Q4eZR5dJujxkIZDP/aGs/pMfdA4JId+ZnPh9rFJ/KhmIufh/t0dS5J9Oblo9HNe3fDBlSp0HhALtM6iOV04hmHYKitFAxe112AnP2K2fofmJtlS4tVK8=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=oXzOCqq4
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BF4114BA23FD
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=S9KQfe9A
-Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20260917052836135.TVRV.60338.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2026 14:28:36 +0900
-Date: Thu, 17 Sep 2026 14:28:34 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=oXzOCqq4
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260917054041664.VNES.17441.HP-Z230@nifty.com>;
+          Thu, 17 Sep 2026 14:40:41 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v16] Cygwin: console: Fix undesired mode change at exit
- of non-cygwin apps
-Message-Id: <20260917142834.122418c7121e4d13ea4c5719@nifty.ne.jp>
-In-Reply-To: <b5cc7615-8db1-6f65-cd2b-88095d491667@gmx.de>
-References: <20260915075713.726-1-takashi.yano@nifty.ne.jp>
-	<b5cc7615-8db1-6f65-cd2b-88095d491667@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789622916;
- bh=Bp99FuSkV19BNyRMD0hgDFiMFEm39nmyj7mEhkt45Q8=;
- h=Date:From:To:Subject:In-Reply-To;
- b=S9KQfe9AGcjRvTYrOWGqJU0ygPdnKFLm4wWttE8WtVpltI4y9Fy+j2adRcjoXOuSaWLGO/Ba
- WRFvlqxWUgjDcGLK1KkhsanmxF46uHRXL4EABMJHYWr3dQjb2/D3x0Y786xnBBWGJEm+iQQ6Pe
- sTSxreHHNjm/AIZbVh9mx1Au6nP6KyonifIOI/m4qRt6e8dhm03FF0KcJnGr+gm9km5lzKAxGU
- nqT9BccIaBQyWKhfIpdZiLFLNhS6U+NWwDJKFyvEemXhYaaZaGxkDfsynTGpf1LtEV+1cI1hcN
- rEdyEdqUMIVmtAZIj6AKAy//ceFmaYkqoUqGGqEL7DeFRhVQ==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Subject: [PATCH v17] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
+Date: Thu, 17 Sep 2026 14:40:26 +0900
+Message-ID: <20260917054034.7668-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789623641;
+ bh=3RzGTABwzJoIiOnPEkHbRlK4eSBof3Fp+V1YxXfuSyQ=;
+ h=From:To:Cc:Subject:Date;
+ b=oXzOCqq4HZNiZ5VZobTfNIyiO1KgXvHrg1Cio7E5U9IvODNyn5/lXj0xxgCkYJhywmMVZWjI
+ eIjk6qVA+BB8vbZZ30ibiCQSg4IWAtpKXEU9gPq/nLoIDpDXM8mW5bUOFMMGB2UgSvR4h287wY
+ p6EFT+D9vKfvnvqmpCGklST79WaIouZEkhn57l5QlwkQ/oeP4WNVfHSpfRBM3WYoX32y8JrIbs
+ 0KXF8VYxp808iZ544PjgjPJLmEiWCQus8Vy7CvzsQ9XQX0E+l4oDcyjvb0tvpK6SFgE+YhXNsO
+ 4348O4KkwbQ15HIvCBFFr+6QT+fxXyA+yC/pK1SGwfXd2A5A==
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+Previously, if two non-cygwin apps are started and one of them
+exits first, the other one lost appropriate console mode, since
+the first one restored it to tty::cygwin. This patch counts the
+active console process whose pgid is pgid of the tty and if the
+result is zero (means the last non-cygwin foreground process),
+restore console mode. To avoid race issue between apps modifying
+console mode simultaneously, this patch also introduce a mutex
+named `cons_mode_mutex`.
 
-Sorry that I haven’t been able to come up with a fully satisfactory
-patch.
+Known limitation:
+In the case of non-overlayed spawn, there still exists a small
+window in which another non-cygwin process may restore tty::cygwin
+mode even though new non-cygwin app is about to start.
 
-On Wed, 16 Sep 2026 15:41:10 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Tue, 15 Sep 2026, Takashi Yano wrote:
-> 
-> > Previously, if two non-cygwin apps are started and one of them
-> > exits first, the other one lost appropriate console mode, since
-> > the first one restored it to tty::cygwin. This patch counts the
-> > active console process whose pgid is pgid of the tty and if the
-> > result is zero (means the last non-cygwin foreground process),
-> > restore console mode. To avoid race issue between apps modifying
-> > console mode simultaneously, this patch also introduce a mutex
-> > named `cons_mode_mutex`.
-> > 
-> > Known limitation:
-> > In the case of non-overlayed spawn, there still exists a small
-> > window in which another non-cygwin process may restore tty::cygwin
-> > mode even though new non-cygwin app is about to start.
-> > 
-> > Fixes: 48285aa36c2c ("Cygwin: console: Fix handling of Ctrl-S in Win7.")
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > ---
-> > v2: Stop counting up/down the counter by itself.
-> >     Use num_active_non_cygwin_apps() instead.
-> > v3: Guard setup_for_non_cygwin_app() by cons_mode_mutex as well.
-> > v4: Guard all mode changes in console by cons_mode_mutex.
-> > v5: Fix the issue of mutex acquisition order.
-> >     Fix the race window around the process creation.
-> >     Improve latency of checking existence of non-cygwin apps.
-> >     Handle errors in checking existence of non-cygwin apps.
-> > v6: Match the conditions for incrementing and decrementing the counter.
-> > v7: Decrement the counter only if it was incremented by myself.
-> > v8: Symlify the conditions for incrementing and decrementing the counter
-> >     a bit.
-> > v9: Minimize the argument of set_non_cygwin_app_setup_ongoing().
-> > v10: Set process_state before calling spawn_worker::setup() rather than
-> >      using the counter. In addition, resume non-cygwin app before
-> > 	 modifying process table. These make things much simpler.
-> >      Narrowing the period of acquiring input_mutex in peek_console()
-> >      in select.cc.
-> > v11: Release output_mutex before calling bg_check() in ioctl().
-> >      Suppress unecessary console-mode change attempts.
-> > v12: Change handling of disabling master thread in the case of win32
-> >      input mode.
-> >      Wait for console attaching only when the spawned app is a console
-> >      app. In addition, a timeout is introduced to this wait loop for
-> >      safety.
-> > v13: Do not perform cleanup for non-cygwin apps on the error in
-> >      active_non_cygwin_apps_exist().
-> >      Handle WAIT_ABANDONED in CSI?9001h/l handling.
-> >      Fix ABBA deadlock about echo code path.
-> >      Set need_win32_input_mode_fix before set_disable_master_thread()
-> >      in CSI?9001h/l handling.
-> >      Setting and checking for need_win32_input_mode_fix inside the
-> >      input_mutex.
-> >      Fix the problem that the flag need_win32_input_mode_fix is set,
-> >      but disable_master_thread does not set if another thread holds
-> >      cons_mode_mutex.
-> > v14: Re-design echo code path. (Introduce raw_write() for doecho())
-> >      Re-design the handling of need_win32_input_mode_fix from scratch.
-> > v15: Fix possible deadlock with input_mutex regarding doecho()
-> > v16: Avoid to overwrite ENABLE_PROCESS_INPUT in tty::native mode.
-> >      Call fix_input_mode_if_necessary in TIMEOUT case as well.
-> 
-> Unfortunately, v16 still does not quite address the hangs. See for example
-> https://github.com/msys2/msys2-runtime/issues/351, with whose reproducer
-> at https://github.com/mrev11/msys2-bugreport (which still hangs with a
-> backported v16) I was able to come up with a fixup for the backported v15,
-> https://github.com/msys2/msys2-runtime/pull/364/commits/dbc070a9d472021d0aecf771ea1d5280a6a48031:
-> 
-> -- snip --
-> Avoid the cleanup/startup deadlock: cleanup can hold `cons_mode_mutex`
-> while waiting for a console master that a new owner cannot start until
-> acquiring that mutex. Startup must precede the mode-mutex wait without
-> changing the handshake or mode serialization.
-> 
-> Also avoid waiting forever for an owner that exited without clearing
-> ownership. A confirmed exit permits ending the wait only while the
-> captured owner is still recorded, excluding the -1 normal-retirement
-> sentinel. Preserve the published request for a replacement worker;
-> a missing worker is not an acknowledgement.
-> 
-> Assisted-by: GPT-6
-> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> ---
->  winsup/cygwin/fhandler/console.cc | 47 +++++++++++++++++++------------
->  1 file changed, 29 insertions(+), 18 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> index 1c30d5f981..c499ae491f 100644
-> --- a/winsup/cygwin/fhandler/console.cc
-> +++ b/winsup/cygwin/fhandler/console.cc
-> @@ -2086,6 +2086,26 @@ fhandler_console::open (int flags, mode_t)
->    if (in_is_console)
->      CloseHandle (h_in);
->  
-> +  /* Another process may hold cons_mode_mutex while waiting for the
-> +     master thread to acknowledge a state change. */
-> +  if (GetCurrentProcessId () == con.owner)
-> +    {
-> +      if (GetModuleHandle ("ConEmuHk64.dll"))
-> +	hook_conemu_cygwin_connector ();
-> +      char name[MAX_PATH];
-> +      shared_name (name, CONS_THREAD_SYNC, get_minor ());
-> +      thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
-> +      if (thread_sync_event)
-> +	{
-> +	  new cygthread (::cons_master_thread, this, "consm");
-> +	  WaitForSingleObject (thread_sync_event, INFINITE);
-> +	  CloseHandle (thread_sync_event);
-> +	}
-> +      else
-> +	debug_printf ("Failed to create thread_sync_event %08x",
-> +		      GetLastError ());
-> +    }
-> +
->    WaitForSingleObject (cons_mode_mutex, mutex_timeout);
->    if (in_is_console && con.curr_input_mode != tty::cygwin)
->      {
-> @@ -2104,23 +2124,6 @@ fhandler_console::open (int flags, mode_t)
->    debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
->  		get_output_handle ());
->  
-> -  if (GetCurrentProcessId () == con.owner)
-> -    {
-> -      if (GetModuleHandle ("ConEmuHk64.dll"))
-> -	hook_conemu_cygwin_connector ();
-> -      char name[MAX_PATH];
-> -      shared_name (name, CONS_THREAD_SYNC, get_minor ());
-> -      thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
-> -      if (thread_sync_event)
-> -	{
-> -	  new cygthread (::cons_master_thread, this, "consm");
-> -	  WaitForSingleObject (thread_sync_event, INFINITE);
-> -	  CloseHandle (thread_sync_event);
-> -	}
-> -      else
-> -	debug_printf ("Failed to create thread_sync_event %08x",
-> -		      GetLastError ());
-> -    }
->    return 1;
->  }
+In addition:
+Avoid the cleanup/startup deadlock: cleanup can hold `cons_mode_mutex`
+while waiting for a console master that a new owner cannot start until
+acquiring that mutex. Startup must precede the mode-mutex wait without
+changing the handshake or mode serialization.
 
-Thanks for the advice!
-I'd like to include this change to v17 patch with Co-authored-by: tag.
+Fixes: 48285aa36c2c ("Cygwin: console: Fix handling of Ctrl-S in Win7.")
+Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+---
+v2: Stop counting up/down the counter by itself.
+    Use num_active_non_cygwin_apps() instead.
+v3: Guard setup_for_non_cygwin_app() by cons_mode_mutex as well.
+v4: Guard all mode changes in console by cons_mode_mutex.
+v5: Fix the issue of mutex acquisition order.
+    Fix the race window around the process creation.
+    Improve latency of checking existence of non-cygwin apps.
+    Handle errors in checking existence of non-cygwin apps.
+v6: Match the conditions for incrementing and decrementing the counter.
+v7: Decrement the counter only if it was incremented by myself.
+v8: Symlify the conditions for incrementing and decrementing the counter
+    a bit.
+v9: Minimize the argument of set_non_cygwin_app_setup_ongoing().
+v10: Set process_state before calling spawn_worker::setup() rather than
+     using the counter. In addition, resume non-cygwin app before
+	 modifying process table. These make things much simpler.
+     Narrowing the period of acquiring input_mutex in peek_console()
+     in select.cc.
+v11: Release output_mutex before calling bg_check() in ioctl().
+     Suppress unecessary console-mode change attempts.
+v12: Change handling of disabling master thread in the case of win32
+     input mode.
+     Wait for console attaching only when the spawned app is a console
+     app. In addition, a timeout is introduced to this wait loop for
+     safety.
+v13: Do not perform cleanup for non-cygwin apps on the error in
+     active_non_cygwin_apps_exist().
+     Handle WAIT_ABANDONED in CSI?9001h/l handling.
+     Fix ABBA deadlock about echo code path.
+     Set need_win32_input_mode_fix before set_disable_master_thread()
+     in CSI?9001h/l handling.
+     Setting and checking for need_win32_input_mode_fix inside the
+     input_mutex.
+     Fix the problem that the flag need_win32_input_mode_fix is set,
+     but disable_master_thread does not set if another thread holds
+     cons_mode_mutex.
+v14: Re-design echo code path. (Introduce raw_write() for doecho())
+     Re-design the handling of need_win32_input_mode_fix from scratch.
+v15: Fix possible deadlock with input_mutex regarding doecho()
+v16: Avoid to overwrite ENABLE_PROCESS_INPUT in tty::native mode.
+     Call fix_input_mode_if_necessary in TIMEOUT case as well.
+v17: Three more fixes suggested by Johannes:
+       (1) Create master thread before the console mode change in
+           open().
+       (2) Call fix_input_mode_if_necessary() in the canonical mode
+           loop in read().
+       (3) Ack for disable_master_thread = false when
+           need_win32_input_mode_fix is true.
 
-> @@ -4938,7 +4941,15 @@ fhandler_console::set_disable_master_thread (bool x, fhandler_console *cons)
->    con.disable_master_thread = x;
->    cons->release_input_mutex ();
->    while (con.master_thread_suspended != x)
-> -    Sleep (1);
-> +    {
-> +      DWORD owner = con.owner;
-> +      /* Keep the request for a replacement worker, but do not wait for a
-> +	 dead owner.  -1 denotes an owner completing normal retirement. */
-> +      if (owner != (DWORD) -1 && !process_alive (owner)
-> +	  && con.owner == owner)
-> +	break;
-> +      Sleep (1);
-> +    }
->  }
->  
->  int
+ winsup/cygwin/fhandler/console.cc       | 244 ++++++++++++++++++++----
+ winsup/cygwin/fhandler/termios.cc       |  40 +++-
+ winsup/cygwin/local_includes/fhandler.h |  10 +-
+ winsup/cygwin/select.cc                 |  16 +-
+ winsup/cygwin/spawn.cc                  |  44 +++--
+ 5 files changed, 278 insertions(+), 76 deletions(-)
 
-I also would like to include this part into NOT this patch, but into:
-[PATCH v2] Cygwin: console: Abort setting disable_master_thread when no con.owner
-bacause the patch above attempt to fix the closely related problem.
-
-> -- snap --
-> 
-> Note: I am _not_ claiming that this should be the final fix. I'm just
-> observing that it addresses the reported hangs reliably.
-> 
-> The reason is a startup deadlock. The reproducer launches Bash and native
-> children from concurrent native threads. In my tests, already its first of
-> five passes hung: one started, zero completed. Cleanup process A holds
-> `cons_mode_mutex` in `cleanup_for_non_cygwin_app()` and calls
-> `set_disable_master_thread(false)`, waiting for resume acknowledgement.
-> Live owner B waits in `open()` for the same mutex _before creating the
-> worker_ that must acknowledge A. Process A cannot release the mutex until
-> B's worker runs; B cannot start it until A releases the mutex. The
-> captures show a `false` request, `true` acknowledgement, no started worker
-> and `need_win32_input_mode_fix=false`: this failure does not involve
-> Win32-input suppression.
-> 
-> The fixup I came up with moves worker startup before the mode-lock wait
-> and adds an owner-liveness escape preserving the request. Startup
-> reordering alone still hung on a dead, nonzero owner. The combined
-> v15-backport fix completed five uninstrumented reproducer runs (495 jobs,
-> no child-command failures); GitHub user `@lhmouse` reported in
-> https://github.com/msys2/MSYS2-packages/pull/6445#issuecomment-5677483786
-> that their own hang was _also_ resolved by this v15+fixup
-> 
-> > 
-> >  winsup/cygwin/fhandler/console.cc       | 207 +++++++++++++++++++++---
-> >  winsup/cygwin/fhandler/termios.cc       |  40 +++--
-> >  winsup/cygwin/local_includes/fhandler.h |  10 +-
-> >  winsup/cygwin/select.cc                 |  16 +-
-> >  winsup/cygwin/spawn.cc                  |  44 ++---
-> >  5 files changed, 257 insertions(+), 60 deletions(-)
-> > 
-> > diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
-> > index be41bf3a2..5de74a6a6 100644
-> > --- a/winsup/cygwin/fhandler/console.cc
-> > +++ b/winsup/cygwin/fhandler/console.cc
-> > @@ -443,6 +443,11 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-> >  	  cygwait (40);
-> >  	  continue;
-> >  	}
-> > +      if (con.need_win32_input_mode_fix)
-> > +	{
-> > +	  cygwait (40);
-> > +	  continue;
-> > +	}
-> 
-> An already-started worker can still fail to acknowledge resume. The 40msec
-> window covers setting acknowledgement `true` for pause. While
-> `need_win32_input_mode_fix` remains `true`, the worker sleeps and
-> continues before clearing that acknowledgement. A caller requesting
-> `false` can therefore wait indefinitely despite periodic wakes. This
-> unchanged source-level concern is distinct from the captured startup
-> deadlock; the experimental startup/death safeguards do not fix it.
-
-Ah, I got it. Thanks! I'll fix that in v17 patch.
-
-> >  
-> >        acquire_attach_mutex (mutex_timeout);
-> >        GetNumberOfConsoleInputEvents (p->input_handle, &total_read);
-> > @@ -841,6 +846,8 @@ fhandler_console::setup ()
-> >        con.num_processed = 0;
-> >        con.curr_input_mode = tty::restore;
-> >        con.curr_output_mode = tty::restore;
-> > +      con.need_win32_input_mode_fix = false;
-> > +      con.is_processed_input = false;
-> >      }
-> >  }
-> >  
-> > [... snipping ...]
-> > @@ -1248,6 +1378,7 @@ wait_retry:
-> >  	case WAIT_TIMEOUT:
-> >  	  if (copied_chars)
-> >  	    {
-> > +	      fix_input_mode_if_necessary (); /* for win32_input_mode */
-> >  	      buflen = copied_chars;
-> >  	      return;
-> >  	    }
-> 
-> This timeout fix still misses canonical echo (a blocking canonical read
-> uses `INFINITE`). If it echoes a mode-switch sequence without receiving a
-> newline, input processing can return `input_processing`, release
-> `input_mutex`, and loop back to waiting. It reaches neither this timeout
-> branch nor the normal finishing fix-up. Thus this hunk addresses the
-> specific partial-timeout example, but not that canonical-echo path.
-> 
-> I do like the native guard and timeout improvement, but also think that
-> worker startup/retirement, `false` acknowledgement and deferred
-> reconciliation before approval need addressing.
-> 
-> I.e. the code needs to finish processing the current input under
-> `input_mutex`, release that lock, then apply any mode change recorded
-> during echo, _before_ waiting for more input or returning to the
-> application. The order should be something along the lines of:
-> 
-> 	case input_processing:
-> 	  release_input_mutex ();
-> 	  fix_input_mode_if_necessary ();
-> 	  continue;
-> 
-> v16 currently goes straight from `release_input_mutex()` to `continue`,
-> potentially waiting indefinitely for more input before applying the echoed
-> mode change. Early returns after input processing need the same
-> consideration.
-> 
-> So why release input first? The helper acquires `cons_mode_mutex` and
-> then, when an update is needed, `input_mutex`. Calling it while the caller
-> still holds `input_mutex` would introduce the reverse ordering:
-> 
-> 	echoing reader:		holds INPUT -> waits for MODE
-> 	mode changer:		holds MODE -> waits for INPUT
-> 
-> That's the deadlock we need to remove.
-
-Thanks for the advice. I'll add your proposal to v17.
-
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index be41bf3a2..a877fce0b 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -443,6 +443,12 @@ fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
+ 	  cygwait (40);
+ 	  continue;
+ 	}
++      if (con.need_win32_input_mode_fix)
++	{
++	  con.master_thread_suspended = false;
++	  cygwait (40);
++	  continue;
++	}
+ 
+       acquire_attach_mutex (mutex_timeout);
+       GetNumberOfConsoleInputEvents (p->input_handle, &total_read);
+@@ -841,6 +847,8 @@ fhandler_console::setup ()
+       con.num_processed = 0;
+       con.curr_input_mode = tty::restore;
+       con.curr_output_mode = tty::restore;
++      con.need_win32_input_mode_fix = false;
++      con.is_processed_input = false;
+     }
+ }
+ 
+@@ -877,6 +885,44 @@ fhandler_console::rabuflen ()
+ static DWORD prev_input_mode_backup;
+ static DWORD prev_output_mode_backup;
+ 
++/* Even under cons_mode_mutex, only need_win32_input_mode_fix can be
++   modified by another thread. This function sets or clears the
++   ENABLE_PROCESSED_INPUT flag to reflect the current value of
++   need_win32_input_mode_fix. */
++void
++fhandler_console::fix_input_mode_if_necessary ()
++{
++  WaitForSingleObject (cons_mode_mutex, mutex_timeout);
++  if (con.curr_input_mode != tty::cygwin)
++    {
++      ReleaseMutex (cons_mode_mutex);
++      return;
++    }
++  bool need_processed_input =
++    con.master_thread_suspended || con.disable_master_thread
++    || con.need_win32_input_mode_fix;
++  if (need_processed_input == con.is_processed_input)
++    {
++      ReleaseMutex (cons_mode_mutex);
++      return;
++    }
++  WaitForSingleObject (input_mutex, mutex_timeout);
++  acquire_attach_mutex (mutex_timeout);
++  DWORD resume_pid = attach_console (con.owner);
++  DWORD flags;
++  GetConsoleMode (get_handle (), &flags);
++  if (need_processed_input)
++    flags |= ENABLE_PROCESSED_INPUT;
++  else
++    flags &= ~ENABLE_PROCESSED_INPUT;
++  con.is_processed_input = need_processed_input;
++  SetConsoleMode (get_handle (), flags);
++  detach_console (resume_pid, con.owner);
++  release_attach_mutex ();
++  ReleaseMutex (input_mutex);
++  ReleaseMutex (cons_mode_mutex);
++}
++
+ /* The function set_{in,out}put_mode() should be static so that they
+    can be called even after the fhandler_console instance is deleted. */
+ void
+@@ -899,7 +945,10 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+       break;
+     case tty::cygwin:
+       flags |= ENABLE_WINDOW_INPUT;
+-      if (con.master_thread_suspended || con.disable_master_thread)
++      con.is_processed_input =
++	con.master_thread_suspended || con.disable_master_thread
++	|| con.need_win32_input_mode_fix;
++      if (con.is_processed_input)
+ 	flags |= ENABLE_PROCESSED_INPUT;
+       if (wincap.has_con_24bit_colors () && !con_is_legacy)
+ 	flags |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+@@ -921,6 +970,7 @@ fhandler_console::set_input_mode (tty::cons_mode m, const termios *t,
+     }
+   con.curr_input_mode = m;
+   SetConsoleMode (p->input_handle, flags);
++  con.is_processed_input = (flags & ENABLE_PROCESSED_INPUT) != 0;
+   if (!(oflags & ENABLE_VIRTUAL_TERMINAL_INPUT)
+       && (flags & ENABLE_VIRTUAL_TERMINAL_INPUT)
+       && con.cursor_key_app_mode)
+@@ -977,16 +1027,92 @@ fhandler_console::setup_for_non_cygwin_app ()
+      console mode. */
+   if (get_ttyp ()->getpgid () == myself->pgid)
+     {
++      WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+       set_disable_master_thread (true, this);
+       set_input_mode (tty::native, &tc ()->ti, get_handle_set ());
+       set_output_mode (tty::native, &tc ()->ti, get_handle_set ());
++      ReleaseMutex (cons_mode_mutex);
++    }
++}
++
++/* Return values
++   0: not exist
++   1: exist
++  -1: error */
++int
++fhandler_console::active_non_cygwin_apps_exist (pid_t pgid)
++{
++  tmp_pathbuf tp;
++  DWORD *list = (DWORD *) tp.c_get ();
++  const DWORD buf_size = NT_MAX_PATH / sizeof (DWORD);
++
++  DWORD buf_size1 = 1;
++  DWORD num;
++  /* The buffer of too large size does not seem to be expected by new condrv.
++     https://github.com/microsoft/terminal/issues/18264#issuecomment-2515448548
++     Use the minimum buffer size in the loop. */
++  while ((num = GetConsoleProcessList (list, buf_size1)) > buf_size1)
++    {
++      if (num > buf_size)
++	return -1;
++      buf_size1 = num;
+     }
++  if (num == 0)
++    return -1;
++
++  /* Last one is the oldest. */
++  /* https://github.com/microsoft/terminal/issues/95 */
++  /* Assuming that newer processes are more likely to be non-cygwin. */
++  for (DWORD i = 0; i < num; i++)
++    {
++      DWORD my_pid = myself->exec_dwProcessId ? : myself->dwProcessId;
++      if (list[i] == my_pid)
++	continue;
++      pid_t pid = cygwin_pid (list[i]);
++      if (pid == 0)
++	continue;
++      pinfo p (pid);
++      if (!!p && p->pgid == pgid && ISSTATE (p, PID_NOTCYGWIN))
++	return 1;
++    }
++  return 0;
+ }
+ 
+ void
+ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+ {
+   const _minor_t unit = p->unit;
++  pid_t pgid = shared_console_info[unit] ?
++    shared_console_info[unit]->tty_min_state.getpgid () : 0;
++
++  WaitForSingleObject (p->cons_mode_mutex, mutex_timeout);
++  tty::cons_mode conmode = cons_mode_on_close (p);
++  if (con.curr_input_mode == conmode && con.curr_output_mode == conmode
++      && con.disable_master_thread == (con.owner == GetCurrentProcessId ()))
++    {
++      ReleaseMutex (p->cons_mode_mutex);
++      return;
++    }
++  switch (active_non_cygwin_apps_exist (pgid))
++    {
++    case -1: /* Error */
++      /* In case of an error, do not perform the cleanup, since the
++	 cygwin app has a chnce to restore console mode in bg_check()
++	 called from read()/write(). So give a priority to non-cygwin
++	 apps here that may exist. */
++      system_printf ("Checking for existence of non-cygwin app failed.");
++      if (con.owner == GetCurrentProcessId ())
++	/* This process is supposed to be the last non-cygwin process */
++	break;
++      fallthrough;
++    case 1: /* Exist */
++      ReleaseMutex (p->cons_mode_mutex);
++      return;
++    case 0: /* Not exist */
++    default:
++      break;
++    }
++
+   termios dummy = {0, };
+   termios *ti = shared_console_info[unit] ?
+     &(shared_console_info[unit]->tty_min_state.ti) : &dummy;
+@@ -994,11 +1120,11 @@ fhandler_console::cleanup_for_non_cygwin_app (handle_set_t *p)
+   set_disable_master_thread (con.owner == GetCurrentProcessId ());
+   /* conmode can be tty::restore when non-cygwin app is
+      exec'ed from login shell. */
+-  tty::cons_mode conmode = cons_mode_on_close (p);
+   if (con.curr_output_mode != conmode)
+     set_output_mode (conmode, ti, p);
+   if (con.curr_input_mode != conmode)
+     set_input_mode (conmode, ti, p);
++  ReleaseMutex (p->cons_mode_mutex);
+ }
+ 
+ /* Return the tty structure associated with a given tty number.  If the
+@@ -1055,6 +1181,10 @@ fhandler_console::setup_io_mutex (void)
+   if (res == WAIT_OBJECT_0)
+     release_output_mutex ();
+ 
++  shared_name (buf, "cygcons.cons_mode.mutex", get_minor ());
++  if (!cons_mode_mutex)
++    cons_mode_mutex = CreateMutex (&sec_none, FALSE, buf);
++
+   extern HANDLE attach_mutex;
+   if (!attach_mutex)
+     attach_mutex = CreateMutex (&sec_none_nih, FALSE, NULL);
+@@ -1182,13 +1312,13 @@ fhandler_console::mouse_aware (MOUSE_EVENT_RECORD& mouse_event)
+ 		 || con.use_mouse >= 3));
+ }
+ 
+-
+ bg_check_types
+ fhandler_console::bg_check (int sig, bool dontsignal)
+ {
+   /* Setting-up console mode for cygwin app. This is necessary if the
+      cygwin app and other non-cygwin apps are started simultaneously
+      in the same process group. */
++  WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+   if (sig == SIGTTIN && con.curr_input_mode != tty::cygwin)
+     {
+       set_disable_master_thread (false, this);
+@@ -1196,6 +1326,7 @@ fhandler_console::bg_check (int sig, bool dontsignal)
+     }
+   if (sig == SIGTTOU && con.curr_output_mode != tty::cygwin)
+     set_output_mode (tty::cygwin, &tc ()->ti, get_handle_set ());
++  ReleaseMutex (cons_mode_mutex);
+ 
+   return fhandler_termios::bg_check (sig, dontsignal);
+ }
+@@ -1248,6 +1379,7 @@ wait_retry:
+ 	case WAIT_TIMEOUT:
+ 	  if (copied_chars)
+ 	    {
++	      fix_input_mode_if_necessary (); /* for win32_input_mode */
+ 	      buflen = copied_chars;
+ 	      return;
+ 	    }
+@@ -1281,6 +1413,7 @@ wait_retry:
+ 	  goto err;
+ 	case input_processing:
+ 	  release_input_mutex ();
++	  fix_input_mode_if_necessary (); /* for win32_input_mode */
+ 	  continue;
+ 	case input_ok: /* input ready */
+ 	  break;
+@@ -1314,6 +1447,8 @@ wait_retry:
+ 
+ #undef buf
+ 
++  fix_input_mode_if_necessary (); /* for win32_input_mode */
++
+   buflen = copied_chars;
+   return;
+ 
+@@ -2011,22 +2146,8 @@ fhandler_console::open (int flags, mode_t)
+   if (in_is_console)
+     CloseHandle (h_in);
+ 
+-  if (in_is_console && con.curr_input_mode != tty::cygwin)
+-    {
+-      prev_input_mode_backup = con.prev_input_mode;
+-      GetConsoleMode (get_handle (), &con.prev_input_mode);
+-      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+-    }
+-  if (out_is_console && con.curr_output_mode != tty::cygwin)
+-    {
+-      prev_output_mode_backup = con.prev_output_mode;
+-      GetConsoleMode (get_output_handle (), &con.prev_output_mode);
+-      set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+-    }
+-
+-  debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
+-		get_output_handle ());
+-
++  /* Another process may hold cons_mode_mutex while waiting for the
++     master thread to acknowledge a state change. */
+   if (GetCurrentProcessId () == con.owner)
+     {
+       if (GetModuleHandle ("ConEmuHk64.dll"))
+@@ -2044,6 +2165,25 @@ fhandler_console::open (int flags, mode_t)
+ 	debug_printf ("Failed to create thread_sync_event %08x",
+ 		      GetLastError ());
+     }
++
++  WaitForSingleObject (cons_mode_mutex, mutex_timeout);
++  if (in_is_console && con.curr_input_mode != tty::cygwin)
++    {
++      prev_input_mode_backup = con.prev_input_mode;
++      GetConsoleMode (get_handle (), &con.prev_input_mode);
++      set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
++  if (out_is_console && con.curr_output_mode != tty::cygwin)
++    {
++      prev_output_mode_backup = con.prev_output_mode;
++      GetConsoleMode (get_output_handle (), &con.prev_output_mode);
++      set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++    }
++  ReleaseMutex (cons_mode_mutex);
++
++  debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
++		get_output_handle ());
++
+   return 1;
+ }
+ 
+@@ -2106,6 +2246,7 @@ fhandler_console::open_setup (int flags)
+       handle_set.output_handle = get_output_handle ();
+       handle_set.input_mutex = input_mutex;
+       handle_set.output_mutex = output_mutex;
++      handle_set.cons_mode_mutex = cons_mode_mutex;
+       handle_set.unit = unit;
+     }
+   return fhandler_base::open_setup (flags);
+@@ -2115,6 +2256,7 @@ void
+ fhandler_console::post_open_setup (int fd)
+ {
+   /* Setting-up console mode for cygwin app started from non-cygwin app. */
++  WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+   if (fd == 0)
+     {
+       set_disable_master_thread (false, this);
+@@ -2122,6 +2264,7 @@ fhandler_console::post_open_setup (int fd)
+     }
+   else if (fd == 1 || fd == 2)
+     set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
++  ReleaseMutex (cons_mode_mutex);
+ 
+   fhandler_base::post_open_setup (fd);
+ }
+@@ -2131,18 +2274,20 @@ fhandler_console::close (int flag)
+ {
+   debug_printf ("closing: %p, %p", get_handle (), get_output_handle ());
+ 
+-  acquire_output_mutex (mutex_timeout);
+-
+   if (shared_console_info[unit] && (dev_t) myself->ctty == get_device ()
+       && cons_mode_on_close (&handle_set) == tty::restore)
+     {
++      WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+       set_disable_master_thread (true, this);
+       if (con.curr_output_mode != tty::restore)
+ 	set_output_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
+       if (con.curr_input_mode != tty::restore)
+ 	set_input_mode (tty::restore, &get_ttyp ()->ti, &handle_set);
++      ReleaseMutex (cons_mode_mutex);
+     }
+ 
++  acquire_output_mutex (mutex_timeout);
++
+   if (shared_console_info[unit] && con.owner == GetCurrentProcessId ())
+     {
+       if (master_thread_started)
+@@ -2197,6 +2342,8 @@ fhandler_console::close (int flag)
+   input_mutex = NULL;
+   CloseHandle (output_mutex);
+   output_mutex = NULL;
++  CloseHandle (cons_mode_mutex);
++  cons_mode_mutex = NULL;
+ 
+   pcon_hand_over_proc ();
+ 
+@@ -2246,8 +2393,8 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	release_output_mutex ();
+ 	return 0;
+       case TIOCSWINSZ:
+-	bg_check (SIGTTOU);
+ 	release_output_mutex ();
++	bg_check (SIGTTOU);
+ 	return 0;
+       case KDGKBMETA:
+ 	*(int *) arg = (con.metabit) ? K_METABIT : K_ESCPREFIX;
+@@ -2370,10 +2517,12 @@ int
+ fhandler_console::tcsetattr (int a, struct termios const *t)
+ {
+   get_ttyp ()->ti = *t;
++  WaitForSingleObject (cons_mode_mutex, mutex_timeout);
+   if (con.curr_input_mode == tty::cygwin)
+     set_input_mode (tty::cygwin, t, &handle_set);
+   if (con.curr_output_mode == tty::cygwin)
+     set_output_mode (tty::cygwin, t, &handle_set);
++  ReleaseMutex (cons_mode_mutex);
+   return 0;
+ }
+ 
+@@ -3140,12 +3289,7 @@ fhandler_console::char_command (char c)
+ 		  if (con.args[i] == 1) /* DECCKM */
+ 		    con.cursor_key_app_mode = (c == 'h');
+ 		  if (con.args[i] == 9001) /* win32-input-mode (https://github.com/microsoft/terminal/blob/main/doc/specs/%234999%20-%20Improved%20keyboard%20handling%20in%20Conpty.md) */
+-		    {
+-		      set_disable_master_thread (c == 'h', this);
+-		      if (con.curr_input_mode == tty::cygwin)
+-			set_input_mode (tty::cygwin,
+-					&tc ()->ti, get_handle_set ());
+-		    }
++		    con.need_win32_input_mode_fix = (c == 'h');
+ 		}
+ 	      /* Call fix_tab_position() if screen has been alternated. */
+ 	      if (need_fix_tab_position)
+@@ -3994,6 +4138,18 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 
+   push_process_state process_state (PID_TTYOU);
+ 
++  ssize_t ret = raw_write (vsrc, len);
++
++  fix_input_mode_if_necessary (); /* for win32_input_mode */
++
++  syscall_printf ("%ld = fhandler_console::write(...)", len);
++
++  return ret;
++}
++
++ssize_t
++fhandler_console::raw_write (const void *vsrc, size_t len)
++{
+   acquire_output_mutex (mutex_timeout);
+ 
+   /* Run and check for ansi sequences */
+@@ -4327,18 +4483,13 @@ fhandler_console::write (const void *vsrc, size_t len)
+     }
+   release_output_mutex ();
+ 
+-  syscall_printf ("%ld = fhandler_console::write(...)", len);
+-
+   return len;
+ }
+ 
+ void
+ fhandler_console::doecho (const void *str, DWORD len)
+ {
+-  int stopped = get_ttyp ()->output_stopped;
+-  get_ttyp ()->output_stopped = 0;
+-  write (str, len);
+-  get_ttyp ()->output_stopped = stopped;
++  raw_write (str, len);
+ }
+ 
+ static const struct {
+@@ -4476,10 +4627,13 @@ fhandler_console::set_console_mode_to_native ()
+ 	fhandler_console *cons = (fhandler_console *) (fhandler_base *) cfd;
+ 	if (cons->get_device () == cons->tc ()->getntty ())
+ 	  {
++	    const fhandler_console::handle_set_t *p = cons->get_handle_set ();
++	    WaitForSingleObject (p->cons_mode_mutex, mutex_timeout);
+ 	    set_disable_master_thread (true, cons);
+ 	    termios *cons_ti = &cons->tc ()->ti;
+-	    set_input_mode (tty::native, cons_ti, cons->get_handle_set ());
+-	    set_output_mode (tty::native, cons_ti, cons->get_handle_set ());
++	    set_input_mode (tty::native, cons_ti, p);
++	    set_output_mode (tty::native, cons_ti, p);
++	    ReleaseMutex (p->cons_mode_mutex);
+ 	    break;
+ 	  }
+       }
+@@ -4536,8 +4690,17 @@ ContinueDebugEvent_Hooked
+ static FARPROC
+ GetProcAddress_Hooked (HMODULE h, LPCSTR n)
+ {
+-  if (strcmp(n, "RequestTermConnector") == 0)
+-    fhandler_console::set_disable_master_thread (true);
++  if (cygheap->ctty && strcmp (n, "RequestTermConnector") == 0)
++    {
++      char buf[MAX_PATH];
++      const _minor_t unit = cygheap->ctty->get_minor ();
++      shared_name (buf, "cygcons.cons_mode.mutex", unit);
++      HANDLE cons_mode_mutex = CreateMutex (&sec_none, FALSE, buf);
++      WaitForSingleObject (cons_mode_mutex, mutex_timeout);
++      fhandler_console::set_disable_master_thread (true);
++      ReleaseMutex (cons_mode_mutex);
++      CloseHandle (cons_mode_mutex);
++    }
+   return GetProcAddress_Orig (h, n);
+ }
+ 
+@@ -4818,6 +4981,9 @@ fhandler_console::get_duplicated_handle_set (handle_set_t *p)
+   DuplicateHandle (GetCurrentProcess (), output_mutex,
+ 		   GetCurrentProcess (), &p->output_mutex,
+ 		   0, FALSE, DUPLICATE_SAME_ACCESS);
++  DuplicateHandle (GetCurrentProcess (), cons_mode_mutex,
++		   GetCurrentProcess (), &p->cons_mode_mutex,
++		   0, FALSE, DUPLICATE_SAME_ACCESS);
+   p->unit = unit;
+ }
+ 
+@@ -4834,6 +5000,8 @@ fhandler_console::close_handle_set (handle_set_t *p)
+   p->input_mutex = NULL;
+   CloseHandle (p->output_mutex);
+   p->output_mutex = NULL;
++  CloseHandle (p->cons_mode_mutex);
++  p->cons_mode_mutex = NULL;
+ }
+ 
+ bool
+diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+index ee576a0a8..0134ec8b8 100644
+--- a/winsup/cygwin/fhandler/termios.cc
++++ b/winsup/cygwin/fhandler/termios.cc
+@@ -830,20 +830,37 @@ void
+ fhandler_termios::spawn_worker::cleanup ()
+ {
+   if (ptys_need_cleanup)
+-    fhandler_pty_slave::cleanup_for_non_cygwin_app (&ptys_handle_set,
+-						    ptys_ttyp, stdin_is_ptys);
++    {
++      fhandler_pty_slave::cleanup_for_non_cygwin_app (&ptys_handle_set,
++						      ptys_ttyp, stdin_is_ptys);
++      fhandler_pty_slave::close_handle_set (&ptys_handle_set);
++      ptys_need_cleanup = false;
++    }
+   if (cons_need_cleanup)
+-    fhandler_console::cleanup_for_non_cygwin_app (&cons_handle_set);
+-  close_handle_set ();
++    {
++      fhandler_console::cleanup_for_non_cygwin_app (&cons_handle_set);
++      fhandler_console::close_handle_set (&cons_handle_set);
++      cons_need_cleanup = false;
++    }
++}
++
++bool
++fhandler_termios::spawn_worker::is_attaching (DWORD pid)
++{
++  return !!fhandler_termios::get_console_process_id (pid, true);
+ }
+ 
+ void
+-fhandler_termios::spawn_worker::close_handle_set ()
++fhandler_termios::spawn_worker::wait_for_resume_if_necessary
++			      (path_conv &pc, PROCESS_INFORMATION &pi)
+ {
+-  if (ptys_need_cleanup)
+-    fhandler_pty_slave::close_handle_set (&ptys_handle_set);
+-  if (cons_need_cleanup)
+-    fhandler_console::close_handle_set (&cons_handle_set);
++  if (is_attaching (myself->dwProcessId) && is_console_app (pc))
++    {
++      DWORD t0 = GetTickCount ();
++      while (GetTickCount () - t0 < 40 && !is_attaching (pi.dwProcessId)
++	     && WaitForSingleObject (pi.hProcess, 0) == WAIT_TIMEOUT)
++	Sleep (1);
++    }
+ }
+ 
+ void
+@@ -916,7 +933,10 @@ fhandler_termios::get_console_process_id (DWORD pid, bool match,
+ 	  }
+ 	else
+ 	  {
+-	    pinfo p (cygwin_pid (list[i]));
++	    pid_t cygpid = cygwin_pid (list[i]);
++	    if (cygpid == 0)
++	      continue;
++	    pinfo p (cygpid);
+ 	    if (nat && !!p && !ISSTATE(p, PID_NOTCYGWIN))
+ 	      continue;
+ 	    if (!!p && p->exec_dwProcessId)
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index d11b3ec4f..e00212f57 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2023,6 +2023,7 @@ class fhandler_termios: public fhandler_base
+     HANDLE output_handle;
+     HANDLE input_mutex;
+     HANDLE output_mutex;
++    HANDLE cons_mode_mutex;
+     _minor_t unit;
+   };
+   class spawn_worker
+@@ -2042,7 +2043,8 @@ class fhandler_termios: public fhandler_base
+ 		bool nopcon, bool reset_sendsig, const WCHAR *envblock);
+     bool need_cleanup () { return ptys_need_cleanup || cons_need_cleanup; }
+     void cleanup ();
+-    void close_handle_set ();
++    bool is_attaching (DWORD pid);
++    void wait_for_resume_if_necessary (path_conv &, PROCESS_INFORMATION &);
+   };
+ };
+ 
+@@ -2157,6 +2159,8 @@ class dev_console
+   volatile bool master_thread_suspended;
+   int num_processed; /* Number of input events in the current input buffer
+ 			already processed by cons_master_thread(). */
++  bool need_win32_input_mode_fix;
++  bool is_processed_input;
+ 
+   inline UINT get_console_cp ();
+   DWORD con_to_str (char *d, int dlen, WCHAR w);
+@@ -2199,6 +2203,7 @@ private:
+   static console_state *shared_console_info[MAX_CONS_DEV + 1];
+   static bool invisible_console;
+   HANDLE input_mutex, output_mutex;
++  HANDLE cons_mode_mutex;
+   handle_set_t handle_set;
+   _minor_t unit;
+   size_t num_input_events_processed;
+@@ -2268,6 +2273,7 @@ private:
+ 
+   void read (void *ptr, size_t& len);
+   ssize_t write (const void *ptr, size_t len);
++  ssize_t raw_write (const void *ptr, size_t len);
+   void doecho (const void *str, DWORD len);
+   int close (int flag = -1);
+   static bool exists ()
+@@ -2366,6 +2372,7 @@ private:
+   void wpbuf_send ();
+   int fstat (struct stat *buf);
+   void discard_key_events (size_t n);
++  void fix_input_mode_if_necessary ();
+ 
+   class console_unit
+   {
+@@ -2379,6 +2386,7 @@ private:
+   void setup_pcon_hand_over ();
+   static void pcon_hand_over_proc ();
+   static tty::cons_mode cons_mode_on_close (handle_set_t *);
++  static int active_non_cygwin_apps_exist (pid_t pgid);
+ 
+   friend tty_min * tty_list::get_cttyp ();
+ };
+diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
+index b72083447..33417169b 100644
+--- a/winsup/cygwin/select.cc
++++ b/winsup/cygwin/select.cc
+@@ -1154,23 +1154,23 @@ peek_console (select_record *me, bool)
+   HANDLE h;
+   set_handle_or_return_if_not_open (h, me);
+ 
+-  fh->acquire_input_mutex (mutex_timeout);
+   while (!fh->input_ready && !fh->get_cons_readahead_valid ())
+     {
+       if (fh->bg_check (SIGTTIN, true) <= bg_eof)
+-	{
+-	  fh->release_input_mutex ();
+-	  return me->read_ready = true;
+-	}
++	return me->read_ready = true;
+       else
+ 	{
++	  fh->acquire_input_mutex (mutex_timeout);
+ 	  acquire_attach_mutex (mutex_timeout);
+ 	  DWORD resume_pid = fh->attach_console (fh->get_owner ());
+ 	  BOOL r = PeekConsoleInputW (h, &irec, 1, &events_read);
+ 	  fh->detach_console (resume_pid, fh->get_owner ());
+ 	  release_attach_mutex ();
+ 	  if (!r || !events_read)
+-	    break;
++	    {
++	      fh->release_input_mutex ();
++	      break;
++	    }
+ 	}
+       if (fhandler_console::input_winch == fh->process_input_message (0)
+ 	  && global_sigs[SIGWINCH].sa_handler != SIG_IGN
+@@ -1180,8 +1180,10 @@ peek_console (select_record *me, bool)
+ 	  fh->release_input_mutex ();
+ 	  return -1;
+ 	}
++      fh->release_input_mutex ();
++
++      fh->fix_input_mode_if_necessary (); /* for win32_input_mode */
+     }
+-  fh->release_input_mutex ();
+   if (fh->input_ready || fh->get_cons_readahead_valid ())
+     return me->read_ready = true;
+ 
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 8f976b9a0..abaa34d32 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -559,6 +559,14 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 			 PROCESS_QUERY_LIMITED_INFORMATION))
+ 	sa = &sec_none_nih;
+ 
++      if (!real_path.iscygexec () && mode == _P_OVERLAY)
++	{
++	  LONG pidflags = PID_NOTCYGWIN;
++	  if (c_flags & CREATE_NEW_PROCESS_GROUP)
++	    pidflags |= PID_NEW_PG;
++	  InterlockedOr ((LONG *) &myself->process_state, pidflags);
++	}
++
+       int fileno_stdin = in__stdin < 0 ? 0 : in__stdin;
+       int fileno_stdout = in__stdout < 0 ? 1 : in__stdout;
+       int fileno_stderr = 2;
+@@ -586,14 +594,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	 up on ruid. The new process will have ruid == euid. */
+       ::cygheap->user.deimpersonate ();
+ 
+-      if (!real_path.iscygexec () && mode == _P_OVERLAY)
+-	{
+-	  LONG pidflags = PID_NOTCYGWIN;
+-	  if (c_flags & CREATE_NEW_PROCESS_GROUP)
+-	    pidflags |= PID_NEW_PG;
+-	  InterlockedOr ((LONG *) &myself->process_state, pidflags);
+-	}
+-
+       cygpid = (mode != _P_OVERLAY) ? create_cygwin_pid () : myself->pid;
+ 
+       cygheap->lock ();
+@@ -737,6 +737,18 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       /* Name the handle similarly to proc_subproc. */
+       ProtectHandle1 (pi.hProcess, childhProc);
+ 
++      /* Start the child running for non-cygwin process*/
++      if (!iscygwin () && (c_flags & CREATE_SUSPENDED))
++	{
++	  /* Inject a non-inheritable wr_proc_pipe handle into child so that we
++	     can accurately track when the child exits without keeping this
++	     process waiting around for it to exit.  */
++	  DuplicateHandle (GetCurrentProcess (), wr_proc_pipe, pi.hProcess,
++			   NULL, 0, false, DUPLICATE_SAME_ACCESS);
++	  ResumeThread (pi.hThread);
++	  term_spawn_worker.wait_for_resume_if_necessary (real_path, pi);
++	}
++
+       if (mode == _P_OVERLAY)
+ 	{
+ 	  myself->dwProcessId = pi.dwProcessId;
+@@ -810,18 +822,11 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 	    }
+ 	}
+ 
+-      /* Start the child running */
+-      if (c_flags & CREATE_SUSPENDED)
++      /* Start the child running for cygwin process*/
++      if (iscygwin () && (c_flags & CREATE_SUSPENDED))
+ 	{
+-	  /* Inject a non-inheritable wr_proc_pipe handle into child so that we
+-	     can accurately track when the child exits without keeping this
+-	     process waiting around for it to exit.  */
+-	  if (!iscygwin ())
+-	    DuplicateHandle (GetCurrentProcess (), wr_proc_pipe, pi.hProcess, NULL,
+-			     0, false, DUPLICATE_SAME_ACCESS);
+ 	  ResumeThread (pi.hThread);
+-	  if (iscygwin ())
+-	    strace.write_childpid (pi.dwProcessId);
++	  strace.write_childpid (pi.dwProcessId);
+ 	}
+       ForceCloseHandle (pi.hThread);
+ 
+@@ -868,7 +873,6 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 		prev_sigExeced =
+ 		  InterlockedCompareExchange (&sigExeced, 0, prev_sigExeced);
+ 	      term_spawn_worker.cleanup ();
+-	      term_spawn_worker.close_handle_set ();
+ 	    }
+ 	  /* Make sure that ctrl_c_handler() is not on going. Calling
+ 	     init_console_handler(false) locks until returning from
+@@ -906,7 +910,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       res = -1;
+     }
+   __endtry
+-  term_spawn_worker.close_handle_set ();
++  term_spawn_worker.cleanup ();
+   this->cleanup ();
+   if (envblock)
+     free (envblock);
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
