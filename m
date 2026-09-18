@@ -1,67 +1,76 @@
-Return-Path: <SRS0=KPEJ=HJ=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.62])
-	by sourceware.org (Postfix) with ESMTP id C519B4BA798F
-	for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2026 18:27:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C519B4BA798F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C519B4BA798F
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.62
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789669623; cv=none;
-	b=ny6JtMwk9NtJSTgVavy35ncIwAr94PuS9+eeE01IU6B4CiPM4Y1d2pv/S3BKsSkVtI9M3+tBQ7RrCeI0X8IaX0bSDMrhkQZW1r9F/fWYCIBF0UX4PO7o2KKp5CyD5CJG7vQCk7uesvwP49kuc3BGCYB+5LCsZContnadWpr8HZk=
+Return-Path: <SRS0=diAQ=HK=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [106.153.226.39])
+	by sourceware.org (Postfix) with ESMTPS id 0672E4BA9032
+	for <cygwin-patches@cygwin.com>; Fri, 18 Sep 2026 01:32:35 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0672E4BA9032
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0672E4BA9032
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.226.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789695158; cv=none;
+	b=UUPm5qGXl397gz2ex8w3dDpUxTOWCr4DwoVnwk19qOXKINXCH9dPNMggkybbNQ0OBSkFszkjzm7MWdFrO6No3d26TIvLV7+zekwliYej/OnqSHqtvywFnfetRUkIbImB6f80EFFKEtVkR5NUXXyMRtjntEdmLmOBBVfyBFvSs5s=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789669623; c=relaxed/simple;
-	bh=ZCkGNzkQa7MTTl++nSLVfXwOonql5W1WyzfB8n1kFhk=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=jpqG92r2MZyCnEuly/n7ghGfMl8VcIJScUFYjj6yVoyaUAlwS0zdCTcDuuXNxJlpJW2Cw84n6xOuCCCIAuBSTFw7abqF0HEne5myzdqMc6auVFvSCpRAAWR8MFG2Uztcv8qfz52XRy6n2tycyEfRHtoT1Qia0QZXdwSPSLp6oog=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C519B4BA798F
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A716138086B8DDF
-X-Originating-IP: [62.56.83.178]
-X-OWM-Source-IP: 62.56.83.178
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTGMOgZipu4Ct+9klFhQDpyoPCaCaSFMGBnRfQX9DBa5iuSjqaK9LrLJ9ghWMxj6gGHUojAMT0GO4TTX2EEq6W0RHNZDiugfbw/zFD7QrKcTmFQ1RW7dzwfRJ52YqjKUrkTAnbfaMAMTP9HwonVFP7R9LQtAlRWkthEYEDfRS3uC6UPcJRD+gr3Pj7O2MbDbnghnDsfOntulxifAd2/GmOeaUnRlBd7Ynw1xXkKsvVWmbkfxZMKVLwfx0GKAur0qDPFOmcJWsD2MGJKYCtI4STE1+LrwCZSeywt4h+Z4aSPsyAnmI07wCZRko5SDN9d7pPgDtJsxhy5fznRNg44xHCa4q8m//q8/YcwZP/ZD4elV83dpVYSTbUeDqZsAw0asIr+wu9BEtb9m0ONwmizsjV4i0MNT56XEd9rYcVx96YabATgpAek9QVujhpWcF7ECZxYtqCGEdrsW7Z/UXV527oSxGa5atsuTogZiFpJ8r2bB3AtCk4GW1VGZAuA8rPOor344Fgx/gyE5OQ5hx+Q2T1o4zMJ1lykrl9FuuHyzA1a0UJge6npOttlr5/tzMAWedvuivwgFOZJL/DQnhO6TxzKNMtLbZH+gMCklckr8gSo8VS754aeCbtScXohKhi1nMCPrfxn9ZtDH1am4zXJgyQhNxYy0UvuPkfCUs/1bpSFHkQ
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.56.83.178) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A716138086B8DDF; Thu, 17 Sep 2026 19:27:01 +0100
-Message-ID: <1ffe50e1-0e56-483c-ace1-c5ef2bbcb98e@dronecode.org.uk>
-Date: Thu, 17 Sep 2026 19:27:01 +0100
+	t=1789695158; c=relaxed/simple;
+	bh=sDze8NxXdiL88+oeYAdPaBhUmq7YjxJ4tV7o0/M5ivs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=BZrsiAF/hp602FG9Wf0CPg5moOhcwBYlO2jLd1oldzDQtrrH8sOkeqvPxx6HS2f+yUaVy9zFdb/t74bpWGkl28FnmWeirRQYziGvJoX9fQgrxyMRMnUzikIxjMrhx2wIFPhcb/6Fsd3RwmMh4PfpvQxOKkvf5n8E2GuXehe+HqU=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=gsEzDGat
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0672E4BA9032
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=gsEzDGat
+Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
+          id <20260918013233183.KBBE.17441.HP-Z230@nifty.com>;
+          Fri, 18 Sep 2026 10:32:33 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>,
+	Shun <shun1048576@gmail.com>
+Subject: [PATCH] Cygwin: clipboard: Handle ERROR_SYS_KEY_NOT_FOUND and NO_ERROR
+Date: Fri, 18 Sep 2026 10:32:10 +0900
+Message-ID: <20260918013226.1205-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: autoload: fix ws2_32 chained init on AArch64
-References: <PN0P287MB0295C357517BE127B601D99092F02@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <aqpYA_4qPMpjT7b_@arm.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com, Evgeny Karpov <evgeny@kmaps.co>
-In-Reply-To: <aqpYA_4qPMpjT7b_@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1789695153;
+ bh=BYq3JL5D7sahiMoht2Bgx1PMY+/atBspDl8RFbVC/D4=;
+ h=From:To:Cc:Subject:Date;
+ b=gsEzDGatmL6jX4IBofTFghz31WUDdzTin+B9e/8N6UpfCqyz1Hghsx0Yq0/R7/vdnI1jRw+5
+ 3juksERwsFF5hakDljaiAOYdTk8XJ8o7quPzXMqmZXYBjXgBiKO7PsqG4tyyalAUmZSI1alQSU
+ SIa5HHTv2dMyxLg0gp8v9gCDPnz5LrzgdGhgRs1iCETdFkz0YjDs/z+/Ydn08Zye8H1Zuzl8Ce
+ 59529cT6LcxoRq2lqG9EnJrgl9VGatd7CKaDKERU4ZPhivICUUIvjRvt1gDtSDNWcstaMv9czK
+ CbqlbMpB8RQ5G+nADQJsIzkroQO/GDtDQBHIMUdO6RuaG/6w==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 16/09/2026 09:49, Evgeny Karpov wrote:
-> On Tue, 07 Jul 2026, Chandru Kumaresan wrote:
->> On AArch64, the autoload INIT_WRAPPER passes func_info* via x30 ("mov
->> x0, x30").  This works for the first init stage (std_dll_init), reached
->> by the trampoline's "blr".  It breaks for a chained second init, because
->> dll_chain reaches it via "br x1" without updating x30.
-> 
-> A more general question, could the autoload implementation be replaced by delay loaded DLLs?
+Windows 10 seems to return ERROR_SYS_KEY_NOT_FOUND instead of
+ERROR_NOT_FOUND. In addition, it returns NO_ERROR even though
+GetClipboardData() returns NULL. This patch handles these cases.
 
-In theory, yes.
+Addresses: https://cygwin.com/pipermail/cygwin/2026-September/260058.html
+Fixes: 7fd670a36b9a ("Cygwin: clipboard: Add workaround for ERROR_CLIPBOARD_NOT_OPEN")
+Reported-by: Shun <shun1048576@gmail.com>
+Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+Reviewed-by:
+---
+ winsup/cygwin/fhandler/clipboard.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-(autoload.cc dates back into the previous millennium, when hand-rolling 
-your own solution to this problem was the only option)
-
-In practice, I'm not sure what the state of the 'dlltool -y' 
-implementation for aarch64 is, and I think there'd be some work involved 
-in mapping all the various ways of handling a missing function we have 
-onto __delayLoadHelper2().
-
-Patches to that end are certainly welcome. :)
+diff --git a/winsup/cygwin/fhandler/clipboard.cc b/winsup/cygwin/fhandler/clipboard.cc
+index 116feb599..391f21051 100644
+--- a/winsup/cygwin/fhandler/clipboard.cc
++++ b/winsup/cygwin/fhandler/clipboard.cc
+@@ -41,7 +41,10 @@ open_clipboard ()
+ 	  DWORD err = GetLastError ();
+ 	  /* Here, ERROR_NOT_FOUND means the clipboard does not contains
+ 	     valid CF_UNICODETEXT. OpenClipboard() must have succeeded. */
+-	  if (err == ERROR_NOT_FOUND)
++	  /* In Windows 10, ERROR_SYS_KEY_NOT_FOUND or NO_ERROR seem
++	     to be returned instead of ERROR_NOT_FOUND. */
++	  if (err == ERROR_NOT_FOUND || err == ERROR_SXS_KEY_NOT_FOUND
++	      || err == NO_ERROR)
+ 	    return true;
+ 	  CloseClipboard ();
+ 	  if (err != ERROR_CLIPBOARD_NOT_OPEN)
+-- 
+2.51.0
 
