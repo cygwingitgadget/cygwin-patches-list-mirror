@@ -1,101 +1,167 @@
-Return-Path: <SRS0=I/iY=HL=maxrnd.com=mark@sourceware.org>
+Return-Path: <SRS0=sXPq=HM=maxrnd.com=mark@sourceware.org>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id A07C84BA9016
-	for <cygwin-patches@cygwin.com>; Sat, 19 Sep 2026 23:47:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A07C84BA9016
+	by sourceware.org (Postfix) with ESMTPS id D0DB94BA9028
+	for <cygwin-patches@cygwin.com>; Sun, 20 Sep 2026 03:55:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D0DB94BA9028
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A07C84BA9016
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D0DB94BA9028
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789861655; cv=none;
-	b=rJipQR0NNaUf7XM34wxNuItRMzKHYntDqR4UhXzyGyQrR9BpOjikN5v5SL2kSOJTvf/PBb4lQ89Sy/i5iGpunGVEzTIeon/nrZ5MEjToljdsmqwLCld8Lq0Jr8AOPazKkl+1HKy1DkkSL9SBa+tclcZ4r6aHjY8t6YQeBXWObno=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789876531; cv=none;
+	b=bQoYF9mcNHzyc1obTWrnRkWntoOb0hZx1l4NAsapcnrhT2t399a4z2L3j/uEIV54CIOftukSXinTqysthIKwjPAc/ENnXZUrgxVh6uu47Cg5wiLv+imZrgTP61aPggbud8GfvCboOTehjA6VB3ccMguC6x4gXx/JVPG+pJ9hqKg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789861655; c=relaxed/simple;
-	bh=2qSP8oasvEB3puY7zoo1kCCMhtaroWY/G7Gt7f3Gino=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=kY9XKmhalkkFwSCGf4JC2Flvi93MKg3DABCCVLudEoTiQQ7uHi4nntdQbG4PxZBsvN9mBM9AlHDcpaWPDdulRb7UBNewIxPnj011QvnquYPeNMUQ/Jt5jw7fxd7dSZGQd05PCfpzTOGSUIGQTbIZeT3r00aE/+1eKfpjPX7zJZQ=
+	t=1789876531; c=relaxed/simple;
+	bh=JMWyGyqcSr8LzpbsEaQOoEoBBXd3NVWPCB+O8YjjsCQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=xvvGaHTF3lWgrCTjafK1plDU/+5LvKZqoOzJiACDr8fDl5nm4SFWvVhyJIER3HW22EszlZ+apWZV/p4T43eyu/HDTU7DXmHtFLPYUZT8J7rogrKwR2QHXZqODGAYqyfE/5USble/UQPl6JJzfo3doH98c7kMGNBIU8r4sSWOns8=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A07C84BA9016
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D0DB94BA9028
 Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 68K01Pxl027207
-	for <cygwin-patches@cygwin.com>; Sat, 19 Sep 2026 17:01:25 -0700 (PDT)
+	by m0.truegem.net (8.12.11/8.12.11) id 68K49K7i050517;
+	Sat, 19 Sep 2026 21:09:20 -0700 (PDT)
 	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdy05wWG; Sat Sep 19 17:01:25 2026
-Message-ID: <229b85bd-da08-4e17-a72c-393985a13556@maxrnd.com>
-Date: Sat, 19 Sep 2026 16:47:43 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/RFC] Patch to fix uid/gid lookup for NFSv4 filesystems
-To: cygwin-patches@cygwin.com
-References: <CAPJSo4UZZN2w=RhhsycAgBW9mim928K9MVw+T7O_9W2uynMD3g@mail.gmail.com>
- <CAPJSo4XhJJJxV=FpWQ44Q5NP=Y46-XPsopNhexzSyGYENjhdRA@mail.gmail.com>
- <CAPJSo4WPqHqcxFS6AL8Cauo4Na6=u14Tw8eennKk_27rnd-rtQ@mail.gmail.com>
- <CAPJSo4X2yqaua0LfD-4qeJsMTLgMGfJT-m05b_8poDwtMGc2sA@mail.gmail.com>
-Content-Language: en-US
+Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
+ via SMTP by m0.truegem.net, id smtpdfSelua; Sat Sep 19 21:09:20 2026
 From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <CAPJSo4X2yqaua0LfD-4qeJsMTLgMGfJT-m05b_8poDwtMGc2sA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+To: cygwin-patches@cygwin.com
+Cc: Mark Geisert <mark@maxrnd.com>, Lionel Cons <lionelcons1972@gmail.com>,
+        Roland Mainz <roland.mainz@nrubsig.org>
+Subject: [PATCH] Cygwin: Handle uids/gids correctly on NFSv4 filesystems
+Date: Sat, 19 Sep 2026 20:54:07 -0700
+Message-ID: <20260920035524.60008-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015275.html>
+References: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015275.html>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hello Lionel,
+Currently, Cygwin assumes that all Windows NFS clients operate
+similarly to the Windows NFSv3 client. It expects that account names
+and numeric uid/gid values are identical on both the client and server
+sides, with LDAP acting as the sole authority for these numeric
+values.
 
-On 9/19/2026 2:54 AM, Lionel Cons wrote:
-> On Fri, 21 Aug 2026 at 17:20, Lionel Cons <lionelcons1972@gmail.com> wrote:
->>
->> On Sun, 16 Aug 2026 at 19:35, Lionel Cons <lionelcons1972@gmail.com> wrote:
->>>
->>> Repost with proper [PATCH/RFC] tag.
->>>
->>> I've attached a patch
->>> (cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt from the
->>> ms-nfs41-client project) that resolves an issue with uid/gid lookups
->>> on Windows NFSv4 filesystems.
->>>
->>> Currently, Cygwin assumes that all Windows NFS clients operate
->>> similarly to the Windows NFSv3 client. It expects that account names
->>> and numeric uid/gid values are identical on both the client and server
->>> sides, with LDAP acting as the sole authority for these numeric
->>> values.
->>>
->>> However, the NFSv4 protocol fundamentally changes this paradigm. As
->>> defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
->>> for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
->>> protocol representation in favor of string-based identifiers (e.g.,
->>> user@domain and group@domain).
->>>
->>> To handle this, all NFSv4 clients implement a local "idmapper"
->>> component that translates these string-based identities from the
->>> network side into local account data (in the case of Windows, mapping
->>> user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
->>> clients manage their own uid/gid translation locally, Cygwin's
->>> reliance on raw LDAP data fails in these environments and results in
->>> the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
->>> owner/group output in Cygwin ls -l.
->>>
->>> The attached patch addresses this by detecting whether the underlying
->>> filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
->>> performs a direct pass-through of the uid/gid values supplied by the
->>> NFSv4 client's idmapper.
->>>
->>> I have successfully tested this fix against several major clients, including:
->>> - Exceed NFSv4 client
->>> - OpenText NFSv4 client
->>> - ms-nfs41-client
->>> - ms-nfs42-client
->>> - Windows NFSv3 client (no change, it continues to use LDAP raw data)
->>>
->>> Please let me know if you have any questions or require modifications
->>> to the patch.
->>
->> ?
-> 
-> Can anyone PLEASE have a look at this patch?
+However, the NFSv4 protocol fundamentally changes this paradigm. As
+defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
+for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
+protocol representation in favor of string-based identifiers (e.g.,
+user@domain and group@domain).
 
-Sorry for the delayed response.  The patch looks OK to me.  I'm in the 
-process of getting it released.
+To handle this, all NFSv4 clients implement a local "idmapper"
+component that translates these string-based identities from the
+network side into local account data (in the case of Windows, mapping
+user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
+clients manage their own uid/gid translation locally, Cygwin's
+reliance on raw LDAP data fails in these environments and results in
+the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
+owner/group output in Cygwin ls -l.
 
-..mark
+The [...] patch addresses this by detecting whether the underlying
+filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
+performs a direct pass-through of the uid/gid values supplied by the
+NFSv4 client's idmapper.
+
+[Lionel has] successfully tested this fix against several major clients,
+including:
+- Exceed NFSv4 client
+- OpenText NFSv4 client
+- ms-nfs41-client
+- ms-nfs42-client
+- Windows NFSv3 client (no change, it continues to use LDAP raw data)
+
+Reported-by: Lionel Cons <lionelcons1972@gmail.com>
+Addresses: https://cygwin.com/pipermail/cygwin-patches/2026q3/015287.html
+Authored-by: Roland Mainz <roland.mainz@nrubsig.org>
+Reviewed-by: Mark Geisert <mark@maxrnd.com>
+Fixes: 88dce3a (Try harder to avoid LDAP access for RFC2307 mapping)
+
+---
+ winsup/cygwin/fhandler/disk_file.cc | 30 ++++++++++++++++++-----------
+ winsup/cygwin/local_includes/path.h |  2 ++
+ 2 files changed, 21 insertions(+), 11 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler/disk_file.cc b/winsup/cygwin/fhandler/disk_file.cc
+index f284b4a05..e4d20b6c5 100644
+--- a/winsup/cygwin/fhandler/disk_file.cc
++++ b/winsup/cygwin/fhandler/disk_file.cc
+@@ -214,7 +214,7 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
+      access through another handle invalidates the caching within the
+      NFS client.  Skip this for Cygwin-created Symlinks playing FIFOs
+      (this sets the filler1 member to NF3FIFO). */
+-  if (get_handle () && nfs_attr->filler1 != NF3FIFO)
++  if (get_handle () && pc.fs_is_nfs3() && (nfs_attr->filler1 != NF3FIFO))
+     {
+       if (get_access () & GENERIC_WRITE)
+ 	FlushFileBuffers (get_handle ());
+@@ -236,11 +236,15 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
+ 	{
+ 	  uid_t map_uid = ILLEGAL_UID;
+ 
+-	  domain = cygheap->dom.get_rfc2307_domain ();
+-	  if ((ldap_open = (cldap.open (domain) == NO_ERROR)))
+-	    map_uid = cldap.remap_uid (nfs_attr->uid);
+-	  if (map_uid == ILLEGAL_UID)
+-	    map_uid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->uid);
++          if (pc.fs_is_nfs4())
++            map_uid = nfs_attr->uid;
++          else {
++	    domain = cygheap->dom.get_rfc2307_domain ();
++	    if ((ldap_open = (cldap.open (domain) == NO_ERROR)))
++	      map_uid = cldap.remap_uid (nfs_attr->uid);
++	    if (map_uid == ILLEGAL_UID)
++	      map_uid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->uid);
++          }
+ 	  cygheap->ugid_cache.add_uid (nfs_attr->uid, map_uid);
+ 	  buf->st_uid = map_uid;
+ 	}
+@@ -255,11 +259,15 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
+ 	{
+ 	  gid_t map_gid = ILLEGAL_GID;
+ 
+-	  domain = cygheap->dom.get_rfc2307_domain ();
+-	  if ((ldap_open || cldap.open (domain) == NO_ERROR))
+-	    map_gid = cldap.remap_gid (nfs_attr->gid);
+-	  if (map_gid == ILLEGAL_GID)
+-	    map_gid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->gid);
++          if (pc.fs_is_nfs4())
++            map_gid = nfs_attr->gid;
++          else {
++	    domain = cygheap->dom.get_rfc2307_domain ();
++	    if ((ldap_open || cldap.open (domain) == NO_ERROR))
++	      map_gid = cldap.remap_gid (nfs_attr->gid);
++	    if (map_gid == ILLEGAL_GID)
++	      map_gid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->gid);
++          }
+ 	  cygheap->ugid_cache.add_gid (nfs_attr->gid, map_gid);
+ 	  buf->st_gid = map_gid;
+ 	}
+diff --git a/winsup/cygwin/local_includes/path.h b/winsup/cygwin/local_includes/path.h
+index ad142ddd3..b8550c05c 100644
+--- a/winsup/cygwin/local_includes/path.h
++++ b/winsup/cygwin/local_includes/path.h
+@@ -423,6 +423,8 @@ class path_conv
+   bool fs_is_refs () const {return fs.is_refs ();}
+   bool fs_is_samba () const {return fs.is_samba ();}
+   bool fs_is_nfs () const {return fs.is_nfs ();}
++  bool fs_is_nfs3 () const {return fs.is_nfs () && !fs.has_acls ();}
++  bool fs_is_nfs4 () const {return fs.is_nfs () && fs.has_acls ();}
+   bool fs_is_netapp () const {return fs.is_netapp ();}
+   bool fs_is_cdrom () const {return fs.is_cdrom ();}
+   bool fs_is_mvfs () const {return fs.is_mvfs ();}
+diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
+index 3f6a0ecd7..84039cea8 100644
+--- a/winsup/cygwin/release/3.7.0
++++ b/winsup/cygwin/release/3.7.0
+@@ -26,6 +26,8 @@ What's new:
+   runs on a pty rather than on the console device originating from the pseudo
+   console.
+ 
++- Support for uid/gid passthru on NFSv4 without involving LDAP.
++
+ Fixes:
+ ------
+--
+2.51.0
 
