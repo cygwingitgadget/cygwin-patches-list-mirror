@@ -1,167 +1,83 @@
-Return-Path: <SRS0=sXPq=HM=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id D0DB94BA9028
-	for <cygwin-patches@cygwin.com>; Sun, 20 Sep 2026 03:55:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D0DB94BA9028
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D0DB94BA9028
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789876531; cv=none;
-	b=bQoYF9mcNHzyc1obTWrnRkWntoOb0hZx1l4NAsapcnrhT2t399a4z2L3j/uEIV54CIOftukSXinTqysthIKwjPAc/ENnXZUrgxVh6uu47Cg5wiLv+imZrgTP61aPggbud8GfvCboOTehjA6VB3ccMguC6x4gXx/JVPG+pJ9hqKg=
+Return-Path: <SRS0=06VY=HM=disroot.org=omikorin@sourceware.org>
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	by sourceware.org (Postfix) with ESMTPS id A12584B9DB48
+	for <cygwin-patches@cygwin.com>; Sun, 20 Sep 2026 04:26:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A12584B9DB48
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=disroot.org
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A12584B9DB48
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=178.21.23.139
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1789878369; cv=none;
+	b=CGzjRQkfupfyB4Vr5gAosfHTfjLJFHMYkLC+xCKMBKD1d4VtfHlObvar+yoc+3i299xgySVuXZ5w6H96M6ddCMO5OShuqTmAAse7O47RbAUdgKG8wMgT91U9/GS5LAJggh8tKMxgcYvvPjE+xzVxMcCqgZnhWVEXPec5hRK1dMY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1789876531; c=relaxed/simple;
-	bh=JMWyGyqcSr8LzpbsEaQOoEoBBXd3NVWPCB+O8YjjsCQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=xvvGaHTF3lWgrCTjafK1plDU/+5LvKZqoOzJiACDr8fDl5nm4SFWvVhyJIER3HW22EszlZ+apWZV/p4T43eyu/HDTU7DXmHtFLPYUZT8J7rogrKwR2QHXZqODGAYqyfE/5USble/UQPl6JJzfo3doH98c7kMGNBIU8r4sSWOns8=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D0DB94BA9028
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 68K49K7i050517;
-	Sat, 19 Sep 2026 21:09:20 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "zotac"
- via SMTP by m0.truegem.net, id smtpdfSelua; Sat Sep 19 21:09:20 2026
-From: Mark Geisert <mark@maxrnd.com>
+	t=1789878369; c=relaxed/simple;
+	bh=rtOZseOUDXpV8tRhG5yFqj8YofC4eI/Y4/IktmPYhLQ=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=RP8gWD7+EeW+p5JrORs7jmBRsKdBRLwu+7eDba8Bmt0Ie1cXsefYuxlkLHU9vZIkzHyLM4cSX1wOrkn8IWKI5crOReogCxpQfwKfDFlzC2ociVkmzys7wrNJjIisNWjnxtKe7VdhQ2vXYwE1/0BvVAR0VuL+pRprcR2DbML4sSc=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=disroot.org header.i=@disroot.org header.a=rsa-sha256 header.s=mail header.b=brwEHB38
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A12584B9DB48
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, secure) header.d=disroot.org header.i=@disroot.org header.a=rsa-sha256 header.s=mail header.b=brwEHB38
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id B53928110D;
+	Sun, 20 Sep 2026 06:26:08 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zvDamSypH4y4; Sun, 20 Sep 2026 06:26:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1789878368; bh=rtOZseOUDXpV8tRhG5yFqj8YofC4eI/Y4/IktmPYhLQ=;
+	h=From:To:Cc:Subject:Date;
+	b=brwEHB38KF5QpG6aiFsa1YUfrbgQ7lyhDMPNDZrHam8laeQM+bC5r6o45BKTkxh8h
+	 +6ix5yrKEPGI4dPeSYRIN1PGXGA3NTKRr0u7lqKraBuPH56Ky/FLAkOjoQhaC2nU2n
+	 GGRKemcPLghR9OuAIoquL7PmlsQF3bDxmTkR9+BMKjVeWVBFVIyeGxqT5ATfVvKsU/
+	 jkYvI/1jU6sVbk31JxzakHBj22fq3PqsjD25DQ7v5DERNOiFlL2bOUKvaU9dhM7XKD
+	 ouc8VkRbhpx215ghPpaRj+NYlLk/h/1pJs2xblAyHfHnJi3kolTNK/H074GOuwhSW/
+	 N+lj8h1hVvjWw==
+From: =?UTF-8?q?Micha=C5=82=20Korczak?= <omikorin@disroot.org>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>, Lionel Cons <lionelcons1972@gmail.com>,
-        Roland Mainz <roland.mainz@nrubsig.org>
-Subject: [PATCH] Cygwin: Handle uids/gids correctly on NFSv4 filesystems
-Date: Sat, 19 Sep 2026 20:54:07 -0700
-Message-ID: <20260920035524.60008-1-mark@maxrnd.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015275.html>
-References: <https://cygwin.com/pipermail/cygwin-patches/2026q3/015275.html>
+Cc: =?UTF-8?q?Micha=C5=82=20Korczak?= <omikorin@disroot.org>
+Subject: [PATCH] cygwin: define IPTOS_DSCP_VA in netinet/ip.h
+Date: Sun, 20 Sep 2026 06:25:24 +0200
+Message-ID: <20260920042524.4566-1-omikorin@disroot.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Currently, Cygwin assumes that all Windows NFS clients operate
-similarly to the Windows NFSv3 client. It expects that account names
-and numeric uid/gid values are identical on both the client and server
-sides, with LDAP acting as the sole authority for these numeric
-values.
+Define IPTOS_DSCP_VA (0xb0) according to RFC 5865 to complete the DSCP
+code point definitions in <netinet/ip.h>. This fixes compilation for
+utilities like openbsd-netcat.
 
-However, the NFSv4 protocol fundamentally changes this paradigm. As
-defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
-for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
-protocol representation in favor of string-based identifiers (e.g.,
-user@domain and group@domain).
+I provide this patch to the Cygwin sources under the 2-clause BSD license.
 
-To handle this, all NFSv4 clients implement a local "idmapper"
-component that translates these string-based identities from the
-network side into local account data (in the case of Windows, mapping
-user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
-clients manage their own uid/gid translation locally, Cygwin's
-reliance on raw LDAP data fails in these environments and results in
-the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
-owner/group output in Cygwin ls -l.
-
-The [...] patch addresses this by detecting whether the underlying
-filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
-performs a direct pass-through of the uid/gid values supplied by the
-NFSv4 client's idmapper.
-
-[Lionel has] successfully tested this fix against several major clients,
-including:
-- Exceed NFSv4 client
-- OpenText NFSv4 client
-- ms-nfs41-client
-- ms-nfs42-client
-- Windows NFSv3 client (no change, it continues to use LDAP raw data)
-
-Reported-by: Lionel Cons <lionelcons1972@gmail.com>
-Addresses: https://cygwin.com/pipermail/cygwin-patches/2026q3/015287.html
-Authored-by: Roland Mainz <roland.mainz@nrubsig.org>
-Reviewed-by: Mark Geisert <mark@maxrnd.com>
-Fixes: 88dce3a (Try harder to avoid LDAP access for RFC2307 mapping)
-
+Signed-off-by: Michał Korczak <omikorin@disroot.org>
 ---
- winsup/cygwin/fhandler/disk_file.cc | 30 ++++++++++++++++++-----------
- winsup/cygwin/local_includes/path.h |  2 ++
- 2 files changed, 21 insertions(+), 11 deletions(-)
+ winsup/cygwin/include/netinet/ip.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/fhandler/disk_file.cc b/winsup/cygwin/fhandler/disk_file.cc
-index f284b4a05..e4d20b6c5 100644
---- a/winsup/cygwin/fhandler/disk_file.cc
-+++ b/winsup/cygwin/fhandler/disk_file.cc
-@@ -214,7 +214,7 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
-      access through another handle invalidates the caching within the
-      NFS client.  Skip this for Cygwin-created Symlinks playing FIFOs
-      (this sets the filler1 member to NF3FIFO). */
--  if (get_handle () && nfs_attr->filler1 != NF3FIFO)
-+  if (get_handle () && pc.fs_is_nfs3() && (nfs_attr->filler1 != NF3FIFO))
-     {
-       if (get_access () & GENERIC_WRITE)
- 	FlushFileBuffers (get_handle ());
-@@ -236,11 +236,15 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
- 	{
- 	  uid_t map_uid = ILLEGAL_UID;
+diff --git a/winsup/cygwin/include/netinet/ip.h b/winsup/cygwin/include/netinet/ip.h
+index 5db1bd9ce..9ce752870 100644
+--- a/winsup/cygwin/include/netinet/ip.h
++++ b/winsup/cygwin/include/netinet/ip.h
+@@ -83,7 +83,7 @@ struct ip {
+ #define IP_MAXPACKET	65535	/* maximum packet size */
  
--	  domain = cygheap->dom.get_rfc2307_domain ();
--	  if ((ldap_open = (cldap.open (domain) == NO_ERROR)))
--	    map_uid = cldap.remap_uid (nfs_attr->uid);
--	  if (map_uid == ILLEGAL_UID)
--	    map_uid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->uid);
-+          if (pc.fs_is_nfs4())
-+            map_uid = nfs_attr->uid;
-+          else {
-+	    domain = cygheap->dom.get_rfc2307_domain ();
-+	    if ((ldap_open = (cldap.open (domain) == NO_ERROR)))
-+	      map_uid = cldap.remap_uid (nfs_attr->uid);
-+	    if (map_uid == ILLEGAL_UID)
-+	      map_uid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->uid);
-+          }
- 	  cygheap->ugid_cache.add_uid (nfs_attr->uid, map_uid);
- 	  buf->st_uid = map_uid;
- 	}
-@@ -255,11 +259,15 @@ fhandler_base::fstat_by_nfs_ea (struct stat *buf)
- 	{
- 	  gid_t map_gid = ILLEGAL_GID;
- 
--	  domain = cygheap->dom.get_rfc2307_domain ();
--	  if ((ldap_open || cldap.open (domain) == NO_ERROR))
--	    map_gid = cldap.remap_gid (nfs_attr->gid);
--	  if (map_gid == ILLEGAL_GID)
--	    map_gid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->gid);
-+          if (pc.fs_is_nfs4())
-+            map_gid = nfs_attr->gid;
-+          else {
-+	    domain = cygheap->dom.get_rfc2307_domain ();
-+	    if ((ldap_open || cldap.open (domain) == NO_ERROR))
-+	      map_gid = cldap.remap_gid (nfs_attr->gid);
-+	    if (map_gid == ILLEGAL_GID)
-+	      map_gid = MAP_UNIX_TO_CYGWIN_ID (nfs_attr->gid);
-+          }
- 	  cygheap->ugid_cache.add_gid (nfs_attr->gid, map_gid);
- 	  buf->st_gid = map_gid;
- 	}
-diff --git a/winsup/cygwin/local_includes/path.h b/winsup/cygwin/local_includes/path.h
-index ad142ddd3..b8550c05c 100644
---- a/winsup/cygwin/local_includes/path.h
-+++ b/winsup/cygwin/local_includes/path.h
-@@ -423,6 +423,8 @@ class path_conv
-   bool fs_is_refs () const {return fs.is_refs ();}
-   bool fs_is_samba () const {return fs.is_samba ();}
-   bool fs_is_nfs () const {return fs.is_nfs ();}
-+  bool fs_is_nfs3 () const {return fs.is_nfs () && !fs.has_acls ();}
-+  bool fs_is_nfs4 () const {return fs.is_nfs () && fs.has_acls ();}
-   bool fs_is_netapp () const {return fs.is_netapp ();}
-   bool fs_is_cdrom () const {return fs.is_cdrom ();}
-   bool fs_is_mvfs () const {return fs.is_mvfs ();}
-diff --git a/winsup/cygwin/release/3.7.0 b/winsup/cygwin/release/3.7.0
-index 3f6a0ecd7..84039cea8 100644
---- a/winsup/cygwin/release/3.7.0
-+++ b/winsup/cygwin/release/3.7.0
-@@ -26,6 +26,8 @@ What's new:
-   runs on a pty rather than on the console device originating from the pseudo
-   console.
- 
-+- Support for uid/gid passthru on NFSv4 without involving LDAP.
-+
- Fixes:
- ------
---
-2.51.0
+ /*
+- * Definitions for DiffServ Codepoints as per RFC2474
++ * Definitions for DiffServ Codepoints as per RFC2474 and RFC5865.
+  */
+ #define IPTOS_DSCP_CS0		0x00
+ #define IPTOS_DSCP_CS1		0x20
+@@ -103,6 +103,7 @@ struct ip {
+ #define IPTOS_DSCP_AF42		0x90
+ #define IPTOS_DSCP_AF43		0x98
+ #define IPTOS_DSCP_CS5		0xa0
++#define	IPTOS_DSCP_VA		0xb0
+ #define IPTOS_DSCP_EF		0xb8
+ #define IPTOS_DSCP_CS6		0xc0
+ #define IPTOS_DSCP_CS7		0xe0
+-- 
+2.55.0.windows.5
 
