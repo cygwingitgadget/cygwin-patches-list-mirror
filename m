@@ -1,89 +1,77 @@
-Return-Path: <SRS0=CSO5=HQ=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
-	by sourceware.org (Postfix) with ESMTPS id 29D324BB3BEE
-	for <cygwin-patches@cygwin.com>; Thu, 24 Sep 2026 11:57:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 29D324BB3BEE
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 29D324BB3BEE
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790251062; cv=none;
-	b=DHdjb7cVRr7y0FjwkFzFXFk1INLcrHKo8FG1plt0Y/zETGhDdybFCYkpBWujk56K1wkvd3T5yy5jo9W2rT3Yp9l6+fugGygVIydE1soWNrLB+HSqiFlzBqaYuhmFD7zXJ0BO86jhEL30i4E6kFKvPkYX0iQAT4noOknVeysiBtg=
+Return-Path: <SRS0=kM7z=HQ=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.92])
+	by sourceware.org (Postfix) with ESMTP id 3CAB24868BD3
+	for <cygwin-patches@cygwin.com>; Thu, 24 Sep 2026 15:21:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3CAB24868BD3
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3CAB24868BD3
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.92
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790263275; cv=none;
+	b=rA31bs3Bk1+b8CGkOtDrLHqhj2X7KDFy+B9xsvRwUgTAWD/ouqirlg3D92MR+2C3SmUv62XgwHg1QthebUBrxvjBXTN500znHhl0PfAN27yqPDJTUu/acdjNjNZcb7Sx9mvV9zj9FzgJxyBz+8uF8TPyVI2CYSebQPwGGHv9OCY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1790251062; c=relaxed/simple;
-	bh=LMWyK992mvuMqL9hBFCwG9E31sNq+flroFLCrOcoeMk=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=M6wxzR/vL202q1YUBjuiXZ+dSZbZ2/gfi4KHxgrSAMaJ7/3TIEa/09CpF6xp7zDLkMR5YN/DgTrtiNSRnl5TMI3+4GiPJyHCrlUNxZAgGaztfSndJYc9iwurfZ/TGer9OJ4VRUarDtBFpJ7bk37XjMQzcVdIBNtdMOM/kCwSvrM=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=LkR90bqJ
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 29D324BB3BEE
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=LkR90bqJ
-Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
-          id <20260924115736139.PGSV.117312.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Thu, 24 Sep 2026 20:57:36 +0900
-Date: Thu, 24 Sep 2026 20:57:34 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+	t=1790263275; c=relaxed/simple;
+	bh=hsNnCWgE3kCutpFw3fnf+bkDn7b4eW+0eMiQzPL8+H4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=LWqA+Tqo8+q5l18H//ff0i18mM34eKxOVgVluap79tXrdqhsbwGiRD8U5v163rmo74TRp2SJJAYSJIgYxD+NHC3DFdbF/DQff2oZe3gI3zyh3A+nB24pZucDbqv5sozAvhAkI3QIzgEKne0HoGMigORf3t8an4zg923lvyhv4yc=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3CAB24868BD3
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A71613809D5ABCF
+X-Originating-IP: [62.56.83.178]
+X-OWM-Source-IP: 62.56.83.178
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTGa2jczxv+ZUGcONZSIG4MAQ0iB5uK9VfUl9u3LPd8S3jn1l7G+NTCuKOZddNktp24NdbRocIoeccYsqfVQIFZkH2+JGU9iEZp1ZmjXw4St5PaW0wgVklBopAIbV41+sT2QnRq8Nqibsr3WUu5rUo+Rf3CZHFjFup6vLuMzrDEjdz497TTSGUIkFyMccwizuLjtHYkFKlyJmkpnm5Try9Gu9WDXGP95kVv9u7rHh1izPoT/8eX9ySZTM5irp+JmFSm3KiJeduo08fQaoHxznaG0/vaoO0Ye7kcZI1VzfJ7cF3LbEwW8PkHfz3VEGZ5SOD+hd0+CaIJTNhYCZzqSU3pUr57Wmk93a5roW+CWnw2g7+EfGV6knWwTkyyrCGqqfZiCUFCSbqSFOVJILK9bQHxVNmsMZ7n7V3d+LxChb572tWP6fONa71Z8TII8z3IdjOG5pMV9jORlpopt1b3sx9tcVZpG17i7ys9t1dJY73YQnUXYPxBTCrqY6wkLq95hGzh8qU8jnartPgdaG6xXtPQMy4tRZh2S8+q6fhfdj85iJtPiv48ykE683ypR4WFJFgaUuiNB6p024JQO9UNV6xrOkByUbsC+McrnaYDfBex6qut98DZWh9Q4efQkbpuI3vJTd18LTF18FciUs0a5FRgddHFY85iO/agGABBMkvrMvg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from tambora (62.56.83.178) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A71613809D5ABCF; Thu, 24 Sep 2026 16:21:11 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v5] Cygwin: console: Abort setting disable_master_thread
- when no con.owner
-Message-Id: <20260924205734.63288b0bc8a3a26a79d9cc4a@nifty.ne.jp>
-In-Reply-To: <4acddc15-292c-f7bd-10d2-ecc055176f23@gmx.de>
-References: <20260923223230.3504-1-takashi.yano@nifty.ne.jp>
-	<4acddc15-292c-f7bd-10d2-ecc055176f23@gmx.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1790251056;
- bh=4dK8v/oCAgFxX+95HwQdzjiDX0sPiSuoiYZobmPAYq0=;
- h=Date:From:To:Subject:In-Reply-To;
- b=LkR90bqJJgU864U33A5jWZWHx6s2X1XgksAbPpblnXf94fk9I+Dj6riOEeHsdBvTVylWB2Y/
- ndFcNb/cJ8HCLC7T78FkX5sdlMBjBlOyUNJv6YXDDlC5Wp1KsH05GIxzVtNTojWmC8hGRutEya
- ZylN0iKXoqnx2WUWhK4Y1ejUZeFX33sB6Wo9F9jMX7yq3qSAlAz7hYf+ENcsvtM7rpuEfvOoo9
- mILlwZKFjI7WtOOdxQEMomyPKur6C9bu63GSbTv1I47y8OFach3Iein/liuXqxBvwAjm4yMyqn
- VUDT2HUOVJXFax+PYYcM+n2RdmmcARy4CG09za6qBMpAlaNA==
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Fix pinfo comparision operator which is ambiguous under C++20 rules
+Date: Thu, 24 Sep 2026 16:21:06 +0100
+Message-ID: <20260924152106.116672-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Johannes,
+../../../../src/winsup/cygwin/pinfo.cc:1254:27: error: C++20 says that these are ambiguous, even though the second is reversed: [-Werror]
+In file included from /wip/cygwin/src/winsup/cygwin/local_includes/fhandler.h:10,
+/wip/cygwin/src/winsup/cygwin/local_includes/pinfo.h:231:8: note: candidate 1: ‘bool pinfo::operator==(pinfo&) const’
+/wip/cygwin/src/winsup/cygwin/local_includes/pinfo.h:231:8: note: candidate 2: ‘bool pinfo::operator==(pinfo&) const’ (reversed)
 
-On Thu, 24 Sep 2026 09:47:19 +0200 (CEST)
-Johannes Schindelin wrote:
-> Hi Takashi,
-> 
-> On Thu, 24 Sep 2026, Takashi Yano wrote:
-> 
-> > With the commit 733d5a953fa9 ("Cygwin: console: Ensure the master
-> > thread runs only when it is supposed to"), the process which calls
-> > set_disable_master_thread() hangs if the con.owner already exited,
-> > because set_disable_master_thread() waits for cons_master_thread
-> > accepting the status change and reflecting the current status to
-> > master_thread_suspended. With this patch, set_disable_master_thread()
-> > is aborted if the owner process no longer exists to avoid this
-> > hang.
-> > 
-> > Addresses: https://cygwin.com/pipermail/cygwin/2026-September/260037.html
-> > Fixes: 733d5a953fa9 ("Cygwin: console: Ensure the master thread runs only when it is supposed to")
-> > Reported-by: Jay Libove Alzina <libove@felines.org>
-> > Co-authored-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
-> > ---
-> > v2: Treat the absence of the master thread the same as suspension.
-> > v3: Handle the crash of owner process.
-> > v4: Put my concept together based on Johannes's.
-> > v5: Abort waiting for master_thread when quering owner process fails.
-> >     need_console_handler() simply returns need_console_handler.
-> >     Rename master_thread_exited() to master_thread_unavailable().
-> >     Set con.is_processed_input before asserting ENABLE_PROCESS_INPUT,
-> >     and unset it after clearing ENABLE_PROCESS_INPUT.
-> 
-> Thank you for addressing all my concerns! From my point of view, this
-> patch is ready.
+Notes:
 
-Thanks for the final review. I'll push this patch after the patch:
-[PATCH v18] Cygwin: console: Fix undesired mode change at exit of non-cygwin apps
-because this depends on that.
+Under C++20 rules, the compiler synthesizes a reversed candidate of this
+operator. However, since neither is an exact match when two const
+arguments are compared, an ambiguity error is reported.
 
+Fix this by making the argument const. This makes the normal order
+candidate an exact match under those circumstances, breaking the
+ambiguity.
+---
+ winsup/cygwin/local_includes/pinfo.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/winsup/cygwin/local_includes/pinfo.h b/winsup/cygwin/local_includes/pinfo.h
+index fe8203fbc..f38393d99 100644
+--- a/winsup/cygwin/local_includes/pinfo.h
++++ b/winsup/cygwin/local_includes/pinfo.h
+@@ -228,7 +228,7 @@ public:
+   void set_exit_code (DWORD n);
+   _pinfo *operator -> () const {return procinfo;}
+   bool operator == (pinfo *x) const {return x->procinfo == procinfo;}
+-  bool operator == (pinfo &x) const {return x.procinfo == procinfo;}
++  bool operator == (const pinfo &x) const {return x.procinfo == procinfo;}
+   bool operator == (_pinfo *x) const {return x == procinfo;}
+   bool operator == (void *x) const {return procinfo == x;}
+   _pinfo *operator * () const {return procinfo;}
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.51.0
+
