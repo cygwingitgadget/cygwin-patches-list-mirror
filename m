@@ -1,85 +1,93 @@
-Return-Path: <SRS0=X1Yk=HR=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id A735C4BB58C6
-	for <cygwin-patches@cygwin.com>; Fri, 25 Sep 2026 00:29:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A735C4BB58C6
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A735C4BB58C6
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790296161; cv=none;
-	b=FJHEGDxvew6Y7MgGQhwvBp/urXfkk7vRdYCNOGD5wJnS5q+tXRY8syjz0rEW9EMWik/N6Oiq8uiaWD0iNNKWBr4vM66Qm5X/u2RqpaRqSvqfvHnEE75w8bs9ps1RcIXbtnwsY/p7tURf7M1C3Vnw9ZSwGAGHC7M+R2xIAWgnvHI=
+Return-Path: <SRS0=9EPT=HS=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id E7ED04BA9029
+	for <cygwin-patches@cygwin.com>; Sat, 26 Sep 2026 15:40:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E7ED04BA9029
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E7ED04BA9029
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790437208; cv=none;
+	b=JslCvwpRDqrUkQMjtO9LIRUoPAuv4uWYNKFwcYAO1xjwiJWZ8kSh3j+MmQTC21STEed63yRWsnGifdmoPLZ+7rt4joYCzwV6gjMDF0ZSZ022ipC8OqinOTsmTUrJuV6NHMl5O4ky3oDpeiAEHaUKrdQbuUdstCy/MjWxjRRfwxM=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1790296161; c=relaxed/simple;
-	bh=YHPTC28F1X8tDamOlM58FvDuay3aInduvMoEGgCiTSM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=oUg2S1WYwae1U+FTl3ojMzVAav/gPSme92g9vuSY34HUZrDtrmjQqJ5tn4pT412YzB5ruBy++NgzDL9YzoPXEuVBQODb9BzNWrQQn4wbb+YK7LpkQqra1VKzYRAKiFarhbnInzdCmaYUomMsQo5fkB/rL6fZJ9IwRaRRuFdlnQQ=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A735C4BB58C6
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 68P0h7tD009347
-	for <cygwin-patches@cygwin.com>; Thu, 24 Sep 2026 17:43:07 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdKrZEgC; Thu Sep 24 17:42:58 2026
-Message-ID: <c251f9bf-1881-47bd-a4a4-3a14b6f542f0@maxrnd.com>
-Date: Thu, 24 Sep 2026 17:29:11 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cygwin: define IPTOS_DSCP_VA in netinet/ip.h
+	t=1790437208; c=relaxed/simple;
+	bh=Ck/dWhmqm7XTf7+5AK7eFF8XOnMdPN71yv3HRyl/IEc=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=i7p2Axay518VIGmF6NN9jfYI3fRO/GK0rH0HQKvdzxgJnQtFihlM09g8ZOSR8oTsQaTYRiWx1507sb96QQsxrblu1fNWm1+QrcK6EWoefeI35YBF+bsur6K0NLiu/p9DibR/ruXvO2KwWkh7GyXEoEbzp1em5RZuEuizd1rJOOs=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ppAmyCGD
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E7ED04BA9029
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ppAmyCGD
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20260926154003209.VVNA.44671.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 27 Sep 2026 00:40:03 +0900
+Date: Sun, 27 Sep 2026 00:40:00 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20260920043247.4589-1-omikorin@disroot.org>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <20260920043247.4589-1-omikorin@disroot.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4] Cygwin: console: Clear readahead buffer on tcflush()
+Message-Id: <20260927004000.82c393a88f3bced4c345142b@nifty.ne.jp>
+In-Reply-To: <59a99c34-239b-73c0-2f74-4feb6cd81db2@gmx.de>
+References: <20260915063431.602-1-takashi.yano@nifty.ne.jp>
+	<59a99c34-239b-73c0-2f74-4feb6cd81db2@gmx.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1790437203;
+ bh=Qb4oDQjgVD/g+osXhVJB4ywvpGuPELrOhh9XVsjzjx0=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=ppAmyCGDua+fB0PjJjSehvJ/KHiRO2JgzN9WbL1bhXoIVxH8Chvzf7IuYW3yc74Jd8zDcNiz
+ 56U4L4m5LJiRBq/AJAdAp9/ZHPiCq1aAYUen0Wwon0q4Da9562RbzeavdOcgKaAOyRvOkcX787
+ TTKdhVbBgzE0VNqD/QO6uHdcOsryoWMEcS95pE4xkS/H+pg+d6tewVkKHpfv6ARUsakQqI37Jn
+ RXKDNFa/cWoYxj4NifcAN0T26AfAw3kSZtwaZJXJC+NB9S/EGD2kElsMZjjR4wmiFb5Nm4ywuA
+ mQbGUbQE3w/6+HBpZE5gdMALeZK52zBKnSc/FQkN0ujT19YQ==
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hello Michał,
+Hi Johannes,
 
-On 9/19/2026 9:32 PM, Michał Korczak via Cygwin-patches wrote:
-> Define IPTOS_DSCP_VA (0xb0) according to RFC 5865 to complete the DSCP
-> code point definitions in <netinet/ip.h>. This fixes compilation for
-> utilities like openbsd-netcat.
+On Thu, 24 Sep 2026 22:08:04 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
 > 
-> I provide this patch to the Cygwin sources under the 2-clause BSD license.
+> On Tue, 15 Sep 2026, Takashi Yano wrote:
 > 
-> Signed-off-by: Michał Korczak <omikorin@disroot.org>
-> ---
-> v2: Fix whitespace formatting to match surrounding code style.
+> > Previously, tcflush(TCIFLUSH) only discarded the input events and
+> > did not clear the readahead buffer. Because of this bug, when user
+> > program called select() -> tcflush() -> read(), the last read()
+> > returned the contents of the readahead buffer instead of blocking
+> > as it should.
+> > 
+> > Correctly, tcflush() must discard all pending input, so read()
+> > should block until new input arrives. With this patch, the read-
+> > ahead buffer and `rapoi` are also cleared as well as input events.
+> > 
+> > Fixes: 8382778cdb57 ("Cygwin: console: fix select() behaviour")
+> > Suggested-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> > Reviewed-by: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+> > ---
+> > v2: Add input_mutex guard. Clear rapoi as well.
+> > v3: Acquire input_mutex before output_mutex in ioctl() to avoid
+> >     deadlock in tcflush().
+> >     Make input_ready static as con_ra is.
+> > v4: Revert input_mutex in ioctl() and move tcflush() outside
+> >     output_mutex insted.
 > 
->   winsup/cygwin/include/netinet/ip.h | 1 +
->   1 file changed, 1 insertion(+)
->   
->   winsup/cygwin/include/netinet/ip.h | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> Thank you for this version. It correctly flushes the Windows input queue,
+> `con_ra`, `input_ready`, and also `cons_rapoi` under `input_mutex`.
 > 
-> diff --git a/winsup/cygwin/include/netinet/ip.h b/winsup/cygwin/include/netinet/ip.h
-> index 5db1bd9ce..8b67a5c6e 100644
-> --- a/winsup/cygwin/include/netinet/ip.h
-> +++ b/winsup/cygwin/include/netinet/ip.h
-> @@ -83,7 +83,7 @@ struct ip {
->   #define IP_MAXPACKET	65535	/* maximum packet size */
->   
->   /*
-> - * Definitions for DiffServ Codepoints as per RFC2474
-> + * Definitions for DiffServ Codepoints as per RFC2474 and RFC5865.
->    */
->   #define IPTOS_DSCP_CS0		0x00
->   #define IPTOS_DSCP_CS1		0x20
-> @@ -103,6 +103,7 @@ struct ip {
->   #define IPTOS_DSCP_AF42		0x90
->   #define IPTOS_DSCP_AF43		0x98
->   #define IPTOS_DSCP_CS5		0xa0
-> +#define IPTOS_DSCP_VA		0xb0
->   #define IPTOS_DSCP_EF		0xb8
->   #define IPTOS_DSCP_CS6		0xc0
->   #define IPTOS_DSCP_CS7		0xe0
+> It also fixes v3's lock-order problem by calling `tcflush()` after
+> releasing `output_mutex`.
+> 
+> However, one concern remains unresolved: `input_ready` is process-static,
+> but `close()` frees and zeroes `con_ra` without clearing `input_ready`. In
+> the same process, closing the last reference to a secondary console and
+> reopening it could therefore retain `input_ready == true` with an empty
+> buffer, potentially producing an apparent EOF. Or am I misreading the
+> code?
 
-Thank you for the v2 patch.  It looks good to me and will shortly be 
-added to the queue for 3.7.0.
+Indeed. Fixed in v5. Thanks.
 
-..mark
-
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
