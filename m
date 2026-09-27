@@ -1,46 +1,46 @@
 Return-Path: <SRS0=6sOE=HT=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
-	by sourceware.org (Postfix) with ESMTPS id 079CF4BA23C4
-	for <cygwin-patches@cygwin.com>; Sun, 27 Sep 2026 13:37:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 079CF4BA23C4
+Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [106.153.227.39])
+	by sourceware.org (Postfix) with ESMTPS id 5DF904BA23FD
+	for <cygwin-patches@cygwin.com>; Sun, 27 Sep 2026 13:49:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5DF904BA23FD
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 079CF4BA23C4
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790516258; cv=none;
-	b=FoozbI7Gj6i0SG0lcIFJYnoiS6+3Q/A20rdce5bsmXwXKW4Z2hnuVdAK+GS1Jknxu9/S0L+I1bus5eNzJf0X40VVBd8gXWyAc8cfBdFLah1NOrKXNKmbjM+ZI7EJGeS4wYLEiuuxapiu0TCYhvNJg5MLfN9kX6sGUpPGE6fv4jE=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5DF904BA23FD
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.39
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790516966; cv=none;
+	b=NdQS2qRLe3brjGrD0K95RTTFrvTA9GoSZSRhc8BsqNbvZr3uX2ymFDfmZuKzOdgMTqb3MFROO465SV+eC9xt6oMOyUh2MdzNoRSufCwkwjg1eD5hgYzID64ZID0m6AdCozla2ysntq6v98dRWScK+FsgdrjkX3aqESuHXz6m7l0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1790516258; c=relaxed/simple;
-	bh=swBkj7WFl2O58QnyBL3p89CiPrIfvWMAAYM+U3GzG1o=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=TSy4tTla1uZsVOSHyXHntzNlxdNuObazkhCVh8Z7Fhatm/puA/itenOlPGrIMEfeW0eHGdEXw+Oy7zAZhaD6kXeCNI95QL18EQAI40ArR6k8lsuP86d2dm9Nnu8+ALW4zswD+BH4AH98T+TGPZnG2FsNxFYhDyvqMvLJrEBss3w=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FR0Qy62K
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 079CF4BA23C4
+	t=1790516966; c=relaxed/simple;
+	bh=aH7/o+p2yuU0fsWdp9rA7ulDnJYsW+aeYzfADbzlipw=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=JS9xkQjlrG6wGHOmeXE/MGJOQe4ciKyFyA5ImCWHePe760GjEutsyVfa+qxfORKk/p//0rxSGcMS+cm3Bk7RzUFVanRIfpMeACiBcbnConm99DxZIp1K12/3H7gA9ZDfWWpdCZypLBwwqSlOtUMi8S9meqbm7xnqGeMkdEoMg+U=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=iHeGKodF
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5DF904BA23FD
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FR0Qy62K
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20260927133735369.HXCM.17441.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sun, 27 Sep 2026 22:37:35 +0900
-Date: Sun, 27 Sep 2026 22:37:32 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=iHeGKodF
+Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
+          id <20260927134924659.CYGL.18412.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sun, 27 Sep 2026 22:49:24 +0900
+Date: Sun, 27 Sep 2026 22:49:22 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v6] Cygwin: console: Improve the performance of
  peek_console
-Message-Id: <20260927223732.57fb4c8ae11260a3523738a9@nifty.ne.jp>
+Message-Id: <20260927224922.4e839303d240bc48ce084153@nifty.ne.jp>
 In-Reply-To: <20260927132627.1002-1-takashi.yano@nifty.ne.jp>
 References: <20260927132627.1002-1-takashi.yano@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1790516255;
- bh=U0UB7/rurfmORfO9FruXtDJzj4qcFlFfZKs7Q1Lz3Ko=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1790516964;
+ bh=fJ+7L8/aWuer9wuKbu5nghEqB9AgcUwsuU+w9ZmE3tA=;
  h=Date:From:To:Subject:In-Reply-To;
- b=FR0Qy62KopDkcDy/slAIcS2l8dzB9WYIsroiYEy9vSg+0ni1dz6O0pzrxDElvPfMQSDXWowt
- e8r7NLUmfffYRbgIybNMmkuyVwzARdRkZwqhcqW2FHkW7vUWRvWJRdspTv3pzoleryEIZgpenL
- rF/hI4QGNalw7dXlGnP0zTM6QtOsHRkBHVNCBQjd7xG0JrfO1rLvhnYHdR9yRYj7K6wPFGEX5U
- 2j8fX+d4ZzjJcvoaMXemYHzDOW6ly5Q0cCgM4OglPifhfF7Nn0z8jJnXzmnLkcbCdpPIJUp9tv
- +gSe1G4zgjyN9Vh9jTQISMJef6WgXX4lrGVGUqAGAFFVhYLw==
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=iHeGKodFlvSaT3dCFrr4s+JKdh534+l2zMPbSwytGBYsfpjYAqDxCS5pZ9mNl1Xt6ohRrepC
+ mCwWo8POUWTdwMCzhPpySfwwmjiGbw1PhlutJldguSEAFCig0Wk9QMcaw+W6HRwvXyfHd1v8Oi
+ XtiHwGE/hlwiR7+md+Jr1q/R9em+97rMnTfKAPVGf5lffen9vuO9wK0nfPgXC6411ggLwfvKPo
+ NjPxFgMdV2g/3kxuGMLiOTthg5AzwOtVnc52z/mtJF2LZxyX5aUhliiXMLDDrScRx514OoHCVO
+ okVSmukN0nrD5nqIE9v3iq4u1uLoWf/HaJTK6tUeHViS9MGA==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -108,9 +108,6 @@ Takashi Yano wrote:
 >    if (!r)
 >      {
 > +      __set_errno_from_win_error (error);
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         __seterrno_from_win_error (error);
-
 >        termios_printf ("PeekConsoleInput failed, %E");
 >        return input_error;
 >      }
@@ -207,6 +204,13 @@ Takashi Yano wrote:
 > 2.51.0
 > 
 
+I've measured the performance.
+I measured the time it takes to paste 10,000 characters into bash.
+
+Without this patch: 5.1 - 5.9 sec.
+With this patch: 3.9 - 4.3 sec.
+
+It seems that this patch can reduce the overhead by about 20%.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
