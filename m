@@ -1,84 +1,105 @@
-Return-Path: <SRS0=6Xlj=HV=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id 106D64BA2E29
-	for <cygwin-patches@cygwin.com>; Tue, 29 Sep 2026 06:46:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 106D64BA2E29
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 106D64BA2E29
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790664420; cv=none;
-	b=cS2NGYC8ksW3braBPEOxs05LwImL54BM5K2BxuiIaoiea3IL9Cw31yt0xn7MoTe+HSs01sFkPGp52/QmdFmfFwqIaX1Krkc7B1FywJR/NVuXROuVPBR4ufZYns4MomtYVy6yddAaNBfmVdOtUjd4cXckj+8ssXZTJ7d0CvtstV0=
+Return-Path: <SRS0=jqfJ=HV=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
+	by sourceware.org (Postfix) with ESMTP id 034CA4B9DB4F
+	for <cygwin-patches@cygwin.com>; Tue, 29 Sep 2026 13:15:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 034CA4B9DB4F
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 034CA4B9DB4F
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.197
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790687724; cv=none;
+	b=TcHk6qOPyY2MTlzfZobDg8qyXXWu+zylF2r4LCn/DNzviLtP7JsFAVaCWx7GpNwaTohogV+15wDxTvXxMtYJSwHiSd6zXmmRzsD4k7B9aTarfP0Vni+/mKVJTZptZ6VVh91XJ/vsfPHEvCfbaWofCweFoPP/kq/Rixq4g7opxPA=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1790664420; c=relaxed/simple;
-	bh=kSjg33LMjWt/vr32uRV8douahHXU5pWq6MkhheXWBeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=bbN0ClS3Uiv6zpCB94KKocaNHNXt9yektzNOI51sr9DMhf5U6yyWFw95tY0rpQr/FdOqaJa7XKuygCSRNau7c/1vLwClOcuRTN/f4Jy1wcMKPRBsQARJ1KpTmSmfwfHL7TwfE+ESg4CQwzeAgs5G+d6HoiQ2JZjui+9I9MDuYM8=
+	t=1790687724; c=relaxed/simple;
+	bh=zkLymHP0HNTxk7yH2Ag2f36xPw/Me413/4GrpU+nIYg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tpJZDXYmWFU9QXqSru8BYilDccVKbQW8j/6ktdkxyNOrb2VFLSPc4lVciB4QNlHIHtEnZQU5hK2rr1s2i5+bCpFebf5uDkXGo8XFGuGazclAe+DicydJdBhqVPM8BMoWJO+ql6EwzbErLUf1USHNGqbY3ASRv2DpWSp5ol9MhM8=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 106D64BA2E29
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 68T70fPG010818
-	for <cygwin-patches@cygwin.com>; Tue, 29 Sep 2026 00:00:41 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpd7Ewc98; Tue Sep 29 00:00:32 2026
-Message-ID: <84f0a1d9-6bd6-4973-b926-ea74b68cc767@maxrnd.com>
-Date: Mon, 28 Sep 2026 23:46:51 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cygwin: define IPTOS_DSCP_VA in netinet/ip.h
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 034CA4B9DB4F
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A715F5F0ACE58EA
+X-Originating-IP: [62.56.83.178]
+X-OWM-Source-IP: 62.56.83.178
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTEAPs4JrLaC/AcolZHJKhQzbfMuWeGJ16ivKydokNFA7Eli7XAVhJRyveiRWs2pgR2wmHduU4R+w1BIe29Yh2OSsV+lOWR0kxAdgU2FH4nMwJMpsvqu0zidf+o9MfWq6AO4kmhy9oh1kTYg4JvnSSRoJa5PzM5Lx5pQr4SKhwF3Adl9PRdnAVFoWc5PBh5lhGWShDmsxcahKGUBW7BtE7NaumdKa0YhZfcyqc/nWa59wCJaa9VNmiZr6Vj8rz8ZTYEZ5hMaHgR63fbIa/mCmOpQsobrNfmlQI56cRtrbAjQ0AvKAqZXYOEzltn9PshWppGq+/WT+M8Ch/0FaNJ/yslKGnlUrCApQ7WXwnH8tMeza9HigeOBPiO2a1ocZRqbSvHBqB/ctYjmjk0tWcAzZ1WLekdacoF7LkcNjC+F1eJoJ/fsGbxDIfR6UDh7H7vggZ05e8zegatI9ny4kCFuF8jTbbSXLSSU3231KK4/Sh7B2ROp/+UXviuC0QFAWNNr+u06DVZ3LFcCsE9+VT6/xG8cW37bsGvb12+14iD09Umg45x7yXpeVX/YH3tu3cDQ6OgIkS4M8fhq9aFo9OTqEORXRj9Up1hHLw5lVJBM/R/BE2MYGdXOv0POV/ORwofxxJ8Wfu4uBAc0Hnk1pxsgIXQBFd+LmkHETcyqdEE8XxFmog
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from tambora (62.56.83.178) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A715F5F0ACE58EA; Tue, 29 Sep 2026 14:15:14 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-References: <20260920043247.4589-1-omikorin@disroot.org>
- <c251f9bf-1881-47bd-a4a4-3a14b6f542f0@maxrnd.com>
- <79fbb95bf37e309b0f235b89bbf8a2ff@disroot.org>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <79fbb95bf37e309b0f235b89bbf8a2ff@disroot.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Drop _pei386_runtime_relocator stub on aarch64
+Date: Tue, 29 Sep 2026 14:15:07 +0100
+Message-ID: <20260929131507.239767-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hello Michał,
+On aarch64, don't emit a stub _pei386_runtime_relocator into the
+libcygwin.a import library, purely for satisfying a reference which ld
+no longer makes.
+---
 
-On 9/26/2026 11:00 AM, Michał Korczak via Cygwin-patches wrote:
-> Hello Mark,
-> 
-> Thank you for accepting the patch.
-> 
-> As I was fixing my issue, I have compared Cygwin ip.h code to the 
-> FreeBSD one [1] and I think it is slightly outdated for a few years.
-> 
-> I do not know if these files should be kept synchronized as this is my 
-> first contribution into Cygwin.
-> There were some additional deprecations years ago. I can only guess if 
-> it will end with more incompatibilites like presented in the patch.
-> 
-> Does it matter here? I am curious.
-> 
-> Michał
-> 
-> [1] https://cgit.freebsd.org/src/tree/sys/netinet/ip.h[...]
+Notes:
+    The specific ld version mentioned here is a "forward-looking statement".
+    The actual version of ld this change appears in is not yet known.
 
-Here is my personal opinion, as I don't think I've heard of any specific 
-Cygwin policy or goal on this subject.
+ winsup/cygwin/Makefile.am                |  6 +++++-
+ winsup/cygwin/lib/_cygwin_crt0_common.cc | 16 ++++++++++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-We don't synchronize with other OS projects in real-time.  If we come 
-across something that's missing and needed for our development, or 
-needed to support an application being ported from Linux, we'll add the 
-missing bits or complete files on a case-by-case basis.
+diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
+index 22b7b14bd..ba281779b 100644
+--- a/winsup/cygwin/Makefile.am
++++ b/winsup/cygwin/Makefile.am
+@@ -83,9 +83,13 @@ LIB_FILES= \
+ 	lib/premain1.c \
+ 	lib/premain2.c \
+ 	lib/premain3.c \
+-	lib/pseudo-reloc-dummy.c \
+ 	lib/pthreadconst.S
+ 
++if TARGET_X86_64
++LIB_FILES+= \
++	lib/pseudo-reloc-dummy.c
++endif
++
+ FHANDLER_FILES= \
+ 	fhandler/base.cc \
+ 	fhandler/clipboard.cc \
+diff --git a/winsup/cygwin/lib/_cygwin_crt0_common.cc b/winsup/cygwin/lib/_cygwin_crt0_common.cc
+index a22528ab4..4d4f63c7e 100644
+--- a/winsup/cygwin/lib/_cygwin_crt0_common.cc
++++ b/winsup/cygwin/lib/_cygwin_crt0_common.cc
+@@ -222,11 +222,19 @@ _cygwin_crt0_common (MainFunc f, per_process *u)
+   u->pseudo_reloc_end = &__RUNTIME_PSEUDO_RELOC_LIST_END__;
+   u->image_base = &_image_base__;
+   /* This is actually a dummy call to force the linker to load this
+-     symbol for older apps which need it. Unfortunately, ld for x86_64
+-     still emits this symbol when linking against static libs which
+-     require pseudo relocation, so we can't drop this call and the
+-     dummy function just yet. */
++     symbol for older apps which need it.
++
++     Unfortunately, ld prior to 2.48 emits this symbol for PE+ targets when
++     linking against static libs which require pseudo-relocation (even though
++     it's unncessary for v2 pseudo-reloc, which has always been available for
++     those targets), so we can't drop this call and the dummy function just yet.
++
++     Linking for aarch64 targets is assumed to be using ld 2.48 or later, which
++     no longer emits that reference.
++  */
++#ifdef __x86_64__
+   _pei386_runtime_relocator (NULL);
++#endif
+   return 1;
+ }
+ } /* "C" */
+-- 
+2.51.0
 
-We don't just bring everything over because not everything in Linux (or 
-the BSDs) is available in the same form on Windows, if at all.  Often 
-the OS interface is different, which leads to complicated situations 
-within Cygwin as it tries to bridge the differences so Linux, etc., 
-applications can just be recompiled and work on Windows+Cygwin.
-
-So, we accept patches for things that are missing, especially if you 
-have an immediate use case.  But we don't track other OSs looking for 
-things to keep up with.  We don't have the staffing for that :-).
-
-Anybody else on the list have an opinion on this and can chime in?
-Thanks for the question!
-
-..mark
