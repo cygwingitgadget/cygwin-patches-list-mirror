@@ -1,105 +1,189 @@
-Return-Path: <SRS0=jqfJ=HV=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
-	by sourceware.org (Postfix) with ESMTP id 034CA4B9DB4F
-	for <cygwin-patches@cygwin.com>; Tue, 29 Sep 2026 13:15:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 034CA4B9DB4F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 034CA4B9DB4F
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.197
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790687724; cv=none;
-	b=TcHk6qOPyY2MTlzfZobDg8qyXXWu+zylF2r4LCn/DNzviLtP7JsFAVaCWx7GpNwaTohogV+15wDxTvXxMtYJSwHiSd6zXmmRzsD4k7B9aTarfP0Vni+/mKVJTZptZ6VVh91XJ/vsfPHEvCfbaWofCweFoPP/kq/Rixq4g7opxPA=
+Return-Path: <SRS0=2QQm=HW=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
+	by sourceware.org (Postfix) with ESMTPS id D3CD54BA2E16
+	for <cygwin-patches@cygwin.com>; Wed, 30 Sep 2026 10:33:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org D3CD54BA2E16
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org D3CD54BA2E16
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1790764404; cv=none;
+	b=GFV+rmskrD/mqMi6JmZlZuoB2f6pQJRmKw3juHByTEwX1TbavlgBZEsyE2GsV8xPIpkDQQYINzN03L1LU2217C3RYTYXmTd++kHW/Rtj8RbPt1v0tPHnZ95ZHtulggEX5g4QZJMvFXG5sXOYt5vGH0uiOeDUfA2gat7gJorCsn4=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1790687724; c=relaxed/simple;
-	bh=zkLymHP0HNTxk7yH2Ag2f36xPw/Me413/4GrpU+nIYg=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tpJZDXYmWFU9QXqSru8BYilDccVKbQW8j/6ktdkxyNOrb2VFLSPc4lVciB4QNlHIHtEnZQU5hK2rr1s2i5+bCpFebf5uDkXGo8XFGuGazclAe+DicydJdBhqVPM8BMoWJO+ql6EwzbErLUf1USHNGqbY3ASRv2DpWSp5ol9MhM8=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 034CA4B9DB4F
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A715F5F0ACE58EA
-X-Originating-IP: [62.56.83.178]
-X-OWM-Source-IP: 62.56.83.178
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTEAPs4JrLaC/AcolZHJKhQzbfMuWeGJ16ivKydokNFA7Eli7XAVhJRyveiRWs2pgR2wmHduU4R+w1BIe29Yh2OSsV+lOWR0kxAdgU2FH4nMwJMpsvqu0zidf+o9MfWq6AO4kmhy9oh1kTYg4JvnSSRoJa5PzM5Lx5pQr4SKhwF3Adl9PRdnAVFoWc5PBh5lhGWShDmsxcahKGUBW7BtE7NaumdKa0YhZfcyqc/nWa59wCJaa9VNmiZr6Vj8rz8ZTYEZ5hMaHgR63fbIa/mCmOpQsobrNfmlQI56cRtrbAjQ0AvKAqZXYOEzltn9PshWppGq+/WT+M8Ch/0FaNJ/yslKGnlUrCApQ7WXwnH8tMeza9HigeOBPiO2a1ocZRqbSvHBqB/ctYjmjk0tWcAzZ1WLekdacoF7LkcNjC+F1eJoJ/fsGbxDIfR6UDh7H7vggZ05e8zegatI9ny4kCFuF8jTbbSXLSSU3231KK4/Sh7B2ROp/+UXviuC0QFAWNNr+u06DVZ3LFcCsE9+VT6/xG8cW37bsGvb12+14iD09Umg45x7yXpeVX/YH3tu3cDQ6OgIkS4M8fhq9aFo9OTqEORXRj9Up1hHLw5lVJBM/R/BE2MYGdXOv0POV/ORwofxxJ8Wfu4uBAc0Hnk1pxsgIXQBFd+LmkHETcyqdEE8XxFmog
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from tambora (62.56.83.178) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A715F5F0ACE58EA; Tue, 29 Sep 2026 14:15:14 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+	t=1790764404; c=relaxed/simple;
+	bh=83zD6hxx1OtIdH+AkiFyEIvPIHofx+5X1lpt58CFzTE=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=LyAdDMoVjKCkqgg4Sgect/1PCElde25oa/f5rn83Ghh5NlHXs/PlRBrQq8+0o8h8EFYH4rShEU3b59pHbBFlHYLVw1yDREY37kgsRqKLQFkkzfOtmlxZAyrbZM0FlAGqCkhDGY8iUxlDasLCce1G90a4rlxnhKltjWOeOfHcMXs=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=I3lcF0pt
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org D3CD54BA2E16
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=I3lcF0pt
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20260930103317716.DWQE.102121.HP-Z230@nifty.com>;
+          Wed, 30 Sep 2026 19:33:17 +0900
+Date: Wed, 30 Sep 2026 19:33:16 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Drop _pei386_runtime_relocator stub on aarch64
-Date: Tue, 29 Sep 2026 14:15:07 +0100
-Message-ID: <20260929131507.239767-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.51.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Cc: Christoph Reiter <reiter.christoph@gmail.com>, Johannes Schindelin
+ <johannes.schindelin@gmx.de>
+Subject: Re: [PATCH] Cygwin: console: Avoid deadlock with app execution
+ aliases
+Message-Id: <20260930193316.db7fee17d3f5ac97ba4fee13@nifty.ne.jp>
+In-Reply-To: <pull.11.cygwin.1790592366705.gitgitgadget@gmail.com>
+References: <pull.11.cygwin.1790592366705.gitgitgadget@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1790764397;
+ bh=OdpOFDOCiNxnQnuReEdgSysI/C/t/DvZxGBie9as7QQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To;
+ b=I3lcF0ptT7BkYlIGVRs1M9wnQtQ/FPz+0I+Sl4U8QEE7IyurRF0EGBxybhFKtv3LdY1T9lHE
+ z/15tSjeALiPJEBX1qoebl9t+ffDKanB59RhzvRFpLpIn7A7dvsS7gYM/D+nz6lpsnqNO9jqZZ
+ udVCj1x7DIxjzE3l/APlbmJSaXBeDV0HIzIZ5W2bRezRoutHrHmdx/2W1u7v4QVPo8Pg5KC4an
+ IAOrdn1w8Q3yM3QbdcP/Zp8SDeuRuB1ZoNqLDjVECwIUGsv51GE39MRPMM5UyW9cFqC79vktHO
+ Yxel1jky9VFLec0PA4D5XryCWWEzSRrpaJknwKIEv03xGWWA==
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On aarch64, don't emit a stub _pei386_runtime_relocator into the
-libcygwin.a import library, purely for satisfying a reference which ld
-no longer makes.
----
+Hi Christoph, Johannes,
 
-Notes:
-    The specific ld version mentioned here is a "forward-looking statement".
-    The actual version of ld this change appears in is not yet known.
+On Mon, 28 Sep 2026 10:46:06 +0000
+"Johannes Schindelin wrote:
+> From: Christoph Reiter <reiter.christoph@gmail.com>
+> 
+> Calling `winget.exe` through its app execution alias from an interactive
+> MSYS2 shell can leave the shell hanging after `winget.exe` exits. This
+> affects all app execution aliases, not only `winget.exe`.
+> 
+> App execution alias handling was introduced in 0631c6644e (Cygwin: Treat
+> Windows Store's "app execution aliases" as symbolic links, 2021-03-22),
+> and 6c3d26961d (Cygwin: termios: Handle app execution alias in
+> is_console_app(), 2025-12-10) taught `is_console_app()` to follow
+> aliases using another `path_conv`, which allocates cygheap memory.
+> 
+> 618eb90fc2 (Cygwin: console: Fix undesired mode change at exit of
+> non-cygwin apps, 2026-09-19) added a second `is_console_app()` call from
+> `wait_for_resume_if_necessary()`. Unfortunately, at that point,
+> `child_info_spawn::worker()` already holds the non-recursive
+> `cygheap_protect`, so following an alias tries to acquire the same lock
+> recursively and deadlocks.
+> 
+> Let's avoid running `is_console_app()` under that lock by instead
+> classifying the executable _once_, in `spawn_worker::setup()`, before
+> acquiring the cygheap lock, then cache and reuse the result for both PTY
+> setup and the post-resume wait.
+> 
+> Addresses: https://github.com/msys2/msys2-runtime/issues/372
+> Fixes: 618eb90fc2 (Cygwin: console: Fix undesired mode change at exit
+>  of non-cygwin apps, 2026-09-19)
+> Signed-off-by: Christoph Reiter <reiter.christoph@gmail.com>
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> ---
+>     Cygwin: console: Avoid deadlock with app execution aliases
+>     
+>     This hang was discovered really quickly after integrating v18 of the
+>     "Cygwin: console: Fix undesired mode change at exit of non-cygwin apps"
+>     patch into the MSYS2 runtime. Happily, Christoph Reiter jumped at the
+>     problem and came up with this patch.
+>     
+>     This is somewhat pressing for me, as I need to fast-track this patch
+>     into Git for Windows' fork of the MSYS2 runtime because Git for Windows
+>     v2.56.0 is due later today and I want to avoid shipping it with this
+>     regression. This urgency does not apply to Cygwin, of course!
+> 
+> Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-11%2Fdscho%2Favoid-hang-with-app-execution-aliases-v1
+> Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-11/dscho/avoid-hang-with-app-execution-aliases-v1
+> Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/11
+> 
+>  winsup/cygwin/fhandler/termios.cc       | 10 +++++++---
+>  winsup/cygwin/local_includes/fhandler.h |  5 +++--
+>  winsup/cygwin/spawn.cc                  |  2 +-
+>  3 files changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/termios.cc b/winsup/cygwin/fhandler/termios.cc
+> index 423ca9ea1..8f01a8b5e 100644
+> --- a/winsup/cygwin/fhandler/termios.cc
+> +++ b/winsup/cygwin/fhandler/termios.cc
+> @@ -779,6 +779,10 @@ fhandler_termios::spawn_worker::setup (bool iscygwin, HANDLE h_stdin,
+>    fhandler_pty_slave *ptys_primary = NULL;
+>    fhandler_console *cons_native = NULL;
+>  
+> +  /* This may resolve an app execution alias, which allocates cygheap memory.
+> +     Do it before child_info_spawn::worker() acquires the cygheap lock. */
+> +  console_app = !iscygwin && is_console_app (pc);
+> +
+>    for (int i = 0; i < 3; i ++)
+>      {
+>        const int chk_order[] = {1, 0, 2};
+> @@ -811,7 +815,7 @@ fhandler_termios::spawn_worker::setup (bool iscygwin, HANDLE h_stdin,
+>  	    ptys->setup_locale ();
+>  	  }
+>      }
+> -  if (!iscygwin && ptys_primary && is_console_app (pc))
+> +  if (ptys_primary && console_app)
+>      {
+>        if (h_stdin == ptys_primary->get_handle_nat ())
+>  	stdin_is_ptys = true;
+> @@ -852,9 +856,9 @@ fhandler_termios::spawn_worker::is_attaching (DWORD pid)
+>  
+>  void
+>  fhandler_termios::spawn_worker::wait_for_resume_if_necessary
+> -			      (path_conv &pc, PROCESS_INFORMATION &pi)
+> +			      (PROCESS_INFORMATION &pi)
+>  {
+> -  if (is_attaching (myself->dwProcessId) && is_console_app (pc))
+> +  if (is_attaching (myself->dwProcessId) && console_app)
+>      {
+>        DWORD t0 = GetTickCount ();
+>        while (GetTickCount () - t0 < 40 && !is_attaching (pi.dwProcessId)
+> diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+> index 465ca2dc3..2f8049a7a 100644
+> --- a/winsup/cygwin/local_includes/fhandler.h
+> +++ b/winsup/cygwin/local_includes/fhandler.h
+> @@ -2033,17 +2033,18 @@ class fhandler_termios: public fhandler_base
+>      bool ptys_need_cleanup;
+>      bool cons_need_cleanup;
+>      bool stdin_is_ptys;
+> +    bool console_app;
+>      tty *ptys_ttyp;
+>    public:
+>      spawn_worker () :
+>        ptys_need_cleanup (false), cons_need_cleanup (false),
+> -      stdin_is_ptys (false), ptys_ttyp (NULL) {}
+> +      stdin_is_ptys (false), console_app (false), ptys_ttyp (NULL) {}
+>      void setup (bool iscygwin, HANDLE h_stdin, path_conv &pc,
+>  		bool nopcon, bool reset_sendsig, const WCHAR *envblock);
+>      bool need_cleanup () { return ptys_need_cleanup || cons_need_cleanup; }
+>      void cleanup ();
+>      bool is_attaching (DWORD pid);
+> -    void wait_for_resume_if_necessary (path_conv &, PROCESS_INFORMATION &);
+> +    void wait_for_resume_if_necessary (PROCESS_INFORMATION &);
+>    };
+>  };
+>  
+> diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+> index 81be6e17c..37182ecb7 100644
+> --- a/winsup/cygwin/spawn.cc
+> +++ b/winsup/cygwin/spawn.cc
+> @@ -762,7 +762,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+>  	  DuplicateHandle (GetCurrentProcess (), wr_proc_pipe, pi.hProcess,
+>  			   NULL, 0, false, DUPLICATE_SAME_ACCESS);
+>  	  ResumeThread (pi.hThread);
+> -	  term_spawn_worker.wait_for_resume_if_necessary (real_path, pi);
+> +	  term_spawn_worker.wait_for_resume_if_necessary (pi);
+>  	}
+>  
+>        if (mode == _P_OVERLAY)
+> 
+> base-commit: 6bee3713a347ac9194f65a5c289f8f9cf2578a45
+> -- 
+> cygwingitgadget
 
- winsup/cygwin/Makefile.am                |  6 +++++-
- winsup/cygwin/lib/_cygwin_crt0_common.cc | 16 ++++++++++++----
- 2 files changed, 17 insertions(+), 5 deletions(-)
+Thanks for the investigation and the patch.
+The patch makes perfect sense.
 
-diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
-index 22b7b14bd..ba281779b 100644
---- a/winsup/cygwin/Makefile.am
-+++ b/winsup/cygwin/Makefile.am
-@@ -83,9 +83,13 @@ LIB_FILES= \
- 	lib/premain1.c \
- 	lib/premain2.c \
- 	lib/premain3.c \
--	lib/pseudo-reloc-dummy.c \
- 	lib/pthreadconst.S
- 
-+if TARGET_X86_64
-+LIB_FILES+= \
-+	lib/pseudo-reloc-dummy.c
-+endif
-+
- FHANDLER_FILES= \
- 	fhandler/base.cc \
- 	fhandler/clipboard.cc \
-diff --git a/winsup/cygwin/lib/_cygwin_crt0_common.cc b/winsup/cygwin/lib/_cygwin_crt0_common.cc
-index a22528ab4..4d4f63c7e 100644
---- a/winsup/cygwin/lib/_cygwin_crt0_common.cc
-+++ b/winsup/cygwin/lib/_cygwin_crt0_common.cc
-@@ -222,11 +222,19 @@ _cygwin_crt0_common (MainFunc f, per_process *u)
-   u->pseudo_reloc_end = &__RUNTIME_PSEUDO_RELOC_LIST_END__;
-   u->image_base = &_image_base__;
-   /* This is actually a dummy call to force the linker to load this
--     symbol for older apps which need it. Unfortunately, ld for x86_64
--     still emits this symbol when linking against static libs which
--     require pseudo relocation, so we can't drop this call and the
--     dummy function just yet. */
-+     symbol for older apps which need it.
-+
-+     Unfortunately, ld prior to 2.48 emits this symbol for PE+ targets when
-+     linking against static libs which require pseudo-relocation (even though
-+     it's unncessary for v2 pseudo-reloc, which has always been available for
-+     those targets), so we can't drop this call and the dummy function just yet.
-+
-+     Linking for aarch64 targets is assumed to be using ld 2.48 or later, which
-+     no longer emits that reference.
-+  */
-+#ifdef __x86_64__
-   _pei386_runtime_relocator (NULL);
-+#endif
-   return 1;
- }
- } /* "C" */
+I'll push the patch as is.
+
 -- 
-2.51.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
