@@ -1,175 +1,128 @@
 Return-Path: <SRS0=9Csj=H7=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-	by sourceware.org (Postfix) with ESMTPS id 2C1834BA5435
-	for <cygwin-patches@cygwin.com>; Fri,  9 Oct 2026 12:12:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2C1834BA5435
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by sourceware.org (Postfix) with ESMTPS id A2CDB4BA543C
+	for <cygwin-patches@cygwin.com>; Fri,  9 Oct 2026 12:13:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org A2CDB4BA543C
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2C1834BA5435
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::536
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791547978; cv=none;
-	b=L0GUW4wdyE+ZIk7pRx2NDoDn2ZCBD6BojsNpI0B/HxlDBM2eRcTwAV1dzUDKou5xrFBKazTYIHnfp47D7DH/vO1B5zU+73M55rzSWwnhtuFfD6KmqZ6eaXU4X3tAFQ0vlREysbSLUonDn+RjqNzQDBz92jvxMWYkBghqgP+4gDc=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org A2CDB4BA543C
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::62f
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791547981; cv=none;
+	b=SFtzI7vJyDe2tZatrhdNOqdcS6ArXClsTrPztbWVgcJD5EDgsCRr1XcaJxwsJuYjIAnvqRfyw3nsjuGtNez30E99isV80xKtunHfTTjnchsjNbApySHqfC/XeNENYvpPz716SYjIjhPgkXv2lsY+1vgmbxnRNLkvNk7FDh7Z68A=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1791547978; c=relaxed/simple;
-	bh=2eflQJgXhsiMMlzAtveRL08jxWWsmf1ORJ3K48SXNLE=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=FMHrks+a4q5gEvbkAPvoDLfLeP5gH+I7TlrEtcmqxy6F+z/sbT5uiK+xhJqQfgU02EGulS08g0vImffjIgHGCaQMtH4S4Pqyk8J3/0j3ixCQQspeJN2Frrzo2dMn8K3i6bZ6JzJ/f51hVMeOgzM9RD2bf6rub31ul+WEYKUhQpY=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=SVzSTuTf
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2C1834BA5435
+	t=1791547981; c=relaxed/simple;
+	bh=QmoinoI3Od24qfb9w9og4aoZ9Ee6rnSbrho0Jzm4pIE=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=mfdmz+I0Ird3wSRKF5eU2ixGZAVBWwCmLqM0R6379xZ0tuAd+7YaB554cD+ha3md22TvWprejicP7ZTrgJN3tilf/RoouNCxYC9bq37C/fGfzVjtEy8h39KPoQk9DkZJe/s2C2tTq9Q+elNxCnOuB1G+3Lqk0ZRfZ8lJLc8t6M0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=izHkNdKn
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org A2CDB4BA543C
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=SVzSTuTf
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1120136a12.0
-        for <cygwin-patches@cygwin.com>; Fri, 09 Oct 2026 05:12:58 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=izHkNdKn
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-2d032846c95so33525935ad.1
+        for <cygwin-patches@cygwin.com>; Fri, 09 Oct 2026 05:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791547977; x=1792152777; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1791547980; x=1792152780; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Rj8458djTpRjelNfylJXdyjuuQ9nDGsvxNIlS8JwJOA=;
-        b=SVzSTuTfXeB423jmV+C4uBMRsy0ed1+qH8Dsgid1cHfiDue4qH4V0K1xfLX6nQLTE+
-         JJ3npjtuzLW1j5CoXTrF5H8vR60dPNDeH1kJ8MwI/GJqnP7kS9UnTsyO4y2027C9Vv/o
-         5yIBAlK6ewRzSMLj4YVGl5VlkippwQDtRV2FC0GFeHCTa0psxLuQmv6tp/IMnFM9vVLc
-         MfagaEiP8n6NVFmu9p1ccriicw56ZAFvhEMuShFm25LzdUw3yRzxy0HdvbunfO5fHaGE
-         0pMa665o5rj/T4IRQ4bFvOIe48cGkXc/V7aQeVUpg7+H+tBFhwAFzP9gM1qF6EYpjrcR
-         konA==
+        bh=S0ow/5lVx0XG/BTIOe2+q7W/+spRGdEOzUV4WlZTi0s=;
+        b=izHkNdKnMk3B1BbDthQYtFqxkrA9yEczoucVBXlDLPGuQLJM1hRLiOcspwY81HA1vP
+         dfbp91XrdRJBC9j4kgzqzhfuX1XNcFDAwk3QGdW2qaXC/Bf8VIXgz0m+PZ+Ikd7OIzj6
+         1evUJxeEF+t0aLcHOV8MJxfMgIIphku9y+W+PfPnLMWnw6j89za3Mws/9tI+EkxX+Qfu
+         ydwqbbo6o0fGONQofSAqoppLxBN4ePjqczEV8oFOuDa19JXlirJ9Yij0hy2iVzQNbb6X
+         8fAOSHKUaw/GE6nnfFDFB+re60QQM4IceQ/YMJQ4uNpRi17+it5F889vv0fIo/J2A6MJ
+         T9Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791547977; x=1792152777;
+        d=1e100.net; s=20260707; t=1791547980; x=1792152780;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Rj8458djTpRjelNfylJXdyjuuQ9nDGsvxNIlS8JwJOA=;
-        b=ia4TZ/8Zjc7d6hHsEaKTq02HO38Y/JTWJy/o20IJ8DnA9HfKWL6pUF4wNBVFPKNCFG
-         69WktuZrpKJNmH0ZlKqqR2NTePCTZp45xD6nhnK81CKJCFJuXcHVogPgdnPMJ2IUtwVS
-         6iXCU5zYps9u36M0K4vYT2hFSXQbe3sHGth2R4UfeZjlO25j1PBFNO9UknyIgkhZ1x5u
-         wgVVxEuTskGdFlePgdhTctuG27vfLBTYKU3eNkDXcFbqkHOqB/7Xa34N1nzPuIvf9Mo/
-         qYlDtwTTd1p9Zdg8Ls9UUMgWn9JQ8zxRstk6ME5ReOSsUfrij8cu15KrtOhFpMBCne7t
-         Kh0g==
-X-Gm-Message-State: AFq9FYKWcUgUY01Fn/FS0SC3rlsbbKd/L4HcJVbYBp8VPNkVtZgKuiu8
-	yKWdPcIgPS44TWpCezJyaQqDEsJhR6iYN/rokC5328Wx6EwxzK+ng2EJt6rymA==
-X-Gm-Gg: AYBFou0CEKMO4VgswyYML1aLTJBS1cF19g+9bjyV5gnRT6IgfcrNJC0gqruiKgSutF0
-	X8x5VVSodnT9xWG4dGUEzreqKfqU9u7k9PcXpAGhLonKwcZTfv2UBrf7Cmf/jzvYOz3UA4spE/B
-	CmVDtZex1iFaFsgZdsW5SmfYhJL4ZLGAEUNNfRhjG8Iz8/tM8Xg5PBKMjgmtH4+umhZtFIuENUq
-	yjCxwWzPcnApLUrzThp7jiQpnY1RsC/wzjzsufKzbqoXhNlS+nzUKF64fAZ5vw6VUtGko43KDh1
-	Hae1n66ZrY1K4ogcy0gn4N7nJybxxmzT+Bt+3o3rICKpXYpR8Mt99D0KOsAMJ98yitoujSsP7Y+
-	sRQAG/yXNTDAAMYsUxUnYPql+y4srVrhOtxLQIMSk3JE/i+XbaBz1Akj/lRCVbu1afI50gxQT+b
-	Pd7eglBhEWWT5jJ+JZwrluurdFSx0iR5Jk2NZkB4Cccx+9R8h69+Zz8yb2rSLosFNzQUBmQbQ=
-X-Received: by 2002:a17:90a:d604:b0:3a7:ed4d:afeb with SMTP id 98e67ed59e1d1-3ab3ab35683mr1094311a91.27.1791547976828;
-        Fri, 09 Oct 2026 05:12:56 -0700 (PDT)
+        bh=S0ow/5lVx0XG/BTIOe2+q7W/+spRGdEOzUV4WlZTi0s=;
+        b=g+kfCsnFxf1bpzER0cndFIRDW7IfznsutUxcIjuY6Na6f+XkreWt2yNHY0knIfJWh3
+         ew5pe6JQJbrCZOUlhOuP3U3ZKWWqXtJDMizxwGXZapA7f8Ju00DMK2egowBiAfiVHviJ
+         Q9BQch7pF8WxEmk1iQEP2hCDpMNuyK62EL0r2M5bAdMmIejMW7kjGMSpiaFqb+UXb6GA
+         YmFHik1BqO3PQ3eIATj3+odYBE2mFHrnUoLMraAJASgf9RNqZckMzlMDqgNhA497VV2l
+         8tREzB8uRNelkOIXEkyrvxyXFS2pQTdIuh6/5Rk+4YNQs9qKYQlt3OvWXnbjaehO0i4S
+         /WUA==
+X-Gm-Message-State: AFq9FYIMttyTg8xBrqaG3qDGWLunayOPF8LBOOGfqLYIZe4oIkIDJEeW
+	3mAa9WFSal49nsGCiNvSbE5WHEVHAlnKaPfjoL/HlF7Oe2eU2CsG4sKUSNFm5w==
+X-Gm-Gg: AYBFou09cYbKNvk9qRIuDpatRmT76QVLlVad1/iGd/2FJ/qzsUoa40YThQDfPx9vs3q
+	hJP1JDkUTX8ghnpjg2pnm/bbRhWlmhCPTKwNUrhuwexzb841RJN/DJzTX4AUON77KDTh1A1QUiQ
+	O6PUGw4OVCXgrWjab2lKdler+xKVAS6EGW4KLB1eVTeBfBYkh9+teDDIc+sy9+W4C9deEpNFA2P
+	PGoI7KRVU2gnp79Sy12Ox1olj6EQsnwipG76JVcgugfSlRdPFFotHGhhqtyYbkwFyHU7pRJV/TB
+	y+BvE/UjoIk9uVoqkxGFg5LCbLOv8hqC0BqIhg4uUCag88NmhecMZCm/sLm7skmyqlyN0mcYa78
+	2sMWMOPdA6A/x2UXbXMT4G+Z1O8iFymmT2xEAoOT13l0fwONWAF63wy+p5DtAov0bvCPvik2Gg1
+	e4CdH6FW8eNAjG39XawJmWN8J8lG0ndV4dvx5AcYm94yShPeOVeb13HQ23ZhVTrveUGHXCWrZvy
+	+FdzHfeuQ==
+X-Received: by 2002:a17:903:230b:b0:2dd:c100:a5e1 with SMTP id d9443c01a7336-2e842df9c64mr14858935ad.53.1791547980410;
+        Fri, 09 Oct 2026 05:13:00 -0700 (PDT)
 Received: from [127.0.0.1] ([20.169.102.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3369530a91.4.2026.10.09.05.12.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422fb8b4sm7273485ad.82.2026.10.09.05.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 05:12:56 -0700 (PDT)
-Message-Id: <pull.13.v2.cygwin.1791547975.gitgitgadget@gmail.com>
-In-Reply-To: <pull.13.cygwin.1791537820.gitgitgadget@gmail.com>
+        Fri, 09 Oct 2026 05:12:58 -0700 (PDT)
+Message-Id: <9a4e55cd7642c4211a4e4dcfdb6a0ac14dc30e3a.1791547975.git.gitgitgadget@gmail.com>
+In-Reply-To: <pull.13.v2.cygwin.1791547975.gitgitgadget@gmail.com>
 References: <pull.13.cygwin.1791537820.gitgitgadget@gmail.com>
+	<pull.13.v2.cygwin.1791547975.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Fri, 09 Oct 2026 12:12:53 +0000
-Subject: [PATCH v2 0/2] Cygwin: console: Preserve saved modes with redirected stdio
+Date: Fri, 09 Oct 2026 12:12:54 +0000
+Subject: [PATCH v2 1/2] Cygwin: console: Preserve saved modes with redirected
+ stdio
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Cc: Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
+    Johannes Schindelin <johannes.schindelin@gmx.de>
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-An issue was reported in https://github.com/msys2/msys2-runtime/issues/379:
-console output mode drops to 0 (ENABLE_PROCESSED_OUTPUT off) after a native
-child process tree exits. The symptom can be verified in a Windows Terminal
-with this bash script (requires a non-Cygwin Python, in this instance it is
-using MSYS2's /ucrt64/bin/python3.exe):
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-#!/usr/bin/env bash
-set -e
+With console stdin but captured stdout and stderr, a runtime child can
+replace the shared saved output mode with zero. A later invocation
+restores that value, rendering CR/LF as glyphs instead of line breaks.
+Redirected stdin with console output exposes the corresponding
+input-mode omission.
 
-script=$(mktemp)
-trap 'rm -f -- "$script"' EXIT
-cat > "$script" <<'PY'
-import subprocess
-subprocess.run(["pacman", "--version"], check=True, capture_output=True, text=True)
-print("line one")
-print("line two")
-PY
+Console handlers restore both modes on close, even with redirected
+stdio. Keep their backups valid regardless of whether opening the
+handler needs to switch either mode.
 
-for run in 1 2; do
-	/ucrt64/bin/python3 "$script"
-done
+Addresses: https://github.com/msys2/msys2-runtime/issues/379
+Fixes: bbd3710fc834 ("Cygwin: console: Set console mode only if
+  std{in,out,err} is console")
+Assisted-by: GPT-6.1
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+---
+ winsup/cygwin/fhandler/console.cc | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-
-With MinTTY, it works as expected, but with Windows Terminal, it prints
-this:
-
-line one
-line two
-line one♪◙line two♪◙
-
-
-The culprit is this: When standard streams (such as stdout or stderr) are
-redirected away from the console while stdin remains a console handle,
-fhandler_console::open() skipped populating the process-local
-prev_output_mode_backup (or prev_input_mode_backup). Because these backup
-fields remained uninitialized (zero), subsequent console mode restoration
-upon process exit in close() transferred that zero backup into the shared
-con.prev_output_mode, which then got restored to the Windows console handle
-by the next process invocation, clearing flags such as
-ENABLE_PROCESSED_OUTPUT.
-
-To resolve this, fhandler_console::open() now unconditionally populates
-prev_input_mode_backup and prev_output_mode_backup from con.prev_input_mode
-and con.prev_output_mode under cons_mode_mutex before checking whether
-standard handles are consoles.
-
-A companion test case in winsup/testsuite/winsup.api/console-mode.c
-exercises child execution under redirected standard streams via cygrun and
-verifies that ENABLE_PROCESSED_OUTPUT is preserved across invocations.
-
-Changes since v1:
-
- * While upstreaming from MSYS2, I missed that the cygrun environment
-   variable went away and I now have to use mingwtestdir to construct the
-   value, which is now fixed. (Sorry, I had missed that because GitHub seems
-   to have disabled Actions in https://github.com/cygwingitgadget/cygwin; I
-   re-enabled them.)
-
-Johannes Schindelin (2):
-  Cygwin: console: Preserve saved modes with redirected stdio
-  Cygwin: testsuite: cover console mode preservation with redirected
-    stdio
-
- winsup/cygwin/fhandler/console.cc          |  5 +-
- winsup/testsuite/Makefile.am               |  1 +
- winsup/testsuite/winsup.api/console-mode.c | 69 ++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 2 deletions(-)
- create mode 100644 winsup/testsuite/winsup.api/console-mode.c
-
-
-base-commit: 8f145421c964d58539f93d2615a338734772db2c
-Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-13%2Fdscho%2Fconsole-output-mode-disables-process-output-v2
-Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-13/dscho/console-output-mode-disables-process-output-v2
-Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/13
-
-Range-diff vs v1:
-
- 1:  9a4e55cd7 = 1:  9a4e55cd7 Cygwin: console: Preserve saved modes with redirected stdio
- 2:  a26e05414 ! 2:  b9c0afe80 Cygwin: testsuite: cover console mode preservation with redirected stdio
-     @@ winsup/testsuite/winsup.api/console-mode.c (new)
-      +  assert (close (fd) == 0);
-      +  snprintf (command, sizeof (command), "\"%s\" child", exe);
-      +  const char *arguments[] = { "cygrun", "-notimeout", command, NULL };
-     -+  assert (getenv ("cygrun"));
-     ++  const char *mingwtestdir = getenv ("mingwtestdir");
-     ++  assert (mingwtestdir);
-     ++  char cygrun[strlen (mingwtestdir) + sizeof ("/cygrun")];
-     ++  sprintf (cygrun, "%s/cygrun", mingwtestdir);
-      +  /* cygrun starts the child without Cygwin's spawn bookkeeping. */
-      +  for (int i = 0; i < 2; ++i)
-     -+    assert (spawnv (_P_WAIT, getenv ("cygrun"), arguments) == 0);
-     ++    assert (spawnv (_P_WAIT, cygrun, arguments) == 0);
-      +  assert (GetConsoleMode (output, &mode));
-      +  return !(mode & ENABLE_PROCESSED_OUTPUT);
-      +}
-
+diff --git a/winsup/cygwin/fhandler/console.cc b/winsup/cygwin/fhandler/console.cc
+index 098b4e7eb..71a502c12 100644
+--- a/winsup/cygwin/fhandler/console.cc
++++ b/winsup/cygwin/fhandler/console.cc
+@@ -2201,15 +2201,16 @@ fhandler_console::open (int flags, mode_t)
+     }
+ 
+   WaitForSingleObject (cons_mode_mutex, mutex_timeout);
++  /* close() restores both modes even when stdio is redirected. */
++  prev_input_mode_backup = con.prev_input_mode;
++  prev_output_mode_backup = con.prev_output_mode;
+   if (in_is_console && con.curr_input_mode != tty::cygwin)
+     {
+-      prev_input_mode_backup = con.prev_input_mode;
+       GetConsoleMode (get_handle (), &con.prev_input_mode);
+       set_input_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+     }
+   if (out_is_console && con.curr_output_mode != tty::cygwin)
+     {
+-      prev_output_mode_backup = con.prev_output_mode;
+       GetConsoleMode (get_output_handle (), &con.prev_output_mode);
+       set_output_mode (tty::cygwin, &get_ttyp ()->ti, &handle_set);
+     }
 -- 
 cygwingitgadget
+
