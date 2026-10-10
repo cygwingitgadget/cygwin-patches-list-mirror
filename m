@@ -1,101 +1,110 @@
-Return-Path: <SRS0=F8mx=IA=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.227])
-	by sourceware.org (Postfix) with ESMTP id AE1464BA2E10
-	for <cygwin-patches@cygwin.com>; Sat, 10 Oct 2026 13:28:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org AE1464BA2E10
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org AE1464BA2E10
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.227
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791638931; cv=none;
-	b=msKuvhCXe9riI5+xMvqjgCe4co3b5BeEVToqwohqfALbHtxvOs16Hz3lyPZfUxuPNEJQDrf0gX0B8RVhowwxmDwzQtI/RrzxwfoToY6yTbaI9CqacwHdm7PdCDePebbvyAYbDa+8VBTtvU0+27PFb+WJLbJvL6lF2h0uu5so27M=
+Return-Path: <SRS0=DBgD=IA=nexgo.de=Stromeko@sourceware.org>
+Received: from mr3.vodafonemail.de (mr3.vodafonemail.de [145.253.228.163])
+	by sourceware.org (Postfix) with ESMTPS id 941AD4BA2E10
+	for <cygwin-patches@cygwin.com>; Sat, 10 Oct 2026 21:30:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 941AD4BA2E10
+Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=nexgo.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nexgo.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 941AD4BA2E10
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=145.253.228.163
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791667859; cv=none;
+	b=kS+WZ925JAlYSUEk9AKLGBAV0S9GZ2QV1WTQrTiJYwhaSxR7J9rABWTJo9oVHbt7OAgn7BDAfFUztoxQ+Y7WoHx5d7ePsK1tRSOykvNCSf4xQMiJetC60+dHc16d8ir4DUz07VxTpXtbnAEmoF5j4chA65Jfmu5vB/HdPLET/Vs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1791638931; c=relaxed/simple;
-	bh=m87dJIeYPjO2oYIFn3Or29uZuj0YVGxukR5WlcGG2uQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=PEzrb42xKuAPU5XUjKUAyFOWykWW9v5iPNiNlw+OyzdM+MaIXvZsMyFyGBlRiWBwuZc+EMN2G8PNJBNGbxmobCw55fEFtUTgIGXhH7YpBMy4NeIojh+NGXMT0/Jjqw52QVy5exbfcaxEkl6na5PQFXKAkQ8FARRMo2NuH0RmpLg=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org AE1464BA2E10
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A7161CE0D126003
-X-Originating-IP: [62.49.190.104]
-X-OWM-Source-IP: 62.49.190.104
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=30/300, class=clean
-X-RazorGate-Vade: dmFkZTEmLgwzxlvjNVzL2Te50w0oT3NKXEhVGY/x31ta8fd8+9FGQ+UTZbCs9ppp8PlgkELpcJfp94QBp0TomHBM2ajV1mkBwpSMVtEvA2wNvTdEDsay/moliaW0yJXsHl0hMGMZCA/vf4ofIA3k4YB310V0CoXcdjTQ0Z591LJthB4ZLtr9DjunnX6TLepbAob0yH4fkqAS5hGyVRDPb+FYKPaSwa8JnpDYVDrFw8TlbfGYi4tku0DKsTZX5kUjl2Z56ZbeKiGBnzhXmVo/QmlW63BM89KQn1ABVh+phMceJTj5YSwhSovMQSbwYSSrc0PiJwqiZOnVHVWQdo8RFa7rVAldtpgD3/M0x67wrht4kClpTT0QQTzoM6Rkjtf9E2htAVRp5l2fePjKATlpNF7ld9GDc6Mf8Be2wjgedgiNF0y1hPuTAluxbhKY3lxr0hdHOO9PJtXTC4ZmH/0Vd3KeccX8BlZYknGL6Z4bXJmthWI1vUtbTPKF2q/qK5/qxt7spNR1B9+mJzBoFwEok1qtFWr9acTWac46YXq7S0UTPBhpdGSOsZ7/QNpDRrbibbI3mJYowZIzoo2EwEMUuGwJX0LUjHTwyah9wieAOPsFUxjDtPncTljkfl2jL22BuBbgbVVqAS2kVqLr8eZlyxBmGJh/HccrBU3c6z2tFtm5QsICOg
-X-RazorGate-Vade-Verdict: clean 30
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.49.190.104) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A7161CE0D126003 for cygwin-patches@cygwin.com; Sat, 10 Oct 2026 14:28:46 +0100
-Message-ID: <c660a54d-e63a-4f7f-ae57-380c10c184d5@dronecode.org.uk>
-Date: Sat, 10 Oct 2026 14:28:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	t=1791667859; c=relaxed/simple;
+	bh=+4N5r1KKlWrsNviTo3GmleO0AzRDXmh7DvpMFNPI4Ps=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=ohd6WCsKuaWuAQ9mBodFnFF+EpMVl/mEQoKvE2GffZJs60trK1GHSsmQxO6FrP8+edza7nn8q/K+lS5Ln9nsJqM9X6KayEtn4iAtG3ZuuV4rjbFri6I3G1z25roElRxKwkM1KUuru/nu5mJLxx2JsgsZ4px+/KDrkql8guevcxY=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (1024-bit key, secure) header.d=nexgo.de header.i=@nexgo.de header.a=rsa-sha256 header.s=vfde-mb-mr2-23sep header.b=bJ8yJkjF
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 941AD4BA2E10
+Authentication-Results: sourceware.org;
+	dkim=pass (1024-bit key, secure) header.d=nexgo.de header.i=@nexgo.de header.a=rsa-sha256 header.s=vfde-mb-mr2-23sep header.b=bJ8yJkjF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nexgo.de;
+	s=vfde-mb-mr2-23sep; t=1791658880;
+	bh=lRhNC7wZ3bzamRI1n4l15NPavrtuIeWsZO/NYeKn14E=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:User-Agent:
+	 Content-Type:From;
+	b=bJ8yJkjFb4T/KoCcfAO55NJZJtoJ9JkRjpvl6SaHpMQNeBfoVYqIBtukGAWW2ZCuq
+	 Lb0PcneE+HjSutvK5HDxL3xXvwqroVbrMtwT9TLddCIflNLtCN9zv9r28YqAbcratO
+	 Rc+16oUQQhd2WwctZKOsoPNddojDSkYRYPzuNUVA=
+Received: from smtp.vodafone.de (unknown [10.5.0.38])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mr3.vodafonemail.de (Postfix) with ESMTPS id 4j2CkS2Wcfz3sHq4
+	for <cygwin-patches@cygwin.com>; Sat, 10 Oct 2026 19:01:20 +0000 (UTC)
+Received: from Gerda (p54a0c349.dip0.t-ipconnect.de [84.160.195.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.vodafone.de (Postfix) with ESMTPSA id 4j2CkM6sMvz92B3
+	for <cygwin-patches@cygwin.com>; Sat, 10 Oct 2026 19:01:12 +0000 (UTC)
+From: ASSI <Stromeko@nexgo.de>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] Cygwin: sequencer: Implement /dev/sequencer
+In-Reply-To: <c660a54d-e63a-4f7f-ae57-380c10c184d5@dronecode.org.uk>
 References: <20261007192542.1049-1-takashi.yano@nifty.ne.jp>
- <b087383d-0d79-4ecb-88a4-42b0fecf0602@maxrnd.com>
- <d3b28759-be02-418b-af63-ef9d7169de42@dronecode.org.uk>
- <20261009133836.b9c96eec087ebb9d54784b0e@nifty.ne.jp>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <20261009133836.b9c96eec087ebb9d54784b0e@nifty.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,BODY_8BITS,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+	<b087383d-0d79-4ecb-88a4-42b0fecf0602@maxrnd.com>
+	<d3b28759-be02-418b-af63-ef9d7169de42@dronecode.org.uk>
+	<20261009133836.b9c96eec087ebb9d54784b0e@nifty.ne.jp>
+	<c660a54d-e63a-4f7f-ae57-380c10c184d5@dronecode.org.uk>
+Date: Sat, 10 Oct 2026 21:01:09 +0200
+Message-ID: <87pkxhe5xm.fsf@Gerda.invalid>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-purgate-server: smtpa07
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-size: 2330
+X-purgate-ID: 155817::1791658876-41413B9E-E73FD6CE/0/0
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 09/10/2026 05:38, Takashi Yano wrote:
-> Hi Mark, Jon,
-> 
-> Thanks for having a look.
-> 
-> On Thu, 8 Oct 2026 11:29:41 +0100
-> Jon Turney wrote:
->> On 08/10/2026 03:57, Mark Geisert wrote:
->>> Hi Takashi,
->>>
->>> On 10/7/2026 12:25 PM, Takashi Yano wrote:
->>>> This is an experimental implementation of /dev/sequencer for the
->>>> external MIDI devices. Currently, only output is supported.
->>>>
->>>> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
->>>> ---
->>>> v2: Use archetype.
->>>>
->>>>    winsup/cygwin/Makefile.am               |   1 +
->>>>    winsup/cygwin/autoload.cc               |   7 +
->>>>    winsup/cygwin/devices.cc                | 847 ++++++++++++------------
->>>>    winsup/cygwin/devices.in                |   1 +
->>>>    winsup/cygwin/dtable.cc                 |   3 +
->>>>    winsup/cygwin/fhandler/sequencer.cc     | 452 +++++++++++++
->>>>    winsup/cygwin/local_includes/devices.h  |   1 +
->>>>    winsup/cygwin/local_includes/fhandler.h |  53 ++
->>>>    8 files changed, 954 insertions(+), 411 deletions(-)
->>>>    create mode 100644 winsup/cygwin/fhandler/sequencer.cc
->>> I'm not familiar with how Cygwin defines its devices so I may be out to
->>> lunch with this observation, but...
->>>
->>> Isn't devices.cc built by cygwin/scripts/gendevices?  cygwin/Makefile.in
->>> seems to show that.  Maybe I'm oversimplifying what's really going on
->>> (and am, thus, out to lunch).
->>
->> This is correct, but the file is checked in for "historical reasons".
->>
->> (since it requires the obscure 'shilka' tool from the cocom package to
->> regenerate. In pre-git times I think it was possible do a build without
->> it, but the way git arranges timestamps prevents that).
-> 
-> What happens if devices.cc is removed from git repository itself?
-> Will anything problematic happen?
-Probably nothing.
+Jon Turney writes:
+>> What happens if devices.cc is removed from git repository itself?
+>> Will anything problematic happen?
+> Probably nothing.
+>
+> But I know this has been on Corinna's hit list for a long time, so if
+> someone is going to touch this, the ideal outcome is just to remove
+> the reliance on cocom entirely.
+>
+> (I did start taking a look at using re2c here instead, but that kind
+> of fell off my list. In any case, deep archaeology would be needed to
+> discover the performance drivers behind the current implementation...)
 
-But I know this has been on Corinna's hit list for a long time, so if 
-someone is going to touch this, the ideal outcome is just to remove the 
-reliance on cocom entirely.
+The thing that it has going for it is that it never backtracks, thus
+only reads any byte once and only reads in forward direction.  It also
+never looks at parts of the string it doesn't actually need.  But then,
+these are C and not counted sttrings, so to know the length of each it
+has already traversed it to the final '\0' anyway (which ensures
+everything is hot in cache at least).  THe switch tree is at most three
+levels deep, but I haven't looked if the inner switches that deal with
+multiple cases actually optimize to a single or multiple comparisons.
+For the general tokenization that this was invented for it's almost
+certainly close to optimal, but we have a more limited set of "keywords"
+so that may not hold, although I think the trie-structure that Shilka
+uses is hard to beat in general.  What needs to be split off in general
+is the numbered suffixes, trying to handle these like keywords is
+insane.  It also makes dynamic device generation tricky (I've looked at
+that and failed, but it's been too long ago to remember exactly how).
 
-(I did start taking a look at using re2c here instead, but that kind of 
-fell off my list. In any case, deep archaeology would be needed to 
-discover the performance drivers behind the current implementation...)
+Also, the frequency of each string could be used (which is not done for
+Cygwin, but probably should be) and that would also influence certain
+other algorithms like compressed hashes.  I thik it's unlikely that a
+general regex engine will be in the top five performers, but I haven't
+tried either.  If we had representative traces of devices lookups,
+that'd be the perfect task for AI to do a benchmark study on=E2=80=A6 :-P
 
+Last but not least, AArch64 on the horizon adds yet another wrinkle.
+
+
+
+Regards,
+Achim.
+--=20
++<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+
+Wavetables for the Waldorf Blofeld:
+http://Synth.Stromeko.net/Downloads.html#BlofeldUserWavetables
