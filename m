@@ -1,73 +1,156 @@
-Return-Path: <SRS0=uTC2=ID=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo010.btinternet.com (btprdrgo010.btinternet.com [65.20.50.244])
-	by sourceware.org (Postfix) with ESMTP id 3FC7B4BA23D3
-	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 13:06:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3FC7B4BA23D3
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3FC7B4BA23D3
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.244
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791896799; cv=none;
-	b=AJ3vJgtwp9XcqIqDxuv+s6CvpBDez/5WcAZbCBTXUkIUQvol3ArS8SIF8PirtcmC1eaZiTSKI0GfIfra2FAb5Q+17wkcnl7pufshOYbcs+pS1lmqWkqflDg6opikXoDOvp19NBuX9yIAUxNxj3Sw/GRRZ4eFLr8z19KYSG6xypU=
+Return-Path: <SRS0=ii+b=ID=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [106.153.227.37])
+	by sourceware.org (Postfix) with ESMTPS id 268DF4BA2E14
+	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 14:37:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 268DF4BA2E14
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 268DF4BA2E14
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.37
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791902253; cv=none;
+	b=YET/nKY8IwS84+CtTDDnSORjagE8nLShXswtRi2gh4i5Dsz5VQRXbP/B4UEVAEMLpvJ7GrsONsOnl60CRYBgn3/TQKQMZJJgvtxV82jXx22XnFEhejfzZuD1BHN5aI8Wk7gRHRKvBP/2tRWnx47op3M5ZPUd2zet0UMbHjHPDPs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1791896799; c=relaxed/simple;
-	bh=lYqx/tU5199ZYwoiQKqN4YgoGx8CCHDWylBsCoSOcMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=kFoP03p5MBdKoecOLQEJE8ueqyLHEmwlZXe3uAzhh5VTRMZSde2oUDwZIpLuVLQ2VYkiyIdQejxlC6ydoBMhHAQitwqT/8+wY26/2jzXFgqV+c5lHN6iaIRSg7L417Hc0f//4O0gYzH/tW99ZBSHAbx8uFLCnP2GW06CEb+J89g=
-ARC-Authentication-Results: i=1; sourceware.org
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A989FAD085B308D
-X-Originating-IP: [62.49.190.104]
-X-OWM-Source-IP: 62.49.190.104
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=79/300, class=clean
-X-RazorGate-Vade: dmFkZTF1XlttF1Qm4XQ6e/dOyQsps33QX1HYJsPAv7b9kNtDtGMTtsv0pAb/GYPhy9CUFLyliyjfqBNnVe9y77XFVmFZjaRxnF8NuUVNJGIRys9MzC4FQIQmZwI3b+X2h6ZMAuGcCArfdi0afPNvUbHFUncB4KPKaQZWabTZOGxU+ZtASmA7M1uaSbCWalAyhppWgGy3ORMKSv8vXuvJC1Vznh8dsVlC9l3elkDNiTthnav6ir0urOOwiUa6XyNbtmfltiNGZbByAf6B8B1B9uw2IpEaRCVlHhgFyK1VF2gfxmQuGbNlPCSL6UkaLaUTJKVV1cTDioqENtLyIWGpXVzE7jA0LbRviLKRrpn6hOSuYg5Jr5hy2eACX+lZkB9f9sT3KS6D5MmlTnK8UuR08Q5FSs5yxhQ3eHKqFb9tLli/UIIlh9OElWCL4VTW86q4cG6xQ0Sal72vKJqUBbJTxD5sE707OnM/3XBidaYHN6V+LykCTYLPxcfRaJkB2jLgBoXaRsB2z/dW/8HUqjh0lhEdMiqspubgLlvKJfUcif5bROjn0IPnHuc5R7XPqT54bhIXq50mt9YeDQsATpC7kFrFZutpGMdmcoNPf+rRlYPGKtjITogoHdl0L41MH5bh0fhRs3jzjgtg0g/ulNuOXdYrHeCeGHxPXVMQe2Z5PcVj0doykg
-X-RazorGate-Vade-Verdict: clean 79
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.49.190.104) by btprdrgo010.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A989FAD085B308D for cygwin-patches@cygwin.com; Tue, 13 Oct 2026 14:06:29 +0100
-Message-ID: <e7e33944-9c71-46e3-b311-e4596afbaa82@dronecode.org.uk>
-Date: Tue, 13 Oct 2026 14:06:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cygwin-htdocs/packaging-hint-files.html: update SPDX spec
- to 3.0.1
-References: <0de3fd2021ffe58cc5657c1ebb5aaa1decd89ae0.1791229333.git.Brian.Inglis@SystematicSW.ab.ca>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <0de3fd2021ffe58cc5657c1ebb5aaa1decd89ae0.1791229333.git.Brian.Inglis@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,KAM_SHORT,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	t=1791902253; c=relaxed/simple;
+	bh=iI9DpheOG2RHp2YkzHJ/OLQAXxmsLAzCPmwU9zqn/bM=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=HR97n35ZApJG0BOue5O2uHUAD5c/anhfRQAIcgM25Skvg6SOG4ZHkM6gkbGyMRqee8DaBz/gbPzSTpzhN20S+/pUhe4pR19TuITiOiyadWkz5cw+lJ25vFdNu0IKdZAsuVep+rpQaGIMznl7uZvNJ4wIQkmKfZJ2Dhb1sYk3RqA=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=k074rQqG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 268DF4BA2E14
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=k074rQqG
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20261013143731020.GLJT.117312.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 23:37:31 +0900
+Date: Tue, 13 Oct 2026 23:37:28 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2 0/2] Cygwin: console: Preserve saved modes with
+ redirected stdio
+Message-Id: <20261013233728.4857bdd673eb95cdef90fb87@nifty.ne.jp>
+In-Reply-To: <pull.13.v2.cygwin.1791547975.gitgitgadget@gmail.com>
+References: <pull.13.cygwin.1791537820.gitgitgadget@gmail.com>
+	<pull.13.v2.cygwin.1791547975.gitgitgadget@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1791902251;
+ bh=beM/DocuWG3cp+sESh2U16dyphJBMpvoeDJuRWBXF2Y=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=k074rQqG9iENHB+FdOsJodv1JaPaaTl8vQNYENPdPV+DmcSFCdb+RxB0lwIYzZBBlmgVPJRe
+ bir+B6CYXZTNiBIjc4u6pPtoABpr/vLl+fBzkihZ3zYyYkfHiQkabH2bYFh8uAowMLULigGD1j
+ L7y8X8KOUOcIM2JL/3IolSz43kSo+VVrBXAwdYnu++fb+wEelsf2bgHQk7vzYv5w68mlIRLFTX
+ 0JyXUsIDxhT9HAtqSaLO4XDoaoepi/vB/h5rPIoEcrqstgAs0OsD64KuPejm/meiJe24YIvTXi
+ IuCk2ddloJ3BmNsimDdvmDEW+JW/3menkCIDHnD8AV5A2ECQ==
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,POISEN_SPAM_PILL,POISEN_SPAM_PILL_1,POISEN_SPAM_PILL_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 05/10/2026 20:42, Brian Inglis wrote:
-> Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-> ---
->   packaging-hint-files.html | 9 +++++----
->   1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/packaging-hint-files.html b/packaging-hint-files.html
-> index 291f9ddc6244..c5108fbd5906 100755
-> --- a/packaging-hint-files.html
-> +++ b/packaging-hint-files.html
-> @@ -418,10 +418,11 @@ version: <i>version-identifier</i>
->   
->     <li>
->       <p>
-> -      <code>license</code> is
-> -      an <a href="https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/">SPDX
-> -      license expression</a> for the <a href="https://spdx.org/licenses/">open
-> -      source license(s)</a> of the package source code.
-> +      <code>license</code> is an
-> +      <a href="https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/">
-> +	  SPDX license expression</a> for the
-> +      <a href="https://spdx.org/licenses/">open source license(s)</a>
-> +      of the package source code.
->       </p>
->     </li>
->   
+Hi Johannes,
 
-Applied. Thanks!
+Thanks for the patch
+
+On Fri, 09 Oct 2026 12:12:53 +0000
+Johannes Schindelin wrote:
+> An issue was reported in https://github.com/msys2/msys2-runtime/issues/379:
+> console output mode drops to 0 (ENABLE_PROCESSED_OUTPUT off) after a native
+> child process tree exits. The symptom can be verified in a Windows Terminal
+> with this bash script (requires a non-Cygwin Python, in this instance it is
+> using MSYS2's /ucrt64/bin/python3.exe):
+> 
+> #!/usr/bin/env bash
+> set -e
+> 
+> script=$(mktemp)
+> trap 'rm -f -- "$script"' EXIT
+> cat > "$script" <<'PY'
+> import subprocess
+> subprocess.run(["pacman", "--version"], check=True, capture_output=True, text=True)
+> print("line one")
+> print("line two")
+> PY
+> 
+> for run in 1 2; do
+> 	/ucrt64/bin/python3 "$script"
+> done
+> 
+> 
+> With MinTTY, it works as expected, but with Windows Terminal, it prints
+> this:
+> 
+> line one
+> line two
+> line one♪◙line two♪◙
+> 
+> 
+> The culprit is this: When standard streams (such as stdout or stderr) are
+> redirected away from the console while stdin remains a console handle,
+> fhandler_console::open() skipped populating the process-local
+> prev_output_mode_backup (or prev_input_mode_backup). Because these backup
+> fields remained uninitialized (zero), subsequent console mode restoration
+> upon process exit in close() transferred that zero backup into the shared
+> con.prev_output_mode, which then got restored to the Windows console handle
+> by the next process invocation, clearing flags such as
+> ENABLE_PROCESSED_OUTPUT.
+> 
+> To resolve this, fhandler_console::open() now unconditionally populates
+> prev_input_mode_backup and prev_output_mode_backup from con.prev_input_mode
+> and con.prev_output_mode under cons_mode_mutex before checking whether
+> standard handles are consoles.
+> 
+> A companion test case in winsup/testsuite/winsup.api/console-mode.c
+> exercises child execution under redirected standard streams via cygrun and
+> verifies that ENABLE_PROCESSED_OUTPUT is preserved across invocations.
+> 
+> Changes since v1:
+> 
+>  * While upstreaming from MSYS2, I missed that the cygrun environment
+>    variable went away and I now have to use mingwtestdir to construct the
+>    value, which is now fixed. (Sorry, I had missed that because GitHub seems
+>    to have disabled Actions in https://github.com/cygwingitgadget/cygwin; I
+>    re-enabled them.)
+> 
+> Johannes Schindelin (2):
+>   Cygwin: console: Preserve saved modes with redirected stdio
+>   Cygwin: testsuite: cover console mode preservation with redirected
+>     stdio
+> 
+>  winsup/cygwin/fhandler/console.cc          |  5 +-
+>  winsup/testsuite/Makefile.am               |  1 +
+>  winsup/testsuite/winsup.api/console-mode.c | 69 ++++++++++++++++++++++
+>  3 files changed, 73 insertions(+), 2 deletions(-)
+>  create mode 100644 winsup/testsuite/winsup.api/console-mode.c
+> 
+> 
+> base-commit: 8f145421c964d58539f93d2615a338734772db2c
+> Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-13%2Fdscho%2Fconsole-output-mode-disables-process-output-v2
+> Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-13/dscho/console-output-mode-disables-process-output-v2
+> Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/13
+> 
+> Range-diff vs v1:
+> 
+>  1:  9a4e55cd7 = 1:  9a4e55cd7 Cygwin: console: Preserve saved modes with redirected stdio
+>  2:  a26e05414 ! 2:  b9c0afe80 Cygwin: testsuite: cover console mode preservation with redirected stdio
+>      @@ winsup/testsuite/winsup.api/console-mode.c (new)
+>       +  assert (close (fd) == 0);
+>       +  snprintf (command, sizeof (command), "\"%s\" child", exe);
+>       +  const char *arguments[] = { "cygrun", "-notimeout", command, NULL };
+>      -+  assert (getenv ("cygrun"));
+>      ++  const char *mingwtestdir = getenv ("mingwtestdir");
+>      ++  assert (mingwtestdir);
+>      ++  char cygrun[strlen (mingwtestdir) + sizeof ("/cygrun")];
+>      ++  sprintf (cygrun, "%s/cygrun", mingwtestdir);
+>       +  /* cygrun starts the child without Cygwin's spawn bookkeeping. */
+>       +  for (int i = 0; i < 2; ++i)
+>      -+    assert (spawnv (_P_WAIT, getenv ("cygrun"), arguments) == 0);
+>      ++    assert (spawnv (_P_WAIT, cygrun, arguments) == 0);
+>       +  assert (GetConsoleMode (output, &mode));
+>       +  return !(mode & ENABLE_PROCESSED_OUTPUT);
+>       +}
+> 
+> -- 
+> cygwingitgadget
+
+Both patches make sense to me. Applied.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
