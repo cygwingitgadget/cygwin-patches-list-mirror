@@ -1,92 +1,354 @@
-Return-Path: <SRS0=H46o=ID=maxrnd.com=mark@sourceware.org>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
-	by sourceware.org (Postfix) with ESMTPS id B9A444BA23F9
-	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 07:18:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B9A444BA23F9
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B9A444BA23F9
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791875883; cv=none;
-	b=Ci4fDWTtpgenD1gGyROKymMlOmA6X8SGSsvEJj96dI0XQj0amSHAsaX2aPGWmFqXP56qEO3cx++V4wxzpd0ywk8kd50LxN14IzHQyjsPX95VayIUIwgIu7vHqhGGBMLUfzMufdaKI1zyB2JcnbkW4jdpGVr8o6Gj9DN3meXc4s8=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1791875883; c=relaxed/simple;
-	bh=K2pWGDfxLpNAxXHKUDta1th6H3Jn8Rv5WdcOwJSQHDU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=n4UsNrH3SD7gQqlGhc4ObgcqrjtAs4ZAM1B383hCHLvTwCiGaTenIHS58SvkHN+fEZ9CN590CggERD5rHe+u1cIE7kiTLzi2xOi+wiFzPY5V0DDr2GO0bxY9QoPGwScfzIyFvDG/0QZxg+GUNs2G3mUNQYsF5uXIAFaz5b4k+bQ=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B9A444BA23F9
-Received: (from daemon@localhost)
-	by m0.truegem.net (8.12.11/8.12.11) id 69D7VWd7081840
-	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 00:31:32 -0700 (PDT)
-	(envelope-from mark@maxrnd.com)
-Received: from 50-1-255-146.fiber.dynamic.sonic.net(50.1.255.146), claiming to be "[192.168.4.101]"
- via SMTP by m0.truegem.net, id smtpdyS8HaP; Tue Oct 13 00:31:30 2026
-Message-ID: <bb52ab6a-a3ad-45f9-a781-799bbbc227a1@maxrnd.com>
-Date: Tue, 13 Oct 2026 00:18:01 -0700
+Return-Path: <SRS0=it8X=ID=multicorewareinc.com=aswin.kalies@sourceware.org>
+Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c409::1])
+	by sourceware.org (Postfix) with ESMTPS id 73BD84BA2E3D
+	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 12:36:55 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 73BD84BA2E3D
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=multicorewareinc.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=multicorewareinc.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 73BD84BA2E3D
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c409::1
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1791895016; cv=pass;
+	b=D/xwU1IkDn41cJaFaEAqK1xgufPZMY2FAyzs7t0ZA+xdxaTdfrKr3APCQY6uCS0cip04BK792if47Owc1LHKcbs2W9zFm1v3i+dN1S6VarfuxV7eOwWMe9yieueWwTXfjR5LfHWd+rR7wJl2MQGD/D1IF9ZYPG0nFG2d0cdeCBQ=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1791895016; c=relaxed/simple;
+	bh=JIlvb/OzpyZLoxS7mRPXe2r6kGv/I6WTnMJZ8mOUNs4=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=SIJBfDXEcNVkPds8i2I2eAjtKqv7v3RmrZ7rwwk35zG7ISZDp1Oz0jP2poiFsygZxIB9wlifnrVTocy77ibuPWkGS2pe3rJc91MGijn8zEPOoK+ZOskXanaO3QmPmSsfjUNlSPZ0X+4ovp79b9iLQas+vdODhWi6AkXIibFTdHg=
+ARC-Authentication-Results: i=2; sourceware.org
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZXX2vcyNDNwNCCrM4BZ+Hmd7se2lfqUzX80w/DzTkzVths51LVPw4YHnDZ+6dYbxqnz5PmsEIn1sfA+B+JrIMncTaUEQ23AL6atFybRf9yx9/7kj6+7o5LKF9HWsN8j0mqISASmwdlLyIYz1b4ullYXttQ/EYJEZ3czsnPhJ5Vl49GNGEKXcDQGmG02sMiW+h9ybiuAhqhq5ScTeoAyDq+TxDoWRkSGf692IfbO5J2gaxB035FqKEWpXBVo7R+ZUP0lXaJGpJKS2ldRzYCjjxg+nvJzrSXcibtpJkFqvuU/KZbjinPhEpJfpcNHDR1VTZItdmNu55a/uBTzOttVHPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ru02mOgKvHT1nUk2eu+MGwFrznraxsxT8MpLEvtd2Vw=;
+ b=Wlaoh0vAC/+B0UxUBcuaEVuRLmKfb7vsjFSueoUsEofODKle1vEuybJzpmW1nGWFWZvIn6H1ph1xGIcn57uAZh5TidF5sgjhFuZBfAv81XGm9GIRkLMuiSfzq6DJ64neotouQXh33YAYez0NcVTmoUCemWH2pKtr8unseRXzbNUh4aERdA5Yg0QHDgpAvftgirqjUUpRYWUKGaqKhcbbN46k8ht/n5IwSRHrYm+yTNj2diUu6XmMTjYum4X414yC2hZj/mr1Re5uQmQJev4xOfDG/UkkDLtQXtYciRUXwm3Tz1egnNjBk4qFUVq1h0362sk9Osx3HHXmVBgAGQA1ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=multicorewareinc.com; dmarc=pass action=none
+ header.from=multicorewareinc.com; dkim=pass header.d=multicorewareinc.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=multicorewareinc.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ru02mOgKvHT1nUk2eu+MGwFrznraxsxT8MpLEvtd2Vw=;
+ b=uGZoSUrqTUnsDwYFPEtWsX9NqbGyBR6AHG3Mi9BESpwtr3LDiz9WpKIqyZe5rcJDz6Y421LH7l3xNig4XKuPQ6dT7MFbVNTaayCOPm1LiLikYzXXSxCjAA4rQMw3uf93U6cobgHJYiMQ+Tapk3SThk1B+C4ShAm2Ui3HYkVenSao+WdVj1yKp2JnneLGzCu6G1oKjVFR+Pwmp8aLZ6MvAuS1oMQCFPOqAiNHhr/UnrtOniUVtZRGasOeqB52pNiFYwWQlWy0BVYjGPDMHtkRii9acfzkvuIR/wNp5LDYYM+s6ZBknlnN1o+Egj8RDDnf0hxSqrJK5LLmjbX3tJtc6A==
+Received: from PN3P287MB1320.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:193::14)
+ by PN2P287MB2157.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1c1::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Tue, 13 Oct
+ 2026 12:36:48 +0000
+Received: from PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
+ ([fe80::8f7c:54ae:2172:b97b]) by PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
+ ([fe80::8f7c:54ae:2172:b97b%4]) with mapi id 15.21.0496.021; Tue, 13 Oct 2026
+ 12:36:48 +0000
+From: Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: gendef: restore incyg in AArch64 longjmp
+Thread-Topic: [PATCH] Cygwin: gendef: restore incyg in AArch64 longjmp
+Thread-Index: AQHdWw6wsdjw0Ujin0GYR0D4t1JOLw==
+Date: Tue, 13 Oct 2026 12:36:48 +0000
+Message-ID:
+ <PN3P287MB1320FF86B79E02E9DF36286FF79E2@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
+Accept-Language: en-IN, en-GB, en-US
+Content-Language: en-IN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=multicorewareinc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PN3P287MB1320:EE_|PN2P287MB2157:EE_
+x-ms-office365-filtering-correlation-id: 40908c62-2fa2-4d29-0f64-08df2926a615
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|23010399003|366016|376014|31052699007|39142699007|6049299003|8096899003|10067099003|3023799007|261009223027099003|38070700021|4053099003|6133799003|55112099003|56012099006|18002099003;
+x-microsoft-antispam-message-info:
+ QZ2Ge9+FGhFdFtWtmnUmCFWPsJDGkOyTybAj2RbtO6T1EcfSLpRJnssrbt52l/iWrEgKHWZJLiZZ964ExxzpmLT/7EuygcbdBFX5yxilEQ1fzoHzi8KTrsqN162jGW3MnDY4tc6WbbIKaWwT6ejF7enh3nZ0S0ZfN0xTZ8sTBAIi98U0fTxXaU4gEPeJ1k/90A0g46Ee1LffqG8SJdqsBU07vLA9fuJDEvA3f7KjCsz7pGhjF1KMgrTrGdB8k0nDwZVmz4rB285QXPTcE1V45iT03MLRUxsW6A1uDN9PIxk7d5YkMwbg2gYEJ4uBczR+F0i839FKwPcf1+j14r017NZGv4pcMXVfrk2r5XHhoFiPJHzB49HMnvIwbl9bohWvys0Q6vcbOXlqLEo70yPEAMbCdzl/mONkn2i0Qt6kM55agP6ThnwAcT72P1djKGt68TlCu/EvU/IAPL966dzTY93CvLQdw67uXFVtTUSSpie5QkwqH898PBilx6vf34Q0f+3MJPe2U1dSKuuL6Y41gt/V3Y7BVGZJ9EzAtlJRJcQbmyK3TKYwUCyUtnqLVblinBTTLwind0sXiYOBgYBX0fqDrYQ2btHoB1Bd9KxZtSQIDeeh/zF5jkxoJ2gQ1+kRpdAHqGfQLhMwyJqKQUoYXayyO+tNs3Tm3NW6f3dNxn+nytpEHM0gJ35vuxHkLdyUoN+7z+m8ys7kgIp9Tqzag3ghX/GdAU/Rls48ODB23Hs=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN3P287MB1320.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(376014)(31052699007)(39142699007)(6049299003)(8096899003)(10067099003)(3023799007)(261009223027099003)(38070700021)(4053099003)(6133799003)(55112099003)(56012099006)(18002099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?dGpWKzVPek5zb1RPeWFxM0c2Sys1TlVER1RXUXRxNG50R3BVVFNYdWUwUlUy?=
+ =?utf-8?B?Rnh0ZkRoZFMveTZkMnhUOXh3blV4djNCY1ozemRkWVFuaUNnRHVKejVrRml3?=
+ =?utf-8?B?eG1scHlZM0xGTk1BRWpvTWQrbm4rMlRCRFJZRjBvak9MbnJqSHh4VG9GSWg5?=
+ =?utf-8?B?ZURpWU9LaE5PdHZrcjRka1JBR0ZFZHhXUTFjZm0ydVZMbG5PbVVyNFJMUFNH?=
+ =?utf-8?B?eGJFQUtwd3FQN3l3cXR4S3pjSk9lM3MrVXhlWEZLd2xPeENnSWM2Zm1xc1BP?=
+ =?utf-8?B?aWkzNC9NREZXMmZjM3ZmcUlPV091Y3YvM2NxZVZoZ3pTcmFnMFRsT1lQM3Nh?=
+ =?utf-8?B?YWxwbDVFNzNMTmlxNzcvZWd6Wkl1cDRLRWtmTTl4Z1lnbjVZK2dJSGZkRU5R?=
+ =?utf-8?B?VjFwbXRlNzNjRGJSVkRVVTIwNUxQak9ObWwzcUd4VXdTaVJhWjZnUDhCcVoy?=
+ =?utf-8?B?UGZYVlF6RXFTZ041TzZZdXZmNnNFeER4YXFqZDhhWTliTmxWVEdYc0lscnRU?=
+ =?utf-8?B?M2RsVkF2T3NTTFVkSEdVbFVyOEUrSFhkRUxwSjQzS3pGYzRkRUNucDNZaEla?=
+ =?utf-8?B?VXkxSllqMXJxMHVMcmpHN2xwSTA3YmE1ZHM2UHVzcWNjS3ZPTUVXMmRTT3k0?=
+ =?utf-8?B?cDNjMzFLQnovNDVMUVhraDlFK2N1d1o2YzRjdjJ2TGlUUXA3WXJZWTJyeDBt?=
+ =?utf-8?B?d3dZS3Y5bko2a1NUM0c4UkpJRFlXV3BSa3cvVTVnS0sxQ254THl6SFhzaGFS?=
+ =?utf-8?B?QkNpaDJvNXNvaTIwYTJxZjZVQWYvU29JemtwVlpDeHRaMHprbUtBRlVneHVr?=
+ =?utf-8?B?Y0VyWHcvcnljbGNRKzZ5dWFzTVRuUk0rU1NLZ3paMzJlbUpFb0laRll2eWFL?=
+ =?utf-8?B?VEFjVXBBbm91NHlDSkkvbE9mN3JFbkNlajNTb3VDZUV5eFVTTlZhcGpoalRH?=
+ =?utf-8?B?UDZ6aGQySHZWNlYrcVZzOTVFeURESTZUckhDMWRFTjVLSGhXcUtWRDhRSDEw?=
+ =?utf-8?B?Smg4MDhKNGJ2MFFHZm1Dby9HSCtRQ00yd0h0OG80TURTbjFKVmtrZTU0UmhE?=
+ =?utf-8?B?RHBHdkV3aFlWSUoxdTFSdUZuc0tZM25wMnNXaHZIQlpJcEhlTzd1TnRiYW9O?=
+ =?utf-8?B?YmRBQUJkWndRVGdSK0V1ZzVNT21mV0JEWjNFdkpjeU5QRzFmeW9CU2dkd3o3?=
+ =?utf-8?B?RllSSks2M3dqblBTQkdIY1pNRld4UFMxZDd5U3NCTW10dU83VFNjQ216eWhr?=
+ =?utf-8?B?UXRuQ05mNFdEVGYwN0xVbjF1VEs5aE5hL3FxeENpdUFJeGRrNTFMZjJSSTY2?=
+ =?utf-8?B?cEhnTWNlRlNOVldrcERtbHZjdDR2cTRUSWd4amZ3R3JsdWtBanp5UjB4R0Ez?=
+ =?utf-8?B?bkVRei94S0w2MUc4TlpyS1lSZDl3SVJySWIxeTZIbnVsSXR6aUxHeWlwTHYv?=
+ =?utf-8?B?NURKa2RhRkF0Unl1MTdqSWxCOGdNU2JYQ05pQm94Y3I3UjloRllaczQ1eFRw?=
+ =?utf-8?B?b29kR2hTK2JBN3A2OWtSdzh0NmFNc1AybEg3L2VVSkdHQVJXMGN3RFZWcmdY?=
+ =?utf-8?B?MGhZQzdBRjE5MXNYeWMyVHA0bWVaYmVISnVrZmZkek1tYWltaDdpSlpTL1M0?=
+ =?utf-8?B?R3RSbXNqZ1JuN2dENUVsVmM1bFZNVUhXK3BlbXVydHhOVkhlZEd1TmYwLzNm?=
+ =?utf-8?B?a2VBWUJ2Ny85dmNCMGJJaW5kZjJpZm9ST3RJbHV4bXNoakxCUS9vRWh2aWlk?=
+ =?utf-8?B?QjI2VkZKRlBOSlhUVTdjVGZBUmUwdDAxWW9telYxanhNbUEwZGU4NzBPMUZK?=
+ =?utf-8?B?ZXZ5aW9YaytpdEliNE5BQ2crVFkyUE5xU0dwbVkyYTJqMVJ3ODRKZkdkR2g2?=
+ =?utf-8?B?T0p6Y1l2b1M4eEtXNytqRWF0ZnRQWG5qcW1ZWGJGQmRRVGF1d21IL0NiZUNX?=
+ =?utf-8?B?b0lMUFQ0VEpBNDlHTjdKQ3dYVWNYaktvZkVrd3dqSjIwY2hRM3BoeDBxd3J1?=
+ =?utf-8?B?Q1l6Sk0zMWlqN2dkbGtsNkVMSkNHQ1RqQzlsdGJUSE1DMjlpNkNQUGh3Vnp0?=
+ =?utf-8?B?Nk84OTJoT1NqWWEvcW9YZDlCWGRUZlRwZkYrRFQzaTBEN3FJM3F4NUtGeC9W?=
+ =?utf-8?B?bEdIMW5IL05rQXFSa0wxcDZJODFnc2xDbHVaM3VaNXlXbW8zQis0TExHTHF1?=
+ =?utf-8?B?WlIyckd1bUF4dDI2QkRCUWI2K1NURTlxdUZXWm16NC9UZVhVRWhmelp4Z2V1?=
+ =?utf-8?B?UEhocDQrNXRyanJLSVY2aWZnTzZZU3RTb3JMTXBVYWowNFdCUWRMSEJNbmNM?=
+ =?utf-8?B?RTdYUEI2eUlicjVRdE8zOTNoN2k0WlBhM1FQd0dhZzVtSVNsSGhoUFpkbVFM?=
+ =?utf-8?Q?f/fGUj78N5zS8oAA=3D?=
+Content-Type: multipart/mixed;
+	boundary="_004_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: Rename orphan __progname variable
-To: cygwin-patches@cygwin.com
-References: <20261012090437.1672-1-mark@maxrnd.com>
- <8120d2e7-b3ef-4ca1-8b39-ee4cbe400945@dronecode.org.uk>
-Content-Language: en-US
-From: Mark Geisert <mark@maxrnd.com>
-In-Reply-To: <8120d2e7-b3ef-4ca1-8b39-ee4cbe400945@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: multicorewareinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PN3P287MB1320.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40908c62-2fa2-4d29-0f64-08df2926a615
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2026 12:36:48.1779
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ffc5e88b-3fa2-4d69-a468-344b6b766e7d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Pt1GjqmY/6M5zKpC6b/Aec0gK0nTFiXJZ5DwDcSY7+MsFE8dHUte6cKaeTvtDUc46SaLRduAS3fY/gOMrC7ju4D8W/kPISoA18aOQR1W1GMSRKXvMVgnfk+bgVPFlhP9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB2157
+X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GB_MSAUTHSOURCE_INDIA,GIT_PATCH_0,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Jon,
+--_004_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_
+Content-Type: multipart/alternative;
+	boundary="_000_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_"
 
-On 10/12/2026 12:55 PM, Jon Turney wrote:
-> On 12/10/2026 10:04, Mark Geisert wrote:
->> The last remaining occurrence of '__progname' in dcrt0.cc was missed
->> when they were being renamed to 'program_invocation_short_name'.  I
->> discovered this when doing my first "#define DEBUGGING" Cygwin build.
->>
->> Signed-off-by: Mark Geisert <mark@maxrnd.com>
->> Fixes: b2476bc (Cygwin: globals: make __progname an alias of
->> program_invocation_short_name)
->>
->> ---
->>   winsup/cygwin/dcrt0.cc | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
->> index e7a837673..7fe8f26ac 100644
->> --- a/winsup/cygwin/dcrt0.cc
->> +++ b/winsup/cygwin/dcrt0.cc
->> @@ -968,7 +968,7 @@ dll_crt0_1 (void *)
->>     /* Disable case-insensitive globbing */
->>     ignore_case_with_glob = false;
->> -  cygbench (__progname);
->> +  cygbench (program_invocation_short_name);
->>     ld_preload ();
->>     /* Per POSIX set the default application locale back to "C". */
-> 
-> Thanks! Please apply.
-> 
-> I noticed that __progname is also (still?) used in cygwin/libc/ 
-> bsdlib.cc. Is there something wrong there, or is that expected to be 
-> independent?
+--_000_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Thanks for the review; will apply shortly if no changes needed...
+SGkgRXZlcnlvbmUsDQpPbiBBQXJjaDY0LCBhbnkgcHJvZ3JhbSB0aGF0IGxv
+YWRzIE9wZW5TU0wncyBsaWJjcnlwdG8gc3RvcHMgcmVjZWl2aW5nDQpzaWdu
+YWxzIHdoaWxlIGl0IGlzIGJsb2NrZWQgaW4gYSBzeXNjYWxsLiBzc2hkIHNp
+dHRpbmcgaW4gcHBvbGwgaWdub3Jlcw0KU0lHQ0hMRCwgU0lHVEVSTSwgU0lH
+SFVQIGFuZCBldmVuIFNJR0tJTEwsIHNvIHNzaCBzZXNzaW9ucyBuZXZlciBm
+aW5pc2guDQpUaGUgY2F1c2UgaXMgdGhhdCBsb25nam1wIGNsZWFycyBfY3ln
+dGxzLmluY3lnIGluc3RlYWQgb2YgcmVzdG9yaW5nIHRoZQ0KdmFsdWUgc2V0
+am1wIHNhdy4gT3BlblNTTCdzIEFBcmNoNjQgY2FwYWJpbGl0eSBwcm9iZSBy
+dW5zIGluIGEgRExMDQpjb25zdHJ1Y3RvciwgaS5lLiBpbnNpZGUgZGxsX2Ny
+dDBfMSB3aXRoIGluY3lnID09IDEuIEl0IGRvZXMgc2lnc2V0am1wLA0KdGFr
+ZXMgYSBTSUdJTEwgYW5kIHNpZ2xvbmdqbXBzIGJhY2s7IGxvbmdqbXAgc2V0
+cyBpbmN5ZyB0byAwLCBhbmQNCmRsbF9jcnQwXzEgdGhlbiBkZWNyZW1lbnRz
+IGl0IHRvIDB4ZmZmZmZmZmYuIFRoZSBwYXRjaCBiZWxvdyBzYXZlcw0KaW5j
+eWcgaW4gc2V0am1wIChqbXBfYnVmIHNsb3QgMjQsIG9mZnNldCAweEMwLCB1
+bnVzZWQgc28gZmFyKSBhbmQNCnJlc3RvcmVzIGl0IGluIGxvbmdqbXAuDQpB
+IHNtYWxsIHJlcHJvZHVjZXIgZG9lcyB0aGUgc2FtZSB0aGluZyB3aXRob3V0
+IE9wZW5TU0w6IHB0aHJlYWRfb25jZQ0KcnVucyBhbiBpbml0aWFsaXplciAo
+aW5zaWRlIEN5Z3dpbikgdGhhdCBkb2VzIHNpZ3NldGptcCwgcmFpc2UoU0lH
+VVNSMSkNCmFuZCBzaWdsb25nam1wcyBvdXQgb2YgdGhlIGhhbmRsZXI7IGFm
+dGVyd2FyZHMgYWxhcm0oMSkgbXVzdCBpbnRlcnJ1cHQNCnBvbGwoTlVMTCwg
+MCwgNTAwMCkgd2l0aCBFSU5UUi4NClRlc3RpbmcsIG9uIHVwc3RyZWFtIG1h
+aW4gKDA2YWRkNTZmNykgY3Jvc3MtYnVpbHQgZm9yIGFhcmNoNjQtcGMtY3ln
+d2luDQphbmQgcnVuIG9uIFdpbmRvd3MgMTEgQVJNNjQ6DQoNCiAgICAgKg0K
+cmVwcm9kdWNlcjogRkFJTCA1LzUgd2l0aG91dCB0aGUgcGF0Y2ggKFNJR0FM
+Uk0gbmV2ZXIgZGVsaXZlcmVkLA0KcG9sbCBzbGVlcHMgdGhlIGZ1bGwgNXMp
+LCBQQVNTIDUvNSB3aXRoIGl0IChFSU5UUiBhZnRlciAxMDAwbXMpLg0KICAg
+ICAqDQp3aW5zdXAgdGVzdHN1aXRlOiBpZGVudGljYWwgcmVzdWx0cyB3aXRo
+IGFuZCB3aXRob3V0IHRoZSBwYXRjaA0KKDI2NSBQQVNTLCAxNyBGQUlMLCA0
+IFhGQUlMLCAxIFNLSVA7IHRoZSBzYW1lIDE3IHRlc3RzIGZhaWwgaW4NCmJv
+dGggcnVuczogMTUgTFRQIEVGQVVMVCBjaGVja3MgYW5kIDIgcG9zaXhfc3Bh
+d24gdGVzdHMgdGhhdA0KZGVwZW5kIG9uIHRoZSBsb2NhbCB0ZXN0IGVudmly
+b25tZW50KS4NCiAgICAgKg0KaW4gb3VyIE1TWVMyIGFhcmNoNjQgYnVpbGQg
+dGhlIHNhbWUgY2hhbmdlIGZpeGVzIHNzaGQgc2Vzc2lvbnMNCmhhbmdpbmcg
+YW5kIFNJR0NITEQgYmVpbmcgbG9zdCAoMzUwLzM1MCBjb25jdXJyZW50IHNl
+c3Npb25zLA0KU0lHVEVSTS9TSUdIVVAvU0lHS0lMTCBkZWxpdmVyZWQpLg0K
+DQp4ODZfNjQgaGFzIHRoZSBzYW1lIGZsYXc6IGl0cyBsb25nam1wIGFsc28g
+Y2xlYXJzIGluY3lnIGluc3RlYWQgb2YNCnJlc3RvcmluZyBpdC4gVGhlIHNh
+bWUgcmVwcm9kdWNlciBmYWlscyAzLzMgb24gQ3lnd2luIDMuNi4xMSB4ODZf
+NjQuDQpJdCBqdXN0IGRvZXNuJ3Qgc2hvdyB1cCBpbiBwcmFjdGljZSB0aGVy
+ZSwgYmVjYXVzZSBPcGVuU1NMIGRldGVjdHMgQ1BVDQpmZWF0dXJlcyBvbiB4
+ODZfNjQgd2l0aCBjcHVpZCBhbmQgbmV2ZXIgbG9uZ2ptcHMgZHVyaW5nIHN0
+YXJ0dXAuIFRoaXMNCnBhdGNoIG9ubHkgdG91Y2hlcyBBQXJjaDY0OyBJIGNh
+biBzZW5kIHRoZSBlcXVpdmFsZW50IHg4Nl82NCBjaGFuZ2UNCnNlcGFyYXRl
+bHkgaWYgeW91J2QgbGlrZSBpdCBmaXhlZCB0aGVyZSBhcyB3ZWxsLg0KVGhh
+bmtzLA0KQXN3aW4gS2FsaWVzDQoNCklubGluZSBwYXRjaA0KDQotLS0NCiB3
+aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmIHwgMjIgKysrKysrKysrKysr
+KysrKysrKy0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxOSBpbnNlcnRpb25zKCsp
+LCAzIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dp
+bi9zY3JpcHRzL2dlbmRlZiBiL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5k
+ZWYNCmluZGV4IDUwNDNlYjM1MC4uYmIwZWNlMTc1IDEwMDc1NQ0KLS0tIGEv
+d2luc3VwL2N5Z3dpbi9zY3JpcHRzL2dlbmRlZg0KKysrIGIvd2luc3VwL2N5
+Z3dpbi9zY3JpcHRzL2dlbmRlZg0KQEAgLTc4NSw2ICs3ODUsMTUgQEAgc2V0
+am1wOg0KIOKAguKAguKAguKAguKAgmxkcuKAguKAguKAgngzLCBbeDJd4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC
+Ly8gbG9hZCBjdXJyZW50IHZhbHVlIG9mIHN0YWNrcHRyDQog4oCC4oCC4oCC
+4oCC4oCCc3Ry4oCC4oCC4oCCeDMsIFt4MF3igILigILigILigILigILigILi
+gILigILigILigILigILigILigILigILigILigIIvLyBzdG9yZSBzdGFja3B0
+ciBpbnRvIGptcF9idWYNCg0KK+KAguKAguKAguKAguKAgi8vIFJlY29yZCBp
+bmN5ZyBhcyB3ZWxsLCBpbiBqbXBfYnVmIHNsb3QgMjQgKDB4QzApLCBzbyBs
+b25nam1wIGNhbiBwdXQNCivigILigILigILigILigIIvLyBpdCBiYWNrLiAg
+c2V0am1wIGlzIG5vdCBhbHdheXMgY2FsbGVkIGZyb20gb3V0c2lkZSBDeWd3
+aW46IGEgRExMDQor4oCC4oCC4oCC4oCC4oCCLy8gY29uc3RydWN0b3IgcnVu
+cyBpbnNpZGUgZGxsX2NydDBfMSB3aXRoIGluY3lnID09IDEsIGFuZCBPcGVu
+U1NMJ3MNCivigILigILigILigILigIIvLyBBQXJjaDY0IGFybWNhcCBwcm9i
+ZSBkb2VzIHNpZ3NldGptcCB0aGVyZSwgZXhlY3V0ZXMgYSBwcm9iZQ0KK+KA
+guKAguKAguKAguKAgi8vIGluc3RydWN0aW9uIGFuZCBzaWdsb25nam1wcyBv
+dXQgb2YgdGhlIFNJR0lMTCBoYW5kbGVyLg0KK+KAguKAguKAguKAguKAgmxk
+cuKAguKAguKAgngyLCA9X2N5Z3Rscy5pbmN5Z+KAguKAguKAguKAguKAguKA
+guKAguKAguKAguKAguKAguKAgi8vIGxvYWQgdGhlIHN5bWJvbCBvZmZzZXQN
+CivigILigILigILigILigIJsZHLigILigILigIJ3MywgW3gxMCwgeDJd4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC
+4oCCLy8gbG9hZCBjdXJyZW50IGluY3lnDQor4oCC4oCC4oCC4oCC4oCCc3Ry
+4oCC4oCC4oCCeDMsIFt4MCwgIzB4QzBd4oCC4oCC4oCC4oCC4oCC4oCC4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCCLy8gc3RvcmUgaW5jeWcgaW50byBq
+bXBfYnVmDQorDQog4oCC4oCC4oCC4oCC4oCCLy8gZGVjcmVtZW50IHRoZSBz
+dGFjayBsb2NrDQog4oCC4oCC4oCC4oCC4oCCbGRy4oCC4oCC4oCCeDIsID1f
+Y3lndGxzLnN0YWNrbG9ja+KAguKAguKAguKAguKAguKAguKAguKAgi8vIGxv
+YWQgdGhlIHN5bWJvbCBvZmZzZXQNCiDigILigILigILigILigIJhZGTigILi
+gILigIJ4MiwgeDEwLCB4MuKAguKAguKAguKAguKAguKAguKAguKAguKAguKA
+guKAguKAguKAgi8vIHgyID0gdGxzX2Jhc2UgKyAmc3RhY2tsb2NrDQpAQCAt
+ODUzLDExICs4NjIsMTggQEAgbG9uZ2ptcDoNCiDigILigILigILigILigIJz
+dWLigILigILigIJ3MTIsIHcxMiwgIzHigILigILigILigILigILigILigILi
+gILigILigILigILigILigILigILigILigILigILigIIvLyBkZWNyZW1lbnQN
+CiDigILigILigILigILigIJzdHLigILigILigIJ3MTIsIFt4MTFd4oCC4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCCLy8gc3RvcmUg
+YmFjaw0KDQot4oCC4oCC4oCC4oCC4oCCLy8gd2UncmUgbm90IGluIGN5Z3dp
+biBhbnltb3JlLCBjbGVhciAiaW4gY3lnd2luIiBmbGFnDQor4oCC4oCC4oCC
+4oCC4oCCLy8gUmVzdG9yZSBpbmN5ZyB0byBpdHMgdmFsdWUgYXQgc2V0am1w
+IHRpbWUuICBGb3JjaW5nIGl0IHRvIDAgaGVyZQ0KK+KAguKAguKAguKAguKA
+gi8vIGlzIG9ubHkgcmlnaHQgd2hlbiB0aGUgbWF0Y2hpbmcgc2V0am1wIHJh
+biBvdXRzaWRlIEN5Z3dpbjsgd2hlbiBpdA0KK+KAguKAguKAguKAguKAgi8v
+IHJhbiBpbnNpZGUgKGUuZy4gaW4gYSBETEwgY29uc3RydWN0b3IgZHVyaW5n
+IGRsbF9jcnQwXzEpIHRoZSBjYWxsZXINCivigILigILigILigILigIIvLyBs
+YXRlciBkb2VzIGluY3lnLS0sIHdoaWNoIHdyYXBzIGl0IHRvIDB4ZmZmZmZm
+ZmYuICBGcm9tIHRoZW4gb24NCivigILigILigILigILigIIvLyBldmVyeSBz
+eXNjYWxsIHJ1bnMgd2l0aCBpbmN5ZyA9PSAwLCBzZXR1cF9oYW5kbGVyIHRh
+a2VzIHRoZQ0KK+KAguKAguKAguKAguKAgi8vIGludGVycnVwdF9ub3cgcGF0
+aCwgZmluZHMgdGhlIHRocmVhZCBpbnNpZGUgdGhlIGtlcm5lbCBhbmQgcmV0
+cmllcw0KK+KAguKAguKAguKAguKAgi8vIGZvcmV2ZXI6IHRoZSBwcm9jZXNz
+IGNhbiBubyBsb25nZXIgcmVjZWl2ZSBhbnkgc2lnbmFsLCBTSUdLSUxMDQor
+4oCC4oCC4oCC4oCC4oCCLy8gaW5jbHVkZWQuDQog4oCC4oCC4oCC4oCC4oCC
+bGRy4oCC4oCC4oCCeDExLCA9X2N5Z3Rscy5pbmN5Z+KAguKAguKAguKAguKA
+guKAguKAguKAguKAguKAguKAgi8vIGxvYWQgdGhlIHN5bWJvbCBvZmZzZXQN
+CiDigILigILigILigILigIJhZGTigILigILigIJ4MTEsIHgxMCwgeDEx4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC
+4oCCLy8geDExID0gdGxzX2Jhc2UgKyAmaW5jeWcNCi3igILigILigILigILi
+gIJtb3bigILigILigIJ3MTIsIHd6cuKAguKAguKAguKAguKAguKAguKAguKA
+guKAguKAguKAguKAguKAguKAguKAguKAgi8vIGNsZWFyIHRoZSBpbmN5ZyBj
+b3VudGVyDQot4oCC4oCC4oCC4oCC4oCCc3Ry4oCC4oCC4oCCdzEyLCBbeDEx
+XeKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAgi8v
+IHN0b3JlIGJhY2sgdGhlIG5ldyB2YWx1ZQ0KK+KAguKAguKAguKAguKAgmxk
+cuKAguKAguKAgngxMiwgW3gyLCAjMHhDMF3igILigILigILigILigILigILi
+gILigIIvLyBpbmN5ZyBzYXZlZCBieSBzZXRqbXANCivigILigILigILigILi
+gIJzdHLigILigILigIJ3MTIsIFt4MTFd4oCC4oCC4oCC4oCC4oCC4oCC4oCC
+4oCC4oCC4oCC4oCC4oCC4oCC4oCCLy8gc3RvcmUgYmFjayB0aGUgc2F2ZWQg
+dmFsdWUNCg0KIOKAguKAguKAguKAguKAgi8vIHVzZSBzZWNvbmQgYXJndW1l
+bnQgYXMgdGhlIHJldHVybiB2YWx1ZQ0KIOKAguKAguKAguKAguKAgm1vduKA
+guKAguKAgngwLCB4M+KAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKA
+guKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAguKAgi8vIG1v
+dmUgc2F2ZWQgcmV0dXJuIHZhbHVlIHRvIHgwDQotLQ0KMi41MS4wLndpbmRv
+d3MuMQ0KDQoNCg==
 
-Also thanks for the follow-on question.  __progname is export-aliased to 
-program_invocation_short_name (in globals.cc).  So one could use either 
-name anywhere, really.  I prefer to leave __progname as-is in bsdlib.cc 
-because that recalls its BSD origin.  In dcrt0.cc for this patch we 
-could go either way, though for __progname we'd have to add an extern 
-reference.  I chose to use program_invocation_short_name as the 
-remainder of this file does already.  I'm open to keeping __progname.
+--_000_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_--
 
-The two names both refer to the same semantic object.  It is filled in 
-by Cygwin as the DLL starts up.  One can later use setprogname() to 
-change it.  But that can only occur after Cygwin is done initializing so 
-it doesn't matter if it's changed.
+--_004_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_
+Content-Type: application/octet-stream;
+	name="Cygwin-gendef-restore-incyg-in-AArch64-longjmp.patch"
+Content-Description: Cygwin-gendef-restore-incyg-in-AArch64-longjmp.patch
+Content-Disposition: attachment;
+	filename="Cygwin-gendef-restore-incyg-in-AArch64-longjmp.patch"; size=3665;
+	creation-date="Tue, 13 Oct 2026 12:33:35 GMT";
+	modification-date="Tue, 13 Oct 2026 12:33:52 GMT"
+Content-Transfer-Encoding: base64
 
-Let me know what you think.
+RnJvbSAzMWM2Y2UxNDFjMjg4OTNhMjZhOTY2NDE1MzY3MTA4YTg3NjA2MDY1
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBBc3dpbiBLYWxpZXMg
+UmFta3VtYXIgTWFuZ2F5YXJrYXJhc2kgPGFzd2luLmthbGllc0BtdWx0aWNv
+cmV3YXJlaW5jLmNvbT4KRGF0ZTogVHVlLCAxMyBPY3QgMjAyNiAxNzo0ODox
+MSArMDUzMApTdWJqZWN0OiBbUEFUQ0hdIEN5Z3dpbjogZ2VuZGVmOiByZXN0
+b3JlIGluY3lnIGluIEFBcmNoNjQgbG9uZ2ptcAoKQUFyY2g2NCBsb25nam1w
+IHVuY29uZGl0aW9uYWxseSBjbGVhcnMgX2N5Z3Rscy5pbmN5ZywgYXNzdW1p
+bmcgdGhlCm1hdGNoaW5nIHNldGptcCByYW4gb3V0c2lkZSBDeWd3aW4uICBU
+aGF0IGRvZXMgbm90IGhvbGQgZm9yIGNvZGUgdGhhdApydW5zIGluIGEgRExM
+IGNvbnN0cnVjdG9yLCB3aGljaCBpcyBjYWxsZWQgZnJvbSBkbGxfY3J0MF8x
+IHdpdGgKaW5jeWcgPT0gMS4KCk9wZW5TU0wncyBBQXJjaDY0IGNhcGFiaWxp
+dHkgcHJvYmUgaXMgc3VjaCBjb2RlOiBhIGNvbnN0cnVjdG9yIG9mIHRoZQpj
+cnlwdG8gRExMIGRvZXMgc2lnc2V0am1wLCBleGVjdXRlcyBwcm9iZSBpbnN0
+cnVjdGlvbnMgYW5kIHNpZ2xvbmdqbXBzCm91dCBvZiB0aGUgU0lHSUxMIGhh
+bmRsZXIuICBsb25nam1wIGRyb3BzIGluY3lnIHRvIDAsIGRsbF9jcnQwXzEg
+dGhlbgpkZWNyZW1lbnRzIGl0IGJlZm9yZSBjYWxsaW5nIG1haW4sIGFuZCBp
+bmN5ZyB3cmFwcyB0byAweGZmZmZmZmZmLgpFdmVyeSBwcm9ncmFtIGxpbmtl
+ZCBhZ2FpbnN0IGxpYmNyeXB0byB0aHVzIGVudGVycyBtYWluIHdpdGggaW5j
+eWcgPT0KMHhmZmZmZmZmZiwgYW5kIF9zaWdmZSBicmluZ3MgaXQgdG8gMCBp
+bnN0ZWFkIG9mIDEgb24gZXZlcnkgQ3lnd2luCmNhbGwuCgpXaXRoIGluY3ln
+ID09IDAgd2hpbGUgdGhlIHRocmVhZCBpcyBibG9ja2VkIGluIGEgc3lzY2Fs
+bCwKc2V0dXBfaGFuZGxlciB0YWtlcyB0aGUgaW50ZXJydXB0X25vdyBwYXRo
+LCBpbnNpZGVfa2VybmVsKCkgcmVwb3J0cwp0aGUgdGhyZWFkIGFzIGJlaW5n
+IGluIG50ZGxsLCBhbmQgdGhlIHNpZ25hbCBpcyBuZXZlciBkZWxpdmVyZWQu
+CnNzaGQgd2FpdGluZyBpbiBwcG9sbCBpZ25vcmVzIFNJR1RFUk0sIFNJR0hV
+UCBhbmQgU0lHS0lMTCwgYW5kIG5ldmVyCnNlZXMgU0lHQ0hMRCBmb3IgaXRz
+IHNlc3Npb24gY2hpbGRyZW4uCgpSZWNvcmQgaW5jeWcgaW4gc2V0am1wLCBp
+biBqbXBfYnVmIHNsb3QgMjQgKG9mZnNldCAweEMwLCB1bnVzZWQgc28KZmFy
+OyBfSkJMRU4gaXMgMjUgb24gQUFyY2g2NCksIGFuZCByZXN0b3JlIHRoYXQg
+dmFsdWUgaW4gbG9uZ2ptcC4KQSBsb25nam1wIGJhY2sgaW50byBhcHBsaWNh
+dGlvbiBjb2RlIHN0aWxsIHJlc3RvcmVzIDAsIGJlY2F1c2UgdGhhdAppcyB3
+aGF0IGl0cyBzZXRqbXAgc2F3LgoKRml4ZXM6IDljNGE3NzgwYmZkYiAoIkN5
+Z3dpbjogZ2VuZGVmOiBJbXBsZW1lbnQgbG9uZ2ptcCBmb3IgQUFyY2g2NCIp
+ClNpZ25lZC1vZmYtYnk6IEFzd2luIEthbGllcyA8YXN3aW4ua2FsaWVzQG11
+bHRpY29yZXdhcmVpbmMuY29tPgotLS0KIHdpbnN1cC9jeWd3aW4vc2NyaXB0
+cy9nZW5kZWYgfCAyMiArKysrKysrKysrKysrKysrKysrLS0tCiAxIGZpbGUg
+Y2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRp
+ZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmIGIvd2lu
+c3VwL2N5Z3dpbi9zY3JpcHRzL2dlbmRlZgppbmRleCA1MDQzZWIzNTAuLmJi
+MGVjZTE3NSAxMDA3NTUKLS0tIGEvd2luc3VwL2N5Z3dpbi9zY3JpcHRzL2dl
+bmRlZgorKysgYi93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmCkBAIC03
+ODUsNiArNzg1LDE1IEBAIHNldGptcDoKIAlsZHIJeDMsIFt4Ml0JCQkvLyBs
+b2FkIGN1cnJlbnQgdmFsdWUgb2Ygc3RhY2twdHIKIAlzdHIJeDMsIFt4MF0J
+CQkvLyBzdG9yZSBzdGFja3B0ciBpbnRvIGptcF9idWYKIAorCS8vIFJlY29y
+ZCBpbmN5ZyBhcyB3ZWxsLCBpbiBqbXBfYnVmIHNsb3QgMjQgKDB4QzApLCBz
+byBsb25nam1wIGNhbiBwdXQKKwkvLyBpdCBiYWNrLiAgc2V0am1wIGlzIG5v
+dCBhbHdheXMgY2FsbGVkIGZyb20gb3V0c2lkZSBDeWd3aW46IGEgRExMCisJ
+Ly8gY29uc3RydWN0b3IgcnVucyBpbnNpZGUgZGxsX2NydDBfMSB3aXRoIGlu
+Y3lnID09IDEsIGFuZCBPcGVuU1NMJ3MKKwkvLyBBQXJjaDY0IGFybWNhcCBw
+cm9iZSBkb2VzIHNpZ3NldGptcCB0aGVyZSwgZXhlY3V0ZXMgYSBwcm9iZQor
+CS8vIGluc3RydWN0aW9uIGFuZCBzaWdsb25nam1wcyBvdXQgb2YgdGhlIFNJ
+R0lMTCBoYW5kbGVyLgorCWxkcgl4MiwgPV9jeWd0bHMuaW5jeWcJCS8vIGxv
+YWQgdGhlIHN5bWJvbCBvZmZzZXQKKwlsZHIJdzMsIFt4MTAsIHgyXQkJCS8v
+IGxvYWQgY3VycmVudCBpbmN5ZworCXN0cgl4MywgW3gwLCAjMHhDMF0JCQkv
+LyBzdG9yZSBpbmN5ZyBpbnRvIGptcF9idWYKKwogCS8vIGRlY3JlbWVudCB0
+aGUgc3RhY2sgbG9jawogCWxkcgl4MiwgPV9jeWd0bHMuc3RhY2tsb2NrCQkv
+LyBsb2FkIHRoZSBzeW1ib2wgb2Zmc2V0CiAJYWRkCXgyLCB4MTAsIHgyCQkJ
+Ly8geDIgPSB0bHNfYmFzZSArICZzdGFja2xvY2sKQEAgLTg1MywxMSArODYy
+LDE4IEBAIGxvbmdqbXA6CiAJc3ViCXcxMiwgdzEyLCAjMQkJCS8vIGRlY3Jl
+bWVudAogCXN0cgl3MTIsIFt4MTFdCQkJLy8gc3RvcmUgYmFjawogCi0JLy8g
+d2UncmUgbm90IGluIGN5Z3dpbiBhbnltb3JlLCBjbGVhciAiaW4gY3lnd2lu
+IiBmbGFnCisJLy8gUmVzdG9yZSBpbmN5ZyB0byBpdHMgdmFsdWUgYXQgc2V0
+am1wIHRpbWUuICBGb3JjaW5nIGl0IHRvIDAgaGVyZQorCS8vIGlzIG9ubHkg
+cmlnaHQgd2hlbiB0aGUgbWF0Y2hpbmcgc2V0am1wIHJhbiBvdXRzaWRlIEN5
+Z3dpbjsgd2hlbiBpdAorCS8vIHJhbiBpbnNpZGUgKGUuZy4gaW4gYSBETEwg
+Y29uc3RydWN0b3IgZHVyaW5nIGRsbF9jcnQwXzEpIHRoZSBjYWxsZXIKKwkv
+LyBsYXRlciBkb2VzIGluY3lnLS0sIHdoaWNoIHdyYXBzIGl0IHRvIDB4ZmZm
+ZmZmZmYuICBGcm9tIHRoZW4gb24KKwkvLyBldmVyeSBzeXNjYWxsIHJ1bnMg
+d2l0aCBpbmN5ZyA9PSAwLCBzZXR1cF9oYW5kbGVyIHRha2VzIHRoZQorCS8v
+IGludGVycnVwdF9ub3cgcGF0aCwgZmluZHMgdGhlIHRocmVhZCBpbnNpZGUg
+dGhlIGtlcm5lbCBhbmQgcmV0cmllcworCS8vIGZvcmV2ZXI6IHRoZSBwcm9j
+ZXNzIGNhbiBubyBsb25nZXIgcmVjZWl2ZSBhbnkgc2lnbmFsLCBTSUdLSUxM
+CisJLy8gaW5jbHVkZWQuCiAJbGRyCXgxMSwgPV9jeWd0bHMuaW5jeWcJCS8v
+IGxvYWQgdGhlIHN5bWJvbCBvZmZzZXQKIAlhZGQJeDExLCB4MTAsIHgxMQkJ
+CS8vIHgxMSA9IHRsc19iYXNlICsgJmluY3lnCi0JbW92CXcxMiwgd3pyCQkJ
+Ly8gY2xlYXIgdGhlIGluY3lnIGNvdW50ZXIKLQlzdHIJdzEyLCBbeDExXQkJ
+CS8vIHN0b3JlIGJhY2sgdGhlIG5ldyB2YWx1ZQorCWxkcgl4MTIsIFt4Miwg
+IzB4QzBdCQkvLyBpbmN5ZyBzYXZlZCBieSBzZXRqbXAKKwlzdHIJdzEyLCBb
+eDExXQkJCS8vIHN0b3JlIGJhY2sgdGhlIHNhdmVkIHZhbHVlCiAKIAkvLyB1
+c2Ugc2Vjb25kIGFyZ3VtZW50IGFzIHRoZSByZXR1cm4gdmFsdWUKIAltb3YJ
+eDAsIHgzCQkJCS8vIG1vdmUgc2F2ZWQgcmV0dXJuIHZhbHVlIHRvIHgwCi0t
+IAoyLjUxLjAud2luZG93cy4xCgo=
 
-..mark
+--_004_PN3P287MB1320FF86B79E02E9DF36286FF79E2PN3P287MB1320INDP_--
