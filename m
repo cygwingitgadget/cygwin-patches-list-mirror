@@ -1,71 +1,105 @@
-Return-Path: <SRS0=Qr2z=ID=SystematicSW.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id B94144BA23CD
-	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 17:50:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B94144BA23CD
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSW.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B94144BA23CD
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791913819; cv=none;
-	b=Si21HFyy2wtMEiilnPK2Vjh5iqtUy2eVcC0SPhGcVNHc2ctS593tpRWpbjFcPE2Y3y5V4BqFVtwL8s7RNKnLNjHAtc3Mlh9yp/lLYyamtDUMDKo+ZYw2ZHeSMiZGPF7d17OkJmMS4TWmwm5JEIJMko2T1qzaP+J5XDPQf+6etKs=
+Return-Path: <SRS0=uTC2=ID=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo002.btinternet.com (btprdrgo002.btinternet.com [65.20.50.70])
+	by sourceware.org (Postfix) with ESMTP id 7FD894BA23C1
+	for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2026 18:32:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7FD894BA23C1
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7FD894BA23C1
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.70
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1791916364; cv=none;
+	b=KIXkv+mFhpR37PqiX/NsVjXi5YMyCTXMQ5/CjQjsf7Hc3LfVpSVgmI+yfaUcE84HWpq8w0cUXng7f8iXqyzDzy/Bf+HQW5bFRTF7Qfyccn2XhoHQD3WqFb0jL+MQCVrWCtFEb15Xy5lcKS/sHDqE9aRU/tObqS+Cru67tslBtos=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1791913819; c=relaxed/simple;
-	bh=8awjQP81n++OSNUP86zLlPUOUkrC9CDmbKBsSTu3h+A=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=dS2WG4NzFDMc/XdRs9H1wq8S1wg8oldw+lMvOA6qufmZhHtJjD/V1myNerpUi1AFo0YvdOciltMMn6LbJ6qvMoZ8N96GTJoUCO8Ar+jWd0tSsU/BZJ5Yc5MOZm/P/vBfljVDZSLhZYXi7EG+v3beE8J+vB1IY8Hk6sqlac+6oqk=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=WFfamWmb
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B94144BA23CD
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSW.ab.ca header.i=@SystematicSW.ab.ca header.a=rsa-sha256 header.s=he header.b=WFfamWmb
-Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 24C391C0D0D;
-	Tue, 13 Oct 2026 17:50:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf13.hostedemail.com (Postfix) with ESMTPA id 9774F20011;
-	Tue, 13 Oct 2026 17:50:16 +0000 (UTC)
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: cygwin-patches@cygwin.com (Cygwin Patches)
-Subject: [PATCH] Cygwin: API winsup/doc/posix.xml: update ISO to final 9945:2026 Edition 2 2026-03-18
-Date: Tue, 13 Oct 2026 11:49:51 -0600
-Message-ID: <00d6c451303b15168f7ec6801c5435f8708cdd34.1791913465.git.Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.51.0
+	t=1791916364; c=relaxed/simple;
+	bh=kO50VhxYnK5PwnAcIbpR+YEUF9U7YqlF9dz8e9jSyU8=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=ZcKbaR5qg8UQAd127DGbGmvcBpsQivZC3ljnYiIX9zbqDv9wirEJkIffPA3tN8S42wKLsH+uu+YTCCxT4kA6QofJfDOO2GRVz9nbkSZUrqkZqUcqW7LDFWI/viMOWhHm3Li5SHMNF00GGqkdh7Pur86w/qR5YVqGDJ1NOFOsDZI=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7FD894BA23C1
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6AB2D6E50450DE1C
+X-Originating-IP: [62.49.190.104]
+X-OWM-Source-IP: 62.49.190.104
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=30/300, class=clean
+X-RazorGate-Vade: dmFkZTE7PZzf7y4xfeRvNdDptUSNK9LiCF4aiMOpdJ6hrw/29rAuCSUeFpMydqqQsuJI1f2GV/kTdGfzYL6TcuRxNwESPFFeSNyOxRbzOEDOEbxIJLRPNaGlZSKMkhEF+ts81mHj7ZaMrvS7mIoMI/zhtLIp1Mlz7uYJVw/JcRifrYfCU5b989sDEghDl9mQa4thpaPKz+caoxt9ff03VFRn/fwoIHKUe/Ca6nr3xFxZGAgTppZIiVbvUF9YuQ2+1fom5S04jwGP/PyCpVAHoaGC1Uo2OnLMY4ZE7B/r9rFgwkYftV61eDs3mL4r0qR2wBTv9WvRt6DwCC/5I5LI4UxBOImxqVept460ctPsXmIaU7cPiHbWkX0pLko5SnKiJ8LKc9XQSLGmFP0HZ+EyVFtYcGvuTzjmTTTqTYcWG/CKgV1DZT1WDo4gPjLyChlL8YI0hbdRIyBJNe5Lndb+aHeGJc2PvkKso+pan85Iu560nwpyZRfOOA1gFDCNCkUieX0tjwxRFTAyQMK4SR3AteQceAhNpAv5UBSycHV5EHAr8NgggvKzNdtZy09X3U2cvmlEbeGiQA8bnO9XPJQP4zDCmlNEYcQWcgvSCGinwld/h9ewJQvyOqWHycoU/6BnTjFKYFlnYyYCkAWp4RnhQ45ymbFUPUjF7OA+D0pXl5pyBrKCCw
+X-RazorGate-Vade-Verdict: clean 30
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (62.49.190.104) by btprdrgo002.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6AB2D6E50450DE1C for cygwin-patches@cygwin.com; Tue, 13 Oct 2026 19:32:39 +0100
+Message-ID: <260285b0-4a0b-43c3-aac8-f9c0720a4014@dronecode.org.uk>
+Date: Tue, 13 Oct 2026 19:32:38 +0100
 MIME-Version: 1.0
-Organization: Systematic Software
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: Rename orphan __progname variable
+References: <20261012090437.1672-1-mark@maxrnd.com>
+ <8120d2e7-b3ef-4ca1-8b39-ee4cbe400945@dronecode.org.uk>
+ <bb52ab6a-a3ad-45f9-a781-799bbbc227a1@maxrnd.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <bb52ab6a-a3ad-45f9-a781-799bbbc227a1@maxrnd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 9774F20011
-X-Stat-Signature: mx9hm653ai8p58d1znzjanyg89ktkqkd
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX18VwuJveTnH+ffVH0xUKswc/uhjIZLH4FU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSW.ab.ca; h=from:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=he; bh=FwFKRNsLJ0w/YV5+6UQT88JV4LXvAYQZB5QnJtsgXCo=; b=WFfamWmbHL/1IOgpe08nRDVkWaMFAcvYsDFeDh6hnCtt7Tc85/frP9FnRqjjIONxTnBG5+twBdVq2SfurLRcYXR6YQsqb5TVGO6C5LxgLtC2iY0BIY/xie1s4pFtlgNmZvRMotJSlmT5KbVJZ1BHZnj900vTQn08PGrIYYVLo4CSa6IqSTig+S380wabKp1kZM4u1Jy3EvO0fnvc4O1yh06NswHFD7NCdejWAx0ZAhy977QZ6pzP4Kdg2GEj7ihJWbD4FSd3gJmJkGXAe24xqppux4LYrt9Zv9yIf6On3DzlhjXlp/heSdBi0szmkCK1XYLtCtOlx1PCe60lZ4Hd/A==
-X-HE-Tag: 1791913816-595353
-X-HE-Meta: U2FsdGVkX18HHEzOgwb+Izwzs4n+AJmaVLp7sUOxtSMtkSXqrPNuk0N87O2C04KXL01GGDULoGY0cW13g4AGaSzO2lxC+rkgs6DoVDn/nBwt+EztoxfVTzqBTqkX0Hiu3JlKl23Xl/2KRoGc9Kc2LJvscz9TD84fsA4U+NVr7bXBXm6nkCIdjRLL4XWs6anUWboIPKgXOhjFlI7UA+jn+TgPwn6GdAkBt4ht7d4yJuHLLuuM7TJVPm0hOMSILmjkeLjUOujUwHtvK4IrsQyt2MGsJ1xsNkRQ9Vdwh20bs2NIBMad5KDXLmy6whQUt4U/6FJ96tGmEDDGLmvQ2nb+NSHKPD5+OSucWJol6DagikRenlC3XZ3jrjs9g9F4c77Lb/1vxmEBroI00OC6/vWR8SK4Gn8rv6h2F6RwDF7WHn2FKrcfYlqc9ZEk/PwADYVWlwutKujUtsK8kDAwUZjeXg==
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,GIT_PATCH_0,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Signed-off-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
----
- winsup/doc/posix.xml | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 13/10/2026 08:18, Mark Geisert wrote:
+> Hi Jon,
+> 
+> On 10/12/2026 12:55 PM, Jon Turney wrote:
+>> On 12/10/2026 10:04, Mark Geisert wrote:
+>>> The last remaining occurrence of '__progname' in dcrt0.cc was missed
+>>> when they were being renamed to 'program_invocation_short_name'.  I
+>>> discovered this when doing my first "#define DEBUGGING" Cygwin build.
+>>>
+>>> Signed-off-by: Mark Geisert <mark@maxrnd.com>
+>>> Fixes: b2476bc (Cygwin: globals: make __progname an alias of
+>>> program_invocation_short_name)
+>>>
+>>> ---
+>>>   winsup/cygwin/dcrt0.cc | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
+>>> index e7a837673..7fe8f26ac 100644
+>>> --- a/winsup/cygwin/dcrt0.cc
+>>> +++ b/winsup/cygwin/dcrt0.cc
+>>> @@ -968,7 +968,7 @@ dll_crt0_1 (void *)
+>>>     /* Disable case-insensitive globbing */
+>>>     ignore_case_with_glob = false;
+>>> -  cygbench (__progname);
+>>> +  cygbench (program_invocation_short_name);
+>>>     ld_preload ();
+>>>     /* Per POSIX set the default application locale back to "C". */
+>>
+>> Thanks! Please apply.
+>>
+>> I noticed that __progname is also (still?) used in cygwin/libc/ 
+>> bsdlib.cc. Is there something wrong there, or is that expected to be 
+>> independent?
+> 
+> Thanks for the review; will apply shortly if no changes needed...
+> 
+> Also thanks for the follow-on question.  __progname is export-aliased to 
+> program_invocation_short_name (in globals.cc).  So one could use either 
+> name anywhere, really.  I prefer to leave __progname as-is in bsdlib.cc 
+> because that recalls its BSD origin.  In dcrt0.cc for this patch we 
+> could go either way, though for __progname we'd have to add an extern 
+> reference.  I chose to use program_invocation_short_name as the 
+> remainder of this file does already.  I'm open to keeping __progname.
+> 
+> The two names both refer to the same semantic object.  It is filled in 
+> by Cygwin as the DLL starts up.  One can later use setprogname() to 
+> change it.  But that can only occur after Cygwin is done initializing so 
+> it doesn't matter if it's changed.
 
-diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index cec7ee38a533..f789e6baffaf 100644
---- a/winsup/doc/posix.xml
-+++ b/winsup/doc/posix.xml
-@@ -11,9 +11,9 @@
- POSIX®.1-2024 also simultaneously IEEE Std 1003.1™-2024 Edition,
- The ®Open Group Base Specifications Issue 8
- (see https://pubs.opengroup.org/onlinepubs/9799919799/), and
--ISO®/IEC DIS 9945 Information technology
--- Portable Operating System Interface (POSIX®) base specifications
--- Issue 8.</para>
-+ISO/IEC/IEEE 9945:2026 Information technology
-+- Portable Operating System Interface (POSIX™) Base Specifications,
-+Issue 8 (Edition 2, 2026) published 2026-03-18.</para>
- 
- <screen>
-     CMPLX
--- 
-2.51.0
+Ah, right.
 
+I was assuming this was just an alias in the PE export table, but we're 
+actually using __attribute__ ((alias)), so yeah, makes sense.
+
+> Let me know what you think.
+Anyhow, don't let this nit-picking discussion sidetrack you from 
+applying this obviously correct change.
