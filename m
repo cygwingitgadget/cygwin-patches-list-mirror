@@ -1,73 +1,73 @@
 Return-Path: <SRS0=koVj=IF=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-	by sourceware.org (Postfix) with ESMTPS id 893A94BA23C8
-	for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2026 07:45:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 893A94BA23C8
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+	by sourceware.org (Postfix) with ESMTPS id C7E344BA2E37
+	for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2026 07:45:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C7E344BA2E37
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 893A94BA23C8
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::32c
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792050307; cv=none;
-	b=i4qNNbqDIQ4H92yoE2EEshumugoFARflpn8kF19YBX0kJm7OvqPIvyTDfg8yRG0WAXgxowrEEc48XfHm6Rr27uey4YYp6Kf0Ywtn9vX7ajT/hMo2gvZSpR/mEt+OVdy9uryrJRyTR+atpyhKXJSvEsOLjmorj1KYO2QKp3AQiX4=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C7E344BA2E37
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::32f
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792050310; cv=none;
+	b=bU1yJ5AxyVjcKJ8gbfGvqrCUJWTxZLTXdmR1f5hQegPmah0bHjXEuaycMu+xVhb9DtzNAxzKAAyRUtUyO+VKLl9no6V77pQy2xTym7P/AGhJExRKLEzOYQW4kEob80UnDr8INuKv4tXjB7gIPpGhDGphReOE6Fr+kZjaSMDzIhs=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792050307; c=relaxed/simple;
-	bh=Y2TXtHmbS2aEH4/QQ7rNANGGUJAiSSkM7r8Uo83RW28=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=THMjVcgIzf8STQzOaM4rU/35lgaduFJbKiw0SVlKV/2e5iJ2naZO/hJ0flrXjrxbpdeKbIJ3FFbzD6MEL0/GUwobznfZyRz1X3uGLku1ZfouN2h2WNfSK3j6fkx22zIMajUEK9YXQ1oIUh5REqOt0YWJFpZWUqYiPPC8Dp0jHDg=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UhhPusOU
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 893A94BA23C8
+	t=1792050310; c=relaxed/simple;
+	bh=ePt1Vb9gcrB/moA8whD0o2mNroNcx3DcQgCm6JkaQy4=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=SWm7DMFa1YjiIW6Esuf3HMfA8wtMpr8m9gmr+dmmE7vMbOELcyUZbvwkkBdpVebZVSCCoXECq1oDclAuvJsikdctsi2g3BosTeiHHsMhuIffA9DD+DBcZZkgVdRlWCaoBkgOm1wDQqERaISE8j5fjGZLAeOW5LMqgXiPIfI8zuc=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PduhuhzM
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C7E344BA2E37
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UhhPusOU
-Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-828f4eeba13so3563719a34.1
-        for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2026 00:45:07 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PduhuhzM
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-82374c2d7aeso3174553a34.1
+        for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2026 00:45:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792050307; x=1792655107; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1792050310; x=1792655110; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
-        b=UhhPusOUMGEbt75xMAF1qYw/oS/cWcAgbTUN1TV6ZyD6UcHW/QYWiESNgYvFfs/s7Y
-         TWXQJl6kxItnXKcGIq/Zqhda2UdVdAh7Us+gtODRpbJeHEaCgZV5ETubX6vjAnzoozTq
-         n7puAWsPSKNlKKmrvH11zriQaZDai7x9+Wjnl+jXf6UifeUmdOJ15sXCFpbNYxbX96oQ
-         tiyZSmR4ag4k+hOfzP+aOQCKA+MPaSoFnxLa3yq/sUHoU6OJ++cQj/+jIacz5TNpk03H
-         EB05PHGWG6cNkBafKeO+E0an/c8fK4rrRu05vdAv2i9KQXXR7isEqn7b0xaKRvyKEBuV
-         MU9w==
+        bh=Q5TtlbgEHIMB/DLbSa8s0zYg+0LxtN45ejto3Bvx0tQ=;
+        b=PduhuhzMXB+yab5QyumIABqmPFNWvoo6nlNamMpFrLRuMzx40gP20wZPcKDmr+iOoa
+         1r8niWxNJtv2OY2tMI/UzSBLN8lk3VFU1Pj+qAfRizgrltIHzRMR/29/Tc6cZeVZqPUy
+         JPAC2+Wrun9skDRb9PWkDC3VowF5ckubRQcfFt8B/J5Xy0Dzl7kfwhghmx4DZSiQ627i
+         cVU9QBp4kPs2NP4DqmC6XZy8PXmgLjJ1wAG/ZbmpodFck0pgBl0mVKf/Vv0b5UdR+ixy
+         9oNEJJtP2TvK4qD32eTQeSRNGtUq1xLioEY+b4W9AIG6p5uTPoX9AJAAiA1o5/THRapS
+         I7tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792050307; x=1792655107;
+        d=1e100.net; s=20260707; t=1792050310; x=1792655110;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
-        b=EidMwGXqAWl883lFt4lqUOaIsB96mttGlAzGSjU2IR0on7nVpsg7eXYVBoeqLqc0T1
-         bCvXQz+2pbhLrVvVhD3VzpAGmvk/RAsj8Q4WxNyjymjUc1sPEbB6Cx9o7miQjiAnH4n3
-         g5IH4VC/sQGk8BJEJueeiMcCU3/fEPUoxNaM/LOh+dWC0L5Nj0WEPeSMgnP4KzJfpHA9
-         cOW1VkxfIBsxkuhln8hOvF1Ae17xycdBlcixRRtF4Jlr9QF6YTm+yqTK9Osbay2CEVZS
-         Fyzpc+FM72vAkR06PHi72un0t6eH+rpzYe7UYD+lh2Q61ikkcX5q5PmABMH3nW4IR+at
-         +4Zw==
-X-Gm-Message-State: AFq9FYKUe3wngPxY/N0s9ttUtZ4DberLq9WnJazvuZQr5Ezuji/Y/nWO
-	9EY7rFGXtdoUJLN7FCN4WvpgR2fk9vFUmYChnlRdC37h3F9hfsdbHgnPjmeDCmGdh/s=
-X-Gm-Gg: AYBFou0MnJbD3oLMd1+4zMgpDlCL9LWgpmSe8iFWQx2uYJUbRO1Ezn50ilJHDDVpYqN
-	2SEXsAARMelgX92+qIa6mzx4CiqjlF3XrrXrsy1azNf+eHvcieEIi9ygXQiUYazgjYEvwMImPyA
-	ntH7AQTp28DMPL7MjCXtFlm/Voj/Dn/JHO6FDKcFrClJrHCpTpJZaT7Y8xgdaZHe4MwYGnMZv/h
-	E2MiJ4jg+vx9YzdHJv3+J8hSV0D+w+yBWpFcvW51M5Rsz2l8V+MZphvDsBgpWZNikt8vsj2ti54
-	z0CQBL0WvrgJu6nuzSDxleaMgnjt83I78yMEzVb5M1oYeRd4XIqgRjmZaT746NoEFuyGFnffmB+
-	+50NETo0QwvjRHrxiBsw0MPysJl4GaiAvEv17rogijXNfPiVT8CHtLc/Xp4J8wwuoUAL5w438nD
-	KMMps1hNJ0cM1AaK3voPXxHzx1xsUwsPA8C3X9bayMraEEM4+lGJxCfFSS86xS2eVO97KQnJ07T
-	uY=
-X-Received: by 2002:a05:6830:2107:b0:81f:6e05:c1aa with SMTP id 46e09a7af769-83096fa8197mr18299840a34.18.1792050306782;
-        Thu, 15 Oct 2026 00:45:06 -0700 (PDT)
+        bh=Q5TtlbgEHIMB/DLbSa8s0zYg+0LxtN45ejto3Bvx0tQ=;
+        b=FA/OjIqoGqz+L4OsrjzF1JNxAIgSGF+hBCMxoGpUd/BB38HRSbQ/cNwJDPmkihAz9U
+         55segZix1gSWYIWIkqx3AranTHcM7fKfj8w4Su+N6qLr/9PS6ot3e2vWQDXsj0tcmwph
+         WLZXQmPECPi1wI96UWB+iKlxPMeUsvTVkF5/ei9kriK/ElG6r0kFP30cTADTia5yDhcU
+         Dtd45INMzIE4VjqS0WelAFi3xS8e8UESmhZ/Dm59OQ/cIr199Yo+jeV8s4SqbHSGmf7U
+         YzoFCNbQSb8m+USs7DCzZOujowfaOV3i8ZKNUlly2XBcQ2Ojk0wiHUywMstfvY6fldbp
+         IlPw==
+X-Gm-Message-State: AFq9FYIKCp5pD6ItxgybLbg8JDn6o5EUWdInkdUA5KBAZ4YxW0fMOtyC
+	4F8YVYxwRBbUlkDQNeXiySY10ibX+0OolvA2ihNietOyTvp4dFvk78hJHA31gGlkcvI=
+X-Gm-Gg: AYBFou1hAntMpddY6Rcz5qIy1LIhbbbkB+OdUsWE+etr9cMVHV24xYP9cpARj/seR+/
+	ky/LIGOmrgfxQbx6JQuhufXptAPvPSMYmcwKF9MEs+gxEgwDDTMz2MpJtSysA8hdPH+BjvEiTMG
+	cx8qL5pWA9y0lVXcmHyX7PMoBrPTbLiOMUHhCIMKhok+eObzsQS/WhyZLX91YxyonRmVz6g553r
+	rsMNzarJiirtcf4LVD2vfXzAnOzsZfq9xA3Ih+oC0367N2l6XVgVMR6/29iGjkz7+cwqoBDQbsG
+	AnayP7A5qZ54PFJIbnwAVg1GHrZVFf7Nxb97camZ8fHCBGBpojzUH9WXjRS2R/eqdFpdJTvt6VY
+	G3rujxsKWWrHuHocS8Fdf5OF+zAzJdzGzJzvr7nGxAhJB67JYIzk9MtPcihhCRMN5DjAq+E5UXc
+	bppI/SsMkj4lrB6m0TgKhDDi8sBwXc+SkZ5WxqYk4jYrFXSCXQDSzocGyf4gmBbD9Vkmps1MK1r
+	mY=
+X-Received: by 2002:a05:6830:3366:b0:81e:375d:3963 with SMTP id 46e09a7af769-83028c5912cmr10921962a34.18.1792050309915;
+        Thu, 15 Oct 2026 00:45:09 -0700 (PDT)
 Received: from [127.0.0.1] ([52.176.123.176])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8303494f76fsm16626219a34.2.2026.10.15.00.45.05
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-83bf78d27a1sm5121513a34.15.2026.10.15.00.45.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 00:45:05 -0700 (PDT)
-Message-Id: <4f53a727d391467eccdbd752fce1b920506954a9.1792050298.git.gitgitgadget@gmail.com>
+        Thu, 15 Oct 2026 00:45:08 -0700 (PDT)
+Message-Id: <92d13761feba33e0f560ed8c87481068e728080c.1792050298.git.gitgitgadget@gmail.com>
 In-Reply-To: <pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
 References: <pull.10.cygwin.1789302605264.gitgitgadget@gmail.com>
 	<pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Thu, 15 Oct 2026 07:44:55 +0000
-Subject: [PATCH v2 2/5] Cygwin: testsuite: allow cygrun without the testing
- namespace
+Date: Thu, 15 Oct 2026 07:44:56 +0000
+Subject: [PATCH v2 3/5] Cygwin: testsuite: cover foreground PTY input recovery
+ after exec
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -75,83 +75,288 @@ MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Cc: Johannes Schindelin <johannes.schindelin@gmx.de>,
     Johannes Schindelin <johannes.schindelin@gmx.de>
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-An executable beside an isolated build of the Cygwin DLL does not need
-the build-date-specific testing namespace. Provide an explicit -notesting
-opt-out so such runs do not depend on the native CYGWIN_TESTING flag
-surviving a Cygwin exec.
+Terminal replies arriving after a foreground Cygwin `exec()`, but before
+its first read, must reach that process rather than remain on the native
+input path. This was broken, with the symptom that a `vim.exe` started
+from a native Console program could inadvertently cause input
+corruption, and this was just fixed. Let's try to verify that this stays
+fixed in the test suite.
 
-Keep the testing namespace enabled by default and leave production
-environment handling unchanged.
+An actual Cygwin `exec()` and a native background process are needed to
+exercise the routing transition responsible for this failure. Checking
+only replies sent after reading begins would miss the pre-read case.
 
 Assisted-by: GPT-6.1
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/testsuite/cygrun.c  | 12 ++++++++++--
- winsup/testsuite/cygrun.sh |  7 ++++++-
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ winsup/testsuite/.gitattributes               |   1 +
+ winsup/testsuite/Makefile.am                  |  27 +++
+ winsup/testsuite/mingw/Makefile.am            |   5 +-
+ winsup/testsuite/mingw/pty-native-input.c     |  22 +++
+ .../winsup.api/pty-background-native.c        | 155 ++++++++++++++++++
+ 5 files changed, 209 insertions(+), 1 deletion(-)
+ create mode 100644 winsup/testsuite/.gitattributes
+ create mode 100644 winsup/testsuite/mingw/pty-native-input.c
+ create mode 100644 winsup/testsuite/winsup.api/pty-background-native.c
 
-diff --git a/winsup/testsuite/cygrun.c b/winsup/testsuite/cygrun.c
-index 50c51876e..b7e6d17bc 100644
---- a/winsup/testsuite/cygrun.c
-+++ b/winsup/testsuite/cygrun.c
-@@ -23,10 +23,11 @@ main (int argc, char **argv)
-   DWORD res;
-   DWORD ec = 1;
-   DWORD timeout = 60 * 1000;
-+  const char *testing = "1";
+diff --git a/winsup/testsuite/.gitattributes b/winsup/testsuite/.gitattributes
+new file mode 100644
+index 000000000..6313b56c5
+--- /dev/null
++++ b/winsup/testsuite/.gitattributes
+@@ -0,0 +1 @@
++* text=auto eol=lf
+diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+index 8f2967a6d..b2b0e0b41 100644
+--- a/winsup/testsuite/Makefile.am
++++ b/winsup/testsuite/Makefile.am
+@@ -378,4 +378,31 @@ clean-local:
  
-   if (argc < 2)
-     {
--      fprintf (stderr, "Usage: cygrun [program]\n");
-+      fprintf (stderr, "Usage: cygrun [-notimeout] [-notesting] program\n");
-       exit (1);
-     }
+ if CROSS_BOOTSTRAP
+ SUBDIRS = mingw
++check_PROGRAMS += testinst/bin/pty-background-native
++testinst_bin_pty_background_native_SOURCES = \
++	winsup.api/pty-background-native.c
++
++testinst_bin_pty_background_native_DEPENDENCIES = \
++	$(filter-out -%,$(LDADD)) \
++	testinst/bin/pty-native-input$(EXEEXT) \
++	testinst/bin/cygwin-console-helper$(EXEEXT) \
++	testinst/usr/share/terminfo/78/xterm
++
++testinst/usr/share/terminfo/78/xterm: /usr/share/terminfo/78/xterm
++	$(MKDIR_P) $(dir $@)
++	$(INSTALL_DATA) $< $@
++
++testinst/bin/pty-native-input$(EXEEXT): mingw/pty-native-input$(EXEEXT)
++	$(INSTALL_PROGRAM) $< $@
++
++testinst/bin/cygwin-console-helper$(EXEEXT): \
++	../utils/mingw/cygwin-console-helper$(EXEEXT)
++	$(INSTALL_PROGRAM) $< $@
++
++mingw/pty-native-input$(EXEEXT): $(srcdir)/mingw/pty-native-input.c
++	$(MAKE) -C mingw pty-native-input$(EXEEXT)
++
++../utils/mingw/cygwin-console-helper$(EXEEXT): \
++	$(top_srcdir)/utils/mingw/cygwin-console-helper.cc
++	$(MAKE) -C ../utils/mingw cygwin-console-helper$(EXEEXT)
+ endif
+diff --git a/winsup/testsuite/mingw/Makefile.am b/winsup/testsuite/mingw/Makefile.am
+index 772e73405..4e6b2fc68 100644
+--- a/winsup/testsuite/mingw/Makefile.am
++++ b/winsup/testsuite/mingw/Makefile.am
+@@ -16,7 +16,7 @@ override CC = @MINGW_CC@
+ override CXX = @MINGW_CXX@
+ AM_CPPFLAGS =
  
-@@ -35,6 +36,8 @@ main (int argc, char **argv)
-     {
-       if (strcmp (argv[i], "-notimeout") == 0)
- 	timeout = INFINITE;
-+      else if (strcmp (argv[i], "-notesting") == 0)
-+	testing = NULL;
-       else
- 	break;
-     }
-@@ -47,7 +50,12 @@ main (int argc, char **argv)
-       exit (1);
-     }
+-noinst_PROGRAMS = cygrun cygload
++noinst_PROGRAMS = cygrun cygload pty-native-input
  
--  SetEnvironmentVariable ("CYGWIN_TESTING", "1");
-+  if (!SetEnvironmentVariable ("CYGWIN_TESTING", testing))
+ cygrun_SOURCES = \
+ 	../cygrun.c
+@@ -24,3 +24,6 @@ cygrun_SOURCES = \
+ cygload_SOURCES = \
+ 	../winsup.api/cygload.cc
+ cygload_LDFLAGS=-static -Wl,-e,cygloadCRTStartup
++
++pty_native_input_SOURCES = \
++	pty-native-input.c
+diff --git a/winsup/testsuite/mingw/pty-native-input.c b/winsup/testsuite/mingw/pty-native-input.c
+new file mode 100644
+index 000000000..688e87482
+--- /dev/null
++++ b/winsup/testsuite/mingw/pty-native-input.c
+@@ -0,0 +1,22 @@
++#include <stdio.h>
++#include <windows.h>
++
++int
++main (void)
++{
++  HANDLE input = CreateFileA ("CONIN$", GENERIC_READ,
++			     FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
++			     OPEN_EXISTING, 0, NULL);
++  DWORD mode, written;
++  if (input == INVALID_HANDLE_VALUE || !GetConsoleMode (input, &mode)
++      || !WriteFile (GetStdHandle (STD_OUTPUT_HANDLE), "R", 1, &written, NULL)
++      || written != 1)
 +    {
-+      fprintf (stderr, "Cannot set testing environment: %lu\n",
++      fprintf (stderr, "Native console readiness failed: %lu\n",
 +	       GetLastError ());
-+      exit (1);
++      return 1;
 +    }
- 
-   memset (&sa, 0, sizeof (sa));
-   memset (&pi, 0, sizeof (pi));
-diff --git a/winsup/testsuite/cygrun.sh b/winsup/testsuite/cygrun.sh
-index bf1d5cc6b..6ad2a373e 100755
---- a/winsup/testsuite/cygrun.sh
-+++ b/winsup/testsuite/cygrun.sh
-@@ -13,5 +13,10 @@ then
-     windows_runtime_root=$(cygpath -m $runtime_root)
-     $cygrun "$exe -v -cygwin $windows_runtime_root/cygwin1.dll"
- else
--    cygdrop $cygrun $exe
-+    # Executables beside their private DLL need no extra testing namespace.
-+    case "$exe" in
-+        testinst/bin/*|./testinst/bin/*) set -- -notesting "$exe" ;;
-+        *) set -- "$exe" ;;
-+    esac
-+    cygdrop "$cygrun" "$@"
- fi
++  /* Keep native console input active during the foreground Vim startup. */
++  Sleep (4000);
++  return 0;
++}
+diff --git a/winsup/testsuite/winsup.api/pty-background-native.c b/winsup/testsuite/winsup.api/pty-background-native.c
+new file mode 100644
+index 000000000..e4128b54a
+--- /dev/null
++++ b/winsup/testsuite/winsup.api/pty-background-native.c
+@@ -0,0 +1,155 @@
++#include <assert.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <windows.h>
++
++#include <errno.h>
++#include <poll.h>
++#include <pty.h>
++#include <sys/wait.h>
++#include <termios.h>
++#include <unistd.h>
++
++static const struct
++{
++  const char *query, *reply;
++} replies[] = {
++  { "\033[6n", "\033[1;1R" }
++};
++
++/* Emulate MinTTY answering terminal queries, not rendering a screen. */
++static int
++terminal (int master, pid_t child)
++{
++  char window[256];
++  size_t used = 0;
++  int status;
++  ULONGLONG deadline = GetTickCount64 () + 10000;
++  for (;;)
++    {
++      assert (GetTickCount64 () < deadline);
++      struct pollfd fd = { master, POLLIN, 0 };
++      int ready = poll (&fd, 1, 100);
++      assert (ready >= 0 || errno == EINTR);
++      if (ready > 0)
++	{
++	  char buf[128];
++	  ssize_t n = read (master, buf, sizeof buf);
++	  assert (n >= 0 || errno == EINTR || errno == EIO);
++	  for (ssize_t i = 0; i < n; i++)
++	    {
++	      if (used == sizeof window)
++		memmove (window, window + 1, --used);
++	      window[used++] = buf[i];
++	      for (size_t j = 0; j < sizeof replies / sizeof *replies; j++)
++		{
++		  size_t len = strlen (replies[j].query);
++		  assert (len && len <= sizeof window);
++		  if (used >= len
++		      && !memcmp (window + used - len, replies[j].query, len))
++		    assert (write (master, replies[j].reply,
++				  strlen (replies[j].reply))
++			   == (ssize_t) strlen (replies[j].reply));
++		}
++	    }
++	}
++      pid_t done = waitpid (child, &status, WNOHANG);
++      assert (done >= 0 || errno == EINTR);
++      if (done == child)
++	break;
++    }
++  close (master);
++  if (!WIFEXITED (status) || WEXITSTATUS (status))
++    {
++      fwrite (window, 1, used, stderr);
++      return 1;
++    }
++  return 0;
++}
++
++/* Emulate Vim entering raw mode and querying before its first input read. */
++static int
++worker (pid_t native)
++{
++  struct termios raw;
++  assert (tcgetpgrp (0) == getpgrp () && getpgid (native) == native
++	 && native != getpgrp ());
++  assert (!tcgetattr (0, &raw));
++  raw.c_lflag &= ~(ICANON | ECHO);
++  raw.c_cc[VMIN] = 0;
++  raw.c_cc[VTIME] = 1;
++  assert (!tcsetattr (0, TCSANOW, &raw));
++  assert (write (1, replies[0].query, strlen (replies[0].query))
++	 == (ssize_t) strlen (replies[0].query));
++  /* Emulate Vim's startup work while replies arrive before the first read. */
++  usleep (100000);
++  char buf[64];
++  size_t used = 0;
++  for (int i = 0; i < 30 && used < sizeof buf; i++)
++    {
++      ssize_t n = read (0, buf + used, sizeof buf - used);
++      assert (n >= 0 || errno == EINTR || errno == EAGAIN);
++      if (n > 0)
++	used += n;
++      if (memchr (buf, 'R', used))
++	break;
++    }
++  int result = used != strlen (replies[0].reply)
++	       || memcmp (buf, replies[0].reply, used);
++  /* Misrouted reports can become keystrokes that edit Vim's first line. */
++  if (result)
++    fprintf (stderr, "Bad terminal reply (%zu bytes)\n", used);
++  int status;
++  assert (waitpid (native, &status, 0) == native
++	 && WIFEXITED (status) && !WEXITSTATUS (status));
++  return result ? 1 : 0;
++}
++
++int
++main (int argc, char **argv)
++{
++  if (argc == 3 && !strcmp (argv[1], "worker"))
++    {
++      int pid;
++      char extra;
++      assert (sscanf (argv[2], "%d%c", &pid, &extra) == 1 && pid > 0);
++      return worker (pid);
++    }
++  assert (argc == 1);
++  if (!GetProcAddress (GetModuleHandleW (L"kernel32.dll"),
++		      "CreatePseudoConsole"))
++    {
++      fprintf (stderr, "ConPTY unavailable\n");
++      return 77;
++    }
++  assert (!setenv ("TERM", "xterm", 1));
++  struct winsize size = { 24, 80, 0, 0 };
++  int master;
++  pid_t child = forkpty (&master, NULL, NULL, &size);
++  assert (child >= 0);
++  if (child)
++    return terminal (master, child);
++
++  int ready[2];
++  assert (!pipe (ready));
++  pid_t native = fork ();
++  assert (native >= 0);
++  if (!native)
++    {
++      close (ready[0]);
++      assert (dup2 (ready[1], 1) == 1);
++      close (ready[1]);
++      assert (execl ("/bin/pty-native-input.exe", "pty-native-input",
++		    (char *) NULL) != -1);
++    }
++  close (ready[1]);
++  char byte;
++  assert (read (ready[0], &byte, 1) == 1 && byte == 'R');
++  close (ready[0]);
++  /* Emulate a native job remaining alive while foreground Vim starts. */
++  assert (!setpgid (native, native));
++  char pid[24];
++  snprintf (pid, sizeof pid, "%ld", (long) native);
++  assert (execl (argv[0], argv[0], "worker", pid, (char *) NULL) != -1);
++}
 -- 
 cygwingitgadget
 
