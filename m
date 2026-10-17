@@ -1,99 +1,77 @@
-Return-Path: <SRS0=U2Tp=IH=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e07.mail.nifty.com (mta-snd-e07.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:27])
-	by sourceware.org (Postfix) with ESMTPS id 55CA64BA2E04
-	for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 06:25:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 55CA64BA2E04
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 55CA64BA2E04
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:27
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792218353; cv=none;
-	b=QELZfK5w8HXUCATDdUZXrWuvOmTBLI3fDqYH5QQm4DV5fPqZWoXMH0WDxpuxRjjRNWIZD87Qj16AJWnVIoBnHYuTKZVROyCGjSUmtdpxcB7hj+7WnB2Zt04LWPAzuCtT21e0NU+Nma0+5NrIltT4fdMxQBs/ITTKTFQ5Q+tl0yM=
+Return-Path: <SRS0=X8J8=IH=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.128])
+	by sourceware.org (Postfix) with ESMTP id E6D574BA2E11
+	for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 13:35:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E6D574BA2E11
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E6D574BA2E11
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.128
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792244129; cv=none;
+	b=UnN2vT0ScRlxUl5TNgImb2dcV4KC5COpw3LWB9BO6vc6zgbTl+RTFIENLmiO+Pf0WxJanS2jNwJ6Owa1xCBJEZuaMQ4S7fhFhoovMpn7B67vM5DON+JiwjisQ/M5IgRarQHHDf+tXXdbbLENvEXA7uKJw1eYFZSNBlQ7irTrO40=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792218353; c=relaxed/simple;
-	bh=sQV1vyuTvvGhedg9CFWTbuPv0dPC9LSWZe3kysXO3N0=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=n1DBFaszg8K7dqwZEE6mTWGjDbOIURJAVNLNFWC7IevRBx7vh9PUjK2g2AgyIX+Vf9xs+9+Uh9GORbvUjvRX2OlvbXDpDA75SdWU7n+Xajt/OU5hoNANj/KGLDVRJVZ3QlzimS/eKHrfNrV6lHgMFUwlcum+LjqfTczU3WWnqIA=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lilIhbqW
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 55CA64BA2E04
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=lilIhbqW
-Received: from HP-Z230 by mta-snd-e07.mail.nifty.com with ESMTP
-          id <20261017062551354.IUXD.17441.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 15:25:51 +0900
-Date: Sat, 17 Oct 2026 15:25:49 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: signal: preserve runtime nesting across user
- handlers
-Message-Id: <20261017152549.d0583b317aa494345f79b18d@nifty.ne.jp>
-In-Reply-To: <20261015144134.a4eb492e28ac4c72891593e9@nifty.ne.jp>
-References: <pull.12.cygwin.1791398786755.gitgitgadget@gmail.com>
-	<40c7ebb4-ff69-45d1-9106-b62457477e04@dronecode.org.uk>
-	<20261015144134.a4eb492e28ac4c72891593e9@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
+	t=1792244129; c=relaxed/simple;
+	bh=6iWkryd8DO8hbBDnhx1dH6vFHl7ulu1X8msrTJhcKyY=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=jfY5EeqXwZyKDNpfs3yHe7QQzQxuvAqUlwBKf5+B+EK424YsQEB+MBCWl5im9tEGmQ5M4sE2ZPMke3n4+uwUExY/gD2XVKr2KQZ8x26uH/z7WrBL1Td5dXnNM68tgAcaCLV5N6jTiCJxDR3MpYFw4njQrjQn9+p43WNvxMrD6jQ=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E6D574BA2E11
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A715CD60E8D2C56
+X-Originating-IP: [62.49.190.104]
+X-OWM-Source-IP: 62.49.190.104
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTFQt5tsehEMABwa2e2fPM0fZ9VjhzEsAEVPn1vzAlWy6RFO58HqohQJH7kuNZoYRhkTuRBjWsGFf7GTHWrvPIA6QcTMHm5SnZ+E3TiAtL7qmQEFgwAT1yDdQqIyxa2OOeQJ4VERhHaRIDjdE0/xRWvKdx4Xu0KY2vGJFlaT8tSI57sRcPUMQW53zncBvb5jhgIgMnKJIW6XTfHTgv2K9KmbNZqgNCk9hYQ6R0jRnSNUIw79dzN2WucVE2ze0mHwPXDUj7N6bYknnUGpcRDOJsCt0n3aWirIgtsrI7ns6x+bOUKAlpLJptrDeFKXOJ/9v7vTd7kRach6Pei3JxJuxOh4eeZ/8x9kQ7S98z3y+lFwGKNH3U4taJkRj8oqjqOZKHG9Z8mYgioqCKUw0srzpA54LoHceM+6uqJm8u5ajcXCiNAhWpKbmMdAzPnhQAktWp6SXCh7PtbQyO/dFn92b+i+G2IEne7Cf7eYa17OVnzpRG3C5WOM0UNRCyokvqETXIbNBmpssB7Q6wKXt4v4H8dZH+MrhKq+lZnfqAB58alDwMbpjT8j4SP3dWTxi6aOrU6o+x2FBNuVKSoQVV8cYJj+V3F2j5ahAxesTkRdLsyoCUect9avFpte4uS/u716RDfL8JUfWMFpc3QklWemuxCChZdZw3jYFp+YnZPqUoyZTA
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (62.49.190.104) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A715CD60E8D2C56; Sat, 17 Oct 2026 14:35:24 +0100
+Message-ID: <093cb58b-5d5f-4059-8420-4bcf3d9f9aee@dronecode.org.uk>
+Date: Sat, 17 Oct 2026 14:35:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] Cygwin: autoload: fix ws2_32 chained init on AArch64
+References: <PN0P287MB0295342E2109C2CB8EECCE6B92062@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+ <ag8IvAkqoNVM-AH2@arm.com>
+ <PN0P287MB02951A11C49A1208A9BA66F392102@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+ <99590c72-bc88-4466-95c2-ae540a11c031@dronecode.org.uk>
+ <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com,
+ Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
+In-Reply-To: <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1792218351;
- bh=bmdFl+/0PqCv4js4ASqow01syAwkhVJbT0vio1EHVJA=;
- h=Date:From:To:Subject:In-Reply-To;
- b=lilIhbqWZKRdV+ksypO9xtGXFxzrCAxQ8oWbpffjZSQQB/1IOPME9QSY5YXW3qFPFs4eLGjW
- qebDopEajoKH0L53qiWEXs4ml716sCjZDfTaNuHPCviywZX6Y54nx6HqjUb01w5VLY3FvfVtej
- yLjOICAJTTS3/sGD/Grop/GRsiSNzvmpLiZ1vc/zQaRuPvTaZaZyzcjhnbxmwPkwK+tgb+S/Fr
- 02MZLWw9of7h07Otie9dS+CE99YDF3SNeQMsXC4l4iVPSIU2N3MyAFlJfaFKyi4X06Ye+kBk6B
- Uo5Vw/3Z2SjQ9u6rZ4hmjxUORjt3ySWZli6/qYxMVnO0Bs3w==
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Hi Jon,
-
-On Thu, 15 Oct 2026 14:41:34 +0900
-Takashi Yano wrote:
-> Hi Johannes,
+On 26/06/2026 10:03, Chandru Kumaresan wrote:
+> Hi Jon,
 > 
-> On Tue, 13 Oct 2026 19:47:43 +0100
-> Jon Turney wrote:
-> > On 07/10/2026 19:46, Johannes Schindelin via GitGitGadget wrote:
-> > > From: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > > 
-> > > CMake/libuv `posix_spawn` callers can hang waiting for `SIGCHLD` after
-> > > nested signal delivery. Restoring `_cygtls::incyg` to `1` loses the
-> > > concrete nesting level; subsequent balancing can leave it at zero,
-> > > disabling the controlled signal-wakeup path.
-> > > 
-> > > Preserve the incoming count, including zero, to keep runtime nesting
-> > > balanced. The public-API regression targets lost wakeups after nested
-> > > delivery, including within `pthread_once`.
-> > > 
-> > > This was suggested by Takashi Yano on May 28th, 2025 in
-> > > https://inbox.sourceware.org/cygwin-patches/20250528125311.2589-1-takashi.yano@nifty.ne.jp/,
-> > > part of which was applied as 8201c57dd1 (Cygwin: signal: Revert
-> > > _cygtls::inside_kernel() change, 2025-05-28). The remaining part is what
-> > > is applied here, together with a regression test that exercises the code
-> > > path that is fixed by it.
-> > 
-> > It seems like restoring the level was part of v1 of the patch, but 
-> > dropped in v2, so maybe he has some context for this I'm missing.
+>> I've applied this patch.
 > 
-> Embarrassingly, I have absolutely no recollection of why I
-> reverted part of the v1 changes in v2. But since that change
-> indeed fixes your test case, it clearly did have a purpose.
-> Thank you for resubmitting the patch!
+> Thanks!!
 > 
-> > But thank you so much for including a test!
-> > 
-> > > Suggested-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> > > Fixes: b7097ab39ed0 ("Cygwin: signal: Revive toggling incyg flag in call_signal_handler()")
-> > > Assisted-by: GPT-6.1
-> > > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > > ---
-> > >      Cygwin: signal: preserve runtime nesting across user handlers
-> > >      
-> > >      This patch addresses the hangs experienced in
-> > >      https://github.com/msys2/msys2-runtime/pull/375#issuecomment-5967746825.
+>> Just so I'm doing my due diligence, I'd like you confirm that you are
+>> submitting this under an open source license as per [1], and you and
+>> your colleagues at multicoreware are authorized to do so.
+> 
+> We have been contributing to Cygwin for about a year, all modifying
+> existing files rather than creating new ones. We will confirm and get
+> back to you shortly.
 
-If you have no objections, I’d like to apply the patch. What do you think?
+It seems that we didn't get a response to this.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+I apologize for not raising this issue initially, but that's us 
+operating under an assumption of good faith (and the fact that we'd much 
+rather spend our time dealing with technical issues than legal ones).
+
+I believe there's no legal difference between "modifying a file" and 
+"creating a file" in terms of the authorship and intellectual property 
+rights which accrue to the creator.
+
+So again, a statement clarifying the situation would be appreciated.
+
