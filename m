@@ -1,235 +1,165 @@
-Return-Path: <SRS0=FtGQ=IG=leafsoftwaresolutions.com=pcahoon@sourceware.org>
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azlp170100009.outbound.protection.outlook.com [IPv6:2a01:111:f403:c107::9])
-	by sourceware.org (Postfix) with ESMTPS id B75244BA2E3D
-	for <cygwin-patches@cygwin.com>; Fri, 16 Oct 2026 11:41:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B75244BA2E3D
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=leafsoftwaresolutions.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=leafsoftwaresolutions.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B75244BA2E3D
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c107::9
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1792150882; cv=pass;
-	b=etPAgYRBnGIp+ggpBVfSS6kPrZ5CYPZY7lcllDD4McVVFf4VAuFKNGpNxdGuiJdj4RrbiF4GTBJPsyuMFADqwvrlwIpscV7u2gmfyrPngtVZrXSSVPVm0TqMX8Inloxnu+7iMrvpijHXbgWy92U8JyCR5TWkuDg+BEGig5NkctU=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792150882; c=relaxed/simple;
-	bh=W3kbZDwaPc4ywyjDFSQ8h48a2PWk6aNHhcqkPEWgS8A=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Wqk8euJ0tUKYKpRM6uPPk7Xp6sGThp0VSS1OyTOwhsVyZz8BLIJ7lZzADUIu3aJhJxhi8jNHSwnf40EQiPURddUSRNwPZswgu+NRtSeHX1ny2Dc6iVUA+rRBuaNZXWdqkeo2IN4FRVNJmUr6aTvD7zz4uZCK2PJJDzHHIyjxku8=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=svNsQLbj
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B75244BA2E3D
+Return-Path: <SRS0=U2Tp=IH=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-e05.mail.nifty.com (mta-snd-e05.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:25])
+	by sourceware.org (Postfix) with ESMTPS id 0A0564BA2E14
+	for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 06:22:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0A0564BA2E14
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0A0564BA2E14
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792218139; cv=none;
+	b=AAWWfr+Fz1oLMgqWG6x5THtSwHWjJwOZn7aQqp9EkLOHDGBwM8dTYwvBs9U4wtdKVbG4GptR88DMygjgKp8ulDdRgXAe03Fv7fSVrN3fF0Y8Fqy5C9CyBZNyRgPdjC60gvtyBxN1AKLqAYtGTL38dDuO5zUbB2JUG8LPOPTFEug=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1792218139; c=relaxed/simple;
+	bh=f2ADRsIZEdKOJzhVmfLpJSU7KZkPELLQQeDRP4XRWnE=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=Az2drX2jpTfuOQcCM7mkPj/kpQkzXFXANuw0ZCw762e+RU/t5okv8vMJKK9Nv+z2LLTTBQZ/HXxbDpDnlXRLE7ZR/8paP/GAgqSVLFvu9yBoEYYJCBJ/uv+U+r/srL6I/9aObJ3AJ+Cphj3NFL8bfsGwnn2gVNHb0EY2Onnknw8=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ekWRhoXk
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0A0564BA2E14
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=svNsQLbj
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QtXqrlWqUc5UgqrONmGvEutseTFMnxvzuQsTpbNzotSs6BbtXxAndKAkouypCd7UaR+hIglmGU5I1yYh8SG30NlSZuDCnuB3qirDHmdGWMGQ2J9+fJ8NdkVgTMn/vpnntBsBHeijaBqQ8DXjYECXkzhunTJNUFZ6oQaIJ+0fea6y7vLKu7pT8QPuAPtaV+IQUjMQ9igAeOmujRmgP2VVFmg4K0P8V6OwFwssUkWE+WOzqzwMFUDY560MRVLWvVka68FqSoy0c0nwJamLKNi9lBv9tjQkSFNHt7JBacU8tXay6oHOjt/lAxYFsFOH42sMrlGOWE7wkJWvwwFahkq+gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O31VbcEpm5oYNwiuX0N7lkhjWWeFkElPJ8HfJWhCENs=;
- b=c3ZVdt/eeCQmMqGsL/eis+rf7iczplMwZU+zPrqFlSkMJppNQhHQyA1Nxa+AmdtXdao9jbJpcgYx2JNJeyf+ARrhTEvgp2ytmiICx1vJ4XOqKBMwi4C3qf6iW10eeqvy7sWj6AFf9zxwGztKIzYlYMX0UXX4cEAjM831imtaGaGgUUyHzIE4N1VrlDhCXqQHSRs2ZpfXR43oggsrjfJlOFYD9QM7oWTVTwDxtj1eSIqeu8py4RRKzgW5zumxQy6BMkmUAUSryjGpVqjdbQcAn8sbw1sGfNi78R9KnLam1R1XgDJf+L00GOXbN57nOm7dS+NkvIR4dSFNR5cXt1t6mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leafsoftwaresolutions.com; dmarc=pass action=none
- header.from=leafsoftwaresolutions.com; dkim=pass
- header.d=leafsoftwaresolutions.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=leafsoftwaresolutions.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O31VbcEpm5oYNwiuX0N7lkhjWWeFkElPJ8HfJWhCENs=;
- b=svNsQLbjcYpib0OTyaM7nSmJeN6Y+uy+qqZdr6Umwcewj6lCHXo+JBfqDn8ICxtACpOGN9BnGEE0/dRbh+hrEKwDnuiCXGiPPxO592sIoCneFqbd21TL8ca7b3eIo9jDt7dJ6uMTTKU86GLtfd0G0cxka0vKxClfwoOZbwWVFiE=
-Received: from CO1PR17MB5321.namprd17.prod.outlook.com (2603:10b6:303:e4::19)
- by PH0PR17MB4784.namprd17.prod.outlook.com (2603:10b6:510:8c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Fri, 16 Oct
- 2026 11:41:16 +0000
-Received: from CO1PR17MB5321.namprd17.prod.outlook.com
- ([fe80::4aea:a917:dde9:bc7d]) by CO1PR17MB5321.namprd17.prod.outlook.com
- ([fe80::4aea:a917:dde9:bc7d%4]) with mapi id 15.21.0522.016; Fri, 16 Oct 2026
- 11:41:16 +0000
-From: Phil Cahoon <pcahoon@leafsoftwaresolutions.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH RESEND] Cygwin: serialize user shared initialization with a
- named mutex
-Thread-Topic: [PATCH RESEND] Cygwin: serialize user shared initialization with
- a named mutex
-Thread-Index: Ad1dYv2LFHGJuBsiRYyn0xV1rCbJag==
-Date: Fri, 16 Oct 2026 11:41:16 +0000
-Message-ID:
- <CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2@CO1PR17MB5321.namprd17.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leafsoftwaresolutions.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR17MB5321:EE_|PH0PR17MB4784:EE_
-x-ms-office365-filtering-correlation-id: 4e88d7ac-0238-48d0-1182-08df2b7a638a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|6049299003|23010399003|38070700021|56012099006|5023799004|10067099003|4053099003|18002099003;
-x-microsoft-antispam-message-info:
- CDNQfFmvQ/gjRRDOjzyLboDbWbmdR01PRJBJn+ne+HjJB8lGGpwzrgRJPFgHevPV7wGz7ke1zwcIjc6UzqWTbzV0rOaUg587JZHnAwGN17dZ0Is33PMFgDixKfgTF+3asHAzu1eqONXLpL1nZsZwCvrv+o8gneqgOov/K+JnWBCjYQY9FnLkW1RzYasvYFrTauvQ57eNJnemEahhkzFai+9UBsJ62PDLb3E76IpmwbVlVec2+hZkqROJV1qjuJv00cmGNUMYYpXE0C/fHQmWc/rutglVKmLSvGwn88xtW3e63S/b8v0mA1xXtuIzGPokjKrDpIsGIszfs2CcjAbn9tzYR9xd72A2rdqkPOIJhTFUYtENeLQum0cSEPRaCvn1ieObICbLnGSChIbeLTiaO9NcPCoUG54tr5X57ulmrufh93J8tNaN/A1JtohJ7tC+fUCgyWVSIv/0IBGxvFoSUbT5g3FQr/NsD+HErCS848ojJfMe+RIecQW7aclplEG7RA7K8sUigU6MXDvfN7VTEUq9T2JoWe/jH1TddQBcI2cYn8Iq/HM7eZaP4Mt8PpjzQUuHfztdCiWrBAeYxmu2Yn5mNSPhx9z5Hb6zZwrtvcWRlGm+3935+ZBoJWBLNtd3DDnxGF/OIjO/aPZAx98I886fk/517elNV/GE0MOX+dcNiwM6BXSUyZBUXgb7dknNmcpxGsFoaWu5ms1hTU6VaaE6iJaTWchcOrrvKxq9wHI=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR17MB5321.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(6049299003)(23010399003)(38070700021)(56012099006)(5023799004)(10067099003)(4053099003)(18002099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?zShbFXsYGnlPjoy9JieLUYLpvtBSgRWNZxluSt4c8rQI0b/xFC3w9z/VOX0Q?=
- =?us-ascii?Q?ao3b3kjiFXzk74pSBW5v5v1Z9HlKqCeWAts14gNDYihJxdnT+B0K7ZpDolgq?=
- =?us-ascii?Q?iA+NfuX+MApLmoognlayJ/FneoxVqqBmj/6jjQmB2BsCsKDeFa2OZXoDkdah?=
- =?us-ascii?Q?KPtbWzKzTokNWvJj6Wzpj7fTxFNUR9MCh9OShvpcmrG0SbpaUIJ/1AGwlqo2?=
- =?us-ascii?Q?LdKLSs0Y7rcPpTN2+OrWPt57Y6f7T29muYqGhxyAClv9Y1UVwr3sEvJE8vIa?=
- =?us-ascii?Q?KXEKZgBGCKFTFzqBEMZWWhgDLx6GMQWasbERoSUFq/1yrytvzPMlZ4fqOIRv?=
- =?us-ascii?Q?cEfguKbM1CLYWQkrJPDZYQ7PqwpviQf0Ue7qJxpI93yvv43quJ9hfgqwFjsQ?=
- =?us-ascii?Q?4wqtY5qrlGMsqjLQwG1W4dGnMhMtzB8RRs7+y74XB0yAYLhTW+5jnSdN8NZZ?=
- =?us-ascii?Q?ispjlp1uUV40H7UCrlJNjWZ9lHKWPYi2oyxX7lbgS+0idD8hHxksLOQ4A4P5?=
- =?us-ascii?Q?zw9jFVATZh0GmD+8nrUguqyTYpoAWmEyyi8hNB2bPZ3jEmF/ey+JXcnUeu4t?=
- =?us-ascii?Q?jVAFeRQAZ3HPlDVfbsVXdTitQe40YfnaSLJTXQ4j7iDbhS+aimzfQXfFHCZg?=
- =?us-ascii?Q?Kq7QivWKzPTMhDDEw8DbSEVYeaArExRn+GajLhr4X4kZNdsHSFzqHcJlyURJ?=
- =?us-ascii?Q?DBAmPJWwRVOy+gR8rhOyE2m/QFarYuIlRaluyDeG4yGmyndhHoH4fWwBfGZ3?=
- =?us-ascii?Q?CTNPfrTqXvV5Kqf9cEYHDhZdAdmTZkjPc8em0LL1ryJzGj5Wsom843oywj4y?=
- =?us-ascii?Q?wvHtfzJSBDF/8kckXfU19Kejd1JiY7SW9+HCJnuNJkMpwTqQR0WEmpbz2e1H?=
- =?us-ascii?Q?HjbG5cZoSLLXmOfY1xcTAjba32Esq1EXVqg16mopqvDx0rxgQLfCxlCMo/tG?=
- =?us-ascii?Q?T+D2RhpMUwcntEWG11umhi8C1mg2lfFAzUFn4txxfcjtkxdyiXTREZjsuWw6?=
- =?us-ascii?Q?pCs4LbyBg+rIB/uvdq26ML+mVbjKgJjl1zkTOfT/mdySd5zTGdaLK4WQcHg2?=
- =?us-ascii?Q?XFgpKJiz9TEJS87jtIrC/45jf4FP8ZeW2xWjnLereyhhUJCPsGoh9MtyRvVi?=
- =?us-ascii?Q?q5+GVO9h/MIP9Jl9YRECYLWff83zxsTvXNa+ojivpTAKe3r6f55CbRZx4ZyL?=
- =?us-ascii?Q?koWaPegjijXvb56AgRByIa9fB9afSnQPYBfWPmPIo0Bwc+67lYAyLSobc2IL?=
- =?us-ascii?Q?Gn6cGMUcQDZTOmS0t2s6oSiB0nEYOzSYnqAlFNofsdHIGfMmhmz34oUokjSi?=
- =?us-ascii?Q?Nx9IJ7U2VyhhKbJa4kDFdS7Eb33aztBo4WO7bCSpkUjDjXCNzvJmX6bq0UsB?=
- =?us-ascii?Q?Jrs4wyywbMXByXMBvfp6z+6rMVRabA4O/rgkpnN4ijF3cs0wJ9ntOE84OE4Q?=
- =?us-ascii?Q?DKCvPpGHjb6ZSMr/iS9OZPFDBer6fRTB62zz+SEDk75ID65nC+8pzVfKsO0J?=
- =?us-ascii?Q?6a6v0j8lpCtXxi2sUKt6wjinkjFeykI0ka21hL3YCbTCrnpA3/RQQSpj/r0Q?=
- =?us-ascii?Q?0tlwydDHx12kDInOc9BFVJzHb5OaHseJrSEyge7/XzTKXJXZPu0oJy48xbwi?=
- =?us-ascii?Q?ZPiCWj3CWxdDva4oobFLx9JCsScDHcp/6yYlsPA17s1dj2b2AGTLh4tdayPE?=
- =?us-ascii?Q?U+KBnQKmSHYkMdS59Emd8rpOn6BqelqgcQ3QpYvZ5gozHMZUnb+ZzwwivPiP?=
- =?us-ascii?Q?OvWshF8ajc2oqDH3FXaqF0LfyScZRQY=3D?=
-Content-Type: multipart/mixed;
-	boundary="_002_CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2CO1PR17MB5321namp_"
-MIME-Version: 1.0
-X-OriginatorOrg: leafsoftwaresolutions.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR17MB5321.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e88d7ac-0238-48d0-1182-08df2b7a638a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2026 11:41:16.5450
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 925dca83-2532-40a7-9105-03cb15e44d10
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6btuuWeWCmbDRKje7lNUTn0r6WyXioAyvaogV1weD0rtCTRHo83NK7sqoMgeJx9dLqCJr67ZXxNoBV5pfHGLdqj2oVM9BzQj3c3CoGB21rty2o/XR+BiHkU08MzswTmu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR17MB4784
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GB_MSAUTHSOURCE_NORTHAM,GIT_PATCH_0,SPF_HELO_NONE,SPF_NONE,TVD_PH_BODY_ACCOUNTS_PRE,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=ekWRhoXk
+Received: from HP-Z230 by mta-snd-e05.mail.nifty.com with ESMTP
+          id <20261017062215248.BGVC.102121.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 15:22:15 +0900
+Date: Sat, 17 Oct 2026 15:22:13 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2 0/5] Cygwin: pty: preserve terminal replies after PTY
+ adoption
+Message-Id: <20261017152213.9394289b21159f4c56815788@nifty.ne.jp>
+In-Reply-To: <pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
+References: <pull.10.cygwin.1789302605264.gitgitgadget@gmail.com>
+	<pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1792218135;
+ bh=NtBL4jzzp4SDaHw6Nwwvleg+VBNDYAF3iLxRVSxE6cM=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=ekWRhoXkfjd6hp+ECz2mrDh76/SdFagLKhEN4E9o2nre2yHnxFvownuhih2C37CjEkJvS6kL
+ ksQfVY/8FsdU7X4/duz1o157H9dFHYl7iOvTFzVHZrjj1qFfFj7m+xegoQbG+39H2DabVO1gwB
+ xTjFoCiUnsgil3BmmRaumALeo90zeK+c7HBOM5VlD8hZe478OR4F+Dc9zwRQWBOjn3ZabeDqv5
+ 2Y+bWQj9+i6f2faBy3DNQryZTk/hms0xB/NqcoMIXyeHp6E8hfHu01S9dKITI96zPL/l1BDlJR
+ XvB9bJjFJwV84T0Edtw+vVTr51amE7do07uWVyErut1SE+Ww==
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_002_CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2CO1PR17MB5321namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Hi Johannes,
 
-Resending because the attachment on my first post was archived as
-binary and scrubbed. The patch is attached as plain text this time;
-nothing in it has changed.
+Thanks for the patch series.
 
---_002_CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2CO1PR17MB5321namp_
-Content-Type: text/plain;
-	name="0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt"
-Content-Description:
- 0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt
-Content-Disposition: attachment;
-	filename="0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt";
-	size=5278; creation-date="Fri, 16 Oct 2026 11:39:57 GMT";
-	modification-date="Fri, 16 Oct 2026 11:41:16 GMT"
-Content-Transfer-Encoding: base64
+On Thu, 15 Oct 2026 07:44:53 +0000
+Johannes Schindelin wrote:
+> MSYS Vim launched by native Git from Bash in MinTTY can delete the first
+> line, enter Insert mode or insert RGB text at startup. The problem is
+> incorrect PTY adoption, and the same problem applies to the Cygwin runtime
+> (but is less common because native Windows programs are not mixed with
+> Cygwin programs as ofte as with MSYS programs).
+> 
+> I merged v1 of this into Git for Windows v2.56.0, as it was somewhat
+> pressing.
+> 
+> This patch is based on cygwin-3_6-branch, but is easily cherry-picked onto
+> master, too.
+> 
+> Changes since v1:
+> 
+>  * Instead of changing input routing when the program changes terminal mode,
+>    v2 changes it already when the foreground Cygwin program starts through
+>    exec().
+>  * Added a test case that gets run as part of Cygwin's test suite.
+> 
+> Johannes Schindelin (5):
+>   Cygwin: pty: restore foreground input routing after exec
+>   Cygwin: testsuite: allow cygrun without the testing namespace
+>   Cygwin: testsuite: cover foreground PTY input recovery after exec
+>   Cygwin: pty: recover input for children of native programs
+>   Cygwin: testsuite: cover PTY input recovery with a native parent
+> 
+>  winsup/cygwin/fhandler/pty.cc                 |  51 +++--
+>  winsup/cygwin/local_includes/fhandler.h       |   2 +
+>  winsup/testsuite/.gitattributes               |   1 +
+>  winsup/testsuite/Makefile.am                  |  27 +++
+>  winsup/testsuite/cygrun.c                     |  12 +-
+>  winsup/testsuite/cygrun.sh                    |   7 +-
+>  winsup/testsuite/mingw/Makefile.am            |   5 +-
+>  winsup/testsuite/mingw/pty-native-input.c     |  89 ++++++++
+>  .../winsup.api/pty-background-native.c        | 197 ++++++++++++++++++
+>  9 files changed, 374 insertions(+), 17 deletions(-)
+>  create mode 100644 winsup/testsuite/.gitattributes
+>  create mode 100644 winsup/testsuite/mingw/pty-native-input.c
+>  create mode 100644 winsup/testsuite/winsup.api/pty-background-native.c
+> 
+> 
+> base-commit: 867eb7748e6e5a0e8430ce9f46af27b4b1e8f204
+> Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-10%2Fdscho%2Ffix-vim-terminal-replies-v2
+> Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-10/dscho/fix-vim-terminal-replies-v2
+> Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/10
+> 
+> Range-diff vs v1:
+> 
+>  1:  a29a15748 < -:  --------- Cygwin: pty: preserve terminal replies after PTY adoption
+>  -:  --------- > 1:  7f0615fc8 Cygwin: pty: restore foreground input routing after exec
+>  -:  --------- > 2:  4f53a727d Cygwin: testsuite: allow cygrun without the testing namespace
+>  -:  --------- > 3:  92d13761f Cygwin: testsuite: cover foreground PTY input recovery after exec
+>  -:  --------- > 4:  f1a25a8e5 Cygwin: pty: recover input for children of native programs
+>  -:  --------- > 5:  5bbc7634a Cygwin: testsuite: cover PTY input recovery with a native parent
+> 
+> -- 
+> cygwingitgadget
 
-RnJvbSAyY2ZlNjllMTA3YTE1YWQyYjQxMDZiZGEzYmViYjVlZmU1YTZlZTQzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQaGlsIENhaG9vbiA8cGNhaG9vbkBsZWFmc29mdHdhcmVzb2x1
-dGlvbnMuY29tPgpEYXRlOiBUaHUsIDE1IE9jdCAyMDI2IDA4OjQ1OjIwIC0wNDAwClN1YmplY3Q6
-IFtQQVRDSF0gQ3lnd2luOiBzZXJpYWxpemUgdXNlciBzaGFyZWQgaW5pdGlhbGl6YXRpb24gd2l0
-aCBhIG5hbWVkCiBtdXRleAoKdXNlcl9pbmZvOjppbml0aWFsaXplIGd1YXJkcyB0aGUgYnVpbGQg
-b2YgdGhlIHBlci11c2VyIG1vdW50IHRhYmxlIHdpdGgKYSBzcGlubG9jayB0aGF0IGdpdmVzIHVw
-IGFmdGVyIDE1IHNlY29uZHMgYW5kIGxldHMgdGhlIHdhaXRlciBpbml0aWFsaXplCmFueXdheS4g
-IFRoZSB3YWl0ZXIgY2Fubm90IHRlbGwgYSBzbG93IGluaXRpYWxpemVyIChhIHNsb3cgYWNjb3Vu
-dApsb29rdXAsIGEgc3VzcGVuZGVkIG9yIHN0YXJ2ZWQgcHJvY2VzcykgZnJvbSBvbmUgdGhhdCBk
-aWVkIHBhcnQgd2F5CnRocm91Z2guICBJbiBib3RoIGNhc2VzIGl0IHJlLXJ1bnMgbW91bnRfaW5m
-bzo6aW5pdCBvbiBhIHRhYmxlIHRoYXQKYWxyZWFkeSBob2xkcyAiLyIsIGNyZWF0ZV9yb290X2Vu
-dHJ5IGZhaWxzIHdpdGggRVBFUk0sIGFuZCB0aGUgcHJvY2VzcwpkaWVzIHdpdGgKCiAgYWRkX2l0
-ZW0gKCJcPz9cQzpcY3lnd2luNjQiLCAiLyIsIC4uLikgZmFpbGVkLCBlcnJubyAxCgpUaGUgdGlt
-ZWQtb3V0IHdhaXRlciBuZXZlciByZXNldHMgdGhlIGxvY2ssIHNvIHdoaWxlIG90aGVyIHByb2Nl
-c3NlcwprZWVwIHRoZSBzZWN0aW9uIG1hcHBlZCwgZXZlcnkgbmV3IHByb2Nlc3Mgd2FpdHMgMTUg
-c2Vjb25kcyBhbmQgZGllcyB0aGUKc2FtZSB3YXkuICBUb29scyB0aGF0IHN0YXJ0IGEgc2hlbGwg
-ZXZlcnkgc2Vjb25kIGtlZXAgdGhlIHNlY3Rpb24gbWFwcGVkCmluZGVmaW5pdGVseS4KClVzZSBh
-IG5hbWVkIG11dGV4IG5leHQgdG8gdGhlIHNlY3Rpb24gaW5zdGVhZC4gIEEgbGl2ZSBpbml0aWFs
-aXplciBpcwpzaW1wbHkgd2FpdGVkIGZvciwgc28gdGhlIHRhYmxlIGlzIG5ldmVyIGJ1aWx0IHR3
-aWNlLiAgQW4gaW5pdGlhbGl6ZXIKdGhhdCBkaWVkIGlzIHJlcG9ydGVkIGFzIFdBSVRfQUJBTkRP
-TkVELCBhbmQgdGhlIHdhaXRlciBjbGVhcnMgdGhlCmhhbGYtYnVpbHQgc2VjdGlvbiBhbmQgcmVi
-dWlsZHMgaXQuICBBbHJlYWR5IGluaXRpYWxpemVkIHNlY3Rpb25zIHN0aWxsCnRha2UgdGhlIGxv
-Y2stZnJlZSBmYXN0IHBhdGguCgpUaGlzIHBhdGNoIHdhcyB3cml0dGVuIGJ5IENsYXVkZSBPcHVz
-IDUuNSAoQW50aHJvcGljKSB1c2luZyBDbGF1ZGUKQ29kZSwgYXQgdGhlIHN1Ym1pdHRlcidzIGRp
-cmVjdGlvbi4KCkFkZHJlc3NlczogaHR0cHM6Ly9naXRodWIuY29tL2dpdC1mb3Itd2luZG93cy9n
-aXQvaXNzdWVzLzYzNjgKU2lnbmVkLW9mZi1ieTogUGhpbCBDYWhvb24gPHBjYWhvb25AbGVhZnNv
-ZnR3YXJlc29sdXRpb25zLmNvbT4KLS0tCiB3aW5zdXAvY3lnd2luL21tL3NoYXJlZC5jYyB8IDc2
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwg
-NTQgaW5zZXJ0aW9ucygrKSwgMjIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
-Z3dpbi9tbS9zaGFyZWQuY2MgYi93aW5zdXAvY3lnd2luL21tL3NoYXJlZC5jYwppbmRleCA3OTc3
-ZGYzLi44YzRlMjBjIDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL21tL3NoYXJlZC5jYworKysg
-Yi93aW5zdXAvY3lnd2luL21tL3NoYXJlZC5jYwpAQCAtMTkwLDMwICsxOTAsNjIgQEAgb3Blbl9z
-aGFyZWQgKGNvbnN0IFdDSEFSICpuYW1lLCBpbnQgbiwgSEFORExFJiBzaGFyZWRfaCwgRFdPUkQg
-c2l6ZSwKIHZvaWQKIHVzZXJfaW5mbzo6aW5pdGlhbGl6ZSAoKQogewotICAvKiBXYWl0IGZvciBp
-bml0aWFsaXphdGlvbiBvZiB0aGUgQ3lnd2luIHBlci11c2VyIHNoYXJlZCwgaWYgbmVjZXNzYXJ5
-ICovCi0gIHNwaW5sb2NrIHN2ZXJzaW9uICh2ZXJzaW9uLCBDVVJSX1VTRVJfTUFHSUMpOwotICBp
-ZiAoIXN2ZXJzaW9uKQorICBpZiAoKFVMT05HKSB2ZXJzaW9uICE9IENVUlJfVVNFUl9NQUdJQykK
-ICAgICB7Ci0gICAgICBjYiA9IHNpemVvZiAoKnVzZXJfc2hhcmVkKTsKLSAgICAgIC8qIEluaXRp
-YWxpemUgbW91bnQgdGFibGUgZnJvbSBzeXN0ZW0gZnN0YWIgcHJpb3IgdG8gY2FsbGluZwotICAg
-ICAgICAgaW50ZXJuYWxfZ2V0cHdzaWQuICBUaGlzIGFsbG93cyB0byBjb252ZXJ0IHB3X2RpciBh
-bmQgcHdfc2hlbGwKLQkgcGF0aHMgZ2l2ZW4gaW4gRE9TIG5vdGF0aW9uIHRvIHZhbGlkIFBPU0lY
-IHBhdGhzLiAgKi8KLSAgICAgIG1vdW50aW5mby5pbml0IChmYWxzZSk7Ci0gICAgICBjeWdwc2lk
-IHNpZCAoY3lnaGVhcC0+dXNlci5zaWQgKCkpOwotICAgICAgc3RydWN0IHBhc3N3ZCAqcHcgPSBp
-bnRlcm5hbF9nZXRwd3NpZCAoc2lkKTsKLSAgICAgIC8qIENvcnJlY3QgdGhlIHVzZXIgbmFtZSB3
-aXRoIHdoYXQncyBkZWZpbmVkIGluIC9ldGMvcGFzc3dkIGJlZm9yZQotCSBsb2FkaW5nIHRoZSB1
-c2VyIGZzdGFiIGZpbGUuICovCi0gICAgICBpZiAocHcpCi0JY3lnaGVhcC0+dXNlci5zZXRfbmFt
-ZSAocHctPnB3X25hbWUpOwotICAgICAgLyogQWZ0ZXIgZmV0Y2hpbmcgdGhlIHVzZXIgaW5mb3Ms
-IGFkZCBtb3VudCBlbnRyaWVzIGZyb20gdXNlcidzIGZzdGFiLiAqLwotICAgICAgbW91bnRpbmZv
-LmluaXQgKHRydWUpOworICAgICAgV0NIQVIgbmFtZVtVTkxFTiArIDFdOworICAgICAgV0NIQVIg
-bXV0ZXhfbmFtZVtVTkxFTiArIDMyXTsKKyAgICAgIGN5Z2hlYXAtPnVzZXIuZ2V0X3dpbmRvd3Nf
-aWQgKG5hbWUpOworICAgICAgX19zbWFsbF9zd3ByaW50ZiAobXV0ZXhfbmFtZSwgTCIlVy4lZC5p
-bml0IiwgbmFtZSwgVVNFUl9WRVJTSU9OKTsKKyAgICAgIEhBTkRMRSBpbml0X211dGV4ID0gQ3Jl
-YXRlTXV0ZXhXICgmc2VjX25vbmVfbmloLCBGQUxTRSwgbXV0ZXhfbmFtZSk7CisgICAgICBpZiAo
-IWluaXRfbXV0ZXgpCisJYXBpX2ZhdGFsICgiQ3JlYXRlTXV0ZXggJVcsICVFLiAgVGVybWluYXRp
-bmcuIiwgbXV0ZXhfbmFtZSk7CisgICAgICBEV09SRCB3YWl0ID0gV2FpdEZvclNpbmdsZU9iamVj
-dCAoaW5pdF9tdXRleCwgSU5GSU5JVEUpOworICAgICAgaWYgKHdhaXQgIT0gV0FJVF9PQkpFQ1Rf
-MCAmJiB3YWl0ICE9IFdBSVRfQUJBTkRPTkVEKQorCWFwaV9mYXRhbCAoIldhaXRGb3JTaW5nbGVP
-YmplY3QgJVcgcmV0dXJuZWQgJXUsICVFLiAgVGVybWluYXRpbmcuIiwKKwkJICAgbXV0ZXhfbmFt
-ZSwgd2FpdCk7CisKKyAgICAgIGlmICgoVUxPTkcpIHZlcnNpb24gPT0gQ1VSUl9VU0VSX01BR0lD
-KQorCS8qIEluaXRpYWxpemVkIHdoaWxlIHdlIHdhaXRlZC4gKi87CisgICAgICBlbHNlIGlmICh2
-ZXJzaW9uID09IDAgfHwgdmVyc2lvbiA9PSAtMSB8fCB3YWl0ID09IFdBSVRfQUJBTkRPTkVEKQor
-CXsKKwkgIC8qIEFuIGFiYW5kb25lZCBtdXRleCBtZWFucyB0aGUgcHJldmlvdXMgaW5pdGlhbGl6
-ZXIgZGllZCBwYXJ0IHdheQorCSAgICAgdGhyb3VnaC4gIERpc2NhcmQgd2hhdCBpdCBsZWZ0IGFu
-ZCBzdGFydCBvdmVyLiAqLworCSAgaWYgKHdhaXQgPT0gV0FJVF9BQkFORE9ORUQpCisJICAgIHsK
-KwkgICAgICBkZWJ1Z19wcmludGYgKCJ1c2VyIHNoYXJlZCBpbml0aWFsaXplciBkaWVkLCByZWJ1
-aWxkaW5nIik7CisJICAgICAgbWVtc2V0ICgodm9pZCAqKSB0aGlzLCAwLCBzaXplb2YgKCp0aGlz
-KSk7CisJICAgIH0KKwkgIGNiID0gc2l6ZW9mICgqdXNlcl9zaGFyZWQpOworCSAgLyogSW5pdGlh
-bGl6ZSBtb3VudCB0YWJsZSBmcm9tIHN5c3RlbSBmc3RhYiBwcmlvciB0byBjYWxsaW5nCisJICAg
-ICBpbnRlcm5hbF9nZXRwd3NpZC4gIFRoaXMgYWxsb3dzIHRvIGNvbnZlcnQgcHdfZGlyIGFuZCBw
-d19zaGVsbAorCSAgICAgcGF0aHMgZ2l2ZW4gaW4gRE9TIG5vdGF0aW9uIHRvIHZhbGlkIFBPU0lY
-IHBhdGhzLiAgKi8KKwkgIG1vdW50aW5mby5pbml0IChmYWxzZSk7CisJICBjeWdwc2lkIHNpZCAo
-Y3lnaGVhcC0+dXNlci5zaWQgKCkpOworCSAgc3RydWN0IHBhc3N3ZCAqcHcgPSBpbnRlcm5hbF9n
-ZXRwd3NpZCAoc2lkKTsKKwkgIC8qIENvcnJlY3QgdGhlIHVzZXIgbmFtZSB3aXRoIHdoYXQncyBk
-ZWZpbmVkIGluIC9ldGMvcGFzc3dkIGJlZm9yZQorCSAgICAgbG9hZGluZyB0aGUgdXNlciBmc3Rh
-YiBmaWxlLiAqLworCSAgaWYgKHB3KQorCSAgICBjeWdoZWFwLT51c2VyLnNldF9uYW1lIChwdy0+
-cHdfbmFtZSk7CisJICAvKiBBZnRlciBmZXRjaGluZyB0aGUgdXNlciBpbmZvcywgYWRkIG1vdW50
-IGVudHJpZXMgZnJvbSB1c2VyJ3MKKwkgICAgIGZzdGFiLiAqLworCSAgbW91bnRpbmZvLmluaXQg
-KHRydWUpOworCSAgSW50ZXJsb2NrZWRFeGNoYW5nZSAoJnZlcnNpb24sIChMT05HKSBDVVJSX1VT
-RVJfTUFHSUMpOworCX0KKyAgICAgIGVsc2UKKwl7CisJICBMT05HIGZvdW5kID0gdmVyc2lvbjsK
-KwkgIFJlbGVhc2VNdXRleCAoaW5pdF9tdXRleCk7CisJICBDbG9zZUhhbmRsZSAoaW5pdF9tdXRl
-eCk7CisJICBtdWx0aXBsZV9jeWd3aW5fcHJvYmxlbSAoInVzZXIgc2hhcmVkIG1lbW9yeSB2ZXJz
-aW9uIiwgZm91bmQsCisJCQkJICAgQ1VSUl9VU0VSX01BR0lDKTsKKwkgIHJldHVybjsKKwl9Cisg
-ICAgICBSZWxlYXNlTXV0ZXggKGluaXRfbXV0ZXgpOworICAgICAgQ2xvc2VIYW5kbGUgKGluaXRf
-bXV0ZXgpOwogICAgIH0KLSAgZWxzZSBpZiAoc3ZlcnNpb24gIT0gQ1VSUl9VU0VSX01BR0lDKQot
-ICAgIHN2ZXJzaW9uLm11bHRpcGxlX2N5Z3dpbl9wcm9ibGVtICgidXNlciBzaGFyZWQgbWVtb3J5
-IHZlcnNpb24iLCB2ZXJzaW9uLAotCQkJCSAgICAgIHN2ZXJzaW9uKTsKLSAgZWxzZSBpZiAodXNl
-cl9zaGFyZWQtPmNiICE9IHNpemVvZiAoKnVzZXJfc2hhcmVkKSkKLSAgICBzdmVyc2lvbi5tdWx0
-aXBsZV9jeWd3aW5fcHJvYmxlbSAoInVzZXIgc2hhcmVkIG1lbW9yeSBzaXplIiwgY2IsCi0JCQkJ
-ICAgICAgc2l6ZW9mICgqdXNlcl9zaGFyZWQpKTsKKyAgaWYgKGNiICE9IHNpemVvZiAoKnVzZXJf
-c2hhcmVkKSkKKyAgICBtdWx0aXBsZV9jeWd3aW5fcHJvYmxlbSAoInVzZXIgc2hhcmVkIG1lbW9y
-eSBzaXplIiwgY2IsCisJCQkgICAgIHNpemVvZiAoKnVzZXJfc2hhcmVkKSk7CiB9CiAKIC8qIEZp
-cnN0IGhhbGYgb2YgdXNlciBzaGFyZWQgaW5pdGlhbGl6YXRpb246IENyZWF0ZSBzaGFyZWQgbWVt
-IHJlZ2lvbi4gKi8KLS0gCjIuNTYuMC53aW5kb3dzLjIKCg==
+Calling fixup_input_state_for_cygwin_app() seems a great idea!
+Thanks!
 
---_002_CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2CO1PR17MB5321namp_--
+Two things.
+(1) This patch series cannot be applied git master cleanly.
+(2) Typeahead input is broken without pseudo console enabled
+    with this patch series.
+      1. Run `env CYGWIN=disable_pcn script`
+      2. Run `cmd`
+      3. Run `sleep 10`
+      4. Type ps<enter>ps<enter> while sleeping.
+    The the second `ps` will not be executed in cmd.
+
+Regarding (2), I think we have two options.
+
+(a) Add an extra fix such as:
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index 294bf8007..8f3b14327 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1286,8 +1286,23 @@ fhandler_pty_slave::cleanup ()
+   while (arch->num_reader)
+     mask_switch_to_nat_pipe (false, false);
+ 
+-  if (get_ttyp ()->pcon_activated && get_ttyp ()->getpgid () == myself->pgid)
+-    req_fixup_pcon_state ();
++  if (get_ttyp ()->getpgid () == myself->pgid)
++    {
++      if (get_ttyp ()->pcon_activated)
++	req_fixup_pcon_state ();
++      else if (get_ttyp ()->switch_to_nat_pipe)
++	{
++	  WaitForSingleObject (input_mutex, mutex_timeout);
++	  if (get_ttyp ()->pty_input_state_eq (tty::to_cyg))
++	    {
++	      acquire_attach_mutex (mutex_timeout);
++	      transfer_input (tty::to_nat, get_handle (), get_ttyp (),
++			      input_available_event, input_transferred_to_cyg);
++	      release_attach_mutex ();
++	    }
++	  ReleaseMutex (input_mutex);
++	}
++    }
+ 
+   /* This used to always call fhandler_pty_common::close when we were execing
+      but that caused multiple closes of the handles associated with this pty.
+
+(b) Call fixup_input_state_for_cygwin_app() only when pcon_activated
+    in fixup_after_exi() and post_open_setup().
+
+What do you think?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
