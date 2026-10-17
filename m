@@ -1,77 +1,76 @@
 Return-Path: <SRS0=X8J8=IH=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.128])
-	by sourceware.org (Postfix) with ESMTP id E6D574BA2E11
-	for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 13:35:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E6D574BA2E11
+Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.180])
+	by sourceware.org (Postfix) with ESMTP id E26024BA2E14
+	for <cygwin-patches@cygwin.com>; Sat, 17 Oct 2026 13:35:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E26024BA2E14
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E6D574BA2E11
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.128
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792244129; cv=none;
-	b=UnN2vT0ScRlxUl5TNgImb2dcV4KC5COpw3LWB9BO6vc6zgbTl+RTFIENLmiO+Pf0WxJanS2jNwJ6Owa1xCBJEZuaMQ4S7fhFhoovMpn7B67vM5DON+JiwjisQ/M5IgRarQHHDf+tXXdbbLENvEXA7uKJw1eYFZSNBlQ7irTrO40=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E26024BA2E14
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.180
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792244130; cv=none;
+	b=N7KNEJCE8w6d417p7wHA7LyqpXkME7Ov64+muERxNnQvLkodbvLA6QNLYABlj6dkiyOf5oWFhsLp7x6YZhdpezbj4UIcSuF13TbKMFAkTDL0wzHN+W6zbX+A2WSEvinVV5mSSm20K2+Lv23/JdODyDF3AER/FDLmpxHOqtBdOrU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792244129; c=relaxed/simple;
-	bh=6iWkryd8DO8hbBDnhx1dH6vFHl7ulu1X8msrTJhcKyY=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=jfY5EeqXwZyKDNpfs3yHe7QQzQxuvAqUlwBKf5+B+EK424YsQEB+MBCWl5im9tEGmQ5M4sE2ZPMke3n4+uwUExY/gD2XVKr2KQZ8x26uH/z7WrBL1Td5dXnNM68tgAcaCLV5N6jTiCJxDR3MpYFw4njQrjQn9+p43WNvxMrD6jQ=
+	t=1792244130; c=relaxed/simple;
+	bh=LPQqO2DBY/7BgjVtUrmauPNhE2g3MgFDB4bApWdx9Vo=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=Yu1XFDRaC/Kw7xqI07rkU2mjTBetDBJAeBXsja9PctiURPeQqfCutNTr/h0XmNKiLomzeUTCM2EBgEnp35K6A64dgbKSRYus7Ivcvdszghlvbpf1ekIWcz4LedZjW4xn/tKRNOPO5ob55KTEoCHK6bQm1YF1Orx/RGZZ0YYTorg=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E6D574BA2E11
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A715CD60E8D2C56
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E26024BA2E14
+Authentication-Results: btinternet.com; none
+X-SNCR-Rigid: 6A715CD60E8D2D50
 X-Originating-IP: [62.49.190.104]
 X-OWM-Source-IP: 62.49.190.104
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTFQt5tsehEMABwa2e2fPM0fZ9VjhzEsAEVPn1vzAlWy6RFO58HqohQJH7kuNZoYRhkTuRBjWsGFf7GTHWrvPIA6QcTMHm5SnZ+E3TiAtL7qmQEFgwAT1yDdQqIyxa2OOeQJ4VERhHaRIDjdE0/xRWvKdx4Xu0KY2vGJFlaT8tSI57sRcPUMQW53zncBvb5jhgIgMnKJIW6XTfHTgv2K9KmbNZqgNCk9hYQ6R0jRnSNUIw79dzN2WucVE2ze0mHwPXDUj7N6bYknnUGpcRDOJsCt0n3aWirIgtsrI7ns6x+bOUKAlpLJptrDeFKXOJ/9v7vTd7kRach6Pei3JxJuxOh4eeZ/8x9kQ7S98z3y+lFwGKNH3U4taJkRj8oqjqOZKHG9Z8mYgioqCKUw0srzpA54LoHceM+6uqJm8u5ajcXCiNAhWpKbmMdAzPnhQAktWp6SXCh7PtbQyO/dFn92b+i+G2IEne7Cf7eYa17OVnzpRG3C5WOM0UNRCyokvqETXIbNBmpssB7Q6wKXt4v4H8dZH+MrhKq+lZnfqAB58alDwMbpjT8j4SP3dWTxi6aOrU6o+x2FBNuVKSoQVV8cYJj+V3F2j5ahAxesTkRdLsyoCUect9avFpte4uS/u716RDfL8JUfWMFpc3QklWemuxCChZdZw3jYFp+YnZPqUoyZTA
+X-RazorGate-Vade: dmFkZTEnd4totH827zSfKrt1hB3NuDu+VfsQ/dZmuRGDtxuMW8hBQkYMMeo5vV1CgpI7Wf4S+NUSy9YBOvxEtWjkEHZyPHpQ8uCj9PWz8zLbRs1q9YxppGf5uAe/9hLmJHK3AGjWFrnaNh3JwyWJvR6/QU9b6htOWy2InznXd+cIIvc1d/z3xP5Wr7u9qE1WMOWX9jolxOCY5OL0UDaVDhB+gDmWkvhhtvvKKxueVILQI9r0GC39NWazgDHuMkSaWdincR7k7pxCklJKl1pQUq0KLoTBE+qI4sYzHt9y0BEVZHQ/of8JVwJZNmb8m+avq2dbpd7MKbgmewbTYwhXNqykNOnnFb19PeDzBO38DBJZba/Y+ba8kUfg5iKPFlXB8r+byKiRAIqs94s60P3ONo6YPJvirdZj1p8agSJrx0cGMi9ysmbjZ1Aq62ahKQ/esJzU/NptHIp0Yba6i4nbcCqX1wFx3LyDyDbEBuRPkip/MgZbWd71EOv3RXJDjVryMNvj2Ym4TMRVyJHjQ4xYeZbD6ZgCUXIVS80TI3HbwJCkihjYo3/7ksqCljGRkYPXRIcy4ONE6XKg/1iemPsOz+MVqziyRJxOerLsfdA4Wih2a9TOWiPcg4o6zQV6Ha46WSAUPCHNiLMaMeBcujEecuyhkNntk256juBYYSqMZb3uqmiHSA
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from [192.168.1.109] (62.49.190.104) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A715CD60E8D2C56; Sat, 17 Oct 2026 14:35:24 +0100
-Message-ID: <093cb58b-5d5f-4059-8420-4bcf3d9f9aee@dronecode.org.uk>
-Date: Sat, 17 Oct 2026 14:35:23 +0100
+        id 6A715CD60E8D2D50; Sat, 17 Oct 2026 14:35:28 +0100
+Message-ID: <f2b1fddd-b867-4eb9-bc41-add80cce54f4@dronecode.org.uk>
+Date: Sat, 17 Oct 2026 14:35:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] Cygwin: autoload: fix ws2_32 chained init on AArch64
-References: <PN0P287MB0295342E2109C2CB8EECCE6B92062@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <ag8IvAkqoNVM-AH2@arm.com>
- <PN0P287MB02951A11C49A1208A9BA66F392102@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
- <99590c72-bc88-4466-95c2-ae540a11c031@dronecode.org.uk>
- <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
+References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
+ <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
+ <aHUFzEEGq448gvZ0@calimero.vinschen.de>
+ <bd64e817-ffa8-4299-a3bc-6d1ff691ca9b@dronecode.org.uk>
+ <aH5CvWENvjsmKbjJ@calimero.vinschen.de>
+ <aH5EsVT1Hhe_7yHV@calimero.vinschen.de>
+ <GV4PR83MB09410EFD509ABD23BDA49B18925DA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com,
- Chandru Kumaresan <chandru.kumaresan@multicorewareinc.com>
-In-Reply-To: <PN0P287MB0295EC86F97A259F0C99818F92EB2@PN0P287MB0295.INDP287.PROD.OUTLOOK.COM>
+Cc: cygwin-patches@cygwin.com, Radek Barton <radek.barton@microsoft.com>,
+ Evgeny Karpov <evgeny@kmaps.co>
+In-Reply-To: <GV4PR83MB09410EFD509ABD23BDA49B18925DA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 26/06/2026 10:03, Chandru Kumaresan wrote:
-> Hi Jon,
-> 
->> I've applied this patch.
-> 
-> Thanks!!
-> 
->> Just so I'm doing my due diligence, I'd like you confirm that you are
->> submitting this under an open source license as per [1], and you and
->> your colleagues at multicoreware are authorized to do so.
-> 
-> We have been contributing to Cygwin for about a year, all modifying
-> existing files rather than creating new ones. We will confirm and get
-> back to you shortly.
+On 21/07/2025 16:53, Radek Barton via Cygwin-patches wrote:
+> Hello.
 
-It seems that we didn't get a response to this.
+Sorry to re-open this long-dormant discussion, but since we've actually 
+reached the point where we might soon be able to start distributing 
+binaries derived from this code, I think clarification is necessary.
 
-I apologize for not raising this issue initially, but that's us 
-operating under an assumption of good faith (and the fact that we'd much 
-rather spend our time dealing with technical issues than legal ones).
+> JFYI, my original thought was that the Signed-off-by header is serving for some sort of automation that will let maintainers create commit with that person as a committer. Other than that, I am not aware of the cases where it could be handy to have different person being a committer and different person being the one who is granting the authorship rights.
 
-I believe there's no legal difference between "modifying a file" and 
-"creating a file" in terms of the authorship and intellectual property 
-rights which accrue to the creator.
+OK, that's fine.  It's on us to explain what we expect it to mean, and 
+we haven't done that.
 
-So again, a statement clarifying the situation would be appreciated.
+What we do need from both you, and Evgeny Karpov, is clear statement that:
+
+1. To the extent that it is protectable, this (and all your other) patch 
+submissions for Cygwin are licenced under the 2-clause BSD license.
+
+2. If this material was produced under a "work-for-hire" contract, your 
+employer has authorized that licencing.
+
+
+Once again, I apologize for my extremely delayed response. I hope it is 
+straightforward for you to provide those assurances.
+
 
