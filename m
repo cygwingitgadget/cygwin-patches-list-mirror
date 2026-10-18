@@ -1,73 +1,73 @@
 Return-Path: <SRS0=ISKq=II=gmail.com=gitgitgadget@sourceware.org>
 Received: from mail-dy1-x1329.google.com (mail-dy1-x1329.google.com [IPv6:2607:f8b0:4864:20::1329])
-	by sourceware.org (Postfix) with ESMTPS id 31E9F4BA2E16
-	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 31E9F4BA2E16
+	by sourceware.org (Postfix) with ESMTPS id 9B27C4BA23C0
+	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9B27C4BA23C0
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 31E9F4BA2E16
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9B27C4BA23C0
 Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::1329
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336072; cv=none;
-	b=Hcyfse89dLMmrl+nsfzK7yFF3EhqcvvAN02KWtg3qgaxOxkgvkLu4aq2P3Q5ZH53ao98dEsVAja83GFnFC5SrhDzK/NkFhWWTRe1fbvm7spm3pMbBM9ZSQVyry4bY1wSTcqy6u67gS02glw43M8zRdq8uXe2vRnr4RM2RnY+NEQ=
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336074; cv=none;
+	b=QchNVD3YFyoLivQ3sU6+rl82qB2x6r/bxRT0KSNwUDpWKuJg47tHfewP3TEMf4l+E1qVopezwfqTbiebvyHkdfwYf7CS4ZYQz/6okReFTm1/gzVfrflFgtnaah9M5V5ewt+T13ye8Yiw7jLOzH2ogEMquzd4UoLHRlLxp8NX8gI=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792336072; c=relaxed/simple;
-	bh=Y2TXtHmbS2aEH4/QQ7rNANGGUJAiSSkM7r8Uo83RW28=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=BGad0aBOHD70vpTuerp4sEqGH8LqwUyj0cWAnqT7hQU1s7hkY+rbFL5RHf388iJw4sVVwydrhP/+y2jF3qFzvJTim4a1GHTlBF1l0HsIn2OI19V+zuxyWY38yDnQ2VH3A9liT0Ck5RHUzdsA9rNmU1Xmg2xtmP1TRW/+xeuaWps=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=N/lPDiHo
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 31E9F4BA2E16
+	t=1792336074; c=relaxed/simple;
+	bh=7M6fj67VGiKfGxw/t/Mbt7jGRQ2dpgSzuDvQJ5pGrSk=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=xfIYWX1C2XrxCLl/Iirx8YB4wQa7k6x8UlxcFF0ZcedOyXjoXqGC8vWs7AJ9UtsmA+g6t/0+7beVcRLUDoFzw1JYzTRERt0rqWKNdLKPnfDU/Z80Wtnu79/nz47qFvy3wwXwLmi0j1pJkZPLNvgkv/Wf0jzX8Yo+h4syjnl7gSE=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HK00wOhG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9B27C4BA23C0
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=N/lPDiHo
-Received: by mail-dy1-x1329.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso3329947eec.1
-        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:52 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HK00wOhG
+Received: by mail-dy1-x1329.google.com with SMTP id 5a478bee46e88-35ef6b49813so2564632eec.0
+        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792336071; x=1792940871; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1792336074; x=1792940874; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
-        b=N/lPDiHoAUt3wm//HKhaag+7EVzVFOsKo1ITHDM/3fpKmDbGlgcPZVEHvMioRsG09I
-         nBS1eWw02U5PAK4KxpX8gmV1iT2eFP+pqdKzY7gPvV53g3k+w5Htcu1j5/YYsy8g8WdT
-         FkTomqJc7isZhl7cVnOGkld3T+gLdJ7s6eRlVADRUrbnY1cGLE1dM8b1YXJxxy42sYN+
-         34SM0H2AmW+qPIZVkxXsZpcHjxbDuAfgeNxQJRyR4cRJMkmV5LTvF+lm7JRgjzkmuaHt
-         kMdyqIba0mkpAUox0jRlIDAjXUAHrOHrH0f+Qy4mnXWfK4rEOjweincpYDgQgHA4OrRm
-         oLTQ==
+        bh=0AnJAMfbXPgy4loD6RnEoHclG07TrU/Eo4D/xiT3tt4=;
+        b=HK00wOhGwTduyyTyxVhbAujtpAI06fseYkJTSCZcABiLjCg7GwohKwDOkzKAESSpy/
+         LXZMUZ29hVKUlHtUo4OPhtUuhYySftb74HX/OMXRe3HZMSTeWprf7T4rPklzWtXgqL6L
+         dBoN4iEc4mtRI8OMeOaUwKRn4ac6CvzNJTDs+lZQ+cw40lUu19FGXPJSgIyKxE6VK2Db
+         vHDJ5jHkMxIyo7hOn0U6Vw5oUXPz0yqlWoyk0059RyOw19E6E6b1ItvaA0/20KnymlAL
+         Hp32IB19DKTJAxgBJi68KUCEu+VmuFkbFL8bkma3tJT2ttUPPco8p5NdVp4CdRKyRGPv
+         WpzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792336071; x=1792940871;
+        d=1e100.net; s=20260707; t=1792336074; x=1792940874;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
-        b=zxYWqELf70psCpKS2jveHqV3nm36tleuDiuBxkOAR8wnVf75XMrr6ToKNMEjyyNpMv
-         +KLd17n1pe6FOYqOuI5tyZvilLVvq3BhHn74XaydxWI59dLawbYYWckEN2IjTHkrcvKb
-         k7tCSpvmKOCNQI2GeGIAExMKDyGRv0RJK2tmUzIC8Of2P3LTGQX7m3iRKF1EjKzSorPf
-         2Lj4tN8U/PK6kySkhMqreLPw9baICZMHbsklKQ9SOjGh8lmebXZNPdJgyN/k8tW932VM
-         9ci/elZHjTfpA/gaBMCEDoHYIfNWNpDNAcSLLe3CJpTpwL8yzHwFpSPJzrS7x4I821wK
-         D3ww==
-X-Gm-Message-State: AFq9FYI0ZVCq66gsRxNVEbzYyKtXYrgmSRgNc4ibAk24Yb45FnlHEXVZ
-	n3LOyNOKg6mbsqaC0o+pfUWKSKHiaclwacl9aHf8czXWAtuhZ//aVATakcAQ5OTL
-X-Gm-Gg: AYBFou1JUSeT2FLhXI3Q7wAD27wgPBuGVC2e57uBDH9c/G7KZKTGh1Wu0pmPpgUY3gJ
-	jJ8lnHR52asXV051j09OYuodOBdp+osI/Hc0ATtoE+VatlJMpz4/YPkkfyR/Sr4RwrHpX9szlz8
-	Gt4j7V1xFWkV/klMJX4+PNU22fBDWkUQ9Njqm0U1lLEJb4GC0dKT1neIx9q4tkACXIN6Yu2nxNL
-	nf2U6Eg3o05BaC8n0xgUxFuNO1Bgt7X5m7dObShjVHLtCKLPQ7QPBWOg3yD3vuD4266DwFh0Zq4
-	+XFI0/WS2kR/kIlwe6OfpY12Gm7ZQPP5DQkun3PemdWJV0tLkKMF3Xm5pb0XJPda/udnXtftUu6
-	loXrasBp/Ui24GZjpsL18bh7i1huw9xAOPlvE4GJZQOv+xhbLdJ4mKMCuWEBjZwxapeKuHxMoW6
-	vWPaYOaU4VN4IlrT3sYuiG6HENyLYkllJ9lAf3kTjXea2qi5kjXOx1BsDjMf1MfoDu1xiD+hMaN
-	w==
-X-Received: by 2002:a05:7301:fc09:b0:359:2f0b:aa89 with SMTP id 5a478bee46e88-361a16681bemr7280251eec.10.1792336070892;
-        Sun, 18 Oct 2026 08:07:50 -0700 (PDT)
+        bh=0AnJAMfbXPgy4loD6RnEoHclG07TrU/Eo4D/xiT3tt4=;
+        b=s8N62CWPg18argPbDGjHMoeMbZtqGiHSI2EnBTnj93mRmoiVBNkPNT4dXMc58o6pXt
+         xwrgSnPI8pnS4U87V+IaazvMcUS38GPSMui1p4lzrZzw7kCDgfUFe4bMtKX7iuj4clQh
+         fv9hw9J8Qzy0kJTCP6KLxOSVHer7UFgGCNeEOhPPtVIQPQV5ZA7SEk/1t5KDeglCkztc
+         v2BvCdcgF6IVEehsst25Ax2Kl7Pxw2O/EmhrWiesRcjvJnV+UQ4DLs7G3tps1aOLCDww
+         y3OnSVwgjdbUzFxsrT0ihkbON2dl5PzDymfqMd/hueiL4deOmgNs86OaiTFnG1hDTirY
+         3tKA==
+X-Gm-Message-State: AFq9FYKtaQl9rPRWzBfq7Bv908LjH8YmYnFUALvGOXW4EhPfsQ+D7ZZ6
+	xH/FZBviaiLwIRyA5TBT8L06wOm3Gc12MHm9WNk/5gfBWg6kovSTghvjny2lmX32
+X-Gm-Gg: AYBFou2RGgQyLYQ/4jrtOhgjjshvzVX9V0eqrE/p/fB9S5nHedT4iEZJIgek+VDStqA
+	yMybuHInfv7+1U/SjRW9EkE2PHtwdJMr+2S7CP53nBIbS6esMNJlNjgcfukqs09xw3tXo9yPqiL
+	EEsdjmRvoanzdraNMaoQiTQBKuRSVNSOzYiAwgFqhD/XeM6kSVC0e1bXhaVM9CBJbqj0PDk7yyQ
+	zn6DP5I9Y6c9k+nxiF/6PkpjoN7/RnxxZ9MtcI7o5gfVudxAv6gYyNW3lQqwS9bSu/9oultQSCR
+	iBMYHeUh99Tja2+wa9F+dVzOxZ38J3lL1hojJBaZlzNj+9hpkOW8Fz6A/pbHtiB0NweDnwMdSB5
+	BURTF8ke2i8G5iJgFqFTvS25hMD1qriXtU6LZ+prb6lwBx4/DMLWEVY+1B5HFK1qH7BB4+R6cuW
+	mQdZDBbuPLnFmnJRC9P4tvj2KccgMHc8iFD9GX9WQZDjphu41SsIxJdnuWNJXDFz6zXRgXnZrKc
+	t5uQ9pk9ViF
+X-Received: by 2002:a05:7301:430c:b0:358:8f02:e0ca with SMTP id 5a478bee46e88-361a1668b25mr7218197eec.9.1792336073606;
+        Sun, 18 Oct 2026 08:07:53 -0700 (PDT)
 Received: from [127.0.0.1] ([172.182.203.60])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3608308a87csm41606081eec.28.2026.10.18.08.07.49
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36081bafa7asm24204913eec.14.2026.10.18.08.07.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 08:07:50 -0700 (PDT)
-Message-Id: <ebf384575c7770da066008fc20c70e78e826f29c.1792336066.git.gitgitgadget@gmail.com>
+        Sun, 18 Oct 2026 08:07:53 -0700 (PDT)
+Message-Id: <2b13ec62fc5b7ae4c3c9ede767c315f883ab3265.1792336066.git.gitgitgadget@gmail.com>
 In-Reply-To: <pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 References: <pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
 	<pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Sun, 18 Oct 2026 15:07:42 +0000
-Subject: [PATCH v3 2/6] Cygwin: testsuite: allow cygrun without the testing
- namespace
+Date: Sun, 18 Oct 2026 15:07:44 +0000
+Subject: [PATCH v3 4/6] Cygwin: pty: recover input for children of native
+ programs
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -81,77 +81,59 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-An executable beside an isolated build of the Cygwin DLL does not need
-the build-date-specific testing namespace. Provide an explicit -notesting
-opt-out so such runs do not depend on the native CYGWIN_TESTING flag
-surviving a Cygwin exec.
+A native Windows program can start a Cygwin child while PTY input is
+still routed to the native console. The `exec()` handover does not
+cover this case, yet a `vim.exe` started this way can enter raw mode
+and query the terminal before its first read.
 
-Keep the testing namespace enabled by default and leave production
-environment handling unchanged.
+Therefore, let's recover input during the child's initialization too,
+once the reopened stdin handle has been published. At that moment,
+the handover can recognize it as standard input. Doing this in `init()`
+is too early. If `stdin` and `stdout` share a PTY, initializing `stdout`
+later can perform the handover `stdin` missed.
 
+Note that we must be careful not to break the `disable_pcon` mode with
+this new logic.
+
+Addresses: https://github.com/git-for-windows/git/issues/6403
+Suggested-by: Takashi Yano <takashi.yano@nifty.ne.jp>
 Assisted-by: GPT-6.1
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/testsuite/cygrun.c  | 12 ++++++++++--
- winsup/testsuite/cygrun.sh |  7 ++++++-
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ winsup/cygwin/fhandler/pty.cc           | 7 +++++++
+ winsup/cygwin/local_includes/fhandler.h | 1 +
+ 2 files changed, 8 insertions(+)
 
-diff --git a/winsup/testsuite/cygrun.c b/winsup/testsuite/cygrun.c
-index 50c51876e..b7e6d17bc 100644
---- a/winsup/testsuite/cygrun.c
-+++ b/winsup/testsuite/cygrun.c
-@@ -23,10 +23,11 @@ main (int argc, char **argv)
-   DWORD res;
-   DWORD ec = 1;
-   DWORD timeout = 60 * 1000;
-+  const char *testing = "1";
+diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
+index e05d7ba5b..7c78ac6d9 100644
+--- a/winsup/cygwin/fhandler/pty.cc
++++ b/winsup/cygwin/fhandler/pty.cc
+@@ -1078,6 +1078,13 @@ fhandler_pty_slave::init (HANDLE h, DWORD a, mode_t, int64_t dummy)
+   return ret;
+ }
  
-   if (argc < 2)
-     {
--      fprintf (stderr, "Usage: cygrun [program]\n");
-+      fprintf (stderr, "Usage: cygrun [-notimeout] [-notesting] program\n");
-       exit (1);
-     }
++void
++fhandler_pty_slave::post_open_setup (int fd)
++{
++  if (fd == 0 && get_ttyp ()->pcon_activated)
++    fixup_input_state_for_cygwin_app ();
++}
++
+ void
+ fhandler_pty_slave::set_switch_to_nat_pipe (void)
+ {
+diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
+index b69a358f6..b7341f277 100644
+--- a/winsup/cygwin/local_includes/fhandler.h
++++ b/winsup/cygwin/local_includes/fhandler.h
+@@ -2473,6 +2473,7 @@ class fhandler_pty_slave: public fhandler_pty_common
  
-@@ -35,6 +36,8 @@ main (int argc, char **argv)
-     {
-       if (strcmp (argv[i], "-notimeout") == 0)
- 	timeout = INFINITE;
-+      else if (strcmp (argv[i], "-notesting") == 0)
-+	testing = NULL;
-       else
- 	break;
-     }
-@@ -47,7 +50,12 @@ main (int argc, char **argv)
-       exit (1);
-     }
- 
--  SetEnvironmentVariable ("CYGWIN_TESTING", "1");
-+  if (!SetEnvironmentVariable ("CYGWIN_TESTING", testing))
-+    {
-+      fprintf (stderr, "Cannot set testing environment: %lu\n",
-+	       GetLastError ());
-+      exit (1);
-+    }
- 
-   memset (&sa, 0, sizeof (sa));
-   memset (&pi, 0, sizeof (pi));
-diff --git a/winsup/testsuite/cygrun.sh b/winsup/testsuite/cygrun.sh
-index bf1d5cc6b..6ad2a373e 100755
---- a/winsup/testsuite/cygrun.sh
-+++ b/winsup/testsuite/cygrun.sh
-@@ -13,5 +13,10 @@ then
-     windows_runtime_root=$(cygpath -m $runtime_root)
-     $cygrun "$exe -v -cygwin $windows_runtime_root/cygwin1.dll"
- else
--    cygdrop $cygrun $exe
-+    # Executables beside their private DLL need no extra testing namespace.
-+    case "$exe" in
-+        testinst/bin/*|./testinst/bin/*) set -- -notesting "$exe" ;;
-+        *) set -- "$exe" ;;
-+    esac
-+    cygdrop "$cygrun" "$@"
- fi
+   int open (int flags, mode_t mode = 0);
+   bool open_setup (int flags);
++  void post_open_setup (int fd);
+   ssize_t write (const void *ptr, size_t len);
+   void read (void *ptr, size_t& len);
+   int init (HANDLE, DWORD, mode_t, int64_t = 0);
 -- 
 cygwingitgadget
 
