@@ -1,73 +1,73 @@
 Return-Path: <SRS0=ISKq=II=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-dy1-x1331.google.com (mail-dy1-x1331.google.com [IPv6:2607:f8b0:4864:20::1331])
-	by sourceware.org (Postfix) with ESMTPS id 9078F4BA2E1E
-	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9078F4BA2E1E
+Received: from mail-dy1-x1329.google.com (mail-dy1-x1329.google.com [IPv6:2607:f8b0:4864:20::1329])
+	by sourceware.org (Postfix) with ESMTPS id 31E9F4BA2E16
+	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 31E9F4BA2E16
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9078F4BA2E1E
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::1331
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336070; cv=none;
-	b=X0dg14lFxDYn2Ta8nvT7ZKYXA/tZpf40H44eS+Za8YA1QdcjsPBOVT8Lq1IOqAJPItbnrcRTy3MIF8neWWFazyIavWLoloxyetocGWerJ6Kw45F3mym78tyzmXQmT/SvC+ZTbH9qyCZlWA6bhtVzXFor5y69tOdLswOYgU++Jpk=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 31E9F4BA2E16
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::1329
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336072; cv=none;
+	b=Hcyfse89dLMmrl+nsfzK7yFF3EhqcvvAN02KWtg3qgaxOxkgvkLu4aq2P3Q5ZH53ao98dEsVAja83GFnFC5SrhDzK/NkFhWWTRe1fbvm7spm3pMbBM9ZSQVyry4bY1wSTcqy6u67gS02glw43M8zRdq8uXe2vRnr4RM2RnY+NEQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792336070; c=relaxed/simple;
-	bh=BX5Cl9eJCh8l5OyknMDmy4ZcVoNBA71H4o3v0jgkw98=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=iKmTxZR+vg20ycAr9ntr8Oqam9IvFnuhVZcjPSuosXmwbIvTjv0Z1aMxr1L1nVJQ6ZbY3pdgInJ0NY3s6e0rVpxzMfvIDfINgc6DDIvIPT0/ZXNy3XP6qMnmS5wV3RGISlxMCrYN2OEORotgW7UpM05rpeypLGzR2KsKZEsVgkY=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sqJxCt26
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9078F4BA2E1E
+	t=1792336072; c=relaxed/simple;
+	bh=Y2TXtHmbS2aEH4/QQ7rNANGGUJAiSSkM7r8Uo83RW28=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=BGad0aBOHD70vpTuerp4sEqGH8LqwUyj0cWAnqT7hQU1s7hkY+rbFL5RHf388iJw4sVVwydrhP/+y2jF3qFzvJTim4a1GHTlBF1l0HsIn2OI19V+zuxyWY38yDnQ2VH3A9liT0Ck5RHUzdsA9rNmU1Xmg2xtmP1TRW/+xeuaWps=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=N/lPDiHo
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 31E9F4BA2E16
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sqJxCt26
-Received: by mail-dy1-x1331.google.com with SMTP id 5a478bee46e88-35a31bb9fb6so3233592eec.1
-        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=N/lPDiHo
+Received: by mail-dy1-x1329.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso3329947eec.1
+        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792336069; x=1792940869; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1792336071; x=1792940871; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=hSi/6elR2fChgfiMMkLEEDEp8no+iOPKUesgm4ZlxmQ=;
-        b=sqJxCt26PrO6/PYMp6yM2jlTik4MZWbaKpiuvJfXcEynZdn+tpzxKSCshA1bGJ1QSZ
-         H/B/+iUEXnv+5FfBcEIUv0egIHMlzTtkc374ox3XDPSOJIIhqkxjT09Fl8EFOHRLo4OK
-         7A1IynxBhQwDC5RjE6OriZsnEAEQ6UIjUwImRrTbE2ueD+d2EaPVALVNJxCDWla90ec/
-         5f+dOnKQQaswIR9TBlyr3wlkwkJ4uWT79FFkH1wgCD2Lq5jBPWh3AasM3Bp6pvxgVdXC
-         3NTBNYCFHb44Thimdgmj4JpcLMTfViSKXvsyNCwIHsb2Eo30oYAufKLzkfUUoLl1Ddvr
-         IJfw==
+        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
+        b=N/lPDiHoAUt3wm//HKhaag+7EVzVFOsKo1ITHDM/3fpKmDbGlgcPZVEHvMioRsG09I
+         nBS1eWw02U5PAK4KxpX8gmV1iT2eFP+pqdKzY7gPvV53g3k+w5Htcu1j5/YYsy8g8WdT
+         FkTomqJc7isZhl7cVnOGkld3T+gLdJ7s6eRlVADRUrbnY1cGLE1dM8b1YXJxxy42sYN+
+         34SM0H2AmW+qPIZVkxXsZpcHjxbDuAfgeNxQJRyR4cRJMkmV5LTvF+lm7JRgjzkmuaHt
+         kMdyqIba0mkpAUox0jRlIDAjXUAHrOHrH0f+Qy4mnXWfK4rEOjweincpYDgQgHA4OrRm
+         oLTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792336069; x=1792940869;
+        d=1e100.net; s=20260707; t=1792336071; x=1792940871;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hSi/6elR2fChgfiMMkLEEDEp8no+iOPKUesgm4ZlxmQ=;
-        b=wS895zKfmiGtUwUmj+YoDmezkWUdmAiH9PXEt44n1vxwcfXTtB1oWPygCcp1/lOngw
-         aQ7YKZP93DhJDPhPkvkrp3GU/BeMtCrB6er2/oBqSKu2/ClODR3TkHfJzj/HZVP1Tlm3
-         INYncH2OuI+lUPo+n5I1F8+QlDwTY1IVUA9jJzjLitPCjjHFK0PrY3gxmgWwXmPHVhUm
-         nBltzfZ0sZoNpb+OEb+GKGRJUn+NPntdOKTHyri27MubyXcYEFriL9ey9MqHK5ydU+A9
-         RcOzDC3y8zq+qensOK1TOPtSq10gcckr7QbIsHOfHr5QB4GUeCwiBpaD3twsOKdM5m/m
-         +W/Q==
-X-Gm-Message-State: AFq9FYKLaAcwdg4420nO9gdwg14NZ558HPOi7fOeLC5WArumbzdwP2yL
-	5uUhWcr33izahlr1rLn2bIebUeo0U+wJnGJdjJu2hPQ5XAopjapQ3tx3d/X5Kg==
-X-Gm-Gg: AYBFou0IUnnGuUjoLYa5CqpvxKnMtML/7gszY8rQxhq78fFVXRNRRaXECH7rxrdHKH7
-	uVNV9G5xp/uEL41uJ6ANbuzQbxuqFyyml0hTeEf2ivFi0dqlu/EEDLgeN7w+7905mt+OHAOqL+F
-	rnGEO5wT+FEoCS6ruc2r/3IIJ9s2DnIChjUN8IB67tcpZUIvlRWmR+moPiXRS1Se9O4txxIK2jM
-	9Rm8bDGP6rwLxB2x14jW9a/fl/2bCHE/84iY3MQT24igjtzHgofvW4KKygaWNFafFmDCvagJmv6
-	7prP3Gns65rUG4D2RXBElMPV1yD6NvDinjp93J8SCJL1bNSpjgwN0vi331seC3QkvyKJP5k13M6
-	+9g5bWLGT8F7sd7UuWK7+qj99X8TolzccyrHwi1tHzzHrA74t0tYzKzTE4fSkFClpdH3oryDbR6
-	PJ2iEIYS8FpWNr4Aek5E2h/Hla+sjdSGzNV+VQVmgpqgywGQlND6KS8kK4s7QjofDOGYB5d3DVw
-	egS9qF+kDnP
-X-Received: by 2002:a05:7300:dd49:b0:35d:800:6344 with SMTP id 5a478bee46e88-3619ea243b4mr7477226eec.4.1792336069356;
-        Sun, 18 Oct 2026 08:07:49 -0700 (PDT)
+        bh=qDjsBw3UjPeX66+dbAL4Jto64fkQRW9PfUbnjq7kfPY=;
+        b=zxYWqELf70psCpKS2jveHqV3nm36tleuDiuBxkOAR8wnVf75XMrr6ToKNMEjyyNpMv
+         +KLd17n1pe6FOYqOuI5tyZvilLVvq3BhHn74XaydxWI59dLawbYYWckEN2IjTHkrcvKb
+         k7tCSpvmKOCNQI2GeGIAExMKDyGRv0RJK2tmUzIC8Of2P3LTGQX7m3iRKF1EjKzSorPf
+         2Lj4tN8U/PK6kySkhMqreLPw9baICZMHbsklKQ9SOjGh8lmebXZNPdJgyN/k8tW932VM
+         9ci/elZHjTfpA/gaBMCEDoHYIfNWNpDNAcSLLe3CJpTpwL8yzHwFpSPJzrS7x4I821wK
+         D3ww==
+X-Gm-Message-State: AFq9FYI0ZVCq66gsRxNVEbzYyKtXYrgmSRgNc4ibAk24Yb45FnlHEXVZ
+	n3LOyNOKg6mbsqaC0o+pfUWKSKHiaclwacl9aHf8czXWAtuhZ//aVATakcAQ5OTL
+X-Gm-Gg: AYBFou1JUSeT2FLhXI3Q7wAD27wgPBuGVC2e57uBDH9c/G7KZKTGh1Wu0pmPpgUY3gJ
+	jJ8lnHR52asXV051j09OYuodOBdp+osI/Hc0ATtoE+VatlJMpz4/YPkkfyR/Sr4RwrHpX9szlz8
+	Gt4j7V1xFWkV/klMJX4+PNU22fBDWkUQ9Njqm0U1lLEJb4GC0dKT1neIx9q4tkACXIN6Yu2nxNL
+	nf2U6Eg3o05BaC8n0xgUxFuNO1Bgt7X5m7dObShjVHLtCKLPQ7QPBWOg3yD3vuD4266DwFh0Zq4
+	+XFI0/WS2kR/kIlwe6OfpY12Gm7ZQPP5DQkun3PemdWJV0tLkKMF3Xm5pb0XJPda/udnXtftUu6
+	loXrasBp/Ui24GZjpsL18bh7i1huw9xAOPlvE4GJZQOv+xhbLdJ4mKMCuWEBjZwxapeKuHxMoW6
+	vWPaYOaU4VN4IlrT3sYuiG6HENyLYkllJ9lAf3kTjXea2qi5kjXOx1BsDjMf1MfoDu1xiD+hMaN
+	w==
+X-Received: by 2002:a05:7301:fc09:b0:359:2f0b:aa89 with SMTP id 5a478bee46e88-361a16681bemr7280251eec.10.1792336070892;
+        Sun, 18 Oct 2026 08:07:50 -0700 (PDT)
 Received: from [127.0.0.1] ([172.182.203.60])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3608308a87csm41605875eec.28.2026.10.18.08.07.48
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3608308a87csm41606081eec.28.2026.10.18.08.07.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 08:07:48 -0700 (PDT)
-Message-Id: <8a6255016b4c9964a0358049293e73c5b3cbdb85.1792336066.git.gitgitgadget@gmail.com>
+        Sun, 18 Oct 2026 08:07:50 -0700 (PDT)
+Message-Id: <ebf384575c7770da066008fc20c70e78e826f29c.1792336066.git.gitgitgadget@gmail.com>
 In-Reply-To: <pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 References: <pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
 	<pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Sun, 18 Oct 2026 15:07:41 +0000
-Subject: [PATCH v3 1/6] Cygwin: pty: restore foreground input routing after
- exec
+Date: Sun, 18 Oct 2026 15:07:42 +0000
+Subject: [PATCH v3 2/6] Cygwin: testsuite: allow cygrun without the testing
+ namespace
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -81,109 +81,77 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-On the 3.6 branch, a native background program can leave PTY input
-routed to the native console while the foreground Cygwin process calls
-`exec()` to start `vim.exe`. At that moment, the PTY can still be in
-canonical mode. The application then switches to raw mode and sends
-terminal queries before its first read, but the replies can remain on
-the native input path, leaving the queries unanswered.
+An executable beside an isolated build of the Cygwin DLL does not need
+the build-date-specific testing namespace. Provide an explicit -notesting
+opt-out so such runs do not depend on the native CYGWIN_TESTING flag
+surviving a Cygwin exec.
 
-Therefore, let's restore foreground input routing during `exec()`, even
-when the PTY is still canonical, rather than waiting for the first read.
-The existing debugger-recovery handover can do this once the attachment
-mutex has been reopened.
+Keep the testing namespace enabled by default and leave production
+environment handling unchanged.
 
-Note that this logic must be careful to keep the `disable_pcon` mode
-working as-is.
-
-Addresses: https://github.com/git-for-windows/git/issues/6403
-Suggested-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-Assisted-by: GPT-6.1 Sol
+Assisted-by: GPT-6.1
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/cygwin/fhandler/pty.cc           | 45 ++++++++++++++++++-------
- winsup/cygwin/local_includes/fhandler.h |  1 +
- 2 files changed, 33 insertions(+), 13 deletions(-)
+ winsup/testsuite/cygrun.c  | 12 ++++++++++--
+ winsup/testsuite/cygrun.sh |  7 ++++++-
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index c5081bcaf..e05d7ba5b 100644
---- a/winsup/cygwin/fhandler/pty.cc
-+++ b/winsup/cygwin/fhandler/pty.cc
-@@ -1120,18 +1120,7 @@ fhandler_pty_slave::reset_switch_to_nat_pipe (void)
- 	  mutex_timeout = INFINITE;
- 	  if (isHybrid)
- 	    {
--	      WaitForSingleObject (input_mutex, mutex_timeout);
--	      if (get_ttyp ()->getpgid () == myself->pgid
--		  && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
--		  && get_ttyp ()->pty_input_state_eq (tty::to_nat))
--		{
--		  acquire_attach_mutex (mutex_timeout);
--		  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
--				  input_available_event,
--				  input_transferred_to_cyg);
--		  release_attach_mutex ();
--		}
--	      ReleaseMutex (input_mutex);
-+	      fixup_input_state_for_cygwin_app ();
- 	      if (get_ttyp ()->master_is_running_as_service
- 		  && get_ttyp ()->pcon_activated)
- 		/* If the master is running as service, re-attaching to
-@@ -2605,7 +2594,11 @@ void
- fhandler_pty_slave::fixup_after_exec ()
- {
-   if (!close_on_exec ())
--    fixup_after_fork (NULL);	/* No parent handle required. */
+diff --git a/winsup/testsuite/cygrun.c b/winsup/testsuite/cygrun.c
+index 50c51876e..b7e6d17bc 100644
+--- a/winsup/testsuite/cygrun.c
++++ b/winsup/testsuite/cygrun.c
+@@ -23,10 +23,11 @@ main (int argc, char **argv)
+   DWORD res;
+   DWORD ec = 1;
+   DWORD timeout = 60 * 1000;
++  const char *testing = "1";
+ 
+   if (argc < 2)
+     {
+-      fprintf (stderr, "Usage: cygrun [program]\n");
++      fprintf (stderr, "Usage: cygrun [-notimeout] [-notesting] program\n");
+       exit (1);
+     }
+ 
+@@ -35,6 +36,8 @@ main (int argc, char **argv)
+     {
+       if (strcmp (argv[i], "-notimeout") == 0)
+ 	timeout = INFINITE;
++      else if (strcmp (argv[i], "-notesting") == 0)
++	testing = NULL;
+       else
+ 	break;
+     }
+@@ -47,7 +50,12 @@ main (int argc, char **argv)
+       exit (1);
+     }
+ 
+-  SetEnvironmentVariable ("CYGWIN_TESTING", "1");
++  if (!SetEnvironmentVariable ("CYGWIN_TESTING", testing))
 +    {
-+      fixup_after_fork (NULL);	/* No parent handle required. */
-+      if (get_ttyp ()->pcon_activated)
-+	fixup_input_state_for_cygwin_app ();
++      fprintf (stderr, "Cannot set testing environment: %lu\n",
++	       GetLastError ());
++      exit (1);
 +    }
  
-   /* Hook Console API */
- #define DO_HOOK(module, name) \
-@@ -4595,3 +4588,29 @@ fhandler_pty_slave::replace_nat_handles (HANDLE new_input, HANDLE new_output)
-   CloseHandle (orig_input_handle_nat);
-   CloseHandle (orig_output_handle_nat);
- }
-+
-+void
-+fhandler_pty_slave::fixup_input_state_for_cygwin_app ()
-+{
-+  DWORD wait = WaitForSingleObject (input_mutex, mutex_timeout);
-+  if (wait != WAIT_OBJECT_0 && wait != WAIT_ABANDONED_0)
-+    {
-+      termios_printf ("input fixup mutex wait returned %u", wait);
-+      return;
-+    }
-+  if (get_ttyp ()->getpgid () == myself->pgid
-+      && GetStdHandle (STD_INPUT_HANDLE) == get_handle ()
-+      && get_ttyp ()->pty_input_state_eq (tty::to_nat))
-+    {
-+      wait = acquire_attach_mutex (mutex_timeout);
-+      if (wait == WAIT_OBJECT_0 || wait == WAIT_ABANDONED_0)
-+	{
-+	  transfer_input (tty::to_cyg, get_handle_nat (), get_ttyp (),
-+			  input_available_event, input_transferred_to_cyg);
-+	  release_attach_mutex ();
-+	}
-+      else
-+	termios_printf ("input fixup attach wait returned %u", wait);
-+    }
-+  ReleaseMutex (input_mutex);
-+}
-diff --git a/winsup/cygwin/local_includes/fhandler.h b/winsup/cygwin/local_includes/fhandler.h
-index 70c2270fa..b69a358f6 100644
---- a/winsup/cygwin/local_includes/fhandler.h
-+++ b/winsup/cygwin/local_includes/fhandler.h
-@@ -2541,6 +2541,7 @@ class fhandler_pty_slave: public fhandler_pty_common
-   void setpgid_aux (pid_t pid);
-   static void release_ownership_of_nat_pipe (tty *ttyp, fhandler_termios *fh);
-   void replace_nat_handles (HANDLE new_input, HANDLE new_output);
-+  void fixup_input_state_for_cygwin_app (void);
- };
- 
- #define __ptsname(buf, unit) __small_sprintf ((buf), "/dev/pty%d", (unit))
+   memset (&sa, 0, sizeof (sa));
+   memset (&pi, 0, sizeof (pi));
+diff --git a/winsup/testsuite/cygrun.sh b/winsup/testsuite/cygrun.sh
+index bf1d5cc6b..6ad2a373e 100755
+--- a/winsup/testsuite/cygrun.sh
++++ b/winsup/testsuite/cygrun.sh
+@@ -13,5 +13,10 @@ then
+     windows_runtime_root=$(cygpath -m $runtime_root)
+     $cygrun "$exe -v -cygwin $windows_runtime_root/cygwin1.dll"
+ else
+-    cygdrop $cygrun $exe
++    # Executables beside their private DLL need no extra testing namespace.
++    case "$exe" in
++        testinst/bin/*|./testinst/bin/*) set -- -notesting "$exe" ;;
++        *) set -- "$exe" ;;
++    esac
++    cygdrop "$cygrun" "$@"
+ fi
 -- 
 cygwingitgadget
 
