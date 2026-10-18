@@ -1,73 +1,73 @@
 Return-Path: <SRS0=ISKq=II=gmail.com=gitgitgadget@sourceware.org>
-Received: from mail-dl1-x122b.google.com (mail-dl1-x122b.google.com [IPv6:2607:f8b0:4864:20::122b])
-	by sourceware.org (Postfix) with ESMTPS id 90A5D4BA2E25
-	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 90A5D4BA2E25
+Received: from mail-dy1-x132b.google.com (mail-dy1-x132b.google.com [IPv6:2607:f8b0:4864:20::132b])
+	by sourceware.org (Postfix) with ESMTPS id 3BBF24BA23CA
+	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 15:07:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 3BBF24BA23CA
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 90A5D4BA2E25
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::122b
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336073; cv=none;
-	b=R/KYDgwkzuS/OeKoHDvXIykD+5d0M9TAX/NvF1kkNHKwZVAUrrDh/SVDMXuyDGu/O+K74u1OVRgTp0Rqo+M88m9nR8Wv6WnK0bqkh2NbnzFDbyKq+Fvyva1BqiiX0CCZ9RJNZfT8udXEFxHj25Pffy0vmI9iPD48DN1B0xyyfOg=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 3BBF24BA23CA
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::132b
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792336077; cv=none;
+	b=TB+R7H9OzxozHNhWjaa0YJKul1FmTJrc+lNEqtvPajErP11p5CEObGrmdlIl3bBgo/nOD4dwiJZ9NiDUAVh5l2xDBTDiPOxrsOK/ymTf84kH0vxSADkO4TAq3ya3qDfeZGP2run4nHeT5Q3qVPUNHThl7Rc3V9UgF/wR5TVOg54=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792336073; c=relaxed/simple;
-	bh=ePt1Vb9gcrB/moA8whD0o2mNroNcx3DcQgCm6JkaQy4=;
-	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=FOwbjF9Y3GRg/r9P5Epe0M9B1USOhVtoZLdYC3CbGjdwk+6AABz2H6YtgSapSdnbebad7qGsocTMbABMYE/q3/JLZ0ZCpBB1gvYSXZ6XSH+TpG0axVaKYZhtfPb7LOngAM71vO/8bFInFS/sXFCeJH9Lfp+saPh46IS8sk0IF5Q=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MkLXwZRj
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 90A5D4BA2E25
+	t=1792336077; c=relaxed/simple;
+	bh=q3ABOwcjArNoQ9OxwM74bssktvKBc2+1eXaxptHc/s8=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=AlgkMW4XGQnevjl/q4ivpeLf/i+WFiMOIMK+cYT/Cpo+Yr0BvrQrYk4445JxVie7tLHHJyNfP5R0HieTZe6jbYJeLdzIRo3And94tjmBNHBQLpb/1D3jN3K1Z2sm8nrWCMJok1WcpohLLUeyklwPOy0eA1RfwpT88FT5eBllv38=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gew6LVWG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 3BBF24BA23CA
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MkLXwZRj
-Received: by mail-dl1-x122b.google.com with SMTP id a92af1059eb24-15354aa70e8so1049674c88.1
-        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gew6LVWG
+Received: by mail-dy1-x132b.google.com with SMTP id 5a478bee46e88-35c76e9614aso2479843eec.0
+        for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2026 08:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792336072; x=1792940872; darn=cygwin.com;
+        d=gmail.com; s=20251104; t=1792336076; x=1792940876; darn=cygwin.com;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Q5TtlbgEHIMB/DLbSa8s0zYg+0LxtN45ejto3Bvx0tQ=;
-        b=MkLXwZRjfSDHTaYwv0rKBsfP6ZyXwYn+U4bL86DolRNmvSn59TuNmpjVDwWCl64g2C
-         JIGvxxddV4WuY7x6lcK5ulf0cOnUn/ctLV5DUfniOsCLLHD8Jz//JQO8u/AcRUvrfxqa
-         i4j47eY0rsRaGLc70qLO3d+QFwS8SksD870yFXvybyXybOHBm8fgo7X/2nnhnKvyH1ea
-         Vjroc2mq6skRO3/Q/SRAF66lk6L32ZPczTxORhOtxJLkOx7B5zpoln5NUHrmXYlqW+pV
-         puCaedGwaHTkiM9V7ux+YIj3d0HQFC3J6AgsfQdKlphhr2cVOMbcdjEwopLVk4byENPT
-         vghA==
+        bh=5x+pvgLSg0u0jWTRy8d1UCqNLl36wn/cRIVG9kx2rFk=;
+        b=gew6LVWGr0kHiAj0MS6QxOT0eIIzthN1csWqAP/PotmMO9bnrCwWWAYq/p0fVSPYVl
+         qiJNbn8MxrqrwEunAugUID61CAtKU13pXfv3BcsoepV5rG2zyaTgzaRDKiN2jLYi/4JR
+         Ebm0GphUHSDZoM/O6H9moUTmWyXIEvmKx3WrI6mpKIclzb6FvzGW6dG336gD/Mp6UFId
+         UnG2vZqtEeDHrjXSNs5dpRAZU6vJ73U9OOxowHSpv+cRX36JRP21hnwZEpX4SlbMaXdL
+         56Jo8wcLZR8qHrQWPtKGfGrNjdlk6L706irmNUq27PduCaOguYaIaR/RquWvTwT5IJtY
+         /1ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792336072; x=1792940872;
+        d=1e100.net; s=20260707; t=1792336076; x=1792940876;
         h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
          :subject:date:from:references:in-reply-to:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Q5TtlbgEHIMB/DLbSa8s0zYg+0LxtN45ejto3Bvx0tQ=;
-        b=typ6pw4nHuaWex5NyGufjWbaks2OSd8P10RtUDdEg0ZOAckJZvSyVcFBIqjKavtzvS
-         h5W2L1dVpmjUYI2vS0U3WmdmC/nsp6dfxFtyzpKdWrJw+uy0c3eiUt66sfT9GBSQ/T/R
-         F0KAp9MS9fTsUeSooxlIlKCZUCP1F5ZbGCyzmH9OSL7WX4wTWGcxeIi1V9dTSYr2bAEb
-         AffRxNSsg2go5H1U8zx2Aa9sVoKcSzhpJ+XH5vUb/XFdjGPnNHFxihEQqL/EwT0/uxD1
-         4DmciFduq2pAMm5XHVXokfEUWFzUt1qnPiDgi39JZbqSOxjPi3TGeATUkM6aIhZwGNGr
-         KRaA==
-X-Gm-Message-State: AFq9FYKrpdAIknz7BX0K12CLQm1C5ShyhvMyWH5g+Y9H6IE3k0Fotkw+
-	4V2DQzaOpA4aNQSAjh6BhjZoqtl65VK74ZA2mR452eDKAwKWQOsM6ip9zwBXSkzI
-X-Gm-Gg: AYBFou15yAYwP+GMJ/Xpx6EZKmulzNBOjVM/xQ4zilhXoRqgyB/te2LG66oYgFIwEdM
-	x6rYVHdJMWVS4iLKmo2zUMBy2GZMnI5gEM/PMbBny6Ic/ZCXiucCSwH9VvEwk5X7xEIwCEGD5qO
-	j80Ftgn2Yli8uLVhiHKYK1NHeJ1qd3cYer1VzczWrKy3Re0x8xGFQos4WBdtVBbdtsIkTn+4NxD
-	TUFHJIDLHtU+33+W0L6dFT81OYJC/2CHP6+qRvNDbcCkiflG3mi1gPjvRqgsqahY1OVbNK5EuFh
-	advVmEUQ0S2erZdRPB0fGrSEkhC83vXXh03rPvpxRO6+iXiuVCVpwiD0yTc0XcvEcB18/4S/yQ4
-	rXS2+XzDOSJgJEMvw2mq7clOhXx93WGWn+b2QXfhLR7YNrkO0hTDVTVLGTx5zSWpj+z0LtpZa0a
-	n62C830n1OQrDGeQZcucsLC72DnazCDMoyLJS9pIjGYBOR4ui0aNe6Jc5PvmN0MaJhNQPeHOu5g
-	Q==
-X-Received: by 2002:a05:701b:2906:b0:141:4a06:ad6f with SMTP id a92af1059eb24-1851238b5f2mr7979919c88.8.1792336072358;
-        Sun, 18 Oct 2026 08:07:52 -0700 (PDT)
+        bh=5x+pvgLSg0u0jWTRy8d1UCqNLl36wn/cRIVG9kx2rFk=;
+        b=h1h976JPCsU++Tw7C6vRZdt9IJ4K/FLuhT7nU7p1qRTWKSgYP0ICrqOiIKRGnYLFcS
+         mB/uXhw/01T4SAVcDgP3JPbVK7hJqN55sPvJ5jw4kF+BL2eoE0oh5iQ7QuqhW8BOOH60
+         klQhl5OFlgclVswiw+IQ1H7Utcu09O3KjQoBjFQt3yQRRE+959oXC34Fup0xMzKhFfI3
+         /lCG80X0VCcgmFnrt9LLFSUl0JJBLo0Q2/FqNLLqrAHPwNWPdCxDeIO+M4OGwCEkgxzp
+         MmSYLHIgdJPLTpmWrPMYniloJW2/Py8v++HmJp+5fCUZq+C9yS1hZ0UPr/t83KCUm1IW
+         aAkQ==
+X-Gm-Message-State: AFq9FYKJL7iJU4AHGcAIoUYx5CsuaJDCEmg6r/y+jZwDM+mDoQBnx/So
+	cVmuJPJ1ZpaRz4M8EL6FIeTwBCH/HwQBMocPVxQjrlSX57jXviAl72ojdkheABlD
+X-Gm-Gg: AYBFou04iaR34Yl2eSPsM+X4tv7uiTC5aipd/QpjLI+ZcklW2MwdNYvvxsk76nS6rBv
+	PVSz9Ln1CNtBt09CTZTv53FAU9ahkJrvCeOjwuKSxUI24ksL/Gs3EEIogQWRfyrUpwBwEAy4BHy
+	jyS/tzoN0zBYV+j59QrkxEuwLwtnCdzT5nme46DusqsXBRQnmQQQC+beO/9ccO1zY20RhBEI4F9
+	PAM+Wld3bKz3yDRinv49YWUYasEIaIpvKE2nz/nYBj9klUoaSt3R1Euv5L711QS9ydsHTtwHfXC
+	zxy9uf2+uauKo/w+eMkRxcN81g7glTIY1BKonmU5QSDoWJkCY07QXbVzKvuDEiZYWygEGfmC+Wx
+	lIZ7zBb80f4vlR3h4Lb71QZ1K/O20rOdcTC8o54soIRr3EjMAYRR+1NKvsMAB/ZnwV/ef9x1fxG
+	dWHxdxMjcptGVPGj4CxiRB52pz7xDYblV3OHaEeM/g/U2MVBuJ8tPoDMhJpIizHJ+wrUS3mc35z
+	w==
+X-Received: by 2002:a05:7301:70f:b0:351:68e8:4646 with SMTP id 5a478bee46e88-361a2d387a5mr7004328eec.37.1792336075936;
+        Sun, 18 Oct 2026 08:07:55 -0700 (PDT)
 Received: from [127.0.0.1] ([172.182.203.60])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-183190aa7bbsm21211014c88.5.2026.10.18.08.07.51
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36082a7b33bsm45036720eec.24.2026.10.18.08.07.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 08:07:51 -0700 (PDT)
-Message-Id: <cceb823afd2815120d9d853c1de25a5a4a15b651.1792336066.git.gitgitgadget@gmail.com>
+        Sun, 18 Oct 2026 08:07:55 -0700 (PDT)
+Message-Id: <cdd3d9ce996397b37a41c8baa861f47ee9c4c4b6.1792336066.git.gitgitgadget@gmail.com>
 In-Reply-To: <pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 References: <pull.10.v2.cygwin.1792050298.gitgitgadget@gmail.com>
 	<pull.10.v3.cygwin.1792336066.gitgitgadget@gmail.com>
 From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
-Date: Sun, 18 Oct 2026 15:07:43 +0000
-Subject: [PATCH v3 3/6] Cygwin: testsuite: cover foreground PTY input recovery
- after exec
+Date: Sun, 18 Oct 2026 15:07:45 +0000
+Subject: [PATCH v3 5/6] Cygwin: testsuite: cover PTY input recovery with a
+ native parent
 Fcc: Sent
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -81,233 +81,213 @@ List-Id: <cygwin-patches.cygwin.com>
 
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 
-Terminal replies arriving after a foreground Cygwin `exec()`, but before
-its first read, must reach that process rather than remain on the native
-input path. This was broken, with the symptom that a `vim.exe` started
-from a native Console program could inadvertently cause input
-corruption, and this was just fixed. Let's try to verify that this stays
-fixed in the test suite.
+The existing test exercises a foreground Cygwin `exec()` with a native
+background process, but not a Cygwin child launched by a native program
+without Cygwin startup metadata. Therefore, let's also make that case
+mandatory in the registered test to catch regressions in either handoff.
 
-An actual Cygwin `exec()` and a native background process are needed to
-exercise the routing transition responsible for this failure. Checking
-only replies sent after reading begins would miss the pre-read case.
+The child must query the terminal before its first read, which would
+otherwise recover input and conceal the missing startup handoff. Only
+`stdin` may be a PTY: setting up `stdout` on the same PTY later could
+perform the handover `stdin` missed. An ordinary pipe for `stdout` and
+`stderr` keeps this case focused on recovery for inherited PTY input.
 
 Assisted-by: GPT-6.1
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- winsup/testsuite/.gitattributes               |   1 +
- winsup/testsuite/Makefile.am                  |  27 +++
- winsup/testsuite/mingw/Makefile.am            |   5 +-
- winsup/testsuite/mingw/pty-native-input.c     |  22 +++
- .../winsup.api/pty-background-native.c        | 155 ++++++++++++++++++
- 5 files changed, 209 insertions(+), 1 deletion(-)
- create mode 100644 winsup/testsuite/.gitattributes
- create mode 100644 winsup/testsuite/mingw/pty-native-input.c
- create mode 100644 winsup/testsuite/winsup.api/pty-background-native.c
+ winsup/testsuite/mingw/pty-native-input.c     | 73 ++++++++++++++-
+ .../winsup.api/pty-background-native.c        | 88 ++++++++++++++-----
+ 2 files changed, 135 insertions(+), 26 deletions(-)
 
-diff --git a/winsup/testsuite/.gitattributes b/winsup/testsuite/.gitattributes
-new file mode 100644
-index 000000000..6313b56c5
---- /dev/null
-+++ b/winsup/testsuite/.gitattributes
-@@ -0,0 +1 @@
-+* text=auto eol=lf
-diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
-index 8f2967a6d..b2b0e0b41 100644
---- a/winsup/testsuite/Makefile.am
-+++ b/winsup/testsuite/Makefile.am
-@@ -378,4 +378,31 @@ clean-local:
- 
- if CROSS_BOOTSTRAP
- SUBDIRS = mingw
-+check_PROGRAMS += testinst/bin/pty-background-native
-+testinst_bin_pty_background_native_SOURCES = \
-+	winsup.api/pty-background-native.c
-+
-+testinst_bin_pty_background_native_DEPENDENCIES = \
-+	$(filter-out -%,$(LDADD)) \
-+	testinst/bin/pty-native-input$(EXEEXT) \
-+	testinst/bin/cygwin-console-helper$(EXEEXT) \
-+	testinst/usr/share/terminfo/78/xterm
-+
-+testinst/usr/share/terminfo/78/xterm: /usr/share/terminfo/78/xterm
-+	$(MKDIR_P) $(dir $@)
-+	$(INSTALL_DATA) $< $@
-+
-+testinst/bin/pty-native-input$(EXEEXT): mingw/pty-native-input$(EXEEXT)
-+	$(INSTALL_PROGRAM) $< $@
-+
-+testinst/bin/cygwin-console-helper$(EXEEXT): \
-+	../utils/mingw/cygwin-console-helper$(EXEEXT)
-+	$(INSTALL_PROGRAM) $< $@
-+
-+mingw/pty-native-input$(EXEEXT): $(srcdir)/mingw/pty-native-input.c
-+	$(MAKE) -C mingw pty-native-input$(EXEEXT)
-+
-+../utils/mingw/cygwin-console-helper$(EXEEXT): \
-+	$(top_srcdir)/utils/mingw/cygwin-console-helper.cc
-+	$(MAKE) -C ../utils/mingw cygwin-console-helper$(EXEEXT)
- endif
-diff --git a/winsup/testsuite/mingw/Makefile.am b/winsup/testsuite/mingw/Makefile.am
-index 772e73405..4e6b2fc68 100644
---- a/winsup/testsuite/mingw/Makefile.am
-+++ b/winsup/testsuite/mingw/Makefile.am
-@@ -16,7 +16,7 @@ override CC = @MINGW_CC@
- override CXX = @MINGW_CXX@
- AM_CPPFLAGS =
- 
--noinst_PROGRAMS = cygrun cygload
-+noinst_PROGRAMS = cygrun cygload pty-native-input
- 
- cygrun_SOURCES = \
- 	../cygrun.c
-@@ -24,3 +24,6 @@ cygrun_SOURCES = \
- cygload_SOURCES = \
- 	../winsup.api/cygload.cc
- cygload_LDFLAGS=-static -Wl,-e,cygloadCRTStartup
-+
-+pty_native_input_SOURCES = \
-+	pty-native-input.c
 diff --git a/winsup/testsuite/mingw/pty-native-input.c b/winsup/testsuite/mingw/pty-native-input.c
-new file mode 100644
-index 000000000..688e87482
---- /dev/null
+index 688e87482..542badf0a 100644
+--- a/winsup/testsuite/mingw/pty-native-input.c
 +++ b/winsup/testsuite/mingw/pty-native-input.c
-@@ -0,0 +1,22 @@
-+#include <stdio.h>
-+#include <windows.h>
-+
-+int
-+main (void)
-+{
-+  HANDLE input = CreateFileA ("CONIN$", GENERIC_READ,
-+			     FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
-+			     OPEN_EXISTING, 0, NULL);
-+  DWORD mode, written;
-+  if (input == INVALID_HANDLE_VALUE || !GetConsoleMode (input, &mode)
-+      || !WriteFile (GetStdHandle (STD_OUTPUT_HANDLE), "R", 1, &written, NULL)
-+      || written != 1)
+@@ -2,13 +2,80 @@
+ #include <windows.h>
+ 
+ int
+-main (void)
++main (int argc, char **argv)
+ {
++  SECURITY_ATTRIBUTES sa = { sizeof sa, NULL, TRUE };
+   HANDLE input = CreateFileA ("CONIN$", GENERIC_READ,
+-			     FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
++			     FILE_SHARE_READ | FILE_SHARE_WRITE, &sa,
+ 			     OPEN_EXISTING, 0, NULL);
+   DWORD mode, written;
+-  if (input == INVALID_HANDLE_VALUE || !GetConsoleMode (input, &mode)
++  if (input == INVALID_HANDLE_VALUE || !GetConsoleMode (input, &mode))
 +    {
 +      fprintf (stderr, "Native console readiness failed: %lu\n",
 +	       GetLastError ());
 +      return 1;
 +    }
-+  /* Keep native console input active during the foreground Vim startup. */
-+  Sleep (4000);
-+  return 0;
-+}
-diff --git a/winsup/testsuite/winsup.api/pty-background-native.c b/winsup/testsuite/winsup.api/pty-background-native.c
-new file mode 100644
-index 000000000..e4128b54a
---- /dev/null
-+++ b/winsup/testsuite/winsup.api/pty-background-native.c
-@@ -0,0 +1,155 @@
-+#include <assert.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <windows.h>
-+
-+#include <errno.h>
-+#include <poll.h>
-+#include <pty.h>
-+#include <sys/wait.h>
-+#include <termios.h>
-+#include <unistd.h>
-+
-+static const struct
-+{
-+  const char *query, *reply;
-+} replies[] = {
-+  { "\033[6n", "\033[1;1R" }
-+};
-+
-+/* Emulate MinTTY answering terminal queries, not rendering a screen. */
-+static int
-+terminal (int master, pid_t child)
-+{
-+  char window[256];
-+  size_t used = 0;
-+  int status;
-+  ULONGLONG deadline = GetTickCount64 () + 10000;
-+  for (;;)
++  if (argc == 3)
 +    {
-+      assert (GetTickCount64 () < deadline);
-+      struct pollfd fd = { master, POLLIN, 0 };
-+      int ready = poll (&fd, 1, 100);
-+      assert (ready >= 0 || errno == EINTR);
-+      if (ready > 0)
++      /* Emulate native Git launching a Cygwin editor. */
++      STARTUPINFOA si = { 0 };
++      PROCESS_INFORMATION pi;
++      HANDLE output, child_pipe;
++      si.cb = sizeof si;
++      si.dwFlags = STARTF_USESTDHANDLES;
++      if (sscanf (argv[2], "%p,%p", &si.hStdInput, &output) != 2)
 +	{
-+	  char buf[128];
-+	  ssize_t n = read (master, buf, sizeof buf);
-+	  assert (n >= 0 || errno == EINTR || errno == EIO);
-+	  for (ssize_t i = 0; i < n; i++)
-+	    {
-+	      if (used == sizeof window)
-+		memmove (window, window + 1, --used);
-+	      window[used++] = buf[i];
-+	      for (size_t j = 0; j < sizeof replies / sizeof *replies; j++)
-+		{
-+		  size_t len = strlen (replies[j].query);
-+		  assert (len && len <= sizeof window);
-+		  if (used >= len
-+		      && !memcmp (window + used - len, replies[j].query, len))
-+		    assert (write (master, replies[j].reply,
-+				  strlen (replies[j].reply))
-+			   == (ssize_t) strlen (replies[j].reply));
-+		}
-+	    }
++	  fprintf (stderr, "Invalid inherited terminal handles\n");
++	  return 1;
 +	}
-+      pid_t done = waitpid (child, &status, WNOHANG);
-+      assert (done >= 0 || errno == EINTR);
-+      if (done == child)
-+	break;
++      /* Only stdin is a PTY; stdout must not mask a missed input handoff. */
++      if (!CreatePipe (&child_pipe, &si.hStdOutput, &sa, 0)
++	  || !SetHandleInformation (child_pipe, HANDLE_FLAG_INHERIT, 0))
++	{
++	  fprintf (stderr, "Cannot create child output pipe: %lu\n",
++		   GetLastError ());
++	  return 1;
++	}
++      si.hStdError = si.hStdOutput;
++      if (!CreateProcessA (NULL, argv[1], NULL, NULL, TRUE, 0,
++			   NULL, NULL, &si, &pi))
++	{
++	  fprintf (stderr, "Cannot launch Cygwin editor: %lu\n",
++		   GetLastError ());
++	  return 1;
++	}
++      CloseHandle (si.hStdOutput);
++      /* Forward Vim's queries to MinTTY without another Cygwin PTY fd. */
++      char buf[128];
++      DWORD n;
++      while (ReadFile (child_pipe, buf, sizeof buf, &n, NULL))
++	if (!WriteFile (output, buf, n, &written, NULL) || written != n)
++	  {
++	    fprintf (stderr, "Cannot forward child output: %lu\n",
++		     GetLastError ());
++	    return 1;
++	  }
++      if (GetLastError () != ERROR_BROKEN_PIPE)
++	{
++	  fprintf (stderr, "Cannot read child output: %lu\n",
++		   GetLastError ());
++	  return 1;
++	}
++      CloseHandle (child_pipe);
++      DWORD status;
++      if (WaitForSingleObject (pi.hProcess, 8000) != WAIT_OBJECT_0
++	  || !GetExitCodeProcess (pi.hProcess, &status))
++	{
++	  fprintf (stderr, "Cygwin editor did not finish\n");
++	  return 1;
++	}
++      if (status)
++	fprintf (stderr, "Cygwin editor exit status: %lu\n", status);
++      CloseHandle (pi.hProcess);
++      CloseHandle (pi.hThread);
++      return status;
 +    }
-+  close (master);
-+  if (!WIFEXITED (status) || WEXITSTATUS (status))
++  if (argc != 1
+       || !WriteFile (GetStdHandle (STD_OUTPUT_HANDLE), "R", 1, &written, NULL)
+       || written != 1)
+     {
+diff --git a/winsup/testsuite/winsup.api/pty-background-native.c b/winsup/testsuite/winsup.api/pty-background-native.c
+index e4128b54a..f1c55bff9 100644
+--- a/winsup/testsuite/winsup.api/pty-background-native.c
++++ b/winsup/testsuite/winsup.api/pty-background-native.c
+@@ -62,6 +62,7 @@ terminal (int master, pid_t child)
+   close (master);
+   if (!WIFEXITED (status) || WEXITSTATUS (status))
+     {
++      fprintf (stderr, "Terminal child status: %d\n", status);
+       fwrite (window, 1, used, stderr);
+       return 1;
+     }
+@@ -73,8 +74,8 @@ static int
+ worker (pid_t native)
+ {
+   struct termios raw;
+-  assert (tcgetpgrp (0) == getpgrp () && getpgid (native) == native
+-	 && native != getpgrp ());
++  assert (tcgetpgrp (0) == getpgrp ());
++  assert (!native || (getpgid (native) == native && native != getpgrp ()));
+   assert (!tcgetattr (0, &raw));
+   raw.c_lflag &= ~(ICANON | ECHO);
+   raw.c_cc[VMIN] = 0;
+@@ -99,31 +100,22 @@ worker (pid_t native)
+ 	       || memcmp (buf, replies[0].reply, used);
+   /* Misrouted reports can become keystrokes that edit Vim's first line. */
+   if (result)
+-    fprintf (stderr, "Bad terminal reply (%zu bytes)\n", used);
 +    {
-+      fwrite (window, 1, used, stderr);
-+      return 1;
++      fprintf (stderr, "Bad terminal reply (%zu bytes):", used);
++      for (size_t i = 0; i < used; i++)
++	fprintf (stderr, " %02x", (unsigned char) buf[i]);
++      fputc ('\n', stderr);
 +    }
-+  return 0;
-+}
-+
-+/* Emulate Vim entering raw mode and querying before its first input read. */
+   int status;
+-  assert (waitpid (native, &status, 0) == native
+-	 && WIFEXITED (status) && !WEXITSTATUS (status));
++  if (native)
++    assert (waitpid (native, &status, 0) == native
++	    && WIFEXITED (status) && !WEXITSTATUS (status));
+   return result ? 1 : 0;
+ }
+ 
+-int
+-main (int argc, char **argv)
 +static int
-+worker (pid_t native)
-+{
-+  struct termios raw;
-+  assert (tcgetpgrp (0) == getpgrp () && getpgid (native) == native
-+	 && native != getpgrp ());
-+  assert (!tcgetattr (0, &raw));
-+  raw.c_lflag &= ~(ICANON | ECHO);
-+  raw.c_cc[VMIN] = 0;
-+  raw.c_cc[VTIME] = 1;
-+  assert (!tcsetattr (0, TCSANOW, &raw));
-+  assert (write (1, replies[0].query, strlen (replies[0].query))
-+	 == (ssize_t) strlen (replies[0].query));
-+  /* Emulate Vim's startup work while replies arrive before the first read. */
-+  usleep (100000);
-+  char buf[64];
-+  size_t used = 0;
-+  for (int i = 0; i < 30 && used < sizeof buf; i++)
++run_case (const char *program, int native_parent)
+ {
+-  if (argc == 3 && !strcmp (argv[1], "worker"))
+-    {
+-      int pid;
+-      char extra;
+-      assert (sscanf (argv[2], "%d%c", &pid, &extra) == 1 && pid > 0);
+-      return worker (pid);
+-    }
+-  assert (argc == 1);
+-  if (!GetProcAddress (GetModuleHandleW (L"kernel32.dll"),
+-		      "CreatePseudoConsole"))
+-    {
+-      fprintf (stderr, "ConPTY unavailable\n");
+-      return 77;
+-    }
+-  assert (!setenv ("TERM", "xterm", 1));
+   struct winsize size = { 24, 80, 0, 0 };
+   int master;
+   pid_t child = forkpty (&master, NULL, NULL, &size);
+@@ -131,6 +123,27 @@ main (int argc, char **argv)
+   if (child)
+     return terminal (master, child);
+ 
++  if (native_parent)
 +    {
-+      ssize_t n = read (0, buf + used, sizeof buf - used);
-+      assert (n >= 0 || errno == EINTR || errno == EAGAIN);
-+      if (n > 0)
-+	used += n;
-+      if (memchr (buf, 'R', used))
-+	break;
++      char path[MAX_PATH], command[MAX_PATH + 32], handles[64];
++      DWORD length = GetModuleFileNameA (NULL, path, sizeof path);
++      assert (length && length < sizeof path);
++      snprintf (command, sizeof command, "\"%s\" worker 0", path);
++      HANDLE input, output;
++      /* Preserve the terminal handles across the native Git process. */
++      assert (DuplicateHandle (GetCurrentProcess (),
++			       GetStdHandle (STD_INPUT_HANDLE),
++			       GetCurrentProcess (), &input,
++			       0, TRUE, DUPLICATE_SAME_ACCESS));
++      assert (DuplicateHandle (GetCurrentProcess (),
++			       GetStdHandle (STD_OUTPUT_HANDLE),
++			       GetCurrentProcess (), &output,
++			       0, TRUE, DUPLICATE_SAME_ACCESS));
++      snprintf (handles, sizeof handles, "%p,%p", input, output);
++      assert (execl ("/bin/pty-native-input.exe", "pty-native-input",
++		     command, handles, (char *) NULL) != -1);
 +    }
-+  int result = used != strlen (replies[0].reply)
-+	       || memcmp (buf, replies[0].reply, used);
-+  /* Misrouted reports can become keystrokes that edit Vim's first line. */
-+  if (result)
-+    fprintf (stderr, "Bad terminal reply (%zu bytes)\n", used);
-+  int status;
-+  assert (waitpid (native, &status, 0) == native
-+	 && WIFEXITED (status) && !WEXITSTATUS (status));
-+  return result ? 1 : 0;
++
+   int ready[2];
+   assert (!pipe (ready));
+   pid_t native = fork ();
+@@ -151,5 +164,34 @@ main (int argc, char **argv)
+   assert (!setpgid (native, native));
+   char pid[24];
+   snprintf (pid, sizeof pid, "%ld", (long) native);
+-  assert (execl (argv[0], argv[0], "worker", pid, (char *) NULL) != -1);
++  assert (execl (program, program, "worker", pid, (char *) NULL) != -1);
++  return 1;
 +}
 +
 +int
@@ -317,10 +297,11 @@ index 000000000..e4128b54a
 +    {
 +      int pid;
 +      char extra;
-+      assert (sscanf (argv[2], "%d%c", &pid, &extra) == 1 && pid > 0);
++      assert (sscanf (argv[2], "%d%c", &pid, &extra) == 1 && pid >= 0);
 +      return worker (pid);
 +    }
-+  assert (argc == 1);
++  assert (argc == 1
++	  || (argc == 2 && !strcmp (argv[1], "native-parent")));
 +  if (!GetProcAddress (GetModuleHandleW (L"kernel32.dll"),
 +		      "CreatePseudoConsole"))
 +    {
@@ -328,35 +309,14 @@ index 000000000..e4128b54a
 +      return 77;
 +    }
 +  assert (!setenv ("TERM", "xterm", 1));
-+  struct winsize size = { 24, 80, 0, 0 };
-+  int master;
-+  pid_t child = forkpty (&master, NULL, NULL, &size);
-+  assert (child >= 0);
-+  if (child)
-+    return terminal (master, child);
-+
-+  int ready[2];
-+  assert (!pipe (ready));
-+  pid_t native = fork ();
-+  assert (native >= 0);
-+  if (!native)
-+    {
-+      close (ready[0]);
-+      assert (dup2 (ready[1], 1) == 1);
-+      close (ready[1]);
-+      assert (execl ("/bin/pty-native-input.exe", "pty-native-input",
-+		    (char *) NULL) != -1);
-+    }
-+  close (ready[1]);
-+  char byte;
-+  assert (read (ready[0], &byte, 1) == 1 && byte == 'R');
-+  close (ready[0]);
-+  /* Emulate a native job remaining alive while foreground Vim starts. */
-+  assert (!setpgid (native, native));
-+  char pid[24];
-+  snprintf (pid, sizeof pid, "%ld", (long) native);
-+  assert (execl (argv[0], argv[0], "worker", pid, (char *) NULL) != -1);
-+}
++  if (argc == 2)
++    return run_case (argv[0], 1);
++  if (run_case (argv[0], 0))
++    return 1;
++  /* Keep the terminal-emulator state independent between scenarios. */
++  assert (execl (argv[0], argv[0], "native-parent", (char *) NULL) != -1);
++  return 1;
+ }
 -- 
 cygwingitgadget
 
