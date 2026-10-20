@@ -1,150 +1,140 @@
-Return-Path: <SRS0=H8Ah=IJ=outlook.com=luca.bacci@sourceware.org>
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazolkn190130003.outbound.protection.outlook.com [IPv6:2a01:111:f403:d201::3])
-	by sourceware.org (Postfix) with ESMTPS id C63814BA2E16
-	for <cygwin-patches@cygwin.com>; Mon, 19 Oct 2026 17:32:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C63814BA2E16
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C63814BA2E16
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:d201::3
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1792431139; cv=pass;
-	b=xw3Rwf/v61vJlbpoO7mDCPruhjAowd1yN2Qd1XnG9NKesyOMmAY5ATu1uSZInslHhXEHh12d3I/bPSgj5QDNOwVSYZRQuE8w7GrLXbk/q1/TkoMX6NCFfv4U9VQpecy+nC9TNcUPVEtpLqmW9YCKIL/SKzZAwiHQEAQpcONt/Pw=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792431139; c=relaxed/simple;
-	bh=/gMXTs5bCXUHOf0vw1zqh0q/XCTDLwh0SlxHhLs6DMU=;
-	h=DKIM-Signature:To:Subject:Date:Message-ID:From:MIME-Version; b=vgzKs1Yls6XTaEcn6QQrpqusVRudihn5rgyt+T+8klF87yGAqqJQ5mtg3Raged0BSYTqqAlgKrps9BioPIZdFMDFvcg6YVCTGsbady/t2nMcGShkYFO1C/worz6D1niyiqvdwusvM0dY8Tp0HFS1VhBO55hprz2Wyy5IhqlLaEI=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=rXrJzgfu
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C63814BA2E16
+Return-Path: <SRS0=VONe=IK=nifty.ne.jp=takashi.yano@sourceware.org>
+Received: from mta-snd-w05.mail.nifty.com (mta-snd-w05.mail.nifty.com [IPv6:2001:268:fa30:831:6a:99:e3:25])
+	by sourceware.org (Postfix) with ESMTPS id 0351E48FEF74
+	for <cygwin-patches@cygwin.com>; Tue, 20 Oct 2026 04:39:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0351E48FEF74
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0351E48FEF74
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa30:831:6a:99:e3:25
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792471165; cv=none;
+	b=FmOp7kFkIpMMC/N6J612aMRTajksFyb0DQ75uUKWcWrPomatN7S5DY/4f3mXodGOl2quj3ili1/eDRxAsWg9+ICtmt9KkiQm82i6B3P+Qw8xJJIuKs+65N/0VHjPtlVhwU1+KaQh/Q+Tcd6our41TkDz5V1CA5ZrIEgTGHDa7nQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1792471165; c=relaxed/simple;
+	bh=xTPtJmHPahIVbtbOnlI2fjMdmfh30DN5iLojiv1/dyI=;
+	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=oRbM5KNBWEy5GoS7QK38aem/Dk/kLtAVkKWa2El/xsUS2kS6Ft3fEjyqaXm1IxYw+Sl9kbRyW2nUTcOJ8aX0Zb+rWMvwOOferebWcSqUsM3+5/vfShBkQFsZn7b1Es6mqOVc9Uyeu8iT/XW92dViOgi5W1M0iSfK3ALtL88tp8o=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=klHeuhHG
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0351E48FEF74
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=rXrJzgfu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m+gXyzre5L1eL3ymOATwOP0gar6icknTwXZGqYiGWOqQ2Tb84tPJJbl9JkdsVW05nNIgOxxEDxWC7Gge7XClE6B44AYjzuXAYD09uR0oaGOOcEExOssO8620CLYC7E7eQePqKamqq2OOaVHLEXYfGCY4kGRdx/MXteVhdqdvxsoIEfVxXM243DigQDlA+Vqy8TyIx5Mrpc3wZdxxeh4kehyVR9+WLXm8zZqfQ8L205fMW+540osWd2DncFYsadQyTE1dG+daW4pQBEg0LRflSs/jUm6QclwtzBoOZA1GF65jjA/Cn9aMg92ibjaSlepU4sOzQZN/WMEEMsBtlKEUUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MQ2Er8vVnk+dk3RjHhH1F/6LuDCR86xu+xOrH57ymKI=;
- b=xlnT14kiTWsy/KHjuP8btfAGKe+JRqFwZf53jQkYcsku6mLj+jH8zKabnzDS0cDzLy6hmSVEKRHNjYvV0mbeomLNkyyPcT2XCiO6MN2tqpHLZoAPi5L+hwXio9qs07O7rjJ3AxwJqmwgt9ZnH8aY4HA8HOQh4hwBo+V5KGimkAoULSKTWVic04oZovzyecxkhF/45dMBAd8oLkhvC6TnwSQpVDf23PH9vnsamwNocbbFYoA/n0vITVUxiNSU6E7bFDh94ZHU6hoPI1oaAwq2wHzpEo2miqQhPNBQdsTzqzcyLgzlwOA1/1i8QzVdYZorun7RUH3EppGmnL6JoP9EjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MQ2Er8vVnk+dk3RjHhH1F/6LuDCR86xu+xOrH57ymKI=;
- b=rXrJzgfucxdMJxUH3KaBjgVdxhCIVLjnXkOtx8v8NhWCZSxr4sCAjHb2vqEQ1xPmXp4+qdgBF9SoSYEDdFisC9hmMNVVcq/bOg/L5potITrCWXe2ARR1BRM+8sNosRrpHiKdJ609v56Tn2rBfNW5fvaFAO1LYkC9acFJ/lk6/dYa1XBdvnpnhXJt04wpZI3kxFHnBiCsBpi0WWrQ0rL6aWZ38Y7J9leH60IIKyUNxxbMAaMauBowL9Z8u/pHvt9sjgYFHeqYsyBwbf6rjyiKKj9UpTM9FDvocv6KczWdx8uhLZEMMwqDPmjSwtIYb5QHZqlb19Pranfs+BKq3ZjOLw==
-Received: from AS4PR02MB7902.eurprd02.prod.outlook.com (2603:10a6:20b:4b2::9)
- by AM0PR02MB457523.eurprd02.prod.outlook.com (2603:10a6:20b:807::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 17:32:17 +0000
-Received: from AS4PR02MB7902.eurprd02.prod.outlook.com
- ([fe80::2a24:bc25:8b55:3de8]) by AS4PR02MB7902.eurprd02.prod.outlook.com
- ([fe80::2a24:bc25:8b55:3de8%5]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 17:32:17 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=klHeuhHG
+Received: from HP-Z230 by mta-snd-w05.mail.nifty.com with ESMTP
+          id <20261020043921231.BPZT.117312.HP-Z230@nifty.com>
+          for <cygwin-patches@cygwin.com>; Tue, 20 Oct 2026 13:39:21 +0900
+Date: Tue, 20 Oct 2026 13:39:19 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] pthread_spinlock: Attempt exchange only when lock_counter is 0
-Date: Mon, 19 Oct 2026 19:32:08 +0200
-Message-ID:
- <AS4PR02MB7902AB280F79F6D37805514D83982@AS4PR02MB7902.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.55.0.windows.5
-In-Reply-To: <20261019173209.2894-1-luca.bacci@outlook.com>
-References: <20261019173209.2894-1-luca.bacci@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-From: <luca.bacci@outlook.com>
-X-ClientProxiedBy: MI1P293CA0014.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:2::17) To AS4PR02MB7902.eurprd02.prod.outlook.com
- (2603:10a6:20b:4b2::9)
-X-Microsoft-Original-Message-ID:
- <20261019173209.2894-2-luca.bacci@outlook.com>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR02MB7902:EE_|AM0PR02MB457523:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b95b97b-3df0-4452-03bc-08df2e06ebe3
-X-MS-Exchange-SLBlob-MailProps:
-	9qw5+ftluCBM04rZffbgGeDNXPMguI7eVhP9h+DZ/6VfpRTgNID8Hbj0jZpN1ot3wz3fsTjWzKyih6MBPigy1FloQtUEXf0JaZpfuX7z9lVtTgfsR5sAMG7rVcGGDWIVuNm9wJNrj1fj/kkwT9x0GVlB/2W2AtDofBZVIxeEa4hUVjjx5WdBYmlFb9vzQ3LTLXHlE1N7UKs+6wAiIL2YV5cohvoGL4nNEL7Ab8ikCbhD9TbB/wdsBAUURv6H9ameVHo+IHo7JsyHItZCcUl8xlXr0PsYyZUebbQp3jGwfIzIk08ABa5DX8tW5vMcPkHupSkBoEXuC/izLf9YtyMyLzEauTzyT3wW9RvreFNilBrOSvXB7UU4dt4JlUlzKotJ7dsAX3zqfOkrXY1zViRhow2k/nHtPaR5E3LInRldb7XWzQaFhDLDtLkTP0ShBME4gosf2JGvSXewRBcyDvudLdMhUk69/ZX3HJ/36cr3UIwHFnu+sARtH45nq4eIDDxENEzn6cdz8a9LHya54b3soCtqc/yOlSuuq9x/Do1c8XTeSn6PXdu+p6HtYykwpgP8718UW73uoO2M5osVk9iuWOJsSvRHwwUgZ1aepNA5BHa3r/FKwAKK7nHcOFRvCj8VkLqVH/oLE0GdgCKjhThGKmxLZdAmiYaZCT6pV/okaMoavIAPeGpGkzpHurLLyJROhqN6ZaTGzF4=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799012|8060799015|12121999013|260925184616899003|24021099003|51005399006|25010399006|15080799012|5072599009|23021999003|40105399003|14041999003|3412199025|440099028;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?a0Kjt+Ybp+mrmDg3XnoD84hW8gDOIYG7oy8Mdmf62xnyCRkwNWeYvzelMbU1?=
- =?us-ascii?Q?f3aRq/lrAOVho7yc0T53TZiH7yOFekqu0QTooP6iwIPBFdMUOWIJUjWMmKQD?=
- =?us-ascii?Q?BwWtV6INGmZ8HXyhJl3aUqUJd5Tnh1YsCzTVlcraHmQPSBH4NMGHlEh/8MPa?=
- =?us-ascii?Q?0ZVa2Xhesx1CkoNeOo2njNL6rBuUP+xmcOQGeJbzWgbtFioEXaUrZz+f26FE?=
- =?us-ascii?Q?LKkjnN4+K/+R/XSXMjcjYGyQds5gIC5fkG1ROaASlmL9u7v01+NF2OYrW5v2?=
- =?us-ascii?Q?REbyztBIcjqa3DP+xtgusjxRoZS+H6PGjSHoiiunRTNq5S23AxTVNO1ekw/j?=
- =?us-ascii?Q?ozM23sy7lrNVNdFR1oruSPgp0VgvF8ACITCqbj2p8p9Zrj8OPwMRDKonwsfo?=
- =?us-ascii?Q?lrYYhJ+3iJRnlNkKiZNvv/7zoAlfw9soI2piZPC/cOHRJa19bAb/XfnN3D9R?=
- =?us-ascii?Q?lg/f8mgy0zLCeuFb4YU8uPi53GrQZBegEFiT4+1pVa/lVggag9mhDBQznrJA?=
- =?us-ascii?Q?+VArodPD6+gDCkE42OGQ6TX9LfCljSek6BmrZc9s7tEx3eJ3Vb64CtDEXjd6?=
- =?us-ascii?Q?b8PBjgHi1e7UH/ofzxvbPVzG/dlricqsvpZdLlVCExG2ej7mjc/MtHtPQi3X?=
- =?us-ascii?Q?eigV7CJDR71a3MlTK4vQ8R8iKOmC7kswaVU8ZqX7ddwRq9tVs2Nz2ZpBlPDj?=
- =?us-ascii?Q?WgGVYV6sQDSTCPj+k7cwl2fWrT9eC3ndKNXcRrxnIS8H/2erXPUhPC6yrYDa?=
- =?us-ascii?Q?p9cuOhmdBaUI3ahLKDOMstgv8xFUG25m/Wej1bl4Y52Em92oYMn1OLrUCLcZ?=
- =?us-ascii?Q?uL4ibCMZ4j2coiILVSbscTH+Dmjexq+TFVPczIh4wH+sW+cnIJ1OXU1wC7Eu?=
- =?us-ascii?Q?Z7S61Jm7apADbL0bMb4U73diTDQDlfqiXlWTyNUagoCcoSak7tqALX1E9936?=
- =?us-ascii?Q?DTD9SAguc90kUUhSs43t1BZaiN7i9hLRtes3Vu+h0/ZjGL5YCYeV2u04X88w?=
- =?us-ascii?Q?uXez?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?cmEup8U9AgDJYxDaxUyx6+N600gDqF1kuoEe9K8k5Yz2XN1jokpIt7K4Ssjs?=
- =?us-ascii?Q?XoI315ihR+LMcu+Vy21DFQtW/FsGsQJNXojV+MWINO6Z3sGU7HkctxiP7vmR?=
- =?us-ascii?Q?JFHyugE5W8qNPdAcxJZWRL0AyzwplqNC/OwB1RBKpAhLVVqY9wCw/xB9422C?=
- =?us-ascii?Q?YroS+qZJh5E+EsurZO/IuVeBtKs+7jEKpft/XONmqTQP85xInMQTCv/pc38H?=
- =?us-ascii?Q?eGt+8s4Ecq0XFcLeZbunIylkjYhsiWosbLWhy8/mPfSoiRjDSmwBer03ilRd?=
- =?us-ascii?Q?9ZzcRGeJls1iWaNuCPSCxk4vlhPbAYXoOasIrUTmr9lKIbabMAoYpzp4D/s8?=
- =?us-ascii?Q?rEFcvA5JpIrAUzayvuA0yfoWicVUEkc0nuebtTn/PZzP35vbsv05Dg81kOhu?=
- =?us-ascii?Q?sYZIYb1JJdOS7/u/m2YhHFg6t47zOtKMumwpRqt0VEW/o/ujaoF6cqOgtirI?=
- =?us-ascii?Q?qUAKd3EzBBSwleim8lUxbz1jQie/+5UeSpd/BNgrUMOOQ5yi5yppAZRpMbNO?=
- =?us-ascii?Q?U8Qt8mOJ/dgIZL5AWMVbQB/8FTzrncGyC3XiYhhi+raCUgmRv3fSkPJ9cliZ?=
- =?us-ascii?Q?kE3e+2CTwosBFj1lffd0qD1UKnzR5AexAGdmFLCb0BzZvA0iu4exuL0SQBBV?=
- =?us-ascii?Q?qizYBNwtbpIqa/5UR3zFf2kaQv1ewAZ2BzirzuB4h/5MYP+sphvjxkQkknO7?=
- =?us-ascii?Q?IVlz/dGur+56TGk43qVQUakPNv0WC0T4uumlKgKCJGigr+sxYxOk5KRbbMAx?=
- =?us-ascii?Q?cq+a2hZqBN09wqusRwa/tnBcjC8Z11OfhOCryny2RGxWw7kKFKTjZ9F8M27/?=
- =?us-ascii?Q?pN1N7blP7Xc/2RpLEnp56aMLqgNMXSd8tM9ZZS15sq6o8n8uuQPcmn9t6/SH?=
- =?us-ascii?Q?6bc1u8oO3PVIWFwz1UGKjXmcV0ryCliZUx9ai2n4AXURWlKNyNucTIO5R2Un?=
- =?us-ascii?Q?33ir5OITGHeAT7eYfmZuGk1JKeK1L+/YeufFtE4Ehloul3ozle6jn/5MdrUQ?=
- =?us-ascii?Q?f7O/2/grKVzCV2mDlmD4b9J7CumTPMC17p5VXyoDpU71d249s5JVsc9/hqKO?=
- =?us-ascii?Q?//pg63n84zfX0+R49LXxhg3/kofMYnhQy/bHeiyFRBKvjhpdOpyWmMQXtcZT?=
- =?us-ascii?Q?yhK42JgWuQa+5VIwrSSO0qml3HmudzTW+qhP7zA8JbdGLGZY+obnxQBsU8M1?=
- =?us-ascii?Q?i6ZnVZ/WAE3u/2cy0xbV3f6s7RCisR4nCrXf9zSy9jBCMpQuSJ2YHugYL8E8?=
- =?us-ascii?Q?jFjwduRDmXTY7gMTuaPj0Qi9VIhMTsHy8vPOBTapZVsxRH4WY4cq6ir0jV/F?=
- =?us-ascii?Q?tv3DdP4sME0f6mGU8RY0W03l+/gIO4+R5/n3kGGeakGKZQPDKOUbU52wJFqU?=
- =?us-ascii?Q?rlDO4RqcKUGJ3bW7Mmt+FpT2NKyj?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b95b97b-3df0-4452-03bc-08df2e06ebe3
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR02MB7902.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 17:32:17.5192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB457523
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GB_MSAUTHSOURCE_EUROPE,GIT_PATCH_0,KAM_NUMSUBJECT,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] tgid reported incorrectly in /proc/<pid>/status
+Message-Id: <20261020133919.10b3f008d0f28349c776f8af@nifty.ne.jp>
+In-Reply-To: <87wlreyhxi.fsf@Gerda.invalid>
+References: <87wlreyhxi.fsf@Gerda.invalid>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-2022-JP
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1792471161;
+ bh=wVPBZrdrD14UeYGmVLBx3fFwv2lNfpoLUqvxzTxZ2PY=;
+ h=Date:From:To:Subject:In-Reply-To;
+ b=klHeuhHGWz6T8KeeL1hWYQ2TNJSLqZaFRG85JKUuQOTYteDOI+6WtGOTFp/iacnzhpw2cldJ
+ rNptaTrA2gdnZOo0jd325SNwVSICZL3pSE70Exy2KhQw0GqwaCZzIRCimmfimlsSC6BvCGZqn3
+ o+65/3iePVrlrAPPui/ILJBYkaaUCOL6iGB4npVN14HHOf/nekCm7tSMQd5RbWX0zB7N0HvgQL
+ rd96JXyYX5wkXM7+m30l6g4p58wCNxYbsSBa0lOLeRBZwnqmOzIY1VYz/IVGqnZuy4VUenoMPs
+ 6e38IhCxx34OIq07GjPq9cFYe/lNyMecV4goi2BK6+onK7CA==
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Of course the value can change at any time, however the
-added check avoids continuous invalidation of cache lines.
----
- winsup/cygwin/thread.cc | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi Achim,
 
-diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-index 96a84596b..424fcc468 100644
---- a/winsup/cygwin/thread.cc
-+++ b/winsup/cygwin/thread.cc
-@@ -1984,7 +1984,8 @@ pthread_spinlock::lock ()
- 
-   do
-     {
--      if (InterlockedExchange (&lock_counter, 1) == 0)
-+      LONG value = __atomic_load_n (&lock_counter, __ATOMIC_RELAXED);
-+      if (value == 0 && InterlockedExchange (&lock_counter, 1) == 0)
- 	{
- 	  set_owner (self);
- 	  result = 0;
+Thanks for the patch.
+
+On Sun, 18 Oct 2026 20:36:41 +0200
+ASSI wrote:
+> From b9f66fe5a55ac39f0bbbcfe9d96cade9927f672d Mon Sep 17 00:00:00 2001
+> From: Achim Gratz <Stromeko@Stromeko.DE>
+> Date: Sun, 18 Oct 2026 19:56:13 +0200
+> Subject: [PATCH] winsup/cygwin/fhandler/process.cc: correct tgid value
+> 
+> Cygwin has historically (and incorrectly) reported the pgid as the
+> tgid in /proc/<pid>/status even though LWP don't exist on Cygwin.
+> Since the Threads parameter was missing at the time, this latent bug
+> was lying dormant as that signifies an invalid tgid on Linux (the same
+> as for a Threads parameter of zero).  However, commit 9756b33 changed
+> that to reporting a number of threads in the Threads parameter that is
+> totally unrelated to LWP, which triggered the bug: procps now reports
+> the tgid instead of the pid as it does on Linux and expects that only
+> the leader process (tgid==pid) should get reported unless you ask for
+> all LWP to be shown.  This either suppresses the output for that
+> process completely or shows the wrong PID for many processes.  Regain
+> some sanity by ensuring tgid==pid for all Cygwin processes as LWP
+> don't exist.
+> 
+> This patch does not change the reporting of parameter Threads (which
+> should probably always be 0 on Cygwin to conform to the expectations
+> set by Linux), however it is currently unknown if that deviation is
+> actually causing problems in existing programs.  Any program using
+> this number should expect the number of threads to change between
+> reading this parameter and actually getting to the point where it
+> could enumerate them.  However, seeing a Thread value different from
+> zero might reasonably enable code paths that try to open directory
+> /proc/<pid>/task (which contains all threads in that thread group on
+> Linux).  Cygwin doesn't have this unless someone whips up an LWP
+> emulation for it, so for that reason it might be better to revert to
+> reporting zero.
+> 
+> Signed-off-by: Achim Gratz <Stromeko@Stromeko.DE>
+> Reported-by: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+> ---
+>  winsup/cygwin/fhandler/process.cc | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler/process.cc b/winsup/cygwin/fhandler/process.cc
+> index 404668661..86ca05e5e 100644
+> --- a/winsup/cygwin/fhandler/process.cc
+> +++ b/winsup/cygwin/fhandler/process.cc
+> @@ -1335,7 +1335,9 @@ format_process_status (void *data, char *&destbuf)
+>  				   "SigIgn:\t%016lx\n",
+>  			  cmd,
+>  			  state, state_str,
+> -			  p->pgid,
+> +			  p->pid, /* this is the tgid on Linux, but
+> +				     Cygwin doesn't have LWP -- treat
+> +				     all processes as leaders */
+
+This makes perfect sense to me.
+
+>  			  p->pid,
+>  			  p->ppid,
+>  			  p->uid, p->uid, p->uid, p->uid,
+> @@ -1343,7 +1345,11 @@ format_process_status (void *data, char *&destbuf)
+>  			  vmsize * kb_per_page, 0UL, vmrss * kb_per_page,
+>  			  vmdata * kb_per_page, 0UL, vmtext * kb_per_page,
+>  			  vmlib * kb_per_page,
+> -			  num_threads,
+> +			  num_threads, /* should really be the number
+> +					  of LWP in the same thread
+> +					  group, not the number of NT
+> +					  threads attached to this
+> +					  process */
+
+What is the practical difference? The only thing I can come up
+with is whether it includes Cygwin’s internal threads (such as
+the signal thread) or not. Is that right?
+
+>  			  pnd, blk, ign
+>  			  );
+>  }
+> -- 
+> 2.56.0
+> 
+> 
+> Regards,
+> Achim.
+> -- 
+> +<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+> 
+> Waldorf MIDI Implementation & additional documentation:
+> http://Synth.Stromeko.net/Downloads.html#WaldorfDocs
+
+
 -- 
-2.55.0.windows.5
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
