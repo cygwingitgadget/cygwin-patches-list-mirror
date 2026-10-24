@@ -1,109 +1,89 @@
-Return-Path: <SRS0=x0C8=IN=SystematicSw.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id B5DB44BA2E30
-	for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2026 02:03:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B5DB44BA2E30
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSw.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B5DB44BA2E30
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792721005; cv=none;
-	b=BhtIP4HuW7oNzjUx8fhbfkoM7i8HErLm2jISF2qeHFIuHKaM4ug0L3CMlgp6XCSBUsBualUQD90kIHJD7mVMfUWG91sTguv31+MFjYy7B5h0Q06/G3xYZXl/iqSQxxTSVMH4VT0ws3BL3yXl64J1oPzu1kk7ZRctDFpc69lDhXI=
+Return-Path: <SRS0=rrDE=IO=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo003.btinternet.com (btprdrgo003.btinternet.com [65.20.50.240])
+	by sourceware.org (Postfix) with ESMTP id 595474BA2E0D
+	for <cygwin-patches@cygwin.com>; Sat, 24 Oct 2026 19:55:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 595474BA2E0D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 595474BA2E0D
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.240
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792871745; cv=none;
+	b=Q6IhnPrIUkt7j9KYzLR9QNrZIxLZGiGO4CsSrqq+usfeiYdqQvfpSen69a1A8jbnwhXIyvDfJ8tt8GIXjvyT9Sdl7nWwyWY3o/1yft15jyxBq0oUDrMMncWJRUC24/9LYzm9Z9OMeiK11dfDel65b6f566vUbMe53DV8jsF4J/o=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792721005; c=relaxed/simple;
-	bh=Zzoc/Bl0cDV8HQFtOr9BfCzEG2op+hckUi4/hfiknPE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=uX/ktfK7Mk2P4RouhZQOggZdtoHw7r5yZIhu7fu0ws2IsPh8G40R2c+Z+r1/I/EjH1YN5mUgP96h/KWim7c/9xW+jpn9RQOf2S7KbtyVwW9PThUEc+IMInu6JMjRRNIgtgrmlx/J49O8qDlgYO+0wCRgQeYOT/IjU3fVIl6ib7Y=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=SystematicSw.ab.ca header.i=@SystematicSw.ab.ca header.a=rsa-sha256 header.s=he header.b=PN8g0rDE
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B5DB44BA2E30
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSw.ab.ca header.i=@SystematicSw.ab.ca header.a=rsa-sha256 header.s=he header.b=PN8g0rDE
-Received: from omf18.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 5788E1C22DA
-	for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2026 02:03:24 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf18.hostedemail.com (Postfix) with ESMTPA id E019F2F
-	for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2026 02:03:22 +0000 (UTC)
-Message-ID: <afdc1d88-4c58-4fc6-b2f2-4105b0f83c08@SystematicSw.ab.ca>
-Date: Thu, 22 Oct 2026 20:03:21 -0600
+	t=1792871745; c=relaxed/simple;
+	bh=WanQR8R2BDWl9XaTCRbw/XU7inX+DndUWQW8Z0VGMZw=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=UD1IyLG05OVrbTdjG8eawFo+QhrFfDskTJs3tXWDXJRWkIOsR5kYhUmsG1CrRgh1X7UgPFdTf/MLJ4sYKyjZV0iWj1Ww3xBIMcVTxPsakpKH3vqr3SkCUqvTk77H0YhthFEIAfHAvZQSi2j/LIwHSiWJ6KBayLBqfcgD8lFwnD0=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 595474BA2E0D
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A7159F4106B07FF
+X-Originating-IP: [62.49.190.104]
+X-OWM-Source-IP: 62.49.190.104
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: dmFkZTECo53ALs5kaOK5QUuxhcqkWSrSBTO0Z4RHYSRFc2Oy54XPTfSqOAqL6EspJ6LVteEAx0PsMwHPWvXOngpFO8TnVzNKSjt+kp+P2JifnrBDQ+PdlgA2urUqd4uOiESk4zwQY6+U8GhrtUNpQPMiD6q5MjOjDfZcHoAlU+53tIjt65Dmfs5gP3r6BXeKW2wifsWI8awETH1WJDtFi25g3bsPIGJCgAjVSG1GCJ4uDF2CZU60j+UHgpXwzhf2HzC7V29wGkuoJoJcUwBnCbFDMAZn7wdTPRDHBmms5HzG5LkVGIMclWe2MUcsAFoSl4GQN/4jBlJvqUleAE0Op5v6DfCSn0wZjzxpz0OgnUyuiCxCoWzs3/HwGp4oo9s0Co0PpkvzqwC51+Iq5+gI/ZFyti5UvJf/ITpmbESqEgeOBHOFwafxSjQaR0U6aNimW114oNgSt+0dv6OAJP9IOnJPv6OWcbLhXYJ/Hdy04JwqkxV/OKwOHJqSePqRNNX3Ao7Aay3MBo3koDC7fHWP2V+p+hruTxNJcPTudkUHszYlGYZ7n9lhvfXbxry0jPzVe2/qqS9L3t3BoV4krMt/fhf0cgM4sHU5/bpOilfmtsbgYuFL50ezhC7l3JYdhMq/kZsLI1QF84hb+3EqpDR2Pz2zHnv0ycNUu5qRXdIrJ27LpDHjmw
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.109] (62.49.190.104) by btprdrgo003.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A7159F4106B07FF; Sat, 24 Oct 2026 20:55:39 +0100
+Message-ID: <e65187e2-28c2-4d48-b5a1-6bf2b4510afa@dronecode.org.uk>
+Date: Sat, 24 Oct 2026 20:55:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: The meaning of "Signed-off-by:" in patches
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <636bc5ac-7500-4d18-966d-ffb73d87da3c@dronecode.org.uk>
- <96aba361-6358-403e-b2e8-a9f39000f4a4@SystematicSW.ab.ca>
- <e9b5add5-05f6-4911-95fc-eca7384aa195@dronecode.org.uk>
-Organization: Systematic Software
-In-Reply-To: <e9b5add5-05f6-4911-95fc-eca7384aa195@dronecode.org.uk>
+Subject: Re: Cygwin tzset: CLDR 49 Western Canadian time zones changes
+ different from TZ DB
+References: <c9f12c06-5609-4034-8fd7-5fc9ec433197@SystematicSW.ab.ca>
+ <5e085618-e363-4a2f-bded-267bfd3d3997@SystematicSW.ab.ca>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com, Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+In-Reply-To: <5e085618-e363-4a2f-bded-267bfd3d3997@SystematicSW.ab.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: bfxpgnakq97zi5wcur1cho6yfkhsiggy
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: E019F2F
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX19rPw+24hnfmegEX44ICWeg6/or1a7IVy8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSw.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=j4WB6ABirXGmqBaAi526POROASdUbEbng+kId9v7El4=; b=PN8g0rDEqkWFZ332FbfYvGnZ7IdEjCDOHoNtHMjX6QDidF/uqDBukhTZaajQlDHyaMfojaK252JtBUtWhLGd22pimFxBR/3He/QyjnXp8SRud8Ca+bDvUPgeUVxdMv3mIU+zMG+nOoLOqYFLR5/3Q8NmYcIc38y6LH92soacDmiAgnzW0T0l1aeDDdNQk6RFzsAJ5upTfiGN0QekgLt3K1PSqMNg0dqIuceQLRbta6yd/DOXTxxI7jFBe+qCvunAs3/JJxwxqcbEeH+jtI5fmMpM/YlLnZ5iKLNE5j0nLaOAEsJwIYrRjiR772h3Kc3sswcREWtWkZUyxmsO/+kpkQ==
-X-HE-Tag: 1792721002-507820
-X-HE-Meta: U2FsdGVkX19m4Zw6tIh30pgRrq7htOVqNCMnHBKodQLngEOBIJzKFYaZX+nO1x2+uA8XqjA9nXMrvZzg3CxOZzjOHkSORrlPGfCNeQLoJuacvXgqFu5daMoq5TWJ2Rh199FsNNRjPOTEM8YfDDF3YT9s7Eo/uHQgWEFLpblUy9N8cceVs6rcqGKP0St63qAGxv3tvXGutzcBr1qj0knyIbQKWthcp/b325r1nKYrvyxot7BGF77AvCiDbSuOdk9232Hmx9TSTf5AdKBh3m5Fu5rXLRk+BV4xIaLpMDHqzpqUnAawZxAkGBPzNfgePgKAOUe7IEeK6uxuayrYArs9iAoOirYwFGZXjd9Nf0AOC8F6GZCvXf1GiQfBuxsrABxDdjBTfiU7QrUdOm+hZB6rYXlpe4zXBr045bhSV3ho5TH4gy9WLmUeXYPIt3wW1a02tw5pR1LtWUZE2J585VUM2HFr51m4tscs9RGVV+okBclZB0zlJCBAZvEQH6mjou9JL718T1P4SaI=
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2026-10-22 10:22, Jon Turney wrote:
-> On 18/10/2026 18:53, Brian Inglis wrote:
->> On 2026-10-18 04:56, Jon Turney wrote:
->>>
->>> I've made a (long overdue) revision to the "Contributing the the Cygwin DLL" 
->>> page [1], to state what we think "Signed-off-by:" in a patch means (going 
->>> forward), by reference to the DCO [2].
->>>
->>> Hopefully, this is uncontroversial and unproblematic, but please let me know 
->>> if you think otherwise...
->>>
->>> [1] https://cygwin.com/contrib/dll.html#before_starting_legal
->>> [2] https://developercertificate.org/
+On 23/10/2026 02:44, Brian Inglis wrote:
+> On 2026-10-13 10:48, Brian Inglis wrote:
+>> The latest word about the ICU 79/CLDR 49 support of Western Canadian 
+>> time zones changes is that they will be maintaining the DST fiction 
+>> year round from release, starting 2026-11-01: using PDT, MDT, CDT for 
+>> BC, AB, MB, year round, rather than TZ DB's use of normal STD times 
+>> using MST, CST, EST year round; presumably YT stays on MST and SK on 
+>> CST even under CLDR, so they will appear to be on different time 
+>> zones, and NT(/NWT) will follow AB, although NU regions still appear 
+>> undecided but likely to follow other adjacent regions.
 >>
->> Ignoring the DCO Copyright which does not imply it applies there, but it
+>> Do some tweaks need made to accommodate the changes coming in a few 
+>> weeks, just before the TZ and TZ DB change already updated?
 > 
-> I don't understand what you are trying to say here.
+> I downloaded the CLDR 49 file with windowsZones.xml and an issue 
+> explained in CLDR-19872.txt based on win32tzlist.out which has not been 
+> applied to the released CLDR, updated windowsZones-cldr-49.xml to get 
+> windowsZones-cldr-19872.xml, and ran an adapted tzmap-windowsZones 
+> script to produce respectively tzmap-cldr-49.h and tzmap-cldr-19872.h 
+> and produced the included diffs showing the minor different output and 
+> fairly different inputs.
 
-The copyright is (c) Linux Foundation, which was confusing for me, and required 
-re-reading everything to be sure what it meant.
+I had to read the source of tzset to understand how this all works, but 
+the changes to tzmap.h seem technically correct.
 
->> would be worth while stating something like where the DCO is applied to the 
->> Cygwin project, authors, and contributors; also newlib licence is
-> 
-> Sorry. Rather than being explicit, I assumed that it was clear from context that 
-> I am only talking about changes to the winsup/ subdirectory of the newlib-cygwin 
-> repository.
+It seems like tzset always uses the first POSIX tzid in the matched 
+record, so tzmap-cldr-49-19872.h.diff doesn't actually functionally 
+change anything?
 
-I think you have to be clear and distinguish here for new contributors.
+> It would be good if someone other than myself could review these 
+> sources, changes, and products, before thay are built into Cygwin tzset 
+> by Nov 1, so Cygwin works properly in Western Canada and other recently 
+> changed Windows time zones.
 
-> Yes, as previously discussed ([1]), we should do something about packages and 
-> ancillary programs in cygwin-apps and everything else, but that is a task for 
-> another day, and preferably for someone who is not me.
-> 
-> [1] https://cygwin.com/pipermail/cygwin-apps/2024-November/043939.html
-> 
->> BSD, but Cygwin is LGPL3+?
-> 
-> And?
+Brian,
 
-We provide a BSD release which covers newlib, but should not really be necessary 
-for just Cygwin winsup, should it, or is there some other reason?
+I ran 'make tzset' to update tzset.h, and then applied your patch to it.
 
->> What should we be doing about GnuPG2 signed -S commits?
->> I could easily add that, but unsure what the infra and tooling is like for 
->> repo writers?
-> I don't think there is any reason not to use signed commits.
+A 3.7.0-0.635 test package has been built with these changes.
 
-So we should recommend -s -S and the other relevant headers?
+If these are the changes you wanted, I can make a 3.6.12 release tomorrow.
 
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
