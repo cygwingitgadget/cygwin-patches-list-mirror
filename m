@@ -1,148 +1,131 @@
-Return-Path: <SRS0=V1wT=IP=SystematicSw.ab.ca=Brian.Inglis@sourceware.org>
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	by sourceware.org (Postfix) with ESMTPS id 476A04BA2E13
-	for <cygwin-patches@cygwin.com>; Sun, 25 Oct 2026 15:09:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 476A04BA2E13
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=SystematicSw.ab.ca
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 476A04BA2E13
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=216.40.44.17
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1792940978; cv=none;
-	b=I0SywgkxayUuitbbKBzNbZV2SPE219CkJ4pPo+Xy51jqxjoWKltTpgEr++5ByLsMCExK9XCubVC6CETo+33KiFvBloZFg/BouIluc6xDWe/z+7EcMOFM2gwSNXD7/3lx44/dl4eu5nqnzeyGZ5Pz91aHQdLVoc7e5Bq9kOCDz1s=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1792940978; c=relaxed/simple;
-	bh=ZyD/S7w/GWKLH6+gaSbYdOUAh5l9AQzqQmZXRlRZrlY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:DKIM-Signature; b=O1Seaznt3MQSO+lsq/vPr6GYyKX59h5RNX4Ib7x5AdRUKzBgfChs3EYU+S4r1TC89C0euISF6+M8JCdUjnIOyEzs1EK9BWqTuj+YDrdFwHJ3Vz3olDXxBcw9BbeDITn67MmQaT6cFO1wUOMa5gw/NnqwNclbAgovs/djdzE241A=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=SystematicSw.ab.ca header.i=@SystematicSw.ab.ca header.a=rsa-sha256 header.s=he header.b=XoAMHaOi
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 476A04BA2E13
+Return-Path: <SRS0=oqe5=IQ=gmail.com=lionelcons1972@sourceware.org>
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+	by sourceware.org (Postfix) with ESMTPS id 0F2684BA23C4
+	for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2026 11:47:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 0F2684BA23C4
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 0F2684BA23C4
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a00:1450:4864:20::62b
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1793015276; cv=pass;
+	b=OzlN+RpJUQzI2hHz3iNWn9bJLTgjXsKJ14YeS78gvIMCvNSMMK8tQUrlRIKROjo6MW+UEubG6kdUq1QKrV8q0juVdkf+uhKgIN0AezMGtuEcl2Ri7BYI72Lo/u+C27M4xc2N5ipc2X5grG0Trc9hkNR3ZtULBWb+E9egzh223x4=
+ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1793015276; c=relaxed/simple;
+	bh=FOrpi3jRDmua+hFa/Pcn0rhlWrSsdxPUA7KCQV/EGeE=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=XTve2uofqYmAwEMXg0x+IvbbSRtv0J33zzbB2KByUo8KKf3tgNZugtqt+lN//vh4UCoxUc+pcp/pe9C8u0/7M60b6iOhYqJd0tqHqXd4Qu7Mpu+vDxJaIICWcrNmc2IiI5Mgr5N2JNrOuM22rlzpjgSDI2IYSWxQnkKFzMRAs4A=
+ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pKwHKUM9
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 0F2684BA23C4
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=SystematicSw.ab.ca header.i=@SystematicSw.ab.ca header.a=rsa-sha256 header.s=he header.b=XoAMHaOi
-Received: from omf08.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id D0241401C5
-	for <cygwin-patches@cygwin.com>; Sun, 25 Oct 2026 15:09:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: Brian.Inglis@SystematicSW.ab.ca) by omf08.hostedemail.com (Postfix) with ESMTPA id 4E80D20025
-	for <cygwin-patches@cygwin.com>; Sun, 25 Oct 2026 15:09:36 +0000 (UTC)
-Message-ID: <a7024578-70bb-411d-b130-d38cdb359c34@SystematicSw.ab.ca>
-Date: Sun, 25 Oct 2026 09:09:35 -0600
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pKwHKUM9
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-c169ae1cb26so604063966b.1
+        for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2026 04:47:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793015275; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qZ5lo+u7fO0t6MehD8xZ+PdEXtiq/z7TgFM+XRNXepWJawnGQvuKTG0l2UJW2lunc2
+         p1ZIbYDT6qD7pU7XaQcGfZhJNT2IvVf7Lw1fF9uzfSzR5Ps8MCIF4BonjWHUqcNjammW
+         QaSEDDBu3b8Dd4i91b4F+IgBPe/rnVrDgtbiRjva8HZz9Uv0yrnBE5vpxlyDyygTMUee
+         l+l0jyNIbzRD+/bLT6fMToOoqAqYoYNpgs6KV0CWtgJ4FtZTmGdJMmXeEwUJm1zBBBjf
+         4MAHOzvNPSA158ye1gkDrqhYRi6TkTXTcwVF4VydvcD52qGMArsSLL26WXJba+9qGfYe
+         3hVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=XWz2cFPfsjZH+FXnr7LkOpguMXAGrUqysE/uxBL2pjo=;
+        fh=Nb6zW3qhuh4BrtxnYMC2bFOEZToxIRbOGxqfwhLVAic=;
+        b=QsmBA5sINEvCts8J6ZifGKBwk5jAgFUf39JGDHgDaOZ/8rfBWqStrIgxongfQcdfIl
+         jk7RSUA9Pr6Uffy+PghSroLOhiWxwOsTeLcwVuSEV3sTivt9Zkr4SLfNIP2IwXD+AL6W
+         SoMkOteHpFj3l+Ri5xQpl7u0nwjtLL4sM0jaOcCqyDmn33yS1frw7fBd7usNNhCHOsbw
+         iwK6aDWcfuGCuVBClRQBddBtTqriFJwKsugJTzoi+G8fXNwFVVgp4UuWOEhnOQPSYLSE
+         2zrKj8gtZ9qKhwHDuC69c33g9vfyqXiPcPQU0yISGFvLUKUEpdfF5dUh4jA7xWV3CTku
+         URAw==;
+        darn=cygwin.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793015275; x=1793620075; darn=cygwin.com;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XWz2cFPfsjZH+FXnr7LkOpguMXAGrUqysE/uxBL2pjo=;
+        b=pKwHKUM9Bdl9/01AUf/0Usk7k+ny4jGwmMQeXAk0+YBaaNqsugGfpEXeuP6wkD3dpX
+         toKM1iwyNraaeNp4cOhxqDrSt3ytMTnmq2jpyCUNOieQ1TUfk3FajOSpdwAyZPyyQFXO
+         F7BoUB/8t4zevbCPjOxXz6iLQWjxhNu1XIAVJwju1h04jCS6Qh4A07LWY0qQynz+7fL9
+         /Njz9vq3qx9EQGpOkaEl68zEeKu8QcSmaB3Hfe+UqsEAUYBIfK1KZPDPlyBsoGumrw7k
+         3exWq6P2Jwkpe17iNMHPqIbM9XnHtMWujnSbJ+WZ7TUgm/kj2zB7W/mUf5hfKo+xxxuf
+         lN8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793015275; x=1793620075;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XWz2cFPfsjZH+FXnr7LkOpguMXAGrUqysE/uxBL2pjo=;
+        b=amw9tVzsG1mgNfAMx4otIty9yncWsEPePPlNmVhZi5dsNBAHTJBAKv1KPqVjmS8ehh
+         7t0NGvDy5hSPHSWPQL1vYBUR3ouB30WwWnfaw0gFsTUhUswvIQVnd+h4VG5PmJj+1sPV
+         0V4AXr8uVQa8F1ekZTasNB/frA+finSMOXa/w0DMqA2cV+Z6MOzF7l4NlUGQMfcOdcb8
+         xEZ2XtD58ARZ5HR1OAp9tLxKhinHiE7DIy+yPc9X4PIe3623+fwiyMSYFkHmgNz5OmI+
+         6LbjQ0SPGHij8UeF79EUQcWZen7ds+QEavG5wpcuL18Y2gTJeVqubUe96d/dfOkK9dAE
+         j6zA==
+X-Gm-Message-State: AFq9FYLl/zmFUJ+tl/aRczBn/Fgvti1knxzM4BaA+dknz8LKC/RtHkg0
+	iJKGhEbrNMgEZFeQjoAgpGVbYimNzctrvszvq8EruZhVizlGNs1+gbZ3ZDc/UyvtOEVfEVNrBfv
+	JpR8R1IL1TAM6ZMr/YEs85jC7PQK0FjLZHOt5YXI=
+X-Gm-Gg: AYBFou3WgVQzCIICbfN5WITv8FqaVMuMPX5TY7i5Yx8XsR3xXNy3dVB4qaAomnoGkEN
+	o+N2DKrmZl+fLTDk3DaccW9TVt8OzFl6mWJ0FF0u27EsKH4LFsIFgNTWujwVStPpIzz07YC+AvZ
+	/Lh9UuLgALfuqSxd9krV5YlZlUsb8pTUHvtjZOpfMuIRn+QJjANPEM+tGyk5j0m1lxq1xQuxH4P
+	TrpJJDASAgCOpTJdZzWFZZpTAPg9vk0os2QYMO1CgtVOzcegml2GKAAm3lcjWc8AE4DmMZYXErr
+	N7MPRmV+Re4xhIKtUngxY7naRf4YBIjCYWDtoensSIpoBzr7CJJ7NUY34FDpr8pEqPJ5UDixcxz
+	aRxdIZ97tDXimALnduwc+wMg52IIntjYkFab6
+X-Received: by 2002:a17:907:3e8d:b0:c46:7fa4:9212 with SMTP id
+ a640c23a62f3a-c46be5e3d65mr880814166b.23.1793015274580; Mon, 26 Oct 2026
+ 04:47:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: Cygwin tzset: CLDR 49 Western Canadian time zones changes
- different from TZ DB
-Content-Language: en-CA
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <c9f12c06-5609-4034-8fd7-5fc9ec433197@SystematicSW.ab.ca>
- <5e085618-e363-4a2f-bded-267bfd3d3997@SystematicSW.ab.ca>
- <e65187e2-28c2-4d48-b5a1-6bf2b4510afa@dronecode.org.uk>
- <62c9c4dd-8c43-462b-8b7f-4d95b85447e1@systematicsw.ab.ca>
- <782b506e-290e-4d10-9f67-ee4d59f338aa@dronecode.org.uk>
-Organization: Systematic Software
-In-Reply-To: <782b506e-290e-4d10-9f67-ee4d59f338aa@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 4E80D20025
-X-Stat-Signature: uadmnj453q6rhzdj3ok66j8ppqkoam4a
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,TXREP,UNPARSEABLE_RELAY shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 427269616E2E496E676C69734053797374656D6174696353572E61622E6361
-X-Session-ID: U2FsdGVkX1/DpXxzTiY7lXRvJso02TlFXrtwGdms5K8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=SystematicSw.ab.ca; h=message-id:date:mime-version:from:reply-to:subject:to:references:in-reply-to:content-type:content-transfer-encoding; s=he; bh=vybKS1zqpXAp1ALKzSb7D+f1uW+VFga+ug15xnH3B08=; b=XoAMHaOi3AVzcKX7sSd+E1U+Db9Q9lOtruhWB9G8/QDPX7i2jGH2I8tu0TuZgEJWGuaBWW0J3MPvPPwU+i1wxxo/TiEaENVx0G851eAxBzrrHvlDPckrAh8LeMx5T9CO9MoZkGfQps/76CtOm0EwSYRtRE6k/QL9Qfd4yvWMfTnUAM1Szy5fBD1xi6eh2sKKqX9UabLIb8myE3Q09avQvOhSlFRMjdNgriZxXU4JDwffmqvsfOxcUTVnu3/Fn4xkC6+sqczviiR0AZ6RdsdW9H/Jj3o59OSfBHY+qEaETCc7gqWCD9PI+ehD90tqiMUPBpUxDHB1CPfAPAwahOb/uQ==
-X-HE-Tag: 1792940976-201477
-X-HE-Meta: U2FsdGVkX1+VBjJTtvPKkeUVKm8sZFS9U5HavDxcuLlU/ECvjhrQ1qjgqkQnakTiLOP1Q7I2ZHUUOKlCm1RGnsNMf7g+bBXzXP9+JQsUOJdjBsA3HhnXwe4y/rBP7qFl/hNzKO7Xr7v+zj2KbnuuW+X37ACP1bDeNY1HWGzama5xq2WcKwnlgTEwUPFXKhMZsq5/paRcF9FpEiRQFop68MUwElWIEarkKKiGhrIyF/Kspbdu0IypgTFlH4Ju9iYQQbB/TvUN9BaGK0rSEnTke6HbbrdFMjXFdz1T/OCNGcFzbmc4w8MowKABS+MF/y5bQUBE9jnOgnV2ULVdzV7TtwVOzxLl1bxA7nSkfPnLvkXQQGUAbRFgx7y1A/HLtdrbBSe9E1XOEECYLHZzqN0MMiNvL2Z7SavN
+References: <20260920035524.60008-1-mark@maxrnd.com> <CAPJSo4UaKfnUZCB1zjYD1mVXzUcE38c+e_Nu2QTXH0VJUg_k0g@mail.gmail.com>
+ <162a3cb8-fdfd-47bb-9bed-4f7b0621743c@maxrnd.com>
+In-Reply-To: <162a3cb8-fdfd-47bb-9bed-4f7b0621743c@maxrnd.com>
+From: Lionel Cons <lionelcons1972@gmail.com>
+Date: Mon, 26 Oct 2026 12:47:18 +0100
+X-Gm-Features: AclHuK-qlz35QjtMXtQ8Zgw9hUWEfH2GHtgCwGCdq-5C96qq_Ew4AQ0QukIZb80
+Message-ID: <CAPJSo4XtD0n8+Jjk=BXjZwCwo97mOcUp-7Zw_cVHnd=eoSgK5w@mail.gmail.com>
+Subject: Re: Porting "Cygwin: Handle uids/gids correctly on NFSv4 filesystems"
+ to Cygwin 3.6? Fwd: [PATCH] Cygwin: Handle uids/gids correctly on NFSv4 filesystems
+To: Mark Geisert <mark@maxrnd.com>
+Cc: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 2026-10-25 05:47, Jon Turney wrote:
-> On 25/10/2026 00:33, Brian Inglis wrote:
->> On 2026-10-24 13:55, Jon Turney wrote:
->>> On 23/10/2026 02:44, Brian Inglis wrote:
->>>> On 2026-10-13 10:48, Brian Inglis wrote:
->>>>> The latest word about the ICU 79/CLDR 49 support of Western Canadian time 
->>>>> zones changes is that they will be maintaining the DST fiction year round 
->>>>> from release, starting 2026-11-01: using PDT, MDT, CDT for BC, AB, MB, year 
->>>>> round, rather than TZ DB's use of normal STD times using MST, CST, EST year 
->>>>> round; presumably YT stays on MST and SK on CST even under CLDR, so they 
->>>>> will appear to be on different time zones, and NT(/NWT) will follow AB, 
->>>>> although NU regions still appear undecided but likely to follow other 
->>>>> adjacent regions.
->>>>>
->>>>> Do some tweaks need made to accommodate the changes coming in a few weeks, 
->>>>> just before the TZ and TZ DB change already updated?
->>>>
->>>> I downloaded the CLDR 49 file with windowsZones.xml and an issue explained 
->>>> in CLDR-19872.txt based on win32tzlist.out which has not been applied to the 
->>>> released CLDR, updated windowsZones-cldr-49.xml to get windowsZones- 
->>>> cldr-19872.xml, and ran an adapted tzmap- windowsZones script to produce 
->>>> respectively tzmap-cldr-49.h and tzmap-cldr-19872.h and produced the 
->>>> included diffs showing the minor different output and fairly different inputs.
->>>
->>> I had to read the source of tzset to understand how this all works, but the 
->>> changes to tzmap.h seem technically correct.
->>>
->>> It seems like tzset always uses the first POSIX tzid in the matched record, 
->>> so tzmap-cldr-49-19872.h.diff doesn't actually functionally change anything?
->>
->> CLDR-10982 generated tzmap.h doesn't change much over the new CLDR 49 download 
->> of windowsZones.xml Supplemental data generated tzmap.h - which you have just 
->> been applied - just adding GL America/Nuuk to Greenland rules, but does add 11 
->> Windows zones changes and 7 TZ DB zone corrections to the previous tzmap.h.
-> 
-> Uh, I don't understand. It only adds Nuuk to tzmap.h, but it also does "11 
-> Windows zones changes and 7 TZ DB zone corrections"?
-> 
-> Is there something else needed here?
+On Wed, 14 Oct 2026 at 09:49, Mark Geisert <mark@maxrnd.com> wrote:
+>
+> Hi Lionel,
+>
+> On 10/13/2026 11:24 PM, Lionel Cons wrote:
+> > Can this patch please be ported to Cygwin 3.6-branch? The scope,
+> > impact and risk is clearly defined as being limited to NFSv4
+> > filesystems. As the current code in Cygwin3.6-release does not work
+> > with NFSv4 filesystems this patch would fix things without impacting
+> > anything else.
+> >
+> > Lionel
+> >
+> > ---------- Forwarded message ---------
+> > From: Mark Geisert <mark@maxrnd.com>
+> > Date: Sun, 20 Sept 2026 at 05:55
+> > Subject: [PATCH] Cygwin: Handle uids/gids correctly on NFSv4 filesystems[...]
+>
+> I have no objection to that request.  As 3.6.11 was released just a
+> couple weeks ago, you would need to run an as-yet-unplanned pre-3.6.12
+> test release to obtain the fix.
 
-Sorry Jon,
+How does that work? How can I help?
 
-I should know better than to assume that others understand that only changes to 
-windowsZones.xml assignments and offsets actually affect the mappings from 
-Windows zones to TZ DB zones.
-For CLDR 49, dropping old POSIX zones dropped by TZ DB: PST8PDT, MST7MDT, 
-CST6CDT, EST5EDT.
-Adding 3 new Windows zones for BC CA, AB CA, MB CA, and mapping them to Western 
-CA TZ DB zones America/Vancouver, America/Inuivik (NWT NT), America/Edmonton, 
-and America/Winnipeg, moving them out of the North American DST observing 
-Pacific, Mountain, Central, and Eastern (US & Canada) Windows and TZ DB zones, 
-which in the Windows western zones, should probably have the "& Canada" removed, 
-except leaving it maintains backward compatibility:
+>
+> I'm checking off-line to see how much further the 3.6.x train is planned
+> to go.
 
-	https://en.wikipedia.org/wiki/Central_Time_Zone#Canada
+Cygwin cygwin-3.6.12 was tagged, I PRAY there will be a cygwin-3.6.13
+with this fix,
 
-Plus a couple of changes to CL and MN Windows zones and TZ DB zone mappings.
+> I will backport the patch, if I can, after I get the answer.
 
-There are 11 changes made to CLDR 49 windowsZones.xml including 7 TZ DB offset 
-fixes by CLDR-19872 updates, but the only net difference made by CLDR-19872 
-updates to the generated tzmap.h compared to the CLDR 49 generated tzmap.h is GL 
-ST is also mapped to America/Nuuk as well as America/Godthab, as the other zone 
-mappings from Windows to TZ DB do not change with CLDR-19872, once the CLDR 49 
-changes are applied, as those changes affect mainly Windows zone offsets not yet 
-reflecting TZ DB changes in zone Display strings shown in comments and location 
-in windowsZones.xml grouping by UTC offset.
+Thank you!
 
->>>> It would be good if someone other than myself could review these sources, 
->>>> changes, and products, before thay are built into Cygwin tzset by Nov 1, so 
->>>> Cygwin works properly in Western Canada and other recently changed Windows 
->>>> time zones.
->>
->>> I ran 'make tzset' to update tzset.h, and then applied your patch to it.
->>> A 3.7.0-0.635 test package has been built with these changes.
->>> If these are the changes you wanted, I can make a 3.6.12 release tomorrow.
->>
->> Thanks Jon,
->>
->> That would be useful for Doug Henderson, who already posted about the problem, 
->> myself holding off on my patch reboot, and anyone else in Western Canada 
->> applying Windows patches soon, hoping for correct Windows time zones and 
->> mappings.
-> Not really an unequivocal answer, but I guess this means "yes".
-
-Indeed, thanks!
-
--- 
-Take care. Thanks, Brian Inglis              Calgary, Alberta, Canada
-
-La perfection est atteinte                   Perfection is achieved
-non pas lorsqu'il n'y a plus rien à ajouter  not when there is no more to add
-mais lorsqu'il n'y a plus rien à retrancher  but when there is no more to cut
-                                 -- Antoine de Saint-Exupéry
+Lionel
