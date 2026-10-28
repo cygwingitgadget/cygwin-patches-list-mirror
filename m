@@ -1,121 +1,94 @@
 Return-Path: <SRS0=B3ed=IS=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo010.btinternet.com (btprdrgo010.btinternet.com [65.20.50.133])
-	by sourceware.org (Postfix) with ESMTP id DFEF64BA2E13
-	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 12:30:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org DFEF64BA2E13
+Received: from btprdrgo012.btinternet.com (btprdrgo012.btinternet.com [65.20.50.196])
+	by sourceware.org (Postfix) with ESMTP id 9C6D54BA2E13
+	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 12:39:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9C6D54BA2E13
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org DFEF64BA2E13
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.133
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793190658; cv=none;
-	b=nZ4lGTx8IrfzUl/ABqJJsD7dvnjkuv2lypVahhFw0+dBXR1Zk6a3bgrMp7PwFFI/WJG/PvlgsvmEyVO9mALFIG80ZN3Blp1SG/JdyGxDokcwykRrSyQZdNzX47ic/0SqmubtcaMtbM77bdmbr6WTnXsBjkCzZkfVzgTKAYjOAcM=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9C6D54BA2E13
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.196
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793191160; cv=none;
+	b=UvR6MZMSOwH4dYZjMV4eJMlvXp3zFOfL0nAUkrXD9lZb41JLuZhbpIEUMXOXoa8IC0rLQbhRW+jRXuS4ld/1FW1/+3nji7Bt0UlNb/8Euj96fQGqY92z7GLyp5uGnXhJC1dnrWbUIxe7HkLZwbys8eYru1cs2tKwifl/PhS6um0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1793190658; c=relaxed/simple;
-	bh=DQv/MqfPVZ1ALSHFREtVjxY2bdSrKrEGZQZF3sIdb2g=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=ZW1V/1S6lHqAamUn5AYC6SCen8n4DEhgCkzalsVT4uL1XY796k/7V/ZkYIv0RspHaajMpJ/bXeNTLtLxPQVWb+jhxzatDxyrWVoUGXVTcG8bOBkJCxiu71Ym2nvJrURC/1fe638drkCQ0pFhxBjnEuHfPeYDn8CgZVhiGUo5DyY=
+	t=1793191160; c=relaxed/simple;
+	bh=RcuWYBc6u6VXpBp9ZLfEamb8TDMGHqLtfe19UlOwAqI=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=T3+AQHh/fXBvpWx4mks2kK1AeXW200EHx3TF/IPmZevgQZdBexuK2Euo37zjzBjQJYITivTJgin4D/PQsBG1W9jKnn5JD9E7RAzOcnycjXt00xRLQ1NY9sbrGVGQVylN2+BiMEuZvGYFpSjsbEEYMQEUaOJp4EwZ3hl9SlgyfuI=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org DFEF64BA2E13
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9C6D54BA2E13
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A989FAD0BF55637
+X-SNCR-Rigid: 6A7161CE1146B11F
 X-Originating-IP: [62.49.190.104]
 X-OWM-Source-IP: 62.49.190.104
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTEr06TheWLubBlS+DquLNUtupGmi2XI0QIPitsCvu6TQBrjsiboPf8m0NT1DrHyMNbOc5/hggoXtsasKLI55lBoFF2uJTpyOqiQk6wCDakGcQoZIYn8A1RxN7VpEO7uBj+3/TmEUeE8EUXyIizjBY09LREldXgYx6ybhXPAdVWhZg5QUEBsHQEEcEmRLrjCRDG2Lj/YC2Olq/ZwP6GNvtCg0gE0FvAwl85MtLlaCS/E7O6QnFOjpaR2G5N5JHqOnI8jkjBy1h5rBci6cewoBRs4ZPoGbwP6rilDD0ZxrcXbBVsNJtFIayWk88ocGmaVB09/riH0OcE0aUCvWa5woKvIpmFxp0mNZvZOqzsfscaGzkPWuRkMJsjb2w7PFv0qWgpbjJQikZbHRSpxknTFdb9BW+Mc32CwCYWtobU8Y3Hl/+jTNCdt04cjEl9OL9DMiMtwf731+bFiXn0udlp2axFAxMM+QnMaULV7RI8i1H1AuMJQ77a5+T9xyhWY9pwEgBpC1NZfU+6Ps6DptFVgbFlM5CujTP/ENe0TEBIZagQ1IOAZDp2M+JNTS0k19RqpvtX1dpdupTTvNwjzdEey+nwGhISrMDLWixJjwJmwytPbo0urVudUHoJNVq33nzaDA2TzFle+ZlB65yA0nrN9SNzkNQEH2kJQwO56eMPvIgBsHQ
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (62.49.190.104) by btprdrgo010.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A989FAD0BF55637; Wed, 28 Oct 2026 12:30:47 +0000
-Message-ID: <83ee12dd-70e3-4e27-85df-c9b860648044@dronecode.org.uk>
-Date: Wed, 28 Oct 2026 12:30:43 +0000
+X-VadeSecure-score: verdict=spam score=230/300, class=phishing
+X-RazorGate-Vade: dmFkZTGwW3cfDDAxnZZiSeSvhEmSCUS1Q6wpTsaXfsLCxHicHUGxYGSjO7zreJC4BOq5lgh1hUMcublh6IuAPBYHY5y2rp8omFQfH6aapUF1/tY0wn+oAqT9GH6XNJ7RSE4CYEd2JO1sf3rDiF54YAn4KQ4EVvX5w8QL3DEgC0gg3OuiaMRBsA5iEd+hHxpC4LXN3bkHyhmSgebBQtPif1Zve5NMM/YNHziaWCjbOv9OrdCKJMrWP2XPxZlrsjPp+fEvIRpNYV0PaQt5mHRiV4BqIZpg9Ud0DGqelwjZGf1lJgRPWibKDbnfHw8Wcaxybpn2aXnYDvY7bkDkk2NVVzukquI8tDNzYbK0omgF47Rzj6Qouw0XwKgQu7yLoHAO7e/dpUNr3IExM+n0Ren8R5CXhQv4wHXwTqczLQOtrQCJ3fmeu/NjOG3FIoMJ8Jz/dlXesxFdnLJRO0sL1/9LIdKgXZaehA6M0LRu+0kGu3khPzbg5yaeBUtJ/9DA2HmlWSoMBtlR2jtR9Vxf9lIv4cyLWlJ++YY/LRaXG6hXqDQU+i5kDWmCsrXiAb0vkAorIneCLhEir9QQkk9oVixNkZ+38DfDYHzBUDLSqA92uuA8+zD4lrjFI9sKj6lghMJn0kYsBPJNany1w8GZzwtbZhhLAi8fPXz94peZAT2049Jej/Qf/A
+X-RazorGate-Vade-Verdict: spam 230
+X-RazorGate-Vade-Classification: phishing
+Received: from [192.168.1.109] (62.49.190.104) by btprdrgo012.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A7161CE1146B11F; Wed, 28 Oct 2026 12:39:16 +0000
+Message-ID: <58a2c092-09a0-4c61-944e-b29d5d27b257@dronecode.org.uk>
+Date: Wed, 28 Oct 2026 12:39:13 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Ms-nfs41-client-devel] [PATCH/RFC] Patch to fix uid/gid lookup
- for NFSv4 filesystems
-References: <CAPJSo4UZZN2w=RhhsycAgBW9mim928K9MVw+T7O_9W2uynMD3g@mail.gmail.com>
- <CAPJSo4XhJJJxV=FpWQ44Q5NP=Y46-XPsopNhexzSyGYENjhdRA@mail.gmail.com>
- <CAPJSo4WPqHqcxFS6AL8Cauo4Na6=u14Tw8eennKk_27rnd-rtQ@mail.gmail.com>
- <CAAvCNcBwn0F84avS5pFS+oUoHuUAoSuKBEc2ybYScO8RDHV9NA@mail.gmail.com>
- <CAKAoaQk+qgptFfmBugTcvfdLLhEnGPJWY70tLdQg1qNRFT+hQg@mail.gmail.com>
+Subject: Re: [PATCH] gendef: fix SEH directives in AArch64 sigdelayed
+References: <9eed0ee5-428c-420a-9788-67d14368f3b1@arm.com>
+ <69bf89b9-73dd-40eb-951f-356fbb7ff3d3@arm.com>
+ <99c4757d-b886-411b-9887-464999d363a7@dronecode.org.uk>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
-Cc: cygwin-patches@cygwin.com, Roland Mainz <roland.mainz@nrubsig.org>
-In-Reply-To: <CAKAoaQk+qgptFfmBugTcvfdLLhEnGPJWY70tLdQg1qNRFT+hQg@mail.gmail.com>
+Cc: cygwin-patches@cygwin.com, Mate Dimand <Mate.Dimand@arm.com>,
+ Evgeny Karpov <evgeny@kmaps.co>, Igor Podgainoi <Igor.Podgainoi@arm.com>
+In-Reply-To: <99c4757d-b886-411b-9887-464999d363a7@dronecode.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 24/08/2026 12:53, Roland Mainz wrote:
-> On Sun, Aug 23, 2026 at 4:38 PM Dan Shelton <dan.f.shelton@gmail.com> wrote:
->>
->> On Fri, 21 Aug 2026 at 17:21, Lionel Cons <lionelcons1972@gmail.com> wrote:
->>>
->>> On Sun, 16 Aug 2026 at 19:35, Lionel Cons <lionelcons1972@gmail.com> wrote:
->>>>
->>>> Repost with proper [PATCH/RFC] tag.
->>>>
->>>> I've attached a patch
->>>> (cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt from the
->>>> ms-nfs41-client project) that resolves an issue with uid/gid lookups
->>>> on Windows NFSv4 filesystems.
->>>>
->>>> Currently, Cygwin assumes that all Windows NFS clients operate
->>>> similarly to the Windows NFSv3 client. It expects that account names
->>>> and numeric uid/gid values are identical on both the client and server
->>>> sides, with LDAP acting as the sole authority for these numeric
->>>> values.
->>>>
->>>> However, the NFSv4 protocol fundamentally changes this paradigm. As
->>>> defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rules
->>>> for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/gid
->>>> protocol representation in favor of string-based identifiers (e.g.,
->>>> user@domain and group@domain).
->>>>
->>>> To handle this, all NFSv4 clients implement a local "idmapper"
->>>> component that translates these string-based identities from the
->>>> network side into local account data (in the case of Windows, mapping
->>>> user/group names and uid/gid values via nfs3attr XATTR). Because NFSv4
->>>> clients manage their own uid/gid translation locally, Cygwin's
->>>> reliance on raw LDAP data fails in these environments and results in
->>>> the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
->>>> owner/group output in Cygwin ls -l.
->>>>
->>>> The attached patch addresses this by detecting whether the underlying
->>>> filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption and
->>>> performs a direct pass-through of the uid/gid values supplied by the
->>>> NFSv4 client's idmapper.
->>>>
->>>> I have successfully tested this fix against several major clients, including:
->>>> - Exceed NFSv4 client
->>>> - OpenText NFSv4 client
->>>> - ms-nfs41-client
->>>> - ms-nfs42-client
->>>> - Windows NFSv3 client (no change, it continues to use LDAP raw data)
->>>>
->>>> Please let me know if you have any questions or require modifications
->>>> to the patch.
->>
->> This is the same patch as
->> https://github.com/kofemann/ms-nfs41-client/blob/master/cygwin/cygwin_patches/cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff
->> right? Who did auhor it - Roland Mainz or someone else? Why was that
->> patch not submitted before?
+On 27/09/2026 16:37, Jon Turney wrote:
+> On 23/09/2026 10:56, Máté Dimand wrote:
+>> The previously sent version of the patch used the wrong save_fplr
+>> directive, sending the corrected version.
 > 
-> That's my patch. The issue is that - while this patch is ready (and in
-> use by CERN&co) - I wanted to do more, but didn't had time to catch
-> Corinna for further debates.
+> Applied the corrected version of the patch. Thanks.
 > 
-> The ToDo-List:
-> 1. get this patch into Cygwin
-Roland,
+> (For patches which are straightforward fixes like this, at your option, 
+> you may include a Fixes: line in the commentary, identifying the commit 
+> which contains the original mistake)
+> 
+>> IMPORTANT NOTICE: The contents of this email and any attachments are 
+>> confidential and may also be privileged. If you are not the intended 
+>> recipient, please notify the sender immediately and do not disclose 
+>> the contents to any other person, use it for any purpose, or store or 
+>> copy the information in any medium. Thank you.
+> 
+> Sorry, this "notice" is invalidated by our existing disclaimer at [1].
+> 
+> But seriously, please avoid automatically appending such notices when 
+> posting to a public mailing list, if possible.
+> 
+> [1] https://cygwin.com/lists.html#notes
+  Actually, I shouldn't be so quick to joke. There is a somewhat serious 
+issue here.
 
-As the original author, can you please make a declaration about the 
-licensing of this patch, as per [1]. (Ideally covering any future 
-contributions as well.)
+I don't see your name in winsup/CONTRIBUTORS, so I don't think we've had 
+a statement about the licensing of your patches.
 
-Thanks!
+Can you please make a declaration about the licensing of this patch, as 
+per [1]. Briefly:
+
+1. To the extent that it is protectable, this (and all your other) patch 
+submissions for Cygwin are licenced under the 2-clause BSD license.
+
+2. If this material was produced under a "work-for-hire" contract, your 
+employer has authorized that licencing.
+
+Ideally, this statement would also cover any future contributions and/or 
+contributions made by your colleagues Igor Podgainoi and Evgeny Karpov 
+as well.)
+
+Apologies for forcing this tedious nonsense on you. Thanks in advance.
 
 
 [1] https://cygwin.com/contrib/dll.html#before_starting_legal
