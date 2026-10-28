@@ -1,100 +1,186 @@
-Return-Path: <SRS0=B3ed=IS=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo008.btinternet.com (btprdrgo008.btinternet.com [65.20.50.197])
-	by sourceware.org (Postfix) with ESMTP id 7D8214BA2E3F
-	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 13:03:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 7D8214BA2E3F
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 7D8214BA2E3F
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.197
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793192639; cv=none;
-	b=laRFffPxEIlj5JU1Y/v5mgwMHSG28iCgfTZ0GH4V3grGjKJSYjBvyepGujf+h2QLjq5kJcNPvf7mJvw/Litj/EBoZtKGMmnUQbe4G6aS8nlkZLpkeJt6qVcqTtSb+3JwV3n5FKWkn5APVTxjqjC47N6mP65xbGtbDMVh5OTZ5RM=
+Return-Path: <SRS0=H7in=IS=nrubsig.org=roland.mainz@sourceware.org>
+Received: from silver.cherry.relay.mailchannels.net (silver.cherry.relay.mailchannels.net [23.83.223.166])
+	by sourceware.org (Postfix) with ESMTPS id 502AA4BA2E05
+	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 13:14:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 502AA4BA2E05
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=nrubsig.org
+Authentication-Results: sourceware.org; spf=fail smtp.mailfrom=nrubsig.org
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 502AA4BA2E05
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=23.83.223.166
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793193252; cv=none;
+	b=aLYjPwq50QUBgZK/lg0A12AxmE82nzKCUASykZ3vJjsyLiQb9EKJ5fOA6MEj7Wv1UcSe6+Ovc4XPzzUAAqePWvVtHluC6PKM561NxasNrTXeL4IhK81PXXpaLpeBDBYxHUdzyIU39Xfj9wijf5Ab/IhUZct+19tyLHwgZwPdo7Y=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1793192639; c=relaxed/simple;
-	bh=TPr21bn41/ppRa/4YQ+pTTclb4UzELy56VA+3wxzJKc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From; b=DCSOv77jgSSTbYYptYQNcxnp/P+XPaFzP+m/wfVI5vZY6Ix8HkfdfdMZJSdLyt2oINVh6PBBerNVj3xbAFf82AjK5QY8cquz/9pAshcS9BwIMDFBjcuPLePZRSxv/0zrGbxwaAzTuItlLr9aIO7QvWbfu3mpneyniDfW187Qus8=
-ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 7D8214BA2E3F
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A715F5F114F2B07
-X-Originating-IP: [62.49.190.104]
-X-OWM-Source-IP: 62.49.190.104
-X-OWM-Env-Sender: jon.turney@dronecode.org.uk
-X-RazorGate-Vade: dmFkZTFnPMkQCIA2dR156oc6N+MDpHwniBzaZI9dFMwSpS1rGapGFIjUatMI+2LX5bi5GLhzJax/48aF3GZXBC1Mt/3YlmBqBrQaW3559zxV0YxNajrX/qda1zXo3qG5MIudyHSzeQ6mgXTf1FWglsEutGQLYxPmcCOrU3elf/aI2LSI+64dobOJ1axZl8V6l8YID6vz6KM9e2Rwdhqb0RTPp5tSG/VUZUOyVMqsPxeHf59AUoGwYaFSkHnT5Hgos7kj7VEGTC6h/eYQoP4wkut60rN0Q8f4qKvVjFbmWHQ1QXeEXQcbo9qvH3rxr1/07kr1Ie6r+jrHApEaNrFud/i+58XvrXxvMet7Z171e2f+x0BEJBazUe7ch/p1pp4GaVds+quLJPJaG40Aydv86wGw+zkhUTCAl/XHD11YCxYHBL6g+4sYoH85VddUCNWh5V2OeF9uI8oiqL91hoti/SwjT8QmS8jeytgKo6tIP8L6yRW/dvOKQUTQC+/OJM6iiNMfj8lPriwA7T0ssnvP4urXDHuw5QuEvQPi+lcOc+CiWdVh9rMQbpC3CcKWMsuPH2uju5z43U46RZaq144Tyfcb6Ct8AlMqU7MgVCv5WxLtsrfzdAjOyU60QlwhPyMSae+ZGQ5cjXHBTQH40ZPRZ6pKqCipBxTztRiR1RpMYN+zGmuvEg
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from [192.168.1.109] (62.49.190.104) by btprdrgo008.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A715F5F114F2B07; Wed, 28 Oct 2026 13:03:49 +0000
-Message-ID: <2bcc1fcd-3e47-454e-88ba-bb323e691558@dronecode.org.uk>
-Date: Wed, 28 Oct 2026 13:03:47 +0000
+	t=1793193252; c=relaxed/simple;
+	bh=BFM/jKKpiiuWwDztOU+HQnwm87GyIhYctI278mZHvUw=;
+	h=DKIM-Signature:MIME-Version:From:Date:Message-ID:Subject:To; b=DhI0ZrZJjSnHTIIPK/0WOYRA8QVoZM9htxc3nCYqPHvc0M7s/3L0T1Sti7cfEEDFa18M/dFVujFUycmAlM/P8fNuI32fnmFJG+KLET/3QPNbHHi07bHlcDizhExWlAffXKZD8mClDsNAqKZN+G+cj/0IpLNQIG94tQyTvqRvnD0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nrubsig.org header.i=@nrubsig.org header.a=rsa-sha256 header.s=dreamhost header.b=Ro2zUho8
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 502AA4BA2E05
+Authentication-Results: sourceware.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nrubsig.org header.i=@nrubsig.org header.a=rsa-sha256 header.s=dreamhost header.b=Ro2zUho8
+X-Sender-Id: dreamhost|x-authsender|gisburn@nrubsig.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 44BC64C3A26
+	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 13:14:11 +0000 (UTC)
+Received: from pdx1-sub0-mail-a208.dreamhost.com (100-96-9-235.trex-nlb.outbound.svc.cluster.local [100.96.9.235])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id C9BC94C3A5E
+	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 13:14:06 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|gisburn@nrubsig.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|gisburn@nrubsig.org
+X-MailChannels-Auth-Id: dreamhost
+X-Chemical-Little: 01501e1921ecbb2e_1793193251009_3007145837
+X-MC-Loop-Signature: 1793193251009:2124911133
+X-MC-Ingress-Time: 1793193251009
+Received: from pdx1-sub0-mail-a208.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.96.9.235 (trex/8.0.2);
+	Wed, 28 Oct 2026 13:14:11 +0000
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: gisburn@nrubsig.org)
+	by pdx1-sub0-mail-a208.dreamhost.com (Postfix) with ESMTPSA id 4jF79V4qb9zVj
+	for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 06:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nrubsig.org;
+	s=dreamhost; t=1793193246;
+	bh=4ZHve7M6vcPhkFElcxZLD4eUIi9tMOlvLWeoQyMd7aU=;
+	h=From:Date:Subject:To:Content-Type:Content-Transfer-Encoding;
+	b=Ro2zUho8SrdjoCQSgCPe1rFCVkLqrbK6GPr6rSOdF/s9p89smBLt0r5YfhEG0OG4x
+	 /Urn9zWt5PnogbzjqNGyzsCoEoZQFdEL+5NyAfv2t9K6oFROd1ztaBTq/vK/jDByGI
+	 QzjGW5G5V3Fg+diZY87AYt8UYsnRVq3hBnEOngeT3a/RBIgnr/mMEoqy96toTLbYri
+	 x6odvlqOBQ2GemptxAunp6G+YgmUYq/0eYrx/Z4VJwzDSQ5IgGnPk0nVuJBZRGGl9H
+	 yZ6nLdgRcWF1y6Yd+S2sFtsyBuMiHwyZtLf7HaOGEZ4c3xJ7S5ZTttl5vHm/83PqOt
+	 6e4+6Xcsxrp8w==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6af9a90e4bbso1012275a12.0
+        for <cygwin-patches@cygwin.com>; Wed, 28 Oct 2026 06:14:06 -0700 (PDT)
+X-Gm-Message-State: AFq9FYLOnSRNtuY0MBhqk96qzs7Q2zYQ60o+2T4dzP09Jw2LUj8LAI/F
+	2bHYlgaTjUw/ykxBhzocgECpGDOpSCGYIo3rjoFPdHLEidck7Kxz4KKcdYAO7v+1yZf6KwCpOYW
+	j5P6OrsgbUKXmBERduwV70N04dbm6Lbs=
+X-Received: by 2002:a05:6402:223a:b0:6b1:c34b:f1de with SMTP id
+ 4fb4d7f45d1cf-6b49cbec0c7mr950551a12.23.1793193245530; Wed, 28 Oct 2026
+ 06:14:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXTERNAL] Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-To: Radek Barton <radek.barton@microsoft.com>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
- Evgeny Karpov <evgeny@kmaps.co>
-References: <DB9PR83MB092300A5FEDFB941EEB3F5969248A@DB9PR83MB0923.EURPRD83.prod.outlook.com>
- <aHUEhDwuvRmJVZ1X@calimero.vinschen.de>
- <aHUFzEEGq448gvZ0@calimero.vinschen.de>
- <bd64e817-ffa8-4299-a3bc-6d1ff691ca9b@dronecode.org.uk>
- <aH5CvWENvjsmKbjJ@calimero.vinschen.de>
- <aH5EsVT1Hhe_7yHV@calimero.vinschen.de>
- <GV4PR83MB09410EFD509ABD23BDA49B18925DA@GV4PR83MB0941.EURPRD83.prod.outlook.com>
- <f2b1fddd-b867-4eb9-bc41-add80cce54f4@dronecode.org.uk>
- <PA2PR83MB0684F9E66CCC064AF949112892602@PA2PR83MB0684.EURPRD83.prod.outlook.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Content-Language: en-GB
-In-Reply-To: <PA2PR83MB0684F9E66CCC064AF949112892602@PA2PR83MB0684.EURPRD83.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+References: <CAPJSo4UZZN2w=RhhsycAgBW9mim928K9MVw+T7O_9W2uynMD3g@mail.gmail.com>
+ <CAPJSo4XhJJJxV=FpWQ44Q5NP=Y46-XPsopNhexzSyGYENjhdRA@mail.gmail.com>
+ <CAPJSo4WPqHqcxFS6AL8Cauo4Na6=u14Tw8eennKk_27rnd-rtQ@mail.gmail.com>
+ <CAAvCNcBwn0F84avS5pFS+oUoHuUAoSuKBEc2ybYScO8RDHV9NA@mail.gmail.com>
+ <CAKAoaQk+qgptFfmBugTcvfdLLhEnGPJWY70tLdQg1qNRFT+hQg@mail.gmail.com> <83ee12dd-70e3-4e27-85df-c9b860648044@dronecode.org.uk>
+In-Reply-To: <83ee12dd-70e3-4e27-85df-c9b860648044@dronecode.org.uk>
+From: Roland Mainz <roland.mainz@nrubsig.org>
+Date: Wed, 28 Oct 2026 14:13:27 +0100
+X-Gmail-Original-Message-ID: <CAKAoaQ=Fj_junDr_5992EUayLRhmG8Gq81KDMQB6NORoCVNA2g@mail.gmail.com>
+X-Gm-Features: AclHuK9q1uVQpecniONJKGqksadLSwrofUtXpZocb6V9xQfAP_w8ylb_6H3EQXk
+Message-ID: <CAKAoaQ=Fj_junDr_5992EUayLRhmG8Gq81KDMQB6NORoCVNA2g@mail.gmail.com>
+Subject: Re: [Ms-nfs41-client-devel] [PATCH/RFC] Patch to fix uid/gid lookup
+ for NFSv4 filesystems
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOCAL_AUTHENTICATION_FAIL_SPF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NEUTRAL,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 27/10/2026 08:45, Radek Barton wrote:
-> Hello.
-> 
-> The code was produced as Microsoft's contribution to Linaro initiatives and, AFAIK, it was public-domained by sending them to the mailing list(s).
+On Wed, Oct 28, 2026 at 1:30=E2=80=AFPM Jon Turney <jon.turney@dronecode.or=
+g.uk> wrote:
+>
+> On 24/08/2026 12:53, Roland Mainz wrote:
+> > On Sun, Aug 23, 2026 at 4:38=E2=80=AFPM Dan Shelton <dan.f.shelton@gmai=
+l.com> wrote:
+> >>
+> >> On Fri, 21 Aug 2026 at 17:21, Lionel Cons <lionelcons1972@gmail.com> w=
+rote:
+> >>>
+> >>> On Sun, 16 Aug 2026 at 19:35, Lionel Cons <lionelcons1972@gmail.com> =
+wrote:
+> >>>>
+> >>>> Repost with proper [PATCH/RFC] tag.
+> >>>>
+> >>>> I've attached a patch
+> >>>> (cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff.txt from the
+> >>>> ms-nfs41-client project) that resolves an issue with uid/gid lookups
+> >>>> on Windows NFSv4 filesystems.
+> >>>>
+> >>>> Currently, Cygwin assumes that all Windows NFS clients operate
+> >>>> similarly to the Windows NFSv3 client. It expects that account names
+> >>>> and numeric uid/gid values are identical on both the client and serv=
+er
+> >>>> sides, with LDAP acting as the sole authority for these numeric
+> >>>> values.
+> >>>>
+> >>>> However, the NFSv4 protocol fundamentally changes this paradigm. As
+> >>>> defined in RFC 7530 (Section 5.9) and expanded upon in RFC 8178 (Rul=
+es
+> >>>> for NFSv4 Domain and ID Mapping), NFSv4 deprecates raw numeric uid/g=
+id
+> >>>> protocol representation in favor of string-based identifiers (e.g.,
+> >>>> user@domain and group@domain).
+> >>>>
+> >>>> To handle this, all NFSv4 clients implement a local "idmapper"
+> >>>> component that translates these string-based identities from the
+> >>>> network side into local account data (in the case of Windows, mappin=
+g
+> >>>> user/group names and uid/gid values via nfs3attr XATTR). Because NFS=
+v4
+> >>>> clients manage their own uid/gid translation locally, Cygwin's
+> >>>> reliance on raw LDAP data fails in these environments and results in
+> >>>> the dreaded "Unix_User+<1234>" and "Unix_Group+<5678>"-kind of
+> >>>> owner/group output in Cygwin ls -l.
+> >>>>
+> >>>> The attached patch addresses this by detecting whether the underlyin=
+g
+> >>>> filesystem is NFSv4. If it is, Cygwin bypasses the LDAP assumption a=
+nd
+> >>>> performs a direct pass-through of the uid/gid values supplied by the
+> >>>> NFSv4 client's idmapper.
+> >>>>
+> >>>> I have successfully tested this fix against several major clients, i=
+ncluding:
+> >>>> - Exceed NFSv4 client
+> >>>> - OpenText NFSv4 client
+> >>>> - ms-nfs41-client
+> >>>> - ms-nfs42-client
+> >>>> - Windows NFSv3 client (no change, it continues to use LDAP raw data=
+)
+> >>>>
+> >>>> Please let me know if you have any questions or require modification=
+s
+> >>>> to the patch.
+> >>
+> >> This is the same patch as
+> >> https://github.com/kofemann/ms-nfs41-client/blob/master/cygwin/cygwin_=
+patches/cygwin_dll_fix_uidgid4nfsv4_fs_20260709.diff
+> >> right? Who did auhor it - Roland Mainz or someone else? Why was that
+> >> patch not submitted before?
+> >
+> > That's my patch. The issue is that - while this patch is ready (and in
+> > use by CERN&co) - I wanted to do more, but didn't had time to catch
+> > Corinna for further debates.
+> >
+> > The ToDo-List:
+> > 1. get this patch into Cygwin
+> Roland,
+>
+> As the original author, can you please make a declaration about the
+> licensing of this patch, as per [1]. (Ideally covering any future
+> contributions as well.)
 
-I'm not sure how Linaro are involved?
+Statement:
+My patches/changes/contributions to the Cygwin sources are under the
+2-clause BSD license.
 
-I don't think the mere act of sending them to the mailing list waives 
-your IP rights, but if you're stating that was the intent, then thank you.
+Is that OK ?
 
-> Please let me know if you need any other form of confirmation that this code is free to be used or re-used.
+----
 
-I hope this is good enough. Thanks again!
-
-> Radek
-> ________________________________
-> From: Jon Turney <jon.turney@dronecode.org.uk>
-> Sent: Saturday, October 17, 2026 3:35 PM
-> Cc: cygwin-patches@cygwin.com <cygwin-patches@cygwin.com>; Radek Barton <radek.barton@microsoft.com>; Evgeny Karpov <evgeny@kmaps.co>
-> Subject: [EXTERNAL] Re: [PATCH] Cygwin: malloc_wrapper: port to AArch64
-> 
-> On 21/07/2025 16:53, Radek Barton via Cygwin-patches wrote:
->> Hello.
-> 
-> Sorry to re-open this long-dormant discussion, but since we've actually
-> reached the point where we might soon be able to start distributing
-> binaries derived from this code, I think clarification is necessary.
-> 
->> JFYI, my original thought was that the Signed-off-by header is serving for some sort of automation that will let maintainers create commit with that person as a committer. Other than that, I am not aware of the cases where it could be handy to have different person being a committer and different person being the one who is granting the authorship rights.
-> 
-> OK, that's fine.  It's on us to explain what we expect it to mean, and
-> we haven't done that.
-> 
-> What we do need from both you, and Evgeny Karpov, is clear statement that:
-> 
-> 1. To the extent that it is protectable, this (and all your other) patch
-> submissions for Cygwin are licenced under the 2-clause BSD license.
-> 
-> 2. If this material was produced under a "work-for-hire" contract, your
-> employer has authorized that licencing.
-> 
-> 
-> Once again, I apologize for my extremely delayed response. I hope it is
-> straightforward for you to provide those assurances.
-> 
+Bye,
+Roland
+--=20
+  __ .  . __
+ (o.\ \/ /.o) roland.mainz@nrubsig.org
+  \__\/\/__/  MPEG specialist, C&&JAVA&&Sun&&Unix programmer
+  /O /=3D=3D\ O\  TEL +49 641 3992797
+ (;O/ \/ \O;)
