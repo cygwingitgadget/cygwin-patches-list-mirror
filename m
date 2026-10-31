@@ -1,43 +1,43 @@
 Return-Path: <SRS0=oEc+=IV=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w07.mail.nifty.com (mta-snd-w07.mail.nifty.com [106.153.227.39])
-	by sourceware.org (Postfix) with ESMTPS id 940B74BAE7DD
-	for <cygwin-patches@cygwin.com>; Sat, 31 Oct 2026 01:16:35 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 940B74BAE7DD
+Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
+	by sourceware.org (Postfix) with ESMTPS id E58C04BA23EF
+	for <cygwin-patches@cygwin.com>; Sat, 31 Oct 2026 20:31:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org E58C04BA23EF
 Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 940B74BAE7DD
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.39
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793409397; cv=none;
-	b=PFu9O+Z17cVw0Ng3EpKwTVKpxHdV+W5QmPzBQVtkW1hF9KaD3KPk5b2KP6HDVVhXzkBNP2G13O9idLMR3ktC4B2DB1ClSaQonI8ZtRk4xTryvzmiH5PgFX1PlanRAIVY7DyRLIrd2hJeX7k8/LMkmmoaMGTAevh/1YpvqZoPfT8=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org E58C04BA23EF
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793478706; cv=none;
+	b=VVjbz3hjpU79mE8iFF79FcAuaNi8csl82kvDzUEkXRoXkQRPCMv1Cc6X61ntgniloRNVj4S8aijuYO8VrB2TQ2b8pKocpZzFPhDrSdbocXlSaiEFIYkXID3bCsDEbPju0KUcfYu+oFgdta8dAH07in8CCNIxErF6YyFts/z5z78=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1793409397; c=relaxed/simple;
-	bh=co4XZAZ7KTp3YnGyzq75jl0J1Da11OSI0IYmyelQi2w=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=hHCtJeLV5rW6NTVdjq8vlt51N7AnVxZLFcwJIK6Ittv4Lnu2sH+Ab2OtRzgXwzFJYZzO15UIoTLmPP9OqOdIVP1o3yWZ5rKMhkPnpcZcYHdIz7kO7ufsHp/OPidNq1jrXtCB5EzMa6Y1o2dHZFqFU9DQJeDRdCJPEy9DOLK6NKs=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FouLgcQv
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 940B74BAE7DD
+	t=1793478706; c=relaxed/simple;
+	bh=Ij8zy1KAvJ/Va9Uk+BGkErdsVU8pRsy3hd6riUKqEBQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:DKIM-Signature; b=nP3qFY0KXAHZDywr1xemEsyGe2YTnfAM3jSwpVRRL/rGNfCCkuwdTonzl4GneDA4eQ94Rv8FUSEbjYeNEohQfYWl0dk+uK6IueNQeUjOKajT1gIjRsPMla1CKKMEGyOckos0G2SQa6roqGhap7SVHiNhe30gliZZKhBJKXcqxdU=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=AjK/KiU2
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org E58C04BA23EF
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=FouLgcQv
-Received: from HP-Z230 by mta-snd-w07.mail.nifty.com with ESMTP
-          id <20261031011631761.GMAP.18412.HP-Z230@nifty.com>;
-          Sat, 31 Oct 2026 10:16:31 +0900
+	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=AjK/KiU2
+Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
+          id <20261031203141086.YOJV.44671.HP-Z230@nifty.com>;
+          Sun, 1 Nov 2026 05:31:41 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v3 2/2] Cygwin: pty: Handle win32 input mode rather than omitting it
-Date: Sat, 31 Oct 2026 10:16:15 +0900
-Message-ID: <20261031011625.3809-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v4 2/2] Cygwin: pty: Handle win32 input mode rather than omitting it
+Date: Sun,  1 Nov 2026 05:31:26 +0900
+Message-ID: <20261031203134.1838-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1793409391;
- bh=RtXFAuhlOAF0sKyEKEcSnIs6JOD2b3Dc+RT3buHFKds=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1793478701;
+ bh=oDR7ZUkheEWTNB6ZpXC7pixosJqEZxMu2ZEtGQjHB34=;
  h=From:To:Cc:Subject:Date;
- b=FouLgcQvE/gdP+d2cF73q8T0IzPXnY0fCrKLJlT+cV0ud2kgQw6b6Ovci5U7jFc4pErSxI4W
- Ws0GmedH6LmoOpsslidQqgTKWeif8AIqMbQ5yhrrxkXBNd/F5acuO+e2siILfTnHOqyG4ccfhQ
- y3hegY8ramjkDwMg4tgFVu1zqMpph39SfXVsISYbFq1F88bRsQAsg9mjbgRfyGSNQQRpBMDiJv
- lCl9JcnI91LfTzwe2u+iLXZJFtwOX+5h81j65XfzyG7F8KP1DRzjjrOtMbJPxh0Lm6E7vrCUUY
- xiPPPVPDpizDMl/RK8FiDdbS2gOn2U7T2pMMM/mLdQeYeFuQ==
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+ b=AjK/KiU2tRssHjbCmylt89bV+gCO2g3PU8be2ITLj6zw94DwXZy3VmkyV2sP6COHt4/zeg1B
+ x7WUl1cJLPid9dn42UcLKT5hQWLX9n7LX/nxhnad6bUrdioRF9H1rMicPVJ/e2YNE7Ek8DJz8S
+ lhE2MjXpFT92VK8McEqFdNuy3yAikHrqJwI/pxWU5gA/SLLlnUQWM+FVgOmrPEHHRFvDrYLJix
+ nZxPiRj+9N846xpvE4yheA08kbYcRzjdiMqpy8LLWMVmEFtFWN0XlmAaL6JITJLUggsynL4mRT
+ p1/RNZucPDibgJHIOAn5xnKyslPs/MKh2n9m3VFmwPTm8hfw==
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
@@ -52,16 +52,18 @@ Reviewed-by:
 ---
 v2: Remove SCI?9001h/l if the foreground process is cygwin process.
 v3: Toggle win32 input mode based on pty_input_state in transfer_input().
+v4: Add missing initialization for win32input_mode_maybe.
 
- winsup/cygwin/fhandler/pty.cc      | 66 +++++++++++++++++++++++++++---
+ winsup/cygwin/fhandler/pty.cc      | 65 +++++++++++++++++++++++++++---
  winsup/cygwin/local_includes/tty.h |  1 +
- 2 files changed, 61 insertions(+), 6 deletions(-)
+ winsup/cygwin/tty.cc               |  1 +
+ 3 files changed, 61 insertions(+), 6 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.cc
-index 39525bd08..c184e486a 100644
+index 39525bd08..9c4779030 100644
 --- a/winsup/cygwin/fhandler/pty.cc
 +++ b/winsup/cygwin/fhandler/pty.cc
-@@ -2734,6 +2734,38 @@ fhandler_pty_master::write (const void *ptr, size_t len)
+@@ -2734,6 +2734,37 @@ fhandler_pty_master::write (const void *ptr, size_t len)
        len = nlen;
        for (size_t i = 0, j = 0; i < len; i++)
  	{
@@ -71,7 +73,6 @@ index 39525bd08..c184e486a 100644
 +	  if (get_ttyp ()->win32input_mode_maybe
 +	      && (buf[i] == '\033' || w32i_idx))
 +	    {
-+	      int a1, a2, a3, a4, a5, a6;
 +	      DWORD n;
 +	      if (buf[i] == '\033')
 +		{
@@ -85,13 +86,13 @@ index 39525bd08..c184e486a 100644
 +		  w32i_buf[w32i_idx] = '\0';
 +		}
 +	      nlen--;
-+	      if (buf[i] == '_'
-+		  && sscanf(w32i_buf, "\033[%d;%d;%d;%d;%d;%d_",
-+			    &a1, &a2, &a3, &a4, &a5, &a6) == 6
-+		  && a1 == 0x43 && a4 == 1 && a5 == 8) /* Ctrl-C */
-+		process_sigs ('\003', get_ttyp (), this);
 +	      if (buf[i] == '_')
 +		{
++		  int a1, a2, a3, a4, a5, a6;
++		  if (sscanf (w32i_buf, "\033[%d;%d;%d;%d;%d;%d_",
++			      &a1, &a2, &a3, &a4, &a5, &a6) == 6
++		      && a1 == 0x43 && a4 == 1 && a5 == 8) /* Ctrl-C */
++		    process_sigs ('\003', get_ttyp (), this);
 +		  WriteFile (to_slave_nat, w32i_buf, w32i_idx, &n, NULL);
 +		  w32i_idx = 0;
 +		}
@@ -100,7 +101,7 @@ index 39525bd08..c184e486a 100644
  	  process_sig_state r = process_sigs (buf[i], get_ttyp (), this);
  	  if (r != done_with_debugger &&
  	      (r != signalled || (ti.c_lflag & NOFLSH) || buf[i] == '\003'))
-@@ -3238,8 +3270,7 @@ fhandler_pty_master::workarounds_for_pseudo_console_output (char *outbuf,
+@@ -3238,8 +3269,7 @@ fhandler_pty_master::workarounds_for_pseudo_console_output (char *outbuf,
  	      }
  	    state = 0;
  	  }
@@ -110,7 +111,7 @@ index 39525bd08..c184e486a 100644
  		 && (outbuf[i] == 'h' || outbuf[i] == 'l'))
  	  {
  	    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
-@@ -3247,6 +3278,18 @@ fhandler_pty_master::workarounds_for_pseudo_console_output (char *outbuf,
+@@ -3247,6 +3277,18 @@ fhandler_pty_master::workarounds_for_pseudo_console_output (char *outbuf,
  	    i = start_at - 1;
  	    state = 0;
  	  }
@@ -129,7 +130,7 @@ index 39525bd08..c184e486a 100644
  	else if (outbuf[i] == '\033')
  	  {
  	    start_at = i;
-@@ -4410,7 +4453,7 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+@@ -4410,7 +4452,7 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
  	return;
      }
  
@@ -138,7 +139,7 @@ index 39525bd08..c184e486a 100644
    if (dir == tty::to_nat)
      to = ttyp->to_slave_nat ();
    else
-@@ -4418,8 +4461,12 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+@@ -4418,8 +4460,12 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
  
    pinfo p (ttyp->master_pid);
    if (p)
@@ -153,7 +154,7 @@ index 39525bd08..c184e486a 100644
      {
        char pipe[MAX_PATH];
        __small_sprintf (pipe,
-@@ -4434,7 +4481,6 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+@@ -4434,7 +4480,6 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
        CloseHandle (repl.from_master_nat); /* not used. */
        CloseHandle (repl.from_master); /* not used. */
        CloseHandle (repl.to_master_nat); /* not used. */
@@ -161,7 +162,7 @@ index 39525bd08..c184e486a 100644
        if (dir == tty::to_nat)
  	{
  	  CloseHandle (repl.to_slave); /* not used. */
-@@ -4445,6 +4491,7 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+@@ -4445,6 +4490,7 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
  	  CloseHandle (repl.to_slave_nat); /* not used. */
  	  to = repl.to_slave;
  	}
@@ -169,7 +170,7 @@ index 39525bd08..c184e486a 100644
      }
  
    UINT cp_from = 0, cp_to = 0;
-@@ -4606,6 +4653,13 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
+@@ -4606,6 +4652,13 @@ fhandler_pty_slave::transfer_input (tty::xfer_dir dir, HANDLE from, tty *ttyp,
        while (IsEventSignalled (input_transferred_to_cyg))
  	yield ();
      }
@@ -195,6 +196,18 @@ index c5102eb81..eb9457181 100644
  
  public:
    HANDLE from_master_nat () const { return _from_master_nat; }
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index ba65aca3d..f21d9ec41 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -306,6 +306,7 @@ tty::init ()
+   last_sig = 0;
+   discard_input = false;
+   stop_fwd_thread = false;
++  win32input_mode_maybe = false;
+ }
+ 
+ HANDLE
 -- 
 2.51.0
 
