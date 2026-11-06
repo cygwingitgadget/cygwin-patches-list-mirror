@@ -1,79 +1,59 @@
-Return-Path: <SRS0=fAJn=I2=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-w10.mail.nifty.com (mta-snd-w10.mail.nifty.com [106.153.227.42])
-	by sourceware.org (Postfix) with ESMTPS id 2B7764BA2E0F
-	for <cygwin-patches@cygwin.com>; Thu,  5 Nov 2026 23:01:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2B7764BA2E0F
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2B7764BA2E0F
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=106.153.227.42
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793919718; cv=none;
-	b=giJAb4Iq6MZZ9VDykYRusn5DLQCHdZ7+B5CWaKQ8ZHiq+w0wbo5i3z8chwVM6r9Fo6sQhySRl54fP7PBi55FSklHOlkSjTbxtSw6QCYdykiPLo8STPEqyTRWnB+Q4fl+mPT1JyPIAqGK5Q1lMCIyvR+qnbDK1OLQ9JAxSd1n4gU=
+Return-Path: <SRS0=bCgQ=I3=dronecode.org.uk=jon.turney@sourceware.org>
+Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.62])
+	by sourceware.org (Postfix) with ESMTP id 9AFA14BA2E0B
+	for <cygwin-patches@cygwin.com>; Fri,  6 Nov 2026 11:01:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9AFA14BA2E0B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9AFA14BA2E0B
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.62
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793962862; cv=none;
+	b=FhSWD3DZ96RFloYMPcqzI1eaMRkVZK+qgV+C5KL9zRQudf99UZQfhUfP3m4gSbdtu1D1FzcRfSCmWtGU6X1fHWkmRN6FH9BCnBB3TyLeV6FOABNxYf0pczZStaYSe07+JiUdXQpsAYGZ8Fy1dRSKhg5Yaj+NG9ZUQK4L5TDcKEU=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1793919718; c=relaxed/simple;
-	bh=kvsPNXeNJFieUizvoyZ0vWNd/5RNYkl5b4hjEVGBvUg=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=oX/tj6GXXZbloC7O+RH+86yZJUPusk4InbfJWrogjqy4LSGeETABSWo7Dz/EiZf3Aaz8zJOdumYx9t+Un2GM2j7F3tFGtnrTAWf3elKM7eTmUo72icZiXKMrMfovbcTT9gXoxuvuCU5bGS+4oG4VQmVUHvXYYQZe6dagHeBwfGU=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=AHQ1j/ec
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2B7764BA2E0F
-Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=AHQ1j/ec
-Received: from HP-Z230 by mta-snd-w10.mail.nifty.com with ESMTP
-          id <20261105230155214.JHWY.44671.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Fri, 6 Nov 2026 08:01:55 +0900
-Date: Fri, 6 Nov 2026 08:01:53 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] tgid reported incorrectly in /proc/<pid>/status
-Message-Id: <20261106080153.52221602569d48f817b98304@nifty.ne.jp>
-In-Reply-To: <87o6c9h9vd.fsf@Gerda.invalid>
-References: <87wlreyhxi.fsf@Gerda.invalid>
-	<20261020133919.10b3f008d0f28349c776f8af@nifty.ne.jp>
-	<87o6c9h9vd.fsf@Gerda.invalid>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1793919715;
- bh=joIU5fePz3xYJ504xzodfi7ySt6Ndjs+AzPH+k34+eg=;
- h=Date:From:To:Subject:In-Reply-To;
- b=AHQ1j/ecm6GU/RfEC1tZp5ApMM3GlGvMnPJE8jOzGzKV6aUJstmQyW8mzTeEG6wRbVZnIwkI
- tEGYYT/AiRZDjSatrabVrWD3TU9ylje//Ns71ZelmbbPdmbi6XiRuUJfhUV96FHS6szm9iBg2b
- vEjqR6Mfn+qUp8GxRtg/nmyfO7LDnCwAemSDYKtve7xZZI3Jm756eZQHfXnHMM9qi3wLLIC8TW
- IpiAuMeeALtIUc0fg+F3d5JYgeRlAB5yKFUPsVZ+lD7+sX89VhTsIsmI/M+j2h3VPhAj0QL2x8
- H/KZnjq8IZPpi0TH3q5Bdw2rswOOC64mL5ETupaPjb2YoHXw==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	t=1793962862; c=relaxed/simple;
+	bh=pM1GVqrsffU9F6KAbmiABPoU5sBR7AMc5Hv+xCL+nBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=DwhnWnvC4W9+ewKt951gY3Xi6PmYG2/5hkGy9/KzTeJ5ijrOjBVnGI4Rii02VKnfmlO+YjBYvGu6+9BHW6ZL4eMLcLce4ag0pI615JOsFRASiMloIHQKbg+w850cf2IharFRc6Fiax3oh8sY6LBGE/9QN+feiq3iB3xDgO17g5A=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9AFA14BA2E0B
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 6A7161381400A521
+X-Originating-IP: [80.176.81.8]
+X-OWM-Source-IP: 80.176.81.8
+X-OWM-Env-Sender: jon.turney@dronecode.org.uk
+X-RazorGate-Vade: dmFkZTGmAh+d5cgMuE36xr0K0Qz/pSFlN2XSQi2FoZtE2x/XcyFuWd3XQPLXHO4PwLKwyfW3ZV2Eahq50G+nuADIt/tbHDArMt+2MprVQbhgYJvSHHwhDjHqGqyGaG1UNjSqDVuN7W/hVYj3e7ntAISvpPdM4PqmjPDhpTdXYPZiFEkLs4tDsgtB4/IfC/Ve/TPiyYm8UKkj+O+dK6OY0Cvv+KuLYICivLohEr/zXe46pk4jTVJYqJaGv8SJE1I1oYDjwmzdc6BjTvciKyNqRcCBqLVQR38/emOJnmd502Zo+kMpmCeUWH1RR90tBLbFm1EM0maN/9xRq77P+QhSBcF6D6EyshSAVXV5GbfKNs2ARPw3BVHkbzX4h6GhWwNHfrCO7QVAcj9ZQz5/+spN6Ta93LlwJEOrBF5bOFOY5e11ccpeCb0ogYKeqp/cOZZMrdBdUaolBbYVMg+9itP6AIkGeqsfESGfEiX02cNQplTL+ePAj56FtjWwNrlNM+VM/MACbYiTHbsONTYymjbyxct0hjqFTeZFNuDxUV519X0xBM5j4ll9poFkOD5TNiXadaOYoF8ODy3V4L9ghvtx+doK/a+H5r0oBqa7gJE0hjXLiSt0XfxUVoAH9XfMlhUpUMOAbo1gDv5q6JiAOji+dFwzZe9wOy5/HZPmrrLdCsXfC0N5Nw
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+Received: from [192.168.1.109] (80.176.81.8) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A7161381400A521; Fri, 6 Nov 2026 11:00:01 +0000
+Message-ID: <467663c7-d1c1-40b2-999a-b7e6b829bb6c@dronecode.org.uk>
+Date: Fri, 6 Nov 2026 10:59:59 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] stdatomic.h: fix the type used for atomic_wchar_t
+To: ASSI <Stromeko@nexgo.de>
+References: <pull.16.cygwin.1793616235364.gitgitgadget@gmail.com>
+ <87a4nrm8x9.fsf@Gerda.invalid>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Content-Language: en-GB
+Cc: cygwin-patches@cygwin.com,
+ Johannes Schindelin <Johannes.Schindelin@gmx.de>
+In-Reply-To: <87a4nrm8x9.fsf@Gerda.invalid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On Sat, 31 Oct 2026 21:51:18 +0100
-ASSI wrote:
-> Takashi Yano writes:
-> >> +			  num_threads, /* should really be the number
-> >> +					  of LWP in the same thread
-> >> +					  group, not the number of NT
-> >> +					  threads attached to this
-> >> +					  process */
-> >
-> > What is the practical difference? The only thing I can come up
-> > with is whether it includes Cygwin$B!G(Bs internal threads (such as
-> > the signal thread) or not. Is that right?
+On 02/11/2026 17:37, ASSI via Cygwin-patches wrote:
+> Johannes Schindelin via GitGitGadget writes:
+> […]
 > 
-> The main difference is that LWP have their own PID and Cygwin pthreads
-> have not.  Also on Linux, while it is possible that helper threads get
-> injected into another applications thread group (e.g. via a library),
-> that is done rarely and requires elevated privileges.  An application
-> not expecting that (because it's not using any libraries that would do
-> that on Linux) might do undesirable things with such threads once they
-> become exposed.  This is a fundamental difference since Cygwin does some
-> "kernel"-like things via these helper threads that would be completely
-> off-limits on Linux (by running in kernel space rather than user-space).
-> So in essence Cygwin currently mixes both "user-space" and
-> "kernel-space" threads into the same threads group and I think that
-> these would somehow need to be separated in order to get something that
-> conforms to the Linux LWP ABI expectations as best as a user-space
-> implementation allows.
+> That fix should be done in newlib, not Cygwin (and then not in the way
+> shown here).
+> 
 
-Thanks for the explanation. The patch applied as is.
+Yes, this patch should be sent to the newlib list.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+But maybe you could explain a bit what's wrong with it?
