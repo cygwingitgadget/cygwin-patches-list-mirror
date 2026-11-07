@@ -1,75 +1,90 @@
-Return-Path: <SRS0=ecbl=I3=nexgo.de=Stromeko@sourceware.org>
-Received: from mr4.vodafonemail.de (mr4.vodafonemail.de [145.253.228.164])
-	by sourceware.org (Postfix) with ESMTPS id 5FF064BA2E14
-	for <cygwin-patches@cygwin.com>; Fri,  6 Nov 2026 16:18:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 5FF064BA2E14
-Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=nexgo.de
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nexgo.de
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 5FF064BA2E14
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=145.253.228.164
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1793981903; cv=none;
-	b=sLLLIQ44jV6qL7iznapiHcTfggBIKk5RWWynBtKgcVgVuliuJAQuRzvDZsrThHh1slTscB/upsQTSUGfcF6laC4IG48X/0MDNIisB1HafQlUyDIE9uPCp/qDNWPF7kZVTGdYzNtM6fOI34H/lgrciispYrEhFe0XmQPUIS/CQng=
+Return-Path: <SRS0=jrW8=I4=maxrnd.com=mark@sourceware.org>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+	by sourceware.org (Postfix) with ESMTPS id 517344BA2E13
+	for <cygwin-patches@cygwin.com>; Sat,  7 Nov 2026 05:20:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 517344BA2E13
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=maxrnd.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 517344BA2E13
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=69.55.228.47
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1794028819; cv=none;
+	b=Zbon52Wy8Q4yVZIRFD9d55LH5ERa7/xlzRhuUOvSTzRWEUOvDfin/bPK7ejlq6guilJBB4effOILV07n60uMm7nBCjhq+XQBi5mtD6awvdnDFInvGCUSP7cTyEiRSY3cIyZojF4aJJoRN2MErrY/LC1inczAWMzrOgQE1i4Vers=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1793981903; c=relaxed/simple;
-	bh=7im4kzYiX1JbY2BOgiRCsvbPLBT178TeK7dLGntL5h0=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=k+Zu7ybUaZpjFB/GCLXWOqffHgqTAx/I6ugT838cDuT828pOY+sJ7m2ixtVATqSlk1J7pnqOmcmOT99Q0sxwScgxqZOeUvlvJax2ySaG2bbtn6oOw/6pHyDGJwrvj+lFfzMQgy/+nLVdIYl8QiVz2kizbC5Rsw51RoVG9yK0v1U=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (1024-bit key, secure) header.d=nexgo.de header.i=@nexgo.de header.a=rsa-sha256 header.s=vfde-mb-mr2-23sep header.b=X9zIV3X7
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 5FF064BA2E14
-Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, secure) header.d=nexgo.de header.i=@nexgo.de header.a=rsa-sha256 header.s=vfde-mb-mr2-23sep header.b=X9zIV3X7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nexgo.de;
-	s=vfde-mb-mr2-23sep; t=1793981889;
-	bh=skOrgEdALNGgIIw9adDsG9Wmycmo7Q3W5CkPXPiB7hE=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:User-Agent:
-	 Content-Type:From;
-	b=X9zIV3X7YN5ax0MJXjQC6AutAPtM4fwNGYRiDC52XntWwd+JSYmJD0ObOYbz6N8pH
-	 +u4KnWLkPRGtJ+8SlXvctjYmGFIObXkXhc2HEtQhcQ7/LtQdpZVcUPxaciZLQnlcMZ
-	 TG5Q2neZSFNw3hnyZTFD5oSfLW4ERvx0xk8ZqmYQ=
-Received: from smtp.vodafone.de (unknown [10.5.0.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by mr4.vodafonemail.de (Postfix) with ESMTPS id 4jLkqj3DSbz3sV1x
-	for <cygwin-patches@cygwin.com>; Fri,  6 Nov 2026 16:18:09 +0000 (UTC)
-Received: from Otto (p54a0cc4e.dip0.t-ipconnect.de [84.160.204.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.vodafone.de (Postfix) with ESMTPSA id 4jLkqd1BVxz905S
-	for <cygwin-patches@cygwin.com>; Fri,  6 Nov 2026 16:18:02 +0000 (UTC)
-From: ASSI <Stromeko@nexgo.de>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] stdatomic.h: fix the type used for atomic_wchar_t
-In-Reply-To: <467663c7-d1c1-40b2-999a-b7e6b829bb6c@dronecode.org.uk>
-References: <pull.16.cygwin.1793616235364.gitgitgadget@gmail.com>
-	<87a4nrm8x9.fsf@Gerda.invalid>
-	<467663c7-d1c1-40b2-999a-b7e6b829bb6c@dronecode.org.uk>
-Date: Fri, 06 Nov 2026 17:17:58 +0100
-Message-ID: <87ld76kk7d.fsf@>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	t=1794028819; c=relaxed/simple;
+	bh=1Fc056WPNbrJNaTV/4sSUND00eQ+RHWehEv2vnKcaqY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From; b=GkdlSa/jJmJjogsQL/TLUE8gVWn1FehiabmbLk2Z3siJwqstuWaD/tNxIk66etwBk7X3lWlS7h4PfsYlA4oeqtCqVLDD1hE3MGaxqMl9O1yGlHQljlKUWkHgBzTTlYuPt5U+5+ZWWfWbsbyTDsDAGzmV149qr0y85GjfdK3XTJ4=
+ARC-Authentication-Results: i=1; sourceware.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 517344BA2E13
+Received: (from daemon@localhost)
+	by m0.truegem.net (8.12.11/8.12.11) id 6A75XTp6037067
+	for <cygwin-patches@cygwin.com>; Fri, 6 Nov 2026 21:33:29 -0800 (PST)
+	(envelope-from mark@maxrnd.com)
+Received: from 50-1-253-193.fiber.dynamic.sonic.net(50.1.253.193), claiming to be "[192.168.4.101]"
+ via SMTP by m0.truegem.net, id smtpdljwBwa; Fri Nov  6 21:33:21 2026
+Message-ID: <02a8901e-648d-40c1-8f96-2e792336af5b@maxrnd.com>
+Date: Fri, 6 Nov 2026 21:20:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-purgate-server: smtpa03
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 448
-X-purgate-ID: 155817::1793981885-B8DCC423-77DDD2A4/0/0
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_MSGID,RCVD_IN_BARRACUDACENTRAL,RCVD_IN_DNSWL_LOW,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Cygwin: spawn: Create winpid symlink for spawned
+ processes as well
+To: cygwin-patches@cygwin.com
+References: <20261106113122.315-1-takashi.yano@nifty.ne.jp>
+Content-Language: en-US
+From: Mark Geisert <mark@maxrnd.com>
+In-Reply-To: <20261106113122.315-1-takashi.yano@nifty.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,GIT_PATCH_0,KAM_DMARC_STATUS,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-Jon Turney writes:
-> But maybe you could explain a bit what's wrong with it?
+Hi Takashi,
 
-Apparently there are systems where that triple underscore is correct, so
-there needs to be some configure-time selection of what symbol to
-target.
+On 11/6/2026 3:31 AM, Takashi Yano wrote:
+> Since commit 1b86dd7d8c19 ("Cygwin: make sure exec'ed process exists
+> early in process list"), spawned processes have been missing from the
+> process list (e.g. the output of `ps`). This is because that commit
+> should also have maintained the winpid symlink for spawned cygwin
+> processes, but did not.
+> 
+> Addresses: https://cygwin.com/pipermail/cygwin/2026-October/260185.html
+> Fixes: 1b86dd7d8c19 ("Cygwin: make sure exec'ed process exists early in process list")
+> Reported-by: Daniyar Oshakbayev <daniyar29@gmail.com>
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+> ---
+>   winsup/cygwin/spawn.cc | 16 +++++++---------
+>   1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+> index 6d736888a..87865ddf3 100644
+> --- a/winsup/cygwin/spawn.cc
+> +++ b/winsup/cygwin/spawn.cc
+> @@ -794,16 +794,14 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+>   	     not available. */
+>   	  DuplicateHandle (GetCurrentProcess (), child.shared_handle (),
+>   			   pi.hProcess, NULL, 0, 0, DUPLICATE_SAME_ACCESS);
+> +	  /* We have to create a new winpid symlink on behalf of the child
+> +	     process. For Cygwin processes we also have to create a reference
+> +	     in the child. */
+> +	  child.create_winpid_symlink ();
+>   	  if (!real_path.iscygexec ())
+> -	    {
+> -	      /* If the child process is not a Cygwin process, we have to
+> -		 create a new winpid symlink and induce it into the child
+> -		 process as well to keep it over the lifetime of the child. */
+> -	      child.create_winpid_symlink ();
+> -	      DuplicateHandle (GetCurrentProcess (),
+> -			       child.shared_winpid_handle (),
+> -			       pi.hProcess, NULL, 0, 0, DUPLICATE_SAME_ACCESS);
+> -	    }
+> +	    DuplicateHandle (GetCurrentProcess (),
+> +			     child.shared_winpid_handle (),
+> +			     pi.hProcess, NULL, 0, 0, DUPLICATE_SAME_ACCESS);
+>   	  child->start_time = time (NULL); /* Register child's starting time. */
+>   	  child->nice = myself->nice;
+>   	  child->sched_policy = myself->sched_policy;
 
+The patch LGTM.  Please apply at your convenience.
 
-Regards,
-Achim.
--- 
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
-
-Factory and User Sound Singles for Waldorf Q+, Q and microQ:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
+..mark
