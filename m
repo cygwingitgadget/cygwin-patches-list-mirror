@@ -1,62 +1,98 @@
 Return-Path: <SRS0=iF8p=I5=dronecode.org.uk=jon.turney@sourceware.org>
-Received: from btprdrgo011.btinternet.com (btprdrgo011.btinternet.com [65.20.50.92])
-	by sourceware.org (Postfix) with ESMTP id 15CCA4BA2E18
-	for <cygwin-patches@cygwin.com>; Sun,  8 Nov 2026 13:12:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 15CCA4BA2E18
+Received: from btprdrgo004.btinternet.com (btprdrgo004.btinternet.com [65.20.50.180])
+	by sourceware.org (Postfix) with ESMTP id C38A84BA2E18
+	for <cygwin-patches@cygwin.com>; Sun,  8 Nov 2026 13:27:07 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org C38A84BA2E18
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none) header.from=dronecode.org.uk
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=dronecode.org.uk
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 15CCA4BA2E18
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.92
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1794143537; cv=none;
-	b=fF56kI7x90aGWqCAkN4XFPKP37o5ldJNJJ3WiGRVPfixtl4G2B1Lq9nANSNr1iqnOMR53aNTd7pcUFY2bvwKjlLcc5M4Eol3B5XEWnym+7JC/mW5m3IDqQF+DolDu+NrdeSSRZAWwG1seH2UGrdZEMru71y3Q5feR74v1dnAGbw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org C38A84BA2E18
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=65.20.50.180
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1794144428; cv=none;
+	b=up0KOBUkBFibiW1wwG9N5GzqmMWhZbyIpUR0Mm/hETGgsamzaOOCBIS9zioqkKUnHTPKKdH4Z3RSYVW7MkdCZ1GoMW6RUiMy1uWt0ZiB2xtsYEmXK6rZzVKHi96izTk6gSj2ly0/bQu22jiU6JwcOqjx5bfa/m5L8as6APMtnAg=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1794143537; c=relaxed/simple;
-	bh=GVG5cKZyG4cJIoEkRZ/fRHi7sYeve2IWktAJ+55zjLY=;
-	h=Message-ID:Date:MIME-Version:Subject:From; b=itw4EAmHxK++VndOOqnXVFm9Nhn0SZ40G4RPf+nxsvNw/u1whPos+OgMGEDz7FogyZmgMhXlOlJvbl4Rm7DRrg8G3dBchpaL3tkt0yWqiHMMOUwzHIU48qCq6RGFp0TRmSL6bwTIMbmv992tAzS/QwysPNbEOkS/3de9/xWq/+4=
+	t=1794144428; c=relaxed/simple;
+	bh=xxwpE+81t03NK7ETakjsDSCLmsDfDHrFL4mRDXCWyTQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From; b=Lfl0Qy8fsx+V+RxntkkhX7e5EGNjgK7o2vFcuemNc+EP6CEQnQjEOly8UqzBMY9bKDfL0AKwCqhzwJq4vSVhsd0E48U1/VP2ajhtsrbOAJsTrNHND7o894wZBwg11G7AsKbokIci5oBfbacoZUYJ/0kZk2g1MSSS5QMp/iGv8j0=
 ARC-Authentication-Results: i=1; sourceware.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 15CCA4BA2E18
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org C38A84BA2E18
 Authentication-Results: btinternet.com;
     auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 6A716138147A634E
+X-SNCR-Rigid: 6A715CD6146FFBF6
 X-Originating-IP: [80.176.81.8]
 X-OWM-Source-IP: 80.176.81.8
 X-OWM-Env-Sender: jon.turney@dronecode.org.uk
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: dmFkZTFq0/a7pyzqIfdXRMkrJTa66JGcIF4CdnG+lOTpn+TCZCf7397pKmC8rosvGknPZEr+w89lp9CW320L5vGbpjvCxBNLtPE0bSKwMG1ofKj7yfsLi1H/0U6oLxqqV48/GZN22gxrrzMpXUv3GKUSLKpu+IKFPCTEfG0ggICZbdjGp1rRc9ZBYPFcDjQszqlFd+E7+Xsr/ChV3r8hMcZ85lUaexLlCIQ6PlfBeW+P8xv8K8SyHNZeXOKE8RLQTO8tRI4AWV7dwOgCKlewndTobC0hj29fm8Sqqvlk1aBWdKgr1d5pxv0wS7U9Qt0O8Y2nGArT1MFfOiCH3ER4yijmkQtHDMqHMkptPctkHcjko7SvuDdCXwqvoqebN9pe4XTnfgk3XA8QEd+vAt65OXQf/PITz1rNuRnNGOiLL0sMRX7KsjDF+5KJ4TXuDzCs9IDjiHteKMF7hgTssILoI6Il87NNbUL5FHdWwCKgjXN6wTgH9QwhY2KN9oh4l3k8wPAq/KoCWNH4DALsqS9SG2rN9zcWbvIJFMFxTk5uMODHPdBtDY4NB5u4l4L/1Wj9DSTKkfDfyVOejTKeeZ4JRxMONppwOuYvbHbIl3x/K4n2n+/R8PTskcQg8NnFxB0uOxftbz9aQmEJ4HDGQhypwEf2uHmjmbM05ClgDQHp065oZbQN6w
+X-RazorGate-Vade: dmFkZTGzMXFgvfm1P6Sqn6uT/2sTMz5a8ILtajFw5Fl+ij2BLIwwbemYYn0Vv/gBC3dU8uUzvkKKlaUM2nqrTLQ0GkFB6ndnpLLvwc6jRoPy9P/1byfohdF3mrLwXqpUMz6iYSEUR7ffrggfiwxXPInjNz71Wc3MDj1Pyh+yoHflgNeju+chSVUXuV83LQq0wMPnZJ0QgZNL9YLIxkFLtcxjlDN7gGZ2IJvoVHcqo2ybaMaB6WJzKdlf/ni+WSuRxZjV8VCGSDnJsX3UNuEfYoqWqxv2jML2n0XlVLnItbbIZG0jPPzvN2uWPaExS7ti1TignsxQHtqrPIQMEHqEXJ55HtGEGzGuRKL+bdVNAZMtBYenkUl1IrW8OWEOFujQ5MorRx4lvGUvo1/2psTsAGCmw7F2P7h/xEzv/eKJBJaIAeIq3HBwyWleQm880ej7gwNZKbPsnXQFgVGxWpWRn+4dsULdyt3zsXBfbiY0V75VzVfoDTdjwJrQEyyNMu4bv7lDV43G+x9dD+sdDAjxsz8wJTwBOk1AQkvSr/ONaZS3plMBVQV6eDpqYFW7y4Xj5t07XwaLAmiskIToGnlGRrUDYO+dFop2Tosa/wLDiUiNwDWY2mowyhzh5ZvU77gfQrggZXwy65cglhgkfb1SnPAwwIccO5bWHLB6Ym8stdcbTcsKpw
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.109] (80.176.81.8) by btprdrgo011.btinternet.com (authenticated as jonturney@btinternet.com)
-        id 6A716138147A634E; Sun, 8 Nov 2026 13:12:15 +0000
-Message-ID: <707bfef1-aa52-491a-9183-b98b8ad4450b@dronecode.org.uk>
-Date: Sun, 8 Nov 2026 13:12:15 +0000
+Received: from [192.168.1.109] (80.176.81.8) by btprdrgo004.btinternet.com (authenticated as jonturney@btinternet.com)
+        id 6A715CD6146FFBF6; Sun, 8 Nov 2026 13:27:06 +0000
+Message-ID: <0d5a6703-fb83-45ac-93c8-1e114816942e@dronecode.org.uk>
+Date: Sun, 8 Nov 2026 13:27:06 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Cygwin: autoload: drop the unused no_resolve_on_fork
- parameter
-References: <PN3P287MB13209A14DE960126F3311558F7A62@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
- <PN3P287MB1320B28B0848F2F91E752442F7662@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] Cygwin: gendef: restore incyg in AArch64 longjmp
+References: <PN3P287MB1320FF86B79E02E9DF36286FF79E2@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Content-Language: en-GB
 Cc: cygwin-patches@cygwin.com,
  Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>
-In-Reply-To: <PN3P287MB1320B28B0848F2F91E752442F7662@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <PN3P287MB1320FF86B79E02E9DF36286FF79E2@PN3P287MB1320.INDP287.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,JMQ_SPF_NEUTRAL,KAM_DMARC_STATUS,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_PBL,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-On 21/10/2026 11:22, Aswin Kalies Ramkumar Mangayarkarasi wrote:
-> Hi Jon,
-> 
-> Gentle ping on this one.
-> 
-> One note: Outlook mangled the inline copy in the mail body, so it does not
-> apply as quoted.  The attached cygwin-autoload-drop-no_resolve_on_fork.patch
-> is intact and still applies cleanly to current main.
-Applied, thanks.
+On 13/10/2026 13:36, Aswin Kalies Ramkumar Mangayarkarasi wrote:
+> Hi Everyone,
+> On AArch64, any program that loads OpenSSL's libcrypto stops receiving
+> signals while it is blocked in a syscall. sshd sitting in ppoll ignores
+> SIGCHLD, SIGTERM, SIGHUP and even SIGKILL, so ssh sessions never finish.
+> The cause is that longjmp clears _cygtls.incyg instead of restoring the
+> value setjmp saw. OpenSSL's AArch64 capability probe runs in a DLL
+> constructor, i.e. inside dll_crt0_1 with incyg == 1. It does sigsetjmp,
+> takes a SIGILL and siglongjmps back; longjmp sets incyg to 0, and
+> dll_crt0_1 then decrements it to 0xffffffff. The patch below saves
+> incyg in setjmp (jmp_buf slot 24, offset 0xC0, unused so far) and
+> restores it in longjmp.
 
-Sorry about the delay in getting around to this, and thanks very much 
-for digging through the history to find out what had gone on here!
+Huh. This sounds like a similar (although distinct) issue to that in 
+https://cygwin.com/pipermail/cygwin-patches/2026q4/015440.html
 
+This is not an area I am hugely familiar with, so perhaps you can help 
+me out, by also thinking about if there's any interaction between the 
+two fixes?
+
+> A small reproducer does the same thing without OpenSSL: pthread_once
+> runs an initializer (inside Cygwin) that does sigsetjmp, raise(SIGUSR1)
+> and siglongjmps out of the handler; afterwards alarm(1) must interrupt
+> poll(NULL, 0, 5000) with EINTR.
+
+I wonder if you could also attach that reproducer, so I can add it to 
+our tests somewhere.
+
+> Testing, on upstream main (06add56f7) cross-built for aarch64-pc-cygwin
+> and run on Windows 11 ARM64:
+> 
+>       *
+> reproducer: FAIL 5/5 without the patch (SIGALRM never delivered,
+> poll sleeps the full 5s), PASS 5/5 with it (EINTR after 1000ms).
+>       *
+> winsup testsuite: identical results with and without the patch
+> (265 PASS, 17 FAIL, 4 XFAIL, 1 SKIP; the same 17 tests fail in
+> both runs: 15 LTP EFAULT checks and 2 posix_spawn tests that
+> depend on the local test environment).
+>       *
+> in our MSYS2 aarch64 build the same change fixes sshd sessions
+> hanging and SIGCHLD being lost (350/350 concurrent sessions,
+> SIGTERM/SIGHUP/SIGKILL delivered).
+> 
+> x86_64 has the same flaw: its longjmp also clears incyg instead of
+> restoring it. The same reproducer fails 3/3 on Cygwin 3.6.11 x86_64.
+> It just doesn't show up in practice there, because OpenSSL detects CPU
+> features on x86_64 with cpuid and never longjmps during startup. This
+> patch only touches AArch64; I can send the equivalent x86_64 change
+> separately if you'd like it fixed there as well.
+Yes, please!
 
