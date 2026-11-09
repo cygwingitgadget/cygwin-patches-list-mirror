@@ -1,29 +1,29 @@
 Return-Path: <SRS0=3bqE=I6=leafsoftwaresolutions.com=pcahoon@sourceware.org>
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azlp170120001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c107::1])
-	by sourceware.org (Postfix) with ESMTPS id B8C4F4BA2E0C
-	for <cygwin-patches@cygwin.com>; Mon,  9 Nov 2026 15:21:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org B8C4F4BA2E0C
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazlp170120001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c10d::1])
+	by sourceware.org (Postfix) with ESMTPS id 6B2324BA9020
+	for <cygwin-patches@cygwin.com>; Mon,  9 Nov 2026 15:27:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 6B2324BA9020
 Authentication-Results: sourceware.org; dmarc=pass (p=reject dis=none) header.from=leafsoftwaresolutions.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=leafsoftwaresolutions.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org B8C4F4BA2E0C
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c107::1
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1794237713; cv=pass;
-	b=tdQ4YIX+2+jvwFq3/fJ6p3PUKGo8bxNj8w1/QICbezVQUC2BU6eApyuOpbT293CocEXSBQUw2cCrIGT8GRsG+X1C8jUR3H/V4GOVK1KxBuNbtOTHOm1UnCCf9YLcIXOZKU5kNqeLyG8HvTEc8fcf3lBIPuHUx8/AdGzGG1ujvUw=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 6B2324BA9020
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c10d::1
+ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1794238022; cv=pass;
+	b=pIYyfkRG7DoZ8BEo7gg9/OrQ0KedcJrAs7e5K/tu10TJZLAAXLaGbPhh22eUj8d5sAbgMG5HJ5i9pLeaTsm8Vnw2+ctaNdiQZDAmMSKofCttYajU3FdgMGuuw0BILaz9hWAWnb98CFKCT0WROpkUyLz88V7Z5mpB7Bam5Aybjpk=
 ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1794237713; c=relaxed/simple;
-	bh=ywOgcvMQZUfcZ4zYURXlymnbB2/aM2pSPMLlFCi6XgI=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=VBOv3VNb6aJx6f88v+sbLZHb5q1RZ3cAbKmkJAl8e7Yfq0thGaIo/QWhORVUEh5L0hRiLIrnNihjw+FZHWdsyUn0rwld4dp3SKiUvCXcyer+escjKcsdIe549UssyHYZzctnhdbHAulfhu3SUfsxbazVhaOHkh/R22t0tGipS40=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=ipIDfJx8
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org B8C4F4BA2E0C
+	t=1794238022; c=relaxed/simple;
+	bh=yPwGrKCfCE/axdFjb0eq23Q8Zkji4R0MvjiBpo2+43E=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=XmS7FfaYdkwsQPsu+v83l0453L7QOs4jDOfBciy4IKpa4A6lLgLIGfHMfaobGUol78nfM4NU2Wbl1CyesohqryVuUikriU9H/dghIvT/HHqYU4kXnO9ug5WIFKXZ0DRhgZAH5EKK9mMlkh2YGOXU2k+myu0VmXM0cSfgxjW4mF4=
+ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=jGGWuS3g
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 6B2324BA9020
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=ipIDfJx8
+	dkim=pass (1024-bit key, unprotected) header.d=leafsoftwaresolutions.com header.i=@leafsoftwaresolutions.com header.a=rsa-sha256 header.s=selector1 header.b=jGGWuS3g
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DeWbEfIaeP2GbMqFETZTEjAd2+wQ02Slp75fKfHbgKl26NQr5HV2CQc1rz0iRqW4Na9POHUt/fuWoigzej/mWWchDxUkandHH0rMpn/SjYc808zgufRmvQtml47c0173oOg1ihqBoevoFYDvSk2uB00mfIvAxhV1xBkUbso/qX3PGZ8pg/8mifKB5Fu6zPStsR4v75fg3AsdrZuMUHCn0ynDvm5F7V+OMQ7ulXu1ZY1IKebpn6+Q5Y8Q9ZzjJuf7PBpOvK13FAkVFVtLw292dPBiZdwY9v5FwxOZZW94CAm4OSRbeQsTLYTeaMKWebNw0tvIUwMkEHLhiQvONJa5LA==
+ b=FetNo2R5O0PzjheAavuDBp7Ba8wZcZmejHqJTd50wPDUec4zoSeRycieZ6UUbZQHm/5rWkP2zHRh8gRzZH7jaTeI5WZMkSwlaJlRZxya2s0CgsySdQ8AQNTVtiudqs5urBeKrc5IZi8DlxaDQgL4OmyuMoc+lRxzeGNhmOHJBH3tFOul4JTWAWrt8PuVHV2SEl5KTJOl5L54QtUgJdcX+DkQCNOoMafh859rHyRJw6qQbZETCWtegpJ0zzs6Y6yYGjhnOsUipUDDdEUwb8PYFy445kqbTP90h3GrcjoNZzbB4zJK7OTHWPyiWpnur2242GHOCG1A3wwEX4wgJvFJQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jJVgyVPCCJFYoEdCsfRBRNT5mTuxJ1nZP4dgAiGsQjo=;
- b=PBeE8fbpjhrfq06T3hcLzA6jVgWDHo0mBWQnLy8I1gvUmYvfac46KlU/Rg0uslsypjrIFQdKoe2ovHWUDJkU2WFpuiuzPIyLBRqPDW/HNZd9ZrI5kzYYbjqqrxmxE9wbCX1rGfBo5+Kmvj0TbgvdN3jlPprhHoKqpEL1wwECSV46Z/A40VIpEohdw+AK4iX8iFjTWfyCAY84udICwbHufGfAAxiIPAm6u21SluKxLC/sINWG6fIFNdCMWHoI8v2FaFp8l+ZX/tSN8aJxNLfZ8I8ErBTMG8u8SmEFkHcjzPZXGfVKKtb1hPqTC0wfb6MfZK4y43fKmf/rG3IZwVeOKQ==
+ bh=yi+YJXcybxEcaPOWnoZeWxULEVXJFGDTPBLP5tjS/Ns=;
+ b=q0v4ASgLcWmhGnT6yjeJNSv3ZgjV/YittAU02uPNjCyX7ut2wUdqYRw+wzokUpcErWhss+Et+PZbi1X+hd9BzNwvWAshsJAzRnuxZApm/6wnRnqsz4g7JpXzJTT6ydTOJajBnIkfzk78My42hSR4YPMDKKuNTvQCwxjSD492zrfaF+v9U9BMOQUx/yCy+HpRCrX+kGc195eLD7orOQQItEjlsPjaNFc3moK00c4xuqFtuZ21dU0HaRVqMyZZLY3pT2SwlEs6JJt+VII7qQn0kBXUe0z7gcB+IbUVKg8R/AX5f16uAOC3dIScfIdHR8JX4FNXqk+y17SWujgCNCGsNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=leafsoftwaresolutions.com; dmarc=pass action=none
  header.from=leafsoftwaresolutions.com; dkim=pass
@@ -31,339 +31,236 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=leafsoftwaresolutions.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jJVgyVPCCJFYoEdCsfRBRNT5mTuxJ1nZP4dgAiGsQjo=;
- b=ipIDfJx83qvAkkut1DYWf8YYdWipFesRkpE42HSq23Fa2F5oH7JOlLN68GPDBu8HVwX0sbwaW+ytxKSnx6bmN53mgRlV1gLPOGrSpi33FmKyac0iefX5HWsi3pyslD03gBzOv1B0SHhkbyjV81GNYtjjNscHcjpToo4HqUgbor4=
+ bh=yi+YJXcybxEcaPOWnoZeWxULEVXJFGDTPBLP5tjS/Ns=;
+ b=jGGWuS3ggc1acJCtP5GTz5GcXM8TBtGqLrlVDcOUtNb5JsWbyb/G99xgwwPmxQdXHWJAiFhkULL4/FH+fhqYpjf5uQLZj8Fwms+om1aN1wgtI5xsk7O5s+vYEKSAjJLadb71sXWj9z2tMDwRXlwZ94cTEa5MB7HnwV1x+UtDnJo=
 Received: from SN4PR17MB978366.namprd17.prod.outlook.com
- (2603:10b6:806:219::11) by DM4PR17MB6183.namprd17.prod.outlook.com
- (2603:10b6:8:8d::8) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:806:219::11) by LV8PR17MB7308.namprd17.prod.outlook.com
+ (2603:10b6:408:265::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.13; Mon, 9 Nov
- 2026 15:21:49 +0000
+ 2026 15:26:44 +0000
 Received: from SN4PR17MB978366.namprd17.prod.outlook.com
  ([fe80::c85b:546a:19a8:621d]) by SN4PR17MB978366.namprd17.prod.outlook.com
  ([fe80::c85b:546a:19a8:621d%4]) with mapi id 15.21.0592.010; Mon, 9 Nov 2026
- 15:21:49 +0000
+ 15:26:42 +0000
 From: Phil Cahoon <pcahoon@leafsoftwaresolutions.com>
-To: Jon Turney <jon.turney@dronecode.org.uk>
-CC: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH RESEND] Cygwin: serialize user shared initialization with
- a named mutex
-Thread-Topic: [PATCH RESEND] Cygwin: serialize user shared initialization with
- a named mutex
-Thread-Index: Ad1dYv2LFHGJuBsiRYyn0xV1rCbJagSPM0EAAC9g/TQ=
-Date: Mon, 9 Nov 2026 15:21:49 +0000
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH v2] Cygwin: serialize user shared initialization with a named
+ mutex
+Thread-Topic: [PATCH v2] Cygwin: serialize user shared initialization with a
+ named mutex
+Thread-Index: AQHdcF4ul0or4RgpaUO9LgZ8EwyMFw==
+Date: Mon, 9 Nov 2026 15:26:42 +0000
 Message-ID:
- <SN4PR17MB97836679EE6035DBD067169FAFAA732@SN4PR17MB978366.namprd17.prod.outlook.com>
-References:
- <CO1PR17MB5321BE63472EAC7A500BCCA0AA9B2@CO1PR17MB5321.namprd17.prod.outlook.com>
- <f5b464c0-09dc-41c8-a0a2-c85588a645e0@dronecode.org.uk>
-In-Reply-To: <f5b464c0-09dc-41c8-a0a2-c85588a645e0@dronecode.org.uk>
+ <SN4PR17MB978366796DAB0A94E35FFF3538AA732@SN4PR17MB978366.namprd17.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach:
+X-MS-Has-Attach: yes
 X-MS-TNEF-Correlator:
 x-ai-generated: mcp-office365
 authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=leafsoftwaresolutions.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN4PR17MB978366:EE_|DM4PR17MB6183:EE_
-x-ms-office365-filtering-correlation-id: f5d2cfc6-ad43-4d23-278c-08df3e752d0d
+x-ms-traffictypediagnostic: SN4PR17MB978366:EE_|LV8PR17MB7308:EE_
+x-ms-office365-filtering-correlation-id: 92e1baa5-3ac7-4d2e-0215-08df3e75dbb9
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|10070799003|23010399003|376014|366016|1800799024|38070700021|5023799004|4143699003|56012099006|261021121427099003|261021123027099003|261021135927099003|261022105027099003|261022075727099003|261022115727099003|261009220027099003|261009221227099003|261009223027099003|261009221727099003|261009223327099003|261026121527099003|261026140227099003|261028144727099003|261102123227099003|10067099003|18002099003|22082099003|6133799003|8096899003;
+ BCL:0;ARA:13230040|23010399003|376014|6049299003|10070799003|366016|1800799024|38070700021|56012099006|261022115727099003|261022105027099003|261026140227099003|261028144727099003|10067099003|18002099003|4053099003;
 x-microsoft-antispam-message-info:
- bBdNTxE4Egx7rn2Saa0EAVRoJyB3fpw55auU9BeurBlJSGKGmWHL6DdiFqixFxcncLAKcSGCgdkozzyDlXYd96jWXFSk8Pk8jdzqIuMimu3t9w1TdjmabiShS82gUAW9mAlCIvClpXcv5OehewJLqqF5dhnbziZT39K6HigZaQSC+wWjda9ZaEJFyRg8CiTnAnHcz5Z+VbliSNxY3OwiY5afPgjoMOgXdlOq9Ra57+fJVByKOIg+99+ILKPQK3mnKjxbzXjQcGC+POhADunGOdoNpNnsChxg2VQaH54y/S63JxJIOdfd5aF3IT0gFlEOqkopxoORpGzxH852Z3vIAHC6n3PP7ktjNryv85RoaL8kUNkXX1uKx0YqL82wEBl3YDdlWaNMIvpZ4EK/1iZbpCqErt5ez/VufEhSa1dTV72u5frGdfCBqE9Th9hW0dQIHzvublaAOpEMxyjuGPMSeeOh6V7DROVFQlvZUHLLPpwG720JSg5vrz2B6EAZVmUyUKL/IfurnntxiW0REgnU4/rpCbrJaXCIZWYfUsiMBpZz/A9j1mATPVuwK1C2TkkDTFAgBOfTcnysLkIf3TvFDWbN1qWDTwFkiG/KAaoW2VqfVEF3bi6KZEoAfX2wkynf+YnCAWUnWDNVRiDPPmyJAG2W6hXaAlqfK4Kb60Dy5+A=
+ sFZXDuuEUjS0XEuC1DLKy1teObzN98T1t+njIBalNewQH6OreE+YKPZ4+iUu2nnUPnD52Dxahlv70bhKwhtW7URWDW5v9nDwEs4kktaFI2fKkIBM9xXLMe4Ic7uLvo4zd9+bVFc8sISHsUpWavgTTLMijFZHBRym/v1ExMKfLmt3Nid9JuGu62YdhUC+E249RPEBPrX65UN6BUCpfYMXkE6l1HxGoq3LjDBJylv6nO30l6nX+iIv2MTf0pXfRprTRfCaA8IAjgV2nSZXWuvNf7Q4Xjx6vIkosk5BstHGNoz6nKf5LN+NleahT2yuZEUF/t/kOQNLm1zUupKq7jMv0mLY/s/zMUD5IdEutC8bTAH/RmEIWzNtWWa+MXAe5HgYmqcRCvBabHJrbRl5TTn2wDug1Ng00YV4PpAtR2V71svMcoBKy/b98DySHuoLKHMktA5mNwjscMMFJwrSVmIsaCg9EfMaccWGspg4aaWenDEcQvhcF2+kcB1Skv1YizB21dgEY2SUgiTklQgIvz4JCsnq0sYT20mkhCUMlusqGAbmGXMgecSSltpL4dSv72HvzvlL5UBBNZnf8oltjgXHkWy0tZ6MR/2JAu9Rs3h+hbjjJyztsxjKp6Lp0olUIH+0PJMLKNtwuCDf5daOyTxSrkWiVpdT8MqfHR90VStt+YubFnx0DTjiX0tC5sc+xY0H1sj5FK1ktxi9QPzQJxhYB+1LGgD3o8oGIbRnvjhsIeE=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR17MB978366.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(23010399003)(376014)(366016)(1800799024)(38070700021)(5023799004)(4143699003)(56012099006)(261021121427099003)(261021123027099003)(261021135927099003)(261022105027099003)(261022075727099003)(261022115727099003)(261009220027099003)(261009221227099003)(261009223027099003)(261009221727099003)(261009223327099003)(261026121527099003)(261026140227099003)(261028144727099003)(261102123227099003)(10067099003)(18002099003)(22082099003)(6133799003)(8096899003);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR17MB978366.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(6049299003)(10070799003)(366016)(1800799024)(38070700021)(56012099006)(261022115727099003)(261022105027099003)(261026140227099003)(261028144727099003)(10067099003)(18002099003)(4053099003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 2
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?yGIqcxo1Wc2HNRnUq4Ba52QqvaTfqunGqKmEMbJMZ66xSTMd6SVzDGK3c1X7?=
- =?us-ascii?Q?gBUibs+k9AUQAekFqGObbkpx4Vcz1igExIqxcWf6gRxKMmvm5gUf6ix8Bsv7?=
- =?us-ascii?Q?M8RWjX+CDTri02NMHG36BiQEw+L5wrYbLyJ3QKd+XReVj0Wj/Hwy/ZJKtZ/Z?=
- =?us-ascii?Q?grupDaiQlIjz5oPsF2zaxt8AncxHLmNCdSGPscO1KVvAStKjtjYDq4sSXn90?=
- =?us-ascii?Q?0zO3kh8uoQCO7DwnBz5YK3+h/bL4t60zM5KozoTWHB42RuWVUumBfPYo+YAF?=
- =?us-ascii?Q?HK27J6RjV5R2a2M0V7RKm5/UN/8fAdhGszAZATQAs1WActU8Q/MALttdyH8A?=
- =?us-ascii?Q?G2m2P5CEwrbOfWPwMQRuHqf/QbzHs5euDEUsGiR94qg3zFOkVPQ4X6K0I/md?=
- =?us-ascii?Q?7/+kmXe7C+8maXRPK8t1Z9ekKYIaHRJx/MSQhBzWdRdiN76GSNCagO8SYyXO?=
- =?us-ascii?Q?R4QPZ9OEIRU4GvBEVv+Uwc2aQ7P8oWtCuNSifR5MMTxPj5lrvC3XKt254Jp4?=
- =?us-ascii?Q?DfmcabpJgy2UHvOHPdhH9Iw+jFzP+fqfjpbnje0l/NiqZv1uUtv2IUTj1JEq?=
- =?us-ascii?Q?YlkB+0RyuUZDtVPV3jQZvNLkihWNGYIV+S7dMbSyRO90rByEa03nEra7rUBx?=
- =?us-ascii?Q?PnYYBvBnMJAzlnKy88cG54bY3B7k1zj45C6O1jQN2ydPiWXrGjVzQXyanc9f?=
- =?us-ascii?Q?Q77xkJ340zmRswoxq/B8ai9/OuKlufhLZ+E+HLRqiwyeqprFyLhT4RK7yi/j?=
- =?us-ascii?Q?RmAh2cpkpbdc0xwjge7rRuClS2ioIOx8QsCuYorLwBSba+YjYI/N7nGKySAs?=
- =?us-ascii?Q?t7y+cNDrdt3b9MUFVcBCKS7aaYiQzdW+P96By0vmeusjqxWDs520qyXYgDwZ?=
- =?us-ascii?Q?gHSJmNMuTql8nTNEeen8+grtyKWsdatd3mgoTq6PwwCnsBirooD9sEfqgsyN?=
- =?us-ascii?Q?Svk+qDkkQjHnQGUIqNlpFfmR1mHSJGS4obu5TyT2J7NAlNzbrPcCj9vi2OlI?=
- =?us-ascii?Q?6ijAMja+Y8pK5FP5spOV1jC9s5iDfaTwbpf0+NUZ26ENhwcFXV1vFRt/vu4J?=
- =?us-ascii?Q?zpQrZC4KDIsT65Xcxp0ph/OBTD+qX9WxTOE7UxHB/xLsm+7z9C8wavK7Lqty?=
- =?us-ascii?Q?0zIQUm+/yxerZf0BX83AhO52sf74B+YfVlIzO0k1dmsz3dqi2uRtvdSttESY?=
- =?us-ascii?Q?ZCKZR2lK7MFzkoZPGi+xj3ZI07lX/rZFZyR5cuXnifblLaW5SVbqDUPN2ypZ?=
- =?us-ascii?Q?HkingFVsdiJjVDiEsjwN+TQJHxOkDxRLorrpNylh8XHji5LPywNp/fHkvbyx?=
- =?us-ascii?Q?oMQAPJVyZeIdkeMlzkLiLwfcOeL6h//coYWkrqnVZ2m7hHDPnjFpcUCYoR5Y?=
- =?us-ascii?Q?rWX83QR15UlW97MEgz21NYVtKZSFZIGAQfUZklU/14lh2IqmOcSuCDx82Au+?=
- =?us-ascii?Q?W6xl5VWRGn7OTjh6Ye5PXr1Mx5y+nk1lCPoXBIwiZ0Tl2vxHjJpO1x42j2Gl?=
- =?us-ascii?Q?4NSRVeYsibNR60l3EXuKh7TEKCTjHwc7DBjwEsXSOeduAhBioIKZswGXtbas?=
- =?us-ascii?Q?wSmbAzbAt+jUJBC4I+LBzNWx4hX7LhlCzz8rt/8VDtCdIv4yyIP3YUtmufe9?=
- =?us-ascii?Q?VjCBvXr6g0Fmo6+6IegM2CMH0GRZkKBNJQT5kp21svaDRultJMwd4z6f8AtH?=
- =?us-ascii?Q?H40ctSRVUasyRM3KjlC8kMHPzYpQZbfjcIhRtyj+h1QWVYvyOKvp0wVQeyvY?=
- =?us-ascii?Q?CYg7QunlI/gCA2Q0uZeCLM93D6Kc5M4kwZQ4NBbW2SnXzWiNysKoTq0OHj61?=
-x-ms-exchange-antispam-messagedata-1: EWHVchBZJ1JZWrK8VOShMHFNQAkGI9Z+jrM=
-Content-Type: multipart/alternative;
-	boundary="_000_SN4PR17MB97836679EE6035DBD067169FAFAA732SN4PR17MB978366_"
+ =?us-ascii?Q?Bo3pLN5MFai8hDqcsHyavjCgiC2OJVvG462od4P4+Fdn4jREhcMMrZZXs8wt?=
+ =?us-ascii?Q?4Ykwr4okQRDg6yIViyiNjMTDBmkOPzgyH2iIXzF0cTpLoOu8CRpw1ywlweT3?=
+ =?us-ascii?Q?2hynr1wBqDwGDZ0wq7Zu+MU5DopCH4iIqhbwCFgyqgDni6Qbp8o7C0fQSUsj?=
+ =?us-ascii?Q?UafraCebkxQ0St88ZthtrbNUbnrim+fpV0g1lTCp7WS4ziXTDFvnaIV2iFFb?=
+ =?us-ascii?Q?XCqwMr8biEB5BQ4fKIFo12lkLlbFOvD4g1E7xIcFQ1MvOvzebeUBHo8nxzjg?=
+ =?us-ascii?Q?fy5lIpHD6JWtwr9npv3P8Z8zEz15TmJ4QqI5Fw687JEO2zmBkNtRxv2/FOQF?=
+ =?us-ascii?Q?8w5WORWJU9nfw6mjmCWwqteCuFH+lii4Hg8XtzkByueQfBWgC5OlbizK9o3v?=
+ =?us-ascii?Q?kdA9AxfyA2dZ4soETpMmVI12jqmQxk3uInk6DCTfLWO+pJD9t6Gwfs49IGM+?=
+ =?us-ascii?Q?fd82kXM5lKjMYXTFvjj+X+ecaSyg2v1oOiwT+haGhpmMxjTAIz6bFpZCm1sl?=
+ =?us-ascii?Q?scUaCOVqzZ4q/xqk6XHKSZ2cBsK0CP3Zllz0bMcAQ7HRj/5Ilt//RtHf68LU?=
+ =?us-ascii?Q?YJ+nJgOkQXK0z+71FVsRzxWp9Qr8BsAZq85V/RBHh2rspt9KsxyFGkJQFJDj?=
+ =?us-ascii?Q?DYFplD4UUdW8/8+CmbKCXHvnFbZLvmi/4umf/Mg3SXp3gZQdjRjQzmInq8VU?=
+ =?us-ascii?Q?/NjpNcwFRlJijW7DUAWyJxZlw2nnH3bE+5EqbEVbxZYKsb8Z68nQP2t+vbc6?=
+ =?us-ascii?Q?VwXjf9O344FcKWm76AULW9m4vrR6Vbm50e1hSL1yWVffYV/Yt2t/7CmVoGUf?=
+ =?us-ascii?Q?PpMGQJ/EkbRYkDjAuJaKrUzQBkw025lv8f0fXwBsFfgZTxGwQMeKrQVcw3pr?=
+ =?us-ascii?Q?q1qpR3qvh53e2yb9R76kHPBOBFlDj6ocZga78/gA4E7tr0bTUHdh1cIXWx+6?=
+ =?us-ascii?Q?GcXOgvUTfGy/Yw3Nb8vrMmWShWiw82HfJgSvC2kMZHPkqydDxKLqCpL62AV9?=
+ =?us-ascii?Q?lhPIyYKYbeRr54j1WYJb6MmRt2N6sxB3907Pebf2Vn4VJz0+q8DGBjoAAYs3?=
+ =?us-ascii?Q?wN1ynCLGwt2mIkc3D+ZoplgQImDrJQSM+ga9r5H2ByAH2K76rsOuJ4bhVCny?=
+ =?us-ascii?Q?PUgk2Ibfu6PRRVE/tn7IeZT/tlnIio2xUOL+mz2rFE9YH+xWEI+c2b2JgUu/?=
+ =?us-ascii?Q?1Szk2yxDWNsbMRyFeh4534507/oq7G1fJS3pm+dXCxlo/rKDFnkoYsRlqQfp?=
+ =?us-ascii?Q?2C6Nta33A/Xw9h5XR0IcRzheaZLRR9bZAIYobF/2ZABeo1hwQAN6WNhPe8rb?=
+ =?us-ascii?Q?cuk6/J3+cz8pA/Wo2bJHF8QoYmA5eJtFWwUbMzk+MEFjFjsCk2MlwXjS8Ioi?=
+ =?us-ascii?Q?BxvqRc1WuT5kALWLm6un6t3JuicizOROtwH5u6QscyAoBJu+hYf/qaUvMqhR?=
+ =?us-ascii?Q?VGTY0damoONx5g5fnYxMrWxoFDkQ19N2Q6ri7hufzuKNgd3pdwEL8zuQDlNP?=
+ =?us-ascii?Q?JbbWpINSZmMPj0wyb3gW7mbhOQFn2Y5oO4PvbSqIT0A1mMde+/TRIt02lQUD?=
+ =?us-ascii?Q?7srWSaT9kU/FngbQGlkuOXC2HmegZxRmMHV8alhLZwj9UwYzhrPW9az6G9SJ?=
+ =?us-ascii?Q?T6MDKzPb+5fxduEHmA85ELT99QTk9zf7b3LUprmu2YiBiCM/Nh3HGxR4cmel?=
+ =?us-ascii?Q?DZiBWBZylbM/JyayGWC1LSmxlHMcXrTEmIPrr1GfL8qOJlN12M2qc+tjV118?=
+ =?us-ascii?Q?2tn+E6S6gEuvYH6ToNIuzjfdrtVlYRXpDU4EivVwv3rIj4gW7hv9nLG4+AK3?=
+x-ms-exchange-antispam-messagedata-1: VF6NohUTcXouQlvZE5EMogqNNKO1Nj/qO1w=
+Content-Type: multipart/mixed;
+	boundary="_002_SN4PR17MB978366796DAB0A94E35FFF3538AA732SN4PR17MB978366_"
 MIME-Version: 1.0
 X-OriginatorOrg: leafsoftwaresolutions.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN4PR17MB978366.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5d2cfc6-ad43-4d23-278c-08df3e752d0d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2026 15:21:49.7504
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92e1baa5-3ac7-4d2e-0215-08df3e75dbb9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2026 15:26:42.8042
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 925dca83-2532-40a7-9105-03cb15e44d10
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FOLTXvwPpCS7rB6m5n22xGseLM4CjIVeL2uV7EMIWzDdc1TEY6RJbu0qW5UoKw9Fvrxyv1LYbiszSwrkosSPqxf9MfI37+p2BIoG2jDoMU7H5fip2yyyawbIcnHSe9Rn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR17MB6183
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GB_MSAUTHSOURCE_NORTHAM,HTML_MESSAGE,SPF_HELO_NONE,SPF_NONE,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: 3SGWEVTvoEhJHvfKq0Wel4BxcoAWFdTvSZc47yJCS2xSs6Fqvjuj1hvUqIIbGpkm89UOzXPPBrK+iEYKuKLuQkLYlUQtfQcYLECQetrIe6F/UzRif5jKP1fkpBRv26mT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR17MB7308
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,GB_MSAUTHSOURCE_NORTHAM,GIT_PATCH_0,SPF_HELO_PASS,SPF_NONE,TVD_PH_BODY_ACCOUNTS_PRE,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_000_SN4PR17MB97836679EE6035DBD067169FAFAA732SN4PR17MB978366_
+--_002_SN4PR17MB978366796DAB0A94E35FFF3538AA732SN4PR17MB978366_
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jon,
+v2 adds the comments Jon Turney asked for in review: the ".init" suffix
+and the per-installation directory, the meaning of version 0 and -1, and
+why the magic is published with InterlockedExchange. There is no code
+change from v1.
 
-Thanks for the review. Answers inline; I'll follow up with a v2 that adds
-the comments you asked for. The code itself is unchanged.
+The patch is attached as plain text. Like the patch, this email was
+drafted by Claude and reviewed by me before sending.
 
-
-> Firstly, a statement on the licensing of the patch, as per [1], would be
-> welcome.
-
-I provide my patches to the Cygwin sources under the 2-clause BSD license.
-
-> There's probably room for some commentary here that mutex and file
-> mappings exist in the same namespace, so the '.init' suffix serves to
-> separate them.
-
-Agreed, v2 says so.
-
-> (I'm kind of surprised that the mutex name doesn't also include the
-> installation key, but it's not in the shared memory file mapping's name
-> either, maybe I'm misunderstanding how that applies here)
-
-It's in the directory rather than the name. Cygwin's own CreateMutexW and
-CreateFileMappingW wrappers in kernel32.cc open named objects relative to
-get_shared_parent_dir(), which is
-\BaseNamedObjects\<shared_id>-<installation key>. So the mutex and the
-section sit side by side in the same per-installation directory, and two
-installations never share either one. v2 mentions this in the comment.
-
-> Uh, what these special values of 0 and -1 correspond to is a mystery to
-> me.
-
-0 is a newly created section: CreateFileMapping zero-fills it, so nobody
-has initialized it yet.
-
--1 is the "initialization in progress" value the old spinlock stores in
-version while it builds the table. With this patch nothing writes -1
-any more, so it can only come from an older DLL with the same
-USER_VERSION sharing the section, e.g. processes still running during an
-upgrade, that died or is still part way through. Treating it as
-uninitialized matches what the spinlock itself did after its timeout.
-Any other value that isn't CURR_USER_MAGIC is a different Cygwin's
-section, which still goes to multiple_cygwin_problem. v2 adds a comment
-covering both.
-
-> Reason for using InterlockedExchange here?
-
-Processes that find the section already initialized take the fast path
-and read version without the mutex. The InterlockedExchange is a full
-barrier, so none of the stores that build the mount table can become
-visible after the magic does, from either compiler or CPU reordering.
-It's the same publish the spinlock's done() used. ReleaseMutex would
-also be a barrier, but it comes after the store, and the fast-path
-readers never call it, so it doesn't help them. v2 adds a comment.
-
-Thanks,
 Phil
 
+--_002_SN4PR17MB978366796DAB0A94E35FFF3538AA732SN4PR17MB978366_
+Content-Type: text/plain;
+	name="v2-0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt"
+Content-Description:
+ v2-0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt
+Content-Disposition: attachment;
+	filename="v2-0001-Cygwin-serialize-user-shared-initialization-with-a-named-mutex.patch.txt";
+	size=6558; creation-date="Mon, 09 Nov 2026 15:24:58 GMT";
+	modification-date="Mon, 09 Nov 2026 15:26:42 GMT"
+Content-Transfer-Encoding: base64
 
-________________________________________
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Sent: Sunday, 08 November 2026 11:39:58
-Cc: cygwin-patches@cygwin.com; Phil Cahoon
-Subject: Re: [PATCH RESEND] Cygwin: serialize user shared initialization wi=
-th a named mutex
+RnJvbSAxZjM0MzNmYTkzZTQ1OTJiNTVlNzg3MjQ3ZjJjZDBlYmY2Mzg3Yjc3IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBQaGlsIENhaG9vbiA8cGNhaG9vbkBsZWFmc29mdHdhcmVzb2x1
+dGlvbnMuY29tPgpEYXRlOiBUaHUsIDE1IE9jdCAyMDI2IDA4OjQ1OjIwIC0wNDAwClN1YmplY3Q6
+IFtQQVRDSCB2Ml0gQ3lnd2luOiBzZXJpYWxpemUgdXNlciBzaGFyZWQgaW5pdGlhbGl6YXRpb24g
+d2l0aCBhIG5hbWVkCiBtdXRleAoKdXNlcl9pbmZvOjppbml0aWFsaXplIGd1YXJkcyB0aGUgYnVp
+bGQgb2YgdGhlIHBlci11c2VyIG1vdW50IHRhYmxlIHdpdGgKYSBzcGlubG9jayB0aGF0IGdpdmVz
+IHVwIGFmdGVyIDE1IHNlY29uZHMgYW5kIGxldHMgdGhlIHdhaXRlciBpbml0aWFsaXplCmFueXdh
+eS4gIFRoZSB3YWl0ZXIgY2Fubm90IHRlbGwgYSBzbG93IGluaXRpYWxpemVyIChhIHNsb3cgYWNj
+b3VudApsb29rdXAsIGEgc3VzcGVuZGVkIG9yIHN0YXJ2ZWQgcHJvY2VzcykgZnJvbSBvbmUgdGhh
+dCBkaWVkIHBhcnQgd2F5CnRocm91Z2guICBJbiBib3RoIGNhc2VzIGl0IHJlLXJ1bnMgbW91bnRf
+aW5mbzo6aW5pdCBvbiBhIHRhYmxlIHRoYXQKYWxyZWFkeSBob2xkcyAiLyIsIGNyZWF0ZV9yb290
+X2VudHJ5IGZhaWxzIHdpdGggRVBFUk0sIGFuZCB0aGUgcHJvY2VzcwpkaWVzIHdpdGgKCiAgYWRk
+X2l0ZW0gKCJcPz9cQzpcY3lnd2luNjQiLCAiLyIsIC4uLikgZmFpbGVkLCBlcnJubyAxCgpUaGUg
+dGltZWQtb3V0IHdhaXRlciBuZXZlciByZXNldHMgdGhlIGxvY2ssIHNvIHdoaWxlIG90aGVyIHBy
+b2Nlc3NlcwprZWVwIHRoZSBzZWN0aW9uIG1hcHBlZCwgZXZlcnkgbmV3IHByb2Nlc3Mgd2FpdHMg
+MTUgc2Vjb25kcyBhbmQgZGllcyB0aGUKc2FtZSB3YXkuICBUb29scyB0aGF0IHN0YXJ0IGEgc2hl
+bGwgZXZlcnkgc2Vjb25kIGtlZXAgdGhlIHNlY3Rpb24gbWFwcGVkCmluZGVmaW5pdGVseS4KClVz
+ZSBhIG5hbWVkIG11dGV4IG5leHQgdG8gdGhlIHNlY3Rpb24gaW5zdGVhZC4gIEEgbGl2ZSBpbml0
+aWFsaXplciBpcwpzaW1wbHkgd2FpdGVkIGZvciwgc28gdGhlIHRhYmxlIGlzIG5ldmVyIGJ1aWx0
+IHR3aWNlLiAgQW4gaW5pdGlhbGl6ZXIKdGhhdCBkaWVkIGlzIHJlcG9ydGVkIGFzIFdBSVRfQUJB
+TkRPTkVELCBhbmQgdGhlIHdhaXRlciBjbGVhcnMgdGhlCmhhbGYtYnVpbHQgc2VjdGlvbiBhbmQg
+cmVidWlsZHMgaXQuICBBbHJlYWR5IGluaXRpYWxpemVkIHNlY3Rpb25zIHN0aWxsCnRha2UgdGhl
+IGxvY2stZnJlZSBmYXN0IHBhdGguCgpUaGlzIHBhdGNoIHdhcyB3cml0dGVuIGJ5IENsYXVkZSBP
+cHVzIDUuNSAoQW50aHJvcGljKSB1c2luZyBDbGF1ZGUKQ29kZSwgYXQgdGhlIHN1Ym1pdHRlcidz
+IGRpcmVjdGlvbi4KCkFkZHJlc3NlczogaHR0cHM6Ly9naXRodWIuY29tL2dpdC1mb3Itd2luZG93
+cy9naXQvaXNzdWVzLzYzNjgKU2lnbmVkLW9mZi1ieTogUGhpbCBDYWhvb24gPHBjYWhvb25AbGVh
+ZnNvZnR3YXJlc29sdXRpb25zLmNvbT4KLS0tCnYyOiBjb21tZW50cyBvbmx5LCBhbnN3ZXJpbmcg
+Sm9uIFR1cm5leSdzIHJldmlldzogdGhlICIuaW5pdCIgc3VmZml4IGFuZAogICAgdGhlIHBlci1p
+bnN0YWxsYXRpb24gZGlyZWN0b3J5LCB0aGUgbWVhbmluZyBvZiB2ZXJzaW9uIDAgYW5kIC0xLCBh
+bmQKICAgIHdoeSB0aGUgbWFnaWMgaXMgcHVibGlzaGVkIHdpdGggSW50ZXJsb2NrZWRFeGNoYW5n
+ZS4gIE5vIGNvZGUgY2hhbmdlLgoKIHdpbnN1cC9jeWd3aW4vbW0vc2hhcmVkLmNjIHwgOTIgKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA3MCBp
+bnNlcnRpb25zKCspLCAyMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2lu
+L21tL3NoYXJlZC5jYyBiL3dpbnN1cC9jeWd3aW4vbW0vc2hhcmVkLmNjCmluZGV4IDc5NzdkZjMu
+LjM2MDgyODMgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vbW0vc2hhcmVkLmNjCisrKyBiL3dp
+bnN1cC9jeWd3aW4vbW0vc2hhcmVkLmNjCkBAIC0xOTAsMzAgKzE5MCw3OCBAQCBvcGVuX3NoYXJl
+ZCAoY29uc3QgV0NIQVIgKm5hbWUsIGludCBuLCBIQU5ETEUmIHNoYXJlZF9oLCBEV09SRCBzaXpl
+LAogdm9pZAogdXNlcl9pbmZvOjppbml0aWFsaXplICgpCiB7Ci0gIC8qIFdhaXQgZm9yIGluaXRp
+YWxpemF0aW9uIG9mIHRoZSBDeWd3aW4gcGVyLXVzZXIgc2hhcmVkLCBpZiBuZWNlc3NhcnkgKi8K
+LSAgc3BpbmxvY2sgc3ZlcnNpb24gKHZlcnNpb24sIENVUlJfVVNFUl9NQUdJQyk7Ci0gIGlmICgh
+c3ZlcnNpb24pCisgIC8qIHZlcnNpb24gaXMgb25seSBzZXQgdG8gQ1VSUl9VU0VSX01BR0lDIGFm
+dGVyIHRoZSBzZWN0aW9uIGlzIGZ1bGx5CisgICAgIGJ1aWx0LCBzbyBhbiBpbml0aWFsaXplZCBz
+ZWN0aW9uIGNhbiBza2lwIHRoZSBtdXRleC4gKi8KKyAgaWYgKChVTE9ORykgdmVyc2lvbiAhPSBD
+VVJSX1VTRVJfTUFHSUMpCiAgICAgewotICAgICAgY2IgPSBzaXplb2YgKCp1c2VyX3NoYXJlZCk7
+Ci0gICAgICAvKiBJbml0aWFsaXplIG1vdW50IHRhYmxlIGZyb20gc3lzdGVtIGZzdGFiIHByaW9y
+IHRvIGNhbGxpbmcKLSAgICAgICAgIGludGVybmFsX2dldHB3c2lkLiAgVGhpcyBhbGxvd3MgdG8g
+Y29udmVydCBwd19kaXIgYW5kIHB3X3NoZWxsCi0JIHBhdGhzIGdpdmVuIGluIERPUyBub3RhdGlv
+biB0byB2YWxpZCBQT1NJWCBwYXRocy4gICovCi0gICAgICBtb3VudGluZm8uaW5pdCAoZmFsc2Up
+OwotICAgICAgY3lncHNpZCBzaWQgKGN5Z2hlYXAtPnVzZXIuc2lkICgpKTsKLSAgICAgIHN0cnVj
+dCBwYXNzd2QgKnB3ID0gaW50ZXJuYWxfZ2V0cHdzaWQgKHNpZCk7Ci0gICAgICAvKiBDb3JyZWN0
+IHRoZSB1c2VyIG5hbWUgd2l0aCB3aGF0J3MgZGVmaW5lZCBpbiAvZXRjL3Bhc3N3ZCBiZWZvcmUK
+LQkgbG9hZGluZyB0aGUgdXNlciBmc3RhYiBmaWxlLiAqLwotICAgICAgaWYgKHB3KQotCWN5Z2hl
+YXAtPnVzZXIuc2V0X25hbWUgKHB3LT5wd19uYW1lKTsKLSAgICAgIC8qIEFmdGVyIGZldGNoaW5n
+IHRoZSB1c2VyIGluZm9zLCBhZGQgbW91bnQgZW50cmllcyBmcm9tIHVzZXIncyBmc3RhYi4gKi8K
+LSAgICAgIG1vdW50aW5mby5pbml0ICh0cnVlKTsKKyAgICAgIFdDSEFSIG5hbWVbVU5MRU4gKyAx
+XTsKKyAgICAgIFdDSEFSIG11dGV4X25hbWVbVU5MRU4gKyAzMl07CisgICAgICBjeWdoZWFwLT51
+c2VyLmdldF93aW5kb3dzX2lkIChuYW1lKTsKKyAgICAgIC8qIE11dGV4ZXMgYW5kIGZpbGUgbWFw
+cGluZ3Mgc2hhcmUgb25lIG9iamVjdCBuYW1lc3BhY2UsIHNvIHRoZQorCSAiLmluaXQiIHN1ZmZp
+eCBrZWVwcyB0aGlzIG5hbWUgYXBhcnQgZnJvbSB0aGUgc2VjdGlvbidzIG93bgorCSAiPFNJRD4u
+PFVTRVJfVkVSU0lPTj4iLiAgT3VyIENyZWF0ZU11dGV4VyB3cmFwcGVyIGNyZWF0ZXMgaXQgaW4K
+KwkgdGhlIHNhbWUgcGVyLWluc3RhbGxhdGlvbiBkaXJlY3RvcnkgYXMgdGhlIHNlY3Rpb24gKHNl
+ZQorCSBnZXRfc2hhcmVkX3BhcmVudF9kaXIpLCBzbyBpdCBuZWVkcyBubyBpbnN0YWxsYXRpb24g
+a2V5IGVpdGhlci4gKi8KKyAgICAgIF9fc21hbGxfc3dwcmludGYgKG11dGV4X25hbWUsIEwiJVcu
+JWQuaW5pdCIsIG5hbWUsIFVTRVJfVkVSU0lPTik7CisgICAgICBIQU5ETEUgaW5pdF9tdXRleCA9
+IENyZWF0ZU11dGV4VyAoJnNlY19ub25lX25paCwgRkFMU0UsIG11dGV4X25hbWUpOworICAgICAg
+aWYgKCFpbml0X211dGV4KQorCWFwaV9mYXRhbCAoIkNyZWF0ZU11dGV4ICVXLCAlRS4gIFRlcm1p
+bmF0aW5nLiIsIG11dGV4X25hbWUpOworICAgICAgRFdPUkQgd2FpdCA9IFdhaXRGb3JTaW5nbGVP
+YmplY3QgKGluaXRfbXV0ZXgsIElORklOSVRFKTsKKyAgICAgIGlmICh3YWl0ICE9IFdBSVRfT0JK
+RUNUXzAgJiYgd2FpdCAhPSBXQUlUX0FCQU5ET05FRCkKKwlhcGlfZmF0YWwgKCJXYWl0Rm9yU2lu
+Z2xlT2JqZWN0ICVXIHJldHVybmVkICV1LCAlRS4gIFRlcm1pbmF0aW5nLiIsCisJCSAgIG11dGV4
+X25hbWUsIHdhaXQpOworCisgICAgICBpZiAoKFVMT05HKSB2ZXJzaW9uID09IENVUlJfVVNFUl9N
+QUdJQykKKwkvKiBJbml0aWFsaXplZCB3aGlsZSB3ZSB3YWl0ZWQuICovOworICAgICAgLyogMCBp
+cyBhIGZyZXNobHkgY3JlYXRlZCBzZWN0aW9uLCB3aGljaCB0aGUgc3lzdGVtIHplcm8tZmlsbHMu
+ICAtMQorCSBpcyB0aGUgImluaXRpYWxpemF0aW9uIGluIHByb2dyZXNzIiBtYXJrZXIgdGhlIHNw
+aW5sb2NrIHVzZWQgYmVmb3JlCisJIHRoaXMgY2hhbmdlOyBpdCBjYW4gb25seSBiZSBsZWZ0IGJ5
+IGFuIG9sZGVyIERMTCBzaGFyaW5nIHRoaXMKKwkgc2VjdGlvbiwgd2hpY2ggZGllZCBvciBpcyBz
+dGlsbCBydW5uaW5nLCBhbmQgdGhlIHNwaW5sb2NrIHdvdWxkCisJIGhhdmUgcmVidWlsdCB0aGUg
+dGFibGUgYWZ0ZXIgaXRzIHRpbWVvdXQgdG9vLiAgQW55IG90aGVyIHZhbHVlIGlzCisJIGEgZGlm
+ZmVyZW50IEN5Z3dpbidzIHNlY3Rpb24uICovCisgICAgICBlbHNlIGlmICh2ZXJzaW9uID09IDAg
+fHwgdmVyc2lvbiA9PSAtMSB8fCB3YWl0ID09IFdBSVRfQUJBTkRPTkVEKQorCXsKKwkgIC8qIEFu
+IGFiYW5kb25lZCBtdXRleCBtZWFucyB0aGUgcHJldmlvdXMgaW5pdGlhbGl6ZXIgZGllZCBwYXJ0
+IHdheQorCSAgICAgdGhyb3VnaC4gIERpc2NhcmQgd2hhdCBpdCBsZWZ0IGFuZCBzdGFydCBvdmVy
+LiAqLworCSAgaWYgKHdhaXQgPT0gV0FJVF9BQkFORE9ORUQpCisJICAgIHsKKwkgICAgICBkZWJ1
+Z19wcmludGYgKCJ1c2VyIHNoYXJlZCBpbml0aWFsaXplciBkaWVkLCByZWJ1aWxkaW5nIik7CisJ
+ICAgICAgbWVtc2V0ICgodm9pZCAqKSB0aGlzLCAwLCBzaXplb2YgKCp0aGlzKSk7CisJICAgIH0K
+KwkgIGNiID0gc2l6ZW9mICgqdXNlcl9zaGFyZWQpOworCSAgLyogSW5pdGlhbGl6ZSBtb3VudCB0
+YWJsZSBmcm9tIHN5c3RlbSBmc3RhYiBwcmlvciB0byBjYWxsaW5nCisJICAgICBpbnRlcm5hbF9n
+ZXRwd3NpZC4gIFRoaXMgYWxsb3dzIHRvIGNvbnZlcnQgcHdfZGlyIGFuZCBwd19zaGVsbAorCSAg
+ICAgcGF0aHMgZ2l2ZW4gaW4gRE9TIG5vdGF0aW9uIHRvIHZhbGlkIFBPU0lYIHBhdGhzLiAgKi8K
+KwkgIG1vdW50aW5mby5pbml0IChmYWxzZSk7CisJICBjeWdwc2lkIHNpZCAoY3lnaGVhcC0+dXNl
+ci5zaWQgKCkpOworCSAgc3RydWN0IHBhc3N3ZCAqcHcgPSBpbnRlcm5hbF9nZXRwd3NpZCAoc2lk
+KTsKKwkgIC8qIENvcnJlY3QgdGhlIHVzZXIgbmFtZSB3aXRoIHdoYXQncyBkZWZpbmVkIGluIC9l
+dGMvcGFzc3dkIGJlZm9yZQorCSAgICAgbG9hZGluZyB0aGUgdXNlciBmc3RhYiBmaWxlLiAqLwor
+CSAgaWYgKHB3KQorCSAgICBjeWdoZWFwLT51c2VyLnNldF9uYW1lIChwdy0+cHdfbmFtZSk7CisJ
+ICAvKiBBZnRlciBmZXRjaGluZyB0aGUgdXNlciBpbmZvcywgYWRkIG1vdW50IGVudHJpZXMgZnJv
+bSB1c2VyJ3MKKwkgICAgIGZzdGFiLiAqLworCSAgbW91bnRpbmZvLmluaXQgKHRydWUpOworCSAg
+LyogUmVhZGVycyBvbiB0aGUgZmFzdCBwYXRoIGFib3ZlIGRvbid0IHRha2UgdGhlIG11dGV4LCBz
+byBwdWJsaXNoCisJICAgICB0aGUgbWFnaWMgd2l0aCBhIGZ1bGwgYmFycmllcjogbm8gd3JpdGUg
+dG8gdGhlIHRhYmxlIG1heSBiZWNvbWUKKwkgICAgIHZpc2libGUgYWZ0ZXIgaXQsIHdoYXRldmVy
+IHRoZSBjb21waWxlciBvciBDUFUgcmVvcmRlcnMuICovCisJICBJbnRlcmxvY2tlZEV4Y2hhbmdl
+ICgmdmVyc2lvbiwgKExPTkcpIENVUlJfVVNFUl9NQUdJQyk7CisJfQorICAgICAgZWxzZQorCXsK
+KwkgIExPTkcgZm91bmQgPSB2ZXJzaW9uOworCSAgUmVsZWFzZU11dGV4IChpbml0X211dGV4KTsK
+KwkgIENsb3NlSGFuZGxlIChpbml0X211dGV4KTsKKwkgIG11bHRpcGxlX2N5Z3dpbl9wcm9ibGVt
+ICgidXNlciBzaGFyZWQgbWVtb3J5IHZlcnNpb24iLCBmb3VuZCwKKwkJCQkgICBDVVJSX1VTRVJf
+TUFHSUMpOworCSAgcmV0dXJuOworCX0KKyAgICAgIFJlbGVhc2VNdXRleCAoaW5pdF9tdXRleCk7
+CisgICAgICBDbG9zZUhhbmRsZSAoaW5pdF9tdXRleCk7CiAgICAgfQotICBlbHNlIGlmIChzdmVy
+c2lvbiAhPSBDVVJSX1VTRVJfTUFHSUMpCi0gICAgc3ZlcnNpb24ubXVsdGlwbGVfY3lnd2luX3By
+b2JsZW0gKCJ1c2VyIHNoYXJlZCBtZW1vcnkgdmVyc2lvbiIsIHZlcnNpb24sCi0JCQkJICAgICAg
+c3ZlcnNpb24pOwotICBlbHNlIGlmICh1c2VyX3NoYXJlZC0+Y2IgIT0gc2l6ZW9mICgqdXNlcl9z
+aGFyZWQpKQotICAgIHN2ZXJzaW9uLm11bHRpcGxlX2N5Z3dpbl9wcm9ibGVtICgidXNlciBzaGFy
+ZWQgbWVtb3J5IHNpemUiLCBjYiwKLQkJCQkgICAgICBzaXplb2YgKCp1c2VyX3NoYXJlZCkpOwor
+ICBpZiAoY2IgIT0gc2l6ZW9mICgqdXNlcl9zaGFyZWQpKQorICAgIG11bHRpcGxlX2N5Z3dpbl9w
+cm9ibGVtICgidXNlciBzaGFyZWQgbWVtb3J5IHNpemUiLCBjYiwKKwkJCSAgICAgc2l6ZW9mICgq
+dXNlcl9zaGFyZWQpKTsKIH0KIAogLyogRmlyc3QgaGFsZiBvZiB1c2VyIHNoYXJlZCBpbml0aWFs
+aXphdGlvbjogQ3JlYXRlIHNoYXJlZCBtZW0gcmVnaW9uLiAqLwotLSAKMi41Ni4wLndpbmRvd3Mu
+NAoK
 
-[You don't often get email from jon.turney@dronecode.org.uk. Learn why this=
- is important at https://aka.ms/LearnAboutSenderIdentification ]
-
-[EXTERNAL]: Use CAUTION with links/attachments & verify sender is safe.
-
-
-On 16/10/2026 12:41, Phil Cahoon via Cygwin-patches wrote:
-> Resending because the attachment on my first post was archived as
-> binary and scrubbed. The patch is attached as plain text this time;
-> nothing in it has changed.
->
->
-> 0001-Cygwin-serialize-user-shared-initialization-with-a-named-
-> mutex.patch.txt
->
-> From 2cfe69e107a15ad2b4106bda3bebb5efe5a6ee43 Mon Sep 17 00:00:00 2001
-> From: Phil Cahoon<pcahoon@leafsoftwaresolutions.com>
-> Date: Thu, 15 Oct 2026 08:45:20 -0400
-> Subject: [PATCH] Cygwin: serialize user shared initialization with a named
-> mutex
->
-> user_info::initialize guards the build of the per-user mount table with
-> a spinlock that gives up after 15 seconds and lets the waiter initialize
-> anyway. The waiter cannot tell a slow initializer (a slow account
-> lookup, a suspended or starved process) from one that died part way
-> through. In both cases it re-runs mount_info::init on a table that
-> already holds "/", create_root_entry fails with EPERM, and the process
-> dies with
->
-> add_item ("\??\C:\cygwin64", "/", ...) failed, errno 1
->
-> The timed-out waiter never resets the lock, so while other processes
-> keep the section mapped, every new process waits 15 seconds and dies the
-> same way. Tools that start a shell every second keep the section mapped
-> indefinitely.
->
-> Use a named mutex next to the section instead. A live initializer is
-> simply waited for, so the table is never built twice. An initializer
-> that died is reported as WAIT_ABANDONED, and the waiter clears the
-> half-built section and rebuilds it. Already initialized sections still
-> take the lock-free fast path.
->
-> This patch was written by Claude Opus 5.5 (Anthropic) using Claude
-> Code, at the submitter's direction.
->
-> Addresses:https://github.com/git-for-windows/git/issues/6368
-> Signed-off-by: Phil Cahoon<pcahoon@leafsoftwaresolutions.com>
-
-Yes, this looks like a real problem, so thanks for investigating and
-producing a patch. I apologize for the delay in reviewing it.
-
-Firstly, a statement on the licensing of the patch, as per [1], would be
-welcome.
-
-[1] https://cygwin.com/contrib/dll.html#before_starting_legal
-
-This all seems reasonable, but I have a couple of small questions:
-
-> --- a/winsup/cygwin/mm/shared.cc
-> +++ b/winsup/cygwin/mm/shared.cc
-> @@ -190,30 +190,62 @@ open_shared (const WCHAR *name, int n, HANDLE& shar=
-ed_h, DWORD size,
-> void
-> user_info::initialize ()
-> {
-> - /* Wait for initialization of the Cygwin per-user shared, if necessary =
-*/
-> - spinlock sversion (version, CURR_USER_MAGIC);
-> - if (!sversion)
-> + if ((ULONG) version !=3D CURR_USER_MAGIC)
-
-Hmmm... yeah, after a bit of head scratching, this seems OK outside the
-mutex, because we've done all the initialization by the time the value
-is set.
-
-> {
-> - cb =3D sizeof (*user_shared);
-> - /* Initialize mount table from system fstab prior to calling
-> - internal_getpwsid. This allows to convert pw_dir and pw_shell
-> - paths given in DOS notation to valid POSIX paths. */
-> - mountinfo.init (false);
-> - cygpsid sid (cygheap->user.sid ());
-> - struct passwd *pw =3D internal_getpwsid (sid);
-> - /* Correct the user name with what's defined in /etc/passwd before
-> - loading the user fstab file. */
-> - if (pw)
-> - cygheap->user.set_name (pw->pw_name);
-> - /* After fetching the user infos, add mount entries from user's fstab. =
-*/
-> - mountinfo.init (true);
-> + WCHAR name[UNLEN + 1];
-> + WCHAR mutex_name[UNLEN + 32];
-> + cygheap->user.get_windows_id (name);
-> + __small_swprintf (mutex_name, L"%W.%d.init", name, USER_VERSION);
-
-There's probably room for some commentary here that mutex and file
-mappings exist in the same namespace, so the '.init' suffix serves to
-separate them.
-
-(I'm kind of surprised that the mutex name doesn't also include the
-installation key, but it's not in the shared memory file mapping's name
-either, maybe I'm misunderstanding how that applies here)
-
-> + HANDLE init_mutex =3D CreateMutexW (&sec_none_nih, FALSE, mutex_name);
-> + if (!init_mutex)
-> + api_fatal ("CreateMutex %W, %E. Terminating.", mutex_name);
-> + DWORD wait =3D WaitForSingleObject (init_mutex, INFINITE);
-> + if (wait !=3D WAIT_OBJECT_0 && wait !=3D WAIT_ABANDONED)
-> + api_fatal ("WaitForSingleObject %W returned %u, %E. Terminating.",
-> + mutex_name, wait);
-> +
-> + if ((ULONG) version =3D=3D CURR_USER_MAGIC)
-> + /* Initialized while we waited. */;
-> + else if (version =3D=3D 0 || version =3D=3D -1 || wait =3D=3D WAIT_ABAN=
-DONED)
-
-Uh, what these special values of 0 and -1 correspond to is a mystery to
-me. I dug around a bit, but couldn't immediately find anything.
-
-A comment explaining that would be nice.
-
-> + {
-> + /* An abandoned mutex means the previous initializer died part way
-> + through. Discard what it left and start over. */
-> + if (wait =3D=3D WAIT_ABANDONED)
-> + {
-> + debug_printf ("user shared initializer died, rebuilding");
-> + memset ((void *) this, 0, sizeof (*this));
-> + }
-> + cb =3D sizeof (*user_shared);
-> + /* Initialize mount table from system fstab prior to calling
-> + internal_getpwsid. This allows to convert pw_dir and pw_shell
-> + paths given in DOS notation to valid POSIX paths. */
-> + mountinfo.init (false);
-> + cygpsid sid (cygheap->user.sid ());
-> + struct passwd *pw =3D internal_getpwsid (sid);
-> + /* Correct the user name with what's defined in /etc/passwd before
-> + loading the user fstab file. */
-> + if (pw)
-> + cygheap->user.set_name (pw->pw_name);
-> + /* After fetching the user infos, add mount entries from user's
-> + fstab. */
-> + mountinfo.init (true);
-> + InterlockedExchange (&version, (LONG) CURR_USER_MAGIC);
-
-Reason for using InterlockedExchange here?
-
-> + }
-> + else
-> + {
-> + LONG found =3D version;
-> + ReleaseMutex (init_mutex);
-> + CloseHandle (init_mutex);
-> + multiple_cygwin_problem ("user shared memory version", found,
-> + CURR_USER_MAGIC);
-> + return;
-> + }
-> + ReleaseMutex (init_mutex);
-> + CloseHandle (init_mutex);
-> }
-> - else if (sversion !=3D CURR_USER_MAGIC)
-> - sversion.multiple_cygwin_problem ("user shared memory version", version,
-> - sversion);
-> - else if (user_shared->cb !=3D sizeof (*user_shared))
-> - sversion.multiple_cygwin_problem ("user shared memory size", cb,
-> - sizeof (*user_shared));
-> + if (cb !=3D sizeof (*user_shared))
-> + multiple_cygwin_problem ("user shared memory size", cb,
-> + sizeof (*user_shared));
-> }
-
---_000_SN4PR17MB97836679EE6035DBD067169FAFAA732SN4PR17MB978366_--
+--_002_SN4PR17MB978366796DAB0A94E35FFF3538AA732SN4PR17MB978366_--
