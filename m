@@ -1,255 +1,172 @@
-Return-Path: <SRS0=/hrh=JB=multicorewareinc.com=aswin.kalies@sourceware.org>
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazlp170110002.outbound.protection.outlook.com [IPv6:2a01:111:f403:c409::2])
-	by sourceware.org (Postfix) with ESMTPS id BD5C84BA2E08
-	for <cygwin-patches@cygwin.com>; Thu, 12 Nov 2026 12:49:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org BD5C84BA2E08
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=multicorewareinc.com
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=multicorewareinc.com
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org BD5C84BA2E08
-Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c409::2
-ARC-Seal: i=2; a=rsa-sha256; d=sourceware.org; s=key; t=1794487788; cv=pass;
-	b=j/xayO6gtlbLVUslo9pZ+mnKbHOTS+4C5uiHXvbApBcixJwUXDFYvqlu8g7uXulOz/sqoVXy1Wz9PWhpVpsjATnUlthJ2hmH3duB01QDbjuT1VtmSukluDNj6k9/kXEYzeP9utbERMxr15KYe+RchVy8nqLHJr4bcV085EBzXk8=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1794487788; c=relaxed/simple;
-	bh=jOEMriU3H2RZLkg44BSzNvrQj0EmgYGsvBqJ+flAZdA=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=Sq4gHh3vzRcT63paVt0oOOJdweTpzWAbtL8oe3Bc7M44TAITafhOuh2F8/MAg0ofheS5uokayGI74bWk5Lvcf8n4LwBBAxRVvFVIaZjuX6LnFcBF60tMPiy3o8IljDZIZJKeM/PfT5OTkPH3kFGnu9DyUwnLxQvsw18J5TZYquw=
-ARC-Authentication-Results: i=2; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=wTnXOCFP
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org BD5C84BA2E08
+Return-Path: <SRS0=TgIJ=JH=gmail.com=gitgitgadget@sourceware.org>
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+	by sourceware.org (Postfix) with ESMTPS id 9A5DE4BA2E22
+	for <cygwin-patches@cygwin.com>; Wed, 18 Nov 2026 10:55:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 9A5DE4BA2E22
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmail.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 9A5DE4BA2E22
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2607:f8b0:4864:20::32b
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1794999357; cv=none;
+	b=ZXxUOwzI/Ug/k+k8eEG5SkmgQljczQVyi5KdidSB5/8sJyuUCvHr0vqDOn0Y9lMG1IfTTwOOdUp6VlF6ghskW1jVtjEzsMKDz+V9VgbNIzINaD3oUmTqNZFRWNVLhI/k2BnGKv8SVhxq5kSX2KqZ7SRoCjWGWUi7371oON3TKZ0=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1794999357; c=relaxed/simple;
+	bh=kC9gOvsFuJmABEvrGYjUc+O29sGRHsSj1h+0br5nLww=;
+	h=DKIM-Signature:Message-Id:From:Date:Subject:MIME-Version:To; b=E0clgO++7lx7Do0ihgxrSZXq2jP6VEtQrSqKipHP5HDfDcXckA0vWH9mcSZpenSEv8tW9wspd3330GNIcoW07F6FZTB/F7PmRbQAB+vmdmtbg/jHTgC1tUPwPaiz7BA0wZ9cj9+OzpWZdqVKY6F/dc7eglhnPbJduvpGhYafEaQ=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n49keNKr
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 9A5DE4BA2E22
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=multicorewareinc.com header.i=@multicorewareinc.com header.a=rsa-sha256 header.s=selector1 header.b=wTnXOCFP
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cCcsishNxLapSHvRQ9TFWt5aSDJisvyLg9hl8VlPScQ3dUYFupfW6kjcqBErm0Hr/9b10WOhHlVl2w5RyHLsTEg4fp9y6+1FTM41L5pJtbr3h2wEayOxENY25UkYv7SKKF1cAL2i4bmQl2b1WjF+ZHLt6ko6CUmb84js9VzMCC2qZHSUgeoL08VI4TNyFxK5Gde8IXKS+hmFWEDIml/OIgaSArvfCdwClB8141Pv2i0BXpSqmgzYpcmyTPvTBMPjcu3mRkb8IAYrKBDNt9xMs7EERC/XhU4E3MkSGgGsEK/iNUO/PUdagbbpX4/p4T8h58IccFK5XTVNq6a3xUV3Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RN7hqkCQDI/K+YOvZo4HweogRZIDVAp+Rfn8v/R4g5U=;
- b=jK7/kvoW15XZbeHPiVROHAoz7isPUrEd9whFjcLCGuLIGQTjBlNgHD+43N4jNmOfzEHqQCefnDuK6zmUDpqEiQGyRwfScQtwfEEiVU9pGsESU/lomywSUhbYO+PsRwU4moAAilzrmwoM2eDMiev267AiYykWcF7Td0gZ6EEk5WmGHOiLjUJBAGQHn1Lf1I3bkGl+yRJFAfUVSyt+VkCzc50srWSX3c2d56sJby3bR4LB4FgqlvXC4DlrXmkA+D5tGIAq9VMYJ9GuAqrtEUbjbAAfxZ/cWEwr03LJ6ZJbKIT6XWrJJrNIYqFqHNWt6aXUiefMEmbAxA0AF6ulzhj3cA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=multicorewareinc.com; dmarc=pass action=none
- header.from=multicorewareinc.com; dkim=pass header.d=multicorewareinc.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=multicorewareinc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RN7hqkCQDI/K+YOvZo4HweogRZIDVAp+Rfn8v/R4g5U=;
- b=wTnXOCFParQ4IEhribfO6uF3KJBO4bb5Nj1Zqr68AhZb6z377xZ/mynui96kotJ6htEy3SKB71D/kYddoU46HH2/+LKjVnj4V/OPeECDjJ4nRXnyle3RzEWQj+mN96dtVRWCbsGphciEtUdaz+G4LpMn9HPyG63CYml8EV+7LjeTAW2xtLgVmlKurridMDGMl6j8mov/etVs0uGABLSKkvf1MYk9S06tBW77AnIawZHzPU9HsUK0uXkoBMsEiPgwsq6mCf3R8YBOztZ6evXGAEiv354iexjGTOP7KVAFULsISgIwNf40MaB3j08OHLBYjuLN/BsB14+5SkUjBlMlDA==
-Received: from PN0P287MB3307.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:21f::7)
- by MA5P287MB4889.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:180::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Thu, 12 Nov
- 2026 12:49:42 +0000
-Received: from PN0P287MB3307.INDP287.PROD.OUTLOOK.COM
- ([fe80::30eb:8149:91d4:c628]) by PN0P287MB3307.INDP287.PROD.OUTLOOK.COM
- ([fe80::30eb:8149:91d4:c628%7]) with mapi id 15.21.0615.009; Thu, 12 Nov 2026
- 12:49:42 +0000
-From: Aswin Kalies Ramkumar Mangayarkarasi <aswin.kalies@multicorewareinc.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-CC: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: gendef: restore incyg in x86_64 longjmp
-Thread-Topic: [PATCH] Cygwin: gendef: restore incyg in x86_64 longjmp
-Thread-Index: AQHdcqIOnsS4ODDpF0W0yOXd5fXctg==
-Date: Thu, 12 Nov 2026 12:49:42 +0000
-Message-ID:
- <PN0P287MB330782994496445071D93613F7702@PN0P287MB3307.INDP287.PROD.OUTLOOK.COM>
-Accept-Language: en-IN, en-GB, en-US
-Content-Language: en-IN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=multicorewareinc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN0P287MB3307:EE_|MA5P287MB4889:EE_
-x-ms-office365-filtering-correlation-id: 82bea3bd-69db-4081-6772-08df40bb6bc9
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|31052699007|39142699007|1800799024|6049299003|23010399003|366016|38070700021|10067099003|56012099006|261022105027099003|261022075727099003|261028144727099003|261026121527099003|261026140227099003|261021123027099003|261021121427099003|261102123227099003|261009223027099003|55112099003|18002099003|8096899003|4053099003;
-x-microsoft-antispam-message-info:
- NI1ZXYDoA9n4S7Xb3NMKDfH6HOy7qxD+HqUJ9VMyqWxpkF5kzsvr1uo/enKGRX8msUvTzmCyzuccu27rMgxxe6/usAXMc5X6+HgWBIK4OWwN73zsAKQoNLc/g/oR3Uyw4y9ncYnPCckzz6NwZPSgUaSe+MKdeiPbJR4JkNT+vC0LUxlX0d3O9jq2KtAsFavQOrwWknIubp31yFXI8dmXPF1zl4hRdZzw4y2wD+j/zJMdNdR2lMcU3H3/l1K7Ai8bUT2jNh0CMbUHdcWUTuuyyvKI8Orr3gg5+1pdz4crXOv1aKQoAv9/5r4/0N3ZYY2k4maghhk3dDzgPVKNzLxGrEPCfbEwSJhApbYWVMGMKyiPD23S/IYhlRwL6HztYjJtI6VkoTdCr+nKpq0ovgAFHESx8XFQohBzwkBHsv1Jnn63P5u1anb6acDblwYo9Co08NNHgwqOoEsomMEP1mcOrPkgkvDNhL4wHNDGhFOAZ9gugmaeZxnTs5liRdSbYQThyr0B8AHjXw/qnHCnzOP24CsHvuCLw9po4ZD6ywJSGjem5Mkc8wbp+nx7mSBBzd66bbtaxuFKhZUO9dGbAlkguMAcREkOAVhFWQwRJVQp8+SygAUsp1df9Vw6xeh4dhKeYysjthmlRlXAnNcCQqlmHXWROp3iDMnEYu0jGNdxikw=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN0P287MB3307.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(31052699007)(39142699007)(1800799024)(6049299003)(23010399003)(366016)(38070700021)(10067099003)(56012099006)(261022105027099003)(261022075727099003)(261028144727099003)(261026121527099003)(261026140227099003)(261021123027099003)(261021121427099003)(261102123227099003)(261009223027099003)(55112099003)(18002099003)(8096899003)(4053099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?RE9CZWJMZzc0djh4V1RzU1hGRFpIUStFVFo2cjJrUElLTm8zRHRDQTJYc1d1?=
- =?utf-8?B?WnVXRXRNWm1hc2QyOWFFeUNYN25aZ3diQVE1YVJkQk8yRC9VVlF1b0ZldVRx?=
- =?utf-8?B?RlNRRit6WVUwNzA1M2ZlRG1sQUF4SFpSa3VuNVI3UHJrbkFjQlBVbUU3QTRS?=
- =?utf-8?B?Z1doR1BoUWNNVGQ3djRBUXJVa0VzNlRVOU01TXh3Rm9KZFBxVTdoRFB0T1Fv?=
- =?utf-8?B?SjdYWEV6SUdZRlU4ZVU5cUtZNDJNVDNpYUR3WFhNNmlLZUtLV3dqODBVYnJB?=
- =?utf-8?B?d0puTVdLR3NxNVpUR1pXaVJ3QmpUb1ZOUDFoR3lleUMwZlVoc0FheVp0SDB1?=
- =?utf-8?B?OUVlMldkRXpRaStNdFRzNk9iYnZmVnR0Wm1LZk15aUZUZGtXd0owQ0dQYmh1?=
- =?utf-8?B?RnF2TjFPaFRsY2pWRVRqeFRDUnZKQmtYQURaYXlNL2tJYzQ0MmJnbTk0eWMv?=
- =?utf-8?B?WVR4QVJHeHM2NVBxeGxZUWtvUFlaYU8vTWpnOGJiOEpyU0JKaDRUSGlqR2lq?=
- =?utf-8?B?TVRQU2pWcEEwYVkyYUdqZ1pmV0hHS1dFdmV2VjVmMTB3alIzcG1ONlFWY0NT?=
- =?utf-8?B?TDlESUlTZUJVUU9JRkpkOFlLUDBxeHZ4bTBsTGlYTHVWOFZtaGJiZDRIeCt2?=
- =?utf-8?B?cjdoUi93VzdDNnF6S252dk9RKy9wRTVFaUxudnkrMFpGaTN2MlBSbXo3Y1F1?=
- =?utf-8?B?Ums3Wm9pNC9RVXFSd1ZxSFNWU2tFOURrQnVWNE9XcmpYYnJ5UnJHMHZsZEZB?=
- =?utf-8?B?NzNuVnlDRGRUWVdJcHAvOEMyTE45TGZjYWFUODBWdkN3dUoxZFQ0ZGczellq?=
- =?utf-8?B?R0hlajExRmp2TUV3N0V1S0NUUGhFR3FUeDA1dlZGbE9DSWV2Q3I5MUk4a1ZT?=
- =?utf-8?B?MEhBUk93YXJRQVY5bVpMU2hOY2JoWlN1c044MjUyYjN1aE5sQXZ3U2VyZllo?=
- =?utf-8?B?RG93Q2Q3cUVmekdpMVVPRW52UDZlWkIxa1BmSDNUZlpvbWtjcmRBdGFmdFlE?=
- =?utf-8?B?QllMeTFvOUVqaVVMbTg2RExzYUVMSnpsN2I1TExZbXB5dEg2d1VNRDFlMHVt?=
- =?utf-8?B?eGhzb2FRQ3NsZTgxK2NScHQyR25vWGZyWDU5WDM3TDVUVjdpK21qMml3UlR6?=
- =?utf-8?B?dEVkQXBCZjR0U1ladTVmMmZYR2VJa1d3YlpDMWgzSFdqQlVTb3ZiR0k2cGxl?=
- =?utf-8?B?Z3lFYjFsaXdhTnFENVdkZHlpaUgxRms4Vkk5aElmMDR4WlBFNFZFZmxQOTdk?=
- =?utf-8?B?UzlHRDhRRENXN2oxZEIvYU5OZ3N3VkUwQUVKMkZQbWM1Wk12WlJFc3lHZEdE?=
- =?utf-8?B?bWtzNHFYK0xCamhRWkswSEZ0ZFdRWml0TG45ZXBWS0x0RUZsN1IvRHY2NktI?=
- =?utf-8?B?K0xqdVFOYVcxb09tVFNsQU8rTnFMbDdYMDkrY2hxV0VIZ0s1M2JvZ0tWYWhm?=
- =?utf-8?B?Z0ZIbEpFMnkwWDNmVzAxenlzKzNrcEhOeDk4MVlubmQvWVRHOFZHL1E1MlZy?=
- =?utf-8?B?N0k5b3ZhT0RJcTFLRTRRdzBRWjBON1JiZkFyQzVOaEhMQlBSdFJaY1E3WWlS?=
- =?utf-8?B?eXE2bWNObG5qUFJvM1QwQ1I4eTNHSWpkaytRVEFHbVNCSS9ZRURXTCtoVEc3?=
- =?utf-8?B?QmdLRzByTkZIekR1ejEvUXMxME9QemxobUhZTDF2RGYvUWRBNW1mcmdmbkhO?=
- =?utf-8?B?ekp3YnBCRGM4Vy82akRRajNZZ0lwc0REWjRrRTVsYWI5VTdqYzhsMVpPOEdW?=
- =?utf-8?B?eEtEZ09pNWwyWjJ6MFVpa2FvQTRJZkZ1MkZlOFpiUkp5c2RuMkdFV040U0d0?=
- =?utf-8?B?bDA2cDhhU0FlSVFLY0djUUJZN05qaTMvbEN1blBDd3YzUzhDcnFJRi9ZZGta?=
- =?utf-8?B?OXNaZGozK25ySXZTcHpFSVFZeDRkN2tiUUdHM1FnMGtaTzJQeXNxQW9na1NU?=
- =?utf-8?B?T013QUQ2U1NNeFFnQjRad09ydWRPa3prMDlBc0pTZXdMSXdkbmgwbmV6QXoz?=
- =?utf-8?B?M0k2L0lHdTR3c3lEdDQ4dEduN29URjh2QTArc2FRcHJVN0lsNWt6bkYrMkk4?=
- =?utf-8?B?cjVIY2tWaUVOdjNyZXdzZmQ3NWJkdzA2SG9aNlFJZkhIU1dmQ1Fybkx1T2ow?=
- =?utf-8?B?Qm00Y0l2TEV3RVFPTmJFcFpOMG00UmpzZWxscVJ0MlJhK3czRlRJRGV3cEtT?=
- =?utf-8?B?TzAvSzlYNXpGWHluOXd2NFpFc2ZzN1JoMVZHK2t6L2JjOTBKenhkcy9SbUo4?=
- =?utf-8?B?ZytVSG1kQ1hJcUkva0FuOHRrZHRSQlBhZ0hNb0UrU2ZxVkh5MUtCNVlhSUpE?=
- =?utf-8?B?MU5LQlArc3gzZzR5ZklzQXQ2Q2s0dHY0VkdHTStUUUwvaHhHODliRm5vTW94?=
- =?utf-8?Q?6N0YhbkdumLJJNzo=3D?=
-Content-Type: multipart/mixed;
-	boundary="_004_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n49keNKr
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-8629fc8ad64so416929a34.1
+        for <cygwin-patches@cygwin.com>; Wed, 18 Nov 2026 02:55:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794999357; x=1795604157; darn=cygwin.com;
+        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
+         :subject:date:from:references:in-reply-to:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=hVUPINV9OqDXLoZ7k9Ljv2+udwu3vsfunS9sYvZa19A=;
+        b=n49keNKrXLKa4caH7uLhjzqY2UoaS4Pt+qeJ7pJJ+HRm84TwzaD0XSAfKLihGmHFg6
+         3PAXvN5O9ecMMI96Yk+Z+JMovdZ2TJ0i/mj3491x8+XRbeUBCqB7c2tAJWQ5TkZMq+EU
+         h5f+4yuKp1JoedR8xDcrNhzsGsc+j3GnNwsRgn7zKMpUwsnavezBHPJRVx2bKRBuTLi1
+         f8Rcbbjwzz0Imkgf5Xthw+yE0MJ1vjPVCpthps4vZcTIHNbpS5lcOVkdwZ2OxVYGEWRd
+         vGUVYvsXe+31XDFJaT75iFNa9zgliH8/BEPdnWNGIaQAk3CgFOh8zWU2R+SPtqVCstfD
+         /kJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794999357; x=1795604157;
+        h=cc:to:mime-version:content-transfer-encoding:content-type:fcc
+         :subject:date:from:references:in-reply-to:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hVUPINV9OqDXLoZ7k9Ljv2+udwu3vsfunS9sYvZa19A=;
+        b=GfMb1b8BplN4aKiAE+zWtkxjLbjcveviNrORVB+4HUX6vMPCaRGe0chD8KS7yQNO71
+         Lh45QH21hiuQ2YKdm4kn8+2SEIEHr2hGHXfjpI35Z53fYQyY+JheI85J+X6yFy33RtmP
+         rv1eBD4N9Rl6JZvADY8SNxM5Wqkgg18KCppo4ezhd5HJaM9UwQye2gcFXIpoOqNBGgBO
+         iLqMqzWlUVMJ1XqKtrD1J3irLdHKGgEGLV8jCCbUCOSckSEATfZ6dCbvxfdRJESMXMmT
+         Ndc3a59lucAGV4WF09nOxIEftEyikUIYXYBn/aCJeIpKUjAs+15yStt2mojcj+HP/W83
+         KmjA==
+X-Gm-Message-State: APuU4Z829QVgQnASgZhvMP9jSvoC/V/HUNjuIGjyFd2j8BRgC3Ain1Gy
+	kJDg9M1RVsMOfsFF9V7s05cd9OmVd9ZeGpH4Z489bGdFc1pZwuCKkOVfCwo3qg==
+X-Gm-Gg: AYBFou3qDxAlqCtJjFegmhgrlf2HGkGN+dtE/mXANJo3F61Vw/6KtoGD55pi9Jp/D5U
+	9B/VtL5mzVtUmwZAmupXsEeDKe1SEIchmq43BtpKZ6rxPj3MMhk3DvpIu2dtMNVDtrr4BxMAK5F
+	Ae46KDW6sOD9NCSP1ipRU+WpfrblG1Kj10ANrpiGW9U0u/GOT4SrYdE4y3rS/i7jUdLgnUSYseC
+	+M5EX/i1E08vGRKHj8xd2DigoGTwj29cRc4SVmEHrRq8YjY10MaMvKy49pjSX1+cPBTCPf3QjMH
+	EK/2adOQaq8Jf69zFlJt3guDPAq82MBk2Qcv6a1yDZ6Bov7ypevjChPoJodmSIV1IpcM248cKlA
+	QyCXbPiNzZgl3P64K+M8OR/xO9kJ3oafwC0ow/hOXP+MH7mv52yphoBUd6RN9FyHeafR0OkKy56
+	jFlAOrc1EWfjrVCfqMNAtW1PaurE23jyco7MP1y0gFFiPVHb+ayDaIbOU6v2Mpj6oKsLuXc/Clw
+	1VodGPoREDZpnAC8fY5r/BIlgS3QDCDjzfy217zZZBTt9MB23PULy5Qtefg3WQnnHylP7iI5S1+
+	WnYfNrvWdDp12cU+A3iahtHhHc5uySMgYpY=
+X-Received: by 2002:a05:6830:441e:b0:862:a0ce:f556 with SMTP id 46e09a7af769-862f0793f8bmr2360852a34.2.1794999356758;
+        Wed, 18 Nov 2026 02:55:56 -0800 (PST)
+Received: from [127.0.0.1] ([135.232.177.251])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-862f01381f5sm1702234a34.3.2026.11.18.02.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 02:55:55 -0800 (PST)
+Message-Id: <pull.16.v2.cygwin.1794999354705.gitgitgadget@gmail.com>
+In-Reply-To: <pull.16.cygwin.1793616235364.gitgitgadget@gmail.com>
+References: <pull.16.cygwin.1793616235364.gitgitgadget@gmail.com>
+From: "Johannes Schindelin via GitGitGadget" <gitgitgadget@gmail.com>
+Date: Wed, 18 Nov 2026 10:55:54 +0000
+Subject: [PATCH v2] Modify atomic_wchar_t reference to use __wchar_t
+Fcc: Sent
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-OriginatorOrg: multicorewareinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN0P287MB3307.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82bea3bd-69db-4081-6772-08df40bb6bc9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2026 12:49:42.1265
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ffc5e88b-3fa2-4d69-a468-344b6b766e7d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M4Pq3iZSBM77ubnkbpB72od8i+r9OGbfQaEgGbzbEvmVyEWnbJYWygEx1V/NocqZTsWKAc86l/zoMoTu/tVbz3y5QirsEceN47BesjS7ue84QgOFS5euvfvk3TRMs/Ab
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA5P287MB4889
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,BODY_8BITS,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GB_MSAUTHSOURCE_INDIA,GIT_PATCH_0,HTML_MESSAGE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+To: cygwin-patches@cygwin.com
+Cc: ASSI <Stromeko@nexgo.de>,
+    Jon Turney <jon.turney@dronecode.org.uk>,
+    Johannes Schindelin <johannes.schindelin@gmx.de>,
+    Jeff Johnston <jjohnstn@redhat.com>
+X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
---_004_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_
-Content-Type: multipart/alternative;
-	boundary="_000_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_"
+From: Jeff Johnston <jjohnstn@redhat.com>
 
---_000_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+This is a backport of 209858c89d (Modify atomic_wchar_t reference to use
+__wchar_t, 2026-06-09) to the `cygwin-3_6-branch`.
 
-SGkgRXZlcnlvbmUsDQoNClRoaXMgaXMgdGhlIHg4Nl82NCBjb3VudGVycGFydCBvZiAiQ3lnd2lu
-OiBnZW5kZWY6IHJlc3RvcmUgaW5jeWcgaW4NCkFBcmNoNjQgbG9uZ2ptcCIsIGFzIGRpc2N1c3Nl
-ZCB3aXRoIEpvbiBpbiB0aGF0IHRocmVhZC4NCg0KeDg2XzY0IGxvbmdqbXAgYWxzbyBjbGVhcnMg
-X2N5Z3Rscy5pbmN5ZyBpbnN0ZWFkIG9mIHJlc3RvcmluZyB0aGUgdmFsdWUNCnNldGptcCBzYXcu
-ICBXaGVuIHNldGptcCBydW5zIGluc2lkZSBDeWd3aW4gKGEgcHRocmVhZF9vbmNlIGluaXRpYWxp
-emVyLA0KYSBETEwgY29uc3RydWN0b3IpIGFuZCBhIHNpZ25hbCBoYW5kbGVyIHNpZ2xvbmdqbXBz
-IGJhY2ssIGluY3lnIHdyYXBzIHRvDQoweGZmZmZmZmZmIGFuZCBzaWduYWxzIGFyZSBubyBsb25n
-ZXIgZGVsaXZlcmVkIHdoaWxlIHRoZSB0aHJlYWQgaXMNCmJsb2NrZWQuICBJdCBkb2VzIG5vdCBz
-aG93IHVwIHdpdGggT3BlblNTTCBvbiB4ODZfNjQsIHdoaWNoIHVzZXMgY3B1aWQNCnJhdGhlciB0
-aGFuIGEgU0lHSUxMIHByb2JlLCBidXQgdGhlIHJlcHJvZHVjZXIgZnJvbSB0aGUgQUFyY2g2NCBw
-YXRjaA0KKHdpbnN1cC5hcGkvcHRocmVhZC9vbmNlMykgZmFpbHMgdGhlcmUgdG9vLg0KDQpqbXBf
-YnVmIGhhcyBubyBmcmVlIDgtYnl0ZSBzbG90IG9uIHg4Nl82NCwgc28gdGhlIHBhdGNoIGtlZXBz
-IGluY3lnIGluDQp0aGUgdW51c2VkIDE2LWJpdCBTcGFyZSBmaWVsZCBvZiB0aGUgV2luZG93cyBf
-SlVNUF9CVUZGRVIgbGF5b3V0IChvZmZzZXQNCjB4NWUpLiAgVGhlIGptcF9idWYgc2l6ZSBhbmQg
-bGF5b3V0IGRvIG5vdCBjaGFuZ2UuDQoNClRlc3RpbmcsIGJ1aWx0IG9uIHRoZSAzLjYuMTIgc291
-cmNlcyBmb3IgeDg2XzY0Og0KDQogIC0gcmVwcm9kdWNlcjogRkFJTCA1LzUgd2l0aG91dCB0aGUg
-cGF0Y2ggKFNJR0FMUk0gbm90IGRlbGl2ZXJlZCwgcG9sbA0KICAgIHNsZWVwcyB0aGUgZnVsbCA1
-IHMpLCBQQVNTIDUvNSB3aXRoIGl0IChFSU5UUiBhZnRlciAxMDAwIG1zKS4NCg0KVGhhbmtzLA0K
-QXN3aW4NCg0KSW5saW5lIHBhdGNoDQoNCi0tLQ0KIHdpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5k
-ZWYgfCAxMCArKysrKysrKy0tDQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMiBk
-ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5kZWYg
-Yi93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmDQppbmRleCA1MDQzZWIzNTAuLjNmY2QwNjAx
-MiAxMDA3NTUNCi0tLSBhL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5kZWYNCisrKyBiL3dpbnN1
-cC9jeWd3aW4vc2NyaXB0cy9nZW5kZWYNCkBAIC02NDEsNiArNjQxLDEyIEBAIHNldGptcDoNCiDi
-gILigILigILigILigIJwb3Bx4oCC4oCCJXJjeA0KIOKAguKAguKAguKAguKAgm1vdnHigILigIJf
-Y3lndGxzLnN0YWNrcHRyKCVyMTEpLCVyMTANCiDigILigILigILigILigIJtb3Zx4oCC4oCCJXIx
-MCwoJXJjeCkNCivigILigILigILigILigIIjIFJlY29yZCBpbmN5ZyB0b28sIHNvIGxvbmdqbXAg
-Y2FuIHB1dCBpdCBiYWNrOiBzZXRqbXAgbWF5IGJlIGNhbGxlZA0KK+KAguKAguKAguKAguKAgiMg
-aW5zaWRlIEN5Z3dpbiAoZS5nLiBmcm9tIGEgcHRocmVhZF9vbmNlIGluaXRpYWxpemVyKS4gIGpt
-cF9idWYgaGFzDQor4oCC4oCC4oCC4oCC4oCCIyBubyBmcmVlIDgtYnl0ZSBzbG90IG9uIHg4Nl82
-NDsgdXNlIHRoZSAxNi1iaXQgU3BhcmUgZmllbGQgdGhhdA0KK+KAguKAguKAguKAguKAgiMgZm9s
-bG93cyBGcENzciBpbiB0aGUgV2luZG93cyBfSlVNUF9CVUZGRVIgbGF5b3V0Lg0KK+KAguKAguKA
-guKAguKAgm1vdmzigILigIJfY3lndGxzLmluY3lnKCVyMTEpLCVyMTBkDQor4oCC4oCC4oCC4oCC
-4oCCbW92d+KAguKAgiVyMTB3LDB4NWUoJXJjeCkNCiDigILigILigILigILigIJkZWNs4oCC4oCC
-X2N5Z3Rscy5zdGFja2xvY2soJXIxMSnigILigILigILigILigILigILigIIjIHJlbGVhc2UgbG9j
-aw0KIOKAguKAguKAguKAguKAgnhvcmzigILigIIlZWF4LCVlYXgNCiDigILigILigILigILigIJy
-ZXQNCkBAIC02NzksOCArNjg1LDggQEAgbG9uZ2ptcDoNCiDigILigILigILigILigIJtb3Zx4oCC
-4oCCKCVyY3gpLCVyMTDigILigILigILigILigILigILigILigILigILigILigILigILigIIjIGdl
-dCBvbGQgc2lnbmFsIHN0YWNrDQog4oCC4oCC4oCC4oCC4oCCbW92ceKAguKAgiVyMTAsX2N5Z3Rs
-cy5zdGFja3B0ciglcjExKeKAguKAguKAgiMgcmVzdG9yZQ0KIOKAguKAguKAguKAguKAgmRlY2zi
-gILigIJfY3lndGxzLnN0YWNrbG9jayglcjExKeKAguKAguKAguKAguKAguKAguKAgiMgcmVsZWFz
-ZSBsb2NrDQot4oCC4oCC4oCC4oCC4oCCeG9ybOKAguKAgiVyMTBkLCVyMTBkDQot4oCC4oCC4oCC
-4oCC4oCCbW92bOKAguKAgiVyMTBkLF9jeWd0bHMuaW5jeWcoJXIxMSnigILigILigILigILigILi
-gILigILigILigILigILigIIjIHdlJ3JlIG5vdCBpbiBjeWd3aW4gYW55bW9yZQ0KK+KAguKAguKA
-guKAguKAgm1vdnp3bOKAguKAguKAguKAguKAguKAgjB4NWUoJXJjeCksJXIxMGTigILigILigILi
-gILigILigILigILigIIjIGluY3lnIHNhdmVkIGJ5IHNldGptcA0KK+KAguKAguKAguKAguKAgm1v
-dmzigILigIIlcjEwZCxfY3lndGxzLmluY3lnKCVyMTEp4oCC4oCC4oCC4oCC4oCC4oCC4oCC4oCC
-4oCC4oCC4oCCIyByZXN0b3JlIGl0DQog4oCC4oCC4oCC4oCC4oCCbW92ceKAguKAgjB4OCglcmN4
-KSwlcmJ4DQog4oCC4oCC4oCC4oCC4oCCbW92ceKAguKAgjB4MTAoJXJjeCksJXJzcA0KIOKAguKA
-guKAguKAguKAgm1vdnHigILigIIweDE4KCVyY3gpLCVyYnANCi0tDQoyLjUxLjAud2luZG93cy4x
-DQoNCg0K
+Fixes: https://github.com/msys2/msys2-runtime/issues/399
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+---
+    stdatomic.h: fix the type used for atomic_wchar_t
+    
+    Including <stdatomic.h> currently fails because atomic_wchar_t refers to
+    the undefined type ___wchar_t (note the triple underscore). This
+    spelling was introduced by the update to the FreeBSD header, which tried
+    to avoid conflicts with clang in
+    https://cgit.freebsd.org/src/commit/sys/sys/stdatomic.h?id=0a4c54d6060ab057c86d65be24cf6032e7436670
+    (Rename __wchar_t so it no longer conflicts with __wchar_t from clang
+    3.4, 2014-04-01) by using the triple underscore.
+    
+    The intended internal wide-character type in Cygwin is __wchar_t (note
+    the double underscore, not triple), which is already available through
+    <sys/_types.h>. Backport 209858c89d4feb342857255be8c10862c1ad9d8b that
+    is already on main to use that existing type so applications can include
+    the header again.
+    
+    Changes since v1:
+    
+     * Clarified that this is actually a straight backport of a commit from
+       main onto the cygwin-3_6-branch, and therefore no re-route via the
+       newlib mailing list is needed at all.
 
---_000_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_--
+Published-As: https://github.com/cygwingitgadget/cygwin/releases/tag/pr-16%2Fdscho%2Ffix-stdatomic-header-v2
+Fetch-It-Via: git fetch https://github.com/cygwingitgadget/cygwin pr-16/dscho/fix-stdatomic-header-v2
+Pull-Request: https://github.com/cygwingitgadget/cygwin/pull/16
 
---_004_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_
-Content-Type: application/octet-stream;
-	name="Cygwin-gendef-restore-incyg-in-x86_64-longjmp.patch"
-Content-Description: Cygwin-gendef-restore-incyg-in-x86_64-longjmp.patch
-Content-Disposition: attachment;
-	filename="Cygwin-gendef-restore-incyg-in-x86_64-longjmp.patch"; size=2760;
-	creation-date="Thu, 12 Nov 2026 12:49:35 GMT";
-	modification-date="Thu, 12 Nov 2026 12:49:42 GMT"
-Content-Transfer-Encoding: base64
+Range-diff vs v1:
 
-RnJvbSBhMjY4MWQ5MDg5NTU5ZDhlY2UyMTFkOTM0NzdmNzcwMGFhNTk3NzZkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBc3dpbiBLYWxpZXMgUmFta3VtYXIgTWFuZ2F5YXJrYXJhc2kg
-PGFzd2luLmthbGllc0BtdWx0aWNvcmV3YXJlaW5jLmNvbT4KRGF0ZTogVGh1LCAxMiBOb3YgMjAy
-NiAxNjo0Mjo0NCArMDUzMApTdWJqZWN0OiBbUEFUQ0hdIEN5Z3dpbjogZ2VuZGVmOiByZXN0b3Jl
-IGluY3lnIGluIHg4Nl82NCBsb25nam1wCgp4ODZfNjQgbG9uZ2ptcCB1bmNvbmRpdGlvbmFsbHkg
-Y2xlYXJzIF9jeWd0bHMuaW5jeWcsIGFzIGl0IGhhcyBkb25lCnNpbmNlIDA5YjAxMDk2MiBpbiAy
-MDA1LCBhc3N1bWluZyB0aGUgbWF0Y2hpbmcgc2V0am1wIHJhbiBvdXRzaWRlCkN5Z3dpbi4gIENv
-ZGUgY2FsbGVkIGZyb20gaW5zaWRlIEN5Z3dpbiwgc3VjaCBhcyBhIHB0aHJlYWRfb25jZQppbml0
-aWFsaXplciBvciBhIERMTCBjb25zdHJ1Y3RvciBydW4gZnJvbSBkbGxfY3J0MF8xLCBjYW4gZG8g
-c2V0am1wCnRoZXJlIGFuZCBsYXRlciBsb25nam1wIGJhY2sgb3V0IG9mIGEgc2lnbmFsIGhhbmRs
-ZXIuICBpbmN5ZyB0aGVuCmRyb3BzIHRvIDAsIHRoZSBjYWxsZXIncyBvd24gaW5jeWctLSBvbiB0
-aGUgd2F5IG91dCB3cmFwcyBpdCB0bwoweGZmZmZmZmZmLCBhbmQgZnJvbSB0aGVuIG9uIHRoZSB0
-aHJlYWQgcnVucyB3aXRoIGluY3lnID09IDAgaW5zaWRlCmV2ZXJ5IHN5c2NhbGwuICBTaWduYWxz
-IGFycml2aW5nIHdoaWxlIGl0IGlzIGJsb2NrZWQgYXJlIG5vIGxvbmdlcgpkZWxpdmVyZWQ6IHdp
-dGggYWxhcm0oMSksIHBvbGwoTlVMTCwgMCwgNTAwMCkgc2xlZXBzIHRoZSBmdWxsIGZpdmUKc2Vj
-b25kcyBpbnN0ZWFkIG9mIHJldHVybmluZyBFSU5UUi4KClRoaXMgaXMgdGhlIHg4Nl82NCBjb3Vu
-dGVycGFydCBvZiB0aGUgQUFyY2g2NCBmaXguICBJdCBkb2VzIG5vdCBzaG93CnVwIHdpdGggT3Bl
-blNTTCBvbiB4ODZfNjQsIHdoaWNoIGRldGVjdHMgQ1BVIGZlYXR1cmVzIHdpdGggY3B1aWQKaW5z
-dGVhZCBvZiBwcm9iaW5nIGluc3RydWN0aW9ucyB1bmRlciBhIFNJR0lMTCBoYW5kbGVyLCBidXQg
-dGhlIHNhbWUKcmVwcm9kdWNlciAod2luc3VwLmFwaS9wdGhyZWFkL29uY2UzKSBmYWlscyB0aGVy
-ZS4KCmptcF9idWYgaGFzIG5vIGZyZWUgOC1ieXRlIHNsb3Qgb24geDg2XzY0OiBfSkJMRU4gaXMg
-MzIgYW5kIHNldGptcAp1c2VzIGFsbCAweDEwMCBieXRlcy4gIEl0IGZvbGxvd3MgdGhlIFdpbmRv
-d3MgX0pVTVBfQlVGRkVSIGxheW91dCwKdGhvdWdoLCB3aG9zZSAxNi1iaXQgU3BhcmUgZmllbGQg
-YWZ0ZXIgRnBDc3IgKG9mZnNldCAweDVlKSBpcyB1bnVzZWQuClJlY29yZCBpbmN5ZyB0aGVyZSBp
-biBzZXRqbXAgYW5kIHJlc3RvcmUgaXQgaW4gbG9uZ2ptcC4gIEEgbG9uZ2ptcApiYWNrIGludG8g
-YXBwbGljYXRpb24gY29kZSBzdGlsbCByZXN0b3JlcyAwLCBiZWNhdXNlIHRoYXQgaXMgd2hhdCBp
-dHMKc2V0am1wIHNhdy4KClNpZ25lZC1vZmYtYnk6IEFzd2luIEthbGllcyA8YXN3aW4ua2FsaWVz
-QG11bHRpY29yZXdhcmVpbmMuY29tPgotLS0KIHdpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5kZWYg
-fCAxMCArKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAyIGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vc2NyaXB0cy9nZW5kZWYgYi93aW5z
-dXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmCmluZGV4IDUwNDNlYjM1MC4uM2ZjZDA2MDEyIDEwMDc1
-NQotLS0gYS93aW5zdXAvY3lnd2luL3NjcmlwdHMvZ2VuZGVmCisrKyBiL3dpbnN1cC9jeWd3aW4v
-c2NyaXB0cy9nZW5kZWYKQEAgLTY0MSw2ICs2NDEsMTIgQEAgc2V0am1wOgogCXBvcHEJJXJjeAog
-CW1vdnEJX2N5Z3Rscy5zdGFja3B0ciglcjExKSwlcjEwCiAJbW92cQklcjEwLCglcmN4KQorCSMg
-UmVjb3JkIGluY3lnIHRvbywgc28gbG9uZ2ptcCBjYW4gcHV0IGl0IGJhY2s6IHNldGptcCBtYXkg
-YmUgY2FsbGVkCisJIyBpbnNpZGUgQ3lnd2luIChlLmcuIGZyb20gYSBwdGhyZWFkX29uY2UgaW5p
-dGlhbGl6ZXIpLiAgam1wX2J1ZiBoYXMKKwkjIG5vIGZyZWUgOC1ieXRlIHNsb3Qgb24geDg2XzY0
-OyB1c2UgdGhlIDE2LWJpdCBTcGFyZSBmaWVsZCB0aGF0CisJIyBmb2xsb3dzIEZwQ3NyIGluIHRo
-ZSBXaW5kb3dzIF9KVU1QX0JVRkZFUiBsYXlvdXQuCisJbW92bAlfY3lndGxzLmluY3lnKCVyMTEp
-LCVyMTBkCisJbW92dwklcjEwdywweDVlKCVyY3gpCiAJZGVjbAlfY3lndGxzLnN0YWNrbG9jaygl
-cjExKQkJIyByZWxlYXNlIGxvY2sKIAl4b3JsCSVlYXgsJWVheAogCXJldApAQCAtNjc5LDggKzY4
-NSw4IEBAIGxvbmdqbXA6CiAJbW92cQkoJXJjeCksJXIxMAkJCSMgZ2V0IG9sZCBzaWduYWwgc3Rh
-Y2sKIAltb3ZxCSVyMTAsX2N5Z3Rscy5zdGFja3B0ciglcjExKQkjIHJlc3RvcmUKIAlkZWNsCV9j
-eWd0bHMuc3RhY2tsb2NrKCVyMTEpCQkjIHJlbGVhc2UgbG9jawotCXhvcmwJJXIxMGQsJXIxMGQK
-LQltb3ZsCSVyMTBkLF9jeWd0bHMuaW5jeWcoJXIxMSkJCSMgd2UncmUgbm90IGluIGN5Z3dpbiBh
-bnltb3JlCisJbW92endsCTB4NWUoJXJjeCksJXIxMGQJCSMgaW5jeWcgc2F2ZWQgYnkgc2V0am1w
-CisJbW92bAklcjEwZCxfY3lndGxzLmluY3lnKCVyMTEpCQkjIHJlc3RvcmUgaXQKIAltb3ZxCTB4
-OCglcmN4KSwlcmJ4CiAJbW92cQkweDEwKCVyY3gpLCVyc3AKIAltb3ZxCTB4MTgoJXJjeCksJXJi
-cAotLSAKMi41MS4wLndpbmRvd3MuMQoK
+ 1:  cf2b7f207 ! 1:  5b85515fe stdatomic.h: fix the type used for atomic_wchar_t
+     @@
+       ## Metadata ##
+     -Author: Johannes Schindelin <johannes.schindelin@gmx.de>
+     +Author: Jeff Johnston <jjohnstn@redhat.com>
+      
+       ## Commit message ##
+     -    stdatomic.h: fix the type used for atomic_wchar_t
+     +    Modify atomic_wchar_t reference to use __wchar_t
+      
+     -    Including <stdatomic.h> fails because atomic_wchar_t refers to the undefined
+     -    type `___wchar_t` (note the triple underscore). This spelling was introduced by
+     -    the update to the FreeBSD header, which tried to avoid conflicts with clang in
+     -    https://cgit.freebsd.org/src/commit/sys/sys/stdatomic.h?id=0a4c54d6060ab057c86d65be24cf6032e7436670
+     -    (Rename __wchar_t so it no longer conflicts with __wchar_t from clang 3.4,
+     -    2014-04-01) by using the triple underscore.
+     +    This is a backport of 209858c89d (Modify atomic_wchar_t reference to use
+     +    __wchar_t, 2026-06-09) to the `cygwin-3_6-branch`.
+      
+     -    The intended internal wide-character type in Cygwin is `__wchar_t` (note the
+     -    double underscore, not triple), which is already available through
+     -    `<sys/_types.h>`. Use that existing type so applications can include the header
+     -    again.
+     -
+     -    This was reported in https://github.com/msys2/msys2-runtime/issues/399.
+     -
+     -    Assisted-by: GPT-6.1 Sol
+     -    Fixes: af393fdf89a7 ("stdatomic.h: use latest FreeBSD file verbatim")
+     +    Fixes: https://github.com/msys2/msys2-runtime/issues/399
+          Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+      
+       ## newlib/libc/include/stdatomic.h ##
 
---_004_PN0P287MB330782994496445071D93613F7702PN0P287MB3307INDP_--
+
+ newlib/libc/include/stdatomic.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/newlib/libc/include/stdatomic.h b/newlib/libc/include/stdatomic.h
+index 67107f47e..40f2d269c 100644
+--- a/newlib/libc/include/stdatomic.h
++++ b/newlib/libc/include/stdatomic.h
+@@ -207,7 +207,7 @@ typedef _Atomic(unsigned char)		atomic_char8_t;
+ #endif
+ typedef _Atomic(__char16_t)		atomic_char16_t;
+ typedef _Atomic(__char32_t)		atomic_char32_t;
+-typedef _Atomic(___wchar_t)		atomic_wchar_t;
++typedef _Atomic(__wchar_t)		atomic_wchar_t;
+ typedef _Atomic(__int_least8_t)		atomic_int_least8_t;
+ typedef _Atomic(__uint_least8_t)	atomic_uint_least8_t;
+ typedef _Atomic(__int_least16_t)	atomic_int_least16_t;
+
+base-commit: af6327c35c85a7c5376a47d980bbade5f40eb5bc
+-- 
+cygwingitgadget
