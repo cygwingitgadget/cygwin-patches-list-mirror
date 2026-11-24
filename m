@@ -1,194 +1,159 @@
-Return-Path: <SRS0=UvTC=JN=nifty.ne.jp=takashi.yano@sourceware.org>
-Received: from mta-snd-e09.mail.nifty.com (mta-snd-e09.mail.nifty.com [IPv6:2001:268:fa04:731:6a:99:e2:29])
-	by sourceware.org (Postfix) with ESMTPS id 66F0E4BA2E30
-	for <cygwin-patches@cygwin.com>; Tue, 24 Nov 2026 03:30:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 66F0E4BA2E30
-Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=nifty.ne.jp
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=nifty.ne.jp
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 66F0E4BA2E30
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=2001:268:fa04:731:6a:99:e2:29
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1795491023; cv=none;
-	b=jUnj0g3orHIyJ1UBd/23Hf17nspObljVVO8Nd9O77LrlvGLkZqXp/WF4DVTAIUR0kuqMRymqn1zmqcTPgrNNoF/jBi/3olvKRjmoXpfbRup7eySsCe1zKiAmNLRiOFYZGxaQgHb6gB3ogFIcnqd/bp/w5p7VkTADR7J9EQ+TE3s=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1795491023; c=relaxed/simple;
-	bh=e1UhDNzaTO28nFG3+wH/8a92YsBqeXv8w7z0IdlhDHI=;
-	h=Date:From:To:Subject:Message-Id:Mime-Version:DKIM-Signature; b=uzcpUCWEvL0kWaSJoTY5IHAJYrA9tWfqm/WB5KYlSY8Oh9kamWLOtwhkrH0gK0WqkfLOuYi3AW0amw3SCQmz18FZOciptgGgvLPMSV2RhCA1VFR8QmT84keuUNM8gliGy3TgYNmWCDGbMPfkYr0re6FLj83lkkYHiA4VUH+sjJM=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=GkPc5g3h
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 66F0E4BA2E30
+Return-Path: <SRS0=pTEM=JN=arm.com=Mate.Dimand@sourceware.org>
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazlp170130007.outbound.protection.outlook.com [IPv6:2a01:111:f403:c20f::7])
+	by sourceware.org (Postfix) with ESMTPS id 76D4840AFC7D
+	for <cygwin-patches@cygwin.com>; Tue, 24 Nov 2026 12:12:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 76D4840AFC7D
+Authentication-Results: sourceware.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=arm.com
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 76D4840AFC7D
+Authentication-Results: sourceware.org; arc=pass smtp.remote-ip=2a01:111:f403:c20f::7
+ARC-Seal: i=3; a=rsa-sha256; d=sourceware.org; s=key; t=1795522336; cv=pass;
+	b=U7kbAq6DwGSb62G/5TY2575huZ6v5pwITYnfaOfFJDqcFViJXQnlkU5MDDWrhG/e1rxOPsWNWn9T6Yi/384uM/CULCR0RnN651yF6tUfSF7LcdrX0vG3JbGGDfHjn5htnNfwgt3Jv8HmJqOKpbVWEzkaP8UW1N7F21/3JMMLBsE=
+ARC-Message-Signature: i=3; a=rsa-sha256; d=sourceware.org; s=key;
+	t=1795522336; c=relaxed/simple;
+	bh=tnT2ST6KsXd0NYmlgkrr1K2CuG2c9sLA5mTxkeuki2A=;
+	h=DKIM-Signature:DKIM-Signature:Message-ID:Date:Subject:To:From:
+	 MIME-Version; b=fGDH2MRaVbROSfIufTXXTeMaWoOf7H91h2K5f+2r/fUJymaY3mlCdnIJG0/rBBTeToAVscv9z7js3QSAi5GewcH79cjbU/F20s5Mr+kACRvoZvoXA17wk2/sGQIYonMXEx74jDTdWXqzu5lE4aCAis8k9nIq9Yy5pHkXCHLI52E=
+ARC-Authentication-Results: i=3; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Ske1JEvg; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Ske1JEvg
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 76D4840AFC7D
 Authentication-Results: sourceware.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nifty.ne.jp header.i=@nifty.ne.jp header.a=rsa-sha256 header.s=default-1th84yt82rvi header.b=GkPc5g3h
-Received: from HP-Z230 by mta-snd-e09.mail.nifty.com with ESMTP
-          id <20261124033018382.KWKC.60338.HP-Z230@nifty.com>
-          for <cygwin-patches@cygwin.com>; Tue, 24 Nov 2026 12:30:18 +0900
-Date: Tue, 24 Nov 2026 12:30:17 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: pthread: Improve the performance of the
- destructor
-Message-Id: <20261124123017.1998d6e169819a09af0b7265@nifty.ne.jp>
-In-Reply-To: <20261124031736.1926-1-takashi.yano@nifty.ne.jp>
-References: <20261124031736.1926-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="Multipart=_Tue__24_Nov_2026_12_30_17_+0900_EEIpWG4qr2VV=sza"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp; s=default-1th84yt82rvi; t=1795491018;
- bh=yp0BTRAK9ZaDNW8aEjppmzx0gRvM3jvFT1ZG1CP3e7g=;
- h=Date:From:To:Subject:In-Reply-To;
- b=GkPc5g3hnvacgMK/NEIpF3dTBAM38Nqy22ukC5CDQBpJZIJv/VzU3V6Jwt8sgMfnyN+KIipV
- 0sg1kgQRNtdCF03/DimG0zUN0d91UoMLynFG6mWDOvNHZvYvvBQn73x9r1wBWFSEqBZ06okb8J
- y+hcQhuJGD7naDYPm99RIrJp+AuGbc9nsp+gnPiqQy/tinqbOKD6XKgVAS3I+4pAd645KjeRll
- mERBO/ENJYJ7oUeowHJ/rYKAiqltmYa09d5gqahPqzOfPUJZ7AdwmLMAlu4tq2oFJMHhp/+d3f
- oVN11ndegl94bg3wkfrYRNDgUsXd2pYOrkbbj49fnQqPc2uA==
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Ske1JEvg;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=Ske1JEvg
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=fThPuyYAu2hysH42jMLe83hWHpSVu7CyFPN82pCepEh3PyWKaP1xcIEDHtkiLeTYadrGp7Z3Lqd8dWCP5F7SOAhbilA6A0FA5jh1aY2/c29Phlo3TrCVaRerdThsE/eixtGyrGVEj5dmwGDw8U7FbWJSnRBFP/wHMSRQxicPbr5EydwweeE6pQhLhboAueO7O4MqCHEwiqTh7PYUiNK+rct5RthKwNreBnryMWwSEpFaGSTYuikxbGagHbtdcv1h2hTNcvgzvucKzed6HWOvFq5Rg6rUjw02X4KY4NfCXV2wx+2UNOa3bYlmWag85oAoYN4ruTdYtgDvLe+q98Y9qA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9KiGJDAwaszeI4P2rNxfXLshhS8PTEoiSbY5pxENaTo=;
+ b=CCxSXLrNk9wWZf7BNIjbOavYGpUkugdsnSoA2maxjim1jb4hOezU1VonPPgY7Bt5uD6G5jBxcF0odKz4vmEG4UESQRvzdYBWb2ehOXNi5WnT7XGGIpJQXXZOLqHcQoa9JUNYgGYOGd57nKL6yUQdvisrCtF23/M0OO57kLxPlBMrFpizMwNh0l7U5+CHTxH7ryIkeSN4QDztuogEMyFB7n9/xSvCy4/VBxdEOcpWaqOEASHBFlIM9fARnj197QnNqfuxBjcgI/l0WxQuCF5707ZCmpmXJWhibnWEV7p/TZ/9yx77Xa+vMgCAJ8H/AMWTRikCzGhQLExzDHKYDoH94A==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=cygwin.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9KiGJDAwaszeI4P2rNxfXLshhS8PTEoiSbY5pxENaTo=;
+ b=Ske1JEvgioRm+h8fEygBiGjhYI0I8IDmkH/jNPoa5jZNhiIs4vwqMNA4N2M66hnNJe7X7C/aSG0ReZu97QYYqFDGHrdWtL1rTscgBR9fRf+l9m5w05puqJrVd9p3zSpFhOgGkDZgbb9y8gRGO8Xb6+2hk+3ricr+Q3AFOAjVkXY=
+Received: from PR3P251CA0012.EURP251.PROD.OUTLOOK.COM (2603:10a6:102:b5::27)
+ by GV1PR08MB11075.eurprd08.prod.outlook.com (2603:10a6:150:1f5::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Tue, 24 Nov
+ 2026 12:12:11 +0000
+Received: from MI3PEPF00008551.eurprd05.prod.outlook.com
+ (2603:10a6:102:b5:cafe::64) by PR3P251CA0012.outlook.office365.com
+ (2603:10a6:102:b5::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Tue,
+ 24 Nov 2026 12:12:11 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 4.158.2.129) smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ MI3PEPF00008551.mail.protection.outlook.com (10.167.240.5) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.3
+ via Frontend Transport; Tue, 24 Nov 2026 12:12:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mL83DeYAcQmxcEWdQvtDPGgZmYQAw6CltvGqn2x5Uzf/+V0g7syBOyChsaqtKslApGk9E3ALsM/BTKuurJhYYXwxZs5NvsgwDhal2crKb6T9nu7OEdwFrgX7I36Quo0/Ne/MI+lKt77CB/re9f3Ep18StDkXE9VOweELdE2wcD0USkPWVVd34ryQA2zjeRQ7v65mtVFUQmC/1d2+ggK7Cd+/fmonuPDGtBqf6dFAfbBirbLtuDWm6JXk/vP++6wnSglfidiuL+CU78hYUUp/vdxtO2fcNLZaDYApUQ6Sq1f+1FOs0sTzidYinuvKSjHNHkfvLEM7e/m7HsyBJX1EIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9KiGJDAwaszeI4P2rNxfXLshhS8PTEoiSbY5pxENaTo=;
+ b=SMkkLrkrdN0kKVsI/iQKRgUn4AIUnkQT9Zg5ritX3qeCknNeP7eTm4bRWto/NG65iH4yKNhZB7Ts/aEhpFhTuJJ6deeYBM/pqeX76VBNP5FiJLp+j0eD0fU+6rTsUPTdun/NkNwn2kLNMi2jjSqZ/lGAsCNmAohAdmn3+ECFMNfl0Ig80EmxfIGRkO/T2M2AUGd6UBi+kh23WgYCcAtr9a+/PTm+hufoPE+t8pWaKZlYfD2Gmd9vRjNp+IaJvG+OHhbRnDFEIHWfJ2GwjulO6SiRs6M7tKKqV/Gfym1u+kFwuMPhh539j+SznJU9ItyyOiMVmpKPQ8jWJT3uRTpbcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9KiGJDAwaszeI4P2rNxfXLshhS8PTEoiSbY5pxENaTo=;
+ b=Ske1JEvgioRm+h8fEygBiGjhYI0I8IDmkH/jNPoa5jZNhiIs4vwqMNA4N2M66hnNJe7X7C/aSG0ReZu97QYYqFDGHrdWtL1rTscgBR9fRf+l9m5w05puqJrVd9p3zSpFhOgGkDZgbb9y8gRGO8Xb6+2hk+3ricr+Q3AFOAjVkXY=
+Authentication-Results-Original: mx.microsoft.com 1; dkim=none (message not
+ signed) header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB4PR08MB9310.eurprd08.prod.outlook.com (2603:10a6:10:3f6::22)
+ by AS2PR08MB8949.eurprd08.prod.outlook.com (2603:10a6:20b:5f8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Tue, 24 Nov
+ 2026 10:34:37 +0000
+Received: from DB4PR08MB9310.eurprd08.prod.outlook.com
+ ([fe80::73e6:2715:9ac4:e576]) by DB4PR08MB9310.eurprd08.prod.outlook.com
+ ([fe80::73e6:2715:9ac4:e576%4]) with mapi id 15.21.0639.011; Tue, 24 Nov 2026
+ 10:34:37 +0000
+Message-ID: <c301e89b-ae2a-4296-a538-df27c7a100eb@arm.com>
+Date: Tue, 24 Nov 2026 11:34:34 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] gendef: fix SEH directives in AArch64 sigdelayed
+To: Jon Turney <jon.turney@dronecode.org.uk>
+Cc: cygwin-patches@cygwin.com, Evgeny Karpov <evgeny@kmaps.co>,
+ Igor Podgainoi <Igor.Podgainoi@arm.com>, nd@arm.com
+References: <9eed0ee5-428c-420a-9788-67d14368f3b1@arm.com>
+ <69bf89b9-73dd-40eb-951f-356fbb7ff3d3@arm.com>
+ <99c4757d-b886-411b-9887-464999d363a7@dronecode.org.uk>
+ <58a2c092-09a0-4c61-944e-b29d5d27b257@dronecode.org.uk>
+Content-Language: en-US
+From: =?UTF-8?B?TcOhdMOpIERpbWFuZA==?= <mate.dimand@arm.com>
+In-Reply-To: <58a2c092-09a0-4c61-944e-b29d5d27b257@dronecode.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PR1P264CA0038.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:2cb::10) To DB4PR08MB9310.eurprd08.prod.outlook.com
+ (2603:10a6:10:3f6::22)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic:
+	DB4PR08MB9310:EE_|AS2PR08MB8949:EE_|MI3PEPF00008551:EE_|GV1PR08MB11075:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad20b6dc-71b5-468b-45cb-08df4a242aaf
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|376014|23010399003|22082099003|18002099003|11063799006|56012099006|4143699003|261028144727099003|261022105027099003|261021123027099003|261026140227099003|10067099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ 0sffdmSY2eTI3p7D2/vDEWphlJrie12OcTC0UuRRShuXHZHg5QExYosaQYwSlObwhvdKReiwTib1DVswHoZgRjnfxfFhhjyQmJ8m496PQhZZyN282IlVR9uBvcH0zRGddCG3WvXtRmo7FUW3kJaT0CxCGGoVDHzaaKFCxjEbMChELE1eVPpKUVHIW+FR/F+vUm0G0ghV5qzT9MyrDfIPTDzWft4g046QTaaYx1LqTNIMUFUgQx3qqOjE9ZhO0Ek/QsDcGqQPWpBDpuNuw486sYABtf5DLqxUZF+0+H9sckwHohPaydr+AAb7CEqTnG/sEt+4PY4qGJ/h1ultWmP//MaD9w+JJvsvocKI6TpO5IPw0Ct2yy65t0OtpLvqCeQuH4PKREXLI5wCSKaUvFICQwmiepIGt+C73juZN9EqdsEU19DpCEcxvJ9o8cjC5hhl0n0ESckTXn60HBQ9A0jXk/Vuzxe9jf7uR3D0nMf2tsiV6L4UHnRY3PZpE/TGmlDFdW3qkBJFToKUB+Sb3vGrdlnmwTD/ybx7U5UQbwvfgN1vzVafXPsbc3/WuoNpoF1zhFwj6PzrvIoo1v2vKr3d8+5JYmaknm/bYoQm+L5pzPzM1Z2Isp9gmNIU084j5VHLd9yiPs9Tz7BAbehPmXow+XG+rZJOYdLarqfuE/zHlTQ=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB4PR08MB9310.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(23010399003)(22082099003)(18002099003)(11063799006)(56012099006)(4143699003)(261028144727099003)(261022105027099003)(261021123027099003)(261026140227099003)(10067099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ ir9l5w8wPlDu8PJpqwxfk29msMc9uh/BHOeqGC80gUnDUl5enKQL5gJk2PzPxAAz+YIUnvKEaWxX9oImzcmtMH10EYG7qtj9NwglB948M/AXl/MXl/XSY0Z92CAyST7IEn+IaVs5jD2/RXw7DlLn1OOvB7XdaLDVAPc0CDN8tU4k91kpmnNrIYgKbhE/yT1QLbAT5Y4Gi0rciA2x1CCnCnbR9VYLTnSA1MzzAlvjMW363k8SeGXOltZosDgYbktOcH0XgtrbNsHjFXmJq8CAmcDIj/XuuSHAm3mN2WiVZqZGfagSEPs0n3ppSxWBQOCzuaUF0XPbtNJXGUGk234x8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8949
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ MI3PEPF00008551.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	4fe73f5e-8bda-4b55-6516-08df4a1689ab
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|14060799003|35042699022|23010399003|36860700016|82310400026|10067099003|261021123027099003|4143699003|11063799006|56012099006|261028144727099003|261022105027099003|261026140227099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	towzzg+YGBtzhPq88OkTOIZr9vSvsUez3aYfI+UhvsZH79NIputKHxNdkNQsPzPbINQxRShzbud1BKNtWXYA4AZUW8p8mkIU5xTx6lBsnXyPltKjHZJBirrtJs6Fu9dwXxf4VxT3CqT3qzTkZZXtG0dPmh57ww2K+gdBU67ptp4chV6V7QQ27EzfBvFHo9waoA9+fLpLYDhW3pWryWmNYMwam9Mq1fciGTPMU67KgyMBO64OgY/zZGMSu1aSJjL59akcVAsl0irJXTgMGR/mvqkBBdfIU1KDuwGRpSnj7xSKCBRR8IKspOgwASoZD/oqSz+J82wx/ewV5n1B8o4BKi8pImTvdNCWUlEhPZIi34wAWzPVhAq1RmIHiDgZ3j1yzKbSKKhm8wUxJoMZDkYOBUgVFLVUSYxIihN8LwCRSNSHGTh0hVTZM1CU2bmB+dZtQKIWnv8TJZUyCGA9SFeugyN8/nLvQY9oWfbz1ADpSCAkI9JPa3kstC5M9dIWxgkwqHT3pEMyK1s9f+hymAIQHwHMQcuDW5jDoeSNA63uippGKxzEAymXdhKjowI7OHBhP7FjR8FZK6Jy/pZcVTmgXQKnt32MApDpS2zDiakVM8XIbF/rYooTmYuH/7WES+gLorKeV93rasaZLyck7+z7NZJvI1arF9pIZwCiIexJrYaxGjOci4wm37xEtOmv4qu0uJAdy2lYQA8/QdyMgwtV8w==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(14060799003)(35042699022)(23010399003)(36860700016)(82310400026)(10067099003)(261021123027099003)(4143699003)(11063799006)(56012099006)(261028144727099003)(261022105027099003)(261026140227099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	XSPRVMTP7jL5KdSSuf+YCcztpGRpFTWXCmGa9dqy+ZeFPuZI1gnbNGqjlhFNXV1+dL9+jN2dnkY2c+QobuovgH6TI8rW+BBlBFJn8Ncvg5R7SI1/hYiQLv/WBAyuRsd+CFCiYDhliLa9aMsTSFyBHrItc8WAEZyTM0Gz3qbtp1QXzHnzO1JgEuCxepybTd6TR8elmp8ZlALDi6Sc1KyGMqOQSVSuv/0Vi1MbpqJP0P/wanMfP2bMDRZznslJeJIA8m03UH7uvYfVREiJLLSGuJr0+CgahrcbWG9U5FS5MpoOQTTwqqolen/tRYVfFGygN3yHQVxD+Zaz8aHPSs0xvsgYLXv8isNXIJcIsbuzRZY1fz8cvuxIBwKyIlRpxVCxQgRlT8NXXfEJhA0YlT6SGw2eVUGjYuEMklH7KRoRv8jT6PSZXsi0+0M/7xSBN3J5
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 12:12:10.3418
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad20b6dc-71b5-468b-45cb-08df4a242aaf
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MI3PEPF00008551.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB11075
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,GB_MSAUTHSOURCE_EUROPE,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,TXREP shortcircuit=no autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is a multi-part message in MIME format.
+Hi Jon,
 
---Multipart=_Tue__24_Nov_2026_12_30_17_+0900_EEIpWG4qr2VV=sza
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Sorry for the delayed response. I can confirm that all Cygwin patches 
+contributed by Arm employees (Máté Dimand, Evgeny Karpov, Igor 
+Podgainoi), including past and future ones, follow the 2-clause BSD 
+license (BSD-2-Clause).
 
-On Tue, 24 Nov 2026 12:17:25 +0900
-Takashi Yano wrote:
-> Deleting pthread-related objects, such as pthread_mutex, becomes very
-> slow when the number of the objects is large. Currently, these objects
-> are managed in a singly linked list, where deletion requires O(n) time.
-> As a result, deleting all objects takes O(n^2) time overall. Due to
-> this issue, freeing a decoder in libde265 can sometime take several
-> tens of seconds, because libde265 uses around 100,000 pthread_mutex
-> objects depending on the video being decoded.
-> 
-> This patch changes the list to a doubly linked, reducing the overall
-> deletion comlexity from O(n^2) to O(n).
-> 
-> Fixes: 5c83f260b87b ("(pthread_key_destructor_list::Remove): New function.")
-> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
-> Reviewed-by:
-> ---
->  winsup/cygwin/local_includes/thread.h | 45 +++++++++++++++++----------
->  winsup/cygwin/thread.cc               | 14 ++++++---
->  2 files changed, 38 insertions(+), 21 deletions(-)
+Best regards,
+Máté Dimand
 
-This issue can be reproduced by the simple reproducer attached.
-In cygwin 3.6.12, you can see the time to destroy pthread_mutex
-is increased by O(n^2).
-
-cygwin 3.6.12:
-Num	Init	Destroy
-2000	0.00105	0.00449
-4000	0.00390	0.01606
-6000	0.00286	0.03653
-8000	0.00457	0.06469
-10000	0.00510	0.10370
-12000	0.00660	0.15064
-14000	0.00780	0.20992
-16000	0.00853	0.27032
-18000	0.00981	0.34256
-20000	0.01010	0.42384
-22000	0.01195	0.50946
-24000	0.01249	0.60148
-26000	0.01361	0.71346
-28000	0.01463	0.82026
-30000	0.01713	0.94794
-32000	0.01761	1.07168
-34000	0.01882	1.20417
-36000	0.01972	1.35318
-38000	0.02078	1.51118
-40000	0.02204	1.67321
-42000	0.02351	1.83842
-44000	0.02423	2.01601
-46000	0.02475	2.20498
-48000	0.02819	2.39564
-50000	0.02788	2.60500
-52000	0.02856	2.82041
-54000	0.02959	3.05356
-56000	0.03312	3.31252
-58000	0.03371	3.55132
-60000	0.03319	3.75833
-62000	0.03609	3.99067
-64000	0.03506	4.26610
-
-With this patch:
-Num	Init	Destroy
-2000	0.00110	0.00065
-4000	0.00198	0.00128
-6000	0.00276	0.00193
-8000	0.00351	0.00261
-10000	0.00448	0.00322
-12000	0.00539	0.00404
-14000	0.00631	0.00494
-16000	0.00737	0.00616
-18000	0.00809	0.00593
-20000	0.00857	0.00644
-22000	0.00920	0.00702
-24000	0.01047	0.00804
-26000	0.01120	0.00893
-28000	0.01245	0.01019
-30000	0.01411	0.01104
-32000	0.01527	0.01181
-34000	0.01613	0.01233
-36000	0.01728	0.01490
-38000	0.01850	0.01451
-40000	0.01927	0.01696
-42000	0.02219	0.01812
-44000	0.02292	0.01912
-46000	0.02395	0.01991
-48000	0.02448	0.02061
-50000	0.02510	0.02117
-52000	0.02681	0.02202
-54000	0.02790	0.02300
-56000	0.03098	0.02407
-58000	0.02983	0.02423
-60000	0.03090	0.02510
-62000	0.03135	0.02591
-64000	0.03263	0.02667
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
-
---Multipart=_Tue__24_Nov_2026_12_30_17_+0900_EEIpWG4qr2VV=sza
-Content-Type: text/x-csrc;
- name="pthread_mutex_bench.c"
-Content-Disposition: attachment;
- filename="pthread_mutex_bench.c"
-Content-Transfer-Encoding: 7bit
-
-#include <stdio.h>
-#include <pthread.h>
-
-void bench(int n)
-{
-	pthread_mutex_t m[n];
-	struct timespec tv0, tv1;
-	double time_to_init, time_to_destroy;
-
-	clock_gettime(CLOCK_MONOTONIC, &tv0);
-	for (int i=0; i<n; i++) {
-		pthread_mutex_init (&m[i], NULL);
-	}
-	clock_gettime(CLOCK_MONOTONIC, &tv1);
-	time_to_init =
-		(tv1.tv_sec - tv0.tv_sec) + (tv1.tv_nsec - tv0.tv_nsec)*1e-9;
-
-	clock_gettime(CLOCK_MONOTONIC, &tv0);
-	for (int i=0; i<n; i++) {
-		pthread_mutex_destroy (&m[i]);
-	}
-	clock_gettime(CLOCK_MONOTONIC, &tv1);
-	time_to_destroy =
-		(tv1.tv_sec - tv0.tv_sec) + (tv1.tv_nsec - tv0.tv_nsec)*1e-9;
-	printf("%d\t%.5f\t%.5f\n", n, time_to_init, time_to_destroy);
-}
-
-int main()
-{
-	printf("Num\tInit\tDestroy\n");
-	for (int n = 2000; n <= 64000; n+=2000) {
-		bench(n);
-	}
-	return 0;
-}
-
---Multipart=_Tue__24_Nov_2026_12_30_17_+0900_EEIpWG4qr2VV=sza--
