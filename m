@@ -1,779 +1,337 @@
-Return-Path: <SRS0=8Yr5=JQ=aosc.io=arthur2e5@sourceware.org>
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-	by sourceware.org (Postfix) with ESMTPS id 2F89642F9C1E
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2F89642F9C1E
-Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=aosc.io
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2F89642F9C1E
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=144.217.248.102
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1795784215; cv=none;
-	b=uiBEBFJ070WeSCIg2JLqqN22of6dbGE+WUfl0+Tx5xYKQFalc8EhkduV7RNhV89J6kPlAtiTy67DZw1klfQh8bRPGbpeFLZ5Ub80U29sm/2oPofr68C48f+bMnrRvm8NI3kMwosQwEhiEYLDExnsNLBl4Tt+1dkVsX0yMqzpR/0=
+Return-Path: <SRS0=cL0F=JQ=gmx.de=Johannes.Schindelin@sourceware.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	by sourceware.org (Postfix) with ESMTPS id 2098243786B4
+	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 13:18:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 2098243786B4
+Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=gmx.de
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 2098243786B4
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=212.227.15.18
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1795785499; cv=none;
+	b=fZxOVZkQqG3HFNcvqfMob0NXNMDhQsoStK+JDW1jEvlKh0HO9z4AsLj/C1y+k5k/MZmcluqvnJSUumFNm7/zlI8LzVR9IvY6ait+Y077SLwToEs2D6hDUNVLDSdKn6UYqafEcb4xzW/lbaO5UyBeQj56LF/zux/4gDDAxEUcqv0=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1795784215; c=relaxed/simple;
-	bh=MaHIP8J0I5GXmGLjQRjPb0rshmGg9I6LYcOJQ3NlF5s=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=jk7RTgEe/5E2KWd5U6egKkEyVHmokv/Dy0lq8e8H47TXP56+TgjNoCvq6GOUrdms3qJQyz0jO46g7b+hvba5tXTiNpBXZiPWmEsAj8lq2glhPvUVkvThLer9cOH13ACNtD/PcVrT0ipYYf3wn/nzKHHWJCrN9oCsIpkIQEafkMI=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=pKCY5qWN
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2F89642F9C1E
+	t=1795785499; c=relaxed/simple;
+	bh=V/+AvXLT9ruiaqlBK+JIus7jve2l/C2YQ69VqLdP9oQ=;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version; b=OVkHMBmK/ovdzsDqP/+PCj1zKI3X+ruYK9UPUYjUjM60plg8/fLGvwm4SHbziFr+6WnndQObcSOjTn7PVqU4BAfN99j5JBTQEP2yqa0eXpf269MDP1S4MX63TV+GYlJzXqp2etPaSlmfj9wb3/KEVtVvT7a6YVZ1zkWFAUbAXpo=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=TsObGWIH
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 2098243786B4
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=pKCY5qWN
-Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
-	by relay1.mymailcheap.com (Postfix) with ESMTPS id CFC583EADF
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:54 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.38.223.107])
-	by nf2.mymailcheap.com (Postfix) with ESMTPSA id 64E4D40080
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aosc.io; s=default;
-	t=1795784209; bh=D+YVrTi9Rw9hzh2balOBC0/K4xV07BEYPxp8u7qdR8k=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=pKCY5qWNiOWJDlwNRdiL5vZkDHyiU+LSupnnRnza8G20LQAGDb0aMWRr1DNU8TW3k
-	 8nBmgyovrIE2wR4Bibi7self9MRnEEq4gCccabwYo5Xf9Y2IAn7A6EYQOP6lBh7IRy
-	 +hwwLfjaer11ERPLEVmyqh18fJLnqkSww49YqdxM=
-Received: from Arisu (unknown [179.253.246.29])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by mail20.mymailcheap.com (Postfix) with ESMTPSA id D9FA1E1FD5
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:48 +0000 (UTC)
-From: Mingye Wang <arthur2e5@aosc.io>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v7 3/3] Cygwin: rewrite cmdline parser
-Date: Fri, 27 Nov 2026 20:56:39 +0800
-Message-ID: <20261127125639.2099-4-arthur2e5@aosc.io>
-X-Mailer: git-send-email 2.56.0.windows.4.niugit
-In-Reply-To: <20261127125639.2099-1-arthur2e5@aosc.io>
-References: <20261127125639.2099-1-arthur2e5@aosc.io>
+	dkim=pass (2048-bit key, secure) header.d=gmx.de header.i=johannes.schindelin@gmx.de header.a=rsa-sha256 header.s=s31663417 header.b=TsObGWIH
+DKIM2-Signature:  i=1; m=1; t=1795785497;
+ mf=PEpvaGFubmVzLlNjaGluZGVsaW5AZ214LmRlPg==;
+ rt=PGN5Z3dpbi1wYXRjaGVzQGN5Z3dpbi5jb20+;
+ d=gmx.de;
+ s=s31663417:rsa-sha256:FF2VorwmnWiQyX4DHJ6nWcxapyHJ
+   tRuaVAEvAEoEXAckc5Dolv3trTqcDkd9Dg04G7A11ru+aByIXrPVorbiHlle9FnpaMhy2kvVhyx
+   HXUTLfmwyUSF3TXFqVcd5RSs7RWw8ogUsIjyoipJlWyV51Uzr2L5m+AsbKuX7Pnu9IFERTAQGDS
+   aIk2kuoE0OttcUSImc1g27Z83fvdt2CfibZ8MLbOMe4gfr/AHSonZSRu4zsz6FXWdK3Nsx+4P3n
+   RH98VSJQcZPawYNn/kSVIFMbByNIt/BPbEp0RhCld4TTqHnR/JqKBIhTueDyA0XXW/wbraGQoJ3
+   2VfVMPKEx1qfIg==;
+Message-Instance:  m=1;
+ h=sha256:
+   +C/cseESI7Bnzt9tOlDYGDKatwQGlOjIY1ZDJgKPGzQ=:
+   V/+AvXLT9ruiaqlBK+JIus7jve2l/C2YQ69VqLdP9oQ=,
+  sha512:
+   3b9wh38tbeKaIvb7xHgV1PVmled6M46LOpUSj3EwDDCLZbK34c4X4k1gwLfN3k5QCXcMV+kOmSToSGU/jakvBw==:
+   /sjETkl7zBiyYkW66cq0Oz4OOkYNkqvv3nmVgrc0XamYyBpptFPJe6tKpvMcfwuNq5R+oO9thclKJuext5dhcQ==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1795785497; x=1796390297;
+	i=johannes.schindelin@gmx.de;
+	bh=ZiikEsT/qqORSZA4JXsQAkXXoC2vYY9qsbFKkEzBz/Y=;
+	h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=TsObGWIH42EccCVq+bQ2BZIWFD/yy/YTqdZG2Bzj2cPet9/Zgi1FiALL3enREjlJ
+	 LpvH7UMEPXXGQqO6GI/TcEY1FL++xNrN8dBfnTrgOBBPguKAE3ANAaTKSOMA2FQZr
+	 XEr4+YqoAxV436Jdb1PbzjmpdTv4ofPWv07yKNwpxjHLJFmm3RFERejBiIc2CUg3y
+	 O3wCX9dgs+UEZFT/c9/XWjM4U4eyKb+AFyh6nxCB1k8iBDGWbP4vnEEv8rSY8o+UC
+	 buqjCQM9oLiwBAl5IcKZ1E7BJqwoFrPQqiqK6/9fO1QMvbjJ+6nS4BBrSAB+v+vLK
+	 rMG4FEqrNgYmM619lA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3bWr-1yWlZW2eDj-00wQKE; Fri, 27
+ Nov 2026 14:18:13 +0100
+Date: Fri, 27 Nov 2026 14:18:11 +0100 (CET)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Do not use terminfo to determine the terminal
+ capability
+In-Reply-To: <20261030141034.11993-1-takashi.yano@nifty.ne.jp>
+Message-ID: <c91b3be9-3f14-8baf-7fd6-825a2cbce1be@gmx.de>
+References: <20261030141034.11993-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [1.20 / 10.00];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	MIME_GOOD(-0.10)[text/plain];
-	R_SPF_ALLOW(-0.10)[+mx];
-	R_DKIM_ALLOW(-0.10)[aosc.io:s=default];
-	LOCAL_OUTBOUND(0.00)[];
-	ASN(0.00)[asn:16276,ipnet:51.38.0.0/16,country:FR];
-	RCPT_COUNT_ONE(0.00)[1];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_ONE(0.00)[1];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[aosc.io:+];
-	PREVIOUSLY_DELIVERED(0.00)[cygwin-patches@cygwin.com];
-	TO_DN_NONE(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[aosc.io,quarantine];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	R_DKIM_ALIGNED(0.00)[strict];
-	FROM_EQ_ENVFROM(0.00)[];
-	TEXT_WORDS_TRUNCATED(0.00)[sampled=1]
-X-Rspamd-Queue-Id: 64E4D40080
-X-Rspamd-Server: nf2.mymailcheap.com
-X-Rspamd-Action: no action
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+X-Provags-ID: V03:K1:xnSfgpALFVBUpiF1OxNiY7lGub94ZuYgrQ2DaTH0JcqIh9RuRmK
+ NZInGzbTaievOePfhzHnjHF4eNnZN7kn4Yrh1mrqfxfyQfTJegIi63YEACBAkklcqhErh9V
+ I4ip1razBe1659VkmCeX0aNW+3IK6Btuzypaqx5iPwlLJAsHw53rPvH5NUd+eB0/J+6pRvz
+ jW1i3gwATKf/sS61Yn7/g==
+UI-OutboundReport: notjunk:1;M01:P0:UBk6sLt5h4A=;IbC+ww2cL+iEiYl5LaeBno9CtR1
+ +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
+ PkM2RBcDAgfA=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,GIT_PATCH_0,MALFORMED_FREEMAIL,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This commit rewrites the cmdline parser to achieve the following:
-* MSVCRT compatibility. Except for the single-quote handling (an
-  extension for compatibility with old Cygwin), the parser now
-  interprets option boundaries exactly like MSVCR since 2008. This fixes
-  the issue where our escaping does not work with our own parsing.
-* Clarity. Since globify() is no longer responsible for handling the
-  opening and closing of quotes, the code is much simpler.
-* Sanity. The GLOB_NOCHECK flag is removed, so a failed glob correctly
-  returns the literal value. Without the change, anything path-like
-  would be garbled by globify's escaping.
-* A memory leak in the @file expansion is removed by rewriting it to use
-  a stack of buffers. This also simplifies the code since we no longer
-  have to move stuff. The "downside" is that tokens can no longer cross
-  file boundaries.
+Hi Takashi,
 
-Some clarifications are made in the documentation for when globs are not
-expanded.
+On Fri, 30 Oct 2026, Takashi Yano wrote:
 
-The change fixes two complaints of mine:
-* That cygwin is incompatible with its own escape.[1]
-* That there is no way to echo `C:\"` from win32.[2]
-  [1]: https://cygwin.com/pipermail/cygwin/2020-June/245162.html
-  [2]: https://cygwin.com/pipermail/cygwin/2019-October/242790.html
+> Currently, pty checks whether the terminal has ANSI escape sequences
+> support which is needed by pseudo console using terminfo. If not, pty
+> does not start psuedo console. However, it does not seem natural for a
 
-(It's never the point to spawn cygwin32 from cygwin64. Consistency
-matters: with yourself always, and with the outside world when you are
-supposed to.)
+s/psuedo/pseudo/
 
-This is the seventh version of the patch, having fixed issues with
-compilation, rebased to the latest version, and tested by replacing
-cygwin1.dll.
+> POSIX emulation layer to refer to terminfo. This patch disables terminfo
+> lookups and relying solely on checking the CSI6n responce with a
+> timeout.
+>=20
+> Fixes: 4e08fe42c9f3 ("Cygwin: pty: Disable pseudo console if TERM does n=
+ot have CSI6n.")
 
-AI was used to automate patch-rebasing and testing.
-It did not write any non-trivial new code.
-It did find a bug related to trailing backslash recovery!
+Thank you for working on this!
 
-Co-Authored-By: Skadi "Skadeep" Deepseek <noreply@deepseek.com>
----
- winsup/cygwin/dcrt0.cc                |  11 +-
- winsup/cygwin/local_includes/winf.h   |   4 +-
- winsup/cygwin/local_includes/winsup.h |   7 +-
- winsup/cygwin/winf.cc                 | 374 +++++++++++++++-----------
- winsup/doc/cygwinenv.xml              |   8 +-
- winsup/doc/faq-api.xml                |   2 +-
- 6 files changed, 231 insertions(+), 175 deletions(-)
+> Signed-off-by: Takashi Yano <takashi.yano@nifty.ne.jp>
+> Reviewed-by:
+>=20
+> ---
+>  winsup/cygwin/fhandler/pty.cc | 76 +----------------------------------
+>  1 file changed, 2 insertions(+), 74 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler/pty.cc b/winsup/cygwin/fhandler/pty.=
+cc
+> index 6d0183f5d..39525bd08 100644
+> --- a/winsup/cygwin/fhandler/pty.cc
+> +++ b/winsup/cygwin/fhandler/pty.cc
+> @@ -4274,75 +4274,6 @@ fhandler_pty_slave::close_pseudoconsole (tty *tty=
+p, DWORD force_switch_to)
+>      }
+>  }
+> =20
+> -static bool
+> -has_ansi_escape_sequences (const WCHAR *env)
+> -{
+> -  /* Retrieve TERM name */
+> -  const char *term =3D NULL;
+> -  char term_str[260];
+> -  if (env)
+> -    {
+> -    for (const WCHAR *p =3D env; *p !=3D L'\0'; p +=3D wcslen (p) + 1)
+> -      if (swscanf (p, L"TERM=3D%236s", term_str) =3D=3D 1)
+> -	{
+> -	  term =3D term_str;
+> -	  break;
+> -	}
+> -    }
+> -  else
+> -    term =3D getenv ("TERM");
+> -
+> -  if (!term)
+> -    return false;
 
-diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
-index f41feb98ac4..d652fb30f21 100644
---- a/winsup/cygwin/dcrt0.cc
-+++ b/winsup/cygwin/dcrt0.cc
-@@ -37,6 +37,8 @@ details. */
- #include "ntdll.h"
- #include "winf.h"
- 
-+#define MAX_AT_FILE_LEVEL 10
-+
- #define PREMAIN_LEN (sizeof (user_data->premain) / sizeof (user_data->premain[0]))
- 
- extern "C" void cygwin_exit (int) __attribute__ ((noreturn));
-@@ -622,8 +624,13 @@ dll_crt0_1 (void *)
- 
-       /* Scan the command line and build argv.  Expand wildcards if not
- 	 called from another cygwin process. */
--      build_argv (line, __argv, __argc,
--		  NOTSTATE (myself, PID_CYGPARENT) && allow_glob);
-+      __argc = cygwin_cmdline_parse (line, &__argv, NULL,
-+		NOTSTATE (myself, PID_CYGPARENT) && allow_glob, MAX_AT_FILE_LEVEL);
-+
-+      if (__argc == -EMLINK)
-+	api_fatal ("Too many levels of nesting for %s", line);
-+      else if (__argc < 0)
-+	api_fatal ("%s for parsing cmdline %s", strerror(-__argc), line);
- 
-       /* Convert argv[0] to posix rules if it's currently blatantly
- 	 win32 style. */
-diff --git a/winsup/cygwin/local_includes/winf.h b/winsup/cygwin/local_includes/winf.h
-index c5a8050f9c6..13aacd5c556 100644
---- a/winsup/cygwin/local_includes/winf.h
-+++ b/winsup/cygwin/local_includes/winf.h
-@@ -78,7 +78,7 @@ class linebuf
-   void add (const char *what) {add (what, strlen (what));}
-   void prepend (const char *, int);
-   void finish (bool);
--  bool fromargv(av&, const char *, bool);;
-+  bool fromargv(av&, const char *, bool, bool fq = false);;
-   operator size_t () const { return ix + 1; }
-   operator const char * () const { return buf; }
-   operator wchar_t * ()
-@@ -100,4 +100,4 @@ class linebuf
-   }
- };
- 
--void build_argv (char *cmd, char **&argv, int &argc, int winshell);
-+extern "C" int cygwin_cmdline_parse (char *cmd, char ***pargv, char **allocs, int doglob, int maxfile);
-diff --git a/winsup/cygwin/local_includes/winsup.h b/winsup/cygwin/local_includes/winsup.h
-index 6841d4a59fb..f5daf780d3d 100644
---- a/winsup/cygwin/local_includes/winsup.h
-+++ b/winsup/cygwin/local_includes/winsup.h
-@@ -133,9 +133,6 @@ extern int cygserver_running;
- 
- #define set_api_fatal_return(n) do {extern int __api_fatal_exit_val; __api_fatal_exit_val = (n);} while (0)
- 
--#undef issep
--#define issep(ch) (strchr (" \t\n\r", (ch)) != NULL)
--
- /* Treats "X:" as absolute path.
-    FIXME: We should drop the notion that "X:" is a valid absolute path.
-    Only "X:/" and "X:\\" should be (see isabspath_strict below).  The
-@@ -147,6 +144,10 @@ extern int cygserver_running;
- #define isabspath_strict(p) \
-   (isdirsep (*(p)) || (isalpha (*(p)) && (p)[1] == ':' && isdirsep ((p)[2])))
- 
-+/* Shortcut.  See also std::add_pointer. */
-+#define malloc_type(n, type) ((type *) malloc ((n) * sizeof (type)))
-+#define realloc_type(b, n, type) ((type *) realloc ((b), (n) * sizeof (type)))
-+
- /******************** Initialization/Termination **********************/
- 
- class per_process;
-diff --git a/winsup/cygwin/winf.cc b/winsup/cygwin/winf.cc
-index a4b2d87d312..532e071de35 100644
---- a/winsup/cygwin/winf.cc
-+++ b/winsup/cygwin/winf.cc
-@@ -15,17 +15,17 @@ details. */
- #include "tls_pbuf.h"
- #include "winf.h"
- #include "sys/cygwin.h"
--#include <ctype.h>
- #include "glob.h"
-+#include <stdio.h>
- 
- void
--linebuf::finish (bool cmdlenoverflow_ok)
-+linebuf::finish (bool trunc_for_cygwin)
- {
-   if (!ix)
-     add ("", 1);
-   else
-     {
--      if (ix-- > MAXCYGWINCMDLEN && cmdlenoverflow_ok)
-+      if (ix-- > MAXCYGWINCMDLEN && trunc_for_cygwin)
- 	ix = MAXCYGWINCMDLEN - 1;
-       buf[ix] = '\0';
-     }
-@@ -65,7 +65,7 @@ linebuf::prepend (const char *what, int len)
- }
- 
- bool
--linebuf::fromargv (av& newargv, const char *real_path, bool cmdlenoverflow_ok)
-+linebuf::fromargv (av& newargv, const char *real_path, bool trunc_for_cygwin, bool forcequote)
- {
-   bool success = true;
-   for (int i = 0; i < newargv.argc; i++)
-@@ -75,7 +75,7 @@ linebuf::fromargv (av& newargv, const char *real_path, bool cmdlenoverflow_ok)
- 
-       a = i ? newargv[i] : (char *) real_path;
-       int len = strlen (a);
--      if (len != 0 && !strpbrk (a, " \t\n\r\""))
-+      if (len != 0 && !forcequote && !strpbrk (a, " \t\n\r\""))
- 	add (a, len);
-       else
- 	{
-@@ -113,7 +113,7 @@ linebuf::fromargv (av& newargv, const char *real_path, bool cmdlenoverflow_ok)
-       add (" ", 1);
-     }
- 
--  finish (cmdlenoverflow_ok);
-+  finish (trunc_for_cygwin);
- 
-   if (ix >= MAXWINCMDLEN)
-     {
-@@ -141,23 +141,18 @@ av::unshift (const char *what)
-   return 1;
- }
- 
--#define MAX_AT_FILE_LEVEL 10
--
- /*
-- * Replaces @file in the command line with the contents of the file.
-- * There may be multiple @file's in a single command line
-- * A \@file is replaced with @file so that echo \@foo would print
-- * @foo and not the contents of foo.
-+ * Read a file into a newly-allocated buffer.
-  */
--static bool
--insert_file (char *name, char *&cmd)
-+static char *
-+read_file (const char *name)
- {
-   HANDLE f;
-   DWORD size;
-   tmp_pathbuf tp;
- 
-   PWCHAR wname = tp.w_get ();
--  sys_mbstowcs (wname, NT_MAX_PATH, name + 1);
-+  sys_mbstowcs (wname, NT_MAX_PATH, name);	/* FIXME: Do we need \\?\ ? */
-   f = CreateFileW (wname,
- 		   GENERIC_READ,		/* open for reading	*/
- 		   FILE_SHARE_VALID_FLAGS,      /* share for reading	*/
-@@ -169,7 +164,7 @@ insert_file (char *name, char *&cmd)
-   if (f == INVALID_HANDLE_VALUE)
-     {
-       debug_printf ("couldn't open file '%s', %E", name);
--      return false;
-+      return NULL;
-     }
- 
-   /* This only supports files up to about 4 billion bytes in
-@@ -180,34 +175,29 @@ insert_file (char *name, char *&cmd)
-     {
-       CloseHandle (f);
-       debug_printf ("couldn't get file size for '%s', %E", name);
--      return false;
-+      return NULL;
-     }
- 
--  int new_size = strlen (cmd) + size + 2;
--  char *tmp = (char *) malloc (new_size);
--  if (!tmp)
-+  char *string = (char *) malloc (size + 1);
-+  if (!string)
-     {
-       CloseHandle (f);
--      debug_printf ("malloc failed, %E");
--      return false;
-+      return NULL;
-     }
- 
--  /* realloc passed as it should */
-+  /* malloc passed as it should */
-   DWORD rf_read;
-   BOOL rf_result;
--  rf_result = ReadFile (f, tmp, size, &rf_read, NULL);
-+  rf_result = ReadFile (f, string, size, &rf_read, NULL);
-   CloseHandle (f);
-   if (!rf_result || (rf_read != size))
-     {
--      free (tmp);
-+      free (string);
-       debug_printf ("ReadFile failed, %E");
--      return false;
-+      return NULL;
-     }
--
--  tmp[size++] = ' ';
--  strcpy (tmp + size, cmd);
--  cmd = tmp;
--  return true;
-+  string[size] = '\0';
-+  return string;
- }
- 
- static inline int
-@@ -217,85 +207,94 @@ isquote (char c)
-   return ch == '"' || ch == '\'';
- }
- 
--/* Step over a run of characters delimited by quotes */
--static /*__inline*/ char *
--quoted (char *cmd, int winshell)
-+static inline int
-+issep (char c)
- {
--  char *p;
--  char quote = *cmd;
--
--  if (!winshell)
--    {
--      char *p;
--      memmove (cmd, cmd + 1, strlen (cmd));
--      if (*(p = strchrnul (cmd, quote)))
--	memmove (p, p + 1, strlen (p));
--      return p;
--    }
--
--  const char *s = quote == '\'' ? "'" : "\\\"";
--  /* This must have been run from a Windows shell, so preserve
--     quotes for globify to play with later. */
--  while (*cmd && *++cmd)
--    if ((p = strpbrk (cmd, s)) == NULL)
--      {
--	cmd = strchr (cmd, '\0');	// no closing quote
--	break;
--      }
--    else if (*p == '\\')
--      cmd = ++p;
--    else if (quote == '"' && p[1] == '"')
--      {
--	*p = '\\';
--	cmd = ++p;			// a quoted quote
--      }
--    else
--      {
--	cmd = p + 1;		// point to after end
--	break;
--      }
--  return cmd;
-+  return c && (strchr (" \t\n\r", c) != NULL);
- }
- 
--/* Grab the next argument from the command line, terminating it in place.
--   Return false when the command line is exhausted.  */
-+/* MSVCRT-like argument parsing.
-+ * Parse a word in-place, consuming characters and marking where quoting state is changed. */
- static bool
--next_arg (char *&cmd, char *&word, char *&sawquote, bool winshell, bool first)
-+next_arg (char *&cmd, char *&arg, size_t* quotepos, size_t &quotesize)
- {
--  while (issep (*cmd))
-+  bool inquote = false;
-+  size_t nbs = 0;
-+  char quote = '\0';
-+  size_t nquotes = 0;
-+
-+  while (*cmd && issep (*cmd))
-     cmd++;
- 
--  if (!*cmd)
--    return false;
-+  arg = cmd;
-+  char *out = arg;
- 
--  word = cmd;
--  sawquote = NULL;
--  while (*cmd)
-+  for (;*cmd && (inquote || !issep (*cmd)); cmd++)
-     {
--      if (*cmd != '"' && (!winshell || *cmd != '\''))
--	cmd++;			// Skip over this character
-+      if (*cmd == '\\')
-+	{
-+	  nbs += 1;
-+	  continue;
-+	}
-+
-+      // For anything else, sort out backslashes first.
-+      // All backslashes are literal, except these before a quote.
-+      // Single-quote is our addition.  Would love to remove it.
-+      bool atquote = inquote ? *cmd == quote : isquote (*cmd);
-+      size_t n = atquote ? nbs / 2 : nbs;
-+      memset (out, '\\', n);
-+      out += n;
-+
-+      if (nbs % 2 == 0 && atquote)
-+	{
-+	  /* The infamous "" special case: emit literal '"', no change.
-+	   *
-+	   * Makes quotepos tracking easier, so applies to single quote too:
-+	   * without this handling, an out pos can contain many state changes,
-+	   * so a check must be done before appending. */
-+	  if (inquote && *cmd == quote && cmd[1] == quote)
-+	    *out++ = *cmd++;
-+	  else
-+	    {
-+	      if (!inquote)
-+		quote = *cmd;
-+	      if (nquotes > quotesize - 1)
-+		quotepos = realloc_type(quotepos, quotesize *= 2, size_t);
-+	      quotepos[nquotes++] = out - arg + inquote;
-+	      inquote = !inquote;
-+	    }
-+	}
-       else
--	/* Skip over characters until the closing quote */
- 	{
--	  sawquote = cmd;
--	  /* Handle quoting.  Only strip off quotes if the parent is
--	     a Cygwin process, or if the word starts with a '@'.
--	     In this case, the insert_file function needs an unquoted
--	     DOS filename and globbing isn't performed anyway. */
--	  cmd = quoted (cmd, winshell && !first && *word != '@');
-+	  *out++ = *cmd;
- 	}
--      if (issep (*cmd))		// End of argument if space
--	break;
-+
-+      nbs = 0;
-     }
-+
-+  /* Flush backslashes that end the word: they are literal. */
-+  if (nbs)
-+    {
-+      memset (out, '\\', nbs);
-+      out += nbs;
-+    }
-+
-   if (*cmd)
--    *cmd++ = '\0';		// Terminate `word'
-+    cmd++;
- 
--  return true;
-+  *out = '\0';
-+  quotepos[nquotes++] = SIZE_MAX;
-+  return arg != cmd;
- }
- 
-+
- /* Perform a glob on word if it contains wildcard characters.
-    Also quote every character between quotes to force glob to
--   treat the characters literally. */
-+   treat the characters literally.
-+
-+   Call glob(3) on the word, and fill argv accordingly.
-+   If the input looks like a DOS path, double up backslashes.
-+ */
- 
- /* Either X:[...] or \\server\[...] */
- #define is_dos_path(s) (isdrive(s) \
-@@ -305,137 +304,186 @@ next_arg (char *&cmd, char *&word, char *&sawquote, bool winshell, bool first)
- 			    && strchr ((s) + 3, '\\')))
- 
- static int
--globify (char *word, char **&argv, int &argc, int &argvlen)
-+globify (const char *word, size_t *quotepos, size_t quotesize, char **&argv, int &argc, int &argvlen)
- {
-   if (*word != '~' && strpbrk (word, "?*[\"\'(){}") == NULL)
-     return 0;
- 
--  int n = 0;
--  char *p, *s;
--  int dos_spec = is_dos_path (word);
--  if (!dos_spec && isquote (*word) && word[1] && word[2])
--    dos_spec = is_dos_path (word + 1);
--
-   /* We'll need more space if there are quoting characters in
-      word.  If that is the case, doubling the size of the
-      string should provide more than enough space. */
--  if (strpbrk (word, "'\""))
--    n = strlen (word);
-+  size_t n = quotepos[0] == SIZE_MAX ? 0 : strlen (word);
-+  char *p;
-+  const char *s;
-+  int dos_spec = is_dos_path (word);
-   char pattern[strlen (word) + ((dos_spec + 1) * n) + 1];
-+  bool inquote = false;
-+  size_t nquotes = 0;
-+  int argcwant;
- 
-   /* Fill pattern with characters from word, quoting any
-      characters found within quotes. */
-   for (p = pattern, s = word; *s != '\000'; s++, p++)
--    if (!isquote (*s))
--      {
--	if (dos_spec && *s == '\\')
--	  *p++ = '\\';
--	*p = *s;
--      }
--    else
--      {
--	char quote = *s;
--	while (*++s && *s != quote)
--	  {
--	    mbstate_t mbs = { 0 };
--	    if (dos_spec || *s != '\\')
--	      /* nothing */;
--	    else if (s[1] == quote || s[1] == '\\')
--	      s++;
-+    {
-+      if (nquotes < quotesize)
-+	{
-+	  if (quotepos[nquotes] == SIZE_MAX)
-+	    quotesize = nquotes;
-+	  else if (quotepos[nquotes] == size_t (s - word))
-+	    {
-+	      inquote = !inquote;
-+	      nquotes++;
-+	    }
-+	}
-+      if (!inquote)
-+	{
-+	  if (dos_spec && *s == '\\')
- 	    *p++ = '\\';
--	    size_t cnt = isascii (*s) ? 1 : mbrtowi (NULL, s, MB_CUR_MAX, &mbs);
--	    if (cnt <= 1 || cnt == (size_t)-1)
--	      *p++ = *s;
--	    else
--	      {
--		--s;
--		while (cnt-- > 0)
--		  *p++ = *++s;
--	      }
--	  }
--	if (*s == quote)
--	  p--;
--	if (*s == '\0')
--	    break;
--      }
--
-+	  *p = *s;
-+	}
-+      else
-+	{
-+	  *p++ = '\\';
-+	  mbstate_t mbs = { 0 };
-+	  size_t cnt = isascii (*s) ? 1 : mbrtowi (NULL, s, MB_CUR_MAX, &mbs);
-+	  if (cnt <= 1 || cnt == (size_t)-1)
-+	    *p = *s;
-+	  else
-+	    {
-+	      memcpy (p, s, cnt);
-+	      p += cnt - 1;
-+	      s += cnt - 1;
-+	    }
-+	}
-+    }
-   *p = '\0';
- 
-   glob_t gl;
-   gl.gl_offs = 0;
- 
--  /* Attempt to match the argument.  Return just word (minus quoting) if no match. */
--  if (glob (pattern, GLOB_TILDE | GLOB_NOCHECK | GLOB_BRACE | GLOB_QUOTE, NULL, &gl) || !gl.gl_pathc)
-+  /* Attempt to match the argument.  Bail if no match. */
-+  if (glob (pattern, GLOB_TILDE | GLOB_BRACE, NULL, &gl) || !gl.gl_pathc)
-     return 0;
- 
-   /* Allocate enough space in argv for the matched filenames. */
--  n = argc;
--  if ((argc += gl.gl_pathc) > argvlen)
-+  if ((argcwant = argc + gl.gl_pathc) > argvlen)
-     {
--      argvlen = argc + 10;
--      argv = (char **) realloc (argv, (1 + argvlen) * sizeof (argv[0]));
-+      argvlen = argcwant + 10;
-+      char **new_argv = (char **) realloc (argv, (1 + argvlen) * sizeof (argv[0]));
-+      if (!new_argv)
-+	{
-+	  free (gl.gl_pathv);
-+	  return -ENOMEM;
-+	}
-+      argv = new_argv;
-     }
- 
-   /* Copy the matched filenames to argv. */
--  char **gv = gl.gl_pathv;
--  char **av = argv + n;
--  while (*gv)
-+  for (char **gv = gl.gl_pathv; *gv; gv++)
-     {
--      debug_printf ("argv[%d] = '%s'", n++, *gv);
--      *av++ = *gv++;
-+      debug_printf ("argv[%zu] = '%s'", argc, *gv);
-+      argv[argc++] = *gv;
-     }
- 
--  /* Clean up after glob. */
-+  /* Clean up after glob.  Not using globfree() because the matches are retained. */
-   free (gl.gl_pathv);
-   return 1;
- }
- 
--
- /* Build argv, argc from string passed from Windows.  */
--
--static void
--build_argv (char *cmd, char **&argv, int &argc, int winshell)
-+extern "C" int
-+cygwin_cmdline_parse (char *cmd, char ***pargv, char **allocs, int doglob, int maxfile)
- {
-   int argvlen = 0;
--  int nesting = 0;		// monitor "nesting" from insert_file
-+  int nesting = 0;	      // nesting depth for @file (file_stack index)
-+  int inserts = 0;	      // total @file encountered (allocs index)
- 
--  argc = 0;
--  argvlen = 0;
--  argv = NULL;
-+  // Would be a bad idea to use alloca due to unbounded file size.
-+  size_t quotesize = 32;
-+  size_t *quotepos = malloc_type (quotesize, size_t);
- 
-+  int argc = 0;
-+  int error = 0;
-+  char **argv = NULL;
-   char *word;
--  char *sawquote;
-+
-+  bool bail_on_file = maxfile > 0;
-+  maxfile = bail_on_file ? maxfile : -maxfile;
-+  char *file_stack[maxfile];
-+  bool has_next;
- 
-   /* Scan command line until there is nothing left. */
--  while (next_arg (cmd, word, sawquote, winshell, argc == 0))
-+  while ((has_next = next_arg (cmd, word, quotepos, quotesize)) || nesting)
-     {
-+      /* Catch when "nothing" is reached but we can pop the stack. */
-+      if (! has_next)
-+	{
-+	  cmd = file_stack[--nesting];
-+	  continue;
-+	}
-+
-       /* Possibly look for @file construction assuming that this isn't
- 	 the very first argument and the @ wasn't quoted */
--      if (argc && sawquote != word && *word == '@')
-+      if (argc && quotepos[0] > 0 && *word == '@')
- 	{
--	  if (++nesting > MAX_AT_FILE_LEVEL)
--	    api_fatal ("Too many levels of nesting for %s", word);
--	  if (insert_file (word, cmd))
--	      continue;			// There's new stuff in cmd now
-+	  bool do_include = inserts < maxfile;
-+	  char *fbuf;
-+	  if (!do_include && bail_on_file)
-+	    {
-+	      error = -EMLINK;
-+	      goto exit;
-+	    }
-+	  if (do_include && (fbuf = read_file (word + 1)))
-+	    {
-+	      file_stack[nesting++] = cmd;
-+	      if (allocs != NULL)
-+		allocs[inserts] = fbuf;
-+
-+	      inserts += 1;
-+	      cmd = fbuf;
-+	      continue;
-+	    }
- 	}
- 
-       /* See if we need to allocate more space for argv */
-       if (argc >= argvlen)
- 	{
- 	  argvlen = argc + 10;
--	  argv = (char **) realloc (argv, (1 + argvlen) * sizeof (argv[0]));
-+	  char **new_argv = (char **) realloc (argv, (1 + argvlen) * sizeof (argv[0]));
-+	  if (!new_argv)
-+	    {
-+	      error = -ENOMEM;
-+	      goto exit;
-+	    }
-+	  argv = new_argv;
- 	}
- 
-       /* Add word to argv file after (optional) wildcard expansion. */
--      if (!winshell || !argc || !globify (word, argv, argc, argvlen))
-+      if (doglob && argc != 0)
- 	{
--	  debug_printf ("argv[%d] = '%s'", argc, word);
--	  argv[argc++] = word;
-+	  error = globify (word, quotepos, quotesize, argv, argc, argvlen);
-+	  if (error < 0)
-+	    goto exit;
-+	  else if (error > 0)
-+	    {
-+              error = 0;
-+	      continue;
-+	    }
- 	}
-+
-+      debug_printf ("argv[%d] = '%s'", argc, word);
-+      argv[argc++] = word;
-     }
- 
-+exit:
-   if (argv)
-     argv[argc] = NULL;
-+  if (allocs != NULL)
-+    allocs[inserts] = NULL;
- 
-+  free (quotepos);
-   debug_printf ("argc %d", argc);
-+
-+  *pargv = argv;
-+  return error ? error : argc;
- }
-diff --git a/winsup/doc/cygwinenv.xml b/winsup/doc/cygwinenv.xml
-index fcb6e22485b..6d4c2e368a1 100644
---- a/winsup/doc/cygwinenv.xml
-+++ b/winsup/doc/cygwinenv.xml
-@@ -55,10 +55,10 @@ to the command as arguments.
- </listitem>
- 
- <listitem>
--<para><envar>(no)glob[:ignorecase]</envar> - if set, command line arguments
--containing UNIX-style file wildcard characters (brackets, braces, question mark,
--asterisk, escaped with \) are expanded into lists of files that match 
--those wildcards.
-+<para><envar>(no)glob[:ignorecase]</envar> - if set, unquoted
-+command line arguments containing UNIX-style file wildcard characters (brackets,
-+braces, question mark, asterisk, escaped with \) are expanded into lists of
-+files that match those wildcards.  Leading tildes are expanded.
- This is applicable only to programs run from non-Cygwin programs such as a CMD prompt.
- That means that this setting does not affect globbing operations for shells such as
- bash, sh, tcsh, zsh, etc.
-diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
-index c9b35f6b04d..0a59c889505 100644
---- a/winsup/doc/faq-api.xml
-+++ b/winsup/doc/faq-api.xml
-@@ -179,7 +179,7 @@ for the old executable and any dll into per-user subdirectories in the
- <para>If the DLL thinks it was invoked from a DOS style prompt, it runs a
- `globber' over the arguments provided on the command line.  This means
- that if you type <literal>LS *.EXE</literal> from DOS, it will do what you might
--expect.
-+expect.  This only happens to the unquoted parts.
- </para>
- <para>Beware: globbing uses <literal>malloc</literal>.  If your application defines
- <literal>malloc</literal>, that will get used.  This may do horrible things to you.
--- 
-2.56.0.windows.4.niugit
+So if `TERM` was unset (and I assume, with terminfo installed, also with
+`TERM=3Ddumb`) this returned `false`, which...
 
+> -
+> -  /* If cursor_home is not "\033[H", terminal is not supposed to
+> -     support ANSI escape sequences. */
+> -  char tinfo[260];
+> -  __small_sprintf (tinfo, "/usr/share/terminfo/%02x/%s", term[0], term)=
+;
+> -  path_conv path (tinfo);
+> -  WCHAR wtinfo[260];
+> -  path.get_wide_win32_path (wtinfo);
+> -  HANDLE h;
+> -  h =3D CreateFileW (wtinfo, GENERIC_READ, FILE_SHARE_READ,
+> -		   NULL, OPEN_EXISTING, 0, NULL);
+> -  if (h =3D=3D NULL)
+> -    return false;
+> -  char terminfo[4096];
+> -  DWORD n;
+> -  ReadFile (h, terminfo, sizeof (terminfo), &n, 0);
+> -  CloseHandle (h);
+> -
+> -  int num_size =3D 2;
+> -  if (*(int16_t *)terminfo =3D=3D 01036 /* MAGIC2 */)
+> -    num_size =3D 4;
+> -  const int name_pos =3D 12; /* Position of terminal name */
+> -  const int name_size =3D *(int16_t *) (terminfo + 2);
+> -  const int bool_count =3D *(int16_t *) (terminfo + 4);
+> -  const int num_count =3D *(int16_t *) (terminfo + 6);
+> -  const int str_count =3D *(int16_t *) (terminfo + 8);
+> -  const int str_size =3D *(int16_t *) (terminfo + 10);
+> -  const int cursor_home =3D 12; /* cursor_home entry index */
+> -  if (cursor_home >=3D str_count)
+> -    return false;
+> -  int str_idx_pos =3D name_pos + name_size + bool_count + num_size * nu=
+m_count;
+> -  if (str_idx_pos & 1)
+> -    str_idx_pos ++;
+> -  const int16_t *str_idx =3D (int16_t *) (terminfo + str_idx_pos);
+> -  const char *str_table =3D (const char *) (str_idx + str_count);
+> -  if (str_idx + cursor_home >=3D (int16_t *) (terminfo + n))
+> -    return false;
+> -  if (str_idx[cursor_home] =3D=3D -1)
+> -    return false;
+> -  const char *cursor_home_str =3D str_table + str_idx[cursor_home];
+> -  if (cursor_home_str >=3D str_table + str_size)
+> -    return false;
+> -  if (cursor_home_str >=3D terminfo + n)
+> -    return false;
+> -  if (strcmp (cursor_home_str, "\033[H") !=3D 0)
+> -    return false;
+> -  return true;
+> -}
+> -
+>  bool
+>  fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+>  {
+> @@ -4355,10 +4286,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHA=
+R *env)
+>    int len;
+>    int wait_cnt =3D 0;
+> =20
+> -  /* Check if terminal has ANSI escape sequence. */
+> -  if (!has_ansi_escape_sequences (env))
+> -    goto maybe_dumb;
+> -
+
+... immediately skipped the ANSI escape sequence handling. But now we no
+longer do that, trying to handle ANSI escape sequences even for `TERM`
+being unset, empty or `dumb`.
+
+But I think we still want the ANSI sequences to be withheld for those
+quite common scenarios, and not send them and then fix them up via
+Backspaces.
+
+Besides:
+
+>    /* Check if terminal has CSI6n */
+>    WaitForSingleObject (input_mutex, mutex_timeout);
+>    /* Set pcon_activated and pcon_start so that the response
+> @@ -4410,7 +4337,8 @@ not_has_csi6n:
+>    get_ttyp ()->pcon_start =3D false;
+>    get_ttyp ()->pcon_activated =3D false;
+>    ReleaseMutex (input_mutex);
+> -maybe_dumb:
+> +  for (int i =3D 0; i < 4; i++)
+> +    WriteFile (get_output_handle (), "\b \b", 3, &n, NULL);
+
+In the failure path, this now _always_ sends backspaces, even if the ANSI
+sequences were processed by the terminal?
+
+Another writer can print legitimate text that this cleanup code would then
+erase.
+
+Ciao,
+Johannes
+
+>    get_ttyp ()->pcon_cap_checked =3D true;
+>    return false;
+>  }
+> --=20
+> 2.51.0
+>=20
+>=20
