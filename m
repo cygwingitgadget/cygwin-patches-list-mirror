@@ -1,48 +1,51 @@
 Return-Path: <SRS0=8Yr5=JQ=aosc.io=arthur2e5@sourceware.org>
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-	by sourceware.org (Postfix) with ESMTPS id 262054307B83
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 262054307B83
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.157])
+	by sourceware.org (Postfix) with ESMTPS id 664D442FA07D
+	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 sourceware.org 664D442FA07D
 Authentication-Results: sourceware.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io
 Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=aosc.io
-ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 262054307B83
-Authentication-Results: sourceware.org; arc=none smtp.remote-ip=144.217.248.102
-ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1795784211; cv=none;
-	b=vCXhrl8SiQPYxUeJKdQc02INxvwtVyHFN1y7tnRrEUEqcq7SflWvHPkjNp5ej/ktIubLRJmRiDWmjMhtK5lnNHaaDkvfZ68mlXL4dkw7ZUGMRp48mHvpxqQQum5pmenC4pzb3p8PH/UWucc9dtqb2Tid3xJOTNP8VShSqyBQfwA=
+ARC-Filter: OpenARC Filter v1.0.0 sourceware.org 664D442FA07D
+Authentication-Results: sourceware.org; arc=none smtp.remote-ip=217.182.119.157
+ARC-Seal: i=1; a=rsa-sha256; d=sourceware.org; s=key; t=1795784214; cv=none;
+	b=eikxpYD0nCaNnpRZ2ZzbbGB6vLkpPcSWdakauizIJO0brt4mgw/vzV6tVGNBTwIKL5gYnruZDBYte06UwrA+he6ubVzrmzPnKpAWs8OZYehKqS3iqo8GMa/amnlKCgo2GOL/dwWEpbHhZZ2aSpGNKKPUgmnytk1fTYYg9qYrCuk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=sourceware.org; s=key;
-	t=1795784211; c=relaxed/simple;
-	bh=+xAAT9F/RlzR247w+Pm6E5rExZ/RZSVTi4J+UBXealw=;
-	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=EIIIIO17etfqkSNOAVFVXtIahFJUFOCNjKZagPtnB7f0mlRvymRJUrF3aadbuxdmqiO7P0HQDPy1JGwcR5vHvpI1BSWY14Lx6TWtl8rNH9L8Yp8BCKyecK68dcDoTRDZMcwKGnO2CuGieyvcGXnKUYvPEMjklx9u4kUMeTM/K5Q=
-ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=neTjPEwt
-DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 262054307B83
+	t=1795784214; c=relaxed/simple;
+	bh=nAOrPdcqMJN1IG9VW5M9fRdmhTL7ITewSeHYQH49rus=;
+	h=DKIM-Signature:From:To:Subject:Date:Message-ID:MIME-Version; b=eLeLdWQBa7Dz/RlwicIKOpRnAje1XMtiioDSCA5TgGyRUnMkOMQdn0shC6kIFr+NxCOWkk9lTDquhb/ZfkHdzmzTNmvaqP1Y7R85626irvsm5jnww0rOTJseK0lR6V4bcgdiiXgrGhPZer+ne75RQ9m1pXT3e6Gj8vs8z/RmDG0=
+ARC-Authentication-Results: i=1; sourceware.org; dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=RrFb4vLu
+DKIM-Filter: OpenDKIM Filter v2.11.0 sourceware.org 664D442FA07D
 Authentication-Results: sourceware.org;
-	dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=neTjPEwt
-Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
-	by relay1.mymailcheap.com (Postfix) with ESMTPS id 8675C3EADF
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:50 +0000 (UTC)
+	dkim=pass (1024-bit key, unprotected) header.d=aosc.io header.i=@aosc.io header.a=rsa-sha256 header.s=default header.b=RrFb4vLu
+Received: from nf1.mymailcheap.com (nf1.mymailcheap.com [51.75.14.91])
+	by relay3.mymailcheap.com (Postfix) with ESMTPS id D61A03EB6B
+	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:52 +0000 (UTC)
 Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.38.223.107])
-	by nf2.mymailcheap.com (Postfix) with ESMTPSA id EBAA44007E
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:45 +0000 (UTC)
+	by nf1.mymailcheap.com (Postfix) with ESMTPSA id 6062140083
+	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aosc.io; s=default;
-	t=1795784205; bh=DKfBFay9RQWlH8QoQ3pktlfsMheks0OFGNLYEZt4QvU=;
-	h=From:To:Subject:Date:From;
-	b=neTjPEwtd5BFUprJbHYVIVlqpJjwxfZ/09xVI7HzjSD4YHRwO/tf7O2359QBYEnOg
-	 XD3Erzjdd5+Zr6jGhqfMKVY7r8Ki2dsj0wjvmM8Wd49QYVMlHjiMFf6rNb4+MoB7Ny
-	 7nDzCX6FsBbDVVWKymu+UXOJBLRa+/u0ddfnYOKc=
+	t=1795784208; bh=B+ETrYB2d5hm4iPVS/9RdS7kgME25z/rrYj/G5gSmv4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=RrFb4vLu71SS8chbVA0Bsv4WzgFVEOeSO+CL9tbV/Co33Ffm3gZovcnsHMpzDGiLN
+	 02zU2OZlOlmeoIzWpbKIKh0BClHvWrl6MM0nwgnvx2KYbF9Q7ASQM3TpbAgwZ5ZRzO
+	 6kRVtYdVoi1Kr9Ke7ZQcYDTE1lFFmXSeqvADgD4M=
 Received: from Arisu (unknown [179.253.246.29])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 5FAD3E1E6A
-	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:43 +0000 (UTC)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 9722EE1FD2
+	for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2026 12:56:47 +0000 (UTC)
 From: Mingye Wang <arthur2e5@aosc.io>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v7 0/3] Cygwin: rewrite cmdline parser
-Date: Fri, 27 Nov 2026 20:56:36 +0800
-Message-ID: <20261127125639.2099-1-arthur2e5@aosc.io>
+Subject: [PATCH v7 2/3] Cygwin: extract command line tokenizer into next_arg
+Date: Fri, 27 Nov 2026 20:56:38 +0800
+Message-ID: <20261127125639.2099-3-arthur2e5@aosc.io>
 X-Mailer: git-send-email 2.56.0.windows.4.niugit
+In-Reply-To: <20261127125639.2099-1-arthur2e5@aosc.io>
+References: <20261127125639.2099-1-arthur2e5@aosc.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 6062140083
 X-Spamd-Result: default: False [1.20 / 10.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
@@ -65,63 +68,126 @@ X-Spamd-Result: default: False [1.20 / 10.00];
 	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_TLS_ALL(0.00)[]
-X-Rspamd-Queue-Id: EBAA44007E
-X-Rspamd-Server: nf2.mymailcheap.com
 X-Rspamd-Action: no action
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: nf1.mymailcheap.com
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GIT_PATCH_0,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TXREP shortcircuit=no autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on sourceware.org
 List-Id: <cygwin-patches.cygwin.com>
 
-This is the seventh version.  The move and the tokenizer extraction are
-separate commits now, as asked in the v6 review, so the third patch is
-only the rewrite.
+Pull the per-argument scanning loop out of build_argv into a next_arg
+helper in the same file.  Quoting, whitespace handling and the in-place
+termination of words are unchanged, so the rewrite can change the
+tokenizer instead of the loop around it.
 
-Previous submissions:
+No functional change.  This is an artificial commit, only here to make
+the following rewrite's diff readable.
 
-[PATCH] Cygwin: rewrite cmdline parser
-https://cygwin.com/pipermail/cygwin-patches/2020q2/010303.html
-[PATCH v2] Cygwin: rewrite cmdline parser
-https://cygwin.com/pipermail/cygwin-patches/2020q2/010304.html
-[PATCH v4 1/3] Cygwin: rewrite and make public cmdline parser
-https://cygwin.com/pipermail/cygwin-patches/2020q3/010559.html
-[PATCH v5] Cygwin: rewrite cmdline parser
-https://cygwin.com/pipermail/cygwin-patches/2020q4/010772.html
-[PATCH v6] Cygwin: rewrite cmdline parser
-https://cygwin.com/pipermail/cygwin-patches/2021q2/011367.html
+AI was used to perform the refactoring mechanically.
 
-Changes since v6:
+Co-Authored-By: Skadi "Skadeep" Deepseek <noreply@deepseek.com>
+---
+ winsup/cygwin/winf.cc | 72 ++++++++++++++++++++++++-------------------
+ 1 file changed, 41 insertions(+), 31 deletions(-)
 
-* Rebased to current master.  The parser helpers are under
-  local_includes now, and globify() uses mbrtowi().
-* A trailing run of backslashes at the end of an argument is no longer
-  dropped.
-* read_file() closes its handle on success and reports read errors
-  again.
-
-The v4 export and the winsup.api test are not part of this series.
-
-The quoting, backslash, glob and @file cases pass from a cmd.exe prompt
-against the built cygwin1.dll.
-
-AI was used to automate patch-rebasing and testing.  It did not write
-any non-trivial new code.  It did find the trailing backslash bug.
-
-I provide all my patches to Cygwin, including this one and all future
-ones, under the 2-clause BSD license.
-
-Mingye Wang (3):
-  Cygwin: move cmdline parser from dcrt0.cc to winf.cc
-  Cygwin: extract command line tokenizer into next_arg
-  Cygwin: rewrite cmdline parser
-
- winsup/cygwin/dcrt0.cc                | 297 +--------------------
- winsup/cygwin/local_includes/winf.h   |   4 +-
- winsup/cygwin/local_includes/winsup.h |   7 +-
- winsup/cygwin/winf.cc                 | 359 +++++++++++++++++++++++++-
- winsup/doc/cygwinenv.xml              |   8 +-
- winsup/doc/faq-api.xml                |   2 +-
- 6 files changed, 374 insertions(+), 303 deletions(-)
-
+diff --git a/winsup/cygwin/winf.cc b/winsup/cygwin/winf.cc
+index 881438fa42e..a4b2d87d312 100644
+--- a/winsup/cygwin/winf.cc
++++ b/winsup/cygwin/winf.cc
+@@ -257,6 +257,42 @@ quoted (char *cmd, int winshell)
+   return cmd;
+ }
+ 
++/* Grab the next argument from the command line, terminating it in place.
++   Return false when the command line is exhausted.  */
++static bool
++next_arg (char *&cmd, char *&word, char *&sawquote, bool winshell, bool first)
++{
++  while (issep (*cmd))
++    cmd++;
++
++  if (!*cmd)
++    return false;
++
++  word = cmd;
++  sawquote = NULL;
++  while (*cmd)
++    {
++      if (*cmd != '"' && (!winshell || *cmd != '\''))
++	cmd++;			// Skip over this character
++      else
++	/* Skip over characters until the closing quote */
++	{
++	  sawquote = cmd;
++	  /* Handle quoting.  Only strip off quotes if the parent is
++	     a Cygwin process, or if the word starts with a '@'.
++	     In this case, the insert_file function needs an unquoted
++	     DOS filename and globbing isn't performed anyway. */
++	  cmd = quoted (cmd, winshell && !first && *word != '@');
++	}
++      if (issep (*cmd))		// End of argument if space
++	break;
++    }
++  if (*cmd)
++    *cmd++ = '\0';		// Terminate `word'
++
++  return true;
++}
++
+ /* Perform a glob on word if it contains wildcard characters.
+    Also quote every character between quotes to force glob to
+    treat the characters literally. */
+@@ -354,6 +390,7 @@ globify (char *word, char **&argv, int &argc, int &argvlen)
+   return 1;
+ }
+ 
++
+ /* Build argv, argc from string passed from Windows.  */
+ 
+ static void
+@@ -366,39 +403,12 @@ build_argv (char *cmd, char **&argv, int &argc, int winshell)
+   argvlen = 0;
+   argv = NULL;
+ 
++  char *word;
++  char *sawquote;
++
+   /* Scan command line until there is nothing left. */
+-  while (*cmd)
++  while (next_arg (cmd, word, sawquote, winshell, argc == 0))
+     {
+-      /* Ignore spaces */
+-      if (issep (*cmd))
+-	{
+-	  cmd++;
+-	  continue;
+-	}
+-
+-      /* Found the beginning of an argument. */
+-      char *word = cmd;
+-      char *sawquote = NULL;
+-      while (*cmd)
+-	{
+-	  if (*cmd != '"' && (!winshell || *cmd != '\''))
+-	    cmd++;		// Skip over this character
+-	  else
+-	    /* Skip over characters until the closing quote */
+-	    {
+-	      sawquote = cmd;
+-	      /* Handle quoting.  Only strip off quotes if the parent is
+-		 a Cygwin process, or if the word starts with a '@'.
+-		 In this case, the insert_file function needs an unquoted
+-		 DOS filename and globbing isn't performed anyway. */
+-	      cmd = quoted (cmd, winshell && argc > 0 && *word != '@');
+-	    }
+-	  if (issep (*cmd))	// End of argument if space
+-	    break;
+-	}
+-      if (*cmd)
+-	*cmd++ = '\0';		// Terminate `word'
+-
+       /* Possibly look for @file construction assuming that this isn't
+ 	 the very first argument and the @ wasn't quoted */
+       if (argc && sawquote != word && *word == '@')
 -- 
 2.56.0.windows.4.niugit
 
